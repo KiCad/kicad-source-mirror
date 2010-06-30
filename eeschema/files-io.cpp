@@ -194,7 +194,7 @@ bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsN
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );
-            msg += wxT( " ->Error" );
+            msg += _( " ->Error" );
         }
 
         PrintMsg( msg );

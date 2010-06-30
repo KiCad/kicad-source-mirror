@@ -415,18 +415,15 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList )
 
         case DRAW_SHEET_STRUCT_TYPE:
         {
-            SCH_SHEET_PIN* pinsheet;
-            for( pinsheet = ( (SCH_SHEET*) DrawItem )->m_Label;
-                 pinsheet;
-                 pinsheet = pinsheet->Next() )
+            SCH_SHEET* sheet = (SCH_SHEET*) DrawItem;
+
+            BOOST_FOREACH( SCH_SHEET_PIN pinsheet, sheet->GetSheetPins() )
             {
-                wxASSERT( pinsheet->Type() ==
-                          DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+                wxASSERT( pinsheet.Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
 
                 item = new DanglingEndHandle( SHEET_LABEL_END );
-
-                item->m_Item = pinsheet;
-                item->m_Pos  = pinsheet->m_Pos;
+                item->m_Item = &pinsheet;
+                item->m_Pos  = pinsheet.m_Pos;
 
                 if( lastitem )
                     lastitem->m_Pnext = item;

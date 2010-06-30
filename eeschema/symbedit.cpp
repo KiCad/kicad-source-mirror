@@ -175,14 +175,14 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
     else
         line << wxT( "~ " );
 
-    line << 0 << wxT( " " ) << m_component->m_TextInside << wxT( " " );
+    line << 0 << wxT( " " ) << m_component->GetPinNameOffset() << wxT( " " );
 
-    if( m_component->m_DrawPinNum )
+    if( m_component->ShowPinNumbers() )
         line << wxT( "Y " );
     else
         line << wxT( "N " );
 
-    if( m_component->m_DrawPinName )
+    if( m_component->ShowPinNames() )
         line << wxT( "Y " );
     else
         line << wxT( "N " );

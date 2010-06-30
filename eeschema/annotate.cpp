@@ -340,6 +340,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 
     /* Final control (just in case ... )*/
     parent->CheckAnnotate( NULL, !annotateSchematic );
+    parent->OnModify( );
     parent->DrawPanel->Refresh( true );
 }
 

@@ -1,4 +1,4 @@
-update=12/06/2010 08:55:18
+update=24/06/2010 21:06:23
 last_client=pcbnew
 [general]
 version=1
@@ -17,8 +17,8 @@ NetDir=
 [pcbnew]
 version=1
 PadDrlX=320
-PadDimH=700
-PadDimV=700
+PadDimH=620
+PadDimV=1100
 BoardThickness=630
 SgPcb45=1
 TxtPcbV=800

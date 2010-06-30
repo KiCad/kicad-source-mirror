@@ -174,8 +174,11 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 /** Function TestDuplicateSheetNames( )
  * inside a given sheet, one cannot have sheets with duplicate names (file
  * names can be duplicated).
+ * @return the error count
+ * @param aCreateMarker: true = create error markers in schematic,
+ *                       false = calculate error count only
  */
-int TestDuplicateSheetNames()
+int TestDuplicateSheetNames(bool aCreateMarker)
 {
     int            err_count = 0;
     EDA_ScreenList ScreenList;      // Created the list of screen
@@ -203,17 +206,20 @@ int TestDuplicateSheetNames()
                         ( ( SCH_SHEET* ) item_to_test )-> m_SheetName )
                     == 0 )
                 {
-                    /* Create a new marker type ERC error*/
-                    SCH_MARKER* Marker = new SCH_MARKER();
-                    Marker->m_TimeStamp = GetTimeStamp();
-                    Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
-                                     ( (SCH_SHEET*) item_to_test )->m_Pos,
-                                     _( "Duplicate Sheet name" ),
-                                     ( (SCH_SHEET*) item_to_test )->m_Pos );
-                    Marker->SetMarkerType( MARK_ERC );
-                    Marker->SetErrorLevel( ERR );
-                    Marker->SetNext( Screen->EEDrawList );
-                    Screen->EEDrawList = Marker;
+                    if( aCreateMarker )
+                    {
+                        /* Create a new marker type ERC error*/
+                        SCH_MARKER* Marker = new SCH_MARKER();
+                        Marker->m_TimeStamp = GetTimeStamp();
+                        Marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
+                                         ( (SCH_SHEET*) item_to_test )->m_Pos,
+                                         _( "Duplicate Sheet name" ),
+                                         ( (SCH_SHEET*) item_to_test )->m_Pos );
+                        Marker->SetMarkerType( MARK_ERC );
+                        Marker->SetErrorLevel( ERR );
+                        Marker->SetNext( Screen->EEDrawList );
+                        Screen->EEDrawList = Marker;
+                    }
                     err_count++;
                 }
             }
@@ -279,9 +285,8 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      * inside a given sheet, one cannot have sheets with duplicate names (file
      * names can be duplicated).
      */
-    int errcnt = TestDuplicateSheetNames();
+    int errcnt = TestDuplicateSheetNames( true );
     g_EESchemaVar.NbErrorErc   += errcnt;
-    g_EESchemaVar.NbWarningErc += errcnt;
 
     m_Parent->BuildNetListBase();
 
@@ -289,7 +294,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      * calculations */
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
-
 
     StartNet   = OldItem = 0;
     NetNbItems = 0;
@@ -428,11 +432,14 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
            || (aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER) )
         {
             msg.Printf( _( "HLabel %s not connected to SheetLabel" ),
-                        aNetItemRef->m_Label->GetData() );
+                        GetChars( aNetItemRef->m_Label ) );
         }
         else
+        {
             msg.Printf( _( "SheetLabel %s not connected to HLabel" ),
-                        aNetItemRef->m_Label->GetData() );
+                        GetChars( aNetItemRef->m_Label ) );
+        }
+
 
         Marker->SetData( ERCE_HIERACHICAL_LABEL,
                          aNetItemRef->m_Start,
@@ -458,7 +465,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
         if( aMinConn == NOC )    /* Only 1 element in the net. */
         {
             msg.Printf( _( "Cmp %s, Pin %s (%s) Unconnected" ),
-                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        GetChars( cmp_ref ), GetChars( string_pinnum ),
                         MsgPinElectricType[ii] );
             Marker->SetData( ERCE_PIN_NOT_CONNECTED,
                              aNetItemRef->m_Start,
@@ -473,7 +480,7 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
                 cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef(
                     &aNetItemRef->m_SheetList );
             msg.Printf( _( "Cmp %s, Pin %s (%s) not driven (Net %d)" ),
-                        cmp_ref.GetData(), string_pinnum.GetData(),
+                        GetChars( cmp_ref ), GetChars( string_pinnum ),
                         MsgPinElectricType[ii], aNetItemRef->GetNet() );
             Marker->SetData( ERCE_PIN_NOT_DRIVEN,
                              aNetItemRef->m_Start,
@@ -513,15 +520,13 @@ static void Diagnose( WinEDA_DrawPanel* aPanel,
             alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef(
                 &aNetItemTst->m_SheetList );
         msg.Printf( _( "Cmp %s, Pin %s (%s) connected to " ),
-                    cmp_ref.GetData(),
-                    string_pinnum.GetData(), MsgPinElectricType[ii] );
+                    GetChars( cmp_ref ), GetChars( string_pinnum ), MsgPinElectricType[ii] );
         Marker->SetData( errortype,
                          aNetItemRef->m_Start,
                          msg,
                          aNetItemRef->m_Start );
         msg.Printf( _( "Cmp %s, Pin %s (%s) (net %d)" ),
-                    alt_cmp.GetData(),
-                    alt_string_pinnum.GetData(), MsgPinElectricType[jj],
+                    GetChars( alt_cmp ), GetChars( alt_string_pinnum ), MsgPinElectricType[jj],
                     aNetItemRef->GetNet() );
         Marker->SetAuxiliaryData( msg, aNetItemTst->m_Start );
     }
@@ -703,7 +708,7 @@ static bool WriteDiagnosticERC( const wxString& FullFileName )
         else
         {
             wxString str = Sheet->PathHumanReadable();
-            msg.Printf( _( "\n***** Sheet %s\n" ), str.GetData() );
+            msg.Printf( _( "\n***** Sheet %s\n" ), GetChars( str ) );
         }
 
         fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );

@@ -17,9 +17,9 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
-static int    s_CurrentTypeLabel = NET_INPUT;
-static wxSize NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
-static wxPoint s_InitialPosition;       // remember here the initial value of the pin label when moving it
+static int     s_CurrentTypeLabel = NET_INPUT;
+static wxSize  NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+static wxPoint s_InitialPosition;  // remember the initial value of the pin label when moving it
 
 
 /****************************************/
@@ -38,9 +38,8 @@ private:
     WinEDA_GraphicTextCtrl* m_TextWin;
 
 public: WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
-                                       SCH_SHEET_PIN* curr_pinsheet,
-                                       const wxPoint& framepos =
-                                           wxPoint( -1, -1 ) );
+                                        SCH_SHEET_PIN* curr_pinsheet,
+                                        const wxPoint& framepos = wxPoint( -1, -1 ) );
     ~WinEDA_PinSheetPropertiesFrame() { };
 
 private:
@@ -51,8 +50,8 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
+    EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -121,8 +120,7 @@ void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
 void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
 {
     m_CurrentPinSheet->m_Text   = m_TextWin->GetText();
-    m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y =
-                                      m_TextWin->GetTextSize();
+    m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y = m_TextWin->GetTextSize();
 
     m_CurrentPinSheet->m_Shape = m_PinSheetShape->GetSelection();
     EndModal( wxID_OK );
@@ -133,8 +131,7 @@ void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
  */
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    SCH_SHEET_PIN* SheetLabel =
-        (SCH_SHEET_PIN*) Panel->GetScreen()->GetCurItem();
+    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) Panel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
@@ -168,31 +165,17 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+    wxASSERT( Sheet != NULL && Sheet->Type() == DRAW_SHEET_STRUCT_TYPE );
     SAFE_DELETE( g_ItemToUndoCopy );
-    
+
     int flags = m_Flags;
     m_Flags = 0;
 
     if( flags & IS_NEW )
     {
         frame->SaveCopyInUndoList( Sheet, UR_CHANGED );
-        if( Sheet->m_Label == NULL )
-            Sheet->m_Label = this;
-        else
-        {
-            SCH_SHEET_PIN* pinsheet = Sheet->m_Label;
-            while( pinsheet )
-            {
-                if( pinsheet->Next() == NULL )
-                {
-                    pinsheet->SetNext( this );
-                    break;
-                }
-                pinsheet = pinsheet->Next();
-            }
-        }
+        Sheet->AddLabel( this );
     }
-    
     else    // pin sheet was existing and only moved
     {
         wxPoint tmp = m_Pos;
@@ -206,7 +189,8 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 
     m_Pos.x = Sheet->m_Pos.x;
     m_Edge  = 0;
-    if( frame->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
+
+    if( frame->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + ( Sheet->m_Size.x / 2 ) ) )
     {
         m_Edge  = 1;
         m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
@@ -219,7 +203,6 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
 
     RedrawOneStruct( frame->DrawPanel, DC, Sheet, GR_DEFAULT_DRAWMODE );
-
     frame->DrawPanel->ManageCurseur = NULL;
     frame->DrawPanel->ForceCloseManageCurseur = NULL;
 }
@@ -241,8 +224,7 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
 
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    SCH_SHEET_PIN* SheetLabel =
-        (SCH_SHEET_PIN*) panel->GetScreen()->GetCurItem();
+    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) panel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
@@ -273,8 +255,7 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel,
-                                           wxDC*          DC )
+int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
 {
     if( SheetLabel == NULL )
         return wxID_CANCEL;
@@ -297,8 +278,7 @@ int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel,
 
 /* Add a new sheet pin to the sheet at the current cursor position.
  */
-SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet,
-                                                       wxDC*      DC )
+SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 {
     wxString       Line, Text;
     SCH_SHEET_PIN* NewSheetLabel;
@@ -330,41 +310,35 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet,
 /* Automatically create a sheet labels from global labels for each node in
  * the corresponding hierarchy.
  */
-SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet,
-                                                       wxDC*      DC )
+SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 {
     EDA_BaseStruct* DrawStruct;
-    SCH_SHEET_PIN*  NewSheetLabel, * SheetLabel = NULL;
+    SCH_SHEET_PIN*  NewSheetLabel;
     SCH_HIERLABEL*  HLabel = NULL;
 
     if( !Sheet->m_AssociatedScreen )
         return NULL;
+
     DrawStruct = Sheet->m_AssociatedScreen->EEDrawList;
     HLabel     = NULL;
+
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
         if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
             continue;
+
         HLabel = (SCH_HIERLABEL*) DrawStruct;
 
-        /* A global label has been found: check is there a corresponding
-         *  sheet label. */
-        SheetLabel = Sheet->m_Label;
-        for( ; SheetLabel != NULL; SheetLabel = SheetLabel->Next() )
-        {
-            if( SheetLabel->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
-            {
-                break;
-            }
-        }
-
-        if( SheetLabel == NULL )
+        /* A global label has been found: check if there a corresponding sheet label. */
+        if( !Sheet->HasLabel( HLabel->m_Text ) )
             break;
+
+        HLabel = NULL;
     }
 
-    if( (HLabel == NULL ) || SheetLabel )
+    if( HLabel == NULL )
     {
-        DisplayInfoMessage( this, _( "No new hierarchical labels found" ), 10 );
+        DisplayInfoMessage( this, _( "No new hierarchical labels found" ) );
         return NULL;
     }
 
@@ -392,8 +366,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet,
  * This sheet label can not be put in a pile "undelete" because it would not
  * Possible to link it back it's 'SCH_SHEET' parent.
  */
-void WinEDA_SchematicFrame::DeleteSheetLabel( bool           aRedraw,
-                                              SCH_SHEET_PIN* aSheetLabelToDel )
+void WinEDA_SchematicFrame::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelToDel )
 {
     SCH_SHEET* parent = (SCH_SHEET*) aSheetLabelToDel->GetParent();
 
@@ -406,23 +379,7 @@ void WinEDA_SchematicFrame::DeleteSheetLabel( bool           aRedraw,
     std::cout << "\n\n\n" << std::flush;
 #endif
 
-    SCH_SHEET_PIN* prev  = NULL;
-    SCH_SHEET_PIN* label = parent->m_Label;
-
-    for( ; label; prev = label, label = label->Next() )
-    {
-        if( label == aSheetLabelToDel )
-        {
-            if( prev )
-                prev->SetNext( label->Next() );
-            else
-                parent->m_Label = label->Next();
-
-            delete aSheetLabelToDel;
-
-            break;
-        }
-    }
+    parent->RemoveLabel( aSheetLabelToDel );
 
     if( aRedraw )
         DrawPanel->PostDirtyRect( parent->GetBoundingBox() );

@@ -1,0 +1,2 @@
+bitmap2component_icon ICON bitmap2component.ico
+#include "wx/msw/wx.rc"

@@ -12,6 +12,8 @@
 #include "hotkeys.h"
 #include "pcbnew_id.h"
 
+#include "help_common_strings.h"
+
 /**
  * PCBNew mainframe menubar
  */
@@ -249,14 +251,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Undo */
     text  = AddHotkeyName( _( "Undo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_UNDO );
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
-                           _( "Undo last edition" ), wxITEM_NORMAL );
+                           HELP_UNDO, wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
     /* Redo */
     text  = AddHotkeyName( _( "Redo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_REDO );
     item = new wxMenuItem( editMenu, wxID_REDO, text,
-                           _( "Redo the last undo command" ), wxITEM_NORMAL );
+                           HELP_REDO, wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );
 
@@ -265,8 +267,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Find */
     text = AddHotkeyName( _( "&Find" ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
-    item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text,
-                           _( "Find components and text in current loaded board" ) );
+    item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND );
     item->SetBitmap( find_xpm );
     editMenu->Append( item );
 
@@ -313,14 +314,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      */
     /* Zoom in */
     text = _( "Zoom In" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom In" ),
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
-    text = _( "Zoom out" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
+    text = _( "Zoom Out" );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
@@ -330,8 +331,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
                           HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
-                           _( "Zoom to fit the board on the screen" ),
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_FIT, wxITEM_NORMAL );
     item->SetBitmap( zoom_auto_xpm );
     viewMenu->Append( item );
 
@@ -342,7 +342,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
                           HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           _( "Redraw the screen of the board" ),
+                           HELP_ZOOM_REDRAW,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_redraw_xpm );
     viewMenu->Append( item );
@@ -381,7 +381,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     */
     item = new wxMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                            _( "Hide &Layers Manager" ),
-                           _( "Show/hide the layers manager toolbar" ) );
+                           HELP_SHOW_HIDE_LAYERMANAGER );
     item->SetBitmap( layers_manager_xpm );
     configmenu->Append( item );
 

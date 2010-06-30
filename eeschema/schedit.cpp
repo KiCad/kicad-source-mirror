@@ -374,16 +374,31 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
-        if ( screen->GetCurItem()
-             && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
-            GetScreen()->SetCurItem(
-                Import_PinSheet( (SCH_SHEET*)screen->GetCurItem(), &dc ) );
+        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+            GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*)screen->GetCurItem(), &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        if ( screen->GetCurItem()
-             && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
-            ( (SCH_SHEET*) screen->GetCurItem() )->CleanupSheet( this, true, true );
+        if ( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) screen->GetCurItem();
+
+            if( !sheet->HasUndefinedLabels() )
+            {
+                DisplayInfoMessage( this,
+                                    _( "There are no undefined labels in this sheet to clean up." ) );
+                return;
+            }
+
+            if( !IsOK( this, _( "Do you wish to cleanup this sheet" ) ) )
+                return;
+
+            /* Save sheet in undo list before cleaning up unreferenced hierarchical labels. */
+            SaveCopyInUndoList( sheet, UR_CHANGED );
+            sheet->CleanupSheet();
+            OnModify();
+            DrawPanel->PostDirtyRect( sheet->GetBoundingBox() );
+        }
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:

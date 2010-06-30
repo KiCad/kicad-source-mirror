@@ -763,7 +763,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     }
 
     // Show the "Parts Locked" option?
-    if( !m_LibEntry || !m_LibEntry->m_UnitSelectionLocked )
+    if( !m_LibEntry || !m_LibEntry->UnitsLocked() )
     {
         D( printf( "partsAreLocked->false\n" ); )
         partsAreLockedLabel->Show( false );

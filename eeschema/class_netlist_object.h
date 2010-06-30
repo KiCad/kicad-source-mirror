@@ -64,18 +64,18 @@ public:
                                          * For Pins: pointer to the component
                                          *   that contains this pin
                                          */
-    int             m_Flag;             /* flag used in calculations */
-    SCH_SHEET_PATH  m_SheetList;
-    int             m_ElectricalType;   /* Has meaning only for Pins and
+    int            m_Flag;              /* flag used in calculations */
+    SCH_SHEET_PATH m_SheetList;
+    int            m_ElectricalType;    /* Has meaning only for Pins and
                                          * hierarchical pins: electrical type */
 private:
-    int             m_NetCode;          /* net code for all items except BUS
+    int            m_NetCode;           /* net code for all items except BUS
                                          * labels because a BUS label has
                                          * as many net codes as bus members
                                          */
 public:
-    int             m_BusNetCode;       /* Used for BUS connections */
-    int             m_Member;           /* for labels type NET_BUSLABELMEMBER
+    int m_BusNetCode;                   /* Used for BUS connections */
+    int m_Member;                       /* for labels type NET_BUSLABELMEMBER
                                          * ( bus member created from the BUS
                                          * label ) member number
                                          */
@@ -84,12 +84,15 @@ public:
                                          * connects to.*/
     long            m_PinNum;           /* pin number ( 1 long = 4 bytes ->
                                          * 4 ascii codes) */
-    const wxString* m_Label;            /* For all labels:pointer on the text
-                                         * label */
+    wxString        m_Label;            /* Label text. */
     wxPoint         m_Start;            // Position of object or for segments:
                                         // starting point
     wxPoint         m_End;              // For segments (wire and buses):
                                         // ending point
+    NETLIST_OBJECT* m_NetNameCandidate; /* a pointer to a label connected to the net,
+                                         * that can be used to give a name to the net
+                                         * NULL if no usable label
+                                         */
 
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx );

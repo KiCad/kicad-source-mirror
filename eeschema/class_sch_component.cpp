@@ -659,7 +659,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 
     Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
-    if( Entry && Entry->m_UnitSelectionLocked )
+    if( Entry && Entry->UnitsLocked() )
         KeepMulti = true;
 
     while( defRef.Last() == '?' )

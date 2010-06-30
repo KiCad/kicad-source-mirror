@@ -340,31 +340,28 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 {
     EDA_BaseStruct* SchItem;
     SCH_COMPONENT*  DrawLibItem;
-    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_PATH* sheetPath;
 
     /* Build the sheet (not screen) list */
     SCH_SHEET_LIST  SheetList;
 
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
+    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem;
-            SchItem = SchItem->Next() )
+        for( SchItem = sheetPath->LastDrawList();  SchItem;  SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
 
             DrawLibItem = (SCH_COMPONENT*) SchItem;
-            DrawLibItem->SetParent( sheet->LastScreen() );
+            DrawLibItem->SetParent( sheetPath->LastScreen() );
             OBJ_CMP_TO_LIST item;
             item.m_RootCmp   = DrawLibItem;
-            item.m_SheetPath = *sheet;
-            item.m_Unit = DrawLibItem->GetUnitSelection( sheet );
+            item.m_SheetPath = *sheetPath;
+            item.m_Unit = DrawLibItem->GetUnitSelection( sheetPath );
 
             strncpy( item.m_Reference,
-                    CONV_TO_UTF8( DrawLibItem->GetRef( sheet ) ),
-                    sizeof( item.m_Reference ) );
+                     CONV_TO_UTF8( DrawLibItem->GetRef( sheetPath ) ),
+                     sizeof( item.m_Reference ) );
 
             // Ensure always null terminate m_Ref.
             item.m_Reference[sizeof( item.m_Reference ) - 1 ] = 0;
@@ -384,19 +381,17 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
 {
     SCH_ITEM*       DrawList;
-    SCH_SHEET_PIN*  PinLabel;
-    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_PATH* sheetPath;
 
     /* Build the sheet list */
     SCH_SHEET_LIST  SheetList;
 
     LABEL_OBJECT    labet_object;
 
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
+    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
     {
-        DrawList = (SCH_ITEM*) sheet->LastDrawList();
+        DrawList = (SCH_ITEM*) sheetPath->LastDrawList();
+
         while( DrawList )
         {
             switch( DrawList->Type() )
@@ -404,22 +399,21 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
             case TYPE_SCH_HIERLABEL:
             case TYPE_SCH_GLOBALLABEL:
                 labet_object.m_LabelType = DrawList->Type();
-                labet_object.m_SheetPath = *sheet;
+                labet_object.m_SheetPath = *sheetPath;
                 labet_object.m_Label     = DrawList;
                 aList.push_back( labet_object );
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
-                PinLabel = ( (SCH_SHEET*) DrawList )->m_Label;
-                while( PinLabel != NULL )
+                SCH_SHEET* sheet = (SCH_SHEET*) DrawList;
+
+                BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, sheet->GetSheetPins() )
                 {
-                    labet_object.m_LabelType =
-                        DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
-                    labet_object.m_SheetPath = *sheet;
-                    labet_object.m_Label     = PinLabel;
+                    labet_object.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                    labet_object.m_SheetPath = *sheetPath;
+                    labet_object.m_Label     = &sheetLabel;
                     aList.push_back( labet_object );
-                    PinLabel = PinLabel->Next();
                 }
             }
             break;
@@ -797,6 +791,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         // Store fields. Store non empty fields only.
         for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
         {
+            //Ensure fields exists in dummy component
+            if( dummyCmp.GetFieldCount() <= jj )
+                dummyCmp.AddField( *currCmp->GetField( jj ) );
+            // store useful data
             if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
                 dummyCmp.GetField( jj )->m_Text = currCmp->GetField( jj )->m_Text;
         }
@@ -845,21 +843,27 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
                     CONV_TO_UTF8( currCmp->GetField( DATASHEET) ->m_Text ) );
 #endif
 
+        fprintf( f, "%c%s", s_ExportSeparatorSymbol,
+                CONV_TO_UTF8( RNames ) );
+
         // print fields, on demand
-        for( int jj = FIELD1; jj <= FIELD8 ; jj++ )
+        int last_nonempty_field_idx = 0;
+        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
+            if ( !dummyCmp.GetField( jj )->m_Text.IsEmpty() )
+                last_nonempty_field_idx = jj;
+        for( int jj = FIELD1; jj <= last_nonempty_field_idx ; jj++ )
         {
             if ( IsFieldChecked( jj ) )
                 fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
         }
 
-        fprintf( f, "%c%s\n", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( RNames ) );
+        fprintf( f, "\n" );
 
         // Clear strings and values, to prepare next component
         qty = 0;
         RNames.Empty();
-        for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
+        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
             dummyCmp.GetField( jj )->m_Text.Empty();
     }
 

@@ -93,7 +93,7 @@ public:
 
     bool IsPartsLocked()
     {
-        return m_Entry->m_UnitSelectionLocked;
+        return m_Entry->UnitsLocked();
     }
 };
 
