@@ -14,6 +14,8 @@
 #include "eeschema_id.h"
 #include "hotkeys.h"
 
+#include "help_common_strings.h"
+
 /**
  * @brief Create or update the menubar for the Component Editor frame
  */
@@ -92,7 +94,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
 
     /* Delete */
     item = new wxMenuItem( editMenu, ID_LIBEDIT_DELETE_ITEM_BUTT,
-                           _( "Delete" ), _( "Delete items" ), wxITEM_NORMAL );
+                           _( "Delete" ), HELP_DELETE_ITEMS, wxITEM_NORMAL );
     item->SetBitmap( delete_body_xpm );
     editMenu->Append( item );
 
@@ -114,14 +116,14 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
      */
     /* Zoom in */
     text  =_( "Zoom In" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom In" ),
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
     text = _( "Zoom Out" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom Out" ),
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
@@ -131,8 +133,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
                           HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
-                           _( "Fit the schematic sheet on the screen" ),
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_FIT, wxITEM_NORMAL );
     item->SetBitmap( zoom_auto_xpm );
     viewMenu->Append( item );
 
@@ -143,8 +144,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
                           HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           _( "Redraw the schematic view" ),
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_REDRAW, wxITEM_NORMAL );
     item->SetBitmap( zoom_redraw_xpm );
     viewMenu->Append( item );
 
@@ -156,30 +156,28 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
 
     /* Pin */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_PIN_BUTT, _( "&Pin" ),
-                           _( "Add pins to the component" ), wxITEM_NORMAL );
+                           HELP_ADD_PIN, wxITEM_NORMAL );
     item->SetBitmap( pin_xpm );
     placeMenu->Append( item );
 
     /* Graphic text */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_TEXT_BUTT,
                            _( "Graphic text" ),
-                           _( "Add graphic texts to the component body" ),
-                           wxITEM_NORMAL );
+                           HELP_ADD_BODYTEXT, wxITEM_NORMAL );
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 
     /* Graphic rectangle */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_RECT_BUTT,
                            _( "Rectangle" ),
-                           _( "Add graphic rectangles to the component body" ),
-                           wxITEM_NORMAL );
+                           HELP_ADD_BODYRECT, wxITEM_NORMAL );
     item->SetBitmap( add_rectangle_xpm );
     placeMenu->Append( item );
 
     /* Graphic Circle */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_CIRCLE_BUTT,
                            _( "Circle" ),
-                           _( "Add circles to the component body" ),
+                           HELP_ADD_BODYCIRCLE,
                            wxITEM_NORMAL );
     item->SetBitmap( add_circle_xpm );
     placeMenu->Append( item );
@@ -187,16 +185,14 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     /* Graphic Arc */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_ARC_BUTT,
                            _( "Arc" ),
-                           _( "Add arcs to the component body" ),
-                           wxITEM_NORMAL );
+                           HELP_ADD_BODYARC, wxITEM_NORMAL );
     item->SetBitmap( add_arc_xpm );
     placeMenu->Append( item );
 
     /* Graphic line or polygon */
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_LINE_BUTT,
                            _( "Line or Polygon" ),
-                           _( "Add lines and polygons to the component body" ),
-                           wxITEM_NORMAL );
+                           HELP_ADD_BODYPOLYGON, wxITEM_NORMAL );
     item->SetBitmap( add_polygon_xpm );
     placeMenu->Append( item );
 

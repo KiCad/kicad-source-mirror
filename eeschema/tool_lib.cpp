@@ -13,6 +13,8 @@
 #include "protos.h"
 #include "libeditframe.h"
 
+#include "help_common_strings.h"
+
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
 #else
@@ -40,27 +42,27 @@ void WinEDA_LibeditFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString,
                          wxBitmap( pin_xpm ),
-                         _( "Add pin" ), wxITEM_CHECK  );
+                         HELP_ADD_PIN, wxITEM_CHECK  );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString,
                          wxBitmap( add_text_xpm ),
-                         _( "Add graphic text" ), wxITEM_CHECK  );
+                         HELP_ADD_BODYTEXT, wxITEM_CHECK  );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString,
                          wxBitmap( add_rectangle_xpm ),
-                         _( "Add rectangle" ), wxITEM_CHECK );
+                         HELP_ADD_BODYRECT, wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString,
                          wxBitmap( add_circle_xpm ),
-                         _( "Add circle" ), wxITEM_CHECK  );
+                         HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString,
                          wxBitmap( add_arc_xpm ),
-                         _( "Add arc" ), wxITEM_CHECK  );
+                         HELP_ADD_BODYARC, wxITEM_CHECK  );
 
     m_VToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString,
                          wxBitmap( add_polygon_xpm ),
-                         _( "Add lines and polygons" ), wxITEM_CHECK  );
+                         HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString,
@@ -79,7 +81,7 @@ void WinEDA_LibeditFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString,
                          wxBitmap( delete_body_xpm ),
-                         _( "Delete items" ), wxITEM_CHECK  );
+                         HELP_DELETE_ITEMS, wxITEM_CHECK  );
 
     m_VToolBar->Realize();
 }
@@ -156,20 +158,20 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
                          _( "Test for duplicate pins and off grid pins" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_Libedit_Hokeys_Descr, HK_ZOOM_IN, false );
+    msg = AddHotkeyName( HELP_ZOOM_IN, s_Libedit_Hokeys_Descr, HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, false );
+    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
                          msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), s_Libedit_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr,
                          HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, false );
+    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
 
