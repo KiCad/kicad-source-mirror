@@ -775,7 +775,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
 #include "kicad_device_context.h"
 
-/* reinitialise components parametres to default values found in lib
+/* reinitialize components parametres to default values found in lib
  */
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 {
@@ -793,7 +793,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
 
-    /* Initialise fields values to default values found in library:  */
+    // Initialize field values to default values found in library:
     LIB_FIELD& refField = entry->GetReferenceField();
     m_Cmp->GetField( REFERENCE )->m_Pos = refField.m_Pos + m_Cmp->m_Pos;
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );
