@@ -55,6 +55,7 @@ BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
     EVT_BUTTON( ID_TO_CVPCB, WinEDA_MainFrame::OnRunCvpcb )
     EVT_BUTTON( ID_TO_EESCHEMA, WinEDA_MainFrame::OnRunEeschema )
     EVT_BUTTON( ID_TO_GERBVIEW, WinEDA_MainFrame::OnRunGerbview )
+    EVT_BUTTON( ID_TO_BITMAP_CONVERTER, WinEDA_MainFrame::OnRunBitmapConverter )
 
     EVT_UPDATE_UI( ID_SELECT_DEFAULT_PDF_BROWSER,
                    WinEDA_MainFrame::OnUpdateDefaultPdfBrowser )

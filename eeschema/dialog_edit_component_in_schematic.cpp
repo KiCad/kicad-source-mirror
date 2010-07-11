@@ -789,6 +789,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( entry == NULL )
         return;
 
+    // save old cmp in undo list if not already in edit, or moving ...
+    if( m_Cmp->m_Flags == 0 )
+        m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
+
     INSTALL_DC( dc, m_Parent->DrawPanel );
 
     RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );

@@ -17,6 +17,7 @@ if(WIN32)
         set(BITMAP2COMPONENT_RESOURCES bitmap2component.rc)
     endif(MINGW)
 endif(WIN32)
+
 add_executable(bitmap2component WIN32 MACOSX_BUNDLE
                             ${BITMAP2COMPONENT_SRCS}
                             ${BITMAP2COMPONENT_RESOURCES})
@@ -28,6 +29,6 @@ target_link_libraries( bitmap2component
                         kbool )
 
 install(TARGETS bitmap2component
-        DESTINATION ${KICAD_PLUGINS}
+        DESTINATION ${KICAD_BIN}
         COMPONENT binary)
 

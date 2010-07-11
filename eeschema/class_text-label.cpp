@@ -129,8 +129,8 @@ SCH_TEXT* SCH_TEXT::GenCopy()
         break;
     }
 
-    newitem->m_Layer = m_Layer;
-    newitem->m_Shape = m_Shape;
+    newitem->m_Layer      = m_Layer;
+    newitem->m_Shape      = m_Shape;
     newitem->m_Orient     = m_Orient;
     newitem->m_Size       = m_Size;
     newitem->m_Width      = m_Width;
@@ -181,7 +181,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset()
 }
 
 
-bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
+bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     return SCH_ITEM::Matches( m_Text, aSearchData );
 }
@@ -212,12 +212,21 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
     int px = m_Pos.x;
     int dx;
 
-    if( m_Orient == 0 )         /* horizontal text */
+    switch( GetSchematicTextOrientation() )
+    {
+    case 0:             /* horizontal text */
         dx = LenSize( m_Text ) / 2;
-    else if( m_Orient == 2 )    /* invert horizontal text*/
+        break;
+
+    case 2:        /* invert horizontal text*/
         dx = -LenSize( m_Text ) / 2;
-    else
+        break;
+
+    default:
         dx = 0;
+        break;
+    }
+
     px += dx;
     px -= aYaxis_position;
     NEGATE( px );
@@ -270,14 +279,23 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
  */
 void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 {
-    // Text is NOT really mirrored; it is moved to a suitable position
-    // which is the closest position for a true mirrored text
-    // The center position is mirrored and the text is moved for half
-    // horizontal len
-    if( m_Orient == 0 )         /* horizontal text */
-        m_Orient = 2;
-    else if( m_Orient == 2 )    /* invert horizontal text*/
-        m_Orient = 0;
+/* The hierarchical label is NOT really mirrored.
+ *   for an horizontal label, the schematic orientation is changed.
+ *   for a vericalal label, the schematic orientation is not changed.
+ *   and the label is moved to a suitable position
+ */
+
+    switch( GetSchematicTextOrientation() )
+    {
+    case 0:             /* horizontal text */
+        SetSchematicTextOrientation( 2 );
+        break;
+
+    case 2:        /* invert horizontal text*/
+        SetSchematicTextOrientation( 0 );
+        break;
+    }
+
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;
@@ -290,14 +308,22 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
  */
 void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 {
-    // Text is NOT really mirrored; it is moved to a suitable position
-    // which is the closest position for a true mirrored text
-    // The center position is mirrored and the text is moved for half
-    // horizontal len
-    if( m_Orient == 0 )         /* horizontal text */
-        m_Orient = 2;
-    else if( m_Orient == 2 )    /* invert horizontal text*/
-        m_Orient = 0;
+    /* The global label is NOT really mirrored.
+     *  for an horizontal label, the schematic orientation is changed.
+     *  for a vericalal label, the schematic orientation is not changed.
+     *  and the label is moved to a suitable position
+     */
+    switch( GetSchematicTextOrientation() )
+    {
+    case 0:             /* horizontal text */
+        SetSchematicTextOrientation( 2 );
+        break;
+
+    case 2:        /* invert horizontal text*/
+        SetSchematicTextOrientation( 0 );
+        break;
+    }
+
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;
@@ -583,6 +609,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )
 {
 /****************************************************************************/
+
 /* Text type Comment (text on layer "NOTE") have 4 directions, and the Text
  * origin is the first letter
  */
@@ -612,10 +639,10 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
     {
         EDA_Rect BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        int x1 = BoundaryBox.GetX();
-        int y1 = BoundaryBox.GetY();
-        int x2 = BoundaryBox.GetRight();
-        int y2 = BoundaryBox.GetBottom();
+        int      x1 = BoundaryBox.GetX();
+        int      y1 = BoundaryBox.GetY();
+        int      x2 = BoundaryBox.GetRight();
+        int      y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
 #endif
@@ -649,8 +676,8 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     }
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 shape, m_Width, CONV_TO_UTF8( text ) ) == EOF )
+                m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
+                shape, m_Width, CONV_TO_UTF8( text ) ) == EOF )
     {
         success = false;
     }
@@ -705,8 +732,8 @@ bool SCH_LABEL::Save( FILE* aFile ) const
         shape = "Italic";
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x, shape,
-                 m_Width, CONV_TO_UTF8( m_Text ) ) == EOF )
+                m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x, shape,
+                m_Width, CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -741,9 +768,9 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
     if( m_Italic )
         shape = "Italic";
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Width,
-                 CONV_TO_UTF8( m_Text ) ) == EOF )
+                m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
+                SheetLabelType[m_Shape], shape, m_Width,
+                CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -756,6 +783,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosRef )
 {
 /************************************************/
+
 /** Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
@@ -792,9 +820,9 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
     if( m_Italic )
         shape = "Italic";
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Width,
-                 CONV_TO_UTF8( m_Text ) ) == EOF )
+                m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
+                SheetLabelType[m_Shape], shape, m_Width,
+                CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -807,6 +835,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
 bool SCH_HIERLABEL::HitTest( const wxPoint& aPosRef )
 {
 /************************************************/
+
 /** Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
@@ -834,6 +863,7 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
                           int               Color )
 {
 /*****************************************************************************/
+
 /* Texts type Global Label  have 4 directions, and the Text origin is the
  * graphic icon
  */
@@ -869,10 +899,10 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
     {
         EDA_Rect BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        int x1 = BoundaryBox.GetX();
-        int y1 = BoundaryBox.GetY();
-        int x2 = BoundaryBox.GetRight();
-        int y2 = BoundaryBox.GetBottom();
+        int      x1 = BoundaryBox.GetX();
+        int      y1 = BoundaryBox.GetY();
+        int      x2 = BoundaryBox.GetRight();
+        int      y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
 #endif
@@ -969,6 +999,7 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
                             int               Color )
 {
 /*****************************************************************************/
+
 /* Texts type Global Label  have 4 directions, and the Text origin is the
  * graphic icon
  */
@@ -1003,10 +1034,10 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
     {
         EDA_Rect BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        int x1 = BoundaryBox.GetX();
-        int y1 = BoundaryBox.GetY();
-        int x2 = BoundaryBox.GetRight();
-        int y2 = BoundaryBox.GetBottom();
+        int      x1 = BoundaryBox.GetX();
+        int      y1 = BoundaryBox.GetY();
+        int      x2 = BoundaryBox.GetRight();
+        int      y2 = BoundaryBox.GetBottom();
         GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
     }
 #endif
@@ -1035,6 +1066,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
 
     // 50% more for negation bar
     int y = wxRound( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );
+
     // Starting point(anchor)
     aCorner_list.push_back( wxPoint( 0, 0 ) );
     aCorner_list.push_back( wxPoint( 0, -y ) );     // Up
@@ -1113,12 +1145,13 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 
     int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
+
     // text X size add height for triangular shapes(bidirectional)
     length = LenSize( m_Text ) + height + DANGLING_SYMBOL_SIZE;
 
     switch( m_SchematicOrientation )    // respect orientation
     {
-    case 0:     /* Horiz Normal Orientation (left justified) */
+    case 0:                             /* Horiz Normal Orientation (left justified) */
         dx = -length;
         dy = height;
         x += DANGLING_SYMBOL_SIZE;
@@ -1202,6 +1235,7 @@ EDA_Rect SCH_LABEL::GetBoundingBox()
     return box;
 }
 
+
 /***********************************/
 EDA_Rect SCH_TEXT::GetBoundingBox()
 /***********************************/
@@ -1210,19 +1244,20 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
     // when calculating the bounding box
     int linewidth =
         (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Width );            // Set the real width
     EDA_Rect rect = GetTextBox( -1 );
     EXCHG( linewidth, m_Width );            // set initial value
 
-    if( m_Orient )   // Rotate rect
+    if( m_Orient )                          // Rotate rect
     {
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
         RotatePoint( &pos, m_Pos, m_Orient );
         RotatePoint( &end, m_Pos, m_Orient );
-        rect.SetOrigin(pos);
-        rect.SetEnd(end);
+        rect.SetOrigin( pos );
+        rect.SetEnd( end );
     }
 
     rect.Normalize();

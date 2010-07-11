@@ -67,7 +67,7 @@ public:
                                          * (UP <->Down) */
     wxSize        m_Ext;                /* Automatic placement margin around
                                          * the module */
-    float         m_Surface;            // Bounding box area
+    double         m_Surface;            // Bounding box area
 
     unsigned long m_Link;               /* Temporary variable ( used in
                                          * editions, ...) */

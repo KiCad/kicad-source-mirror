@@ -30,7 +30,7 @@ class WinEDA_DrawPanel;
                                                      */
 
 // default name for nameless projects
-#define NAMELESS_PROJECT wxT("noname")
+#define NAMELESS_PROJECT wxT( "noname" )
 
 #define NB_ITEMS 11
 
@@ -49,21 +49,24 @@ enum pseudokeys {
 
 /* TODO Executable names TODO*/
 #ifdef __WINDOWS__
-#    define CVPCB_EXE    wxT( "cvpcb.exe" )
-#    define PCBNEW_EXE   wxT( "pcbnew.exe" )
-#    define EESCHEMA_EXE wxT( "eeschema.exe" )
-#    define GERBVIEW_EXE wxT( "gerbview.exe" )
+#define CVPCB_EXE           wxT( "cvpcb.exe" )
+#define PCBNEW_EXE          wxT( "pcbnew.exe" )
+#define EESCHEMA_EXE        wxT( "eeschema.exe" )
+#define GERBVIEW_EXE        wxT( "gerbview.exe" )
+#define BITMAPCONVERTER_EXE wxT( "bitmap2component.exe" )
 #else
-# ifndef __WXMAC__
-#  define CVPCB_EXE    wxT( "cvpcb" )
-#  define PCBNEW_EXE   wxT( "pcbnew" )
-#  define EESCHEMA_EXE wxT( "eeschema" )
-#  define GERBVIEW_EXE wxT( "gerbview" )
+#ifndef __WXMAC__
+#define CVPCB_EXE           wxT( "cvpcb" )
+#define PCBNEW_EXE          wxT( "pcbnew" )
+#define EESCHEMA_EXE        wxT( "eeschema" )
+#define GERBVIEW_EXE        wxT( "gerbview" )
+#define BITMAPCONVERTER_EXE wxT( "bitmap2component" )
 #else
-#  define CVPCB_EXE    wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
-#  define PCBNEW_EXE   wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
-#  define EESCHEMA_EXE wxT( "eeschema.app/Contents/MacOS/eeschema" )
-#  define GERBVIEW_EXE wxT( "gerbview.app/Contents/MacOS/gerbview" )
+#define CVPCB_EXE           wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
+#define PCBNEW_EXE          wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
+#define EESCHEMA_EXE        wxT( "eeschema.app/Contents/MacOS/eeschema" )
+#define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
+#define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
 # endif
 #endif
 
@@ -280,11 +283,11 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
  * If "by posting on this line
  * Color = color display
  */
-void     Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                              int               pos_X,
-                              const wxString&   texte_H,
-                              const wxString&   texte_L,
-                              int               color );
+void Affiche_1_Parametre( WinEDA_DrawFrame* frame,
+                          int               pos_X,
+                          const wxString&   texte_H,
+                          const wxString&   texte_L,
+                          int               color );
 
 int GetTimeStamp();
 
@@ -309,8 +312,8 @@ const wxString& valeur_param( int valeur, wxString& buf_texte );
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
-wxString        ReturnUnitSymbol( int aUnits                    = g_UnitMetric,
-                                  const wxString& aFormatString = _( " (%s):" ) );
+wxString        ReturnUnitSymbol( int aUnits = g_UnitMetric,
+                                 const wxString& aFormatString = _( " (%s):" ) );
 
 /**
  * Get a human readable units string.
