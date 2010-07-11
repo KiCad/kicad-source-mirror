@@ -36,7 +36,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_ModuleStatus = 0;
     flag = 0;
     m_CntRot90 = m_CntRot180 = 0;
-    m_Surface  = 0;
+    m_Surface  = 0.0;
     m_Link     = 0;
     m_LastEdit_Time = time( NULL );
     m_LocalClearance = 0;
@@ -634,13 +634,11 @@ void MODULE::Set_Rectangle_Encadrement()
     int width;
     int cx, cy, uxf, uyf, rayon;
     int xmax, ymax;
-
+    int xmin, ymin;
 
     /* Initial coordinates of the module has a nonzero limit value. */
-    m_BoundaryBox.m_Pos.x = -500;
-    m_BoundaryBox.m_Pos.y = -500;
-    xmax = 500;
-    ymax = 500;
+    xmin = ymin = -250;
+    xmax = ymax = 250;
 
     for( EDGE_MODULE* pt_edge_mod = (EDGE_MODULE*) m_Drawings.GetFirst();
          pt_edge_mod; pt_edge_mod = pt_edge_mod->Next() )
@@ -655,50 +653,59 @@ void MODULE::Set_Rectangle_Encadrement()
         case S_ARC:
         case S_CIRCLE:
         {
-            cx     = pt_edge_mod->m_Start0.x; cy = pt_edge_mod->m_Start0.y;  // center
+            cx     = pt_edge_mod->m_Start0.x;
+            cy = pt_edge_mod->m_Start0.y;  // center
             uxf    = pt_edge_mod->m_End0.x; uyf = pt_edge_mod->m_End0.y;
             rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
             rayon += width;
-            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, cx - rayon );
-            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, cy - rayon );
+            xmin = MIN( xmin, cx - rayon );
+            ymin = MIN( ymin, cy - rayon );
             xmax = MAX( xmax, cx + rayon );
             ymax = MAX( ymax, cy + rayon );
             break;
         }
 
-        default:
-            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x,
-                                         pt_edge_mod->m_Start0.x - width );
-            m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x,
-                                         pt_edge_mod->m_End0.x - width );
-            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y,
-                                         pt_edge_mod->m_Start0.y - width );
-            m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y,
-                                         pt_edge_mod->m_End0.y - width );
+        case S_SEGMENT:
+            xmin = MIN( xmin, pt_edge_mod->m_Start0.x - width );
+            xmin = MIN( xmin, pt_edge_mod->m_End0.x - width );
+            ymin = MIN( ymin, pt_edge_mod->m_Start0.y - width );
+            ymin = MIN( ymin, pt_edge_mod->m_End0.y - width );
             xmax = MAX( xmax, pt_edge_mod->m_Start0.x + width );
             xmax = MAX( xmax, pt_edge_mod->m_End0.x + width );
             ymax = MAX( ymax, pt_edge_mod->m_Start0.y + width );
             ymax = MAX( ymax, pt_edge_mod->m_End0.y + width );
             break;
+
+        case S_POLYGON:
+            for( unsigned ii = 0; ii < pt_edge_mod->m_PolyPoints.size(); ii++ )
+            {
+                wxPoint pt = pt_edge_mod->m_PolyPoints[ii];
+                xmin = MIN( xmin, (pt.x - width) );
+                ymin = MIN( ymin, (pt.y - width) );
+                xmax   = MAX( xmax, (pt.x + width) );
+                ymax   = MAX( ymax, (pt.y + width) );
+            }
+            break;
         }
     }
 
-    /* Pads: find the min and max coordinates and update the bounding
-     * rectangle.
+    /* Pads: find the min and max coordinates and update the bounding box.
      */
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         rayon = pad->m_Rayon;
         cx    = pad->m_Pos0.x;
         cy    = pad->m_Pos0.y;
-        m_BoundaryBox.m_Pos.x = MIN( m_BoundaryBox.m_Pos.x, cx - rayon );
-        m_BoundaryBox.m_Pos.y = MIN( m_BoundaryBox.m_Pos.y, cy - rayon );
+        xmin = MIN( xmin, cx - rayon );
+        ymin = MIN( ymin, cy - rayon );
         xmax = MAX( xmax, cx + rayon );
         ymax = MAX( ymax, cy + rayon );
     }
 
-    m_BoundaryBox.SetWidth( xmax - m_BoundaryBox.m_Pos.x );
-    m_BoundaryBox.SetHeight( ymax - m_BoundaryBox.m_Pos.y );
+    m_BoundaryBox.m_Pos.x = xmin;
+    m_BoundaryBox.m_Pos.y = ymin;
+    m_BoundaryBox.SetWidth( xmax - xmin );
+    m_BoundaryBox.SetHeight( ymax - ymin );
 }
 
 
@@ -709,75 +716,28 @@ void MODULE::Set_Rectangle_Encadrement()
  */
 void MODULE::SetRectangleExinscrit()
 {
-    int width;
-    int cx, cy, uxf, uyf, rayon;
-    int xmax, ymax;
-
-    m_RealBoundaryBox.m_Pos.x = xmax = m_Pos.x;
-    m_RealBoundaryBox.m_Pos.y = ymax = m_Pos.y;
+    m_RealBoundaryBox.m_Pos = m_Pos;
+    m_RealBoundaryBox.SetEnd( m_Pos );
+    m_RealBoundaryBox.Inflate( 500 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
          edge; edge = edge->Next() )
     {
-        if( edge->Type() != TYPE_EDGE_MODULE )
+        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
             continue;
 
-        width = edge->m_Width / 2;
-
-        switch( edge->m_Shape )
-        {
-        case S_ARC:
-        case S_CIRCLE:
-        {
-            cx     = edge->m_Start.x;
-            cy     = edge->m_Start.y;  // center
-            uxf    = edge->m_End.x;
-            uyf    = edge->m_End.y;
-            rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
-            rayon += width;
-            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x,
-                                             cx - rayon );
-            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y,
-                                             cy - rayon );
-            xmax = MAX( xmax, cx + rayon );
-            ymax = MAX( ymax, cy + rayon );
-            break;
-        }
-
-        default:
-            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x,
-                                             edge->m_Start.x - width );
-            m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x,
-                                             edge->m_End.x - width );
-            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y,
-                                             edge->m_Start.y - width );
-            m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y,
-                                             edge->m_End.y - width );
-            xmax = MAX( xmax, edge->m_Start.x + width );
-            xmax = MAX( xmax, edge->m_End.x + width );
-            ymax = MAX( ymax, edge->m_Start.y + width );
-            ymax = MAX( ymax, edge->m_End.y + width );
-            break;
-        }
+        EDA_Rect rect = edge->GetBoundingBox();
+        m_RealBoundaryBox.Merge(rect);
     }
+
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        rayon = pad->m_Rayon;
-
-        cx = pad->m_Pos.x;
-        cy = pad->m_Pos.y;
-
-        m_RealBoundaryBox.m_Pos.x = MIN( m_RealBoundaryBox.m_Pos.x, cx - rayon );
-        m_RealBoundaryBox.m_Pos.y = MIN( m_RealBoundaryBox.m_Pos.y, cy - rayon );
-
-        xmax = MAX( xmax, cx + rayon );
-        ymax = MAX( ymax, cy + rayon );
+        EDA_Rect rect = pad->GetBoundingBox();
+        m_RealBoundaryBox.Merge(rect);
     }
 
-    m_RealBoundaryBox.SetWidth( xmax - m_RealBoundaryBox.m_Pos.x );
-    m_RealBoundaryBox.SetHeight( ymax - m_RealBoundaryBox.m_Pos.y );
-    m_Surface = ABS( (float) m_RealBoundaryBox.GetWidth()
+    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth()
                      * m_RealBoundaryBox.GetHeight() );
 }
 
@@ -801,7 +761,7 @@ EDA_Rect MODULE::GetBoundingBox()
     text_area = m_Value->GetBoundingBox();
     area.Merge( text_area );
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();  edge;
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;
          edge = edge->Next() )
     {
         if( edge->Type() != TYPE_TEXTE_MODULE )

@@ -36,45 +36,65 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* brightSizer;
 	brightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_gridInfo = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxStaticBoxSizer* sbSizerInfo;
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Bitmap info:") ), wxVERTICAL );
 	
-	// Grid
-	m_gridInfo->CreateGrid( 3, 1 );
-	m_gridInfo->EnableEditing( false );
-	m_gridInfo->EnableGridLines( true );
-	m_gridInfo->EnableDragGridSize( false );
-	m_gridInfo->SetMargins( 0, 0 );
+	wxFlexGridSizer* fgSizerInfo;
+	fgSizerInfo = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerInfo->SetFlexibleDirection( wxBOTH );
+	fgSizerInfo->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	// Columns
-	m_gridInfo->SetColSize( 0, 80 );
-	m_gridInfo->EnableDragColMove( false );
-	m_gridInfo->EnableDragColSize( true );
-	m_gridInfo->SetColLabelSize( 30 );
-	m_gridInfo->SetColLabelValue( 0, _("Value") );
-	m_gridInfo->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_staticTextSizeX = new wxStaticText( this, wxID_ANY, _("Size X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeX->Wrap( -1 );
+	fgSizerInfo->Add( m_staticTextSizeX, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	// Rows
-	m_gridInfo->AutoSizeRows();
-	m_gridInfo->EnableDragRowSize( true );
-	m_gridInfo->SetRowLabelSize( 80 );
-	m_gridInfo->SetRowLabelValue( 0, _("Size X") );
-	m_gridInfo->SetRowLabelValue( 1, _("Size Y") );
-	m_gridInfo->SetRowLabelValue( 2, _("BPP") );
-	m_gridInfo->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTRE );
+	m_SizeXValue = new wxStaticText( this, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXValue->Wrap( -1 );
+	fgSizerInfo->Add( m_SizeXValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	// Label Appearance
+	m_SizeXunits = new wxStaticText( this, wxID_ANY, _("pixels"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXunits->Wrap( -1 );
+	fgSizerInfo->Add( m_SizeXunits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	// Cell Defaults
-	m_gridInfo->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	brightSizer->Add( m_gridInfo, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticTextSizeY = new wxStaticText( this, wxID_ANY, _("Size Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeY->Wrap( -1 );
+	fgSizerInfo->Add( m_staticTextSizeY, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_SizeYValue = new wxStaticText( this, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYValue->Wrap( -1 );
+	fgSizerInfo->Add( m_SizeYValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_SizeYunits = new wxStaticText( this, wxID_ANY, _("pixels"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYunits->Wrap( -1 );
+	fgSizerInfo->Add( m_SizeYunits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextBPP = new wxStaticText( this, wxID_ANY, _("BPP:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBPP->Wrap( -1 );
+	fgSizerInfo->Add( m_staticTextBPP, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_BPPValue = new wxStaticText( this, wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BPPValue->Wrap( -1 );
+	fgSizerInfo->Add( m_BPPValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_BPPunits = new wxStaticText( this, wxID_ANY, _("bits"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BPPunits->Wrap( -1 );
+	fgSizerInfo->Add( m_BPPunits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	sbSizerInfo->Add( fgSizerInfo, 0, wxEXPAND|wxBOTTOM, 5 );
+	
+	brightSizer->Add( sbSizerInfo, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonLoad = new wxButton( this, wxID_ANY, _("Load Bitmap"), wxDefaultPosition, wxDefaultSize, 0 );
 	brightSizer->Add( m_buttonLoad, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonExportEeschema = new wxButton( this, wxID_ANY, _("Export to eeschema"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonExportEeschema->SetToolTip( _("Create a lib file for Eeschema") );
+	
 	brightSizer->Add( m_buttonExportEeschema, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonExportPcbnew = new wxButton( this, wxID_ANY, _("Export to Pcbnew"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonExportPcbnew->SetToolTip( _("Create a footprint file for PcbNew") );
+	
 	brightSizer->Add( m_buttonExportPcbnew, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxString m_rbOptionsChoices[] = { _("Normal"), _("Negative") };
@@ -94,6 +114,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	m_statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 	
 	// Connect Events
 	m_InitialPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaint ), NULL, this );

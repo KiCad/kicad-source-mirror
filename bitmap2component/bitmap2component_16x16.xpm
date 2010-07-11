@@ -1,0 +1,38 @@
+/* XPM */
+const char *bitmap2component_16x16_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"& c #128B26",
+"  c #0CFA0C",
+"# c #A75104",
+"@ c #22204C",
+"O c #050304",
+"; c #191327",
+"X c #054306",
+"* c #F27504",
+"o c #0C7E0C",
+": c #1ACC2E",
+"$ c #51280C",
+"- c #391E07",
+". c #0CBE0C",
+"% c #289F55",
+"= c #703505",
+"+ c #1C563C",
+/* pixels */
+"            .  X",
+"oooooooooooo .. ",
+"oXO+ooooooXO .. ",
+"@@#$+%+&   XX  X",
+"OO#*#O#=OX  XOOO",
+"OO#*=O$-OO;@@@: ",
+"OO=OO.%:XOO***$o",
+"%:%   X.  ;***#X",
+"ooooo . .o;***#;",
+"OO=$OXooOOO###;o",
+"OO#*#O#$OOX+o&: ",
+"OO#*=O=-OX  XOOO",
+"&X=;& %%   XX  X",
+"oX;oooooooXO .. ",
+"oooooooooooo .. ",
+"            .  X"
+};

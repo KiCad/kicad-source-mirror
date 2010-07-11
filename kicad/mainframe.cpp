@@ -171,6 +171,11 @@ void WinEDA_MainFrame::OnExit( wxCommandEvent& event )
     Close( true );
 }
 
+void WinEDA_MainFrame::OnRunBitmapConverter( wxCommandEvent& event )
+{
+    ExecuteFile( this, BITMAPCONVERTER_EXE, wxEmptyString );
+}
+
 
 void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 {

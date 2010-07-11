@@ -499,7 +499,10 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             DrawPanel->Refresh();
         break;
 
-    case HK_SWITCH_TRACK_POSTURE:   // change the position of initial segment when creating new tracks
+    case HK_SWITCH_TRACK_POSTURE:
+        /* change the position of initial segment when creating new tracks
+         * switch from _/  to -\ .
+         */
         ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
         g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
         ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );

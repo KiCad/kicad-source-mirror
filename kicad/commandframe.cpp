@@ -9,16 +9,20 @@
 
 #include "kicad.h"
 
+#include "../bitmap2component/bitmap2component_16x16.xpm"
+
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( WinEDA_MainFrame* parent ) :
     wxSashLayoutWindow( parent, wxID_ANY )
 {
+    #define BUTTON_HEIGHT 32
     m_Parent    = parent;
     m_DialogWin = NULL;
     m_ButtPanel = new wxPanel( this, wxID_ANY );
     m_ButtonSeparation     = 10;    // control of command buttons position
-    m_ButtonLastPosition.x = 20;    // control of command buttons position
-    m_ButtonLastPosition.y = 20;    // control of command buttons position
-    m_ButtonsPanelHeight        = (m_ButtonLastPosition.y * 2) + 32;
+    m_ButtonsListPosition.x = 20;
+    m_ButtonsListPosition.y = 20 + BUTTON_HEIGHT;
+    m_ButtonLastPosition = m_ButtonsListPosition;
+    m_ButtonsPanelHeight   = m_ButtonsListPosition.y + 20;
     CreateCommandToolbar();
     m_DialogWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
@@ -84,6 +88,11 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
     AddFastLaunch( btn );
 
+    btn = new wxBitmapButton( parent, ID_TO_BITMAP_CONVERTER,
+            wxBitmap( bitmap2component_16x16_xpm ) );
+    btn->SetToolTip( _( "Bitmap2Component (Bitmap converter to create logos)" ) );
+    AddFastLaunch( btn );
+
 }
 
 
@@ -96,6 +105,8 @@ void RIGHT_KM_FRAME::AddFastLaunch( wxBitmapButton* button )
  * @param button = wxBitmapButton to add to the window
  */
 {
-    button->Move( m_ButtonLastPosition );
+    wxPoint buttPos = m_ButtonLastPosition;
+    buttPos.y -= button->GetSize().GetHeight();
+    button->Move( buttPos );
     m_ButtonLastPosition.x += button->GetSize().GetWidth() + m_ButtonSeparation;
 }

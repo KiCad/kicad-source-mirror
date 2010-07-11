@@ -20,12 +20,13 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/notebook.h>
-#include <wx/grid.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/radiobox.h>
-#include <wx/stattext.h>
 #include <wx/slider.h>
-#include <wx/sizer.h>
+#include <wx/statusbr.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,13 +44,22 @@ class BM2CMP_FRAME_BASE : public wxFrame
 		wxScrolledWindow* m_InitialPicturePanel;
 		wxScrolledWindow* m_GreyscalePicturePanel;
 		wxScrolledWindow* m_BNPicturePanel;
-		wxGrid* m_gridInfo;
+		wxStaticText* m_staticTextSizeX;
+		wxStaticText* m_SizeXValue;
+		wxStaticText* m_SizeXunits;
+		wxStaticText* m_staticTextSizeY;
+		wxStaticText* m_SizeYValue;
+		wxStaticText* m_SizeYunits;
+		wxStaticText* m_staticTextBPP;
+		wxStaticText* m_BPPValue;
+		wxStaticText* m_BPPunits;
 		wxButton* m_buttonLoad;
 		wxButton* m_buttonExportEeschema;
 		wxButton* m_buttonExportPcbnew;
 		wxRadioBox* m_rbOptions;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
+		wxStatusBar* m_statusBar;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaint( wxPaintEvent& event ){ event.Skip(); }

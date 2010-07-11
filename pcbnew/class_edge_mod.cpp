@@ -94,21 +94,20 @@ EDA_Rect EDGE_MODULE::GetBoundingBox()
         // We must compute true coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
 
-        std::vector<wxPoint> points = m_PolyPoints;
-        wxPoint p_end = m_Start;
-
+        wxPoint p_end;
         MODULE* Module = (MODULE*) m_Parent;
-        for( unsigned ii = 0; ii < points.size(); ii++ )
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
         {
-            wxPoint& pt = points[ii];
+            wxPoint pt = m_PolyPoints[ii];
 
             if( Module )
             {
-                RotatePoint( &pt.x, &pt.y, Module->m_Orient );
+                RotatePoint( &pt, Module->m_Orient );
                 pt += Module->m_Pos;
             }
 
-            pt += m_Start0;
+            if( ii == 0 )
+                p_end = pt;
             bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
             bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
             p_end.x   = MAX( p_end.x, pt.x );
@@ -121,6 +120,7 @@ EDA_Rect EDGE_MODULE::GetBoundingBox()
     }
     }
 
+    bbox.Inflate( (m_Width+1) / 2 );
     return bbox;
 }
 
@@ -269,8 +269,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             wxPoint& pt = points[ii];
 
             RotatePoint( &pt.x, &pt.y, module->m_Orient );
-            pt += module->m_Pos;
-            pt += m_Start0 - offset;
+            pt += module->m_Pos - offset;
         }
 
         GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],

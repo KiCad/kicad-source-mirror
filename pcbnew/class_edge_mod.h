@@ -9,17 +9,19 @@ class EDGE_MODULE : public BOARD_ITEM
 {
 public:
     int     m_Width;        // 0 = line, > 0 = tracks, bus ...
-    wxPoint m_Start;        // Line start point
-    wxPoint m_End;          // Line end point
+    wxPoint m_Start;        // Line start point / circle and arc center
+    wxPoint m_End;          // Line end point / circle and arc starting point
 
     int     m_Shape;        // enum Track_Shapes
-    wxPoint m_Start0;       // Start point.
-    wxPoint m_End0;         // End point.
+    wxPoint m_Start0;       // Start point or centre, relative to module origin, orient 0.
+    wxPoint m_End0;         // End point, relative to module origin, orient 0.
 
     int     m_Angle;        // Arcs: angle in 0.1 degrees
 
-    std::vector<wxPoint> m_PolyPoints;   // For polygons: number of points (> 2)
-                            // Coord are relative to Origin, orient 0
+    std::vector<wxPoint> m_PolyPoints;   /* For polygons: number of points (> 2)
+                                          *  Coord are relative to Origin, orient 0
+                                          *  m_Start0 and m_End0 are not used for polygons
+                                          */
 
 public:
     EDGE_MODULE( MODULE* parent );
@@ -40,7 +42,8 @@ public:
         return m_Start;
     }
 
-    void    Copy( EDGE_MODULE* source );    // copy structure
+
+    void             Copy( EDGE_MODULE* source ); // copy structure
 
     /**
      * Function Save
@@ -48,17 +51,17 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool Save( FILE* aFile ) const;
+    bool             Save( FILE* aFile ) const;
 
-    int     ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
+    int              ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
 
-    void    SetDrawCoord();
+    void             SetDrawCoord();
 
     /* drawing functions */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                  int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void             Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                           int aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void    Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void             Draw3D( Pcb3D_GLCanvas* glcanvas );
 
     /**
      * Function DisplayInfo
@@ -67,7 +70,7 @@ public:
      * Is virtual from EDA_BaseStruct.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
-    void    DisplayInfo( WinEDA_DrawFrame* frame );
+    void             DisplayInfo( WinEDA_DrawFrame* frame );
 
 
     /**
@@ -85,7 +88,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& refPos );
+    bool             HitTest( const wxPoint& refPos );
 
     /**
      * Function GetClass
@@ -95,8 +98,10 @@ public:
     virtual wxString GetClass() const
     {
         return wxT( "MGRAPHIC" );
+
         // return wxT( "EDGE" );  ?
     }
+
 
     /** Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
@@ -109,7 +114,7 @@ public:
      * clearance when the circle is approxiamted by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void         TransformShapeWithClearanceToPolygon(
+    void TransformShapeWithClearanceToPolygon(
         std::vector <CPolyPt>& aCornerBuffer,
         int                    aClearanceValue,
         int
@@ -117,6 +122,7 @@ public:
         double                 aCorrectionFactor );
 
 #if defined(DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
