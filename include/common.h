@@ -313,7 +313,7 @@ const wxString& valeur_param( int valeur, wxString& buf_texte );
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
-wxString        ReturnUnitSymbol( int aUnits = g_UnitMetric,
+wxString        ReturnUnitSymbol( UserUnitType aUnit = g_UserUnit,
                                  const wxString& aFormatString = _( " (%s):" ) );
 
 /**
