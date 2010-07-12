@@ -87,7 +87,7 @@ WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
     m_TextWin = new WinEDA_GraphicTextCtrl( this, _( "Text:" ),
                                             m_CurrentPinSheet->m_Text,
                                             m_CurrentPinSheet->m_Size.x,
-                                            g_UnitMetric, LeftBoxSizer, 200 );
+                                            g_UserUnit, LeftBoxSizer, 200 );
 
     // Display shape selection :
     #define NBSHAPES 5

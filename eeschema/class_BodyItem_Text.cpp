@@ -363,7 +363,7 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );

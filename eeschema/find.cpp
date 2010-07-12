@@ -67,8 +67,8 @@ void WinEDA_SchematicFrame::OnFindDrcMarker( wxFindDialogEvent& event )
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
-        double x = To_User_Unit( g_UnitMetric, (double) lastMarker->m_Pos.x, m_InternalUnits );
-        double y = To_User_Unit( g_UnitMetric, (double) lastMarker->m_Pos.y, m_InternalUnits );
+        double x = To_User_Unit( g_UserUnit, (double) lastMarker->m_Pos.x, m_InternalUnits );
+        double y = To_User_Unit( g_UserUnit, (double) lastMarker->m_Pos.y, m_InternalUnits );
         msg.Printf( _( "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s" ),
                     GetChars( path ), x, GetChars( units ), y, GetChars( units) );
         SetStatusText( msg );

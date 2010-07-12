@@ -58,7 +58,7 @@ public:
     int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
     bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode,
                                      * TRUE = filled */
-    int  m_UserGridUnits;
+    UserUnitType            m_UserGridUnit;
     wxRealPoint             m_UserGridSize;
 
     WinEDA3D_DrawFrame*     m_Draw3DFrame;

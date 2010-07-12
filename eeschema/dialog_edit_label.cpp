@@ -140,11 +140,11 @@ void DialogLabelEditor::InitDialog()
 
     m_TextStyle->SetSelection( style );
 
-    wxString units = ReturnUnitSymbol( g_UnitMetric, wxT( "(%s)" ) );
+    wxString units = ReturnUnitSymbol( g_UserUnit, wxT( "(%s)" ) );
     msg = _( "H" ) + units + _( " x W" ) + units;
     m_staticSizeUnits->SetLabel( msg );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_CurrentText->m_Size.x,
+    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x,
                                  m_Parent->m_InternalUnits );
     m_TextSize->SetValue( msg );
 
@@ -206,7 +206,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
-    value = ReturnValueFromString( g_UnitMetric, text, m_Parent->m_InternalUnits );
+    value = ReturnValueFromString( g_UserUnit, text, m_Parent->m_InternalUnits );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
     if( m_TextShape )
         m_CurrentText->m_Shape = m_TextShape->GetSelection();

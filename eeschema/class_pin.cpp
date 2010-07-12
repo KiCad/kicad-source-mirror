@@ -1647,7 +1647,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "Visible" ), Text, DARKGREEN );
 
     /* Display pin length */
-    Text = ReturnStringFromValue( g_UnitMetric, m_PinLen,
+    Text = ReturnStringFromValue( g_UserUnit, m_PinLen,
                                   EESCHEMA_INTERNAL_UNIT, true );
     frame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 

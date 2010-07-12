@@ -100,9 +100,9 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
     m_ModeColorOption->SetSelection(s_PlotBlackAndWhite);
 
-    AddUnitSymbol(* m_TextPenWidth, g_UnitMetric );
+    AddUnitSymbol(* m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue(g_UnitMetric, g_DrawDefaultLineThickness,
+        ReturnStringFromValue(g_UserUnit, g_DrawDefaultLineThickness,
                               m_Parent->m_InternalUnits ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
     if (GetSizer())
@@ -128,7 +128,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, g_DrawDefaultLineThickness,
+        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
                                m_Parent->m_InternalUnits ) );
 }
 

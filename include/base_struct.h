@@ -15,7 +15,6 @@ extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
 
 #endif
 
-
 /* Id for class identification, at run time */
 enum KICAD_T {
     NOT_USED = -1,          // the 3d code uses this value

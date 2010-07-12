@@ -62,14 +62,14 @@ void dialog_copper_zone::initDialog( )
 
     m_FillModeCtrl->SetSelection( m_Zone_Setting->m_FillMode ? 1 : 0 );
 
-    AddUnitSymbol( *m_ClearanceValueTitle, g_UnitMetric );
-    msg = ReturnStringFromValue( g_UnitMetric,
+    AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
+    msg = ReturnStringFromValue( g_UserUnit,
                                  m_Zone_Setting->m_ZoneClearance,
                                  m_Parent->m_InternalUnits );
     m_ZoneClearanceCtrl->SetValue( msg );
 
-    AddUnitSymbol( *m_MinThicknessValueTitle, g_UnitMetric );
-    msg = ReturnStringFromValue( g_UnitMetric,
+    AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
+    msg = ReturnStringFromValue( g_UserUnit,
                                  m_Zone_Setting->m_ZoneMinThickness,
                                  m_Parent->m_InternalUnits );
     m_ZoneMinThicknessCtrl->SetValue( msg );
@@ -101,8 +101,8 @@ void dialog_copper_zone::initDialog( )
         m_CopperWidthValue->Enable( true );
     }
 
-    AddUnitSymbol( *m_AntipadSizeText, g_UnitMetric );
-    AddUnitSymbol( *m_CopperBridgeWidthText, g_UnitMetric );
+    AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
+    AddUnitSymbol( *m_CopperBridgeWidthText, g_UserUnit );
     PutValueInLocalUnits( *m_AntipadSizeValue,
                           m_Zone_Setting->m_ThermalReliefGapValue,
                           PCB_INTERNAL_UNIT );
@@ -266,7 +266,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_Zone_Setting->m_ZoneClearance =
-        ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
 
     // Test if this is a reasonnable value for this parameter
     // A too large value can hang pcbnew
@@ -279,7 +279,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
-        ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
     if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,

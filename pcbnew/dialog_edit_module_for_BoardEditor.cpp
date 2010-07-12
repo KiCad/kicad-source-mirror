@@ -57,11 +57,11 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 {
     PutValueInLocalUnits( *m_ModPositionX,
                           m_CurrentModule->GetPosition().x, PCB_INTERNAL_UNIT );
-    AddUnitSymbol( *XPositionStatic, g_UnitMetric );
+    AddUnitSymbol( *XPositionStatic, g_UserUnit );
 
     PutValueInLocalUnits( *m_ModPositionY,
                           m_CurrentModule->GetPosition().y, PCB_INTERNAL_UNIT );
-    AddUnitSymbol( *YPositionStatic, g_UnitMetric );
+    AddUnitSymbol( *YPositionStatic, g_UserUnit );
 
     m_LayerCtrl->SetSelection(
          (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
@@ -100,9 +100,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_OrientValue->Enable( select );
 
     // Initialize dialog relative to masks clearances
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     int internalUnit = m_Parent->m_InternalUnits;
     PutValueInLocalUnits( *m_NetClearanceValueCtrl,
@@ -263,17 +263,17 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
     m_3D_Scale = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Scale:" ),
-                                        BoxSizer, 2, 1 );
+                                        BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer    = new wxBoxSizer( wxVERTICAL );
     m_3D_Offset = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Offset:" ),
-                                         BoxSizer, 2, 1 );
+                                         BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer = new wxBoxSizer( wxVERTICAL );
     m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ),
-                                           BoxSizer, 2, 1 );
+                                           BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 }
 

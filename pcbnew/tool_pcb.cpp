@@ -616,22 +616,39 @@ an existing track use its width\notherwise, use current width setting" ),
     // Update displayed values
     m_SelGridBox->Clear();
     wxString format = _( "Grid");
-    if( g_UnitMetric == INCHES )
+    switch( g_UserUnit )
+    {
+    case INCHES:
         format += wxT( " %.1f" );
-    else
+        break;
+
+    case MILLIMETRES:
         format += wxT( " %.3f" );
+        break;
+
+    case UNSCALED_UNITS:
+        format += wxT( " %f" );
+        break;
+    }
 
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
         GRID_TYPE grid = GetScreen()->m_GridList[i];
-        double value = To_User_Unit( g_UnitMetric, grid.m_Size.x,
+        double value = To_User_Unit( g_UserUnit, grid.m_Size.x,
                                      m_InternalUnits );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
-            if( g_UnitMetric == INCHES )
+            switch( g_UserUnit ) 
+            {
+            case INCHES:
                 msg.Printf( format.GetData(), value * 1000 );
-            else
+                break;
+
+            case MILLIMETRES:
+            case UNSCALED_UNITS:
                 msg.Printf( format.GetData(), value );
+                break;
+            }
         }
         else
             msg = _( "User Grid" );

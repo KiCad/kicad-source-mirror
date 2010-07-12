@@ -443,26 +443,24 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
 }
 
 
-void BASE_SCREEN::AddGrid( const wxRealPoint& size, int units, int id )
+void BASE_SCREEN::AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id )
 {
     double x, y;
     wxRealPoint new_size;
     GRID_TYPE new_grid;
 
-    if( units == MILLIMETRE )
+    switch( aUnit )
     {
+    case MILLIMETRES:
         x = size.x / 25.4;
         y = size.y / 25.4;
-    }
-    else if( units == CENTIMETRE )
-    {
-        x = size.x / 2.54;
-        y = size.y / 2.54;
-    }
-    else
-    {
+        break;
+
+    case INCHES:
+    case UNSCALED_UNITS:
         x = size.x;
         y = size.y;
+        break;
     }
 
     new_size.x = x * GetInternalUnits();

@@ -837,7 +837,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UnitMetric, aBoard->m_TrackWidthList[ii],
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii],
                                        PCB_INTERNAL_UNIT, true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
         if( ii == 0 )
@@ -857,9 +857,9 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
     trackwidth_menu->AppendSeparator();
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UnitMetric, aBoard->m_ViasDimensionsList[ii].m_Diameter,
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
                                        PCB_INTERNAL_UNIT, true );
-        wxString drill = ReturnStringFromValue( g_UnitMetric,
+        wxString drill = ReturnStringFromValue( g_UserUnit,
                                                 aBoard->m_ViasDimensionsList[ii].m_Drill,
                                                 PCB_INTERNAL_UNIT,  true );
         if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )

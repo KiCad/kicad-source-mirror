@@ -27,11 +27,11 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UnitMetric = MILLIMETRE;
+        g_UserUnit = MILLIMETRES;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
-            g_UnitMetric = INCHES;
+            g_UserUnit = INCHES;
         UpdateStatusBar();
         ReCreateAuxiliaryToolbar();
         break;

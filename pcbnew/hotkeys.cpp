@@ -365,7 +365,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_SWITCH_UNITS:
-        g_UnitMetric = (g_UnitMetric == INCHES) ? MILLIMETRE : INCHES;
+        g_UserUnit = (g_UserUnit == INCHES) ? MILLIMETRES : INCHES;
         break;
 
     case HK_SWITCH_TRACK_DISPLAY_MODE:
@@ -726,7 +726,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_SWITCH_UNITS:
-        g_UnitMetric = (g_UnitMetric == INCHES) ? MILLIMETRE : INCHES;
+        g_UserUnit = (g_UserUnit == INCHES) ? MILLIMETRES : INCHES;
         break;
 
     case HK_ZOOM_IN:

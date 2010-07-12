@@ -123,21 +123,21 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     // Initialize 3D parameters
 
     wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Scale = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Scale:" ), BoxSizer, 2, 1 );
+    m_3D_Scale = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Scale:" ), BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer    = new wxBoxSizer( wxVERTICAL );
-    m_3D_Offset = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Offset:" ), BoxSizer, 2, 1 );
+    m_3D_Offset = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Offset:" ), BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ), BoxSizer, 2, 1 );
+    m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ), BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     // Initialize dialog relative to masks clearances
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     wxString  msg;
     int internalUnit = m_Parent->m_InternalUnits;

@@ -157,17 +157,17 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
     columnLabel.SetText( _( "Value" ) );
     fieldListCtrl->InsertColumn( COLUMN_TEXT, columnLabel );
 
-    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UnitMetric );
+    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UserUnit );
     textSizeLabel->SetLabel( label );
 
     label  = _( "Pos " );
     label += _( "X" );
-    label += ReturnUnitSymbol( g_UnitMetric );
+    label += ReturnUnitSymbol( g_UserUnit );
     posXLabel->SetLabel( label );
 
     label  = _( "Pos " );
     label += _( "Y" );
-    label += ReturnUnitSymbol( g_UnitMetric );
+    label += ReturnUnitSymbol( g_UserUnit );
     posYLabel->SetLabel( label );
 
     InitBuffers();
@@ -638,7 +638,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     fieldValueTextCtrl->SetValue( field.m_Text );
 
     textSizeTextCtrl->SetValue(
-        WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT, g_UnitMetric, field.m_Size.x ) );
+        WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT, g_UserUnit, field.m_Size.x ) );
 
     wxPoint coord = field.m_Pos;
     wxPoint zero;
@@ -659,13 +659,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UnitMetric, coord.x, EESCHEMA_INTERNAL_UNIT );
+    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x, EESCHEMA_INTERNAL_UNIT );
     posXTextCtrl->SetValue( coordText );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( coord.y );
-    coordText = ReturnStringFromValue( g_UnitMetric, coord.y, EESCHEMA_INTERNAL_UNIT );
+    coordText = ReturnStringFromValue( g_UserUnit, coord.y, EESCHEMA_INTERNAL_UNIT );
     posYTextCtrl->SetValue( coordText );
 }
 
@@ -719,7 +719,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
     field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize(
-        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UnitMetric );
+        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UserUnit );
 
     field.m_Size.y = field.m_Size.x;
 
@@ -734,14 +734,11 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    double value;
-
-    posXTextCtrl->GetValue().ToDouble( &value );
-    field.m_Pos.x = From_User_Unit( g_UnitMetric, value, EESCHEMA_INTERNAL_UNIT );
-
-    posYTextCtrl->GetValue().ToDouble( &value );
-    field.m_Pos.y = From_User_Unit( g_UnitMetric, value, EESCHEMA_INTERNAL_UNIT );
-
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(), 
+            EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(), 
+            EESCHEMA_INTERNAL_UNIT );
+    
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( field.m_Pos.y );

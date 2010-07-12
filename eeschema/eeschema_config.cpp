@@ -189,9 +189,9 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
                 grid_list.Index( GetBaseScreen()->GetGrid() ) );
 
     units.Add( GetUnitsLabel( INCHES ) );
-    units.Add( GetUnitsLabel( MILLIMETRE ) );
+    units.Add( GetUnitsLabel( MILLIMETRES ) );
 
-    dlg.SetUnits( units, g_UnitMetric );
+    dlg.SetUnits( units, g_UserUnit );
     dlg.SetGridSizes( grid_list, GetBaseScreen()->GetGridId() );
     dlg.SetLineWidth( g_DrawDefaultLineThickness );
     dlg.SetTextSize( g_DefaultTextLabelSize );
@@ -220,7 +220,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    g_UnitMetric = dlg.GetUnitsSelection();
+    g_UserUnit = (UserUnitType)dlg.GetUnitsSelection();
 
     GetBaseScreen()->SetGrid(
         grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
@@ -495,8 +495,8 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Unite" ),
-                                                   &g_UnitMetric, 0, 0, 1 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( wxT( "Unite" ),
+                                                   (int*)&g_UserUnit, 0 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
                                                         &g_LayerDescr.LayerColor[LAYER_WIRE],
                                                         GREEN ) );

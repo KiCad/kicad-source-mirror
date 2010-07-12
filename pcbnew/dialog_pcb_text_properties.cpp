@@ -112,17 +112,17 @@ WinEDA_TextPCBPropertiesFrame::WinEDA_TextPCBPropertiesFrame( WinEDA_PcbFrame* p
 
     m_TxtSizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ),
                                          TextPCB->m_Size,
-                                         g_UnitMetric, LeftBoxSizer,
+                                         g_UserUnit, LeftBoxSizer,
                                          m_Parent->m_InternalUnits );
 
     m_TxtWidthCtlr = new WinEDA_ValueCtrl( this, _( "Width" ),
                                            TextPCB->m_Width,
-                                           g_UnitMetric, LeftBoxSizer,
+                                           g_UserUnit, LeftBoxSizer,
                                            m_Parent->m_InternalUnits );
 
     m_TxtPosCtrl = new WinEDA_PositionCtrl( this, _( "Position" ),
                                             TextPCB->m_Pos,
-                                            g_UnitMetric, LeftBoxSizer,
+                                            g_UserUnit, LeftBoxSizer,
                                             m_Parent->m_InternalUnits );
 
     m_SelLayerBox = new WinEDAChoiceBox( this, ID_TEXTPCB_SELECT_LAYER,

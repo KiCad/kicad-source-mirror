@@ -235,8 +235,8 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
         for( unsigned i = 0; i < screen->m_GridList.GetCount(); i++ )
         {
             tmp = screen->m_GridList[i];
-            double gridValueInch = To_User_Unit( 0, tmp.m_Size.x, m_InternalUnits );
-            double gridValue_mm = To_User_Unit( 1, tmp.m_Size.x, m_InternalUnits );
+            double gridValueInch = To_User_Unit( INCHES, tmp.m_Size.x, m_InternalUnits );
+            double gridValue_mm = To_User_Unit( MILLIMETRES, tmp.m_Size.x, m_InternalUnits );
 
             if( tmp.m_Id == ID_POPUP_GRID_USER )
             {
@@ -244,12 +244,22 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
             }
             else
             {
-                if( g_UnitMetric == 0 )     // inches
+                switch( g_UserUnit )
+                {
+                case INCHES:
                     msg.Printf( wxT( "%.1f mils, (%.3f mm)" ),
                                 gridValueInch * 1000, gridValue_mm );
-                else
+                    break;
+
+                case MILLIMETRES:
                     msg.Printf( wxT( "%.3f mm, (%.1f mils)" ),
                                 gridValue_mm, gridValueInch * 1000 );
+                    break;
+
+                case UNSCALED_UNITS:
+                    msg = wxT( "???" );
+                    break;
+                }
             }
             gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
             if( grid == tmp.m_Size )

@@ -19,15 +19,15 @@
 #include "class_board_design_settings.h"
 
 /* helper to convert an integer value to a string, using mils or mm
- * according to g_UnitMetric value
+ * according to g_UserUnit value
  */
 static wxString ReturnStringValue( int aValue )
 {
     wxString      text;
     const wxChar* format;
-    double        value = To_User_Unit( g_UnitMetric, aValue, PCB_INTERNAL_UNIT );
+    double        value = To_User_Unit( g_UserUnit, aValue, PCB_INTERNAL_UNIT );
 
-    if( g_UnitMetric == INCHES )
+    if( g_UserUnit == INCHES )
     {
         format = wxT( " %.1f" );
         value *= 1000;
@@ -35,7 +35,7 @@ static wxString ReturnStringValue( int aValue )
     else
         format = wxT( " %.3f" );
     text.Printf( format, value );
-    if( g_UnitMetric == INCHES )
+    if( g_UserUnit == INCHES )
         text += _( " mils" );
     else
         text += _( " mm" );
@@ -196,9 +196,9 @@ void WinEDA_PcbFrame::SetToolbars()
                                             _( "Enable design rule checking" ) );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM,
-                                      g_UnitMetric == MILLIMETRE ? TRUE : false );
+                                      g_UserUnit == MILLIMETRES );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : false );
+                                      g_UserUnit == INCHES );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );

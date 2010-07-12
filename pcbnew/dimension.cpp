@@ -114,11 +114,11 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
 
     m_TxtSizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ),
                                          Dimension->m_Text->m_Size,
-                                         g_UnitMetric, LeftBoxSizer, m_Parent->m_InternalUnits );
+                                         g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
 
     m_TxtWidthCtrl = new WinEDA_ValueCtrl( this, _( "Width" ),
                                            Dimension->m_Width,
-                                           g_UnitMetric, LeftBoxSizer, m_Parent->m_InternalUnits );
+                                           g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
 
     wxStaticText* text = new wxStaticText( this, -1, _( "Layer:" ) );
     LeftBoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );

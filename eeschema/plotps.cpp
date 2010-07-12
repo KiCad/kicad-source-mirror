@@ -255,7 +255,7 @@ void WinEDA_PlotPSFrame::CreateControls()
     m_DefaultLineSizeCtrl = new WinEDA_ValueCtrl( this,
                                                   _( "Default Line Width" ),
                                                   g_DrawDefaultLineThickness,
-                                                  g_UnitMetric,
+                                                  g_UserUnit,
                                                   m_DefaultLineSizeCtrlSizer,
                                                   EESCHEMA_INTERNAL_UNIT );
 }

@@ -91,17 +91,17 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     columnLabel.SetText( _( "Value" ) );
     fieldListCtrl->InsertColumn( 1, columnLabel );
 
-    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UnitMetric );
+    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UserUnit );
     textSizeLabel->SetLabel( label );
 
     label  = _( "Pos " );
     label += _( "X" );
-    label += ReturnUnitSymbol( g_UnitMetric );
+    label += ReturnUnitSymbol( g_UserUnit );
     posXLabel->SetLabel( label );
 
     label  = _( "Pos " );
     label += _( "Y" );
-    label += ReturnUnitSymbol( g_UnitMetric );
+    label += ReturnUnitSymbol( g_UserUnit );
     posYLabel->SetLabel( label );
 
     copySelectedFieldToPanel();
@@ -599,7 +599,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue(
         WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT,
-                                            g_UnitMetric, field.m_Size.x ) );
+                                            g_UserUnit, field.m_Size.x ) );
 
     wxPoint coord = field.m_Pos;
     wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
@@ -623,11 +623,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UnitMetric, coord.x,
+    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x,
                                                 EESCHEMA_INTERNAL_UNIT );
     posXTextCtrl->SetValue( coordText );
 
-    coordText = ReturnStringFromValue( g_UnitMetric, coord.y,
+    coordText = ReturnStringFromValue( g_UserUnit, coord.y,
                                        EESCHEMA_INTERNAL_UNIT );
     posYTextCtrl->SetValue( coordText );
 }
@@ -667,7 +667,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
     field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize(
-        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UnitMetric );
+        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UserUnit );
     field.m_Size.y = field.m_Size.x;
 
     int style = m_StyleRadioBox->GetSelection();
@@ -681,15 +681,10 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    double value;
-
-    posXTextCtrl->GetValue().ToDouble( &value );
-    field.m_Pos.x = From_User_Unit( g_UnitMetric, value,
-                                    EESCHEMA_INTERNAL_UNIT );
-
-    posYTextCtrl->GetValue().ToDouble( &value );
-    field.m_Pos.y = From_User_Unit( g_UnitMetric, value,
-                                    EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(), 
+            EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(), 
+            EESCHEMA_INTERNAL_UNIT );
 
     return true;
 }

@@ -151,22 +151,22 @@ void DIALOG_PLOT::Init_Dialog()
 
 
     // Set units and value for HPGL pen speed.
-    AddUnitSymbol( *m_textPenSize, g_UnitMetric );
-    msg = ReturnStringFromValue( g_UnitMetric, g_pcb_plot_options.HPGL_Pen_Diam, UNITS_MILS );
+    AddUnitSymbol( *m_textPenSize, g_UserUnit );
+    msg = ReturnStringFromValue( g_UserUnit, g_pcb_plot_options.HPGL_Pen_Diam, UNITS_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units to cm for standard HPGL pen speed.
-    msg = ReturnStringFromValue( CENTIMETRE, g_pcb_plot_options.HPGL_Pen_Speed, 1 );
+    msg = ReturnStringFromValue( UNSCALED_UNITS, g_pcb_plot_options.HPGL_Pen_Speed, 1 );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay.
-    AddUnitSymbol( *m_textPenOvr, g_UnitMetric );
-    msg = ReturnStringFromValue( g_UnitMetric,
+    AddUnitSymbol( *m_textPenOvr, g_UserUnit );
+    msg = ReturnStringFromValue( g_UserUnit,
                                  g_pcb_plot_options.HPGL_Pen_Recouvrement,
                                  UNITS_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
-    msg = ReturnStringFromValue( g_UnitMetric,
+    msg = ReturnStringFromValue( g_UserUnit,
                                  g_pcb_plot_options.PlotLine_Width,
                                  PCB_INTERNAL_UNIT );
     m_LinesWidth->AppendText( msg );
@@ -443,19 +443,19 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     g_pcb_plot_options.DrawViaOnMaskLayer = m_PlotNoViaOnMaskOpt->GetValue();
 
     wxString msg = m_HPGLPenSizeOpt->GetValue();
-    int      tmp = ReturnValueFromString( g_UnitMetric, msg, UNITS_MILS );
+    int      tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
     g_pcb_plot_options.HPGL_Pen_Diam = tmp;
 
     msg = m_HPGLPenSpeedOpt->GetValue();
-    tmp = ReturnValueFromString( CENTIMETRE, msg, 1 );
+    tmp = ReturnValueFromString( MILLIMETRES, msg, 1 );
     g_pcb_plot_options.HPGL_Pen_Speed = tmp;
 
     msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ReturnValueFromString( g_UnitMetric, msg, UNITS_MILS );
+    tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
     g_pcb_plot_options.HPGL_Pen_Recouvrement = tmp;
 
     msg = m_LinesWidth->GetValue();
-    tmp = ReturnValueFromString( g_UnitMetric, msg, PCB_INTERNAL_UNIT );
+    tmp = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
     g_pcb_plot_options.PlotLine_Width = tmp;
     g_DrawDefaultLineThickness = g_pcb_plot_options.PlotLine_Width;
 

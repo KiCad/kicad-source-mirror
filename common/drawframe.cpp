@@ -72,7 +72,6 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
     m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
     m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxilary axis.
-    m_UnitType            = INTERNAL_UNIT_TYPE;    // Internal unit = inch
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;   // hide/Show grid. default = show
@@ -334,18 +333,18 @@ void WinEDA_DrawFrame::DisplayUnitsMsg()
 {
     wxString msg;
 
-    switch( g_UnitMetric )
+    switch( g_UserUnit )
     {
     case INCHES:
-        msg = _( "Inch" );
+        msg = _( "Inches" );
         break;
 
-    case MILLIMETRE:
+    case MILLIMETRES:
         msg += _( "mm" );
         break;
 
     default:
-        msg += _( "??" );
+        msg += _( "Units" );
         break;
     }
 
@@ -610,45 +609,68 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    double dXpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.x,
+    double dXpos = To_User_Unit( g_UserUnit, screen->m_Curseur.x,
                                  m_InternalUnits );
-    double dYpos = To_User_Unit( g_UnitMetric, screen->m_Curseur.y,
+    double dYpos = To_User_Unit( g_UserUnit, screen->m_Curseur.y,
                                  m_InternalUnits );
     /*
      * Converting from inches to mm can give some coordinates due to
      * float point precision rounding errors, like 1.999 or 2.001 so
      * round to the nearest drawing precision required by the application.
     */
-    if ( g_UnitMetric )
+    if ( g_UserUnit == MILLIMETRES )
     {
         dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
         dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
     }
-    if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
-        Line.Printf( g_UnitMetric ? wxT( "X %.2f  Y %.2f" ) :
-                     wxT( "X %.3f  Y %.3f" ), dXpos, dYpos );
-    else
-        Line.Printf( g_UnitMetric ? wxT( "X %.3f  Y %.3f" ) :
-                     wxT( "X %.4f  Y %.4f" ), dXpos, dYpos );
+
+    /* The following sadly is an if eeschema/if pcbnew */
+    wxString formatter;
+    switch( g_UserUnit )
+    {
+    case INCHES:
+        if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        {
+            formatter = wxT( "X %.3f  Y %.3f" );
+        }
+        else
+        {
+            formatter = wxT( "X %.4f  Y %.4f" );
+        }
+        break;
+
+    case MILLIMETRES:
+        if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        {
+            formatter = wxT( "X %.2f  Y %.2f" );
+        }
+        else
+        {
+            formatter = wxT( "X %.3f  Y %.3f" );
+        }
+        break;
+
+    case UNSCALED_UNITS:
+        formatter = wxT( "X %f  Y %f" );
+        break;
+    }
+
+    Line.Printf( formatter, dXpos, dYpos );
     SetStatusText( Line, 2 );
 
     /* Display relative coordinates:  */
     dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UnitMetric, dx, m_InternalUnits );
-    dYpos = To_User_Unit( g_UnitMetric, dy, m_InternalUnits );
-    if ( g_UnitMetric )
+    dXpos = To_User_Unit( g_UserUnit, dx, m_InternalUnits );
+    dYpos = To_User_Unit( g_UserUnit, dy, m_InternalUnits );
+    if( g_UserUnit == MILLIMETRES )
     {
-        dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
+        dXpos = RoundTo0( dXpos, (double) ( m_InternalUnits / 10 ) );
+        dYpos = RoundTo0( dYpos, (double) ( m_InternalUnits / 10 ) );
     }
-    if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
-        Line.Printf( g_UnitMetric ? wxT( "X %.2f  Y %.2f" ) :
-                     wxT( "X %.3f  Y %.3f" ), dXpos, dYpos );
-    else
-        Line.Printf( g_UnitMetric ? wxT( "x %.3f  y %.3f" ) :
-                     wxT( "x %.4f  y %.4f" ), dXpos, dYpos );
 
+    /* We already decided the formatter above */
+    Line.Printf( formatter, dXpos, dYpos );
     SetStatusText( Line, 3 );
 }
 

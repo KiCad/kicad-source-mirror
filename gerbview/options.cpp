@@ -46,12 +46,12 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UnitMetric = MILLIMETRE;
+        g_UserUnit = MILLIMETRES;
         UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        g_UnitMetric = INCHES;
+        g_UserUnit = INCHES;
         UpdateStatusBar();
         break;
 
@@ -206,7 +206,7 @@ WinEDA_GerberGeneralOptionsFrame::WinEDA_GerberGeneralOptionsFrame(
     m_BoxUnits = new wxRadioBox( this, -1, _( "Units" ), wxDefaultPosition,
                                  wxDefaultSize,
                                  2, list_units, 1 );
-    m_BoxUnits->SetSelection( g_UnitMetric ? 1 : 0 );
+    m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
     LeftBoxSizer->Add( m_BoxUnits, 0, wxGROW | wxALL, 5 );
 
     /* Selection of cursor shape */
@@ -242,7 +242,7 @@ void WinEDA_GerberGeneralOptionsFrame::OnOkClick( wxCommandEvent& event )
 {
     DisplayOpt.DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
-    g_UnitMetric  = (m_BoxUnits->GetSelection() == 0) ? 0 : 1;
+    g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
     m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_Default_GERBER_Format =
         (m_GerberDefaultScale->GetSelection() == 0) ? 23 : 34;
