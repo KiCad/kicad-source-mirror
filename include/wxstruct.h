@@ -16,13 +16,12 @@
 #include <wx/aui/aui.h>
 
 #include "colors.h"
+#include "common.h"
 
 //C++ guarantees that operator delete checks its argument for null-ness
 #ifndef SAFE_DELETE
 #define SAFE_DELETE( p ) delete (p); (p) = NULL;
 #endif
-
-#define INTERNAL_UNIT_TYPE 0             // Internal unit = inch
 
 #ifndef EESCHEMA_INTERNAL_UNIT
 #define EESCHEMA_INTERNAL_UNIT 1000
@@ -169,7 +168,6 @@ public:
                                             // = 1000 for eeschema, = 10000
                                             // for PCBnew and Gerbview
 
-    int          m_UnitType;                // Internal Unit type (0 = inch)
     bool         m_Draw_Axis;               // TRUE to show X and Y axis
     bool         m_Draw_Sheet_Ref;          // TRUE to show frame references
 
@@ -566,7 +564,8 @@ public:
 class WinEDA_GraphicTextCtrl
 {
 public:
-    int           m_Units, m_Internal_Unit;
+    UserUnitType  m_UserUnit;
+    int           m_Internal_Unit;
 
     wxTextCtrl*   m_FrameText;
     wxTextCtrl*   m_FrameSize;
@@ -576,7 +575,7 @@ private:
 public:
     WinEDA_GraphicTextCtrl( wxWindow* parent, const wxString& Title,
                             const wxString& TextToEdit, int textsize,
-                            int units, wxBoxSizer* BoxSizer, int framelen = 200,
+                            UserUnitType user_unit, wxBoxSizer* BoxSizer, int framelen = 200,
                             int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
     ~WinEDA_GraphicTextCtrl();
@@ -594,10 +593,10 @@ public:
      * Function FormatSize
      * formats a string containing the size in the desired units.
      */
-    static wxString FormatSize( int internalUnit, int units, int textSize );
+    static wxString FormatSize( int internalUnit, UserUnitType user_unit, int textSize );
 
     static int      ParseSize( const wxString& sizeText, int internalUnit,
-                               int units );
+                               UserUnitType user_unit );
 };
 
 
@@ -608,7 +607,8 @@ public:
 class WinEDA_PositionCtrl
 {
 public:
-    int           m_Units, m_Internal_Unit;
+    UserUnitType  m_UserUnit;
+    int           m_Internal_Unit;
     wxPoint       m_Pos_To_Edit;
 
     wxTextCtrl*   m_FramePosX;
@@ -619,7 +619,7 @@ private:
 public:
     WinEDA_PositionCtrl( wxWindow* parent, const wxString& title,
                          const wxPoint& pos_to_edit,
-                         int units, wxBoxSizer* BoxSizer,
+                         UserUnitType user_unit, wxBoxSizer* BoxSizer,
                          int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
     ~WinEDA_PositionCtrl();
@@ -639,7 +639,7 @@ class WinEDA_SizeCtrl : public WinEDA_PositionCtrl
 public:
     WinEDA_SizeCtrl( wxWindow* parent, const wxString& title,
                      const wxSize& size_to_edit,
-                     int units, wxBoxSizer* BoxSizer,
+                     UserUnitType user_unit, wxBoxSizer* BoxSizer,
                      int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
     ~WinEDA_SizeCtrl() { }
@@ -653,7 +653,7 @@ public:
 class WinEDA_ValueCtrl
 {
 public:
-    int           m_Units;
+    UserUnitType  m_UserUnit;
     int           m_Value;
     wxTextCtrl*   m_ValueCtrl;
 private:
@@ -662,7 +662,7 @@ private:
 
 public:
     WinEDA_ValueCtrl( wxWindow* parent, const wxString& title, int value,
-                      int units, wxBoxSizer* BoxSizer,
+                      UserUnitType user_unit, wxBoxSizer* BoxSizer,
                       int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
     ~WinEDA_ValueCtrl();

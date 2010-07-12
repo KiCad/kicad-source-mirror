@@ -66,7 +66,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
-    m_UserGridUnits       = INCHES;
+    m_UserGridUnit        = INCHES;
     m_Collector           = new GENERAL_COLLECTOR();
 }
 
@@ -340,9 +340,23 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
         theta = theta * 180.0 / M_PI;
 
         ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
-        Line.Printf( g_UnitMetric ? wxT( "Ro %.3f Th %.1f" ) :
-                     wxT( "Ro %.4f Th %.1f" ),
-                     To_User_Unit( g_UnitMetric, ro, m_InternalUnits ),
+        wxString formatter;
+        switch( g_UserUnit )
+        {
+        case INCHES:
+            formatter = wxT( "Ro %.4f Th %.1f" );
+            break;
+
+        case MILLIMETRES:
+            formatter = wxT( "Ro %.3f Th %.1f" );
+            break;
+
+        case UNSCALED_UNITS:
+            formatter = wxT( "Ro %f Th %f" );
+            break;
+        }
+
+        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_InternalUnits ),
                      theta );
 
         // overwrite the absolute cartesian coordinates
@@ -378,7 +392,7 @@ void WinEDA_BasePcbFrame::LoadSettings()
 
     cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
-    cfg->Read( m_FrameName + UserGridUnitsEntry, &m_UserGridUnits,
+    cfg->Read( m_FrameName + UserGridUnitsEntry, (long*)&m_UserGridUnit,
                ( long )INCHES );
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
@@ -409,7 +423,7 @@ void WinEDA_BasePcbFrame::SaveSettings()
     WinEDA_DrawFrame::SaveSettings();
     cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
     cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
-    cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnits );
+    cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );
     cfg->Write( m_FrameName + DisplayPadFillEntry, m_DisplayPadFill );
     cfg->Write( m_FrameName + DisplayViaFillEntry, m_DisplayViaFill );
     cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );

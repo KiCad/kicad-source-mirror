@@ -530,7 +530,7 @@ void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
@@ -791,12 +791,12 @@ void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Radius,
+    msg = ReturnStringFromValue( g_UserUnit, m_Radius,
                                  EESCHEMA_INTERNAL_UNIT, true );
     aFrame->AppendMsgPanel( _( "Radius" ), msg, RED );
 
@@ -1020,7 +1020,7 @@ void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
@@ -1271,7 +1271,7 @@ void LIB_SEGMENT::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
@@ -1689,7 +1689,7 @@ void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel(_( "Line width" ), msg, BLUE );
@@ -2060,7 +2060,7 @@ void LIB_BEZIER::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UnitMetric, m_Width,
+    msg = ReturnStringFromValue( g_UserUnit, m_Width,
                                  EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );

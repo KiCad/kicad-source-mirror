@@ -12,6 +12,7 @@
 #include "base_struct.h"
 #include "class_undoredo_container.h"
 #include "block_commande.h"
+#include "common.h"
 
 
 // Forward declarations:
@@ -325,7 +326,7 @@ public:
     void        SetGridList( GridArray& sizelist );
     void        AddGrid( const GRID_TYPE& grid );
     void        AddGrid( const wxRealPoint& size, int id );
-    void        AddGrid( const wxRealPoint& size, int units, int id );
+    void        AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id );
 
 
     /**

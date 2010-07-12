@@ -81,24 +81,36 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     msg.Printf(format, m_Screen->m_ScreenNumber);
     m_TextSheetNumber->SetLabel(msg);
 
-    if( g_UnitMetric )
+    switch( g_UserUnit )
     {
-        UserSizeX = (double)g_Sheet_user.m_Size.x * 25.4 / 1000;
-        UserSizeY = (double)g_Sheet_user.m_Size.y * 25.4 / 1000;
-        msg.Printf( wxT("%.2f"), UserSizeX );
-        m_TextUserSizeX->SetValue(msg);
-        msg.Printf( wxT("%.2f"), UserSizeY );
-        m_TextUserSizeY->SetValue(msg);
+    case MILLIMETRES:
+        UserSizeX = (double) g_Sheet_user.m_Size.x * 25.4 / 1000;
+        UserSizeY = (double) g_Sheet_user.m_Size.y * 25.4 / 1000;
+        msg.Printf( wxT( "%.2f" ), UserSizeX );
+        m_TextUserSizeX->SetValue( msg );
+        msg.Printf( wxT( "%.2f" ), UserSizeY );
+        m_TextUserSizeY->SetValue( msg );
+        break;
+
+    case INCHES:
+        UserSizeX = (double) g_Sheet_user.m_Size.x / 1000;
+        UserSizeY = (double) g_Sheet_user.m_Size.y / 1000;
+        msg.Printf( wxT( "%.3f" ), UserSizeX );
+        m_TextUserSizeX->SetValue( msg );
+        msg.Printf( wxT( "%.3f" ), UserSizeY );
+        m_TextUserSizeY->SetValue( msg );
+        break;
+
+    case UNSCALED_UNITS:
+        UserSizeX = g_Sheet_user.m_Size.x;
+        UserSizeY = g_Sheet_user.m_Size.y;
+        msg.Printf( wxT( "%f" ), UserSizeX );
+        m_TextUserSizeX->SetValue( msg );
+        msg.Printf( wxT( "%f" ), UserSizeY );
+        m_TextUserSizeY->SetValue( msg );
+        break;
     }
-    else
-    {
-        UserSizeX = (double)g_Sheet_user.m_Size.x / 1000;
-        UserSizeY = (double)g_Sheet_user.m_Size.y / 1000;
-        msg.Printf( wxT("%.3f"), UserSizeX );
-        m_TextUserSizeX->SetValue(msg);
-        msg.Printf( wxT("%.3f"), UserSizeY );
-        m_TextUserSizeY->SetValue(msg);
-    }
+
     // Set validators
     m_PageSizeBox->SetValidator( wxGenericValidator(& m_CurrentSelection) );
     m_TextRevision->SetValidator( wxTextValidator(wxFILTER_NONE, & m_Screen->m_Revision) );
@@ -185,15 +197,22 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings(wxCommandEvent& event)
     m_SelectedSheet = SheetList[ii];
     m_Screen->m_CurrentSheetDesc = m_SelectedSheet;
 
-    if( g_UnitMetric )
+    switch( g_UserUnit )
     {
-        g_Sheet_user.m_Size.x = (int)( UserSizeX * 1000 / 25.4 );
-        g_Sheet_user.m_Size.y = (int)( UserSizeY * 1000 / 25.4 );
-    }
-    else
-    {
-        g_Sheet_user.m_Size.x = (int)( UserSizeX * 1000 );
-        g_Sheet_user.m_Size.y = (int)( UserSizeY * 1000 );
+    case MILLIMETRES:
+        g_Sheet_user.m_Size.x = (int) ( UserSizeX * 1000 / 25.4 );
+        g_Sheet_user.m_Size.y = (int) ( UserSizeY * 1000 / 25.4 );
+        break;
+
+    case INCHES:
+        g_Sheet_user.m_Size.x = (int) ( UserSizeX * 1000 );
+        g_Sheet_user.m_Size.y = (int) ( UserSizeY * 1000 );
+        break;
+
+    case UNSCALED_UNITS:
+        g_Sheet_user.m_Size.x = (int) ( UserSizeX );
+        g_Sheet_user.m_Size.y = (int) ( UserSizeY );
+        break;
     }
 
     if( g_Sheet_user.m_Size.x < 6000 )

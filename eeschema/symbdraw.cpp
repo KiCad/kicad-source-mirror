@@ -68,9 +68,9 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 
     DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem->m_typeName );
 
-    dialog.SetWidthUnits( ReturnUnitSymbol( g_UnitMetric ) );
+    dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
-    wxString val = ReturnStringFromValue( g_UnitMetric, m_drawLineWidth,
+    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth,
                                           m_InternalUnits );
     dialog.SetWidth( val );
     dialog.SetApplyToAllUnits( !m_drawSpecificUnit );
@@ -85,7 +85,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
         return;
 
     val = dialog.GetWidth();
-    m_drawLineWidth = ReturnValueFromString( g_UnitMetric, val,
+    m_drawLineWidth = ReturnValueFromString( g_UserUnit, val,
                                              m_InternalUnits );
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();

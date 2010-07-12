@@ -181,27 +181,27 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->m_Start.x = ReturnValueFromString( g_UnitMetric, msg,
+    m_Item->m_Start.x = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->m_Start.y = ReturnValueFromString( g_UnitMetric, msg,
+    m_Item->m_Start.y = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->m_End.x = ReturnValueFromString( g_UnitMetric, msg,
+    m_Item->m_End.x = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->m_End.y = ReturnValueFromString( g_UnitMetric, msg,
+    m_Item->m_End.y = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->m_Width = ReturnValueFromString( g_UnitMetric, msg,
+    m_Item->m_Width = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UnitMetric, msg,
+    int thickness = ReturnValueFromString( g_UserUnit, msg,
         m_Parent->m_InternalUnits );
 
     m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);

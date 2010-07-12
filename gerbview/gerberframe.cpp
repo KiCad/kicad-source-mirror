@@ -286,10 +286,10 @@ void WinEDA_GerberFrame::SetToolbars()
     {
         m_OptionsToolBar->ToggleTool(
             ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UnitMetric ==
-            MILLIMETRE ? TRUE : FALSE );
+            g_UserUnit ==
+            MILLIMETRES ? TRUE : FALSE );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : FALSE );
+                                      g_UserUnit == INCHES ? TRUE : FALSE );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );

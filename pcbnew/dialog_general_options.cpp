@@ -38,7 +38,7 @@ void Dialog_GeneralOptions::init()
 
     /* Set display options */
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
-    m_UnitsSelection->SetSelection( g_UnitMetric ? 1 : 0 );
+    m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
     m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
 
     wxString timevalue;
@@ -69,13 +69,13 @@ void Dialog_GeneralOptions::OnCancelClick( wxCommandEvent& event )
 
 void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 {
-    int ii;
+    UserUnitType ii;
 
     DisplayOpt.DisplayPolarCood =
         ( m_PolarDisplay->GetSelection() == 0 ) ? FALSE : true;
-    ii = g_UnitMetric;
-    g_UnitMetric = ( m_UnitsSelection->GetSelection() == 0 )  ? 0 : 1;
-    if( ii != g_UnitMetric )
+    ii = g_UserUnit;
+    g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
+    if( ii != g_UserUnit )
         m_Parent->ReCreateAuxiliaryToolbar();
 
     m_Parent->m_CursorShape = m_CursorShape->GetSelection();
@@ -132,11 +132,11 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UnitMetric = MILLIMETRE;
+        g_UserUnit = MILLIMETRES;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
         if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
-            g_UnitMetric = INCHES;
+            g_UserUnit = INCHES;
         m_TrackAndViasSizesList_Changed = true;
         UpdateStatusBar();
         ReCreateAuxiliaryToolbar();

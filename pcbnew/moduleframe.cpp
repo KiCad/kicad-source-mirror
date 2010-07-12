@@ -178,7 +178,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
 
-    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
+    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -351,10 +351,10 @@ void WinEDA_ModuleEditFrame::SetToolbars()
     {
         m_OptionsToolBar->ToggleTool(
             ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UnitMetric ==
-            MILLIMETRE ? TRUE : false );
+            g_UserUnit ==
+            MILLIMETRES ? TRUE : false );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : false );
+                                      g_UserUnit == INCHES ? TRUE : false );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );

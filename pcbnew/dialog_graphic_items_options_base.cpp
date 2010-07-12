@@ -95,7 +95,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE::DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSizerRight;
 	sbSizerRight = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General:") ), wxVERTICAL );
 	
-	m_DefaultPenSizeTitle = new wxStaticText( this, wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultPenSizeTitle = new wxStaticText( this, wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DefaultPenSizeTitle->Wrap( -1 );
 	m_DefaultPenSizeTitle->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	

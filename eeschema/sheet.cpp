@@ -43,14 +43,14 @@ bool WinEDA_SchematicFrame::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     DIALOG_SCH_SHEET_PROPS dlg( this );
 
-    wxString units = GetUnitsLabel( g_UnitMetric );
+    wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetFileName( aSheet->GetFileName() );
-    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UnitMetric,
+    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                     aSheet->m_FileNameSize,
                                                     m_InternalUnits ) );
     dlg.SetFileNameTextSizeUnits( units );
     dlg.SetSheetName( aSheet->m_SheetName );
-    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UnitMetric,
+    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                      aSheet->m_SheetNameSize,
                                                      m_InternalUnits ) );
     dlg.SetSheetNameTextSizeUnits( units );
@@ -109,12 +109,12 @@ structures and cannot be undone.\nOk to continue renaming?" );
             else
                 SaveCopyInUndoList( aSheet, UR_CHANGED );
 
-            aSheet->m_FileNameSize = ReturnValueFromString( g_UnitMetric,
+            aSheet->m_FileNameSize = ReturnValueFromString( g_UserUnit,
                                                             dlg.GetFileNameTextSize(),
                                                             m_InternalUnits );
 
             aSheet->m_SheetName = dlg.GetSheetName();
-            aSheet->m_SheetNameSize = ReturnValueFromString( g_UnitMetric,
+            aSheet->m_SheetNameSize = ReturnValueFromString( g_UserUnit,
                                                              dlg.GetSheetNameTextSize(),
                                                              m_InternalUnits );
 

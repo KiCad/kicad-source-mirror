@@ -15,7 +15,6 @@ class WinEDA_DrawFrame;
 class WinEDAListBox;
 class WinEDA_DrawPanel;
 
-
 /* Flag for special keys */
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
                                                      * shift key depressed */
@@ -78,9 +77,11 @@ enum pseudokeys {
 #define ON  1
 #define OFF 0
 
-#define INCHES     0
-#define MILLIMETRE 1
-#define CENTIMETRE 2
+enum UserUnitType {
+    INCHES = 0,
+    MILLIMETRES = 1,
+    UNSCALED_UNITS = 2
+};
 
 #if defined(KICAD_GOST)
 #define LEFTMARGIN   800    /* 20mm */
@@ -184,7 +185,7 @@ extern wxString     g_Prj_Default_Config_FullFilename;
 // Name of local configuration file. (<curr projet>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
-extern int          g_UnitMetric; // display units mm = 1, inches = 0, cm = 2
+extern UserUnitType g_UserUnit;     ///< display units
 
 /* Draw color for moving objects: */
 extern int          g_GhostColor;
@@ -324,10 +325,10 @@ wxString        ReturnUnitSymbol( int aUnits = g_UnitMetric,
  * @param aUnits - The units text to return.
  * @return The human readable units string.
  */
-wxString        GetUnitsLabel( int aUnits );
-wxString        GetAbbreviatedUnitsLabel( int aUnits = g_UnitMetric );
+wxString        GetUnitsLabel( UserUnitType aUnit );
+wxString        GetAbbreviatedUnitsLabel( UserUnitType aUnit = g_UserUnit );
 
-int             ReturnValueFromString( int Units, const wxString& TextValue,
+int             ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
                                        int Internal_Unit );
 
 /** Function ReturnStringFromValue
@@ -340,12 +341,12 @@ int             ReturnValueFromString( int Units, const wxString& TextValue,
  * @return a wxString what contains value and optionally the symbol unit (like
  *         2.000 mm)
  */
-wxString        ReturnStringFromValue( int  aUnits,
+wxString        ReturnStringFromValue( UserUnitType aUnit,
                                        int  aValue,
                                        int  aInternal_Unit,
                                        bool aAdd_unit_symbol = false );
 
-void            AddUnitSymbol( wxStaticText& Stext, int Units = g_UnitMetric );
+void            AddUnitSymbol( wxStaticText& Stext, UserUnitType aUnit = g_UserUnit );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
@@ -353,7 +354,7 @@ void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
                                       int Internal_Unit );
 
 /* Convert the number Value in a string according to the internal units
- *  and the selected unit (g_UnitMetric) and put it in the wxTextCtrl TextCtrl
+ *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
  **/
 int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
                                          int               Internal_Unit );
@@ -365,16 +366,15 @@ wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );
  * Function To_User_Unit
  * Convert in inch or mm the variable "val" (double)given in internal units
  * @return the converted value, in double
- * @param is_metric : true if the result must be returned in mm , false if
- *                    inches
+ * @param aUnit : user unit to be converted to
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double          To_User_Unit( bool   is_metric,
+double          To_User_Unit( UserUnitType aUnit,
                               double val,
                               int    internal_unit_value );
 
-int             From_User_Unit( bool   is_metric,
+int             From_User_Unit( UserUnitType aUnit,
                                 double val,
                                 int    internal_unit_value );
 wxString        GenDate();

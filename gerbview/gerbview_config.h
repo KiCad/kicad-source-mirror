@@ -36,8 +36,8 @@ static PARAM_CFG_WXSTRING DrillExtBufCfg
 static PARAM_CFG_INT UnitCfg    // Units; 0 inches, 1 mm
 (
     wxT("Unite"),
-    &g_UnitMetric,
-    FALSE
+    (int*)&g_UserUnit,
+    MILLIMETRES
 );
 
 static PARAM_CFG_INT GerberScaleCfg // default scale; 0 2.3, 1 3.4

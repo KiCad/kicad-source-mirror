@@ -492,11 +492,11 @@ void WinEDA_PlotHPGLFrame::SetPageOffsetValue()
 
     if( HPGL_SizeSelect != PAGE_DEFAULT )
     {
-        msg = ReturnStringFromValue( g_UnitMetric,
+        msg = ReturnStringFromValue( g_UserUnit,
                                      Plot_sheet_list[HPGL_SizeSelect]->m_Offset.x,
                                      EESCHEMA_INTERNAL_UNIT );
         m_PlotOrgPosition_X->SetValue( msg );
-        msg = ReturnStringFromValue( g_UnitMetric,
+        msg = ReturnStringFromValue( g_UserUnit,
                                      Plot_sheet_list[HPGL_SizeSelect]-> m_Offset.y,
                                      EESCHEMA_INTERNAL_UNIT );
         m_PlotOrgPosition_Y->SetValue( msg );
@@ -525,10 +525,10 @@ void WinEDA_PlotHPGLFrame::AcceptPlotOffset( wxCommandEvent& event )
     {
         wxString msg = m_PlotOrgPosition_X->GetValue();
         Plot_sheet_list[HPGL_SizeSelect]->m_Offset.x =
-            ReturnValueFromString( g_UnitMetric, msg, EESCHEMA_INTERNAL_UNIT );
+            ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
         msg = m_PlotOrgPosition_Y->GetValue();
         Plot_sheet_list[HPGL_SizeSelect]->m_Offset.y =
-            ReturnValueFromString( g_UnitMetric, msg, EESCHEMA_INTERNAL_UNIT );
+            ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
     }
 }
 
@@ -574,10 +574,10 @@ void WinEDA_PlotHPGLFrame::HPGL_Plot( wxCommandEvent& event )
     {
         wxString msg = m_PlotOrgPosition_X->GetValue();
         Plot_sheet_list[HPGL_SizeSelect]->m_Offset.x =
-            ReturnValueFromString( g_UnitMetric, msg, EESCHEMA_INTERNAL_UNIT );
+            ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
         msg = m_PlotOrgPosition_Y->GetValue();
         Plot_sheet_list[HPGL_SizeSelect]->m_Offset.y =
-            ReturnValueFromString( g_UnitMetric, msg, EESCHEMA_INTERNAL_UNIT );
+            ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
     }
 
     Plot_Schematic_HPGL( Select_PlotAll, HPGL_SizeSelect );

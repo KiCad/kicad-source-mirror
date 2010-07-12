@@ -123,21 +123,21 @@ void DIALOG_PAD_PROPERTIES::InitDialog( )
         pad = &g_Pad_Master;
 
     // Display current unit name in dialog:
-    m_PadPosX_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadPosY_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadDrill_X_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadDrill_Y_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeSizeX_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeSizeY_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeOffsetX_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeOffsetY_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeDeltaX_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_PadShapeDeltaY_Unit->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_PadPosX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadPosY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadDrill_X_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadDrill_Y_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeSizeX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeSizeY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeOffsetX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeOffsetY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeDeltaX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeDeltaY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     // Display current pad masks clearances units
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad parameters units:
     PutValueInLocalUnits( *m_PadPosition_X_Ctrl, pad->m_Pos.x, internalUnits );

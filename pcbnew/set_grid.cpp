@@ -21,15 +21,15 @@ void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
     WinEDA_PcbGridFrame dlg( this, pos );
 
     dlg.SetGridSize( m_UserGridSize );
-    dlg.SetGridUnits( m_UserGridUnits );
+    dlg.SetGridUnits( m_UserGridUnit );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     m_UserGridSize  = dlg.GetGridSize();
-    m_UserGridUnits = dlg.GetGridUnits();
+    m_UserGridUnit = (UserUnitType)dlg.GetGridUnits();
 
-    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnits, ID_POPUP_GRID_USER );
+    GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     
     // If the user grid is the current option, recall SetGrid()
     // to force new values put in list as current grid value

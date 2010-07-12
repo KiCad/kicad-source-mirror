@@ -95,9 +95,9 @@ void DIALOG_SVG_PRINT::initDialog( )
     }
 
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
-    AddUnitSymbol( *m_TextPenWidth, g_UnitMetric );
+    AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize,
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
                                m_Parent->m_InternalUnits ) );
 
     m_Print_Frame_Ref_Ctrl->SetValue( s_Parameters.m_Print_Sheet_Ref );
@@ -177,7 +177,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
 
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UnitMetric, s_Parameters.m_PenDefaultSize,
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
                                m_Parent->m_InternalUnits ) );
 }
 

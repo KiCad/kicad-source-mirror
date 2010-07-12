@@ -75,7 +75,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( this, wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextPenWidth = new wxStaticText( this, wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
 	m_TextPenWidth->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	

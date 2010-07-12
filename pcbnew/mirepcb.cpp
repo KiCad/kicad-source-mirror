@@ -105,13 +105,13 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame(
     // Size:
     m_MireSizeCtrl = new WinEDA_ValueCtrl( this, _( "Size" ),
                                            m_MirePcb->m_Size,
-                                           g_UnitMetric, LeftBoxSizer,
+                                           g_UserUnit, LeftBoxSizer,
                                            m_Parent->m_InternalUnits );
 
     // Width:
     m_MireWidthCtrl = new WinEDA_ValueCtrl( this, _( "Width" ),
                                             m_MirePcb->m_Width,
-                                            g_UnitMetric, LeftBoxSizer,
+                                            g_UserUnit, LeftBoxSizer,
                                             m_Parent->m_InternalUnits );
 
     // Shape

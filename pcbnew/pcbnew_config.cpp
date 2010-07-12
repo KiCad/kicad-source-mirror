@@ -302,7 +302,7 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetConfigurationSettings()
                                                    OPT_VIA_HOLE_END - 1 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
                                                    &DisplayOpt.DisplayNetNamesMode, 3, 0, 3 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Unite" ), &g_UnitMetric, FALSE ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Unite" ), (int*)&g_UserUnit, MILLIMETRES ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegFill" ),
                                                     &DisplayOpt.DisplayPcbTrackFill, TRUE ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),

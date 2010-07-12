@@ -220,7 +220,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     }
 
     /* Enter the desired length. */
-    if( !g_UnitMetric )
+    if( !g_UserUnit )
     {
         fcoeff = 10000.0;
         msg.Printf( wxT( "%1.4f" ), Mself.lng / fcoeff );
@@ -677,7 +677,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     }
 
     wxString value;
-    if( g_UnitMetric )
+    if( g_UserUnit )
     {
         fcoeff = 10000.0f / 25.4f;
         value.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
@@ -862,7 +862,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
 
     m_SizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ), ShapeSize,
-                                      g_UnitMetric, LeftBoxSizer,
+                                      g_UserUnit, LeftBoxSizer,
                                       PCB_INTERNAL_UNIT );
 
     GetSizer()->Fit( this );
@@ -1163,7 +1163,7 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
 
     /* Entrance to the desired length of the gap. */
-    if( g_UnitMetric )
+    if( g_UserUnit )
     {
         fcoeff = 10000.0f / 25.4f;
         msg.Printf( wxT( "%2.3f" ), gap_size / fcoeff );

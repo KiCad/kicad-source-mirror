@@ -38,8 +38,8 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
 {
     SetFocus();
 
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UnitMetric ) );
+    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     int Internal_Unit = m_Parent->m_InternalUnits;
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,

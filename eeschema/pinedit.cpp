@@ -81,7 +81,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
 
     DIALOG_LIB_EDIT_PIN dlg( this );
 
-    wxString units = GetUnitsLabel( g_UnitMetric );
+    wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetOrientationList( LIB_PIN::GetOrientationNames(),
                             LIB_PIN::GetOrientationSymbols() );
     dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->m_Orient ) );
@@ -92,16 +92,16 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
                                LIB_PIN::GetElectricalTypeSymbols());
     dlg.SetElectricalType( pin->m_PinType );
     dlg.SetName( pin->m_PinName );
-    dlg.SetNameTextSize( ReturnStringFromValue( g_UnitMetric,
+    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                 pin->m_PinNameSize,
                                                 m_InternalUnits ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetNumber( pin->GetNumber() );
-    dlg.SetNumberTextSize( ReturnStringFromValue( g_UnitMetric,
+    dlg.SetNumberTextSize( ReturnStringFromValue( g_UserUnit,
                                                   pin->m_PinNumSize,
                                                   m_InternalUnits ) );
     dlg.SetNumberTextSizeUnits( units );
-    dlg.SetLength( ReturnStringFromValue( g_UnitMetric, pin->m_PinLen,
+    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->m_PinLen,
                                           m_InternalUnits ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->m_Unit == 0 );
@@ -129,14 +129,14 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     }
 
     /* Save the pin properties to use for the next new pin. */
-    LastPinNameSize = ReturnValueFromString( g_UnitMetric,
+    LastPinNameSize = ReturnValueFromString( g_UserUnit,
                                              dlg.GetNameTextSize(),
                                              m_InternalUnits );
-    LastPinNumSize = ReturnValueFromString( g_UnitMetric,
+    LastPinNumSize = ReturnValueFromString( g_UserUnit,
                                             dlg.GetNumberTextSize(),
                                             m_InternalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
-    LastPinLength = ReturnValueFromString( g_UnitMetric, dlg.GetLength(),
+    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(),
                                            m_InternalUnits );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
     LastPinType = dlg.GetElectricalType();

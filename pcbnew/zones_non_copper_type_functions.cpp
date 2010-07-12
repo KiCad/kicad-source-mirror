@@ -81,8 +81,8 @@ void DialogNonCopperZonesEditor::Init()
 
     m_FillModeCtrl->SetSelection( m_Zone_Setting->m_FillMode ? 1 : 0 );
 
-    AddUnitSymbol( *m_MinThicknessValueTitle, g_UnitMetric );
-    wxString msg = ReturnStringFromValue( g_UnitMetric,
+    AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
+    wxString msg = ReturnStringFromValue( g_UserUnit,
                                  m_Zone_Setting->m_ZoneMinThickness,
                                  m_Parent->m_InternalUnits );
     m_ZoneMinThicknessCtrl->SetValue( msg );
@@ -134,7 +134,7 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
 {
     wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
-        ReturnValueFromString( g_UnitMetric, txtvalue, m_Parent->m_InternalUnits );
+        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
     if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,

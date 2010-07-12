@@ -293,15 +293,25 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
     m_SelGridBox->Clear();
     for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
     {
-        double value = To_User_Unit( g_UnitMetric,
+        double value = To_User_Unit( g_UserUnit,
                                      GetScreen()->m_GridList[i].m_Size.x,
                                      PCB_INTERNAL_UNIT );
         if( GetScreen()->m_GridList[i].m_Id != ID_POPUP_GRID_USER )
         {
-            if( g_UnitMetric == INCHES )
+            switch( g_UserUnit )
+            {
+            case INCHES:
                 msg.Printf( _( "Grid %.1f" ), value * 1000 );
-            else
+                break;
+
+            case MILLIMETRES:
                 msg.Printf( _( "Grid %.3f" ), value );
+                break;
+
+            case UNSCALED_UNITS:
+                msg.Printf( _( "Grid %f" ), value );
+                break;
+            }
         }
         else
         {

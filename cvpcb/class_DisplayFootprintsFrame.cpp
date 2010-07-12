@@ -252,10 +252,9 @@ void DISPLAY_FOOTPRINTS_FRAME::SetToolbars()
     {
         m_OptionsToolBar->ToggleTool(
             ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UnitMetric ==
-            MILLIMETRE ? TRUE : false );
+            g_UserUnit == MILLIMETRES );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UnitMetric == INCHES ? TRUE : false );
+                                      g_UserUnit == INCHES );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );
@@ -342,12 +341,12 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UnitMetric = MILLIMETRE;
+        g_UserUnit = MILLIMETRES;
         UpdateStatusBar();
         break;
 
     case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        g_UnitMetric = INCHES;
+        g_UserUnit = INCHES;
         UpdateStatusBar();
         break;
 
