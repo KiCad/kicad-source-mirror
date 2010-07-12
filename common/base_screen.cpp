@@ -456,6 +456,7 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id )
         y = size.y / 25.4;
         break;
 
+    default:
     case INCHES:
     case UNSCALED_UNITS:
         x = size.x;

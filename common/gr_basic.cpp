@@ -143,6 +143,8 @@ int GRMapY( int y )
 #define WHEN_INSIDE
 
 
+#if defined( USE_WX_ZOOM )
+// currently only used if USE_WX_ZOOM is defined.
 /**
  * Test if any part of a line falls within the bounds of a rectangle.
  *
@@ -373,6 +375,8 @@ static bool clipLine( EDA_Rect* aClipBox, int& x1, int& y1, int& x2, int& y2 )
 
     return true;
 }
+#endif      // if defined( USE_WX_ZOOM )
+
 
 /**
  * Function clip_line

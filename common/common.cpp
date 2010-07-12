@@ -367,7 +367,7 @@ wxString ReturnStringFromValue( UserUnitType aUnit, int aValue, int aInternal_Un
         case MILLIMETRES:
             StringValue += _( " mm" );
             break;
-        
+
         case UNSCALED_UNITS:
             break;
         }
@@ -506,6 +506,7 @@ int From_User_Unit( UserUnitType aUnit, double val, int internal_unit_value )
         value = val * internal_unit_value;
         break;
 
+    default:
     case UNSCALED_UNITS:
         value = val;
     }
