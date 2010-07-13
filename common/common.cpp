@@ -367,7 +367,7 @@ wxString ReturnStringFromValue( UserUnitType aUnit, int aValue, int aInternal_Un
         case MILLIMETRES:
             StringValue += _( " mm" );
             break;
-        
+
         case UNSCALED_UNITS:
             break;
         }
@@ -402,7 +402,8 @@ int ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
     while( brk_point < buf.Len() )
     {
         wxChar ch = buf[brk_point];
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) ) )
+        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point)
+             || (ch == '-') || (ch == '+') ) )
         {
             break;
         }
@@ -506,6 +507,7 @@ int From_User_Unit( UserUnitType aUnit, double val, int internal_unit_value )
         value = val * internal_unit_value;
         break;
 
+    default:
     case UNSCALED_UNITS:
         value = val;
     }
