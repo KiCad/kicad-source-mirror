@@ -130,6 +130,7 @@ private:
 
     /* Grid and zoom values. */
 public:
+    wxPoint	m_GridOrigin;
     GridArray  m_GridList;
     bool       m_UserGridIsON;
 
@@ -321,6 +322,7 @@ public:
      */
     GRID_TYPE   GetGrid();
 
+    const wxPoint &GetGridOrigin();
     void        SetGrid( const wxRealPoint& size );
     void        SetGrid( int id );
     void        SetGridList( GridArray& sizelist );

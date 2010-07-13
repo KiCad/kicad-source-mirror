@@ -85,6 +85,7 @@ set(PCBNEW_SRCS
     dialog_mask_clearance_base.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
+    dialog_set_grid_base.cpp
     dist.cpp
     dragsegm.cpp
     drc.cpp

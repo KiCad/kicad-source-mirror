@@ -41,6 +41,10 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
         OnConfigurePcbOptions( event );
         break;
 
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        InstallGridFrame( wxDefaultPosition );
+        break;
+
     default:
         break;
     }

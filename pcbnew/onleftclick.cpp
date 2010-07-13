@@ -374,6 +374,13 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         OnModify();
         break;
 
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        DrawPanel->DrawGridAxis( DC, GR_XOR );
+        GetScreen()->m_GridOrigin = GetScreen()->m_Curseur;
+        DrawPanel->DrawGridAxis( DC, GR_COPY );
+        GetScreen()->SetModify();
+        break;
+
     default:
         DrawPanel->SetCursor( wxCURSOR_ARROW );
         DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() id error" ) );

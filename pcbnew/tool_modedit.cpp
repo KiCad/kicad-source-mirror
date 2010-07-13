@@ -181,6 +181,11 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
                          wxBitmap( delete_body_xpm ),
                          _( "Delete items" ), wxITEM_CHECK );
 
+    m_VToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,
+                         wxBitmap( grid_select_axis_xpm ),
+                         _( "Set the origin point for the grid" ),
+                         wxITEM_CHECK );
+
     m_VToolBar->Realize();
 
     SetToolbars();

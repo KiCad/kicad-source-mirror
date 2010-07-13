@@ -52,13 +52,16 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
 {
     wxRealPoint grid_size = GetBaseScreen()->GetGridSize();
 
-    if( !GetBaseScreen()->m_UserGridIsON )
+    if( !GetBaseScreen()->m_UserGridIsON ) // XXX UNUSED VARIABLE???
     {
-        int tmp = wxRound( (double) coord->x / grid_size.x );
-        coord->x = wxRound( (double) tmp * grid_size.x );
+	const wxPoint& grid_origin = GetBaseScreen()->GetGridOrigin();
+	double offset = fmod(grid_origin.x, grid_size.x);
+        int tmp = wxRound( (coord->x - offset) / grid_size.x );
+        coord->x = wxRound( tmp * grid_size.x + offset );
 
-        tmp = wxRound( (double) coord->y / grid_size.y );
-        coord->y = wxRound( (double) tmp * grid_size.y );
+	offset = fmod(grid_origin.y, grid_size.y);
+        tmp = wxRound( (coord->y - offset) / grid_size.y );
+        coord->y = wxRound ( tmp * grid_size.y + offset );
     }
 }
 

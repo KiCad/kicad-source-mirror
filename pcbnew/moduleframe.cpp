@@ -99,6 +99,8 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
               WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_PLACE_ANCHOR,
               WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_PLACE_GRID_COORD_BUTT,
+              WinEDA_ModuleEditFrame::Process_Special_Functions )
 
     // Vertical toolbar (right click):
     EVT_TOOL_RCLICKED( ID_MODEDIT_ADD_PAD,
@@ -157,6 +159,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     m_FrameName = wxT( "ModEditFrame" );
     m_Draw_Sheet_Ref = false;   // true to show the frame references
     m_Draw_Axis = true;         // true to show X and Y axis on screen
+    m_Draw_Grid_Axis = true;    // show the grid origin axis
     m_HotkeysZoomAndGridList = s_Module_Editor_Hokeys_Descr;
 
     // Give an icon

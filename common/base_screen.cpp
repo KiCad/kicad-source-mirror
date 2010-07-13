@@ -478,6 +478,12 @@ GRID_TYPE BASE_SCREEN::GetGrid()
     return m_Grid;
 }
 
+/*********************************/
+const wxPoint& BASE_SCREEN::GetGridOrigin()
+/*********************************/
+{
+    return m_GridOrigin;
+}
 
 wxRealPoint BASE_SCREEN::GetGridSize()
 {

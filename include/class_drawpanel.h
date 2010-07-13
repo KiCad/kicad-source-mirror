@@ -107,6 +107,8 @@ public:
      * @param DC = current Device Context
      */
     void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
+    void         DrawGridAxis( wxDC* DC, int drawmode );
+    void         OnEraseBackground( wxEraseEvent& event );
 
     void         OnActivate( wxActivateEvent& event );
 
