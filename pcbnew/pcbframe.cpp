@@ -215,6 +215,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
     EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                     WinEDA_PcbFrame::ProcessMuWaveFunctions )
+EVT_TOOL( ID_PCB_PLACE_GRID_COORD_BUTT,
+          WinEDA_PcbFrame::Process_Special_Functions )
 
     EVT_TOOL_RCLICKED( ID_TRACK_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
@@ -222,6 +224,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL_RCLICKED( ID_PCB_ADD_TEXT_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_ADD_LINE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_DIMENSION_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
+    EVT_TOOL_RCLICKED( ID_PCB_PLACE_GRID_COORD_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE,
                     ID_POPUP_PCB_AUTOPLACE_END_RANGE,
@@ -257,6 +260,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     m_Draw_Sheet_Ref = true;            // true to display sheet references
     m_Draw_Axis = false;                 // true to display X and Y axis
     m_Draw_Auxiliary_Axis = true;
+    m_Draw_Grid_Axis = true;
     m_SelTrackWidthBox    = NULL;
     m_SelViaSizeBox = NULL;
     m_SelLayerBox   = NULL;

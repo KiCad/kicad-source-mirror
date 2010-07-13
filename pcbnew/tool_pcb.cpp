@@ -463,6 +463,11 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          _( "Offset adjust for drill and place files" ),
                          wxITEM_CHECK );
 
+    m_VToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,
+                         wxBitmap( grid_select_axis_xpm ),
+                         _( "Set the origin point for the grid" ),
+                         wxITEM_CHECK );
+
     m_VToolBar->Realize();
     SetToolbars();
 }
@@ -638,7 +643,7 @@ an existing track use its width\notherwise, use current width setting" ),
                                      m_InternalUnits );
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
-            switch( g_UserUnit ) 
+            switch( g_UserUnit )
             {
             case INCHES:
                 msg.Printf( format.GetData(), value * 1000 );

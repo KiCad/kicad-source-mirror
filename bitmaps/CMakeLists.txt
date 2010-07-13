@@ -142,6 +142,7 @@ set(BITMAP_SRCS
     Global_Options_Pad.xpm
     green.xpm
     grid_select.xpm
+    grid_select_axis.xpm
     grid.xpm
     hammer.xpm
     help.xpm

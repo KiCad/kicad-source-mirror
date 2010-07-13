@@ -458,6 +458,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_PENCIL, _( "Place anchor" ) );
         break;
 
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Grid Origin" ) );
+        break;
+
     case ID_NO_SELECT_BUTT:
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;

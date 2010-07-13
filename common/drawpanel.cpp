@@ -739,6 +739,9 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 
     if( m_Parent->m_Draw_Auxiliary_Axis )
         DrawAuxiliaryAxis( DC, GR_COPY );
+
+    if( m_Parent->m_Draw_Grid_Axis )
+        DrawGridAxis( DC, GR_COPY );
 }
 
 
@@ -916,6 +919,36 @@ void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
                   0, Color );
 }
 
+/********************************************************************/
+void WinEDA_DrawPanel::DrawGridAxis( wxDC* DC, int drawmode )
+/********************************************************************/
+{
+    BASE_SCREEN* screen = GetScreen();
+    if( !m_Parent->m_Draw_Grid_Axis
+        || ( screen->m_GridOrigin.x == 0
+             && screen->m_GridOrigin.y == 0 ) )
+        return;
+
+    int          Color  = m_Parent->GetGridColor();
+
+    GRSetDrawMode( DC, drawmode );
+
+    /* Draw the Y axis */
+    GRDashedLine( &m_ClipBox, DC,
+                  screen->m_GridOrigin.x,
+                  -screen->ReturnPageSize().y,
+                  screen->m_GridOrigin.x,
+                  screen->ReturnPageSize().y,
+                  0, Color );
+
+    /* Draw the X axis */
+    GRDashedLine( &m_ClipBox, DC,
+                  -screen->ReturnPageSize().x,
+                  screen->m_GridOrigin.y,
+                  screen->ReturnPageSize().x,
+                  screen->m_GridOrigin.y,
+                  0, Color );
+}
 
 /** Build and display a Popup menu on a right mouse button click
  * @return true if a popup menu is shown, or false

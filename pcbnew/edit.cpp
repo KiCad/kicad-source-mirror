@@ -251,6 +251,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Zero" ) );
         break;
 
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Grid Origin" ) );
+        break;
+
     case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_CIRCLE_BUTT:

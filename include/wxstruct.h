@@ -169,6 +169,7 @@ public:
                                             // for PCBnew and Gerbview
 
     bool         m_Draw_Axis;               // TRUE to show X and Y axis
+    bool         m_Draw_Grid_Axis;     /* TRUE to show grid axis. */
     bool         m_Draw_Sheet_Ref;          // TRUE to show frame references
 
     bool         m_Print_Sheet_Ref;         // TRUE to print frame references

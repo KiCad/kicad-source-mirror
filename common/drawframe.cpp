@@ -72,6 +72,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
     m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
     m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxilary axis.
+    m_Draw_Grid_Axis      = FALSE;  // TRUE to draw the grid axis
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;   // hide/Show grid. default = show

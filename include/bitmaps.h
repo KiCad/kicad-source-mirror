@@ -134,6 +134,7 @@ extern const char* glabel2text_xpm[];
 extern const char* gl_change_xpm[];
 extern const char* global_options_pad_xpm[];
 extern const char* green_xpm[];
+extern const char* grid_select_axis_xpm[];
 extern const char* grid_select_xpm[];
 extern const char* grid_xpm[];
 extern const char* hammer_xpm[];

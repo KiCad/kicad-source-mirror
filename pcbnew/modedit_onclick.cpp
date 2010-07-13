@@ -149,6 +149,13 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
     }
     break;
 
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        DrawPanel->DrawGridAxis( DC, GR_XOR );
+        GetScreen()->m_GridOrigin = GetScreen()->m_Curseur;
+        DrawPanel->DrawGridAxis( DC, GR_COPY );
+        GetScreen()->SetModify();
+        break;
+
     case ID_PCB_ADD_TEXT_BUTT:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         CreateTextModule( GetBoard()->m_Modules, DC );
