@@ -84,10 +84,10 @@ enum UserUnitType {
 };
 
 #if defined(KICAD_GOST)
-#define LEFTMARGIN   800    /* 20mm */
-#define RIGHTMARGIN  200    /* 5mm */
-#define TOPMARGIN    200    /* 5mm */
-#define BOTTOMMARGIN 200    /* 5mm */
+#define GOST_LEFTMARGIN   800    /* 20mm */
+#define GOST_RIGHTMARGIN  200    /* 5mm */
+#define GOST_TOPMARGIN    200    /* 5mm */
+#define GOST_BOTTOMMARGIN 200    /* 5mm */
 
 #endif
 /* forward declarations: */

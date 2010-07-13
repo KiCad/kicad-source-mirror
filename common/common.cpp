@@ -211,10 +211,10 @@ Ki_PageDescr::Ki_PageDescr( const wxSize&   size,
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
 #if defined(KICAD_GOST)
-    m_LeftMargin   = LEFTMARGIN;
-    m_RightMargin  = RIGHTMARGIN;
-    m_TopMargin    = TOPMARGIN;
-    m_BottomMargin = BOTTOMMARGIN;
+    m_LeftMargin   = GOST_LEFTMARGIN;
+    m_RightMargin  = GOST_RIGHTMARGIN;
+    m_TopMargin    = GOST_TOPMARGIN;
+    m_BottomMargin = GOST_BOTTOMMARGIN;
 #else
     m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
 #endif
