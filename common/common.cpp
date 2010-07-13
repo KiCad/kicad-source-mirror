@@ -402,7 +402,8 @@ int ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
     while( brk_point < buf.Len() )
     {
         wxChar ch = buf[brk_point];
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) ) )
+        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point)
+             || (ch == '-') || (ch == '+') ) )
         {
             break;
         }
