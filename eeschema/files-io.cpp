@@ -249,14 +249,3 @@ void WinEDA_SchematicFrame::SaveProject()
     LibArchive( this, fn.GetFullPath() );
 }
 
-
-/**
- * Return the number of components in the schematic.
- *
- * Power components are not included.
- */
-
-int CountCmpNumber()
-{
-    return g_RootSheet->ComponentCount();
-}

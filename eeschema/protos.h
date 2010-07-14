@@ -171,11 +171,6 @@ EDA_Colors ReturnLayerColor( int Layer );
 void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
                                    const wxPoint&    pos );
 
-/*************/
-/* EELOAD.CPP */
-/*************/
-int  CountCmpNumber();
-
 /***************/
 /* EECONFIG.CPP */
 /***************/

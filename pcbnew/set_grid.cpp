@@ -14,25 +14,25 @@
 #include "dialog_set_grid_base.h"
 
 
-class DIALOG_SET_GRID: public DIALOG_SET_GRID_BASE
+class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
-	public:
-         int m_internalUnits;
+public:
+    int m_internalUnits;
 
-	public:
-		DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos );
-		~DIALOG_SET_GRID() { }
-        void SetGridSize( const wxRealPoint& grid );
-        wxRealPoint GetGridSize();
-        void SetGridUnits( int units );
-        int GetGridUnits();
-        void SetGridOrigin( const wxPoint& grid );
-        wxPoint GetGridOrigin();
+public:
+    DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos );
+    ~DIALOG_SET_GRID() { }
+    void        SetGridSize( const wxRealPoint& grid );
+    wxRealPoint GetGridSize();
+    void        SetGridUnits( int units );
+    int         GetGridUnits();
+    void        SetGridOrigin( const wxPoint& grid );
+    wxPoint     GetGridOrigin();
 
-	private:
-		void OnResetGridOrgClick( wxCommandEvent& event );
-		void OnCancelClick( wxCommandEvent& event );
-		void OnOkClick( wxCommandEvent& event );
+private:
+    void        OnResetGridOrgClick( wxCommandEvent& event );
+    void        OnCancelClick( wxCommandEvent& event );
+    void        OnOkClick( wxCommandEvent& event );
 };
 
 void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
@@ -47,9 +47,9 @@ void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_UserGridSize  = dlg.GetGridSize();
-    m_UserGridUnit = (UserUnitType)dlg.GetGridUnits();
-    GetScreen()->m_GridOrigin = dlg.GetGridOrigin( );
+    m_UserGridSize = dlg.GetGridSize();
+    m_UserGridUnit = (UserUnitType) dlg.GetGridUnits();
+    GetScreen()->m_GridOrigin = dlg.GetGridOrigin();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
 
@@ -62,14 +62,16 @@ void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
 }
 
 
-DIALOG_SET_GRID::DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos )
-    : DIALOG_SET_GRID_BASE( parent )
+DIALOG_SET_GRID::DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos ) :
+    DIALOG_SET_GRID_BASE( parent )
 {
+    SetFocus();
+
     m_TextPosXUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     GetSizer()->SetSizeHints( this );
-    Centre( );
+    Centre();
 }
 
 
@@ -103,47 +105,51 @@ void DIALOG_SET_GRID::SetGridUnits( int units )
         m_UnitGrid->SetSelection( 1 );
 }
 
+
 int DIALOG_SET_GRID::GetGridUnits()
 {
     return m_UnitGrid->GetSelection();
 }
+
 
 wxPoint DIALOG_SET_GRID::GetGridOrigin()
 {
     wxPoint grid;
 
     /* TODO: Some error checking here would be a good thing. */
-    grid.x =  ReturnValueFromTextCtrl( *m_GridOriginXCtrl, m_internalUnits );
-    grid.y =  ReturnValueFromTextCtrl( *m_GridOriginYCtrl, m_internalUnits );
+    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl, m_internalUnits );
+    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl, m_internalUnits );
 
     return grid;
 }
 
+
 void DIALOG_SET_GRID::SetGridOrigin( const wxPoint& grid )
 {
     wxString msg;
+
     PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x, m_internalUnits );
     PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y, m_internalUnits );
 }
 
 
-void DIALOG_SET_GRID::OnResetGridOrgClick(wxCommandEvent& event)
+void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 {
-    wxString msg(_("0") );
-    m_GridOriginXCtrl->SetValue(msg);
-    m_GridOriginYCtrl->SetValue(msg);
+    SetGridOrigin( wxPoint(0,0) );
 }
+
 
 /*****************************************************************/
 void DIALOG_SET_GRID::OnCancelClick( wxCommandEvent& event )
 /*****************************************************************/
 {
-    EndModal(wxID_CANCEL);
+    EndModal( wxID_CANCEL );
 }
 
+
 /*************************************************************************/
-void DIALOG_SET_GRID::OnOkClick(wxCommandEvent& event)
+void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
 /*************************************************************************/
 {
-    EndModal(wxID_OK);
+    EndModal( wxID_OK );
 }

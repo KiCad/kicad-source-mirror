@@ -49,7 +49,7 @@ public:
     SCH_COMPONENT* m_RootCmp;           // the component in schematic
     LIB_COMPONENT* m_Entry;             // the source component in library
     int            m_Unit;              /* Selected part (For multi parts per
-                                         * package) depending on sheet path */
+                                        * package) depending on sheet path */
     SCH_SHEET_PATH m_SheetPath;         /* the sheet path for this component */
     unsigned long  m_TimeStamp;         /* unique identification number
                                          * depending on sheet path */
@@ -104,11 +104,11 @@ public:
 typedef std::vector <NETLIST_OBJECT*> NETLIST_OBJECT_LIST;
 extern NETLIST_OBJECT_LIST g_NetObjectslist;
 
+extern bool g_OptNetListUseNames;   /* TRUE to use names rather than
+                                     * net numbers. SPICE netlist only
+                                     */
 
 /* Prototypes: */
-void     WriteNetList( WinEDA_SchematicFrame* frame,
-                       const wxString&        FileNameNL,
-                       bool                   use_netnames );
 void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
 
 /** Function ReturnUserNetlistTypeName

@@ -24,18 +24,17 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
+	m_staticText1->SetToolTip( _("Enter the text to be used within the schematic") );
+	
 	m_textControlSizer->Add( m_staticText1, 0, wxRIGHT, 3 );
 	
 	wxBoxSizer* bSizeText;
 	bSizeText = new wxBoxSizer( wxVERTICAL );
 	
 	m_textLabelSingleLine = new wxTextCtrl( this, wxID_VALUESINGLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	m_textLabelSingleLine->SetToolTip( _("Enter the text to be used within the schematic") );
-	
 	bSizeText->Add( m_textLabelSingleLine, 0, wxEXPAND|wxLEFT, 3 );
 	
 	m_textLabelMultiLine = new wxTextCtrl( this, wxID_VALUEMULTI, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_PROCESS_ENTER );
-	m_textLabelMultiLine->SetToolTip( _("Enter the text to be used within the schematic") );
 	m_textLabelMultiLine->SetMinSize( wxSize( -1,60 ) );
 	
 	bSizeText->Add( m_textLabelMultiLine, 1, wxEXPAND|wxLEFT, 3 );
@@ -65,7 +64,7 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	
 	wxString m_TextOrientChoices[] = { _("Right"), _("Up"), _("Left"), _("Down") };
 	int m_TextOrientNChoices = sizeof( m_TextOrientChoices ) / sizeof( wxString );
-	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("O&rietation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextOrient = new wxRadioBox( this, wxID_ANY, _("O&rientation"), wxDefaultPosition, wxDefaultSize, m_TextOrientNChoices, m_TextOrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextOrient->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP, 3 );
 	
@@ -78,7 +77,7 @@ DialogLabelEditor_Base::DialogLabelEditor_Base( wxWindow* parent, wxWindowID id,
 	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-State"), _("Passive") };
 	int m_TextShapeNChoices = sizeof( m_TextShapeChoices ) / sizeof( wxString );
 	m_TextShape = new wxRadioBox( this, wxID_ANY, _("S&hape"), wxDefaultPosition, wxDefaultSize, m_TextShapeNChoices, m_TextShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextShape->SetSelection( 2 );
+	m_TextShape->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextShape, 1, wxALL|wxLEFT|wxTOP, 3 );
 	
 	bMainSizer->Add( m_OptionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 12 );

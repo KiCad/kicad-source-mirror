@@ -95,9 +95,6 @@ typedef enum
 } FileSaveType;
 
 
-extern int            g_OptNetListUseNames;  /* TRUE to use names rather than
-                                              * net numbers (PSPICE netlist
-                                              * only) */
 extern SCH_ITEM*      g_ItemToRepeat; /* Pointer to the last structure used
                                        * by the repeat command.   NULL if no
                                        * item to repeat */

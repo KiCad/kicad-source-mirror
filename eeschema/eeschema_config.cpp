@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
@@ -12,6 +11,7 @@
 #include "gestfich.h"
 #include "program.h"
 #include "general.h"
+#include "netlist.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "eeschema_config.h"
@@ -363,11 +363,6 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptLab" ),
                                                       &g_RepeatDeltaLabel,
                                                       1, -10, +10 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "SimCmd" ),
-                                                           &g_SimulatorCommandLine ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "UseNetN" ),
-                                                      &g_OptNetListUseNames,
-                                                      0, 0, 1 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
                                                       &g_DefaultTextLabelSize,
                                                       DEFAULT_SIZE_TEXT, 0,
@@ -473,6 +468,8 @@ static const wxString ReplaceStringEntry( wxT( "LastReplaceString" ) );
 static const wxString FindStringHistoryEntry( wxT( "FindStringHistoryList%d" ) );
 static const wxString ReplaceStringHistoryEntry( wxT( "ReplaceStringHistoryList%d" ) );
 static const wxString FieldNamesEntry( wxT( "FieldNames" ) );
+static const wxString SpiceNetNamesEntry( wxT( "SpiceUseNetNames" ) );
+static const wxString SimulatorCommandEntry( wxT( "SimCmdLine" ) );
 
 /*
  * Return the EESchema applications settings list.
@@ -496,7 +493,7 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
         return m_configSettings;
 
     m_configSettings.push_back( new PARAM_CFG_INT( wxT( "Unite" ),
-                                                   (int*)&g_UserUnit, 0 ) );
+                                                    (int*)&g_UserUnit, 0 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
                                                         &g_LayerDescr.LayerColor[LAYER_WIRE],
                                                         GREEN ) );
@@ -615,6 +612,10 @@ void WinEDA_SchematicFrame::LoadSettings()
     cfg->Read( PrintDialogHeightEntry, &tmp, -1 );
     m_printDialogSize.SetHeight( (int) tmp );
 
+    // Load netlists options:
+    cfg->Read( SpiceNetNamesEntry,  &g_OptNetListUseNames, false );
+    cfg->Read( SimulatorCommandEntry, &g_SimulatorCommandLine );
+
     /* Load find dialog session setting. */
     cfg->Read( FindDialogPositionXEntry, &tmp, -1 );
     m_findDialogPosition.x = (int) tmp;
@@ -668,6 +669,7 @@ void WinEDA_SchematicFrame::LoadSettings()
                 CONV_TO_UTF8(e.errorText) );)
         }
     }
+
 }
 
 
@@ -699,6 +701,10 @@ void WinEDA_SchematicFrame::SaveSettings()
     cfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
     cfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
     cfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
+
+    // Save netlists options:
+    cfg->Write( SpiceNetNamesEntry,  g_OptNetListUseNames );
+    cfg->Write( SimulatorCommandEntry, g_SimulatorCommandLine );
 
     /* Save find dialog session setting. */
     cfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );
