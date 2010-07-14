@@ -563,8 +563,6 @@ void WinEDA_SchematicFrame::OnUpdateSelectCursor( wxUpdateUIEvent& event )
 
 void WinEDA_SchematicFrame::OnUpdateUnits( wxUpdateUIEvent& event )
 {
-    bool is_metric = ( g_UserUnit == MILLIMETRES ) ? true : false;
-
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, g_UserUnit == MILLIMETRES );
     m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, g_UserUnit == INCHES );
     DisplayUnitsMsg();

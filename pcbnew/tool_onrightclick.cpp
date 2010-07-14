@@ -18,8 +18,6 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
     int     id = event.GetSelection();
 
     wxGetMousePosition( &pos.x, &pos.y );
-    pos.x -= 400;
-    pos.y -= 30;
 
     switch( id )
     {

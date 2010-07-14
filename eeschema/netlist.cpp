@@ -342,6 +342,7 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
         case NET_HIERLABEL:
         case NET_LABEL:
         case NET_PINLABEL:
+        case NET_GLOBLABEL:
             candidates.push_back( item );
             break;
 
@@ -368,7 +369,21 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
     if( aLabelItemBuffer.size() == 0 )
         return NULL;
 
+    int priority_order[4] =
+    { NET_LABEL, NET_HIERLABEL, NET_PINLABEL, NET_GLOBLABEL };
+
     NETLIST_OBJECT*item = aLabelItemBuffer[0];
+
+    // Calculate item priority
+    int item_priority = 0;
+    for( unsigned ii = 0; ii < 4; ii++ )
+    {
+        if ( item->m_Type == priority_order[ii]  )
+        {
+            item_priority = ii;
+            break;
+        }
+    }
 
     for( unsigned ii = 1; ii < aLabelItemBuffer.size(); ii++ )
     {
@@ -378,38 +393,23 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             item = candidate;
             continue;
         }
-        switch ( item->m_Type )
+        // Calculate candidate priority
+        int candidate_priority = 0;
+        for( unsigned ii = 0; ii < 4; ii++ )
         {
-            case NET_HIERLABEL:
-                if( candidate->m_Type == NET_PINLABEL )
-                    item = candidate;
-                else if( candidate->m_Type == NET_HIERLABEL )
-                {
-                    if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
-                        item = candidate;
-                }
+            if ( candidate->m_Type == priority_order[ii]  )
+            {
+                candidate_priority = ii;
                 break;
-
-            case NET_LABEL:
-                if( candidate->m_Type == NET_LABEL )
-                {
-                    if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
-                        item = candidate;
-                }
-                else
-                    item = candidate;
-                break;
-
-            case NET_PINLABEL:
-                if( candidate->m_Type != NET_PINLABEL )
-                    break;
-                if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
-                    item = candidate;
-                break;
-
-            default:    // Should not occur.
-                break;
-       }
+            }
+        }
+        if( candidate_priority > item_priority )
+            item = candidate;
+        else if( candidate_priority == item_priority )
+        {
+            if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+                item = candidate;
+        }
     }
     return item;
 }

@@ -21,7 +21,7 @@
 
 // Global variables
 
-int       g_OptNetListUseNames; /* TRUE to use names rather than net
+bool       g_OptNetListUseNames; /* TRUE to use names rather than net
                                  * The numbers (PSPICE netlist only) */
 SCH_ITEM* g_ItemToRepeat;       /* Pointer to the last structure
                                  * for duplicatation by the repeat command.

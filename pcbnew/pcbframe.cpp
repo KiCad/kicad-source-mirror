@@ -215,8 +215,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
     EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                     WinEDA_PcbFrame::ProcessMuWaveFunctions )
-EVT_TOOL( ID_PCB_PLACE_GRID_COORD_BUTT,
-          WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_PCB_PLACE_GRID_COORD_BUTT,
+              WinEDA_PcbFrame::Process_Special_Functions )
 
     EVT_TOOL_RCLICKED( ID_TRACK_BUTT, WinEDA_PcbFrame::ToolOnRightClick )
     EVT_TOOL_RCLICKED( ID_PCB_CIRCLE_BUTT, WinEDA_PcbFrame::ToolOnRightClick )

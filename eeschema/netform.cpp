@@ -54,52 +54,60 @@ static NETLIST_OBJECT_LIST s_SortedComponentPinList;
 static wxArrayString s_ReferencesAlreadyFound;
 
 
-/* Create the netlist file ( Format is given by frame->m_NetlistFormat )
- *  bool use_netnames is used only for Spice netlist
+/** function  WriteNetListFile
+ * Create the netlist file. Netlist info must be existing
+ * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
+ * @param aFullFileName = full netlist file name
+ * @param aUse_netnames = bool. if true, use net names from labels in schematic
+ *                              if false, use net numbers (net codes)
+ *   bool aUse_netnames is used only for Spice netlist
+ * @return true if success.
  */
-void WriteNetList( WinEDA_SchematicFrame* frame, const wxString& FileNameNL,
-                   bool use_netnames )
+bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
+                   bool aUse_netnames )
 {
     FILE* f = NULL;
 
-    if( frame->m_NetlistFormat < NET_TYPE_CUSTOM1 )
+    if( aFormat < NET_TYPE_CUSTOM1 )
     {
-        if( ( f = wxFopen( FileNameNL, wxT( "wt" ) ) ) == NULL )
+        if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
         {
-            wxString msg = _( "Failed to create file " ) + FileNameNL;
-            DisplayError( frame, msg );
-            return;
+            wxString msg = _( "Failed to create file " ) + aFullFileName;
+            DisplayError( this, msg );
+            return false;
         }
     }
 
     wxBusyCursor Busy;
 
-    switch( frame->m_NetlistFormat )
+    switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        WriteNetListPCBNEW( frame, f, TRUE );
+        WriteNetListPCBNEW( this, f, TRUE );
         fclose( f );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        WriteNetListPCBNEW( frame, f, FALSE );
+        WriteNetListPCBNEW( this, f, FALSE );
         fclose( f );
         break;
 
     case NET_TYPE_CADSTAR:
-        WriteNetListCADSTAR( frame, f );
+        WriteNetListCADSTAR( this, f );
         fclose( f );
         break;
 
     case NET_TYPE_SPICE:
-        WriteNetListPspice( frame, f, use_netnames );
+        WriteNetListPspice( this, f, aUse_netnames );
         fclose( f );
         break;
 
     default:
-        Write_GENERIC_NetList( frame, FileNameNL );
+        Write_GENERIC_NetList( this, aFullFileName );
         break;
     }
+
+    return true;
 }
 
 
@@ -179,8 +187,8 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList
                 AddPinToComponentPinList( Component, sheet, Pin );
             }
         }
-        else  // Multiple parts per package: Collect all parts ans pins for
-              // this reference
+        else    // Multiple parts per package: Collect all parts ans pins for
+                // this reference
             FindAllsInstancesOfComponent( Component, Entry, sheet );
 
         /* Sort Pins in s_SortedComponentPinList by pin number */
@@ -218,7 +226,8 @@ static wxString ReturnPinNetName( NETLIST_OBJECT* Pin, const wxString& DefaultFo
     if( !NetName.IsEmpty() )
     {
         // prefix non global labels names by the sheet path, to avoid names collisions
-        if( netref->m_Type != NET_PINLABEL )
+        if( ( netref->m_Type != NET_PINLABEL )
+           && ( netref->m_Type != NET_GLOBLABEL ) )
         {
             wxString lnet = NetName;
             NetName = netref->m_SheetList.PathHumanReadable();
@@ -387,12 +396,12 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
     SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst();
-         sheet != NULL;
-         sheet = SheetList.GetNext() )
+        sheet != NULL;
+        sheet = SheetList.GetNext() )
     {
         for( DrawList = sheet->LastDrawList();
-             DrawList != NULL;
-             DrawList = DrawList->Next() )
+            DrawList != NULL;
+            DrawList = DrawList->Next() )
         {
             wxChar ident;
             if( DrawList->Type() != TYPE_SCH_TEXT )
@@ -418,6 +427,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
                 }
 
                 text = DRAWTEXT->m_Text.AfterFirst( ' ' );
+
                 // First BUFYPOS_LEN char are the Y position.
                 msg.Printf( wxT( "%s %s" ), bufnum, text.GetData() );
                 if( ident == '+' )
@@ -464,7 +474,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
                 NETLIST_OBJECT* Pin = s_SortedComponentPinList[ii];
                 if( !Pin )
                     continue;
-                wxString NetName = ReturnPinNetName( Pin, wxT( "N-%.6d" ) );
+                wxString        NetName = ReturnPinNetName( Pin, wxT( "N-%.6d" ) );
                 if( NetName.IsEmpty() )
                     NetName = wxT( "?" );
                 if( use_netnames )
@@ -481,7 +491,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
             }
 
             fprintf( f, " %s\n",
-                     CONV_TO_UTF8( Component->GetField( VALUE )->m_Text ) );
+                    CONV_TO_UTF8( Component->GetField( VALUE )->m_Text ) );
         }
     }
 
@@ -518,7 +528,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     char Buf[256];
     SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* DrawList;
-    SCH_COMPONENT*  Component;
+    SCH_COMPONENT* Component;
     OBJ_CMP_TO_LIST* CmpList = NULL;
     int CmpListCount = 0, CmpListSize = 1000;
 
@@ -560,14 +570,14 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                     if( CmpListCount >= CmpListSize )
                     {
                         CmpListSize += 1000;
-                        CmpList =
+                        CmpList      =
                             (OBJ_CMP_TO_LIST*) realloc( CmpList,
                                                         sizeof(OBJ_CMP_TO_LIST)
                                                         * CmpListSize );
                     }
                     CmpList[CmpListCount].m_RootCmp = Component;
                     strcpy( CmpList[CmpListCount].m_Reference,
-                            Component->GetRef( sheet ).mb_str() );
+                           Component->GetRef( sheet ).mb_str() );
                     CmpListCount++;
                 }
             }
@@ -582,8 +592,8 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
             Line = Component->GetRef( sheet );
             fprintf( f, " ( %s %s",
-                     CONV_TO_UTF8( Component->GetPath( sheet ) ),
-                     CONV_TO_UTF8( FootprintName ) );
+                    CONV_TO_UTF8( Component->GetPath( sheet ) ),
+                    CONV_TO_UTF8( FootprintName ) );
             fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
 
             Line = Component->GetField( VALUE )->m_Text;
@@ -610,7 +620,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
                 netname.Replace( wxT( " " ), wxT( "_" ) );
 
                 fprintf( f, "  ( %4.4s %s )\n", (char*) &Pin->m_PinNum,
-                         CONV_TO_UTF8( netname ) );
+                        CONV_TO_UTF8( netname ) );
             }
 
             fprintf( f, " )\n" );
@@ -629,7 +639,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
         for( int ii = 0; ii < CmpListCount; ii++ )
         {
             Component = CmpList[ii].m_RootCmp;
-            Entry = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
+            Entry     = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
 
             //Line.Printf(_("%s"), CmpList[ii].m_Ref);
             //Line.Replace( wxT( " " ), wxT( "_" ) );
@@ -647,7 +657,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
             for( unsigned jj = 0; jj < Entry->m_FootprintList.GetCount(); jj++ )
             {
                 fprintf( f, " %s\n",
-                         CONV_TO_UTF8( Entry->m_FootprintList[jj] ) );
+                        CONV_TO_UTF8( Entry->m_FootprintList[jj] ) );
             }
 
             fprintf( f, "$endlist\n" );
@@ -736,6 +746,7 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
         {
             if(  aPinList[jj] == NULL )   // Already removed
                 continue;
+
             // other pin num end of duplicate list.
             if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
                 break;
@@ -860,7 +871,8 @@ static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
             NetcodeName += wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
-                if( netref->m_Type != NET_PINLABEL )
+                if( ( netref->m_Type != NET_PINLABEL )
+                   && ( netref->m_Type != NET_GLOBLABEL ) )
                 {
                     // usual net name, prefix it by the sheet path
                     NetcodeName += netref->m_SheetList.PathHumanReadable();
@@ -1037,7 +1049,8 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
             NetcodeName = wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
-                if( netref->m_Type != NET_PINLABEL )
+                if( ( netref->m_Type != NET_PINLABEL )
+                   && ( netref->m_Type != NET_GLOBLABEL ) )
                 {
                     // usual net name, prefix it by the sheet path
                     NetcodeName +=
@@ -1074,10 +1087,10 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
             buf[4]     = 0;
             str_pinnum = CONV_FROM_UTF8( buf );
             InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
-                                    GetChars(InitNetDesc),
-                                    GetChars(refstr),
-                                    GetChars(str_pinnum),
-                                    GetChars(NetcodeName) );
+                                   GetChars( InitNetDesc ),
+                                   GetChars( refstr ),
+                                   GetChars( str_pinnum ),
+                                   GetChars( NetcodeName ) );
         }
             print_ter++;
             break;
