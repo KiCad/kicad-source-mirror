@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 14/07/2010 15:02:09
+EESchema Schematic File Version 2  date 14/07/2010 20:10:02
 LIBS:pspice
 LIBS:pspice-cache
 EELAYER 24  0
@@ -14,16 +14,10 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text GLabel 4700 2600 0    60   Input ~ 0
+Text Label 4550 2800 0    60   ~ 0
 VIN
-Wire Wire Line
-	4700 2600 5100 2600
-Connection ~ 5100 2600
 Text Label 8650 2100 0    60   ~ 0
 VOUT
-Text GLabel 9550 2100 2    60   Input ~ 0
-VOUT
-Connection ~ 9200 2100
 Wire Notes Line
 	4050 6600 4050 5700
 Wire Notes Line
@@ -44,7 +38,7 @@ Wire Wire Line
 Wire Wire Line
 	7800 1500 7700 1500
 Wire Wire Line
-	9200 2100 9200 1500
+	9200 1500 9200 2100
 Connection ~ 7700 2800
 Wire Wire Line
 	8250 2800 8400 2800
@@ -84,9 +78,9 @@ Wire Wire Line
 Wire Wire Line
 	5100 2300 5100 3300
 Wire Wire Line
-	7700 2100 9550 2100
+	9200 2100 7700 2100
 Text Notes 4200 5900 0    60   ~ 0
-+gnucap .model Q2N2222 npn (bf=200)\n.print tran v(nodes)\n.print dc v(nodes)\n.tran 10 10000 10 > x.txt\n.save all\n
++gnucap .model Q2N2222 npn (bf=200)\n.print tran v(nodes)\n.print dc v(nodes)\n.tran 10 10000 10 > pspice.dat\n
 Text Notes 4050 5700 0    60   ~ 0
 Pspice directives using one multiline text:
 $Comp
