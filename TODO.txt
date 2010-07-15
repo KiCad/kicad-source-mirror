@@ -1,10 +1,6 @@
 KiCad TODO List
 ===============
 
-CMAKE
------
-* Add install targets for binaries and resources on Mac.
-
 WXMAC Platform
 --------------
 * Fix hotkey list to match CMD key
@@ -27,23 +23,6 @@ Common
 * Push file open semantics down to one of the base frame classes ( likely candidate is
   WinEDA_BasicFrame ) so that file open behavior is consistent across all applications.
 
-ANYONE:
-C2) Write a tool to generate DSNLEXER keyword tables (and enums) as *.cpp and
-    *.h. Language of tool should probably be C++. As input, the tool should take
-    a list of whitespace separated keywords from a text file that is manually
-    maintained.  The *.cpp file should be named based on input file name and should
-    include the keyword table with a global array.  The *.h file be named based on
-    the input file name and should hold the enums and an extern array to the keyword table.
-    The enum table should include the core syntactical enums from dsnlexer.h as
-    the first negative values.  See enum DSN_T { from specctra.h as example.
-
-    Tool should verify uniqueness of keywords, enforce all lowercase, and sort.
-    Spaces are not allowed in keywords, but if whitespace is the delimiter for
-    the tool, it will be impossible to specify a keyword with whitespaces in it.
-
-    Use tool in CMake scripts for future grammars, but remember for cross compiling,
-    generating and using a tool to run natively on the build machine is a bit tricky with
-    CMake.
 
 
 CvPCB
