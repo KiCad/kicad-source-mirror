@@ -31,7 +31,8 @@ enum hotkey_id_commnand {
     HK_COPY_COMPONENT_OR_LABEL,
     HK_DRAG,
     HK_ADD_NEW_COMPONENT,
-    HK_BEGIN_WIRE
+    HK_BEGIN_WIRE,
+    HK_ADD_LABEL
 };
 
 // List of hotkey descriptors for eeschema

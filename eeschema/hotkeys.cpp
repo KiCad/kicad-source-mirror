@@ -102,6 +102,7 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
 #endif
 
 // Schematic editor
+static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
 static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
 static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ),
                                      HK_ADD_NEW_COMPONENT, 'A' );
@@ -188,6 +189,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkEditComponentValue,
     &HkEditComponentFootprint,
     &HkBeginWire,
+    &HkAddLabel,
     NULL
 };
 
@@ -381,6 +383,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                           _( "Add Component" ) );
             OnLeftClick( DC, MousePos );
         }
+        break;
+
+    case HK_ADD_LABEL:
+        // switch to m_ID_current_state = ID_LABEL_BUTT;
+        if( m_ID_current_state != ID_LABEL_BUTT )
+            SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
+        OnLeftClick( DC, MousePos );
         break;
 
     case HK_BEGIN_WIRE:
