@@ -414,7 +414,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..) or a hierachical sheet
+        // or a label
         if( (screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT)
+        && (screen->GetCurItem()->Type() != TYPE_SCH_LABEL)
+        && (screen->GetCurItem()->Type() != TYPE_SCH_GLOBALLABEL)
+        && (screen->GetCurItem()->Type() != TYPE_SCH_HIERLABEL)
             && (screen->GetCurItem()->Type() != DRAW_SHEET_STRUCT_TYPE) )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
         if( screen->GetCurItem() == NULL )

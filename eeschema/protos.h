@@ -31,7 +31,7 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
 /*********************/
 /* DANGLING_ENDS.CPP */
 /*********************/
-bool SegmentIntersect( int Sx1, int Sy1, int Sx2, int Sy2, int Px1, int Py1 );
+bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
 
 /****************/
 /* BUS_WIRE_JUNCTION.CPP */

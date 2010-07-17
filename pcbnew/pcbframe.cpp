@@ -319,7 +319,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    ReCreateAuxVToolbar();
+    ReCreateMicrowaveVToolbar();
 
     m_auimgr.SetManagedWindow( this );
 
@@ -370,6 +370,9 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                       m_show_layer_manager_tools );
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+                                       m_show_microwave_tools );
+        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
     }
 
     if( DrawPanel )
@@ -542,8 +545,7 @@ void WinEDA_PcbFrame::SaveSettings()
     config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
     config->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    config->Write( SHOW_MICROWAVE_TOOLS,
-        ( m_AuxVToolBar && m_AuxVToolBar->IsShown() ) ? true : false );
+    config->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
     config->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
 
 }

@@ -1031,9 +1031,7 @@ static void SegmentToPointConnect( NETLIST_OBJECT* Jonction,
                 continue;
         }
 
-        if( SegmentIntersect( Segment->m_Start.x, Segment->m_Start.y,
-                              Segment->m_End.x, Segment->m_End.y,
-                              Jonction->m_Start.x, Jonction->m_Start.y ) )
+        if( SegmentIntersect( Segment->m_Start, Segment->m_End, Jonction->m_Start ) )
         {
             /* Propagation Netcode has all the objects of the same Netcode. */
             if( IsBus == 0 )

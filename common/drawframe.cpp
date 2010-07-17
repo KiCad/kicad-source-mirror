@@ -423,6 +423,8 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_ID_current_state = id;
+    if( m_VToolBar )
+        m_VToolBar->Refresh( );
 }
 
 

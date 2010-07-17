@@ -605,23 +605,10 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     for( Struct = screen->EEDrawList; Struct != NULL; Struct = Struct->Next() )
         Struct->m_Flags = 0;
 
-    // Sel .m_Flags to selected for a wire or bus in selected area if there is
-    // only one item:
-    if( pickedlist->GetCount() == 1 )
+    for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*) pickedlist->GetPickedItem( 0 );
-        if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
-            Struct->m_Flags = SELECTED;
-    }
-    // Sel .m_Flags to selected for a wire or bus in selected area for a list
-    // of items:
-    else
-    {
-        for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
-        {
-            Struct = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
-            Struct->m_Flags = SELECTED;
-        }
+        Struct = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
+        Struct->m_Flags = SELECTED;
     }
 
     if( screen->m_BlockLocate.m_Command != BLOCK_DRAG )
@@ -653,6 +640,18 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
         Struct = (SCH_ITEM*) (SCH_ITEM*) pickedlist->GetPickedItem( ii );
+    if( ( Struct->Type() == TYPE_SCH_LABEL )
+        || ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
+        || ( Struct->Type() == TYPE_SCH_HIERLABEL ) )
+    {
+            #undef STRUCT
+            #define STRUCT ( (SCH_TEXT*) Struct )
+        if( !screen->m_BlockLocate.Inside( STRUCT->m_Pos ) )
+        {
+            AddPickedItem( screen, STRUCT->m_Pos );
+        }
+    }
+
         if( Struct->Type() == TYPE_SCH_COMPONENT )
         {
             // Add all pins of the selected component to list

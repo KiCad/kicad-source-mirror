@@ -476,13 +476,13 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 /* Create the auxiliary vertical right toolbar, showing tools for
  * microwave applications
  */
-void WinEDA_PcbFrame::ReCreateAuxVToolbar()
+void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
 {
     if( m_AuxVToolBar )
         return;
 
     m_AuxVToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this,
-                                        ID_AUX_V_TOOLBAR, FALSE );
+                                        ID_MICROWAVE_V_TOOLBAR, FALSE );
 
     // Set up toolbar
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,

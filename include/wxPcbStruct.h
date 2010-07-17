@@ -269,7 +269,7 @@ public:
     void             ReCreateHToolbar();
     void             ReCreateAuxiliaryToolbar();
     void             ReCreateVToolbar();
-    void             ReCreateAuxVToolbar();
+    void             ReCreateMicrowaveVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
     WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
