@@ -532,7 +532,8 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* fr
     PopMenu->AppendSeparator();
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
+    msg = AddHotkeyName( _( "Add Label" ), s_Schematic_Hokeys_Descr, HK_ADD_LABEL );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, add_line_label_xpm );
 
     // Add global label command only if the cursor is over one end of the wire.
     if( ( pos.x == Wire->m_Start.x && pos.y == Wire->m_Start.y)

@@ -386,14 +386,16 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ADD_LABEL:
-        // switch to m_ID_current_state = ID_LABEL_BUTT;
-        if( m_ID_current_state != ID_LABEL_BUTT )
-            SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
-        OnLeftClick( DC, MousePos );
-        break;
+        if( !ItemInEdit )
+        {
+            // switch to m_ID_current_state = ID_LABEL_BUTT;
+            if( m_ID_current_state != ID_LABEL_BUTT )
+                SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
+            OnLeftClick( DC, MousePos );
+        }
+         break;
 
     case HK_BEGIN_WIRE:
-
         /* An item is selected. If edited and not a wire, a new command is not
          * possible */
         if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
