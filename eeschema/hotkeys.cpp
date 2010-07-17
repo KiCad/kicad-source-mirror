@@ -578,10 +578,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 wxPostEvent( this, eventMoveOrDragComponent );
                 break;
 
-            case TYPE_SCH_TEXT:
             case TYPE_SCH_LABEL:
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
+                wxPostEvent( this, eventMoveOrDragComponent );
+            break;
+
+            case TYPE_SCH_TEXT:
             case DRAW_PART_TEXT_STRUCT_TYPE:
             case DRAW_BUSENTRY_STRUCT_TYPE:
                 if( HK_Descr->m_Idcommand != HK_DRAG )

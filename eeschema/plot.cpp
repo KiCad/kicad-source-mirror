@@ -17,9 +17,7 @@
 #include "class_pin.h"
 
 
-/* Local Variables : */
-static void Plot_Hierarchical_PIN_Sheet( PLOTTER* plotter,
-                                         SCH_SHEET_PIN* Struct );
+/* Local functions : */
 static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
                            int FieldNumber, bool IsMulti, int DrawMode );
 
@@ -304,46 +302,6 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
 }
 
 
-static void Plot_Hierarchical_PIN_Sheet( PLOTTER*       plotter,
-                                         SCH_SHEET_PIN* aHierarchical_PIN )
-{
-    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    int        posx, tposx, posy, size;
-
-    static std::vector <wxPoint> Poly;
-
-    txtcolor = ReturnLayerColor( aHierarchical_PIN->GetLayer() );
-
-    posx = aHierarchical_PIN->m_Pos.x;
-    posy = aHierarchical_PIN->m_Pos.y;
-    size = aHierarchical_PIN->m_Size.x;
-    GRTextHorizJustifyType side;
-    if( aHierarchical_PIN->m_Edge )
-    {
-        tposx = posx - size;
-        side  = GR_TEXT_HJUSTIFY_RIGHT;
-    }
-    else
-    {
-        tposx = posx + size + (size / 8);
-        side  = GR_TEXT_HJUSTIFY_LEFT;
-    }
-
-    int thickness = aHierarchical_PIN->GetPenSize();
-    plotter->set_current_line_width( thickness );
-
-    plotter->text( wxPoint( tposx, posy ), txtcolor, aHierarchical_PIN->m_Text,
-                   TEXT_ORIENT_HORIZ, wxSize( size, size ),
-                   side, GR_TEXT_VJUSTIFY_CENTER, thickness,
-                   aHierarchical_PIN->m_Italic, aHierarchical_PIN->m_Bold );
-
-    /* Draw the associated graphic symbol */
-    aHierarchical_PIN->CreateGraphicShape( Poly, aHierarchical_PIN->m_Pos );
-
-    plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
-}
-
-
 static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
 {
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
@@ -399,9 +357,9 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
 
     /* Draw texts : SheetLabel */
-    BOOST_FOREACH( SCH_SHEET_PIN& label, Struct->GetSheetPins() )
+    BOOST_FOREACH( SCH_SHEET_PIN& pin_sheet, Struct->GetSheetPins() )
     {
-        label.Plot( plotter );
+        pin_sheet.Plot( plotter );
     }
 }
 

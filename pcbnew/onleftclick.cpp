@@ -378,7 +378,6 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawPanel->DrawGridAxis( DC, GR_XOR );
         GetScreen()->m_GridOrigin = GetScreen()->m_Curseur;
         DrawPanel->DrawGridAxis( DC, GR_COPY );
-        GetScreen()->SetModify();
         break;
 
     default:

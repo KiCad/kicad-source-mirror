@@ -23,38 +23,33 @@ static wxSize  ShapeSize;
 static int     PolyShapeType;
 
 
-static void         Exit_Self( WinEDA_DrawPanel* Panel, wxDC* DC );
-static EDGE_MODULE* gen_arc( MODULE*      aModule,
-                             EDGE_MODULE* PtSegm,
-                             int          cX,
-                             int          cY,
-                             int          angle );
-static void         ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel,
-                                   wxDC*             DC,
-                                   bool              erase );
+static void Exit_Self( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void gen_arc( std::vector <wxPoint>& aBuffer,
+                     wxPoint                aStartPoint,
+                     wxPoint                aCenter,
+                     int                    a_ArcAngle );
+static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel,
+                                              wxDC*             DC,
+                                              bool              erase );
 
+
+int         BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
+                                      wxPoint aStartPoint, wxPoint aEndPoint,
+                                      int aLength, int aWidth );
 
 class SELFPCB
 {
 public:
-    int     forme;                      // Shape: coil, spiral, etc ..
-    int     orient;                     // 0..3600
-    int     valeur;                     // Value.
+    int     forme;          // Shape: coil, spiral, etc ..
     wxPoint m_Start;
     wxPoint m_End;
     wxSize  m_Size;
-    D_PAD*  pt_pad_start, * pt_pad_end;
     int     lng;                        // Trace length.
-    int     m_Width;
-    int     nbrin;                      // Number of segments.
-    int     lbrin;                      // Length of segments.
-    int     rayon;                      // Radius between segments.
-    int     delta;                      // distance between pads
+    int     m_Width;                    // Trace width.
 };
 
 static SELFPCB Mself;
 static int     Self_On;
-static int     Bl_X0, Bl_Y0, Bl_Xf, Bl_Yf;
 
 
 /* This function shows on screen the bounding box of the inductor that will be
@@ -62,41 +57,50 @@ static int     Bl_X0, Bl_Y0, Bl_Xf, Bl_Yf;
  */
 static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    int deltaX, deltaY;
-
-    /* Calculate the orientation and size of the window:
-     * - Orient = vertical or horizontal (maximum dimensions)
-     * - Size.x = Size.y / 2
+    /* Calculate the orientation and size of the box containing the inductor:
+     * the box is a rectangle with height = lenght/2
+     * the shape is defined by a rectangle, nor necessary horizontal or vertical
      */
     GRSetDrawMode( DC, GR_XOR );
 
+    wxPoint poly[5];
+    wxPoint pt    = Mself.m_End - Mself.m_Start;
+    int     angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    int     len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+
+    // calculate corners
+    pt.x = 0; pt.y = len / 4;
+    RotatePoint( &pt, angle );
+    poly[0] = Mself.m_Start + pt;
+    poly[1] = Mself.m_End + pt;
+    pt.x    = 0; pt.y = -len / 4;
+    RotatePoint( &pt, angle );
+    poly[2] = Mself.m_End + pt;
+    poly[3] = Mself.m_Start + pt;
+    poly[4] = poly[0];
+
     if( erase )
     {
-        GRRect( &panel->m_ClipBox, DC, Bl_X0, Bl_Y0, Bl_Xf, Bl_Yf, YELLOW );
+        GRPoly( &panel->m_ClipBox, DC, 5, poly, false, 0, YELLOW, YELLOW );
     }
 
-    deltaX = ( panel->GetScreen()->m_Curseur.x - Mself.m_Start.x ) / 4;
-    deltaY = ( panel->GetScreen()->m_Curseur.y - Mself.m_Start.y ) / 4;
+    Mself.m_End = panel->GetScreen()->m_Curseur;
+    pt    = Mself.m_End - Mself.m_Start;
+    angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
 
-    Mself.orient = 900;
-    if( abs( deltaX ) > abs( deltaY ) )
-        Mself.orient = 0;
+    // calculate new corners
+    pt.x = 0; pt.y = len / 4;
+    RotatePoint( &pt, angle );
+    poly[0] = Mself.m_Start + pt;
+    poly[1] = Mself.m_End + pt;
+    pt.x    = 0; pt.y = -len / 4;
+    RotatePoint( &pt, angle );
+    poly[2] = Mself.m_End + pt;
+    poly[3] = Mself.m_Start + pt;
+    poly[4] = poly[0];
 
-    if( Mself.orient == 0 )
-    {
-        Bl_X0 = Mself.m_Start.x;
-        Bl_Y0 = Mself.m_Start.y - deltaX;
-        Bl_Xf = panel->GetScreen()->m_Curseur.x;
-        Bl_Yf = Mself.m_Start.y + deltaX;
-    }
-    else
-    {
-        Bl_X0 = Mself.m_Start.x - deltaY;
-        Bl_Y0 = Mself.m_Start.y;
-        Bl_Xf = Mself.m_Start.x + deltaY;
-        Bl_Yf = panel->GetScreen()->m_Curseur.y;
-    }
-    GRRect( &panel->m_ClipBox, DC, Bl_X0, Bl_Y0, Bl_Xf, Bl_Yf, YELLOW );
+    GRPoly( &panel->m_ClipBox, DC, 5, poly, false, 0, YELLOW, YELLOW );
 }
 
 
@@ -121,18 +125,13 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
     }
 
     Mself.m_Start = GetScreen()->m_Curseur;
+    Mself.m_End   = Mself.m_Start;
 
     Self_On = 1;
 
     /* Update the initial coordinates. */
     GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
     UpdateStatusBar();
-
-    Bl_X0 = Mself.m_Start.x;
-    Bl_Y0 = Mself.m_Start.y;
-
-    Bl_Xf = Bl_X0;
-    Bl_Yf = Bl_Y0;
 
     DrawPanel->ManageCurseur = ShowBoundingBoxMicroWaveInductor;
     DrawPanel->ForceCloseManageCurseur = Exit_Self;
@@ -143,29 +142,27 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
 /* Create a self-shaped coil
  * - Length Mself.lng
  * - Extremities Mself.m_Start and Mself.m_End
- * - Constraint: m_Start.x = m_End.x (self Vertical)
- * Or m_Start.y = m_End.y (self Horizontal)
  *
  * We must determine:
  * Mself.nbrin = number of segments perpendicular to the direction
  * (The coil nbrin will demicercles + 1 + 2 1 / 4 circle)
  * Mself.lbrin = length of a strand
- * Mself.rayon = radius of rounded parts of the coil
+ * Mself.radius = radius of rounded parts of the coil
  * Mself.delta = segments extremities connection between him and the coil even
  *
  * The equations are
- * Mself.m_Size.x = 2 * Mself.rayon + Mself.lbrin
- * Mself.m_Size.y * Mself.delta = 2 + 2 * Mself.nbrin * Mself.rayon
+ * Mself.m_Size.x = 2 * Mself.radius + Mself.lbrin
+ * Mself.m_Size.y * Mself.delta = 2 + 2 * Mself.nbrin * Mself.radius
  * Mself.lng = 2 * Mself.delta / / connections to the coil
  + (Mself.nbrin-2) * Mself.lbrin / / length of the strands except 1st and last
- + (Mself.nbrin 1) * (PI * Mself.rayon) / / length of rounded
- * Mself.lbrin + / 2 - Melf.rayon * 2) / / length of 1st and last bit
+ + (Mself.nbrin 1) * (PI * Mself.radius) / / length of rounded
+ * Mself.lbrin + / 2 - Melf.radius * 2) / / length of 1st and last bit
  *
  * The constraints are:
  * Nbrin >= 2
- * Mself.rayon < Mself.m_Size.x
- * Mself.m_Size.y = Mself.rayon * 4 + 2 * Mself.raccord
- * Mself.lbrin> Mself.rayon * 2
+ * Mself.radius < Mself.m_Size.x
+ * Mself.m_Size.y = Mself.radius * 4 + 2 * Mself.raccord
+ * Mself.lbrin> Mself.radius * 2
  *
  * The calculation is conducted in the following way:
  * Initially:
@@ -178,13 +175,11 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
  */
 MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 {
-    EDGE_MODULE* PtSegm, * LastSegm, * FirstSegm, * newedge;
-    MODULE*      Module;
-    D_PAD*       PtPad;
-    int          ii, ll, lextbrin;
-    double       fcoeff;
-    bool         abort = FALSE;
-    wxString     msg;
+    D_PAD*   PtPad;
+    int      ll;
+    double   fcoeff;
+    bool     abort = FALSE;
+    wxString msg;
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
     DrawPanel->ManageCurseur = NULL;
@@ -200,24 +195,9 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     Mself.m_End = GetScreen()->m_Curseur;
 
-    /* Fitting of parameters to simplify the calculation:
-     * The starting point must be coord departure from the end point */
-    if( Mself.orient == 0 )    // Horizontal
-    {
-        Mself.m_End.y = Mself.m_Start.y;
-        if( Mself.m_Start.x > Mself.m_End.x )
-            EXCHG( Mself.m_Start.x, Mself.m_End.x );
-        Mself.m_Size.y = Mself.m_End.x - Mself.m_Start.x;
-        Mself.lng = Mself.m_Size.y;
-    }
-    else                       // Vertical
-    {
-        Mself.m_End.x = Mself.m_Start.x;
-        if( Mself.m_Start.y > Mself.m_End.y )
-            EXCHG( Mself.m_Start.y, Mself.m_End.y );
-        Mself.m_Size.y = Mself.m_End.y - Mself.m_Start.y;
-        Mself.lng = Mself.m_Size.y;
-    }
+    wxPoint pt = Mself.m_End - Mself.m_Start;
+    int     min_len = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    Mself.lng = min_len;
 
     /* Enter the desired length. */
     if( !g_UserUnit )
@@ -244,53 +224,28 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Mself.lng = wxRound( fval * fcoeff );
 
     /* Control values (ii = minimum length) */
-    if( Mself.lng < Mself.m_Size.y )
+    if( Mself.lng < min_len )
     {
         DisplayError( this, _( "Requested length < minimum length" ) );
         return NULL;
     }
 
     /* Calculate the elements. */
-    Mself.m_Width  = GetBoard()->GetCurrentTrackWidth();
-    Mself.m_Size.x = Mself.m_Size.y / 2;
+    Mself.m_Width = GetBoard()->GetCurrentTrackWidth();
 
-    // Choose a reasonable starting value for the radius of the arcs.
-    Mself.rayon = MIN( Mself.m_Width * 5, Mself.m_Size.x / 4 );
-
-    for( Mself.nbrin = 2; ; Mself.nbrin++ )
+    std::vector <wxPoint> buffer;
+    ll = BuildCornersList_S_Shape( buffer, Mself.m_Start, Mself.m_End,
+                                   Mself.lng, Mself.m_Width );
+    if( !ll )
     {
-        Mself.delta =
-            ( Mself.m_Size.y - ( Mself.rayon * 2 * Mself.nbrin ) ) / 2;
-        if( Mself.delta < Mself.m_Size.y / 10 ) // Reduce radius.
-        {
-            Mself.delta = Mself.m_Size.y / 10;
-            Mself.rayon =
-                ( Mself.m_Size.y - 2 * Mself.delta ) / ( 2 * Mself.nbrin );
-            if( Mself.rayon < Mself.m_Width ) // Radius too small.
-            {
-                Affiche_Message( _( "Unable to create line: Requested length is too big" ) );
-                return NULL;
-            }
-        }
-        Mself.lbrin = Mself.m_Size.x - ( Mself.rayon * 2 );
-        lextbrin    = ( Mself.lbrin / 2 ) - Mself.rayon;
-        ll  = 2 * lextbrin;                     // Length of first and last
-                                                // segment.
-        ll += 2 * Mself.delta;                  // Length of coil connections.
-        ll += Mself.nbrin * ( Mself.lbrin - 2 );  // Length of other segments.
-        ll += ( ( Mself.nbrin + 1 ) * 314 * Mself.rayon ) / 100;
-
-        msg.Printf( _( "Segment count = %d, length = " ), Mself.nbrin );
-        wxString stlen;
-        valeur_param( ll, stlen );
-        msg += stlen;
-        Affiche_Message( msg );
-        if( ll >= Mself.lng )
-            break;
+        DisplayError( this, _( "Requested length too large" ) );
+        return NULL;
     }
 
+
     /* Generate module. */
-    Module = Create_1_Module( DC, wxEmptyString );
+    MODULE* Module;
+    Module = Create_1_Module( NULL, wxEmptyString );
     if( Module == NULL )
         return NULL;
 
@@ -298,172 +253,33 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Module->m_LibRef    = wxT( "MuSelf" );
     Module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
     Module->m_Flags     = 0;
+    Module->m_Pos = Mself.m_End;
 
-    Module->Draw( DrawPanel, DC, GR_XOR );
-
-    /* Generate special features. */
-    FirstSegm = PtSegm = new EDGE_MODULE( Module );
-    Module->m_Drawings.PushBack( PtSegm );
-
-    PtSegm->m_Start = Mself.m_Start;
-    PtSegm->m_End.x = Mself.m_Start.x;
-    PtSegm->m_End.y = PtSegm->m_Start.y + Mself.delta;
-    PtSegm->m_Width = Mself.m_Width;
-    PtSegm->SetLayer( Module->GetLayer() );
-    PtSegm->m_Shape = S_SEGMENT;
-
-    newedge = new EDGE_MODULE( Module );
-    newedge->Copy( PtSegm );
-
-    Module->m_Drawings.PushBack( newedge );
-
-    PtSegm = newedge;
-    PtSegm->m_Start = PtSegm->m_End;
-
-    PtSegm = gen_arc( Module,
-                      PtSegm,
-                      PtSegm->m_End.x - Mself.rayon,
-                      PtSegm->m_End.y,
-                      -900 );
-
-    if( lextbrin )
+    /* Generate segments. */
+    for( unsigned jj = 1; jj < buffer.size(); jj++ )
     {
-        newedge = new EDGE_MODULE( Module );
-        newedge->Copy( PtSegm );
-
-        Module->m_Drawings.PushBack( newedge );
-
-        PtSegm = newedge;
-        PtSegm->m_Start  = PtSegm->m_End;
-        PtSegm->m_End.x -= lextbrin;
+        EDGE_MODULE* PtSegm;
+        PtSegm = new EDGE_MODULE( Module );
+        PtSegm->m_Start = buffer[jj - 1];
+        PtSegm->m_End   = buffer[jj];
+        PtSegm->m_Width = Mself.m_Width;
+        PtSegm->SetLayer( Module->GetLayer() );
+        PtSegm->m_Shape  = S_SEGMENT;
+        PtSegm->m_Start0 = PtSegm->m_Start - Module->m_Pos;
+        PtSegm->m_End0   = PtSegm->m_End - Module->m_Pos;
+        Module->m_Drawings.PushBack( PtSegm );
     }
 
-    /* Create coil. */
-    for( ii = 1; ii < Mself.nbrin; ii++ )
-    {
-        int arc_angle;
-        newedge = new EDGE_MODULE( Module );
-        newedge->Copy( PtSegm );
-
-        Module->m_Drawings.PushBack( newedge );
-
-        PtSegm = newedge;
-        PtSegm->m_Start = PtSegm->m_End;
-
-        if( ii & 1 ) /* odd order arcs are greater than 0 */
-            arc_angle = 1800;
-        else
-            arc_angle = -1800;
-
-        PtSegm = gen_arc( Module, PtSegm, PtSegm->m_End.x,
-                          PtSegm->m_End.y + Mself.rayon, arc_angle );
-
-        if( ii < Mself.nbrin - 1 )
-        {
-            newedge = new EDGE_MODULE( Module );
-            newedge->Copy( PtSegm );
-
-            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
-
-            PtSegm = newedge;
-            PtSegm->m_Start = PtSegm->m_End;
-            if( ii & 1 )
-                PtSegm->m_End.x += Mself.lbrin;
-            else
-                PtSegm->m_End.x -= Mself.lbrin;
-        }
-    }
-
-    /* Create last segment. */
-    if( ii & 1 )
-    {
-        if( lextbrin )
-        {
-            newedge = new EDGE_MODULE( Module );
-            newedge->Copy( PtSegm );
-
-            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
-
-            PtSegm = newedge;
-            PtSegm->m_Start  = PtSegm->m_End;
-            PtSegm->m_End.x -= lextbrin;
-        }
-
-        newedge = new EDGE_MODULE( Module );
-        newedge->Copy( PtSegm );
-        Module->m_Drawings.PushBack( newedge );
-
-        PtSegm = newedge;
-        PtSegm->m_Start.x = PtSegm->m_End.x; PtSegm->m_Start.y =
-            PtSegm->m_End.y;
-        PtSegm = gen_arc( Module,
-                          PtSegm,
-                          PtSegm->m_End.x,
-                          PtSegm->m_End.y + Mself.rayon,
-                          900 );
-    }
-    else
-    {
-        if( lextbrin )
-        {
-            newedge = new EDGE_MODULE( Module );
-            newedge->Copy( PtSegm );
-
-            Module->m_Drawings.Insert( newedge, PtSegm->Next() );
-
-            PtSegm = newedge;
-            PtSegm->m_Start  = PtSegm->m_End;
-            PtSegm->m_End.x += lextbrin;
-        }
-        newedge = new EDGE_MODULE( Module );
-        newedge->Copy( PtSegm );
-
-        Module->m_Drawings.PushBack( newedge );
-        PtSegm = newedge;
-        PtSegm->m_Start = PtSegm->m_End;
-        PtSegm = gen_arc( Module,
-                          PtSegm,
-                          PtSegm->m_End.x,
-                          PtSegm->m_End.y + Mself.rayon,
-                          -900 );
-    }
-
-    newedge = new EDGE_MODULE( Module );
-    newedge->Copy( PtSegm );
-    Module->m_Drawings.Insert( newedge, PtSegm->Next() );
-    PtSegm = newedge;
-
-    PtSegm->m_Start = PtSegm->m_End;
-    PtSegm->m_End   = Mself.m_End;
-
-    /* Rotate the coil if it has a horizontal orientation. */
-    LastSegm = PtSegm;
-    if( Mself.orient == 0 )
-    {
-        for( PtSegm = FirstSegm;
-            PtSegm != NULL;
-            PtSegm = (EDGE_MODULE*) PtSegm->Next() )
-        {
-            RotatePoint( &PtSegm->m_Start.x, &PtSegm->m_Start.y,
-                         FirstSegm->m_Start.x, FirstSegm->m_Start.y, 900 );
-            if( PtSegm != LastSegm )
-                RotatePoint( &PtSegm->m_End.x, &PtSegm->m_End.y,
-                             FirstSegm->m_Start.x, FirstSegm->m_Start.y, 900 );
-        }
-    }
-
-    Module->m_Pos = LastSegm->m_End;
-
-    /* Place pad on each end of coil. */
+    /* Place a pad on each end of coil. */
     PtPad = new D_PAD( Module );
 
     Module->m_Pads.PushFront( PtPad );
 
     PtPad->SetPadName( wxT( "1" ) );
-    PtPad->m_Pos = LastSegm->m_End;
-    PtPad->m_Pos0 = PtPad->m_Pos - Module->m_Pos;
-    PtPad->m_Size.x = PtPad->m_Size.y = LastSegm->m_Width;
-    PtPad->m_Masque_Layer = g_TabOneLayerMask[LastSegm->GetLayer()];
+    PtPad->m_Pos    = Mself.m_End;
+    PtPad->m_Pos0   = PtPad->m_Pos - Module->m_Pos;
+    PtPad->m_Size.x = PtPad->m_Size.y = Mself.m_Width;
+    PtPad->m_Masque_Layer = g_TabOneLayerMask[Module->GetLayer()];
     PtPad->m_Attribut     = PAD_SMD;
     PtPad->m_PadShape     = PAD_CIRCLE;
     PtPad->m_Rayon = PtPad->m_Size.x / 2;
@@ -475,27 +291,21 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     PtPad = newpad;
     PtPad->SetPadName( wxT( "2" ) );
-    PtPad->m_Pos = FirstSegm->m_Start;
+    PtPad->m_Pos  = Mself.m_Start;
     PtPad->m_Pos0 = PtPad->m_Pos - Module->m_Pos;
 
     /* Modify text positions. */
     Module->DisplayInfo( this );
     Module->m_Value->m_Pos.x = Module->m_Reference->m_Pos.x =
-        ( FirstSegm->m_Start.x + LastSegm->m_End.x ) / 2;
+                                   ( Mself.m_Start.x + Mself.m_End.x ) / 2;
     Module->m_Value->m_Pos.y = Module->m_Reference->m_Pos.y =
-        ( FirstSegm->m_Start.y + LastSegm->m_End.y ) / 2;
+                                   ( Mself.m_Start.y + Mself.m_End.y ) / 2;
 
     Module->m_Reference->m_Pos.y -= Module->m_Reference->m_Size.y;
-    Module->m_Value->m_Pos.y += Module->m_Value->m_Size.y;
-    Module->m_Reference->m_Pos0 = Module->m_Reference->m_Pos - Module->m_Pos;
+    Module->m_Value->m_Pos.y     += Module->m_Value->m_Size.y;
+    Module->m_Reference->m_Pos0   = Module->m_Reference->m_Pos - Module->m_Pos;
     Module->m_Value->m_Pos0 = Module->m_Value->m_Pos - Module->m_Pos;
 
-    /* Initial segment coordinates. */
-    for( PtSegm = FirstSegm; PtSegm; PtSegm = PtSegm->Next() )
-    {
-        PtSegm->m_Start0 = PtSegm->m_Start - Module->m_Pos;
-        PtSegm->m_End0   = PtSegm->m_End - Module->m_Pos;
-    }
 
     Module->Set_Rectangle_Encadrement();
     Module->Draw( DrawPanel, DC, GR_OR );
@@ -504,60 +314,215 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 }
 
 
-/* Generate an arc EDGE_MODULE:
- * Center cX, cY
- * Angle "angle"
- * Starting point gives the structure pointed to by PtSegm, which must
- * Returns a pointer to the structure EDGE_MODULE generated.
+/** gen_arc
+ * Generate an arc using arc approximation by lines:
+ * Center aCenter
+ * Angle "angle" (in 0.1 deg)
+ * @param  aBuffer = a buffer to store points.
+ * @param  aStartPoint = starting point of arc.
+ * @param  aCenter = arc centre.
+ * @param  a_ArcAngle = arc length in 0.1 degrees.
  */
-static EDGE_MODULE* gen_arc( MODULE*      aModule,
-                             EDGE_MODULE* PtSegm,
-                             int          cX,
-                             int          cY,
-                             int          angle )
+static void gen_arc( std::vector <wxPoint>& aBuffer,
+                     wxPoint                aStartPoint,
+                     wxPoint                aCenter,
+                     int                    a_ArcAngle )
 {
-    int          ii, nb_seg;
-    double       alpha, beta, fsin, fcos;
-    int          x0, xr0, y0, yr0;
-    EDGE_MODULE* newedge;
+    #define SEGM_COUNT_PER_360DEG 16
+    wxPoint first_point = aStartPoint - aCenter;
+    int     seg_count = ( (abs( a_ArcAngle ) ) * SEGM_COUNT_PER_360DEG) / 3600;
 
-    angle = -angle;
-    y0    = PtSegm->m_Start.x - cX;
-    x0    = PtSegm->m_Start.y - cY;
+    if( seg_count == 0 )
+        seg_count = 1;
 
-    nb_seg = ( abs( angle ) ) / 225;
+    double increment_angle = (double) a_ArcAngle * 3.14159 / 1800 / seg_count;
 
-    if( nb_seg == 0 )
-        nb_seg = 1;
-
-    alpha = ( (double) angle * 3.14159 / 1800 ) / nb_seg;
-
-    for( ii = 1; ii <= nb_seg; ii++ )
+    // Creates nb_seg point to approximate arc by segments:
+    for( int ii = 1; ii <= seg_count; ii++ )
     {
-        if( ii > 1 )
+        double  rot_angle = increment_angle * ii;
+        double  fcos = cos( rot_angle );
+        double  fsin = sin( rot_angle );
+        wxPoint currpt;
+
+        // Rotate current point:
+        currpt.x = wxRound( ( first_point.x * fcos + first_point.y * fsin ) );
+        currpt.y = wxRound( ( first_point.y * fcos - first_point.x * fsin ) );
+
+        wxPoint corner = aCenter + currpt;
+        aBuffer.push_back( corner );
+    }
+}
+
+
+/** Function BuildCornersList_S_Shape
+ * Create a path like a S-shaped coil
+ * @param  aBuffer =  a vector <wxPoint>& buffer where to put points
+ * @param  aEndPoint = ending point of the path
+ * @param  aLength = full lenght of the path
+ * @param  aWidth = witdth of lines
+ */
+int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
+                              wxPoint aStartPoint, wxPoint aEndPoint,
+                              int aLength, int aWidth )
+{
+/* We must determine:
+ * segm_count = number of segments perpendicular to the direction
+ * segm_len = length of a strand
+ * radius = radius of rounded parts of the coil
+ * stubs_len = length of the 2 stubs( segments parallel to the direction)
+ *         connecting the start point to the start point of the S shape
+ *         and the ending point to the end point of the S shape
+ * The equations are (assuming the area size of the entire shape is Size:
+ * Size.x = 2 * radius + segm_len
+ * Size.y = (segm_count + 2 ) * 2 * radius + 2 * stubs_len
+ * Mself.lng = 2 * delta // connections to the coil
+ *             + (segm_count-2) * segm_len      // length of the strands except 1st and last
+ *             + (segm_count) * (PI * radius)   // length of rounded
+ * segm_len + / 2 - radius * 2)                 // length of 1st and last bit
+ *
+ * The constraints are:
+ * segm_count >= 2
+ * radius < m_Size.x
+ * Size.y = (radius * 4) + (2 * stubs_len)
+ * segm_len > radius * 2
+ *
+ * The calculation is conducted in the following way:
+ * first:
+ * segm_count = 2
+ * radius = 4 * Size.x (arbitrarily fixed value)
+ * Then:
+ * Increasing the number of segments to the desired length
+ * (radius decreases if necessary)
+ */
+    wxSize  size;
+
+    // This scale factor adjust the arc lenght to handle
+    // the arc to segment approximation.
+    // because we use SEGM_COUNT_PER_360DEG segment to approximate a circle,
+    // the trace len must be corrected when calculated using arcs
+    // this factor adjust calculations and must be canged if SEGM_COUNT_PER_360DEG is modified
+    // because trace using segment is shorter the corresponding arc
+    // ADJUST_SIZE is the ratio between tline len and the arc len for an arc
+    // of 360/ADJUST_SIZE angle
+    #define ADJUST_SIZE 0.988
+
+    wxPoint pt       = aEndPoint - aStartPoint;
+    int     angle    = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    int     min_len  = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    int     segm_len = 0;           // lenght of segments
+    int     full_len;               // full len of shape (sum of lenght of all segments + arcs)
+
+
+    /* Note: calculations are made for a vertical coil (more easy calculations)
+     * and after points are rotated to their actual position
+     * So the main direction is the Y axis.
+     * the 2 stubs are on the Y axis
+     * the others segments are parallel to the X axis.
+     */
+
+    // Calculate the size of area (for a vertical shape)
+    size.x = min_len / 2;
+    size.y = min_len;
+
+    // Choose a reasonable starting value for the radius of the arcs.
+    int radius = MIN( aWidth * 5, size.x / 4 );
+
+    int segm_count;     // number of full len segments
+                        // the half size segments (first and last segment) are not counted here
+    int stubs_len = 0;  // lenght of first or last segment (half size of others segments)
+    for( segm_count = 0; ; segm_count++ )
+    {
+        stubs_len = ( size.y - ( radius * 2 * (segm_count + 2 ) ) ) / 2;
+        if( stubs_len < size.y / 10 ) // Reduce radius.
         {
-            newedge = new EDGE_MODULE( aModule );
-
-            newedge->Copy( PtSegm );
-
-            aModule->m_Drawings.PushBack( newedge );
-
-            PtSegm = newedge;
-
-            PtSegm->m_Start = PtSegm->m_End;
+            stubs_len = size.y / 10;
+            radius    = ( size.y - (2 * stubs_len) ) / ( 2 * (segm_count + 2) );
+            if( radius < aWidth ) // Radius too small.
+            {
+                // Unable to create line: Requested length value is too large for room
+                return 0;
+            }
         }
+        segm_len  = size.x - ( radius * 2 );
+        full_len  = 2 * stubs_len;                  // Length of coil connections.
+        full_len += segm_len * segm_count;          // Length of full length segments.
+        full_len += wxRound( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );  // Ard arcs len
+        full_len += segm_len - (2 * radius);        // Length of first and last segments
+                                                    // (half size segments len = segm_len/2 - radius).
 
-        beta = ( alpha * ii );
-        fcos = cos( beta ); fsin = sin( beta );
-
-        xr0 = (int) ( x0 * fcos + y0 * fsin );
-        yr0 = (int) ( y0 * fcos - x0 * fsin );
-
-        PtSegm->m_End.x = cX + yr0;
-        PtSegm->m_End.y = cY + xr0;
+        if( full_len >= aLength )
+            break;
     }
 
-    return PtSegm;
+    // Adjust len by adjusting segm_len:
+    int delta_size = full_len - aLength;
+    // reduce len of the segm_count segments + 2 half size segments (= 1 full size segment)
+    segm_len -= delta_size / (segm_count+1);
+
+    // Generate first line (the first stub) and first arc (90 deg arc)
+    pt = aStartPoint;
+    aBuffer.push_back( pt );
+    pt.y += stubs_len;
+    aBuffer.push_back( pt );
+
+    wxPoint centre = pt;
+    centre.x -= radius;
+    gen_arc( aBuffer, pt, centre, -900 );
+    pt = aBuffer.back();
+
+    int half_size_seg_len = segm_len / 2 - radius;
+    if( half_size_seg_len )
+    {
+        pt.x -= half_size_seg_len;
+        aBuffer.push_back( pt );
+    }
+
+    /* Create shape. */
+    int ii;
+    int sign = 1;
+    segm_count += 1;    // increase segm_count to create the last half_size segment
+    for( ii = 0; ii < segm_count; ii++ )
+    {
+        int arc_angle;
+
+        if( ii & 1 ) /* odd order arcs are greater than 0 */
+            sign = -1;
+        else
+            sign = 1;
+        arc_angle = 1800 * sign;
+        centre    = pt;
+        centre.y += radius;
+        gen_arc( aBuffer, pt, centre, arc_angle );
+        pt    = aBuffer.back();
+        pt.x += segm_len * sign;
+        aBuffer.push_back( pt );
+    }
+
+    // The last point is false:
+    // it is the end of a full size segment, but must be
+    // the end of the second half_size segment. Change it.
+    sign *= -1;
+    aBuffer.back().x = aStartPoint.x + radius * sign;
+
+    // create last arc
+    pt        = aBuffer.back();
+    centre    = pt;
+    centre.y += radius;
+    gen_arc( aBuffer, pt, centre, 900 * sign );    pt = aBuffer.back();
+
+    // Rotate point
+    angle += 900;
+    for( unsigned jj = 0; jj < aBuffer.size(); jj++ )
+    {
+        RotatePoint( &aBuffer[jj].x, &aBuffer[jj].y,
+                     aStartPoint.x, aStartPoint.y, angle );
+    }
+
+    // push last point (end point)
+    aBuffer.push_back( aEndPoint );
+
+    return 1;
 }
 
 
@@ -576,8 +541,8 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
     if( Module == NULL )
         return NULL;
 
-    Module->m_TimeStamp = GetTimeStamp();
-    Module->m_Value->m_Size = wxSize( 30, 30 );
+    Module->m_TimeStamp           = GetTimeStamp();
+    Module->m_Value->m_Size       = wxSize( 30, 30 );
     Module->m_Value->m_Pos0.y     = -30;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;
     Module->m_Reference->m_Size   = wxSize( 30, 30 );
@@ -591,8 +556,8 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
 
         Module->m_Pads.PushFront( pad );
 
-        pad->m_Size.x = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
-        pad->m_Pos = Module->m_Pos;
+        pad->m_Size.x       = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
+        pad->m_Pos          = Module->m_Pos;
         pad->m_PadShape     = PAD_RECT;
         pad->m_Attribut     = PAD_SMD;
         pad->m_Masque_Layer = LAYER_FRONT;
@@ -817,10 +782,10 @@ private:
 
 
 BEGIN_EVENT_TABLE( WinEDA_SetParamShapeFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
-    EVT_BUTTON( ID_READ_SHAPE_FILE,
-                WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
+EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
+EVT_BUTTON( ID_READ_SHAPE_FILE,
+            WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
 END_EVENT_TABLE()
 
 WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
@@ -850,11 +815,14 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
 
     Button =
         new wxButton( this, ID_READ_SHAPE_FILE,
-                      _( "Read Shape Description File..." ) );
+                     _( "Read Shape Description File..." ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    wxString shapelist[3] = { _( "Normal" ), _( "Symmetrical" ),
-                              _( "Mirrored" ) };
+    wxString shapelist[3] =
+    {
+        _( "Normal" ), _( "Symmetrical" ),
+        _( "Mirrored" )
+    };
     m_ShapeOptionCtrl = new wxRadioBox( this, -1, _( "Shape Option" ),
                                         wxDefaultPosition, wxDefaultSize, 3,
                                         shapelist, 1,
@@ -870,7 +838,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
 }
 
 
-void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
+void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& WXUNUSED(event) )
 {
     if( PolyEdges )
         free( PolyEdges );
@@ -967,7 +935,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
                     int index = ptbuf - PolyEdges;
                     bufsize *= 2;
                     ptbuf    = PolyEdges = (double*) realloc(
-                                    PolyEdges, bufsize * 2 *
+                                   PolyEdges, bufsize * 2 *
                                    sizeof(double) );
                     ptbuf += index;
                 }
@@ -1013,7 +981,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
     int          ii, npoints;
 
     WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame(
-         this, wxPoint( -1, -1 ) );
+        this, wxPoint( -1, -1 ) );
 
     int ok = frame->ShowModal();
 
