@@ -930,9 +930,9 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " ref=\"" << ReturnFieldName( 0 )
+                                 << " ref=\"" << CONV_TO_UTF8( ReturnFieldName( 0 ) )
                                  << '"' << " chipName=\""
-                                 << m_ChipName.mb_str() << '"' <<  m_Pos
+                                 << CONV_TO_UTF8( m_ChipName ) << '"' <<  m_Pos
                                  << " layer=\"" << m_Layer
                                  << '"' << "/>\n";
 
@@ -944,13 +944,13 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
         if( !value.IsEmpty() )
         {
             NestedSpace( nestLevel + 1, os ) << "<field" << " name=\""
-                                             << ReturnFieldName( i ).mb_str()
+                                             << CONV_TO_UTF8( ReturnFieldName( i ) )
                                              << '"' <<  " value=\""
-                                             << value.mb_str() << "\"/>\n";
+                                             << CONV_TO_UTF8( value ) << "\"/>\n";
         }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
+    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() )
                                  << ">\n";
 }
 

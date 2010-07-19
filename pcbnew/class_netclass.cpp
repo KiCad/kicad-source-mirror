@@ -321,7 +321,7 @@ void NETCLASS::Show( int nestLevel, std::ostream& os )
     for( const_iterator i = begin();  i!=end();  ++i )
     {
         // NestedSpace( nestLevel+1, os ) << *i;
-        os << *i;
+        os << CONV_TO_UTF8( *i );
     }
 
     // NestedSpace( nestLevel, os )
