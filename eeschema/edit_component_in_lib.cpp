@@ -228,7 +228,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
  *  New name cannot be the root name, and must not exists
  */
 {
-    wxString Line;
     wxString aliasname;
     LIB_COMPONENT* component = m_Parent->GetComponent();
     CMP_LIBRARY* library = m_Parent->GetLibrary();
@@ -236,12 +235,15 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
     if( component == NULL )
         return;
 
-    if( Get_Message( _( "New alias:" ),
-                     _( "Component Alias" ), Line, this ) != 0 )
-        return;
+    wxTextEntryDialog dlg( this, _( "New alias:" ), _( "Component Alias" ), aliasname );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
 
-    Line.Replace( wxT( " " ), wxT( "_" ) );
-    aliasname = Line;
+    aliasname = dlg.GetValue( );
+
+    aliasname.Replace( wxT( " " ), wxT( "_" ) );
+    if( aliasname.IsEmpty() )
+        return;
 
     if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND
         || library->FindEntry( aliasname ) != NULL )
@@ -405,8 +407,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter(
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
 /*******************************************************************************/
 
-/* Add a new name to the alias list box
- *  New name cannot be the root name, and must not exists
+/* Add a new name to the footprint filter list box
+ * Obvioulsy, cannot be void
  */
 {
     wxString Line;
@@ -415,11 +417,15 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
     if( component == NULL )
         return;
 
-    if( Get_Message( _( "Add Footprint Filter" ), _( "Footprint Filter" ),
-                     Line, this ) != 0 )
-        return;
+    wxTextEntryDialog dlg( this, _( "Add Footprint Filter" ), _( "Footprint Filter" ), Line );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
 
+    Line = dlg.GetValue( );
     Line.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( Line.IsEmpty() )
+        return;
 
     /* test for an existing name: */
     int index = m_FootprintFilterListBox->FindString( Line );

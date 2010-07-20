@@ -27,7 +27,7 @@ static void AbortMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 
-    WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) Panel->GetParent();
+    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) Panel->GetParent();
 
     if( parent == NULL )
         return;
@@ -37,7 +37,7 @@ static void AbortMoveField( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( item == NULL )
         return;
 
-    wxPoint curpos = Panel->GetScreen()->m_Curseur;
+    wxPoint             curpos = Panel->GetScreen()->m_Curseur;
 
     Panel->GetScreen()->m_Curseur = s_InitialPosition;
     ShowMoveField( Panel, DC, true );
@@ -54,9 +54,9 @@ void WinEDA_LibeditFrame::StartMoveField( wxDC* DC, LIB_FIELD* field )
     if( ( m_component == NULL ) || ( field == NULL ) )
         return;
 
-    m_drawItem  = field;
+    m_drawItem = field;
     s_InitialPosition = field->m_Pos;
-    NEGATE(s_InitialPosition.y);
+    NEGATE( s_InitialPosition.y );
     m_drawItem->m_Flags |= IS_MOVED;
 
     DrawPanel->CursorOff( DC );
@@ -90,7 +90,7 @@ static void ShowMoveField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         return;
 
     wxString text = Field->GetFullText( parent->GetUnit() );
-    wxPoint offset ;
+    wxPoint  offset;
     offset.x = s_LastPosition.x - Field->m_Pos.x;
     offset.y = s_LastPosition.y + Field->m_Pos.y;
 
@@ -123,7 +123,7 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LIB_FIELD* Field )
                  &fieldText, DefaultTransformMatrix );
 
     DrawPanel->CursorOn( DC );
-    OnModify( );
+    OnModify();
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     m_drawItem = NULL;
@@ -132,8 +132,9 @@ void WinEDA_LibeditFrame::PlaceField( wxDC* DC, LIB_FIELD* Field )
 
 void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
 {
-    wxString   Text;
-    wxString   title;
+    wxString Text;
+    wxString title;
+    bool     save = true;
 
     if( Field == NULL )
         return;
@@ -141,11 +142,11 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
     switch( Field->m_FieldId )
     {
     case REFERENCE:
-        title = wxT( "Reference:" );
+        title = _( "Reference:" );
         break;
 
     case VALUE:
-        title = wxT( "Component Name / Value:" );
+        title = _( "Component Name / Value:" );
         break;
 
     default:
@@ -154,9 +155,24 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
 
     Text = Field->m_Text;
 
-    /* FIXME: Use wxTextEntry dialog here and check for cancel button. */
-    Get_Message( title, _( "Edit field" ), Text, this );
+    {
+        wxTextEntryDialog dlg( this, title, _( "Edit field" ), Text );
+        if( dlg.ShowModal() != wxID_OK )
+            return; // cancelled by user
+        Text = dlg.GetValue( );
+    }
+
     Text.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( Field->m_FieldId == REFERENCE || Field->m_FieldId == VALUE )
+    {
+        if( Text.IsEmpty ( ) )
+        {
+            DisplayError( this, _( "Value or Reference cannot be void. Aborted" ) );
+            return;
+        }
+    }
+
 
     wxString fieldText = Field->GetFullText( m_unit );
 
@@ -172,11 +188,12 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
         /* Test for an existing name in the current components alias list. */
         if( Field->GetParent()->m_AliasList.Index( Text, false ) != wxNOT_FOUND )
         {
-            msg.Printf( _( "The field name <%s> is an existing alias of the \
+            msg.Printf( _(
+                           "The field name <%s> is an existing alias of the \
 component <%s>.\nPlease choose another name that does not conflict with any \
 names in the alias list." ),
-                        GetChars( Text ),
-                        GetChars( Field->GetParent()->GetName() ) );
+                       GetChars( Text ),
+                       GetChars( Field->GetParent()->GetName() ) );
             DisplayError( this, msg );
             return;
         }
@@ -186,15 +203,18 @@ names in the alias list." ),
          */
         if( m_library && m_library->FindEntry( Text ) != NULL )
         {
-            msg.Printf( _( "The field name <%s> conflicts with an existing \
+            msg.Printf( _(
+                           "The field name <%s> conflicts with an existing \
 entry in the component library <%s>.\nPlease choose another name that does \
-not conflict with any library entries." ),
-                        GetChars( Text ),
-                        GetChars( m_library->GetName() ) );
+not conflict with any library entries."                                                                                                                                                           ),
+                       GetChars( Text ),
+                       GetChars( m_library->GetName() ) );
             DisplayError( this, msg );
             return;
         }
 
+        SaveCopyInUndoList( Field->GetParent() );
+        save = false;
         Field->GetParent()->SetName( Text );
     }
 
@@ -203,7 +223,8 @@ not conflict with any library entries." ),
 
     if( !Text.IsEmpty() )
     {
-        SaveCopyInUndoList( Field->GetParent() );
+        if( save )
+            SaveCopyInUndoList( Field->GetParent() );
         Field->m_Text = Text;
     }
     else
@@ -220,7 +241,7 @@ not conflict with any library entries." ),
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode, &fieldText,
                  DefaultTransformMatrix );
 
-    OnModify( );
+    OnModify();
     UpdateAliasSelectList();
 }
 
@@ -233,11 +254,10 @@ not conflict with any library entries." ),
  */
 void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
 {
-
     if( Field == NULL )
         return;
 
-    OnModify( );
+    OnModify();
     DrawPanel->CursorOff( DC );
     GRSetDrawMode( DC, g_XorMode );
 
@@ -247,9 +267,9 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
         ShowMoveField( DrawPanel, DC, false );
     else
         Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &fieldText,
-                 DefaultTransformMatrix );
+                     DefaultTransformMatrix );
 
-    if( Field->m_Orient ==  TEXT_ORIENT_VERT)
+    if( Field->m_Orient ==  TEXT_ORIENT_VERT )
         Field->m_Orient = TEXT_ORIENT_HORIZ;
     else
         Field->m_Orient = TEXT_ORIENT_VERT;
@@ -263,7 +283,7 @@ void WinEDA_LibeditFrame::RotateField( wxDC* DC, LIB_FIELD* Field )
         ShowMoveField( DrawPanel, DC, false );
     else
         Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode, &fieldText,
-                 DefaultTransformMatrix );
+                     DefaultTransformMatrix );
 
     DrawPanel->CursorOn( DC );
 }

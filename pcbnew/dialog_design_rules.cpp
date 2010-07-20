@@ -656,11 +656,13 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
 {
     wxString class_name;
 
-    if( Get_Message( _( "New Net Class Name:" ),
-                     wxEmptyString,
-                     class_name,
-                     this ) )
-        return;
+    wxTextEntryDialog dlg( this,  _( "New Net Class Name:" ), wxEmptyString, class_name );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    class_name = dlg.GetValue( );
+    if( class_name.IsEmpty() )
+        return;         // empty name not allowed
 
     // The name must dot exists:
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )

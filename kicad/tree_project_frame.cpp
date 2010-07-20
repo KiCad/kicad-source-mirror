@@ -853,8 +853,13 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     wxString buffer = m_TreeProject->GetItemText( curr_item );
     wxString msg    = _( "Change filename: " ) + tree_data->m_FileName;
 
-    if( Get_Message( msg, _( "Change filename" ), buffer, this ) != 0 )
-        return; //Abort command
+    wxTextEntryDialog dlg( this, msg, _( "Change filename" ), buffer );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    buffer = dlg.GetValue( );
+    if( buffer.IsEmpty() )
+        return;         // empty file name not allowed
 
     if( tree_data->Rename( buffer, true ) )
         m_TreeProject->SetItemText( curr_item, buffer );

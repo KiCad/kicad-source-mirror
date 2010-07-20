@@ -639,7 +639,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         if( wxTheClipboard->Open() )
         {
             if( !wxTheClipboard->SetData( dobjBmp ) )
-                wxLogError( _T( "Failed to copy image to clipboard" ) );
+                wxMessageBox( _( "Failed to copy image to clipboard" ) );
+
             wxTheClipboard->Flush();    /* the data in clipboard will stay
                                          * available after the
                                          * application exits */
@@ -653,7 +654,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         if( !image.SaveFile( FullFileName,
                              fmt_is_jpeg ? wxBITMAP_TYPE_JPEG :
                              wxBITMAP_TYPE_PNG ) )
-            wxLogError( wxT( "Can't save file" ) );
+            wxMessageBox( _( "Can't save file" ) );
 
         image.Destroy();
     }
