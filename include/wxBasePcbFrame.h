@@ -226,8 +226,16 @@ public:
     virtual void OnModify( );
 
     // Modules (footprints)
-    MODULE* Create_1_Module( wxDC*           DC,
-                             const wxString& module_name );
+    /** Function Create_1_Module
+     * Creates a new module or footprint : A new module contains 2 texts :
+     *  First = REFERENCE
+     *  Second = VALUE: "VAL**"
+     * the new module is added to the board module list
+     * @param aModuleName = name of the new footprint
+     *   (will the component reference in board)
+     * @return a pointer to the new module
+     */
+    MODULE* Create_1_Module( const wxString& module_name );
     void    Edit_Module( MODULE* module, wxDC* DC );
     void    Rotate_Module( wxDC*   DC,
                            MODULE* module,

@@ -49,8 +49,9 @@ bool           Segments_45_Only;                // True to allow horiz, vert. an
 bool           g_TwoSegmentTrackBuild = true;
 bool           g_HighLight_Status;
 
-int            ModuleSegmentWidth;
-int            ModuleTextWidth;
+wxSize         g_ModuleTextSize;      /* Default footprint texts size */
+int            g_ModuleSegmentWidth;
+int            g_ModuleTextWidth;
 int            Route_Layer_TOP;
 int            Route_Layer_BOTTOM;
 int            g_MaxLinksShowed;
@@ -58,7 +59,6 @@ int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 int            g_HighLight_NetCode   = -1;
 
-wxSize         ModuleTextSize;      /* Default footprint texts size */
 wxPoint        g_Offset_Module;     /* Offset de trace du modul en depl */
 wxString       g_Current_PadName;   // Last used pad name (pad num)
 

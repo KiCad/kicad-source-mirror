@@ -177,8 +177,6 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 {
     D_PAD*   PtPad;
     int      ll;
-    double   fcoeff;
-    bool     abort = FALSE;
     wxString msg;
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -200,28 +198,13 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Mself.lng = min_len;
 
     /* Enter the desired length. */
-    if( !g_UserUnit )
-    {
-        fcoeff = 10000.0;
-        msg.Printf( wxT( "%1.4f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(inch):" ), _( "Length" ), msg, this );
-    }
-    else
-    {
-        fcoeff = 10000.0 / 25.4;
-        msg.Printf( wxT( "%2.3f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(mm):" ), _( "Length" ), msg, this );
-    }
-    if( abort )
-        return NULL;
+    msg = ReturnStringFromValue( g_UserUnit, Mself.lng, GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
+    if( dlg.ShowModal() != wxID_OK )
+        return NULL; // cancelled by user
 
-    double fval;
-    if( !msg.ToDouble( &fval ) )
-    {
-        DisplayError( this, _( "Incorrect number, abort" ) );
-        return NULL;
-    }
-    Mself.lng = wxRound( fval * fcoeff );
+    msg = dlg.GetValue( );
+    Mself.lng = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
     /* Control values (ii = minimum length) */
     if( Mself.lng < min_len )
@@ -245,7 +228,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     /* Generate module. */
     MODULE* Module;
-    Module = Create_1_Module( NULL, wxEmptyString );
+    Module = Create_1_Module( wxEmptyString );
     if( Module == NULL )
         return NULL;
 
@@ -537,7 +520,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
     int      pad_num = 1;
     wxString Line;
 
-    Module = Create_1_Module( NULL, name );
+    Module = Create_1_Module( name );
     if( Module == NULL )
         return NULL;
 
@@ -606,13 +589,11 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
 {
     int      oX;
-    float    fcoeff;
     D_PAD*   pad;
     MODULE*  Module;
     wxString msg, cmp_name;
     int      pad_count = 2;
     int      angle     = 0;
-    bool     abort;
 
     /* Enter the size of the gap or stub*/
     int      gap_size = GetBoard()->GetCurrentTrackWidth();
@@ -641,36 +622,25 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
         break;
     }
 
-    wxString value;
-    if( g_UserUnit )
+    msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), wxEmptyString );
+    if( dlg.ShowModal() != wxID_OK )
     {
-        fcoeff = 10000.0f / 25.4f;
-        value.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
-        msg += _( " (mm):" );
+        DrawPanel->MouseToCursorSchema();
+        return NULL; // cancelled by user
     }
-    else
-    {
-        fcoeff = 10000.0;
-        value.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
-        msg += _( " (inch):" );
-    }
-    abort = Get_Message( msg, _( "Create microwave module" ), value, this );
 
-    double fval;
-    if( !value.ToDouble( &fval ) )
-    {
-        DisplayError( this, _( "Incorrect number, abort" ) );
-        abort = TRUE;
-    }
-    gap_size = ABS( wxRound( fval * fcoeff ) );
+    msg = dlg.GetValue( );
+    gap_size = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
-    if( !abort && ( shape_type == 2 ) )
+    bool abort = false;
+    if( shape_type == 2 )
     {
-        fcoeff = 10.0;
-        value.Printf( wxT( "%3.1f" ), angle / fcoeff );
-        msg   = _( "Angle (0.1deg):" );
-        abort = Get_Message( msg, _( "Create microwave module" ), value, this );
-        if( !value.ToDouble( &fval ) )
+        double fcoeff = 10.0, fval;
+        msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
+        wxTextEntryDialog angledlg( this, _( "Angle (0.1deg):" ), _( "Create microwave module" ), msg );
+        msg = angledlg.GetValue( );
+        if( !msg.ToDouble( &fval ) )
         {
             DisplayError( this, _( "Incorrect number, abort" ) );
             abort = TRUE;
@@ -1100,7 +1070,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
 void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
 {
     int      gap_size, oX;
-    float    fcoeff;
     D_PAD*   pad, * next_pad;
     wxString msg;
 
@@ -1130,27 +1099,14 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     /* Calculate the current dimension. */
     gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
 
-    /* Entrance to the desired length of the gap. */
-    if( g_UserUnit )
-    {
-        fcoeff = 10000.0f / 25.4f;
-        msg.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
-        Get_Message( _( "Gap (mm):" ), _( "Create Microwave Gap" ), msg, this );
-    }
-    else
-    {
-        fcoeff = 10000.0;
-        msg.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
-        Get_Message( _( "Gap (inch):" ), _( "Create Microwave Gap" ), msg,
-                     this );
-    }
+    /* Entrer the desired length of the gap. */
+    msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
 
-    if( !msg.IsEmpty() )
-    {
-        double fval;
-        if( msg.ToDouble( &fval ) )
-            gap_size = (int) ( fval * fcoeff );
-    }
+    msg = dlg.GetValue( );
+    gap_size = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
     /* Updating sizes of pads forming the gap. */
     pad->m_Size.x = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();

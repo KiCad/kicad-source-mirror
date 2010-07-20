@@ -20,11 +20,13 @@
 static void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC );
 
 
-static MODULE*           s_ModuleInitialCopy = NULL;    // Copy of module for
-                                                        // abort/undo command
-static PICKED_ITEMS_LIST s_PickedList;                  // a picked list to
-                                                        // save initial module
-                                                        // and dragged tracks
+static MODULE*           s_ModuleInitialCopy = NULL;    /* Copy of module for
+                                                         * abort/undo command
+                                                         */
+static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
+                                                         * save initial module
+                                                         * and dragged tracks
+                                                         */
 
 
 /* Show or hide module pads.
@@ -64,16 +66,22 @@ void Rastnest_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
  */
 MODULE* WinEDA_BasePcbFrame::GetModuleByName()
 {
-    wxString modulename;
-    MODULE*  module = NULL;
+    wxString          moduleName;
+    MODULE*           module = NULL;
 
-    Get_Message( _( "Name:" ), _( "Search footprint" ), modulename, this );
-    if( !modulename.IsEmpty() )
+    wxTextEntryDialog dlg( this, _( "Name:" ), _( "Search footprint" ), moduleName );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return NULL;    //Aborted by user
+
+    moduleName.Trim( true );
+    moduleName.Trim( false );
+    if( !moduleName.IsEmpty() )
     {
         module = GetBoard()->m_Modules;
         while( module )
         {
-            if( module->m_Reference->m_Text.CmpNoCase( modulename ) == 0 )
+            if( module->m_Reference->m_Text.CmpNoCase( moduleName ) == 0 )
                 break;
             module = module->Next();
         }
@@ -101,7 +109,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     module->m_Flags |= IS_MOVED;
 
     /* Show ratsnest. */
-    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
         DrawGeneralRatsnest( DC );
 
     if( g_DragSegmentList ) /* Should not occur ! */
@@ -221,7 +229,7 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     // Display ratsnest is allowed
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
-    if( pcbframe->GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+    if( pcbframe->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
         pcbframe->DrawGeneralRatsnest( DC );
 }
 
@@ -304,9 +312,9 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
     {
-        msg.Printf( _( "Delete Module %s (value %s) ?"),
-                    GetChars(module->m_Reference->m_Text),
-                    GetChars(module->m_Value->m_Text) );
+        msg.Printf( _( "Delete Module %s (value %s) ?" ),
+                   GetChars( module->m_Reference->m_Text ),
+                   GetChars( module->m_Value->m_Text ) );
         if( !IsOK( this, msg ) )
         {
             return FALSE;
@@ -324,7 +332,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
 
     // Redraw the full screen to ensure perfect display of board and ratsnest.
     if( DC )
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
 
     return true;
 }
@@ -344,13 +352,13 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
     if( Module == NULL )
         return;
     if( ( Module->GetLayer() != LAYER_N_FRONT )
-        && ( Module->GetLayer() != LAYER_N_BACK ) )
+       && ( Module->GetLayer() != LAYER_N_BACK ) )
         return;
 
     OnModify();
 
     if( !( Module->m_Flags & IS_MOVED ) ) /* This is a simple flip, no other
-                                         *edition in progress */
+                                           *edition in progress */
     {
         GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
         if( DC )
@@ -362,7 +370,7 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         }
 
         /* Show ratsnest if necessary. */
-        if( DC && GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+        if( DC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             DrawGeneralRatsnest( DC );
 
         g_Offset_Module.x = 0;
@@ -450,7 +458,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
 
     newpos = GetScreen()->m_Curseur;
     module->SetPosition( newpos );
-    module->m_Flags  = 0;
+    module->m_Flags = 0;
 
     delete s_ModuleInitialCopy;
     s_ModuleInitialCopy = NULL;
@@ -483,10 +491,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         Compile_Ratsnest( DC, true );
 
     if( DC )
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
 
     module->DisplayInfo( this );
-
 }
 
 
@@ -515,7 +522,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
             DrawPanel->PostDirtyRect( module->GetBoundingBox() );
             module->m_Flags = tmp;
 
-            if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
                 DrawGeneralRatsnest( DC );
         }
     }
@@ -540,18 +547,20 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
     if( DC )
     {
         if( !( module->m_Flags & IS_MOVED ) )
-        {   //  not beiing moved: redraw the module and update ratsnest
+        {
+            //  not beiing moved: redraw the module and update ratsnest
             module->Draw( DrawPanel, DC, GR_OR );
             Compile_Ratsnest( DC, true );
         }
         else
-        {   // Beiing moved: just redraw it
+        {
+            // Beiing moved: just redraw it
             DrawModuleOutlines( DrawPanel, DC, module );
             Dessine_Segments_Dragges( DrawPanel, DC );
         }
 
         if( module->m_Flags == 0 )  // module not in edit: redraw full screen
-            DrawPanel->Refresh( );
+            DrawPanel->Refresh();
     }
 }
 

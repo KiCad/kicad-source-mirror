@@ -84,20 +84,20 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
     /* Modules: Edges width */
     AddUnitSymbol( *m_EdgeModWidthTitle );
     PutValueInLocalUnits( *m_OptModuleEdgesWidth,
-                          ModuleSegmentWidth, PCB_INTERNAL_UNIT );
+                          g_ModuleSegmentWidth, PCB_INTERNAL_UNIT );
 
     /* Modules: Texts: Size & width */
     AddUnitSymbol( *m_TextModWidthTitle );
     PutValueInLocalUnits( *m_OptModuleTextWidth,
-                          ModuleTextWidth, PCB_INTERNAL_UNIT );
+                          g_ModuleTextWidth, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextModSizeVTitle );
     PutValueInLocalUnits( *m_OptModuleTextVSize,
-                          ModuleTextSize.y, PCB_INTERNAL_UNIT );
+                          g_ModuleTextSize.y, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextModSizeHTitle );
     PutValueInLocalUnits( *m_OptModuleTextHSize,
-                          ModuleTextSize.x, PCB_INTERNAL_UNIT );
+                          g_ModuleTextSize.x, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_DefaultPenSizeTitle );
     PutValueInLocalUnits( *m_DefaultPenSizeCtrl,
@@ -118,13 +118,13 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
      m_BrdSettings->m_PcbTextSize.x =
         ReturnValueFromTextCtrl( *m_OptPcbTextHSize, PCB_INTERNAL_UNIT );
 
-    ModuleSegmentWidth =
+    g_ModuleSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptModuleEdgesWidth, PCB_INTERNAL_UNIT );
-    ModuleTextWidth =
+    g_ModuleTextWidth =
         ReturnValueFromTextCtrl( *m_OptModuleTextWidth, PCB_INTERNAL_UNIT );
-    ModuleTextSize.y =
+    g_ModuleTextSize.y =
         ReturnValueFromTextCtrl( *m_OptModuleTextVSize, PCB_INTERNAL_UNIT );
-    ModuleTextSize.x =
+    g_ModuleTextSize.x =
         ReturnValueFromTextCtrl( *m_OptModuleTextHSize, PCB_INTERNAL_UNIT );
 
     g_DrawDefaultLineThickness =
