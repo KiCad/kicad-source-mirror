@@ -272,6 +272,15 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
         m_ListLibr->Delete(selections[ii] );
         m_LibListChanged = TRUE;
     }
+
+    // Select next item after deleted in m_ListLibr
+    if( m_ListLibr->GetCount() > 0 && selections.GetCount() > 0 )
+    {
+        int pos = selections[selections.GetCount()-1];
+        if( pos == m_ListLibr->GetCount() )
+            pos = m_ListLibr->GetCount() - 1;
+        m_ListLibr->SetSelection( pos );
+    }
 }
 
 
