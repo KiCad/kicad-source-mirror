@@ -175,6 +175,13 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
         return DrawStruct;
     }
 
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABELITEM );
+    if( DrawStruct )
+    {
+        ClearMsgPanel();
+        return DrawStruct;
+    }
+
     /* search for a pin */
     Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint,
                         &LibItem );
