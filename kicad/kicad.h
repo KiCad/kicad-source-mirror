@@ -159,7 +159,7 @@ public:
 
 private:
     void CreateCommandToolbar( void );
-    void AddFastLaunch( wxBitmapButton* button );
+    wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap & aBitmap );
 
     DECLARE_EVENT_TABLE()
 };

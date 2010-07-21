@@ -70,43 +70,38 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 {
     wxBitmapButton* btn;
 
-    wxWindow*       parent = m_ButtPanel;
-
-    btn = new wxBitmapButton( parent, ID_TO_EESCHEMA, wxBitmap( icon_eeschema_xpm ) );
+    btn = AddBitmapButton( ID_TO_EESCHEMA, wxBitmap( icon_eeschema_xpm ) );
     btn->SetToolTip( _( "EESchema (Schematic editor)" ) );
-    AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( parent, ID_TO_CVPCB, wxBitmap( icon_cvpcb_xpm ) );
+    btn = AddBitmapButton( ID_TO_CVPCB, wxBitmap( icon_cvpcb_xpm ) );
     btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
-    AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( parent, ID_TO_PCB, wxBitmap( a_icon_pcbnew_xpm ) );
+    btn = AddBitmapButton( ID_TO_PCB, wxBitmap( a_icon_pcbnew_xpm ) );
     btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
-    AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( parent, ID_TO_GERBVIEW, wxBitmap( icon_gerbview_xpm ) );
+    btn = AddBitmapButton( ID_TO_GERBVIEW, wxBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
-    AddFastLaunch( btn );
 
-    btn = new wxBitmapButton( parent, ID_TO_BITMAP_CONVERTER,
-            wxBitmap( bitmap2component_16x16_xpm ) );
+    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_16x16_xpm ) );
     btn->SetToolTip( _( "Bitmap2Component (Bitmap converter to create logos)" ) );
-    AddFastLaunch( btn );
-
 }
 
 
-/****************************************************************/
-void RIGHT_KM_FRAME::AddFastLaunch( wxBitmapButton* button )
-/****************************************************************/
-
-/** Function AddFastLaunch
- * add a  Bitmap Button (fast launch button) to the window
- * @param button = wxBitmapButton to add to the window
+/** Function AddBitmapButton
+ * add a  Bitmap Button (fast launch button) to the buttons panel
+ * @param aId = the button id
+ * @param aBitmap = the wxBitmap used to create the button
  */
+wxBitmapButton* RIGHT_KM_FRAME::AddBitmapButton( wxWindowID aId, const wxBitmap & aBitmap  )
 {
     wxPoint buttPos = m_ButtonLastPosition;
-    buttPos.y -= button->GetSize().GetHeight();
-    button->Move( buttPos );
-    m_ButtonLastPosition.x += button->GetSize().GetWidth() + m_ButtonSeparation;
+    wxSize buttSize;
+    int btn_margin = 8;
+    buttSize.x = aBitmap.GetWidth() + btn_margin;
+    buttSize.y = aBitmap.GetHeight() + btn_margin;
+    buttPos.y -= buttSize.y;
+    wxBitmapButton* btn = new wxBitmapButton( m_ButtPanel, aId, aBitmap, buttPos, buttSize);
+    m_ButtonLastPosition.x += buttSize.x + m_ButtonSeparation;
+
+    return btn;
 }
