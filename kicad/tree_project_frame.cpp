@@ -858,6 +858,8 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
         return; // cancelled by user
 
     buffer = dlg.GetValue( );
+    buffer.Trim( true );
+    buffer.Trim( false );
     if( buffer.IsEmpty() )
         return;         // empty file name not allowed
 

@@ -525,6 +525,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         wxTextEntryDialog dlg( this, _( "Name:" ), _( "Save module" ), Name_Cmp );
         if( dlg.ShowModal() != wxID_OK )
             return 0; // cancelled by user
+        Name_Cmp = dlg.GetValue();
         Name_Cmp.Trim( true );
         Name_Cmp.Trim( false );
         if( Name_Cmp.IsEmpty() )
@@ -735,9 +736,9 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( const wxString& aModuleName )
     {
         wxTextEntryDialog dlg( this, _( "Module Reference:" ),
                          _( "Module Creation" ), moduleName );
-        int diag = dlg.ShowModal();
-        if( diag != wxID_OK )
+        if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user
+        moduleName = dlg.GetValue();
     }
     moduleName.Trim( true );
     moduleName.Trim( false );

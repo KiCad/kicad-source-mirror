@@ -132,6 +132,8 @@ modified!\nYou must create a new power"  ) );
     wxTextEntryDialog dlg( this, Field->m_Name, _( "Component field text" ), newtext );
     int diag = dlg.ShowModal();
     newtext = dlg.GetValue( );
+    newtext.Trim( true );
+    newtext.Trim( false );
 
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -306,6 +308,8 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
         return; // cancelled by user
 
     ref = dlg.GetValue( );
+    ref.Trim( true );
+    ref.Trim( false );
 
     if( !ref.IsEmpty() ) // New text entered
     {
@@ -351,6 +355,8 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
         return; // cancelled by user
 
     message = dlg.GetValue( );
+    message.Trim( true );
+    message.Trim( false );
 
     if( !message.IsEmpty() )
     {
@@ -390,6 +396,8 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
         return; // cancelled by user
 
     message = dlg.GetValue( );
+    message.Trim( true );
+    message.Trim( false );
 
     bool wasEmpty = false;
     if( TextField->m_Text.IsEmpty() )

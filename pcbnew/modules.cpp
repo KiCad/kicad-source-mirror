@@ -70,10 +70,10 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
     MODULE*           module = NULL;
 
     wxTextEntryDialog dlg( this, _( "Name:" ), _( "Search footprint" ), moduleName );
-
     if( dlg.ShowModal() != wxID_OK )
         return NULL;    //Aborted by user
 
+    moduleName = dlg.GetValue();
     moduleName.Trim( true );
     moduleName.Trim( false );
     if( !moduleName.IsEmpty() )
