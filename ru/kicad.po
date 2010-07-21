@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-17 11:50+0300\n"
-"PO-Revision-Date: 2010-07-17 11:51+0300\n"
+"POT-Creation-Date: 2010-07-21 08:48+0300\n"
+"PO-Revision-Date: 2010-07-21 08:51+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -1315,11 +1315,11 @@ msgstr "Ошибка при создании "
 msgid "Add Component"
 msgstr "Добавить компонент"
 
-#: eeschema/hotkeys.cpp:391
+#: eeschema/hotkeys.cpp:393
 msgid "Add Label"
 msgstr "Добавить метку"
 
-#: eeschema/hotkeys.cpp:415
+#: eeschema/hotkeys.cpp:417
 msgid "Add Wire"
 msgstr "Добавить проводник"
 
@@ -3034,27 +3034,27 @@ msgstr "Файл %s не найден."
 msgid "from "
 msgstr "из"
 
-#: eeschema/dialog_eeschema_config.cpp:307
+#: eeschema/dialog_eeschema_config.cpp:316
 msgid "Library files:"
 msgstr "Файлы библиотек:"
 
-#: eeschema/dialog_eeschema_config.cpp:348
+#: eeschema/dialog_eeschema_config.cpp:357
 msgid "Library already in use"
 msgstr "Библиотека уже используется"
 
-#: eeschema/dialog_eeschema_config.cpp:362
+#: eeschema/dialog_eeschema_config.cpp:371
 msgid "Default Path for Libraries"
 msgstr "Основные пути библиотек"
 
-#: eeschema/dialog_eeschema_config.cpp:386
+#: eeschema/dialog_eeschema_config.cpp:395
 msgid "Use a relative path?"
 msgstr "Использовать относительный путь?"
 
-#: eeschema/dialog_eeschema_config.cpp:387
+#: eeschema/dialog_eeschema_config.cpp:396
 msgid "Path type"
 msgstr "Тип пути"
 
-#: eeschema/dialog_eeschema_config.cpp:410
+#: eeschema/dialog_eeschema_config.cpp:419
 msgid "Path already in use"
 msgstr "Путь уже используется"
 
@@ -3232,232 +3232,244 @@ msgid "Move Global Label"
 msgstr "Переместить глобальную метку"
 
 #: eeschema/onrightclick.cpp:345
+msgid "Drag Global Label"
+msgstr "Переташить глобальную метку"
+
+#: eeschema/onrightclick.cpp:348
 msgid "Copy Global Label"
 msgstr "Копировать глобальную метку"
 
-#: eeschema/onrightclick.cpp:350
+#: eeschema/onrightclick.cpp:353
 msgid "Rotate Global Label"
 msgstr "Вращать глобальную метку"
 
-#: eeschema/onrightclick.cpp:352
+#: eeschema/onrightclick.cpp:355
 msgid "Edit Global Label"
 msgstr "Правка глобальной метки"
 
-#: eeschema/onrightclick.cpp:354
+#: eeschema/onrightclick.cpp:357
 msgid "Delete Global Label"
 msgstr "Удалить глобальную метку"
 
-#: eeschema/onrightclick.cpp:359
-#: eeschema/onrightclick.cpp:425
-#: eeschema/onrightclick.cpp:465
+#: eeschema/onrightclick.cpp:362
+#: eeschema/onrightclick.cpp:434
+#: eeschema/onrightclick.cpp:474
 msgid "Change to Hierarchical Label"
 msgstr "Изменить на иерархическую метку"
 
-#: eeschema/onrightclick.cpp:361
-#: eeschema/onrightclick.cpp:392
-#: eeschema/onrightclick.cpp:463
+#: eeschema/onrightclick.cpp:364
+#: eeschema/onrightclick.cpp:398
+#: eeschema/onrightclick.cpp:472
 msgid "Change to Label"
 msgstr "Изменить на метку"
 
-#: eeschema/onrightclick.cpp:363
-#: eeschema/onrightclick.cpp:394
-#: eeschema/onrightclick.cpp:427
+#: eeschema/onrightclick.cpp:366
+#: eeschema/onrightclick.cpp:400
+#: eeschema/onrightclick.cpp:436
 msgid "Change to Text"
 msgstr "Изменить на текст"
 
-#: eeschema/onrightclick.cpp:365
-#: eeschema/onrightclick.cpp:398
-#: eeschema/onrightclick.cpp:431
-#: eeschema/onrightclick.cpp:469
+#: eeschema/onrightclick.cpp:368
+#: eeschema/onrightclick.cpp:404
+#: eeschema/onrightclick.cpp:440
+#: eeschema/onrightclick.cpp:478
 msgid "Change Type"
 msgstr "Изменить тип"
 
-#: eeschema/onrightclick.cpp:376
+#: eeschema/onrightclick.cpp:379
 msgid "Move Hierarchical Label"
 msgstr "Переместить иерархическую метку"
 
-#: eeschema/onrightclick.cpp:379
+#: eeschema/onrightclick.cpp:382
+msgid "Drag Hierarchical Label"
+msgstr "Перетащить иерархическую метку"
+
+#: eeschema/onrightclick.cpp:385
 msgid "Copy Hierarchical Label"
 msgstr "Копировать иерархическую метку"
 
-#: eeschema/onrightclick.cpp:383
+#: eeschema/onrightclick.cpp:389
 msgid "Rotate Hierarchical Label"
 msgstr "Вращать иерархическую метку"
 
-#: eeschema/onrightclick.cpp:385
+#: eeschema/onrightclick.cpp:391
 msgid "Edit Hierarchical Label"
 msgstr "Правка иерархической метки"
 
-#: eeschema/onrightclick.cpp:387
+#: eeschema/onrightclick.cpp:393
 msgid "Delete Hierarchical Label"
 msgstr "Удалить иерархическую метку"
 
-#: eeschema/onrightclick.cpp:396
-#: eeschema/onrightclick.cpp:429
+#: eeschema/onrightclick.cpp:402
+#: eeschema/onrightclick.cpp:438
 msgid "Change to Global Label"
 msgstr "Изменить на глобальную метку"
 
-#: eeschema/onrightclick.cpp:409
+#: eeschema/onrightclick.cpp:415
 msgid "Move Label"
 msgstr "Переместить метку"
 
-#: eeschema/onrightclick.cpp:412
+#: eeschema/onrightclick.cpp:418
+msgid "Drag Label"
+msgstr "Перетащить метку"
+
+#: eeschema/onrightclick.cpp:421
 msgid "Copy Label"
 msgstr "Копировать метку"
 
-#: eeschema/onrightclick.cpp:416
+#: eeschema/onrightclick.cpp:425
 msgid "Rotate Label"
 msgstr "Вращать метку"
 
-#: eeschema/onrightclick.cpp:418
+#: eeschema/onrightclick.cpp:427
 msgid "Edit Label"
 msgstr "Правка метки"
 
-#: eeschema/onrightclick.cpp:420
+#: eeschema/onrightclick.cpp:429
 msgid "Delete Label"
 msgstr "Удалить метку"
 
-#: eeschema/onrightclick.cpp:442
+#: eeschema/onrightclick.cpp:451
 msgid "Move Text"
 msgstr "Переместить текст"
 
-#: eeschema/onrightclick.cpp:445
+#: eeschema/onrightclick.cpp:454
 msgid "Copy Text"
 msgstr "Копировать текст"
 
-#: eeschema/onrightclick.cpp:450
+#: eeschema/onrightclick.cpp:459
 msgid "Rotate Text"
 msgstr "Вращать текст"
 
-#: eeschema/onrightclick.cpp:452
+#: eeschema/onrightclick.cpp:461
 msgid "Edit Text"
 msgstr "Правка текста"
 
-#: eeschema/onrightclick.cpp:454
+#: eeschema/onrightclick.cpp:463
 msgid "Delete Text"
 msgstr "Удалить текст"
 
-#: eeschema/onrightclick.cpp:467
+#: eeschema/onrightclick.cpp:476
 msgid "Change to Glabel"
 msgstr "Изменить на глобальную метку"
 
-#: eeschema/onrightclick.cpp:483
-#: eeschema/onrightclick.cpp:521
+#: eeschema/onrightclick.cpp:492
+#: eeschema/onrightclick.cpp:530
 msgid "Break Wire"
 msgstr "Разорвать провод"
 
-#: eeschema/onrightclick.cpp:486
+#: eeschema/onrightclick.cpp:495
 msgid "Delete Junction"
 msgstr "Удалить соединение"
 
-#: eeschema/onrightclick.cpp:491
-#: eeschema/onrightclick.cpp:515
+#: eeschema/onrightclick.cpp:500
+#: eeschema/onrightclick.cpp:524
 msgid "Delete Node"
 msgstr "Удалить узел"
 
-#: eeschema/onrightclick.cpp:492
-#: eeschema/onrightclick.cpp:516
+#: eeschema/onrightclick.cpp:501
+#: eeschema/onrightclick.cpp:525
 msgid "Delete Connection"
 msgstr "Удалить соединение"
 
-#: eeschema/onrightclick.cpp:506
+#: eeschema/onrightclick.cpp:515
 msgid "Wire End"
 msgstr "Закончить провод"
 
-#: eeschema/onrightclick.cpp:510
+#: eeschema/onrightclick.cpp:519
 msgid "Drag Wire"
 msgstr "Перетащить провод"
 
-#: eeschema/onrightclick.cpp:513
+#: eeschema/onrightclick.cpp:522
 msgid "Delete Wire"
 msgstr "Удалить провод"
 
-#: eeschema/onrightclick.cpp:531
-#: eeschema/onrightclick.cpp:557
+#: eeschema/onrightclick.cpp:541
+#: eeschema/onrightclick.cpp:567
 msgid "Add Global Label"
 msgstr "Добавить глобальную метку"
 
-#: eeschema/onrightclick.cpp:542
+#: eeschema/onrightclick.cpp:552
 msgid "Bus End"
 msgstr "Закончить шину"
 
-#: eeschema/onrightclick.cpp:546
+#: eeschema/onrightclick.cpp:556
 msgid "Delete Bus"
 msgstr "Удалить шину"
 
-#: eeschema/onrightclick.cpp:548
+#: eeschema/onrightclick.cpp:558
 msgid "Break Bus"
 msgstr "Разорвать шину"
 
-#: eeschema/onrightclick.cpp:567
+#: eeschema/onrightclick.cpp:577
 msgid "Enter Sheet"
 msgstr "Войти в лист"
 
-#: eeschema/onrightclick.cpp:569
+#: eeschema/onrightclick.cpp:579
 msgid "Move Sheet"
 msgstr "Переместить лист"
 
-#: eeschema/onrightclick.cpp:573
+#: eeschema/onrightclick.cpp:583
 msgid "Drag Sheet"
 msgstr "Перетащить лист"
 
-#: eeschema/onrightclick.cpp:579
+#: eeschema/onrightclick.cpp:589
 msgid "Place Sheet"
 msgstr "Разместить лист"
 
-#: eeschema/onrightclick.cpp:583
+#: eeschema/onrightclick.cpp:593
 msgid "Edit Sheet"
 msgstr "Править лист"
 
-#: eeschema/onrightclick.cpp:587
+#: eeschema/onrightclick.cpp:597
 msgid "Resize Sheet"
 msgstr "Изменить размер листа"
 
-#: eeschema/onrightclick.cpp:590
+#: eeschema/onrightclick.cpp:600
 msgid "Import PinSheets"
 msgstr "Импорт выводов листа"
 
-#: eeschema/onrightclick.cpp:594
+#: eeschema/onrightclick.cpp:604
 msgid "Cleanup PinSheets"
 msgstr "Очистить выводы листа"
 
-#: eeschema/onrightclick.cpp:597
+#: eeschema/onrightclick.cpp:607
 msgid "Delete Sheet"
 msgstr "Удалить лист"
 
-#: eeschema/onrightclick.cpp:608
+#: eeschema/onrightclick.cpp:618
 msgid "Move PinSheet"
 msgstr "Переместить вывод листа"
 
-#: eeschema/onrightclick.cpp:613
+#: eeschema/onrightclick.cpp:623
 msgid "Edit PinSheet"
 msgstr "Править вывод листа"
 
-#: eeschema/onrightclick.cpp:616
+#: eeschema/onrightclick.cpp:626
 msgid "Delete PinSheet"
 msgstr "Удалить вывод листа"
 
-#: eeschema/onrightclick.cpp:628
+#: eeschema/onrightclick.cpp:638
 msgid "Window Zoom"
 msgstr "Масштабировать"
 
-#: eeschema/onrightclick.cpp:636
+#: eeschema/onrightclick.cpp:646
 msgid "Save Block"
 msgstr "Сохранить блок"
 
-#: eeschema/onrightclick.cpp:638
+#: eeschema/onrightclick.cpp:648
 msgid "Drag Block"
 msgstr "Перетащить блок"
 
-#: eeschema/onrightclick.cpp:646
+#: eeschema/onrightclick.cpp:656
 msgid "Copy to Clipboard"
 msgstr "Скопировать в буфер"
 
-#: eeschema/onrightclick.cpp:655
+#: eeschema/onrightclick.cpp:665
 msgid "Delete Marker"
 msgstr "Удалить маркер"
 
-#: eeschema/onrightclick.cpp:656
+#: eeschema/onrightclick.cpp:666
 msgid "Marker Error Info"
 msgstr "Информация о маркере"
 
@@ -10634,116 +10646,111 @@ msgstr "Файл размещения на медной стороне:"
 msgid "Module count"
 msgstr "Кол-во модулей"
 
-#: pcbnew/muonde.cpp:227
+#: pcbnew/muonde.cpp:207
 msgid "Length(inch):"
 msgstr "Длина (дюйм):"
 
-#: pcbnew/muonde.cpp:233
+#: pcbnew/muonde.cpp:213
 msgid "Length(mm):"
 msgstr "Длина (мм):"
 
-#: pcbnew/muonde.cpp:241
-#: pcbnew/muonde.cpp:697
-#: pcbnew/muonde.cpp:710
+#: pcbnew/muonde.cpp:221
+#: pcbnew/muonde.cpp:662
+#: pcbnew/muonde.cpp:675
 msgid "Incorrect number, abort"
 msgstr "некорректный номер, прерывано"
 
-#: pcbnew/muonde.cpp:249
+#: pcbnew/muonde.cpp:229
 msgid "Requested length < minimum length"
 msgstr "Заданная длина меньше минимальной"
 
-#: pcbnew/muonde.cpp:271
-msgid "Unable to create line: Requested length is too big"
-msgstr "Не удалось создать линию: Затребованная длина слишком велика"
+#: pcbnew/muonde.cpp:241
+msgid "Requested length too large"
+msgstr "Заданная длина очень велика"
 
-#: pcbnew/muonde.cpp:283
-#, c-format
-msgid "Segment count = %d, length = "
-msgstr "Количество сегментов = %d, длина ="
-
-#: pcbnew/muonde.cpp:658
+#: pcbnew/muonde.cpp:623
 msgid "Gap"
 msgstr "Зазор"
 
-#: pcbnew/muonde.cpp:663
+#: pcbnew/muonde.cpp:628
 msgid "Stub"
 msgstr "Неоднородность"
 
-#: pcbnew/muonde.cpp:669
+#: pcbnew/muonde.cpp:634
 msgid "Arc Stub"
 msgstr "Дуговая неоднородность"
 
-#: pcbnew/muonde.cpp:684
+#: pcbnew/muonde.cpp:649
 msgid " (mm):"
 msgstr " (мм):"
 
-#: pcbnew/muonde.cpp:690
+#: pcbnew/muonde.cpp:655
 msgid " (inch):"
 msgstr " (дюйм):"
 
-#: pcbnew/muonde.cpp:692
-#: pcbnew/muonde.cpp:707
+#: pcbnew/muonde.cpp:657
+#: pcbnew/muonde.cpp:672
 msgid "Create microwave module"
 msgstr "Создать СВЧ-модуль"
 
-#: pcbnew/muonde.cpp:706
+#: pcbnew/muonde.cpp:671
 msgid "Angle (0.1deg):"
 msgstr "Угол (0,1°):"
 
-#: pcbnew/muonde.cpp:828
+#: pcbnew/muonde.cpp:793
 msgid "Complex shape"
 msgstr "Комплексная форма"
 
-#: pcbnew/muonde.cpp:853
+#: pcbnew/muonde.cpp:818
 msgid "Read Shape Description File..."
 msgstr "Чтение файла описания шаблона..."
 
-#: pcbnew/muonde.cpp:856
+#: pcbnew/muonde.cpp:823
 msgid "Symmetrical"
 msgstr "Симметрично"
 
-#: pcbnew/muonde.cpp:857
+#: pcbnew/muonde.cpp:824
 msgid "Mirrored"
 msgstr "Зеркально"
 
-#: pcbnew/muonde.cpp:858
+#: pcbnew/muonde.cpp:826
 msgid "Shape Option"
 msgstr "Параметры формы"
 
-#: pcbnew/muonde.cpp:918
+#: pcbnew/muonde.cpp:886
 msgid "Read descr shape file"
 msgstr "Читать файл описания шаблона"
 
-#: pcbnew/muonde.cpp:933
+#: pcbnew/muonde.cpp:901
 msgid "File not found"
 msgstr "Файл не найден"
 
-#: pcbnew/muonde.cpp:1041
+#: pcbnew/muonde.cpp:1009
 msgid "Shape has a null size!"
 msgstr "Шаблон имеет нулевой размер!"
 
-#: pcbnew/muonde.cpp:1046
+#: pcbnew/muonde.cpp:1014
 msgid "Shape has no points!"
 msgstr "Шаблон не имеет контура!"
 
-#: pcbnew/muonde.cpp:1150
+#: pcbnew/muonde.cpp:1118
 msgid "No pad for this module"
 msgstr "Нет конт.пл. в этом модуле"
 
-#: pcbnew/muonde.cpp:1156
+#: pcbnew/muonde.cpp:1124
 msgid "Only one pad for this module"
 msgstr "Только одна конт.пл. в этом модуле"
 
-#: pcbnew/muonde.cpp:1170
+#: pcbnew/muonde.cpp:1138
 msgid "Gap (mm):"
 msgstr "Зазор (мм):"
 
-#: pcbnew/muonde.cpp:1170
-#: pcbnew/muonde.cpp:1176
+#: pcbnew/muonde.cpp:1138
+#: pcbnew/muonde.cpp:1144
 msgid "Create Microwave Gap"
 msgstr "Создать СВЧ зазор"
 
-#: pcbnew/muonde.cpp:1176
+#: pcbnew/muonde.cpp:1144
 msgid "Gap (inch):"
 msgstr "Зазор (дюйм):"
 
@@ -12739,7 +12746,7 @@ msgstr "Показать другие элементы:"
 msgid "Show page limits"
 msgstr "Показывать границы страницы"
 
-#: pcbnew/pcbframe.cpp:427
+#: pcbnew/pcbframe.cpp:430
 msgid "Board modified, Save before exit ?"
 msgstr "Плата была изменена. Сохранить при выходе?"
 
@@ -13242,6 +13249,12 @@ msgstr "Параметры отображения"
 #: pcbnew/dialog_set_grid_base.h:61
 msgid "Grid Origin and User Grid Size"
 msgstr "Начальные координаты и пользовательский шаг сетки"
+
+#~ msgid "Unable to create line: Requested length is too big"
+#~ msgstr "Не удалось создать линию: Затребованная длина слишком велика"
+
+#~ msgid "Segment count = %d, length = "
+#~ msgstr "Количество сегментов = %d, длина ="
 
 #~ msgid "O&rietation"
 #~ msgstr "Ориентация"
