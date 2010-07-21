@@ -36,7 +36,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             case TYPE_EDGE_MODULE:
                 SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-                Place_EdgeMod( (EDGE_MODULE*) DrawStruct, DC );
+                Place_EdgeMod( (EDGE_MODULE*) DrawStruct );
                 break;
 
             case TYPE_PAD:
@@ -93,13 +93,15 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         {
             if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_CIRCLE )
             {
-                End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
+                End_Edge_Module( (EDGE_MODULE*) DrawStruct );
                 SetCurItem( NULL );
+                DrawPanel->Refresh();
             }
             else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_ARC )
             {
-                End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
+                End_Edge_Module( (EDGE_MODULE*) DrawStruct );
                 SetCurItem( NULL );
+                DrawPanel->Refresh();
             }
             else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_SEGMENT )
             {
@@ -437,8 +439,9 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     {
         if( DrawStruct && ( DrawStruct->m_Flags & IS_NEW ) )
         {
-            End_Edge_Module( (EDGE_MODULE*) DrawStruct, DC );
+            End_Edge_Module( (EDGE_MODULE*) DrawStruct );
             SetCurItem( NULL );
+            DrawPanel->Refresh();
         }
         break;
     }

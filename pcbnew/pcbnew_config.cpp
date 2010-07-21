@@ -248,11 +248,11 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtPcbH" ),
                                                       &boardDesignSettings.m_PcbTextSize.x,
                                                       600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &ModuleTextSize.y,
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &g_ModuleTextSize.y,
                                                       500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &ModuleTextSize.x,
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &g_ModuleTextSize.x,
                                                       500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &ModuleTextWidth,
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &g_ModuleTextWidth,
                                                       100, 1, TEXTS_MAX_WIDTH ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "VEgarde" ),
                                                       &boardDesignSettings.m_SolderMaskMargin,
@@ -266,7 +266,7 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtLar" ),
                                                       &boardDesignSettings.m_PcbTextWidth,
                                                       120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &ModuleSegmentWidth,
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &g_ModuleSegmentWidth,
                                                       120, 0, 0xFFFF ) );
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LastNetListRead" ),
                                                            &m_lastNetListRead ) );

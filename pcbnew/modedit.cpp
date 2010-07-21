@@ -237,7 +237,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
 
-        MODULE* module = Create_1_Module( NULL, wxEmptyString );
+        MODULE* module = Create_1_Module( wxEmptyString );
         if( module )        // i.e. if create module command not aborted
         {
             // Initialize data relative to nets and netclasses (for a new
@@ -350,7 +350,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
-        Import_Module( NULL );
+        Import_Module( );
         redraw = true;
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
@@ -579,7 +579,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( (GetScreen()->GetCurItem()->m_Flags & IS_NEW) )
         {
-            End_Edge_Module( (EDGE_MODULE*) GetScreen()->GetCurItem(), &dc );
+            End_Edge_Module( (EDGE_MODULE*) GetScreen()->GetCurItem() );
             SetCurItem( NULL );
         }
         break;
@@ -588,34 +588,40 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         EDGE_MODULE* edge = NULL;
         if( GetScreen()->GetCurItem()
-           && ( GetScreen()->GetCurItem()->m_Flags & IS_NEW )
            && ( GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE ) )
         {
             edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
-        Enter_Edge_Width( edge, &dc );
+        Enter_Edge_Width( edge );
         DrawPanel->MouseToCursorSchema();
+        if( edge )
+            DrawPanel->Refresh();
+
     }
     break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
         DrawPanel->MouseToCursorSchema();
         Edit_Edge_Width( (EDGE_MODULE*) GetScreen()->GetCurItem() );
+        DrawPanel->Refresh( );
         break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE:
         DrawPanel->MouseToCursorSchema();
         Edit_Edge_Width( NULL );
+        DrawPanel->Refresh( );
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE:
         DrawPanel->MouseToCursorSchema();
         Edit_Edge_Layer( (EDGE_MODULE*) GetScreen()->GetCurItem() );
+        DrawPanel->Refresh( );
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE:
         DrawPanel->MouseToCursorSchema();
         Edit_Edge_Layer( NULL );
+        DrawPanel->Refresh( );
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:

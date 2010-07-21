@@ -502,21 +502,21 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
 
         if( stricmp( Line, "EdgeModWidth" ) == 0 )
         {
-            ModuleSegmentWidth = atoi( data );
+            g_ModuleSegmentWidth = atoi( data );
             continue;
         }
 
         if( stricmp( Line, "TextModWidth" ) == 0 )
         {
-            ModuleTextWidth = atoi( data );
+            g_ModuleTextWidth = atoi( data );
             continue;
         }
 
         if( stricmp( Line, "TextModSize" ) == 0 )
         {
-            ModuleTextSize.x = atoi( data );
+            g_ModuleTextSize.x = atoi( data );
             data = strtok( NULL, " =\n\r" );
-            ModuleTextSize.y = atoi( data );
+            g_ModuleTextSize.y = atoi( data );
             continue;
         }
 
@@ -668,9 +668,9 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
              aBoard->GetBoardDesignSettings()->m_PcbTextSize.x,
              aBoard->GetBoardDesignSettings()->m_PcbTextSize.y );
 
-    fprintf( aFile, "EdgeModWidth %d\n", ModuleSegmentWidth );
-    fprintf( aFile, "TextModSize %d %d\n", ModuleTextSize.x, ModuleTextSize.y );
-    fprintf( aFile, "TextModWidth %d\n", ModuleTextWidth );
+    fprintf( aFile, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
+    fprintf( aFile, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
+    fprintf( aFile, "TextModWidth %d\n", g_ModuleTextWidth );
     fprintf( aFile,
              "PadSize %d %d\n",
              g_Pad_Master.m_Size.x,

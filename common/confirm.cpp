@@ -114,32 +114,3 @@ bool IsOK( wxWindow* parent, const wxString& text )
     return FALSE;
 }
 
-
-/* Get a text from user
- * Title = title to display
- * Buffer: enter text by user
- * Leading and trailing spaces are removed
- * Buffer is the initial text displayed, anr the returned text
- * Return:
- * 0 if OK
- * 1 if CANCEL
- */
-int Get_Message( const wxString& title,           // The question
-                 const wxString& frame_caption,   // The frame caption
-                 wxString& buffer,                // String input/return buffer
-                 wxWindow* frame )
-{
-    wxString message;
-
-    message = wxGetTextFromUser( title, frame_caption,
-                                 buffer, frame );
-    if( !message.IsEmpty() )
-    {
-        message.Trim( FALSE );      // Remove blanks at beginning
-        message.Trim( TRUE );       // Remove blanks at end
-        buffer = message;
-        return 0;
-    }
-
-    return 1;
-}

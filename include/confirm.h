@@ -16,10 +16,4 @@ void    DisplayInfoMessage( wxWindow* parent, const wxString& msg,
 
 bool    IsOK( wxWindow* parent, const wxString& msg );
 
-int     Get_Message( const wxString& title,
-                     const wxString& frame_caption,
-                     wxString& buffer,
-                     wxWindow* frame );
-
-
 #endif /* __INCLUDE__CONFIRM_H__ */

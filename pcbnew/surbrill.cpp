@@ -30,8 +30,11 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
     int           selection;
 
     netFilter = wxT( "*" );
-    Get_Message( _( "Filter for net names:" ), _( "Net Filter" ),
-                 netFilter, this );
+    wxTextEntryDialog dlg( this, _( "Filter for net names:" ), _( "Net Filter" ), netFilter );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    netFilter = dlg.GetValue( );
     if( netFilter.IsEmpty() )
         return;
 

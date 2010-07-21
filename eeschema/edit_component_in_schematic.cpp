@@ -128,9 +128,17 @@ modified!\nYou must create a new power"  ) );
 
     wxString newtext = Field->m_Text;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
-    Get_Message( Field->m_Name, _( "Component field text" ), newtext, this );
+
+    wxTextEntryDialog dlg( this, Field->m_Name, _( "Component field text" ), newtext );
+    int diag = dlg.ShowModal();
+    newtext = dlg.GetValue( );
+    newtext.Trim( true );
+    newtext.Trim( false );
+
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
+    if ( diag != wxID_OK )
+        return;  // cancelled by user
 
     Field->m_AddExtraText = flag;
     Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
@@ -295,7 +303,13 @@ void WinEDA_SchematicFrame::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC
         flag = 1;
 
     wxString ref = Cmp->GetRef( GetSheet() );
-    Get_Message( _( "Reference" ), _( "Component reference" ), ref, this );
+    wxTextEntryDialog dlg( this, _( "Reference" ), _( "Component reference" ), ref );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    ref = dlg.GetValue( );
+    ref.Trim( true );
+    ref.Trim( false );
 
     if( !ref.IsEmpty() ) // New text entered
     {
@@ -335,8 +349,14 @@ void WinEDA_SchematicFrame::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     SCH_FIELD* TextField = Cmp->GetField( VALUE );
 
     message = TextField->m_Text;
-    if( Get_Message( _( "Value" ), _( "Component value" ), message, this ) )
-        message.Empty();  //allow the user to remove the value.
+
+    wxTextEntryDialog dlg( this,  _( "Value" ), _( "Component value" ), message );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    message = dlg.GetValue( );
+    message.Trim( true );
+    message.Trim( false );
 
     if( !message.IsEmpty() )
     {
@@ -371,8 +391,13 @@ void WinEDA_SchematicFrame::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC
     SCH_FIELD* TextField = Cmp->GetField( FOOTPRINT );
     message = TextField->m_Text;
 
-    if( Get_Message( _( "Footprint" ), _( "Component footprint" ), message, this ) )
-        return;    // edition cancelled by user.
+    wxTextEntryDialog dlg( this, _( "Footprint" ), _( "Component footprint" ), message );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
+
+    message = dlg.GetValue( );
+    message.Trim( true );
+    message.Trim( false );
 
     bool wasEmpty = false;
     if( TextField->m_Text.IsEmpty() )

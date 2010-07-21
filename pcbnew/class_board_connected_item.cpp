@@ -128,7 +128,9 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
         netclass = net->GetNetClass();
 #ifdef __WXDEBUG__
         if( netclass == NULL )
+        {
             wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass(): NULL netclass") );
+        }
 #endif
     }
 

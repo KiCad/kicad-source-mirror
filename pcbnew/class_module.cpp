@@ -38,7 +38,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_CntRot90 = m_CntRot180 = 0;
     m_Surface  = 0.0;
     m_Link     = 0;
-    m_LastEdit_Time = time( NULL );
+    m_LastEdit_Time  = time( NULL );
     m_LocalClearance = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
@@ -59,6 +59,7 @@ MODULE::~MODULE()
     delete m_Value;
 }
 
+
 /* Draw the anchor cross (vertical)
  * Must be done after the pads, because drawing the hole will erase overwrite
  * every thing already drawn.
@@ -76,7 +77,7 @@ void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        int color = g_ColorsSettings.GetItemColor(ANCHOR_VISIBLE);
+        int color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
         GRLine( &panel->m_ClipBox, DC,
                 m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
                 m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
@@ -158,9 +159,9 @@ void MODULE::Copy( MODULE* aModule )
         if( item->m_Shape3DName.IsEmpty() )           // do not copy empty shapes.
             continue;
         S3D_MASTER* t3d = m_3D_Drawings;
-        if( t3d && t3d->m_Shape3DName.IsEmpty() )     // The first entry can
-                                                      // exist, but is empty :
-                                                      // use it.
+        if( t3d && t3d->m_Shape3DName.IsEmpty() )       // The first entry can
+                                                        // exist, but is empty :
+                                                        // use it.
             t3d->Copy( item );
         else
         {
@@ -196,7 +197,7 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         pad->Draw( panel, DC, draw_mode, offset );
     }
 
-    BOARD * brd = GetBoard();
+    BOARD* brd = GetBoard();
 
     // Draws footprint anchor
     DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
@@ -302,13 +303,13 @@ bool MODULE::Save( FILE* aFile ) const
     fprintf( aFile, "AR %s\n", CONV_TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
     if( m_LocalSolderMaskMargin != 0 )
-        fprintf( aFile, ".SolderMask %d\n",m_LocalSolderMaskMargin );
+        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
     if( m_LocalSolderPasteMargin != 0 )
-        fprintf( aFile, ".SolderPaste %d\n",m_LocalSolderPasteMargin);
-    if( m_LocalSolderPasteMarginRatio != 0)
-        fprintf( aFile, ".SolderPasteRatio %g\n",m_LocalSolderPasteMarginRatio);
+        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
     if( m_LocalClearance != 0 )
-        fprintf( aFile, ".LocalClearance %d\n",m_LocalClearance );
+        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
@@ -489,7 +490,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             {
                 D_PAD* pad = new D_PAD( this );
                 pad->ReadDescr( File, LineNum );
-                RotatePoint( &pad->m_Pos.x, &pad->m_Pos.y, m_Orient );
+                RotatePoint( &pad->m_Pos, m_Orient );
                 pad->m_Pos.x += m_Pos.x;
                 pad->m_Pos.y += m_Pos.y;
 
@@ -507,7 +508,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
 
         /* Decode the first code of the current line and read the
          * corresponding data
-        */
+         */
         switch( Line[0] )
         {
         case 'P':
@@ -602,20 +603,21 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             break;
 
         case '.':    /* Read specific data */
-            if( strnicmp(Line, ".SolderMask ", 12 ) == 0 )
-                m_LocalSolderMaskMargin = atoi(Line+12);
-            else if( strnicmp(Line, ".SolderPaste ", 13)  == 0 )
-                m_LocalSolderPasteMargin = atoi(Line+13);
-            else if( strnicmp(Line, ".SolderPasteRatio ", 18) == 0 )
-                m_LocalSolderPasteMarginRatio = atof(Line+18);
-            else if( strnicmp(Line, ".LocalClearance ", 16 ) == 0 )
-                m_LocalClearance = atoi(Line+16);
-           break;
+            if( strnicmp( Line, ".SolderMask ", 12 ) == 0 )
+                m_LocalSolderMaskMargin = atoi( Line + 12 );
+            else if( strnicmp( Line, ".SolderPaste ", 13 )  == 0 )
+                m_LocalSolderPasteMargin = atoi( Line + 13 );
+            else if( strnicmp( Line, ".SolderPasteRatio ", 18 ) == 0 )
+                m_LocalSolderPasteMarginRatio = atof( Line + 18 );
+            else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
+                m_LocalClearance = atoi( Line + 16 );
+            break;
 
         default:
             break;
         }
     }
+
     /* Recalculate the bounding box */
     Set_Rectangle_Encadrement();
     return 0;
@@ -640,51 +642,53 @@ void MODULE::Set_Rectangle_Encadrement()
     xmin = ymin = -250;
     xmax = ymax = 250;
 
-    for( EDGE_MODULE* pt_edge_mod = (EDGE_MODULE*) m_Drawings.GetFirst();
-         pt_edge_mod; pt_edge_mod = pt_edge_mod->Next() )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
+        edge; edge = edge->Next() )
     {
-        if( pt_edge_mod->Type() != TYPE_EDGE_MODULE )
+        if( edge->Type() != TYPE_EDGE_MODULE )
             continue;
 
-        width = pt_edge_mod->m_Width / 2;
+        width = edge->m_Width / 2;
 
-        switch( pt_edge_mod->m_Shape )
+        switch( edge->m_Shape )
         {
         case S_ARC:
         case S_CIRCLE:
         {
-            cx     = pt_edge_mod->m_Start0.x;
-            cy = pt_edge_mod->m_Start0.y;  // center
-            uxf    = pt_edge_mod->m_End0.x; uyf = pt_edge_mod->m_End0.y;
-            rayon  = (int) hypot( (double) (cx - uxf), (double) (cy - uyf) );
+            cx     = edge->m_Start0.x;
+            cy     = edge->m_Start0.y; // center
+            uxf    = edge->m_End0.x;
+            uyf    = edge->m_End0.y;
+            rayon  = (int) hypot( (double) ( cx - uxf ), (double) ( cy - uyf ) );
             rayon += width;
-            xmin = MIN( xmin, cx - rayon );
-            ymin = MIN( ymin, cy - rayon );
-            xmax = MAX( xmax, cx + rayon );
-            ymax = MAX( ymax, cy + rayon );
+            xmin   = MIN( xmin, cx - rayon );
+            ymin   = MIN( ymin, cy - rayon );
+            xmax   = MAX( xmax, cx + rayon );
+            ymax   = MAX( ymax, cy + rayon );
             break;
         }
 
         case S_SEGMENT:
-            xmin = MIN( xmin, pt_edge_mod->m_Start0.x - width );
-            xmin = MIN( xmin, pt_edge_mod->m_End0.x - width );
-            ymin = MIN( ymin, pt_edge_mod->m_Start0.y - width );
-            ymin = MIN( ymin, pt_edge_mod->m_End0.y - width );
-            xmax = MAX( xmax, pt_edge_mod->m_Start0.x + width );
-            xmax = MAX( xmax, pt_edge_mod->m_End0.x + width );
-            ymax = MAX( ymax, pt_edge_mod->m_Start0.y + width );
-            ymax = MAX( ymax, pt_edge_mod->m_End0.y + width );
+            xmin = MIN( xmin, edge->m_Start0.x - width );
+            xmin = MIN( xmin, edge->m_End0.x - width );
+            ymin = MIN( ymin, edge->m_Start0.y - width );
+            ymin = MIN( ymin, edge->m_End0.y - width );
+            xmax = MAX( xmax, edge->m_Start0.x + width );
+            xmax = MAX( xmax, edge->m_End0.x + width );
+            ymax = MAX( ymax, edge->m_Start0.y + width );
+            ymax = MAX( ymax, edge->m_End0.y + width );
             break;
 
         case S_POLYGON:
-            for( unsigned ii = 0; ii < pt_edge_mod->m_PolyPoints.size(); ii++ )
+            for( unsigned ii = 0; ii < edge->m_PolyPoints.size(); ii++ )
             {
-                wxPoint pt = pt_edge_mod->m_PolyPoints[ii];
+                wxPoint pt = edge->m_PolyPoints[ii];
                 xmin = MIN( xmin, (pt.x - width) );
                 ymin = MIN( ymin, (pt.y - width) );
-                xmax   = MAX( xmax, (pt.x + width) );
-                ymax   = MAX( ymax, (pt.y + width) );
+                xmax = MAX( xmax, (pt.x + width) );
+                ymax = MAX( ymax, (pt.y + width) );
             }
+
             break;
         }
     }
@@ -696,10 +700,10 @@ void MODULE::Set_Rectangle_Encadrement()
         rayon = pad->m_Rayon;
         cx    = pad->m_Pos0.x;
         cy    = pad->m_Pos0.y;
-        xmin = MIN( xmin, cx - rayon );
-        ymin = MIN( ymin, cy - rayon );
-        xmax = MAX( xmax, cx + rayon );
-        ymax = MAX( ymax, cy + rayon );
+        xmin  = MIN( xmin, cx - rayon );
+        ymin  = MIN( ymin, cy - rayon );
+        xmax  = MAX( xmax, cx + rayon );
+        ymax  = MAX( ymax, cy + rayon );
     }
 
     m_BoundaryBox.m_Pos.x = xmin;
@@ -721,24 +725,24 @@ void MODULE::SetRectangleExinscrit()
     m_RealBoundaryBox.Inflate( 500 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
-         edge; edge = edge->Next() )
+        edge; edge = edge->Next() )
     {
         if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
             continue;
 
         EDA_Rect rect = edge->GetBoundingBox();
-        m_RealBoundaryBox.Merge(rect);
+        m_RealBoundaryBox.Merge( rect );
     }
 
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
         EDA_Rect rect = pad->GetBoundingBox();
-        m_RealBoundaryBox.Merge(rect);
+        m_RealBoundaryBox.Merge( rect );
     }
 
     m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth()
-                     * m_RealBoundaryBox.GetHeight() );
+                    * m_RealBoundaryBox.GetHeight() );
 }
 
 
@@ -762,7 +766,7 @@ EDA_Rect MODULE::GetBoundingBox()
     area.Merge( text_area );
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;
-         edge = edge->Next() )
+        edge = edge->Next() )
     {
         if( edge->Type() != TYPE_TEXTE_MODULE )
             continue;
@@ -912,6 +916,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 #else
         if( buf == aPadName )
 #endif
+
 
 
             return pad;

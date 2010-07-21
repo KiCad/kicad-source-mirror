@@ -177,8 +177,6 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 {
     D_PAD*   PtPad;
     int      ll;
-    double   fcoeff;
-    bool     abort = FALSE;
     wxString msg;
 
     DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -200,28 +198,13 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     Mself.lng = min_len;
 
     /* Enter the desired length. */
-    if( !g_UserUnit )
-    {
-        fcoeff = 10000.0;
-        msg.Printf( wxT( "%1.4f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(inch):" ), _( "Length" ), msg, this );
-    }
-    else
-    {
-        fcoeff = 10000.0 / 25.4;
-        msg.Printf( wxT( "%2.3f" ), Mself.lng / fcoeff );
-        abort = Get_Message( _( "Length(mm):" ), _( "Length" ), msg, this );
-    }
-    if( abort )
-        return NULL;
+    msg = ReturnStringFromValue( g_UserUnit, Mself.lng, GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
+    if( dlg.ShowModal() != wxID_OK )
+        return NULL; // cancelled by user
 
-    double fval;
-    if( !msg.ToDouble( &fval ) )
-    {
-        DisplayError( this, _( "Incorrect number, abort" ) );
-        return NULL;
-    }
-    Mself.lng = wxRound( fval * fcoeff );
+    msg = dlg.GetValue();
+    Mself.lng = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
     /* Control values (ii = minimum length) */
     if( Mself.lng < min_len )
@@ -245,7 +228,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     /* Generate module. */
     MODULE* Module;
-    Module = Create_1_Module( NULL, wxEmptyString );
+    Module = Create_1_Module( wxEmptyString );
     if( Module == NULL )
         return NULL;
 
@@ -330,7 +313,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
 {
     #define SEGM_COUNT_PER_360DEG 16
     wxPoint first_point = aStartPoint - aCenter;
-    int     seg_count = ( (abs( a_ArcAngle ) ) * SEGM_COUNT_PER_360DEG) / 3600;
+    int     seg_count   = ( ( abs( a_ArcAngle ) ) * SEGM_COUNT_PER_360DEG ) / 3600;
 
     if( seg_count == 0 )
         seg_count = 1;
@@ -395,7 +378,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
  * Increasing the number of segments to the desired length
  * (radius decreases if necessary)
  */
-    wxSize  size;
+    wxSize size;
 
     // This scale factor adjust the arc lenght to handle
     // the arc to segment approximation.
@@ -445,11 +428,11 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
             }
         }
         segm_len  = size.x - ( radius * 2 );
-        full_len  = 2 * stubs_len;                  // Length of coil connections.
-        full_len += segm_len * segm_count;          // Length of full length segments.
-        full_len += wxRound( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );  // Ard arcs len
-        full_len += segm_len - (2 * radius);        // Length of first and last segments
-                                                    // (half size segments len = segm_len/2 - radius).
+        full_len  = 2 * stubs_len;                                                  // Length of coil connections.
+        full_len += segm_len * segm_count;                                          // Length of full length segments.
+        full_len += wxRound( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );    // Ard arcs len
+        full_len += segm_len - (2 * radius);                                        // Length of first and last segments
+                                                                                    // (half size segments len = segm_len/2 - radius).
 
         if( full_len >= aLength )
             break;
@@ -457,8 +440,9 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
 
     // Adjust len by adjusting segm_len:
     int delta_size = full_len - aLength;
+
     // reduce len of the segm_count segments + 2 half size segments (= 1 full size segment)
-    segm_len -= delta_size / (segm_count+1);
+    segm_len -= delta_size / (segm_count + 1);
 
     // Generate first line (the first stub) and first arc (90 deg arc)
     pt = aStartPoint;
@@ -537,19 +521,25 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
     int      pad_num = 1;
     wxString Line;
 
-    Module = Create_1_Module( NULL, name );
+    Module = Create_1_Module( name );
     if( Module == NULL )
         return NULL;
 
+    #define DEFAULT_SIZE 30
     Module->m_TimeStamp           = GetTimeStamp();
-    Module->m_Value->m_Size       = wxSize( 30, 30 );
-    Module->m_Value->m_Pos0.y     = -30;
+    Module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    Module->m_Value->m_Pos0.y     = -DEFAULT_SIZE;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;
-    Module->m_Reference->m_Size   = wxSize( 30, 30 );
-    Module->m_Reference->m_Pos0.y = 30;
+    Module->m_Value->m_Width      = DEFAULT_SIZE / 4;
+    Module->m_Reference->m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    Module->m_Reference->m_Pos0.y = DEFAULT_SIZE;
     Module->m_Reference->m_Pos.y += Module->m_Reference->m_Pos0.y;
+    Module->m_Reference->m_Width  = DEFAULT_SIZE / 4;
 
-    /* Create dots forming the gap. */
+    /* Create 2 pads used in gaps and stubs.
+     *  The gap is between these 2 pads
+     * the stub is the pad 2
+     */
     while( pad_count-- )
     {
         D_PAD* pad = new D_PAD( Module );
@@ -570,33 +560,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
 }
 
 
-#if 0
-static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
-{
-    MODULE* Module = (MODULE*) frame->GetScreen()->GetCurItem();
-
-    if( Module )
-    {
-        if( Module->m_Flags & IS_NEW )
-        {
-            Module->Draw( frame->DrawPanel, DC, GR_XOR );
-            Module->DeleteStructure();
-        }
-        else
-        {
-            Module->Draw( frame->DrawPanel, DC, GR_XOR );
-        }
-    }
-
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
-    frame->SetCurItem( NULL );
-}
-
-
-#endif
-
-
 /* Create a module "GAP" or "STUB"
  *  This a "gap" or  "stub" used in micro wave designs
  *  This module has 2 pads:
@@ -606,13 +569,11 @@ static void Exit_Muonde( WinEDA_DrawFrame* frame, wxDC* DC )
 MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
 {
     int      oX;
-    float    fcoeff;
     D_PAD*   pad;
     MODULE*  Module;
     wxString msg, cmp_name;
     int      pad_count = 2;
     int      angle     = 0;
-    bool     abort;
 
     /* Enter the size of the gap or stub*/
     int      gap_size = GetBoard()->GetCurrentTrackWidth();
@@ -641,36 +602,32 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
         break;
     }
 
-    wxString value;
-    if( g_UserUnit )
+    wxString          value = ReturnStringFromValue( g_UserUnit, gap_size,
+                                                    GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
+    if( dlg.ShowModal() != wxID_OK )
     {
-        fcoeff = 10000.0f / 25.4f;
-        value.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
-        msg += _( " (mm):" );
+        DrawPanel->MouseToCursorSchema();
+        return NULL; // cancelled by user
     }
-    else
-    {
-        fcoeff = 10000.0;
-        value.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
-        msg += _( " (inch):" );
-    }
-    abort = Get_Message( msg, _( "Create microwave module" ), value, this );
 
-    double fval;
-    if( !value.ToDouble( &fval ) )
-    {
-        DisplayError( this, _( "Incorrect number, abort" ) );
-        abort = TRUE;
-    }
-    gap_size = ABS( wxRound( fval * fcoeff ) );
+    value    = dlg.GetValue();
+    gap_size = ReturnValueFromString( g_UserUnit, value, GetScreen()->GetInternalUnits() );
 
-    if( !abort && ( shape_type == 2 ) )
+    bool abort = false;
+    if( shape_type == 2 )
     {
-        fcoeff = 10.0;
-        value.Printf( wxT( "%3.1f" ), angle / fcoeff );
-        msg   = _( "Angle (0.1deg):" );
-        abort = Get_Message( msg, _( "Create microwave module" ), value, this );
-        if( !value.ToDouble( &fval ) )
+        double            fcoeff = 10.0, fval;
+        msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
+        wxTextEntryDialog angledlg( this, _( "Angle (0.1deg):" ), _(
+                                        "Create microwave module" ), msg );
+        if( angledlg.ShowModal() != wxID_OK )
+        {
+            DrawPanel->MouseToCursorSchema();
+            return NULL; // cancelled by user
+        }
+        msg = angledlg.GetValue();
+        if( !msg.ToDouble( &fval ) )
         {
             DisplayError( this, _( "Incorrect number, abort" ) );
             abort = TRUE;
@@ -1100,7 +1057,6 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
 void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
 {
     int      gap_size, oX;
-    float    fcoeff;
     D_PAD*   pad, * next_pad;
     wxString msg;
 
@@ -1130,27 +1086,14 @@ void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
     /* Calculate the current dimension. */
     gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
 
-    /* Entrance to the desired length of the gap. */
-    if( g_UserUnit )
-    {
-        fcoeff = 10000.0f / 25.4f;
-        msg.Printf( wxT( "%2.3f" ), gap_size / fcoeff );
-        Get_Message( _( "Gap (mm):" ), _( "Create Microwave Gap" ), msg, this );
-    }
-    else
-    {
-        fcoeff = 10000.0;
-        msg.Printf( wxT( "%2.4f" ), gap_size / fcoeff );
-        Get_Message( _( "Gap (inch):" ), _( "Create Microwave Gap" ), msg,
-                     this );
-    }
+    /* Entrer the desired length of the gap. */
+    msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
+    wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
+    if( dlg.ShowModal() != wxID_OK )
+        return; // cancelled by user
 
-    if( !msg.IsEmpty() )
-    {
-        double fval;
-        if( msg.ToDouble( &fval ) )
-            gap_size = (int) ( fval * fcoeff );
-    }
+    msg = dlg.GetValue();
+    gap_size = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
     /* Updating sizes of pads forming the gap. */
     pad->m_Size.x = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();

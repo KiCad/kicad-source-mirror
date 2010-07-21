@@ -45,11 +45,11 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
 
     Text->m_Text = wxT( "text" );
 
-    ModuleTextWidth = Clamp_Text_PenSize( ModuleTextWidth,
-                                          MIN( ModuleTextSize.x,
-                                               ModuleTextSize.y ), true );
-    Text->m_Size  = ModuleTextSize;
-    Text->m_Width = ModuleTextWidth;
+    g_ModuleTextWidth = Clamp_Text_PenSize( g_ModuleTextWidth,
+                                          MIN( g_ModuleTextSize.x,
+                                               g_ModuleTextSize.y ), true );
+    Text->m_Size  = g_ModuleTextSize;
+    Text->m_Width = g_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->m_Curseur;
     Text->SetLocalCoord();
 

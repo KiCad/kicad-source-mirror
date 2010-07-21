@@ -1178,9 +1178,20 @@ public:
     void         RemoveStruct( EDA_BaseStruct* Item );
     void         Transform( MODULE* module, int transform );
 
-    // loading/exporting Footprint
-    MODULE*      Import_Module( wxDC* DC );
+    // importing / exporting Footprint
     void         Export_Module( MODULE* ptmod, bool createlib );
+    /**
+     * Function Import_Module
+     * Read a file containing only one footprint.
+     * Used to import (after exporting) a footprint
+     * Exported files  have the standard ext .emp
+     * This is the same format as .mod files but restricted to only one footprint
+     * The import function can also read gpcb footprint file, in Newlib format
+     * (One footprint per file, Newlib files have no special ext.)
+     * @param DC = Current Device Context (can be NULL)
+     */
+    MODULE* Import_Module( );
+
 
     /** function Load_Module_From_BOARD
      * load in Modedit a footfrint from the main board
@@ -1198,22 +1209,27 @@ public:
 
     // functions to edit footprint edges
 
-    /**
-     * Function Edit_Edge_Width
+    /** Function Edit_Edge_Width
      * changes the width of module perimeter lines, EDGE_MODULEs.
-     * @param ModuleSegmentWidth (global) = new width
-     * @param Edge = edge to edit, or NULL.  If Edge == NULL change
-     *               the width of all the footprint's edges
-     * @param DC = current Device Context
+     * param ModuleSegmentWidth (global) = new width
+     * @param aEdge = edge to edit, or NULL.  If aEdge == NULL change
+     *               the width of all footprint's edges
      */
-    void         Edit_Edge_Width( EDGE_MODULE* Edge );
+    void         Edit_Edge_Width( EDGE_MODULE* aEdge );
     void         Edit_Edge_Layer( EDGE_MODULE* Edge );
     void         Delete_Edge_Module( EDGE_MODULE* Edge );
     EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, int type_edge );
-    void         End_Edge_Module( EDGE_MODULE* Edge, wxDC* DC );
-    void         Enter_Edge_Width( EDGE_MODULE* Edge, wxDC* DC );
+    void         End_Edge_Module( EDGE_MODULE* Edge );
+    /** function Enter_Edge_Width
+     * Edition of the edge items width
+     * Ask for a new width.
+     * Change the width of EDGE_MODULE Edge if aEdge != NULL
+     * @param aEdge = edge to edit, or NULL
+     * @output ModuleSegmentWidth (global) = new width
+     */
+    void         Enter_Edge_Width( EDGE_MODULE* aEdge );
     void         Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
-    void         Place_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
+    void         Place_EdgeMod( EDGE_MODULE* drawitem );
 
     // handlers for libraries:
     void         Delete_Module_In_Library( const wxString& libname );
