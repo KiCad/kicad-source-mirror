@@ -6,6 +6,9 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( wxWindow* parent,
     DIALOG_LIB_EDIT_DRAW_ITEM_BASE( parent )
 {
     SetTitle( itemName + wxT( " " ) + GetTitle() );
+
+    // Required under wxGTK if we want to demiss the dialog with the ESC key
+    SetFocus();
 }
 
 
