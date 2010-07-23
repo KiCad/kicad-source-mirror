@@ -68,6 +68,17 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     item->SetBitmap( plot_xpm );
     filesMenu->Append( item );
 
+    /*  Quit on all platforms except WXMAC, because else this "breaks" the mac
+        UI compliance. The Quit item is in a different menu on a mac than
+        windows or unix machine.
+    */
+#if !defined(__WXMAC__)
+    filesMenu->AppendSeparator();
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
+                           _( "Quit Library Editor" ) );
+    filesMenu->Append( item );
+#endif
+
     /**
      * Edit menu
      */

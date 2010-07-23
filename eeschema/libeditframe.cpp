@@ -116,6 +116,8 @@ EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
                 WinEDA_LibeditFrame::Process_Special_Functions )
 
 /* menubar commands */
+EVT_MENU( wxID_EXIT,
+          WinEDA_LibeditFrame::CloseWindow )
 EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
           WinEDA_LibeditFrame::SaveActiveLibrary )
 EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE,
@@ -339,7 +341,8 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
             GetScreen()->ClrModify();
     }
 
-    BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() ) {
+    BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() )
+    {
         if( lib.IsModified() )
         {
             wxString msg;
@@ -965,11 +968,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/** Called on activate the frame.
- * Test if the current library exists
- * the library list can be changed by the schematic editor after reloading a new schematic
- * and the current m_library can point a non existent lib.
- */
 void WinEDA_LibeditFrame::OnActivate( wxActivateEvent& event )
 {
     WinEDA_DrawFrame::OnActivate( event );
@@ -992,9 +990,6 @@ void WinEDA_LibeditFrame::EnsureActiveLibExists()
         m_library = NULL;
 }
 
-/** function SetLanguage
- * called on a language menu selection
- */
 void WinEDA_LibeditFrame::SetLanguage( wxCommandEvent& event )
 {
     WinEDA_BasicFrame::SetLanguage( event );

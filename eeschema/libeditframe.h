@@ -36,14 +36,16 @@ public:
 
     void ReCreateMenuBar();
 
-    /** Function EnsureActiveLibExists
-     * Must be called after the libraries are reloaded
+    /**
+     * Function EnsureActiveLibExists
+     * must be called after the libraries are reloaded
      * (for instance after loading a schematic project)
      */
     static void EnsureActiveLibExists();
 
-    /** function SetLanguage
-     * called on a language menu selection
+    /**
+     * Function SetLanguage
+     * is called on a language menu selection
      */
     void SetLanguage( wxCommandEvent& event );
 
@@ -101,6 +103,19 @@ public:
     void LoadSettings();
     void SaveSettings();
 
+    /**
+     * Function CloseWindow()
+     * triggers the wxCloseEvent, which is handled by the function given
+     * to EVT_CLOSE() macro:
+     * <p>
+     * EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
+     */
+    void CloseWindow( wxCommandEvent& WXUNUSED(event) )
+    {
+        // Generate a wxCloseEvent
+        Close( false );
+    }
+
     /** Function OnModify()
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
@@ -154,7 +169,11 @@ public:
 
 private:
 
-    /** OnActivate event funtion( virtual )
+    /**
+     * Function OnActivate
+     * is called when the frame is activated. Tests if the current library exists.
+     * The library list can be changed by the schematic editor after reloading a new schematic
+     * and the current m_library can point a non existent lib.
      */
     virtual void     OnActivate( wxActivateEvent& event );
 

@@ -341,12 +341,14 @@ public:
     virtual void     ToolOnRightClick( wxCommandEvent& event );
     void             AdjustScrollBars();
 
-    /** OnActivate event function (virtual)
-     * called when activating the frame.
-     * in derived classes with a virtual OnActivate function,
-     * do not forget to call the WinEDA_DrawFrame::OnActivate( event )  basic function
+    /**
+     * Function OnActivate (virtual)
+     * is called when activating the frame.
+     * In derived classes with a overriding OnActivate function,
+     * do not forget to call this WinEDA_DrawFrame::OnActivate( event ) basic function.
      */
     virtual void     OnActivate( wxActivateEvent& event );
+
     /**
      * Function UpdateStatusBar
      * updates the status bar information.
