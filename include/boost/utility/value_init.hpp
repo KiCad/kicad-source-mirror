@@ -114,8 +114,6 @@ class value_initialized
 
 
 
-
-
 template<class T>
 T const& get ( value_initialized<T> const& x )
 {

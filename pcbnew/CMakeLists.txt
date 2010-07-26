@@ -13,6 +13,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 #
 # NOTE: Many of the commented out ones are nested in *.cpp files for dialogs
 ###
+if( USE_BOOST_POLYGON_LIBRARY )
+    set(PCBNEW_SRC_FILL_ZONE zones_convert_brd_items_to_polygons_with_Boost.cpp)
+else( USE_BOOST_POLYGON_LIBRARY )
+    set(PCBNEW_SRC_FILL_ZONE zones_convert_brd_items_to_polygons_with_Kbool.cpp)
+endif( USE_BOOST_POLYGON_LIBRARY )
+
 set(PCBNEW_SRCS
     pcbframe.cpp
     attribut.cpp
@@ -146,7 +152,6 @@ set(PCBNEW_SRCS
     printout_controler.cpp
     queue.cpp
     ratsnest.cpp
-#    set_color.cpp
     set_grid.cpp
     solve.cpp
     specctra.cpp
@@ -164,9 +169,9 @@ set(PCBNEW_SRCS
     trpiste.cpp
     work.cpp
     xchgmod.cpp
+    ${PCBNEW_SRC_FILL_ZONE}
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp
-    zones_convert_brd_items_to_polygons.cpp
     zone_filling_algorithm.cpp
     zones_functions_for_undo_redo.cpp
     zones_non_copper_type_functions.cpp

@@ -8,7 +8,7 @@
 //  Copyright (c) 2002-2003 David Abrahams
 //  Copyright (c) 2003 Gennaro Prota
 //  Copyright (c) 2003 Eric Friedman
-//
+//  Copyright (c) 2010 Eric Jourdanneau, Joel Falcou
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -596,6 +596,11 @@ namespace boost{
 #     endif
 #  endif
 
+//
+// Set some default values GPU support
+//
+#  ifndef BOOST_GPU_ENABLED
+#  define BOOST_GPU_ENABLED 
+#  endif
 #endif
-
 

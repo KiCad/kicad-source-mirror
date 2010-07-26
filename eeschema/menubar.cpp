@@ -24,9 +24,9 @@
  */
 void WinEDA_SchematicFrame::ReCreateMenuBar()
 {
-    wxString   text;
-    wxMenuItem *item;
-    wxMenuBar  *menuBar = GetMenuBar();
+    wxString    text;
+    wxMenuItem* item;
+    wxMenuBar*  menuBar = GetMenuBar();
 
     /**
      * Destroy the existing menu bar so it can be rebuilt.  This allows
@@ -44,14 +44,14 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* New */
     item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
-                           _( "New schematic project" ) );
+                          _( "New schematic project" ) );
 
     item->SetBitmap( new_xpm );
     filesMenu->Append( item );
 
-	/* Open */
+    /* Open */
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
-                           _( "Open an existing schematic project" ) );
+                          _( "Open an existing schematic project" ) );
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
@@ -60,7 +60,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
                                         -1, _( "Open &Recent" ),
-                                        _("Open a recent opened schematic project" ),
+                                        _( "Open a recent opened schematic project" ),
                                         open_project_xpm );
 
     /* Separator */
@@ -69,20 +69,20 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     /* Save */
     /* Save Project */
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
-                           _( "&Save Whole Schematic Project\tCtrl+S" ),
-                           _( "Save all sheets in the schematic project" ) );
+                          _( "&Save Whole Schematic Project\tCtrl+S" ),
+                          _( "Save all sheets in the schematic project" ) );
     item->SetBitmap( save_project_xpm );
     filesMenu->Append( item );
 
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "Save &Current Sheet Only" ),
-                           _( "Save only current schematic sheet" ) );
+                          _( "Save only current schematic sheet" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
     /* Save as... */
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS,
-                           _( "Save Current Sheet &as" ),
-                           _( "Save current schematic sheet as..." ) );
+                          _( "Save Current Sheet &as" ),
+                          _( "Save current schematic sheet as..." ) );
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
 
@@ -91,33 +91,33 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Print */
     item = new wxMenuItem( filesMenu, wxID_PRINT, _( "P&rint" ),
-                           _( "Print schematic" ) );
+                          _( "Print schematic" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
 
     /* Plot submenu */
     wxMenu* choice_plot_fmt = new wxMenu;
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
-                           _( "Plot PostScript" ),
-                           _( "Plot schematic sheet in PostScript format" ) );
+                          _( "Plot PostScript" ),
+                          _( "Plot schematic sheet in PostScript format" ) );
     item->SetBitmap( plot_PS_xpm );
     choice_plot_fmt->Append( item );
 
     /* Plot HPGL */
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_HPGL, _( "Plot HPGL" ),
-                           _( "Plot schematic sheet in HPGL format" ) );
+                          _( "Plot schematic sheet in HPGL format" ) );
     item->SetBitmap( plot_HPG_xpm );
     choice_plot_fmt->Append( item );
 
     /* Plot SVG */
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_SVG, _( "Plot SVG" ),
-                           _( "Plot schematic sheet in SVG format" ) );
+                          _( "Plot schematic sheet in SVG format" ) );
     item->SetBitmap( plot_xpm );
     choice_plot_fmt->Append( item );
 
     /* Plot DXF */
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_DXF, _( "Plot DXF" ),
-                           _( "Plot schematic sheet in DXF format" ) );
+                          _( "Plot schematic sheet in DXF format" ) );
     item->SetBitmap( plot_xpm );
     choice_plot_fmt->Append( item );
 
@@ -125,8 +125,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 #ifdef __WINDOWS__
 
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
-                           _( "Plot to Clipboard" ),
-                           _( "Export drawings to clipboard" ) );
+                          _( "Plot to Clipboard" ),
+                          _( "Export drawings to clipboard" ) );
     item->SetBitmap( copy_button );
     choice_plot_fmt->Append( item );
 
@@ -134,7 +134,8 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, choice_plot_fmt,
                                         ID_GEN_PLOT, _( "&Plot" ),
-                                        _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
+                                        _(
+                                            "Plot schematic sheet in HPGL, PostScript or SVG format" ),
                                         plot_xpm );
 
     /* Quit on all platforms except WXMAC */
@@ -142,11 +143,10 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
-                           _( "Quit EESchema" ) );
+                          _( "Quit EESchema" ) );
     filesMenu->Append( item );
 
 #endif /* !defined( __WXMAC__) */
-
 
 
     /**
@@ -155,7 +155,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     /* Undo */
-    text  = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO);
+    text = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO );
 
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            HELP_UNDO, wxITEM_NORMAL );
@@ -163,7 +163,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     editMenu->Append( item );
 
     /* Redo */
-    text  = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO);
+    text = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO );
 
     item = new wxMenuItem( editMenu, wxID_REDO, text,
                            HELP_REDO, wxITEM_NORMAL );
@@ -200,7 +200,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     editMenu->Append( item );
 
 
-
     /**
      * View menu
      */
@@ -218,7 +217,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
      * for Zoom in and Zoom out sub menus
      */
     /* Zoom in */
-    text  =_( "Zoom In" );
+    text = _( "Zoom In" );
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
@@ -252,7 +251,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     viewMenu->Append( item );
 
 
-
     /**
      * Place menu
      * TODO: Unify the ID names!
@@ -260,7 +258,9 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* placeMenu = new wxMenu;
 
     /* Component */
-    item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, _( "&Component" ),
+    text = AddHotkeyName( _( "&Component" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_NEW_COMPONENT );
+    item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
                            HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
     item->SetBitmap( add_component_xpm );
     placeMenu->Append( item );
@@ -272,13 +272,15 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* Wire */
-    item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, _( "&Wire" ),
+    text = AddHotkeyName( _( "&Wire" ), s_Schematic_Hokeys_Descr,
+                          HK_BEGIN_WIRE );
+    item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, text,
                            HELP_PLACE_WIRE, wxITEM_NORMAL );
     item->SetBitmap( add_line_xpm );
     placeMenu->Append( item );
 
     /* Bus */
-    item = new wxMenuItem( placeMenu, ID_BUS_BUTT,  _( "&Bus" ),
+    item = new wxMenuItem( placeMenu, ID_BUS_BUTT, _( "&Bus" ),
                            HELP_PLACE_BUS, wxITEM_NORMAL );
     item->SetBitmap( add_bus_xpm );
     placeMenu->Append( item );
@@ -298,20 +300,25 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* No connect flag */
-    item = new wxMenuItem( placeMenu, ID_NOCONN_BUTT,  _( "No connect flag" ),
+    text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_NOCONN_FLAG );
+    item = new wxMenuItem( placeMenu, ID_NOCONN_BUTT, text,
                            HELP_PLACE_NC_FLAG, wxITEM_NORMAL );
     item->SetBitmap( noconn_button );
     placeMenu->Append( item );
 
     /* Net name */
-    item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, _( "Label" ),
+    text = AddHotkeyName( _( "Label" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_LABEL );
+    item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, text,
                            HELP_PLACE_NETLABEL, wxITEM_NORMAL  );
     item->SetBitmap( add_line_label_xpm );
     placeMenu->Append( item );
 
     /* Global label */
     item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, _( "Global label" ),
-                           _( "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy" ),
+                           _(
+                               "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy" ),
                            wxITEM_NORMAL );
     item->SetBitmap( add_glabel_xpm );
     placeMenu->Append( item );
@@ -371,7 +378,6 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
 
-
     /**
      * Preferences Menu
      */
@@ -379,19 +385,19 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Library */
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
-                           _( "Library preferences" ) );
+                          _( "Library preferences" ) );
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
 
     /* Colors */
     item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
-                           _( "Color preferences" ) );
+                          _( "Color preferences" ) );
     item->SetBitmap( palette_xpm );
     configmenu->Append( item );
 
     /* Options */
     item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
-                           _( "Eeschema general options and preferences" ) );
+                          _( "Eeschema general options and preferences" ) );
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
 
@@ -406,16 +412,15 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Save preferences */
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
-                           _( "Save application preferences" ) );
+                          _( "Save application preferences" ) );
     item->SetBitmap( save_setup_xpm );
     configmenu->Append( item );
 
     /* Read preferences */
     item = new wxMenuItem( configmenu, ID_CONFIG_READ, _( "&Read preferences" ),
-                           _( "Read application preferences" ) );
+                          _( "Read application preferences" ) );
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
-
 
 
     /**
@@ -423,7 +428,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
      */
     wxMenu* helpMenu = new wxMenu;
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
-                           _( "Open the eeschema manual" ) );
+                          _( "Open the eeschema manual" ) );
     item->SetBitmap( online_help_xpm );
     helpMenu->Append( item );
 
@@ -431,7 +436,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 #if !defined(__WXMAC__)
 
     item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
-                           _( "About eeschema schematic designer" ) );
+                          _( "About eeschema schematic designer" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
 

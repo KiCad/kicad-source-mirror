@@ -86,10 +86,12 @@ public:
     }
 };
 
-template< class T > T forward( T t )
+#if defined( BOOST_HAS_RVALUE_REFS )
+template< class T > T&& forward( T &&t )
 {
     return t;
 }
+#endif
 
 } // namespace detail
 

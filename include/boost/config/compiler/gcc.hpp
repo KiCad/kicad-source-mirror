@@ -108,11 +108,8 @@
 //
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_EXTERN_TEMPLATE
-#define BOOST_NO_LAMBDAS
 #define BOOST_NO_NULLPTR
-#define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_TEMPLATE_ALIASES
-#define BOOST_NO_UNICODE_LITERALS
 
 // C++0x features in 4.3.n and later
 //
@@ -168,6 +165,9 @@
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
+#  define BOOST_NO_LAMBDAS
+#  define BOOST_NO_RAW_LITERALS
+#  define BOOST_NO_UNICODE_LITERALS
 #endif
 
 // ConceptGCC compiler:

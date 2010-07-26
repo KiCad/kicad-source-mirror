@@ -88,12 +88,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer->Add( m_buttonLoad, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonExportEeschema = new wxButton( this, wxID_ANY, _("Export to eeschema"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonExportEeschema->SetToolTip( _("Create a lib file for Eeschema") );
+	m_buttonExportEeschema->SetToolTip( _("Create a library file for Eeschema\nThis library contains only one component: logo") );
 	
 	brightSizer->Add( m_buttonExportEeschema, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_buttonExportPcbnew = new wxButton( this, wxID_ANY, _("Export to Pcbnew"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonExportPcbnew->SetToolTip( _("Create a footprint file for PcbNew") );
+	m_buttonExportPcbnew->SetToolTip( _("Create a footprint file for PcbNew\nThis footprint contains only one footprint: logo") );
 	
 	brightSizer->Add( m_buttonExportPcbnew, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -108,6 +108,8 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer->Add( m_ThresholdText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_sliderThreshold = new wxSlider( this, wxID_ANY, 25, 0, 50, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_TOP );
+	m_sliderThreshold->SetToolTip( _("Adjust the level to convert the greysvale picture to the binary picture.") );
+	
 	brightSizer->Add( m_sliderThreshold, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	bMainSizer->Add( brightSizer, 0, wxEXPAND, 5 );
