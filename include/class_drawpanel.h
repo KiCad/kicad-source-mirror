@@ -44,6 +44,8 @@ public:
                                             // ignore mouse events
 
     bool m_Block_Enable;                    // TRUE to accept Block Commands
+    // useful to avoid false start block in certain cases
+    // (like switch from a sheet to an other sheet
     int  m_CanStartBlock;                   // >= 0 (or >= n) if a block can
                                             // start
     bool m_PrintIsMirrored;                 // True when drawing in mirror
@@ -51,8 +53,6 @@ public:
                                             // because arcs are oriented, and
                                             // in mirror mode, orientations are
                                             // reversed
-    // useful to avoid false start block in certain cases (like switch from a
-    // sheet to an other sheet
     int  m_PanelDefaultCursor;              // Current mouse cursor default
                                             // shape id for this window
     int  m_PanelCursor;                     // Current mouse cursor shape id

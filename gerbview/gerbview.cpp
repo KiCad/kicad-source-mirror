@@ -105,7 +105,6 @@ bool WinEDA_App::OnInit()
                                           * main frame in order to display the
                                           * real hotkeys in menus or tool tips
                                           */
-
     frame = new  WinEDA_GerberFrame( NULL, wxT( "GerbView" ),
                                      wxPoint( 0, 0 ),
                                      wxSize( 600, 400 ) );

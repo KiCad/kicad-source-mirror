@@ -288,19 +288,18 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
     return guide;
 }
 
-void WinEDA_BasePcbFrame::SetToolID( int id, int new_cursor_id,
-                                     const wxString& title )
+void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     bool redraw = false;
 
-    WinEDA_DrawFrame::SetToolID( id, new_cursor_id, title );
+    WinEDA_DrawFrame::SetToolID( aId, aCursor, aToolMsg );
 
-    if( id < 0 )
+    if( aId < 0 )
         return;
 
     // handle color changes for transitions in and out of ID_TRACK_BUTT
-    if( ( m_ID_current_state == ID_TRACK_BUTT && id != ID_TRACK_BUTT )
-        || ( m_ID_current_state != ID_TRACK_BUTT && id == ID_TRACK_BUTT ) )
+    if( ( m_ID_current_state == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
+        || ( m_ID_current_state != ID_TRACK_BUTT && aId== ID_TRACK_BUTT ) )
     {
         if( DisplayOpt.ContrastModeDisplay )
             redraw = true;

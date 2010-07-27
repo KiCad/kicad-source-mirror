@@ -133,7 +133,6 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     m_HToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -187,8 +186,6 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
                          wxITEM_CHECK );
 
     m_VToolBar->Realize();
-
-    SetToolbars();
 }
 
 
@@ -238,8 +235,6 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
                                _( "Show Edges Sketch" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->Realize();
-
-    SetToolbars();
 }
 
 
@@ -328,6 +323,4 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
         if( m_LastGridSizeId == GetScreen()->m_GridList[i].m_Id )
             m_SelGridBox->SetSelection( i );
     }
-
-    SetToolbars();
 }

@@ -199,7 +199,7 @@ void WinEDA_SetColorsFrame::CreateControls()
 
         BitmapButton =
             new wxBitmapButton( this, butt_ID, ButtBitmap, wxDefaultPosition,
-                                wxSize( BUTT_SIZE_X, BUTT_SIZE_Y ) );
+                                wxSize( BUTT_SIZE_X+8, BUTT_SIZE_Y+6 ) );
         RowBoxSizer->Add( BitmapButton,
                           0,
                           wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM,

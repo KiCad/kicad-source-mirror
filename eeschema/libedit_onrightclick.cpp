@@ -1,5 +1,5 @@
 /****************************/
-/*	EESchema - libedit_onrightclick.cpp	*/
+/*  EESchema - libedit_onrightclick.cpp */
 /****************************/
 
 /* , In library editor, create the pop menu when clicking on mouse right button
@@ -85,21 +85,21 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_arc_xpm );
-			msg = AddHotkeyName( _( "Drag Arc Size" ), s_Libedit_Hokeys_Descr,
-						HK_DRAG );
-			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+            msg = AddHotkeyName( _( "Drag Arc Size" ), s_Libedit_Hokeys_Descr,
+                                 HK_DRAG );
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
                                   msg, move_arc_xpm );
         }
 
         msg = AddHotkeyName( _( "Edit Arc Options" ), s_Libedit_Hokeys_Descr,
-        						HK_EDIT );
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, options_arc_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Arc " ), s_Libedit_Hokeys_Descr,
-                                 HK_DELETE_PIN );
+                                 HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_arc_xpm );
         }
@@ -115,22 +115,22 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         }
 
         if( DrawEntry->m_Flags == 0 )
-		{
-			msg = AddHotkeyName( _( "Drag Circle Outline" ), s_Libedit_Hokeys_Descr,
-						HK_DRAG );
-			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
-                                  msg, move_rectangle_xpm );
-		}
+        {
+            msg = AddHotkeyName( _( "Drag Circle Outline" ), s_Libedit_Hokeys_Descr,
+                                 HK_DRAG );
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                          msg, move_rectangle_xpm );
+        }
 
         msg = AddHotkeyName( _( "Edit Circle Options" ), s_Libedit_Hokeys_Descr,
-                						HK_EDIT );
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, options_circle_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Circle " ),
-                                 s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+                                 s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_circle_xpm );
         }
@@ -146,22 +146,22 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         }
 
         msg = AddHotkeyName( _( "Edit Rectangle Options" ), s_Libedit_Hokeys_Descr,
-                						HK_EDIT );
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, options_rectangle_xpm );
 
         if( DrawEntry->m_Flags == 0 )
-		{
-			msg = AddHotkeyName( _( "Drag Rectangle Edge" ), s_Libedit_Hokeys_Descr,
-						HK_DRAG );
-			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
-                                  msg, move_rectangle_xpm );
-		}
+        {
+            msg = AddHotkeyName( _( "Drag Rectangle Edge" ), s_Libedit_Hokeys_Descr,
+                                 HK_DRAG );
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+                          msg, move_rectangle_xpm );
+        }
 
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Rectangle " ), s_Libedit_Hokeys_Descr,
-                                 HK_DELETE_PIN );
+                                 HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_rectangle_xpm );
         }
@@ -178,19 +178,19 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         }
 
         msg = AddHotkeyName( _( "Edit Text " ), s_Libedit_Hokeys_Descr,
-								HK_EDIT );
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, edit_text_xpm );
 
         msg = AddHotkeyName( _( "Rotate Text " ), s_Libedit_Hokeys_Descr,
-								HK_ROTATE );
+                             HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
                       msg, edit_text_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Text " ), s_Libedit_Hokeys_Descr,
-                                 HK_DELETE_PIN );
+                                 HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_text_xpm );
         }
@@ -203,9 +203,9 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_line_xpm );
-			msg = AddHotkeyName( _( "Drag Edge Point" ), s_Libedit_Hokeys_Descr,
-						HK_DRAG );
-			ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
+            msg = AddHotkeyName( _( "Drag Edge Point" ), s_Libedit_Hokeys_Descr,
+                                 HK_DRAG );
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM,
                                   msg, move_line_xpm );
         }
 
@@ -216,14 +216,14 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
         }
 
         msg = AddHotkeyName( _( "Edit Line Options" ), s_Libedit_Hokeys_Descr,
-                						HK_EDIT );
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, options_segment_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
             msg = AddHotkeyName( _( "Delete Line " ), s_Libedit_Hokeys_Descr,
-                                 HK_DELETE_PIN );
+                                 HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_segment_xpm );
         }
@@ -232,7 +232,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
             if( ( (LIB_POLYLINE*) DrawEntry )->GetCornerCount() > 2 )
             {
                 msg = AddHotkeyName( _( "Delete Segment " ),
-                                     s_Libedit_Hokeys_Descr, HK_DELETE_PIN );
+                                     s_Libedit_Hokeys_Descr, HK_DELETE );
                 ADD_MENUITEM( PopMenu,
                               ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
                               msg, delete_segment_xpm );
@@ -296,7 +296,7 @@ void AddMenusForPin( wxMenu*              PopMenu,
     if( not_in_move )
     {
         msg = AddHotkeyName( _( "Delete Pin " ), s_Libedit_Hokeys_Descr,
-                             HK_DELETE_PIN );
+                             HK_DELETE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                       msg, delete_pin_xpm );
     }

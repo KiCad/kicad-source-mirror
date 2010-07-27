@@ -106,6 +106,8 @@ static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
 static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
 static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ),
                                      HK_ADD_NEW_COMPONENT, 'A' );
+static Ki_HotkeyInfo HkAddNoConn( wxT( "Add NoConnected Flag" ),
+                                  HK_ADD_NOCONN_FLAG, 'Q' );
 static Ki_HotkeyInfo HkMirrorYComponent( wxT( "Mirror Y Component" ),
                                          HK_MIRROR_Y_COMPONENT, 'Y' );
 static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ),
@@ -146,11 +148,11 @@ static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find next DRC marker" ), HK_FIND
                                           WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
+static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ),
+                                  HK_LIBEDIT_CREATE_PIN, 'P' );
 static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST,
                                   WXK_INSERT );
 static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
-static Ki_HotkeyInfo HkDeletePin( wxT( "Delete Pin" ), HK_DELETE_PIN,
-                                  WXK_DELETE );
 
 
 // List of common hotkey descriptors
@@ -190,16 +192,18 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkEditComponentFootprint,
     &HkBeginWire,
     &HkAddLabel,
+    &HkAddNoConn,
     NULL
 };
 
 // List of hotkey descriptors for library editor
 Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 {
+    &HkCreatePin,
     &HkInsertPin,
     &HkEdit,
     &HkMovePin,
-    &HkDeletePin,
+    &HkDelete,
     &HkRotate,
     &HkDrag,
     NULL
@@ -332,7 +336,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
             RefreshToolBar = LocateAndDeleteItem( this, DC );
-            OnModify( );
+            OnModify();
             GetScreen()->SetCurItem( NULL );
             TestDanglingEnds( GetScreen()->EEDrawList, DC );
         }
@@ -393,9 +397,10 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
             OnLeftClick( DC, MousePos );
         }
-         break;
+        break;
 
     case HK_BEGIN_WIRE:
+
         /* An item is selected. If edited and not a wire, a new command is not
          * possible */
         if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
@@ -415,6 +420,16 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             // switch to m_ID_current_state = ID_WIRE_BUTT;
             if( m_ID_current_state != ID_WIRE_BUTT )
                 SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add Wire" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_NOCONN_FLAG:      // Add a no connected flag
+        if( !ItemInEdit )
+        {
+            if( m_ID_current_state != ID_NOCONN_BUTT )
+                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL,
+                          _( "Add a no connected flag" ) );
             OnLeftClick( DC, MousePos );
         }
         break;
@@ -563,7 +578,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
             // Create the events for moving a component or other schematic item
             wxCommandEvent eventMoveOrDragComponent( wxEVT_COMMAND_TOOL_CLICKED,
-                                               HK_Descr->m_IdMenuEvent );
+                                                     HK_Descr->m_IdMenuEvent );
             wxCommandEvent eventMoveItem( wxEVT_COMMAND_TOOL_CLICKED,
                                           ID_POPUP_SCH_MOVE_ITEM_REQUEST );
             wxCommandEvent eventMovePinsheet( wxEVT_COMMAND_TOOL_CLICKED,
@@ -584,7 +599,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             case TYPE_SCH_GLOBALLABEL:
             case TYPE_SCH_HIERLABEL:
                 wxPostEvent( this, eventMoveOrDragComponent );
-            break;
+                break;
 
             case TYPE_SCH_TEXT:
             case DRAW_PART_TEXT_STRUCT_TYPE:
@@ -831,8 +846,16 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
+    case HK_LIBEDIT_CREATE_PIN:
+    {
+        wxCommandEvent evt;
+        evt.SetId( ID_LIBEDIT_PIN_BUTT );
+        Process_Special_Functions( evt );
+        break;
+    }
 
-    case HK_DELETE_PIN:
+
+    case HK_DELETE:
         m_drawItem = LocateItemUsingCursor();
 
         if( m_drawItem )

@@ -164,7 +164,7 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
         iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
 
         BitmapButton = new wxBitmapButton( this, butt_ID, ButtBitmap,
-                                           wxDefaultPosition, wxSize( w, h ) );
+                                           wxDefaultPosition, wxSize( w+8, h+6 ) );
         FlexColumnBoxSizer->Add( BitmapButton, 0,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
                                  wxLEFT | wxBOTTOM, 5 );

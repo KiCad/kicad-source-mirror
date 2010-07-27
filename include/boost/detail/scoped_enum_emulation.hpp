@@ -41,9 +41,9 @@
 
 #ifdef BOOST_NO_SCOPED_ENUMS
 
-# define BOOST_SCOPED_ENUM_START(name) struct name { enum enum_t
+# define BOOST_SCOPED_ENUM_START(name) struct name { enum enum_type
 # define BOOST_SCOPED_ENUM_END };
-# define BOOST_SCOPED_ENUM(name) name::enum_t
+# define BOOST_SCOPED_ENUM(name) name::enum_type
 
 #else
 

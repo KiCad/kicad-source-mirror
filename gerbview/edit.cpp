@@ -104,13 +104,13 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
         if( m_ID_current_state == 0 )
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+            SetToolID( 0, 0, wxEmptyString );
         else
-            SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+            DrawPanel->SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
         break;
 
     default:
-        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->UnManageCursor( 0, 0, wxEmptyString );
         break;
     }
 
@@ -146,7 +146,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( 0, 0, wxEmptyString );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -172,8 +172,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             gerber_layer->m_Selected_Tool = tool;
             DrawPanel->Refresh( TRUE );
         }
-        else
-            DisplayError( this, _( "No layer selected" ) );
         break;
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:

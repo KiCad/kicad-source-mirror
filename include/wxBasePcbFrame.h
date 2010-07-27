@@ -104,8 +104,7 @@ public:
     virtual bool    OnRightClick( const wxPoint& MousePos,
                                   wxMenu*        PopMenu )  = 0;
     virtual void    ReCreateMenuBar();
-    virtual void    SetToolID( int id, int new_cursor_id,
-                               const wxString& title );
+    virtual void    SetToolID( int aId, int aCursor, const wxString& aToolMsg );
     virtual void    UpdateStatusBar();
 
     PCB_SCREEN*     GetScreen() const

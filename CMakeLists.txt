@@ -24,6 +24,8 @@ option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF).  Warning, this is
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental")
 
+option(USE_BOOST_POLYGON_LIBRARY
+       "Use boost polygon library instead of Kbool to calculate filled areas in zones (default OFF). Warning, this is experimental")
 
 #================================================
 # Set flags for GCC.
@@ -56,6 +58,11 @@ if(USE_WX_GRAPHICS_CONTEXT)
     set( USE_WX_ZOOM ON )
     add_definitions(-DUSE_WX_ZOOM)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
+endif(USE_WX_GRAPHICS_CONTEXT)
+
+if(USE_BOOST_POLYGON_LIBRARY)
+    set( USE_BOOST_POLYGON_LIBRARY ON )
+    add_definitions(-DUSE_BOOST_POLYGON_LIBRARY)
 endif(USE_WX_GRAPHICS_CONTEXT)
 
 # Locations for install targets.

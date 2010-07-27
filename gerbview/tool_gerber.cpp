@@ -3,6 +3,8 @@
 /***************************************************/
 
 #include "fctsys.h"
+#include "wx/wupdlock.h"
+
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "macros.h"
@@ -16,6 +18,8 @@
 
 void WinEDA_GerberFrame::ReCreateMenuBar( void )
 {
+    wxWindowUpdateLocker dummy(this);
+
     wxMenuBar  *menuBar = GetMenuBar();
 
     /* Destroy the existing menu bar so it can be rebuilt.  This allows
@@ -143,6 +147,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     if( m_HToolBar != NULL )
         return;
 
+    // we create m_SelLayerTool that have a lot of items,
+    // so create a wxWindowUpdateLocker is a good idea
+    wxWindowUpdateLocker dummy(this);
+
     if( GetScreen() )
     {
         layer = GetScreen()->m_Active_Layer;
@@ -214,11 +222,12 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                                          ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ),
                                          choices );
-    m_SelLayerBox->SetSelection( getActiveLayer() );
     m_HToolBar->AddControl( m_SelLayerBox );
 
     m_HToolBar->AddSeparator();
     choices.Clear();
+
+    choices.Alloc(MAX_TOOLS+1);
     choices.Add( _( "No tool" ) );
 
     for( ii = 0; ii < MAX_TOOLS; ii++ )
@@ -227,7 +236,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
         msg = _( "Tool " ); msg << ii + FIRST_DCODE;
         choices.Add( msg );
     }
-
     m_SelLayerTool = new WinEDAChoiceBox( m_HToolBar,
                                           ID_TOOLBARH_GERBER_SELECT_TOOL,
                                           wxDefaultPosition, wxSize( 150, -1 ),
@@ -238,7 +246,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     m_HToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -249,6 +256,8 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
 {
     if( m_VToolBar )
         return;
+
+    wxWindowUpdateLocker dummy(this);
 
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
@@ -262,7 +271,6 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
                          _( "Delete items" ) );
 
     m_VToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -273,6 +281,8 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 {
     if( m_OptionsToolBar )
         return;
+
+    wxWindowUpdateLocker dummy(this);
 
     // creation of tool bar options
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
@@ -327,5 +337,4 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 
 
     m_OptionsToolBar->Realize();
-    SetToolbars();
 }

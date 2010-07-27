@@ -3,6 +3,7 @@
 /***************************************/
 
 #include "fctsys.h"
+#include "wx/wupdlock.h"
 
 #include "common.h"
 #include "pcbnew.h"
@@ -180,6 +181,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
         return;
     }
 
+    wxWindowUpdateLocker dummy(this);
 
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
     m_HToolBar->SetRows( 1 );
@@ -286,7 +288,6 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     // the changes
 
     m_HToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -294,6 +295,8 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 {
     if( m_OptionsToolBar )
         return;
+
+    wxWindowUpdateLocker dummy(this);
 
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
                                            ID_OPT_TOOLBAR, FALSE );
@@ -385,7 +388,6 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
 
     m_OptionsToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -395,6 +397,8 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 {
     if( m_VToolBar )
         return;
+
+    wxWindowUpdateLocker dummy(this);
 
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
@@ -469,7 +473,6 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          wxITEM_CHECK );
 
     m_VToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -480,6 +483,8 @@ void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
 {
     if( m_AuxVToolBar )
         return;
+
+    wxWindowUpdateLocker dummy(this);
 
     m_AuxVToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this,
                                         ID_MICROWAVE_V_TOOLBAR, FALSE );
@@ -509,8 +514,6 @@ void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
                             _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();
-
-    SetToolbars();
 }
 
 
@@ -527,6 +530,8 @@ void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
 {
     size_t   i;
     wxString msg;
+
+    wxWindowUpdateLocker dummy(this);
 
     if( m_AuxiliaryToolBar == NULL )
     {
@@ -666,8 +671,6 @@ an existing track use its width\notherwise, use current width setting" ),
 
     m_TrackAndViasSizesList_Changed    = true;
     ReCreateLayerBox( NULL );
-
-    SetToolbars();
 }
 
 

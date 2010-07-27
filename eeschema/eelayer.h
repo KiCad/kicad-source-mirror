@@ -38,8 +38,8 @@ enum col_sel_id {
 #endif
 
 // Specify the width and height of every (color-displaying / bitmap) button
-const int BUTT_SIZE_X = 30;
-const int BUTT_SIZE_Y = 20;
+const int BUTT_SIZE_X = 16;
+const int BUTT_SIZE_Y = 16;
 
 // Macro utile :
 #define ADR( numlayer ) & (g_LayerDescr.LayerColor[numlayer])

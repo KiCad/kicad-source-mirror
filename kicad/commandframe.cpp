@@ -83,7 +83,8 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
 
     btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_16x16_xpm ) );
-    btn->SetToolTip( _( "Bitmap2Component (Bitmap converter to create logos)" ) );
+    btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
+Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
 }
 
 
