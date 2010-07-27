@@ -131,10 +131,13 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     m_show_layer_manager_tools = true;
 
     m_Draw_Axis = true;         // true to show X and Y axis on screen
-    m_Draw_Sheet_Ref = FALSE;   // TRUE for reference drawings.
+    m_Draw_Sheet_Ref = false;   // true for reference drawings.
     m_HotkeysZoomAndGridList = s_Gerbview_Hokeys_Descr;
+    m_SelLayerBox = NULL;
+    m_SelLayerTool = NULL;
+
     if( DrawPanel )
-        DrawPanel->m_Block_Enable = TRUE;
+        DrawPanel->m_Block_Enable = true;
 
     // Give an icon
 #ifdef __WINDOWS__
@@ -238,7 +241,8 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
  */
 void WinEDA_GerberFrame::SetToolbars()
 {
-    int     layer  = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
+    int     layer  = screen->m_Active_Layer;
     GERBER* gerber = g_GERBER_List[layer];
 
     if( m_HToolBar == NULL )
@@ -246,40 +250,41 @@ void WinEDA_GerberFrame::SetToolbars()
 
     if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {
-        m_HToolBar->EnableTool( wxID_CUT, TRUE );
-        m_HToolBar->EnableTool( wxID_COPY, TRUE );
+        m_HToolBar->EnableTool( wxID_CUT, true );
+        m_HToolBar->EnableTool( wxID_COPY, true );
     }
     else
     {
-        m_HToolBar->EnableTool( wxID_CUT, FALSE );
-        m_HToolBar->EnableTool( wxID_COPY, FALSE );
+        m_HToolBar->EnableTool( wxID_CUT, false );
+        m_HToolBar->EnableTool( wxID_COPY, false );
     }
 
-    if( m_SelLayerBox->GetSelection() !=
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer )
+    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != screen->m_Active_Layer) )
     {
-        m_SelLayerBox->SetSelection(
-            ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+        m_SelLayerBox->SetSelection( screen->m_Active_Layer );
     }
 
-    if( gerber )
+    if( m_SelLayerTool )
     {
-        int sel_index;
-        m_SelLayerTool->Enable( TRUE );
-        if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
-            sel_index = 0;
-        else
-            sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
-
-        if( sel_index != m_SelLayerTool->GetSelection() )
+        if( gerber )
         {
-            m_SelLayerTool->SetSelection( sel_index );
+            int sel_index;
+            m_SelLayerTool->Enable( true );
+            if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
+                sel_index = 0;
+            else
+                sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
+
+            if( sel_index != m_SelLayerTool->GetSelection() )
+            {
+                m_SelLayerTool->SetSelection( sel_index );
+            }
         }
-    }
-    else
-    {
-        m_SelLayerTool->SetSelection( 0 );
-        m_SelLayerTool->Enable( FALSE );
+        else
+        {
+            m_SelLayerTool->SetSelection( 0 );
+            m_SelLayerTool->Enable( false );
+        }
     }
 
     if( m_OptionsToolBar )
@@ -287,9 +292,9 @@ void WinEDA_GerberFrame::SetToolbars()
         m_OptionsToolBar->ToggleTool(
             ID_TB_OPTIONS_SELECT_UNIT_MM,
             g_UserUnit ==
-            MILLIMETRES ? TRUE : FALSE );
+            MILLIMETRES ? true : false );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UserUnit == INCHES ? TRUE : FALSE );
+                                      g_UserUnit == INCHES ? true : false );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                       DisplayOpt.DisplayPolarCood );
