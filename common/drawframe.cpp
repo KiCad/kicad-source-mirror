@@ -376,13 +376,14 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
                                   const wxString& title )
 {
-    // Change Cursor
+    // Keep default cursor in toolbars
+    SetCursor( wxNullCursor );
+    // Change Cursor in DrawPanel only
     if( DrawPanel )
     {
         DrawPanel->m_PanelDefaultCursor = new_cursor_id;
         DrawPanel->SetCursor( new_cursor_id );
     }
-    SetCursor( wxCURSOR_ARROW );
     DisplayToolMsg( title );
 
     if( id < 0 )

@@ -206,7 +206,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* viewMenu = new wxMenu;
 
     /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
+     * we cannot add hotkey shortcut here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
      * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
      * zoom in and out from hotkeys are equivalent to the pop up menu zoom
      * From here, zoomming is made around the screen center
@@ -215,16 +215,20 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
      *
      * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
+     * SO WE ADD THE NAME OF THE CORRESPONDING HOTKEY AS A COMMENT, NOT AS A SHORTCUT
+     * using in AddHotkeyName call the option "false" (not a shortcut)
      */
     /* Zoom in */
-    text = _( "Zoom In" );
+    text = AddHotkeyName( _( "Zoom In" ), s_Schematic_Hokeys_Descr,
+                          ID_ZOOM_IN, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
-    text = _( "Zoom Out" );
+    text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
+                          ID_ZOOM_OUT, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
                            wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
@@ -259,7 +263,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Component */
     text = AddHotkeyName( _( "&Component" ), s_Schematic_Hokeys_Descr,
-                          HK_ADD_NEW_COMPONENT );
+                          HK_ADD_NEW_COMPONENT, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
                            HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
     item->SetBitmap( add_component_xpm );
@@ -273,7 +277,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Wire */
     text = AddHotkeyName( _( "&Wire" ), s_Schematic_Hokeys_Descr,
-                          HK_BEGIN_WIRE );
+                          HK_BEGIN_WIRE, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, text,
                            HELP_PLACE_WIRE, wxITEM_NORMAL );
     item->SetBitmap( add_line_xpm );
@@ -301,7 +305,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* No connect flag */
     text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
-                          HK_ADD_NOCONN_FLAG );
+                          HK_ADD_NOCONN_FLAG, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_NOCONN_BUTT, text,
                            HELP_PLACE_NC_FLAG, wxITEM_NORMAL );
     item->SetBitmap( noconn_button );
@@ -309,7 +313,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Net name */
     text = AddHotkeyName( _( "Label" ), s_Schematic_Hokeys_Descr,
-                          HK_ADD_LABEL );
+                          HK_ADD_LABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, text,
                            HELP_PLACE_NETLABEL, wxITEM_NORMAL  );
     item->SetBitmap( add_line_label_xpm );
