@@ -112,6 +112,7 @@ bool WinEDA_App::OnInit()
     }
 
     ScreenPcb = new PCB_SCREEN();
+    ActiveScreen = ScreenPcb;
 
     // read current setup and reopen last directory if no filename to open in command line
     bool reopenLastUsedDirectory = argc == 1;
@@ -140,7 +141,6 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
-    ActiveScreen = ScreenPcb;
 
     SetTopWindow( frame );
     frame->Show( true );

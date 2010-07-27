@@ -364,29 +364,33 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/*
+/** Function SetToolID
  * Enables the icon of the selected tool in the vertical toolbar.
  * (Or tool ID_NO_SELECT_BUTT default if no new selection)
- * if (id >= 0)
+ * @param aId = new m_ID_current_state value (if aId >= 0)
+ * @param aCursor = the new cursor shape (0 = default cursor)
+ * @param aTitle = tool message in status bar
+ * if (aId >= 0)
  * Updates all variables related:
- * Message m_ID_current_state, cursor
- * If (id < 0)
- * Only updates the variables message and cursor
+ *      m_ID_current_state, cursor shape and message in status bar
+ * If (aId < 0)
+ *      Only updates the cursor shape and message in status bar
+ *      (does not the current m_ID_current_state value
  */
-void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
-                                  const wxString& title )
+void WinEDA_DrawFrame::SetToolID( int aId, int aCursor,
+                                  const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
     // Change Cursor in DrawPanel only
     if( DrawPanel )
     {
-        DrawPanel->m_PanelDefaultCursor = new_cursor_id;
-        DrawPanel->SetCursor( new_cursor_id );
+        DrawPanel->m_PanelDefaultCursor = aCursor;
+        DrawPanel->SetCursor( aCursor );
     }
-    DisplayToolMsg( title );
+    DisplayToolMsg( aToolMsg );
 
-    if( id < 0 )
+    if( aId < 0 )
         return;
 
     // Old Tool ID_NO_SELECT_BUTT active or inactive if no new tool.
@@ -400,7 +404,7 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
     }
     else
     {
-        if( id )
+        if( aId )
         {
             if( m_VToolBar )
                 m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, FALSE );
@@ -412,18 +416,18 @@ void WinEDA_DrawFrame::SetToolID( int id, int new_cursor_id,
             m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
     }
 
-    if( id )
+    if( aId )
     {
         if( m_VToolBar )
-            m_VToolBar->ToggleTool( id, TRUE );
+            m_VToolBar->ToggleTool( aId, TRUE );
 
         if( m_AuxVToolBar )
-            m_AuxVToolBar->ToggleTool( id, TRUE );
+            m_AuxVToolBar->ToggleTool( aId, TRUE );
     }
     else if( m_VToolBar )
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
-    m_ID_current_state = id;
+    m_ID_current_state = aId;
     if( m_VToolBar )
         m_VToolBar->Refresh( );
 }

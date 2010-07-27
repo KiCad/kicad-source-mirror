@@ -29,6 +29,7 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
         ReCreateAuxiliaryToolbar();
+        SetToolbars();
         DrawPanel->MouseToCursorSchema();
     }
 }
@@ -49,6 +50,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_LOAD_FILE:
         LoadOnePcbFile( GetScreen()->m_FileName, false, true );
         ReCreateAuxiliaryToolbar();
+        SetToolbars();
         break;
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
@@ -84,6 +86,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         GetScreen()->m_FileName = fn.GetFullPath();
         SetTitle( GetScreen()->m_FileName );
         ReCreateAuxiliaryToolbar();
+        SetToolbars();
         break;
     }
 
@@ -98,6 +101,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
                                         GetChars( PcbFileExtension ) );
         SetTitle( GetScreen()->m_FileName );
         ReCreateLayerBox( NULL );
+        SetToolbars();
         break;
 
     case ID_SAVE_BOARD:

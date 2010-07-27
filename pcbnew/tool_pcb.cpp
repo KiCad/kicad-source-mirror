@@ -288,7 +288,6 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     // the changes
 
     m_HToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -389,7 +388,6 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
 
     m_OptionsToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -475,7 +473,6 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
                          wxITEM_CHECK );
 
     m_VToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -517,8 +514,6 @@ void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
                             _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();
-
-    SetToolbars();
 }
 
 
@@ -676,8 +671,6 @@ an existing track use its width\notherwise, use current width setting" ),
 
     m_TrackAndViasSizesList_Changed    = true;
     ReCreateLayerBox( NULL );
-
-    SetToolbars();
 }
 
 

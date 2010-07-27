@@ -239,8 +239,20 @@ public:
     virtual void     ReCreateVToolbar() = 0;
     virtual void     ReCreateMenuBar();
     virtual void     ReCreateAuxiliaryToolbar();
-    virtual void     SetToolID( int id, int new_cursor_id,
-                                const wxString& title );
+    /** Function SetToolID
+     * Enables the icon of the selected tool in the vertical toolbar.
+     * (Or tool ID_NO_SELECT_BUTT default if no new selection)
+     * @param aId = new m_ID_current_state value (if aId >= 0)
+     * @param aCursor = the new cursor shape
+     * @param aToolMsg = tool message in status bar
+     * if (aId >= 0)
+     * Updates all variables related:
+     *      m_ID_current_state, cursor shape and message in status bar
+     * If (aId < 0)
+     *      Only updates the cursor shape and message in status bar
+     *      (does not the current m_ID_current_state value
+     */
+    virtual void     SetToolID( int aId, int aCursor, const wxString& aToolMsg );
 
     /* Thes 4 functions provide a basic way to sho/hide grid
      * and /get/set grid color.

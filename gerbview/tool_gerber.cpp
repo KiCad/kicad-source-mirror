@@ -246,7 +246,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     m_HToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -272,7 +271,6 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
                          _( "Delete items" ) );
 
     m_VToolBar->Realize();
-    SetToolbars();
 }
 
 
@@ -339,5 +337,4 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 
 
     m_OptionsToolBar->Realize();
-    SetToolbars();
 }
