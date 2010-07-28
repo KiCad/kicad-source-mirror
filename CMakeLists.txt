@@ -63,7 +63,7 @@ endif(USE_WX_GRAPHICS_CONTEXT)
 if(USE_BOOST_POLYGON_LIBRARY)
     set( USE_BOOST_POLYGON_LIBRARY ON )
     add_definitions(-DUSE_BOOST_POLYGON_LIBRARY)
-endif(USE_WX_GRAPHICS_CONTEXT)
+endif(USE_BOOST_POLYGON_LIBRARY)
 
 # Locations for install targets.
 set(KICAD_BIN bin
