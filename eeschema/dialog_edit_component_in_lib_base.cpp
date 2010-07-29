@@ -107,7 +107,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("Options"), true );
+	m_NoteBook->AddPage( m_PanelBasic, _("Options"), false );
 	m_PanelDoc = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* m_PanelDocBoxSizer;
 	m_PanelDocBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -123,7 +123,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
-	m_staticTextKeywords->SetToolTip( _("Enter keys words that can be used to select this composant\nkeys words cannot have spaces and are separated by a space") );
+	m_staticTextKeywords->SetToolTip( _("Enter keys words that can be used to select this composant.\nKey words cannot have spaces and are separated by a space.") );
 	
 	m_PanelDocBoxSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -153,7 +153,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelDoc->SetSizer( m_PanelDocBoxSizer );
 	m_PanelDoc->Layout();
 	m_PanelDocBoxSizer->Fit( m_PanelDoc );
-	m_NoteBook->AddPage( m_PanelDoc, _("Description"), false );
+	m_NoteBook->AddPage( m_PanelDoc, _("Description"), true );
 	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMainPanelAlias;
 	bSizerMainPanelAlias = new wxBoxSizer( wxHORIZONTAL );

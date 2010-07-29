@@ -96,7 +96,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          _( "Module Properties" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),
                          _( "Print Module" ) );
 
     m_HToolBar->AddSeparator();
@@ -173,7 +173,8 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_MODEDIT_PLACE_ANCHOR, wxEmptyString,
                          wxBitmap( anchor_xpm ),
-                         _( "Place anchor" ), wxITEM_CHECK );
+                         _( "Place the footprint module reference anchor" ),
+                         wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_MODEDIT_DELETE_ITEM_BUTT, wxEmptyString,

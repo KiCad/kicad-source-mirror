@@ -90,7 +90,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_GEN_PRINT, WinEDA_GerberFrame::ToPrinter )
+    EVT_TOOL( wxID_PRINT, WinEDA_GerberFrame::ToPrinter )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                          WinEDA_GerberFrame::Process_Special_Functions )

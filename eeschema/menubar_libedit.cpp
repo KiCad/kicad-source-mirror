@@ -76,6 +76,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
                            _( "Quit Library Editor" ) );
+    item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 #endif
 

@@ -1,0 +1,25 @@
+/*
+ * file polygons_defs.h
+ * definitions to use boost::polygon in Kicad
+ */
+
+#ifndef _POLYGONS_DEFS_H_
+#define _POLYGONS_DEFS_H_
+
+#ifdef USE_BOOST_POLYGON_LIBRARY
+
+#include "boost/polygon/polygon.hpp"
+
+// Define some types used here from boost::polygon
+namespace bpl = boost::polygon;         // bpl = boost polygon library
+using namespace bpl::operators;         // +, -, =, ...
+
+typedef int                    coordinate_type;
+
+typedef bpl::polygon_data<int> KPolygon;
+typedef std::vector<KPolygon>  KPolygonSet;
+
+typedef bpl::point_data<int>   KPolyPoint;
+#endif          // USE_BOOST_POLYGON_LIBRARY
+
+#endif          // #ifndef _POLYGONS_DEFS_H_
