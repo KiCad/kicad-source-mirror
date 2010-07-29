@@ -22,29 +22,18 @@
 #include <math.h>
 #include <vector>
 
-#include "boost/polygon/polygon.hpp"
 
 #include "fctsys.h"
+#include "polygons_defs.h"
+
 #include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
 #include "zones.h"
-
 #include "PolyLine.h"
 
-#include "boost/polygon/polygon.hpp"
-
-// Define some types used here from boost::polygon
-namespace bpl = boost::polygon;         // bpl = boost polygon library
-using namespace bpl::operators;         // +, -, =, ...
-using namespace bpl;
-
-typedef int                     coordinate_type;
-typedef bpl::point_data<int>    KPolyPoint;
-typedef bpl::polygon_data<int>  KPolygon;
-typedef std::vector< KPolygon > KPolygonSet;
 
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );

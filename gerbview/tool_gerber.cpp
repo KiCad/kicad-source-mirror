@@ -68,7 +68,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     filesMenu->AppendSeparator();
 
-    filesMenu->Append( ID_GEN_PRINT, _( "P&rint" ), _( "Print gerber" ) );
+    filesMenu->Append( wxID_PRINT, _( "P&rint" ), _( "Print gerber" ) );
     filesMenu->Append( ID_GEN_PLOT, _( "Plot" ),
                        _( "Plotting in various formats" ) );
 
@@ -177,7 +177,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          _( "Undelete" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString,
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString,
                          wxBitmap( print_button ),
                          _( "Print world" ) );
 

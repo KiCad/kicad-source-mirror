@@ -40,7 +40,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pad Geometry:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerGeometry;
-	fgSizerGeometry = new wxFlexGridSizer( 9, 3, 0, 0 );
+	fgSizerGeometry = new wxFlexGridSizer( 12, 3, 0, 0 );
 	fgSizerGeometry->SetFlexibleDirection( wxBOTH );
 	fgSizerGeometry->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -230,7 +230,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	sbClearancesSizer->Add( m_staticText20, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgClearancesGridSizer;
-	fgClearancesGridSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
+	fgClearancesGridSizer = new wxFlexGridSizer( 5, 3, 0, 0 );
 	fgClearancesGridSizer->SetFlexibleDirection( wxBOTH );
 	fgClearancesGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
