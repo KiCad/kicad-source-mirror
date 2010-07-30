@@ -381,8 +381,7 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
             if( DrawLibItem->GetRef( aSheet ).IsEmpty() )
                 DrawLibItem->SetRef( aSheet, wxT( "DefRef?" ) );
 
-            strncpy( new_object.m_Reference,
-                     CONV_TO_UTF8( DrawLibItem->GetRef( aSheet ) ), 32 );
+            new_object.SetRef( DrawLibItem->GetRef( aSheet ) );
 
             new_object.m_NumRef = -1;
 
@@ -409,6 +408,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
     /* update the reference numbers */
     for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
     {
+#if 0
         char*          Text = aComponentsList[ii].m_Reference;
         SCH_COMPONENT* component = aComponentsList[ii].m_RootCmp;
 
@@ -419,8 +419,23 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
 
         component->SetRef( &(aComponentsList[ii].m_SheetPath),
                            CONV_FROM_UTF8( Text ) );
+#else
+
+        wxString        ref = aComponentsList[ii].GetRef();
+        SCH_COMPONENT*  component = aComponentsList[ii].m_RootCmp;
+
+        if( aComponentsList[ii].m_NumRef < 0 )
+            ref += wxChar( '?' );
+        else
+            ref << aComponentsList[ii].m_NumRef;
+
+        aComponentsList[ii].SetRef( ref );
+
+        component->SetRef( &aComponentsList[ii].m_SheetPath, ref );
+#endif
+
         component->m_Multi = aComponentsList[ii].m_Unit;
-        component->SetUnitSelection( &(aComponentsList[ii].m_SheetPath),
+        component->SetUnitSelection( &aComponentsList[ii].m_SheetPath,
                                      aComponentsList[ii].m_Unit );
     }
 }
@@ -437,41 +452,57 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
  */
 void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
 {
-    char* Text;
+    std::string refText;    // construct once outside loop
 
     for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
     {
         aComponentsList[ii].m_NumRef = -1;
-        Text = aComponentsList[ii].m_Reference;
-        int ll = strlen( Text ) - 1;
-        if( Text[ll] == '?' )
+
+        refText = aComponentsList[ii].GetRefStr();
+
+        int ll = refText.length() - 1;
+
+        if( refText[ll] == '?' )
+        {
+            aComponentsList[ii].m_IsNew = true;
+
+            if( !aComponentsList[ii].IsPartsLocked() )
+                aComponentsList[ii].m_Unit = 0x7FFFFFFF;
+
+            refText.erase(ll);  // delete last char
+
+            aComponentsList[ii].SetRefStr( refText );
+        }
+
+        else if( isdigit( refText[ll] ) == 0 )
         {
             aComponentsList[ii].m_IsNew = true;
             if( !aComponentsList[ii].IsPartsLocked() )
                 aComponentsList[ii].m_Unit = 0x7FFFFFFF;
-            Text[ll] = 0;
-            continue;
         }
 
-        if( isdigit( Text[ll] ) == 0 )
+        else
         {
-            aComponentsList[ii].m_IsNew = true;
-            if( !aComponentsList[ii].IsPartsLocked() )
-                aComponentsList[ii].m_Unit = 0x7FFFFFFF;
-            continue;
-        }
-
-        while( ll >= 0 )
-        {
-            if( (Text[ll] <= ' ' ) || isdigit( Text[ll] ) )
-                ll--;
-            else
+            while( ll >= 0 )
             {
-                if( isdigit( Text[ll + 1] ) )
-                    aComponentsList[ii].m_NumRef = atoi( &Text[ll + 1] );
-                Text[ll + 1] = 0;
-                break;
+                if( (refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
+                    ll--;
+                else
+                {
+                    if( isdigit( refText[ll + 1] ) )
+                    {
+                        // nul terminated C string into cp
+                        const char* cp = refText.c_str() + ll + 1;
+
+                        aComponentsList[ii].m_NumRef = atoi( cp );
+                    }
+
+                    refText.erase( ll+1 );  // delete from ll+1 to end
+                    break;
+                }
             }
+
+            aComponentsList[ii].SetRefStr( refText );
         }
     }
 }
@@ -490,7 +521,7 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
      */
     for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
     {
-        if( aComponentsList[ii].m_Reference[0] == '#' )
+        if( aComponentsList[ii].GetRefStr()[0] == '#' )
         {
             aComponentsList[ii].m_IsNew  = true;
             aComponentsList[ii].m_NumRef = 0;
@@ -716,9 +747,9 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
             else
                 Buff = wxT( "?" );
 
-            cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
+            cmpref = ComponentsList[ii].GetRef();
             msg.Printf( _( "item not annotated: %s%s" ),
-                       cmpref.GetData(), Buff.GetData() );
+                       GetChars( cmpref ), GetChars( Buff ) );
 
             if( ( ComponentsList[ii].m_Unit > 0 )
                 && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
@@ -748,9 +779,10 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
             else
                 Buff = wxT( "?" );
 
-            cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
-            msg.Printf( _( "Error item %s%s" ), cmpref.GetData(),
-                       Buff.GetData() );
+            cmpref = ComponentsList[ii].GetRef();
+
+            msg.Printf( _( "Error item %s%s" ), GetChars( cmpref ),
+                       GetChars( Buff ) );
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
                          ComponentsList[ii].m_Unit,
@@ -789,9 +821,10 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
             else
                 Buff = wxT( "?" );
 
-            cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
+            cmpref = ComponentsList[ii].GetRef();
+
             msg.Printf( _( "Multiple item %s%s" ),
-                       cmpref.GetData(), Buff.GetData() );
+                       GetChars( cmpref ), GetChars( Buff ) );
 
             if( ( ComponentsList[ii].m_Unit > 0 )
                 && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
@@ -819,9 +852,9 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
             else
                 Buff = wxT( "?" );
 
-            cmpref = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
+            cmpref = ComponentsList[ii].GetRef();
             msg.Printf( _( "Multiple item %s%s" ),
-                       cmpref.GetData(), Buff.GetData() );
+                       GetChars( cmpref ), GetChars( Buff ) );
 
             if( ( ComponentsList[ii].m_Unit > 0 )
                 && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
@@ -846,16 +879,17 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
         int next = ii + 1;
         if( ComponentsList[ii].CompareValue( ComponentsList[next] ) != 0 )
         {
-            wxString nextcmpref;
-            cmpref     = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
-            nextcmpref = CONV_FROM_UTF8( ComponentsList[next].m_Reference );
+            wxString nextcmpref = ComponentsList[next].GetRef();
+
+            cmpref = ComponentsList[ii].GetRef();
+
 #if defined(KICAD_GOST)
             msg.Printf( _( "Diff values for %s%d.%c (%s) and %s%d.%c (%s)" ),
                         cmpref.GetData(),
                         ComponentsList[ii].m_NumRef,
                         ComponentsList[ii].m_Unit + '1' - 1,
-                        ComponentsList[ii].m_Value->GetData(),
-                        nextcmpref.GetData(),
+                        GetChars( *ComponentsList[ii].m_Value ),
+                        GetChars( nextcmpref ),
                         ComponentsList[next].m_NumRef,
                         ComponentsList[next].m_Unit + '1' - 1,
                         ComponentsList[next].m_Value->GetData() );
@@ -864,11 +898,11 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
                         cmpref.GetData(),
                         ComponentsList[ii].m_NumRef,
                         ComponentsList[ii].m_Unit + 'A' - 1,
-                        ComponentsList[ii].m_Value->GetData(),
-                        nextcmpref.GetData(),
+                        GetChars( *ComponentsList[ii].m_Value ),
+                        GetChars( nextcmpref ),
                         ComponentsList[next].m_NumRef,
                         ComponentsList[next].m_Unit + 'A' - 1,
-                        ComponentsList[next].m_Value->GetData() );
+                        GetChars( *ComponentsList[next].m_Value ) );
 #endif
 
             if( aMessageList )
@@ -897,15 +931,19 @@ int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
         /* Same time stamp found.  */
         wxString nextcmpref;
         wxString full_path;
+
         full_path.Printf( wxT( "%s%8.8X" ),
-                          ComponentsList[ii].m_SheetPath.Path().GetData(),
+                          GetChars( ComponentsList[ii].m_SheetPath.Path() ),
                           ComponentsList[ii].m_TimeStamp );
-        cmpref     = CONV_FROM_UTF8( ComponentsList[ii].m_Reference );
-        nextcmpref = CONV_FROM_UTF8( ComponentsList[ii + 1].m_Reference );
+
+        cmpref     = ComponentsList[ii].GetRef();
+        nextcmpref = ComponentsList[ii + 1].GetRef();
+
         msg.Printf( _( "duplicate time stamp (%s) for %s%d and %s%d" ),
-                    full_path.GetData(),
-                    cmpref.GetData(), ComponentsList[ii].m_NumRef,
-                    nextcmpref.GetData(), ComponentsList[ii + 1].m_NumRef );
+                    GetChars( full_path ),
+                    GetChars( cmpref ), ComponentsList[ii].m_NumRef,
+                    GetChars( nextcmpref ), ComponentsList[ii + 1].m_NumRef );
+
         if( aMessageList )
         {
             aMessageList->Add( msg + wxT( "\n" ));

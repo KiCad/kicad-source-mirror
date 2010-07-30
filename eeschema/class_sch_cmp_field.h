@@ -47,11 +47,20 @@ public:
         return wxT( "SCH_FIELD" );
     }
 
-
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     EDA_Rect GetBoundaryBox() const;
-    bool     IsVoid();
+
+    /**
+     * Function IsVoid
+     * returns true if the field is either empty or holds "~".
+     */
+    bool     IsVoid()
+    {
+        size_t len = m_Text.Len();
+        return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
+    }
+
     void     SwapData( SCH_FIELD* copyitem );
 
     /** Function ImportValues

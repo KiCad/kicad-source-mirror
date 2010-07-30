@@ -32,7 +32,10 @@
  *        the return value for an error.
  */
 
-/* object used in build BOM to handle the list of labels in schematic
+
+/**
+ * Class LABEL_OBJECT
+ * is used in build BOM to handle the list of labels in schematic
  * because in a complex hierarchy, a label is used more than once,
  * and had more than one sheet path, so we must create a flat list of labels
  */
@@ -53,14 +56,9 @@ public: LABEL_OBJECT()
 };
 
 
-// Filename extension for BOM list
-static const wxString BomFileExtension( wxT( "lst" ) );
-static const wxString CsvFileExtension( wxT( "csv" ) );
-#define BomFileWildcard _( "Bill of Materials file (*.lst)|*.lst" )
-
-
 static void BuildComponentsListFromSchematic(
     std::vector <OBJ_CMP_TO_LIST>& aList );
+
 static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
 static bool SortComponentsByReference(  const OBJ_CMP_TO_LIST& obj1,
                                         const OBJ_CMP_TO_LIST& obj2 );
@@ -73,14 +71,14 @@ static bool SortLabelsBySheet( const LABEL_OBJECT& obj1,
 static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList );
 static int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
 
-int         RefDesStringCompare( const char* obj1, const char* obj2 );
+int         RefDesStringCompare( const wxString& lhs, const wxString& rhs );
 int         SplitString( wxString  strToSplit,
                          wxString* strBeginning,
                          wxString* strDigits,
                          wxString* strEnd );
 
 
-/* separator used in bom export to spreadsheet */
+// separator used in bom export to spreadsheet
 static char s_ExportSeparatorSymbol;
 
 
@@ -89,27 +87,53 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
                                          char aExportSeparatorSymbol,
                                          bool aRunBrowser )
 {
-    wxFileName fn;
+    wxString    wildcard;
+
+    static wxFileName fn;
+
+    wxFileName  current = g_RootSheet->m_AssociatedScreen->m_FileName;
 
     s_ExportSeparatorSymbol = aExportSeparatorSymbol;
 
-    m_ListFileName = g_RootSheet->m_AssociatedScreen->m_FileName;
-    fn = m_ListFileName;
-    if( aTypeFile == 2 )
-        fn.SetExt( CsvFileExtension );
-    else
-        fn.SetExt( BomFileExtension );
+    if( !fn.HasName() || fn.GetName()==NAMELESS_PROJECT )
+    {
+        fn.SetName( current.GetName() );
+    }
+    // else use a previous run's name, because fn was set before and user
+    // is probably just iteratively refining the BOM.
 
-    wxFileDialog dlg( this, _( "Bill of Materials" ), fn.GetPath(),
-                      fn.GetFullName(), BomFileWildcard,
+    if( fn.GetPath().IsEmpty() )
+    {
+        fn.SetPath( current.GetPath() );
+    }
+    // else use a previous run's path, because fn was set before and user
+    // is probably just iteratively refining the BOM.
+
+    wxString bomDesc = _( "Bill of Materials" );    // translate once, use twice.
+
+    if( aTypeFile == 0 )
+    {
+        fn.SetExt( wxT( "lst" ) );
+        wildcard = bomDesc + wxT( " (*.lst)|*.lst" );
+    }
+    else
+    {
+        fn.SetExt( wxT( "csv" ) );
+        wildcard = bomDesc + wxT( " (*.csv)|*.csv" );
+    }
+
+    wxFileDialog dlg( this, bomDesc, fn.GetPath(),
+                      fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    fn = dlg.GetPath();        // remember path+filename+ext for subsequent runs.
+
     m_ListFileName = dlg.GetPath();
 
-    /* Close dialog, then show the list (if so requested) */
+    // Close dialog, then show the list (if so requested)
 
     switch( aTypeFile )
     {
@@ -148,6 +172,7 @@ bool DIALOG_BUILD_BOM::IsFieldChecked(int aFieldId)
 {
     if( m_AddAllFields->IsChecked() && (aFieldId>= FIELD1) )
         return true;
+
     switch ( aFieldId )
     {
         case FIELD1:
@@ -173,11 +198,7 @@ bool DIALOG_BUILD_BOM::IsFieldChecked(int aFieldId)
     return false;
 }
 
-/*
- * Print a list of components, in a form which can be imported by a spreadsheet
- * form is:
- * cmp value; number of components; <footprint>; <field1>; ...; list of references having the same value
- */
+
 void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents )
 {
     FILE*    f;
@@ -192,16 +213,17 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
     }
 
     std::vector <OBJ_CMP_TO_LIST> cmplist;
+
     BuildComponentsListFromSchematic( cmplist );
 
-    /*  sort component list by ref and remove sub components*/
+    // sort component list by ref and remove sub components
     if( !aIncludeSubComponents )
     {
         sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
         DeleteSubCmp( cmplist );
     }
 
-    /*  sort component list by value*/
+    // sort component list by value
     sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
     PrintComponentsListByPart( f, cmplist,aIncludeSubComponents );
 
@@ -231,13 +253,13 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
     std::vector <OBJ_CMP_TO_LIST> cmplist;
     BuildComponentsListFromSchematic( cmplist );
 
-    /*  sort component list */
+    // sort component list
     sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
 
     if( !aIncludeSubComponents )
         DeleteSubCmp( cmplist );
 
-    /* create the file */
+    // create the file
     PrintComponentsListByRef( f, cmplist, TRUE, aIncludeSubComponents );
 
     fclose( f );
@@ -270,13 +292,15 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
     itemCount = cmplist.size();
     if( itemCount )
     {
-        /* creates the list file */
+        // creates the list file
         DateAndTime( Line );
+
         wxString Title = wxGetApp().GetAppName() + wxT( " " ) +
                          GetBuildVersion();
+
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
-        /*  sort component list */
+        // sort component list
         sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
 
         if( !aIncludeSubComponents )
@@ -296,16 +320,19 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
     /* Create list of global labels and pins sheets */
     /*************************************************/
     std::vector <LABEL_OBJECT> listOfLabels;
+
     GenListeGLabels( listOfLabels );
     if( ( itemCount = listOfLabels.size() ) > 0 )
     {
         if( m_GenListLabelsbySheet->GetValue() )
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
+
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets \
-( order = Sheet Number ) count = %d\n"                                                                              ),
+                            "\n#Global, Hierarchical Labels and PinSheets "
+                            "( order = Sheet Number ) count = %d\n" ),
                         itemCount );
+
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
@@ -315,9 +342,10 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
 
             msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( \
-order = Alphab. ) count = %d\n\n"                                                                                ),
+                            "\n#Global, Hierarchical Labels and PinSheets ( "
+                            "order = Alphab. ) count = %d\n\n" ),
                         itemCount );
+
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
@@ -329,47 +357,43 @@ order = Alphab. ) count = %d\n\n"                                               
 }
 
 
-/* Creates the list of components found in the whole schematic
+/**
+ * Function BuildComponentsListFromSchematic
+ * creates the list of components found in the whole schematic.
  *
- * if List == null, just returns the count. if not, fills the list.
- * goes through the sheets, not the screens, so that we account for
+ * Goes through the 'sheets', not the screens, so that we account for
  * multiple instances of a given screen.
- * Also Initialize m_Father as pointer of the SCH_SCREEN parent
  */
 void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 {
-    EDA_BaseStruct* SchItem;
-    SCH_COMPONENT*  DrawLibItem;
-    SCH_SHEET_PATH* sheetPath;
+    // Build the sheet list (which is not screen a screen list)
+    SCH_SHEET_LIST  sheetList;  // uses a global
 
-    /* Build the sheet (not screen) list */
-    SCH_SHEET_LIST  SheetList;
-
-    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( SchItem = sheetPath->LastDrawList();  SchItem;  SchItem = SchItem->Next() )
+        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            if( SchItem->Type() != TYPE_SCH_COMPONENT )
+            if( schItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
 
-            DrawLibItem = (SCH_COMPONENT*) SchItem;
-            DrawLibItem->SetParent( sheetPath->LastScreen() );
+            SCH_COMPONENT* comp = (SCH_COMPONENT*) schItem;
+
+            comp->SetParent( path->LastScreen() );
+
             OBJ_CMP_TO_LIST item;
-            item.m_RootCmp   = DrawLibItem;
-            item.m_SheetPath = *sheetPath;
-            item.m_Unit = DrawLibItem->GetUnitSelection( sheetPath );
 
-            strncpy( item.m_Reference,
-                     CONV_TO_UTF8( DrawLibItem->GetRef( sheetPath ) ),
-                     sizeof( item.m_Reference ) );
+            item.m_RootCmp   = comp;
+            item.m_SheetPath = *path;
+            item.m_Unit      = comp->GetUnitSelection( path );
 
-            // Ensure always null terminate m_Ref.
-            item.m_Reference[sizeof( item.m_Reference ) - 1 ] = 0;
-            // Skip pseudo components:
-            // pseudo components have a reference starting by #. Mainly power symbols
-            if( item.m_Reference[0] == '#' )
+            item.SetRef( comp->GetRef( path ) );
+
+            // skip pseudo components, which have a reference starting
+            // with #, mainly power symbols
+            if( item.GetRefStr()[0] == '#' )
                 continue;
-            // Real component found, push it in list
+
+            // Real component found, keep it
             aList.push_back( item );
         }
     }
@@ -380,40 +404,37 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
  */
 static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
 {
-    SCH_ITEM*       DrawList;
-    SCH_SHEET_PATH* sheetPath;
+    // Build the sheet list
+    SCH_SHEET_LIST  sheetList;
 
-    /* Build the sheet list */
-    SCH_SHEET_LIST  SheetList;
+    LABEL_OBJECT    lable;
 
-    LABEL_OBJECT    labet_object;
-
-    for( sheetPath = SheetList.GetFirst();  sheetPath != NULL;  sheetPath = SheetList.GetNext() )
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        DrawList = (SCH_ITEM*) sheetPath->LastDrawList();
+        SCH_ITEM* schItem = (SCH_ITEM*) path->LastDrawList();
 
-        while( DrawList )
+        while( schItem )
         {
-            switch( DrawList->Type() )
+            switch( schItem->Type() )
             {
             case TYPE_SCH_HIERLABEL:
             case TYPE_SCH_GLOBALLABEL:
-                labet_object.m_LabelType = DrawList->Type();
-                labet_object.m_SheetPath = *sheetPath;
-                labet_object.m_Label     = DrawList;
-                aList.push_back( labet_object );
+                lable.m_LabelType = schItem->Type();
+                lable.m_SheetPath = *path;
+                lable.m_Label     = schItem;
+                aList.push_back( lable );
                 break;
 
             case DRAW_SHEET_STRUCT_TYPE:
             {
-                SCH_SHEET* sheet = (SCH_SHEET*) DrawList;
+                SCH_SHEET* sheet = (SCH_SHEET*) schItem;
 
                 BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, sheet->GetSheetPins() )
                 {
-                    labet_object.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
-                    labet_object.m_SheetPath = *sheetPath;
-                    labet_object.m_Label     = &sheetLabel;
-                    aList.push_back( labet_object );
+                    lable.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                    lable.m_SheetPath = *path;
+                    lable.m_Label     = &sheetLabel;
+                    aList.push_back( lable );
                 }
             }
             break;
@@ -422,7 +443,7 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
                 break;
             }
 
-            DrawList = DrawList->Next();
+            schItem = schItem->Next();
         }
     }
 }
@@ -446,7 +467,7 @@ bool SortComponentsByValue( const OBJ_CMP_TO_LIST& obj1,
 
     if( ii == 0 )
     {
-        ii = RefDesStringCompare( obj1.m_Reference, obj2.m_Reference );
+        ii = RefDesStringCompare( obj1.GetRef(), obj2.GetRef() );
     }
 
     if( ii == 0 )
@@ -470,7 +491,7 @@ bool SortComponentsByReference( const OBJ_CMP_TO_LIST& obj1,
     int             ii;
     const wxString* Text1, * Text2;
 
-    ii = RefDesStringCompare( obj1.m_Reference, obj2.m_Reference );
+    ii = RefDesStringCompare( obj1.GetRef(), obj2.GetRef() );
 
     if( ii == 0 )
     {
@@ -528,7 +549,6 @@ bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     int      ii;
     wxString Text1, Text2;
 
-
     ii = obj1.m_SheetPath.Cmp( obj2.m_SheetPath );
 
     if( ii == 0 )
@@ -567,7 +587,7 @@ static void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
         if( libItem == NULL )
             continue;
 
-        currName = CONV_FROM_UTF8( aList[ii].m_Reference );
+        currName = aList[ii].GetRef();
 
         if( !oldName.IsEmpty() )
         {
@@ -606,6 +626,7 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
     {
         if( ! IsFieldChecked( ii ) )
             continue;
+
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
@@ -624,10 +645,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     bool                           CompactForm,
     bool                           aIncludeSubComponents )
 {
-    EDA_BaseStruct* DrawList;
-    SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  Entry;
-    char            CmpName[80];
     wxString        msg;
 
     if( CompactForm )
@@ -654,6 +671,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
                 continue;
 
             msg = _( "Field" );
+
             fprintf( f, "%c%s%d", s_ExportSeparatorSymbol, CONV_TO_UTF8(
                          msg ), ii - FIELD1 + 1 );
         }
@@ -666,80 +684,91 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         if( aIncludeSubComponents )
             msg << _( " (with SubCmp)" );
+
         fprintf( f, "%s\n", CONV_TO_UTF8( msg ) );
     }
+
+    std::string     CmpName;
+    wxString        subRef;
 
     // Print list of items
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        DrawList = aList[ii].m_RootCmp;
-
-        if( DrawList == NULL )
-            continue;
-        if( DrawList->Type() != TYPE_SCH_COMPONENT )
+        EDA_BaseStruct* item = aList[ii].m_RootCmp;
+        if( item == NULL )
             continue;
 
-        DrawLibItem = (SCH_COMPONENT*) DrawList;
+        if( item->Type() != TYPE_SCH_COMPONENT )
+            continue;
+
+        SCH_COMPONENT*  comp = (SCH_COMPONENT*) item;
 
         bool isMulti = false;
-        wxString subRef;
-        Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
-        if( Entry )
-            isMulti = Entry->IsMulti();
+
+        LIB_COMPONENT*  entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        if( entry )
+            isMulti = entry->IsMulti();
 
         if( isMulti && aIncludeSubComponents )
             subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].m_Unit );
         else
             subRef.Empty();
 
-        sprintf( CmpName, "%s", aList[ii].m_Reference );
+        CmpName = aList[ii].GetRefStr();
+
         if( !CompactForm )
-            sprintf( CmpName + strlen( CmpName ), "%s", CONV_TO_UTF8(subRef) );
+            CmpName += CONV_TO_UTF8(subRef);
 
         if( CompactForm )
 #if defined(KICAD_GOST)
-            fprintf( f, "%s%c%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField(
+            fprintf( f, "%s%c%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( comp->GetField(
                                       VALUE )->m_Text ), s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+                    CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
-            fprintf( f, "%s%c%s", CmpName, s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+            fprintf( f, "%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
+                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
 
         else
 #if defined(KICAD_GOST)
-            fprintf( f, "| %-10s %-12s %-20s", CmpName,
-                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
-                    CONV_TO_UTF8( DrawLibItem->GetField( DATASHEET )->m_Text ) );
+            fprintf( f, "| %-10s %-12s %-20s", CmpName.c_str(),
+                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ),
+                    CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
-            fprintf( f, "| %-10s %-12s", CmpName,
-                    CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ) );
+            fprintf( f, "| %-10s %-12s", CmpName.c_str(),
+                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
+
         if( aIncludeSubComponents )
         {
             msg = aList[ii].m_SheetPath.PathHumanReadable();
+
             if( CompactForm )
             {
                 fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                         CONV_TO_UTF8( msg ) );
+
                 msg = m_Parent->GetXYSheetReferences(
-                    (BASE_SCREEN*) DrawLibItem->GetParent(),
-                    DrawLibItem->m_Pos );
+                    (BASE_SCREEN*) comp->GetParent(),
+                    comp->m_Pos );
+
                 fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
                         CONV_TO_UTF8( msg ) );
             }
             else
             {
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+
                 msg = m_Parent->GetXYSheetReferences(
-                    (BASE_SCREEN*) DrawLibItem->GetParent(),
-                    DrawLibItem->m_Pos );
+                    (BASE_SCREEN*) comp->GetParent(),
+                    comp->m_Pos );
+
                 fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
             }
         }
 
-        PrintFieldData( f, DrawLibItem, CompactForm );
+        PrintFieldData( f, comp, CompactForm );
 
         fprintf( f, "\n" );
     }
@@ -771,18 +800,20 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     bool aIncludeSubComponents)
 {
     int             qty = 0;
-    wxString        RefName;
+    wxString        refName;
     wxString        fullRefName;        // reference + part Id (for multiple parts per package
-    wxString        ValName;
-    wxString        RNames;
+    wxString        valName;
+    wxString        refNames;
     wxString        lastRef;
     wxString        unitId;
-    SCH_COMPONENT*  currCmp, *nextCmp;
-    SCH_COMPONENT   dummyCmp;        // A dummy component, to store fields
+    SCH_COMPONENT*  currCmp;
+    SCH_COMPONENT*  nextCmp;
+    SCH_COMPONENT   dummyCmp;           // A dummy component, to store fields
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
         currCmp = (SCH_COMPONENT*) aList[ii].m_RootCmp;
+
         if( ii < aList.size() -1 )
             nextCmp = aList[ii+1].m_RootCmp;
         else
@@ -791,48 +822,53 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         // Store fields. Store non empty fields only.
         for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
         {
-            //Ensure fields exists in dummy component
+            // Ensure fields exists in dummy component
             if( dummyCmp.GetFieldCount() <= jj )
                 dummyCmp.AddField( *currCmp->GetField( jj ) );
+
             // store useful data
             if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
                 dummyCmp.GetField( jj )->m_Text = currCmp->GetField( jj )->m_Text;
         }
 
-        RefName = CONV_FROM_UTF8( aList[ii].m_Reference );
-        ValName = currCmp->GetField( VALUE )->m_Text;
+        refName = aList[ii].GetRef();
+        valName = currCmp->GetField( VALUE )->m_Text;
 
         int multi = 0;
         if( aIncludeSubComponents )
         {
-            LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( currCmp->m_ChipName );
-            if( Entry )
-                multi = Entry->GetPartCount();
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( currCmp->m_ChipName );
+            if( entry )
+                multi = entry->GetPartCount();
             if ( multi <= 1 )
                 multi = 0;
         }
 
         if ( multi && aList[ii].m_Unit > 0 )
-            unitId.Printf(wxT("%c"), 'A' -1 + aList[ii].m_Unit);
-        else unitId.Empty();
-        fullRefName = RefName + unitId;
-
-        if( RNames.IsEmpty() )
-            RNames = fullRefName;
+            unitId.Printf( wxT("%c"), 'A' -1 + aList[ii].m_Unit );
         else
-            RNames << wxT( ", " ) << fullRefName;
+            unitId.Empty();
+
+        fullRefName = refName + unitId;
+
+        if( refNames.IsEmpty() )
+            refNames = fullRefName;
+        else
+            refNames << wxT( ", " ) << fullRefName;
+
         // In multi parts per package, we have the reference more than once
         // but we must count only one package
-        if( lastRef != RefName )
+        if( lastRef != refName )
             qty++;
-        lastRef = RefName;
+
+        lastRef = refName;
 
         // if the next cmoponent has same value the line will be printed after.
-        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( ValName ) == 0 )
+        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0 )
             continue;
 
        // Print line for the current component value:
-        fprintf( f, "%15s%c%3d", CONV_TO_UTF8( ValName ), s_ExportSeparatorSymbol, qty );
+        fprintf( f, "%15s%c%3d", CONV_TO_UTF8( valName ), s_ExportSeparatorSymbol, qty );
 
         if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
@@ -840,17 +876,20 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
 #if defined(KICAD_GOST)
             fprintf( f, "%c%20s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( currCmp->GetField( DATASHEET) ->m_Text ) );
+                    CONV_TO_UTF8( currCmp->GetField( DATASHEET )->m_Text ) );
 #endif
 
-        fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( RNames ) );
+        // wrap the field in quotes, since it has commas in it.
+        fprintf( f, "%c\"%s\"", s_ExportSeparatorSymbol,
+                CONV_TO_UTF8( refNames ) );
 
         // print fields, on demand
         int last_nonempty_field_idx = 0;
+
         for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
             if ( !dummyCmp.GetField( jj )->m_Text.IsEmpty() )
                 last_nonempty_field_idx = jj;
+
         for( int jj = FIELD1; jj <= last_nonempty_field_idx ; jj++ )
         {
             if ( IsFieldChecked( jj ) )
@@ -862,7 +901,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         // Clear strings and values, to prepare next component
         qty = 0;
-        RNames.Empty();
+        refNames.Empty();
+
         for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
             dummyCmp.GetField( jj )->m_Text.Empty();
     }
@@ -876,10 +916,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool                           aIncludeSubComponents )
 {
-    EDA_BaseStruct* DrawList;
+    EDA_BaseStruct* schItem;
     SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  Entry;
-    char            CmpName[80];
+    LIB_COMPONENT*  entry;
+    std::string     CmpName;
     wxString        msg;
 
     msg = _( "\n#Cmp ( order = Value )" );
@@ -887,24 +927,25 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     if( aIncludeSubComponents )
         msg << _( " (with SubCmp)" );
     msg << wxT( "\n" );
+
     fputs( CONV_TO_UTF8( msg ), f );
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        DrawList = aList[ii].m_RootCmp;
+        schItem = aList[ii].m_RootCmp;
 
-        if( DrawList == NULL )
+        if( schItem == NULL )
             continue;
 
-        if( DrawList->Type() != TYPE_SCH_COMPONENT )
+        if( schItem->Type() != TYPE_SCH_COMPONENT )
             continue;
 
-        DrawLibItem = (SCH_COMPONENT*) DrawList;
+        DrawLibItem = (SCH_COMPONENT*) schItem;
 
         bool isMulti = false;
-        Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
-        if( Entry )
-            isMulti = Entry->IsMulti();
+        entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+        if( entry )
+            isMulti = entry->IsMulti();
 
         wxString subRef;
         if( isMulti && aIncludeSubComponents )
@@ -912,11 +953,12 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         else
             subRef.Empty();
 
-        sprintf( CmpName, "%s%s", aList[ii].m_Reference, CONV_TO_UTF8(subRef) );
+        CmpName = aList[ii].GetRefStr();
+        CmpName += CONV_TO_UTF8(subRef);
 
         fprintf( f, "| %-12s %-10s",
                  CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
-                 CmpName );
+                 CmpName.c_str() );
 
         // print the sheet path
         if( aIncludeSubComponents )
@@ -962,9 +1004,9 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
             sheetpath = aList[ii].m_SheetPath.PathHumanReadable();
             msg.Printf(
                 _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                DrawTextItem->m_Text.GetData(),
-                labeltype.GetData(),
-                sheetpath.GetData(),
+                GetChars( DrawTextItem->m_Text ),
+                GetChars( labeltype ),
+                GetChars( sheetpath ),
                 (float) DrawTextItem->m_Pos.x / 1000,
                 (float) DrawTextItem->m_Pos.y / 1000 );
 
@@ -975,18 +1017,23 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
         {
             DrawSheetLabel = (SCH_SHEET_PIN*) aList[ii].m_Label;
             int jj = DrawSheetLabel->m_Shape;
+
             if( jj < 0 )
                 jj = NET_TMAX;
+
             if( jj > NET_TMAX )
                 jj = 4;
+
             wxString labtype = CONV_FROM_UTF8( SheetLabelType[jj] );
+
             msg.Printf(
                 _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                DrawSheetLabel->m_Text.GetData(),
-                labtype.GetData(),
-                aList[ii].m_SheetPath.PathHumanReadable().GetData(),
+                GetChars( DrawSheetLabel->m_Text ),
+                GetChars( labtype ),
+                GetChars( aList[ii].m_SheetPath.PathHumanReadable()),
                 (float) DrawSheetLabel->m_Pos.x / 1000,
                 (float) DrawSheetLabel->m_Pos.y / 1000 );
+
             fputs( CONV_TO_UTF8( msg ), f );
         }
         break;
@@ -1008,35 +1055,27 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
  * return 0 if the strings are equal
  * return 1 if the first string is greater than the second
  */
-int RefDesStringCompare( const char* obj1, const char* obj2 )
+int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
 {
-    /* The strings we are going to compare */
-    wxString strFWord;
-    wxString strSWord;
-
-    /* The different sections of the first string */
+    // The different sections of the first string
     wxString strFWordBeg, strFWordMid, strFWordEnd;
 
-    /* The different sections of the second string */
+    // The different sections of the second string
     wxString strSWordBeg, strSWordMid, strSWordEnd;
 
-    int isEqual = 0;            /* The numerical results of a string compare */
-    int iReturn = 0;            /* The variable that is being returned */
+    int isEqual = 0;            // The numerical results of a string compare
+    int iReturn = 0;            // The variable that is being returned
 
     long lFirstDigit  = 0;      /* The converted middle section of the first
                                  *string */
     long lSecondDigit = 0;      /* The converted middle section of the second
                                  *string */
 
-    /* Since m_Ref is a char * it is ASCII */
-    strFWord = wxString::FromAscii( obj1 );
-    strSWord = wxString::FromAscii( obj2 );
-
-    /* Split the two string into separate parts */
+    // Split the two string into separate parts
     SplitString( strFWord, &strFWordBeg, &strFWordMid, &strFWordEnd );
     SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
 
-    /* Compare the Beginning section of the strings */
+    // Compare the Beginning section of the strings
     isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
     if( isEqual > 0 )
         iReturn = 1;
@@ -1044,17 +1083,19 @@ int RefDesStringCompare( const char* obj1, const char* obj2 )
         iReturn = -1;
     else
     {
-        /* If the first sections are equal compare there digits */
+        // If the first sections are equal compare there digits
         strFWordMid.ToLong( &lFirstDigit );
         strSWordMid.ToLong( &lSecondDigit );
+
         if( lFirstDigit > lSecondDigit )
             iReturn = 1;
         else if( lFirstDigit < lSecondDigit )
             iReturn = -1;
         else
         {
-            /* If the first two sections are equal compare the endings */
+            // If the first two sections are equal compare the endings
             isEqual = strFWordEnd.CmpNoCase( strSWordEnd );
+
             if( isEqual > 0 )
                 iReturn = 1;
             else if( isEqual < 0 )
@@ -1079,16 +1120,16 @@ int SplitString( wxString  strToSplit,
                  wxString* strDigits,
                  wxString* strEnd )
 {
-    /* Clear all the return strings */
+    // Clear all the return strings
     strBeginning->Clear();
     strDigits->Clear();
     strEnd->Clear();
 
-    /* There no need to do anything if the string is empty */
+    // There no need to do anything if the string is empty
     if( strToSplit.length() == 0 )
         return 0;
 
-    /* Starting at the end of the string look for the first digit */
+    // Starting at the end of the string look for the first digit
     int ii;
     for( ii = (strToSplit.length() - 1); ii >= 0; ii-- )
     {
@@ -1096,15 +1137,15 @@ int SplitString( wxString  strToSplit,
             break;
     }
 
-    /* If there were no digits then just set the single string */
+    // If there were no digits then just set the single string
     if( ii < 0 )
         *strBeginning = strToSplit;
     else
     {
-        /* Since there is at least one digit this is the trailing string */
+        // Since there is at least one digit this is the trailing string
         *strEnd = strToSplit.substr( ii + 1 );
 
-        /* Go to the end of the digits */
+        // Go to the end of the digits
         int position = ii + 1;
         for( ; ii >= 0; ii-- )
         {
@@ -1112,7 +1153,7 @@ int SplitString( wxString  strToSplit,
                 break;
         }
 
-        /* If all that was left was digits, then just set the digits string */
+        // If all that was left was digits, then just set the digits string
         if( ii < 0 )
             *strDigits = strToSplit.substr( 0, position );
 
