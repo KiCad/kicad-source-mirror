@@ -134,9 +134,9 @@ check_find_package_result(OPENGL_FOUND "OpenGL")
 
 # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
 if(APPLE)
-    find_package(wxWidgets COMPONENTS gl adv html core net base QUIET)
+    find_package(wxWidgets COMPONENTS gl adv html core net base xml QUIET)
 else(APPLE)
-    find_package(wxWidgets COMPONENTS gl aui adv html core net base QUIET)
+    find_package(wxWidgets COMPONENTS gl aui adv html core net base xml QUIET)
 endif(APPLE)
 check_find_package_result(wxWidgets_FOUND "wxWidgets")
 

@@ -53,18 +53,15 @@
 class SCH_MARKER;
 
 
-/****************************************/
-/* class to handle and access to a sheet */
-/* a 'path' so to speak..               */
-/****************************************/
-
-/*
+/**
+ * Class SCH_SHEET_PATH
+ * handles access to a sheet by way of a path.
+ * <p>
  * The member m_sheets stores the list of sheets from the first (usually
- * g_RootSheet)
- * to a given sheet in last position.
- * The last sheet is usually the sheet we want to select or reach. So Last()
- * return this last sheet
- * Others sheets are the "path" from the first to the last sheet
+ * g_RootSheet) to a given sheet in last position.
+ * The _last_ sheet is usually the sheet we want to select or reach (which is
+ * what the function Last() returns).
+ * Others sheets constitute the "path" from the first to the last sheet.
  */
 class SCH_SHEET_PATH
 {
@@ -77,7 +74,7 @@ public:
 
 public:
     SCH_SHEET_PATH();
-    ~SCH_SHEET_PATH() { };
+    // ~SCH_SHEET_PATH() { };
 
     void Clear()
     {
@@ -137,7 +134,7 @@ public:
      * Pop is used when leaving a sheet after a selection or analyze
      * This is like cd .. in directories navigation
      */
-    SCH_SHEET* Pop();
+    SCH_SHEET*      Pop();
 
     /** Function Path
      * the path uses the time stamps which do not changes even when editing
@@ -215,15 +212,14 @@ public:
 };
 
 
-/*******************************************************/
-/* Class to handle the list of *Sheets* in a hierarchy */
-/*******************************************************/
-
-/* sheets are not unique - can have many sheets with the same
+/**
+ * Class SCH_SHEET_LIST
+ * handles the list of Sheets in a hiearchy.
+ * Sheets are not unique, there can be many sheets with the same
  * filename and the same SCH_SCREEN reference.
- * the schematic (SCH_SCREEN) is shared between these sheets,
+ * The schematic (SCH_SCREEN) is shared between these sheets,
  * and component references are specific to a sheet path.
- * When a sheet is entered, component references and sheet number are updated
+ * When a sheet is entered, component references and sheet number are updated.
  */
 class SCH_SHEET_LIST
 {
@@ -243,9 +239,12 @@ private:
     SCH_SHEET_PATH  m_currList;
 
 public:
-    /* The constructor: build the list of sheets from aSheet.
-     * If aSheet == NULL (default) build the whole list of sheets in hierarchy
-     * So usually call it with no param.
+
+    /**
+     * Constructor
+     * builds the list of sheets from aSheet.
+     * If aSheet == NULL (default) build the whole list of sheets in hierarchy.
+     * So usually call it with no parameter.
      */
     SCH_SHEET_LIST( SCH_SHEET* aSheet = NULL );
 
@@ -256,48 +255,54 @@ public:
         m_List = NULL;
     }
 
-
-    /** Function GetCount()
+    /**
+     * Function GetCount()
      * @return the number of sheets in list:
      * usually the number of sheets found in the whole hierarchy
      */
     int GetCount() { return m_count; }
 
-    /** Function GetFirst
-     *  @return the first item (sheet) in m_List and prepare calls to GetNext()
+    /**
+     * Function GetFirst
+     * @return the first item (sheet) in m_List and prepare calls to GetNext()
      */
     SCH_SHEET_PATH* GetFirst();
 
-    /** Function GetNext
-     *  @return the next item (sheet) in m_List or NULL if no more item in
+    /**
+     * Function GetNext
+     * @return the next item (sheet) in m_List or NULL if no more item in
      * sheet list
      */
     SCH_SHEET_PATH* GetNext();
 
     /**
-     * Get the last sheet in the sheet list.
+     * Function GetLast
+     * returns the last sheet in the sheet list.
      *
      * @return Last sheet in the list or NULL if sheet list is empty.
      */
     SCH_SHEET_PATH* GetLast();
 
     /**
-     * Get the previous sheet in the sheet list.
+     * Function GetPrevious
+     * returns the previous sheet in the sheet list.
      *
      * @return The previous sheet in the sheet list or NULL if already at the
      *         beginning of the list.
      */
     SCH_SHEET_PATH* GetPrevious();
 
-    /** Function GetSheet
-     *  @return the item (sheet) in aIndex position in m_List or NULL if less
+    /**
+     * Function GetSheet
+     * @return the item (sheet) in aIndex position in m_List or NULL if less
      * than index items
      * @param aIndex = index in sheet list to get the sheet
      */
     SCH_SHEET_PATH* GetSheet( int aIndex );
 
     /**
-     * Search the entire schematic for the next schematic object.
+     * Function FindNextItem
+     * searches the entire schematic for the next schematic object.
      *
      * @param aType - The type of schematic item to find.
      * @param aSheetFound - The sheet the item was found in.  NULL if the next item
@@ -310,7 +315,8 @@ public:
                             SCH_ITEM* aLastItem = NULL, bool aWrap = true );
 
     /**
-     * Search the entire schematic for the previous schematic item.
+     * Function FindPreviousItem
+     * searches the entire schematic for the previous schematic item.
      *
      * @param aType - The type of schematic item to find.
      * @param aSheetFound - The sheet the item was found in.  NULL if the previous item
@@ -323,7 +329,8 @@ public:
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
 
     /**
-     * Search the entire schematic for the next item that matches the search criteria.
+     * Function MatchNextItem
+     * searches the entire schematic for the next item that matches the search criteria.
      *
      * @param aSearchData - Criteria to search item against.
      * @param aSheetFound - The sheet the item was found in.  NULL if the next item
@@ -337,12 +344,15 @@ public:
 
 private:
 
-    /** Function BuildSheetList
-     * Build the list of sheets and their sheet path from the aSheet sheet
-     * if aSheet = g_RootSheet, the full sheet path and sheet list is built
-     * @param aSheet = the starting sheet from the built is made
+    /**
+     * Function BuildSheetList
+     * builds the list of sheets and their sheet path from \a aSheet.
+     * If aSheet = g_RootSheet, the full sheet path and sheet list is built
+     *
+     * @param aSheet is the starting sheet from which the list is built,
+     *   or NULL indicating that g_RootSheet should be used.
      */
     void           BuildSheetList( SCH_SHEET* sheet );
 };
 
-#endif /* CLASS_DRAWSHEET_PATH_H */
+#endif // CLASS_DRAWSHEET_PATH_H

@@ -217,18 +217,6 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
 
 
 /**
- * return True if the field is void, i.e.:
- *  contains  "~" or ""
- */
-bool SCH_FIELD::IsVoid()
-{
-    if( m_Text.IsEmpty() || m_Text == wxT( "~" ) )
-        return true;
-    return false;
-}
-
-
-/**
  * Function GetBoundaryBox()
  * @return an EDA_Rect contains the real (user coordinates) boundary box for
  *         a text field,

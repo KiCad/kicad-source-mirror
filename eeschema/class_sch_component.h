@@ -78,7 +78,7 @@ private:
      * multi = part selection in multi parts per package (0 or 1 for one part
      *         per package)
      */
-    wxArrayString m_PathsAndReferences;
+    wxArrayString   m_PathsAndReferences;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 

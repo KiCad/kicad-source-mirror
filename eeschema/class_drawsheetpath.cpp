@@ -477,12 +477,6 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex )
 }
 
 
-/** Function BuildSheetList
- * Build the list of sheets and their sheet path from the aSheet sheet
- * if aSheet = g_RootSheet, the full sheet path list (and full sheet list) is
- * built
- * @param aSheet = the starting sheet to  build list
- */
 void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 {
     if( m_List == NULL )

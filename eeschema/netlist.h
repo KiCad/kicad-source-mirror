@@ -45,6 +45,11 @@ enum  TypeNetForm {
  */
 class OBJ_CMP_TO_LIST
 {
+private:
+    /// Component reference prefix, without number (for IC1, this is IC) )
+    std::string    m_Ref;               // it's private, use the accessors please
+
+
 public:
     SCH_COMPONENT* m_RootCmp;           // the component in schematic
     LIB_COMPONENT* m_Entry;             // the source component in library
@@ -57,8 +62,6 @@ public:
                                          * components */
     wxString*      m_Value;             /* Component value (same for all
                                          * instances) */
-    char           m_Reference[32];     /* Component reference prefix, without
-                                         * number (for IC1, this is IC) ) */
     int            m_NumRef;            /* Reference number (for IC1, this is
                                          * 1) ) depending on sheet path*/
     int            m_Flag;              /* flag for computations */
@@ -73,9 +76,30 @@ public:
         m_TimeStamp    = 0;
         m_IsNew        = false;
         m_Value        = NULL;
-        m_Reference[0] = 0;
         m_NumRef       = 0;
         m_Flag         = 0;
+    }
+
+    /*  Some accessors which hide the strategy of how the reference is stored,
+        thereby making it easy to change that strategy.
+    */
+
+
+    void SetRef( const wxString& aReference )
+    {
+        m_Ref =  CONV_TO_UTF8( aReference );
+    }
+    wxString GetRef() const
+    {
+        return CONV_FROM_UTF8( m_Ref.c_str() );
+    }
+    void SetRefStr( const std::string& aReference )
+    {
+        m_Ref = aReference;
+    }
+    const char* GetRefStr() const
+    {
+        return m_Ref.c_str();
     }
 
 
@@ -87,7 +111,7 @@ public:
 
     int CompareRef( const OBJ_CMP_TO_LIST& item ) const
     {
-        return strnicmp( m_Reference, item.m_Reference, 32 );
+        return m_Ref.compare( item.m_Ref );
     }
 
 

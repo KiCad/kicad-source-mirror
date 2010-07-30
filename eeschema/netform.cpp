@@ -3,6 +3,9 @@
 /*****************************/
 
 #include "fctsys.h"
+
+#include <wx/xml/xml.h>
+
 #include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
@@ -25,37 +28,77 @@
  *        returns a value less than 0 when it does.
  */
 
-static void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame,
-                                   const wxString&        FullFileName );
-static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
+static bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
+
+static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool with_pcbnew );
+
 static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
 static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+
 static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool use_netnames );
 
-static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+static bool WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+
 static void AddPinToComponentPinList( SCH_COMPONENT*  Component,
                                       SCH_SHEET_PATH* sheet,
                                       LIB_PIN*        PinEntry );
+
 static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component,
-                                          LIB_COMPONENT*  Entry,
+                                          LIB_COMPONENT*  aEntry,
                                           SCH_SHEET_PATH* Sheet_in );
+
 static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 );
 static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
-
-static void ClearUsedFlags( void );
 
 
 static NETLIST_OBJECT_LIST s_SortedComponentPinList;
 
-// list of references already found for multi part per packages components
-// (used to avoid to used more than one time a component)
-static wxArrayString s_ReferencesAlreadyFound;
+
+#include <set>
+
+/**
+ * Class UNIQUE_STRINGS
+ * will keep track of unique wxStrings and is useful in telling if a string
+ * has been seen before.
+ */
+class UNIQUE_STRINGS
+{
+private:
+    std::set<wxString>      m_set;    ///< set of wxStrings already found
+
+public:
+    /**
+     * Function Clear
+     * erases the record.
+     */
+    void Clear()  {  m_set.clear();  }
+
+    /**
+     * Function Lookup
+     * returns true if \a aString already exists in the set, otherwise returns
+     * false and adds \a aString to the set for next time.
+     */
+    bool Lookup( const wxString& aString );
+};
+
+bool UNIQUE_STRINGS::Lookup( const wxString& aString )
+{
+    bool ret = ( m_set.find( aString ) != m_set.end() );
+    if( !ret )
+        m_set.insert( aString );
+
+    return ret;
+}
+
+/// Used for multi part per package components, avoids using a component more than once.
+static UNIQUE_STRINGS s_ReferencesAlreadyFound;
 
 
-/** function  WriteNetListFile
- * Create the netlist file. Netlist info must be existing
+/**
+ * Function  WriteNetListFile
+ * creates the netlist file. Netlist info must be existing
  * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
  * @param aFullFileName = full netlist file name
  * @param aUse_netnames = bool. if true, use net names from labels in schematic
@@ -66,7 +109,8 @@ static wxArrayString s_ReferencesAlreadyFound;
 bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
                    bool aUse_netnames )
 {
-    FILE* f = NULL;
+    bool    ret = true;
+    FILE*   f = NULL;
 
     if( aFormat < NET_TYPE_CUSTOM1 )
     {
@@ -83,12 +127,12 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        WriteNetListPCBNEW( this, f, TRUE );
+        ret = WriteNetListPCBNEW( this, f, TRUE );
         fclose( f );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        WriteNetListPCBNEW( this, f, FALSE );
+        ret = WriteNetListPCBNEW( this, f, FALSE );
         fclose( f );
         break;
 
@@ -103,11 +147,39 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
         break;
 
     default:
-        Write_GENERIC_NetList( this, aFullFileName );
+        {
+            wxFileName  tmpFile = aFullFileName;
+            tmpFile.SetExt( wxT( "tmp" ) );
+
+            ret = Write_GENERIC_NetList( this, tmpFile.GetFullPath() );
+            if( !ret )
+                break;
+
+            // Call the external module (plug in )
+            if( g_NetListerCommandLine.IsEmpty() )
+                break;
+
+            wxString commandLine;
+
+            if( wxIsAbsolutePath( g_NetListerCommandLine ) )
+                commandLine = g_NetListerCommandLine;
+            else
+                commandLine = FindKicadFile( g_NetListerCommandLine );
+
+            // this is the input file to the plugin
+            commandLine += wxT( " " ) + tmpFile.GetFullPath();
+
+            // this is the output file to the plugin
+            commandLine += wxT( " " ) + aFullFileName;
+
+            ProcessExecute( commandLine, wxEXEC_SYNC );
+
+            // ::wxRemoveFile( tmpFile.GetFullPath() );
+        }
         break;
     }
 
-    return true;
+    return ret;
 }
 
 
@@ -118,87 +190,70 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
  *  considered)
  *  Must be deallocated by the user
  */
-static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* DrawList,
-                                                        SCH_SHEET_PATH* sheet )
+static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
+                                                        SCH_SHEET_PATH* path )
 {
-    SCH_COMPONENT* Component = NULL;
-    LIB_COMPONENT* Entry;
-    LIB_PIN*       Pin;
-
     s_SortedComponentPinList.clear();
-    for( ; DrawList != NULL; DrawList = DrawList->Next() )
+
+    // continue searching from the middle of a linked list
+    for(  ; item;  item = item->Next() )
     {
-        if( DrawList->Type() != TYPE_SCH_COMPONENT )
-            continue;
-        Component = (SCH_COMPONENT*) DrawList;
-
-        /* Power symbol and other component which have the reference starting
-         * by "#" are not included in netlist (pseudo or virtual components) */
-        wxString str = Component->GetRef( sheet );
-        if( str[0] == '#' )  // ignore it
+        if( item->Type() != TYPE_SCH_COMPONENT )
             continue;
 
-        //if( Component->m_FlagControlMulti == 1 )
+        // found next component
+        SCH_COMPONENT* comp = (SCH_COMPONENT*) item;
+
+        // Power symbols and other components which have the reference starting
+        // with "#" are not included in netlist (pseudo or virtual components)
+        wxString ref = comp->GetRef( path );
+        if( ref[0] == wxChar( '#' ) )  // ignore it
+            continue;
+
+        // if( Component->m_FlagControlMulti == 1 )
         //    continue;                                      /* yes */
         // removed because with multiple instances of one schematic
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        Entry = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
-
-        if( Entry  == NULL )
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        if( !entry )
             continue;
 
         // Multi parts per package: test if already visited:
-        if( Entry->GetPartCount() > 1 )
+        if( entry->GetPartCount() > 1 )
         {
-            bool found = false;
-            for( unsigned jj = 0;
-                 jj < s_ReferencesAlreadyFound.GetCount();
-                 jj++ )
-            {
-                if( str == s_ReferencesAlreadyFound[jj] )  // Already visited
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if( found )
+            if( s_ReferencesAlreadyFound.Lookup( ref ) )
                 continue;
-            else
-            {
-                s_ReferencesAlreadyFound.Add( str );  // Mark as visited
-            }
         }
 
-        if( Entry->GetPartCount() <= 1 )   // One part per package
+        if( entry->GetPartCount() <= 1 )   // One part per package
         {
             LIB_PIN_LIST pins;
 
-            Entry->GetPins( pins, Component->GetUnitSelection( sheet ), Component->m_Convert );
+            entry->GetPins( pins, comp->GetUnitSelection( path ), comp->m_Convert );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
-                Pin = pins[i];
+                LIB_PIN* pin = pins[i];
 
-                wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                AddPinToComponentPinList( Component, sheet, Pin );
+                AddPinToComponentPinList( comp, path, pin );
             }
         }
-        else    // Multiple parts per package: Collect all parts ans pins for
+        else    // Multiple parts per package: Collect all parts and pins for
                 // this reference
-            FindAllsInstancesOfComponent( Component, Entry, sheet );
+            FindAllsInstancesOfComponent( comp, entry, path );
 
-        /* Sort Pins in s_SortedComponentPinList by pin number */
+        // Sort pins in s_SortedComponentPinList by pin number
         sort( s_SortedComponentPinList.begin(),
               s_SortedComponentPinList.end(), SortPinsByNum );
 
-        /* Remove duplicate Pins in s_SortedComponentPinList */
+        // Remove duplicate Pins in s_SortedComponentPinList
         EraseDuplicatePins( s_SortedComponentPinList );
 
-        return Component;
+        return comp;
     }
 
     return NULL;
@@ -247,115 +302,205 @@ static wxString ReturnPinNetName( NETLIST_OBJECT* Pin, const wxString& DefaultFo
 }
 
 
+static wxXmlNode* Node( const wxString& name, const wxString& content=wxEmptyString )
+{
+    wxXmlNode* n = new wxXmlNode( 0, wxXML_ELEMENT_NODE, name );
+
+    if( content.Len() > 0 )     // excludes wxEmptyString
+        n->AddChild( new wxXmlNode( 0, wxXML_TEXT_NODE, wxEmptyString, content ) );
+
+    return n;
+}
+
+
 /* Create a generic netlist, and call an external netlister
  *  to change the netlist syntax and create the file
  */
-void Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& FullFileName )
+bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
-    wxString        Line, FootprintName;
-    SCH_SHEET_PATH* sheet;
-    EDA_BaseStruct* SchItem;
-    SCH_COMPONENT*  Component;
-    wxString        netname;
-    FILE*           tmpfile;
-    wxFileName      fn = FullFileName;
+#if 1
+    // output the XML format netlist.
+    wxXmlDocument   xdoc;
+                                // tree markers or walkers
+    wxXmlNode*      xroot;      // root node
+    wxXmlNode*      xcomps;     // start of components
 
-    fn.SetExt( wxT( "tmp" ) );
+    wxString        timeStamp;
 
-    if( ( tmpfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
+    // some strings we need many times, but don't want to construct more
+    // than once for performance.  These are used within loops so the
+    // enclosing wxString constructor would fire on each usage.
+    const wxString  sFields     = wxT("fields");
+    const wxString  sField      = wxT("field");
+    const wxString  sComponent  = wxT("comp");      // use "part" ?
+    const wxString  sName       = wxT("name");
+    const wxString  sRef        = wxT("ref");
+    const wxString  sPins       = wxT("pins");
+    const wxString  sPin        = wxT("pin");
+    const wxString  sValue      = wxT("value");
+    const wxString  sFootprint  = wxT("footprint");
+    const wxString  sDatasheet  = wxT("datasheet");
+    const wxString  sTStamp     = wxT("tstamp");
+    const wxString  sTSFmt      = wxT("%8.8lX");        // comp->m_TimeStamp
+
+    s_ReferencesAlreadyFound.Clear();
+
+    xdoc.SetRoot( xroot = Node( wxT("netlist") ) );
+    xroot->AddProperty( wxT("version"), wxT("B") );
+
+    xroot->AddChild( xcomps = Node( wxT("components") ) );
+
+    SCH_SHEET_LIST sheetList;
+
+    // output is xml, so there is no reason to remove spaces from the field values.
+
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        wxString msg = _( "Failed to create file " ) + fn.GetFullPath();
-        DisplayError( frame, msg );
-        return;
-    }
-
-    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic
-                         * files*/
-    fprintf( tmpfile, "$BeginNetlist\n" );
-
-    /* Create netlist module section */
-    fprintf( tmpfile, "$BeginComponentList\n" );
-    SCH_SHEET_LIST SheetList;
-
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
-    {
-        for( SchItem = sheet->LastDrawList(); SchItem != NULL; SchItem = SchItem->Next() )
+        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SchItem = Component = FindNextComponentAndCreatPinList( SchItem, sheet );
-
-            if( Component == NULL )
+            SCH_COMPONENT*  comp = FindNextComponentAndCreatPinList( schItem, path );
+            if( !comp )
                 break;  // No component left
 
-            FootprintName.Empty();
-            if( !Component->GetField( FOOTPRINT )->IsVoid() )
+            schItem = comp;
+
+            // current component being constructed
+            wxXmlNode* xcomp = Node( sComponent );
+            xcomps->AddChild( xcomp );
+            xcomp->AddProperty( sRef, comp->GetRef( path ) );
+
+            xcomp->AddChild( Node( sValue, comp->GetField( VALUE )->m_Text ) );
+
+            timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
+
+            xcomp->AddChild( Node( sTStamp, timeStamp ) );
+
+            if( !comp->GetField( FOOTPRINT )->m_Text.IsEmpty() )
+                xcomp->AddChild( Node( sFootprint, comp->GetField( FOOTPRINT )->m_Text ) );
+
+            if( !comp->GetField( DATASHEET )->m_Text.IsEmpty() )
+                xcomp->AddChild( Node( sDatasheet, comp->GetField( DATASHEET )->m_Text ) );
+
+            // all fields within the component, starting with the MANDATORY_FIELDS
+            if( comp->GetFieldCount() > MANDATORY_FIELDS )
             {
-                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
-                FootprintName.Replace( wxT( " " ), wxT( "_" ) );
+                wxXmlNode* xfields = Node( sFields );
+                xcomp->AddChild( xfields );
+
+                for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp->GetFieldCount();  ++fldNdx )
+                {
+                    SCH_FIELD*  f = comp->GetField( fldNdx );
+                    wxXmlNode*  xfield = Node( sField, f->m_Text );
+
+                    xfield->AddProperty( sName, f->m_Name );
+                    xfields->AddChild( xfield );
+                }
             }
 
-            fprintf( tmpfile, "\n$BeginComponent\n" );
-            fprintf( tmpfile, "TimeStamp=%8.8lX\n", Component->m_TimeStamp );
-            fprintf( tmpfile, "Footprint=%s\n", CONV_TO_UTF8( FootprintName ) );
-            Line = wxT( "Reference=" ) + Component->GetRef( sheet ) + wxT( "\n" );
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            fputs( CONV_TO_UTF8( Line ), tmpfile );
+            // @todo add:  libsource + sheetpath
+        }
+    }
 
-            Line = Component->GetField( VALUE )->m_Text;
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( tmpfile, "Value=%s\n", CONV_TO_UTF8( Line ) );
+    // @todo generate the nested <libpart> s
+    xroot->AddChild( Node( wxT("libparts") ) );
 
-            Line = Component->m_ChipName;
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( tmpfile, "Libref=%s\n", CONV_TO_UTF8( Line ) );
+    // @todo generate the nested <net>s
+    xroot->AddChild( Node( wxT("nets") ) );
+
+    return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
+
+#else
+
+    // ouput the well established/old net list format
+    wxString        field;
+    wxString        footprint;
+    wxString        netname;
+    FILE*           out;
+    int             ret = 0;    // OR on each call, test sign bit at very end.
+
+    if( ( out = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
+    {
+        wxString msg = _( "Failed to create file " ) + aOutFileName;
+        DisplayError( frame, msg );
+        return false;
+    }
+
+    s_ReferencesAlreadyFound.Clear();
+
+    ret |= fprintf( out, "$BeginNetlist\n" );
+
+    // Create netlist module section
+    ret |= fprintf( out, "$BeginComponentList\n" );
+
+    SCH_SHEET_LIST sheetList;
+
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
+    {
+        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        {
+            SCH_COMPONENT*  comp = FindNextComponentAndCreatPinList( schItem, path );
+            if( !comp )
+                break;  // No component left
+
+            schItem = comp;
+
+            footprint.Empty();
+            if( !comp->GetField( FOOTPRINT )->IsVoid() )
+            {
+                footprint = comp->GetField( FOOTPRINT )->m_Text;
+                footprint.Replace( wxT( " " ), wxT( "_" ) );
+            }
+
+            ret |= fprintf( out, "\n$BeginComponent\n" );
+            ret |= fprintf( out, "TimeStamp=%8.8lX\n", comp->m_TimeStamp );
+            ret |= fprintf( out, "Footprint=%s\n", CONV_TO_UTF8( footprint ) );
+
+            field = wxT( "Reference=" ) + comp->GetRef( path ) + wxT( "\n" );
+            field.Replace( wxT( " " ), wxT( "_" ) );
+            ret |= fputs( CONV_TO_UTF8( field ), out );
+
+            field = comp->GetField( VALUE )->m_Text;
+            field.Replace( wxT( " " ), wxT( "_" ) );
+            ret |= fprintf( out, "Value=%s\n", CONV_TO_UTF8( field ) );
+
+            field = comp->m_ChipName;
+            field.Replace( wxT( " " ), wxT( "_" ) );
+            ret |= fprintf( out, "Libref=%s\n", CONV_TO_UTF8( field ) );
 
             // Write pin list:
-            fprintf( tmpfile, "$BeginPinList\n" );
+            ret |= fprintf( out, "$BeginPinList\n" );
             for( unsigned ii = 0; ii < s_SortedComponentPinList.size(); ii++ )
             {
                 NETLIST_OBJECT* Pin = s_SortedComponentPinList[ii];
                 if( !Pin )
                     continue;
+
                 netname = ReturnPinNetName( Pin, wxT( "$-%.6d" ) );
                 if( netname.IsEmpty() )
                     netname = wxT( "?" );
-                fprintf( tmpfile, "%.4s=%s\n", (char*) &Pin->m_PinNum, CONV_TO_UTF8( netname ) );
+
+                ret |= fprintf( out, "%.4s=%s\n", (char*) &Pin->m_PinNum, CONV_TO_UTF8( netname ) );
             }
 
-            fprintf( tmpfile, "$EndPinList\n" );
-            fprintf( tmpfile, "$EndComponent\n" );
+            ret |= fprintf( out, "$EndPinList\n" );
+            ret |= fprintf( out, "$EndComponent\n" );
         }
     }
 
-    fprintf( tmpfile, "$EndComponentList\n" );
+    ret |= fprintf( out, "$EndComponentList\n" );
 
-    fprintf( tmpfile, "\n$BeginNets\n" );
-    WriteGENERICListOfNets( tmpfile, g_NetObjectslist );
-    fprintf( tmpfile, "$EndNets\n" );
-    fprintf( tmpfile, "\n$EndNetlist\n" );
-    fclose( tmpfile );
+    ret |= fprintf( out, "\n$BeginNets\n" );
 
-    // Call the external module (plug in )
+    if( !WriteGENERICListOfNets( out, g_NetObjectslist ) )
+        ret = -1;
 
-    if( g_NetListerCommandLine.IsEmpty() )
-        return;
+    ret |= fprintf( out, "$EndNets\n" );
 
-    wxString CommandFile;
-    if( wxIsAbsolutePath( g_NetListerCommandLine ) )
-        CommandFile = g_NetListerCommandLine;
-    else
-        CommandFile = FindKicadFile( g_NetListerCommandLine );
+    ret |= fprintf( out, "\n$EndNetlist\n" );
+    ret |= fclose( out );
 
-    CommandFile += wxT( " " ) + fn.GetFullPath();
-    CommandFile += wxT( " " ) + FullFileName;
-
-    ProcessExecute( CommandFile, wxEXEC_SYNC );
-}
-
-
-/* Clear flag list, used in netlist generation */
-static void ClearUsedFlags( void )
-{
-    s_ReferencesAlreadyFound.Clear();
+    return ret >= 0;
+#endif
 }
 
 
@@ -454,10 +599,10 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
     }
     fprintf( f, "\n" );
 
+    //  Create component list
 
-    /* Create component list */
-    ClearUsedFlags();  /* Reset the flags FlagControlMulti in all schematic
-                        * files*/
+    s_ReferencesAlreadyFound.Clear();
+
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
@@ -522,159 +667,150 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
  * = FALSE if with_pcbnew
  * Format ORCADPCB2 strict
  */
-static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
+static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
 {
-    wxString Line, FootprintName;
-    char Buf[256];
-    SCH_SHEET_PATH* sheet;
-    EDA_BaseStruct* DrawList;
-    SCH_COMPONENT* Component;
-    OBJ_CMP_TO_LIST* CmpList = NULL;
-    int CmpListCount = 0, CmpListSize = 1000;
+    wxString    Line;
+    wxString    footprint;
+    char        dateBuf[256];
+    int         ret = 0;        // zero now, OR in the sign bit on error
 
-    DateAndTime( Buf );
+    std::vector<OBJ_CMP_TO_LIST> cmpList;
+
+    DateAndTime( dateBuf );
+
     if( with_pcbnew )
-        fprintf( f, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, Buf );
+        ret |= fprintf( f, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, dateBuf );
     else
-        fprintf( f, "( { %s created  %s }\n", NETLIST_HEAD_STRING, Buf );
+        ret |= fprintf( f, "( { %s created  %s }\n", NETLIST_HEAD_STRING, dateBuf );
 
+    // Create netlist module section
 
-    /* Create netlist module section */
-    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic
-                         * files*/
+    s_ReferencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST SheetList;
+    SCH_SHEET_LIST sheetList;
 
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
+        for( EDA_BaseStruct* item = path->LastDrawList();  item;  item = item->Next() )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
-            if( Component == NULL )
+            SCH_COMPONENT* comp = FindNextComponentAndCreatPinList( item, path );
+            if( !comp )
                 break;
 
-            /* Get the Component FootprintFilter and put the component in
-             * CmpList if filter is not void */
-            LIB_COMPONENT* Entry =
-                CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
+            item = comp;
 
-            if( Entry != NULL )
+            // Get the Component FootprintFilter and put the component in
+            // cmpList if filter is present
+            LIB_COMPONENT* entry =
+                CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+
+            if( entry )
             {
-                if( Entry->m_FootprintList.GetCount() != 0 ) /* Put in list */
+                if( entry->m_FootprintList.GetCount() != 0 )    // Put in list
                 {
-                    if( CmpList == NULL )
-                    {
-                        CmpList = (OBJ_CMP_TO_LIST*)
-                                  MyZMalloc( sizeof(OBJ_CMP_TO_LIST) * CmpListSize );
-                    }
-                    if( CmpListCount >= CmpListSize )
-                    {
-                        CmpListSize += 1000;
-                        CmpList      =
-                            (OBJ_CMP_TO_LIST*) realloc( CmpList,
-                                                        sizeof(OBJ_CMP_TO_LIST)
-                                                        * CmpListSize );
-                    }
-                    CmpList[CmpListCount].m_RootCmp = Component;
-                    strcpy( CmpList[CmpListCount].m_Reference,
-                           Component->GetRef( sheet ).mb_str() );
-                    CmpListCount++;
+                    cmpList.push_back( OBJ_CMP_TO_LIST() );
+
+                    cmpList.back().m_RootCmp = comp;
+                    cmpList.back().SetRef( comp->GetRef( path ) );
                 }
             }
 
-            if( !Component->GetField( FOOTPRINT )->IsVoid() )
+            if( !comp->GetField( FOOTPRINT )->IsVoid() )
             {
-                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
-                FootprintName.Replace( wxT( " " ), wxT( "_" ) );
+                footprint = comp->GetField( FOOTPRINT )->m_Text;
+                footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
-                FootprintName = wxT( "$noname" );
+                footprint = wxT( "$noname" );
 
-            Line = Component->GetRef( sheet );
-            fprintf( f, " ( %s %s",
-                    CONV_TO_UTF8( Component->GetPath( sheet ) ),
-                    CONV_TO_UTF8( FootprintName ) );
-            fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
+            Line = comp->GetRef( path );
 
-            Line = Component->GetField( VALUE )->m_Text;
+            ret |= fprintf( f, " ( %s %s",
+                    CONV_TO_UTF8( comp->GetPath( path ) ),
+                    CONV_TO_UTF8( footprint ) );
+
+            ret |= fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
+
+            Line = comp->GetField( VALUE )->m_Text;
             Line.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( f, " %s", CONV_TO_UTF8( Line ) );
+            ret |= fprintf( f, " %s", CONV_TO_UTF8( Line ) );
 
             if( with_pcbnew )  // Add the lib name for this component
             {
-                Line = Component->m_ChipName;
+                Line = comp->m_ChipName;
                 Line.Replace( wxT( " " ), wxT( "_" ) );
-                fprintf( f, " {Lib=%s}", CONV_TO_UTF8( Line ) );
+                ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( Line ) );
             }
-            fprintf( f, "\n" );
+            ret |= fprintf( f, "\n" );
 
             // Write pin list:
             for( unsigned ii = 0; ii < s_SortedComponentPinList.size(); ii++ )
             {
-                NETLIST_OBJECT* Pin = s_SortedComponentPinList[ii];
-                if( !Pin )
+                NETLIST_OBJECT* pin = s_SortedComponentPinList[ii];
+                if( !pin )
                     continue;
-                wxString netname = ReturnPinNetName( Pin, wxT( "N-%.6d" ) );
+
+                wxString netname = ReturnPinNetName( pin, wxT( "N-%.6d" ) );
                 if( netname.IsEmpty() )
                     netname = wxT( "?" );
+
                 netname.Replace( wxT( " " ), wxT( "_" ) );
 
-                fprintf( f, "  ( %4.4s %s )\n", (char*) &Pin->m_PinNum,
+                ret |= fprintf( f, "  ( %4.4s %s )\n", (char*) &pin->m_PinNum,
                         CONV_TO_UTF8( netname ) );
             }
 
-            fprintf( f, " )\n" );
+            ret |= fprintf( f, " )\n" );
         }
     }
 
-    fprintf( f, ")\n*\n" );
+    ret |= fprintf( f, ")\n*\n" );
 
     s_SortedComponentPinList.clear();
 
-    /* Write the allowed footprint list for each component */
-    if( with_pcbnew && CmpList )
+    // Write the allowed footprint list for each component
+    if( with_pcbnew && cmpList.size() )
     {
-        fprintf( f, "{ Allowed footprints by component:\n" );
-        LIB_COMPONENT* Entry;
-        for( int ii = 0; ii < CmpListCount; ii++ )
+        wxString    ref;
+
+        ret |= fprintf( f, "{ Allowed footprints by component:\n" );
+        for( unsigned ii = 0; ii < cmpList.size(); ii++ )
         {
-            Component = CmpList[ii].m_RootCmp;
-            Entry     = CMP_LIBRARY::FindLibraryComponent( Component->m_ChipName );
+            SCH_COMPONENT* comp = cmpList[ii].m_RootCmp;
 
-            //Line.Printf(_("%s"), CmpList[ii].m_Ref);
-            //Line.Replace( wxT( " " ), wxT( "_" ) );
-            for( unsigned nn = 0;
-                 nn<sizeof(CmpList[ii].m_Reference)
-                 && CmpList[ii].m_Reference[nn];
-                 nn++ )
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+
+            ref = cmpList[ii].GetRef();
+
+            ref.Replace( wxT( " " ), wxT( "_" ) );
+
+            ret |= fprintf( f, "$component %s\n", CONV_TO_UTF8( ref ) );
+
+            // Write the footprint list
+            for( unsigned jj = 0; jj < entry->m_FootprintList.GetCount(); jj++ )
             {
-                if( CmpList[ii].m_Reference[nn] == ' ' )
-                    CmpList[ii].m_Reference[nn] = '_';
+                ret |= fprintf( f, " %s\n",
+                        CONV_TO_UTF8( entry->m_FootprintList[jj] ) );
             }
 
-            fprintf( f, "$component %s\n", CmpList[ii].m_Reference );
-            /* Write the footprint list */
-            for( unsigned jj = 0; jj < Entry->m_FootprintList.GetCount(); jj++ )
-            {
-                fprintf( f, " %s\n",
-                        CONV_TO_UTF8( Entry->m_FootprintList[jj] ) );
-            }
-
-            fprintf( f, "$endlist\n" );
+            ret |= fprintf( f, "$endlist\n" );
         }
 
-        fprintf( f, "$endfootprintlist\n}\n" );
+        ret |= fprintf( f, "$endfootprintlist\n}\n" );
     }
-    if( CmpList )
-        free( CmpList );
 
     if( with_pcbnew )
     {
-        fprintf( f, "{ Pin List by Nets\n" );
-        WriteGENERICListOfNets( f, g_NetObjectslist );
-        fprintf( f, "}\n" );
-        fprintf( f, "#End\n" );
+        ret |= fprintf( f, "{ Pin List by Nets\n" );
+
+        if( !WriteGENERICListOfNets( f, g_NetObjectslist ) )
+            ret = -1;
+
+        ret |= fprintf( f, "}\n" );
+        ret |= fprintf( f, "#End\n" );
     }
+
+    return ret >= 0;
 }
 
 
@@ -686,7 +822,7 @@ static void WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 static void AddPinToComponentPinList( SCH_COMPONENT* Component,
                                       SCH_SHEET_PATH* sheetlist, LIB_PIN* Pin )
 {
-    /* Search the PIN description for Pin in g_NetObjectslist*/
+    // Search the PIN description for Pin in g_NetObjectslist
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
         if( g_NetObjectslist[ii]->m_Type != NET_PIN )
@@ -699,9 +835,10 @@ static void AddPinToComponentPinList( SCH_COMPONENT* Component,
             continue;
 
         s_SortedComponentPinList.push_back( g_NetObjectslist[ii] );
+
         if( s_SortedComponentPinList.size() >= MAXPIN )
         {
-            /* Log message for Internal error */
+            // Log message for Internal error
             DisplayError( NULL, wxT( "AddPinToComponentPinList err: MAXPIN reached" ) );
             return;
         }
@@ -777,7 +914,7 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
  * component pin list
  */
 static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component_in,
-                                          LIB_COMPONENT*  Entry,
+                                          LIB_COMPONENT*  aEntry,
                                           SCH_SHEET_PATH* Sheet_in )
 {
     EDA_BaseStruct* SchItem;
@@ -801,10 +938,10 @@ static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component_in,
             if( str.CmpNoCase( Reference ) != 0 )
                 continue;
 
-            if( Entry == NULL )
+            if( aEntry == NULL )
                 continue;
 
-            for( pin = Entry->GetNextPin(); pin != NULL; pin = Entry->GetNextPin( pin ) )
+            for( pin = aEntry->GetNextPin(); pin != NULL; pin = aEntry->GetNextPin( pin ) )
             {
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
@@ -844,81 +981,89 @@ static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
 /* Written in the file / net list (ranked by Netcode), and elements that are
  * connected
  */
-static void WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+static bool WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
-    int NetCode, LastNetCode = -1;
-    int SameNetcodeCount = 0;
-    SCH_COMPONENT* Cmp;
-    wxString NetName, CmpRef;
-    wxString NetcodeName;
-    char FirstItemInNet[1024];
+    int         ret = 0;
+    int         netCode;
+    int         lastNetCode = -1;
+    int         sameNetcodeCount = 0;
+    wxString    netName;
+    wxString    ref;
+    wxString    netcodeName;
+    char        firstItemInNet[256];
 
     for( unsigned ii = 0; ii < aObjectsList.size(); ii++ )
     {
+        SCH_COMPONENT*  comp;
+
         // New net found, write net id;
-        if( ( NetCode = aObjectsList[ii]->GetNet() ) != LastNetCode )
+        if( ( netCode = aObjectsList[ii]->GetNet() ) != lastNetCode )
         {
-            SameNetcodeCount = 0;              // Items count for this net
-            NetName.Empty();
+            sameNetcodeCount = 0;              // Items count for this net
+            netName.Empty();
 
             // Find a label (if exists) for this net.
             NETLIST_OBJECT* netref;
             netref = aObjectsList[ii]->m_NetNameCandidate;
             if( netref )
-                NetName = netref->m_Label;
+                netName = netref->m_Label;
 
-            NetcodeName.Printf( wxT( "Net %d " ), NetCode );
-            NetcodeName += wxT( "\"" );
-            if( !NetName.IsEmpty() )
+            netcodeName.Printf( wxT( "Net %d " ), netCode );
+            netcodeName += wxT( "\"" );
+            if( !netName.IsEmpty() )
             {
                 if( ( netref->m_Type != NET_PINLABEL )
                    && ( netref->m_Type != NET_GLOBLABEL ) )
                 {
                     // usual net name, prefix it by the sheet path
-                    NetcodeName += netref->m_SheetList.PathHumanReadable();
+                    netcodeName += netref->m_SheetList.PathHumanReadable();
                 }
-                NetcodeName += NetName;
+                netcodeName += netName;
             }
-            NetcodeName += wxT( "\"" );
+            netcodeName += wxT( "\"" );
 
             // Add the netname without prefix, in cases we need only the
             // "short" netname
-            NetcodeName += wxT( " \"" ) + NetName + wxT( "\"" );
-            LastNetCode  = NetCode;
+            netcodeName += wxT( " \"" ) + netName + wxT( "\"" );
+            lastNetCode  = netCode;
         }
 
         if( aObjectsList[ii]->m_Type != NET_PIN )
             continue;
 
-        Cmp = (SCH_COMPONENT*) aObjectsList[ii]->m_Link;
+        comp = (SCH_COMPONENT*) aObjectsList[ii]->m_Link;
 
         // Get the reference for the net name and the main parent component
-        CmpRef = Cmp->GetRef( &aObjectsList[ii]->m_SheetList );
-        if( CmpRef.StartsWith( wxT( "#" ) ) )
+        ref = comp->GetRef( &aObjectsList[ii]->m_SheetList );
+        if( ref[0] == wxChar( '#' ) )
             continue;                 // Pseudo component (Like Power symbol)
 
-        // Print the pin list for this net, if  2 or more items are connected:
-        SameNetcodeCount++;
-        if( SameNetcodeCount == 1 )     /* first item for this net found,
-                                         * Print this connection, when a
-                                         * second item will be found */
+        // Print the pin list for this net, use special handling if
+        // 2 or more items are connected:
+
+        // if first item for this net found, defer printing this connection
+        // until a second item will is found
+        if( ++sameNetcodeCount == 1 )
         {
-            sprintf( FirstItemInNet, " %s %.4s\n", CONV_TO_UTF8( CmpRef ),
-                     (const char*) &aObjectsList[ii]->m_PinNum );
+            snprintf( firstItemInNet, sizeof(firstItemInNet), " %s %.4s\n",
+                      CONV_TO_UTF8( ref ),
+                      (const char*) &aObjectsList[ii]->m_PinNum );
         }
 
-        // Second item for this net found, Print the Net name, and the
+        // Second item for this net found, print the Net name, and the
         // first item
-        if( SameNetcodeCount == 2 )
+        if( sameNetcodeCount == 2 )
         {
-            fprintf( f, "%s\n", CONV_TO_UTF8( NetcodeName ) );
-            fputs( FirstItemInNet, f );
+            ret |= fprintf( f, "%s\n", CONV_TO_UTF8( netcodeName ) );
+            ret |= fputs( firstItemInNet, f );
         }
 
-        if( SameNetcodeCount >= 2 )
-            fprintf( f, " %s %.4s\n", CONV_TO_UTF8( CmpRef ),
+        if( sameNetcodeCount >= 2 )
+            ret |= fprintf( f, " %s %.4s\n", CONV_TO_UTF8( ref ),
                      (const char*) &aObjectsList[ii]->m_PinNum );
     }
+
+    return ret >= 0;
 }
 
 
@@ -956,7 +1101,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
-    wxString FootprintName;
+    wxString footprint;
     char Line[1024];
     SCH_SHEET_PATH* sheet;
     EDA_BaseStruct* DrawList;
@@ -970,9 +1115,9 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     fprintf( f, "\"%s\"\n", CONV_TO_UTF8( Title ) );
     fprintf( f, "\n" );
 
-    /* Create netlist module section */
-    ClearUsedFlags();   /* Reset the flags FlagControlMulti in all schematic
-                         *files*/
+    // Create netlist module section
+    s_ReferencesAlreadyFound.Clear();
+
     SCH_SHEET_LIST SheetList;
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
@@ -983,13 +1128,16 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
             if( Component == NULL )
                 break;
 
+            /*
+            doing nothing with footprint
             if( !Component->GetField( FOOTPRINT )->IsVoid() )
             {
-                FootprintName = Component->GetField( FOOTPRINT )->m_Text;
-                FootprintName.Replace( wxT( " " ), wxT( "_" ) );
+                footprint = Component->GetField( FOOTPRINT )->m_Text;
+                footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
-                FootprintName = wxT( "$noname" );
+                footprint = wxT( "$noname" );
+            */
 
             msg = Component->GetRef( sheet );
             fprintf( f, "%s     ", CONV_TO_UTF8( StartCmpDesc ) );
@@ -1024,10 +1172,10 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
-    wxString NetcodeName, InitNetDescLine;
+    wxString netcodeName, InitNetDescLine;
     unsigned ii;
     int print_ter = 0;
-    int NetCode, LastNetCode = -1;
+    int NetCode, lastNetCode = -1;
     SCH_COMPONENT* Cmp;
     wxString NetName;
 
@@ -1037,7 +1185,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
     for( ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
         // Get the NetName of the current net :
-        if( ( NetCode = aObjectsList[ii]->GetNet() ) != LastNetCode )
+        if( ( NetCode = aObjectsList[ii]->GetNet() ) != lastNetCode )
         {
             NetName.Empty();
 
@@ -1046,22 +1194,22 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
             if( netref )
                 NetName = netref->m_Label;
 
-            NetcodeName = wxT( "\"" );
+            netcodeName = wxT( "\"" );
             if( !NetName.IsEmpty() )
             {
                 if( ( netref->m_Type != NET_PINLABEL )
                    && ( netref->m_Type != NET_GLOBLABEL ) )
                 {
                     // usual net name, prefix it by the sheet path
-                    NetcodeName +=
+                    netcodeName +=
                         netref->m_SheetList.PathHumanReadable();
                 }
-                NetcodeName += NetName;
+                netcodeName += NetName;
             }
             else  // this net has no name: create a default name $<net number>
-                NetcodeName << wxT( "$" ) << NetCode;
-            NetcodeName += wxT( "\"" );
-            LastNetCode  = NetCode;
+                netcodeName << wxT( "$" ) << NetCode;
+            netcodeName += wxT( "\"" );
+            lastNetCode  = NetCode;
             print_ter    = 0;
         }
 
@@ -1090,7 +1238,7 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
                                    GetChars( InitNetDesc ),
                                    GetChars( refstr ),
                                    GetChars( str_pinnum ),
-                                   GetChars( NetcodeName ) );
+                                   GetChars( netcodeName ) );
         }
             print_ter++;
             break;
