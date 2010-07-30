@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,8 +20,8 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bOptionsSizer;
+	bOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panel1 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -90,7 +90,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText9->Wrap( -1 );
 	fgSizer1->Add( m_staticText9, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_spinRepeatHorizontal = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 500, 0 );
+	m_spinRepeatHorizontal = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -500, 500, 0 );
 	fgSizer1->Add( m_spinRepeatHorizontal, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticRepeatXUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -101,7 +101,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText12->Wrap( -1 );
 	fgSizer1->Add( m_staticText12, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_spinRepeatVertical = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 500, 100 );
+	m_spinRepeatVertical = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -500, 500, 100 );
 	fgSizer1->Add( m_spinRepeatVertical, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticRepeatYUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -124,18 +124,23 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
 	m_checkShowGrid = new wxCheckBox( m_panel1, wxID_ANY, _("Show g&rid"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer2->Add( m_checkShowGrid, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkShowHiddenPins = new wxCheckBox( m_panel1, wxID_ANY, _("Show hi&dden pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer2->Add( m_checkShowHiddenPins, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Enable automatic &panning"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer2->Add( m_checkAutoPan, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkHVOrientation = new wxCheckBox( m_panel1, wxID_ANY, _("Allow buses and wires to be placed in H or V &orientation only"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer2->Add( m_checkHVOrientation, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkPageLimits = new wxCheckBox( m_panel1, wxID_ANY, _("Show p&age limits"), wxDefaultPosition, wxDefaultSize, 0 );
+	
 	bSizer2->Add( m_checkPageLimits, 0, wxALL|wxEXPAND, 3 );
 	
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 0 );
@@ -238,7 +243,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer6->Fit( m_panel2 );
 	m_notebook1->AddPage( m_panel2, _("Template Field Names"), false );
 	
-	bSizer5->Add( m_notebook1, 1, wxEXPAND, 0 );
+	bOptionsSizer->Add( m_notebook1, 1, wxEXPAND, 0 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -246,9 +251,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
-	bSizer5->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
+	bOptionsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
 	
-	mainSizer->Add( bSizer5, 1, 0, 12 );
+	mainSizer->Add( bOptionsSizer, 1, 0, 12 );
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
