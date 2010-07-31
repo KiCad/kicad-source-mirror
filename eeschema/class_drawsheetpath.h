@@ -99,7 +99,7 @@ public:
      * returns a pointer to the last sheet of the list
      * One can see the others sheet as the "path" to reach this last sheet
      */
-    SCH_SHEET* Last();
+    SCH_SHEET*      Last();
 
     /** Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
@@ -143,11 +143,12 @@ public:
      */
     wxString         Path();
 
-    /** Function PathHumanReadable
-     * Return the sheet path in a readable form, i.e.
-     * as a path made from sheet names.
-     * (the "normal" path uses the time stamps which do not changes even when
-     * editing sheet parameters)
+    /**
+     * Function PathHumanReadable
+     * returns the sheet path in a human readable form, i.e. as a path made
+     * from sheet names.  The the "normal" path instead uses the time
+     * stamps in the path.  (Time stamps do not change even when editing
+     * sheet parameters).
      */
     wxString         PathHumanReadable();
 
