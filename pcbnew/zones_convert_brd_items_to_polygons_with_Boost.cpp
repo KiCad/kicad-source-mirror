@@ -131,33 +131,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * so m_ZoneMinThickness is the min thickness of the filled zones areas
      * the main polygon is stored in polyset_zone_solid_areas
      */
-#if 1
-    {
-        /* creates the main polygon (i.e. the filled area using only one outline)
-         * in GroupA in Bool_Engine to do a BOOL_CORRECTION operation
-         * to reserve a m_ZoneMinThickness/2 margin around the outlines
-         */
-        Bool_Engine* booleng = new Bool_Engine();
-        ArmBoolEng( booleng, true );
-        CopyPolygonsFromFilledPolysListToBoolengine( booleng, GROUP_A );
-        booleng->SetCorrectionFactor( (double) -margin );
-        booleng->Do_Operation( BOOL_CORRECTION );
 
-        /* Now copy the new outline in m_FilledPolysList */
-        m_FilledPolysList.clear();
-        CopyPolygonsFromBoolengineToFilledPolysList( booleng );
-        delete booleng;
-        CopyPolygonsFromFilledPolysListTotKPolygonList( this, polyset_zone_solid_areas );
-    }
-#else
-    /* currently does not work well.
-     * using kbool gives reliable results
-     * using boost::polygone gives erroneous results
-     */
     CopyPolygonsFromFilledPolysListTotKPolygonList( this,
                                                     polyset_zone_solid_areas );
     polyset_zone_solid_areas -= margin;
-#endif
 
     if( polyset_zone_solid_areas.size() == 0 )
         return;
@@ -520,82 +497,6 @@ void AddUnconnectedThermalStubsToKPolygonList( std::vector<CPolyPt>& aCornerBuff
             }
         }
     }
-}
-
-
-/** Function CopyPolygonsFromFilledPolysListToBoolengine
- * Copy (Add) polygons found in m_FilledPolysList to kbool BoolEngine
- * m_FilledPolysList may have more than one polygon
- * @param aBoolengine = kbool engine
- * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
- * @return the corner count
- */
-int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine(
-    Bool_Engine* aBoolengine, GroupType    aGroup )
-{
-    unsigned corners_count = m_FilledPolysList.size();
-    int      count = 0;
-    unsigned ic    = 0;
-
-    while( ic < corners_count )
-    {
-        if( aBoolengine->StartPolygonAdd( aGroup ) )
-        {
-            for( ; ic < corners_count; ic++ )
-            {
-                CPolyPt* corner = &m_FilledPolysList[ic];
-                aBoolengine->AddPoint( corner->x, corner->y );
-                count++;
-                if( corner->end_contour )
-                {
-                    ic++;
-                    break;
-                }
-            }
-
-            aBoolengine->EndPolygonAdd();
-        }
-    }
-
-    return count;
-}
-
-
-/** Function CopyPolygonsFromBoolengineToFilledPolysList
- * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
- * @param aBoolengine = kbool engine
- * @return the corner count
- */
-int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList(
-    Bool_Engine* aBoolengine )
-{
-    int count = 0;
-
-    while( aBoolengine->StartPolygonGet() )
-    {
-        CPolyPt corner( 0, 0, false );
-        while( aBoolengine->PolygonHasMorePoints() )
-        {
-            corner.x = (int) aBoolengine->GetPolygonXPoint();
-            corner.y = (int) aBoolengine->GetPolygonYPoint();
-            corner.end_contour = false;
-
-            // Flag this corner if starting a hole connection segment:
-            // This is used by draw functions to draw only useful segments (and not extra segments)
-            corner.utility =
-                (aBoolengine->GetPolygonPointEdgeType() ==
-                 KB_FALSE_EDGE) ? 1 : 0;
-            m_FilledPolysList.push_back( corner );
-            count++;
-        }
-
-        corner.end_contour = true;
-        m_FilledPolysList.pop_back();
-        m_FilledPolysList.push_back( corner );
-        aBoolengine->EndPolygonGet();
-    }
-
-    return count;
 }
 
 

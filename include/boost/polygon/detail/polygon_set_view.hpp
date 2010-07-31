@@ -153,13 +153,13 @@ namespace boost { namespace polygon{
   };
 
   template <typename ltype, typename rtype, int op_type>
-  typename polygon_set_view<ltype, rtype, op_type>::iterator_type 
+  typename polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::iterator_type
   polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::
   begin(const polygon_set_view<ltype, rtype, op_type>& polygon_set) {
     return polygon_set.begin();
   }
   template <typename ltype, typename rtype, int op_type>
-  typename polygon_set_view<ltype, rtype, op_type>::iterator_type 
+  typename polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::iterator_type
   polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::
   end(const polygon_set_view<ltype, rtype, op_type>& polygon_set) {
     return polygon_set.end();

@@ -251,12 +251,14 @@ namespace boost { namespace polygon{
             return;
           }
           Unit firstY = (*iter).y();
+          Unit firstX = (*iter).x();
           ++iter;
           if(iter == tailp_->points.end()) {
             tailp_->points.push_front(point);
             return;
           }
-          if(iter->y() == point.y() && firstY == point.y()) {
+          if((iter->y() == point.y() && firstY == point.y()) ||
+             (iter->x() == point.x() && firstX == point.x())){
             --iter;
             *iter = point;
           } else {
@@ -274,12 +276,14 @@ namespace boost { namespace polygon{
           return;
         }
         Unit firstY = (*iter).y();
+        Unit firstX = (*iter).x();
         ++iter;
         if(iter == tailp_->points.rend()) {
           tailp_->points.push_back(point);
           return;
         }
-        if(iter->y() == point.y() && firstY == point.y()) {
+        if((iter->y() == point.y() && firstY == point.y()) ||
+           (iter->x() == point.x() && firstX == point.x())){
           --iter;
           *iter = point;
         } else {
@@ -474,7 +478,7 @@ namespace boost { namespace polygon{
       ct counts[4];
     };
 
-    typedef Vertex45CountT<int> Vertex45Count;
+    typedef Vertex45CountT<signed char> Vertex45Count;
 
 //     inline std::ostream& operator<< (std::ostream& o, const Vertex45Count& c) {
 //       o << c[0] << ", " << c[1] << ", ";
@@ -492,7 +496,8 @@ namespace boost { namespace polygon{
       inline Vertex45CompactT(const Point& point, int riseIn, int countIn) : pt(point), count() {
         count[riseIn+1] = countIn;
       }
-      inline Vertex45CompactT(const Vertex45T& vertex) : pt(vertex.pt), count() {
+      template <typename ct2>
+      inline Vertex45CompactT(const typename boolean_op_45<Unit>::template Vertex45T<ct2>& vertex) : pt(vertex.pt), count() {
         count[vertex.rise+1] = vertex.count;
       }
       inline Vertex45CompactT(const Vertex45CompactT& vertex) : pt(vertex.pt), count(vertex.count) {}
@@ -2244,6 +2249,7 @@ namespace boost { namespace polygon{
   struct geometry_concept<PolyLine45PolygonData<T> > { typedef polygon_45_with_holes_concept type; };
   template <typename T>
   struct geometry_concept<PolyLine45HoleData<T> > { typedef polygon_45_concept type; };
+
 }
 }
 #endif

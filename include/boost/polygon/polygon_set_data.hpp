@@ -120,38 +120,7 @@ namespace boost { namespace polygon {
 
     template <typename polygon_type>
     inline void insert(const polygon_type& polygon_object, bool is_hole, polygon_concept ) {
-      bool first_iteration = true;
-      point_type first_point;
-      point_type previous_point;
-      point_type current_point;
-      direction_1d winding_dir = winding(polygon_object);
-      int multiplier = winding_dir == COUNTERCLOCKWISE ? 1 : -1;
-      if(is_hole) multiplier *= -1;
-      for(typename polygon_traits<polygon_type>::iterator_type itr = begin_points(polygon_object);
-          itr != end_points(polygon_object); ++itr) {
-        assign(current_point, *itr);
-        if(first_iteration) {
-          first_iteration = false;
-          first_point = previous_point = current_point;
-        } else {
-          if(previous_point != current_point) {
-            element_type elem(edge_type(previous_point, current_point),
-                              ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
-            insert_clean(elem);
-          }
-        }
-        previous_point = current_point;
-      }
-      current_point = first_point;
-      if(!first_iteration) {
-        if(previous_point != current_point) {
-          element_type elem(edge_type(previous_point, current_point),
-                            ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
-          insert_clean(elem);
-        }
-        dirty_ = true;
-        unsorted_ = true;
-      }
+      insert_vertex_sequence(begin_points(polygon_object), end_points(polygon_object), winding(polygon_object), is_hole);
     }
 
     inline void insert(const polygon_set_data& ps, bool is_hole = false) {
@@ -229,9 +198,37 @@ namespace boost { namespace polygon {
 
     template <class iT>
     inline void insert_vertex_sequence(iT begin_vertex, iT end_vertex, direction_1d winding, bool is_hole) {
-       polygon_data<coordinate_type> poly;
-       poly.set(begin_vertex, end_vertex);
-       insert(poly, is_hole);
+      bool first_iteration = true;
+      point_type first_point;
+      point_type previous_point;
+      point_type current_point;
+      direction_1d winding_dir = winding;
+      int multiplier = winding_dir == COUNTERCLOCKWISE ? 1 : -1;
+      if(is_hole) multiplier *= -1;
+      for( ; begin_vertex != end_vertex; ++begin_vertex) {
+        assign(current_point, *begin_vertex);
+        if(first_iteration) {
+          first_iteration = false;
+          first_point = previous_point = current_point;
+        } else {
+          if(previous_point != current_point) {
+            element_type elem(edge_type(previous_point, current_point),
+                              ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
+            insert_clean(elem);
+          }
+        }
+        previous_point = current_point;
+      }
+      current_point = first_point;
+      if(!first_iteration) {
+        if(previous_point != current_point) {
+          element_type elem(edge_type(previous_point, current_point),
+                            ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
+          insert_clean(elem);
+        }
+        dirty_ = true;
+        unsorted_ = true;
+      }
     }
 
     template <typename output_container>
@@ -363,6 +360,13 @@ namespace boost { namespace polygon {
 
     inline polygon_set_data&
     resize(coordinate_type resizing, bool corner_fill_arc = false, unsigned int num_circle_segments=0) {
+      if(!corner_fill_arc) {
+        if(resizing < 0)
+          return shrink(-resizing);
+        if(resizing > 0)
+          return bloat(-resizing);
+        return *this;
+      }
       if(resizing == 0) return *this;
       std::list<polygon_with_holes_data<coordinate_type> > pl;
       get(pl);
@@ -418,6 +422,139 @@ namespace boost { namespace polygon {
       }
       unsorted_ = true;
       dirty_ = true;
+      return *this;
+    }
+
+    static inline void compute_offset_edge(point_data<coordinate_type>& pt1, point_data<coordinate_type>& pt2,
+                                           const point_data<coordinate_type>&  prev_pt,
+                                           const point_data<coordinate_type>&  current_pt,
+                                           coordinate_type distance, int multiplier) {
+      coordinate_type dx = current_pt.x() - prev_pt.x();
+      coordinate_type dy = current_pt.y() - prev_pt.y();
+      double ddx = (double)dx;
+      double ddy = (double)dy;
+      double edge_length = std::sqrt(ddx*ddx + ddy*ddy);
+      double dnx = dy;
+      double dny = -dx;
+      dnx = dnx * (double)distance / edge_length;
+      dny = dny * (double)distance / edge_length;
+      dnx = std::floor(dnx+0.5);
+      dny = std::floor(dny+0.5);
+      pt1.x(prev_pt.x() + (coordinate_type)dnx * (coordinate_type)multiplier);
+      pt2.x(current_pt.x() + (coordinate_type)dnx * (coordinate_type)multiplier);
+      pt1.y(prev_pt.y() + (coordinate_type)dny * (coordinate_type)multiplier);
+      pt2.y(current_pt.y() + (coordinate_type)dny * (coordinate_type)multiplier);
+    }
+
+    static inline void modify_pt(point_data<coordinate_type>& pt, const point_data<coordinate_type>&  prev_pt,
+                                 const point_data<coordinate_type>&  current_pt,  const point_data<coordinate_type>&  next_pt,
+                                 coordinate_type distance, coordinate_type multiplier) {
+      std::pair<point_data<coordinate_type>, point_data<coordinate_type> > he1(prev_pt, current_pt), he2(current_pt, next_pt);
+      compute_offset_edge(he1.first, he1.second, prev_pt, current_pt, distance, multiplier);
+      compute_offset_edge(he2.first, he2.second, current_pt, next_pt, distance, multiplier);
+      typename scanline_base<coordinate_type>::compute_intersection_pack pack;
+      if(!pack.compute_lazy_intersection(pt, he1, he2, true, true)) {
+        pt = he1.second; //colinear offset edges use shared point
+      }
+    }
+
+    static void resize_poly_up(std::vector<point_data<coordinate_type> >& poly, coordinate_type distance, coordinate_type multiplier) {
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
+      for(std::size_t i = 2; i < poly.size()-1; ++i) {
+        point_data<coordinate_type> next_pt = poly[i];
+        modify_pt(poly[i-1], prev_pt, current_pt, next_pt, distance, multiplier);
+        prev_pt = current_pt;
+        current_pt = next_pt;
+      }
+      point_data<coordinate_type> next_pt = first_pt;
+      modify_pt(poly[poly.size()-2], prev_pt, current_pt, next_pt, distance, multiplier);
+      prev_pt = current_pt;
+      current_pt = next_pt;
+      next_pt = second_pt;
+      modify_pt(poly[0], prev_pt, current_pt, next_pt, distance, multiplier);
+      poly.back() = poly.front();
+    }
+    static bool resize_poly_down(std::vector<point_data<coordinate_type> >& poly, coordinate_type distance, coordinate_type multiplier) {
+      std::vector<point_data<coordinate_type> > orig_poly(poly);
+      rectangle_data<coordinate_type> extents_rectangle;
+      set_points(extents_rectangle, poly[0], poly[0]);
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
+      encompass(extents_rectangle, current_pt);
+      for(std::size_t i = 2; i < poly.size()-1; ++i) {
+        point_data<coordinate_type> next_pt = poly[i];
+        encompass(extents_rectangle, next_pt);
+        modify_pt(poly[i-1], prev_pt, current_pt, next_pt, distance, multiplier);
+        prev_pt = current_pt;
+        current_pt = next_pt;
+      }
+      if(delta(extents_rectangle, HORIZONTAL) <= std::abs(2*distance))
+        return false;
+      if(delta(extents_rectangle, VERTICAL) <= std::abs(2*distance))
+        return false;
+      point_data<coordinate_type> next_pt = first_pt;
+      modify_pt(poly[poly.size()-2], prev_pt, current_pt, next_pt, distance, multiplier);
+      prev_pt = current_pt;
+      current_pt = next_pt;
+      next_pt = second_pt;
+      modify_pt(poly[0], prev_pt, current_pt, next_pt, distance, multiplier);
+      poly.back() = poly.front();
+      //if the line segments formed between orignial and new points cross for an edge that edge inverts
+      //if all edges invert the polygon should be discarded
+      //if even one edge does not invert return true because the polygon is valid
+      bool non_inverting_edge = false;
+      for(std::size_t i = 1; i < poly.size(); ++i) {
+        std::pair<point_data<coordinate_type>, point_data<coordinate_type> >
+          he1(poly[i], orig_poly[i]),
+          he2(poly[i-1], orig_poly[i-1]);
+        if(!scanline_base<coordinate_type>::intersects(he1, he2)) {
+          non_inverting_edge = true;
+          break;
+        }
+      }
+      return non_inverting_edge;
+    }
+
+    polygon_set_data&
+    bloat(typename coordinate_traits<coordinate_type>::unsigned_area_type distance) {
+      std::list<polygon_with_holes_data<coordinate_type> > polys;
+      get(polys);
+      clear();
+      for(typename std::list<polygon_with_holes_data<coordinate_type> >::iterator itr = polys.begin();
+          itr != polys.end(); ++itr) {
+        resize_poly_up((*itr).self_.coords_, (coordinate_type)distance, (coordinate_type)1);
+        insert_vertex_sequence((*itr).self_.begin(), (*itr).self_.end(), COUNTERCLOCKWISE, false); //inserts without holes
+        for(typename std::list<polygon_data<coordinate_type> >::iterator itrh = (*itr).holes_.begin();
+            itrh != (*itr).holes_.end(); ++itrh) {
+          if(resize_poly_down((*itrh).coords_, (coordinate_type)distance, (coordinate_type)1)) {
+            insert_vertex_sequence((*itrh).coords_.begin(), (*itrh).coords_.end(), CLOCKWISE, true);
+          }
+        }
+      }
+      return *this;
+    }
+
+    polygon_set_data&
+    shrink(typename coordinate_traits<coordinate_type>::unsigned_area_type distance) {
+      std::list<polygon_with_holes_data<coordinate_type> > polys;
+      get(polys);
+      clear();
+      for(typename std::list<polygon_with_holes_data<coordinate_type> >::iterator itr = polys.begin();
+          itr != polys.end(); ++itr) {
+        if(resize_poly_down((*itr).self_.coords_, (coordinate_type)distance, (coordinate_type)-1)) {
+          insert_vertex_sequence((*itr).self_.begin(), (*itr).self_.end(), COUNTERCLOCKWISE, false); //inserts without holes
+          for(typename std::list<polygon_data<coordinate_type> >::iterator itrh = (*itr).holes_.begin();
+              itrh != (*itr).holes_.end(); ++itrh) {
+            resize_poly_up((*itrh).coords_, (coordinate_type)distance, (coordinate_type)-1);
+            insert_vertex_sequence((*itrh).coords_.begin(), (*itrh).coords_.end(), CLOCKWISE, true);
+          }
+        }
+      }
       return *this;
     }
 
@@ -481,6 +618,7 @@ namespace boost { namespace polygon {
       bool sizing_sign = resizing>0;
       bool prev_concave = true;
       point_data<T> prev_point;
+      //int iCtr=0;
 
 
       //insert minkofski shapes on edges and corners
@@ -494,7 +632,9 @@ namespace boost { namespace polygon {
         double direction = normal1.x()*normal2.y()- normal2.x()*normal1.y();
         bool convex = direction>0;
 
-        bool treat_as_concave = convex ^ sizing_sign ;
+        bool treat_as_concave = !convex;
+        if(sizing_sign)
+          treat_as_concave = convex;
         point_data<double> v;
         assign(v, normal1);
         double s2 = (v.x()*v.x()+v.y()*v.y());
@@ -533,14 +673,14 @@ namespace boost { namespace polygon {
                                          , num_circle_segments, corner_fill_arc))
            {
                if (first_pts.size()) {
-                  for (unsigned i=0; i<pts.size(); i++) {
+                  for (unsigned int i=0; i<pts.size(); i++) {
                     sizingSet.insert_vertex_sequence(pts[i].begin(),pts[i].end(),winding,false);
                   }
 
                } else {
                   first_pts = pts[0];
                   first_wdir = resize_wdir;
-                  for (unsigned i=1; i<pts.size(); i++) {
+                  for (unsigned int i=1; i<pts.size(); i++) {
                     sizingSet.insert_vertex_sequence(pts[i].begin(),pts[i].end(),winding,false);
                   }
                }
@@ -573,7 +713,7 @@ namespace boost { namespace polygon {
 
       //insert original shape
       tmp.insert(poly, false, polygon_concept());
-      if( ((resizing < 0) ^ hole) ) tmp -= sizingSet;
+      if((resizing < 0) ^ hole) tmp -= sizingSet;
       else tmp += sizingSet;
       //tmp.clean();
       insert(tmp, hole);
@@ -662,13 +802,13 @@ namespace boost { namespace polygon {
     typedef polygon_set_concept type;
   };
 
-  template <typename  T>
-  inline double compute_area(point_data<T>& a, point_data<T>& b, point_data<T>& c) {
+//   template <typename  T>
+//   inline double compute_area(point_data<T>& a, point_data<T>& b, point_data<T>& c) {
 
-     return (double)(b.x()-a.x())*(double)(c.y()-a.y())- (double)(c.x()-a.x())*(double)(b.y()-a.y());
+//      return (double)(b.x()-a.x())*(double)(c.y()-a.y())- (double)(c.x()-a.x())*(double)(b.y()-a.y());
 
 
-  }
+//   }
 
   template <typename  T>
   inline int make_resizing_vertex_list(std::vector<std::vector<point_data< T> > >& return_points,
@@ -709,7 +849,7 @@ namespace boost { namespace polygon {
 
       std::pair<point_data<double>,point_data<double> > he1(start_offset,mid1_offset);
       std::pair<point_data<double>,point_data<double> > he2(mid2_offset ,end_offset);
-      typedef typename high_precision_type<double>::type high_precision;
+      //typedef typename high_precision_type<double>::type high_precision;
 
       point_data<T> intersect;
       typename scanline_base<T>::compute_intersection_pack pack;
@@ -723,8 +863,8 @@ namespace boost { namespace polygon {
          return_points_back.push_back(start);
          return_points_back.push_back(curr_prev);
 
-         /*double d1= */compute_area(intersect,middle,start);
-         /*double d2= */compute_area(start,curr_prev,intersect);
+         //double d1= compute_area(intersect,middle,start);
+         //double d2= compute_area(start,curr_prev,intersect);
 
          curr_prev = intersect;
 
@@ -754,7 +894,7 @@ namespace boost { namespace polygon {
          ps += 2.0 * our_pi;
       if (pe <= 0.0)
          pe += 2.0 * our_pi;
-      if (ps >= 2.0 * M_PI)
+      if (ps >= 2.0 * our_pi)
          ps -= 2.0 * our_pi;
       while (pe <= ps)
          pe += 2.0 * our_pi;
@@ -771,9 +911,9 @@ namespace boost { namespace polygon {
       }
       return_points.push_back(round_down<T>(center));
       return_points.push_back(round_down<T>(start));
-      int i=0;
+      unsigned int i=0;
       double curr_angle = ps+delta_angle;
-      while( curr_angle < pe - 0.01 && i < 2 * (int)num_circle_segments) {
+      while( curr_angle < pe - 0.01 && i < 2 * num_circle_segments) {
          i++;
          double x = center.x() + r * cos( curr_angle);
          double y = center.y() + r * sin( curr_angle);

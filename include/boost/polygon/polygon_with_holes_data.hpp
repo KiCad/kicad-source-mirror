@@ -96,7 +96,7 @@ public:
     return holes_.size();
   }
 
-private:
+public:
   polygon_data<coordinate_type> self_;
   std::list<hole_type> holes_; 
   };

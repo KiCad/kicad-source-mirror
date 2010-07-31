@@ -60,7 +60,7 @@ public:
 
   inline std::size_t size() const { return coords_.size(); }
 
-private:
+public:
   std::vector<point_data<coordinate_type> > coords_; 
 };
 
