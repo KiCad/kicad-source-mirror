@@ -1073,6 +1073,8 @@ public:
     void         InstallOptionsFrame( const wxPoint& pos );
 
     void         OnCloseWindow( wxCloseEvent& Event );
+    void         CloseModuleEditor( wxCommandEvent& Event );
+
     void         Process_Special_Functions( wxCommandEvent& event );
     void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void         ReCreateHToolbar();

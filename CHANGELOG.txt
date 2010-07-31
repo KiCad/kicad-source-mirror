@@ -21,7 +21,7 @@ email address.
 2010-jul-27, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++all:
-    Updated boost to version 1.34
+    Updated boost to version 1.43
     Added boost::polygon (experimental)
 ++pcbnew:
     Added experimental zone fill calculations with boost::polygon

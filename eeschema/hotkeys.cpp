@@ -429,7 +429,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             if( m_ID_current_state != ID_NOCONN_BUTT )
                 SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL,
-                          _( "Add a no connected flag" ) );
+                          _( "Add \"NoNonnect\" Flags" ) );
             OnLeftClick( DC, MousePos );
         }
         break;

@@ -222,7 +222,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          HELP_REDO );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GEN_PRINT, wxEmptyString, wxBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),
                          _( "Print board" ) );
     m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, wxBitmap( plot_xpm ),
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );

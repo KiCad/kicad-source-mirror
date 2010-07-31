@@ -144,6 +144,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
                           _( "Quit EESchema" ) );
+    item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
 #endif /* !defined( __WXMAC__) */

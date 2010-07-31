@@ -135,6 +135,9 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
     case ID_MODEDIT_PLACE_ANCHOR:
     {
         MODULE* module = GetBoard()->m_Modules;
+        if( module == NULL    // No module loaded
+            || (module->m_Flags != 0) )
+            break;
         module->m_Flags = 0;
         SaveCopyInUndoList( module, UR_MODEDIT );
         Place_Ancre( module );      // set the new relatives internal
@@ -145,7 +148,7 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         // Replace the module in position 0, to recalculate absolutes
         // coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( 0, 0, wxEmptyString );
         SetCurItem( NULL );
         DrawPanel->Refresh();
     }
@@ -159,6 +162,8 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
+        if( GetBoard()->m_Modules == NULL )
+            break;
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         CreateTextModule( GetBoard()->m_Modules, DC );
         break;
@@ -172,10 +177,9 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         break;
 
     default:
-        DrawPanel->SetCursor( wxCURSOR_ARROW );
         DisplayError( this,
                       wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
-        m_ID_current_state = 0;
+        SetToolID( 0, 0, wxEmptyString );
         break;
     }
 

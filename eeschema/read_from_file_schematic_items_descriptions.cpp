@@ -703,16 +703,17 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
             if( fieldNdx >= component->GetFieldCount() )
             {
-                // add as many fields as needed so the m_FieldId's are
-                // contiguous, no gaps.
-                while( fieldNdx >= component->GetFieldCount() )
-                {
-                    int       newNdx = component->GetFieldCount();
+                // The first MANDATOR_FIELDS must be constructed within the SCH_COMPONENT
+                // constructor.
+                wxASSERT( component->GetFieldCount() >= MANDATORY_FIELDS );
 
-                    SCH_FIELD field( wxPoint( 0, 0 ), newNdx, component,
-                                     fieldName );
-                    component->AddField( field );
-                }
+                // Ignore the fieldNdx, it is not important anymore if within
+                // the user defined fields region (i.e. >= MANDATORY_FIELDS).
+
+                int       newNdx = component->GetFieldCount();  // has this index after insertion
+
+                SCH_FIELD field( wxPoint( 0, 0 ), newNdx, component, fieldName );
+                component->AddField( field );
             }
             else
             {

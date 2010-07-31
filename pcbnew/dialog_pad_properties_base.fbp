@@ -331,7 +331,7 @@
                                                 <property name="name">fgSizerGeometry</property>
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                 <property name="permission">none</property>
-                                                <property name="rows">9</property>
+                                                <property name="rows">12</property>
                                                 <property name="vgap">0</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
@@ -2207,7 +2207,7 @@
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bMiddleSizer</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -2590,7 +2590,7 @@
                                                 <property name="name">fgClearancesGridSizer</property>
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                 <property name="permission">none</property>
-                                                <property name="rows">4</property>
+                                                <property name="rows">5</property>
                                                 <property name="vgap">0</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>

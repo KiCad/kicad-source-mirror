@@ -24,7 +24,9 @@ enum  NumFieldType {
     FOOTPRINT,              ///< Field Name Module PCB, i.e. "16DIP300"
     DATASHEET,              ///< name of datasheet
 
-    MANDATORY_FIELDS,       ///< the first 4 are mandatory or fixed, and instantiated in FIELD constructors
+    /// The first 4 are mandatory, and must be instantiated in SCH_COMPONENT
+    /// and LIB_COMPONENT constructors
+    MANDATORY_FIELDS,
 
     FIELD1 = MANDATORY_FIELDS,
     FIELD2,

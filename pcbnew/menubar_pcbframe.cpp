@@ -195,7 +195,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, ID_GEN_PRINT, _( "&Print" ),
+    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "&Print" ),
                            _( "Print pcb board" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
@@ -237,6 +237,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
                            _( "Quit PCBNew" ) );
+    item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
 #endif /* !defined( __WXMAC__ ) */
