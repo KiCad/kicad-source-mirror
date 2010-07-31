@@ -33,38 +33,38 @@ namespace boost { namespace polygon{
     typedef std::map<half_edge, std::set<segment_id>, less_half_edge> edge_scanline;
     typedef typename edge_scanline::iterator iterator;
 
-    std::map<Unit, std::set<segment_id> > vertical_data_;
-    edge_scanline edge_scanline_;
-    Unit x_;
-    int just_before_;
-    segment_id segment_id_;
-    std::vector<std::pair<half_edge, int> > event_edges_;
-    std::set<Point> intersection_queue_;
+//     std::map<Unit, std::set<segment_id> > vertical_data_;
+//     edge_scanline edge_scanline_;
+//     Unit x_;
+//     int just_before_;
+//     segment_id segment_id_;
+//     std::vector<std::pair<half_edge, int> > event_edges_;
+//     std::set<Point> intersection_queue_;
   public:
-    inline line_intersection() : vertical_data_(), edge_scanline_(), x_((std::numeric_limits<Unit>::max)()), just_before_(0), segment_id_(0), event_edges_(), intersection_queue_() {
-      less_half_edge lessElm(&x_, &just_before_);
-      edge_scanline_ = edge_scanline(lessElm);
-    }
-    inline line_intersection(const line_intersection& that) : vertical_data_(), edge_scanline_(), x_(), just_before_(), segment_id_(), event_edges_(), intersection_queue_() { (*this) = that; }
-    inline line_intersection& operator=(const line_intersection& that) {
-      x_ = that.x_;
-      just_before_ = that.just_before_;
-      segment_id_ = that.segment_id_;
+//     inline line_intersection() : vertical_data_(), edge_scanline_(), x_((std::numeric_limits<Unit>::max)()), just_before_(0), segment_id_(0), event_edges_(), intersection_queue_() {
+//       less_half_edge lessElm(&x_, &just_before_);
+//       edge_scanline_ = edge_scanline(lessElm);
+//     }
+//     inline line_intersection(const line_intersection& that) : vertical_data_(), edge_scanline_(), x_(), just_before_(), segment_id_(), event_edges_(), intersection_queue_() { (*this) = that; }
+//     inline line_intersection& operator=(const line_intersection& that) {
+//       x_ = that.x_;
+//       just_before_ = that.just_before_;
+//       segment_id_ = that.segment_id_;
         
-      //I cannot simply copy that.edge_scanline_ to this edge_scanline_ becuase the functor store pointers to other members!
-      less_half_edge lessElm(&x_, &just_before_);
-      edge_scanline_ = edge_scanline(lessElm);
+//       //I cannot simply copy that.edge_scanline_ to this edge_scanline_ becuase the functor store pointers to other members!
+//       less_half_edge lessElm(&x_, &just_before_);
+//       edge_scanline_ = edge_scanline(lessElm);
 
-      edge_scanline_.insert(that.edge_scanline_.begin(), that.edge_scanline_.end());
-      return *this;
-    }
+//       edge_scanline_.insert(that.edge_scanline_.begin(), that.edge_scanline_.end());
+//       return *this;
+//     }
 
-    static inline void between(Point pt, Point pt1, Point pt2) {
-      less_point lp;
-      if(lp(pt1, pt2))
-        return lp(pt, pt2) && lp(pt1, pt);
-      return lp(pt, pt1) && lp(pt2, pt);
-    }
+//     static inline void between(Point pt, Point pt1, Point pt2) {
+//       less_point lp;
+//       if(lp(pt1, pt2))
+//         return lp(pt, pt2) && lp(pt1, pt);
+//       return lp(pt, pt1) && lp(pt2, pt);
+//     }
 
     template <typename iT>
     static inline void compute_histogram_in_y(iT begin, iT end, std::size_t size, std::vector<std::pair<Unit, std::pair<std::size_t, std::size_t> > >& histogram) {
@@ -216,7 +216,7 @@ namespace boost { namespace polygon{
         //itr2 = pts.end();
         while(lfinger != newend && (*lfinger).x() < startpt.x()) ++lfinger; 
         for(typename std::vector<Point>::iterator itr = lfinger ; itr != newend && (*itr).x() <= stoppt.x(); ++itr) {
-          if(intersects_grid(*itr, he1))
+          if(scanline_base<Unit>::intersects_grid(*itr, he1))
             intersection_points[id1].insert(*itr);
         }
       }
@@ -243,8 +243,8 @@ namespace boost { namespace polygon{
           //edge changed orientation, invert count on edge
           output_segments.back().second.second *= -1;
         }
-        if(!is_vertical(input_segments[intermediate_segments[i].second].first) &&
-           is_vertical(output_segments.back().first)) {
+        if(!scanline_base<Unit>::is_vertical(input_segments[intermediate_segments[i].second].first) &&
+           scanline_base<Unit>::is_vertical(output_segments.back().first)) {
           output_segments.back().second.second *= -1;
         }
         if(lp(output_segments.back().first.second, output_segments.back().first.first)) {
@@ -349,7 +349,7 @@ namespace boost { namespace polygon{
           segment_id id = (*iter).second;
           const std::set<Point>& pts = intersection_points[id];
           Point hpt(he.first.get(HORIZONTAL)+1, he.first.get(VERTICAL));
-          if(!is_vertical(he) && less_slope(he.first.get(HORIZONTAL), he.first.get(VERTICAL),
+          if(!scanline_base<Unit>::is_vertical(he) && scanline_base<Unit>::less_slope(he.first.get(HORIZONTAL), he.first.get(VERTICAL),
                                             he.second, hpt)) {
             //slope is below horizontal
             std::vector<Point> tmpPts;
@@ -365,263 +365,263 @@ namespace boost { namespace polygon{
       }
     }
 
-    //iT iterator over unsorted pair<Point> representing line segments of input
-    //output_segments is populated with fully intersected output line segment half
-    //edges and the index of the input segment that they are assoicated with
-    //duplicate output half edges with different ids will be generated in the case
-    //that parallel input segments intersection
-    //outputs are in sorted order and include both begin and end events for
-    //each segment
-    template <typename iT>
-    inline void scan(std::vector<std::pair<half_edge, int> >& output_segments,
-                     iT begin, iT end) {
-      std::map<segment_id, std::set<Point> > intersection_points;
-      scan(intersection_points, begin, end);
-      segment_intersections(output_segments, intersection_points, begin, end);
-    }
+//     //iT iterator over unsorted pair<Point> representing line segments of input
+//     //output_segments is populated with fully intersected output line segment half
+//     //edges and the index of the input segment that they are assoicated with
+//     //duplicate output half edges with different ids will be generated in the case
+//     //that parallel input segments intersection
+//     //outputs are in sorted order and include both begin and end events for
+//     //each segment
+//     template <typename iT>
+//     inline void scan(std::vector<std::pair<half_edge, int> >& output_segments,
+//                      iT begin, iT end) {
+//       std::map<segment_id, std::set<Point> > intersection_points;
+//       scan(intersection_points, begin, end);
+//       segment_intersections(output_segments, intersection_points, begin, end);
+//     }
 
-    //iT iterator over sorted sequence of half edge, segment id pairs representing segment begin and end points
-    //intersection points provides a mapping from input segment id (vector index) to the set
-    //of intersection points assocated with that input segment
-    template <typename iT>
-    inline void scan(std::map<segment_id, std::set<Point> >& intersection_points,
-                     iT begin, iT end) {
-      for(iT iter = begin; iter != end; ++iter) {
-        const std::pair<half_edge, int>& elem = *iter;
-        const half_edge& he = elem.first;
-        Unit current_x = he.first.get(HORIZONTAL);
-        if(current_x != x_) {
-          process_scan_event(intersection_points);
-          while(!intersection_queue_.empty() &&
-                (*(intersection_queue_.begin()).get(HORIZONTAL) < current_x)) {
-            x_ = *(intersection_queue_.begin()).get(HORIZONTAL);
-            process_intersections_at_scan_event(intersection_points);
-          }
-          x_ = current_x;
-        }
-        event_edges_.push_back(elem);
-      }
-      process_scan_event(intersection_points);
-    }
+//     //iT iterator over sorted sequence of half edge, segment id pairs representing segment begin and end points
+//     //intersection points provides a mapping from input segment id (vector index) to the set
+//     //of intersection points assocated with that input segment
+//     template <typename iT>
+//     inline void scan(std::map<segment_id, std::set<Point> >& intersection_points,
+//                      iT begin, iT end) {
+//       for(iT iter = begin; iter != end; ++iter) {
+//         const std::pair<half_edge, int>& elem = *iter;
+//         const half_edge& he = elem.first;
+//         Unit current_x = he.first.get(HORIZONTAL);
+//         if(current_x != x_) {
+//           process_scan_event(intersection_points);
+//           while(!intersection_queue_.empty() &&
+//                 (*(intersection_queue_.begin()).get(HORIZONTAL) < current_x)) {
+//             x_ = *(intersection_queue_.begin()).get(HORIZONTAL);
+//             process_intersections_at_scan_event(intersection_points);
+//           }
+//           x_ = current_x;
+//         }
+//         event_edges_.push_back(elem);
+//       }
+//       process_scan_event(intersection_points);
+//     }
 
-    inline iterator lookup(const half_edge& he) {
-      return edge_scanline_.find(he);
-    }
+//     inline iterator lookup(const half_edge& he) {
+//       return edge_scanline_.find(he);
+//     }
 
-    inline void insert_into_scanline(const half_edge& he, int id) {
-      edge_scanline_[he].insert(id);
-    }
+//     inline void insert_into_scanline(const half_edge& he, int id) {
+//       edge_scanline_[he].insert(id);
+//     }
 
-    inline void lookup_and_remove(const half_edge& he, int id) {
-      iterator remove_iter = lookup(he);
-      if(remove_iter == edge_scanline_.end()) {
-        //std::cout << "failed to find removal segment in scanline\n";
-        return;
-      }
-      std::set<segment_id>& ids = (*remove_iter).second;
-      std::set<segment_id>::iterator id_iter = ids.find(id);
-      if(id_iter == ids.end()) {
-        //std::cout << "failed to find removal segment id in scanline set\n";
-        return;
-      }
-      ids.erase(id_iter);
-      if(ids.empty())
-        edge_scanline_.erase(remove_iter);
-    }
+//     inline void lookup_and_remove(const half_edge& he, int id) {
+//       iterator remove_iter = lookup(he);
+//       if(remove_iter == edge_scanline_.end()) {
+//         //std::cout << "failed to find removal segment in scanline\n";
+//         return;
+//       }
+//       std::set<segment_id>& ids = (*remove_iter).second;
+//       std::set<segment_id>::iterator id_iter = ids.find(id);
+//       if(id_iter == ids.end()) {
+//         //std::cout << "failed to find removal segment id in scanline set\n";
+//         return;
+//       }
+//       ids.erase(id_iter);
+//       if(ids.empty())
+//         edge_scanline_.erase(remove_iter);
+//     }
 
-    static inline void update_segments(std::map<segment_id, std::set<Point> >& intersection_points, 
-                                       const std::set<segment_id>& segments, Point pt) {
-      for(std::set<segment_id>::const_iterator itr = segments.begin(); itr != segments.end(); ++itr) {
-        intersection_points[*itr].insert(pt);
-      }
-    }
+//     static inline void update_segments(std::map<segment_id, std::set<Point> >& intersection_points, 
+//                                        const std::set<segment_id>& segments, Point pt) {
+//       for(std::set<segment_id>::const_iterator itr = segments.begin(); itr != segments.end(); ++itr) {
+//         intersection_points[*itr].insert(pt);
+//       }
+//     }
 
-    inline void process_intersections_at_scan_event(std::map<segment_id, std::set<Point> >& intersection_points) {
-      //there may be additional intersection points at this x location that haven't been
-      //found yet if vertical or near vertical line segments intersect more than
-      //once before the next x location
-      just_before_ = true;
-      std::set<iterator> intersecting_elements;
-      std::set<Unit> intersection_locations;
-      typedef typename std::set<Point>::iterator intersection_iterator;
-      intersection_iterator iter;
-      //first find all secondary intersection locations and all scanline iterators
-      //that are intersecting
-      for(iter = intersection_queue_.begin();
-          iter != intersection_queue_.end() && (*iter).get(HORIZONTAL) == x_; ++iter) {
-        Point pt = *iter;
-        Unit y = pt.get(VERTICAL);
-        intersection_locations.insert(y);
-        //if x_ is max there can be only end events and no sloping edges
-        if(x_ != (std::numeric_limits<Unit>::max)()) {
-          //deal with edges that project to the right of scanline
-          //first find the edges in the scanline adjacent to primary intersectin points
-          //lookup segment in scanline at pt
-          iterator itr = edge_scanline_.lower_bound(half_edge(pt, Point(x_+1, y)));
-          //look above pt in scanline until reaching end or segment that doesn't intersect
-          //1x1 grid upper right of pt
-          //look below pt in scanline until reaching begin or segment that doesn't interset
-          //1x1 grid upper right of pt
+//     inline void process_intersections_at_scan_event(std::map<segment_id, std::set<Point> >& intersection_points) {
+//       //there may be additional intersection points at this x location that haven't been
+//       //found yet if vertical or near vertical line segments intersect more than
+//       //once before the next x location
+//       just_before_ = true;
+//       std::set<iterator> intersecting_elements;
+//       std::set<Unit> intersection_locations;
+//       typedef typename std::set<Point>::iterator intersection_iterator;
+//       intersection_iterator iter;
+//       //first find all secondary intersection locations and all scanline iterators
+//       //that are intersecting
+//       for(iter = intersection_queue_.begin();
+//           iter != intersection_queue_.end() && (*iter).get(HORIZONTAL) == x_; ++iter) {
+//         Point pt = *iter;
+//         Unit y = pt.get(VERTICAL);
+//         intersection_locations.insert(y);
+//         //if x_ is max there can be only end events and no sloping edges
+//         if(x_ != (std::numeric_limits<Unit>::max)()) {
+//           //deal with edges that project to the right of scanline
+//           //first find the edges in the scanline adjacent to primary intersectin points
+//           //lookup segment in scanline at pt
+//           iterator itr = edge_scanline_.lower_bound(half_edge(pt, Point(x_+1, y)));
+//           //look above pt in scanline until reaching end or segment that doesn't intersect
+//           //1x1 grid upper right of pt
+//           //look below pt in scanline until reaching begin or segment that doesn't interset
+//           //1x1 grid upper right of pt
 
-          //second find edges in scanline on the y interval of each edge found in the previous
-          //step for x_ to x_ + 1
+//           //second find edges in scanline on the y interval of each edge found in the previous
+//           //step for x_ to x_ + 1
 
-          //third find overlaps in the y intervals of all found edges to find all
-          //secondary intersection points
+//           //third find overlaps in the y intervals of all found edges to find all
+//           //secondary intersection points
 
-        }
-      }
-      //erase the intersection points from the queue
-      intersection_queue_.erase(intersection_queue_.begin(), iter);
-      std::vector<scanline_element> insertion_edges;
-      insertion_edges.reserve(intersecting_elements.size());
-      std::vector<std::pair<Unit, iterator> > sloping_ends;
-      //do all the work of updating the output of all intersecting 
-      for(typename std::set<iterator>::iterator inter_iter = intersecting_elements.begin();
-          inter_iter != intersecting_elements.end(); ++inter_iter) {
-        //if it is horizontal update it now and continue
-        if(is_horizontal((*inter_iter).first)) {
-          update_segments(intersection_points, (*inter_iter).second, Point(x_, (*inter_iter).first.get(VERTICAL)));
-        } else {
-          //if x_ is max there can be only end events and no sloping edges
-          if(x_ != (std::numeric_limits<Unit>::max)()) {
-            //insert its end points into the vector of sloping ends
-            const half_edge& he = (*inter_iter).first;
-            Unit y = evalAtXforY(x_, he.first, he.second);
-            Unit y2 = evalAtXforY(x_+1, he.first, he.second); 
-            if(y2 >= y) y2 +=1; //we round up, in exact case we don't worry about overbite of one
-            else y += 1; //downward sloping round up
-            sloping_ends.push_back(std::make_pair(y, inter_iter));
-            sloping_ends.push_back(std::make_pair(y2, inter_iter));
-          }
-        }
-      }
+//         }
+//       }
+//       //erase the intersection points from the queue
+//       intersection_queue_.erase(intersection_queue_.begin(), iter);
+//       std::vector<scanline_element> insertion_edges;
+//       insertion_edges.reserve(intersecting_elements.size());
+//       std::vector<std::pair<Unit, iterator> > sloping_ends;
+//       //do all the work of updating the output of all intersecting 
+//       for(typename std::set<iterator>::iterator inter_iter = intersecting_elements.begin();
+//           inter_iter != intersecting_elements.end(); ++inter_iter) {
+//         //if it is horizontal update it now and continue
+//         if(is_horizontal((*inter_iter).first)) {
+//           update_segments(intersection_points, (*inter_iter).second, Point(x_, (*inter_iter).first.get(VERTICAL)));
+//         } else {
+//           //if x_ is max there can be only end events and no sloping edges
+//           if(x_ != (std::numeric_limits<Unit>::max)()) {
+//             //insert its end points into the vector of sloping ends
+//             const half_edge& he = (*inter_iter).first;
+//             Unit y = evalAtXforY(x_, he.first, he.second);
+//             Unit y2 = evalAtXforY(x_+1, he.first, he.second); 
+//             if(y2 >= y) y2 +=1; //we round up, in exact case we don't worry about overbite of one
+//             else y += 1; //downward sloping round up
+//             sloping_ends.push_back(std::make_pair(y, inter_iter));
+//             sloping_ends.push_back(std::make_pair(y2, inter_iter));
+//           }
+//         }
+//       }
         
-      //merge sloping element data
-      std::sort(sloping_ends.begin(), sloping_ends.end());
-      std::map<Unit, std::set<iterator> > sloping_elements;
-      std::set<iterator> merge_elements;
-      for(typename std::vector<std::pair<Unit, iterator> >::iterator slop_iter = sloping_ends.begin();
-          slop_iter = sloping_ends.end(); ++slop_iter) {
-        //merge into sloping elements
-        typename std::set<iterator>::iterator merge_iterator = merge_elements.find((*slop_iter).second);
-        if(merge_iterator = merge_elements.end()) {
-          merge_elements.insert((*slop_iter).second);
-        } else {
-          merge_elements.erase(merge_iterator);
-        }
-        sloping_elements[(*slop_iter).first] = merge_elements;
-      }
+//       //merge sloping element data
+//       std::sort(sloping_ends.begin(), sloping_ends.end());
+//       std::map<Unit, std::set<iterator> > sloping_elements;
+//       std::set<iterator> merge_elements;
+//       for(typename std::vector<std::pair<Unit, iterator> >::iterator slop_iter = sloping_ends.begin();
+//           slop_iter == sloping_ends.end(); ++slop_iter) {
+//         //merge into sloping elements
+//         typename std::set<iterator>::iterator merge_iterator = merge_elements.find((*slop_iter).second);
+//         if(merge_iterator == merge_elements.end()) {
+//           merge_elements.insert((*slop_iter).second);
+//         } else {
+//           merge_elements.erase(merge_iterator);
+//         }
+//         sloping_elements[(*slop_iter).first] = merge_elements;
+//       }
 
-      //scan intersection points
-      typename std::map<Unit, std::set<segment_id> >::iterator vertical_iter = vertical_data_.begin();
-      typename std::map<Unit, std::set<iterator> >::iterator sloping_iter = sloping_elements.begin();
-      for(typename std::set<Unit>::iterator position_iter = intersection_locations.begin();
-          position_iter = intersection_locations.end(); ++position_iter) {
-        //look for vertical segments that intersect this point and update them
-        Unit y = *position_iter;
-        Point pt(x_, y);
-        //handle vertical segments
-        if(vertical_iter != vertical_data_.end()) {
-          typename std::map<Unit, std::set<segment_id> >::iterator next_vertical = vertical_iter;
-          for(++next_vertical; next_vertical != vertical_data_.end() &&
-                (*next_vertical).first < y; ++next_vertical) {
-            vertical_iter = next_vertical;
-          }
-          if((*vertical_iter).first < y && !(*vertical_iter).second.empty()) {
-            update_segments(intersection_points, (*vertical_iter).second, pt);
-            ++vertical_iter;
-            if(vertical_iter != vertical_data_.end() && (*vertical_iter).first == y)
-              update_segments(intersection_points, (*vertical_iter).second, pt);
-          }
-        }
-        //handle sloping segments
-        if(sloping_iter != sloping_elements.end()) {
-          typename std::map<Unit, std::set<iterator> >::iterator next_sloping = sloping_iter;
-          for(++next_sloping; next_sloping != sloping_elements.end() &&
-                (*next_sloping).first < y; ++next_sloping) {
-            sloping_iter = next_sloping;
-          }
-          if((*sloping_iter).first < y && !(*sloping_iter).second.empty()) {
-            for(typename std::set<iterator>::iterator element_iter = (*sloping_iter).second.begin();
-                element_iter != (*sloping_iter).second.end(); ++element_iter) {
-              const half_edge& he = (*element_iter).first;
-              if(intersects_grid(pt, he)) {
-                update_segments(intersection_points, (*element_iter).second, pt);
-              }
-            }
-            ++sloping_iter;
-            if(sloping_iter != sloping_elements.end() && (*sloping_iter).first == y &&
-               !(*sloping_iter).second.empty()) {
-              for(typename std::set<iterator>::iterator element_iter = (*sloping_iter).second.begin();
-                  element_iter != (*sloping_iter).second.end(); ++element_iter) {
-                const half_edge& he = (*element_iter).first;
-                if(intersects_grid(pt, he)) {
-                  update_segments(intersection_points, (*element_iter).second, pt);
-                }
-              }
-            }
-          }
-        }
-      }
+//       //scan intersection points
+//       typename std::map<Unit, std::set<segment_id> >::iterator vertical_iter = vertical_data_.begin();
+//       typename std::map<Unit, std::set<iterator> >::iterator sloping_iter = sloping_elements.begin();
+//       for(typename std::set<Unit>::iterator position_iter = intersection_locations.begin();
+//           position_iter == intersection_locations.end(); ++position_iter) {
+//         //look for vertical segments that intersect this point and update them
+//         Unit y = *position_iter;
+//         Point pt(x_, y);
+//         //handle vertical segments
+//         if(vertical_iter != vertical_data_.end()) {
+//           typename std::map<Unit, std::set<segment_id> >::iterator next_vertical = vertical_iter;
+//           for(++next_vertical; next_vertical != vertical_data_.end() &&
+//                 (*next_vertical).first < y; ++next_vertical) {
+//             vertical_iter = next_vertical;
+//           }
+//           if((*vertical_iter).first < y && !(*vertical_iter).second.empty()) {
+//             update_segments(intersection_points, (*vertical_iter).second, pt);
+//             ++vertical_iter;
+//             if(vertical_iter != vertical_data_.end() && (*vertical_iter).first == y)
+//               update_segments(intersection_points, (*vertical_iter).second, pt);
+//           }
+//         }
+//         //handle sloping segments
+//         if(sloping_iter != sloping_elements.end()) {
+//           typename std::map<Unit, std::set<iterator> >::iterator next_sloping = sloping_iter;
+//           for(++next_sloping; next_sloping != sloping_elements.end() &&
+//                 (*next_sloping).first < y; ++next_sloping) {
+//             sloping_iter = next_sloping;
+//           }
+//           if((*sloping_iter).first < y && !(*sloping_iter).second.empty()) {
+//             for(typename std::set<iterator>::iterator element_iter = (*sloping_iter).second.begin();
+//                 element_iter != (*sloping_iter).second.end(); ++element_iter) {
+//               const half_edge& he = (*element_iter).first;
+//               if(intersects_grid(pt, he)) {
+//                 update_segments(intersection_points, (*element_iter).second, pt);
+//               }
+//             }
+//             ++sloping_iter;
+//             if(sloping_iter != sloping_elements.end() && (*sloping_iter).first == y &&
+//                !(*sloping_iter).second.empty()) {
+//               for(typename std::set<iterator>::iterator element_iter = (*sloping_iter).second.begin();
+//                   element_iter != (*sloping_iter).second.end(); ++element_iter) {
+//                 const half_edge& he = (*element_iter).first;
+//                 if(intersects_grid(pt, he)) {
+//                   update_segments(intersection_points, (*element_iter).second, pt);
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
 
-      //erase and reinsert edges into scanline with check for future intersection
-    }
+//       //erase and reinsert edges into scanline with check for future intersection
+//     }
 
-    inline void process_scan_event(std::map<segment_id, std::set<Point> >& intersection_points) {
-      just_before_ = true;
+//     inline void process_scan_event(std::map<segment_id, std::set<Point> >& intersection_points) {
+//       just_before_ = true;
 
-      //process end events by removing those segments from the scanline 
-      //and insert vertices of all events into intersection queue
-      Point prev_point((std::numeric_limits<Unit>::min)(), (std::numeric_limits<Unit>::min)());
-      less_point lp;
-      std::set<segment_id> vertical_ids;
-      vertical_data_.clear();
-      for(std::size_t i = 0; i < event_edges_.size(); ++i) {
-        segment_id id = event_edges_[i].second;
-        const half_edge& he = event_edges_[i].first;
-        //vertical half edges are handled during intersection processing because
-        //they cannot be inserted into the scanline
-        if(!is_vertical(he)) {
-          if(lp(he.second, he.first)) {
-            //half edge is end event
-            lookup_and_remove(he, id);
-          } else {
-            //half edge is begin event
-            insert_into_scanline(he, id);  
-            //note that they will be immediately removed and reinserted after
-            //handling their intersection (vertex)
-            //an optimization would allow them to be processed specially to avoid the redundant
-            //removal and reinsertion
-          }
-        } else {
-          //common case if you are lucky
-          //update the map of y to set of segment id
-          if(lp(he.second, he.first)) {
-            //half edge is end event
-            std::set<segment_id>::iterator itr = vertical_ids.find(id);
-            if(itr == vertical_ids.end()) {
-              //std::cout << "Failed to find end event id in vertical ids\n";
-            } else {
-              vertical_ids.erase(itr);
-              vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
-            }
-          } else {
-            //half edge is a begin event
-            vertical_ids.insert(id);
-            vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
-          }
-        }
-        //prevent repeated insertion of same vertex into intersection queue
-        if(prev_point != he.first)
-          intersection_queue_.insert(he.first);
-        else
-          prev_point = he.first;
-        // process intersections at scan event
-        process_intersections_at_scan_event(intersection_points);
-      }
-      event_edges_.clear();
-    }
+//       //process end events by removing those segments from the scanline 
+//       //and insert vertices of all events into intersection queue
+//       Point prev_point((std::numeric_limits<Unit>::min)(), (std::numeric_limits<Unit>::min)());
+//       less_point lp;
+//       std::set<segment_id> vertical_ids;
+//       vertical_data_.clear();
+//       for(std::size_t i = 0; i < event_edges_.size(); ++i) {
+//         segment_id id = event_edges_[i].second;
+//         const half_edge& he = event_edges_[i].first;
+//         //vertical half edges are handled during intersection processing because
+//         //they cannot be inserted into the scanline
+//         if(!is_vertical(he)) {
+//           if(lp(he.second, he.first)) {
+//             //half edge is end event
+//             lookup_and_remove(he, id);
+//           } else {
+//             //half edge is begin event
+//             insert_into_scanline(he, id);  
+//             //note that they will be immediately removed and reinserted after
+//             //handling their intersection (vertex)
+//             //an optimization would allow them to be processed specially to avoid the redundant
+//             //removal and reinsertion
+//           }
+//         } else {
+//           //common case if you are lucky
+//           //update the map of y to set of segment id
+//           if(lp(he.second, he.first)) {
+//             //half edge is end event
+//             std::set<segment_id>::iterator itr = vertical_ids.find(id);
+//             if(itr == vertical_ids.end()) {
+//               //std::cout << "Failed to find end event id in vertical ids\n";
+//             } else {
+//               vertical_ids.erase(itr);
+//               vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
+//             }
+//           } else {
+//             //half edge is a begin event
+//             vertical_ids.insert(id);
+//             vertical_data_[he.first.get(HORIZONTAL)] = vertical_ids;
+//           }
+//         }
+//         //prevent repeated insertion of same vertex into intersection queue
+//         if(prev_point != he.first)
+//           intersection_queue_.insert(he.first);
+//         else
+//           prev_point = he.first;
+//         // process intersections at scan event
+//         process_intersections_at_scan_event(intersection_points);
+//       }
+//       event_edges_.clear();
+//     }
 
   public:
     template <typename stream_type>
@@ -892,23 +892,23 @@ namespace boost { namespace polygon{
         return false;
       }
       edges.pop_back();
-      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(11, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(11, 11)), (segment_id)edges.size()));
       if(!verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail3\n";
         return false;
       }
-      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(10, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 0), Point(10, 11)), (segment_id)edges.size()));
       if(verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail4\n";
         return false;
       }
       edges.pop_back();
-      edges.push_back(std::make_pair(half_edge(Point(1, 2), Point(11, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(1, 2), Point(11, 11)), (segment_id)edges.size()));
       if(!verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail5 " << result.first << " " << result.second << "\n";
         return false;
       }
-      edges.push_back(std::make_pair(half_edge(Point(0, 5), Point(0, 11)), edges.size()));
+      edges.push_back(std::make_pair(half_edge(Point(0, 5), Point(0, 11)), (segment_id)edges.size()));
       if(verify_scan(result, edges.begin(), edges.end())) {
         stdcout << "fail6 " << result.first << " " << result.second << "\n";
         return false;
@@ -1048,7 +1048,7 @@ namespace boost { namespace polygon{
           if(current_iter != scan_data_.end()) {
             //make sure we are looking at element in scanline just below y
             //if(evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) != y) {
-            if(on_above_or_below(Point(x_, y), (*current_iter).first) != 0) {
+            if(scanline_base<Unit>::on_above_or_below(Point(x_, y), (*current_iter).first) != 0) {
               Point e2(pt);
               if(e2.get(VERTICAL) != (std::numeric_limits<Unit>::max)())
                 e2.set(VERTICAL, e2.get(VERTICAL) + 1);
@@ -1060,12 +1060,12 @@ namespace boost { namespace polygon{
             if(current_iter != scan_data_.end()) {
               //get the bottom iterator for elements at this point
               //while(evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) >= (high_precision)y && 
-              while(on_above_or_below(Point(x_, y), (*current_iter).first) != 1 &&
+              while(scanline_base<Unit>::on_above_or_below(Point(x_, y), (*current_iter).first) != 1 &&
                     current_iter != scan_data_.begin()) {
                 --current_iter;
               }
               //if(evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) >= (high_precision)y) {
-              if(on_above_or_below(Point(x_, y), (*current_iter).first) != 1) {
+              if(scanline_base<Unit>::on_above_or_below(Point(x_, y), (*current_iter).first) != 1) {
                 properties_below.clear();
               } else {
                 properties_below = (*current_iter).second;
@@ -1078,7 +1078,7 @@ namespace boost { namespace polygon{
           while(current_iter != scan_data_.end() &&
                 //can only be true if y is integer
                 //evalAtXforY(x_, (*current_iter).first.first, (*current_iter).first.second) == y) {
-                on_above_or_below(Point(x_, y), (*current_iter).first) == 0) {
+                scanline_base<Unit>::on_above_or_below(Point(x_, y), (*current_iter).first) == 0) {
             //removal_set_.push_back(current_iter);
             ++current_iter;
           }
@@ -1129,7 +1129,7 @@ namespace boost { namespace polygon{
             y = vertical_edge_below.second.get(VERTICAL);
             continue;
           }
-          if(is_vertical(he)) {
+          if(scanline_base<Unit>::is_vertical(he)) {
             update_property_map(vertical_properties_above, vp.second);
             vertical_edge_above = he;
           } else {
@@ -1556,7 +1556,7 @@ namespace boost { namespace polygon{
       sl.scan(result, mof, pmd.begin(), pmd.end());
     }
 
-    inline bool verify() {
+    inline bool verify1() {
       std::pair<int, int> offenders;
       std::vector<std::pair<half_edge, int> > lines;
       int count = 0;
@@ -1704,8 +1704,8 @@ namespace boost { namespace polygon{
           //if half edge 1 is not vertical its slope is less than that of half edge 2
           return get(pt1, HORIZONTAL) != get(pt2, HORIZONTAL);
         }
-        return less_slope(get(pt_, HORIZONTAL),
-                          get(pt_, VERTICAL), pt1, pt2);
+        return scanline_base<Unit>::less_slope(get(pt_, HORIZONTAL),
+                                               get(pt_, VERTICAL), pt1, pt2);
       }
     };
 
@@ -2154,7 +2154,7 @@ pts.push_back(Point(12344171, 6695983 )); pts.push_back(Point(12287208, 6672388 
       si.insert(poly, 444);
       result.clear();
       si.merge(result);
-      si.verify();
+      si.verify1();
       print(stdcout, si.pmd) << std::endl;
       if(!result.empty()) {
         psd = (*(result.begin())).second;
@@ -2534,7 +2534,7 @@ pts.push_back(Point(12344171, 6695983 )); pts.push_back(Point(12287208, 6672388 
         elem.first = edge;
         elem.second = 1;
         if(edge.second < edge.first) elem.second *= -1;
-        if(is_vertical(edge)) elem.second *= -1;
+        if(scanline_base<Unit>::is_vertical(edge)) elem.second *= -1;
 #ifdef BOOST_POLYGON_MSVC
 #pragma warning (disable: 4127)
 #endif

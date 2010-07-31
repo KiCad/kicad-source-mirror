@@ -42,7 +42,7 @@ namespace boost { namespace polygon{
           ivlIds_.second = that.ivlIds_.second;
           incremented_ = that.incremented_;
           return *this;
-        };
+        }
         inline bool operator==(const iterator& that) { return itr_ == that.itr_; }
         inline bool operator!=(const iterator& that) { return itr_ != that.itr_; }
         inline iterator& operator++() {

@@ -19,10 +19,10 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
-option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF).  Warning, this is experimental" )
+option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF). Warning, this is experimental" )
 
 option(USE_WX_GRAPHICS_CONTEXT
-       "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental")
+       "Use wxGraphicsContext for rendering (default OFF). Warning, this is experimental")
 
 option(USE_BOOST_POLYGON_LIBRARY
        "Use boost polygon library instead of Kbool to calculate filled areas in zones (default OFF). Warning, this is experimental")

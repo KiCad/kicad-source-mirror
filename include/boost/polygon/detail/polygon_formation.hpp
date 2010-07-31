@@ -1721,7 +1721,7 @@ namespace polygon_formation {
   unsigned int get_polygons(output_container& container, iterator_type begin, iterator_type end,
                     orientation_2d orient, bool fracture_holes, concept_type ) {
     typedef typename output_container::value_type polygon_type;
-    typedef typename iterator_type::value_type::first_type coordinate_type;
+    typedef typename std::iterator_traits<iterator_type>::value_type::first_type coordinate_type;
     polygon_type poly;
     unsigned int countPolygons = 0;
     typedef typename geometry_concept<polygon_type>::type polygon_concept_type;

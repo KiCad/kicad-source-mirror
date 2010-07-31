@@ -121,7 +121,7 @@ namespace boost { namespace polygon{
 
     static inline bool clean(const polygon_set_data<T>& polygon_set) { polygon_set.clean(); return true; }
 
-    static inline bool sorted(const polygon_set_data<T>& polygon_set) { int untested = 0;polygon_set.sort(); return true; }
+    static inline bool sorted(const polygon_set_data<T>& polygon_set) { polygon_set.sort(); return true; }
 
   };
 }  

@@ -388,7 +388,8 @@ namespace boost { namespace polygon{
     struct compute_intersection_pack {
       typedef typename high_precision_type<Unit>::type high_precision;
       high_precision y_high, dx1, dy1, dx2, dy2, x11, x21, y11, y21, x_num, y_num, x_den, y_den, x, y;
-      static inline bool compute_lazy_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, bool projected = false) {
+      static inline bool compute_lazy_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, 
+                                                   bool projected = false, bool round_closest = false) {
         long double y_high, dx1, dy1, dx2, dy2, x11, x21, y11, y21, x_num, y_num, x_den, y_den, x, y;
         typedef rectangle_data<Unit> Rectangle;
         Rectangle rect1, rect2;
@@ -445,6 +446,10 @@ namespace boost { namespace polygon{
         //std::cout << "cross2 " << dy2 << " " << dx1 << " " << dy2 * dx1 << std::endl;
         //Unit exp_x = compute_x_intercept<at>(x11, x21, y11, y21, dy1, dy2, dx1, dx2);
         //Unit exp_y = compute_x_intercept<at>(y11, y21, x11, x21, dx1, dx2, dy1, dy2);
+        if(round_closest) {
+          x = x + 0.5;
+          y = y + 0.5;
+        }
         Unit x_unit = (Unit)(x);
         Unit y_unit = (Unit)(y);
         //truncate downward if it went up due to negative number
@@ -463,12 +468,17 @@ namespace boost { namespace polygon{
                                                (long double) (std::numeric_limits<Unit>::min)(), 
                                                (long double)(std::numeric_limits<Unit>::max)(), 
                                                (long double) (std::numeric_limits<Unit>::max)() );
-          return contains(inf_rect, intersection, true);
+          if(contains(inf_rect, intersection, true)) {
+            intersection = result;
+            return true;
+          } else
+            return false;
         }
         intersection = result;
         return true;
       }
-      inline bool compute_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, bool projected = false) {
+      inline bool compute_intersection(Point& intersection, const half_edge& he1, const half_edge& he2, 
+                                       bool projected = false, bool round_closest = false) {
         if(!projected && !intersects(he1, he2))
            return false;
         bool lazy_success = compute_lazy_intersection(intersection, he1, he2, projected); 
@@ -536,6 +546,10 @@ namespace boost { namespace polygon{
         //std::cout << "cross2 " << dy2 << " " << dx1 << " " << dy2 * dx1 << std::endl;
         //Unit exp_x = compute_x_intercept<at>(x11, x21, y11, y21, dy1, dy2, dx1, dx2);
         //Unit exp_y = compute_x_intercept<at>(y11, y21, x11, x21, dx1, dx2, dy1, dy2);
+        if(round_closest) {
+          x = x + (high_precision)0.5;
+          y = y + (high_precision)0.5;
+        }
         Unit x_unit = convert_high_precision_type<Unit>(x);
         Unit y_unit = convert_high_precision_type<Unit>(y);
         //truncate downward if it went up due to negative number
@@ -549,6 +563,17 @@ namespace boost { namespace polygon{
         Point result(x_unit, y_unit);
         if(!contains(rect1, result, true)) return false;
         if(!contains(rect2, result, true)) return false;
+        if(projected) {
+          rectangle_data<long double> inf_rect((long double)(std::numeric_limits<Unit>::min)(), 
+                                               (long double) (std::numeric_limits<Unit>::min)(), 
+                                               (long double)(std::numeric_limits<Unit>::max)(), 
+                                               (long double) (std::numeric_limits<Unit>::max)() );
+          if(contains(inf_rect, intersection, true)) {
+            intersection = result;
+            return true;
+          } else
+            return false;
+        }
         intersection = result;
         return true;
       }
@@ -872,7 +897,7 @@ namespace boost { namespace polygon{
       inline active_tail_arbitrary(const vertex_half_edge& vertex, active_tail_arbitrary* otherTailp = 0) : tailp_(), otherTailp_(), holesList_(), head_() {
         tailp_ = new poly_line_arbitrary;
         tailp_->points.push_back(vertex.pt);
-        bool headArray[4] = {false, true, true, true};
+        //bool headArray[4] = {false, true, true, true};
         bool inverted = vertex.count == -1;
         head_ = (!vertex.is_vertical) ^ inverted;
         otherTailp_ = otherTailp;
@@ -1172,7 +1197,7 @@ namespace boost { namespace polygon{
       inline less_half_edge_count() : pt_() {}
       inline less_half_edge_count(Point point) : pt_(point) {}
       inline bool operator () (const std::pair<Point, int>& elm1, const std::pair<Point, int>& elm2) const {
-        return less_slope(pt_.get(HORIZONTAL), pt_.get(VERTICAL), elm1.first, elm2.first);
+        return scanline_base<Unit>::less_slope(pt_.get(HORIZONTAL), pt_.get(VERTICAL), elm1.first, elm2.first);
       }
     };
 
@@ -1196,7 +1221,7 @@ namespace boost { namespace polygon{
         Unit dx2 = elm2.first.first.first.get(HORIZONTAL) - elm2.first.first.second.get(HORIZONTAL);
         Unit dy1 = elm1.first.first.first.get(VERTICAL) - elm1.first.first.second.get(VERTICAL);
         Unit dy2 = elm2.first.first.first.get(VERTICAL) - elm2.first.first.second.get(VERTICAL);
-        return less_slope(dx1, dy1, dx2, dy2);
+        return scanline_base<Unit>::less_slope(dx1, dy1, dx2, dy2);
       }
     };
 
@@ -1356,7 +1381,7 @@ namespace boost { namespace polygon{
 
       bool have_vertical_tail_from_below = false;
       if(c_size &&
-         is_vertical(counts_from_scanline.back().first.first)) {
+         scanline_base<Unit>::is_vertical(counts_from_scanline.back().first.first)) {
         have_vertical_tail_from_below = true;
       }
       //assert size = size_less_1 + 1
@@ -1704,7 +1729,7 @@ namespace boost { namespace polygon{
           //std::cout << "checking whether ot handle hole\n";
           if(currentIter == inputEnd || 
              currentIter->pt.get(HORIZONTAL) != x_ ||
-             on_above_or_below(currentIter->pt, half_edge(iter->first.pt, iter->first.other_pt)) != -1) {
+             scanline_base<Unit>::on_above_or_below(currentIter->pt, half_edge(iter->first.pt, iter->first.other_pt)) != -1) {
             //(high_precision)(currentIter->pt.get(VERTICAL)) >= iter->first.evalAtX(x_)) {
 
             //std::cout << "handle hole here\n";
@@ -2041,26 +2066,26 @@ namespace boost { namespace polygon{
       he2.first = Point(0, 0);
       he2.second = Point(10, 20);
       Point result;
-      bool b = compute_intersection(result, he1, he2);
+      bool b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, 0)) return false;
       he1.first = Point(0, 10);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(5, 10)) return false;
       he1.first = Point(0, 11);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(5, 10)) return false;
       he1.first = Point(0, 0);
       he1.second = Point(1, 9);
       he2.first = Point(0, 9);
       he2.second = Point(1, 0);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, 4)) return false;
 
       he1.first = Point(0, -10);
       he1.second = Point(1, -1);
       he2.first = Point(0, -1);
       he2.second = Point(1, -10);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(0, -5)) return false;
       he1.first = Point((std::numeric_limits<int>::max)(), (std::numeric_limits<int>::max)()-1);
       he1.second = Point((std::numeric_limits<int>::min)(), (std::numeric_limits<int>::max)());
@@ -2068,13 +2093,13 @@ namespace boost { namespace polygon{
       he2.first = Point((std::numeric_limits<int>::max)()-1, (std::numeric_limits<int>::max)());
       he2.second = Point((std::numeric_limits<int>::max)(), (std::numeric_limits<int>::min)());
       //he2.second = Point((std::numeric_limits<int>::max)(), 0);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       //b is false because of overflow error
       he1.first = Point(1000, 2000);
       he1.second = Point(1010, 2010);
       he2.first = Point(1000, 2000);
       he2.second = Point(1010, 2020);
-      b = compute_intersection(result, he1, he2);
+      b = scanline_base<Unit>::compute_intersection(result, he1, he2);
       if(!b || result != Point(1000, 2000)) return false;
 
       return b;
@@ -2301,7 +2326,7 @@ namespace boost { namespace polygon{
 
       bool have_vertical_tail_from_below = false;
       if(c_size &&
-         is_vertical(counts_from_scanline.back().first.first)) {
+         scanline_base<Unit>::is_vertical(counts_from_scanline.back().first.first)) {
         have_vertical_tail_from_below = true;
       }
       //assert size = size_less_1 + 1
@@ -2607,7 +2632,7 @@ namespace boost { namespace polygon{
         //std::cout << "current Y " << currentY << std::endl;
         //std::cout << "scanline size " << scanData_.size() << std::endl;
         //print(scanData_);
-        iterator iter = lookUp_(currentY);
+        iterator iter = this->lookUp_(currentY);
         //std::cout << "found element in scanline " << (iter != scanData_.end()) << std::endl;
         //int counts[4] = {0, 0, 0, 0};
         incoming_count counts_from_scanline;
@@ -2634,7 +2659,7 @@ namespace boost { namespace polygon{
         }
         Point currentPoint(polygon_arbitrary_formation<Unit>::x_, currentY);
         //std::cout << "counts_from_scanline size " << counts_from_scanline.size() << std::endl;
-        sort_incoming_count(counts_from_scanline, currentPoint);
+        this->sort_incoming_count(counts_from_scanline, currentPoint);
 
         vertex_arbitrary_count incoming;
         //std::cout << "aggregating\n";
@@ -2646,7 +2671,7 @@ namespace boost { namespace polygon{
         } while(currentIter != inputEnd && currentIter->pt.get(VERTICAL) == currentY &&
                 currentIter->pt.get(HORIZONTAL) == polygon_arbitrary_formation<Unit>::x_);
         //print(incoming);
-        sort_vertex_arbitrary_count(incoming, currentPoint);
+        this->sort_vertex_arbitrary_count(incoming, currentPoint);
         //std::cout << currentPoint.get(HORIZONTAL) << "," << currentPoint.get(VERTICAL) << std::endl;
         //print(incoming);
         //std::cout << "incoming counts from input size " << incoming.size() << std::endl;
