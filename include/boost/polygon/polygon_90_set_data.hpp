@@ -244,6 +244,38 @@ namespace boost { namespace polygon{
     // get the scanline orientation of the polygon set
     inline orientation_2d orient() const { return orient_; }
 
+    polygon_90_set_data<coordinate_type>& operator-=(const polygon_90_set_data& that) {
+      sort();
+      that.sort();
+      value_type data;
+      std::swap(data, data_);
+      applyBooleanBinaryOp(data.begin(), data.end(),
+                           that.begin(), that.end(), boolean_op::BinaryCount<boolean_op::BinaryNot>()); 
+      return *this;
+    }
+    polygon_90_set_data<coordinate_type>& operator^=(const polygon_90_set_data& that) {
+      sort();
+      that.sort();
+      value_type data;
+      std::swap(data, data_);
+      applyBooleanBinaryOp(data.begin(), data.end(),
+                           that.begin(), that.end(),  boolean_op::BinaryCount<boolean_op::BinaryXor>()); 
+      return *this;
+    }
+    polygon_90_set_data<coordinate_type>& operator&=(const polygon_90_set_data& that) {
+      sort();
+      that.sort();
+      value_type data;
+      std::swap(data, data_);
+      applyBooleanBinaryOp(data.begin(), data.end(),
+                           that.begin(), that.end(), boolean_op::BinaryCount<boolean_op::BinaryAnd>()); 
+      return *this;
+    }
+    polygon_90_set_data<coordinate_type>& operator|=(const polygon_90_set_data& that) {
+      insert(that);
+      return *this;
+    }
+
     void clean() const {
       sort();
       if(dirty_) {
@@ -297,7 +329,7 @@ namespace boost { namespace polygon{
     }
 
     polygon_90_set_data&
-    bloat(typename coordinate_traits<coordinate_type>::unsigned_area_type west_bloating,
+    bloat2(typename coordinate_traits<coordinate_type>::unsigned_area_type west_bloating,
           typename coordinate_traits<coordinate_type>::unsigned_area_type east_bloating,
           typename coordinate_traits<coordinate_type>::unsigned_area_type south_bloating,
           typename coordinate_traits<coordinate_type>::unsigned_area_type north_bloating) {
@@ -318,11 +350,257 @@ namespace boost { namespace polygon{
       return *this;
     }
 
+    static void modify_pt(point_data<coordinate_type>& pt, const point_data<coordinate_type>&  prev_pt,
+                          const point_data<coordinate_type>&  current_pt,  const point_data<coordinate_type>&  next_pt,
+                          coordinate_type west_bloating,
+                          coordinate_type east_bloating,
+                          coordinate_type south_bloating,
+                          coordinate_type north_bloating) {
+      bool pxl = prev_pt.x() < current_pt.x();
+      bool pyl = prev_pt.y() < current_pt.y();
+      bool nxl = next_pt.x() < current_pt.x();
+      bool nyl = next_pt.y() < current_pt.y();
+      bool pxg = prev_pt.x() > current_pt.x();
+      bool pyg = prev_pt.y() > current_pt.y();
+      bool nxg = next_pt.x() > current_pt.x();
+      bool nyg = next_pt.y() > current_pt.y();
+      //two of the four if statements will execute
+      if(pxl)
+        pt.y(current_pt.y() - south_bloating);
+      if(pxg)
+        pt.y(current_pt.y() + north_bloating);
+      if(nxl)
+        pt.y(current_pt.y() + north_bloating);
+      if(nxg)
+        pt.y(current_pt.y() - south_bloating);
+      if(pyl)
+        pt.x(current_pt.x() + east_bloating);
+      if(pyg)
+        pt.x(current_pt.x() - west_bloating);
+      if(nyl)
+        pt.x(current_pt.x() - west_bloating);
+      if(nyg)
+        pt.x(current_pt.x() + east_bloating);
+    }
+    static void resize_poly_up(std::vector<point_data<coordinate_type> >& poly, 
+                               coordinate_type west_bloating,
+                               coordinate_type east_bloating,
+                               coordinate_type south_bloating,
+                               coordinate_type north_bloating) {
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
+      for(std::size_t i = 2; i < poly.size(); ++i) {
+        point_data<coordinate_type> next_pt = poly[i];
+        modify_pt(poly[i-1], prev_pt, current_pt, next_pt, west_bloating, east_bloating, south_bloating, north_bloating);
+        prev_pt = current_pt;
+        current_pt = next_pt;
+      }
+      point_data<coordinate_type> next_pt = first_pt;
+      modify_pt(poly.back(), prev_pt, current_pt, next_pt, west_bloating, east_bloating, south_bloating, north_bloating);
+      prev_pt = current_pt;
+      current_pt = next_pt;
+      next_pt = second_pt;
+      modify_pt(poly[0], prev_pt, current_pt, next_pt, west_bloating, east_bloating, south_bloating, north_bloating);
+      remove_colinear_pts(poly);
+    }
+    static bool resize_poly_down(std::vector<point_data<coordinate_type> >& poly, 
+                                 coordinate_type west_shrinking,
+                                 coordinate_type east_shrinking,
+                                 coordinate_type south_shrinking,
+                                 coordinate_type north_shrinking) {
+      rectangle_data<coordinate_type> extents_rectangle;
+      set_points(extents_rectangle, poly[0], poly[0]);
+      point_data<coordinate_type> first_pt = poly[0];
+      point_data<coordinate_type> second_pt = poly[1];
+      point_data<coordinate_type> prev_pt = poly[0];
+      point_data<coordinate_type> current_pt = poly[1];
+      encompass(extents_rectangle, current_pt);
+      for(int i = 2; i < poly.size(); ++i) {
+        point_data<coordinate_type> next_pt = poly[i];
+        encompass(extents_rectangle, next_pt);
+        modify_pt(poly[i-1], prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
+        prev_pt = current_pt;
+        current_pt = next_pt;
+      }
+      if(delta(extents_rectangle, HORIZONTAL) < std::abs(west_shrinking + east_shrinking))
+        return false;
+      if(delta(extents_rectangle, VERTICAL) < std::abs(north_shrinking + south_shrinking))
+        return false;
+      point_data<coordinate_type> next_pt = first_pt;
+      modify_pt(poly.back(), prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
+      prev_pt = current_pt;
+      current_pt = next_pt;
+      next_pt = second_pt;
+      modify_pt(poly[0], prev_pt, current_pt, next_pt, west_shrinking, east_shrinking, south_shrinking, north_shrinking);
+      return remove_colinear_pts(poly);
+    }
+
+    static bool remove_colinear_pts(std::vector<point_data<coordinate_type> >& poly) {
+      bool found_colinear = true;
+      while(found_colinear) {
+        found_colinear = false;
+        typename std::vector<point_data<coordinate_type> >::iterator itr = poly.begin(); 
+        itr += poly.size() - 1; //get last element position
+        typename std::vector<point_data<coordinate_type> >::iterator itr2 = poly.begin();
+        typename std::vector<point_data<coordinate_type> >::iterator itr3 = itr2;
+        ++itr3;
+        std::size_t count = 0;
+        for( ; itr3 < poly.end(); ++itr3) {
+          if(((*itr).x() == (*itr2).x() && (*itr).x() == (*itr3).x()) ||
+             ((*itr).y() == (*itr2).y() && (*itr).y() == (*itr3).y()) ) {
+            ++count;
+            found_colinear = true;
+          } else {
+            itr = itr2;
+            ++itr2;
+          }
+          *itr2 = *itr3;
+        }
+        itr3 = poly.begin();
+        if(((*itr).x() == (*itr2).x() && (*itr).x() == (*itr3).x()) ||
+           ((*itr).y() == (*itr2).y() && (*itr).y() == (*itr3).y()) ) {
+          ++count;
+          found_colinear = true;
+        }
+        poly.erase(poly.end() - count, poly.end());
+      }
+      return poly.size() >= 4;
+    }    
+
+    polygon_90_set_data&
+    bloat(typename coordinate_traits<coordinate_type>::unsigned_area_type west_bloating,
+           typename coordinate_traits<coordinate_type>::unsigned_area_type east_bloating,
+           typename coordinate_traits<coordinate_type>::unsigned_area_type south_bloating,
+           typename coordinate_traits<coordinate_type>::unsigned_area_type north_bloating) {
+      std::list<polygon_45_with_holes_data<coordinate_type> > polys;
+      get(polys);
+      clear();
+      for(typename std::list<polygon_45_with_holes_data<coordinate_type> >::iterator itr = polys.begin();
+          itr != polys.end(); ++itr) {
+        //polygon_90_set_data<coordinate_type> psref;
+        //psref.insert(view_as<polygon_90_concept>((*itr).self_));
+        //rectangle_data<coordinate_type> prerect;
+        //psref.extents(prerect);
+        resize_poly_up((*itr).self_.coords_, west_bloating, east_bloating, south_bloating, north_bloating);
+        iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+          begin_input(view_as<polygon_90_concept>((*itr).self_), LOW, orient_, false, true, COUNTERCLOCKWISE), 
+          end_input(view_as<polygon_90_concept>((*itr).self_), HIGH, orient_, false, true, COUNTERCLOCKWISE);
+        insert(begin_input, end_input, orient_);
+        //polygon_90_set_data<coordinate_type> pstest;
+        //pstest.insert(view_as<polygon_90_concept>((*itr).self_));
+        //psref.bloat2(west_bloating, east_bloating, south_bloating, north_bloating);
+        //if(!equivalence(psref, pstest)) {
+        // std::cout << "test failed\n";
+        //}
+        for(typename std::list<polygon_45_data<coordinate_type> >::iterator itrh = (*itr).holes_.begin();
+            itrh != (*itr).holes_.end(); ++itrh) {
+          //rectangle_data<coordinate_type> rect;
+          //psref.extents(rect);
+          //polygon_90_set_data<coordinate_type> psrefhole;
+          //psrefhole.insert(prerect);
+          //psrefhole.insert(view_as<polygon_90_concept>(*itrh), true);
+          //polygon_45_data<coordinate_type> testpoly(*itrh);
+          if(resize_poly_down((*itrh).coords_, west_bloating, east_bloating, south_bloating, north_bloating)) {
+            iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+              begin_input(view_as<polygon_90_concept>(*itrh), LOW, orient_, true, true), 
+              end_input(view_as<polygon_90_concept>(*itrh), HIGH, orient_, true, true);
+            insert(begin_input, end_input, orient_);
+            //polygon_90_set_data<coordinate_type> pstesthole;
+            //pstesthole.insert(rect);
+            //iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+            // begin_input2(view_as<polygon_90_concept>(*itrh), LOW, orient_, true, true); 
+            //pstesthole.insert(begin_input2, end_input, orient_);
+            //psrefhole.bloat2(west_bloating, east_bloating, south_bloating, north_bloating);
+            //if(!equivalence(psrefhole, pstesthole)) {
+            // std::cout << (winding(testpoly) == CLOCKWISE) << std::endl;
+            // std::cout << (winding(*itrh) == CLOCKWISE) << std::endl;
+            // polygon_90_set_data<coordinate_type> c(psrefhole);
+            // c.clean();
+            // polygon_90_set_data<coordinate_type> a(pstesthole);
+            // polygon_90_set_data<coordinate_type> b(pstesthole);
+            // a.sort();
+            // b.clean();
+            // std::cout << "test hole failed\n";
+            // //std::cout << testpoly << std::endl;
+            //}
+          }
+        }
+      }
+      return *this;
+    }
+
     polygon_90_set_data&
     shrink(typename coordinate_traits<coordinate_type>::unsigned_area_type west_shrinking,
            typename coordinate_traits<coordinate_type>::unsigned_area_type east_shrinking,
            typename coordinate_traits<coordinate_type>::unsigned_area_type south_shrinking,
            typename coordinate_traits<coordinate_type>::unsigned_area_type north_shrinking) {
+      std::list<polygon_45_with_holes_data<coordinate_type> > polys;
+      get(polys);
+      clear();
+      for(typename std::list<polygon_45_with_holes_data<coordinate_type> >::iterator itr = polys.begin();
+          itr != polys.end(); ++itr) {
+        //polygon_90_set_data<coordinate_type> psref;
+        //psref.insert(view_as<polygon_90_concept>((*itr).self_));
+        //rectangle_data<coordinate_type> prerect;
+        //psref.extents(prerect);
+        //polygon_45_data<coordinate_type> testpoly((*itr).self_);
+        if(resize_poly_down((*itr).self_.coords_, -west_shrinking, -east_shrinking, -south_shrinking, -north_shrinking)) {
+          iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+            begin_input(view_as<polygon_90_concept>((*itr).self_), LOW, orient_, false, true, COUNTERCLOCKWISE), 
+            end_input(view_as<polygon_90_concept>((*itr).self_), HIGH, orient_, false, true, COUNTERCLOCKWISE);
+          insert(begin_input, end_input, orient_);
+          //iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+          //  begin_input2(view_as<polygon_90_concept>((*itr).self_), LOW, orient_, false, true, COUNTERCLOCKWISE); 
+          //polygon_90_set_data<coordinate_type> pstest;
+          //pstest.insert(begin_input2, end_input, orient_);
+          //psref.shrink2(west_shrinking, east_shrinking, south_shrinking, north_shrinking);
+          //if(!equivalence(psref, pstest)) {
+          //  std::cout << "test failed\n";
+          //}
+          for(typename std::list<polygon_45_data<coordinate_type> >::iterator itrh = (*itr).holes_.begin();
+              itrh != (*itr).holes_.end(); ++itrh) {
+            //rectangle_data<coordinate_type> rect;
+            //psref.extents(rect);
+            //polygon_90_set_data<coordinate_type> psrefhole;
+            //psrefhole.insert(prerect);
+            //psrefhole.insert(view_as<polygon_90_concept>(*itrh), true);
+            //polygon_45_data<coordinate_type> testpoly(*itrh);
+            resize_poly_up((*itrh).coords_, -west_shrinking, -east_shrinking, -south_shrinking, -north_shrinking);
+            iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+              begin_input(view_as<polygon_90_concept>(*itrh), LOW, orient_, true, true), 
+              end_input(view_as<polygon_90_concept>(*itrh), HIGH, orient_, true, true);
+            insert(begin_input, end_input, orient_);
+            //polygon_90_set_data<coordinate_type> pstesthole;
+            //pstesthole.insert(rect);
+            //iterator_geometry_to_set<polygon_90_concept, view_of<polygon_90_concept, polygon_45_data<coordinate_type> > >
+            //  begin_input2(view_as<polygon_90_concept>(*itrh), LOW, orient_, true, true); 
+            //pstesthole.insert(begin_input2, end_input, orient_);
+            //psrefhole.shrink2(west_shrinking, east_shrinking, south_shrinking, north_shrinking);
+            //if(!equivalence(psrefhole, pstesthole)) {
+            //  std::cout << (winding(testpoly) == CLOCKWISE) << std::endl;
+            //  std::cout << (winding(*itrh) == CLOCKWISE) << std::endl;
+            //  polygon_90_set_data<coordinate_type> c(psrefhole);
+            //  c.clean();
+            //  polygon_90_set_data<coordinate_type> a(pstesthole);
+            //  polygon_90_set_data<coordinate_type> b(pstesthole);
+            //  a.sort();
+            //  b.clean();
+            //  std::cout << "test hole failed\n";
+            //  //std::cout << testpoly << std::endl;
+            //}
+          }
+        }
+      }
+      return *this;
+    }
+
+    polygon_90_set_data&
+    shrink2(typename coordinate_traits<coordinate_type>::unsigned_area_type west_shrinking,
+            typename coordinate_traits<coordinate_type>::unsigned_area_type east_shrinking,
+            typename coordinate_traits<coordinate_type>::unsigned_area_type south_shrinking,
+            typename coordinate_traits<coordinate_type>::unsigned_area_type north_shrinking) {
       rectangle_data<coordinate_type> externalBoundary;
       if(!extents(externalBoundary)) return *this;
       ::boost::polygon::bloat(externalBoundary, 10); //bloat by diferential ammount
@@ -350,6 +628,30 @@ namespace boost { namespace polygon{
       insert(externalBoundary);
       clean(); //we have negative values in the set, so we need to apply an OR operation to make it valid input to a boolean
       return *this;
+    }
+
+    polygon_90_set_data&
+    shrink(direction_2d dir, typename coordinate_traits<coordinate_type>::unsigned_area_type shrinking) {
+      if(dir == WEST)
+        return shrink(shrinking, 0, 0, 0);
+      if(dir == EAST)
+        return shrink(0, shrinking, 0, 0);
+      if(dir == SOUTH)
+        return shrink(0, 0, shrinking, 0);
+      if(dir == NORTH)
+        return shrink(0, 0, 0, shrinking);
+    }
+
+    polygon_90_set_data&
+    bloat(direction_2d dir, typename coordinate_traits<coordinate_type>::unsigned_area_type shrinking) {
+      if(dir == WEST)
+        return bloat(shrinking, 0, 0, 0);
+      if(dir == EAST)
+        return bloat(0, shrinking, 0, 0);
+      if(dir == SOUTH)
+        return bloat(0, 0, shrinking, 0);
+      if(dir == NORTH)
+        return bloat(0, 0, 0, shrinking);
     }
 
     polygon_90_set_data&

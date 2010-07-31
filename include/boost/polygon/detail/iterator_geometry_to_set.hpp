@@ -29,7 +29,7 @@ private:
 public:
   iterator_geometry_to_set() : rectangle_(), vertex_(), corner_(4), orient_(), is_hole_() {}
   iterator_geometry_to_set(const rectangle_type& rectangle, direction_1d dir, 
-                           orientation_2d orient = HORIZONTAL, bool is_hole = false) : 
+                           orientation_2d orient = HORIZONTAL, bool is_hole = false, bool = false, direction_1d = CLOCKWISE) : 
     rectangle_(), vertex_(), corner_(0), orient_(orient), is_hole_(is_hole) {
     assign(rectangle_, rectangle);
     if(dir == HIGH) corner_ = 4;
@@ -93,7 +93,7 @@ private:
   int polygon_index;
 public:
   iterator_geometry_to_set() : vertex_(), itrb(), itre(), last_vertex_(), is_hole_(), multiplier_(), first_pt(), second_pt(), pts(), use_wrap(), orient_(), polygon_index(-1) {}
-  iterator_geometry_to_set(const polygon_type& polygon, direction_1d dir, orientation_2d orient = HORIZONTAL, bool is_hole = false) : 
+  iterator_geometry_to_set(const polygon_type& polygon, direction_1d dir, orientation_2d orient = HORIZONTAL, bool is_hole = false, bool winding_override = false, direction_1d w = CLOCKWISE) : 
     vertex_(), itrb(), itre(), last_vertex_(), 
     is_hole_(is_hole), multiplier_(), first_pt(), second_pt(), pts(), use_wrap(), 
     orient_(orient), polygon_index(0) {
@@ -103,7 +103,9 @@ public:
     if(itrb == itre || dir == HIGH || size(polygon) < 4) {
       polygon_index = -1;
     } else {
-      direction_1d wdir = winding(polygon);
+      direction_1d wdir = w;
+      if(!winding_override)
+        wdir = winding(polygon);
       multiplier_ = wdir == LOW ? -1 : 1;
       if(is_hole_) multiplier_ *= -1;
       first_pt = pts[0] = *itrb;
@@ -182,9 +184,7 @@ public:
     vertex_.second.first =pts[1].get(orient_);
     if(pts[1] == pts[2]) {
       vertex_.second.second = 0;
-      return;
-    }
-    if(pts[0].get(HORIZONTAL) != pts[1].get(HORIZONTAL)) {
+    } else if(pts[0].get(HORIZONTAL) != pts[1].get(HORIZONTAL)) {
       vertex_.second.second = -1; 
     } else if(pts[0].get(VERTICAL) != pts[1].get(VERTICAL)) {
       vertex_.second.second = 1;
@@ -214,7 +214,7 @@ private:
 public:
   iterator_geometry_to_set() : itrb(), itre(), itrhib(), itrhie(), itrhb(), itrhe(), orient_(), is_hole_(), started_holes() {}
   iterator_geometry_to_set(const polygon_with_holes_type& polygon, direction_1d dir, 
-                           orientation_2d orient = HORIZONTAL, bool is_hole = false) : 
+                           orientation_2d orient = HORIZONTAL, bool is_hole = false, bool = false, direction_1d = CLOCKWISE) : 
     itrb(), itre(), itrhib(), itrhie(), itrhb(), itrhe(), orient_(orient), is_hole_(is_hole), started_holes() {
     itre = iterator_geometry_to_set<polygon_90_concept, polygon_with_holes_type>(polygon, HIGH, orient, is_hole_);
     itrhe = end_holes(polygon);

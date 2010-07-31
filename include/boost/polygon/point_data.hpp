@@ -34,17 +34,29 @@ namespace boost { namespace polygon{
 #endif
     { (*this) = that; }
     template <typename other>
-    point_data(const other& that) : coords_() { (*this) = that; }
+    point_data(const other& that)
+#ifndef BOOST_POLYGON_MSVC
+      :coords_()  
+#endif
+    { (*this) = that; }
     inline point_data& operator=(const point_data& that) {
       coords_[0] = that.coords_[0]; coords_[1] = that.coords_[1]; return *this; 
     }
     template<typename T1, typename T2>
-    inline point_data(const T1& x, const T2& y):coords_() {
+    inline point_data(const T1& x, const T2& y)
+#ifndef BOOST_POLYGON_MSVC
+      :coords_()  
+#endif
+    {
       coords_[HORIZONTAL] = (coordinate_type)x;
       coords_[VERTICAL] = (coordinate_type)y;
     }
     template <typename T2>
-    inline point_data(const point_data<T2>& rvalue):coords_() {
+    inline point_data(const point_data<T2>& rvalue)
+#ifndef BOOST_POLYGON_MSVC
+      :coords_()  
+#endif
+    {
       coords_[HORIZONTAL] = (coordinate_type)(rvalue.x());
       coords_[VERTICAL] = (coordinate_type)(rvalue.y());
     }

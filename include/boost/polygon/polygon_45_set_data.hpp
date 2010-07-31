@@ -1541,11 +1541,11 @@ namespace boost { namespace polygon{
       polygon_90_set_data<Unit> l90sd(VERTICAL), r90sd(VERTICAL), output(VERTICAL);
       for(typename value_type::const_iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
       }
       for(typename value_type::const_iterator itr = rvalue.data_.begin(); itr != rvalue.data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        r90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        r90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
       }
       l90sd.sort();
       r90sd.sort();
@@ -1673,7 +1673,7 @@ namespace boost { namespace polygon{
       polygon_90_set_data<Unit> l90sd(VERTICAL);
       for(typename value_type::const_iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         if((*itr).count[3] == 0) continue; //skip all non vertical edges
-        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
+        l90sd.insert(std::make_pair((*itr).pt.x(), std::make_pair<Unit, int>((*itr).pt.y(), (*itr).count[3])), false, VERTICAL);
       }
       l90sd.sort();
 #ifdef BOOST_POLYGON_MSVC
