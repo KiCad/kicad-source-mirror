@@ -714,7 +714,10 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
                 fieldNdx = component->GetFieldCount();  // new has this index after insertion
 
-                SCH_FIELD field( wxPoint( 0, 0 ), fieldNdx, component, fieldName );
+                SCH_FIELD field( wxPoint( 0, 0 ),
+                            -1,     // field id is not relavant for user defined fields
+                            component, fieldName );
+
                 component->AddField( field );
             }
             else

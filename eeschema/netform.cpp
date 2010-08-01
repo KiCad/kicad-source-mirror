@@ -1,6 +1,32 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2009 jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /*****************************/
 /* Net list generation code. */
 /*****************************/
+
 
 #include "fctsys.h"
 
@@ -39,13 +65,14 @@ static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                                 bool use_netnames );
 
-static bool WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+static bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+static bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList );
 
 static void AddPinToComponentPinList( SCH_COMPONENT*  Component,
                                       SCH_SHEET_PATH* sheet,
                                       LIB_PIN*        PinEntry );
 
-static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component,
+static void FindAllInstancesOfComponent(  SCH_COMPONENT*  Component,
                                           LIB_COMPONENT*  aEntry,
                                           SCH_SHEET_PATH* Sheet_in );
 
@@ -220,14 +247,18 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
         if( !entry )
             continue;
 
-        // Multi parts per package: test if already visited:
+        // If Multi parts per package
         if( entry->GetPartCount() > 1 )
         {
+            // test if already visited, and if so skip
             if( s_ReferencesAlreadyFound.Lookup( ref ) )
                 continue;
+
+            // Collect all parts and pins for this first occurance of reference
+            FindAllInstancesOfComponent( comp, entry, path );
         }
 
-        if( entry->GetPartCount() <= 1 )   // One part per package
+        else    // entry->GetPartCount() <= 1 means one part per package
         {
             LIB_PIN_LIST pins;
 
@@ -242,9 +273,6 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
                 AddPinToComponentPinList( comp, path, pin );
             }
         }
-        else    // Multiple parts per package: Collect all parts and pins for
-                // this reference
-            FindAllsInstancesOfComponent( comp, entry, path );
 
         // Sort pins in s_SortedComponentPinList by pin number
         sort( s_SortedComponentPinList.begin(),
@@ -302,19 +330,28 @@ static wxString ReturnPinNetName( NETLIST_OBJECT* Pin, const wxString& DefaultFo
 }
 
 
-static wxXmlNode* Node( const wxString& name, const wxString& content=wxEmptyString )
+/**
+ * Function Node
+ * is a convenience function that creates a new wxXmlNode with an optional textual child.
+ * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
+ * @param aContent is optional, and if given is the text to include in a child
+ *   of the returned node, and has type wxXML_TEXT_NODE.
+ */
+static wxXmlNode* Node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
 {
-    wxXmlNode* n = new wxXmlNode( 0, wxXML_ELEMENT_NODE, name );
+    wxXmlNode* n = new wxXmlNode( 0, wxXML_ELEMENT_NODE, aName );
 
-    if( content.Len() > 0 )     // excludes wxEmptyString
-        n->AddChild( new wxXmlNode( 0, wxXML_TEXT_NODE, wxEmptyString, content ) );
+    if( aTextualContent.Len() > 0 )     // excludes wxEmptyString, the default textual content
+        n->AddChild( new wxXmlNode( 0, wxXML_TEXT_NODE, wxEmptyString, aTextualContent ) );
 
     return n;
 }
 
 
-/* Create a generic netlist, and call an external netlister
- *  to change the netlist syntax and create the file
+/**
+ * Function Write_GENERIC_NetList
+ * creates a generic netlist, now in XML.
+ * @return bool - true if there were no errors, else false.
  */
 bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
@@ -325,30 +362,41 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
     wxXmlNode*      xroot;      // root node
     wxXmlNode*      xcomps;     // start of components
 
-    wxString        timeStamp;
-
     // some strings we need many times, but don't want to construct more
     // than once for performance.  These are used within loops so the
-    // enclosing wxString constructor would fire on each usage.
-    const wxString  sFields     = wxT("fields");
-    const wxString  sField      = wxT("field");
-    const wxString  sComponent  = wxT("comp");      // use "part" ?
-    const wxString  sName       = wxT("name");
-    const wxString  sRef        = wxT("ref");
-    const wxString  sPins       = wxT("pins");
-    const wxString  sPin        = wxT("pin");
-    const wxString  sValue      = wxT("value");
-    const wxString  sFootprint  = wxT("footprint");
-    const wxString  sDatasheet  = wxT("datasheet");
-    const wxString  sTStamp     = wxT("tstamp");
-    const wxString  sTSFmt      = wxT("%8.8lX");        // comp->m_TimeStamp
+    // enclosing wxString constructor would fire on each loop iteration if
+    // they were in a nested scope.
+
+    wxString        timeStamp;
+    wxString        logicalLibName;
+
+    // these are actually constructor invocations, not assignments as it appears:
+    const wxString  sFields     = wxT( "fields" );
+    const wxString  sField      = wxT( "field" );
+    const wxString  sComponent  = wxT( "comp" );          // use "part" ?
+    const wxString  sName       = wxT( "name" );
+    const wxString  sRef        = wxT( "ref" );
+    const wxString  sPins       = wxT( "pins" );
+    const wxString  sPin        = wxT( "pin" );
+    const wxString  sValue      = wxT( "value" );
+    const wxString  sSheetPath  = wxT( "sheetpath" );
+    const wxString  sFootprint  = wxT( "footprint" );
+    const wxString  sDatasheet  = wxT( "datasheet" );
+    const wxString  sTStamp     = wxT( "tstamp" );
+    const wxString  sTStamps    = wxT( "tstamps" );
+    const wxString  sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
+    const wxString  sLibSource  = wxT( "libsource" );
+    const wxString  sLibPart    = wxT( "libpart" );
+    const wxString  sLib        = wxT( "lib" );
+    const wxString  sPart       = wxT( "part" );
+    const wxString  sNames      = wxT( "names" );
 
     s_ReferencesAlreadyFound.Clear();
 
-    xdoc.SetRoot( xroot = Node( wxT("netlist") ) );
-    xroot->AddProperty( wxT("version"), wxT("B") );
+    xdoc.SetRoot( xroot = Node( wxT( "netlist" ) ) );
+    xroot->AddProperty( wxT( "version" ), wxT( "B" ) );
 
-    xroot->AddChild( xcomps = Node( wxT("components") ) );
+    xroot->AddChild( xcomps = Node( wxT( "components" ) ) );
 
     SCH_SHEET_LIST sheetList;
 
@@ -364,16 +412,17 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
 
             schItem = comp;
 
-            // current component being constructed
-            wxXmlNode* xcomp = Node( sComponent );
-            xcomps->AddChild( xcomp );
+            wxXmlNode* xcomp;  // current component being constructed
+
+            // Output the component's elments in order of expected access frequency.
+            // This may not always look best, but it will allow faster execution
+            // under XSL processing systems which do sequential searching within
+            // an element.
+
+            xcomps->AddChild( xcomp = Node( sComponent ) );
             xcomp->AddProperty( sRef, comp->GetRef( path ) );
 
             xcomp->AddChild( Node( sValue, comp->GetField( VALUE )->m_Text ) );
-
-            timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
-
-            xcomp->AddChild( Node( sTStamp, timeStamp ) );
 
             if( !comp->GetField( FOOTPRINT )->m_Text.IsEmpty() )
                 xcomp->AddChild( Node( sFootprint, comp->GetField( FOOTPRINT )->m_Text ) );
@@ -381,37 +430,60 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
             if( !comp->GetField( DATASHEET )->m_Text.IsEmpty() )
                 xcomp->AddChild( Node( sDatasheet, comp->GetField( DATASHEET )->m_Text ) );
 
-            // all fields within the component, starting with the MANDATORY_FIELDS
+            // Export all user defined fields within the component,
+            // which start at field index MANDATORY_FIELDS.  Only output the <fields>
+            // container element if there are any <field>s.
             if( comp->GetFieldCount() > MANDATORY_FIELDS )
             {
-                wxXmlNode* xfields = Node( sFields );
-                xcomp->AddChild( xfields );
+                wxXmlNode* xfields;
+                xcomp->AddChild( xfields = Node( sFields ) );
 
-                for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp->GetFieldCount();  ++fldNdx )
+                for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
                 {
                     SCH_FIELD*  f = comp->GetField( fldNdx );
-                    wxXmlNode*  xfield = Node( sField, f->m_Text );
 
-                    xfield->AddProperty( sName, f->m_Name );
-                    xfields->AddChild( xfield );
+                    // only output a field if non empty
+                    if( !f->m_Text.IsEmpty() )
+                    {
+                        wxXmlNode*  xfield;
+                        xfields->AddChild( xfield = Node( sField, f->m_Text ) );
+                        xfield->AddProperty( sName, f->m_Name );
+                    }
                 }
             }
 
-            // @todo add:  libsource + sheetpath
+            wxXmlNode*  xlibsource;
+            xcomp->AddChild( xlibsource = Node( sLibSource ) );
+
+            // "logical" library name, which is in anticipation of a better search
+            // algorithm for parts based on "logical_lib.part" and where logical_lib
+            // is merely the library name minus path and extension.
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+            if( entry )
+                xlibsource->AddProperty( sLib, entry->GetLibrary()->GetLogicalName()  );
+            xlibsource->AddProperty( sPart, comp->m_ChipName );
+
+            wxXmlNode* xsheetpath;
+            xcomp->AddChild( xsheetpath = Node( sSheetPath ) );
+            xsheetpath->AddProperty( sTStamps, path->Path() );
+            xsheetpath->AddProperty( sNames, path->PathHumanReadable() );
+
+            timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
+            xcomp->AddChild( Node( sTStamp, timeStamp ) );
         }
     }
 
     // @todo generate the nested <libpart> s
-    xroot->AddChild( Node( wxT("libparts") ) );
+    xroot->AddChild( Node( wxT( "libparts" ) ) );
 
-    // @todo generate the nested <net>s
-    xroot->AddChild( Node( wxT("nets") ) );
+    wxXmlNode* xnets;
+    xroot->AddChild( xnets = Node( wxT( "nets" ) ) );
+    WriteGENERICListOfNets( xnets, g_NetObjectslist );
 
     return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
 
-#else
+#else   // ouput the well established/old net list format which was not XML.
 
-    // ouput the well established/old net list format
     wxString        field;
     wxString        footprint;
     wxString        netname;
@@ -491,7 +563,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
 
     ret |= fprintf( out, "\n$BeginNets\n" );
 
-    if( !WriteGENERICListOfNets( out, g_NetObjectslist ) )
+    if( !WriteGENERICListOfNetsTxt( out, g_NetObjectslist ) )
         ret = -1;
 
     ret |= fprintf( out, "$EndNets\n" );
@@ -669,7 +741,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
  */
 static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
 {
-    wxString    Line;
+    wxString    field;
     wxString    footprint;
     char        dateBuf[256];
     int         ret = 0;        // zero now, OR in the sign bit on error
@@ -723,23 +795,23 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
             else
                 footprint = wxT( "$noname" );
 
-            Line = comp->GetRef( path );
+            field = comp->GetRef( path );
 
             ret |= fprintf( f, " ( %s %s",
                     CONV_TO_UTF8( comp->GetPath( path ) ),
                     CONV_TO_UTF8( footprint ) );
 
-            ret |= fprintf( f, "  %s", CONV_TO_UTF8( Line ) );
+            ret |= fprintf( f, "  %s", CONV_TO_UTF8( field ) );
 
-            Line = comp->GetField( VALUE )->m_Text;
-            Line.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fprintf( f, " %s", CONV_TO_UTF8( Line ) );
+            field = comp->GetField( VALUE )->m_Text;
+            field.Replace( wxT( " " ), wxT( "_" ) );
+            ret |= fprintf( f, " %s", CONV_TO_UTF8( field ) );
 
             if( with_pcbnew )  // Add the lib name for this component
             {
-                Line = comp->m_ChipName;
-                Line.Replace( wxT( " " ), wxT( "_" ) );
-                ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( Line ) );
+                field = comp->m_ChipName;
+                field.Replace( wxT( " " ), wxT( "_" ) );
+                ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( field ) );
             }
             ret |= fprintf( f, "\n" );
 
@@ -803,7 +875,7 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     {
         ret |= fprintf( f, "{ Pin List by Nets\n" );
 
-        if( !WriteGENERICListOfNets( f, g_NetObjectslist ) )
+        if( !WriteGENERICListOfNetsTxt( f, g_NetObjectslist ) )
             ret = -1;
 
         ret |= fprintf( f, "}\n" );
@@ -907,13 +979,14 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 
 
 /**
- * Used for multiple parts per package components.
+ * Function FindAllInstancesOfComponent
+ * is used for multiple parts per package components.
  *
  * Search all instances of Component_in,
  * Calls AddPinToComponentPinList() to and pins founds to the current
  * component pin list
  */
-static void FindAllsInstancesOfComponent( SCH_COMPONENT*  Component_in,
+static void FindAllInstancesOfComponent( SCH_COMPONENT*  Component_in,
                                           LIB_COMPONENT*  aEntry,
                                           SCH_SHEET_PATH* Sheet_in )
 {
@@ -981,7 +1054,7 @@ static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
 /* Written in the file / net list (ranked by Netcode), and elements that are
  * connected
  */
-static bool WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+static bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     int         ret = 0;
     int         netCode;
@@ -1064,6 +1137,91 @@ static bool WriteGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
     }
 
     return ret >= 0;
+}
+
+
+/**
+ * Function WriteGENERICListOfNets
+ * saves a netlist in xml format.
+ */
+static bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList )
+{
+    wxString    netCodeTxt;
+    wxString    netName;
+    wxString    ref;
+
+    wxString    sNet  = wxT( "net" );
+    wxString    sName = wxT( "name" );
+    wxString    sCode = wxT( "code" );
+    wxString    sRef  = wxT( "ref" );
+    wxString    sPin  = wxT( "pin" );
+    wxString    sNode = wxT( "node" );
+    wxString    sFmtd = wxT( "%d" );
+
+    wxXmlNode*  xnet;
+    int         netCode;
+    int         lastNetCode = -1;
+    int         sameNetcodeCount = 0;
+
+    /*  output:
+        <net code="123" name="/cfcard.sch/WAIT#">
+            <node ref="R23" pin="1"/>
+            <node ref="U18" pin="12"/>
+        </net>
+    */
+
+    for( unsigned ii = 0; ii < aObjectsList.size(); ii++ )
+    {
+        SCH_COMPONENT*  comp;
+
+        // New net found, write net id;
+        if( ( netCode = aObjectsList[ii]->GetNet() ) != lastNetCode )
+        {
+            sameNetcodeCount = 0;   // item count for this net
+
+            netName.Empty();
+
+            // Find a label for this net, if it exists.
+            NETLIST_OBJECT* netref = aObjectsList[ii]->m_NetNameCandidate;
+            if( netref )
+            {
+                if( netref->m_Type != NET_PINLABEL && netref->m_Type != NET_GLOBLABEL )
+                {
+                    // usual net name, prefix it by the sheet path
+                    netName = netref->m_SheetList.PathHumanReadable();
+                }
+
+                netName += netref->m_Label;
+            }
+
+            lastNetCode  = netCode;
+        }
+
+        if( aObjectsList[ii]->m_Type != NET_PIN )
+            continue;
+
+        comp = (SCH_COMPONENT*) aObjectsList[ii]->m_Link;
+
+        // Get the reference for the net name and the main parent component
+        ref = comp->GetRef( &aObjectsList[ii]->m_SheetList );
+        if( ref[0] == wxChar( '#' ) )
+            continue;
+
+        if( ++sameNetcodeCount == 1 )
+        {
+            aNode->AddChild( xnet = Node( sNet ) );
+            netCodeTxt.Printf( sFmtd, netCode );
+            xnet->AddProperty( sCode, netCodeTxt );
+            xnet->AddProperty( sName, netName );
+        }
+
+        wxXmlNode*  xnode;
+        xnet->AddChild( xnode = Node( sNode ) );
+        xnode->AddProperty( sRef, ref );
+        xnode->AddProperty( sPin,  LIB_PIN::ReturnPinStringNum( aObjectsList[ii]->m_PinNum ) );
+    }
+
+    return true;
 }
 
 

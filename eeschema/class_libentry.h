@@ -32,25 +32,25 @@ enum  LibrEntryOptions
 
 
 /**
- * Base class to describe library components and aliases.
+ * Class CMP_LIB_ENTRY
+ * is a base class to describe library components and aliases.
  *
  * This class is not to be used directly.
  */
 class CMP_LIB_ENTRY : public EDA_BaseStruct
 {
-
 protected:
     wxString         name;
 
-    /** Library object that entry is attached to. */
+    /// Library object that entry is attached to.
     CMP_LIBRARY*     library;
 
-    /** Entry type, either ROOT or ALIAS. */
+    /// Entry type, either ROOT or ALIAS.
     LibrEntryType    type;
 
-    wxString         description;  /* documentation for info */
-    wxString         keyWords;     /* keyword list (used for search for components by keyword) */
-    wxString         docFileName;  /* Associate doc file name */
+    wxString         description;  ///< documentation for info
+    wxString         keyWords;     ///< keyword list (used for search for components by keyword)
+    wxString         docFileName;  ///< Associate doc file name
 
 public:
     CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
@@ -65,7 +65,7 @@ public:
 
     wxString GetLibraryName();
 
-    CMP_LIBRARY* GetLibrary() {return library;}
+    CMP_LIBRARY* GetLibrary() { return library; }
 
     virtual const wxString& GetName() const { return name; }
 

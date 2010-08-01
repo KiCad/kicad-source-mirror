@@ -51,27 +51,25 @@ extern bool operator<( const CMP_LIBRARY& item1, const CMP_LIBRARY& item2 );
 
 
 /**
- * Component library object.
- *
- * Component libraries are used to load, save, search, and otherwise manipulate
+ * Class CMP_LIBRARY
+ * is used to load, save, search, and otherwise manipulate
  * component library files.
  */
-
 class CMP_LIBRARY
 {
 public:
-    int            m_Type;         /* type indicator */
+    int            m_Type;          ///< type indicator
     int            m_Flags;
 
 protected:
-    wxFileName     fileName;        /* Library file name. */
-    wxDateTime     timeStamp;       /* Library save time and date. */
-    int            versionMajor;    /* Library major version number. */
-    int            versionMinor;    /* Library minor version number. */
-    LIB_ENTRY_LIST entries;         /* Parts themselves are saved here. */
-    bool           isCache;         /* False for the "standard" libraries,
-                                     * True for the library cache */
-    wxString       header;          /* first line of loaded library. */
+    wxFileName     fileName;        ///< Library file name.
+    wxDateTime     timeStamp;       ///< Library save time and date.
+    int            versionMajor;    ///< Library major version number.
+    int            versionMinor;    ///< Library minor version number.
+    LIB_ENTRY_LIST entries;         ///< Parts themselves are saved here.
+    bool           isCache;         /**< False for the "standard" libraries,
+                                         True for the library cache */
+    wxString       header;          ///< first line of loaded library.
 
     static CMP_LIBRARY_LIST libraryList;
     static wxArrayString    libraryListSortOrder;
@@ -79,7 +77,7 @@ protected:
     friend class CMP_LIB_ENTRY;
 
 private:
-    bool           isModified;      /* Library modification status. */
+    bool           isModified;      ///< Library modification status.
 
 public:
     CMP_LIBRARY( int aType, const wxFileName& aFileName );
@@ -96,8 +94,9 @@ public:
     bool getModifyFlag( ) { return isModified;}
 
     /**
-     * Save library to file.
-     *
+     * Function Save
+     * saves library to a file.
+     * <p>
      * Prior to component library version 3.0, two files were created.  The
      * component objects are wer as component library (*.lib) files.  The
      * library entry ojbect document strings were save in library document
@@ -142,8 +141,9 @@ private:
     bool LoadHeader( FILE* aFile, int* aLineNum );
     void LoadAliases( LIB_COMPONENT* aComponent );
 
-    /** function RemoveEntryName
-     * Remove an /a aName entry from the library list names.
+    /**
+     * Function RemoveEntryName
+     * removes an /a aName entry from the library list names.
      * Warning: this is a partiel remove, because if aname is an alias
      * it is not removed from its root component.
      * this is for internal use only
@@ -164,7 +164,8 @@ public:
     }
 
     /**
-     * Get the number of entries in the library.
+     * Function GetCount
+     * returns the number of entries in the library.
      *
      * @return The number of component and alias entries.
      */
@@ -350,14 +351,25 @@ public:
     wxString GetName() const { return fileName.GetName(); }
 
     /**
-     * Return the full file library name with path and extension.
+     * Function GetFullFileName
+     * returns the full file library name with path and extension.
      *
-     * @return Full library file name with path and extension.
+     * @return wxString - Full library file name with path and extension.
      */
     wxString GetFullFileName() { return fileName.GetFullPath(); }
 
     /**
-     * Set the component library file name.
+     * Function GetLogicalName
+     * returns the logical name of the library, which for now is the filename
+     * without path or extension.
+     * wxString - The logical library name.
+     */
+    wxString GetLogicalName() { return fileName.GetName(); }
+
+
+    /**
+     * Function SetFileName
+     * sets the component library file name.
      *
      * @param aFileName - New library file name.
      */
@@ -374,16 +386,19 @@ public:
      * of safety from abusing the library list.
      */
 
-     /**
-     * Test for an existing library.
+    /**
+     * Function LibraryExists
+     * tests for existence of a library.
      *
      * @param aLibptr - aLibptr.
-     * @return true found.  false if not found.
+     * @return bool - true if exists, else false
      */
 
     static bool LibraryExists( const CMP_LIBRARY* aLibptr );
+
     /**
-     * Load a component library file.
+     * Function LoadLibrary
+     * loads a component library file.
      *
      * @param aFileName - File name of the component library to load.
      * @param aErrorMsg - Error message if the component library failed to load.
@@ -394,7 +409,8 @@ public:
                                      wxString& aErrorMsg );
 
     /**
-     * Add a compnent library to the library list.
+     * Function AddLibrary
+     * adds a compnent library to the library list.
      *
      * @param aFileName - File name object of component library.
      * @param aErrorMsg - Error message if the component library failed to load.
@@ -403,7 +419,8 @@ public:
     static bool AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg );
 
     /**
-     * Insert a compnent library to the library list.
+     * Function AddLibrary
+     * inserts a compnent library into the library list.
      *
      * @param aFileName - File name object of component library.
      * @param aErrerMsg - Error message if the component library failed to load.
@@ -414,14 +431,16 @@ public:
                             CMP_LIBRARY_LIST::iterator& aIterator );
 
     /**
-     * Remove component library from the library list.
+     * Function RemoveLibrary
+     * removes a component library from the library list.
      *
      * @param aName - Name of component library to remove.
      */
     static void RemoveLibrary( const wxString& aName );
 
     /**
-     * Find component library by /a aName.
+     * Function FindLibrary
+     * finds a component library by \a aName.
      *
      * @param aName - Library file name without path or extension to find.
      * @return Component library if found, otherwise NULL.
@@ -429,7 +448,8 @@ public:
     static CMP_LIBRARY* FindLibrary( const wxString& aName );
 
     /**
-     * Get the list of component library file names without path and extension.
+     * Function GetLibraryNames
+     * returns the list of component library file names without path and extension.
      *
      * @param aSorted - Sort the list of name if true.  Otherwise use the
      *                  library load order.
@@ -438,7 +458,8 @@ public:
     static wxArrayString GetLibraryNames( bool aSorted = true );
 
     /**
-     * Search all libraries in the list for a component.
+     * Function FindLibraryComponent
+     * searches all libraries in the list for a component.
      *
      * A component object will always be returned.  If the entry found
      * is an alias.  The root component will be found and returned.
@@ -451,7 +472,8 @@ public:
                                                 const wxString& aLibraryName = wxEmptyString );
 
     /**
-     * Search all libraries in the list for an entry.
+     * Function FindLibraryEntry
+     * searches all libraries in the list for an entry.
      *
      * The object can be either a component or an alias.
      *
@@ -463,7 +485,8 @@ public:
                                             const wxString& aLibraryName = wxEmptyString );
 
     /**
-     * Remove all cache libraries from library list.
+     * Function RemoveCacheLibrary
+     * removes all cache libraries from library list.
      */
     static void RemoveCacheLibrary();
 
