@@ -343,11 +343,6 @@ SCH_COMPONENT* NETLIST_HELP::findNextComponentAndCreatPinList( EDA_BaseStruct* a
             // Collect all parts and pins for this first occurance of reference.
             // This is only done once, it would be too expensive otherwise.
             FindAllInstancesOfComponent( comp, entry, aSheetPath );
-
-            if( ref == wxString( wxT("U1") ) )
-            {
-                printf("U1 m_SortedComponentPinList.size():%zu\n", m_SortedComponentPinList.size() );
-            }
         }
 
         else    // entry->GetPartCount() <= 1 means one part per package
@@ -867,9 +862,6 @@ bool NETLIST_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bo
             }
             ret |= fprintf( f, "\n" );
 
-            printf( "%-10s pincount:%zu\n", CONV_TO_UTF8( comp->GetRef( path ) ),
-                m_SortedComponentPinList.size() );
-
             // Write pin list:
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
@@ -1086,32 +1078,8 @@ void NETLIST_HELP::FindAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
                 if( pin->m_Convert && pin->m_Convert != comp2->m_Convert )
                     continue;
 
-#if defined(DEBUG)
-                printf( "AddPin %s %s\n", CONV_TO_UTF8(ref), CONV_TO_UTF8( pin->GetNumber() ) );
-
-                if( ref == wxString( wxT("U1") ) && pin->GetNumber() == wxString( wxT("A1") ) )
-                {
-                    int debug = 1;
-                }
-
-                bool rc =
-#endif
-
                 // A suitable pin is found: add it to the current list
-                AddPinToComponentPinList( comp2, aSheetPath, pin );
-
-#if defined(DEBUG)
-                if( !rc )
-                {
-                    printf("skipped pin %s %s\n",
-                        CONV_TO_UTF8(ref),
-                        CONV_TO_UTF8( pin->GetNumber() ) );
-
-                    printf( "g_NetObjectslist.size():%zu\n",
-                        g_NetObjectslist.size() );
-                }
-#endif
-
+                AddPinToComponentPinList( comp2, sheet, pin );
             }
         }
     }

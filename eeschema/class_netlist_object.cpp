@@ -83,10 +83,28 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
     if( !m_Label.IsEmpty() )
         out << " <label>" << m_Label.mb_str() << "</label>\n";
 
+    out << " <sheetpath>" << m_SheetList.PathHumanReadable().mb_str() << "</sheetpath>\n";
+
+    switch( m_Type )
+    {
+    case NET_PIN:
+        out << " <refOfComp>" << ((SCH_COMPONENT*)m_Link)->GetRef(&m_SheetList).mb_str() << "</refOfComp>\n";
+
+        if( m_Comp )
+            m_Comp->Show( 1, out );
+        break;
+
+    default:
+        // not all the m_Comp classes have working Show functions.
+        ;
+    }
+
+/*  was segfault-ing
     if( m_Comp )
-        m_Comp->Show( 1, out );
+        m_Comp->Show( 1, out );     // labels may not have good Show() funcs?
     else
         out << " m_Comp==NULL\n";
+*/
 
     out << "</netItem>\n";
 }

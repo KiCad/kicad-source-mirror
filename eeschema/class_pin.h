@@ -115,6 +115,10 @@ public:
         return wxT( "LIB_PIN" );
     }
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os );   // virtual override
+#endif
+
 
     /**
      * Write pin object to a FILE in "*.lib" format.
