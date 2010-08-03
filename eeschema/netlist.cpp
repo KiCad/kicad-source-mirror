@@ -18,7 +18,7 @@
 // Buffer to build the list of items used in netlist and erc calculations
 NETLIST_OBJECT_LIST g_NetObjectslist;
 
-//#define NETLIST_DEBUG
+#define NETLIST_DEBUG
 
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );

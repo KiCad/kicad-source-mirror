@@ -1485,12 +1485,6 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
 }
 
 
-wxString LIB_PIN::GetNumber( void )
-{
-    return ReturnPinStringNum( m_PinNum );
-}
-
-
 /** Function LIB_PIN::SetPinNumFromString()
  * fill the buffer with pin num as a wxString
  *  Pin num is coded as a long

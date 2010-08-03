@@ -16,20 +16,22 @@
 
 /**
  * Function GetChars
- * returns a pointer to the actual character data, either 8 or
- * 16 bits wide, depending on how the wxWidgets library was compiled.
+ * returns a wxChar* to the actual character data within a wxString, and is
+ * helpful for passing strings to wxString::Printf(wxT("%s"), GetChars(wxString) )
+ * <p>
+ * wxChar is defined to be <ul>
+ * <li> standard C style char when wxUSE_UNICODE==0 </li>
+ * <li> wchar_t when wxUSE_UNICODE==1 (the default). </li>
+ * <ul>
+ * i.e. it depends on how the wxWidgets library was compiled.  There was a period
+ * during the development of wxWidgets 2.9 when GetData() was missing, so this
+ * function was used to provide insulation from that design change.  It may
+ * no longer be needed, and is harmless.  GetData() seems to be an acceptable
+ * alternative in all cases now.
  */
-static inline const wxChar* GetChars( wxString s )
+static inline const wxChar* GetChars( const wxString& s )
 {
 #if wxCHECK_VERSION( 2, 9, 0 )
-
-/* To be Fixed:
- *   Currently, access to the actual character data in <wxString::Printf
- *   is a moving target
- *   So, with wxWidgets 2.9.0 this line is subject to change:
- */
-
-//    return (const wxChar*) s.wx_str();
     return (const wxChar*) s.c_str();
 #else
     return s.GetData();

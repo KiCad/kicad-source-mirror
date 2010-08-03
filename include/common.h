@@ -382,4 +382,4 @@ void            MyFree( void* pt_mem );
 void*           MyZMalloc( size_t nb_octets );
 void*           MyMalloc( size_t nb_octets );
 
-#endif  /* __INCLUDE__COMMON_H__ */
+#endif  // __INCLUDE__COMMON_H__

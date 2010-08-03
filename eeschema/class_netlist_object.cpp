@@ -10,7 +10,6 @@
 
 #include "class_netlist_object.h"
 
-
 #if defined(DEBUG)
 #include <iostream>
 const char* ShowType( NetObjetType aType )
@@ -134,3 +133,4 @@ NETLIST_OBJECT::NETLIST_OBJECT( NETLIST_OBJECT& aSource )
 NETLIST_OBJECT::~NETLIST_OBJECT()
 {
 }
+

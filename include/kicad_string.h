@@ -79,5 +79,27 @@ bool     WildCompareString( const wxString& pattern,
  */
 char*    to_point( char* Text );
 
+/**
+ * Function RefDesStringCompare
+ * acts just like the strcmp function but treats numbers within the string text
+ * correctly for sorting.  eg. A10 > A2
+ * return -1 if first string is less than the second
+ * return 0 if the strings are equal
+ * return 1 if the first string is greater than the second
+ */
+int  RefDesStringCompare( const wxString& lhs, const wxString& rhs );
 
-#endif /* __INCLUDE__KICAD_STRING_H__ */
+/**
+ * Function SplitString
+ * breaks a string into three parts.
+ * The alphabetic preamble
+ * The numeric part
+ * Any alphabetic ending
+ * For example C10A is split to C 10 A
+ */
+int SplitString( wxString  strToSplit,
+                 wxString* strBeginning,
+                 wxString* strDigits,
+                 wxString* strEnd );
+
+#endif // __INCLUDE__KICAD_STRING_H__

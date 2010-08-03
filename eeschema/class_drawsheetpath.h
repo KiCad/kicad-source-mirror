@@ -150,7 +150,7 @@ public:
      * stamps in the path.  (Time stamps do not change even when editing
      * sheet parameters).
      */
-    wxString         PathHumanReadable();
+    wxString         PathHumanReadable()  const;
 
     /** Function BuildSheetPathInfoFromSheetPathValue
      * Fill this with data to access to the hierarchical sheet known by its
@@ -207,9 +207,9 @@ public:
 
     bool operator=( const SCH_SHEET_PATH& d1 );
 
-    bool operator==( const SCH_SHEET_PATH& d1 );
+    bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
-    bool operator!=( const SCH_SHEET_PATH& d1 );
+    bool operator!=( const SCH_SHEET_PATH& d1 ) const;
 };
 
 
