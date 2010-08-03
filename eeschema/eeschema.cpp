@@ -104,7 +104,10 @@ void WinEDA_App::MacOpenFile( const wxString &fileName )
     wxFileName    filename = fileName;
     WinEDA_SchematicFrame * frame = ((WinEDA_SchematicFrame*) GetTopWindow());
 
-    if(!filename.FileExists())
+    if( !frame )
+        return;
+
+    if( !filename.FileExists() )
         return;
 
     frame->LoadOneEEProject( fileName, false );
