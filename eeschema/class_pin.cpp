@@ -1485,12 +1485,6 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
 }
 
 
-wxString LIB_PIN::GetNumber( void )
-{
-    return ReturnPinStringNum( m_PinNum );
-}
-
-
 /** Function LIB_PIN::SetPinNumFromString()
  * fill the buffer with pin num as a wxString
  *  Pin num is coded as a long
@@ -1772,3 +1766,16 @@ const char*** LIB_PIN::GetStyleSymbols()
     return s_icons_Pins_Shapes;
 }
 
+#if defined(DEBUG)
+
+void LIB_PIN::Show( int nestLevel, std::ostream& os )
+{
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
+                                 << " num=\"" << GetNumber().mb_str()
+                                 << '"' << "/>\n";
+
+
+//    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+}
+
+#endif

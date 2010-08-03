@@ -320,3 +320,113 @@ char* strupper( char* Text )
 
     return Text;
 }
+
+
+int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
+{
+    // The different sections of the first string
+    wxString strFWordBeg, strFWordMid, strFWordEnd;
+
+    // The different sections of the second string
+    wxString strSWordBeg, strSWordMid, strSWordEnd;
+
+    int isEqual = 0;            // The numerical results of a string compare
+    int iReturn = 0;            // The variable that is being returned
+
+    long lFirstDigit  = 0;      /* The converted middle section of the first
+                                 *string */
+    long lSecondDigit = 0;      /* The converted middle section of the second
+                                 *string */
+
+    // Split the two strings into separate parts
+    SplitString( strFWord, &strFWordBeg, &strFWordMid, &strFWordEnd );
+    SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
+
+    // Compare the Beginning section of the strings
+    isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
+
+    if( isEqual > 0 )
+        iReturn = 1;
+    else if( isEqual < 0 )
+        iReturn = -1;
+    else
+    {
+        // If the first sections are equal compare their digits
+        strFWordMid.ToLong( &lFirstDigit );
+        strSWordMid.ToLong( &lSecondDigit );
+
+        if( lFirstDigit > lSecondDigit )
+            iReturn = 1;
+        else if( lFirstDigit < lSecondDigit )
+            iReturn = -1;
+        else
+        {
+            // If the first two sections are equal compare the endings
+            isEqual = strFWordEnd.CmpNoCase( strSWordEnd );
+
+            if( isEqual > 0 )
+                iReturn = 1;
+            else if( isEqual < 0 )
+                iReturn = -1;
+            else
+                iReturn = 0;
+        }
+    }
+
+    return iReturn;
+}
+
+
+int SplitString( wxString  strToSplit,
+                 wxString* strBeginning,
+                 wxString* strDigits,
+                 wxString* strEnd )
+{
+    // Clear all the return strings
+    strBeginning->Empty();
+    strDigits->Empty();
+    strEnd->Empty();
+
+    // There no need to do anything if the string is empty
+    if( strToSplit.length() == 0 )
+        return 0;
+
+    // Starting at the end of the string look for the first digit
+    int ii;
+    for( ii = (strToSplit.length() - 1); ii >= 0; ii-- )
+    {
+        if( isdigit( strToSplit[ii] ) )
+            break;
+    }
+
+    // If there were no digits then just set the single string
+    if( ii < 0 )
+        *strBeginning = strToSplit;
+    else
+    {
+        // Since there is at least one digit this is the trailing string
+        *strEnd = strToSplit.substr( ii + 1 );
+
+        // Go to the end of the digits
+        int position = ii + 1;
+        for( ; ii >= 0; ii-- )
+        {
+            if( !isdigit( strToSplit[ii] ) )
+                break;
+        }
+
+        // If all that was left was digits, then just set the digits string
+        if( ii < 0 )
+            *strDigits = strToSplit.substr( 0, position );
+
+        /* We were only looking for the last set of digits everything else is
+         *part of the preamble */
+        else
+        {
+            *strDigits    = strToSplit.substr( ii + 1, position - ii - 1 );
+            *strBeginning = strToSplit.substr( 0, ii + 1 );
+        }
+    }
+
+    return 0;
+}

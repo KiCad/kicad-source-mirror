@@ -7,6 +7,7 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
+#include "classes_body_items.h"
 
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
                                  * pins */
@@ -114,6 +115,10 @@ public:
         return wxT( "LIB_PIN" );
     }
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os );   // virtual override
+#endif
+
 
     /**
      * Write pin object to a FILE in "*.lib" format.
@@ -159,7 +164,12 @@ public:
      */
     void         ReturnPinStringNum( wxString& aStringBuffer ) const;
 
-    wxString     GetNumber();
+
+    wxString GetNumber()
+    {
+        return ReturnPinStringNum( m_PinNum );
+    }
+
 
     /** Function ReturnPinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars

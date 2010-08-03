@@ -934,7 +934,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
                                  << '"' << " chipName=\""
                                  << CONV_TO_UTF8( m_ChipName ) << '"' <<  m_Pos
                                  << " layer=\"" << m_Layer
-                                 << '"' << "/>\n";
+                                 << '"' << ">\n";
 
     // skip the reference, it's been output already.
     for( int i = 1; i < GetFieldCount();  ++i )

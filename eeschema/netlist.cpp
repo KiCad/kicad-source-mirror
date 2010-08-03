@@ -273,7 +273,7 @@ void WinEDA_SchematicFrame::BuildNetListBase()
     sort( g_NetObjectslist.begin(), g_NetObjectslist.end(), SortItemsbyNetcode );
 
 #if defined(NETLIST_DEBUG) && defined(DEBUG)
-    std::cout << "after qsort()\n";
+    std::cout << "\n\nafter qsort()\n";
     dumpNetTable();
 #endif
 
@@ -467,7 +467,6 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
     NETLIST_OBJECT* new_item;
     SCH_COMPONENT*  DrawLibItem;
     LIB_COMPONENT*  Entry;
-    LIB_PIN*        pin;
     SCH_SHEET_PATH  list;
 
     DrawList = sheetlist->LastScreen()->EEDrawList;
@@ -587,24 +586,20 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
         case TYPE_SCH_COMPONENT:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-            Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
-
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
             if( Entry == NULL )
                 break;
 
-            for( pin = Entry->GetNextPin(); pin != NULL;
-                pin = Entry->GetNextPin( pin ) )
+            for( LIB_PIN* pin = Entry->GetNextPin();  pin;  pin = Entry->GetNextPin( pin ) )
             {
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                if( pin->m_Unit
-                   && ( pin->m_Unit !=
-                       DrawLibItem->GetUnitSelection( sheetlist ) ) )
+                if( pin->m_Unit &&
+                        ( pin->m_Unit != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
-                if( pin->m_Convert
-                   && ( pin->m_Convert != DrawLibItem->m_Convert ) )
+                if( pin->m_Convert &&
+                        ( pin->m_Convert != DrawLibItem->m_Convert ) )
                     continue;
 
                 wxPoint pos2 =
@@ -640,7 +635,6 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                     aNetItemBuffer.push_back( new_item );
                 }
             }
-
             break;
 
         case DRAW_POLYLINE_STRUCT_TYPE:

@@ -7,6 +7,8 @@
 #ifndef CLASSES_BODY_ITEMS_H
 #define CLASSES_BODY_ITEMS_H
 
+#include "base_struct.h"
+
 
 class LIB_COMPONENT;
 class PLOTTER;

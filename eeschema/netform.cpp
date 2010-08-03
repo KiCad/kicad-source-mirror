@@ -48,51 +48,22 @@
 
 #include "build_version.h"
 
+#include <set>
+
 /**
  * @bug - Every place in this file where fprintf() is used and the return
  *        is not checked is a bug.  The fprintf() function can fail and
  *        returns a value less than 0 when it does.
  */
 
-static bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
-
-static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
-                                bool with_pcbnew );
-
-static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
-static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
-
-static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
-                                bool use_netnames );
-
-static bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
-static bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList );
-
-static void AddPinToComponentPinList( SCH_COMPONENT*  Component,
-                                      SCH_SHEET_PATH* sheet,
-                                      LIB_PIN*        PinEntry );
-
-static void FindAllInstancesOfComponent(  SCH_COMPONENT*  Component,
-                                          LIB_COMPONENT*  aEntry,
-                                          SCH_SHEET_PATH* Sheet_in );
-
-static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 );
-static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
-
-
-static NETLIST_OBJECT_LIST s_SortedComponentPinList;
-
-
-#include <set>
 
 /**
  * Class UNIQUE_STRINGS
- * will keep track of unique wxStrings and is useful in telling if a string
+ * tracks unique wxStrings and is useful in telling if a string
  * has been seen before.
  */
 class UNIQUE_STRINGS
 {
-private:
     std::set<wxString>      m_set;    ///< set of wxStrings already found
 
 public:
@@ -119,8 +90,77 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
     return ret;
 }
 
-/// Used for multi part per package components, avoids using a component more than once.
-static UNIQUE_STRINGS s_ReferencesAlreadyFound;
+
+/**
+ * Class EXPORT_HELP
+ * is a private implementation class used in this source file to keep track
+ * of and recycle datastructures used in the generation of various exported netlist
+ * files.  Since it is private it is not in a header file.
+ */
+class EXPORT_HELP
+{
+    NETLIST_OBJECT_LIST m_SortedComponentPinList;
+
+    /// Used for "multi parts per package" components, avoids processing a lib component more than once.
+    UNIQUE_STRINGS      m_ReferencesAlreadyFound;
+
+
+    /**
+     * Function sprintPinNetName
+     * formats the net name for \a aPin using \a aNetNameFormat into \a aResult.
+     * <p>
+     *  Net name is:
+     *  <ul>
+     * <li> "?" if pin not connected
+     * <li> "netname" for global net (like gnd, vcc ..
+     * <li> "netname_sheetnumber" for the usual nets
+     * </ul>
+     */
+    static void sprintPinNetName( wxString* aResult, const wxString& aNetNameFormat, NETLIST_OBJECT* aPin );
+
+    /**
+     * Function findNextComponentAndCreatePinList
+     * finds a "suitable" component from the DrawList and optionally builds
+     * its pin list int m_SortedComponentPinList. The list is sorted by pin num.
+     * A suitable component is a "new" real component (power symbols are not
+     * considered).
+     */
+    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_BaseStruct* aItem,
+                                                        SCH_SHEET_PATH* aSheetPath );
+
+public:
+    bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
+
+    /**
+     * Function WriteNetListPCBNEW
+     * generates a net list file (Format 2 improves ORCAD PCB)
+     * = TRUE if with_pcbnew
+     * Format Pcbnew (OrcadPcb2 + reviews and lists of net)
+     * = FALSE if with_pcbnew
+     * Format ORCADPCB2 strict
+     */
+    bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
+                                    bool with_pcbnew );
+
+    void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
+    void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+
+    void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
+                                    bool use_netnames );
+
+    bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+    bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList );
+
+    bool AddPinToComponentPinList( SCH_COMPONENT*  Component,
+                                          SCH_SHEET_PATH* sheet,
+                                          LIB_PIN*        PinEntry );
+
+    void FindAllInstancesOfComponent(  SCH_COMPONENT*  Component,
+                                              LIB_COMPONENT*  aEntry,
+                                              SCH_SHEET_PATH* Sheet_in );
+
+    void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
+};
 
 
 /**
@@ -136,8 +176,9 @@ static UNIQUE_STRINGS s_ReferencesAlreadyFound;
 bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
                    bool aUse_netnames )
 {
-    bool    ret = true;
-    FILE*   f = NULL;
+    bool            ret = true;
+    FILE*           f = NULL;
+    EXPORT_HELP    helper;
 
     if( aFormat < NET_TYPE_CUSTOM1 )
     {
@@ -154,22 +195,22 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        ret = WriteNetListPCBNEW( this, f, TRUE );
+        ret = helper.WriteNetListPCBNEW( this, f, TRUE );
         fclose( f );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        ret = WriteNetListPCBNEW( this, f, FALSE );
+        ret = helper.WriteNetListPCBNEW( this, f, FALSE );
         fclose( f );
         break;
 
     case NET_TYPE_CADSTAR:
-        WriteNetListCADSTAR( this, f );
+        helper.WriteNetListCADSTAR( this, f );
         fclose( f );
         break;
 
     case NET_TYPE_SPICE:
-        WriteNetListPspice( this, f, aUse_netnames );
+        helper.WriteNetListPspice( this, f, aUse_netnames );
         fclose( f );
         break;
 
@@ -178,7 +219,7 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
             wxFileName  tmpFile = aFullFileName;
             tmpFile.SetExt( wxT( "tmp" ) );
 
-            ret = Write_GENERIC_NetList( this, tmpFile.GetFullPath() );
+            ret = helper.Write_GENERIC_NetList( this, tmpFile.GetFullPath() );
             if( !ret )
                 break;
 
@@ -210,31 +251,76 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
 }
 
 
-/*  Find a "suitable" component from the DrawList
- *  build its pin list s_SortedComponentPinList.
- *  The list is sorted by pin num
- *  A suitable component is a "new" real component (power symbols are not
- *  considered)
- *  Must be deallocated by the user
+/*
+ * Comparison routine for sorting by pin numbers.
  */
-static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
-                                                        SCH_SHEET_PATH* path )
+static bool sortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
 {
-    s_SortedComponentPinList.clear();
+    // return "lhs < rhs"
+    return RefDesStringCompare( Pin1->GetPinNumText(), Pin2->GetPinNumText() ) < 0;
+}
 
-    // continue searching from the middle of a linked list
-    for(  ; item;  item = item->Next() )
+
+void EXPORT_HELP::sprintPinNetName( wxString* aResult,
+                        const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
+{
+    int netcode = aPin->GetNet();
+
+    // Not wxString::Clear(), which would free memory.  We want the worst
+    // case wxString memory to grow to avoid reallocation from within the
+    // caller's loop.
+    aResult->Empty();
+
+    if( netcode != 0 && aPin->m_FlagOfConnection == PAD_CONNECT )
     {
-        if( item->Type() != TYPE_SCH_COMPONENT )
+        NETLIST_OBJECT* netref = aPin->m_NetNameCandidate;
+        if( netref )
+            *aResult = netref->m_Label;
+
+        if( !aResult->IsEmpty() )
+        {
+            // prefix non global label names with the sheet path, to avoid name collisions
+            if( netref->m_Type != NET_PINLABEL && netref->m_Type != NET_GLOBLABEL )
+            {
+                wxString lnet = *aResult;
+
+                *aResult = netref->m_SheetList.PathHumanReadable();
+
+                // If sheet path is too long, use the time stamp name instead
+                if( aResult->Length() > 32 )
+                    *aResult = netref->m_SheetList.Path();
+
+                *aResult += lnet;
+            }
+        }
+        else
+        {
+            aResult->Printf( aNetNameFormat.GetData(), netcode );
+        }
+    }
+}
+
+
+SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_BaseStruct* aItem,
+                                                        SCH_SHEET_PATH* aSheetPath )
+{
+    wxString    ref;
+
+    m_SortedComponentPinList.clear();
+
+    // continue searching from the middle of a linked list (the draw list)
+    for(  ; aItem;  aItem = aItem->Next() )
+    {
+        if( aItem->Type() != TYPE_SCH_COMPONENT )
             continue;
 
         // found next component
-        SCH_COMPONENT* comp = (SCH_COMPONENT*) item;
+        SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
 
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
-        wxString ref = comp->GetRef( path );
-        if( ref[0] == wxChar( '#' ) )  // ignore it
+        ref = comp->GetRef( aSheetPath );
+        if( ref[0] == wxChar( '#' ) )
             continue;
 
         // if( Component->m_FlagControlMulti == 1 )
@@ -247,22 +333,23 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
         if( !entry )
             continue;
 
-        // If Multi parts per package
+        // If component is a "multi parts per package" type
         if( entry->GetPartCount() > 1 )
         {
             // test if already visited, and if so skip
-            if( s_ReferencesAlreadyFound.Lookup( ref ) )
+            if( m_ReferencesAlreadyFound.Lookup( ref ) )
                 continue;
 
-            // Collect all parts and pins for this first occurance of reference
-            FindAllInstancesOfComponent( comp, entry, path );
+            // Collect all parts and pins for this first occurance of reference.
+            // This is only done once, it would be too expensive otherwise.
+            FindAllInstancesOfComponent( comp, entry, aSheetPath );
         }
 
         else    // entry->GetPartCount() <= 1 means one part per package
         {
-            LIB_PIN_LIST pins;
+            LIB_PIN_LIST pins;      // constructed once here
 
-            entry->GetPins( pins, comp->GetUnitSelection( path ), comp->m_Convert );
+            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->m_Convert );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
@@ -270,63 +357,21 @@ static SCH_COMPONENT* FindNextComponentAndCreatPinList( EDA_BaseStruct* item,
 
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                AddPinToComponentPinList( comp, path, pin );
+                AddPinToComponentPinList( comp, aSheetPath, pin );
             }
         }
 
-        // Sort pins in s_SortedComponentPinList by pin number
-        sort( s_SortedComponentPinList.begin(),
-              s_SortedComponentPinList.end(), SortPinsByNum );
+        // Sort pins in m_SortedComponentPinList by pin number
+        sort( m_SortedComponentPinList.begin(),
+              m_SortedComponentPinList.end(), sortPinsByNum );
 
-        // Remove duplicate Pins in s_SortedComponentPinList
-        EraseDuplicatePins( s_SortedComponentPinList );
+        // Remove duplicate Pins in m_SortedComponentPinList
+        EraseDuplicatePins( m_SortedComponentPinList );
 
         return comp;
     }
 
     return NULL;
-}
-
-
-/* Return the net name for the pin Pin.
- *  Net name is:
- *  "?" if pin not connected
- *  "netname" for global net (like gnd, vcc ..
- *  "netname_sheetnumber" for the usual nets
- */
-static wxString ReturnPinNetName( NETLIST_OBJECT* Pin, const wxString& DefaultFormatNetname )
-{
-    int      netcode = Pin->GetNet();
-    wxString NetName;
-
-    if( ( netcode == 0 ) || ( Pin->m_FlagOfConnection != PAD_CONNECT ) )
-        return NetName;
-
-    NETLIST_OBJECT* netref = Pin->m_NetNameCandidate;
-    if( netref )
-        NetName = netref->m_Label;
-
-    if( !NetName.IsEmpty() )
-    {
-        // prefix non global labels names by the sheet path, to avoid names collisions
-        if( ( netref->m_Type != NET_PINLABEL )
-           && ( netref->m_Type != NET_GLOBLABEL ) )
-        {
-            wxString lnet = NetName;
-            NetName = netref->m_SheetList.PathHumanReadable();
-
-            // If sheet path is too long, use the time stamp name instead
-            if( NetName.Length() > 32 )
-                NetName = netref->m_SheetList.Path();
-            NetName += lnet;
-        }
-    }
-    else
-    {
-        NetName.Printf( DefaultFormatNetname.GetData(), netcode );
-    }
-
-    return NetName;
 }
 
 
@@ -353,7 +398,7 @@ static wxXmlNode* Node( const wxString& aName, const wxString& aTextualContent =
  * creates a generic netlist, now in XML.
  * @return bool - true if there were no errors, else false.
  */
-bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
 #if 1
     // output the XML format netlist.
@@ -391,7 +436,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
     const wxString  sPart       = wxT( "part" );
     const wxString  sNames      = wxT( "names" );
 
-    s_ReferencesAlreadyFound.Clear();
+    m_ReferencesAlreadyFound.Clear();
 
     xdoc.SetRoot( xroot = Node( wxT( "netlist" ) ) );
     xroot->AddProperty( wxT( "version" ), wxT( "B" ) );
@@ -406,7 +451,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
     {
         for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = FindNextComponentAndCreatPinList( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
                 break;  // No component left
 
@@ -497,7 +542,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
         return false;
     }
 
-    s_ReferencesAlreadyFound.Clear();
+    m_ReferencesAlreadyFound.Clear();
 
     ret |= fprintf( out, "$BeginNetlist\n" );
 
@@ -510,7 +555,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
     {
         for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = FindNextComponentAndCreatPinList( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
                 break;  // No component left
 
@@ -541,9 +586,9 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
 
             // Write pin list:
             ret |= fprintf( out, "$BeginPinList\n" );
-            for( unsigned ii = 0; ii < s_SortedComponentPinList.size(); ii++ )
+            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
-                NETLIST_OBJECT* Pin = s_SortedComponentPinList[ii];
+                NETLIST_OBJECT* Pin = m_SortedComponentPinList[ii];
                 if( !Pin )
                     continue;
 
@@ -586,7 +631,7 @@ bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFi
  * [.-] Or PSpice gnucap are beginning
  * + + Gnucap and PSpice are ultimately NetList
  */
-static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
+void EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
 {
     char            Line[1024];
     SCH_SHEET_PATH* sheet;
@@ -596,6 +641,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
     wxString        text;
     wxArrayString   SpiceCommandAtBeginFile, SpiceCommandAtEndFile;
     wxString        msg;
+    wxString        netName;
 
 #define BUFYPOS_LEN 4
     wxChar          bufnum[BUFYPOS_LEN + 1];
@@ -623,12 +669,15 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
             wxChar ident;
             if( DrawList->Type() != TYPE_SCH_TEXT )
                 continue;
+
             #define DRAWTEXT ( (SCH_TEXT*) DrawList )
             text = DRAWTEXT->m_Text; if( text.IsEmpty() )
                 continue;
+
             ident = text.GetChar( 0 );
             if( ident != '.' && ident != '-' && ident != '+' )
                 continue;
+
             text.Remove( 0, 1 );    // Remove the first char.
             text.Remove( 6 );       // text contains 6 char.
             text.MakeLower();
@@ -673,34 +722,37 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
 
     //  Create component list
 
-    s_ReferencesAlreadyFound.Clear();
+    m_ReferencesAlreadyFound.Clear();
 
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
+            DrawList = Component = findNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )
                 break;
 
             fprintf( f, "%s ", CONV_TO_UTF8( Component->GetRef( sheet ) ) );
 
             // Write pin list:
-            for( unsigned ii = 0; ii < s_SortedComponentPinList.size(); ii++ )
+            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
-                NETLIST_OBJECT* Pin = s_SortedComponentPinList[ii];
+                NETLIST_OBJECT* Pin = m_SortedComponentPinList[ii];
                 if( !Pin )
                     continue;
-                wxString        NetName = ReturnPinNetName( Pin, wxT( "N-%.6d" ) );
-                if( NetName.IsEmpty() )
-                    NetName = wxT( "?" );
+
+                sprintPinNetName( &netName , wxT( "N-%.6d" ), Pin );
+
+                if( netName.IsEmpty() )
+                    netName = wxT( "?" );
+
                 if( use_netnames )
-                    fprintf( f, " %s", CONV_TO_UTF8( NetName ) );
+                    fprintf( f, " %s", CONV_TO_UTF8( netName ) );
                 else    // Use number for net names (with net number = 0 for
                         // "GND"
                 {
                     // NetName = "0" is "GND" net for Spice
-                    if( NetName == wxT( "0" ) || NetName == wxT( "GND" ) )
+                    if( netName == wxT( "0" ) || netName == wxT( "GND" ) )
                         fprintf( f, " 0" );
                     else
                         fprintf( f, " %d", Pin->GetNet() );
@@ -712,7 +764,7 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
         }
     }
 
-    s_SortedComponentPinList.clear();
+    m_SortedComponentPinList.clear();
 
     /* Print texts starting by [+]pspice , ou [+]gnucap */
     nbitems = SpiceCommandAtEndFile.GetCount();
@@ -733,18 +785,13 @@ static void WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_
 }
 
 
-/* Generate net list file (Format 2 improves ORCAD PCB)
- * = TRUE if with_pcbnew
- * Format Pcbnew (OrcadPcb2 + reviews and lists of net)
- * = FALSE if with_pcbnew
- * Format ORCADPCB2 strict
- */
-static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
+bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
     char        dateBuf[256];
     int         ret = 0;        // zero now, OR in the sign bit on error
+    wxString    netName;
 
     std::vector<OBJ_CMP_TO_LIST> cmpList;
 
@@ -757,7 +804,7 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
     // Create netlist module section
 
-    s_ReferencesAlreadyFound.Clear();
+    m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList;
 
@@ -765,7 +812,7 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
     {
         for( EDA_BaseStruct* item = path->LastDrawList();  item;  item = item->Next() )
         {
-            SCH_COMPONENT* comp = FindNextComponentAndCreatPinList( item, path );
+            SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, path );
             if( !comp )
                 break;
 
@@ -816,20 +863,20 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
             ret |= fprintf( f, "\n" );
 
             // Write pin list:
-            for( unsigned ii = 0; ii < s_SortedComponentPinList.size(); ii++ )
+            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
-                NETLIST_OBJECT* pin = s_SortedComponentPinList[ii];
+                NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
                 if( !pin )
                     continue;
 
-                wxString netname = ReturnPinNetName( pin, wxT( "N-%.6d" ) );
-                if( netname.IsEmpty() )
-                    netname = wxT( "?" );
+                sprintPinNetName( &netName, wxT( "N-%.6d" ), pin );
+                if( netName.IsEmpty() )
+                    netName = wxT( "?" );
 
-                netname.Replace( wxT( " " ), wxT( "_" ) );
+                netName.Replace( wxT( " " ), wxT( "_" ) );
 
                 ret |= fprintf( f, "  ( %4.4s %s )\n", (char*) &pin->m_PinNum,
-                        CONV_TO_UTF8( netname ) );
+                        CONV_TO_UTF8( netName ) );
             }
 
             ret |= fprintf( f, " )\n" );
@@ -838,7 +885,7 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
     ret |= fprintf( f, ")\n*\n" );
 
-    s_SortedComponentPinList.clear();
+    m_SortedComponentPinList.clear();
 
     // Write the allowed footprint list for each component
     if( with_pcbnew && cmpList.size() )
@@ -887,34 +934,43 @@ static bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with
 
 
 /*
- * Add a new pin description in the pin list s_SortedComponentPinList
+ * Add a new pin description in the pin list m_SortedComponentPinList
  * a pin description is a pointer to the corresponding structure
  * created by BuildNetList() in the table g_NetObjectslist
  */
-static void AddPinToComponentPinList( SCH_COMPONENT* Component,
-                                      SCH_SHEET_PATH* sheetlist, LIB_PIN* Pin )
+bool EXPORT_HELP::AddPinToComponentPinList( SCH_COMPONENT* aComponent,
+                                      SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
 {
     // Search the PIN description for Pin in g_NetObjectslist
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
-        if( g_NetObjectslist[ii]->m_Type != NET_PIN )
-            continue;
-        if( g_NetObjectslist[ii]->m_Link != Component )
-            continue;
-        if( g_NetObjectslist[ii]->m_SheetList != *sheetlist )
-            continue;
-        if( g_NetObjectslist[ii]->m_PinNum != Pin->m_PinNum )
+        NETLIST_OBJECT* pin = g_NetObjectslist[ii];
+
+        if( pin->m_Type != NET_PIN )
             continue;
 
-        s_SortedComponentPinList.push_back( g_NetObjectslist[ii] );
+        if( pin->m_Link != aComponent )
+            continue;
 
-        if( s_SortedComponentPinList.size() >= MAXPIN )
+        if( pin->m_PinNum != aPin->m_PinNum )
+            continue;
+
+        // most expensive test at the end.
+        if( pin->m_SheetList != *aSheetPath )
+            continue;
+
+        m_SortedComponentPinList.push_back( pin );
+
+        if( m_SortedComponentPinList.size() >= MAXPIN )
         {
             // Log message for Internal error
             DisplayError( NULL, wxT( "AddPinToComponentPinList err: MAXPIN reached" ) );
-            return;
         }
+
+        return true;  // we're done, we appended.
     }
+
+    return false;
 }
 
 
@@ -932,7 +988,7 @@ static void AddPinToComponentPinList( SCH_COMPONENT* Component,
  * given component.
  * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
  */
-static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
+void EXPORT_HELP::EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 {
     if( aPinList.size() == 0 )  // Trivial case: component with no pin
         return;
@@ -959,6 +1015,7 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
             // other pin num end of duplicate list.
             if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
                 break;
+
             if( aPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
                 aPinList[jj] = NULL;
             else /* the reference pin is not connected: remove this pin if the
@@ -980,81 +1037,59 @@ static void EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 
 /**
  * Function FindAllInstancesOfComponent
- * is used for multiple parts per package components.
+ * is used for "multiple parts per package" components.
  *
  * Search all instances of Component_in,
  * Calls AddPinToComponentPinList() to and pins founds to the current
  * component pin list
  */
-static void FindAllInstancesOfComponent( SCH_COMPONENT*  Component_in,
-                                          LIB_COMPONENT*  aEntry,
-                                          SCH_SHEET_PATH* Sheet_in )
+void EXPORT_HELP::FindAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
+                                         LIB_COMPONENT*  aEntry,
+                                         SCH_SHEET_PATH* aSheetPath )
 {
-    EDA_BaseStruct* SchItem;
-    SCH_COMPONENT* Component2;
-    LIB_PIN* pin;
-    SCH_SHEET_PATH* sheet;
-    wxString str, Reference = Component_in->GetRef( Sheet_in );
+    wxString    ref = aComponent->GetRef( aSheetPath );
+    wxString    ref2;
 
-    SCH_SHEET_LIST SheetList;
+    SCH_SHEET_LIST sheetList;
 
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        for( SchItem = sheet->LastDrawList(); SchItem; SchItem = SchItem->Next() )
+        for( EDA_BaseStruct* schItem = sheet->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            if( SchItem->Type() != TYPE_SCH_COMPONENT )
+            if( schItem->Type() != TYPE_SCH_COMPONENT )
                 continue;
 
-            Component2 = (SCH_COMPONENT*) SchItem;
+            SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) schItem;
 
-            str = Component2->GetRef( sheet );
-            if( str.CmpNoCase( Reference ) != 0 )
+            ref2 = comp2->GetRef( sheet );
+            if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
             if( aEntry == NULL )
                 continue;
 
-            for( pin = aEntry->GetNextPin(); pin != NULL; pin = aEntry->GetNextPin( pin ) )
+            for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                if( pin->m_Unit
-                   && ( pin->m_Unit != Component2->GetUnitSelection( sheet ) ) )
+                if( pin->m_Unit && pin->m_Unit != comp2->GetUnitSelection( aSheetPath ) )
                     continue;
 
-                if( pin->m_Convert
-                   && ( pin->m_Convert != Component2->m_Convert ) )
+                if( pin->m_Convert && pin->m_Convert != comp2->m_Convert )
                     continue;
 
-                // A suitable pin in found: add it to the current list
-                AddPinToComponentPinList( Component2, sheet, pin );
+                // A suitable pin is found: add it to the current list
+                AddPinToComponentPinList( comp2, sheet, pin );
             }
         }
     }
 }
 
 
-/*
- * Comparison routine for sorting by pin numbers.
- */
-static bool SortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
-{
-    int Num1, Num2;
-    char Line[5];
-
-    Num1    = Pin1->m_PinNum;
-    Num2    = Pin2->m_PinNum;
-    Line[4] = 0;
-    memcpy( Line, &Num1, 4 ); Num1 = atoi( Line );
-    memcpy( Line, &Num2, 4 ); Num2 = atoi( Line );
-    return Num1 < Num2;
-}
-
-
 /* Written in the file / net list (ranked by Netcode), and elements that are
  * connected
  */
-static bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+bool EXPORT_HELP::WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     int         ret = 0;
     int         netCode;
@@ -1144,7 +1179,7 @@ static bool WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsLis
  * Function WriteGENERICListOfNets
  * saves a netlist in xml format.
  */
-static bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList )
+bool EXPORT_HELP::WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList )
 {
     wxString    netCodeTxt;
     wxString    netName;
@@ -1158,7 +1193,7 @@ static bool WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObje
     wxString    sNode = wxT( "node" );
     wxString    sFmtd = wxT( "%d" );
 
-    wxXmlNode*  xnet;
+    wxXmlNode*  xnet = 0;
     int         netCode;
     int         lastNetCode = -1;
     int         sameNetcodeCount = 0;
@@ -1255,7 +1290,7 @@ wxString StartLine( wxT( "." ) );
  * .. B * T3 1
  *U1 * 14
  */
-static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
+void EXPORT_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
@@ -1274,7 +1309,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     fprintf( f, "\n" );
 
     // Create netlist module section
-    s_ReferencesAlreadyFound.Clear();
+    m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST SheetList;
 
@@ -1282,7 +1317,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = Component = FindNextComponentAndCreatPinList( DrawList, sheet );
+            DrawList = Component = findNextComponentAndCreatPinList( DrawList, sheet );
             if( Component == NULL )
                 break;
 
@@ -1310,7 +1345,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 
     fprintf( f, "\n" );
 
-    s_SortedComponentPinList.clear();
+    m_SortedComponentPinList.clear();
 
     WriteListOfNetsCADSTAR( f, g_NetObjectslist );
 
@@ -1326,7 +1361,7 @@ static void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
  *. B U1 100
  * 6 CA
  */
-static void WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+void EXPORT_HELP::WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );

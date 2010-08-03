@@ -220,7 +220,7 @@ wxString SCH_SHEET_PATH::Path()
  * (the "normal" path uses the time stamps which do not changes even when
  * editing sheet parameters)
  */
-wxString SCH_SHEET_PATH::PathHumanReadable()
+wxString SCH_SHEET_PATH::PathHumanReadable() const
 {
     wxString s, t;
 
@@ -355,6 +355,7 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
 bool SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
 {
     m_numSheets = d1.m_numSheets;
+
     unsigned i;
     for( i = 0; i < m_numSheets; i++ )
     {
@@ -370,10 +371,11 @@ bool SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
 }
 
 
-bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 )
+bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 {
     if( m_numSheets != d1.m_numSheets )
         return false;
+
     for( unsigned i = 0; i < m_numSheets; i++ )
     {
         if( m_sheets[i] != d1.m_sheets[i] )
@@ -384,14 +386,23 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 )
 }
 
 
-bool SCH_SHEET_PATH::operator!=( const SCH_SHEET_PATH& d1 )
+bool SCH_SHEET_PATH::operator!=( const SCH_SHEET_PATH& d1 ) const
 {
     if( m_numSheets != d1.m_numSheets )
         return true;
+
     for( unsigned i = 0; i < m_numSheets; i++ )
     {
         if( m_sheets[i] != d1.m_sheets[i] )
+        {
+            /*
+            printf( "micompare this:'%s' d1:'%s'\n",
+                CONV_TO_UTF8( PathHumanReadable() ),
+                CONV_TO_UTF8( d1.PathHumanReadable() ) );
+            */
+
             return true;
+        }
     }
 
     return false;

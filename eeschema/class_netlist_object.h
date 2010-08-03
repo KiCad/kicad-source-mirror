@@ -6,6 +6,9 @@
 #ifndef _CLASS_NETLIST_OBJECT_H_
 #define _CLASS_NETLIST_OBJECT_H_
 
+#include "class_pin.h"      // LIB_PIN::ReturnPinStringNum( m_PinNum )
+
+
 /* Type of Net objects (wires, labels, pins...) */
 enum NetObjetType {
     NET_ITEM_UNSPECIFIED,           // only for not yet initialized instances
@@ -105,6 +108,17 @@ public:
 
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
     int GetNet() const { return m_NetCode; }
+
+    /**
+     * Function GetPinNum
+     * returns a pin number in wxString form.  Pin numbers are not always
+     * numbers.  "A23" would be a valid pin number.
+     */
+    wxString GetPinNumText()
+    {
+        // hide the ugliness in here, but do it inline.
+        return  LIB_PIN::ReturnPinStringNum( m_PinNum );
+    }
 };
 
 #endif  // _CLASS_NETLIST_OBJECT_H_
