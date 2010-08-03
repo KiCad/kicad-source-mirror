@@ -92,12 +92,12 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
 
 
 /**
- * Class NETLIST_HELP
+ * Class EXPORT_HELP
  * is a private implementation class used in this source file to keep track
  * of and recycle datastructures used in the generation of various exported netlist
  * files.  Since it is private it is not in a header file.
  */
-class NETLIST_HELP
+class EXPORT_HELP
 {
     NETLIST_OBJECT_LIST m_SortedComponentPinList;
 
@@ -178,7 +178,7 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
 {
     bool            ret = true;
     FILE*           f = NULL;
-    NETLIST_HELP    helper;
+    EXPORT_HELP    helper;
 
     if( aFormat < NET_TYPE_CUSTOM1 )
     {
@@ -261,7 +261,7 @@ static bool sortPinsByNum( NETLIST_OBJECT* Pin1, NETLIST_OBJECT* Pin2 )
 }
 
 
-void NETLIST_HELP::sprintPinNetName( wxString* aResult,
+void EXPORT_HELP::sprintPinNetName( wxString* aResult,
                         const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
 {
     int netcode = aPin->GetNet();
@@ -301,7 +301,7 @@ void NETLIST_HELP::sprintPinNetName( wxString* aResult,
 }
 
 
-SCH_COMPONENT* NETLIST_HELP::findNextComponentAndCreatPinList( EDA_BaseStruct* aItem,
+SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_BaseStruct* aItem,
                                                         SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
@@ -398,7 +398,7 @@ static wxXmlNode* Node( const wxString& aName, const wxString& aTextualContent =
  * creates a generic netlist, now in XML.
  * @return bool - true if there were no errors, else false.
  */
-bool NETLIST_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
 #if 1
     // output the XML format netlist.
@@ -631,7 +631,7 @@ bool NETLIST_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wx
  * [.-] Or PSpice gnucap are beginning
  * + + Gnucap and PSpice are ultimately NetList
  */
-void NETLIST_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
+void EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
 {
     char            Line[1024];
     SCH_SHEET_PATH* sheet;
@@ -785,7 +785,7 @@ void NETLIST_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bo
 }
 
 
-bool NETLIST_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
+bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
@@ -938,7 +938,7 @@ bool NETLIST_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bo
  * a pin description is a pointer to the corresponding structure
  * created by BuildNetList() in the table g_NetObjectslist
  */
-bool NETLIST_HELP::AddPinToComponentPinList( SCH_COMPONENT* aComponent,
+bool EXPORT_HELP::AddPinToComponentPinList( SCH_COMPONENT* aComponent,
                                       SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
 {
     // Search the PIN description for Pin in g_NetObjectslist
@@ -988,7 +988,7 @@ bool NETLIST_HELP::AddPinToComponentPinList( SCH_COMPONENT* aComponent,
  * given component.
  * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
  */
-void NETLIST_HELP::EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
+void EXPORT_HELP::EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 {
     if( aPinList.size() == 0 )  // Trivial case: component with no pin
         return;
@@ -1043,7 +1043,7 @@ void NETLIST_HELP::EraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
  * Calls AddPinToComponentPinList() to and pins founds to the current
  * component pin list
  */
-void NETLIST_HELP::FindAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
+void EXPORT_HELP::FindAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
                                          LIB_COMPONENT*  aEntry,
                                          SCH_SHEET_PATH* aSheetPath )
 {
@@ -1089,7 +1089,7 @@ void NETLIST_HELP::FindAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 /* Written in the file / net list (ranked by Netcode), and elements that are
  * connected
  */
-bool NETLIST_HELP::WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+bool EXPORT_HELP::WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     int         ret = 0;
     int         netCode;
@@ -1179,7 +1179,7 @@ bool NETLIST_HELP::WriteGENERICListOfNetsTxt( FILE* f, NETLIST_OBJECT_LIST& aObj
  * Function WriteGENERICListOfNets
  * saves a netlist in xml format.
  */
-bool NETLIST_HELP::WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList )
+bool EXPORT_HELP::WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST& aObjectsList )
 {
     wxString    netCodeTxt;
     wxString    netName;
@@ -1193,7 +1193,7 @@ bool NETLIST_HELP::WriteGENERICListOfNets( wxXmlNode* aNode, NETLIST_OBJECT_LIST
     wxString    sNode = wxT( "node" );
     wxString    sFmtd = wxT( "%d" );
 
-    wxXmlNode*  xnet;
+    wxXmlNode*  xnet = 0;
     int         netCode;
     int         lastNetCode = -1;
     int         sameNetcodeCount = 0;
@@ -1290,7 +1290,7 @@ wxString StartLine( wxT( "." ) );
  * .. B * T3 1
  *U1 * 14
  */
-void NETLIST_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
+void EXPORT_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
@@ -1361,7 +1361,7 @@ void NETLIST_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
  *. B U1 100
  * 6 CA
  */
-void NETLIST_HELP::WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+void EXPORT_HELP::WriteListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
