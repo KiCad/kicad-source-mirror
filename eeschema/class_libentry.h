@@ -71,32 +71,32 @@ public:
 
     virtual void SetName( const wxString& aName ) { name = aName; }
 
-    bool isComponent() { return type == ROOT; }
+    bool isComponent() const { return type == ROOT; }
 
-    bool isAlias() { return type == ALIAS; }
+    bool isAlias() const { return type == ALIAS; }
 
-    int GetType() { return type; }
+    int GetType() const { return type; }
 
     void SetDescription( const wxString& aDescription )
     {
         description = aDescription;
     }
 
-    wxString GetDescription() { return description; }
+    wxString GetDescription() const { return description; }
 
     void SetKeyWords( const wxString& aKeyWords )
     {
         keyWords = aKeyWords;
     }
 
-    wxString GetKeyWords() { return keyWords; }
+    wxString GetKeyWords() const { return keyWords; }
 
     void SetDocFileName( const wxString& aDocFileName )
     {
         docFileName = aDocFileName;
     }
 
-    wxString GetDocFileName() { return docFileName; }
+    wxString GetDocFileName() const { return docFileName; }
 
     /**
      * Write the entry document information to a FILE in "*.dcm" format.

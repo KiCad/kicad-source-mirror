@@ -360,11 +360,21 @@ public:
 
     /**
      * Function GetLogicalName
-     * returns the logical name of the library, which for now is the filename
-     * without path or extension.
-     * wxString - The logical library name.
+     * returns the logical name of the library.
+     * @return wxString - The logical name of this library.
      */
-    wxString GetLogicalName() { return fileName.GetName(); }
+    wxString GetLogicalName()
+    {
+        /*  for now is the filename without path or extension.
+
+            Technically the library should not know its logical name!
+            This will eventually come out of a pair of lookup tables using a
+            reverse lookup using the full name or library pointer as a key.
+            Search will be by project lookup table and then user lookup table if
+            not found.
+        */
+        return fileName.GetName();
+    }
 
 
     /**

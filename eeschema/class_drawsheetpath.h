@@ -66,11 +66,12 @@ class SCH_MARKER;
 class SCH_SHEET_PATH
 {
 private:
-    unsigned m_numSheets;
+    unsigned        m_numSheets;
 
 public:
 #define DSLSZ 32          // Max number of levels for a sheet path
-    SCH_SHEET * m_sheets[DSLSZ];
+    SCH_SHEET*      m_sheets[DSLSZ];
+
 
 public:
     SCH_SHEET_PATH();
