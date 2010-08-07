@@ -30,7 +30,6 @@
 
 #include "fctsys.h"
 
-#include <wx/xml/xml.h>
 
 #include "gr_basic.h"
 #include "common.h"
@@ -45,6 +44,8 @@
 #include "protos.h"
 #include "class_library.h"
 #include "class_pin.h"
+
+#include "xnode.h"      // also nests: <wx/xml/xml.h>
 
 #include "build_version.h"
 
@@ -189,41 +190,56 @@ class EXPORT_HELP
      */
     void writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 
+
+    /**
+     * Function makeGenericRoot
+     * builds the entire document tree for the generic export.  This is factored
+     * out here so we can write the tree in either S-expression file format
+     * or in XML if we put the tree built here into a wxXmlDocument.
+     */
+    XNODE*     makeGenericRoot();
+
+    /**
+     * Function makeGenericComponents
+     * returns a sub-tree holding all the schematic components.
+     */
+    XNODE*     makeGenericComponents();
+
     /**
      * Function makeGenericDesignHeader
      * fills out a project "design" header into an XML node.
-     * @return wxXmlNode* - the design header
+     * @return XNODE*     - the design header
      */
-    wxXmlNode* makeGenericDesignHeader();
+    XNODE*     makeGenericDesignHeader();
 
     /**
      * Function makeGenericLibParts
      * fills out an XML node with the unique library parts and returns it.
      */
-    wxXmlNode* makeGenericLibParts();
+    XNODE*     makeGenericLibParts();
 
     /**
      * Function makeGenericListOfNets
      * fills out an XML node with a list of nets and returns it.
      */
-    wxXmlNode* makeGenericListOfNets();
+    XNODE*     makeGenericListOfNets();
 
     /**
      * Function makeGenericLibraries
      * fills out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
      */
-    wxXmlNode* makeGenericLibraries();
+    XNODE*     makeGenericLibraries();
 
 
 public:
 
     /**
-     * Function Write_GENERIC_NetList
+     * Function WriteGENERICNetList
      * creates a generic netlist, now in XML.
      * @return bool - true if there were no errors, else false.
      */
-    bool Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
+    bool WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
 
     /**
      * Function WriteNetListPCBNEW
@@ -337,7 +353,7 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
             wxFileName  tmpFile = aFullFileName;
             tmpFile.SetExt( wxT( "tmp" ) );
 
-            ret = helper.Write_GENERIC_NetList( this, tmpFile.GetFullPath() );
+            ret = helper.WriteGENERICNetList( this, tmpFile.GetFullPath() );
             if( !ret )
                 break;
 
@@ -541,28 +557,27 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
 
 /**
  * Function node
- * is a convenience function that creates a new wxXmlNode with an optional textual child.
- * It also provides some insulation from a possible change in XML library.  Compiler
- * may or may not decide to inline this, its choice.
+ * is a convenience function that creates a new XNODE with an optional textual child.
+ * It also provides some insulation from a possible change in XML library.
  *
  * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
  * @param aContent is optional, and if given is the text to include in a child
  *   of the returned node, and has type wxXML_TEXT_NODE.
  */
-static wxXmlNode* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
+static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
 {
-    wxXmlNode* n = new wxXmlNode( 0, wxXML_ELEMENT_NODE, aName );
+    XNODE* n = new XNODE( wxXML_ELEMENT_NODE, aName );
 
     if( aTextualContent.Len() > 0 )     // excludes wxEmptyString, the parameter's default value
-        n->AddChild( new wxXmlNode( 0, wxXML_TEXT_NODE, wxEmptyString, aTextualContent ) );
+        n->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, aTextualContent ) );
 
     return n;
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericDesignHeader()
+XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
-    wxXmlNode*  xdesign = node( wxT("design") );
+    XNODE*      xdesign = node( wxT("design") );
     char        date[128];
 
     DateAndTime( date );
@@ -601,14 +616,14 @@ wxXmlNode* EXPORT_HELP::makeGenericDesignHeader()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericLibraries()
+XNODE*     EXPORT_HELP::makeGenericLibraries()
 {
-    wxXmlNode*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
+    XNODE*      xlibs = node( wxT( "libraries" ) );     // auto_ptr
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
         CMP_LIBRARY*    lib = (CMP_LIBRARY*) *it;
-        wxXmlNode*      xlibrary;
+        XNODE*          xlibrary;
 
         xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
         xlibrary->AddProperty( wxT( "logical" ), lib->GetLogicalName() );
@@ -621,9 +636,9 @@ wxXmlNode* EXPORT_HELP::makeGenericLibraries()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericLibParts()
+XNODE*     EXPORT_HELP::makeGenericLibParts()
 {
-    wxXmlNode*  xlibparts = node( wxT( "libparts" ) );   // auto_ptr
+    XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
     wxString    sLibpart  = wxT( "libpart" );
     wxString    sLib      = wxT( "lib" );
     wxString    sPart     = wxT( "part" );
@@ -649,7 +664,7 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 
         m_Libraries.insert( library );  // inserts component's library iff unique
 
-        wxXmlNode*  xlibpart;
+        XNODE*      xlibpart;
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
         xlibpart->AddProperty( sLib, library->GetLogicalName() );
         xlibpart->AddProperty( sPart, lcomp->GetName()  );
@@ -669,14 +684,14 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
         fieldList.clear();
         lcomp->GetFields( fieldList );
 
-        wxXmlNode* xfields;
+        XNODE*     xfields;
         xlibpart->AddChild( xfields = node( sFields ) );
 
         for( unsigned i=0;  i<fieldList.size();  ++i )
         {
             if( !fieldList[i].m_Text.IsEmpty() )
             {
-                wxXmlNode* xfield;
+                XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
                 xfield->AddProperty( sName, fieldList[i].m_Name );
             }
@@ -690,12 +705,12 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 
         if( pinList.size() )
         {
-            wxXmlNode* pins;
+            XNODE*     pins;
 
             xlibpart->AddChild( pins = node( sPins ) );
             for( unsigned i=0; i<pinList.size();  ++i )
             {
-                wxXmlNode* pin;
+                XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
                 pin->AddProperty( sNum, pinList[i]->GetNumber() );
@@ -709,9 +724,9 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
+XNODE*     EXPORT_HELP::makeGenericListOfNets()
 {
-    wxXmlNode*  xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
+    XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
     wxString    netName;
     wxString    ref;
@@ -724,7 +739,7 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
     wxString    sNode = wxT( "node" );
     wxString    sFmtd = wxT( "%d" );
 
-    wxXmlNode*  xnet = 0;
+    XNODE*      xnet = 0;
     int         netCode;
     int         lastNetCode = -1;
     int         sameNetcodeCount = 0;
@@ -785,7 +800,7 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
             xnet->AddProperty( sName, netName );
         }
 
-        wxXmlNode*  xnode;
+        XNODE*      xnode;
         xnet->AddChild( xnode = node( sNode ) );
         xnode->AddProperty( sRef, ref );
         xnode->AddProperty( sPin,  nitem->GetPinNumText() );
@@ -795,56 +810,62 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
 }
 
 
-bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+XNODE*     EXPORT_HELP::makeGenericRoot()
 {
-#if 1
-    // output the XML format netlist.
-    wxXmlDocument   xdoc;
+    XNODE*      xroot = node( wxT( "export" ) );
 
-                                // tree markers or walkers
-    wxXmlNode*      xroot;      // root node
-    wxXmlNode*      xcomps;     // start of components
+    xroot->AddProperty( wxT( "version" ), wxT( "D" ) );
+
+    // add the "design" header
+    xroot->AddChild( makeGenericDesignHeader() );
+
+    xroot->AddChild( makeGenericComponents() );
+
+    xroot->AddChild( makeGenericLibParts() );
+
+    // must follow makeGenericLibParts()
+    xroot->AddChild( makeGenericLibraries() );
+
+    xroot->AddChild( makeGenericListOfNets() );
+
+    return xroot;
+}
+
+
+XNODE*     EXPORT_HELP::makeGenericComponents()
+{
+    XNODE*          xcomps = node( wxT( "components" ) );
+
+    wxString        timeStamp;
 
     // some strings we need many times, but don't want to construct more
     // than once for performance.  These are used within loops so the
     // enclosing wxString constructor would fire on each loop iteration if
     // they were in a nested scope.
 
-    wxString        timeStamp;
-    wxString        logicalLibName;
-
-
     // these are actually constructor invocations, not assignments as it appears:
-    const wxString  sFields     = wxT( "fields" );
-    const wxString  sField      = wxT( "field" );
-    const wxString  sComponent  = wxT( "comp" );          // use "part" ?
-    const wxString  sName       = wxT( "name" );
-    const wxString  sRef        = wxT( "ref" );
-    const wxString  sPins       = wxT( "pins" );
-    const wxString  sPin        = wxT( "pin" );
-    const wxString  sValue      = wxT( "value" );
-    const wxString  sSheetPath  = wxT( "sheetpath" );
-    const wxString  sFootprint  = wxT( "footprint" );
-    const wxString  sDatasheet  = wxT( "datasheet" );
-    const wxString  sTStamp     = wxT( "tstamp" );
-    const wxString  sTStamps    = wxT( "tstamps" );
-    const wxString  sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
-    const wxString  sLibSource  = wxT( "libsource" );
-    const wxString  sLibPart    = wxT( "libpart" );
-    const wxString  sLib        = wxT( "lib" );
-    const wxString  sPart       = wxT( "part" );
-    const wxString  sNames      = wxT( "names" );
+    wxString  sFields     = wxT( "fields" );
+    wxString  sField      = wxT( "field" );
+    wxString  sComponent  = wxT( "comp" );          // use "part" ?
+    wxString  sName       = wxT( "name" );
+    wxString  sRef        = wxT( "ref" );
+    wxString  sPins       = wxT( "pins" );
+    wxString  sPin        = wxT( "pin" );
+    wxString  sValue      = wxT( "value" );
+    wxString  sSheetPath  = wxT( "sheetpath" );
+    wxString  sFootprint  = wxT( "footprint" );
+    wxString  sDatasheet  = wxT( "datasheet" );
+    wxString  sTStamp     = wxT( "tstamp" );
+    wxString  sTStamps    = wxT( "tstamps" );
+    wxString  sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
+    wxString  sLibSource  = wxT( "libsource" );
+    wxString  sLibPart    = wxT( "libpart" );
+    wxString  sLib        = wxT( "lib" );
+    wxString  sPart       = wxT( "part" );
+    wxString  sNames      = wxT( "names" );
 
 
     m_ReferencesAlreadyFound.Clear();
-
-    xdoc.SetRoot( xroot = node( wxT( "export" ) ) );
-    xroot->AddProperty( wxT( "version" ), wxT( "D" ) );
-
-    // add the "design" header
-    xroot->AddChild( makeGenericDesignHeader() );
-
-    xroot->AddChild( xcomps = node( wxT( "components" ) ) );
 
     SCH_SHEET_LIST sheetList;
 
@@ -861,7 +882,7 @@ bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxS
 
             schItem = comp;
 
-            wxXmlNode* xcomp;  // current component being constructed
+            XNODE*     xcomp;  // current component being constructed
 
             // Output the component's elments in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
@@ -884,7 +905,7 @@ bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxS
             // container element if there are any <field>s.
             if( comp->GetFieldCount() > MANDATORY_FIELDS )
             {
-                wxXmlNode* xfields;
+                XNODE*     xfields;
                 xcomp->AddChild( xfields = node( sFields ) );
 
                 for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
@@ -894,14 +915,14 @@ bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxS
                     // only output a field if non empty
                     if( !f->m_Text.IsEmpty() )
                     {
-                        wxXmlNode*  xfield;
+                        XNODE*      xfield;
                         xfields->AddChild( xfield = node( sField, f->m_Text ) );
                         xfield->AddProperty( sName, f->m_Name );
                     }
                 }
             }
 
-            wxXmlNode*  xlibsource;
+            XNODE*      xlibsource;
             xcomp->AddChild( xlibsource = node( sLibSource ) );
 
             // "logical" library name, which is in anticipation of a better search
@@ -912,7 +933,7 @@ bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxS
                 xlibsource->AddProperty( sLib, entry->GetLibrary()->GetLogicalName() );
             xlibsource->AddProperty( sPart, comp->m_ChipName );
 
-            wxXmlNode* xsheetpath;
+            XNODE*     xsheetpath;
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
             xsheetpath->AddProperty( sNames, path->PathHumanReadable() );
             xsheetpath->AddProperty( sTStamps, path->Path() );
@@ -922,12 +943,17 @@ bool EXPORT_HELP::Write_GENERIC_NetList( WinEDA_SchematicFrame* frame, const wxS
         }
     }
 
-    xroot->AddChild( makeGenericLibParts() );
+    return xcomps;
+}
 
-    // must follow makeGenericLibParts()
-    xroot->AddChild( makeGenericLibraries() );
 
-    xroot->AddChild( makeGenericListOfNets() );
+bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+{
+#if 1
+    // output the XML format netlist.
+    wxXmlDocument   xdoc;
+
+    xdoc.SetRoot( makeGenericRoot() );
 
     return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
 

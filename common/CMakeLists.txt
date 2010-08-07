@@ -53,6 +53,7 @@ set(COMMON_SRCS
     trigo.cpp
     worksheet.cpp
     wxwineda.cpp
+    xnode.cpp
     zoom.cpp
 )
 
