@@ -197,39 +197,39 @@ class EXPORT_HELP
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
      */
-    wxXmlNode* makeGenericRoot();
+    XNODE*     makeGenericRoot();
 
     /**
      * Function makeGenericComponents
      * returns a sub-tree holding all the schematic components.
      */
-    wxXmlNode* makeGenericComponents();
+    XNODE*     makeGenericComponents();
 
     /**
      * Function makeGenericDesignHeader
      * fills out a project "design" header into an XML node.
-     * @return wxXmlNode* - the design header
+     * @return XNODE*     - the design header
      */
-    wxXmlNode* makeGenericDesignHeader();
+    XNODE*     makeGenericDesignHeader();
 
     /**
      * Function makeGenericLibParts
      * fills out an XML node with the unique library parts and returns it.
      */
-    wxXmlNode* makeGenericLibParts();
+    XNODE*     makeGenericLibParts();
 
     /**
      * Function makeGenericListOfNets
      * fills out an XML node with a list of nets and returns it.
      */
-    wxXmlNode* makeGenericListOfNets();
+    XNODE*     makeGenericListOfNets();
 
     /**
      * Function makeGenericLibraries
      * fills out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
      */
-    wxXmlNode* makeGenericLibraries();
+    XNODE*     makeGenericLibraries();
 
 
 public:
@@ -557,28 +557,27 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
 
 /**
  * Function node
- * is a convenience function that creates a new wxXmlNode with an optional textual child.
- * It also provides some insulation from a possible change in XML library.  Compiler
- * may or may not decide to inline this, its choice.
+ * is a convenience function that creates a new XNODE with an optional textual child.
+ * It also provides some insulation from a possible change in XML library.
  *
  * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
  * @param aContent is optional, and if given is the text to include in a child
  *   of the returned node, and has type wxXML_TEXT_NODE.
  */
-static wxXmlNode* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
+static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
 {
-    wxXmlNode* n = new wxXmlNode( 0, wxXML_ELEMENT_NODE, aName );
+    XNODE* n = new XNODE( wxXML_ELEMENT_NODE, aName );
 
     if( aTextualContent.Len() > 0 )     // excludes wxEmptyString, the parameter's default value
-        n->AddChild( new wxXmlNode( 0, wxXML_TEXT_NODE, wxEmptyString, aTextualContent ) );
+        n->AddChild( new XNODE( wxXML_TEXT_NODE, wxEmptyString, aTextualContent ) );
 
     return n;
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericDesignHeader()
+XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
-    wxXmlNode*  xdesign = node( wxT("design") );
+    XNODE*      xdesign = node( wxT("design") );
     char        date[128];
 
     DateAndTime( date );
@@ -617,14 +616,14 @@ wxXmlNode* EXPORT_HELP::makeGenericDesignHeader()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericLibraries()
+XNODE*     EXPORT_HELP::makeGenericLibraries()
 {
-    wxXmlNode*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
+    XNODE*      xlibs = node( wxT( "libraries" ) );     // auto_ptr
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
         CMP_LIBRARY*    lib = (CMP_LIBRARY*) *it;
-        wxXmlNode*      xlibrary;
+        XNODE*          xlibrary;
 
         xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
         xlibrary->AddProperty( wxT( "logical" ), lib->GetLogicalName() );
@@ -637,9 +636,9 @@ wxXmlNode* EXPORT_HELP::makeGenericLibraries()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericLibParts()
+XNODE*     EXPORT_HELP::makeGenericLibParts()
 {
-    wxXmlNode*  xlibparts = node( wxT( "libparts" ) );   // auto_ptr
+    XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
     wxString    sLibpart  = wxT( "libpart" );
     wxString    sLib      = wxT( "lib" );
     wxString    sPart     = wxT( "part" );
@@ -665,7 +664,7 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 
         m_Libraries.insert( library );  // inserts component's library iff unique
 
-        wxXmlNode*  xlibpart;
+        XNODE*      xlibpart;
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
         xlibpart->AddProperty( sLib, library->GetLogicalName() );
         xlibpart->AddProperty( sPart, lcomp->GetName()  );
@@ -685,14 +684,14 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
         fieldList.clear();
         lcomp->GetFields( fieldList );
 
-        wxXmlNode* xfields;
+        XNODE*     xfields;
         xlibpart->AddChild( xfields = node( sFields ) );
 
         for( unsigned i=0;  i<fieldList.size();  ++i )
         {
             if( !fieldList[i].m_Text.IsEmpty() )
             {
-                wxXmlNode* xfield;
+                XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
                 xfield->AddProperty( sName, fieldList[i].m_Name );
             }
@@ -706,12 +705,12 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 
         if( pinList.size() )
         {
-            wxXmlNode* pins;
+            XNODE*     pins;
 
             xlibpart->AddChild( pins = node( sPins ) );
             for( unsigned i=0; i<pinList.size();  ++i )
             {
-                wxXmlNode* pin;
+                XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
                 pin->AddProperty( sNum, pinList[i]->GetNumber() );
@@ -725,9 +724,9 @@ wxXmlNode* EXPORT_HELP::makeGenericLibParts()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
+XNODE*     EXPORT_HELP::makeGenericListOfNets()
 {
-    wxXmlNode*  xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
+    XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
     wxString    netName;
     wxString    ref;
@@ -740,7 +739,7 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
     wxString    sNode = wxT( "node" );
     wxString    sFmtd = wxT( "%d" );
 
-    wxXmlNode*  xnet = 0;
+    XNODE*      xnet = 0;
     int         netCode;
     int         lastNetCode = -1;
     int         sameNetcodeCount = 0;
@@ -801,7 +800,7 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
             xnet->AddProperty( sName, netName );
         }
 
-        wxXmlNode*  xnode;
+        XNODE*      xnode;
         xnet->AddChild( xnode = node( sNode ) );
         xnode->AddProperty( sRef, ref );
         xnode->AddProperty( sPin,  nitem->GetPinNumText() );
@@ -811,9 +810,9 @@ wxXmlNode* EXPORT_HELP::makeGenericListOfNets()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericRoot()
+XNODE*     EXPORT_HELP::makeGenericRoot()
 {
-    wxXmlNode*  xroot = node( wxT( "export" ) );
+    XNODE*      xroot = node( wxT( "export" ) );
 
     xroot->AddProperty( wxT( "version" ), wxT( "D" ) );
 
@@ -833,9 +832,9 @@ wxXmlNode* EXPORT_HELP::makeGenericRoot()
 }
 
 
-wxXmlNode* EXPORT_HELP::makeGenericComponents()
+XNODE*     EXPORT_HELP::makeGenericComponents()
 {
-    wxXmlNode*      xcomps = node( wxT( "components" ) );
+    XNODE*          xcomps = node( wxT( "components" ) );
 
     wxString        timeStamp;
 
@@ -883,7 +882,7 @@ wxXmlNode* EXPORT_HELP::makeGenericComponents()
 
             schItem = comp;
 
-            wxXmlNode* xcomp;  // current component being constructed
+            XNODE*     xcomp;  // current component being constructed
 
             // Output the component's elments in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
@@ -906,7 +905,7 @@ wxXmlNode* EXPORT_HELP::makeGenericComponents()
             // container element if there are any <field>s.
             if( comp->GetFieldCount() > MANDATORY_FIELDS )
             {
-                wxXmlNode* xfields;
+                XNODE*     xfields;
                 xcomp->AddChild( xfields = node( sFields ) );
 
                 for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
@@ -916,14 +915,14 @@ wxXmlNode* EXPORT_HELP::makeGenericComponents()
                     // only output a field if non empty
                     if( !f->m_Text.IsEmpty() )
                     {
-                        wxXmlNode*  xfield;
+                        XNODE*      xfield;
                         xfields->AddChild( xfield = node( sField, f->m_Text ) );
                         xfield->AddProperty( sName, f->m_Name );
                     }
                 }
             }
 
-            wxXmlNode*  xlibsource;
+            XNODE*      xlibsource;
             xcomp->AddChild( xlibsource = node( sLibSource ) );
 
             // "logical" library name, which is in anticipation of a better search
@@ -934,7 +933,7 @@ wxXmlNode* EXPORT_HELP::makeGenericComponents()
                 xlibsource->AddProperty( sLib, entry->GetLibrary()->GetLogicalName() );
             xlibsource->AddProperty( sPart, comp->m_ChipName );
 
-            wxXmlNode* xsheetpath;
+            XNODE*     xsheetpath;
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
             xsheetpath->AddProperty( sNames, path->PathHumanReadable() );
             xsheetpath->AddProperty( sTStamps, path->Path() );
