@@ -25,54 +25,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include "richio.h"
-
+// #define WXUSINGDLL
 #include <wx/xml/xml.h>
-
-// These are classes for eXporting document trees, and thus have names
-// starting with X.  They can export either in XML or S-expression format.
-
-
-/**
- * Class XATTR
- * holds an XML or S-expression attribute/child value.  It is used for eXporting
- * a document tree in EITHER XML or S-expression.
- */
-class XATTR : public wxXmlProperty      // use wxXmlAttribute for wx >= 2.9
-{
-public:
-    XATTR() :
-        wxXmlProperty()
-    {
-    }
-
-    XATTR( const wxString& aName, const wxString& aValue ) :
-        wxXmlProperty( aName, aValue )
-    {
-    }
-
-
-    /**
-     * Function Format
-     * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression
-     * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
-     */
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
-
-
-    /**
-     * Function FormatContents
-     * writes the contents of object as UTF8 out to an OUTPUTFORMATTER as an S-expression
-     * This is the same as Format() except that the outer wrapper is not included.
-     * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
-     */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
-};
 
 
 /**
@@ -88,12 +43,10 @@ public:
     {
     }
 
-
     XNODE( wxXmlNodeType aType, const wxString& aName, const wxString& aContent = wxEmptyString ) :
         wxXmlNode( NULL, aType, aName, aContent )
     {
     }
-
 
     /**
      * Function Format
@@ -103,7 +56,6 @@ public:
      * @throw IOError if a system error writing the output, such as a full disk.
      */
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
-
 
     /**
      * Function FormatContents

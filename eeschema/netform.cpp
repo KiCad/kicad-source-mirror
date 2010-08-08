@@ -190,46 +190,45 @@ class EXPORT_HELP
      */
     void writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 
-
     /**
      * Function makeGenericRoot
      * builds the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format
      * or in XML if we put the tree built here into a wxXmlDocument.
      */
-    XNODE*     makeGenericRoot();
+    XNODE* makeGenericRoot();
 
     /**
      * Function makeGenericComponents
      * returns a sub-tree holding all the schematic components.
      */
-    XNODE*     makeGenericComponents();
+    XNODE* makeGenericComponents();
 
     /**
      * Function makeGenericDesignHeader
      * fills out a project "design" header into an XML node.
-     * @return XNODE*     - the design header
+     * @return XNODE* - the design header
      */
-    XNODE*     makeGenericDesignHeader();
+    XNODE* makeGenericDesignHeader();
 
     /**
      * Function makeGenericLibParts
      * fills out an XML node with the unique library parts and returns it.
      */
-    XNODE*     makeGenericLibParts();
+    XNODE* makeGenericLibParts();
 
     /**
      * Function makeGenericListOfNets
      * fills out an XML node with a list of nets and returns it.
      */
-    XNODE*     makeGenericListOfNets();
+    XNODE* makeGenericListOfNets();
 
     /**
      * Function makeGenericLibraries
      * fills out an XML node with a list of used libraries and returns it.
      * Must have called makeGenericLibParts() before this function.
      */
-    XNODE*     makeGenericLibraries();
+    XNODE* makeGenericLibraries();
 
 
 public:
@@ -390,6 +389,12 @@ static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 {
     // return "lhs < rhs"
     return RefDesStringCompare( aPin1->GetPinNumText(), aPin2->GetPinNumText() ) < 0;
+}
+
+static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
+{
+    // return "lhs < rhs"
+    return RefDesStringCompare( aPin1->GetNumber(), aPin2->GetNumber() ) < 0;
 }
 
 
@@ -577,7 +582,7 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 
 XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
-    XNODE*      xdesign = node( wxT("design") );
+    XNODE*  xdesign = node( wxT("design") );
     char        date[128];
 
     DateAndTime( date );
@@ -616,17 +621,17 @@ XNODE* EXPORT_HELP::makeGenericDesignHeader()
 }
 
 
-XNODE*     EXPORT_HELP::makeGenericLibraries()
+XNODE* EXPORT_HELP::makeGenericLibraries()
 {
-    XNODE*      xlibs = node( wxT( "libraries" ) );     // auto_ptr
+    XNODE*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
         CMP_LIBRARY*    lib = (CMP_LIBRARY*) *it;
-        XNODE*          xlibrary;
+        XNODE*      xlibrary;
 
         xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
-        xlibrary->AddProperty( wxT( "logical" ), lib->GetLogicalName() );
+        xlibrary->AddAttribute( wxT( "logical" ), lib->GetLogicalName() );
         xlibrary->AddChild( node( wxT( "uri" ),  lib->GetFullFileName() ) );
 
         // @todo: add more fun stuff here
@@ -636,7 +641,7 @@ XNODE*     EXPORT_HELP::makeGenericLibraries()
 }
 
 
-XNODE*     EXPORT_HELP::makeGenericLibParts()
+XNODE* EXPORT_HELP::makeGenericLibParts()
 {
     XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
     wxString    sLibpart  = wxT( "libpart" );
@@ -650,7 +655,6 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
     wxString    sFields   = wxT( "fields" );
     wxString    sDescr    = wxT( "description" );
     wxString    sDocs     = wxT( "docs" );
-
 
     LIB_PIN_LIST    pinList;
     LIB_FIELD_LIST  fieldList;
@@ -666,8 +670,8 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
 
         XNODE*      xlibpart;
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
-        xlibpart->AddProperty( sLib, library->GetLogicalName() );
-        xlibpart->AddProperty( sPart, lcomp->GetName()  );
+        xlibpart->AddAttribute( sLib, library->GetLogicalName() );
+        xlibpart->AddAttribute( sPart, lcomp->GetName()  );
 
         //----- show the important properties -------------------------
         if( !lcomp->GetDescription().IsEmpty() )
@@ -693,7 +697,7 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
             {
                 XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
-                xfield->AddProperty( sName, fieldList[i].m_Name );
+                xfield->AddAttribute( sName, fieldList[i].m_Name );
             }
         }
 
@@ -701,7 +705,7 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
         pinList.clear();
         lcomp->GetPins( pinList, 0, 0 );
 
-        // sort the pin list here?
+        sort( pinList.begin(), pinList.end(), sortPinsByNumber );
 
         if( pinList.size() )
         {
@@ -713,7 +717,7 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
-                pin->AddProperty( sNum, pinList[i]->GetNumber() );
+                pin->AddAttribute( sNum, pinList[i]->GetNumber() );
 
                 // caution: construction work site here, drive slowly
             }
@@ -724,7 +728,7 @@ XNODE*     EXPORT_HELP::makeGenericLibParts()
 }
 
 
-XNODE*     EXPORT_HELP::makeGenericListOfNets()
+XNODE* EXPORT_HELP::makeGenericListOfNets()
 {
     XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -796,25 +800,25 @@ XNODE*     EXPORT_HELP::makeGenericListOfNets()
         {
             xnets->AddChild( xnet = node( sNet ) );
             netCodeTxt.Printf( sFmtd, netCode );
-            xnet->AddProperty( sCode, netCodeTxt );
-            xnet->AddProperty( sName, netName );
+            xnet->AddAttribute( sCode, netCodeTxt );
+            xnet->AddAttribute( sName, netName );
         }
 
         XNODE*      xnode;
         xnet->AddChild( xnode = node( sNode ) );
-        xnode->AddProperty( sRef, ref );
-        xnode->AddProperty( sPin,  nitem->GetPinNumText() );
+        xnode->AddAttribute( sRef, ref );
+        xnode->AddAttribute( sPin,  nitem->GetPinNumText() );
     }
 
     return xnets;
 }
 
 
-XNODE*     EXPORT_HELP::makeGenericRoot()
+XNODE* EXPORT_HELP::makeGenericRoot()
 {
     XNODE*      xroot = node( wxT( "export" ) );
 
-    xroot->AddProperty( wxT( "version" ), wxT( "D" ) );
+    xroot->AddAttribute( wxT( "version" ), wxT( "D" ) );
 
     // add the "design" header
     xroot->AddChild( makeGenericDesignHeader() );
@@ -832,11 +836,11 @@ XNODE*     EXPORT_HELP::makeGenericRoot()
 }
 
 
-XNODE*     EXPORT_HELP::makeGenericComponents()
+XNODE* EXPORT_HELP::makeGenericComponents()
 {
-    XNODE*          xcomps = node( wxT( "components" ) );
+    XNODE*      xcomps = node( wxT( "components" ) );
 
-    wxString        timeStamp;
+    wxString    timeStamp;
 
     // some strings we need many times, but don't want to construct more
     // than once for performance.  These are used within loops so the
@@ -844,25 +848,25 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
     // they were in a nested scope.
 
     // these are actually constructor invocations, not assignments as it appears:
-    wxString  sFields     = wxT( "fields" );
-    wxString  sField      = wxT( "field" );
-    wxString  sComponent  = wxT( "comp" );          // use "part" ?
-    wxString  sName       = wxT( "name" );
-    wxString  sRef        = wxT( "ref" );
-    wxString  sPins       = wxT( "pins" );
-    wxString  sPin        = wxT( "pin" );
-    wxString  sValue      = wxT( "value" );
-    wxString  sSheetPath  = wxT( "sheetpath" );
-    wxString  sFootprint  = wxT( "footprint" );
-    wxString  sDatasheet  = wxT( "datasheet" );
-    wxString  sTStamp     = wxT( "tstamp" );
-    wxString  sTStamps    = wxT( "tstamps" );
-    wxString  sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
-    wxString  sLibSource  = wxT( "libsource" );
-    wxString  sLibPart    = wxT( "libpart" );
-    wxString  sLib        = wxT( "lib" );
-    wxString  sPart       = wxT( "part" );
-    wxString  sNames      = wxT( "names" );
+    wxString    sFields     = wxT( "fields" );
+    wxString    sField      = wxT( "field" );
+    wxString    sComponent  = wxT( "comp" );          // use "part" ?
+    wxString    sName       = wxT( "name" );
+    wxString    sRef        = wxT( "ref" );
+    wxString    sPins       = wxT( "pins" );
+    wxString    sPin        = wxT( "pin" );
+    wxString    sValue      = wxT( "value" );
+    wxString    sSheetPath  = wxT( "sheetpath" );
+    wxString    sFootprint  = wxT( "footprint" );
+    wxString    sDatasheet  = wxT( "datasheet" );
+    wxString    sTStamp     = wxT( "tstamp" );
+    wxString    sTStamps    = wxT( "tstamps" );
+    wxString    sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
+    wxString    sLibSource  = wxT( "libsource" );
+    wxString    sLibPart    = wxT( "libpart" );
+    wxString    sLib        = wxT( "lib" );
+    wxString    sPart       = wxT( "part" );
+    wxString    sNames      = wxT( "names" );
 
 
     m_ReferencesAlreadyFound.Clear();
@@ -882,7 +886,7 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
 
             schItem = comp;
 
-            XNODE*     xcomp;  // current component being constructed
+            XNODE* xcomp;  // current component being constructed
 
             // Output the component's elments in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
@@ -890,7 +894,7 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
             // an element.
 
             xcomps->AddChild( xcomp = node( sComponent ) );
-            xcomp->AddProperty( sRef, comp->GetRef( path ) );
+            xcomp->AddAttribute( sRef, comp->GetRef( path ) );
 
             xcomp->AddChild( node( sValue, comp->GetField( VALUE )->m_Text ) );
 
@@ -905,7 +909,7 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
             // container element if there are any <field>s.
             if( comp->GetFieldCount() > MANDATORY_FIELDS )
             {
-                XNODE*     xfields;
+                XNODE* xfields;
                 xcomp->AddChild( xfields = node( sFields ) );
 
                 for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
@@ -915,14 +919,14 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
                     // only output a field if non empty
                     if( !f->m_Text.IsEmpty() )
                     {
-                        XNODE*      xfield;
+                        XNODE*  xfield;
                         xfields->AddChild( xfield = node( sField, f->m_Text ) );
-                        xfield->AddProperty( sName, f->m_Name );
+                        xfield->AddAttribute( sName, f->m_Name );
                     }
                 }
             }
 
-            XNODE*      xlibsource;
+            XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( sLibSource ) );
 
             // "logical" library name, which is in anticipation of a better search
@@ -930,13 +934,13 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
             // is merely the library name minus path and extension.
             LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
             if( entry )
-                xlibsource->AddProperty( sLib, entry->GetLibrary()->GetLogicalName() );
-            xlibsource->AddProperty( sPart, comp->m_ChipName );
+                xlibsource->AddAttribute( sLib, entry->GetLibrary()->GetLogicalName() );
+            xlibsource->AddAttribute( sPart, comp->m_ChipName );
 
-            XNODE*     xsheetpath;
+            XNODE* xsheetpath;
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
-            xsheetpath->AddProperty( sNames, path->PathHumanReadable() );
-            xsheetpath->AddProperty( sTStamps, path->Path() );
+            xsheetpath->AddAttribute( sNames, path->PathHumanReadable() );
+            xsheetpath->AddAttribute( sTStamps, path->Path() );
 
             timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
@@ -946,10 +950,45 @@ XNODE*     EXPORT_HELP::makeGenericComponents()
     return xcomps;
 }
 
+#include <wx/wfstream.h>        // wxFFileOutputStream
 
 bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
-#if 1
+#if 0
+
+    // this code seems to work now, for S-expression support.
+
+    bool rc = false;
+    wxFFileOutputStream os( aOutFileName, wxT( "wt" ) );
+
+    if( !os.IsOk() )
+    {
+    L_error:
+        wxString msg = _( "Failed to create file " ) + aOutFileName;
+        DisplayError( frame, msg );
+    }
+    else
+    {
+        XNODE*  xroot = makeGenericRoot();
+
+        try
+        {
+            STREAM_OUTPUTFORMATTER  outputFormatter( os );
+            xroot->Format( &outputFormatter, 0 );
+        }
+        catch( IOError ioe )
+        {
+            delete xroot;
+            goto L_error;
+        }
+
+        delete xroot;
+        rc = true;
+    }
+
+    return rc;
+
+#elif 1
     // output the XML format netlist.
     wxXmlDocument   xdoc;
 

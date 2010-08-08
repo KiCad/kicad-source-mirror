@@ -24,46 +24,77 @@
 
 
 #include "xnode.h"
+#include "macros.h"
+
+
+typedef wxXmlProperty  XATTR;
 
 void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
-    // output attributes first if they exist
+    switch( GetType() )
+    {
+    case wxXML_ELEMENT_NODE:
+        out->Print( nestLevel, "(%s", CONV_TO_UTF8( GetName() ) );
+        FormatContents( out, nestLevel );
+        if( GetNext() )
+            out->Print( 0, ")\n" );
+        else
+            out->Print( 0, ")" );
+        break;
 
-    // output children if they exist.
-
-    // output "contents" if it exists.  Use quote need checker to wrap contents if needed.
-
-    // A good XML element will not have both children AND contents, usually one or the other.
-    // children != attributes in the above statement.
-
-//    for( XNODE*...
+    default:
+        FormatContents( out, nestLevel );
+    }
 }
 
 
 void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
-    // overridden in ELEM_HOLDER
-}
+    std::string utf8;
+    const char* quote;
 
-
-void XATTR::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-{
     // output attributes first if they exist
+    for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )
+    {
+        utf8  = CONV_TO_UTF8( attr->GetValue() );   // capture the content
+        quote = out->GetQuoteChar( utf8.c_str() );
 
-    // output children if they exist.
+        out->Print( 0, " (%s %s%s%s)",
+            // attr names should never need quoting, no spaces, we designed the file.
+            CONV_TO_UTF8( attr->GetName() ),
+            quote, utf8.c_str(), quote );
+    }
 
-    // output "contents" if it exists.  Use quote need checker to wrap contents if needed.
+    // we only expect to have used one of two types here:
+    switch( GetType() )
+    {
+    case wxXML_ELEMENT_NODE:
 
-    // A good XML element will not have both children AND contents, usually one or the other.
-    // children != attributes in the above statement.
+        // output children if they exist.
+        for( XNODE* kid = (XNODE*) GetChildren();  kid;  kid = (XNODE*) kid->GetNext() )
+        {
+            if( kid->GetType() != wxXML_TEXT_NODE )
+            {
+                if( kid == GetChildren() )
+                    out->Print( 0, "\n" );
+                kid->Format( out, nestLevel+1 );
+            }
+            else
+            {
+                kid->Format( out, 0 );
+            }
+        }
+        break;
 
-//    for( XNODE*...
-}
+    case wxXML_TEXT_NODE:
+        utf8  = CONV_TO_UTF8( GetContent() );
+        quote = out->GetQuoteChar( utf8.c_str() );
+        out->Print( 0, " %s%s%s", quote, utf8.c_str(), quote );
+        break;
 
-
-void XATTR::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
-{
-    // overridden in ELEM_HOLDER
+    default:
+        ;   // not supported
+    }
 }
 
 
