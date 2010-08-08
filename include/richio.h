@@ -148,14 +148,14 @@ public:
     /**
      * Function Rewind
      * a wrapper to the standard function rewind.
-     * also clear the current line number 
+     * also clear the current line number
      */
     void Rewind()
     {
         rewind( fp );
         lineNum = 0;
     }
-    
+
 };
 
 
@@ -201,17 +201,43 @@ public:
 
 /**
  * Class OUTPUTFORMATTER
- * is an interface (abstract class) used to output ASCII text in a convenient
- * way.  The primary interface is printf() like but with support for indentation
+ * is an important interface (abstract) class used to output UTF8 text in a convenient
+ * way. The primary interface is "printf() - like" but with support for indentation
  * control.  The destination of the 8 bit wide text is up to the implementer.
+ * <p>
+ * The implementer only has to implement the write() function, but can also optionaly
+ * re-implement GetQuoteChar().
+ * <p>
  * If you want to output a wxString, then use CONV_TO_UTF8() on it before passing
  * it as an argument to Print().
  * <p>
  * Since this is an abstract interface, only classes derived from this one
- * will be the implementations.
+ * may actually be used.
  */
 class OUTPUTFORMATTER
 {
+    std::vector<char>       buffer;
+
+    int sprint( const char* fmt, ... )  throw( IOError );
+    int vprint( const char* fmt,  va_list ap )  throw( IOError );
+
+
+protected:
+    OUTPUTFORMATTER( int aReserve = 300 ) :
+            buffer( aReserve, '\0' )
+    {
+    }
+
+
+    /**
+     * Function write
+     * should be coded in the interface implementation (derived) classes.
+     *
+     * @param aOutBuf is the start of a byte buffer to write.
+     * @param aCount  tells how many bytes to write.
+     * @throw IOError, if there is a problem outputting, such as a full disk.
+     */
+    virtual void write( const char* aOutBuf, int aCount ) throw( IOError ) = 0;
 
 #if defined(__GNUG__)   // The GNU C++ compiler defines this
 
@@ -238,7 +264,7 @@ public:
      * @return int - the number of characters output.
      * @throw IOError, if there is a problem outputting, such as a full disk.
      */
-    virtual int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
 
     /**
      * Function GetQuoteChar
@@ -256,7 +282,10 @@ public:
      * @return const char* - the quote_char as a single character string, or ""
      *   if the wrapee does not need to be wrapped.
      */
-    virtual const char* GetQuoteChar( const char* wrapee ) = 0;
+    virtual const char* GetQuoteChar( const char* wrapee )
+    {
+        return GetQuoteChar( wrapee, "\"" );
+    }
 
     virtual ~OUTPUTFORMATTER() {}
 
@@ -283,11 +312,7 @@ public:
 */
 class STRINGFORMATTER : public OUTPUTFORMATTER
 {
-    std::vector<char>       buffer;
     std::string             mystring;
-
-    int sprint( const char* fmt, ... );
-    int vprint( const char* fmt,  va_list ap );
 
 public:
 
@@ -296,10 +321,9 @@ public:
      * reserves space in the buffer
      */
     STRINGFORMATTER( int aReserve = 300 ) :
-        buffer( aReserve, '\0' )
+        OUTPUTFORMATTER( aReserve )
     {
     }
-
 
     /**
      * Function Clear
@@ -316,16 +340,47 @@ public:
      */
     void StripUseless();
 
-
     std::string GetString()
     {
         return mystring;
     }
 
+    //-----<OUTPUTFORMATTER>------------------------------------------------
+protected:
+    void write( const char* aOutBuf, int aCount ) throw( IOError );
+    //-----</OUTPUTFORMATTER>-----------------------------------------------
+};
+
+
+/**
+ * Class STREAM_OUTPUTFORMATTER
+ * implements OUTPUTFORMATTER to a wxWidgets wxOutputStream.  The stream is
+ * neither opened nor closed by this class.
+ */
+class STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
+{
+    wxOutputStream& os;
+    char            quoteChar[2];
+
+public:
+
+    /**
+     * Constructor STREAM_OUTPUTFORMATTER
+     * can take any number of wxOutputStream derivations, so it can write
+     * to a file, socket, or zip file.
+     */
+    STREAM_OUTPUTFORMATTER( wxOutputStream& aStream, char aQuoteChar = '"' ) :
+        os( aStream )
+    {
+        quoteChar[0] = aQuoteChar;
+        quoteChar[1] = 0;
+    }
 
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
     const char* GetQuoteChar( const char* wrapee );
+
+protected:
+    void write( const char* aOutBuf, int aCount ) throw( IOError );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 

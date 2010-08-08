@@ -147,18 +147,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
 }
 
 
-//-----<STRINGFORMATTER>----------------------------------------------------
-
-const char* STRINGFORMATTER::GetQuoteChar( const char* wrapee )
-{
-    // for what we are using STRINGFORMATTER for at this time, we can return
-    // the nul string always.
-
-    return "";
-//    return OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, "\"" );
-}
-
-int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
+int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IOError )
 {
     int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     if( ret >= (int) buffer.size() )
@@ -168,13 +157,13 @@ int STRINGFORMATTER::vprint( const char* fmt,  va_list ap )
     }
 
     if( ret > 0 )
-        mystring.append( (const char*) &buffer[0] );
+        write( &buffer[0], ret );
 
     return ret;
 }
 
 
-int STRINGFORMATTER::sprint( const char* fmt, ... )
+int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IOError )
 {
     va_list     args;
 
@@ -186,9 +175,8 @@ int STRINGFORMATTER::sprint( const char* fmt, ... )
 }
 
 
-int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
+int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
 {
-
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
     va_list     args;
@@ -200,17 +188,14 @@ int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 
     for( int i=0; i<nestLevel;  ++i )
     {
+        // no error checking needed, an exception indicates an error.
         result = sprint( "%*c", NESTWIDTH, ' ' );
-        if( result < 0 )
-            break;
 
         total += result;
     }
 
-    if( result<0 || (result=vprint( fmt, args ))<0 )
-    {
-        throw IOError( _("Error writing to STRINGFORMATTER") );
-    }
+    // no error checking needed, an exception indicates an error.
+    result = vprint( fmt, args );
 
     va_end( args );
 
@@ -218,6 +203,13 @@ int STRINGFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
     return total;
 }
 
+
+//-----<STRINGFORMATTER>----------------------------------------------------
+
+void STRINGFORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
+{
+    mystring.append( aOutBuf, aCount );
+}
 
 void STRINGFORMATTER::StripUseless()
 {
@@ -230,6 +222,32 @@ void STRINGFORMATTER::StripUseless()
         if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
         {
             mystring += *i;
+        }
+    }
+}
+
+
+//-----<STREAM_OUTPUTFORMATTER>--------------------------------------
+
+const char* STREAM_OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
+{
+    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quoteChar );
+}
+
+
+void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
+{
+    int lastWrite;
+
+    // This might delay awhile if you were writing to say a socket, but for
+    // a file it should only go through the loop once.
+    for( int total = 0;  total<aCount;  total += lastWrite )
+    {
+        lastWrite = os.Write( aOutBuf, aCount ).LastWrite();
+
+        if( !os.IsOk() )
+        {
+            throw IOError( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
         }
     }
 }

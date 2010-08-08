@@ -3970,7 +3970,7 @@ typedef boost::ptr_set<PADSTACK>    PADSTACKSET;
  * Class SPECCTRA_DB
  * holds a DSN data tree, usually coming from a DSN file.
  */
-class SPECCTRA_DB : public OUTPUTFORMATTER
+class SPECCTRA_DB
 {
     /// specctra DSN keywords
     static const KEYWORD keywords[];
@@ -3979,13 +3979,8 @@ class SPECCTRA_DB : public OUTPUTFORMATTER
     DSNLEXER*       lexer;
 
     PCB*            pcb;
-
     SESSION*        session;
-
-    FILE*           fp;
-
     wxString        filename;
-
     std::string     quote_char;
 
     bool            modulesAreFlipped;
@@ -4304,7 +4299,6 @@ public:
         lexer = 0;
         pcb   = 0;
         session = 0;
-        fp    = 0;
         quote_char += '"';
         modulesAreFlipped = false;
     }
@@ -4316,17 +4310,7 @@ public:
         delete session;
 
         deleteNETs();
-
-        if( fp )
-            fclose( fp );
     }
-
-
-    //-----<OUTPUTFORMATTER>-------------------------------------------------
-    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
-
-    const char* GetQuoteChar( const char* wrapee );
-    //-----</OUTPUTFORMATTER>------------------------------------------------
 
     static const char* TokenName( int aToken );
 
@@ -4353,11 +4337,6 @@ public:
         pcb = aPcb;
     }
     PCB*  GetPCB()  { return pcb; }
-
-    void SetFILE( FILE* aFile )
-    {
-        fp = aFile;
-    }
 
     /**
      * Function SetSESSION

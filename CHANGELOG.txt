@@ -4,6 +4,19 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Aug-7 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common
+  * add xnode.cpp and xnode.h which can be used to output either an XML or
+    S-expression document file.
+  * Add class STREAM_OUTPUTFORMATTER which is a richio class which can write
+    to any of the wxOutputStream derivatives, such as file, socket, zip, tar.
+  * Added netlist.keywords
+++eeschema
+  * netform.cpp can now output S-expression OK, although I have it commented out
+    pending the addition of a UI for it.
+
+
 2010-Aug-4 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++eeschema netform.cpp:

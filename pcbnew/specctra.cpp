@@ -52,7 +52,9 @@
 
 #include "specctra.h"
 
-#include <wx/ffile.h>
+//#include <wx/ffile.h>
+#include <wx/wfstream.h>        // wxFFileOutputStream
+
 
 #include "build_version.h"
 
@@ -3850,81 +3852,42 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError )
 }
 
 
-int SPECCTRA_DB::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
-{
-    va_list     args;
-
-    va_start( args, fmt );
-
-    int result = 0;
-    int total  = 0;
-
-    for( int i=0; i<nestLevel;  ++i )
-    {
-        result = fprintf( fp, "%*c", NESTWIDTH, ' ' );
-        if( result < 0 )
-            break;
-
-        total += result;
-    }
-
-    if( result<0 || (result=vfprintf( fp, fmt, args ))<0 )
-    {
-        ThrowIOError( _("System file error writing to file \"%s\""), GetChars(filename) );
-    }
-
-    va_end( args );
-
-    total += result;
-    return total;
-}
-
-
-const char* SPECCTRA_DB::GetQuoteChar( const char* wrapee )
-{
-    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quote_char.c_str() );
-}
-
-
 void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOError )
 {
-    fp = wxFopen( filename, wxT("w") );
-
-    if( !fp )
-    {
-        ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
-    }
-
     if( pcb )
     {
+        wxFFileOutputStream os( filename, wxT( "wt" ) );
+
+        if( !os.IsOk() )
+        {
+            ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
+        }
+
+        STREAM_OUTPUTFORMATTER  outputFormatter( os, quote_char[0] );
+
         if( aNameChange )
             pcb->pcbname = CONV_TO_UTF8(filename);
 
-        pcb->Format( this, 0 );
+        pcb->Format( &outputFormatter, 0 );
     }
-
-    // if an exception is thrown by Format, then ~SPECCTRA_DB() will close
-    // the file.
-
-    fclose( fp );
-    fp = 0;
 }
 
 
 void SPECCTRA_DB::ExportSESSION( wxString filename )
 {
-    fp = wxFopen( filename, wxT("w") );
-
-    if( !fp )
-    {
-        ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
-    }
-
     if( session )
-        session->Format( this, 0 );
+    {
+        wxFFileOutputStream os( filename, wxT( "wt" ) );
 
-    fclose( fp );
-    fp = 0;
+        if( !os.IsOk() )
+        {
+            ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
+        }
+
+        STREAM_OUTPUTFORMATTER  outputFormatter( os, quote_char[0] );
+
+        session->Format( &outputFormatter, 0 );
+    }
 }
 
 
