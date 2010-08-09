@@ -36,57 +36,71 @@
 # Valid tokens:    a a1 foo_1 foo_bar2
 # Invalid tokens:  1 A _foo bar_ foO
 #
-# Usage:
+# Invocation Parameters are:  enum, inputFile, outCppFile, outHeaderFile
 #
-#     add_custom_command(
-#         OUTPUT  ${CMAKE_BINARY_DIR}/cmp_library_keywords.h
-#                 ${CMAKE_BINARY_DIR}/cmp_library_keywords.cpp
-#         COMMAND ${CMAKE_COMMAND}
-#                 -Denum=YOURTOK_T
-#                 -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-#                 -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-#         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-#    )
+#     enum       - Required, name of the enum to generate.
 #
-# Input parameters:
+#     inputFile  - Required, name of the token list file, or "*.keywords" file.
+#                  Choose the basefilename carefully, it decides the class name
+#                  used in the generated *_lexer.h file.
 #
-#     enum       - The name of the enum to generate, defaults to DSN_T, but
-#                  you'll get collisions if you don't override it.
-#     inputFile  - The name of the token list file.
-#     outputPath - Optional output path to save the generated files.  If not defined,
-#                  the output path is the same path as the token list file path.
+#     outCppFile - Optional, full path and file name of where to save the generated
+#                  cpp keywords file.  If not defined, the output path is the same
+#                  path as the token list file path, with a file name of *_keywords.cpp
+#
+#  outHeaderFile - Optional, full path and file name of where to save the generated
+#                  *.h lexfer file.  If not defined, the output path is the same
+#                  path as the token list file path, with a file name of *_lexer.h
+#
+# Example Usage from within a CMakeLists.txt file is shown below.  CMake itself
+# is invoked as a child process to execute this script and parameters are passed on
+# the command line, which is formulated as the "COMMAND" sequence below:
+#
+# add_custom_command(
+#     OUTPUT  ${CMAKE_BINARY_DIR}/cmp_library_lexer.h
+#             ${CMAKE_BINARY_DIR}/cmp_library_keywords.cpp
+#     COMMAND ${CMAKE_COMMAND}
+#             -Denum=YOURTOK_T
+#             -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+#             -DoutCppFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
+#             -DoutHeaderFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
+#             -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+#     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_{lexer.h,keywords.cpp}
+#         from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords"
+# )
 
+#message( STATUS "TokenList2DsnLexer.cmake" )    # indicate we are running
 
 set( tokens "" )
 set( lineCount 0 )
-set( dsnErrorMsg "DSN token file generator failure:" )
-
+set( dsnErrorMsg "TokenList2DsnLexer.cmake failure:" )
 
 if( NOT EXISTS ${inputFile} )
     message( FATAL_ERROR "${dsnErrorMsg} file ${inputFile} cannot be found." )
-endif( NOT EXISTS ${inputFile} )
-
-if( NOT EXISTS ${outputPath} )
-    get_filename_component( outputPath "${inputFile}" PATH )
-endif( NOT EXISTS ${outputPath} )
+endif()
 
 if( NOT DEFINED enum )
-    set( enum DSN_T )
+    message( FATAL_ERROR "${dsnErrorMsg} missing \"enum\" processing ${inputFile}." )
 endif()
-#message( STATUS "enum: ${enum}" )
 
+get_filename_component( outputPath "${inputFile}" PATH )
 
-# Separate the file name without extension from the full file path.
+# the keywords filename without extension is important, it sets the classname into RESULT
 get_filename_component( result "${inputFile}" NAME_WE )
+string( TOUPPER "${result}" RESULT )
 
-message( STATUS "Extracted file name ${result} from path ${inputFile}" )
+#message( "enum:'${enum}' result:'${result}' outputPath:'${outputPath}' inputFile:'${inputFile}'" )
 
-# Create include and source file name from the list file name.
-set( includeFileName "${outputPath}/${result}_lexer.h" )
-set( sourceFileName "${outputPath}/${result}_keywords.cpp" )
+if( NOT DEFINED outCppFile )
+    set( outCppFile "${outputPath}/${result}_keywords.cpp" )
+endif()
+
+if( NOT DEFINED outHeaderFile )
+    set( outHeaderFile "${outputPath}/${result}_lexer.h" )
+endif()
 
 # Create tag for generating header file.
-string( TOUPPER "${result}" RESULT )
 set( headerTag "_${RESULT}_H_" )
 
 set( includeFileHeader
@@ -175,31 +189,31 @@ if( NOT ( tokensBefore EQUAL tokensAfter ) )
     message( FATAL_ERROR "Duplicate tokens found in file <${inputFile}>." )
 endif( NOT ( tokensBefore EQUAL tokensAfter ) )
 
-file( WRITE "${includeFileName}" "${includeFileHeader}" )
-file( WRITE "${sourceFileName}" "${sourceFileHeader}" )
+file( WRITE "${outHeaderFile}" "${includeFileHeader}" )
+file( WRITE "${outCppFile}" "${sourceFileHeader}" )
 
 set( lineCount 1 )
 
 foreach( token ${tokens} )
     if( lineCount EQUAL 1 )
-        file( APPEND "${includeFileName}" "    T_${token} = 0" )
+        file( APPEND "${outHeaderFile}" "    T_${token} = 0" )
     else( lineCount EQUAL 1 )
-        file( APPEND "${includeFileName}" "    T_${token}" )
+        file( APPEND "${outHeaderFile}" "    T_${token}" )
     endif( lineCount EQUAL 1 )
 
-    file(APPEND "${sourceFileName}" "    TOKDEF( ${token} )" )
+    file(APPEND "${outCppFile}" "    TOKDEF( ${token} )" )
 
     if( lineCount EQUAL tokensAfter )
-        file( APPEND "${includeFileName}" "\n" )
-        file( APPEND "${sourceFileName}" "\n" )
+        file( APPEND "${outHeaderFile}" "\n" )
+        file( APPEND "${outCppFile}" "\n" )
     else( lineCount EQUAL tokensAfter )
-        file( APPEND "${includeFileName}" ",\n" )
-        file( APPEND "${sourceFileName}" ",\n" )
+        file( APPEND "${outHeaderFile}" ",\n" )
+        file( APPEND "${outCppFile}" ",\n" )
     endif( lineCount EQUAL tokensAfter )
     math( EXPR lineCount "${lineCount} + 1" )
 endforeach( token ${tokens} )
 
-file( APPEND "${includeFileName}"
+file( APPEND "${outHeaderFile}"
 "};
 
 extern const KEYWORD  ${result}_keywords[];
@@ -316,7 +330,7 @@ class ${RESULT}_PARSER : public ${RESULT}_LEXER
 "
 )
 
-file( APPEND "${sourceFileName}"
+file( APPEND "${outCppFile}"
 "};
 
 const unsigned ${result}_keyword_count = DIM( ${result}_keywords );

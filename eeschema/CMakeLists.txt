@@ -32,6 +32,7 @@ set(EESCHEMA_SRCS
     class_text-label.cpp
     classes_body_items.cpp
     cleanup.cpp
+    cmp_library_keywords.cpp
     cmp_library_lexer.cpp
     controle.cpp
     cross-probing.cpp
@@ -154,35 +155,50 @@ if(APPLE)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.eeschema)
 endif(APPLE)
 
-# Generate DSN lexer header and source files for the component library file
-# format.
+
+# auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
+# library format.
+set( inputFile      ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords )
+set( outHeaderFile  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h )
+set( outCppFile     ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp )
+set( enum           TLIB_T )
 add_custom_command(
-    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
+    OUTPUT  ${outHeaderFile}
+            ${outCppFile}
     COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+        -Denum=${enum}
+        -DinputFile=${inputFile}
+        -DoutHeaderFile=${outHeaderFile}
+        -DoutCppFile=${outCppFile}
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_{lexer.h,keywords.cpp}
-       from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords"
+            ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+    COMMENT "TokenList2DsnLexer.cmake creating:
+       ${outHeaderFile} and
+       ${outCppFile} from
+       ${inputFile}"
     )
 
-set_source_files_properties( cmp_library_lexer.cpp
-    PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
-    )
 
-
+set( inputFile      ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords )
+set( outHeaderFile  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h )
+set( outCppFile     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp )
+set( enum           TFIELD_T )
 add_custom_command(
-    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
-            ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
+    OUTPUT  ${outHeaderFile}
+            ${outCppFile}
     COMMAND ${CMAKE_COMMAND}
-        -Denum=TFIELD_T
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
+        -Denum=${enum}
+        -DinputFile=${inputFile}
+        -DoutHeaderFile=${outHeaderFile}
+        -DoutCppFile=${outCppFile}
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_{lexer.h,keywords.cpp}
-       from ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords"
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+            ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+    COMMENT "TokenList2DsnLexer.cmake creating:
+       ${outHeaderFile} and
+       ${outCppFile} from
+       ${inputFile}"
     )
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
