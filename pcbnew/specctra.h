@@ -626,7 +626,7 @@ protected:
     }
 
     // avoid creating this for every compare, make static.
-    static STRINGFORMATTER  sf;
+    static STRING_FORMATTER  sf;
 
 
 public:
@@ -3985,7 +3985,7 @@ class SPECCTRA_DB
 
     bool            modulesAreFlipped;
 
-    STRINGFORMATTER sf;
+    STRING_FORMATTER sf;
 
     STRINGS         layerIds;       ///< indexed by PCB layer number
 

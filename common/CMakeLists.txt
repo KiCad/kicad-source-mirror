@@ -43,6 +43,7 @@ set(COMMON_SRCS
     gr_basic.cpp
     hotkeys_basic.cpp
     msgpanel.cpp
+    netlist_keywords.cpp
     newstroke_font.cpp
     ../pcbnew/class_drc_item.cpp
     projet_config.cpp
@@ -90,6 +91,19 @@ set(PCB_COMMON_SRCS
 )
 
 add_library(pcbcommon ${PCB_COMMON_SRCS})
+
+# auto-generate netlist_lexer.h and netlist_keywords.cpp
+add_custom_command(
+    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/netlist_lexer.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
+    COMMAND ${CMAKE_COMMAND}
+        -Denum=NL_T
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
+        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/netlist_{lexer.h,keywords.cpp}
+       from ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords"
+    )
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)

@@ -654,10 +654,7 @@ void WinEDA_SchematicFrame::LoadSettings()
 
     if( !templateFieldNames.IsEmpty() )
     {
-        std::string dsnTxt = CONV_TO_UTF8( templateFieldNames );
-
-        DSNLEXER  lexer( dsnTxt, DSN::template_fieldnames_keywords,
-                                 DSN::template_fieldnames_keyword_count );
+        TEMPLATE_FIELDNAMES_LEXER  lexer( CONV_TO_UTF8( templateFieldNames ) );
         try
         {
             m_TemplateFieldNames.Parse( &lexer );
@@ -735,7 +732,7 @@ void WinEDA_SchematicFrame::SaveSettings()
     }
 
     // Save template fieldnames
-    STRINGFORMATTER sf;
+    STRING_FORMATTER sf;
 
     m_TemplateFieldNames.Format( &sf, 0 );
 

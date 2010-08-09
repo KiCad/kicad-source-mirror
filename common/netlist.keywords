@@ -10,6 +10,8 @@ export
 field
 fields
 footprint
+footprints
+fp
 lib
 libpart
 libraries

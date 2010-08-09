@@ -46,13 +46,13 @@ void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const thr
 }
 
 
-void TEMPLATE_FIELDNAME::Parse( DSNLEXER* in ) throw( IOError )
+void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError )
 {
     TFIELD_T    tok;
 
     in->NeedLEFT();     // begin (name ...)
 
-    if( (tok = (TFIELD_T) in->NextTok()) != T_name )
+    if( (tok = in->NextTok()) != T_name )
         in->Expecting( T_name );
 
     in->NeedSYMBOLorNUMBER();
@@ -61,11 +61,11 @@ void TEMPLATE_FIELDNAME::Parse( DSNLEXER* in ) throw( IOError )
 
     in->NeedRIGHT();    // end (name ...)
 
-    while( (tok = (TFIELD_T) in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {
         // "visible" has no '(' prefix, "value" does, so T_LEFT is optional.
         if( tok == T_LEFT )
-            tok = (TFIELD_T) in->NextTok();
+            tok = in->NextTok();
 
         switch( tok )
         {
@@ -89,28 +89,28 @@ void TEMPLATE_FIELDNAME::Parse( DSNLEXER* in ) throw( IOError )
 
 void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
 {
-    // We'll keep this general even though the only know use at this time
-    // will not want the newlines or the indentation.
+    // We'll keep this general, and include the \n, even though the only known
+    // use at this time will not want the newlines or the indentation.
     out->Print( nestLevel, "(templatefields" );
     for( unsigned i=0;  i<m_Fields.size();  ++i )
         m_Fields[i].Format( out, nestLevel+1 );
     out->Print( 0, ")\n" );
 }
 
-void TEMPLATES::Parse( DSNLEXER* in ) throw( IOError )
+void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError )
 {
     TFIELD_T        tok;
 
-    while( (tok = (TFIELD_T) in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {
         if( tok == T_LEFT )
-            tok = (TFIELD_T) in->NextTok();
+            tok = in->NextTok();
 
         switch( tok )
         {
         case T_templatefields:  // a token indicating class TEMPLATES.
 
-            // Be flexible regarding the starting point of the DSNLEXER
+            // Be flexible regarding the starting point of the TEMPLATE_FIELDNAMES_LEXER
             // stream.  Caller may not have read the first two tokens out of the
             // stream: T_LEFT and T_templatefields, so ignore them if seen here.
             break;

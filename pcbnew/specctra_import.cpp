@@ -531,7 +531,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
                 // padstack from its name as a work around.
 
 
-                // Could use a STRINGFORMATTER here and convert the entire
+                // Could use a STRING_FORMATTER here and convert the entire
                 // wire_via to text and put that text into the exception.
                 wxString psid( CONV_FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
 
