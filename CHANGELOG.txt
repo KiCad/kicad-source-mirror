@@ -4,6 +4,13 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Aug-9 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++CMakeModules:
+    Revise TokenList2DsnLexer.cmake to take outCppFile and outHeaderFile optinally
+    and enum mandatorily.  Standardize the script's invocation technique within
+    all the CMakeLists.txt files.
+
 2010-Aug-8 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++CMakeModules:
