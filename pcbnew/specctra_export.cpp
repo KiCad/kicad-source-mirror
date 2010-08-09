@@ -848,7 +848,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOErr
         }
 
 #if 0 && defined(DEBUG)
-        STRINGFORMATTER sf;
+        STRING_FORMATTER sf;
         path->Format( &sf, 0 );
         printf( "%s\n", sf.GetString().c_str() );
 #endif

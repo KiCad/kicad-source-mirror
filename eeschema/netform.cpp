@@ -655,6 +655,8 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
     wxString    sFields   = wxT( "fields" );
     wxString    sDescr    = wxT( "description" );
     wxString    sDocs     = wxT( "docs" );
+    wxString    sFprints  = wxT( "footprints" );
+    wxString    sFp       = wxT( "fp" );
 
     LIB_PIN_LIST    pinList;
     LIB_FIELD_LIST  fieldList;
@@ -680,9 +682,17 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
         if( !lcomp->GetDocFileName().IsEmpty() )
             xlibpart->AddChild( node( sDocs,   lcomp->GetDocFileName() ) );
 
-        // @todo show the footprints here.
-        // (*it)->m_FootprintList
+        // Write the footprint list
+        if( lcomp->m_FootprintList.GetCount() )
+        {
+            XNODE*  xfootprints;
+            xlibpart->AddChild( xfootprints = node( sFprints ) );
 
+            for( unsigned i=0; i<lcomp->m_FootprintList.GetCount(); ++i )
+            {
+                xfootprints->AddChild( node( sFp, lcomp->m_FootprintList[i] ) );
+            }
+        }
 
         //----- show the fields here ----------------------------------
         fieldList.clear();

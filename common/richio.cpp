@@ -204,14 +204,14 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 }
 
 
-//-----<STRINGFORMATTER>----------------------------------------------------
+//-----<STRING_FORMATTER>----------------------------------------------------
 
-void STRINGFORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
+void STRING_FORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
 {
     mystring.append( aOutBuf, aCount );
 }
 
-void STRINGFORMATTER::StripUseless()
+void STRING_FORMATTER::StripUseless()
 {
     std::string  copy = mystring;
 

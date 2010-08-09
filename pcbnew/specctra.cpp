@@ -51,10 +51,7 @@
 #include <cstdio>
 
 #include "specctra.h"
-
-//#include <wx/ffile.h>
 #include <wx/wfstream.h>        // wxFFileOutputStream
-
 
 #include "build_version.h"
 
@@ -3979,7 +3976,7 @@ int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
 
 
 // a reasonably small memory price to pay for improved performance
-STRINGFORMATTER  ELEM::sf;
+STRING_FORMATTER  ELEM::sf;
 
 
 //-----<UNIT_RES>---------------------------------------------------------

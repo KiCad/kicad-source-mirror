@@ -5,9 +5,9 @@
 #include "richio.h"
 #include "wxstruct.h"
 #include "macros.h"
-#include "template_fieldnames_keywords.h"
+#include "template_fieldnames_lexer.h"
 
-class DSNLEXER;
+class TEMPLATE_FIELDNAMES_LEXER;
 
 
 /**
@@ -71,7 +71,7 @@ struct TEMPLATE_FIELDNAME
     /**
      * Function Parse
      * fills this object from information in the input stream \a aSpec, which
-     * is a DSNLEXER. The entire textual element spec is <br>
+     * is a TEMPLATE_FIELDNAMES_LEXER. The entire textual element spec is <br>
      * (field (name _yourfieldname_)(value _yourvalue_) visible)) <br>
      * The presence of value is optional, the presence of visible is optional.
      * When this function is called, the input token stream given by \a aSpec
@@ -81,7 +81,7 @@ struct TEMPLATE_FIELDNAME
      *
      * @param aSpec is the input token stream of keywords and symbols.
      */
-    void Parse( DSNLEXER* aSpec ) throw( IOError );
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* aSpec ) throw( IOError );
 
     /**
      * Function GetDefaultFieldName
@@ -110,9 +110,9 @@ public:
 
     /**
      * Function Parse
-     * fills this object from information in the input stream handled by DSNLEXER
+     * fills this object from information in the input stream handled by TEMPLATE_FIELDNAMES_LEXER
      */
-    void Parse( DSNLEXER* in ) throw( IOError );
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError );
 
 
     /**
@@ -148,4 +148,3 @@ public:
 };
 
 #endif // _TEMPLATE_FIELDNAME_H_
-

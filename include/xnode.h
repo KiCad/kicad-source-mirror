@@ -26,7 +26,6 @@
  */
 
 #include "richio.h"
-// #define WXUSINGDLL
 #include <wx/xml/xml.h>
 
 
@@ -50,7 +49,7 @@ public:
 
     /**
      * Function Format
-     * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression
+     * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
      * @throw IOError if a system error writing the output, such as a full disk.
@@ -59,7 +58,7 @@ public:
 
     /**
      * Function FormatContents
-     * writes the contents of object as UTF8 out to an OUTPUTFORMATTER as an S-expression
+     * writes the contents of object as UTF8 out to an OUTPUTFORMATTER as an S-expression.
      * This is the same as Format() except that the outer wrapper is not included.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.

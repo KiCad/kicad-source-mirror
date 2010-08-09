@@ -76,7 +76,6 @@ protected:
     unsigned            maxLineLength;
     unsigned            capacity;
 
-
 public:
     LINE_READER( unsigned aMaxLineLength );
 
@@ -84,7 +83,6 @@ public:
     {
         delete[] line;
     }
-
 
     /**
      * Function ReadLine
@@ -125,7 +123,6 @@ protected:
     FILE*               fp;     ///< no ownership, no close on destruction
 
 public:
-
     /**
      * Constructor LINE_READER
      * takes an open FILE and the size of the desired line buffer.
@@ -133,7 +130,6 @@ public:
      * @param aMaxLineLength The number of bytes to use in the line buffer.
      */
     FILE_LINE_READER( FILE* aFile,  unsigned aMaxLineLength );
-
 
     /**
      * Function ReadLine
@@ -155,7 +151,6 @@ public:
         rewind( fp );
         lineNum = 0;
     }
-
 };
 
 
@@ -228,6 +223,21 @@ protected:
     {
     }
 
+    virtual ~OUTPUTFORMATTER() {}
+
+    /**
+     * Function GetQuoteChar
+     * performs quote character need determination according to the Specctra DSN
+     * specification.
+
+     * @param wrapee A string that might need wrapping on each end.
+     * @param quote_char A single character C string which provides the current
+     *          quote character, should it be needed by the wrapee.
+     *
+     * @return const char* - the quote_char as a single character string, or ""
+     *   if the wrapee does not need to be wrapped.
+     */
+    static const char* GetQuoteChar( const char* wrapee, const char* quote_char );
 
     /**
      * Function write
@@ -241,10 +251,10 @@ protected:
 
 #if defined(__GNUG__)   // The GNU C++ compiler defines this
 
-// When used on a C++ function, we must account for the "this" pointer,
-// so increase the STRING-INDEX and FIRST-TO_CHECK by one.
-// See http://docs.freebsd.org/info/gcc/gcc.info.Function_Attributes.html
-// Then to get format checking during the compile, compile with -Wall or -Wformat
+    // When used on a C++ function, we must account for the "this" pointer,
+    // so increase the STRING-INDEX and FIRST-TO_CHECK by one.
+    // See http://docs.freebsd.org/info/gcc/gcc.info.Function_Attributes.html
+    // Then to get format checking during the compile, compile with -Wall or -Wformat
 #define PRINTF_FUNC       __attribute__ ((format (printf, 3, 4)))
 
 #else
@@ -252,6 +262,8 @@ protected:
 #endif
 
 public:
+
+    //-----<interface functions>------------------------------------------
 
     /**
      * Function Print
@@ -287,40 +299,43 @@ public:
         return GetQuoteChar( wrapee, "\"" );
     }
 
-    virtual ~OUTPUTFORMATTER() {}
-
     /**
-     * Function GetQuoteChar
-     * performs quote character need determination according to the Specctra DSN
-     * specification.
-
-     * @param wrapee A string that might need wrapping on each end.
-     * @param quote_char A single character C string which provides the current
-     *          quote character, should it be needed by the wrapee.
+     * Function Quoted
+     * checks \a aWrappee input string for a need to be quoted
+     * (e.g. contains a ')' character or a space), and for \" double quotes
+     * within the string that need to be doubled up such that the DSNLEXER
+     * will correctly parse the string from a file later.
      *
-     * @return const char* - the quote_char as a single character string, or ""
-     *   if the wrapee does not need to be wrapped.
+     * @param aWrapee is a string that might need wraping in double quotes,
+     *  and it might need to have its internal quotes doubled up, or not.
+     *  Caller's copy may be modified, or not.
+     *
+     * @return const char* - useful for passing to printf() style functions that
+     *  must output utf8 streams.
+    virtual const char* Quoted( std::string* aWrapee );
+        thinking about using wxCharBuffer* instead.
      */
-    static const char* GetQuoteChar( const char* wrapee, const char* quote_char );
+
+    //-----</interface functions>-----------------------------------------
 };
 
 
 /**
- * Class STRINGFORMATTER
+ * Class STRING_FORMATTER
  * implements OUTPUTFORMATTER to a memory buffer.  After Print()ing the
  * string is available through GetString()
 */
-class STRINGFORMATTER : public OUTPUTFORMATTER
+class STRING_FORMATTER : public OUTPUTFORMATTER
 {
     std::string             mystring;
 
 public:
 
     /**
-     * Constructor STRINGFORMATTER
+     * Constructor STRING_FORMATTER
      * reserves space in the buffer
      */
-    STRINGFORMATTER( int aReserve = 300 ) :
+    STRING_FORMATTER( int aReserve = 300 ) :
         OUTPUTFORMATTER( aReserve )
     {
     }
@@ -363,7 +378,6 @@ class STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
     char            quoteChar[2];
 
 public:
-
     /**
      * Constructor STREAM_OUTPUTFORMATTER
      * can take any number of wxOutputStream derivations, so it can write
@@ -384,6 +398,4 @@ protected:
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 
-
 #endif // RICHIO_H_
-

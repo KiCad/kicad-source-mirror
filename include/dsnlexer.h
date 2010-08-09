@@ -167,6 +167,62 @@ public:
         delete reader;
     }
 
+    // Some functions whose return value is best overloaded to return an enum
+    // in a derived class.
+    //-----<overload return values to tokens>------------------------------
+
+    /**
+     * Function NextTok
+     * returns the next token found in the input file or DSN_EOF when reaching
+     * the end of file.  Users should wrap this function to return an enum
+     * to aid in grammar debugging while running under a debugger, but leave
+     * this lower level function returning an int (so the enum does not collide
+     * with another usage).
+     * @return int - the type of token found next.
+     * @throw IOError - only if the LINE_READER throws it.
+     */
+    int NextTok() throw (IOError);
+
+    /**
+     * Function NeedSYMBOL
+     * calls NextTok() and then verifies that the token read in
+     * satisfies bool IsSymbol().
+     * If not, an IOError is thrown.
+     * @return int - the actual token read in.
+     * @throw IOError, if the next token does not satisfy IsSymbol()
+     */
+    int NeedSYMBOL() throw( IOError );
+
+    /**
+     * Function NeedSYMBOLorNUMBER
+     * calls NextTok() and then verifies that the token read in
+     * satisfies bool IsSymbol() or tok==DSN_NUMBER.
+     * If not, an IOError is thrown.
+     * @return int - the actual token read in.
+     * @throw IOError, if the next token does not satisfy the above test
+     */
+    int NeedSYMBOLorNUMBER() throw( IOError );
+
+    /**
+     * Function CurTok
+     * returns whatever NextTok() returned the last time it was called.
+     */
+    int CurTok()
+    {
+        return curTok;
+    }
+
+    /**
+     * Function PrevTok
+     * returns whatever NextTok() returned the 2nd to last time it was called.
+     */
+    int PrevTok()
+    {
+        return prevTok;
+    }
+
+    //-----</overload return values to tokens>-----------------------------
+
 
     /**
      * Function SetStringDelimiter
@@ -207,18 +263,6 @@ public:
         commentsAreTokens = val;
         return old;
     }
-
-    /**
-     * Function NextTok
-     * returns the next token found in the input file or DSN_EOF when reaching
-     * the end of file.  Users should wrap this function to return an enum
-     * to aid in grammar debugging while running under a debugger, but leave
-     * this lower level function returning an int (so the enum does not collide
-     * with another usage).
-     * @return int - the type of token found next.
-     * @throw IOError - only if the LINE_READER throws it.
-     */
-    int NextTok() throw (IOError);
 
     /**
      * Function IsSymbol
@@ -287,26 +331,6 @@ public:
     void NeedRIGHT() throw( IOError );
 
     /**
-     * Function NeedSYMBOL
-     * calls NextTok() and then verifies that the token read in
-     * satisfies bool IsSymbol().
-     * If not, an IOError is thrown.
-     * @return int - the actual token read in.
-     * @throw IOError, if the next token does not satisfy IsSymbol()
-     */
-    int NeedSYMBOL() throw( IOError );
-
-    /**
-     * Function NeedSYMBOLorNUMBER
-     * calls NextTok() and then verifies that the token read in
-     * satisfies bool IsSymbol() or tok==DSN_NUMBER.
-     * If not, an IOError is thrown.
-     * @return int - the actual token read in.
-     * @throw IOError, if the next token does not satisfy the above test
-     */
-    int NeedSYMBOLorNUMBER() throw( IOError );
-
-    /**
      * Function GetTokenText
      * returns the C string representation of a DSN_T value.
      */
@@ -330,15 +354,6 @@ public:
     }
 
     /**
-     * Function CurTok
-     * returns whatever NextTok() returned the last time it was called.
-     */
-    int CurTok()
-    {
-        return curTok;
-    }
-
-    /**
      * Function CurLineNumber
      * returns the current line number within my LINE_READER
      */
@@ -355,15 +370,6 @@ public:
     const wxString& CurFilename()
     {
         return filename;
-    }
-
-    /**
-     * Function PrevTok
-     * returns whatever NextTok() returned the 2nd to last time it was called.
-     */
-    int PrevTok()
-    {
-        return prevTok;
     }
 
     /**

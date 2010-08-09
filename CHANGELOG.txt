@@ -4,6 +4,20 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Aug-8 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++CMakeModules:
+    Revise TokenList2DsnLexer.cmake to make an entire derived lexer class that
+    returns the proper enum type for superior debugging.
+++eeschema
+  * netform.cpp now outputs the allowed footprint filters for a given library
+    component.
+  * There is an auto-generated class called NETLIST_LEXER which is defined in
+    from netlist.keywords by TokenList2DsnLexer.cmake into netlist_lexer.h, that
+    may be the basis of loading a S-expression form of the generic netlist format
+    which is written from netform.cpp.
+
+
 2010-Aug-7 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++common

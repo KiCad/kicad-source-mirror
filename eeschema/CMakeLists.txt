@@ -157,33 +157,33 @@ endif(APPLE)
 # Generate DSN lexer header and source files for the component library file
 # format.
 add_custom_command(
-    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h
+    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
             ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
     COMMAND ${CMAKE_COMMAND}
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h(.cpp)
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_{lexer.h,keywords.cpp}
        from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords"
     )
+
 set_source_files_properties( cmp_library_lexer.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
     )
 
 
 add_custom_command(
-    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.h
+    OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
             ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
     COMMAND ${CMAKE_COMMAND}
         -Denum=TFIELD_T
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
         -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.h(.cpp)
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_{lexer.h,keywords.cpp}
        from ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords"
     )
-
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
     ${EESCHEMA_RESOURCES})
