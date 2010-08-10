@@ -11,19 +11,19 @@
 #include "class_board_design_settings.h"
 #include "drawtxt.h"
 
-/* Routines Locales */
+/* Loca functions */
 static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
-/* Variables "locales" : */
-static int status_dimension; /*  = 0 : pas de dimension en cours
-                             *  = 1 : debut place, fin a placer
-                             *  = 2 : fin placee, texte a ajuster */
+/* Local variables : */
+static int status_dimension; /* Used in cimension creation:
+                             * = 0 : initial value: no dimension in progress
+                             *  = 1 : First point created
+                             *  = 2 : Secont point created, the text must be placed */
 
 /*
- *  Les routines generent une dimension de la forme
- *  - cote usuelle:
- *
+ *  A dimension has this shape:
+ *  It has 2 reference points, and a text
  * |            |
  * |    dist    |
  * |<---------->|
@@ -53,7 +53,7 @@ public:
 
     // Constructor and destructor
     DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                                    DIMENSION* Dimension, wxDC* DC, const wxPoint& pos );
+                                    DIMENSION* Dimension, wxDC* DC );
     ~DIMENSION_EDITOR_DIALOG()
     {
     }
@@ -73,10 +73,9 @@ END_EVENT_TABLE()
 
 
 DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                                                                DIMENSION* Dimension, wxDC* DC,
-                                                                const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Dimension properties" ), framepos, wxSize( 340, 270 ),
-              DIALOG_STYLE )
+                                                  DIMENSION* Dimension, wxDC* DC
+                                                  ) :
+    wxDialog( parent, -1, _( "Dimension properties" ) )
 {
     wxButton* Button;
 
@@ -350,14 +349,13 @@ static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bo
 
 
 /***************************************************************/
-void WinEDA_PcbFrame::Install_Edit_Dimension( DIMENSION* Dimension,
-                                             wxDC* DC, const wxPoint& pos )
+void WinEDA_PcbFrame::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
 /***************************************************************/
 {
     if( Dimension == NULL )
         return;
 
-    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, Dimension, DC, pos );
+    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, Dimension, DC );
     frame->ShowModal();
     frame->Destroy();
 }

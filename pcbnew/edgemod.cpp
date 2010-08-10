@@ -16,6 +16,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 
 
 static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

@@ -1,8 +1,4 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char *tools_xpm[];
-
-#else
 const char *tools_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "16 16 5 1",
@@ -27,5 +23,3 @@ const char *tools_xpm[] = {
 ".+++++++++++++. ",
 "............... ",
 "                "};
-#endif
-

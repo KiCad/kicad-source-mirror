@@ -10,6 +10,7 @@
 #include "3d_viewer.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "dialog_edit_module_for_Modedit.h"
 
 #include "bitmaps.h"

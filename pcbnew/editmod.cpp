@@ -9,6 +9,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "trigo.h"
 #include "3d_viewer.h"
 

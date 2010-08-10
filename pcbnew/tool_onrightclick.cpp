@@ -7,6 +7,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "dialog_design_rules.h"
 
 #include "pcbnew_id.h"
