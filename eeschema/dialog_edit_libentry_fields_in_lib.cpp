@@ -226,8 +226,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
         if( newvalue->CmpNoCase( m_LibEntry->m_AliasList[i] ) == 0 )
         {
             wxString msg;
-            msg.Printf( _( "A new name is entered for this component\n"
-                           "An alias %s already exists!\nCannot update this component" ),
+            msg.Printf( _( "A new name is entered for this component\n\
+An alias %s already exists!\nCannot update this component" ),
                         newvalue->GetData() );
             DisplayError( this, msg );
             return;

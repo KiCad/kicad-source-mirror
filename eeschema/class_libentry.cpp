@@ -398,8 +398,8 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem,
 
         if( field->m_FieldId < MANDATORY_FIELDS )
         {
-            wxLogWarning( _( "An attempt was made to remove the %s field "
-                             "from component %s in library %s." ),
+            wxLogWarning( _( "An attempt was made to remove the %s field \
+from component %s in library %s." ),
                           GetChars( field->m_Name ), GetChars( GetName() ),
                           GetChars( GetLibraryName() ) );
             return;
@@ -854,8 +854,8 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
             {
                 if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
                 {
-                    aErrorMsg = wxT( "file ended prematurely while attempting "
-                                    "to flush to end of drawing section." );
+                    aErrorMsg = wxT( "file ended prematurely while attempting \
+to flush to end of drawing section." );
                     return false;
                 }
             } while( strncmp( aLine, "ENDDRAW", 7 ) != 0 );

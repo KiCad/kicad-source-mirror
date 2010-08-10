@@ -298,7 +298,10 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
             msg << wxT( "\n\n" ) << _( "All old aliases will be removed. Continue ?" );
             int diag = wxMessageBox( msg, title, wxYES | wxICON_QUESTION );
             if( diag != wxYES )
+            {
+                delete newCmp;
                 return NULL;
+            }
         }
     }
 

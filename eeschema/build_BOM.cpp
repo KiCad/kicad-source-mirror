@@ -322,9 +322,8 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
 
-            msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets "
-                            "( order = Sheet Number ) count = %d\n" ),
+            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets \
+( order = Sheet Number ) count = %d\n" ),
                         itemCount );
 
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
@@ -335,9 +334,8 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         {
             sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
 
-            msg.Printf( _(
-                            "\n#Global, Hierarchical Labels and PinSheets ( "
-                            "order = Alphab. ) count = %d\n\n" ),
+            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets ( \
+order = Alphab. ) count = %d\n\n" ),
                         itemCount );
 
             fprintf( f, "%s", CONV_TO_UTF8( msg ) );
@@ -449,8 +447,7 @@ static void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
  *    if same value: by reference
  *         if same reference: by unit number
  */
-bool SortComponentsByValue( const OBJ_CMP_TO_LIST& obj1,
-                            const OBJ_CMP_TO_LIST& obj2 )
+bool SortComponentsByValue( const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 )
 {
     int             ii;
     const wxString* Text1, * Text2;
@@ -607,12 +604,12 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
         else
         {
             fprintf( f, "; %-12s",
-                    CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
     }
 
@@ -623,10 +620,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
         else
             fprintf( f, "; %-12s",
-                    CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
     }
 }
 
@@ -666,8 +663,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
             msg = _( "Field" );
 
-            fprintf( f, "%c%s%d", s_ExportSeparatorSymbol, CONV_TO_UTF8(
-                         msg ), ii - FIELD1 + 1 );
+            fprintf( f, "%c%s%d", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ), ii - FIELD1 + 1 );
         }
 
         fprintf( f, "\n" );
@@ -716,22 +712,21 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
         if( CompactForm )
 #if defined(KICAD_GOST)
             fprintf( f, "%s%c%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( comp->GetField(
-                                      VALUE )->m_Text ), s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
+                     CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
             fprintf( f, "%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
 
         else
 #if defined(KICAD_GOST)
             fprintf( f, "| %-10s %-12s %-20s", CmpName.c_str(),
-                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ),
-                    CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ),
+                     CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
             fprintf( f, "| %-10s %-12s", CmpName.c_str(),
-                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
 
         if( aIncludeSubComponents )
@@ -740,23 +735,20 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
             if( CompactForm )
             {
-                fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                        CONV_TO_UTF8( msg ) );
+                fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
 
-                msg = m_Parent->GetXYSheetReferences(
-                    (BASE_SCREEN*) comp->GetParent(),
-                    comp->m_Pos );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) comp->GetParent(),
+                                                      comp->m_Pos );
 
                 fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
-                        CONV_TO_UTF8( msg ) );
+                         CONV_TO_UTF8( msg ) );
             }
             else
             {
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
 
-                msg = m_Parent->GetXYSheetReferences(
-                    (BASE_SCREEN*) comp->GetParent(),
-                    comp->m_Pos );
+                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) comp->GetParent(),
+                                                      comp->m_Pos );
 
                 fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
             }
@@ -866,16 +858,16 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
+                     CONV_TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
 
 #if defined(KICAD_GOST)
             fprintf( f, "%c%20s", s_ExportSeparatorSymbol,
-                    CONV_TO_UTF8( currCmp->GetField( DATASHEET )->m_Text ) );
+                     CONV_TO_UTF8( currCmp->GetField( DATASHEET )->m_Text ) );
 #endif
 
         // wrap the field in quotes, since it has commas in it.
         fprintf( f, "%c\"%s\"", s_ExportSeparatorSymbol,
-                CONV_TO_UTF8( refNames ) );
+                 CONV_TO_UTF8( refNames ) );
 
         // print fields, on demand
         int last_nonempty_field_idx = 0;
@@ -888,7 +880,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         {
             if ( IsFieldChecked( jj ) )
                 fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
-                        CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
+                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
         }
 
         fprintf( f, "\n" );
@@ -959,8 +951,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         {
             msg = aList[ii].m_SheetPath.PathHumanReadable();
             fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-            msg = m_Parent->GetXYSheetReferences(
-                (BASE_SCREEN*) DrawLibItem->GetParent(), DrawLibItem->m_Pos );
+            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) DrawLibItem->GetParent(),
+                                                  DrawLibItem->m_Pos );
             fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
         }
 
@@ -996,13 +988,12 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
                 labeltype = wxT( "Global      " );
 
             sheetpath = aList[ii].m_SheetPath.PathHumanReadable();
-            msg.Printf(
-                _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                GetChars( DrawTextItem->m_Text ),
-                GetChars( labeltype ),
-                GetChars( sheetpath ),
-                (float) DrawTextItem->m_Pos.x / 1000,
-                (float) DrawTextItem->m_Pos.y / 1000 );
+            msg.Printf( _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
+                        GetChars( DrawTextItem->m_Text ),
+                        GetChars( labeltype ),
+                        GetChars( sheetpath ),
+                        (float) DrawTextItem->m_Pos.x / 1000,
+                        (float) DrawTextItem->m_Pos.y / 1000 );
 
             fputs( CONV_TO_UTF8( msg ), f );
             break;
@@ -1020,13 +1011,12 @@ static int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
 
             wxString labtype = CONV_FROM_UTF8( SheetLabelType[jj] );
 
-            msg.Printf(
-                _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                GetChars( DrawSheetLabel->m_Text ),
-                GetChars( labtype ),
-                GetChars( aList[ii].m_SheetPath.PathHumanReadable()),
-                (float) DrawSheetLabel->m_Pos.x / 1000,
-                (float) DrawSheetLabel->m_Pos.y / 1000 );
+            msg.Printf( _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
+                        GetChars( DrawSheetLabel->m_Text ),
+                        GetChars( labtype ),
+                        GetChars( aList[ii].m_SheetPath.PathHumanReadable() ),
+                        (float) DrawSheetLabel->m_Pos.x / 1000,
+                        (float) DrawSheetLabel->m_Pos.y / 1000 );
 
             fputs( CONV_TO_UTF8( msg ), f );
         }
