@@ -204,8 +204,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * Thermal shapes will be created later if necessary
      */
     int item_clearance;
+
     // static to avoid unnecessary memory allocation when filling many zones.
     static std::vector <CPolyPt> cornerBufferPolysToSubstract;
+    cornerBufferPolysToSubstract.clear();
 
     D_PAD  dummyPad( (MODULE*) NULL );
     D_PAD* nextpad;
