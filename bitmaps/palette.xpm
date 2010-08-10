@@ -1,8 +1,4 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char *palette_xpm[];
-
-#else
 const char * palette_xpm[] = {
 "16 15 14 1",
 " 	c #c0c0c0",
@@ -34,5 +30,4 @@ const char * palette_xpm[] = {
 "    .oXo---Xo.  ",
 "   *#.oXXoXo..  ",
 "  *#  ......    "}
-#endif
 ;

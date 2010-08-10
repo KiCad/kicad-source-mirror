@@ -11,6 +11,7 @@
 #include "gestfich.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "protos.h"
 
 /*

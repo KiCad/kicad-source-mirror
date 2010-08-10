@@ -6,6 +6,7 @@
 #include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "pcbnew_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -72,13 +73,14 @@ static Ki_HotkeyInfo HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
+static Ki_HotkeyInfo HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static Ki_HotkeyInfo HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT,
                                       'F' );
 static Ki_HotkeyInfo HkRotateFootprint( wxT( "Rotate Footprint" ),
                                         HK_ROTATE_FOOTPRINT, 'R' );
-static Ki_HotkeyInfo HkMoveFootprint( wxT( "Move Footprint" ), HK_MOVE_FOOTPRINT,
+static Ki_HotkeyInfo HkMoveFootprint( wxT( "Move Footprint" ), HK_MOVE_FOOTPRINT_OR_TRACK,
                                       'M' );
-static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT,
+static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT_OR_TRACK,
                                       'G' );
 static Ki_HotkeyInfo HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
                                             HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -163,8 +165,8 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
     &HkEndTrack,               &HkMoveFootprint,
     &HkFlipFootprint,          &HkRotateFootprint,           &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
-    &HkLoadfile,               &HkFindItem,                  &HkSwitch2CopperLayer,
-    &HkSwitch2InnerLayer1,
+    &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
+    &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
     &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
     &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
@@ -540,6 +542,17 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         }
         break;
 
+    case HK_EDIT_ITEM:      // Edit board item
+        if( ItemFree )
+        {
+            BOARD_ITEM * item = PcbGeneralLocateAndDisplay();
+            if ( item == NULL )
+                break;
+            //An item is found, and some can be edited:
+            OnEditItemRequest( DC, item );
+        }
+        break;
+
     // Footprint edition:
     case HK_LOCK_UNLOCK_FOOTPRINT: // toggle module "MODULE_is_LOCKED" status:
         // get any module, locked or not locked and toggle its locked status
@@ -556,11 +569,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         }
         break;
 
-    case HK_DRAG_FOOTPRINT: // Start move (and drag) module
-    case HK_MOVE_FOOTPRINT: // Start move module
+    case HK_DRAG_FOOTPRINT_OR_TRACK: // Start move (and drag) module or track segment
+    case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move module or track segment
         if( PopupOn )
             break;
-
+        // Fall through on hot key
     case HK_ROTATE_FOOTPRINT:   // Rotation
     case HK_FLIP_FOOTPRINT:     // move to other side
         int exit = 0;
@@ -575,7 +588,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                                || DrawStruct->Type() == TYPE_VIA) )
                 switch( HK_Descr->m_Idcommand )
                 {
-                case HK_DRAG_FOOTPRINT: // Start move (and drag) module
+                case HK_DRAG_FOOTPRINT_OR_TRACK: // Start drag track segment
                     DrawPanel->MouseToCursorSchema();
 
                     //Start_DragTrackSegmentAndKeepSlope( (TRACK*) DrawStruct,DC );
@@ -584,7 +597,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                     break;
 
                 // fall through
-                case HK_MOVE_FOOTPRINT: // Start move module
+                case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move track segment
                     DrawPanel->MouseToCursorSchema();
                     Start_MoveOneNodeOrSegment( (TRACK*) DrawStruct, DC,
                                                ID_POPUP_PCB_MOVE_TRACK_NODE );
@@ -646,7 +659,6 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             {
                 // Send the module via socket to EESCHEMA's search facility.
                 SendMessageToEESCHEMA( module );
-
                 SetCurItem( module );
             }
 
@@ -664,11 +676,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                 Change_Side_Module( module, DC );
                 break;
 
-            case HK_DRAG_FOOTPRINT: // Start move (and drag) module
+            case HK_DRAG_FOOTPRINT_OR_TRACK: // Start move (and drag) module
                 g_Drag_Pistes_On = TRUE;
 
             // fall through
-            case HK_MOVE_FOOTPRINT: // Start move module
+            case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move module
                 GetScreen()->m_Curseur = module->m_Pos;
                 DrawPanel->MouseToCursorSchema();
                 StartMove_Module( module, DC );

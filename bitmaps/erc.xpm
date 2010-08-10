@@ -1,8 +1,4 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char *erc_xpm[];
-
-#else
 const char *erc_xpm[] = {
 "16 16 100 2",
 "  	c None",
@@ -121,4 +117,3 @@ const char *erc_xpm[] = {
 "                . . . . #.$.. . ",
 "                  .     . %.&.. ",
 "                          . .   "};
-#endif

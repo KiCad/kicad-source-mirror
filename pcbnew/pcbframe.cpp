@@ -48,6 +48,7 @@
 #include "class_pcb_layer_widget.h"
 #include "hotkeys.h"
 #include "pcbnew_config.h"
+#include "module_editor_frame.h"
 
 
 extern int g_DrawDefaultLineThickness;

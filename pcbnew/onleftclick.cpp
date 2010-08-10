@@ -389,15 +389,11 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/********************************************************************************/
-void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-/********************************************************************************/
-
 /* handle the double click on the mouse left button
  */
+void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
-    wxPoint     pos = GetPosition();
 
     switch( m_ID_current_state )
     {
@@ -431,43 +427,23 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case TYPE_TEXTE:
-            InstallTextPCBOptionsFrame( (TEXTE_PCB*) DrawStruct, DC );
-            DrawPanel->MouseToCursorSchema();
-            break;
-
         case TYPE_PAD:
-            InstallPadOptionsFrame( (D_PAD*) DrawStruct );
-            DrawPanel->MouseToCursorSchema();
-            break;
-
         case TYPE_MODULE:
-            InstallModuleOptionsFrame( (MODULE*) DrawStruct, DC );
-            DrawPanel->MouseToCursorSchema();
-            break;
-
         case TYPE_MIRE:
-            InstallMireOptionsFrame( (MIREPCB*) DrawStruct, DC, pos );
-            DrawPanel->MouseToCursorSchema();
-            break;
-
         case TYPE_DIMENSION:
-            Install_Edit_Dimension( (DIMENSION*) DrawStruct, DC, pos );
-            DrawPanel->MouseToCursorSchema();
-            break;
-
         case TYPE_TEXTE_MODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, DC );
+            OnEditItemRequest( DC, DrawStruct );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_DRAWSEGMENT:
-            InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) DrawStruct, DC );
+            OnEditItemRequest( DC, DrawStruct );
             break;
 
         case TYPE_ZONE_CONTAINER:
             if( DrawStruct->m_Flags )
                 break;
-            Edit_Zone_Params( DC, (ZONE_CONTAINER*) DrawStruct );
+            OnEditItemRequest( DC, DrawStruct );
             break;
 
         default:
@@ -512,3 +488,57 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         break;
     }
 }
+
+
+
+/** Function OnEditItemRequest
+ * Install the corresponding dialog editor for the given item
+ * @param DC = the current device context
+ * @param aItem = a pointer to the BOARD_ITEM to edit
+ */
+void WinEDA_PcbFrame::OnEditItemRequest( wxDC* DC, BOARD_ITEM* aItem )
+{
+    switch( aItem->Type() )
+    {
+    case TYPE_TRACK:
+    case TYPE_VIA:
+        Edit_TrackSegm_Width( DC, (TRACK*) aItem );
+        break;
+
+    case TYPE_TEXTE:
+        InstallTextPCBOptionsFrame( (TEXTE_PCB*) aItem, DC );
+        break;
+
+    case TYPE_PAD:
+        InstallPadOptionsFrame( (D_PAD*) aItem );
+        break;
+
+    case TYPE_MODULE:
+        InstallModuleOptionsFrame( (MODULE*) aItem, DC );
+        break;
+
+    case TYPE_MIRE:
+        InstallMireOptionsFrame( (MIREPCB*) aItem, DC );
+        break;
+
+    case TYPE_DIMENSION:
+        Install_Edit_Dimension( (DIMENSION*) aItem, DC );
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        InstallTextModOptionsFrame( (TEXTE_MODULE*) aItem, DC );
+        break;
+
+    case TYPE_DRAWSEGMENT:
+        InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) aItem, DC );
+        break;
+
+    case TYPE_ZONE_CONTAINER:
+        Edit_Zone_Params( DC, (ZONE_CONTAINER*) aItem );
+        break;
+
+    default:
+        break;
+    }
+}
+

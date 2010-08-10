@@ -12,6 +12,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 #include "class_board_design_settings.h"
 #include "autorout.h"
 #include "protos.h"
@@ -807,7 +808,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_MIRE:
-        InstallMireOptionsFrame( (MIREPCB*) GetCurItem(), &dc, pos );
+        InstallMireOptionsFrame( (MIREPCB*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 
@@ -824,7 +825,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_DIMENSION:
-        Install_Edit_Dimension( (DIMENSION*) GetCurItem(), &dc, pos );
+        Install_Edit_Dimension( (DIMENSION*) GetCurItem(), &dc );
         DrawPanel->MouseToCursorSchema();
         break;
 

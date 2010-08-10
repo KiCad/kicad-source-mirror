@@ -7,6 +7,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "module_editor_frame.h"
 
 #include "bitmaps.h"
 #include "protos.h"

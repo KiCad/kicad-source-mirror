@@ -28,10 +28,10 @@ static MIREPCB s_TargetCopy( NULL );    /* Used to store "old" values of the
                                          */
 
 /************************************/
-/* class WinEDA_MirePropertiesFrame */
+/* class TARGET_PROPERTIES_DIALOG_EDITOR */
 /************************************/
 
-class WinEDA_MirePropertiesFrame : public wxDialog
+class TARGET_PROPERTIES_DIALOG_EDITOR : public wxDialog
 {
 private:
 
@@ -42,11 +42,10 @@ private:
     WinEDA_ValueCtrl* m_MireSizeCtrl;
     wxRadioBox*       m_MireShape;
 
-public: WinEDA_MirePropertiesFrame( WinEDA_PcbFrame* parent,
+public: TARGET_PROPERTIES_DIALOG_EDITOR( WinEDA_PcbFrame* parent,
                                     MIREPCB*         Mire,
-                                    wxDC*            DC,
-                                    const wxPoint&   pos );
-    ~WinEDA_MirePropertiesFrame() { }
+                                    wxDC*            DC );
+    ~TARGET_PROPERTIES_DIALOG_EDITOR() { }
 
 private:
     void OnOkClick( wxCommandEvent& event );
@@ -55,29 +54,26 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE( WinEDA_MirePropertiesFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_MirePropertiesFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_MirePropertiesFrame::OnCancelClick )
+BEGIN_EVENT_TABLE( TARGET_PROPERTIES_DIALOG_EDITOR, wxDialog )
+    EVT_BUTTON( wxID_OK, TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick )
 END_EVENT_TABLE()
 
 
-void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb,
-                                               wxDC* DC, const wxPoint& pos )
+void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC )
 {
-    WinEDA_MirePropertiesFrame* frame =
-        new WinEDA_MirePropertiesFrame( this, MirePcb, DC, pos );
+    TARGET_PROPERTIES_DIALOG_EDITOR* frame =
+        new TARGET_PROPERTIES_DIALOG_EDITOR( this, MirePcb, DC );
 
     frame->ShowModal();
     frame->Destroy();
 }
 
 
-WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame(
+TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
     WinEDA_PcbFrame* parent,
-    MIREPCB* Mire, wxDC* DC,
-    const wxPoint& framepos ) :
-    wxDialog( parent, -1, _( "Target Properties" ), framepos, wxSize( 270, 210 ),
-              DIALOG_STYLE )
+    MIREPCB* Mire, wxDC* DC ) :
+    wxDialog( parent, wxID_ANY, _( "Target Properties" ) )
 {
     wxString  number;
     wxButton* Button;
@@ -128,7 +124,7 @@ WinEDA_MirePropertiesFrame::WinEDA_MirePropertiesFrame(
 }
 
 
-void WinEDA_MirePropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
+void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED(
                                                    event ) )
 {
     EndModal( -1 );
@@ -137,7 +133,7 @@ void WinEDA_MirePropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
 
 /* Updates the different parameters for the component being edited
  */
-void WinEDA_MirePropertiesFrame::OnOkClick( wxCommandEvent& event )
+void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 {
     m_MirePcb->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
