@@ -20,14 +20,15 @@
 
 <!-- for each component -->
 <xsl:template match="comp">
+    <xsl:text> </xsl:text>
     <xsl:value-of select="@ref"/>
     <xsl:text> </xsl:text>
     <xsl:choose>
-        <xsl:when test = "footprint = ''">
-            <xsl:text>unknown</xsl:text>
+        <xsl:when test = "footprint != '' ">
+            <xsl:apply-templates select="footprint"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="footprint"/>
+            <xsl:text>unknown</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>&nl;</xsl:text>

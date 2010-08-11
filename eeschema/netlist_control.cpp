@@ -189,7 +189,9 @@ WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
     SetSizer( GeneralBoxSizer );
 
     m_NoteBook = new wxNotebook( this, ID_NETLIST_NOTEBOOK,
-                                 wxDefaultPosition, wxDefaultSize );
+                     wxDefaultPosition, wxDefaultSize,
+                     wxNB_TOP );   // @todo: tabs on top are being hidden on linux
+
     GeneralBoxSizer->Add( m_NoteBook, 0, wxGROW | wxALL, 5 );
 
     // Add notebook pages:
@@ -229,6 +231,7 @@ WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
 
 //    GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+
     Centre();
 }
 
