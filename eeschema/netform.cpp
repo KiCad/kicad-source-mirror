@@ -1010,7 +1010,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
-#if 1
+#if 0
 
     // this code seems to work now, for S-expression support.
 
