@@ -629,7 +629,7 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
     XNODE*  xdesign = node( wxT("design") );
-    char        date[128];
+    char    date[128];
 
     DateAndTime( date );
 
@@ -1010,7 +1010,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
 {
-#if 0
+#if 1
 
     // this code seems to work now, for S-expression support.
 

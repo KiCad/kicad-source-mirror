@@ -204,6 +204,46 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 }
 
 
+const char* OUTPUTFORMATTER::Quoted( std::string* aWrapee ) throw( IOError )
+{
+    // derived class's notion of what a quote character is
+    char quote          = *GetQuoteChar( "(" );
+
+    // Will the string be wrapped based on its interior content?
+    const char* squote  = GetQuoteChar( aWrapee->c_str() );
+
+    // Search the interior of the string for 'quote' chars
+    // and replace them as found with duplicated quotes.
+    // Note that necessarily any string which has internal quotes will
+    // also be wrapped in quotes later in this function.
+    for( unsigned i=0;  i<aWrapee->size();  ++i )
+    {
+        if( (*aWrapee)[i] == quote )
+        {
+            aWrapee->insert( aWrapee->begin()+i, quote );
+            ++i;
+        }
+        else if( (*aWrapee)[0]=='\r' || (*aWrapee)[0]=='\n' )
+        {
+            // In a desire to maintain accurate line number reporting within DSNLEXER
+            // a decision was made to make all S-expression strings be on a single
+            // line.  You can embedd \n (human readable) in the text but not
+            // '\n' which is 0x0a.
+            throw IOError( _( "S-expression string has newline" ) );
+        }
+    }
+
+    if( *squote )
+    {
+        // wrap the beginning and end of the string in a quote.
+        aWrapee->insert( aWrapee->begin(), quote );
+        aWrapee->insert( aWrapee->end(), quote );
+    }
+
+    return aWrapee->c_str();
+}
+
+
 //-----<STRING_FORMATTER>----------------------------------------------------
 
 void STRING_FORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )

@@ -11,7 +11,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
-<xsl:template match="export">
+<xsl:template match="/export">
     <xsl:text>*PADS-PCB*&nl;*PART*&nl;</xsl:text>
     <xsl:apply-templates select="components/comp"/>
     <xsl:text>&nl;*NET*&nl;</xsl:text>
