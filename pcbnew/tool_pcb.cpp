@@ -216,8 +216,12 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 #endif
 
     m_HToolBar->AddSeparator();
+    msg = AddHotkeyName( HELP_UNDO, s_Board_Editor_Hokeys_Descr,
+                         HK_UNDO, false );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
                          HELP_UNDO );
+    msg = AddHotkeyName( HELP_REDO, s_Board_Editor_Hokeys_Descr,
+                         HK_REDO, false );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
                          HELP_REDO );
 
@@ -272,11 +276,11 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_AUTOPLACE, wxEmptyString,
                          wxBitmap( mode_module_xpm ),
-                         _( "Manual and automatic move or place of modules" ),
+                         _( "Mode footprint: manual and automatic move and place modules" ),
                          wxITEM_CHECK );
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_AUTOROUTE, wxEmptyString,
                          wxBitmap( mode_track_xpm ),
-                         _( "Mode Track and Autorouting" ), wxITEM_CHECK );
+                         _( "Mode track: autorouting" ), wxITEM_CHECK );
 
     // Fast call to FreeROUTE Web Bases router
     m_HToolBar->AddSeparator();

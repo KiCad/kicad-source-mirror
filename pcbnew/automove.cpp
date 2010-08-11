@@ -36,14 +36,11 @@ wxString ModulesMaskSelection = wxT( "*" );
 void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxPoint    pos;
     INSTALL_DC( dc, DrawPanel );
     bool       on_state;
 
     if( m_HToolBar == NULL )
         return;
-
-    wxGetMousePosition( &pos.x, &pos.y );
 
     switch( id )
     {
@@ -172,12 +169,9 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 }
 
 
-/* Routine allocation of components in a rectangular format 4 / 3,
- * Starting from the mouse cursor
- * The components with the FIXED status are not normally dives
- * According to the flags:
- * All modules (not fixed) will be left
- * Only PCB modules are not left
+/* Function to move components in a rectangular area format 4 / 3,
+ * starting from the mouse cursor
+ * The components with the FIXED status set are not moved
  */
 void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 {
