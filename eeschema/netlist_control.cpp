@@ -445,6 +445,7 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     wxFileName fn;
     wxString   FileWildcard, FileExt;
     wxString   msg, Command;
+    wxString   title = _( "Save Netlist File" );
 
     NetlistUpdateOpt();
 
@@ -466,15 +467,20 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
         FileWildcard = _( "CadStar netlist file (.frp)|*.frp" );
         break;
 
-    default:
+    case NET_TYPE_PCBNEW:
         FileExt = NetlistFileExtension;
         FileWildcard = NetlistFileWildcard;
         break;
+
+    default:    // custom
+        FileExt = wxT( "*" );
+        FileWildcard = AllFilesWildcard;
+        title = _( "Generic Export" );
     }
 
     fn.SetExt( FileExt );
 
-    wxFileDialog dlg( this, _( "Save Netlist Files" ), fn.GetPath(),
+    wxFileDialog dlg( this, title, fn.GetPath(),
                       fn.GetFullName(), FileWildcard,
                       wxFD_SAVE );
 

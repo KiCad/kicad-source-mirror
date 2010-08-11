@@ -230,7 +230,6 @@ class EXPORT_HELP
      */
     XNODE* makeGenericLibraries();
 
-
 public:
 
     /**
@@ -293,7 +292,54 @@ public:
      */
     bool WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
                                     bool use_netnames );
+
+    /**
+     * Function MakeCommandLine
+     * builds up a string that describes a command line for
+     * executing a child process. The input and output file names
+     * along with any options to the executable are all possibly
+     * in the returned string.
+     *
+     * @param aFormatString holds:
+     *   <ul>
+     *   <li>the name of the external program
+     *   <li>any options needed by that program
+     *   <li>formatting sequences, see below.
+     *   </ul>
+     *
+     * @param aTempfile is the name of an input file to the
+     *  external program.
+     * @param aFinalFile is the name of an output file that
+     *  the user expects.
+     *
+     *  <p> Supported formatting sequences and their meaning:
+     *  <ul>
+     *  <li> %B => base filename of selected output file, minus
+     *       path and extension.
+     *  <li> %I => complete filename and path of the temporary
+     *       input file.
+     *  <li> %O => complete filename and path of the user chosen
+     *       output file.
+     *  </ul>
+     */
+    static wxString MakeCommandLine( const wxString& aFormatString,
+            const wxString& aTempfile, const wxString& aFinalFile );
 };
+
+
+wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
+            const wxString& aTempfile, const wxString& aFinalFile )
+{
+    wxString    ret  = aFormatString;
+    wxFileName  in   = aTempfile;
+    wxFileName  out  = aFinalFile;
+
+    ret.Replace( wxT("%B"), out.GetName().GetData(), true );
+    ret.Replace( wxT("%I"), in.GetFullName().GetData(), true );
+    ret.Replace( wxT("%O"), out.GetFullName().GetData(), true );
+
+    return ret;
+}
 
 
 /**
@@ -356,22 +402,18 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
             if( !ret )
                 break;
 
-            // Call the external module (plug in )
+            // If user provided no plugin command line, return now.
             if( g_NetListerCommandLine.IsEmpty() )
                 break;
 
-            wxString commandLine;
-
-            if( wxIsAbsolutePath( g_NetListerCommandLine ) )
-                commandLine = g_NetListerCommandLine;
-            else
-                commandLine = FindKicadFile( g_NetListerCommandLine );
-
-            // this is the input file to the plugin
-            commandLine += wxT( " " ) + tmpFile.GetFullPath();
-
-            // this is the output file to the plugin
-            commandLine += wxT( " " ) + aFullFileName;
+            // build full command line from user's format string, e.g.:
+            // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
+            // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
+            // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.tmp"
+            wxString commandLine = EXPORT_HELP::MakeCommandLine(
+                                        g_NetListerCommandLine,
+                                        tmpFile.GetFullPath(),
+                                        aFullFileName );
 
             ProcessExecute( commandLine, wxEXEC_SYNC );
 
@@ -1614,7 +1656,7 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
 
 
 /* Generate CADSTAR net list. */
-wxString StartLine( wxT( "." ) );
+static wxString StartLine( wxT( "." ) );
 
 
 void EXPORT_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
