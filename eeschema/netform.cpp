@@ -335,8 +335,8 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
     wxFileName  out  = aFinalFile;
 
     ret.Replace( wxT("%B"), out.GetName().GetData(), true );
-    ret.Replace( wxT("%I"), in.GetFullName().GetData(), true );
-    ret.Replace( wxT("%O"), out.GetFullName().GetData(), true );
+    ret.Replace( wxT("%I"), in.GetFullPath().GetData(), true );
+    ret.Replace( wxT("%O"), out.GetFullPath().GetData(), true );
 
     return ret;
 }
@@ -398,6 +398,8 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
             wxFileName  tmpFile = aFullFileName;
             tmpFile.SetExt( wxT( "tmp" ) );
 
+            D(printf("tmpFile:'%s'\n", CONV_TO_UTF8( tmpFile.GetFullPath() ) );)
+
             ret = helper.WriteGENERICNetList( this, tmpFile.GetFullPath() );
             if( !ret )
                 break;
@@ -414,6 +416,8 @@ bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFull
                                         g_NetListerCommandLine,
                                         tmpFile.GetFullPath(),
                                         aFullFileName );
+
+            D(printf("commandLine:'%s'\n", CONV_TO_UTF8( commandLine ) );)
 
             ProcessExecute( commandLine, wxEXEC_SYNC );
 

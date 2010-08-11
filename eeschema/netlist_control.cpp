@@ -227,7 +227,7 @@ WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
     // Add custom panels:
     InstallCustomPages();
 
-    GetSizer()->Fit( this );
+//    GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -442,10 +442,10 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
  * and run the netlist creator
  */
 {
-    wxFileName fn;
-    wxString   FileWildcard, FileExt;
-    wxString   msg, Command;
-    wxString   title = _( "Save Netlist File" );
+    wxFileName  fn;
+    wxString    fileWildcard;
+    wxString    fileExt;
+    wxString    title = _( "Save Netlist File" );
 
     NetlistUpdateOpt();
 
@@ -458,30 +458,31 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
     switch( CurrPage->m_IdNetType )
     {
     case NET_TYPE_SPICE:
-        FileExt = wxT( "cir" );
-        FileWildcard = _( "SPICE netlist file (.cir)|*.cir" );
+        fileExt = wxT( "cir" );
+        fileWildcard = _( "SPICE netlist file (.cir)|*.cir" );
         break;
 
     case NET_TYPE_CADSTAR:
-        FileExt = wxT( "frp" );
-        FileWildcard = _( "CadStar netlist file (.frp)|*.frp" );
+        fileExt = wxT( "frp" );
+        fileWildcard = _( "CadStar netlist file (.frp)|*.frp" );
         break;
 
     case NET_TYPE_PCBNEW:
-        FileExt = NetlistFileExtension;
-        FileWildcard = NetlistFileWildcard;
+    case NET_TYPE_ORCADPCB2:
+        fileExt = NetlistFileExtension;
+        fileWildcard = NetlistFileWildcard;
         break;
 
-    default:    // custom
-        FileExt = wxT( "*" );
-        FileWildcard = AllFilesWildcard;
-        title = _( "Generic Export" );
+    default:    // custom, NET_TYPE_CUSTOM1 and greater
+        fileExt = wxEmptyString;    // wxT( "" );
+        fileWildcard = AllFilesWildcard;
+        title.Printf( _( "%s Export" ), CurrPage->m_TitleStringCtrl->GetValue().GetData() );
     }
 
-    fn.SetExt( FileExt );
+    fn.SetExt( fileExt );
 
     wxFileDialog dlg( this, title, fn.GetPath(),
-                      fn.GetFullName(), FileWildcard,
+                      fn.GetFullName(), fileWildcard,
                       wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
