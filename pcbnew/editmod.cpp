@@ -118,7 +118,7 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
     switch( Item->Type() )
     {
     case TYPE_PAD:
-        DeletePad( (D_PAD*) Item );
+        DeletePad( (D_PAD*) Item, false );
         break;
 
     case TYPE_TEXTE_MODULE:

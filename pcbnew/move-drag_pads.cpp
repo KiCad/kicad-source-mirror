@@ -227,30 +227,36 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 }
 
 
-/* Function to delete the pad. */
-void WinEDA_BasePcbFrame::DeletePad( D_PAD* Pad )
+/** Function DeletePad
+ * Delete the pad aPad.
+ * Refresh the modified screen area
+ * Refresh modified parameters of the parent module (bounding box, last date)
+ * @param aPad = the pad to delete
+ * @param aQuery = true to promt for confirmation, false to delete silently
+ */
+void WinEDA_BasePcbFrame::DeletePad( D_PAD* aPad, bool aQuery )
 {
     MODULE*  Module;
-    wxString line;
-
-    if( Pad == NULL )
+ 
+    if( aPad == NULL )
         return;
 
-    Module = (MODULE*) Pad->GetParent();
+    Module = (MODULE*) aPad->GetParent();
     Module->m_LastEdit_Time = time( NULL );
 
-    line.Printf( _( "Delete Pad (module %s %s) " ),
-                 GetChars( Module->m_Reference->m_Text ),
-                 GetChars( Module->m_Value->m_Text ) );
-    if( !IsOK( this, line ) )
-        return;
+    if( aQuery )
+    {
+        wxString msg;
+        msg.Printf( _( "Delete Pad (module %s %s) " ),
+                     GetChars( Module->m_Reference->m_Text ),
+                     GetChars( Module->m_Value->m_Text ) );
+        if( !IsOK( this, msg ) )
+            return;
+    }
 
     m_Pcb->m_Status_Pcb = 0;
-
-    Pad->DeleteStructure();
-
+    aPad->DeleteStructure();
     DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
-
     Module->Set_Rectangle_Encadrement();
 
     OnModify();
