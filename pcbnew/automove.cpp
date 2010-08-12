@@ -36,17 +36,56 @@ wxString ModulesMaskSelection = wxT( "*" );
 void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    INSTALL_DC( dc, DrawPanel );
     bool       on_state;
 
     if( m_HToolBar == NULL )
         return;
 
+    INSTALL_DC( dc, DrawPanel );
+
     switch( id )
     {
     case ID_TOOLBARH_PCB_AUTOPLACE:
+        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOPLACE );
+        if( on_state )
+        {
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOROUTE, FALSE );
+            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOPLACE;
+        }
+        else
+            m_HTOOL_current_state = 0;
+        return;
+
     case ID_TOOLBARH_PCB_AUTOROUTE:
-        break;
+        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOROUTE );
+        if( on_state )
+        {
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOPLACE, FALSE );
+            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOROUTE;
+        }
+        else
+            m_HTOOL_current_state = 0;
+        return;
+
+
+    case ID_POPUP_PCB_AUTOROUTE_SELECT_LAYERS:
+        return;
+
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
+        FixeModule( (MODULE*) GetScreen()->GetCurItem(), TRUE );
+        return;
+
+    case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
+        FixeModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
+        return;
+
+    case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
+        FixeModule( NULL, FALSE );
+        return;
+
+    case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
+        FixeModule( NULL, TRUE );
+        return;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( DrawPanel->ManageCurseur
@@ -68,44 +107,6 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TOOLBARH_PCB_AUTOPLACE:
-        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOPLACE );
-        if( on_state )
-        {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOROUTE, FALSE );
-            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOPLACE;
-        }
-        else
-            m_HTOOL_current_state = 0;
-        break;
-
-    case ID_TOOLBARH_PCB_AUTOROUTE:
-        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOROUTE );
-        if( on_state )
-        {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOPLACE, FALSE );
-            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOROUTE;
-        }
-        else
-            m_HTOOL_current_state = 0;
-        break;
-
-    case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
-        FixeModule( (MODULE*) GetScreen()->GetCurItem(), TRUE );
-        break;
-
-    case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
-        FixeModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
-        break;
-
-    case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
-        FixeModule( NULL, FALSE );
-        break;
-
-    case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
-        FixeModule( NULL, TRUE );
-        break;
-
     case ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE:
         AutoPlaceModule( (MODULE*) GetScreen()->GetCurItem(),
                         PLACE_1_MODULE, &dc );
@@ -155,9 +156,6 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         Reset_Noroutable( &dc );
         break;
 
-    case ID_POPUP_PCB_AUTOROUTE_SELECT_LAYERS:
-        break;
-
     default:
         DisplayError( this, wxT( "AutoPlace command error" ) );
         break;
@@ -165,7 +163,6 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
     GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
     Compile_Ratsnest( &dc, true );
-    SetToolbars();
 }
 
 
