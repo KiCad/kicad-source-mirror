@@ -301,7 +301,7 @@ public:
 
     /**
      * Function Quoted
-     * checks \a aWrappee input string for a need to be quoted
+     * checks \a aWrapee input string for a need to be quoted
      * (e.g. contains a ')' character or a space), and for \" double quotes
      * within the string that need to be doubled up such that the DSNLEXER
      * will correctly parse the string from a file later.
@@ -312,9 +312,11 @@ public:
      *
      * @return const char* - useful for passing to printf() style functions that
      *  must output utf8 streams.
-    virtual const char* Quoted( std::string* aWrapee );
-        thinking about using wxCharBuffer* instead.
+     * @throw IOError, if aWrapee has any \r or \n bytes in it which is
+     *        illegal according to the DSNLEXER who does not ever want them
+     *        within a string.
      */
+    virtual const char* Quoted( std::string* aWrapee )  throw( IOError );
 
     //-----</interface functions>-----------------------------------------
 };

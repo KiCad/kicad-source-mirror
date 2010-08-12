@@ -629,7 +629,7 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
     XNODE*  xdesign = node( wxT("design") );
-    char        date[128];
+    char    date[128];
 
     DateAndTime( date );
 

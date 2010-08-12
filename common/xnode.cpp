@@ -26,8 +26,8 @@
 #include "xnode.h"
 #include "macros.h"
 
-
-typedef wxXmlProperty  XATTR;
+typedef wxXmlProperty   XATTR;
+#define GetAttribs      GetProperties
 
 void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
@@ -51,18 +51,16 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
     std::string utf8;
-    const char* quote;
 
     // output attributes first if they exist
-    for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )
+    for( XATTR* attr = (XATTR*) GetAttribs();  attr;  attr = (XATTR*) attr->GetNext() )
     {
         utf8  = CONV_TO_UTF8( attr->GetValue() );   // capture the content
-        quote = out->GetQuoteChar( utf8.c_str() );
 
-        out->Print( 0, " (%s %s%s%s)",
+        out->Print( 0, " (%s %s)",
             // attr names should never need quoting, no spaces, we designed the file.
             CONV_TO_UTF8( attr->GetName() ),
-            quote, utf8.c_str(), quote );
+            out->Quoted( &utf8 ) );
     }
 
     // we only expect to have used one of two types here:
@@ -88,14 +86,12 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError
 
     case wxXML_TEXT_NODE:
         utf8  = CONV_TO_UTF8( GetContent() );
-        quote = out->GetQuoteChar( utf8.c_str() );
-        out->Print( 0, " %s%s%s", quote, utf8.c_str(), quote );
+        out->Print( 0, " %s", out->Quoted( &utf8 ) );
         break;
 
     default:
         ;   // not supported
     }
 }
-
 
 // EOF

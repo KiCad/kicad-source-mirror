@@ -24,9 +24,9 @@
  *      default key value is the default hotkey for this command. Can be overrided by the user hotkey list file
  *  add the HkMyNewEntry pointer in the s_board_edit_Hotkey_List list ( or/and the s_module_edit_Hotkey_List list)
  *  Add the new code in the switch in OnHotKey() function.
- *  when the variable PopupOn is true, an item is currently edited.
- *  This can be useful if the new function cannot be executed while an item is currently being edited
- *  ( For example, one cannot start a new wire when a component is moving.)
+ *      Note: when the variable itemCurrentlyEdited is true, an item is currently edited.
+ *      This can be useful if the new function cannot be executed while an item is currently being edited
+ *      ( For example, one cannot start a new wire when a component is moving.)
  *
  *  Note: If an hotkey is a special key, be sure the corresponding wxWidget keycode (WXK_XXXX)
  *  is handled in the hotkey_name_descr s_Hotkey_Name_List list (see hotkeys_basic.cpp)
@@ -69,25 +69,22 @@ static Ki_HotkeyInfo HkBackspace( wxT( "Delete track segment" ), HK_BACK_SPACE,
 static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X' );
 static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
 static Ki_HotkeyInfo HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
-                                        HK_SWITCH_TRACK_POSTURE, '/' );
+                                           HK_SWITCH_TRACK_POSTURE, '/' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
 static Ki_HotkeyInfo HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static Ki_HotkeyInfo HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT,
                                       'F' );
-static Ki_HotkeyInfo HkRotateFootprint( wxT( "Rotate Footprint" ),
-                                        HK_ROTATE_FOOTPRINT, 'R' );
-static Ki_HotkeyInfo HkMoveFootprint( wxT( "Move Footprint" ), HK_MOVE_FOOTPRINT_OR_TRACK,
-                                      'M' );
+static Ki_HotkeyInfo HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
+static Ki_HotkeyInfo HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
 static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT_OR_TRACK,
                                       'G' );
 static Ki_HotkeyInfo HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
                                             HK_GET_AND_MOVE_FOOTPRINT, 'T' );
 static Ki_HotkeyInfo HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ),
                                               HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
-static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE,
-                               WXK_DELETE );
+static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
 static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
@@ -162,8 +159,8 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
     &HkBackspace,
     &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
     &HkSwitchTrackPosture,
-    &HkEndTrack,               &HkMoveFootprint,
-    &HkFlipFootprint,          &HkRotateFootprint,           &HkDragFootprint,
+    &HkEndTrack,               &HkMoveItem,
+    &HkFlipFootprint,          &HkRotateItem,                &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
     &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
     &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,
@@ -210,46 +207,41 @@ struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] =
       NULL, NULL, NULL
   } };
 
-/***********************************************************/
-void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
-/***********************************************************/
-
-/* Hot keys. Some commands are relatives to the item under the mouse cursor
- *  Commands are case insensitive
- *  @param DC = current device context
+/** Function OnHotKey.
+ *  ** Commands are case insensitive **
+ *  Some commands are relatives to the item under the mouse cursor
+ *  @param aDC = current device context
  *  @param hotkey = hotkey code (ascii or wxWidget code for special keys)
- *  @param DrawStruct = NULL or pointer on a EDA_BaseStruct under the mouse cursor
+ *  @param aItem = NULL or pointer on a EDA_BaseStruct under the mouse cursor
  */
-
+void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aItem )
 {
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-    cmd.SetEventObject( this );
-
-    bool PopupOn = (GetCurItem() && GetCurItem()->m_Flags);
-
-    bool ItemFree = (GetCurItem() == 0 || GetCurItem()->m_Flags == 0);
-
-    if( hotkey == 0 )
+    if( aHotkeyCode == 0 )
         return;
+
+    bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
 
     MODULE* module = NULL;
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
      */
-    if( (hotkey >= 'a') && (hotkey <= 'z') )
-        hotkey += 'A' - 'a';
+    if( (aHotkeyCode >= 'a') && (aHotkeyCode <= 'z') )
+        aHotkeyCode += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_Common_Hotkey_List );
 
     if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( hotkey, s_board_edit_Hotkey_List );
+        HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, s_board_edit_Hotkey_List );
 
     if( HK_Descr == NULL )
         return;
 
-    int ll;
+    // Create a wxCommandEvent that will be posted in some hot keys functions
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    int            ll;
 
     switch( HK_Descr->m_Idcommand )
     {
@@ -270,7 +262,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                       GetBoard()->GetCopperLayerCount() - 2 );
         else
             ll--;
-        SwitchLayer( DC, ll );
+        SwitchLayer( aDC, ll );
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
@@ -283,39 +275,39 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
             ll = LAYER_N_FRONT;
         else
             ll++;
-        SwitchLayer( DC, ll );
+        SwitchLayer( aDC, ll );
         break;
 
     case HK_SWITCH_LAYER_TO_COMPONENT:
-        SwitchLayer( DC, LAYER_N_FRONT );
+        SwitchLayer( aDC, LAYER_N_FRONT );
         break;
 
     case HK_SWITCH_LAYER_TO_COPPER:
-        SwitchLayer( DC, LAYER_N_BACK );
+        SwitchLayer( aDC, LAYER_N_BACK );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER1:
-        SwitchLayer( DC, LAYER_N_2 );
+        SwitchLayer( aDC, LAYER_N_2 );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER2:
-        SwitchLayer( DC, LAYER_N_3 );
+        SwitchLayer( aDC, LAYER_N_3 );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER3:
-        SwitchLayer( DC, LAYER_N_4 );
+        SwitchLayer( aDC, LAYER_N_4 );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER4:
-        SwitchLayer( DC, LAYER_N_5 );
-       break;
+        SwitchLayer( aDC, LAYER_N_5 );
+        break;
 
     case HK_SWITCH_LAYER_TO_INNER5:
-        SwitchLayer( DC, LAYER_N_6 );
+        SwitchLayer( aDC, LAYER_N_6 );
         break;
 
     case HK_SWITCH_LAYER_TO_INNER6:
-        SwitchLayer( DC, LAYER_N_7 );
+        SwitchLayer( aDC, LAYER_N_7 );
         break;
 
     case HK_HELP: // Display Current hotkey list
@@ -354,7 +346,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
 
     case HK_UNDO:
     case HK_REDO:
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
             wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
                                   HK_Descr->m_IdMenuEvent );
@@ -378,26 +370,24 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_DELETE:
-        OnHotkeyDeleteItem( DC, DrawStruct );
+        OnHotkeyDeleteItem( aDC );
         break;
 
     case HK_BACK_SPACE:
         if( m_ID_current_state == ID_TRACK_BUTT && getActiveLayer()
             <= LAYER_N_FRONT )
         {
-            if( ItemFree )
+            if( !itemCurrentlyEdited )
             {
                 // no track is currently being edited - select a segment and remove it.
                 // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay() so it can restrict its search to specific item types.
-                // @todo: use PcbGeneralLocateAndDisplay() everywhere in this source file.
-
-                DrawStruct = PcbGeneralLocateAndDisplay();
+                aItem = PcbGeneralLocateAndDisplay();
 
                 // don't let backspace delete modules!!
-                if( DrawStruct && (DrawStruct->Type() == TYPE_TRACK
-                                   || DrawStruct->Type() == TYPE_VIA) )
+                if( aItem && (aItem->Type() == TYPE_TRACK
+                              || aItem->Type() == TYPE_VIA) )
                 {
-                    Delete_Segment( DC, (TRACK*) DrawStruct );
+                    Delete_Segment( aDC, (TRACK*) aItem );
                     SetCurItem( NULL );
                 }
                 OnModify();
@@ -407,7 +397,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
                 // then an element is being edited - remove the last segment.
                 // simple lines for debugger:
                 TRACK* track = (TRACK*) GetCurItem();
-                track = Delete_Segment( DC, track );
+                track = Delete_Segment( aDC, track );
                 SetCurItem( track );
                 OnModify();
             }
@@ -415,17 +405,17 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_END_TRACK:
-        if( !ItemFree && (GetCurItem()->Type() == TYPE_TRACK)
+        if( itemCurrentlyEdited && (GetCurItem()->Type() == TYPE_TRACK)
            && ( (GetCurItem()->m_Flags & IS_NEW) != 0 ) )
         {
             // A new track is in progress: call to End_Route()
             DrawPanel->MouseToCursorSchema();
-            End_Route( (TRACK*) GetCurItem(), DC );
+            End_Route( (TRACK*) GetCurItem(), aDC );
         }
         break;
 
     case HK_GET_AND_MOVE_FOOTPRINT:
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST  );
@@ -434,7 +424,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_FIND_ITEM:
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
             wxCommandEvent evt;
             evt.SetId( ID_FIND_ITEMS );
@@ -443,7 +433,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_LOAD_BOARD:
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
             // try not to duplicate save, load code etc.
             wxCommandEvent evt;
@@ -453,7 +443,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_SAVE_BOARD:
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
             // try not to duplicate save, load code etc.
             wxCommandEvent evt;
@@ -465,9 +455,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )
             return;
-        if( ItemFree )                              // no track in progress: nothing to do
+        if( !itemCurrentlyEdited )                              // no track in progress: nothing to do
             break;
-        if( GetCurItem()->Type() != TYPE_TRACK )    // Should not occur
+        if( GetCurItem()->Type() != TYPE_TRACK )                // Should not occur
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
@@ -477,7 +467,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         {
             int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
             GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA;
-            Other_Layer_Route( (TRACK*) GetCurItem(), DC );
+            Other_Layer_Route( (TRACK*) GetCurItem(), aDC );
             GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
             if( DisplayOpt.ContrastModeDisplay )
                 DrawPanel->Refresh();
@@ -487,34 +477,35 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
     case HK_ADD_VIA: // Switch to alternate layer and Place a via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )
             return;
-        if( ItemFree ) // no track in progress: switch layer only
+        if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
-            Other_Layer_Route( NULL, DC );
+            Other_Layer_Route( NULL, aDC );
             break;
         }
         if( GetCurItem()->Type() != TYPE_TRACK )
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
-        Other_Layer_Route( (TRACK*) GetCurItem(), DC ); // place via and switch layer
+        Other_Layer_Route( (TRACK*) GetCurItem(), aDC ); // place via and switch layer
         if( DisplayOpt.ContrastModeDisplay )
             DrawPanel->Refresh();
         break;
 
     case HK_SWITCH_TRACK_POSTURE:
+
         /* change the position of initial segment when creating new tracks
          * switch from _/  to -\ .
          */
-        ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+        ShowNewTrackWhenMovingCursor( DrawPanel, aDC, false );
         g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
-        ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+        ShowNewTrackWhenMovingCursor( DrawPanel, aDC, false );
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track
         if( getActiveLayer() > LAYER_N_FRONT )
             break;
 
-        if( m_ID_current_state != ID_TRACK_BUTT && ItemFree )
+        if( m_ID_current_state != ID_TRACK_BUTT && !itemCurrentlyEdited )
         {
             cmd.SetId( ID_TRACK_BUTT );
             GetEventHandler()->ProcessEvent( cmd );
@@ -523,16 +514,16 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         if( m_ID_current_state != ID_TRACK_BUTT )
             break;
 
-        if( ItemFree )     // no track in progress:
+        if( !itemCurrentlyEdited )     // no track in progress:
         {
-            TRACK* track = Begin_Route( NULL, DC );
+            TRACK* track = Begin_Route( NULL, aDC );
             SetCurItem( track );
             if( track )
                 DrawPanel->m_AutoPAN_Request = true;
         }
         else if( GetCurItem()->m_Flags & IS_NEW )
         {
-            TRACK* track = Begin_Route( (TRACK*) GetCurItem(), DC );
+            TRACK* track = Begin_Route( (TRACK*) GetCurItem(), aDC );
 
             // SetCurItem() must not write to the msg panel
             // because a track info is displayed while moving the mouse cursor
@@ -543,20 +534,21 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         break;
 
     case HK_EDIT_ITEM:      // Edit board item
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
         {
-            BOARD_ITEM * item = PcbGeneralLocateAndDisplay();
-            if ( item == NULL )
+            BOARD_ITEM* item = PcbGeneralLocateAndDisplay();
+            if( item == NULL )
                 break;
+
             //An item is found, and some can be edited:
-            OnEditItemRequest( DC, item );
+            OnEditItemRequest( aDC, item );
         }
         break;
 
     // Footprint edition:
     case HK_LOCK_UNLOCK_FOOTPRINT: // toggle module "MODULE_is_LOCKED" status:
         // get any module, locked or not locked and toggle its locked status
-        if( ItemFree )
+        if( !itemCurrentlyEdited )
             module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
                                              | VISIBLE_ONLY );
         else if( GetCurItem()->Type() == TYPE_MODULE )
@@ -569,133 +561,27 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct
         }
         break;
 
-    case HK_DRAG_FOOTPRINT_OR_TRACK: // Start move (and drag) module or track segment
-    case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move module or track segment
-        if( PopupOn )
-            break;
-        // Fall through on hot key
-    case HK_ROTATE_FOOTPRINT:   // Rotation
+    case HK_DRAG_FOOTPRINT_OR_TRACK:    // Start drag module or track segment
+        OnHotkeyMoveItem( HK_DRAG_FOOTPRINT_OR_TRACK, aDC );
+        break;
+
+    case HK_MOVE_ITEM:                  // Start move item
+        OnHotkeyMoveItem( HK_MOVE_ITEM, aDC );
+        break;
+
+    case HK_ROTATE_ITEM:        // Rotation
+        OnHotkeyRotateItem( HK_ROTATE_ITEM, aDC );
+        break;
+
     case HK_FLIP_FOOTPRINT:     // move to other side
-        int exit = 0;
-        if( m_ID_current_state == ID_TRACK_BUTT )
-        {
-            if( ItemFree )
-                DrawStruct = PcbGeneralLocateAndDisplay();
-            else
-                DrawStruct = GetCurItem();
-
-            if( DrawStruct && (DrawStruct->Type() == TYPE_TRACK
-                               || DrawStruct->Type() == TYPE_VIA) )
-                switch( HK_Descr->m_Idcommand )
-                {
-                case HK_DRAG_FOOTPRINT_OR_TRACK: // Start drag track segment
-                    DrawPanel->MouseToCursorSchema();
-
-                    //Start_DragTrackSegmentAndKeepSlope( (TRACK*) DrawStruct,DC );
-                    Start_MoveOneNodeOrSegment( (TRACK*) DrawStruct, DC,
-                                               ID_POPUP_PCB_DRAG_TRACK_SEGMENT );
-                    break;
-
-                // fall through
-                case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move track segment
-                    DrawPanel->MouseToCursorSchema();
-                    Start_MoveOneNodeOrSegment( (TRACK*) DrawStruct, DC,
-                                               ID_POPUP_PCB_MOVE_TRACK_NODE );
-                    break;
-                }
-
-            else
-                exit = 1;
-        }
-        else if( !exit )
-        {
-            if( ItemFree )
-            {
-                module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
-                                                 | IGNORE_LOCKED | VISIBLE_ONLY
-#if defined(USE_MATCH_LAYER)
-                                                 | MATCH_LAYER
-#endif
-                                                 );
-
-                if( module == NULL ) // no footprint found
-                {
-                    module = Locate_Prefered_Module( GetBoard(),
-                                                     CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
-                    if( module )
-                    {
-                        // a footprint is found, but locked or on an other layer
-                        if( module->IsLocked() )
-                        {
-                            wxString msg;
-
-                            msg.Printf( _( "Footprint %s found, but locked" ),
-                                       module->m_Reference->m_Text.GetData() );
-
-                            DisplayInfoMessage( this, msg );
-                        }
-                        module = NULL;
-                    }
-                }
-            }
-            else if( GetCurItem()->Type() == TYPE_MODULE )
-            {
-                module = (MODULE*) GetCurItem();
-
-                // @todo: might need to add a layer check in if() below
-                if( (GetCurItem()->m_Flags == 0) && module->IsLocked() )
-                    module = NULL; // do not move, rotate ... it.
-            }
-            if( module == NULL )
-                break;
-
-            /*  I'd like to make sending to EESCHEMA edge triggered, but the
-             *  simple mouse click on a module when the arrow icon is in play
-             *  does not set GetCurItem() at this time, nor does a mouse click
-             *  when the local ratsnest icon is in play set GetCurItem(), and these
-             *  actions also call SendMessageToEESCHEMA().
-             *  if( GetCurItem() != module )
-             */
-            {
-                // Send the module via socket to EESCHEMA's search facility.
-                SendMessageToEESCHEMA( module );
-                SetCurItem( module );
-            }
-
-            switch( HK_Descr->m_Idcommand )
-            {
-            case HK_ROTATE_FOOTPRINT:           // Rotation
-                if( module->m_Flags == 0 )      // not currently in edit, prepare undo command
-                    SaveCopyInUndoList( module, UR_ROTATED, module->m_Pos );
-                Rotate_Module( DC, module, 900, TRUE );
-                break;
-
-            case HK_FLIP_FOOTPRINT:             // move to other side
-                if( module->m_Flags == 0 )      // not currently in edit, prepare undo command
-                    SaveCopyInUndoList( module, UR_FLIPPED, module->m_Pos );
-                Change_Side_Module( module, DC );
-                break;
-
-            case HK_DRAG_FOOTPRINT_OR_TRACK: // Start move (and drag) module
-                g_Drag_Pistes_On = TRUE;
-
-            // fall through
-            case HK_MOVE_FOOTPRINT_OR_TRACK: // Start move module
-                GetScreen()->m_Curseur = module->m_Pos;
-                DrawPanel->MouseToCursorSchema();
-                StartMove_Module( module, DC );
-                break;
-            }
-
-            module->DisplayInfo( this );
-            break;
-        }
+        OnHotkeyRotateItem( HK_FLIP_FOOTPRINT, aDC );
+        break;
     }
 }
 
 
 /***********************************************************/
-void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
+void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey,
                                        EDA_BaseStruct* DrawStruct )
 /***********************************************************/
 
@@ -779,18 +665,18 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* DC, int hotkey,
 }
 
 
-/******************************************************************************/
-bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
-/******************************************************************************/
-
-/* Delete the item foun under the mouse cursor
+/** Function OnHotkeyDeleteItem
+ * Delete the item found under the mouse cursor
  *  Depending on the current active tool::
  *      Tool track
  *          if a track is in progress: Delete the last segment
  *			else delete the entire track
  *      Tool module (footprint):
  *          Delete the module.
+ * @param aDC = current device context
+ * @return true if an item was deleted
  */
+bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
 {
     bool ItemFree = (GetCurItem() == NULL) || (GetCurItem()->m_Flags == 0);
 
@@ -798,22 +684,22 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
     {
     case ID_TRACK_BUTT:
         if( getActiveLayer() > LAYER_N_FRONT )
-            return FALSE;
+            return false;
         if( ItemFree )
         {
-            DrawStruct = PcbGeneralLocateAndDisplay();
+            BOARD_ITEM* DrawStruct = PcbGeneralLocateAndDisplay();
             if( DrawStruct && DrawStruct->Type() != TYPE_TRACK )
-                return FALSE;
-            Delete_Track( DC, (TRACK*) DrawStruct );
+                return false;
+            Delete_Track( aDC, (TRACK*) DrawStruct );
         }
         else if( GetCurItem()->Type() == TYPE_TRACK )
         {
             // simple lines for debugger:
             TRACK* track = (TRACK*) GetCurItem();
-            track = Delete_Segment( DC, track );
+            track = Delete_Segment( aDC, track );
             SetCurItem( track );
             OnModify();
-            return TRUE;
+            return true;
         }
         break;
 
@@ -823,20 +709,195 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct )
             MODULE* module = Locate_Prefered_Module( GetBoard(),
                                                      CURSEUR_ON_GRILLE );
             if( module == NULL )
-                return FALSE;
+                return false;
             if( !IsOK( this, _( "Delete module?" ) ) )
-                return FALSE;
-            RemoveStruct( module, DC );
+                return false;
+            RemoveStruct( module, aDC );
         }
         else
-            return FALSE;
+            return false;
         break;
 
     default:
-        return FALSE;
+        return false;
     }
 
     OnModify();
     SetCurItem( NULL );
-    return TRUE;
+    return true;
+}
+
+
+/** Function OnHotkeyMoveItem
+ * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
+ * Only a footprint or a track can be dragged
+ * @param aIdCommand = the hotkey command id
+ * @param aDC = current device context
+ * @return true if an item was moved
+ */
+bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand, wxDC* aDC )
+{
+    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    BOARD_ITEM* item = NULL;
+
+    if( m_ID_current_state == ID_COMPONENT_BUTT )
+    {
+        item = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
+                                       | IGNORE_LOCKED | VISIBLE_ONLY
+    #if defined(USE_MATCH_LAYER)
+                                       | MATCH_LAYER
+    #endif
+                                       );
+
+        if( item == NULL )             // no footprint found
+            item = Locate_Prefered_Module( GetBoard(),
+                                           CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
+    }
+    if( item == NULL )
+        item = PcbGeneralLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    switch( item->Type() )
+    {
+    case TYPE_TRACK:
+    case TYPE_VIA:
+        if( aIdCommand == HK_MOVE_ITEM )
+        {
+            Start_MoveOneNodeOrSegment( (TRACK*) item, aDC,
+                                       ID_POPUP_PCB_MOVE_TRACK_NODE );
+            return true;
+        }
+        if( aIdCommand == HK_DRAG_FOOTPRINT_OR_TRACK )
+        {
+            //Start_DragTrackSegmentAndKeepSlope( (TRACK*) DrawStruct, aDC );
+            Start_MoveOneNodeOrSegment( (TRACK*) item, aDC,
+                                       ID_POPUP_PCB_DRAG_TRACK_SEGMENT );
+            return true;
+        }
+        break;
+
+    case TYPE_MODULE:
+    {
+        MODULE* module = (MODULE*) item;
+
+        // a footprint is found, but locked or on an other layer
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but locked" ),
+                       module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
+
+        // Send the module via socket to EESCHEMA's search facility.
+        SendMessageToEESCHEMA( module );
+
+        // Start move module
+        GetScreen()->m_Curseur = module->m_Pos;
+        DrawPanel->MouseToCursorSchema();
+        if( aIdCommand == HK_DRAG_FOOTPRINT_OR_TRACK )
+            g_Drag_Pistes_On = true;
+
+        StartMove_Module( module, aDC );
+    }
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+
+/** Function OnHotkeyRotateItem
+ * Rotate the item (text or footprint) found under the mouse cursor
+ * @param aIdCommand = the hotkey command id
+ * @param aDC = current device context
+ * @return true if an item was moved
+ */
+bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand, wxDC* aDC )
+{
+    bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
+
+    MODULE* module = NULL;
+
+    if( !itemCurrentlyEdited )
+    {
+        module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
+                                         | IGNORE_LOCKED | VISIBLE_ONLY
+#if defined(USE_MATCH_LAYER)
+                                         | MATCH_LAYER
+#endif
+                                         );
+
+        if( module == NULL )         // no footprint found
+        {
+            module = Locate_Prefered_Module( GetBoard(),
+                                             CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
+            if( module )
+            {
+                // a footprint is found, but locked or on an other layer
+                if( module->IsLocked() )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Footprint %s found, but locked" ),
+                               module->m_Reference->m_Text.GetData() );
+                    DisplayInfoMessage( this, msg );
+                }
+                module = NULL;
+            }
+        }
+    }
+    else if( GetCurItem()->Type() == TYPE_MODULE )
+    {
+        module = (MODULE*) GetCurItem();
+
+        // @todo: might need to add a layer check in if() below
+        if( (GetCurItem()->m_Flags == 0) && module->IsLocked() )
+            module = NULL;         // do not move, rotate ... it.
+    }
+    if( module == NULL )
+        return false;
+
+    /*  I'd like to make sending to EESCHEMA edge triggered, but the
+     *  simple mouse click on a module when the arrow icon is in play
+     *  does not set GetCurItem() at this time, nor does a mouse click
+     *  when the local ratsnest icon is in play set GetCurItem(), and these
+     *  actions also call SendMessageToEESCHEMA().
+     *  if( GetCurItem() != module )
+     */
+    {
+        // Send the module via socket to EESCHEMA's search facility.
+        SendMessageToEESCHEMA( module );
+        SetCurItem( module );
+    }
+
+    switch( aIdCommand )
+    {
+    case HK_ROTATE_ITEM:                        // Rotation
+        if( module->m_Flags == 0 )              // not currently in edit, prepare undo command
+            SaveCopyInUndoList( module, UR_ROTATED, module->m_Pos );
+        Rotate_Module( aDC, module, 900, true );
+        break;
+
+    case HK_FLIP_FOOTPRINT:                     // move to other side
+        if( module->m_Flags == 0 )              // not currently in edit, prepare undo command
+            SaveCopyInUndoList( module, UR_FLIPPED, module->m_Pos );
+        Change_Side_Module( module, aDC );
+        break;
+    }
+
+    module->DisplayInfo( this );
+
+    return true;
 }
