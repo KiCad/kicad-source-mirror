@@ -26,8 +26,8 @@
 #include "xnode.h"
 #include "macros.h"
 
-
-typedef wxXmlProperty  XATTR;
+typedef wxXmlProperty   XATTR;
+#define GetAttribs      GetProperties
 
 void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 {
@@ -53,7 +53,7 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError
     std::string utf8;
 
     // output attributes first if they exist
-    for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )
+    for( XATTR* attr = (XATTR*) GetAttribs();  attr;  attr = (XATTR*) attr->GetNext() )
     {
         utf8  = CONV_TO_UTF8( attr->GetValue() );   // capture the content
 
@@ -93,6 +93,5 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError
         ;   // not supported
     }
 }
-
 
 // EOF
