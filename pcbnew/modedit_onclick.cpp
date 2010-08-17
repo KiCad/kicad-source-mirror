@@ -116,19 +116,13 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         break;
 
     case ID_MODEDIT_DELETE_ITEM_BUTT:
-
-        // Item in edit, cannot delete it
-        if( DrawStruct && (DrawStruct->m_Flags != 0) )
+        if( DrawStruct == NULL ||           // No item to delete
+            (DrawStruct->m_Flags != 0) )    // Item in edit, cannot delete it
             break;
-        DrawStruct = ModeditLocateAndDisplay();
-        if( DrawStruct == NULL || (DrawStruct->m_Flags != 0) )
-            break;
-        if( DrawStruct->Type() != TYPE_MODULE ) //GetBoard()->m_Modules )
+        if( DrawStruct->Type() != TYPE_MODULE ) // Cannot delete the module itself
         {
-            // Cannot delete the module itself
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             RemoveStruct( DrawStruct );
-            DrawStruct = NULL;
             SetCurItem( NULL );
         }
         break;

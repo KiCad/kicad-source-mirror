@@ -518,7 +518,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DELETE_PAD:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        DeletePad( (D_PAD*) GetScreen()->GetCurItem() );
+        DeletePad( (D_PAD*) GetScreen()->GetCurItem(), false );
         SetCurItem( NULL );
         DrawPanel->MouseToCursorSchema();
         break;

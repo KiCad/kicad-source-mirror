@@ -83,7 +83,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         switch( m_HTOOL_current_state )
         {
-        case ID_TOOLBARH_PCB_AUTOPLACE:
+        case ID_TOOLBARH_PCB_MODE_MODULE:
             scanList = GENERAL_COLLECTOR::ModuleItems;
             break;
 

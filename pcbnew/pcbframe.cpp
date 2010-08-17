@@ -183,8 +183,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                          WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                          WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
-    EVT_TOOL( ID_TOOLBARH_PCB_AUTOPLACE, WinEDA_PcbFrame::AutoPlace )
-    EVT_TOOL( ID_TOOLBARH_PCB_AUTOROUTE, WinEDA_PcbFrame::AutoPlace )
+    EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, WinEDA_PcbFrame::AutoPlace )
+    EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, WinEDA_PcbFrame::AutoPlace )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
               WinEDA_PcbFrame::Access_to_External_Tool )
 

@@ -253,10 +253,44 @@ public:
      */
     void             SetLastNetListRead( const wxString& aNetListFile );
 
-    void             OnHotKey( wxDC*           DC,
-                               int             hotkey,
-                               EDA_BaseStruct* DrawStruct );
-    bool             OnHotkeyDeleteItem( wxDC* DC, EDA_BaseStruct* DrawStruct );
+    /** Function OnHotKey.
+     *  ** Commands are case insensitive **
+     *  Some commands are relatives to the item under the mouse cursor
+     *  @param aDC = current device context
+     *  @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
+     *  @param aItem = NULL or pointer on a EDA_BaseStruct under the mouse cursor
+     */
+    void             OnHotKey( wxDC*           aDC,
+                               int             aHotkeyCode,
+                               EDA_BaseStruct* aItem );
+
+    /** Function OnHotkeyDeleteItem
+     * Delete the item found under the mouse cursor
+     *  Depending on the current active tool::
+     *      Tool track
+     *          if a track is in progress: Delete the last segment
+     *			else delete the entire track
+     *      Tool module (footprint):
+     *          Delete the module.
+     * @param aDC = current device context
+     * @return true if an item was deleted
+     */
+    bool             OnHotkeyDeleteItem( wxDC* aDC );
+
+    /** Function OnHotkeyMoveItem
+     * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
+     * Only a footprint or a track can be dragged
+     * @param aIdCommand = the hotkey command id
+     * @return true if an item was moved
+     */
+    bool             OnHotkeyMoveItem( int aIdCommand );
+
+    /** Function OnHotkeyRotateItem
+     * Rotate the item (text or footprint) found under the mouse cursor
+     * @param aIdCommand = the hotkey command id
+     * @return true if an item was moved
+     */
+    bool             OnHotkeyRotateItem( int aIdCommand );
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );

@@ -257,7 +257,14 @@ public:
                                               wxDC*         DC );
 
     void          AddPad( MODULE* Module, bool draw );
-    void          DeletePad( D_PAD* Pad );
+    /** Function DeletePad
+     * Delete the pad aPad.
+     * Refresh the modified screen area
+     * Refresh modified parameters of the parent module (bounding box, last date)
+     * @param aPad = the pad to delete
+     * @param aQuery = true to promt for confirmation, false to delete silently
+     */
+    void          DeletePad( D_PAD* aPad, bool aQuery = true );
     void          StartMovePad( D_PAD* Pad, wxDC* DC );
     void          RotatePad( D_PAD* Pad, wxDC* DC );
     void          PlacePad( D_PAD* Pad, wxDC* DC );
