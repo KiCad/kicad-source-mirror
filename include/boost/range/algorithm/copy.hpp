@@ -30,7 +30,7 @@ namespace boost
 template< class SinglePassRange, class OutputIterator >
 inline OutputIterator copy(const SinglePassRange& rng, OutputIterator out)
 {
-    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
     return std::copy(boost::begin(rng),boost::end(rng),out);
 }
 

@@ -34,6 +34,16 @@ inline ForwardRange& rotate(ForwardRange& rng,
     return rng;
 }
 
+/// \overload
+template<class ForwardRange>
+inline const ForwardRange& rotate(const ForwardRange& rng,
+    BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type middle)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    std::rotate(boost::begin(rng), middle, boost::end(rng));
+    return rng;
+}
+
     } // namespace range
     using range::rotate;
 } // namespace boost
