@@ -581,8 +581,9 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), add_corner_xpm );
+            msg = AddHotkeyName( _( "Drag Outline Segment" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT,
-                          _( "Drag Outline Segment" ), drag_outline_segment_xpm );
+                          msg, drag_outline_segment_xpm );
         }
 
         zones_menu->AppendSeparator();
