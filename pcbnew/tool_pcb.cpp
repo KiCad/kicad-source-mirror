@@ -274,11 +274,11 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          *LayerPairBitmap, SEL_LAYER_HELP );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_AUTOPLACE, wxEmptyString,
+    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString,
                          wxBitmap( mode_module_xpm ),
                          _( "Mode footprint: manual and automatic move and place modules" ),
                          wxITEM_CHECK );
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_AUTOROUTE, wxEmptyString,
+    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString,
                          wxBitmap( mode_track_xpm ),
                          _( "Mode track: autorouting" ), wxITEM_CHECK );
 

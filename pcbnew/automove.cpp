@@ -45,23 +45,23 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TOOLBARH_PCB_AUTOPLACE:
-        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOPLACE );
+    case ID_TOOLBARH_PCB_MODE_MODULE:
+        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_MODE_MODULE );
         if( on_state )
         {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOROUTE, FALSE );
-            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOPLACE;
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, FALSE );
+            m_HTOOL_current_state = ID_TOOLBARH_PCB_MODE_MODULE;
         }
         else
             m_HTOOL_current_state = 0;
         return;
 
-    case ID_TOOLBARH_PCB_AUTOROUTE:
-        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_AUTOROUTE );
+    case ID_TOOLBARH_PCB_MODE_TRACKS:
+        on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_MODE_TRACKS );
         if( on_state )
         {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_AUTOPLACE, FALSE );
-            m_HTOOL_current_state = ID_TOOLBARH_PCB_AUTOROUTE;
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, FALSE );
+            m_HTOOL_current_state = ID_TOOLBARH_PCB_MODE_TRACKS;
         }
         else
             m_HTOOL_current_state = 0;

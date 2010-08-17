@@ -348,10 +348,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
         /* change the position of initial segment when creating new tracks
          * switch from _/  to -\ .
+         * If a track is in progress, it will be redrawn
         */
-        ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
+        if( DrawPanel->ManageCurseur == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
         g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
-        ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
+        if( DrawPanel->ManageCurseur == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:

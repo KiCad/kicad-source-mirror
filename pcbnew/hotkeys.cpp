@@ -78,7 +78,7 @@ static Ki_HotkeyInfo HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT
                                       'F' );
 static Ki_HotkeyInfo HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static Ki_HotkeyInfo HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
-static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_FOOTPRINT_OR_TRACK,
+static Ki_HotkeyInfo HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_ITEM,
                                       'G' );
 static Ki_HotkeyInfo HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
                                             HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -222,6 +222,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
     bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
 
     MODULE* module = NULL;
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
@@ -315,33 +316,27 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
         break;
 
     case HK_ZOOM_IN:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
+        evt_type = ID_POPUP_ZOOM_IN;
         break;
 
     case HK_ZOOM_OUT:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
+        evt_type = ID_POPUP_ZOOM_OUT;
         break;
 
     case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ADD_MODULE:
-        cmd.SetId( ID_COMPONENT_BUTT );
-        GetEventHandler()->ProcessEvent( cmd );
+        evt_type = ID_ZOOM_REDRAW;
         break;
 
     case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
+        evt_type = ID_ZOOM_PAGE;
+        break;
+
+    case HK_ZOOM_CENTER:
+        evt_type = ID_POPUP_ZOOM_CENTER;
+        break;
+
+    case HK_ADD_MODULE:
+        evt_type = ID_COMPONENT_BUTT;
         break;
 
     case HK_UNDO:
@@ -374,13 +369,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
         break;
 
     case HK_BACK_SPACE:
-        if( m_ID_current_state == ID_TRACK_BUTT && getActiveLayer()
-            <= LAYER_N_FRONT )
+        if( m_ID_current_state == ID_TRACK_BUTT && (getActiveLayer() <= LAYER_N_FRONT) )
         {
             if( !itemCurrentlyEdited )
             {
                 // no track is currently being edited - select a segment and remove it.
-                // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay() so it can restrict its search to specific item types.
+                // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay()
+                // so it can restrict its search to specific item types.
                 aItem = PcbGeneralLocateAndDisplay();
 
                 // don't let backspace delete modules!!
@@ -416,40 +411,22 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
 
     case HK_GET_AND_MOVE_FOOTPRINT:
         if( !itemCurrentlyEdited )
-        {
-            wxCommandEvent evt;
-            evt.SetId( ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST  );
-            Process_Special_Functions( evt );
-        }
+            evt_type = ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST;
         break;
 
     case HK_FIND_ITEM:
         if( !itemCurrentlyEdited )
-        {
-            wxCommandEvent evt;
-            evt.SetId( ID_FIND_ITEMS );
-            Process_Special_Functions( evt );
-        }
+            evt_type = ID_FIND_ITEMS;
         break;
 
     case HK_LOAD_BOARD:
         if( !itemCurrentlyEdited )
-        {
-            // try not to duplicate save, load code etc.
-            wxCommandEvent evt;
-            evt.SetId( ID_LOAD_FILE );
-            Files_io( evt );
-        }
+            evt_type = ID_LOAD_FILE ;
         break;
 
     case HK_SAVE_BOARD:
         if( !itemCurrentlyEdited )
-        {
-            // try not to duplicate save, load code etc.
-            wxCommandEvent evt;
-            evt.SetId( ID_SAVE_BOARD );
-            Files_io( evt );
-        }
+            evt_type = ID_SAVE_BOARD;
         break;
 
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
@@ -464,14 +441,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
 
         // place micro via and switch layer
         if( IsMicroViaAcceptable() )
-        {
-            int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
-            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA;
-            Other_Layer_Route( (TRACK*) GetCurItem(), aDC );
-            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
-            if( DisplayOpt.ContrastModeDisplay )
-                DrawPanel->Refresh();
-        }
+            evt_type = ID_POPUP_PCB_PLACE_MICROVIA;
         break;
 
     case HK_ADD_VIA: // Switch to alternate layer and Place a via if a track is in progress
@@ -486,19 +456,14 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
-        Other_Layer_Route( (TRACK*) GetCurItem(), aDC ); // place via and switch layer
-        if( DisplayOpt.ContrastModeDisplay )
-            DrawPanel->Refresh();
+        evt_type = ID_POPUP_PCB_PLACE_VIA;
         break;
 
     case HK_SWITCH_TRACK_POSTURE:
-
         /* change the position of initial segment when creating new tracks
          * switch from _/  to -\ .
          */
-        ShowNewTrackWhenMovingCursor( DrawPanel, aDC, false );
-        g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
-        ShowNewTrackWhenMovingCursor( DrawPanel, aDC, false );
+        evt_type = ID_POPUP_PCB_SWITCH_TRACK_POSTURE ;
         break;
 
     case HK_ADD_NEW_TRACK: // Start new track
@@ -561,21 +526,29 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
         }
         break;
 
-    case HK_DRAG_FOOTPRINT_OR_TRACK:    // Start drag module or track segment
-        OnHotkeyMoveItem( HK_DRAG_FOOTPRINT_OR_TRACK, aDC );
+    case HK_DRAG_ITEM:    // Start drag module or track segment
+        OnHotkeyMoveItem( HK_DRAG_ITEM );
         break;
 
     case HK_MOVE_ITEM:                  // Start move item
-        OnHotkeyMoveItem( HK_MOVE_ITEM, aDC );
+        OnHotkeyMoveItem( HK_MOVE_ITEM );
         break;
 
     case HK_ROTATE_ITEM:        // Rotation
-        OnHotkeyRotateItem( HK_ROTATE_ITEM, aDC );
+        OnHotkeyRotateItem( HK_ROTATE_ITEM );
         break;
 
     case HK_FLIP_FOOTPRINT:     // move to other side
-        OnHotkeyRotateItem( HK_FLIP_FOOTPRINT, aDC );
+        OnHotkeyRotateItem( HK_FLIP_FOOTPRINT );
         break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
     }
 }
 
@@ -592,7 +565,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey,
     if( hotkey == 0 )
         return;
 
-    bool           ItemFree = (GetCurItem() == 0 || GetCurItem()->m_Flags == 0);
+    BOARD_ITEM* item = GetCurItem();
+    bool           ItemFree = (item == 0) || (item->m_Flags == 0);
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -678,7 +652,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey,
  */
 bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
 {
-    bool ItemFree = (GetCurItem() == NULL) || (GetCurItem()->m_Flags == 0);
+    BOARD_ITEM* item = GetCurItem();
+    bool ItemFree = (item == NULL) || (item->m_Flags == 0);
 
     switch( m_ID_current_state )
     {
@@ -687,15 +662,15 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
             return false;
         if( ItemFree )
         {
-            BOARD_ITEM* DrawStruct = PcbGeneralLocateAndDisplay();
-            if( DrawStruct && DrawStruct->Type() != TYPE_TRACK )
+            item = PcbGeneralLocateAndDisplay();
+            if( item && item->Type() != TYPE_TRACK )
                 return false;
-            Delete_Track( aDC, (TRACK*) DrawStruct );
+            Delete_Track( aDC, (TRACK*) item );
         }
-        else if( GetCurItem()->Type() == TYPE_TRACK )
+        else if( item->Type() == TYPE_TRACK )
         {
             // simple lines for debugger:
-            TRACK* track = (TRACK*) GetCurItem();
+            TRACK* track = (TRACK*) item;
             track = Delete_Segment( aDC, track );
             SetCurItem( track );
             OnModify();
@@ -729,59 +704,37 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
 
 
 /** Function OnHotkeyMoveItem
- * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
- * Only a footprint or a track can be dragged
+ * Move or drag the item (footprint, track, text .. ) found under the mouse cursor
+ * An item can be moved (or dragged) only if there is no item currently edited
+ * Only a footprint, a pad or a track can be dragged
  * @param aIdCommand = the hotkey command id
- * @param aDC = current device context
  * @return true if an item was moved
  */
-bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand, wxDC* aDC )
+bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
 {
-    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->m_Flags;
 
     if( itemCurrentlyEdited )
         return false;
 
-    BOARD_ITEM* item = NULL;
-
-    if( m_ID_current_state == ID_COMPONENT_BUTT )
-    {
-        item = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
-                                       | IGNORE_LOCKED | VISIBLE_ONLY
-    #if defined(USE_MATCH_LAYER)
-                                       | MATCH_LAYER
-    #endif
-                                       );
-
-        if( item == NULL )             // no footprint found
-            item = Locate_Prefered_Module( GetBoard(),
-                                           CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
-    }
-    if( item == NULL )
-        item = PcbGeneralLocateAndDisplay();
+    item = PcbGeneralLocateAndDisplay();
 
     if( item == NULL )
         return false;
 
     SetCurItem( item );
 
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+
     switch( item->Type() )
     {
     case TYPE_TRACK:
     case TYPE_VIA:
         if( aIdCommand == HK_MOVE_ITEM )
-        {
-            Start_MoveOneNodeOrSegment( (TRACK*) item, aDC,
-                                       ID_POPUP_PCB_MOVE_TRACK_NODE );
-            return true;
-        }
-        if( aIdCommand == HK_DRAG_FOOTPRINT_OR_TRACK )
-        {
-            //Start_DragTrackSegmentAndKeepSlope( (TRACK*) DrawStruct, aDC );
-            Start_MoveOneNodeOrSegment( (TRACK*) item, aDC,
-                                       ID_POPUP_PCB_DRAG_TRACK_SEGMENT );
-            return true;
-        }
+            evt_type = ID_POPUP_PCB_MOVE_TRACK_NODE;
+        if( aIdCommand == HK_DRAG_ITEM )
+            evt_type = ID_POPUP_PCB_DRAG_TRACK_SEGMENT;
         break;
 
     case TYPE_MODULE:
@@ -797,22 +750,51 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand, wxDC* aDC )
             DisplayInfoMessage( this, msg );
             break;
         }
-
-        // Send the module via socket to EESCHEMA's search facility.
-        SendMessageToEESCHEMA( module );
-
-        // Start move module
-        GetScreen()->m_Curseur = module->m_Pos;
-        DrawPanel->MouseToCursorSchema();
-        if( aIdCommand == HK_DRAG_FOOTPRINT_OR_TRACK )
-            g_Drag_Pistes_On = true;
-
-        StartMove_Module( module, aDC );
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
+        if( aIdCommand == HK_DRAG_ITEM )
+            evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
     }
-        return true;
+    break;
+
+    case TYPE_PAD:
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_PAD_REQUEST;
+        if( aIdCommand == HK_DRAG_ITEM )
+            evt_type = ID_POPUP_PCB_DRAG_PAD_REQUEST;
+        break;
+
+    case TYPE_TEXTE:
+        evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
+        break;
+
+    case TYPE_MIRE:
+        evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
+        break;
+
+    case TYPE_ZONE_CONTAINER:
+        evt_type = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+        break;
+
+    case TYPE_DRAWSEGMENT:
+        evt_type = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
+        break;
 
     default:
         break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
     }
 
     return false;
@@ -821,83 +803,66 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand, wxDC* aDC )
 
 /** Function OnHotkeyRotateItem
  * Rotate the item (text or footprint) found under the mouse cursor
+ * Note:
+ *     this command can be used with an item currently in edit
+ *     Only some items can be rotated (footprints and texts)
  * @param aIdCommand = the hotkey command id
- * @param aDC = current device context
  * @return true if an item was moved
  */
-bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand, wxDC* aDC )
+bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand )
 {
-    bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
-
-    MODULE* module = NULL;
+    BOARD_ITEM* item = GetCurItem();
+    bool        itemCurrentlyEdited = item && item->m_Flags;
+    int         evt_type = 0; // Used to post a wxCommandEvent on demand
 
     if( !itemCurrentlyEdited )
-    {
-        module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
-                                         | IGNORE_LOCKED | VISIBLE_ONLY
-#if defined(USE_MATCH_LAYER)
-                                         | MATCH_LAYER
-#endif
-                                         );
+        item = PcbGeneralLocateAndDisplay();
 
-        if( module == NULL )         // no footprint found
-        {
-            module = Locate_Prefered_Module( GetBoard(),
-                                             CURSEUR_OFF_GRILLE | VISIBLE_ONLY );
-            if( module )
-            {
-                // a footprint is found, but locked or on an other layer
-                if( module->IsLocked() )
-                {
-                    wxString msg;
-                    msg.Printf( _( "Footprint %s found, but locked" ),
-                               module->m_Reference->m_Text.GetData() );
-                    DisplayInfoMessage( this, msg );
-                }
-                module = NULL;
-            }
-        }
-    }
-    else if( GetCurItem()->Type() == TYPE_MODULE )
-    {
-        module = (MODULE*) GetCurItem();
-
-        // @todo: might need to add a layer check in if() below
-        if( (GetCurItem()->m_Flags == 0) && module->IsLocked() )
-            module = NULL;         // do not move, rotate ... it.
-    }
-    if( module == NULL )
+    if( item == NULL )
         return false;
 
-    /*  I'd like to make sending to EESCHEMA edge triggered, but the
-     *  simple mouse click on a module when the arrow icon is in play
-     *  does not set GetCurItem() at this time, nor does a mouse click
-     *  when the local ratsnest icon is in play set GetCurItem(), and these
-     *  actions also call SendMessageToEESCHEMA().
-     *  if( GetCurItem() != module )
-     */
-    {
-        // Send the module via socket to EESCHEMA's search facility.
-        SendMessageToEESCHEMA( module );
-        SetCurItem( module );
-    }
+    SetCurItem( item );
 
-    switch( aIdCommand )
+    switch( item->Type() )
     {
-    case HK_ROTATE_ITEM:                        // Rotation
-        if( module->m_Flags == 0 )              // not currently in edit, prepare undo command
-            SaveCopyInUndoList( module, UR_ROTATED, module->m_Pos );
-        Rotate_Module( aDC, module, 900, true );
+    case TYPE_MODULE:
+    {
+         MODULE* module = (MODULE*) item;
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s is locked" ),
+                       module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
+        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+            evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
+        if( aIdCommand == HK_FLIP_FOOTPRINT )                   // move to other side
+            evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
+    }
         break;
 
-    case HK_FLIP_FOOTPRINT:                     // move to other side
-        if( module->m_Flags == 0 )              // not currently in edit, prepare undo command
-            SaveCopyInUndoList( module, UR_FLIPPED, module->m_Pos );
-        Change_Side_Module( module, aDC );
+    case TYPE_TEXTE:
+        evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+        break;
+
+    default:
         break;
     }
 
-    module->DisplayInfo( this );
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
 
-    return true;
+    return false;
 }

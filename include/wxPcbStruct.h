@@ -281,18 +281,16 @@ public:
      * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
      * Only a footprint or a track can be dragged
      * @param aIdCommand = the hotkey command id
-     * @param aDC = current device context
      * @return true if an item was moved
      */
-    bool             OnHotkeyMoveItem( int aIdCommand, wxDC* aDC );
+    bool             OnHotkeyMoveItem( int aIdCommand );
 
     /** Function OnHotkeyRotateItem
      * Rotate the item (text or footprint) found under the mouse cursor
      * @param aIdCommand = the hotkey command id
-     * @param aDC = current device context
      * @return true if an item was moved
      */
-    bool             OnHotkeyRotateItem( int aIdCommand, wxDC* aDC );
+    bool             OnHotkeyRotateItem( int aIdCommand );
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
