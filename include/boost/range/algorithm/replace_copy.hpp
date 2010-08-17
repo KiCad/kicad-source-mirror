@@ -27,10 +27,10 @@ namespace boost
 /// \pre ForwardRange is a model of the ForwardRangeConcept
 template< class ForwardRange, class OutputIterator, class Value >
 inline OutputIterator
-replace_copy(ForwardRange& rng, OutputIterator out_it, const Value& what,
+replace_copy(const ForwardRange& rng, OutputIterator out_it, const Value& what,
         const Value& with_what)
 {
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::replace_copy(boost::begin(rng), boost::end(rng), out_it,
         what, with_what);
 }

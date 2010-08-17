@@ -35,10 +35,28 @@ inline RandomAccessRange& sort(RandomAccessRange& rng)
 }
 
 /// \overload
+template<class RandomAccessRange>
+inline const RandomAccessRange& sort(const RandomAccessRange& rng)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
+    std::sort(boost::begin(rng), boost::end(rng));
+    return rng;
+}
+
+/// \overload
 template<class RandomAccessRange, class BinaryPredicate>
 inline RandomAccessRange& sort(RandomAccessRange& rng, BinaryPredicate pred)
 {
     BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<RandomAccessRange> ));
+    std::sort(boost::begin(rng), boost::end(rng), pred);
+    return rng;
+}
+
+/// \overload
+template<class RandomAccessRange, class BinaryPredicate>
+inline const RandomAccessRange& sort(const RandomAccessRange& rng, BinaryPredicate pred)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( RandomAccessRangeConcept<const RandomAccessRange> ));
     std::sort(boost::begin(rng), boost::end(rng), pred);
     return rng;
 }

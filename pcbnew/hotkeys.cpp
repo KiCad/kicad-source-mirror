@@ -765,23 +765,30 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
         break;
 
     case TYPE_TEXTE:
-        evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
         break;
 
     case TYPE_MIRE:
-        evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
         break;
 
     case TYPE_ZONE_CONTAINER:
-        evt_type = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
+        if( aIdCommand == HK_DRAG_ITEM )
+            evt_type = ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT;
         break;
 
     case TYPE_TEXTE_MODULE:
-        evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
         break;
 
     case TYPE_DRAWSEGMENT:
-        evt_type = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
         break;
 
     default:
@@ -844,11 +851,13 @@ bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand )
         break;
 
     case TYPE_TEXTE:
-        evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
+        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+            evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
         break;
 
     case TYPE_TEXTE_MODULE:
-        evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+            evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
         break;
 
     default:

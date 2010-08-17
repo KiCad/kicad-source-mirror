@@ -34,6 +34,15 @@ inline BidirectionalRange& reverse(BidirectionalRange& rng)
     return rng;
 }
 
+/// \overload
+template<class BidirectionalRange>
+inline const BidirectionalRange& reverse(const BidirectionalRange& rng)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( BidirectionalRangeConcept<const BidirectionalRange> ));
+    std::reverse(boost::begin(rng), boost::end(rng));
+    return rng;
+}
+
     } // namespace range
     using range::reverse;
 } // namespace boost

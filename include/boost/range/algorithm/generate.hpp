@@ -33,6 +33,15 @@ inline ForwardRange& generate( ForwardRange& rng, Generator gen )
     return rng;
 }
 
+/// \overload
+template< class ForwardRange, class Generator >
+inline const ForwardRange& generate( const ForwardRange& rng, Generator gen )
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    std::generate(boost::begin(rng), boost::end(rng), gen);
+    return rng;
+}
+
     } // namespace range
     using range::generate;
 } // namespace boost

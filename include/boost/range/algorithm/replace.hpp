@@ -35,6 +35,17 @@ replace(ForwardRange& rng, const Value& what,
     return rng;
 }
 
+/// \overload
+template< class ForwardRange, class Value >
+inline const ForwardRange&
+replace(const ForwardRange& rng, const Value& what,
+        const Value& with_what)
+{
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
+    std::replace(boost::begin(rng), boost::end(rng), what, with_what);
+    return rng;
+}
+
     } // namespace range
     using range::replace;
 } // namespace boost;

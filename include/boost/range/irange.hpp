@@ -173,28 +173,54 @@ namespace boost
     } // namespace range_detail
 
     template<typename Integer>
-    iterator_range< range_detail::integer_iterator<Integer> >
-        irange(Integer first, Integer last)
+    class integer_range
+        : public iterator_range< range_detail::integer_iterator<Integer> >
+    {
+        typedef range_detail::integer_iterator<Integer> iterator_t;
+        typedef iterator_range<iterator_t> base_t;
+    public:
+        integer_range(Integer first, Integer last)
+            : base_t(iterator_t(first), iterator_t(last))
+        {
+        }
+    };
+
+    template<typename Integer>
+    class strided_integer_range
+    : public iterator_range< range_detail::integer_iterator_with_step<Integer> >
+    {
+        typedef range_detail::integer_iterator_with_step<Integer> iterator_t;
+        typedef iterator_range<iterator_t> base_t;
+    public:
+        template<typename Iterator>
+        strided_integer_range(Iterator first, Iterator last)
+            : base_t(first, last)
+        {
+        }
+    };
+
+    template<typename Integer>
+    integer_range<Integer>
+    irange(Integer first, Integer last)
     {
         BOOST_ASSERT( first <= last );
-        return boost::iterator_range< range_detail::integer_iterator<Integer> >(
-                range_detail::integer_iterator<Integer>(first),
-                range_detail::integer_iterator<Integer>(last));
+        return integer_range<Integer>(first, last);
     }
 
     template<typename Integer, typename StepSize>
-    iterator_range< range_detail::integer_iterator_with_step<Integer> >
+    strided_integer_range<Integer>
         irange(Integer first, Integer last, StepSize step_size)
     {
         BOOST_ASSERT( step_size != 0 );
         BOOST_ASSERT( (step_size > 0) ? (last >= first) : (last <= first) );
+
         typedef typename range_detail::integer_iterator_with_step<Integer> iterator_t;
 
         const std::ptrdiff_t last_step
             = (static_cast<std::ptrdiff_t>(last) - static_cast<std::ptrdiff_t>(first))
             / (static_cast<std::ptrdiff_t>(step_size));
 
-        return boost::iterator_range< iterator_t >(
+        return strided_integer_range<Integer>(
             iterator_t(first, 0, step_size),
             iterator_t(first, last_step, step_size));
     }

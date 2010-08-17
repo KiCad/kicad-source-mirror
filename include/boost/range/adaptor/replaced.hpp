@@ -47,7 +47,7 @@ namespace boost
         };
 
         template< class R >
-        class replace_range :
+        class replaced_range :
             public boost::iterator_range<
                 boost::transform_iterator<
                     replace_value< BOOST_DEDUCED_TYPENAME range_value<R>::type >,
@@ -64,7 +64,7 @@ namespace boost
         public:
             typedef BOOST_DEDUCED_TYPENAME range_value<R>::type value_type;
 
-            replace_range( R& r, value_type from, value_type to )
+            replaced_range( R& r, value_type from, value_type to )
                 : base_t( make_transform_iterator( boost::begin(r), Fn(from, to) ),
                           make_transform_iterator( boost::end(r), Fn(from, to) ) )
             { }
@@ -83,23 +83,23 @@ namespace boost
         };
 
         template< class InputRng >
-        inline replace_range<InputRng>
+        inline replaced_range<InputRng>
         operator|( InputRng& r,
                    const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
         {
-            return replace_range<InputRng>(r, f.val1, f.val2);
+            return replaced_range<InputRng>(r, f.val1, f.val2);
         }
 
         template< class InputRng >
-        inline replace_range<const InputRng>
+        inline replaced_range<const InputRng>
         operator|( const InputRng& r,
                    const replace_holder<BOOST_DEDUCED_TYPENAME range_value<InputRng>::type>& f )
         {
-            return replace_range<const InputRng>(r, f.val1, f.val2);
+            return replaced_range<const InputRng>(r, f.val1, f.val2);
         }
     } // 'range_detail'
 
-    using range_detail::replace_range;
+    using range_detail::replaced_range;
 
     namespace adaptors
     {
@@ -111,21 +111,21 @@ namespace boost
         }
 
         template<class InputRange>
-        inline replace_range<InputRange>
+        inline replaced_range<InputRange>
         replace(InputRange& rng,
                 BOOST_DEDUCED_TYPENAME range_value<InputRange>::type from,
                 BOOST_DEDUCED_TYPENAME range_value<InputRange>::type to)
         {
-            return replace_range<InputRange>(rng, from, to);
+            return replaced_range<InputRange>(rng, from, to);
         }
 
         template<class InputRange>
-        inline replace_range<const InputRange>
+        inline replaced_range<const InputRange>
         replace(const InputRange& rng,
                 BOOST_DEDUCED_TYPENAME range_value<const InputRange>::type from,
                 BOOST_DEDUCED_TYPENAME range_value<const InputRange>::type to)
         {
-            return replace_range<const InputRange>(rng, from ,to);
+            return replaced_range<const InputRange>(rng, from ,to);
         }
 
     } // 'adaptors'

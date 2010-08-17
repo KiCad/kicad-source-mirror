@@ -44,7 +44,7 @@ template< class ForwardRange, class Integer, class Value >
 inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
     return std::search_n(boost::begin(rng), boost::end(rng), count, value);
 }
 
@@ -69,7 +69,7 @@ inline BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate binary_pred)
 {
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
     BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         BOOST_DEDUCED_TYPENAME range_value<const ForwardRange>::type, const Value&>));
     return std::search_n(boost::begin(rng), boost::end(rng),
@@ -97,7 +97,7 @@ template< range_return_value re, class ForwardRange, class Integer,
 inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value)
 {
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
     return range_return<const ForwardRange,re>::
         pack(std::search_n(boost::begin(rng), boost::end(rng),
                            count, value),
@@ -128,7 +128,7 @@ inline BOOST_DEDUCED_TYPENAME range_return<const ForwardRange,re>::type
 search_n(const ForwardRange& rng, Integer count, const Value& value,
          BinaryPredicate pred)
 {
-    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<ForwardRange>));
+    BOOST_RANGE_CONCEPT_ASSERT((ForwardRangeConcept<const ForwardRange>));
     BOOST_RANGE_CONCEPT_ASSERT((BinaryPredicateConcept<BinaryPredicate,
         BOOST_DEDUCED_TYPENAME range_value<const ForwardRange>::type,
         const Value&>));

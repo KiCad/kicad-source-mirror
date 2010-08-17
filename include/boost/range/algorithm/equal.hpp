@@ -159,8 +159,8 @@ namespace boost
         template< class SinglePassRange1, class SinglePassRange2 >
         inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2 )
         {
-            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
 
             return ::boost::range_detail::equal(
                 ::boost::begin(rng1), ::boost::end(rng1),
@@ -172,8 +172,8 @@ namespace boost
         inline bool equal( const SinglePassRange1& rng1, const SinglePassRange2& rng2,
                            BinaryPredicate pred )
         {
-            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange1> ));
-            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange2> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange1> ));
+            BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange2> ));
 
             return ::boost::range_detail::equal(
                 ::boost::begin(rng1), ::boost::end(rng1),

@@ -31,10 +31,10 @@ namespace boost
 /// \pre Value is convertible to a type in OutputIterator's set of value types.
 template< class ForwardRange, class OutputIterator, class Predicate, class Value >
 inline OutputIterator
-replace_copy_if(ForwardRange& rng, OutputIterator out_it, Predicate pred,
+replace_copy_if(const ForwardRange& rng, OutputIterator out_it, Predicate pred,
         const Value& with_what)
 {
-    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<const ForwardRange> ));
     return std::replace_copy_if(boost::begin(rng), boost::end(rng), out_it,
         pred, with_what);
 }

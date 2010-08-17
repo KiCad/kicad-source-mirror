@@ -28,10 +28,10 @@ namespace boost
     /// \pre out_it is not an iterator in the range rng
     template< class SinglePassRange, class OutputIterator, class Predicate >
     inline OutputIterator
-    remove_copy_if(SinglePassRange& rng, OutputIterator out_it, Predicate pred)
+    remove_copy_if(const SinglePassRange& rng, OutputIterator out_it, Predicate pred)
     {
-        boost::function_requires< SinglePassRangeConcept<SinglePassRange> >();
-        return std::remove_copy_if(boost::begin(rng), boost::end(rng), out_it, pred); 
+        BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
+        return std::remove_copy_if(boost::begin(rng), boost::end(rng), out_it, pred);
     }
 }
 

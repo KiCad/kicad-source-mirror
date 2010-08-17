@@ -27,7 +27,6 @@
 
 namespace boost
 {
-
     namespace range_detail
     {
         template< class Iter, class Pred, bool default_pass >
@@ -140,10 +139,14 @@ namespace boost
 
         public:
             adjacent_filter_range( const P& p, R& r )
-            : base_range( skip_iter( boost::begin(r), boost::end(r), p),
-                          skip_iter( boost::end(r), boost::end(r), p) )
+            : base_range(skip_iter(boost::begin(r), boost::end(r), p),
+                         skip_iter(boost::end(r), boost::end(r), p))
             {
             }
+
+        private:
+            P m_pred;
+            R* m_range;
         };
 
         template< class T >

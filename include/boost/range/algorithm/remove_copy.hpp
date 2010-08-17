@@ -31,9 +31,9 @@ namespace boost
 /// InputIterator's value type.
 template< class SinglePassRange, class OutputIterator, class Value >
 inline OutputIterator
-remove_copy(SinglePassRange& rng, OutputIterator out_it, const Value& val)
+remove_copy(const SinglePassRange& rng, OutputIterator out_it, const Value& val)
 {
-    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<SinglePassRange> ));
+    BOOST_RANGE_CONCEPT_ASSERT(( SinglePassRangeConcept<const SinglePassRange> ));
     return std::remove_copy(boost::begin(rng), boost::end(rng), out_it, val);
 }
 
