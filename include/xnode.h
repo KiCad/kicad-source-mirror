@@ -65,6 +65,27 @@ public:
      * @throw IOError if a system error writing the output, such as a full disk.
      */
     virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+
+#if wxABI_VERSION < 20811   // change the if as needed
+
+    wxString GetAttribute( const wxString& attrName, const wxString& defaultVal ) const
+    {
+        return GetPropVal(attrName, defaultVal);
+    }
+    bool GetAttribute( const wxString& attrName, wxString *value ) const
+    {
+        return GetPropVal(attrName, value);
+    }
+    void AddAttribute( const wxString& attrName, const wxString& value )
+    {
+        AddProperty(attrName, value);
+    }
+    wxXmlProperty* GetAttributes() const
+    {
+        return GetProperties();
+    }
+#endif // wx < 2.8.11
+
 };
 
 #endif  // _XATTR_H_

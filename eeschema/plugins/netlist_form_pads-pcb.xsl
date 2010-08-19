@@ -2,6 +2,9 @@
 <!--XSL style sheet to EESCHEMA Generic Netlist Format to PADS netlist format
     Copyright (C) 2010, SoftPLC Corporation.
     GPL v2.
+
+    How to use:
+        https://lists.launchpad.net/kicad-developers/msg05157.html
 -->
 
 <!DOCTYPE xsl:stylesheet [
