@@ -1085,7 +1085,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  -vrmlm->m_MatPosition.y - aModule->m_Pos.y,
                  vrmlm->m_MatPosition.z + layer_z[aModule->GetLayer()] );
         fprintf( aOutputFile,
-                "  children [\n    Inline {\n      url [ \"%s\" ]\n    } ]\n",
+                "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
                 CONV_TO_UTF8( fname ) );
         fprintf( aOutputFile, "  }\n" );
 

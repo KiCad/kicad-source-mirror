@@ -427,7 +427,6 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
         v_data[0] = zone_c->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
         v_data[1] = zone_c->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale * -1;
         v_data[2] = zpos;
-        D( printf( "Tess gluTessVertex(%f,%f,%f)\n", v_data[0], v_data[1], v_data[2] ); )
         gluTessVertex( tess, v_data, &zone_c->m_FilledPolysList[ii] );
 
         if( zone_c->m_FilledPolysList[ii].end_contour == 1 )
@@ -642,19 +641,6 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
 void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 {
     D_PAD* pad = m_Pads;
-
-#if 0
-    if( !DisplayOpt.Show_Modules_Cmp )
-    {
-        if( m_Layer == LAYER_N_FRONT )
-            return;
-    }
-    if( !DisplayOpt.Show_Modules_Cu )
-    {
-        if( m_Layer == LAYER_N_BACK )
-            return;
-    }
-#endif
 
     /* Draw pads */
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
@@ -1302,18 +1288,12 @@ static GLfloat Get3DLayerSide( int act_layer )
 void CALLBACK tessBeginCB( GLenum which )
 {
     glBegin( which );
-
-    // DEBUG //
-    D( printf( "Tess glBegin()\n" ); )
 }
 
 
 void CALLBACK tessEndCB()
 {
     glEnd();
-
-    // DEBUG //
-    D( printf( "Tess glEnd()\n" ); )
 }
 
 
@@ -1325,9 +1305,6 @@ void CALLBACK tessVertexCB( const GLvoid* data )
     glVertex3f( (*ptr).x * g_Parm_3D_Visu.m_BoardScale,
                (*ptr).y * g_Parm_3D_Visu.m_BoardScale * -1,
                g_Parm_3D_Visu.m_ActZpos );
-
-    // DEBUG //
-    D( printf( "TessVertex glVertex3d(%d,%d,%f)\n", (*ptr).x, (*ptr).y, g_Parm_3D_Visu.m_ActZpos ); )
 }
 
 
