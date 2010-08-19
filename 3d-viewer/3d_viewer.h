@@ -171,6 +171,13 @@ public:
      * @param aZone_c = the zone to draw
     */
 	void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone_c );
+
+    /** Function Draw3D_Polygon
+     * draw one solid polygon
+     * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
+     * @param aZpos = the z position in 3D units
+    */
+    void   Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos );
     void   Draw3D_Via( SEGVIA* via );
     void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
     void   Draw3D_DrawText( TEXTE_PCB* text );

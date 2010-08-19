@@ -1466,7 +1466,7 @@
                                                             <property name="name">fgSizerClearances</property>
                                                             <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                             <property name="permission">none</property>
-                                                            <property name="rows">3</property>
+                                                            <property name="rows">5</property>
                                                             <property name="vgap">0</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>

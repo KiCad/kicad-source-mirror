@@ -115,7 +115,7 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
 
     /* Sizer 1 creation */
     wxFlexGridSizer* fgSizer1;
-    fgSizer1 = new wxFlexGridSizer( 1, 1, 0, 0 );
+    fgSizer1 = new wxFlexGridSizer( 7, 1, 0, 0 );
     fgSizer1->SetFlexibleDirection( wxBOTH );
     fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 

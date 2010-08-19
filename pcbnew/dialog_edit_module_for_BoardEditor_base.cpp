@@ -149,7 +149,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	sbSizerLocalProperties->Add( m_staticTextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	wxFlexGridSizer* fgSizerClearances;
-	fgSizerClearances = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerClearances = new wxFlexGridSizer( 5, 3, 0, 0 );
 	fgSizerClearances->SetFlexibleDirection( wxBOTH );
 	fgSizerClearances->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
