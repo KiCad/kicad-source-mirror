@@ -19,6 +19,7 @@
     <xsl:apply-templates select="components/comp"/>
     <xsl:text>&nl;*NET*&nl;</xsl:text>
     <xsl:apply-templates select="nets/net"/>
+    <xsl:text>*END*&nl;</xsl:text>
 </xsl:template>
 
 <!-- for each component -->
@@ -39,18 +40,21 @@
 
 <!-- for each net -->
 <xsl:template match="net">
-    <xsl:text>*SIGNAL* </xsl:text>
-    <xsl:choose>
-        <xsl:when test = "@name != '' ">
-            <xsl:value-of select="@name"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>N-</xsl:text>
-            <xsl:value-of select="@code"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>&nl;</xsl:text>
-    <xsl:apply-templates select="node"/>
+    <!-- nets are output only if there is more than one pin in net -->
+    <xsl:if test="count(node)>1">
+        <xsl:text>*SIGNAL* </xsl:text>
+        <xsl:choose>
+            <xsl:when test = "@name != '' ">
+                <xsl:value-of select="@name"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>N-</xsl:text>
+                <xsl:value-of select="@code"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>&nl;</xsl:text>
+        <xsl:apply-templates select="node"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- for each node -->
