@@ -263,6 +263,9 @@ An alias %s already exists!\nCannot update this component" ),
     // copy all the fields back, fully replacing any previous fields
     m_LibEntry->SetFields( m_FieldsBuf );
 
+    // We need to keep the name and the value the same at the moment!
+    SetName(m_LibEntry->GetValueField().m_Text);
+
     m_Parent->OnModify( );
 
     EndModal( 0 );
@@ -734,11 +737,11 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(), 
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(),
             EESCHEMA_INTERNAL_UNIT );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(), 
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(),
             EESCHEMA_INTERNAL_UNIT );
-    
+
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( field.m_Pos.y );

@@ -19,20 +19,21 @@
     <xsl:text>.HEA&nl;</xsl:text>
     <xsl:apply-templates select="design/date"/>  <!-- Generate line .TIM <time> -->
     <xsl:apply-templates select="design/tool"/>  <!-- Generate line .APP <eeschema version> -->
+    <xsl:text>&nl;</xsl:text>
     <xsl:apply-templates select="components/comp"/>  <!-- Generate list of components -->
     <xsl:text>&nl;&nl;</xsl:text>
     <xsl:apply-templates select="nets/net"/>          <!-- Generate list of nets and connections -->
     <xsl:text>&nl;.END&nl;</xsl:text>
 </xsl:template>
 
- <!-- Generate line .TIM 20/08/2010 10:45:33 -->
+ <!-- Generate line .APP "eeschema (2010-08-17 BZR 2450)-unstable" -->
 <xsl:template match="tool">
     <xsl:text>.APP "</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>"&nl;</xsl:text>
 </xsl:template>
 
- <!-- Generate line .APP "eeschema (2010-08-17 BZR 2450)-unstable" -->
+ <!-- Generate line .TIM 20/08/2010 10:45:33 -->
 <xsl:template match="date">
     <xsl:text>.TIM </xsl:text>
     <xsl:apply-templates/>
@@ -40,6 +41,10 @@
 </xsl:template>
 
 <!-- for each component -->
+<!-- create lines like
+    .ADD_COM U3 "74LS541"   (when no footprint name specified)
+    .ADD_COM JP1 "CONN_8X2" "pin_array_8x2" "pin_array_8x2"   (with a specified footprint name)
+-->
 <xsl:template match="comp">
     <xsl:text>.ADD_COM </xsl:text>
     <xsl:value-of select="@ref"/>
@@ -56,6 +61,13 @@
 </xsl:template>
 
 <!-- for each net -->
+<!-- create lines like
+.ADD_TER U3.9 "/PC-RST"
+.TER     U3.8
+         BUS1.2
+.ADD_TER BUS1.14 "/PC-IOR"
+.TER     U3.7
+-->
 <xsl:template match="net">
     <!-- nets are output only if there is more than one pin in net -->
     <xsl:if test="count(node)>1">
