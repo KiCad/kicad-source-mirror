@@ -1005,7 +1005,9 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
         drawings.push_back( field );
     }
 
-    drawings.sort();    // would be nice to know why...
+    // Reorder drawings: transparent polygons first, pins and text last.
+    // so texts have priority on sreen.
+    drawings.sort();
 }
 
 
