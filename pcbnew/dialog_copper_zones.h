@@ -17,20 +17,26 @@ private:
                                      *  ZONE_EXPORT_VALUES if values are exported to others zones
                                      */
 
-    ZONE_SETTING* m_Zone_Setting;
-    long          m_NetSorting;
-    int           m_LayerId[LAYER_COUNT]; // Handle the real layer number from layer name position in m_LayerSelectionCtrl
+    ZONE_SETTING*   m_Zone_Setting;
+    long            m_NetSorting;
+    long            m_NetFiltering;
+    int             m_LayerId[LAYER_COUNT]; // Handle the real layer number from layer name position in m_LayerSelectionCtrl
+    static wxString m_netNameShowFilter;    /* the filter to show nets (default * "*").
+                                             *  static to keep this pattern for an entire pcbnew session
+                                             */
 
 public:
     dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting );
 private:
-    void initDialog( );
+    void initDialog();
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
     void ExportSetupToOtherCopperZones( wxCommandEvent& event );
     void OnPadsInZoneClick( wxCommandEvent& event );
+    void OnRunFiltersButtonClick( wxCommandEvent& event );
+    void buildAvailableListOfNets();
+    void initListNetsParams();
 };
-
 #endif      // #ifndef DIALOG_COPPER_ZONES

@@ -40,6 +40,7 @@ class dialog_copper_zone_base : public wxDialog
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
 		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
+		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
 		
 	
 	protected:
@@ -77,9 +78,12 @@ class dialog_copper_zone_base : public wxDialog
 		wxButton* m_OkButton;
 		wxButton* m_ButtonCancel;
 		
-		wxRadioBox* m_NetSortingOption;
+		wxRadioBox* m_NetDisplayOption;
 		wxStaticText* m_staticText5;
-		wxTextCtrl* m_NetNameFilter;
+		wxTextCtrl* m_DoNotShowNetNameFilter;
+		wxStaticText* m_staticText51;
+		wxTextCtrl* m_ShowNetNameFilter;
+		wxButton* m_buttonRunFilter;
 		wxStaticText* m_staticText2;
 		wxListBox* m_ListNetNameSelection;
 		wxStaticText* m_staticText3;
@@ -91,6 +95,7 @@ class dialog_copper_zone_base : public wxDialog
 		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnRunFiltersButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:

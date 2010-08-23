@@ -15,6 +15,7 @@ BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )
 	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_base::_wxFB_OnButtonCancelClick )
 	EVT_RADIOBOX( ID_NET_SORTING_OPTION, dialog_copper_zone_base::_wxFB_OnNetSortingOptionSelected )
+	EVT_BUTTON( wxID_ANY, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 END_EVENT_TABLE()
 
 dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -164,22 +165,34 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* m_NetSortOptSizer;
 	m_NetSortOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Nets Display Options:") ), wxVERTICAL );
 	
-	wxString m_NetSortingOptionChoices[] = { _("Alphabetic"), _("Advanced") };
-	int m_NetSortingOptionNChoices = sizeof( m_NetSortingOptionChoices ) / sizeof( wxString );
-	m_NetSortingOption = new wxRadioBox( this, ID_NET_SORTING_OPTION, _("Net sorting:"), wxDefaultPosition, wxDefaultSize, m_NetSortingOptionNChoices, m_NetSortingOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_NetSortingOption->SetSelection( 0 );
-	m_NetSortingOption->SetToolTip( _("Nets can be sorted:\nBy alphabetic order\nBy number of pads in the net (advanced)") );
+	wxString m_NetDisplayOptionChoices[] = { _("Show all, alphabetic"), _("Show all, advanced"), _("Filtered, alphabetic"), _("Filtered, advanced") };
+	int m_NetDisplayOptionNChoices = sizeof( m_NetDisplayOptionChoices ) / sizeof( wxString );
+	m_NetDisplayOption = new wxRadioBox( this, ID_NET_SORTING_OPTION, _("Net list options:"), wxDefaultPosition, wxDefaultSize, m_NetDisplayOptionNChoices, m_NetDisplayOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_NetDisplayOption->SetSelection( 2 );
+	m_NetDisplayOption->SetToolTip( _("Nets can be sorted:\nBy alphabetic order\nBy number of pads in the net (advanced)") );
 	
-	m_NetSortOptSizer->Add( m_NetSortingOption, 0, wxALL|wxEXPAND, 5 );
+	m_NetSortOptSizer->Add( m_NetDisplayOption, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Filter"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Filter: Hidden Nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	m_NetSortOptSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_NetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_NetNameFilter->SetToolTip( _("Pattern in advanced mode, to filter net names in list\nNet names matching this pattern are not displayed") );
+	m_DoNotShowNetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DoNotShowNetNameFilter->SetToolTip( _("Pattern in advanced mode, to filter net names in list\nNet names matching this pattern are not displayed") );
 	
-	m_NetSortOptSizer->Add( m_NetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_NetSortOptSizer->Add( m_DoNotShowNetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticText51 = new wxStaticText( this, wxID_ANY, _("Filter: Allowed Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText51->Wrap( -1 );
+	m_NetSortOptSizer->Add( m_staticText51, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_ShowNetNameFilter = new wxTextCtrl( this, ID_TEXTCTRL_NETNAMES_FILTER, _("*"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowNetNameFilter->SetToolTip( _("Pattern in advanced mode, to filter net names in list\nOnly net names matching this pattern are displayed") );
+	
+	m_NetSortOptSizer->Add( m_ShowNetNameFilter, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_buttonRunFilter = new wxButton( this, wxID_ANY, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NetSortOptSizer->Add( m_buttonRunFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	m_RightBoxSizer->Add( m_NetSortOptSizer, 1, wxEXPAND, 5 );
 	

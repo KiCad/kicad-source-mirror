@@ -19,6 +19,9 @@
 
 #include "dialog_copper_zones.h"
 
+wxString dialog_copper_zone::m_netNameShowFilter("*");    /* the filter to show nets (default * "*").
+                                             *  static to keep this pattern for an entire pcbnew session
+                                             */
 
 /************************************************************************************************/
 dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting ) :
@@ -31,11 +34,6 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
     m_OnExitCode   = ZONE_ABORT;
 
-    if( m_Config )
-    {
-        m_NetSorting = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
-    }
-
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
 
     initDialog();
@@ -46,7 +44,7 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
 
 
 /*****************************************************************/
-void dialog_copper_zone::initDialog( )
+void dialog_copper_zone::initDialog()
 /*****************************************************************/
 
 // Initialise all dialog options and values in wxTextCtrl
@@ -148,57 +146,22 @@ void dialog_copper_zone::initDialog( )
             m_LayerSelectionCtrl->SetSelection( ii );
     }
 
-    m_NetSortingOption->SetSelection( m_NetSorting );
-
-    wxString NetNameFilter = wxT( "N_0*" );
+    wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
     {
-        NetNameFilter =
-            m_Config->Read( ZONE_NET_FILTER_STRING_KEY );
+        int opt = m_Config->Read( ZONE_NET_SORT_OPTION_KEY, 1l );
+        m_NetDisplayOption->SetSelection( opt );
+        m_Config->Read( ZONE_NET_FILTER_STRING_KEY, netNameDoNotShowFilter );
     }
+    else
+        m_NetDisplayOption->SetSelection( 1 );
+
+    m_ShowNetNameFilter->SetValue(m_netNameShowFilter);
+    initListNetsParams();
 
     // Build list of nets:
-    m_NetNameFilter->SetValue( NetNameFilter );
-    wxArrayString ListNetName;
-    m_Parent->GetBoard()->ReturnSortedNetnamesList(
-        ListNetName,
-        m_NetSorting == 0 ? false : true );
-
-    if( m_NetSorting != 0 )
-    {
-        wxString Filter = m_NetNameFilter->GetValue();
-        for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
-        {
-            if( ListNetName[ii].Matches( Filter.GetData() ) )
-            {
-                ListNetName.RemoveAt( ii );
-                ii--;
-            }
-        }
-    }
-
-    ListNetName.Insert( wxT( "<no net>" ), 0 );
-    m_ListNetNameSelection->InsertItems( ListNetName, 0 );
-
-    // Select net:
-    int net_select = m_Zone_Setting->m_NetcodeSelection;
-
-    if( net_select > 0 )
-    {
-        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
-        if( equipot )  // Search net in list and select it
-        {
-            for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
-            {
-                if( ListNetName[ii] == equipot->GetNetname() )
-                {
-                    m_ListNetNameSelection->SetSelection( ii );
-                    m_ListNetNameSelection->EnsureVisible( ii );
-                    break;
-                }
-            }
-        }
-    }
+    m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
+    buildAvailableListOfNets();
 }
 
 
@@ -258,10 +221,11 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     {
         m_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
                          (long) m_Zone_Setting->m_Zone_HatchingStyle );
-        wxString Filter = m_NetNameFilter->GetValue();
+        wxString Filter = m_DoNotShowNetNameFilter->GetValue();
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
     }
 
+    m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
     m_Zone_Setting->m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
@@ -365,49 +329,15 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
 /***************************************************************************/
 {
-    wxArrayString ListNetName;
+    initListNetsParams();
+    buildAvailableListOfNets();
 
-    m_NetSorting = m_NetSortingOption->GetSelection();
-    m_Parent->GetBoard()->ReturnSortedNetnamesList(
-        ListNetName, m_NetSorting == 0 ? false : true );
-    if( m_NetSorting != 0 )
-    {
-        wxString Filter = m_NetNameFilter->GetValue();
-        for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
-        {
-            if( ListNetName[ii].Matches( Filter.GetData() ) )
-            {
-                ListNetName.RemoveAt( ii );
-                ii--;
-            }
-        }
-    }
-    m_ListNetNameSelection->Clear();
-    m_ListNetNameSelection->InsertItems( ListNetName, 0 );
+    m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
     if( m_Config )
     {
-        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetSorting );
-        wxString Filter = m_NetNameFilter->GetValue();
+        m_Config->Write( ZONE_NET_SORT_OPTION_KEY, (long) m_NetDisplayOption->GetSelection() );
+        wxString Filter = m_DoNotShowNetNameFilter->GetValue();
         m_Config->Write( ZONE_NET_FILTER_STRING_KEY, Filter );
-    }
-
-    // Select and display current zone net name in listbox:
-    int net_select = m_Zone_Setting->m_NetcodeSelection;
-    if( net_select > 0 )
-    {
-        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
-        if( equipot )  // Search net in list and select it
-        {
-            for( unsigned ii = 0; ii < ListNetName.GetCount(); ii++ )
-            {
-                if( ListNetName[ii] == equipot->GetNetname() )
-                {
-                    m_ListNetNameSelection->SetSelection( ii );
-                    m_ListNetNameSelection->EnsureVisible( ii );
-                    break;
-                }
-            }
-        }
     }
 }
 
@@ -416,6 +346,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
 void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
 /*****************************************************************/
 {
+    m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
     if( AcceptOptions( true ) )
         EndModal( ZONE_OK );
 }
@@ -456,5 +387,102 @@ void dialog_copper_zone::OnPadsInZoneClick( wxCommandEvent& event )
         m_AntipadSizeValue->Enable( true );
         m_CopperWidthValue->Enable( true );
         break;
+    }
+}
+
+
+/** init m_NetSorting and m_NetFiltering values
+ * according to m_NetDisplayOption selection
+ */
+void dialog_copper_zone::initListNetsParams()
+{
+    switch( m_NetDisplayOption->GetSelection() )
+    {
+    case 0:
+        m_NetSorting   = true;
+        m_NetFiltering = false;
+        break;
+
+    case 1:
+        m_NetSorting   = false;
+        m_NetFiltering = false;
+        break;
+
+    case 2:
+        m_NetSorting   = true;
+        m_NetFiltering = true;
+        break;
+
+    case 3:
+        m_NetSorting   = false;
+        m_NetFiltering = true;
+        break;
+    }
+}
+
+
+/* Called when clicking on Apply Filter button
+ * Rebuild the list of nets with the currents filters settings.
+ * If the net display options is not a filtered option, force this option
+ */
+void dialog_copper_zone::OnRunFiltersButtonClick( wxCommandEvent& event )
+{
+    m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
+    // Ensure filtered option for nets:
+    if( m_NetDisplayOption->GetSelection() == 0 )
+        m_NetDisplayOption->SetSelection( 2 );
+    else if( m_NetDisplayOption->GetSelection() == 1 )
+        m_NetDisplayOption->SetSelection( 3 );
+    initListNetsParams();
+    buildAvailableListOfNets();
+}
+
+
+void dialog_copper_zone::buildAvailableListOfNets()
+{
+    wxArrayString listNetName;
+
+    m_Parent->GetBoard()->ReturnSortedNetnamesList(
+        listNetName, m_NetSorting == 0 ? false : true );
+
+    if( m_NetFiltering )
+    {
+        wxString doNotShowFilter = m_DoNotShowNetNameFilter->GetValue();
+        wxString ShowFilter = m_ShowNetNameFilter->GetValue();
+        for( unsigned ii = 0; ii < listNetName.GetCount(); ii++ )
+        {
+            if( listNetName[ii].Matches( doNotShowFilter ) )
+            {
+                listNetName.RemoveAt( ii );
+                ii--;
+            }
+            else if( !listNetName[ii].Matches( ShowFilter ) )
+            {
+                listNetName.RemoveAt( ii );
+                ii--;
+            }
+        }
+    }
+    m_ListNetNameSelection->Clear();
+    listNetName.Insert( wxT( "<no net>" ), 0 );
+    m_ListNetNameSelection->InsertItems( listNetName, 0 );
+
+    // Ensure current select net for the zone is visible:
+    int net_select = m_Zone_Setting->m_NetcodeSelection;
+    if( net_select > 0 )
+    {
+        NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
+        if( equipot )  // Search net in list and select it
+        {
+            for( unsigned ii = 0; ii < listNetName.GetCount(); ii++ )
+            {
+                if( listNetName[ii] == equipot->GetNetname() )
+                {
+                    m_ListNetNameSelection->SetSelection( ii );
+                    m_ListNetNameSelection->EnsureVisible( ii );
+                    break;
+                }
+            }
+        }
     }
 }
