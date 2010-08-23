@@ -19,7 +19,7 @@
 
 #include "dialog_copper_zones.h"
 
-wxString dialog_copper_zone::m_netNameShowFilter("*");    /* the filter to show nets (default * "*").
+wxString dialog_copper_zone::m_netNameShowFilter( wxT( "*" ) );    /* the filter to show nets (default * "*").
                                              *  static to keep this pattern for an entire pcbnew session
                                              */
 

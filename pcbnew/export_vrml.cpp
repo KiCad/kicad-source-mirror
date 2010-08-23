@@ -926,17 +926,17 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
             {
                 int coord[8] =
                 {
-                    -pad_w - pad_dy, +pad_h + pad_dx,
-                    -pad_w + pad_dy, -pad_h - pad_dx,
-                    +pad_w - pad_dy, +pad_h - pad_dx,
-                    +pad_w + pad_dy, -pad_h + pad_dx,
+                    wxRound(-pad_w - pad_dy), wxRound(+pad_h + pad_dx),
+                    wxRound(-pad_w + pad_dy), wxRound(-pad_h - pad_dx),
+                    wxRound(+pad_w - pad_dy), wxRound(+pad_h - pad_dx),
+                    wxRound(+pad_w + pad_dy), wxRound(-pad_h + pad_dx),
                 };
 
                 for( int i = 0; i < 4; i++ )
                 {
                     RotatePoint( &coord[i * 2], &coord[i * 2 + 1], pad->m_Orient );
-                    coord[i * 2]     += pad_x;
-                    coord[i * 2 + 1] += pad_y;
+                    coord[i * 2]     += wxRound( pad_x );
+                    coord[i * 2 + 1] += wxRound( pad_y );
                 }
 
                 bag_flat_quad( layer, coord[0], coord[1],
@@ -1054,7 +1054,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
          * for footprints that are flipped
          * When flipped, axis rotation is the horizontal axis (X axis)
          */
-        int rotx = vrmlm->m_MatRotation.x;
+        int rotx = wxRound( vrmlm->m_MatRotation.x );
         if ( isFlipped )
             rotx += 1800;
 

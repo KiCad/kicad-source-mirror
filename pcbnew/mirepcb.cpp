@@ -42,9 +42,8 @@ private:
     WinEDA_ValueCtrl* m_MireSizeCtrl;
     wxRadioBox*       m_MireShape;
 
-public: TARGET_PROPERTIES_DIALOG_EDITOR( WinEDA_PcbFrame* parent,
-                                    MIREPCB*         Mire,
-                                    wxDC*            DC );
+public:
+    TARGET_PROPERTIES_DIALOG_EDITOR( WinEDA_PcbFrame* parent, MIREPCB* Mire, wxDC* DC );
     ~TARGET_PROPERTIES_DIALOG_EDITOR() { }
 
 private:
@@ -73,7 +72,7 @@ void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC )
 TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
     WinEDA_PcbFrame* parent,
     MIREPCB* Mire, wxDC* DC ) :
-    wxDialog( parent, wxID_ANY, _( "Target Properties" ) )
+    wxDialog( parent, wxID_ANY, wxString( _( "Target Properties" ) ) )
 {
     wxString  number;
     wxButton* Button;
@@ -124,8 +123,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
 }
 
 
-void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED(
-                                                   event ) )
+void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
 {
     EndModal( -1 );
 }

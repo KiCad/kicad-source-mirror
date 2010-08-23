@@ -17,9 +17,9 @@ static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bo
 
 /* Local variables : */
 static int status_dimension; /* Used in cimension creation:
-                             * = 0 : initial value: no dimension in progress
-                             *  = 1 : First point created
-                             *  = 2 : Secont point created, the text must be placed */
+                              * = 0 : initial value: no dimension in progress
+                              *  = 1 : First point created
+                              *  = 2 : Secont point created, the text must be placed */
 
 /*
  *  A dimension has this shape:
@@ -53,7 +53,7 @@ public:
 
     // Constructor and destructor
     DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                                    DIMENSION* Dimension, wxDC* DC );
+                             DIMENSION* Dimension, wxDC* DC );
     ~DIMENSION_EDITOR_DIALOG()
     {
     }
@@ -67,15 +67,15 @@ private:
 };
 
 BEGIN_EVENT_TABLE( DIMENSION_EDITOR_DIALOG, wxDialog )
-EVT_BUTTON( wxID_OK, DIMENSION_EDITOR_DIALOG::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, DIMENSION_EDITOR_DIALOG::OnCancelClick )
+    EVT_BUTTON( wxID_OK, DIMENSION_EDITOR_DIALOG::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, DIMENSION_EDITOR_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
 DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
                                                   DIMENSION* Dimension, wxDC* DC
                                                   ) :
-    wxDialog( parent, -1, _( "Dimension properties" ) )
+    wxDialog( parent, -1, wxString( _( "Dimension properties" ) ) )
 {
     wxButton* Button;
 
@@ -108,8 +108,8 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
     RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
     m_Name = new WinEDA_EnterText( this, wxT( "Text:" ),
-                                  Dimension->m_Text->m_Text,
-                                  LeftBoxSizer, wxSize( 200, -1 ) );
+                                   Dimension->m_Text->m_Text,
+                                   LeftBoxSizer, wxSize( 200, -1 ) );
 
     m_TxtSizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ),
                                          Dimension->m_Text->m_Size,
@@ -163,15 +163,16 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
     CurrentDimension->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
 
     int width = m_TxtWidthCtrl->GetValue();
-    int maxthickness = Clamp_Text_PenSize(width, CurrentDimension->m_Text->m_Size );
+    int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->m_Text->m_Size );
     if( width > maxthickness )
     {
-        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
+        DisplayError( NULL,
+                      _( "The text thickness is too large for the text size. It will be clamped") );
         width = maxthickness;
     }
     CurrentDimension->m_Text->m_Width = CurrentDimension->m_Width = width ;
 
-    CurrentDimension->m_Text->m_Mirror = (m_Mirror->GetSelection() == 1) ? true : false;
+    CurrentDimension->m_Text->m_Mirror = ( m_Mirror->GetSelection() == 1 ) ? true : false;
 
     CurrentDimension->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
 
