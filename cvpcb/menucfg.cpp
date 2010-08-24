@@ -31,10 +31,9 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
    /* Open Recent submenu */
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
-                                          -1, _( "Open &Recent" ),
-                     _("Open a recent opened netlist document" ),
-                                               open_project_xpm );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu, -1, _( "Open &Recent" ),
+                                        _("Open a recent opened netlist document" ),
+                                        open_project_xpm );
 
 
 
@@ -49,8 +48,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 #if !defined(__WXMAC__)
 
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
-                           _( "Quit CvPCB" ) );
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit CvPCB" ) );
     filesMenu->Append( item );
 
 #endif /* !defined( __WXMAC__) */
@@ -78,6 +76,9 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
+
+    AddHelpVersionInfoMenuEntry( helpMenu );
+
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the cvpcb manual" ) );
     item->SetBitmap( online_help_xpm );
@@ -105,4 +106,3 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
      * rebuilt.  This allows language changes of the menu text on the fly. */
     SetMenuBar( menuBar );
 }
-

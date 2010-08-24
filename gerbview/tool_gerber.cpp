@@ -118,6 +118,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
+    AddHelpVersionInfoMenuEntry( helpMenu );
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                             _( "Open the gerbview manual" ), help_xpm );
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About Gerbview" ),
@@ -161,7 +162,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString,
-                          wxBitmap( new_xpm ),
+                         wxBitmap( new_xpm ),
                          _( "New world" ) );
 
     m_HToolBar->AddTool( wxID_FILE, wxEmptyString,
@@ -262,8 +263,7 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
-                         wxBitmap( cursor_xpm ) );
+    m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString, wxBitmap( cursor_xpm ) );
     m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_GERBVIEW_DELETE_ITEM_BUTT, wxEmptyString,
@@ -285,11 +285,10 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
     wxWindowUpdateLocker dummy(this);
 
     // creation of tool bar options
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
-                                           ID_OPT_TOOLBAR, FALSE );
+    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
-                                wxBitmap( grid_xpm ),
+                               wxBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
@@ -329,11 +328,10 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
     // Tools to show/hide toolbars:
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                                    wxEmptyString,
-                                    wxBitmap( layers_manager_xpm ),
-                                    _(
-                                    "Show/hide the layers manager toolbar" ),
-                                    wxITEM_CHECK );
+                               wxEmptyString,
+                               wxBitmap( layers_manager_xpm ),
+                               _( "Show/hide the layers manager toolbar" ),
+                               wxITEM_CHECK );
 
 
     m_OptionsToolBar->Realize();

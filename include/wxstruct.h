@@ -110,7 +110,19 @@ public:
 
     void         GetKicadHelp( wxCommandEvent& event );
     void         GetKicadAbout( wxCommandEvent& event );
+
+    /**
+     * Copy the version information to the clipboard for bug reporting purposes.
+     */
+    void         CopyVersionInfoToClipboard( wxCommandEvent& event );
     void         PrintMsg( const wxString& text );
+
+    /**
+     * Append the copy version information to clipboard help menu entry to \a aMenu.
+     *
+     * @param aMenu - The menu to append.
+     */
+    void         AddHelpVersionInfoMenuEntry( wxMenu* aMenu );
 
     virtual void LoadSettings();
     virtual void SaveSettings();
@@ -148,7 +160,7 @@ public:
     WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side)
                                             // Toolbar
     WinEDA_Toolbar*   m_OptionsToolBar;     // Options Toolbar (left side)
-    WinEDA_Toolbar*   m_AuxiliaryToolBar;   // Auxiliay Toolbar used in pcbnew
+    WinEDA_Toolbar*   m_AuxiliaryToolBar;   // Auxiliary Toolbar used in pcbnew
 
     WinEDAChoiceBox*  m_SelGridBox;         // Choice box to choose the grid
                                             // size
@@ -254,9 +266,9 @@ public:
      */
     virtual void     SetToolID( int aId, int aCursor, const wxString& aToolMsg );
 
-    /* Thes 4 functions provide a basic way to sho/hide grid
+    /* These 4 functions provide a basic way to show/hide grid
      * and /get/set grid color.
-     * thes parameters are saved in kicad config for each main frame
+     * These parameters are saved in kicad config for each main frame
      */
     /** Function IsGridVisible() , virtual
      * @return true if the grid must be shown
@@ -425,8 +437,8 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                    int aPrintMask, bool aPrintMirrorMode,
-                    void * aData = NULL);
+                            int aPrintMask, bool aPrintMirrorMode,
+                            void * aData = NULL);
 
     DECLARE_EVENT_TABLE();
 };
@@ -520,7 +532,7 @@ public:
      * Append a message to the message panel.
      *
      * This method automatically adjusts for the width of the text string.
-     * Making consectutive calls to AppendMessage will append each message
+     * Making consecutive calls to AppendMessage will append each message
      * to the right of the last message.  This message is not compatible
      * with Affiche_1_Parametre.
      *
@@ -730,7 +742,7 @@ class WinEDA_Toolbar : public wxAuiToolBar
 public:
     wxWindow*       m_Parent;
     id_toolbar      m_Ident;
-    bool            m_Horizontal;       // some auxilary TB are horizontal, others vertical
+    bool            m_Horizontal;       // some auxiliary TB are horizontal, others vertical
 
 public:
     WinEDA_Toolbar( id_toolbar type, wxWindow* parent,

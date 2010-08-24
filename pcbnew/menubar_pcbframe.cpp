@@ -196,7 +196,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Print */
     item = new wxMenuItem( filesMenu, wxID_PRINT, _( "&Print" ),
-                           _( "Print pcb board" ) );
+                           _( "Print board" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
 
@@ -235,8 +235,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 #if !defined( __WXMAC__ )
 
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
-                           _( "Quit PCBNew" ) );
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit PCBNew" ) );
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 
@@ -306,9 +305,9 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
      * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
      * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zoomming is made around the screen center
-     * From hotkeys, zoomming is made around the mouse cursor position
-     * (obvioulsy not possible from the toolbat or menubar command)
+     * From here, zooming is made around the screen center
+     * From hotkeys, zooming is made around the mouse cursor position
+     * (obviously not possible from the toolbar or menubar command)
      *
      * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
@@ -487,6 +486,9 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      * Help menu
      */
     wxMenu* helpMenu = new wxMenu;
+
+    AddHelpVersionInfoMenuEntry( helpMenu );
+
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the PCBnew manual" ) );
     item->SetBitmap( online_help_xpm );

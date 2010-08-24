@@ -63,7 +63,16 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
      * Check Operating System *
      **************************/
 #if defined __WINDOWS__
-    description << ( wxT( "on Windows" ) );
+
+    description << wxT( "on " );
+
+#if defined _WIN64
+    description << wxT( "64 bit" );
+#else
+    description << wxT( "32 bit" );
+#endif
+
+    description << wxT( " Windows" );
 
     /* Check for wxMAC */
 #	elif defined __WXMAC__
@@ -71,11 +80,11 @@ void InitKiCadAbout( wxAboutDialogInfo& info )
 
     /* Linux 64 bits */
 #	elif defined _LP64 && __LINUX__
-    description << ( wxT( "on 64 Bits GNU/Linux" ) );
+    description << ( wxT( "on 64 bit GNU/Linux" ) );
 
     /* Linux 32 bits */
 #	elif defined __LINUX__
-    description << ( wxT( "on 32 Bits GNU/Linux" ) );
+    description << ( wxT( "on 32 bit GNU/Linux" ) );
 
     /* OpenBSD */
 #	elif defined __OpenBSD__

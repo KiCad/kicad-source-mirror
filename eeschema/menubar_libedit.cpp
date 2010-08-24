@@ -119,9 +119,9 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
      * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
      * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
      * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zoomming is made around the screen center
-     * From hotkeys, zoomming is made around the mouse cursor position
-     * (obvioulsy not possible from the toolbat or menubar command)
+     * From here, zooming is made around the screen center
+     * From hotkeys, zooming is made around the mouse cursor position
+     * (obviously not possible from the toolbar or menubar command)
      *
      * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
@@ -228,7 +228,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
 #if 0   // work in progress. activated when finished
 /* Dimension */
     item = new wxMenuItem( configmenu, ID_LIBEDIT_DIMENSIONS, _( "&Dimensions" ),
-                           _( "Tickness of graphic lines, texts sizes and others" ) );
+                           _( "Thickness of graphic lines, texts sizes and others" ) );
     item->SetBitmap( add_dimension_xpm );
     configmenu->Append( item );
 #endif
@@ -257,6 +257,9 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
      * Help Menu
      */
     wxMenu* helpMenu = new wxMenu;
+
+    AddHelpVersionInfoMenuEntry( helpMenu );
+
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the eeschema manual" ) );
     item->SetBitmap( online_help_xpm );

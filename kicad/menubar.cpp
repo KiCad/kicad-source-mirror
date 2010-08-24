@@ -167,7 +167,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     /* Text editor */
     item = new wxMenuItem( browseMenu, ID_TO_EDITOR, _( "Text E&ditor" ),
-                           _( "Open prefered text editor" ) );
+                           _( "Open preferred text editor" ) );
 #if !defined( __WXMAC__ )
     item->SetBitmap( editor_xpm );
 #endif /* !defined( __WXMAC__ ) */
@@ -194,7 +194,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     /* Text editor */
     item = new wxMenuItem( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,
                            _( "&Text Editor" ),
-                           _( "Select your prefered text editor" ) );
+                           _( "Select your preferred text editor" ) );
 #if !defined( __WXMAC__ )
     item->SetBitmap( editor_xpm );
 #endif /* !defined( __WXMAC__ ) */
@@ -264,9 +264,12 @@ void WinEDA_MainFrame::ReCreateMenuBar()
      */
     wxMenu* helpMenu = new wxMenu;
 
+    AddHelpVersionInfoMenuEntry( helpMenu );
+
     /* Contents */
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the kicad manual" ) );
+
 #if !defined( __WXMAC__ )
     item->SetBitmap( online_help_xpm );
 #endif /* !defined( __WXMAC__ ) */
@@ -343,4 +346,3 @@ void WinEDA_MainFrame::RecreateBaseHToolbar()
     /* Create m_HToolBar */
     m_HToolBar->Realize();
 }
-
