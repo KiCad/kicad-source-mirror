@@ -106,6 +106,10 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "" ),             0                                                        }
 };
 
+#define MODIFIER_CTRL wxT( "Ctrl+" )
+#define MODIFIER_ALT  wxT( "Alt+" )
+#define MODIFIER_SHIFT  wxT( "Shift+" )
+
 
 /** function ReturnKeyNameFromKeyCode
  * return the key name from the key code
@@ -122,11 +126,11 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     bool     found = false;
 
     if( (aKeycode & GR_KB_CTRL) != 0 )
-        modifier << wxT( "Ctrl+" );
+        modifier << MODIFIER_CTRL;
     if( (aKeycode & GR_KB_ALT) != 0 )
-        modifier << wxT( "Alt+" );
+        modifier << MODIFIER_ALT;
     if( (aKeycode & GR_KB_SHIFT) != 0 )
-        modifier << wxT( "Shift+" );
+        modifier << MODIFIER_SHIFT;
 
     aKeycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
 
@@ -268,18 +272,18 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
     int modifier = 0;
     while( 1 )
     {
-        if( key.StartsWith(wxT("Ctrl+") ) )
+        if( key.StartsWith( MODIFIER_CTRL ) )
         {
             modifier |= GR_KB_CTRL;
             key.Remove( 0, 5 );
         }
 
-        else if( key.StartsWith(wxT("Alt+") ) )
+        else if( key.StartsWith( MODIFIER_ALT ) )
         {
             modifier |= GR_KB_ALT;
             key.Remove( 0, 4 );
         }
-        else if( key.StartsWith(wxT("Shift+") ) )
+        else if( key.StartsWith( MODIFIER_SHIFT ) )
         {
             modifier |= GR_KB_SHIFT;
             key.Remove( 0, 6 );

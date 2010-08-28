@@ -95,6 +95,10 @@ void HOTKEYS_EDITOR_DIALOG::CancelClicked( wxCommandEvent& event )
 void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& event )
 {
     m_table->RestoreFrom( m_hotkeys );
+    m_curEditingRow = -1;
+    for( int i = 0; i < m_hotkeyGrid->GetNumberRows(); ++i )
+        SetHotkeyCellState( i, false );
+
     m_hotkeyGrid->Refresh();
     Update();
 }
@@ -167,7 +171,7 @@ void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
             if( key >= 'a' && key <= 'z' ) //upcase key
                 key = key + ('A' - 'a');
 
-#if 0       // For debug
+#if 0       // For debug only
             wxString msg;
             msg.Printf(wxT("key %X, keycode %X"),event.GetKeyCode(), key);
             wxMessageBox(msg);
@@ -175,12 +179,11 @@ void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
             // See if this key code is handled in hotkeys list
             bool exists;
             ReturnKeyNameFromKeyCode( key, &exists );
-            if( !exists )   // not handled, see s_Hotkey_Name_List[] in hotkeys_basic.cpp
-                wxMessageBox( _("Hotkey value not handled" ) );
+            if( !exists )   // not handled, see hotkeys_basic.cpp
+                wxMessageBox( _("Hotkey code not handled" ) );
             else
             {
                 m_table->SetKeyCode( m_curEditingRow, key );
-                SetHotkeyCellState( m_curEditingRow, false );
             }
             break;
         }
