@@ -127,12 +127,48 @@ public:
     virtual void LoadSettings();
     virtual void SaveSettings();
 
-    int          WriteHotkeyConfigFile( const wxString&                        Filename,
-                                        struct Ki_HotkeyInfoSectionDescriptor* DescList,
-                                        bool                                   verbose );
-    int          ReadHotkeyConfigFile( const wxString&                        Filename,
-                                       struct Ki_HotkeyInfoSectionDescriptor* DescList,
-                                       bool                                   verbose );
+    // Read/Save and Import/export hotkeys config
+
+    /** Function ReadHotkeyConfig
+     * Read configuration data and fill the current hotkey list with hotkeys
+     * @param aDescList = current hotkey list descr. to initialise.
+     */
+    int          ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+
+    /** Function WriteHotkeyConfig
+     * Store the current hotkey list
+     * It is stored using the standard wxConfig mechanism or a file.
+     *
+     * @param aDescList = pointer to the current hotkey list.
+     * @param aFullFileName = a wxString pointer to a fuill file name.
+     *  if NULL, use the standard wxConfig mechanism (default)
+     * the output format is: shortcut  "key"  "function"
+     * lines starting with # are comments
+     */
+    int          WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
+                                    wxString * aFullFileName = NULL);
+
+    /** Function ReadHotkeyConfigFile
+     * Read an old configuration file (<file>.key) and fill the current hotkey list
+     * with hotkeys
+     * @param aFilename = file name to read.
+     * @param aDescList = current hotkey list descr. to initialise.
+     */
+    int          ReadHotkeyConfigFile( const wxString& Filename,
+                                       struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+
+    /** Function ImportHotkeyConfigFromFile
+     * Prompt the user for an old hotkey file to read, and read it.
+     * @param aDescList = current hotkey list descr. to initialise.
+     */
+    void         ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+
+    /** Function ExportHotkeyConfigToFile
+     * Prompt the user for an old hotkey file to read, and read it.
+     * @param aDescList = current hotkey list descr. to initialise.
+     */
+    void         ExportHotkeyConfigToFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+
     /** function SetLanguage
      * called on a language menu selection
      * when using a derived function, do not forget to call this one

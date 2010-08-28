@@ -23,7 +23,7 @@ static wxArrayString s_PowerNameList;
  */
 void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
-    SCH_ITEM* DrawStruct = (SCH_ITEM*) GetScreen()->GetCurItem();
+    SCH_ITEM* DrawStruct = GetScreen()->GetCurItem();
 
     if( ( m_ID_current_state == 0 ) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
@@ -60,10 +60,14 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 break;
 
             default:
-                DisplayError( this,
-                              wxT( "WinEDA_SchematicFrame::OnLeftClick err: m_Flags != 0" ) );
+            {
+                wxString msg;
+                msg.Printf(wxT( "WinEDA_SchematicFrame::OnLeftClick err: m_Flags != 0, itmetype %d" ),
+                            DrawStruct->Type());
+                DisplayError( this, msg );
                 DrawStruct->m_Flags = 0;
                 break;
+            }
             }
         }
         else

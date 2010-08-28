@@ -25,6 +25,7 @@
 #include "class_drawpanel.h"
 
 #include "id.h"
+#include "hotkeys.h"
 
 #include "build_version.h"
 
@@ -134,10 +135,10 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     }
 
     g_DrawBgColor = BLACK;
-    Read_Hotkey_Config( frame, false );  /* Must be called before creating the
-                                          * main frame in order to display the
-                                          * real hotkeys in menus or tool tips */
 
+   /* Must be called before creating the main frame in order to
+    * display the real hotkeys in menus or tool tips */
+    ReadHotkeyConfig( wxT("PcbFrame"), s_Board_Editor_Hokeys_Descr );
 
     frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );

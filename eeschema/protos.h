@@ -171,11 +171,6 @@ EDA_Colors ReturnLayerColor( int Layer );
 void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
                                    const wxPoint&    pos );
 
-/***************/
-/* EECONFIG.CPP */
-/***************/
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
-
 
 /**************/
 /* NETLIST.CPP */

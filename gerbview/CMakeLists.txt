@@ -6,6 +6,7 @@ add_definitions(-DGERBVIEW -DPCBNEW)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
+                    ../common
                     ../cvpcb
                     ../pcbnew
                     ../polygon)
@@ -82,7 +83,7 @@ endif(APPLE)
 ###
 add_executable(gerbview WIN32 MACOSX_BUNDLE
                ${GERBVIEW_SRCS}
-               ${GERBVIEW_EXTRA_SRCS} 
+               ${GERBVIEW_EXTRA_SRCS}
                ${GERBVIEW_RESOURCES})
 
 ###

@@ -26,6 +26,8 @@ set(COMMON_SRCS
     confirm.cpp
     copy_to_clipboard.cpp
     dialog_display_info_HTML_base.cpp
+    dialog_hotkeys_editor.cpp
+    dialog_hotkeys_editor_base.cpp
     dialog_load_error.cpp
     dcsvg.cpp
     dialog_page_settings_base.cpp
@@ -42,6 +44,7 @@ set(COMMON_SRCS
     get_component_dialog.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
+    hotkey_grid_table.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp

@@ -1384,9 +1384,9 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 
     /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
      * They have an ascii code from 1 to 27 remapped
-     * GR_KB_CTRL + 'A' to GR_KB_CTRL + 'Z'
+     * to GR_KB_CTRL + 'A' to GR_KB_CTRL + 'Z'
      */
-    if( (localkey & (GR_KB_CTRL|GR_KB_ALT|GR_KB_SHIFT)) == GR_KB_CTRL )
+    if( (localkey > GR_KB_CTRL) && (localkey <= GR_KB_CTRL+26) )
         localkey += 'A' - 1;
 
     INSTALL_DC( DC, this );

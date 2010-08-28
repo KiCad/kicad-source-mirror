@@ -213,9 +213,9 @@ Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 // an hotkey config file)
 struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] =
 {
-    { &g_CommonSectionTag,    s_Common_Hotkey_List,    "Common keys"           },
-    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, "Schematic editor keys" },
-    { &g_LibEditSectionTag,   s_LibEdit_Hotkey_List,   "library editor keys"   },
+    { &g_CommonSectionTag,    s_Common_Hotkey_List,    L"Common keys"           },
+    { &g_SchematicSectionTag, s_Schematic_Hotkey_List, L"Schematic editor keys" },
+    { &g_LibEditSectionTag,   s_LibEdit_Hotkey_List,   L"library editor keys"   },
     { NULL,                   NULL,                    NULL                    }
 };
 

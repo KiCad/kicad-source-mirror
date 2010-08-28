@@ -16,23 +16,19 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "wxstruct.h"
+#include "dialog_hotkeys_editor.h"
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
+#include <wx/tokenzr.h>
 
+#define HOTKEYS_CONFIG_KEY wxT( "Keys" )
 
 wxString g_CommonSectionTag( wxT( "[common]" ) );
 wxString g_SchematicSectionTag( wxT( "[eeschema]" ) );
 wxString g_LibEditSectionTag( wxT( "[libedit]" ) );
 wxString g_BoardEditorSectionTag( wxT( "[pcbnew]" ) );
 wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
-
-
-/* 0 = files are in Home directory (usefull under unix)
- * 1 = kicad/template ( usefull only under windows )
- * 2 ... = unused
- */
-int g_ConfigFileLocationChoice;
 
 
 /* Class to handle hotkey commnands. hotkeys have a default value
@@ -53,6 +49,15 @@ Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand,
 }
 
 
+Ki_HotkeyInfo::Ki_HotkeyInfo( const Ki_HotkeyInfo* base )
+{
+    m_KeyCode     = base->m_KeyCode;
+    m_InfoMsg     = base->m_InfoMsg;
+    m_Idcommand   = base->m_Idcommand;
+    m_IdMenuEvent = base->m_IdMenuEvent;
+}
+
+
 /* class to handle the printable name and the keycode
  */
 struct hotkey_name_descr
@@ -61,154 +66,44 @@ struct hotkey_name_descr
     int           m_KeyCode;
 };
 
+/* table giving the hotkey name from the hotkey code, for special keys
+ * Note : when modifiers (ATL, SHIFT, CTRL) do not modify
+ * the code of the key, do need to enter the modified key code
+ * For instance wxT( "F1" ), WXK_F1 handle F1, AltF1, CtrlF1 ...
+ */
 static struct hotkey_name_descr s_Hotkey_Name_List[] =
 {
-    { wxT( "F1" ),           WXK_F1                         },
-    { wxT( "F2" ),           WXK_F2                         },
-    { wxT( "F3" ),           WXK_F3                         },
-    { wxT( "F4" ),           WXK_F4                         },
-    { wxT( "F5" ),           WXK_F5                         },
-    { wxT( "F6" ),           WXK_F6                         },
-    { wxT( "F7" ),           WXK_F7                         },
-    { wxT( "F8" ),           WXK_F8                         },
-    { wxT( "F9" ),           WXK_F9                         },
-    { wxT( "F10" ),          WXK_F10                        },
-    { wxT( "F11" ),          WXK_F11                        },
-    { wxT( "F12" ),          WXK_F12                        },
+    { wxT( "F1" ),           WXK_F1                                                   },
+    { wxT( "F2" ),           WXK_F2                                                   },
+    { wxT( "F3" ),           WXK_F3                                                   },
+    { wxT( "F4" ),           WXK_F4                                                   },
+    { wxT( "F5" ),           WXK_F5                                                   },
+    { wxT( "F6" ),           WXK_F6                                                   },
+    { wxT( "F7" ),           WXK_F7                                                   },
+    { wxT( "F8" ),           WXK_F8                                                   },
+    { wxT( "F9" ),           WXK_F9                                                   },
+    { wxT( "F10" ),          WXK_F10                                                  },
+    { wxT( "F11" ),          WXK_F11                                                  },
+    { wxT( "F12" ),          WXK_F12                                                  },
 
-    { wxT( "Esc" ),          WXK_ESCAPE                     },
-    { wxT( "Del" ),          WXK_DELETE                     },
-    { wxT( "Tab" ),          '\t'                           },
-    { wxT( "BkSp" ),         WXK_BACK                       },
-    { wxT( "Ins" ),          WXK_INSERT                     },
+    { wxT( "Esc" ),          WXK_ESCAPE                                               },
+    { wxT( "Del" ),          WXK_DELETE                                               },
+    { wxT( "Tab" ),          '\t'                                                     },
+    { wxT( "BkSp" ),         WXK_BACK                                                 },
+    { wxT( "Ins" ),          WXK_INSERT                                               },
 
-    { wxT( "Home" ),         WXK_HOME                       },
-    { wxT( "End" ),          WXK_END                        },
-    { wxT( "PgUp" ),         WXK_PAGEUP                     },
-    { wxT( "PgDn" ),         WXK_PAGEDOWN                   },
+    { wxT( "Home" ),         WXK_HOME                                                 },
+    { wxT( "End" ),          WXK_END                                                  },
+    { wxT( "PgUp" ),         WXK_PAGEUP                                               },
+    { wxT( "PgDn" ),         WXK_PAGEDOWN                                             },
 
-    { wxT( "Up" ),           WXK_UP                         },
-    { wxT( "Down" ),         WXK_DOWN                       },
-    { wxT( "Left" ),         WXK_LEFT                       },
-    { wxT( "Right" ),        WXK_RIGHT                      },
-
-    { wxT( "space" ),        ' '                            },
-    { wxT( "?" ),            '?'                            },
-    { wxT( "!" ),            '!'                            },
-    { wxT( ";" ),            ';'                            },
-    { wxT( ":" ),            ':'                            },
-    { wxT( "." ),            '.'                            },
-    { wxT( "," ),            ','                            },
-    { wxT( "*" ),            '*'                            },
-    { wxT( "+" ),            '+'                            },
-    { wxT( "=" ),            '='                            },
-    { wxT( "-" ),            '-'                            },
-    { wxT( "%%" ),           '%'                            },
-    { wxT( "[" ),            '['                            },
-    { wxT( "]" ),            ']'                            },
-    { wxT( "'" ),            '\''                           },
-    { wxT( "`" ),            '`'                            },
-    { wxT( "/" ),            '/'                            },
-    { wxT( "\\" ),           '\\'                           },
-    { wxT( "0" ),            '0'                            },
-    { wxT( "1" ),            '1'                            },
-    { wxT( "2" ),            '2'                            },
-    { wxT( "3" ),            '3'                            },
-    { wxT( "4" ),            '4'                            },
-    { wxT( "5" ),            '5'                            },
-    { wxT( "6" ),            '6'                            },
-    { wxT( "7" ),            '7'                            },
-    { wxT( "8" ),            '8'                            },
-    { wxT( "9" ),            '9'                            },
-    { wxT( "A" ),            'A'                            },
-    { wxT( "B" ),            'B'                            },
-    { wxT( "C" ),            'C'                            },
-    { wxT( "D" ),            'D'                            },
-    { wxT( "E" ),            'E'                            },
-    { wxT( "F" ),            'F'                            },
-    { wxT( "G" ),            'G'                            },
-    { wxT( "H" ),            'H'                            },
-    { wxT( "I" ),            'I'                            },
-    { wxT( "J" ),            'J'                            },
-    { wxT( "K" ),            'K'                            },
-    { wxT( "L" ),            'L'                            },
-    { wxT( "M" ),            'M'                            },
-    { wxT( "N" ),            'N'                            },
-    { wxT( "O" ),            'O'                            },
-    { wxT( "P" ),            'P'                            },
-    { wxT( "Q" ),            'Q'                            },
-    { wxT( "R" ),            'R'                            },
-    { wxT( "S" ),            'S'                            },
-    { wxT( "T" ),            'T'                            },
-    { wxT( "U" ),            'U'                            },
-    { wxT( "V" ),            'V'                            },
-    { wxT( "W" ),            'W'                            },
-    { wxT( "X" ),            'X'                            },
-    { wxT( "Y" ),            'Y'                            },
-    { wxT( "Z" ),            'Z'                            },
-
-    { wxT( "Ctrl++" ),       GR_KB_CTRL + '+'               },
-    { wxT( "Ctrl+-" ),       GR_KB_CTRL + '-'               },
-
-    { wxT( "Ctrl+A" ),       GR_KB_CTRL + 'A'               },
-    { wxT( "Ctrl+B" ),       GR_KB_CTRL + 'B'               },
-    { wxT( "Ctrl+C" ),       GR_KB_CTRL + 'C'               },
-    { wxT( "Ctrl+D" ),       GR_KB_CTRL + 'D'               },
-    { wxT( "Ctrl+E" ),       GR_KB_CTRL + 'E'               },
-    { wxT( "Ctrl+F" ),       GR_KB_CTRL + 'F'               },
-    { wxT( "Ctrl+G" ),       GR_KB_CTRL + 'G'               },
-    { wxT( "Ctrl+H" ),       GR_KB_CTRL + 'H'               },
-    { wxT( "Ctrl+I" ),       GR_KB_CTRL + 'I'               },
-    { wxT( "Ctrl+J" ),       GR_KB_CTRL + 'J'               },
-    { wxT( "Ctrl+K" ),       GR_KB_CTRL + 'K'               },
-    { wxT( "Ctrl+L" ),       GR_KB_CTRL + 'L'               },
-    { wxT( "Ctrl+M" ),       GR_KB_CTRL + 'M'               },
-    { wxT( "Ctrl+N" ),       GR_KB_CTRL + 'N'               },
-    { wxT( "Ctrl+O" ),       GR_KB_CTRL + 'O'               },
-    { wxT( "Ctrl+P" ),       GR_KB_CTRL + 'P'               },
-    { wxT( "Ctrl+Q" ),       GR_KB_CTRL + 'Q'               },
-    { wxT( "Ctrl+R" ),       GR_KB_CTRL + 'R'               },
-    { wxT( "Ctrl+S" ),       GR_KB_CTRL + 'S'               },
-    { wxT( "Ctrl+T" ),       GR_KB_CTRL + 'T'               },
-    { wxT( "Ctrl+U" ),       GR_KB_CTRL + 'U'               },
-    { wxT( "Ctrl+V" ),       GR_KB_CTRL + 'V'               },
-    { wxT( "Ctrl+W" ),       GR_KB_CTRL + 'W'               },
-    { wxT( "Ctrl+X" ),       GR_KB_CTRL + 'X'               },
-    { wxT( "Ctrl+Y" ),       GR_KB_CTRL + 'Y'               },
-    { wxT( "Ctrl+Z" ),       GR_KB_CTRL + 'Z'               },
-
-    { wxT( "Shift+Ctrl++" ), GR_KB_SHIFT + GR_KB_CTRL + '+' },
-    { wxT( "Shift+Ctrl+-" ), GR_KB_SHIFT + GR_KB_CTRL + '-' },
-
-    { wxT( "Shift+Ctrl+A" ), GR_KB_SHIFT + GR_KB_CTRL + 'A' },
-    { wxT( "Shift+Ctrl+B" ), GR_KB_SHIFT + GR_KB_CTRL + 'B' },
-    { wxT( "Shift+Ctrl+C" ), GR_KB_SHIFT + GR_KB_CTRL + 'C' },
-    { wxT( "Shift+Ctrl+D" ), GR_KB_SHIFT + GR_KB_CTRL + 'D' },
-    { wxT( "Shift+Ctrl+E" ), GR_KB_SHIFT + GR_KB_CTRL + 'E' },
-    { wxT( "Shift+Ctrl+F" ), GR_KB_SHIFT + GR_KB_CTRL + 'F' },
-    { wxT( "Shift+Ctrl+G" ), GR_KB_SHIFT + GR_KB_CTRL + 'G' },
-    { wxT( "Shift+Ctrl+H" ), GR_KB_SHIFT + GR_KB_CTRL + 'H' },
-    { wxT( "Shift+Ctrl+I" ), GR_KB_SHIFT + GR_KB_CTRL + 'I' },
-    { wxT( "Shift+Ctrl+J" ), GR_KB_SHIFT + GR_KB_CTRL + 'J' },
-    { wxT( "Shift+Ctrl+K" ), GR_KB_SHIFT + GR_KB_CTRL + 'K' },
-    { wxT( "Shift+Ctrl+L" ), GR_KB_SHIFT + GR_KB_CTRL + 'L' },
-    { wxT( "Shift+Ctrl+M" ), GR_KB_SHIFT + GR_KB_CTRL + 'M' },
-    { wxT( "Shift+Ctrl+N" ), GR_KB_SHIFT + GR_KB_CTRL + 'N' },
-    { wxT( "Shift+Ctrl+O" ), GR_KB_SHIFT + GR_KB_CTRL + 'O' },
-    { wxT( "Shift+Ctrl+P" ), GR_KB_SHIFT + GR_KB_CTRL + 'P' },
-    { wxT( "Shift+Ctrl+Q" ), GR_KB_SHIFT + GR_KB_CTRL + 'Q' },
-    { wxT( "Shift+Ctrl+R" ), GR_KB_SHIFT + GR_KB_CTRL + 'R' },
-    { wxT( "Shift+Ctrl+S" ), GR_KB_SHIFT + GR_KB_CTRL + 'S' },
-    { wxT( "Shift+Ctrl+T" ), GR_KB_SHIFT + GR_KB_CTRL + 'T' },
-    { wxT( "Shift+Ctrl+U" ), GR_KB_SHIFT + GR_KB_CTRL + 'U' },
-    { wxT( "Shift+Ctrl+V" ), GR_KB_SHIFT + GR_KB_CTRL + 'V' },
-    { wxT( "Shift+Ctrl+W" ), GR_KB_SHIFT + GR_KB_CTRL + 'W' },
-    { wxT( "Shift+Ctrl+X" ), GR_KB_SHIFT + GR_KB_CTRL + 'X' },
-    { wxT( "Shift+Ctrl+Y" ), GR_KB_SHIFT + GR_KB_CTRL + 'Y' },
-    { wxT( "Shift+Ctrl+Z" ), GR_KB_SHIFT + GR_KB_CTRL + 'Z' },
+    { wxT( "Up" ),           WXK_UP                                                   },
+    { wxT( "Down" ),         WXK_DOWN                                                 },
+    { wxT( "Left" ),         WXK_LEFT                                                 },
+    { wxT( "Right" ),        WXK_RIGHT                                                },
 
     // Do not change this line: end of list
-    { wxT( "" ),             0                              }
+    { wxT( "" ),             0                                                        }
 };
 
 
@@ -217,12 +112,14 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
+ * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
  * @return the key name in a wxString
  */
-wxString ReturnKeyNameFromKeyCode( int aKeycode )
+wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 {
     wxString keyname, modifier, fullkeyname;
     int      ii;
+    bool     found = false;
 
     if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << wxT( "Ctrl+" );
@@ -232,20 +129,32 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode )
         modifier << wxT( "Shift+" );
 
     aKeycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
-    for( ii = 0; ; ii++ )
+
+    if( (aKeycode >= ' ') && (aKeycode < 0x7F ) )
     {
-        if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )
+        found   = true;
+        keyname.Append((wxChar)aKeycode);
+    }
+    else
+    {
+        for( ii = 0; ; ii++ )
         {
-            keyname = wxT( "<unknown>" );
-            break;
-        }
-        if( s_Hotkey_Name_List[ii].m_KeyCode == aKeycode )
-        {
-            keyname = s_Hotkey_Name_List[ii].m_Name;
-            break;
+            if( s_Hotkey_Name_List[ii].m_KeyCode == 0 ) // End of list
+            {
+                keyname = wxT( "<unknown>" );
+                break;
+            }
+            if( s_Hotkey_Name_List[ii].m_KeyCode == aKeycode )
+            {
+                keyname = s_Hotkey_Name_List[ii].m_Name;
+                found   = true;
+                break;
+            }
         }
     }
 
+    if( aIsFound )
+        *aIsFound = found;
     fullkeyname = modifier + keyname;
     return fullkeyname;
 }
@@ -261,22 +170,24 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode )
  * @return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
-                        int aCommandId , bool  aIsShortCut )
+                        int aCommandId, bool aIsShortCut )
 {
-    wxString msg     = aText;
+    wxString msg = aText;
     wxString keyname;
+
     if( aList )
         keyname = ReturnKeyNameFromCommandId( aList, aCommandId );
 
     if( !keyname.IsEmpty() )
     {
-        if ( aIsShortCut )
+        if( aIsShortCut )
             msg << wxT( "\t" ) << keyname;
         else
-            msg << wxT( " <" ) << keyname << wxT(">");
+            msg << wxT( " <" ) << keyname << wxT( ">" );
     }
     return msg;
 }
+
 
 /** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
@@ -304,10 +215,10 @@ wxString AddHotkeyName( const wxString&                        aText,
             keyname = ReturnKeyNameFromCommandId( List, aCommandId );
             if( !keyname.IsEmpty() )
             {
-                if ( aIsShortCut )
+                if( aIsShortCut )
                     msg << wxT( "\t" ) << keyname;
                 else
-                    msg << wxT( " <" ) << keyname << wxT(">");
+                    msg << wxT( " <" ) << keyname << wxT( ">" );
                 break;
             }
         }
@@ -352,6 +263,37 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 {
     int ii, keycode = 0;
 
+    // Search for modifiers: Ctrl+ Alt+ and Shift+
+    wxString key = keyname;
+    int modifier = 0;
+    while( 1 )
+    {
+        if( key.StartsWith(wxT("Ctrl+") ) )
+        {
+            modifier |= GR_KB_CTRL;
+            key.Remove( 0, 5 );
+        }
+
+        else if( key.StartsWith(wxT("Alt+") ) )
+        {
+            modifier |= GR_KB_ALT;
+            key.Remove( 0, 4 );
+        }
+        else if( key.StartsWith(wxT("Shift+") ) )
+        {
+            modifier |= GR_KB_SHIFT;
+            key.Remove( 0, 6 );
+        }
+        else
+            break;
+    }
+
+    if( (key[0] >= ' ') && (key[0] < 0x7F) )
+    {
+        keycode = key[0];
+        keycode += modifier;
+    }
+
     for( ii = 0; ; ii++ )
     {
         if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )  // End of list reached
@@ -359,7 +301,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
 
         if( keyname.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
         {
-            keycode = s_Hotkey_Name_List[ii].m_KeyCode;
+            keycode = s_Hotkey_Name_List[ii].m_KeyCode + modifier;
             break;
         }
     }
@@ -418,189 +360,165 @@ Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
 }
 
 
-/*
- * Create a configuration file (*.key) from the current hotkey list
- * @param Filename = default full file name to create. If void, A filename
- *    will be asked
- * @param List = pointer to the current hotkey list.
- * the ouput format is: shortcut  "key"  "function"
- * lines starting with # are comments
+/** Function WriteHotkeyConfig
+ * Store the current hotkey list
+ * It is stored using the standard wxConfig mechanism or a file.
  *
+ * @param aDescList = pointer to the current hotkey list.
+ * @param aFullFileName = a wxString pointer to a fuill file name.
+ *  if NULL, use the standard wxConfig mechanism (default)
+ * the output format is: shortcut  "key"  "function"
+ * lines starting with # are comments
  */
-int WinEDA_BasicFrame::WriteHotkeyConfigFile(
-    const wxString&                        Filename,
-    struct Ki_HotkeyInfoSectionDescriptor* DescList,
-    bool                                   verbose )
+int WinEDA_BasicFrame::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
+                                          wxString*                              aFullFileName )
 {
-    wxString FullFilename = Filename;
-    FILE*    cfgfile;
     wxString msg;
-
-    if( FullFilename.IsEmpty() || verbose )
-    {
-        wxString Mask, Path, Ext;
-        Ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-        Mask = wxT( "*." ) + Ext;
-        Path = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
-        FullFilename = EDA_FileSelector( _( "Save Hotkey Configuration File:" ),
-                                         Path,
-                                         FullFilename,
-                                         Ext,
-                                         Mask,
-                                         this,
-                                         wxFD_SAVE,
-                                         TRUE );
-    }
-
-    if( FullFilename.IsEmpty() )
-        return 0;
-
-    cfgfile = wxFopen( FullFilename, wxT( "wt" ) );
-
-    if( cfgfile == NULL )
-    {
-        if( verbose )
-        {
-            msg = _( "Unable to create " ) + FullFilename;
-            DisplayError( this, msg );
-        }
-        return 0;
-    }
-
     wxString keyname, infokey;
 
     msg = wxT( "$hotkey list\n" );
-    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
-
-    /* print the allowed keys, for info
-     */
-    msg = wxT( "# " ); msg += _( "Allowed keys:\n" );
-    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
-    msg.Empty();
-    for( int ii = 0; ; ii++ )
-    {
-        if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )
-            break;;
-        if( msg.IsEmpty() )
-            msg = wxT( "# " );
-        else
-            msg += wxT( ", " );
-        msg += s_Hotkey_Name_List[ii].m_Name;
-        if( msg.Len() > 60 )
-        {
-            msg += wxT( "\n" );
-            fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
-            msg.Empty();
-        }
-    }
-
-    /* print the last line of the info section */
-    if( !msg.IsEmpty() )
-        msg += wxT( "\n" );
-    msg += wxT( "#\n#\n" );
-    fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
 
     /* Print the current hotkey list */
     Ki_HotkeyInfo** List;
-    for( ; DescList->m_HK_InfoList != NULL; DescList++ )
+    for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
-        if( DescList->m_Comment )
+        if( aDescList->m_Comment )
         {
-            fprintf( cfgfile, "# " );
-            fprintf( cfgfile, "%s\n", DescList->m_Comment );
+            msg += wxT( "# " );
+            msg += wxString( aDescList->m_Comment );
+            msg += wxT( "\n" );
         }
-        msg = *DescList->m_SectionTag;
-        fprintf( cfgfile, "%s\n", CONV_TO_UTF8( msg ) );
-        List = DescList->m_HK_InfoList;
+        msg += *aDescList->m_SectionTag;
+        msg += wxT( "\n" );
+
+        List = aDescList->m_HK_InfoList;
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
-            msg     = wxT( "shortcut   " );
+            msg    += wxT( "shortcut   " );
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
             AddDelimiterString( keyname );
             infokey = hk_decr->m_InfoMsg;
             AddDelimiterString( infokey );
             msg += keyname + wxT( ":    " ) + infokey + wxT( "\n" );
-            fprintf( cfgfile, "%s", CONV_TO_UTF8( msg ) );
         }
     }
 
-    msg = wxT( "$Endlist\n" );
-    fprintf( cfgfile, "%s\n", CONV_TO_UTF8( msg ) );
-    fclose( cfgfile );
+    msg += wxT( "$Endlist\n" );
+
+    if( aFullFileName )
+    {
+        FILE* file = wxFopen( *aFullFileName, wxT( "wt" ) );
+        if( file )
+            fputs( CONV_TO_UTF8( msg ), file );
+        else
+        {
+            msg.Printf( wxT( "Unable to write file %s" ), GetChars( *aFullFileName ) );
+            return 0;
+        }
+    }
+    else
+    {
+        wxConfig config( m_FrameName );
+        config.Write( HOTKEYS_CONFIG_KEY, msg );
+    }
+
     return 1;
 }
 
 
-/*
- * Read a configuration file (<file>.key) and fill the current hotkey list
+/** Function ReadHotkeyConfigFile
+ * Read an old configuration file (<file>.key) and fill the current hotkey list
  * with hotkeys
- * @param Filename = default full file name to create. If void, A filename
- *    will be asked
- * @param DescList = current hotkey list descr. to initialise.
+ * @param aFilename = file name to read.
+ * @param aDescList = current hotkey list descr. to initialise.
+ */
+int WinEDA_BasicFrame::ReadHotkeyConfigFile(
+    const wxString&                        aFilename,
+    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+{
+    wxFile cfgfile( aFilename );
+
+    /* get length */
+    cfgfile.SeekEnd();
+    wxFileOffset size = cfgfile.Tell();
+    cfgfile.Seek( 0 );
+
+    /* read data */
+    char*    buffer = new char[size];
+    cfgfile.Read( buffer, size );
+
+    wxString data( buffer, wxConvUTF8 );
+
+    /* parse */
+    ParseHotkeyConfig( data, aDescList );
+
+    /* cleanup */
+    delete buffer;
+    cfgfile.Close();
+    return 1;
+}
+
+
+void ReadHotkeyConfig( const wxString&                        Appname,
+                       struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+{
+    wxConfig config( Appname );
+
+    if( !config.HasEntry( HOTKEYS_CONFIG_KEY ) )
+    {
+        // assume defaults are ok
+        return;
+    }
+
+    wxString data;
+    config.Read( HOTKEYS_CONFIG_KEY, &data );
+
+    ParseHotkeyConfig( data, aDescList );
+}
+
+
+/** Function ReadHotkeyConfig
+ * Read configuration data and fill the current hotkey list with hotkeys
+ * @param aDescList = current hotkey list descr. to initialise.
+ */
+int WinEDA_BasicFrame::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+{
+    ::ReadHotkeyConfig( m_FrameName, aDescList );
+    return 1;
+}
+
+
+/** Function ParseHotkeyConfig
  * the input format is: shortcut  "key"  "function"
  * lines starting by # are ignored (comments)
  * lines like [xxx] are tags (example: [common] or [libedit] which identify
  * sections
- *
  */
-int WinEDA_BasicFrame::ReadHotkeyConfigFile(
-    const wxString&                        Filename,
-    struct Ki_HotkeyInfoSectionDescriptor* DescList,
-    bool                                   verbose )
+void ParseHotkeyConfig(
+    const wxString&                        data,
+    struct Ki_HotkeyInfoSectionDescriptor* DescList )
 {
-    wxString FullFilename = Filename;
-    FILE*    cfgfile;
-    wxString msg;
+    /* Read the config */
+    wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
+    Ki_HotkeyInfo**   CurrentHotkeyList = 0;
 
-    if( FullFilename.IsEmpty() || verbose )
+    while( tokenizer.HasMoreTokens() )
     {
-        wxString Mask, Path, Ext;
-        Ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-        Mask = wxT( "*." ) + Ext;
-        Path = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
-        FullFilename = EDA_FileSelector( _( "Open Hotkey Configuration File:" ),
-                                         Path,
-                                         FullFilename,
-                                         Ext,
-                                         Mask,
-                                         this,
-                                         wxFD_OPEN,
-                                         TRUE );
-        if( FullFilename.IsEmpty() )
-            return 0;
-    }
+        wxString          line = tokenizer.GetNextToken();
+        wxStringTokenizer lineTokenizer( line );
 
-    cfgfile = wxFopen( FullFilename, wxT( "rt" ) );
+        wxString          line_type = lineTokenizer.GetNextToken();
+        if( line_type[0]  == '#' ) //comment
+            continue;
 
-    if( cfgfile == NULL )
-    {
-        if( verbose )
+        if( line_type[0]  == '[' ) // A tag is found. search infos in list
         {
-            msg = _( "Unable to read " ) + FullFilename;
-            DisplayError( this, msg );
-        }
-        return 0;
-    }
-
-    wxString        keyname;
-    char            Line[1024];
-    int             LineNum = 0;
-    Ki_HotkeyInfo** CurrentHotkeyList = NULL;
-
-    /* Read the file */
-    while(  GetLine( cfgfile, Line, &LineNum ) != NULL )
-    {
-        char* line_type, * keyname, * fctname;
-        line_type = strtok( Line, " \t\n\r" );
-        msg = CONV_FROM_UTF8( line_type );
-        if( msg[0]  == '[' ) // A tag is found. search infos in list
-        {
-            CurrentHotkeyList = NULL;
+            CurrentHotkeyList = 0;
             Ki_HotkeyInfoSectionDescriptor* DList = DescList;
-            for( ; DList->m_HK_InfoList != NULL; DList++ )
+            for( ; DList->m_HK_InfoList; DList++ )
             {
-                if( *DList->m_SectionTag == msg )
+                if( *DList->m_SectionTag == line_type )
                 {
                     CurrentHotkeyList = DList->m_HK_InfoList;
                     break;
@@ -609,32 +527,29 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile(
 
             continue;
         }
-        if( msg != wxT( "shortcut" ) )
-            continue;
-        if( msg == wxT( "$Endlist" ) )
+        if( line_type == wxT( "$Endlist" ) )
             break;
+        if( line_type != wxT( "shortcut" ) )
+            continue;
         if( CurrentHotkeyList == NULL )
             continue;
 
         /* Get the key name */
-        strtok( NULL, "\"\n\r" );
-        keyname = strtok( NULL, "\"\n\r" );
+        lineTokenizer.SetString( lineTokenizer.GetString(), L"\"\r\n\t ", wxTOKEN_STRTOK );
+        wxString keyname = lineTokenizer.GetNextToken();
 
-        strtok( NULL, "\"\n\r" );
+        wxString remainder = lineTokenizer.GetString();
 
         /* Get the command name */
-        fctname = strtok( NULL, "\"\n\r" );
-        msg     = CONV_FROM_UTF8( fctname );
+        wxString fctname = remainder.AfterFirst( '\"' ).BeforeFirst( '\"' );
 
         /* search the hotkey in current hotkey list */
         for( Ki_HotkeyInfo** List = CurrentHotkeyList; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
-            if( hk_decr->m_InfoMsg == msg )
+            if( hk_decr->m_InfoMsg == fctname )
             {
-                msg = CONV_FROM_UTF8( keyname );
-
-                int code = ReturnKeyCodeFromKeyName( msg );
+                int code = ReturnKeyCodeFromKeyName( keyname );
                 if( code )
                     hk_decr->m_KeyCode = code;
 
@@ -642,47 +557,67 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile(
             }
         }
     }
-
-    fclose( cfgfile );
-    return 1;
 }
 
 
-/* return the hotkey config file path
- * @param choice : 0 = home, 1 = kicad/share/template
+/** Function ImportHotkeyConfigFromFile
+ * Prompt the user for an old hotkey file to read, and read it.
+ * @param aDescList = current hotkey list descr. to initialise.
  */
-wxString ReturnHotkeyConfigFilePath( int choice )
+void WinEDA_BasicFrame::ImportHotkeyConfigFromFile(
+    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
-    wxString     path;
-    wxAppTraits* traits = wxGetApp().GetTraits();
+    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
+    wxString mask = wxT( "*." ) + ext;
+    wxString path = wxGetCwd();
+    wxString filename;
 
-    switch( choice )
-    {
-    case 0:
-        path = traits->GetStandardPaths().GetUserConfigDir() +
-               wxFileName::GetPathSeparator();
+    filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
+                                 path,
+                                 filename,
+                                 ext,
+                                 mask,
+                                 this,
+                                 wxFD_OPEN,
+                                 TRUE );
 
-    case 1:
+    if( filename.IsEmpty() )
+        return;
 
-        /* TODO: This is broken under a normal Poxis system.  Users
-         *       generally do no have write permissions to this path
-         *       and there is no provision for prompting for the root
-         *       password.  Suggest we remove this unless someone has
-         *       a workable solution (Wayne).
-         */
-        path = ReturnKicadDatasPath() + wxT( "template/" );
-        break;
+    ReadHotkeyConfigFile( filename, aDescList );
+}
 
-    default:
-        break;
-    }
 
-    return path;
+/** Function ExportHotkeyConfigToFile
+ * Prompt the user for an old hotkey file to read, and read it.
+ * @param aDescList = current hotkey list descr. to initialise.
+ */
+void WinEDA_BasicFrame::ExportHotkeyConfigToFile(
+    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+{
+    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
+    wxString mask = wxT( "*." ) + ext;
+    wxString path = wxGetCwd();
+    wxString filename;
+
+    filename = EDA_FileSelector( _( "Read Hotkey Configuration File:" ),
+                                 path,
+                                 filename,
+                                 ext,
+                                 mask,
+                                 this,
+                                 wxFD_OPEN,
+                                 TRUE );
+
+    if( filename.IsEmpty() )
+        return;
+
+    WriteHotkeyConfig( aDescList, &filename );
 }
 
 
 /** add hotkey config options submenu to a menu
- * @param menu : initial menu
+ * @param menu : root menu
  */
 void AddHotkeyConfigMenu( wxMenu* aMenu )
 {
@@ -700,99 +635,33 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     item->SetBitmap( info_xpm );
     HotkeySubmenu->Append( item );
 
-    /* (Re)create hotkey file */
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_CREATE_CONFIG,
-                           _( "(Re)create Hotkeys File" ),
+    /* Call hotkeys editor*/
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
+                          _( "Edit Hotkeys" ),
+                          _( "Call the hotkeys editor" ) );
+    item->SetBitmap( editor_xpm );
+    HotkeySubmenu->Append( item );
+
+    HotkeySubmenu->AppendSeparator();
+
+    /* create hotkey file to export current hotkeys config */
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+                           _( "Export Hotkeys Config" ),
                            _(
-                               "Create or recreate the hotkey configuration file from current hotkey list" )
+                               "Create a hotkey configuration file to export the current hotkey config" )
                            );
     item->SetBitmap( save_setup_xpm );
     HotkeySubmenu->Append( item );
 
     /* Reload hotkey file */
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_READ_CONFIG,
-                          _( "Reload Hotkeys File" ),
-                          _( "Reload the hotkey configuration file" ) );
+    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+                          _( "Import Hotkeys Config" ),
+                          _( "Load an existing hotkey configuration file" ) );
     item->SetBitmap( reload_xpm );
-    HotkeySubmenu->Append( item );
-
-    /* Edit hotkey file */
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EDIT_CONFIG,
-                          _( "Edit Hotkeys File" ),
-                          _( "Edit the hotkey configuration file in a text editor" ) );
-    item->SetBitmap( editor_xpm );
     HotkeySubmenu->Append( item );
 
     /* Append HotkeySubmenu to menu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
                                         ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
                                         _( "Hotkeys configuration and preferences" ), hotkeys_xpm );
-
-    /* Hotkey path */
-    wxMenu* HotkeyLocationSubmenu = new wxMenu();
-
-    /* Home directory */
-    item = new wxMenuItem( HotkeyLocationSubmenu,
-                           ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
-                           _( "Home directory" ),
-                           _( "Use home directory to load or store Hotkey config files" ),
-                           wxITEM_CHECK );
-    HotkeyLocationSubmenu->Append( item );
-
-    /* KiCad template directory */
-    item = new wxMenuItem( HotkeyLocationSubmenu,
-                           ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
-                           _( "KiCad template directory" ),
-                           _( "Use kicad/template directory to load or store Hotkey config files" ),
-                           wxITEM_CHECK );
-    HotkeyLocationSubmenu->Append( item );
-
-    /* Append location submenu to HotkeySubmenu */
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( HotkeySubmenu, HotkeyLocationSubmenu,
-                                        -1, _( "Location" ),
-                                        _( "Select hotkey configuration file location" ),
-                                        right_xpm );
-    HotkeyLocationSubmenu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME,
-                                  g_ConfigFileLocationChoice == 0 );
-    HotkeyLocationSubmenu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD,
-                                  g_ConfigFileLocationChoice == 1 );
-}
-
-
-/* called on hotkey file location selecton menu
- *  @param frame = current WinEDA_DrawFrame
- *  @param id = selected menu id
- *  @return g_ConfigFileLocationChoice (global) = new selection
- */
-void HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id )
-{
-    wxMenuBar* menu = frame->GetMenuBar();
-
-    wxConfig*  config = wxGetApp().m_EDA_CommonConfig;
-
-    switch( id )
-    {
-    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-        if( g_ConfigFileLocationChoice != 0 )
-        {
-            g_ConfigFileLocationChoice = 0;
-            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME, true );
-            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, false );
-            config->Write( HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice );
-        }
-        break;
-
-    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-        if( g_ConfigFileLocationChoice != 1 )
-        {
-            g_ConfigFileLocationChoice = 1;
-            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_HOME, false );
-            menu->Check( ID_PREFERENCES_HOTKEY_PATH_IS_KICAD, true );
-            config->Write( HOTKEY_CFG_PATH_OPT, g_ConfigFileLocationChoice );
-        }
-        break;
-
-    default:
-        break;
-    }
 }

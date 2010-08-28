@@ -612,8 +612,6 @@ void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
     m_LanguageId = m_EDA_CommonConfig->Read( wxT( "Language" ),
                                              wxLANGUAGE_DEFAULT );
     m_EditorName = m_EDA_CommonConfig->Read( wxT( "Editor" ) );
-    g_ConfigFileLocationChoice = m_EDA_CommonConfig->Read( HOTKEY_CFG_PATH_OPT,
-                                                           0L );
 
     m_fileHistory.Load( *m_EDA_Config );
 

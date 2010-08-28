@@ -18,6 +18,7 @@
 #include "worksheet.h"
 #include "hotkeys.h"
 #include "dialog_eeschema_options.h"
+#include "dialog_hotkeys_editor.h"
 
 #include <wx/fdrepdlg.h>
 
@@ -65,30 +66,16 @@ void WinEDA_LibeditFrame::Process_Config( wxCommandEvent& event )
 
 
     /* Hotkey IDs */
-    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
-        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
-                         HOTKEY_FILENAME,
-                         DEFAULT_HOTKEY_FILENAME_EXT );
-        WriteHotkeyConfigFile( fn.GetFullPath(), s_Eeschema_Hokeys_Descr, true );
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
-        Read_Hotkey_Config( this, true );
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( s_Eeschema_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
-    {
-        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
-                         HOTKEY_FILENAME, DEFAULT_HOTKEY_FILENAME_EXT );
-        wxString editorname = wxGetApp().GetEditorName();
-        if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
-    }
-    break;
-
-    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-        HandleHotkeyConfigMenuSelection( this, id );
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( s_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
@@ -141,30 +128,16 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 
 
     /* Hotkey IDs */
-    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
-        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
-                         HOTKEY_FILENAME,
-                         DEFAULT_HOTKEY_FILENAME_EXT );
-        WriteHotkeyConfigFile( fn.GetFullPath(), s_Eeschema_Hokeys_Descr, true );
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( s_Eeschema_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
-        Read_Hotkey_Config( this, true );
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( s_Eeschema_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
-    {
-        fn = wxFileName( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ),
-                         HOTKEY_FILENAME, DEFAULT_HOTKEY_FILENAME_EXT );
-        wxString editorname = wxGetApp().GetEditorName();
-        if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
-    }
-    break;
-
-    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-        HandleHotkeyConfigMenuSelection( this, id );
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
@@ -257,25 +230,6 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     }
 
     DrawPanel->Refresh( true );
-}
-
-
-/*
- * Read the hotkey files config for eeschema and libedit
- */
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
-{
-    wxString FullFileName = ReturnHotkeyConfigFilePath(
-        g_ConfigFileLocationChoice );
-
-    FullFileName += HOTKEY_FILENAME;
-    FullFileName += wxT( "." );
-    FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-    frame->ReadHotkeyConfigFile( FullFileName,
-                                 s_Eeschema_Hokeys_Descr,
-                                 verbose );
-
-    return TRUE;
 }
 
 

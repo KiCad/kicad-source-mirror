@@ -355,13 +355,21 @@ void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent& WXUNUSED( ev
     #define __BO_COMPILER ",unknown"
 #endif
 
+#if wxCHECK_VERSION( 2, 9, 0 )
+#define KICAD_BUILD_OPTIONS_SIGNATURE \
+    " (" __WX_BO_UNICODE \
+     __ABI_VERSION __BO_COMPILER \
+     __WX_BO_STL \
+     __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 \
+     ")"
+#else
 #define KICAD_BUILD_OPTIONS_SIGNATURE \
     " (" __WX_BO_DEBUG "," __WX_BO_UNICODE \
      __ABI_VERSION __BO_COMPILER \
      __WX_BO_STL \
      __WX_BO_WXWIN_COMPAT_2_4 __WX_BO_WXWIN_COMPAT_2_6 \
      ")"
-
+#endif
     tmp = wxT( "Application: " ) + wxGetApp().GetTitle() + wxT( "\n" );
     tmp += wxT( "Version: " ) + GetBuildVersion() + wxT( "\n" );
     tmp << wxT( "Build: " ) << wxVERSION_STRING
