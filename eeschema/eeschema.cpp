@@ -15,6 +15,7 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "hotkeys.h"
 
 #include <wx/snglinst.h>
 
@@ -147,10 +148,9 @@ bool WinEDA_App::OnInit()
     bool reopenLastUsedDirectory = argc == 1;
     GetSettings( reopenLastUsedDirectory );
 
-    Read_Hotkey_Config( frame, false );   /* Must be called before creating
-                                           * the main frame  in order to
-                                           * display the real hotkeys in menus
-                                           * or tool tips */
+   /* Must be called before creating the main frame in order to
+    * display the real hotkeys in menus or tool tips */
+    ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
 
     // Create main frame (schematic frame) :
     frame = new WinEDA_SchematicFrame( NULL, wxT( "EESchema" ),

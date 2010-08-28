@@ -95,13 +95,13 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     wxGetApp().AddMenuLanguageList( configmenu );
 
+    AddHotkeyConfigMenu( configmenu );
+
+
     configmenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_SAVE, _( "&Save Setup" ),
                             _( "Save application preferences" ),
                             save_setup_xpm );
-
-    configmenu->AppendSeparator();
-    AddHotkeyConfigMenu( configmenu );
 
     wxMenu* miscellaneous_menu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_SHOW_LIST_DCODES,

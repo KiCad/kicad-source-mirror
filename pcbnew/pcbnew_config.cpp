@@ -21,6 +21,7 @@
 #include "dialog_general_options.h"
 
 #include "pcbnew_config.h"
+#include "dialog_hotkeys_editor.h"
 
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
@@ -105,55 +106,28 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         LoadProjectSettings( dlg.GetPath() );
         break;
     }
-    case ID_PREFERENCES_HOTKEY_CREATE_CONFIG:
-        fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
-        fn.SetName( HOTKEY_FILENAME );
-        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-        WriteHotkeyConfigFile( fn.GetFullPath(), s_Pcbnew_Editor_Hokeys_Descr, true );
+
+   /* Hotkey IDs */
+    case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
+        ExportHotkeyConfigToFile( s_Board_Editor_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_READ_CONFIG:
-        Read_Hotkey_Config( this, true );
+    case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
+        ImportHotkeyConfigFromFile( s_Board_Editor_Hokeys_Descr );
         break;
 
-    case ID_PREFERENCES_HOTKEY_EDIT_CONFIG:
-    {
-        fn.SetPath( ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice ) );
-        fn.SetName( HOTKEY_FILENAME );
-        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-
-        wxString editorname = wxGetApp().GetEditorName();
-        if( !editorname.IsEmpty() )
-            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
-        break;
-    }
-
-    case ID_PREFERENCES_HOTKEY_PATH_IS_HOME:
-    case ID_PREFERENCES_HOTKEY_PATH_IS_KICAD:
-        HandleHotkeyConfigMenuSelection( this, id );
+    case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
+        InstallHotkeyFrame( this, s_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        // Display current hotkey list for eeschema.
         DisplayHotkeyList( this, s_Board_Editor_Hokeys_Descr );
         break;
 
     default:
         DisplayError( this, wxT( "WinEDA_PcbFrame::Process_Config internal error" ) );
     }
-}
-
-
-/*
- * Read the hotkey files config for pcbnew and module_edit
- */
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose )
-{
-    wxString FullFileName = ReturnHotkeyConfigFilePath( g_ConfigFileLocationChoice );
-
-    FullFileName += HOTKEY_FILENAME;
-    FullFileName += wxT( "." );
-    FullFileName += DEFAULT_HOTKEY_FILENAME_EXT;
-    return frame->ReadHotkeyConfigFile( FullFileName, s_Pcbnew_Editor_Hokeys_Descr, verbose );
 }
 
 

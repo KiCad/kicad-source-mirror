@@ -43,17 +43,6 @@ class D_PAD;
 void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
 
 
-/* Create a sorted list of pointers to pads.
- * This list is sorted by X coordinate value.
- * The list must be freed bu user
- */
-
-/**************/
-/* PCBCFG.CPP */
-/**************/
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
-
-
 /***************/
 /* TRPISTE.CPP */
 /***************/

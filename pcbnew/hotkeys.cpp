@@ -176,12 +176,12 @@ Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = { NULL };
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
 struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
 { {
-      &g_CommonSectionTag, s_Common_Hotkey_List, "Common keys"
+      &g_CommonSectionTag, s_Common_Hotkey_List, L"Common keys"
   },
   {
-      &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, "Board editor keys"
+      &g_BoardEditorSectionTag, s_board_edit_Hotkey_List, L"Board editor keys"
   },{
-      &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, "Footprint editor keys"
+      &g_ModuleEditSectionTag, s_module_edit_Hotkey_List, L"Footprint editor keys"
   },{
       NULL, NULL, NULL
   } };

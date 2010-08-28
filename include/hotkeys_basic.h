@@ -10,9 +10,6 @@
 
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( "key" )
 
-/* keyword idetifier in kicad config use ti store/retrieve path option */
-#define HOTKEY_CFG_PATH_OPT wxT( "HotkeyPathOption" )
-
 
 /* Class to handle hotkey commnands. hotkeys have a default value
  *  This class allows the real key code changed by user(from a key code list file)
@@ -27,6 +24,7 @@ public:
 
 public:
     Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
+    Ki_HotkeyInfo( const Ki_HotkeyInfo* base);
 };
 
 /* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list)
@@ -43,7 +41,7 @@ struct Ki_HotkeyInfoSectionDescriptor
 public:
     wxString*       m_SectionTag;           // The section name
     Ki_HotkeyInfo** m_HK_InfoList;          // List of Ki_HotkeyInfo pointers
-    const char*      m_Comment;             // comment: will be printed in the config file
+    const wchar_t*      m_Comment;             // comment: will be printed in the config file
                                             // Info usage only
 };
 
@@ -56,12 +54,9 @@ extern wxString g_LibEditSectionTag;
 extern wxString g_BoardEditorSectionTag;
 extern wxString g_ModuleEditSectionTag;
 
-extern int g_ConfigFileLocationChoice;
-
 
 /* Functions:
  */
-wxString        ReturnHotkeyConfigFilePath( int choice );
 void            AddHotkeyConfigMenu( wxMenu* menu );
 void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id );
 
@@ -70,9 +65,10 @@ void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
+ * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
  * @return the key name in a wxString
  */
-wxString        ReturnKeyNameFromKeyCode( int aKeycode );
+wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
 
 /** function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
@@ -126,6 +122,18 @@ void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame
  * @return the corresponding Ki_HotkeyInfo pointer from the Ki_HotkeyInfo List
  */
 Ki_HotkeyInfo*  GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList );
+
+/** function ReadHotkeyConfig * Read hotkey configuration for a given
+ app, possibly before the frame for that app has been created
+
+ @param Appname = the value of the app's m_FrameName
+ @param DescList = the hotkey data
+*/
+
+void            ReadHotkeyConfig( const wxString&                        Appname,
+                                  struct Ki_HotkeyInfoSectionDescriptor* DescList );
+void            ParseHotkeyConfig( const wxString&                        data,
+                                   struct Ki_HotkeyInfoSectionDescriptor* DescList );
 
 
 // common hotkeys event id

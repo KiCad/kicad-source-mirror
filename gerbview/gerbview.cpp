@@ -17,6 +17,7 @@
 #include "zones.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
+#include "hotkeys.h"
 
 #include "build_version.h"
 
@@ -101,10 +102,10 @@ bool WinEDA_App::OnInit()
 
     g_DrawBgColor = BLACK;
 
-    Read_Hotkey_Config( frame, false );  /* Must be called before creating the
-                                          * main frame in order to display the
-                                          * real hotkeys in menus or tool tips
-                                          */
+   /* Must be called before creating the main frame in order to
+    * display the real hotkeys in menus or tool tips */
+    ReadHotkeyConfig( wxT("GerberFrame"), s_Gerbview_Hokeys_Descr );
+
     frame = new  WinEDA_GerberFrame( NULL, wxT( "GerbView" ),
                                      wxPoint( 0, 0 ),
                                      wxSize( 600, 400 ) );

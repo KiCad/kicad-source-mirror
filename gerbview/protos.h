@@ -3,8 +3,6 @@
 int* InstallDialogLayerPairChoice( WinEDA_GerberFrame* parent );
 
 bool Read_Config();
-bool Read_Hotkey_Config( WinEDA_DrawFrame* frame, bool verbose );
-
 
 void Print_PcbItems( BOARD* Pcb, wxDC* DC, int drawmode, int printmasklayer );
 
