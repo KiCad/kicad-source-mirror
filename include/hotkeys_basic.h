@@ -78,6 +78,15 @@ wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL )
  */
 wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId );
 
+/** function ReturnKeyCodeFromKeyName
+ * return the key code from its key name
+ * Only some wxWidgets key values are handled for function key
+ * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
+ *   like F2 or space or an usual (ascii) char.
+ * @return the key code
+ */
+int ReturnKeyCodeFromKeyName( const wxString& keyname );
+
 /** function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name

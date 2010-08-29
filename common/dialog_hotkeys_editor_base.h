@@ -37,8 +37,9 @@ class HOTKEYS_EDITOR_DIALOG_BASE : public wxDialog
 		wxButton* m_undoButton;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void KeyPressed( wxKeyEvent& event ){ event.Skip(); }
-		virtual void StartEditing( wxGridEvent& event ){ event.Skip(); }
+		virtual void OnKeyPressed( wxKeyEvent& event ){ event.Skip(); }
+		virtual void OnRightClickOnCell( wxGridEvent& event ){ event.Skip(); }
+		virtual void OnClickOnCell( wxGridEvent& event ){ event.Skip(); }
 		virtual void OnOKClicked( wxCommandEvent& event ){ event.Skip(); }
 		virtual void CancelClicked( wxCommandEvent& event ){ event.Skip(); }
 		virtual void UndoClicked( wxCommandEvent& event ){ event.Skip(); }

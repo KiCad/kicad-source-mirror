@@ -99,7 +99,7 @@
                         <property name="drag_col_size">1</property>
                         <property name="drag_grid_size">0</property>
                         <property name="drag_row_size">1</property>
-                        <property name="editing">1</property>
+                        <property name="editing">0</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="font"></property>
@@ -122,20 +122,20 @@
                         <property name="row_label_values"></property>
                         <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
                         <property name="row_sizes"></property>
-                        <property name="rows">5</property>
+                        <property name="rows">1</property>
                         <property name="size"></property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style"></property>
-                        <event name="OnChar">KeyPressed</event>
+                        <property name="window_style">wxDOUBLE_BORDER|wxTAB_TRAVERSAL|wxWANTS_CHARS</property>
+                        <event name="OnChar">OnKeyPressed</event>
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
                         <event name="OnGridCellChange"></event>
-                        <event name="OnGridCellLeftClick">StartEditing</event>
+                        <event name="OnGridCellLeftClick"></event>
                         <event name="OnGridCellLeftDClick"></event>
-                        <event name="OnGridCellRightClick"></event>
+                        <event name="OnGridCellRightClick">OnRightClickOnCell</event>
                         <event name="OnGridCellRightDClick"></event>
                         <event name="OnGridCmdCellChange"></event>
                         <event name="OnGridCmdCellLeftClick"></event>
@@ -163,7 +163,7 @@
                         <event name="OnGridLabelRightDClick"></event>
                         <event name="OnGridRangeSelect"></event>
                         <event name="OnGridRowSize"></event>
-                        <event name="OnGridSelectCell"></event>
+                        <event name="OnGridSelectCell">OnClickOnCell</event>
                         <event name="OnKeyDown"></event>
                         <event name="OnKeyUp"></event>
                         <event name="OnKillFocus"></event>
@@ -192,7 +192,7 @@
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer2</property>
+                        <property name="name">b_buttonsSizer</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
