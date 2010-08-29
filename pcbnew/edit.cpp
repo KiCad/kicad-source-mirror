@@ -38,6 +38,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     int         itmp;
     INSTALL_DC( dc, DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
+    MODULE* module;
 
     DrawPanel->CursorOff( &dc );
 
@@ -608,6 +609,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             g_Drag_Pistes_On = false;
             break;
         }
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         GetScreen()->m_Curseur = ((MODULE*) GetCurItem())->m_Pos;
         DrawPanel->MouseToCursorSchema();
         StartMove_Module( (MODULE*) GetCurItem(), &dc );
@@ -615,6 +625,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      /* get module by name and move it */
         SetCurItem( GetModuleByName() );
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         if( GetCurItem() )
         {
             DrawPanel->MouseToCursorSchema();
@@ -631,6 +650,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         if( Delete_Module( (MODULE*) GetCurItem(), &dc, true ) )
         {
             SetCurItem( NULL );
@@ -646,7 +674,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
             SaveCopyInUndoList(GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->m_Pos);
         Rotate_Module( &dc, (MODULE*) GetCurItem(), 900, true );
@@ -661,6 +697,15 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
             SaveCopyInUndoList(GetCurItem(), UR_ROTATED_CLOCKWISE, ((MODULE*)GetCurItem())->m_Pos);
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -900, true );
@@ -674,10 +719,17 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
         if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
             break;
-
+        module = (MODULE*) GetCurItem();
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "Footprint %s found, but it is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple flip, no other edition in progress */
             SaveCopyInUndoList(GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->m_Pos);
-
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
@@ -693,12 +745,34 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DRAG_PAD_REQUEST:
+        module = (MODULE*) GetCurItem()->GetParent();
+        if( !module || module->Type() != TYPE_MODULE )
+            break;
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "The parent (%s) of the pad is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         g_Drag_Pistes_On = true;
         DrawPanel->MouseToCursorSchema();
         StartMovePad( (D_PAD*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
+        module = (MODULE*) GetCurItem()->GetParent();
+        if( !module || module->Type() != TYPE_MODULE )
+            break;
+        if( module->IsLocked() )
+        {
+            wxString msg;
+            msg.Printf( _( "The parent (%s) of the pad is locked" ),
+                        module->m_Reference->m_Text.GetData() );
+            DisplayInfoMessage( this, msg );
+            break;
+        }
         g_Drag_Pistes_On = false;
         DrawPanel->MouseToCursorSchema();
         StartMovePad( (D_PAD*) GetCurItem(), &dc );

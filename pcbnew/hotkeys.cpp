@@ -945,17 +945,6 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
 
     case TYPE_MODULE:
     {
-        MODULE* module = (MODULE*) item;
-
-        // a footprint is found, but locked or on an other layer
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but locked" ),
-                       module->m_Reference->m_Text.GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
         if( aIdCommand == HK_DRAG_ITEM )
@@ -1040,15 +1029,6 @@ bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand )
     {
     case TYPE_MODULE:
     {
-         MODULE* module = (MODULE*) item;
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s is locked" ),
-                       module->m_Reference->m_Text.GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
         if( aIdCommand == HK_FLIP_FOOTPRINT )                   // move to other side
