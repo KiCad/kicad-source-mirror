@@ -40,8 +40,9 @@ private:
     void OnOKClicked( wxCommandEvent& event );
     void CancelClicked( wxCommandEvent& event );
     void UndoClicked( wxCommandEvent& event );
-    void StartEditing( wxGridEvent& event );
-    void KeyPressed( wxKeyEvent& event );
+    void OnClickOnCell( wxGridEvent& event );
+    void OnRightClickOnCell( wxGridEvent& event );
+    void OnKeyPressed( wxKeyEvent& event );
     void SetHotkeyCellState( int aRow, bool aHightlight );
 };
 

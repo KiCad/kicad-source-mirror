@@ -1,12 +1,34 @@
-#include <wx/tooltip.h>
+/*
+dialog_hotkeys_editor.cpp
+*/
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <algorithm>
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "gr_basic.h"
 #include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
 
 #include "dialog_hotkeys_editor.h"
 
@@ -30,6 +52,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( WinEDA_DrawFrame*               pa
 {
     m_parent  = parent;
     m_hotkeys = hotkeys;
+    m_curEditingRow = -1;
 
     m_table = new HotkeyGridTable( hotkeys );
     m_hotkeyGrid->SetTable( m_table, true );
@@ -82,16 +105,18 @@ void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
     /* save the hotkeys */
     m_parent->WriteHotkeyConfig( m_hotkeys );
 
-    Close( TRUE );
+    EndModal( wxID_OK );
 }
 
 
 void HOTKEYS_EDITOR_DIALOG::CancelClicked( wxCommandEvent& event )
 {
-    Close( TRUE );
+    EndModal( wxID_CANCEL );
 }
 
 
+/* Reinit the hotkeys to the initial state (remove all pending changes
+ */
 void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& event )
 {
     m_table->RestoreFrom( m_hotkeys );
@@ -121,13 +146,13 @@ void HOTKEYS_EDITOR_DIALOG::SetHotkeyCellState( int aRow, bool aHightlight )
 }
 
 
-void HOTKEYS_EDITOR_DIALOG::StartEditing( wxGridEvent& event )
+void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
 {
     if( m_curEditingRow != -1 )
         SetHotkeyCellState( m_curEditingRow, false );
 
     int newRow = event.GetRow();
-    if( m_curEditingRow == newRow || m_table->isHeader( newRow ) )
+    if( ( event.GetCol() != 1 ) || ( m_table->isHeader( newRow ) ) )
     {
         m_curEditingRow = -1;
     }
@@ -140,8 +165,47 @@ void HOTKEYS_EDITOR_DIALOG::StartEditing( wxGridEvent& event )
     Update();
 }
 
+/** OnRightClickOnCell
+ * If a cell is selected, display a list of keys for selection
+ * The list is restricted to keys that cannot be entered:
+ * tab, home ... because these keys have special functions in dialogs
+ */
+void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
+{
+    // Select the new cell if needed
+    OnClickOnCell(event);
 
-void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
+    if( m_curEditingRow == -1 )
+        return;
+
+    // Do not translate these key names. They are internally used.
+    //ee hotkeys_basic.cpp
+    #define C_COUNT 8
+    wxString choices[C_COUNT] =
+    {
+        wxT("End")
+        wxT("Tab"),
+        wxT("Ctrl+Tab"),
+        wxT("Alt+Tab"),
+        wxT("Home"),
+        wxT("Space"),
+        wxT("Ctrl+Space"),
+        wxT("Alt+Space"),
+    };
+
+    wxString keyname = wxGetSingleChoice(
+        _("Special keys only. For others keys, use keyboard"),
+        _("Select a key"), C_COUNT, choices, this);
+    int key = ReturnKeyCodeFromKeyName( keyname );
+
+    if( key == 0 )
+        return;
+    m_table->SetKeyCode( m_curEditingRow, key );
+    m_hotkeyGrid->Refresh();
+    Update();
+}
+
+void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
 {
     if( m_curEditingRow != -1 )
     {
@@ -155,7 +219,6 @@ void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
             break;
 
         default:
-
             if( event.ControlDown() )
                 key |= GR_KB_CTRL;
             if( event.AltDown() )
@@ -168,7 +231,7 @@ void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
             if( (key > GR_KB_CTRL) && (key <= GR_KB_CTRL+26) )
                 key += ('A' - 1);
 
-            if( key >= 'a' && key <= 'z' ) //upcase key
+            if( key >= 'a' && key <= 'z' ) // convert to uppercase
                 key = key + ('A' - 'a');
 
 #if 0       // For debug only
@@ -176,7 +239,7 @@ void HOTKEYS_EDITOR_DIALOG::KeyPressed( wxKeyEvent& event )
             msg.Printf(wxT("key %X, keycode %X"),event.GetKeyCode(), key);
             wxMessageBox(msg);
 #endif
-            // See if this key code is handled in hotkeys list
+            // See if this key code is handled in hotkeys names list
             bool exists;
             ReturnKeyNameFromKeyCode( key, &exists );
             if( !exists )   // not handled, see hotkeys_basic.cpp

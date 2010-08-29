@@ -70,6 +70,9 @@ struct hotkey_name_descr
  * Note : when modifiers (ATL, SHIFT, CTRL) do not modify
  * the code of the key, do need to enter the modified key code
  * For instance wxT( "F1" ), WXK_F1 handle F1, AltF1, CtrlF1 ...
+ * Key names are:
+ *        "Space","Ctrl+Space","Alt+Space" or
+ *      "Alt+A","Ctrl+F1", ...
  */
 static struct hotkey_name_descr s_Hotkey_Name_List[] =
 {
@@ -88,7 +91,7 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
 
     { wxT( "Esc" ),          WXK_ESCAPE                                               },
     { wxT( "Del" ),          WXK_DELETE                                               },
-    { wxT( "Tab" ),          '\t'                                                     },
+    { wxT( "Tab" ),          WXK_TAB                                                  },
     { wxT( "BkSp" ),         WXK_BACK                                                 },
     { wxT( "Ins" ),          WXK_INSERT                                               },
 
@@ -101,6 +104,8 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
     { wxT( "Down" ),         WXK_DOWN                                                 },
     { wxT( "Left" ),         WXK_LEFT                                                 },
     { wxT( "Right" ),        WXK_RIGHT                                                },
+
+    { wxT( "Space" ),        WXK_SPACE                                                },
 
     // Do not change this line: end of list
     { wxT( "" ),             0                                                        }
@@ -134,7 +139,7 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 
     aKeycode &= ~( GR_KB_CTRL | GR_KB_ALT | GR_KB_SHIFT );
 
-    if( (aKeycode >= ' ') && (aKeycode < 0x7F ) )
+    if( (aKeycode > ' ') && (aKeycode < 0x7F ) )
     {
         found   = true;
         keyname.Append((wxChar)aKeycode);
@@ -263,7 +268,7 @@ wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId )
  *   like F2 or space or an usual (ascii) char.
  * @return the key code
  */
-static int ReturnKeyCodeFromKeyName( const wxString& keyname )
+int ReturnKeyCodeFromKeyName( const wxString& keyname )
 {
     int ii, keycode = 0;
 
@@ -292,10 +297,11 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
             break;
     }
 
-    if( (key[0] >= ' ') && (key[0] < 0x7F) )
+    if( (key.length() == 1) && (key[0] > ' ') && (key[0] < 0x7F) )
     {
         keycode = key[0];
         keycode += modifier;
+        return keycode;
     }
 
     for( ii = 0; ; ii++ )
@@ -303,7 +309,7 @@ static int ReturnKeyCodeFromKeyName( const wxString& keyname )
         if( s_Hotkey_Name_List[ii].m_KeyCode == 0 )  // End of list reached
             break;
 
-        if( keyname.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
+        if( key.CmpNoCase( s_Hotkey_Name_List[ii].m_Name ) == 0 )
         {
             keycode = s_Hotkey_Name_List[ii].m_KeyCode + modifier;
             break;
