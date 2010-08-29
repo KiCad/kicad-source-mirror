@@ -175,7 +175,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABELITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABELITEM | TEXTITEM );
     if( DrawStruct )
     {
         ClearMsgPanel();
