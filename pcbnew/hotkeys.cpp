@@ -171,7 +171,11 @@ Ki_HotkeyInfo* s_board_edit_Hotkey_List[] =
 };
 
 // List of hotkey descriptors for the module editor
-Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = { NULL };
+Ki_HotkeyInfo* s_module_edit_Hotkey_List[] = {
+    &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
+    &HkDelete,
+    NULL
+ };
 
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
 struct Ki_HotkeyInfoSectionDescriptor s_Pcbnew_Editor_Hokeys_Descr[] =
@@ -635,9 +639,211 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey,
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         break;
+
+    case HK_EDIT_ITEM:
+        OnHotkeyEditItem( HK_EDIT_ITEM );
+        break;
+
+    case HK_DELETE:
+        OnHotkeyDeleteItem( HK_DELETE );
+        break;
+
+    case HK_MOVE_ITEM:
+        OnHotkeyMoveItem( HK_MOVE_ITEM );
+        break;
+
+    case HK_ROTATE_ITEM:
+        OnHotkeyRotateItem( HK_ROTATE_ITEM );
+        break;
     }
 }
 
+bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->m_Flags;
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    item = ModeditLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+
+    switch( item->Type() )
+    {
+    case TYPE_MODULE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_MODULE;
+        break;
+
+    case TYPE_PAD:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_PAD;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_TEXTMODULE;
+        break;
+
+    default:
+        break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}
+
+bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->m_Flags;
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    item = ModeditLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+
+    switch( item->Type() )
+    {
+    case TYPE_PAD:
+        if( aIdCommand == HK_DELETE )
+            evt_type = ID_POPUP_PCB_DELETE_PAD;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        if( aIdCommand == HK_DELETE )
+            evt_type = ID_POPUP_PCB_DELETE_TEXTMODULE;
+        break;
+
+    case TYPE_EDGE_MODULE:
+        if( aIdCommand == HK_DELETE )
+            evt_type = ID_POPUP_PCB_DELETE_EDGE;
+        break;
+
+    default:
+        break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}
+
+bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->m_Flags;
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    item = ModeditLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+
+    switch( item->Type() )
+    {
+    case TYPE_PAD:
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_PAD_REQUEST;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+        break;
+
+    case TYPE_EDGE_MODULE:
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_EDGE;
+        break;
+
+    default:
+        break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}
+
+bool WinEDA_ModuleEditFrame::OnHotkeyRotateItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool        itemCurrentlyEdited = item && item->m_Flags;
+    int         evt_type = 0; // Used to post a wxCommandEvent on demand
+
+    if( !itemCurrentlyEdited )
+        item = ModeditLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    switch( item->Type() )
+    {
+    case TYPE_TEXTE_MODULE:
+        if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
+            evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+        break;
+
+    default:
+        break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}
 
 /** Function OnHotkeyDeleteItem
  * Delete the item found under the mouse cursor

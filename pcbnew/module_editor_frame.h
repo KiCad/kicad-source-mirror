@@ -41,6 +41,10 @@ public:
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    bool         OnHotkeyEditItem( int aIdCommand );
+    bool         OnHotkeyDeleteItem( int aIdCommand );
+    bool         OnHotkeyMoveItem( int aIdCommand );
+    bool         OnHotkeyRotateItem( int aIdCommand );
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
 

@@ -17,6 +17,7 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 
+#include "hotkeys.h"
 
 /* Handle the left click in footprint editor
  */
@@ -264,8 +265,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Rotate" ), rotate_module_pos_xpm );
         ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_MIRROR,
                       _( "Mirror" ), mirror_H_xpm );
+        msg = AddHotkeyName( _( "Edit Module" ), s_Module_Editor_Hokeys_Descr,
+                             HK_EDIT_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_MODULE,
-                      _( "Edit Module" ), edit_module_xpm );
+                      msg, edit_module_xpm );
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, transform_choice,
                                    ID_MODEDIT_TRANSFORM_MODULE,
                                    _( "Transform Module" ), edit_xpm );
@@ -275,17 +278,23 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_PAD:
         if( !flags )
         {
+            msg = AddHotkeyName( _("Move Pad" ), s_Module_Editor_Hokeys_Descr,
+                                 HK_MOVE_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST,
-                          _( "Move Pad" ), move_pad_xpm );
+                          msg, move_pad_xpm );
         }
-        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_PAD, _( "Edit Pad" ),
-                      options_pad_xpm );
+        msg = AddHotkeyName( _("Edit Pad" ), s_Module_Editor_Hokeys_Descr,
+                             HK_EDIT_ITEM );
+        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_PAD,
+                      msg, options_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
                       _( "New Pad Settings" ), options_new_pad_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
                       _( "Export Pad Settings" ), export_options_pad_xpm );
+        msg = AddHotkeyName( _("Delete Pad" ), s_Module_Editor_Hokeys_Descr,
+                             HK_DELETE );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_PAD,
-                      _( "delete Pad" ), delete_pad_xpm );
+                      msg, delete_pad_xpm );
         if( !flags )
         {
             PopMenu->AppendSeparator();
@@ -297,18 +306,28 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_TEXTE_MODULE:
         if( !flags )
         {
+            msg = AddHotkeyName( _("Move Text Mod." ), s_Module_Editor_Hokeys_Descr,
+                                 HK_MOVE_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
-                          _( "Move Text Mod." ), move_field_xpm );
+                          msg, move_field_xpm );
         }
+        msg = AddHotkeyName( _("Rotate Text Mod." ), s_Module_Editor_Hokeys_Descr,
+                             HK_ROTATE_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-                      _( "Rotate Text Mod." ), rotate_field_xpm );
+                      msg, rotate_field_xpm );
         if( !flags )
         {
+            msg = AddHotkeyName( _("Edit Text Mod." ), s_Module_Editor_Hokeys_Descr,
+                                 HK_EDIT_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
-                          _( "Edit Text Mod." ), edit_text_xpm );
+                          msg, edit_text_xpm );
             if( ( (TEXTE_MODULE*) DrawStruct )->m_Type == TEXT_is_DIVERS )
+            {
+                msg = AddHotkeyName( _("Delete Text Mod." ), s_Module_Editor_Hokeys_Descr,
+                                     HK_DELETE );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE,
-                              _( "Delete Text Mod." ), delete_text_xpm );
+                              msg, delete_text_xpm );
+            }
         }
         break;
 
@@ -318,8 +337,12 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
                           _( "End edge" ), apply_xpm );
         if( !flags )
+        {
+            msg = AddHotkeyName( _("Move edge" ), s_Module_Editor_Hokeys_Descr,
+                                 HK_MOVE_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_EDGE,
-                          _( "Move edge" ), move_line_xpm );
+                          msg, move_line_xpm );
+        }
         if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_PLACE_EDGE,
                           _( "Place edge" ), apply_xpm );
@@ -335,8 +358,10 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                       _( "Edit Layer (Current)" ), select_layer_pair_xpm );
         ADD_MENUITEM( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE,
                       _( "Edit Layer (All)" ), select_layer_pair_xpm );
+        msg = AddHotkeyName( _("Delete edge" ), s_Module_Editor_Hokeys_Descr,
+                             HK_DELETE );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DELETE_EDGE,
-                      _( "Delete edge" ), delete_xpm );
+                      msg, delete_xpm );
         append_set_width = TRUE;
     }
     break;
@@ -375,7 +400,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                || ( m_ID_current_state == ID_PCB_ARC_BUTT ) ) ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH,
-                      _( "Set Width" ), width_segment_xpm );
+                      _("Set Width" ), width_segment_xpm );
         PopMenu->AppendSeparator();
     }
 
