@@ -1180,7 +1180,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
         s_IgnoreNextLeftButtonRelease = false;
     }
 
-    if( event.ButtonUp( 2 )
+    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE )
        && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
     {
         // The middle button has been released, with no block command:
@@ -1283,7 +1283,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
             }
         }
 
-        if( event.ButtonUp( 1 ) || event.ButtonUp( 2 ) )
+        if( event.ButtonUp( wxMOUSE_BTN_LEFT ) || event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
         {
             /* Release the mouse button: end of block.
              * The command can finish (DELETE) or have a next command (MOVE,
