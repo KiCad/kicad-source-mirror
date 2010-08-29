@@ -448,7 +448,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
         // add a new field unconditionally to the UI only
-        SCH_FIELD   fld( wxPoint(0,0), -1 /* id is a relic */, NULL, it->m_Name );
+        SCH_FIELD   fld( wxPoint(0,0), -1 /* id is a relic */, m_Cmp, it->m_Name );
 
         // See if field by same name already exists in component.
         SCH_FIELD* schField = aComponent->FindField( it->m_Name );
