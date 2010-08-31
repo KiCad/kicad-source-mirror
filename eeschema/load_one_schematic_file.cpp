@@ -52,17 +52,20 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
     SCH_BUS_ENTRY*  busEntry;
     SCH_NO_CONNECT* NoConnectStruct;
     int             LineCount;
-    wxString        MsgDiag;   /* Error and log messages */
+    wxString        MsgDiag;            // Error and log messages
 
     FILE*           f;
 
     if( screen == NULL )
         return FALSE;
+
     if( FullFileName.IsEmpty() )
         return FALSE;
 
     screen->SetCurItem( NULL );
     screen->m_FileName = FullFileName;
+
+    // D(printf("LoadOneEEFile:%s\n", CONV_TO_UTF8( FullFileName ) ); )
 
     LineCount = 1;
     if( ( f = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
@@ -85,7 +88,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
         return FALSE;
     }
 
-    //get the file version here. TODO: Support version numbers > 9
+    // get the file version here. TODO: Support version numbers > 9
     char version = Line[9 + sizeof(SCHEMATIC_HEAD_STRING)];
     int  ver     = version - '0';
     if( ver > EESCHEMA_VERSION )
@@ -136,7 +139,7 @@ again." );
 
         switch( Line[0] )
         {
-        case '$':           /* identification block */
+        case '$':           // identification block
             if( Line[1] == 'C' )
                 Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount, screen );
 
@@ -145,31 +148,30 @@ again." );
 
             else if( Line[1] == 'D' )
                 Failed = ReadSchemaDescr( this, Line, f, MsgDiag, &LineCount, screen );
-        else if( Line[1] == 'T' ) //text part
-        {
-            printf( "**** TEXT PART\n" );
-            SCH_ITEM* Struct;
-            Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version );
 
-            if( Struct )
+            else if( Line[1] == 'T' ) // text part
             {
-                Struct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = Struct;
-            }
-            else
-            {
-                Failed = true;
-            }
-        }
+                printf( "**** TEXT PART\n" );
+                SCH_ITEM* Struct;
+                Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version );
 
+                if( Struct )
+                {
+                    Struct->SetNext( screen->EEDrawList );
+                    screen->EEDrawList = Struct;
+                }
+                else
+                {
+                    Failed = true;
+                }
+            }
             break;
 
-        case 'L':        /* Its a library item. */
+        case 'L':        // Its a library item.
             Failed = ReadPartDescr( this, Line, f, MsgDiag, &LineCount, screen );
             break;
 
-
-        case 'W':        /* Its a Segment (WIRE or BUS) item. */
+        case 'W':        // Its a Segment (WIRE or BUS) item.
             if( sscanf( SLine, "%s %s", Name1, Name2 ) != 2  )
             {
                 MsgDiag.Printf( wxT( "EESchema file segment error at line %d, aborted" ),
@@ -178,7 +180,9 @@ again." );
                 Failed = true;
                 break;
             }
+
             layer = LAYER_NOTES;
+
             if( Name1[0] == 'W' )
                 layer = LAYER_WIRE;
             if( Name1[0] == 'B' )
@@ -207,8 +211,7 @@ again." );
             }
             break;
 
-
-        case 'E':        /* Its a WIRE or BUS item. */
+        case 'E':        // Its a WIRE or BUS item.
             if( sscanf( SLine, "%s %s", Name1, Name2 ) != 2  )
             {
                 MsgDiag.Printf( wxT( "EESchema file record struct error at line %d, aborted" ),
@@ -224,6 +227,7 @@ again." );
             busEntry = new SCH_BUS_ENTRY( wxPoint( 0, 0 ), '\\', ii );
 
             LineCount++;
+
             if( fgets( Line, 256 - 1, f ) == NULL
                 || sscanf( Line, "%d %d %d %d ", &busEntry->m_Pos.x, &busEntry->m_Pos.y,
                            &busEntry->m_Size.x, &busEntry->m_Size.y ) != 4 )
@@ -245,7 +249,7 @@ again." );
             }
             break;
 
-        case 'P':        /* Its a polyline item. */
+        case 'P':        // Its a polyline item.
             if( sscanf( SLine, "%s %s %d", Name1, Name2, &ii ) != 3 )
             {
                 MsgDiag.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
@@ -287,7 +291,7 @@ at line %d, aborted" ),
             }
             break;
 
-        case 'C':                       /* It is a connection item. */
+        case 'C':                       // It is a connection item.
             ConnectionStruct = new SCH_JUNCTION( wxPoint( 0, 0 ) );
 
             if( sscanf( SLine, "%s %d %d", Name1, &ConnectionStruct->m_Pos.x,
@@ -307,7 +311,7 @@ at line %d, aborted" ),
             }
             break;
 
-        case 'N':                       /* It is a NoConnect item. */
+        case 'N':                       // It is a NoConnect item.
             if( sscanf( SLine, "%s %d %d", Name1, &pos.x, &pos.y ) != 3 )
             {
                 MsgDiag.Printf( wxT( "EESchema file NoConnect struct error at line %d, aborted" ),
@@ -323,25 +327,25 @@ at line %d, aborted" ),
             }
             break;
 
-        case 'K':                       /* It is a Marker item. */
+        case 'K':                       // It is a Marker item.
             // Markers are no more read from file. they are only created on
             // demand in schematic
             break;
 
-        case 'T':                       /* It is a text item. */
-        {
-            SCH_ITEM* Struct;
-            Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version);
-
-            if( Struct )
+        case 'T':                       // It is a text item.
             {
-                Struct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = Struct;
+                SCH_ITEM* Struct;
+                Struct = ReadTextDescr( f, MsgDiag, Line, sizeof(Line), &LineCount, version);
+
+                if( Struct )
+                {
+                    Struct->SetNext( screen->EEDrawList );
+                    screen->EEDrawList = Struct;
+                }
+                else
+                    Failed = true;
             }
-            else
-                Failed = true;
             break;
-        }
 
         default:
             Failed = true;
@@ -381,7 +385,7 @@ at line %d, aborted" ),
     MsgDiag = _( "Done Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
 
-    return true;    /* Although it may be that file is only partially loaded. */
+    return true;    // Although it may be that file is only partially loaded.
 }
 
 
