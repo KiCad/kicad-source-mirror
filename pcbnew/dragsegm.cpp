@@ -1,44 +1,28 @@
-/*********************************************************/
-/* Routines relatives a la gestions des pistes en "DRAG" */
-/*********************************************************/
+/*********************************/
+/* functions used to drag tracks */
+/*********************************/
 
 /* Fichier dragsegm.cpp */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
-#include "autorout.h"
-
-#include "protos.h"
 
 #include "drag.h"
 
+/* a list of DRAG_SEGM items used to move or drag tracks */
+std::vector<DRAG_SEGM> g_DragSegmentList;
 
-DRAG_SEGM* g_DragSegmentList = NULL;    /* pointe le debut de la liste
-                                         * des structures DRAG_SEGM */
-
+/* helper class to handle a list of track segments to drag or move
+ */
 DRAG_SEGM::DRAG_SEGM( TRACK* segm )
 {
     m_Segm = segm;
     m_StartInitialValue = m_Segm->m_Start;
     m_EndInitialValue   = m_Segm->m_End;
-
     m_Pad_Start = m_Pad_End = NULL;
     m_Flag = 0;
-}
-
-
-DRAG_SEGM::~DRAG_SEGM()
-{
-}
-
-
-void DRAG_SEGM::SetInitialValues()
-{
-    m_Segm->m_Start = m_StartInitialValue;
-    m_Segm->m_End   = m_EndInitialValue;
 }
 
 
@@ -47,40 +31,30 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
 /*******************************************************************/
 /* Redraw the list of segments starting in g_DragSegmentList, while moving a footprint */
 {
-    D_PAD*     pt_pad;
-    TRACK*     Track;
-    DRAG_SEGM* pt_drag;
+    D_PAD* pt_pad;
+    TRACK* Track;
 
-    if( g_DragSegmentList == NULL )
+    if( g_DragSegmentList.size() == 0 )
         return;
 
-    pt_drag = g_DragSegmentList;
-    for( ; pt_drag; pt_drag = pt_drag->Pnext )
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        int px, py;
-
-        Track = pt_drag->m_Segm;
-
+        wxPoint pos;
+        Track = g_DragSegmentList[ii].m_Segm;
         Track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
 
-        pt_pad = pt_drag->m_Pad_Start;
+        pt_pad = g_DragSegmentList[ii].m_Pad_Start;
         if( pt_pad )
         {
-            px = pt_pad->m_Pos.x - g_Offset_Module.x;
-            py = pt_pad->m_Pos.y - g_Offset_Module.y;
-
-            Track->m_Start.x = px;
-            Track->m_Start.y = py;
+            pos = pt_pad->m_Pos - g_Offset_Module;
+            Track->m_Start = pos;
         }
 
-        pt_pad = pt_drag->m_Pad_End;
+        pt_pad = g_DragSegmentList[ii].m_Pad_End;
         if( pt_pad )
         {
-            px = pt_pad->m_Pos.x - g_Offset_Module.x;
-            py = pt_pad->m_Pos.y - g_Offset_Module.y;
-
-            Track->m_End.x = px;
-            Track->m_End.y = py;
+            pos = pt_pad->m_Pos - g_Offset_Module;
+            Track->m_End = pos;
         }
 
         Track->Draw( panel, DC, GR_XOR );
@@ -91,13 +65,10 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
 /*************************************************************************/
 void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module )
 /*************************************************************************/
-
-/* Construit la liste des segments connectes aus pads du module Module
- *  pour le drag de ces segments
- *  la liste est mise a l'adresse pointee par pt_drag.
- *  la variable globale nb_drag_segment est incrementee du nombre de segments
- *  Met l'attribut EDIT sur les segments selectionnes
- *  et les affiche en mode EDIT (sketch)
+/** Build the list of track segments connected to pads of a given module
+ *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
+ *  For each selected track segment set the EDIT flag
+ *  and redraw them in EDIT mode (sketch mode)
  */
 {
     D_PAD* pt_pad;
@@ -115,16 +86,18 @@ void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module )
 /**********************************************************************************/
 void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad )
 /**********************************************************************************/
-
-/* Routine construisant la liste les segments de piste connectes au pad PtPad
- *  Les net_codes sont supposes a jour.
+/** Build the list of track segments connected to a given pad
+ *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
+ *  For each selected track segment set the EDIT flag
+ *  and redraw them in EDIT mode (sketch mode)
+ *  Net codes must be OK.
  */
 {
     TRACK*  Track;
     int     net_code = PtPad->GetNet();
     int     MasqueLayer;
     wxPoint pos;
-    BOARD*  pcb = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
+    BOARD*  pcb = ( (WinEDA_BasePcbFrame*)( panel->GetParent() ) )->GetBoard();
 
     Track = pcb->m_Track->GetStartNetCode( net_code );
 
@@ -133,21 +106,21 @@ void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad
     for( ; Track; Track = Track->Next() )
     {
         if( Track->GetNet() != net_code )
-            break;                                                      /* hors zone */
+            break;
 
         if( ( MasqueLayer & Track->ReturnMaskLayer() ) == 0 )
-            continue;                                                   /* couches differentes */
+            continue;
 
         if( pos == Track->m_Start )
         {
             AddSegmentToDragList( panel, DC, STARTPOINT, Track );
-            g_DragSegmentList->m_Pad_Start = PtPad;
+            g_DragSegmentList.back().m_Pad_Start = PtPad;
         }
 
         if( pos == Track->m_End )
         {
             AddSegmentToDragList( panel, DC, ENDPOINT, Track );
-            g_DragSegmentList->m_Pad_End = PtPad;
+            g_DragSegmentList.back().m_Pad_End = PtPad;
         }
     }
 }
@@ -157,23 +130,17 @@ void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad
 void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
                            int flag, TRACK* Track )
 /******************************************************************/
-
 /* Add the segment"Track" to the drag list, and erase it from screen
  *  flag = STARTPOINT (if the point to drag is the start point of Track) or ENDPOINT
  */
 {
-    DRAG_SEGM* pt_drag;
-
-    pt_drag = new DRAG_SEGM( Track );
-
-    pt_drag->Pnext = g_DragSegmentList;
-    g_DragSegmentList = pt_drag;
+    DRAG_SEGM wrapper( Track );
 
     if( (flag & STARTPOINT) )
-        pt_drag->m_Flag |= 1;
+        wrapper.m_Flag |= 1;
 
     if( (flag & ENDPOINT) )
-        pt_drag->m_Flag |= 2;
+        wrapper.m_Flag |= 2;
 
     Track->Draw( panel, DC, GR_XOR );
     Track->SetState( EDIT, ON );
@@ -185,66 +152,68 @@ void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
         Track->m_Flags |= ENDPOINT;
 
     Track->Draw( panel, DC, GR_XOR );
+    g_DragSegmentList.push_back( wrapper );
 }
 
 
 /**********************************************************************************/
 void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
-                                  wxPoint& point, int MasqueLayer, int net_code )
+                                  wxPoint& aRefPos, int MasqueLayer, int net_code )
 /**********************************************************************************/
 
-/* Routine construisant la liste les segments de piste connectes a la via Via
- *  Les net_codes sont supposes a jour.
+/* Build the list of tracks connected to the ref point
+ *  Net codes must be OK.
+ * @param aRefPos = reference point of connection
  */
 {
-    BOARD* pcb = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
+    BOARD* pcb = ( (WinEDA_BasePcbFrame*)( panel->GetParent() ) )->GetBoard();
 
     TRACK* track = pcb->m_Track->GetStartNetCode( net_code );
+
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != net_code )
-            break;                                                      /* hors zone */
+        if( track->GetNet() != net_code )   // Bad net, not connected
+            break;
 
         if( ( MasqueLayer & track->ReturnMaskLayer() ) == 0 )
-            continue;                                                   /* couches differentes */
+            continue;                       // Cannot be connected, not on the same layer
 
         if( track->m_Flags & IS_DRAGGED )
-            continue;                                                   // already in list
+            continue;                       // already put in list
 
-        if( track->m_Start == point )
-        {
-            AddSegmentToDragList( panel, DC, STARTPOINT, track );
-        }
+        int flag = 0;
+        
+        if( (track->m_Start == aRefPos) && ((track->m_Flags & STARTPOINT) == 0) )
+            flag |= STARTPOINT;
 
-        if( track->m_End == point )
+        if( track->m_End == aRefPos && ((track->m_Flags & ENDPOINT) == 0)  )
+            flag |= ENDPOINT;
+
+        // Note: vias will be flagged with both STARTPOINT and ENDPOINT
+        // and must not be entered twice.
+        if( flag )
         {
-            AddSegmentToDragList( panel, DC, ENDPOINT, track );
+            AddSegmentToDragList( panel, DC, flag, track );
+            // If a connected via is found at location aRefPos,
+            // collect also tracks connected by this via.
+            if( track->Type() == TYPE_VIA )
+                Collect_TrackSegmentsToDrag( panel, DC, aRefPos,
+                                            track->ReturnMaskLayer(),
+                                            net_code );
         }
     }
 }
 
 
-/*****************************/
-void EraseDragListe()
-/*****************************/
-
-/* Routine de liberation memoire de la liste des structures DRAG_SEGM
- *  remet a zero le pointeur global g_DragSegmentList
+/** function EraseDragList
+ * clear the .m_Flags of all track segments found in g_DragSegmentList
+ * and clear the list.
+ * the memory is not freed and will be reused when creating a new list
  */
+void EraseDragList()
 {
-    DRAG_SEGM* pt_drag;
-    DRAG_SEGM* NextStruct;
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
+        g_DragSegmentList[ii].m_Segm->m_Flags = 0;
 
-    if( g_DragSegmentList == NULL )
-        return;
-
-    pt_drag = g_DragSegmentList;
-    for( ; pt_drag != NULL; pt_drag = NextStruct )
-    {
-        NextStruct = pt_drag->Pnext;
-        pt_drag->m_Segm->m_Flags = 0;
-        delete pt_drag;
-    }
-
-    g_DragSegmentList = NULL;
+    g_DragSegmentList.clear();
 }

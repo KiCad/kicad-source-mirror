@@ -1,4 +1,8 @@
+<<<<<<< TREE
+update=31/08/2010 17:56:15
+=======
 update=22/07/2010 13:46:39
+>>>>>>> MERGE-SOURCE
 version=1
 last_client=pcbnew
 [common]
