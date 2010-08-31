@@ -61,7 +61,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         Panel->ManageCurseur( Panel, DC, true );
 
     Panel->GetScreen()->m_Curseur = oldpos;
-    g_HighLight_Status = FALSE;
+    g_HighLight_Status = false;
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
         Panel,
         DC,
@@ -110,11 +110,10 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     /* Undo move and redraw trace segments. */
-    DRAG_SEGM* pt_drag = g_DragSegmentList;
-    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    for( unsigned jj=0 ; jj < g_DragSegmentList.size(); jj++ )
     {
-        TRACK* Track = pt_drag->m_Segm;
-        pt_drag->SetInitialValues();
+        TRACK* Track = g_DragSegmentList[jj].m_Segm;
+        g_DragSegmentList[jj].SetInitialValues();
         Track->SetState( EDIT, OFF );
         Track->m_Flags = 0;
         Track->Draw( Panel, DC, GR_OR );
@@ -127,11 +126,9 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
     g_HighLight_Status   = Old_HighLigt_Status;
     if( g_HighLight_Status )
         ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
-            Panel,
-            DC,
-            g_HighLight_NetCode );
+            Panel, DC, g_HighLight_NetCode );
 
-    EraseDragListe();
+    EraseDragList();
 }
 
 
@@ -145,7 +142,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     int          draw_mode = GR_XOR | GR_SURBRILL;
 
-    DisplayOpt.DisplayPcbTrackFill = FALSE;
+    DisplayOpt.DisplayPcbTrackFill = false;
 
     erase = true;
 
@@ -175,10 +172,9 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* Redraw the current moved track segments */
     Trace_Une_Piste( panel, DC, NewTrack, NbPtNewTrack, draw_mode );
 
-    DRAG_SEGM* pt_drag = g_DragSegmentList;
-    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        Track = pt_drag->m_Segm;
+        Track = g_DragSegmentList[ii].m_Segm;
         if( erase )
             Track->Draw( panel, DC, draw_mode );
 
@@ -250,32 +246,35 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
     BASE_SCREEN* screen = panel->GetScreen();
     bool         update = true;
     TRACK*       Track;
-    DRAG_SEGM*   TrackSegWrapper = g_DragSegmentList;
     TRACK*       tSegmentToStart = NULL, * tSegmentToEnd = NULL;
 
-    if( TrackSegWrapper == NULL )
+    if( g_DragSegmentList.size() == 0 )
         return;
 
-    Track = TrackSegWrapper->m_Segm;
+    /* get the segments :
+     * from last to first in list are:
+     * the segment to move
+     * the segment connected to its end point (if exists)
+     * the segment connected to its start point (if exists)
+     */
+    int ii = g_DragSegmentList.size() - 1;
+    Track = g_DragSegmentList[ii].m_Segm;
     if( Track == NULL )
         return;
-
-    TrackSegWrapper = TrackSegWrapper->Pnext;
-    if( TrackSegWrapper )
+    ii--;
+    if( ii >= 0)
     {
-        if( s_EndSegmentPresent )
+         if( s_EndSegmentPresent )
         {
-            tSegmentToEnd   = TrackSegWrapper->m_Segm;  // Get the segment
-                                                        // connected to the end
-                                                        // point
-            TrackSegWrapper = TrackSegWrapper->Pnext;
+            // Get the segment connected to the end point
+            tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;
+            ii--;
         }
         if( s_StartSegmentPresent )
         {
-            if( TrackSegWrapper )
-                tSegmentToStart = TrackSegWrapper->m_Segm;  // Get the segment
-                                                            // connected to the
-                                                            // start point
+            // Get the segment connected to the start point
+            if( ii >= 0 )
+                tSegmentToStart = g_DragSegmentList[ii].m_Segm; 
         }
     }
 
@@ -461,36 +460,42 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
 
 /* Init variables (slope, Y intersect point, flags) for
  * Show_Drag_Track_Segment_With_Cte_Slope()
- *  return true if Ok, FALSE if dragging is not possible
+ *  return true if Ok, false if dragging is not possible
  *  (2 colinear segments)
  */
 bool InitialiseDragParameters()
 {
     double     tx1, tx2, ty1, ty2; // temporary storage of points
     TRACK*     Track;
-    DRAG_SEGM* TrackSegWrapper = g_DragSegmentList;
     TRACK*     tSegmentToStart = NULL, * tSegmentToEnd = NULL;
 
-    if( TrackSegWrapper == NULL )
-        return FALSE;
-    Track = TrackSegWrapper->m_Segm;
-    if( Track == NULL )
-        return FALSE;
+    if( g_DragSegmentList.size() == 0 )
+        return false;
 
-    TrackSegWrapper = TrackSegWrapper->Pnext;
-    if( TrackSegWrapper )
+    /* get the segments :
+     * from last to first in list are:
+     * the segment to move
+     * the segment connected to its end point (if exists)
+     * the segment connected to its start point (if exists)
+     */
+    int ii = g_DragSegmentList.size() - 1;
+    Track = g_DragSegmentList[ii].m_Segm;
+    if( Track == NULL )
+        return false;
+    ii--;
+    if( ii >= 0)
     {
         if( s_EndSegmentPresent )
         {
-            tSegmentToEnd   = TrackSegWrapper->m_Segm;  // Get the segment
+            tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;  // Get the segment
                                                         // connected to the end
                                                         // point
-            TrackSegWrapper = TrackSegWrapper->Pnext;
+            ii--;
         }
         if( s_StartSegmentPresent )
         {
-            if( TrackSegWrapper )
-                tSegmentToStart = TrackSegWrapper->m_Segm;  // Get the segment
+            if( ii  >= 0 )
+                tSegmentToStart = g_DragSegmentList[ii].m_Segm;  // Get the segment
                                                             // connected to the
                                                             // start point
         }
@@ -644,7 +649,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
 
     NewTrack     = NULL;
     NbPtNewTrack = 0;
-    EraseDragListe();
+    EraseDragList();
 
     /* Change highlighted net: the new one will be highlighted */
     Old_HighLigt_Status   = g_HighLight_Status;
@@ -653,7 +658,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
         High_Light( DC );
     PosInit = GetScreen()->m_Curseur;
 
-    if( track->Type() == TYPE_VIA )
+    if( track->Type() == TYPE_VIA )     // For a via: always drag it
     {
         track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
         if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
@@ -673,12 +678,12 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
 
         switch( command )
         {
-        case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
+        case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:   // Move segment
             track->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
             AddSegmentToDragList( DrawPanel, DC, track->m_Flags, track );
             break;
 
-        case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
+        case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
             pos = track->m_Start;
             Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
                                          track->ReturnMaskLayer(),
@@ -690,7 +695,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
                                          track->GetNet() );
             break;
 
-        case ID_POPUP_PCB_MOVE_TRACK_NODE:
+        case ID_POPUP_PCB_MOVE_TRACK_NODE:  // Drag via or move node
             pos = (diag & STARTPOINT) ? track->m_Start : track->m_End;
             Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
                                          track->ReturnMaskLayer(),
@@ -706,10 +711,9 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
     ITEM_PICKER picker( track, UR_CHANGED );
     picker.m_Link = track->Copy();
     s_ItemsListPicker.PushItem( picker );
-    DRAG_SEGM*  pt_drag = g_DragSegmentList;
-    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        TRACK* draggedtrack = pt_drag->m_Segm;
+        TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
         picker.m_PickedItem = draggedtrack;
         picker.m_Link = draggedtrack->Copy();
         s_ItemsListPicker.PushItem( picker );
@@ -824,7 +828,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
 {
     TRACK* TrackToStartPoint = NULL;
     TRACK* TrackToEndPoint   = NULL;
-    bool   error = FALSE;
+    bool   error = false;
 
     if( !track )
         return;
@@ -835,14 +839,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
     // Broken functions: see comments
     while( MergeCollinearTracks( track, DC, START ) )
     {
-    }
-
-    ;
+    };
     while( MergeCollinearTracks( track, DC, END ) )
     {
-    }
-
-    ;
+    };
 #endif
 
     s_StartSegmentPresent = s_EndSegmentPresent = true;
@@ -885,10 +885,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
     }
 
     if( !TrackToStartPoint || ( TrackToStartPoint->Type() != TYPE_TRACK ) )
-        s_StartSegmentPresent = FALSE;
+        s_StartSegmentPresent = false;
 
     if( !TrackToEndPoint || ( TrackToEndPoint->Type() != TYPE_TRACK ) )
-        s_EndSegmentPresent = FALSE;
+        s_EndSegmentPresent = false;
 
     /* Change high light net: the new one will be highlighted */
     Old_HighLigt_Status   = g_HighLight_Status;
@@ -896,7 +896,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
     if( g_HighLight_Status )
         High_Light( DC );
 
-    EraseDragListe();
+    EraseDragList();
 
     NewTrack = NULL;
     NbPtNewTrack   = 0;
@@ -933,11 +933,10 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
     GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
 
     // Prepare the Undo command
-    DRAG_SEGM*  pt_drag = g_DragSegmentList;
     ITEM_PICKER picker( NULL, UR_CHANGED );
-    for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        TRACK* draggedtrack = pt_drag->m_Segm;
+        TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
         picker.m_PickedItem = draggedtrack;
         picker.m_Link = draggedtrack->Copy();
         s_ItemsListPicker.PushItem( picker );
@@ -961,10 +960,9 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
 bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 {
     int        errdrc;
-    DRAG_SEGM* pt_drag;
 
     if( Track == NULL )
-        return FALSE;
+        return false;
 
     int current_net_code = Track->GetNet();
 
@@ -973,14 +971,13 @@ bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     {
         errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
         if( errdrc == BAD_DRC )
-            return FALSE;
+            return false;
         /* Redraw the dragged segments */
-        pt_drag = g_DragSegmentList;
-        for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+        for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
-            errdrc = m_drc->Drc( pt_drag->m_Segm, GetBoard()->m_Track );
+            errdrc = m_drc->Drc( g_DragSegmentList[ii].m_Segm, GetBoard()->m_Track );
             if( errdrc == BAD_DRC )
-                return FALSE;
+                return false;
         }
     }
 
@@ -992,10 +989,9 @@ bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     Track->Draw( DrawPanel, DC, draw_mode );
 
     /* Draw dragged tracks */
-    pt_drag = g_DragSegmentList;
-    for( ; pt_drag; pt_drag = pt_drag->Pnext )
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        Track = pt_drag->m_Segm;
+        Track = g_DragSegmentList[ii].m_Segm;
         Track->SetState( EDIT, OFF );
         Track->m_Flags = 0;
         Track->Draw( DrawPanel, DC, draw_mode );
@@ -1010,7 +1006,7 @@ bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
             GetBoard(), Track->m_End, masque_layer );
     }
 
-    EraseDragListe();
+    EraseDragList();
 
     SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner

@@ -1071,11 +1071,13 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5
 
     /* Count the drag events.  Used to filter mouse moves before starting a
-     * block command.  A block command can be started only if MinDragEventCount >
-     * MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND in order to avoid spurious block
-     * commands. */
+     * block command.  A block command can be started only if
+     * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
+     * and m_CanStartBlock >= 0
+     * in order to avoid spurious block commands.
+     */
     static int MinDragEventCount;
-    if( event.Leaving() || event.Entering() )
+    if( event.Leaving() /*|| event.Entering()*/ )
     {
         m_CanStartBlock = -1;
     }
@@ -1117,11 +1119,6 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 
     if( event.MiddleDown() )
         localbutt = GR_M_MIDDLE_DOWN;
-
-    if( event.ButtonDClick( 2 ) )
-    {
-    }
-    ;                               // Unused
 
     localrealbutt |= localbutt;     /* compensation default wxGTK */
 

@@ -112,20 +112,15 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
         DrawGeneralRatsnest( DC );
 
-    if( g_DragSegmentList ) /* Should not occur ! */
-    {
-        EraseDragListe();
-    }
-
+    EraseDragList();
+ 
     if( g_Drag_Pistes_On )
     {
         Build_Drag_Liste( DrawPanel, DC, module );
         ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
-        for( DRAG_SEGM* pt_drag = g_DragSegmentList;
-             pt_drag != NULL;
-             pt_drag = pt_drag->Pnext )
+        for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
-            TRACK* segm = pt_drag->m_Segm;
+            TRACK* segm = g_DragSegmentList[ii].m_Segm;
             itemWrapper.m_PickedItem = segm;
             itemWrapper.m_Link = segm->Copy();
             itemWrapper.m_Link->SetState( EDIT, OFF );
@@ -155,7 +150,6 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
  */
 void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    DRAG_SEGM*            pt_drag;
     TRACK*                pt_segm;
     MODULE*               module;
     WinEDA_PcbFrame*      pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
@@ -176,24 +170,23 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
             if( g_Drag_Pistes_On )
             {
                 /* Erase on screen dragged tracks */
-                pt_drag = g_DragSegmentList;
-                for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+                for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
                 {
-                    pt_segm = pt_drag->m_Segm;
+                    pt_segm = g_DragSegmentList[ii].m_Segm;
                     pt_segm->Draw( Panel, DC, GR_XOR );
                 }
             }
 
             /* Go to old position for dragged tracks */
-            pt_drag = g_DragSegmentList;
-            for( ; pt_drag != NULL; pt_drag = pt_drag->Pnext )
+            for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
             {
-                pt_segm = pt_drag->m_Segm; pt_segm->SetState( EDIT, OFF );
-                pt_drag->SetInitialValues();
+                pt_segm = g_DragSegmentList[ii].m_Segm;
+                pt_segm->SetState( EDIT, OFF );
+                g_DragSegmentList[ii].SetInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
             }
 
-            EraseDragListe();
+            EraseDragList();
             module->m_Flags = 0;
         }
 
@@ -466,21 +459,19 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
     if( DC )
         module->Draw( DrawPanel, DC, GR_OR );
 
-    if( g_DragSegmentList )
+    if( g_DragSegmentList.size() )
     {
         /* Redraw dragged track segments */
-        for( DRAG_SEGM* pt_drag = g_DragSegmentList;
-             pt_drag != NULL;
-             pt_drag = pt_drag->Pnext )
+        for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
-            pt_segm = pt_drag->m_Segm;
+            pt_segm = g_DragSegmentList[ii].m_Segm;
             pt_segm->SetState( EDIT, OFF );
             if( DC )
                 pt_segm->Draw( DrawPanel, DC, GR_OR );
         }
 
         // Delete drag list
-        EraseDragListe();
+        EraseDragList();
     }
 
     g_Drag_Pistes_On = FALSE;
