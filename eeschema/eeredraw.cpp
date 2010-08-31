@@ -76,9 +76,27 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
     else
     {
+#if 0
         title = wxT( "[" );
         title << GetScreen()->m_FileName << wxT( "]  " ) << _( "Sheet" );
         title << wxT( " " ) << m_CurrentSheet->PathHumanReadable();
+
+#else
+        // Window title format:
+        // [filename sheetpath] (/path/to/filedir)
+
+        // Often the /path/to/filedir is blank because of the FullFileName argument
+        // passed to LoadOneEEFile() which currently omits the path on non-root schematics.
+        wxFileName t( GetScreen()->m_FileName );
+
+        title = wxChar( '[' );
+        title << t.GetName() << wxChar( ' ' );
+        title << m_CurrentSheet->PathHumanReadable() << wxChar( ']' );
+
+        title << wxChar( ' ' );
+        title << wxChar( '(' ) << t.GetPath() << wxChar( ')' );
+#endif
+
         SetTitle( title );
     }
 }
