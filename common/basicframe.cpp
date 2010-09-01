@@ -22,6 +22,8 @@
 #include "macros.h"
 #include "bitmaps.h"
 
+// Uncomment this line to use the new KiCad About dialog
+#define USE_NEW_ABOUT_DIALOG
 
 /*
  * Class constructor for WinEDA_BasicFrame general options
@@ -286,9 +288,14 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
  */
 void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
 {
+#ifdef USE_NEW_ABOUT_DIALOG
+    bool ShowAboutDialog(wxWindow * parent);
+    ShowAboutDialog(this);
+#else
     wxAboutDialogInfo info;
     InitKiCadAbout(info);
     wxAboutBox(info);
+#endif
 }
 
 
