@@ -5,7 +5,14 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ../polygon
                    )
 
+set( COMMON_ABOUT_DLG_SRCS
+    dialog_about/AboutDialog_main.cpp
+    dialog_about/dialog_about.cpp
+    dialog_about/dialog_about_base.cpp
+)
+
 set(COMMON_SRCS
+    ${COMMON_ABOUT_DLG_SRCS}
     about_kicad.cpp
     base_screen.cpp
     base_struct.cpp
