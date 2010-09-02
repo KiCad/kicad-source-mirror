@@ -503,15 +503,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
         break;
 
     case HK_EDIT_ITEM:      // Edit board item
-        if( !itemCurrentlyEdited )
-        {
-            BOARD_ITEM* item = PcbGeneralLocateAndDisplay();
-            if( item == NULL )
-                break;
-
-            //An item is found, and some can be edited:
-            OnEditItemRequest( aDC, item );
-        }
+        OnHotkeyEditItem( HK_EDIT_ITEM );
         break;
 
     // Footprint edition:
@@ -908,6 +900,90 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
     return true;
 }
 
+bool WinEDA_PcbFrame::OnHotkeyEditItem( int aIdCommand )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->m_Flags;
+
+    if( itemCurrentlyEdited )
+        return false;
+
+    item = PcbGeneralLocateAndDisplay();
+
+    if( item == NULL )
+        return false;
+
+    SetCurItem( item );
+
+    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+
+    switch( item->Type() )
+    {
+    case TYPE_TRACK:
+    case TYPE_VIA:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_TRACKSEG;
+        break;
+
+    case TYPE_TEXTE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_TEXTEPCB;
+        break;
+
+    case TYPE_MODULE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_MODULE;
+        break;
+
+    case TYPE_PAD:
+        // Post a EDIT_MODULE event here to prevent pads
+        // from being edited by hotkeys.
+        // Process_Special_Functions takes care of finding
+        // the parent.
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_MODULE;
+        break;
+
+    case TYPE_MIRE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_MIRE;
+        break;
+
+    case TYPE_DIMENSION:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_DIMENSION;
+        break;
+
+    case TYPE_TEXTE_MODULE:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_TEXTMODULE;
+        break;
+
+    case TYPE_DRAWSEGMENT:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_DRAWING;
+        break;
+
+    case TYPE_ZONE_CONTAINER:
+        if( aIdCommand == HK_EDIT_ITEM )
+            evt_type = ID_POPUP_PCB_EDIT_ZONE_PARAMS;
+        break;
+
+    default:
+        break;
+    }
+
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}
 
 /** Function OnHotkeyMoveItem
  * Move or drag the item (footprint, track, text .. ) found under the mouse cursor
@@ -953,10 +1029,14 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
     break;
 
     case TYPE_PAD:
+        // Post MODULE_REQUEST events here to prevent pads
+        // from being moved or dragged by hotkeys.
+        // Process_Special_Functions takes care of finding
+        // the parent.
         if( aIdCommand == HK_MOVE_ITEM )
-            evt_type = ID_POPUP_PCB_MOVE_PAD_REQUEST;
+            evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
         if( aIdCommand == HK_DRAG_ITEM )
-            evt_type = ID_POPUP_PCB_DRAG_PAD_REQUEST;
+            evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
         break;
 
     case TYPE_TEXTE:

@@ -200,6 +200,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                        wxT( "http://boolean.klaasholwerda.nl/bool.html" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Lorenzo Marcantonio" ), wxT( "lomarcan@tin.it" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Marco Serantoni" ), wxT( "marco.serantoni@gmail.com" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Marco Mattila" ), wxT( "marcom99@gmail.com" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Rafael Sokolowski" ), wxT( "rafael.sokolowski@web.de" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Rok Markovic" ), wxT( "rok@kanardia.eu" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Tim Hanson" ), wxT( "sideskate@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Vesa Solonen" ), wxT( "vesa.solonen@hut.fi" ) ) );

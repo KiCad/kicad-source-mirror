@@ -5,8 +5,6 @@ WXMAC Platform
 --------------
 * Fix hotkey list to match CMD key
 * Fix AddHotkeyName to let wxWidgets handle Ctrl to CMD key
-* Fix About dialog crash, or trash wxAboutDialog and create our own
-  About dialog to match all platforms. (wxAboutDialog different on platforms)
 * Fix toolbar button tooltips.
 
 Common
@@ -14,12 +12,10 @@ Common
 * Grep for @TODO or TODO for sourcecode tasks
 * Use doxygen compatible comments on member functions (.h files)
 * Add tooltip text to all non-obvious controls in every dialog window.
-  Need to do this using DialogBlocks.
+  Use wxFormBuilder.
 * Component and module search displays in which library the
   module or component lives.
 * List auto up and down scrolling.
-* Integer/long/double input boxes should handle comma and dot separated values,
-  not only comma.
 * Push file open semantics down to one of the base frame classes ( likely candidate is
   WinEDA_BasicFrame ) so that file open behavior is consistent across all applications.
 
