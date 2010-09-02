@@ -113,8 +113,10 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<p>" );
     description << wxT( "<b><u>" ) << _( "Description" ) << wxT( "</u></b>" ); // bold & underlined font for caption
 
-    description << wxT(
-        "<p>The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards.</p>" );
+    description << wxT( "<p>" ) <<
+    _(
+        "The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards." )
+                << wxT( "</p>" );
 
     description << wxT( "</p>" );
 
@@ -170,7 +172,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
         << HtmlNewline( 4 )
         << _( "The complete KiCad EDA Suite is released under the" ) << HtmlNewline( 2 )
         << HtmlHyperlink( wxT( "http://www.gnu.org/licenses" ),
-                         _( "GNU General Public License version 2" ) )
+                         _( "GNU General Public License (GPL) version 2" ) )
         << wxT( "</div>" );
 
     info.SetLicense( license );
@@ -201,7 +203,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddDeveloper( new Contributor( wxT( "Lorenzo Marcantonio" ), wxT( "lomarcan@tin.it" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Marco Serantoni" ), wxT( "marco.serantoni@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Marco Mattila" ), wxT( "marcom99@gmail.com" ) ) );
-    info.AddDeveloper( new Contributor( wxT( "Rafael Sokolowski" ), wxT( "rafael.sokolowski@web.de" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Rafael Sokolowski" ),
+                                       wxT( "rafael.sokolowski@web.de" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Rok Markovic" ), wxT( "rok@kanardia.eu" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Tim Hanson" ), wxT( "sideskate@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Vesa Solonen" ), wxT( "vesa.solonen@hut.fi" ) ) );

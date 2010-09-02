@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "dialog_design_rules_aux_helper_class.h"
+
 #include "dialog_design_rules_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -99,7 +101,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_leftClassChoice->SetSelection( 0 );
 	leftNetSelectBoxSizer->Add( m_leftClassChoice, 0, wxEXPAND, 5 );
 	
-	m_leftListCtrl = new wxListCtrl( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
+	m_leftListCtrl = new NETS_LIST_CTRL( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VIRTUAL|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_leftListCtrl->SetMinSize( wxSize( 220,200 ) );
 	
 	leftNetSelectBoxSizer->Add( m_leftListCtrl, 1, wxEXPAND|wxTOP, 5 );
@@ -139,7 +141,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_rightClassChoice->SetSelection( 0 );
 	rghtNetSelectBoxSizer->Add( m_rightClassChoice, 0, wxEXPAND, 5 );
 	
-	m_rightListCtrl = new wxListCtrl( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VRULES|wxSUNKEN_BORDER );
+	m_rightListCtrl = new NETS_LIST_CTRL( m_panelNetClassesEditor, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_VIRTUAL|wxLC_VRULES|wxSUNKEN_BORDER );
 	m_rightListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
 	rghtNetSelectBoxSizer->Add( m_rightListCtrl, 1, wxEXPAND|wxTOP, 5 );

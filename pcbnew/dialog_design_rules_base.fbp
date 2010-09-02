@@ -558,8 +558,8 @@
                                                             <property name="permission">protected</property>
                                                             <property name="pos"></property>
                                                             <property name="size"></property>
-                                                            <property name="style">wxLC_HRULES|wxLC_REPORT|wxLC_VRULES</property>
-                                                            <property name="subclass"></property>
+                                                            <property name="style">wxLC_HRULES|wxLC_REPORT|wxLC_VIRTUAL|wxLC_VRULES</property>
+                                                            <property name="subclass">NETS_LIST_CTRL; dialog_design_rules_aux_helper_class.h</property>
                                                             <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
@@ -908,8 +908,8 @@
                                                             <property name="permission">protected</property>
                                                             <property name="pos"></property>
                                                             <property name="size"></property>
-                                                            <property name="style">wxLC_HRULES|wxLC_REPORT|wxLC_VRULES</property>
-                                                            <property name="subclass"></property>
+                                                            <property name="style">wxLC_HRULES|wxLC_REPORT|wxLC_VIRTUAL|wxLC_VRULES</property>
+                                                            <property name="subclass">NETS_LIST_CTRL; dialog_design_rules_aux_helper_class.h</property>
                                                             <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
