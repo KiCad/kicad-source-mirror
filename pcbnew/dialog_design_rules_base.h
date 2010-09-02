@@ -10,6 +10,8 @@
 
 #include <wx/intl.h>
 
+class NETS_LIST_CTRL;
+
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -60,13 +62,13 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxButton* m_removeButton;
 		wxButton* m_moveUpButton;
 		wxChoice* m_leftClassChoice;
-		wxListCtrl* m_leftListCtrl;
+		NETS_LIST_CTRL* m_leftListCtrl;
 		wxButton* m_buttonRightToLeft;
 		wxButton* m_buttonLeftToRight;
 		wxButton* m_buttonLeftSelAll;
 		wxButton* m_buttonRightSelAll;
 		wxChoice* m_rightClassChoice;
-		wxListCtrl* m_rightListCtrl;
+		NETS_LIST_CTRL* m_rightListCtrl;
 		wxPanel* m_panelGolbalDesignRules;
 		wxRadioBox* m_OptViaType;
 		wxStaticText* m_ViaMinTitle;

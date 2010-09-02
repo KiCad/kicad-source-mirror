@@ -76,7 +76,7 @@ private:
     void CopyGlobalRulesToBoard();
     void CopyDimensionsListsToBoard( );
     void SetRoutableLayerStatus();
-    void FillListBoxWithNetNames( wxListCtrl* aListCtrl, const wxString& aNetClass );
+    void FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl, const wxString& aNetClass );
     void PrintCurrentSettings( );
 
     /**
@@ -96,9 +96,7 @@ private:
 
     void setNetClass( const wxString& aNetName, const wxString& aClassName );
 
-    static void setRowItem(  wxListCtrl* aListCtrl, int aRow, NETCUP* aNetAndClass );
-
-    void moveSelectedItems( wxListCtrl* src, const wxString& newClassName );
+    void moveSelectedItems( NETS_LIST_CTRL* src, const wxString& newClassName );
 
 
 public:
