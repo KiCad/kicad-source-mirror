@@ -741,15 +741,13 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
 
-    msg = AddHotkeyName( _( "Move" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
     ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST,
-                  msg, move_pad_xpm );
-    msg = AddHotkeyName( _( "Drag" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
+                  _( "Move" ), move_pad_xpm );
     ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST,
-                  msg, drag_pad_xpm );
+                  _( "Drag" ), drag_pad_xpm );
 
-    msg = AddHotkeyName( _( "Edit Pad" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, msg, options_pad_xpm );
+    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD,
+                  _( "Edit" ), options_pad_xpm );
     sub_menu_Pad->AppendSeparator();
 
     ADD_MENUITEM_WITH_HELP( sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,

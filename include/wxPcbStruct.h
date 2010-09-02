@@ -277,6 +277,8 @@ public:
      */
     bool             OnHotkeyDeleteItem( wxDC* aDC );
 
+    bool             OnHotkeyEditItem( int aIdCommand );
+
     /** Function OnHotkeyMoveItem
      * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
      * Only a footprint or a track can be dragged
