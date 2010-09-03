@@ -5,9 +5,11 @@
  * Created:   2010-08-06
  * Copyright: Rafael Sokolowski ()
  * License:
- **************************************************************/# include "dialog_about.h"
+ **************************************************************/
+#include "dialog_about.h"
 #include "aboutinfo.h"
 #include <wx/aboutdlg.h>
+#include <wx/textctrl.h>
 
 
 /* Used icons:
@@ -17,8 +19,9 @@
  *  kicad_icon_xpm[];    // Icon of the application
  */
 #include "bitmaps.h"
-
-
+#include "wxstruct.h"
+#include "common.h"
+#include "appl_wxstruct.h"
 #include "build_version.h"
 
 
@@ -37,21 +40,18 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
  */
 static void InitKiCadAboutNew( AboutAppInfo& info )
 {
-    /* set application specific icon */
+    /* Set application specific icon */
 
-    // COULD BE: use another function call to get appropriate icon; its hardcoded because there is no top level window existing here
-    // do something like:
-    //      wxTheApp->GetTopWindow()->GetIcon() ??? or...
-    //      const wxTopLevelWindow * const tlw = wxDynamicCast(::wxGetApp().GetTopWindow(), wxTopLevelWindow); ???
-    //      if( tlw ) info.SetIcon( tlw->GetIcon() ); ???
-    info.SetIcon( kicad_icon_xpm );
+    const wxTopLevelWindow * const tlw = wxDynamicCast(::wxGetApp().GetTopWindow(), wxTopLevelWindow);
+    if( tlw )
+        info.SetIcon( tlw->GetIcon() );
+    else
+        info.SetIcon( kicad_icon_xpm );
 
     /* Set title */
+    info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );
 
-    //  COULD BE: info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );
-    info.SetAppName( wxT( ".: KiCad :." ) );
-
-    /* copyright information */
+    /* Copyright information */
     info.SetCopyright( wxT( "(C) 1992-2010 KiCad Developers Team" ) );
 
     /* KiCad build version */

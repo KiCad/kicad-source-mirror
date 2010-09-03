@@ -19,31 +19,37 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
+	
+	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_bitmapApp = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_bitmapApp, 0, wxALIGN_CENTER|wxALL, 5 );
+	bSizer3->Add( m_bitmapApp, 1, wxALIGN_CENTER|wxALL, 5 );
 	
 	wxBoxSizer* b_apptitleSizer;
 	b_apptitleSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextAppTitle = new wxStaticText( this, wxID_ANY, _("App Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE );
+	m_staticTextAppTitle = new wxStaticText( this, wxID_ANY, _("App Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticTextAppTitle->Wrap( -1 );
 	m_staticTextAppTitle->SetFont( wxFont( 14, 70, 90, 92, false, wxEmptyString ) );
 	
-	b_apptitleSizer->Add( m_staticTextAppTitle, 0, wxALIGN_CENTER|wxALL|wxEXPAND, 5 );
+	b_apptitleSizer->Add( m_staticTextAppTitle, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	m_staticTextCopyright = new wxStaticText( this, wxID_ANY, _("Copyright Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE );
+	m_staticTextCopyright = new wxStaticText( this, wxID_ANY, _("Copyright Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticTextCopyright->Wrap( -1 );
-	b_apptitleSizer->Add( m_staticTextCopyright, 0, wxALIGN_CENTER|wxALL|wxEXPAND, 1 );
+	b_apptitleSizer->Add( m_staticTextCopyright, 0, wxALIGN_CENTER|wxALL, 1 );
 	
-	m_staticTextBuildVersion = new wxStaticText( this, wxID_ANY, _("Build Version Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE );
+	m_staticTextBuildVersion = new wxStaticText( this, wxID_ANY, _("Build Version Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticTextBuildVersion->Wrap( -1 );
-	b_apptitleSizer->Add( m_staticTextBuildVersion, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	b_apptitleSizer->Add( m_staticTextBuildVersion, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_staticTextLibVersion = new wxStaticText( this, wxID_ANY, _("Lib Version Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE|wxST_NO_AUTORESIZE );
+	m_staticTextLibVersion = new wxStaticText( this, wxID_ANY, _("Lib Version Info"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticTextLibVersion->Wrap( -1 );
-	b_apptitleSizer->Add( m_staticTextLibVersion, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	b_apptitleSizer->Add( m_staticTextLibVersion, 0, wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
-	bSizer3->Add( b_apptitleSizer, 1, wxEXPAND, 5 );
+	bSizer3->Add( b_apptitleSizer, 10, wxEXPAND, 5 );
+	
+	
+	bSizer3->Add( 0, 0, 2, wxEXPAND, 5 );
 	
 	bSizer1->Add( bSizer3, 0, wxEXPAND, 5 );
 	
