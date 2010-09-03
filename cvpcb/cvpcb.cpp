@@ -84,8 +84,8 @@ bool WinEDA_App::OnInit()
      /* WXMAC application specific */
 #ifdef __WXMAC__
 //	wxApp::SetExitOnFrameDelete(false);
-//	wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
-	wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
+    wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
+    wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
 #endif /* __WXMAC__ */
 
 
