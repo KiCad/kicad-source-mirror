@@ -86,8 +86,18 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">1</property>
+                            <object class="spacer" expanded="1">
+                                <property name="height">0</property>
+                                <property name="permission">protected</property>
+                                <property name="width">0</property>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER|wxALL</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">1</property>
                             <object class="wxStaticBitmap" expanded="1">
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>
@@ -136,7 +146,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">10</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">b_apptitleSizer</property>
@@ -144,7 +154,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER|wxALL|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER|wxALL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="bg"></property>
@@ -161,7 +171,7 @@
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
-                                        <property name="style">wxALIGN_CENTRE|wxST_NO_AUTORESIZE</property>
+                                        <property name="style">wxALIGN_CENTRE</property>
                                         <property name="subclass"></property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
@@ -195,7 +205,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">1</property>
-                                    <property name="flag">wxALIGN_CENTER|wxALL|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER|wxALL</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="bg"></property>
@@ -212,7 +222,7 @@
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
-                                        <property name="style">wxALIGN_CENTRE|wxST_NO_AUTORESIZE</property>
+                                        <property name="style">wxALIGN_CENTRE</property>
                                         <property name="subclass"></property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
@@ -246,7 +256,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="bg"></property>
@@ -263,7 +273,7 @@
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
-                                        <property name="style">wxALIGN_CENTRE|wxST_NO_AUTORESIZE</property>
+                                        <property name="style">wxALIGN_CENTRE</property>
                                         <property name="subclass"></property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
@@ -297,7 +307,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+                                    <property name="flag">wxALIGN_CENTER|wxBOTTOM|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="bg"></property>
@@ -314,7 +324,7 @@
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
-                                        <property name="style">wxALIGN_CENTRE|wxST_NO_AUTORESIZE</property>
+                                        <property name="style">wxALIGN_CENTRE</property>
                                         <property name="subclass"></property>
                                         <property name="tooltip"></property>
                                         <property name="window_extra_style"></property>
@@ -346,6 +356,16 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">2</property>
+                            <object class="spacer" expanded="1">
+                                <property name="height">0</property>
+                                <property name="permission">protected</property>
+                                <property name="width">0</property>
                             </object>
                         </object>
                     </object>

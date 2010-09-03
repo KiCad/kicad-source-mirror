@@ -37,11 +37,13 @@ class dialog_about_base : public wxDialog
 		wxButton* m_buttonOK;
 	
 	protected:
+		
 		wxStaticBitmap* m_bitmapApp;
 		wxStaticText* m_staticTextAppTitle;
 		wxStaticText* m_staticTextCopyright;
 		wxStaticText* m_staticTextBuildVersion;
 		wxStaticText* m_staticTextLibVersion;
+		
 		wxAuiNotebook* m_auiNotebook;
 		
 		// Virtual event handlers, overide them in your derived class

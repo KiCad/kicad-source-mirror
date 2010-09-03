@@ -421,15 +421,17 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         {
             if( Track->IsPointOnEnds( cursorPosition, -1 ) != 0 )
             {
+                msg = AddHotkeyName( _( "Move Node" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE,
-                              _( "Move Node" ), move_xpm );
+                              msg, move_xpm );
             }
             else
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
                               _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
+                msg = AddHotkeyName( _( "Drag Segment" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
-                              _( "Drag Segment" ), drag_track_segment_xpm );
+                              msg, drag_track_segment_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
                               _( "Break Track" ), break_line_xpm );
             }
@@ -483,10 +485,6 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
                                    ID_POPUP_PCB_SELECT_WIDTH,
                                    _( "Select Track Width" ), width_track_xpm );
-        PopMenu->AppendSeparator();
-        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                      _( "Global Tracks and Vias Edition" ), width_track_via_xpm );
-        PopMenu->AppendSeparator();
     }
 
     else    // Allows switching to an other track/via size when routing
@@ -494,10 +492,10 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
                                    ID_POPUP_PCB_SELECT_WIDTH,
                                    _( "Select Track Width" ), width_track_xpm );
-        PopMenu->AppendSeparator();
     }
 
     // Delete control:
+    PopMenu->AppendSeparator();
     wxMenu* track_mnu = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
                                ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
@@ -516,6 +514,16 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
                       _( "Delete Net" ), delete_net_xpm );
     }
+
+    // Add global edition command
+    if( !flags )
+    {
+        PopMenu->AppendSeparator();
+        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
+                      _( "Global Tracks and Vias Edition" ), width_track_via_xpm );
+    }
+
+    // Add lock/unlock flags menu:
     track_mnu = new wxMenu;
 
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
@@ -530,7 +538,6 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     if( !flags )
     {
-        track_mnu->AppendSeparator();
         track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACK, _( "Track Locked: Yes" ) );
         track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACK, _( "Track Locked: No" ) );
         track_mnu->AppendSeparator();
