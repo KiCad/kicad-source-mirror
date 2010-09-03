@@ -13,7 +13,6 @@ set( COMMON_ABOUT_DLG_SRCS
 
 set(COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
-    about_kicad.cpp
     base_screen.cpp
     base_struct.cpp
     basicframe.cpp
