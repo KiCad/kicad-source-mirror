@@ -8,7 +8,7 @@
 #include "base_struct.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
-
+#include "class_text-label.h"
 
 extern SCH_SHEET* g_RootSheet;
 
@@ -22,17 +22,29 @@ extern SCH_SHEET* g_RootSheet;
  * connected to a wire, bus, or label.  In the schematic page represented by
  * the sheet, it corresponds to a hierarchical label.
  */
-class SCH_SHEET_PIN : public SCH_ITEM, public EDA_TextStruct
+
+//class SCH_SHEET_PIN : public SCH_ITEM, public EDA_TextStruct
+class SCH_SHEET_PIN : public SCH_HIERLABEL
 {
 private:
-    int  m_Number;      ///< Label number use for saving sheet label to file.
+    int m_Number;       ///< Label number use for saving sheet label to file.
                         ///< Sheet label numbering begins at 2.
                         ///< 0 is reserved for the sheet name.
                         ///< 1 is reserve for the sheet file name.
+    int m_Edge;                     /* For pin labels only: sheet edge (0 to 3) of the pin
+                                     * m_Edge define on which edge the pin is positionned:
+                                     *        0: pin on left side
+                                     *        1: pin on right side
+                                     *        2: pin on top side
+                                     *        3: pin on bottom side
+                                     *  for compatibility reasons, this does not follow same values as text
+                                     *  orientation.
+                                     */
 
 public:
-    int  m_Edge, m_Shape;
-    bool m_IsDangling;  // TRUE non connected
+
+    //int m_Shape;
+    //bool m_IsDangling;  // TRUE non connected
 
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
@@ -46,14 +58,17 @@ public:
         return wxT( "SCH_SHEET_PIN" );
     }
 
-    bool operator==( const SCH_SHEET_PIN* aPin ) const;
+
+    bool operator  ==( const SCH_SHEET_PIN* aPin ) const;
 
     SCH_SHEET_PIN* GenCopy();
 
     SCH_SHEET_PIN* Next()
     {
-        return ( SCH_SHEET_PIN*) Pnext;
+        return (SCH_SHEET_PIN*) Pnext;
     }
+
+    void SwapData( SCH_SHEET_PIN* copyitem );
 
     /**
      * Get the sheet label number.
@@ -67,7 +82,10 @@ public:
      *
      * @param aNumber - New sheet number label.
      */
-    void SetNumber( int aNumber );
+    void        SetNumber( int aNumber );
+    void        SetEdge( int aEdge );
+    int         GetEdge();
+    void        ConstraintOnEdge( wxPoint Pos );
 
     /**
      * Get the parent sheet object of this sheet pin.
@@ -77,20 +95,11 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    void Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
-               const wxPoint&    offset,
-               int               draw_mode,
-               int               Color = -1 );
-
-    /**
-     * Plot this sheet pin object to aPlotter.
-     *
-     * @param aPlotter - The plotter object to plot to.
-     */
-    void Plot( PLOTTER* aPlotter );
+/*the functions Draw, CreateGraphicShape and Plot are no removed as
+ *  as this shape is already handled as HIERLABEL ...
+ */
 
     /**
      * Function Save
@@ -118,8 +127,6 @@ public:
      * @param aCorner_list = list to fill with polygon corners coordinates
      * @param Pos = Position of the shape
      */
-    void        CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                    const wxPoint&         Pos );
 
     // Geometric transforms (used in block operations):
 
@@ -137,13 +144,11 @@ public:
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y( int aYaxis_position )
-    {
-        m_Edge   = m_Edge ? 0 : 1;
-        m_Pos.x -= aYaxis_position;
-        NEGATE(  m_Pos.x );
-        m_Pos.x += aYaxis_position;
-    }
+
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
+    virtual void Mirror_X( int aXaxis_position );
+
 
     /**
      * Compare schematic sheet entry (pin?) name against search string.
@@ -155,7 +160,7 @@ public:
 };
 
 
-typedef boost::ptr_vector< SCH_SHEET_PIN > SCH_SHEET_PIN_LIST;
+typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PIN_LIST;
 
 
 /* class SCH_SHEET
@@ -209,11 +214,16 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool         Save( FILE* aFile ) const;
+    bool           Save( FILE* aFile ) const;
 
-    void         Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    SCH_SHEET*   GenCopy();
-    void         DisplayInfo( WinEDA_DrawFrame* frame );
+    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    SCH_SHEET*     GenCopy();
+    void           DisplayInfo( WinEDA_DrawFrame* frame );
+
+    /* there is no member for orientation in sch_sheet, to preserve file
+     * format, we detect orientation based on pin edges
+     */
+    bool           IsVerticalOrientation();
 
     /**
      * Add aLabel to this sheet.
@@ -224,7 +234,7 @@ public:
      *
      * @param aLabel - The label to add to the sheet.
      */
-    void AddLabel( SCH_SHEET_PIN* aLabel );
+    void           AddLabel( SCH_SHEET_PIN* aLabel );
 
     SCH_SHEET_PIN_LIST& GetSheetPins() { return m_labels; }
 
@@ -233,7 +243,7 @@ public:
      *
      * @param aSheetLabel - The sheet label to remove from the list.
      */
-    void RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
+    void           RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
 
     /**
      * Delete sheet label which do not have a corresponding hierarchical label.
@@ -241,7 +251,7 @@ public:
      * Note: Make sure you save a copy of the sheet in the undo list before calling
      *       CleanupSheet() otherwise any unrefernced sheet labels will be lost.
      */
-    void CleanupSheet();
+    void           CleanupSheet();
 
     /**
      * Return the label found at aPosition in this sheet.
@@ -259,7 +269,7 @@ public:
      *
      * @return - True if label found, otherwise false.
      */
-    bool HasLabel( const wxString& aName );
+    bool           HasLabel( const wxString& aName );
 
     bool HasLabels() { return !m_labels.empty(); }
 
@@ -268,12 +278,12 @@ public:
      *
      * @return True if there are any undefined labels.
      */
-    bool HasUndefinedLabels();
+    bool           HasUndefinedLabels();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int  GetPenSize();
+    virtual int    GetPenSize();
 
     /** Function Draw
      *  Draw the hierarchical sheet shape
@@ -284,11 +294,11 @@ public:
      *  @param aColor = color used to draw sheet. Usually -1 to use the normal
      * color for sheet items
      */
-    void         Draw( WinEDA_DrawPanel* aPanel,
-                       wxDC*             aDC,
-                       const wxPoint&    aOffset,
-                       int               aDrawMode,
-                       int               aColor = -1 );
+    void           Draw( WinEDA_DrawPanel* aPanel,
+                         wxDC*             aDC,
+                         const wxPoint&    aOffset,
+                         int               aDrawMode,
+                         int               aColor = -1 );
 
     /** Function HitTest
      * @return true if the point aPosRef is within item area
@@ -389,8 +399,7 @@ public:
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
-        BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
-        {
+        BOOST_FOREACH( SCH_SHEET_PIN & label, m_labels ) {
             label.Move( aMoveVector );
         }
     }
@@ -401,6 +410,8 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 
     /**
      * Compare schematic sheet file and sheet name against search string.
@@ -416,7 +427,7 @@ public:
      *
      * @param aSize - The new size for this sheet.
      */
-    void Resize( const wxSize& aSize );
+    void         Resize( const wxSize& aSize );
 
 #if defined(DEBUG)
 

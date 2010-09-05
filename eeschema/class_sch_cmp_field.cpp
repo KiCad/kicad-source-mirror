@@ -17,6 +17,7 @@
 #include "gr_basic.h"
 #include "drawtxt.h"
 #include "macros.h"
+#include "trigo.h"
 
 #include "program.h"
 #include "general.h"
@@ -115,10 +116,10 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
      *   justifications are complicated to calculate
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
-    */
+     */
     EDA_Rect BoundaryBox = GetBoundaryBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    GRTextVertJustifyType vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
     textpos = BoundaryBox.Centre();
 
     if( m_FieldId == REFERENCE )
@@ -151,15 +152,18 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
-    */
+     */
 #if 0
+
     // Draw boundary box:
     int x1 = BoundaryBox.GetX();
     int y1 = BoundaryBox.GetY();
     int x2 = BoundaryBox.GetRight();
     int y2 = BoundaryBox.GetBottom();
     GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+
     // Draw the text anchor point
+
     /* Calculate the text position, according to the component
      * orientation/mirror */
     textpos  = m_Pos - parentComponent->m_Pos;
@@ -169,7 +173,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     y1 = textpos.y;
     int len = 10;
     GRLine( &panel->m_ClipBox, DC, x1 - len, y1, x1 + len, y1, 0, BLUE );
-    GRLine( &panel->m_ClipBox, DC, x1, y1 - len, x1, y1 +len, 0, BLUE );
+    GRLine( &panel->m_ClipBox, DC, x1, y1 - len, x1, y1 + len, 0, BLUE );
 #endif
 }
 
@@ -224,20 +228,20 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
  */
 EDA_Rect SCH_FIELD::GetBoundaryBox() const
 {
-    EDA_Rect BoundaryBox;
-    int      hjustify, vjustify;
-    int      orient;
-    wxSize   size;
-    wxPoint  pos1, pos2;
+    EDA_Rect       BoundaryBox;
+    int            hjustify, vjustify;
+    int            orient;
+    wxSize         size;
+    wxPoint        pos1, pos2;
 
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
 
     orient = m_Orient;
-    wxPoint pos = parentComponent->m_Pos;
+    wxPoint        pos = parentComponent->m_Pos;
     pos1 = m_Pos - pos;
 
-    size.x = LenSize( m_Text );
-    size.y = m_Size.y;
+    size.x   = LenSize( m_Text );
+    size.y   = m_Size.y;
     hjustify = m_HJustify;
     vjustify = m_VJustify;
 
@@ -396,18 +400,18 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     m_Flags = 0;
     frame->GetScreen()->SetCurItem( NULL );
-    frame->OnModify( );
+    frame->OnModify();
     frame->SetCurrentField( NULL );
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     if( aAuxData && m_FieldId == REFERENCE )
     {
-        SCH_COMPONENT* pSch = (SCH_COMPONENT*) m_Parent;
-        SCH_SHEET_PATH* sheet = (SCH_SHEET_PATH*) aAuxData;
-        wxString fulltext = pSch->GetRef( sheet );
+        SCH_COMPONENT*  pSch     = (SCH_COMPONENT*) m_Parent;
+        SCH_SHEET_PATH* sheet    = (SCH_SHEET_PATH*) aAuxData;
+        wxString        fulltext = pSch->GetRef( sheet );
         if( m_AddExtraText )
         {
             /* For more than one part per package, we must add the part selection
@@ -419,4 +423,10 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void * aAuxData )
     }
 
     return SCH_ITEM::Matches( m_Text, aSearchData );
+}
+
+
+void SCH_FIELD::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
 }

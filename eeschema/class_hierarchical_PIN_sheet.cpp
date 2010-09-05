@@ -17,20 +17,33 @@
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 #include "plot_common.h"
+#include "trigo.h"
 
 #include "program.h"
 #include "general.h"
 #include "protos.h"
 
+/* m_Edge define on which edge the pin is positionned:
+ *
+ *        0: pin on left side
+ *        1: pin on right side
+ *        2: pin on top side
+ *        3: pin on bottom side
+ *  for compatibility reasons, this does not follow same values as text
+ *  ortientation.
+ */
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( parent, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE ), EDA_TextStruct( text )
+    SCH_HIERLABEL( pos, text, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
 {
+    SetParent( parent );
     wxASSERT( parent );
-    wxASSERT( Pnext == NULL );
     m_Layer = LAYER_SHEETLABEL;
     m_Pos   = pos;
-    m_Edge  = 0;
+    if( parent->IsVerticalOrientation() )
+        SetEdge( 2 );
+    else
+        SetEdge( 0 );
     m_Shape = NET_INPUT;
     m_IsDangling = TRUE;
     m_Number     = 2;
@@ -41,15 +54,27 @@ SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
 {
     SCH_SHEET_PIN* newitem = new SCH_SHEET_PIN( (SCH_SHEET*) m_Parent, m_Pos, m_Text );
 
-    newitem->m_Edge   = m_Edge;
-    newitem->m_Shape  = m_Shape;
-    newitem->m_Number = m_Number;
-
+    newitem->SetEdge( GetEdge() );
+    newitem->m_Shape = m_Shape;
+    newitem->SetNumber( GetNumber() );
     return newitem;
 }
 
 
-bool SCH_SHEET_PIN::operator==(const SCH_SHEET_PIN* aPin ) const
+void SCH_SHEET_PIN::SwapData( SCH_SHEET_PIN* copyitem )
+{
+    SCH_TEXT::SwapData( (SCH_TEXT*) copyitem );
+    int tmp;
+    tmp = copyitem->GetNumber();
+    copyitem->SetNumber( GetNumber() );
+    SetNumber( tmp );
+    tmp = copyitem->GetEdge();
+    copyitem->SetEdge( GetEdge() );
+    SetEdge( tmp );
+}
+
+
+bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 {
     return aPin == this;
 }
@@ -72,153 +97,88 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 }
 
 
-/*****************************************************************************/
-/* Routine to create hierarchical labels */
-/*****************************************************************************/
-void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               DrawMode,
-                          int               Color )
+void SCH_SHEET_PIN::SetEdge( int aEdge )
 {
-    GRTextHorizJustifyType       side;
-    EDA_Colors                   txtcolor;
-    int posx, tposx, posy;
+    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
-    static std::vector <wxPoint> Poly;
-
-    int LineWidth = GetPenSize();
-
-    if( Color >= 0 )
-        txtcolor = (EDA_Colors) Color;
-    else
-        txtcolor = ReturnLayerColor( m_Layer );
-    GRSetDrawMode( DC, DrawMode );
-
-    posx = m_Pos.x + offset.x;
-    posy = m_Pos.y + offset.y;
-    wxSize size = m_Size;
-
-    if( !m_Text.IsEmpty() )
+    /* use -1 to adjust text orientation without changing edge*/
+    if( aEdge > -1 )
+        m_Edge = aEdge;
+    switch( m_Edge )
     {
-        if( m_Edge )
+    case 0:        /* pin on left side*/
+        m_Pos.x = Sheet->m_Pos.x;
+        SetSchematicTextOrientation( 2 ); /* Orientation horiz inverse */
+        break;
+
+    case 1:        /* pin on right side*/
+        m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
+        SetSchematicTextOrientation( 0 ); /* Orientation horiz normal */
+        break;
+
+    case 2:        /* pin on top side*/
+        m_Pos.y = Sheet->m_Pos.y;
+        SetSchematicTextOrientation( 3 ); /* Orientation vert BOTTOM  */
+        break;
+
+    case 3:        /* pin on bottom side*/
+        m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
+        SetSchematicTextOrientation( 1 ); /* Orientation vert UP  */
+        break;
+    }
+}
+
+
+int SCH_SHEET_PIN::GetEdge()
+{
+    return m_Edge;
+}
+
+
+/* ConstraintOnEdge is used to ajust label position to egde based
+ * on proximity to vertical / horizontal edge.
+ * used by sheetlab and resize
+ */
+void SCH_SHEET_PIN::ConstraintOnEdge( wxPoint Pos )
+{
+    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+
+    if( Sheet == NULL )
+        return;
+
+    if( m_Edge<2 ) /*horizontal sheetpin*/
+    {
+        if( Pos.x > ( Sheet->m_Pos.x + ( Sheet->m_Size.x / 2 ) ) )
         {
-            tposx = posx - size.x;
-            side  = GR_TEXT_HJUSTIFY_RIGHT;
+            SetEdge( 1 );
         }
         else
         {
-            tposx = posx + size.x + (size.x / 8);
-            side  = GR_TEXT_HJUSTIFY_LEFT;
+            SetEdge( 0 );
         }
-        DrawGraphicText( panel, DC, wxPoint( tposx, posy ), txtcolor,
-                         m_Text, TEXT_ORIENT_HORIZ, size, side,
-                         GR_TEXT_VJUSTIFY_CENTER, LineWidth, false, false );
+
+        m_Pos.y = Pos.y;
+        if( m_Pos.y < Sheet->m_Pos.y )
+            m_Pos.y = Sheet->m_Pos.y;
+        if( m_Pos.y > (Sheet->m_Pos.y + Sheet->m_Size.y) )
+            m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
     }
-
-    /* Draw the graphic symbol */
-    CreateGraphicShape( Poly, m_Pos + offset );
-    int FillShape = false;
-    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0],
-            FillShape, LineWidth, txtcolor, txtcolor );
-}
-
-
-void SCH_SHEET_PIN::Plot( PLOTTER* aPlotter )
-{
-    wxASSERT( aPlotter != NULL );
-
-    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    int        posx, tposx, posy, size;
-
-    static std::vector <wxPoint> Poly;
-
-    txtcolor = ReturnLayerColor( GetLayer() );
-
-    posx = m_Pos.x;
-    posy = m_Pos.y;
-    size = m_Size.x;
-    GRTextHorizJustifyType side;
-
-    if( m_Edge )
+    else /* vertical sheetpin*/
     {
-        tposx = posx - size;
-        side  = GR_TEXT_HJUSTIFY_RIGHT;
-    }
-    else
-    {
-        tposx = posx + size + (size / 8);
-        side  = GR_TEXT_HJUSTIFY_LEFT;
-    }
+        if( Pos.y > ( Sheet->m_Pos.y + ( Sheet->m_Size.y / 2 ) ) )
+        {
+            SetEdge( 3 ); //bottom
+        }
+        else
+        {
+            SetEdge( 2 ); //top
+        }
 
-    int thickness = GetPenSize();
-    aPlotter->set_current_line_width( thickness );
-
-    aPlotter->text( wxPoint( tposx, posy ), txtcolor, m_Text, TEXT_ORIENT_HORIZ,
-                    wxSize( size, size ), side, GR_TEXT_VJUSTIFY_CENTER, thickness,
-                    m_Italic, m_Bold );
-
-    /* Draw the associated graphic symbol */
-    CreateGraphicShape( Poly, m_Pos );
-
-    aPlotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
-}
-
-
-/** function CreateGraphicShape
- * Calculates the graphic shape (a polygon) associated to the text
- * @param aCorner_list = list to fill with polygon corners coordinates
- * @param Pos = Position of the shape
- */
-void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint& Pos )
-{
-    wxSize size = m_Size;
-
-    aCorner_list.clear();
-    if( m_Edge )
-    {
-        size.x = -size.x;
-        size.y = -size.y;
-    }
-
-    int size2 = size.x / 2;
-
-    aCorner_list.push_back( Pos );
-    switch( m_Shape )
-    {
-    case 0:         /* input |> */
-        aCorner_list.push_back( wxPoint( Pos.x, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x, Pos.y + size2 ) );
-        aCorner_list.push_back( Pos );
-        break;
-
-    case 1:         /* output <| */
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y + size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
-        aCorner_list.push_back( Pos );
-        break;
-
-    case 2:         /* bidi <> */
-    case 3:         /* TriSt <> */
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size2, Pos.y + size2 ) );
-        aCorner_list.push_back( Pos );
-        break;
-
-    default:         /* unsp []*/
-        aCorner_list.push_back( wxPoint( Pos.x, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y - size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x + size.x, Pos.y + size2 ) );
-        aCorner_list.push_back( wxPoint( Pos.x, Pos.y + size2 ) );
-        aCorner_list.push_back( Pos );
-        break;
+        m_Pos.x = Pos.x;
+        if( m_Pos.x < Sheet->m_Pos.x )
+            m_Pos.x = Sheet->m_Pos.x;
+        if( m_Pos.x > (Sheet->m_Pos.x + Sheet->m_Size.x) )
+            m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
     }
 }
 
@@ -235,8 +195,24 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 
     if( m_Text.IsEmpty() )
         return true;
-    if( m_Edge )
+    switch( m_Edge )
+    {
+    case 0:     //pin on left side
+        side = 'L';
+        break;
+
+    case 1:     //pin on right side
         side = 'R';
+        break;
+
+    case 2:      //pin on top side
+        side = 'T';
+        break;
+
+    case 3:     //pin on bottom side
+        side = 'B';
+        break;
+    }
 
     switch( m_Shape )
     {
@@ -270,6 +246,66 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData )
 {
     return SCH_ITEM::Matches( m_Text, aSearchData );
+}
+
+
+void SCH_SHEET_PIN::Mirror_X( int aXaxis_position )
+{
+    int p = m_Pos.y - aXaxis_position;
+
+    m_Pos.y = aXaxis_position - p;
+    switch( m_Edge )
+    {
+    case 2:
+        SetEdge( 3 );
+        break;
+
+    case 3:
+        SetEdge( 2 );
+        break;
+    }
+}
+
+
+void SCH_SHEET_PIN::Mirror_Y( int aYaxis_position )
+{
+    int p = m_Pos.x - aYaxis_position;
+
+    m_Pos.x = aYaxis_position - p;
+    switch( m_Edge )
+    {
+    case 0:
+        SetEdge( 1 );
+        break;
+
+    case 1:
+        SetEdge( 0 );
+        break;
+    }
+}
+
+
+void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    switch( m_Edge )
+    {
+    case 0:     //pin on left side
+        SetEdge( 3 );
+        break;
+
+    case 1:     //pin on right side
+        SetEdge( 2 );
+        break;
+
+    case 2:      //pin on top side
+        SetEdge( 0 );
+        break;
+
+    case 3:     //pin on bottom side
+        SetEdge( 1 );
+        break;
+    }
 }
 
 

@@ -5,7 +5,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
-
+#include "trigo.h"
 #include "common.h"
 #include "program.h"
 #include "general.h"
@@ -97,11 +97,12 @@ bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
 EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
 {
     EDA_Rect box;
-    box.SetOrigin(m_Pos);
-    box.SetEnd(m_End());
+
+    box.SetOrigin( m_Pos );
+    box.SetEnd( m_End() );
 
     box.Normalize();
-    int      width = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int width = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
     box.Inflate( width / 2 );
 
     return box;
@@ -141,6 +142,31 @@ void SCH_BUS_ENTRY::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
+void SCH_BUS_ENTRY::Mirror_X( int aXaxis_position )
+{
+    m_Pos.y -= aXaxis_position;
+    NEGATE(  m_Pos.y );
+    m_Pos.y += aXaxis_position;
+    NEGATE(  m_Size.y );
+}
+
+
+void SCH_BUS_ENTRY::Mirror_Y( int aYaxis_position )
+{
+    m_Pos.x -= aYaxis_position;
+    NEGATE(  m_Pos.x );
+    m_Pos.x += aYaxis_position;
+    NEGATE(  m_Size.x );
+}
+
+
+void SCH_BUS_ENTRY::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Size.x, &m_Size.y, 900 );
+}
+
+
 /**********************/
 /* class SCH_JUNCTION */
 /**********************/
@@ -148,13 +174,12 @@ void SCH_BUS_ENTRY::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
 {
-#define DRAWJUNCTION_DIAMETER  32  /* Diameter of junction symbol between wires */
-    m_Pos   = pos;
-    m_Layer = LAYER_JUNCTION;
+#define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
+    m_Pos    = pos;
+    m_Layer  = LAYER_JUNCTION;
     m_Size.x = m_Size.y = DRAWJUNCTION_DIAMETER;
 #undef DRAWJUNCTION_DIAMETER
 }
-
 
 
 SCH_JUNCTION* SCH_JUNCTION::GenCopy()
@@ -191,6 +216,7 @@ bool SCH_JUNCTION::Save( FILE* aFile ) const
 EDA_Rect SCH_JUNCTION::GetBoundingBox()
 {
     EDA_Rect rect;
+
     rect.SetOrigin( m_Pos );
     rect.Inflate( ( GetPenSize() + m_Size.x ) / 2 );
 
@@ -207,7 +233,7 @@ bool SCH_JUNCTION::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                 ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
+                ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
 }
 
 
@@ -236,8 +262,30 @@ void SCH_JUNCTION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, DrawMode );
 
     GRFilledCircle( &panel->m_ClipBox, DC, m_Pos.x + offset.x,
-                    m_Pos.y + offset.y, (m_Size.x/2), 0, color,
+                    m_Pos.y + offset.y, (m_Size.x / 2), 0, color,
                     color );
+}
+
+
+void SCH_JUNCTION::Mirror_X( int aXaxis_position )
+{
+    m_Pos.y -= aXaxis_position;
+    NEGATE(  m_Pos.y );
+    m_Pos.y += aXaxis_position;
+}
+
+
+void SCH_JUNCTION::Mirror_Y( int aYaxis_position )
+{
+    m_Pos.x -= aYaxis_position;
+    NEGATE(  m_Pos.x );
+    m_Pos.x += aYaxis_position;
+}
+
+
+void SCH_JUNCTION::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
 }
 
 
@@ -263,7 +311,7 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
     SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
 {
 #define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
-    m_Pos = pos;
+    m_Pos    = pos;
     m_Size.x = m_Size.y = DRAWNOCONNECT_SIZE;
 #undef DRAWNOCONNECT_SIZE
 }
@@ -282,8 +330,9 @@ SCH_NO_CONNECT* SCH_NO_CONNECT::GenCopy()
 
 EDA_Rect SCH_NO_CONNECT::GetBoundingBox()
 {
-    int delta = ( GetPenSize() + m_Size.x ) / 2;
-    EDA_Rect  box;
+    int      delta = ( GetPenSize() + m_Size.x ) / 2;
+    EDA_Rect box;
+
     box.SetOrigin( m_Pos );
     box.Inflate( delta );
 
@@ -340,9 +389,9 @@ int SCH_NO_CONNECT::GetPenSize()
 void SCH_NO_CONNECT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                            const wxPoint& offset, int DrawMode, int Color )
 {
-    int       pX, pY, color;
-    int       delta = m_Size.x / 2;
-    int       width = g_DrawDefaultLineThickness;
+    int pX, pY, color;
+    int delta = m_Size.x / 2;
+    int width = g_DrawDefaultLineThickness;
 
     pX = m_Pos.x + offset.x;
     pY = m_Pos.y + offset.y;
@@ -357,6 +406,28 @@ void SCH_NO_CONNECT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
             pY + delta, width, color );
     GRLine( &panel->m_ClipBox, DC, pX + delta, pY - delta, pX - delta,
             pY + delta, width, color );
+}
+
+
+void SCH_NO_CONNECT::Mirror_X( int aXaxis_position )
+{
+    m_Pos.y -= aXaxis_position;
+    NEGATE(  m_Pos.y );
+    m_Pos.y += aXaxis_position;
+}
+
+
+void SCH_NO_CONNECT::Mirror_Y( int aYaxis_position )
+{
+    m_Pos.x -= aYaxis_position;
+    NEGATE(  m_Pos.x );
+    m_Pos.x += aYaxis_position;
+}
+
+
+void SCH_NO_CONNECT::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
 }
 
 
@@ -431,6 +502,7 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os )
                                  << GetClass().Lower().mb_str() << ">\n";
 }
 
+
 #endif
 
 
@@ -446,7 +518,7 @@ EDA_Rect SCH_LINE::GetBoundingBox()
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
     EDA_Rect ret( wxPoint( xmin, ymin ),
-                  wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+                 wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -530,6 +602,35 @@ void SCH_LINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
+void SCH_LINE::Mirror_X( int aXaxis_position )
+{
+    m_Start.y -= aXaxis_position;
+    NEGATE(  m_Start.y );
+    m_Start.y += aXaxis_position;
+    m_End.y   -= aXaxis_position;
+    NEGATE(  m_End.y );
+    m_End.y += aXaxis_position;
+}
+
+
+void SCH_LINE::Mirror_Y( int aYaxis_position )
+{
+    m_Start.x -= aYaxis_position;
+    NEGATE(  m_Start.x );
+    m_Start.x += aYaxis_position;
+    m_End.x   -= aYaxis_position;
+    NEGATE(  m_End.x );
+    m_End.x += aYaxis_position;
+}
+
+
+void SCH_LINE::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Start, rotationPoint, 900 );
+    RotatePoint( &m_End, rotationPoint, 900 );
+}
+
+
 /***********************/
 /* Class SCH_POLYLINE */
 /***********************/
@@ -586,7 +687,7 @@ bool SCH_POLYLINE::Save( FILE* aFile ) const
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
     if( fprintf( aFile, "Poly %s %s %d\n",
-                 width, layer, GetCornerCount() ) == EOF )
+                width, layer, GetCornerCount() ) == EOF )
     {
         return false;
     }
@@ -646,5 +747,36 @@ void SCH_POLYLINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         for( unsigned i = 1; i < GetCornerCount(); i++ )
             GRLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
                       m_PolyPoints[i].y + offset.y, width, color );
+    }
+}
+
+
+void SCH_POLYLINE::Mirror_X( int aXaxis_position )
+{
+    for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
+    {
+        m_PolyPoints[ii].y -= aXaxis_position;
+        NEGATE(  m_PolyPoints[ii].y );
+        m_PolyPoints[ii].y = aXaxis_position;
+    }
+}
+
+
+void SCH_POLYLINE::Mirror_Y( int aYaxis_position )
+{
+    for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
+    {
+        m_PolyPoints[ii].x -= aYaxis_position;
+        NEGATE(  m_PolyPoints[ii].x );
+        m_PolyPoints[ii].x = aYaxis_position;
+    }
+}
+
+
+void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
+{
+    for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
+    {
+        RotatePoint( &m_PolyPoints[ii], rotationPoint, 900 );
     }
 }

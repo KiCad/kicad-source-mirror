@@ -18,12 +18,13 @@ class SCH_SHEET_PATH;
  */
 struct Error
 {
-    wxString    errorText;
+    wxString errorText;
 
     Error( const wxChar* aMsg ) :
         errorText( aMsg )
     {
     }
+
 
     Error( const wxString& aMsg ) :
         errorText( aMsg )
@@ -32,7 +33,7 @@ struct Error
 };
 
 /// A container for several SCH_FIELD items
-typedef std::vector<SCH_FIELD>  SCH_FIELDS;
+typedef std::vector<SCH_FIELD> SCH_FIELDS;
 
 
 /**
@@ -44,14 +45,14 @@ class SCH_COMPONENT : public SCH_ITEM
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
 public:
-    int             m_Multi;     // In multi unit chip - which unit to draw.
+    int      m_Multi;            // In multi unit chip - which unit to draw.
 
-    wxPoint         m_Pos;
+    wxPoint  m_Pos;
 
-    wxString        m_ChipName;  /* Key to look for in the library,
+    wxString m_ChipName;         /* Key to look for in the library,
                                   * i.e. "74LS00". */
 
-    wxString        m_PrefixString;   /* C, R, U, Q etc - the first character
+    wxString m_PrefixString;          /* C, R, U, Q etc - the first character
                                        * which typically indicates what the
                                        * component is. Determined, upon
                                        * placement, from the library component.
@@ -59,14 +60,14 @@ public:
                                        * first non-digits in the reference
                                        * fields. */
 
-    int             m_Convert;        /* Handle multiple shape (for instance
+    int m_Convert;                    /* Handle multiple shape (for instance
                                        * De Morgan conversion) */
-    int             m_Transform[2][2]; /* The rotation/mirror transformation
+    int m_Transform[2][2];             /* The rotation/mirror transformation
                                         * matrix. */
 
 private:
 
-    SCH_FIELDS      m_Fields;         ///< variable length list of fields
+    SCH_FIELDS m_Fields;              ///< variable length list of fields
 
 
     /* Hierarchical references.
@@ -78,7 +79,7 @@ private:
      * multi = part selection in multi parts per package (0 or 1 for one part
      *         per package)
      */
-    wxArrayString   m_PathsAndReferences;
+    wxArrayString m_PathsAndReferences;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -128,7 +129,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool    Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
 
     /**
@@ -147,12 +148,13 @@ public:
      * set to NULL.
      * @return SCH_COMPONENT* - a copy of me.
      */
-    SCH_COMPONENT*  GenCopy()
+    SCH_COMPONENT* GenCopy()
     {
         return new SCH_COMPONENT( *this );
     }
 
-    void            SetOrientation( int aOrientation );
+
+    void       SetOrientation( int aOrientation );
 
     /** function GetOrientation()
      * Used to display component orientation (in dialog editor or info)
@@ -167,24 +169,24 @@ public:
      * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because
      * they are equivalent)
      */
-    int             GetOrientation();
+    int        GetOrientation();
 
-    wxPoint         GetScreenCoord( const wxPoint& coord );
-    void            DisplayInfo( WinEDA_DrawFrame* frame );
+    wxPoint    GetScreenCoord( const wxPoint& coord );
+    void       DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**
      * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
      * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
      *             else remove annotation relative to this sheetpath
      */
-    void            ClearAnnotation( SCH_SHEET_PATH* aSheet );
+    void       ClearAnnotation( SCH_SHEET_PATH* aSheet );
 
     /** function SetTimeStamp
      * Change the old time stamp to the new time stamp.
      * the time stamp is also modified in paths
      * @param aNewTimeStamp = new time stamp
      */
-    void            SetTimeStamp( long aNewTimeStamp);
+    void       SetTimeStamp( long aNewTimeStamp );
 
     /**
      * Function GetBoundaryBox
@@ -193,7 +195,7 @@ public:
      * this include only fields defined in library
      * use GetBoundingBox() to include fields in schematic
      */
-    EDA_Rect        GetBoundaryBox() const;
+    EDA_Rect   GetBoundaryBox() const;
 
     /**
      * Function GetBoundingBox
@@ -202,7 +204,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox();
+    EDA_Rect   GetBoundingBox();
 
     //-----<Fields>-----------------------------------------------------------
 
@@ -212,7 +214,7 @@ public:
      * @reeturn wxString - the field name or wxEmptyString if invalid field
      *                     index.
      */
-    wxString ReturnFieldName( int aFieldNdx ) const;
+    wxString   ReturnFieldName( int aFieldNdx ) const;
 
     /**
      * Function GetField
@@ -242,6 +244,7 @@ public:
         m_Fields = aFields;     // vector copying, length is changed possibly
     }
 
+
     //-----</Fields>----------------------------------------------------------
 
     /**
@@ -267,28 +270,29 @@ public:
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
 
-    void                    Draw( WinEDA_DrawPanel* panel,
-                                  wxDC*             DC,
-                                  const wxPoint&    offset,
-                                  int               draw_mode,
-                                  int               Color,
-                                  bool              DrawPinText );
 
-    void                    SwapData( SCH_COMPONENT* copyitem );
+    void Draw( WinEDA_DrawPanel* panel,
+               wxDC*             DC,
+               const wxPoint&    offset,
+               int               draw_mode,
+               int               Color,
+               bool              DrawPinText );
 
-    void                    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void           SwapData( SCH_COMPONENT* copyitem );
+
+    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
     // returns a unique ID, in the form of a path.
-    wxString                GetPath( SCH_SHEET_PATH* sheet );
+    wxString       GetPath( SCH_SHEET_PATH* sheet );
 
     /**
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
-    const wxString          GetRef( SCH_SHEET_PATH* sheet );
+    const wxString GetRef( SCH_SHEET_PATH* sheet );
 
     // Set the reference, for the given sheet path.
-    void                    SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
+    void           SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference
@@ -299,25 +303,26 @@ public:
      * @param aMulti = part selection, used in multi part per package (0 or 1
      *                 for non multi)
      */
-    void                    AddHierarchicalReference( const wxString& aPath,
-                                                      const wxString& aRef,
-                                                      int aMulti );
+    void           AddHierarchicalReference( const wxString& aPath,
+                                             const wxString& aRef,
+                                             int             aMulti );
 
     // returns the unit selection, for the given sheet path.
-    int                     GetUnitSelection( SCH_SHEET_PATH* aSheet );
+    int            GetUnitSelection( SCH_SHEET_PATH* aSheet );
 
     // Set the unit selection, for the given sheet path.
-    void                    SetUnitSelection( SCH_SHEET_PATH* aSheet,
-                                              int aUnitSelection );
+    void           SetUnitSelection( SCH_SHEET_PATH* aSheet,
+                                     int             aUnitSelection );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      * for a component, has no meaning, but it is necessary to satisfy the
      * SCH_ITEM class requirements.
      */
-    virtual int GetPenSize( ) { return 0; }
+    virtual int GetPenSize() { return 0; }
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
@@ -329,11 +334,15 @@ public:
             GetField( ii )->Move( aMoveVector );
     }
 
+
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position);
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
+
 
     /**
      * Compare schematic component reference and value fields against search string.
@@ -344,9 +353,9 @@ public:
      *          This param is used in this case
      * @return True if this component reference or value field matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData );
 
-    #if defined (DEBUG)
+    #if defined(DEBUG)
 
     /**
      * Function Show

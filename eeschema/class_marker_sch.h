@@ -9,9 +9,10 @@
 #include "class_marker_base.h"
 
 /* Marker are mainly used to show an ERC error
-*/
+ */
 
-enum TypeMarker {      /* Markers type */
+enum TypeMarker {
+    /* Markers type */
     MARK_UNSPEC,
     MARK_ERC,
     MARK_PCB,
@@ -24,10 +25,10 @@ enum TypeMarker {      /* Markers type */
 extern const wxChar* NameMarqueurType[];
 
 
-class SCH_MARKER : public SCH_ITEM , public MARKER_BASE
+class SCH_MARKER : public SCH_ITEM, public MARKER_BASE
 {
 public:
-    SCH_MARKER( );
+    SCH_MARKER();
     SCH_MARKER( const wxPoint& aPos, const wxString& aText );
     ~SCH_MARKER();
     virtual wxString GetClass() const
@@ -36,11 +37,11 @@ public:
     }
 
 
-    SCH_MARKER* GenCopy();
+    SCH_MARKER*  GenCopy();
 
-    virtual void      Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                            const wxPoint& aOffset, int aDraw_mode,
-                            int aColor = -1 );
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                       const wxPoint& aOffset, int aDraw_mode,
+                       int aColor = -1 );
 
 
     /**
@@ -50,14 +51,14 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool              Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      * for a marker, has no meaning, but it is necessary to satisfy the
      * SCH_ITEM class requirements
      */
-    virtual int GetPenSize( ) { return 0; };
+    virtual int GetPenSize() { return 0; };
 
     /** Function HitTest
      * @return true if the point aPosRef is within item area
@@ -67,6 +68,7 @@ public:
     {
         return HitTestMarker( aPosRef );
     }
+
 
     /**
      * Function GetBoundingBox
@@ -79,25 +81,24 @@ public:
 
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
+
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        m_Pos.x -= aYaxis_position;
-        m_Pos.x = - m_Pos.x;
-        m_Pos.x += aYaxis_position;
-    }
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
+    virtual void Mirror_X( int aXaxis_position );
 
     /**
      * Compare DRC marker main and auxiliary text against search string.
@@ -112,10 +113,11 @@ public:
      *
      * @param aFrame - Top window that owns the message panel.
      */
-    void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    void         DisplayInfo( WinEDA_DrawFrame* aFrame );
 
 #if defined(DEBUG)
-    void              Show( int nestLevel, std::ostream& os );
+    void         Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 

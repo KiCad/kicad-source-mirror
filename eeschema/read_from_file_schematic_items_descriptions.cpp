@@ -323,7 +323,7 @@ error line %d, aborted\n" ),
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
             SheetLabelStruct->m_Size.x = SheetLabelStruct->m_Size.y = size;
-
+            SheetLabelStruct->m_Pos.x=x; //to readjust x of first label if vertical
             switch( Char1[0] )
             {
             case 'I':
@@ -347,9 +347,22 @@ error line %d, aborted\n" ),
                 break;
             }
 
-            if( Char2[0] == 'R' )
-                SheetLabelStruct->m_Edge = 1;
-
+            switch( Char2[0] ) 
+            {
+            case 'R' : /* pin on right side */
+                SheetLabelStruct->SetEdge(1);
+                break;
+            case 'T' : /* pin on top side */
+                SheetLabelStruct->SetEdge(2);
+                break;
+            case 'B' : /* pin on bottom side */
+                SheetLabelStruct->SetEdge(3);
+                break;
+            case 'L' : /* pin on left side */
+            default  :
+                SheetLabelStruct->SetEdge(0);
+                break;
+            }
             SheetStruct->AddLabel( SheetLabelStruct );
         }
     }

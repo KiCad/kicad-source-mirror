@@ -49,7 +49,6 @@ protected:
                                      * Saving file
                                      */
 
-
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
               const wxString& text = wxEmptyString,
@@ -143,7 +142,10 @@ public:
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
+    virtual void Rotate( wxPoint rotationPoint );
     virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+
 
     /**
      * Compare schematic text entry against search string.
@@ -152,7 +154,7 @@ public:
      * @param aAuxData - a pointer on auxiliary data, if needed. Can be null
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData );
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
@@ -201,6 +203,8 @@ public:
      * wire)
      */
     virtual wxPoint GetSchematicTextOffset();
+    virtual void    Mirror_X( int aXaxis_position );
+    virtual void    Rotate( wxPoint rotationPoint );
 
     /**
      * Function GetBoundingBox
@@ -209,7 +213,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect        GetBoundingBox();
 
     /**
      * Function Save
@@ -300,6 +304,8 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void    Mirror_Y( int aYaxis_position );
+    virtual void    Mirror_X( int aXaxis_position );
+    virtual void    Rotate( wxPoint rotationPoint );
 };
 
 
@@ -307,7 +313,7 @@ class SCH_HIERLABEL : public SCH_TEXT
 {
 public:
     SCH_HIERLABEL( const wxPoint& pos = wxPoint( 0, 0 ),
-                   const wxString& text = wxEmptyString );
+                   const wxString& text = wxEmptyString, KICAD_T aType = TYPE_SCH_HIERLABEL );
     ~SCH_HIERLABEL() { }
     virtual void Draw( WinEDA_DrawPanel* panel,
                        wxDC*             DC,
@@ -381,6 +387,8 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void    Mirror_Y( int aYaxis_position );
+    virtual void    Mirror_X( int aXaxis_position );
+    virtual void    Rotate( wxPoint rotationPoint );
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

@@ -106,10 +106,10 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
      */
     EDA_Rect BoundaryBox = field->GetBoundaryBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    GRTextVertJustifyType vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    wxPoint textpos = BoundaryBox.Centre();
+    GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
+    wxPoint  textpos = BoundaryBox.Centre();
 
-    int thickness = field->GetPenSize();
+    int      thickness = field->GetPenSize();
 
     if( !IsMulti || (FieldNumber != REFERENCE) )
     {
@@ -242,6 +242,7 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
 
     switch( aSchText->Type() )
     {
+    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
     case TYPE_SCH_GLOBALLABEL:
     case TYPE_SCH_HIERLABEL:
     case TYPE_SCH_LABEL:
@@ -293,7 +294,8 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
                                                              aSchText->m_Pos );
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
     }
-    if( aSchText->Type() == TYPE_SCH_HIERLABEL )
+    if( ( aSchText->Type() == TYPE_SCH_HIERLABEL )
+       || ( aSchText->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE) )
     {
         ( (SCH_HIERLABEL*) aSchText )->CreateGraphicShape( Poly,
                                                            aSchText->m_Pos );
@@ -307,6 +309,8 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
     EDA_Colors txtcolor = UNSPECIFIED_COLOR;
     wxSize     size;
     wxString   Text;
+    int        name_orientation;
+    wxPoint    pos_sheetname, pos_filename;
     wxPoint    pos;
 
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
@@ -326,18 +330,32 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
     plotter->line_to( pos );
     plotter->finish_to( Struct->m_Pos );
 
+    if( Struct->IsVerticalOrientation() )
+    {
+        pos_sheetname    = wxPoint( Struct->m_Pos.x - 8, Struct->m_Pos.y + Struct->m_Size.y );
+        pos_filename     = wxPoint( Struct->m_Pos.x + Struct->m_Size.x + 4,
+                                    Struct->m_Pos.y + Struct->m_Size.y );
+        name_orientation = TEXT_ORIENT_VERT;
+    }
+    else
+    {
+        pos_sheetname    = wxPoint( Struct->m_Pos.x, Struct->m_Pos.y - 4 );
+        pos_filename     = wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 );
+        name_orientation = TEXT_ORIENT_HORIZ;
+    }
     /* Draw texts: SheetName */
     Text = Struct->m_SheetName;
     size = wxSize( Struct->m_SheetNameSize, Struct->m_SheetNameSize );
-    pos  = Struct->m_Pos; pos.y -= 4;
+
+    //pos  = Struct->m_Pos; pos.y -= 4;
     thickness = g_DrawDefaultLineThickness;
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
     plotter->set_color( ReturnLayerColor( LAYER_SHEETNAME ) );
 
     bool italic = false;
-    plotter->text( pos, txtcolor,
-                   Text, TEXT_ORIENT_HORIZ, size,
+    plotter->text( pos_sheetname, txtcolor,
+                   Text, name_orientation, size,
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
                    thickness, italic, false );
 
@@ -349,17 +367,17 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
 
     plotter->set_color( ReturnLayerColor( LAYER_SHEETFILENAME ) );
 
-    plotter->text( wxPoint( Struct->m_Pos.x, Struct->m_Pos.y + Struct->m_Size.y + 4 ),
-                   txtcolor, Text, TEXT_ORIENT_HORIZ, size,
+    plotter->text( pos_filename, txtcolor,
+                   Text, name_orientation, size,
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                    thickness, italic, false );
 
     plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
 
     /* Draw texts : SheetLabel */
-    BOOST_FOREACH( SCH_SHEET_PIN& pin_sheet, Struct->GetSheetPins() )
-    {
-        pin_sheet.Plot( plotter );
+    BOOST_FOREACH( SCH_SHEET_PIN & pin_sheet, Struct->GetSheetPins() ) {
+        //pin_sheet.Plot( plotter );
+        PlotTextStruct( plotter, &pin_sheet );
     }
 }
 

@@ -435,7 +435,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ROTATE:       // Component or other schematic item rotation
-
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK)//allows bloc operation on hotkey
+        {
+            HandleBlockEndByPopUp(BLOCK_ROTATE, DC );
+            break;
+        } 
         if( DrawStruct == NULL )
         {
             // Find the schematic object to rotate under the cursor
@@ -465,6 +469,9 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
             switch( DrawStruct->Type() )
             {
+            case DRAW_SHEET_STRUCT_TYPE: //TODO allow sheet rotate on hotkey
+                //wxPostEvent( this, eventRotateSheet );
+                break;
             case TYPE_SCH_COMPONENT:
                 wxPostEvent( this, eventRotateComponent );
                 break;
@@ -487,6 +494,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK)
+        {
+            HandleBlockEndByPopUp(BLOCK_MIRROR_Y, DC );
+            break;
+        } 
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
         if( DrawStruct )
@@ -501,6 +513,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK) //allows bloc operation on hotkey
+		{
+            HandleBlockEndByPopUp(BLOCK_MIRROR_X, DC );
+            break;
+		} 
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct )

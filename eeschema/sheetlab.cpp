@@ -20,7 +20,7 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static int     s_CurrentTypeLabel = NET_INPUT;
 static wxSize  NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 static wxPoint s_InitialPosition;  // remember the initial value of the pin label when moving it
-
+static int     s_InitialEdge;
 
 /****************************************/
 /* class WinEDA_PinSheetPropertiesFrame */
@@ -38,8 +38,8 @@ private:
     WinEDA_GraphicTextCtrl* m_TextWin;
 
 public: WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
-                                        SCH_SHEET_PIN* curr_pinsheet,
-                                        const wxPoint& framepos = wxPoint( -1, -1 ) );
+                                       SCH_SHEET_PIN* curr_pinsheet,
+                                       const wxPoint& framepos = wxPoint( -1, -1 ) );
     ~WinEDA_PinSheetPropertiesFrame() { };
 
 private:
@@ -50,8 +50,8 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
+EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -126,6 +126,7 @@ void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
     EndModal( wxID_OK );
 }
 
+
 /* Called when aborting a move pinsheet label
  * delete a new pin sheet label, or restire its old position
  */
@@ -145,13 +146,9 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
         SheetLabel->m_Pos = s_InitialPosition;
-        // Restore edge position:
-        SCH_SHEET* sheet = (SCH_SHEET*) SheetLabel->GetParent();
-        if( s_InitialPosition.x > ( sheet->m_Pos.x + (sheet->m_Size.x / 2) ) )
-            SheetLabel->m_Edge  = 1;
-        else
-            SheetLabel->m_Edge  = 0;
 
+        // Restore edge position:
+        SheetLabel->SetEdge( s_InitialEdge );
         RedrawOneStruct( Panel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
         SheetLabel->m_Flags = 0;
     }
@@ -165,6 +162,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+
     wxASSERT( Sheet != NULL && Sheet->Type() == DRAW_SHEET_STRUCT_TYPE );
     SAFE_DELETE( g_ItemToUndoCopy );
 
@@ -180,27 +178,12 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
     {
         wxPoint tmp = m_Pos;
         m_Pos = s_InitialPosition;
-        m_Edge  = 0;
-        if( m_Pos.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
-            m_Edge  = 1;
+        SetEdge( s_InitialEdge );
         frame->SaveCopyInUndoList( Sheet, UR_CHANGED );
         m_Pos = tmp;
     }
 
-    m_Pos.x = Sheet->m_Pos.x;
-    m_Edge  = 0;
-
-    if( frame->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + ( Sheet->m_Size.x / 2 ) ) )
-    {
-        m_Edge  = 1;
-        m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
-    }
-
-    m_Pos.y = frame->GetScreen()->m_Curseur.y;
-    if( m_Pos.y < Sheet->m_Pos.y )
-        m_Pos.y = Sheet->m_Pos.y;
-    if( m_Pos.y > (Sheet->m_Pos.y + Sheet->m_Size.y) )
-        m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
+    ConstraintOnEdge( frame->GetScreen()->m_Curseur );
 
     RedrawOneStruct( frame->DrawPanel, DC, Sheet, GR_DEFAULT_DRAWMODE );
     frame->DrawPanel->ManageCurseur = NULL;
@@ -214,7 +197,8 @@ void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
     NetSheetTextSize     = SheetLabel->m_Size;
     s_CurrentTypeLabel   = SheetLabel->m_Shape;
     SheetLabel->m_Flags |= IS_MOVED;
-    s_InitialPosition = SheetLabel->m_Pos;
+    s_InitialPosition    = SheetLabel->m_Pos;
+    s_InitialEdge = SheetLabel->GetEdge();
 
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
@@ -229,27 +213,10 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( SheetLabel == NULL )
         return;
 
-    SCH_SHEET* Sheet = (SCH_SHEET*) SheetLabel->GetParent();
-
-    if( Sheet == NULL )
-        return;
     if( erase )
         RedrawOneStruct( panel, DC, SheetLabel, g_XorMode );
 
-    SheetLabel->m_Edge  = 0;
-    SheetLabel->m_Pos.x = Sheet->m_Pos.x;
-
-    if( panel->GetScreen()->m_Curseur.x > ( Sheet->m_Pos.x + (Sheet->m_Size.x / 2) ) )
-    {
-        SheetLabel->m_Edge  = 1;
-        SheetLabel->m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
-    }
-
-    SheetLabel->m_Pos.y = panel->GetScreen()->m_Curseur.y;
-    if( SheetLabel->m_Pos.y < Sheet->m_Pos.y )
-        SheetLabel->m_Pos.y = Sheet->m_Pos.y;
-    if( SheetLabel->m_Pos.y > (Sheet->m_Pos.y + Sheet->m_Size.y) )
-        SheetLabel->m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
+    SheetLabel->ConstraintOnEdge( panel->GetScreen()->m_Curseur );
 
     RedrawOneStruct( panel, DC, SheetLabel, g_XorMode );
 }
@@ -269,7 +236,7 @@ int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
     int diag = frame->ShowModal();
     frame->Destroy();
 
-    if ( DC )
+    if( DC )
         RedrawOneStruct( DrawPanel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
 
     return diag;
@@ -302,7 +269,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet, wxDC* D
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
     DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
 
-    OnModify( );
+    OnModify();
     return NewSheetLabel;
 }
 
@@ -342,7 +309,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet, wxDC* D
         return NULL;
     }
 
-    OnModify( );
+    OnModify();
     SAFE_DELETE( g_ItemToUndoCopy );
     SaveCopyInUndoList( Sheet, UR_CHANGED );
 

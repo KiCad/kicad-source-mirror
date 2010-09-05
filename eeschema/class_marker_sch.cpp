@@ -8,6 +8,7 @@
 #include "common.h"
 #include "program.h"
 #include "general.h"
+#include "trigo.h"
 
 #include "class_marker_sch.h"
 #include "erc.h"
@@ -51,7 +52,7 @@ SCH_MARKER::~SCH_MARKER()
 SCH_MARKER* SCH_MARKER::GenCopy()
 {
     SCH_MARKER* newitem = new SCH_MARKER( GetPos(),
-                                          GetReporter().GetMainText() );
+                                         GetReporter().GetMainText() );
 
     newitem->SetMarkerType( GetMarkerType() );
     newitem->SetErrorLevel( GetErrorLevel() );
@@ -146,4 +147,26 @@ void SCH_MARKER::DisplayInfo( WinEDA_DrawFrame* aFrame )
     aFrame->ClearMsgPanel();
     aFrame->AppendMsgPanel( _( "Electronics rule check error" ),
                             GetReporter().GetErrorText(), DARKRED );
+}
+
+
+void SCH_MARKER::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+}
+
+
+void SCH_MARKER::Mirror_X( int aXaxis_position )
+{
+    m_Pos.y -= aXaxis_position;
+    m_Pos.y  = -m_Pos.y;
+    m_Pos.y += aXaxis_position;
+}
+
+
+void SCH_MARKER::Mirror_Y( int aYaxis_position )
+{
+    m_Pos.x -= aYaxis_position;
+    m_Pos.x  = -m_Pos.x;
+    m_Pos.x += aYaxis_position;
 }
