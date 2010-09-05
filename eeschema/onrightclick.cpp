@@ -19,7 +19,6 @@
 using namespace std;
 
 
-
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* frame );
 static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, WinEDA_SchematicFrame* frame );
@@ -209,7 +208,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
     default:
         wxString msg;
         msg.Printf( wxT( "WinEDA_SchematicFrame::OnRightClick Error: unknown DrawType %d" ),
-                    DrawStruct->Type() );
+                   DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -223,7 +222,8 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
     wxString msg;
 
-    if( !Field->m_Flags ){
+    if( !Field->m_Flags )
+    {
         msg = AddHotkeyName( _( "Move Field" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
@@ -444,7 +444,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 {
     wxString msg;
-    wxMenu* menu_change_type = new wxMenu;
+    wxMenu*  menu_change_type = new wxMenu;
 
     if( !Text->m_Flags )
     {
@@ -482,7 +482,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 
 void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, WinEDA_SchematicFrame* frame )
 {
-    bool is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
+    bool     is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
     wxString msg;
 
     if( !is_new )
@@ -506,8 +506,8 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, WinEDA_Schema
 
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* frame )
 {
-    bool    is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
-    wxPoint pos    = frame->GetScreen()->m_Curseur;
+    bool     is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
+    wxPoint  pos    = frame->GetScreen()->m_Curseur;
     wxString msg;
 
     if( is_new )
@@ -630,6 +630,7 @@ void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 {
     wxString msg;
+
     ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), cancel_xpm );
 
     PopMenu->AppendSeparator();
@@ -650,6 +651,9 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
         ADD_MENUITEM( PopMenu, ID_POPUP_DRAG_BLOCK, msg, move_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, _( "Mirror Block ||" ), mirror_H_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block --" ), mirror_V_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block ccw" ), rotate_pos_xpm );
+
 #if 0
   #ifdef __WINDOWS__
         ADD_MENUITEM( menu_other_block_commands, ID_GEN_COPY_BLOCK_TO_CLIPBOARD,

@@ -79,6 +79,9 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void Mirror_Y(int aYaxis_position) = 0;
+    virtual void Mirror_X(int aXaxis_position) = 0;
+    virtual void Rotate(wxPoint rotationPoint) = 0;
+
 
     /**
      * Function Save

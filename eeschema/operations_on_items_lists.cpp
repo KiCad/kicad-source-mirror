@@ -1,8 +1,8 @@
 /***************************************************
  *  operations_on_item_lists.cpp
- * functions used in block commands, on lists of schematic items:
- * move, mirror, delete and copy
- ****************************************************/
+ * functions used in block commands, or undo/redo,
+ * to move, mirror, delete, copy ... lists of schematic items
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -14,9 +14,17 @@
 #include "class_marker_sch.h"
 #include "protos.h"
 
+void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
+{
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        item->Rotate( rotationPoint );      // Place it in its new position.
+        item->m_Flags = 0;
+    }
+}
 
-void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
-void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
+
 void DeleteItemsInList( WinEDA_DrawPanel*  panel,
                         PICKED_ITEMS_LIST& aItemsList );
 void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
@@ -29,6 +37,17 @@ void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Mirror_Y( aMirrorPoint.x );      // Place it in its new position.
+        item->m_Flags = 0;
+    }
+}
+
+
+void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
+{
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        item->Mirror_X( aMirrorPoint.y );      // Place it in its new position.
         item->m_Flags = 0;
     }
 }
@@ -68,8 +87,9 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
         if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
         {
             /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT( "DeleteItemsInList() err: unexpected \
-DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
+            wxMessageBox( wxT(
+                             "DeleteItemsInList() err: unexpected \
+DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE"                                                                     ) );
         }
         else
         {
@@ -102,7 +122,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
         /* This structure is attached to a node, and is not accessible by
          * the global list directly. */
         frame->SaveCopyInUndoList(
-            (SCH_ITEM*) ( (SCH_SHEET_PIN*) DrawStruct )-> GetParent(),
+            (SCH_ITEM*)( (SCH_SHEET_PIN*) DrawStruct )->GetParent(),
             UR_CHANGED );
         frame->DeleteSheetLabel( DC ? true : false,
                                  (SCH_SHEET_PIN*) DrawStruct );
@@ -199,7 +219,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
         wxMessageBox( wxT( "DuplicateStruct error: NULL struct" ) );
         return NULL;
     }
-    
+
     switch( aDrawStruct->Type() )
     {
     case DRAW_POLYLINE_STRUCT_TYPE:
@@ -248,9 +268,10 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 
     case DRAW_SHEET_STRUCT_TYPE:
         NewDrawStruct = ( (SCH_SHEET*) aDrawStruct )->GenCopy();
-        if ( aClone )
+        if( aClone )
         {
-            ((SCH_SHEET*)NewDrawStruct)->m_SheetName = ((SCH_SHEET*)aDrawStruct)->m_SheetName;
+            ( (SCH_SHEET*) NewDrawStruct )->m_SheetName =
+                ( (SCH_SHEET*) aDrawStruct )->m_SheetName;
         }
         break;
 
@@ -264,7 +285,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
     break;
     }
 
-    if ( aClone )
+    if( aClone )
         NewDrawStruct->m_TimeStamp = aDrawStruct->m_TimeStamp;
 
     NewDrawStruct->m_Image = aDrawStruct;

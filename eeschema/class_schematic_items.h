@@ -71,14 +71,15 @@ public:
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int  GetPenSize();
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         if( (m_Flags & STARTPOINT) == 0 )
             m_Start += aMoveVector;
@@ -86,22 +87,18 @@ public:
             m_End += aMoveVector;
     }
 
+
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        m_Start.x -= aYaxis_position;
-        NEGATE(  m_Start.x );
-        m_Start.x += aYaxis_position;
-        m_End.x -= aYaxis_position;
-        NEGATE(  m_End.x );
-        m_End.x += aYaxis_position;
-    }
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 
@@ -110,7 +107,7 @@ class SCH_NO_CONNECT : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
-    wxSize m_Size;                      // size of this symbol
+    wxSize  m_Size;                     // size of this symbol
 
 public:
     SCH_NO_CONNECT( const wxPoint& pos );
@@ -126,11 +123,11 @@ public:
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int     GetPenSize();
 
-    virtual void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                               const wxPoint& offset, int draw_mode,
-                               int Color = -1 );
+    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                          const wxPoint& offset, int draw_mode,
+                          int Color = -1 );
 
     /**
      * Function Save
@@ -139,13 +136,13 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool                 Save( FILE* aFile ) const;
+    bool            Save( FILE* aFile ) const;
 
     /** Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
-    bool HitTest( const wxPoint& aPosRef );
+    bool            HitTest( const wxPoint& aPosRef );
 
     /**
      * Function GetBoundingBox
@@ -155,28 +152,27 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect             GetBoundingBox();
+    EDA_Rect        GetBoundingBox();
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
+
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        m_Pos.x -= aYaxis_position;
-        NEGATE(  m_Pos.x );
-        m_Pos.x += aYaxis_position;
-    }
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 };
 
 
@@ -230,29 +226,27 @@ public:
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int    GetPenSize();
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
+
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        m_Pos.x -= aYaxis_position;
-        NEGATE(  m_Pos.x );
-        m_Pos.x += aYaxis_position;
-        NEGATE(  m_Size.x );
-    }
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 };
 
 class SCH_POLYLINE : public SCH_ITEM
@@ -271,10 +265,10 @@ public:
     }
 
 
-    SCH_POLYLINE*  GenCopy();
-    virtual void   Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& offset, int draw_mode,
-                         int Color = -1 );
+    SCH_POLYLINE* GenCopy();
+    virtual void  Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+                        const wxPoint& offset, int draw_mode,
+                        int Color = -1 );
 
     /**
      * Function Save
@@ -283,7 +277,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool           Save( FILE* aFile ) const;
+    bool          Save( FILE* aFile ) const;
 
     /** Function AddPoint
      * add a corner to m_PolyPoints
@@ -292,6 +286,7 @@ public:
     {
         m_PolyPoints.push_back( point );
     }
+
 
     /** Function GetCornerCount
      * @return the number of corners
@@ -302,31 +297,28 @@ public:
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int GetPenSize();
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
             m_PolyPoints[ii] += aMoveVector;
     }
+
+
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
-        {
-            m_PolyPoints[ii].x -= aYaxis_position;
-            NEGATE(  m_PolyPoints[ii].x );
-            m_PolyPoints[ii].x = aYaxis_position;
-        }
-    }
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 };
 
 
@@ -334,7 +326,7 @@ class SCH_JUNCTION : public SCH_ITEM
 {
 public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
-    wxSize m_Size;
+    wxSize  m_Size;
 
 public:
     SCH_JUNCTION( const wxPoint& pos );
@@ -350,7 +342,7 @@ public:
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
-    bool HitTest( const wxPoint& aPosRef );
+    bool          HitTest( const wxPoint& aPosRef );
 
     /**
      * Function GetBoundingBox
@@ -360,17 +352,18 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect            GetBoundingBox();
+    EDA_Rect      GetBoundingBox();
 
     SCH_JUNCTION* GenCopy();
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int   GetPenSize();
 
     virtual void  Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                         const wxPoint& offset, int draw_mode, int Color = -1 );
+
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
@@ -381,28 +374,28 @@ public:
     bool          Save( FILE* aFile ) const;
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
+
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_Y(int aYaxis_position)
-    {
-        m_Pos.x -= aYaxis_position;
-        NEGATE(  m_Pos.x );
-        m_Pos.x += aYaxis_position;
-    }
+    virtual void Mirror_Y( int aYaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
+    virtual void Rotate( wxPoint rotationPoint );
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 

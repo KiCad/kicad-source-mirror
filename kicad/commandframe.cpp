@@ -97,7 +97,7 @@ wxBitmapButton* RIGHT_KM_FRAME::AddBitmapButton( wxWindowID aId, const wxBitmap 
 {
     wxPoint buttPos = m_ButtonLastPosition;
     wxSize buttSize;
-    int btn_margin = 8;
+    int btn_margin = 10;
     buttSize.x = aBitmap.GetWidth() + btn_margin;
     buttSize.y = aBitmap.GetHeight() + btn_margin;
     buttPos.y -= buttSize.y;

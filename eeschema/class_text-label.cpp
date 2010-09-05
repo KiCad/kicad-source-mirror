@@ -218,8 +218,16 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
         dx = LenSize( m_Text ) / 2;
         break;
 
+    case 1: /* Vert Orientation UP */
+        dx = -m_Size.x / 2;
+        break;
+
     case 2:        /* invert horizontal text*/
         dx = -LenSize( m_Text ) / 2;
+        break;
+
+    case 3: /*  Vert Orientation BOTTOM */
+        dx = m_Size.x / 2;
         break;
 
     default:
@@ -233,6 +241,84 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
     px += aYaxis_position;
     px -= dx;
     m_Pos.x = px;
+}
+
+
+/** virtual function Mirror_X
+ * mirror item relative to an X axis
+ * @param aXaxis_position = the x axis position
+ */
+void SCH_TEXT::Mirror_X( int aXaxis_position )
+{
+    // Text is NOT really mirrored; it is moved to a suitable position
+    // which is the closest position for a true mirrored text
+    // The center position is mirrored and the text is moved for half
+    // horizontal len
+    int py = m_Pos.y;
+    int dy;
+
+    switch( GetSchematicTextOrientation() )
+    {
+    case 0:             /* horizontal text */
+        dy = -m_Size.y / 2;
+        break;
+
+    case 1: /* Vert Orientation UP */
+        dy = -LenSize( m_Text ) / 2;
+        break;
+
+    case 2:                 /* invert horizontal text*/
+        dy = m_Size.y / 2;  // how to calculate text height?
+        break;
+
+    case 3: /*  Vert Orientation BOTTOM */
+        dy = LenSize( m_Text ) / 2;
+        break;
+
+    default:
+        dy = 0;
+        break;
+    }
+
+    py += dy;
+    py -= aXaxis_position;
+    NEGATE( py );
+    py += aXaxis_position;
+    py -= dy;
+    m_Pos.y = py;
+}
+
+
+void SCH_TEXT::Rotate( wxPoint rotationPoint )
+{
+    int dy;
+
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 1) % 4 );
+    switch( GetSchematicTextOrientation() )
+    {
+    case 0:             /* horizontal text */
+        dy = m_Size.y;
+        break;
+
+    case 1: /* Vert Orientation UP */
+        dy = 0;
+        break;
+
+    case 2:        /* invert horizontal text*/
+        dy = m_Size.y;
+        break;
+
+    case 3: /*  Vert Orientation BOTTOM */
+        dy = 0;
+        break;
+
+    default:
+        dy = 0;
+        break;
+    }
+
+    m_Pos.y += dy;
 }
 
 
@@ -302,6 +388,32 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 }
 
 
+void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
+{
+    switch( GetSchematicTextOrientation() )
+    {
+    case 1:             /* vertical text */
+        SetSchematicTextOrientation( 3 );
+        break;
+
+    case 3:        /* invert vertical text*/
+        SetSchematicTextOrientation( 1 );
+        break;
+    }
+
+    m_Pos.y -= aXaxis_position;
+    NEGATE( m_Pos.y );
+    m_Pos.y += aXaxis_position;
+}
+
+
+void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
+}
+
+
 /** virtual function Mirror_Y
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
@@ -327,6 +439,32 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;
+}
+
+
+void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
+{
+    switch( GetSchematicTextOrientation() )
+    {
+    case 1:             /* vertical text */
+        SetSchematicTextOrientation( 3 );
+        break;
+
+    case 3:        /* invert vertical text*/
+        SetSchematicTextOrientation( 1 );
+        break;
+    }
+
+    m_Pos.y -= aXaxis_position;
+    NEGATE( m_Pos.y );
+    m_Pos.y += aXaxis_position;
+}
+
+
+void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
 }
 
 
@@ -717,6 +855,32 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
+/** virtual function Mirror_X
+ * mirror item relative to an X axis
+ * @param aXaxis_position = the x axis position
+ */
+void SCH_LABEL::Mirror_X( int aXaxis_position )
+{
+    // Text is NOT really mirrored; it is moved to a suitable position
+    // which is the closest position for a true mirrored text
+    // The center position is mirrored and the text is moved for half
+    // horizontal len
+    int py = m_Pos.y;
+
+    py -= aXaxis_position;
+    NEGATE( py );
+    py += aXaxis_position;
+    m_Pos.y = py;
+}
+
+
+void SCH_LABEL::Rotate( wxPoint rotationPoint )
+{
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 1) % 4 );
+}
+
+
 /**
  * Function Save
  * writes the data structures for this object out to a FILE in "*.brd" format.
@@ -795,8 +959,8 @@ bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosRef )
 
 
 /*****************************************************************************/
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_HIERLABEL )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
+    SCH_TEXT( pos, text, aType )
 {
 /*****************************************************************************/
     m_Layer = LAYER_HIERLABEL;

@@ -57,15 +57,15 @@ DanglingEndHandle* RebuildEndList( EDA_BaseStruct* DrawList );
 /* Returns true if the point P is on the segment S. */
 bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint )
 {
-    wxPoint vectSeg = aSegEnd - aSegStart;  // Vector from S1 to S2
+    wxPoint vectSeg   = aSegEnd - aSegStart;    // Vector from S1 to S2
     wxPoint vectPoint = aTestPoint - aSegStart; // Vector from S1 to P
 
     // Use long long here to avoid overflow in calculations
-    if( (long long)vectSeg.x * vectPoint.y - (long long)vectSeg.y * vectPoint.x )
+    if( (long long) vectSeg.x * vectPoint.y - (long long) vectSeg.y * vectPoint.x )
         return false;        /* Cross product non-zero, vectors not parallel */
 
-    if( ((long long)vectSeg.x * vectPoint.x + (long long)vectSeg.y * vectPoint.y) <
-        ((long long)vectPoint.x * vectPoint.x + (long long)vectPoint.y * vectPoint.y) )
+    if( ( (long long) vectSeg.x * vectPoint.x + (long long) vectSeg.y * vectPoint.y ) <
+       ( (long long) vectPoint.x * vectPoint.x + (long long) vectPoint.y * vectPoint.y ) )
         return false;          /* Point not on segment */
 
     return true;
@@ -100,6 +100,14 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
             TestLabelForDangling( (SCH_LABEL*) item, this, DC );
             break;
 
+        case DRAW_SHEET_STRUCT_TYPE:
+
+            // Read the hierarchical pins list and teast for dangling pins:
+            BOOST_FOREACH( SCH_SHEET_PIN & sheetPin, ( (SCH_SHEET*) item )->GetSheetPins() ) {
+                TestLabelForDangling( &sheetPin, this, DC );
+            }
+            break;
+
         case DRAW_SEGMENT_STRUCT_TYPE:
             #undef STRUCT
             #define STRUCT ( (SCH_LINE*) item )
@@ -118,7 +126,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC )
             break;
 
         default:
-            ;
+            break;
         }
     }
 }

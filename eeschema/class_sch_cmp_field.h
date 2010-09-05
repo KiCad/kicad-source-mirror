@@ -37,7 +37,7 @@ public:
                                  * (for REFERENCE: add part selection text */
 
 public:
-    SCH_FIELD( const wxPoint& aPos,  int aFieldId, SCH_COMPONENT* aParent,
+    SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
                wxString aName = wxEmptyString );
 
     ~SCH_FIELD();
@@ -46,6 +46,7 @@ public:
     {
         return wxT( "SCH_FIELD" );
     }
+
 
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
@@ -58,22 +59,24 @@ public:
     bool     IsVoid()
     {
         size_t len = m_Text.Len();
+
         return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
     }
 
-    void     SwapData( SCH_FIELD* copyitem );
+
+    void SwapData( SCH_FIELD* copyitem );
 
     /** Function ImportValues
      * copy parameters from a source.
      * Pointers and specific values (position) are not copied
      * @param aSource = the LIB_FIELD to read
      */
-    void     ImportValues( const LIB_FIELD& aSource );
+    void ImportValues( const LIB_FIELD& aSource );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    int GetPenSize( );
+    int  GetPenSize();
 
     /** Function IsVisible
      * @return true is this field is visible, false if flagged invisible
@@ -83,14 +86,15 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
+
     /**
      * Function Draw
      */
-    void     Draw( WinEDA_DrawPanel* panel,
-                   wxDC*             DC,
-                   const wxPoint&    offset,
-                   int               draw_mode,
-                   int               Color = -1 );
+    void Draw( WinEDA_DrawPanel* panel,
+               wxDC*             DC,
+               const wxPoint&    offset,
+               int               draw_mode,
+               int               Color = -1 );
 
     /**
      * Function Save
@@ -102,26 +106,40 @@ public:
     bool Save( FILE* aFile ) const;
 
     // Geometric transforms (used in block operations):
+
     /** virtual function Move
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y(int aYaxis_position)
+
+    virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void Mirror_X( int aXaxis_position )
     {
         /* Do Nothing: fields are never mirrored alone.
          * they are moved when the parent component is mirrored
          * this function is only needed by the virtual pure function of the
          * master class */
     }
+
+
+    /** virtual function Mirror_Y
+     * mirror item relative to an Y axis
+     * @param aYaxis_position = the y axis position
+     */
+    virtual void Mirror_Y( int aYaxis_position )
+    {
+        /* Do Nothing: fields are never mirrored alone.
+         * they are moved when the parent component is mirrored
+         * this function is only needed by the virtual pure function of the
+         * master class */
+    }
+
 
     /**
      * Compare schematic field text against search string.
@@ -133,7 +151,7 @@ public:
      *              this is only one of all references (one per sheet path)
      * @return True if this field text matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData );
 };
 
 

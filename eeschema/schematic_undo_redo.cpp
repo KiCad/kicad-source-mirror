@@ -157,8 +157,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         #undef DEST
         #define SOURCE ( (SCH_SHEET_PIN*) aItem )
         #define DEST   ( (SCH_SHEET_PIN*) aImage )
-        EXCHG( SOURCE->m_Edge, DEST->m_Edge );
-        EXCHG( SOURCE->m_Shape, DEST->m_Shape );
+        DEST->SwapData( SOURCE );
         break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
@@ -174,11 +173,10 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 
     // not directly used in schematic:
     default:
-        wxMessageBox(wxT( "SwapData() error: unexpected type" ) );
+        wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
         break;
     }
 }
-
 
 
 /** function SaveCopyInUndoList
@@ -225,7 +223,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( aItem )
     {
         itemWrapper.m_PickedItemType = aItem->Type();
-        itemWrapper.m_PickerFlags = aItem->m_Flags;
+        itemWrapper.m_PickerFlags    = aItem->m_Flags;
     }
 
     switch( aCommandType )
@@ -233,7 +231,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
     case UR_CHANGED:            /* Create a copy of item */
         CopyOfItem = DuplicateStruct( aItem, true );
         itemWrapper.m_Link = CopyOfItem;
-        if ( CopyOfItem )
+        if( CopyOfItem )
             commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -273,10 +271,12 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
  */
 void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                                 UndoRedoOpType     aTypeCommand,
-                                                const wxPoint& aTransformPoint )
+                                                const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
+
     commandToUndo->m_TransformPoint = aTransformPoint;
+
     // Copy picker list:
     commandToUndo->CopyList( aItemsList );
 
@@ -286,27 +286,30 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         SCH_ITEM*      item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
         wxASSERT( item );
 
-        UndoRedoOpType command    = commandToUndo->GetPickedItemStatus( ii );
+        UndoRedoOpType command = commandToUndo->GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
-            commandToUndo->SetPickedItemStatus(command, ii );
+            commandToUndo->SetPickedItemStatus( command, ii );
         }
 
         switch( command )
         {
         case UR_CHANGED:        /* Create a copy of item */
+
             /* If needed, create a copy of item, and put in undo list
              * in the picker, as link
              * If this link is not null, the copy is already done
              */
-            if( commandToUndo->GetPickedItemLink(ii) == NULL )
+            if( commandToUndo->GetPickedItemLink( ii ) == NULL )
                 commandToUndo->SetPickedItemLink( DuplicateStruct( item, true ), ii );
-            wxASSERT( commandToUndo->GetPickedItemLink(ii) );
+            wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;
 
         case UR_MOVED:
         case UR_MIRRORED_Y:
+        case UR_MIRRORED_X:
+        case UR_ROTATED:
         case UR_NEW:
         case UR_DELETED:
             break;
@@ -343,7 +346,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
  * @param aRedoCommand = a bool: true for redo, false for undo
  */
 void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
-                                                    bool aRedoCommand )
+                                                    bool               aRedoCommand )
 {
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
@@ -351,13 +354,13 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
     // Undo in the reverse order of list creation: (this can allow stacked
     // changes like the same item can be changes and deleted in the same
     // complex command
-    for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
+    for( int ii = aList->GetCount() - 1; ii >= 0; ii--  )
     {
         ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
         item = (SCH_ITEM*) itemWrapper.m_PickedItem;
-        if ( item )
+        if( item )
             item->m_Flags = 0;
-        SCH_ITEM*   image = (SCH_ITEM*) itemWrapper.m_Link;
+        SCH_ITEM* image = (SCH_ITEM*) itemWrapper.m_Link;
         switch( itemWrapper.m_UndoRedoStatus )
         {
         case UR_CHANGED: /* Exchange old and new data for each item */
@@ -376,9 +379,9 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
             break;
 
         case UR_MOVED:
-            item->m_Flags = aList->GetPickerFlags(ii);
+            item->m_Flags = aList->GetPickerFlags( ii );
             item->Move( aRedoCommand ?
-                        aList->m_TransformPoint : - aList->m_TransformPoint );
+                        aList->m_TransformPoint : -aList->m_TransformPoint );
             item->m_Flags = 0;
             break;
 
@@ -387,7 +390,23 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
             wxPoint mirrorPoint = aList->m_TransformPoint;
             item->Mirror_Y( mirrorPoint.x );
         }
-            break;
+        break;
+
+        case UR_MIRRORED_X:
+        {
+            wxPoint mirrorPoint = aList->m_TransformPoint;
+            item->Mirror_X( mirrorPoint.y );
+        }
+        break;
+
+        case UR_ROTATED:
+        {
+            wxPoint RotationPoint = aList->m_TransformPoint;
+            item->Rotate( RotationPoint );
+            item->Rotate( RotationPoint );
+            item->Rotate( RotationPoint );
+        }
+        break;
 
         case UR_WIRE_IMAGE:
             /* Exchange the current wires and the old wires */
@@ -423,7 +442,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
  *  - Get the previous version of the schematic from undo list
  *  @return none
  */
-void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
+void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -439,13 +458,13 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
     GetScreen()->PushCommandToRedoList( List );
 
 //    m_drawItem = NULL;
-    OnModify( );
+    OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
     TestDanglingEnds( GetScreen()->EEDrawList, NULL );
-    DrawPanel->Refresh( );
+    DrawPanel->Refresh();
 }
 
 
@@ -455,7 +474,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList(wxCommandEvent& event)
  *  - Get the previous version from Redo list
  *  @return none
  */
-void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
+void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
@@ -472,13 +491,13 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList(wxCommandEvent& event)
     GetScreen()->PushCommandToUndoList( List );
 
 //    m_drawItem = NULL;
-    OnModify( );
+    OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
     TestDanglingEnds( GetScreen()->EEDrawList, NULL );
-    DrawPanel->Refresh( );
+    DrawPanel->Refresh();
 }
 
 
