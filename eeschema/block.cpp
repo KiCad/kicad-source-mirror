@@ -346,16 +346,26 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
 
 /* Manage end block command from context menu.
- * Called after HandleBlockEnd.
- * From the command block move can execute a command other than block move.
+ * Can be called only :
+ *      after HandleBlockEnd
+ *      and if the current command is block move.
+ * Execute a command other than block move from the current block move selected items list.
+ * Due to (minor) problems in undo/redo or/and display block,
+ * a mirror/rotate command is immediatly executed and multible block commands
+ * are not allowed (multiple commands are tricky to undo/redo in one time)
  */
 void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 {
-    int             ii    = 0;
+    bool blockCmdFinished = true;   /* set to false for block command which
+                                     * have a next step
+                                     * and true if the block command is finished here
+                                     */
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
+    // can convert only a block move command to an other command
     if( block->m_Command != BLOCK_MOVE )
         return;
+    // Useless if the new command is block move because we are already in block move.
     if( Command == BLOCK_MOVE )
         return;
 
@@ -366,17 +376,13 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
     {
     case BLOCK_COPY:     /* move to copy */
         block->m_State = STATE_BLOCK_MOVE;
-        ii = 1;
+        blockCmdFinished = false;
         break;
 
     case BLOCK_DRAG:     /* move to Drag */
-
-        /* ???
-         * Effacement de la liste des structures de pointage,
-         * qui est devenue erronnee
-         */
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
 
         BreakSegmentOnJunction( GetScreen() );
@@ -384,7 +390,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
         PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
         if( block->GetCount() )
         {
-            ii = 1;
+            blockCmdFinished = false;
             CollectStructsToDrag( (SCH_SCREEN*) GetScreen() );
             if( DrawPanel->ManageCurseur )
                 DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -397,16 +403,14 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->GetCount() )
         {
-            ii = -1;
             DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
             OnModify();
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
-        DrawPanel->Refresh();
         break;
 
-    case BLOCK_SAVE:     /* Save */
+    case BLOCK_SAVE:     /* Save list in paste buffer*/
         if( DrawPanel->ManageCurseur )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->GetCount() )
@@ -415,7 +419,6 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
                 -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
             SaveStructListForPaste( block->m_ItemsSelection );
             MoveItemsInList( g_BlockSaveDataList.m_ItemsSelection, move_vector );
-            ii = -1;
         }
         break;
 
@@ -432,7 +435,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->GetCount() )
         {
-            ii = 1;
+//            blockCmdFinished = true;
             /* Compute the rotation center and put it on grid */
             wxPoint rotationPoint = block->Centre();
             PutOnGrid( &rotationPoint );
@@ -444,8 +447,8 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
-        block->m_State   = STATE_BLOCK_MOVE;
-        block->m_Command = BLOCK_MOVE; //allows multiple rotate
+//        block->m_State   = STATE_BLOCK_MOVE;
+//        block->m_Command = BLOCK_MOVE; //allows multiple rotate
         break;
 
     case BLOCK_MIRROR_X:
@@ -453,7 +456,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->GetCount() )
         {
-            ii = 1;
+//            blockCmdFinished = true;
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
             PutOnGrid( &mirrorPoint );
@@ -462,8 +465,8 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
                                 mirrorPoint );
             Mirror_X_ListOfItems( block->m_ItemsSelection, mirrorPoint );
             OnModify();
-            block->m_State   = STATE_BLOCK_MOVE;
-            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
+//            block->m_State   = STATE_BLOCK_MOVE;
+//            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
@@ -474,7 +477,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
         if( block->GetCount() )
         {
-            ii = 1;
+//            blockCmdFinished = true;
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
             PutOnGrid( &mirrorPoint );
@@ -483,8 +486,8 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
                                 mirrorPoint );
             MirrorListOfItems( block->m_ItemsSelection, mirrorPoint );
             OnModify();
-            block->m_State   = STATE_BLOCK_MOVE;
-            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
+//            block->m_State   = STATE_BLOCK_MOVE;
+//            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
         }
         TestDanglingEnds( GetScreen()->EEDrawList, DC );
         DrawPanel->Refresh();
@@ -494,7 +497,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
     }
 
-    if( ii <= 0 )
+    if( blockCmdFinished )
     {
         block->ClearItemsList();
         block->m_Flags   = 0;
