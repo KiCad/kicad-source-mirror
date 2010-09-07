@@ -268,30 +268,9 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 }
 
 
-/**
- * Struct wxString_less_than
- * is used by std:set<> and std::map<> instantiations which use wxString as their key.
-struct wxString_less_than
-{
-    // a "less than" test on two wxStrings
-    bool operator()( const wxString& s1, const wxString& s2) const
-    {
-        return s1.Cmp( s2 ) < 0;  // case specific wxString compare
-    }
-};
- */
-
-
-/**
- * Function makePADSTACK
- * creates a PADSTACK which matches the given pad.  Only pads which do not
- * satisfy the function isKeepout() should be passed to this function.
- * @param aPad The D_PAD which needs to be made into a PADSTACK.
- * @return PADSTACK* - The created padstack, including its padstack_id.
- */
 PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 {
-    char        name[80];                   // padstack name builder
+    char        name[256];                   // padstack name builder
     std::string uniqifier;
 
     // caller must do these checks before calling here.
@@ -456,10 +435,57 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         }
         break;
 
-/*
     case PAD_TRAPEZOID:
+        {
+            double dx = scale( aPad->m_Size.x ) / 2.0;
+            double dy = scale( aPad->m_Size.y ) / 2.0;
+
+            double ddx = scale( aPad->m_DeltaSize.x ) / 2.0;
+            double ddy = scale( aPad->m_DeltaSize.y ) / 2.0;
+
+            // see class_pad_draw_functions.cpp which draws the trapezoid pad
+            POINT   lowerLeft(  -dx - ddy, -dy + ddx );
+            POINT   upperLeft(  -dx + ddy, +dy - ddx );
+            POINT   upperRight( +dx - ddy, +dy + ddx );
+            POINT   lowerRight( +dx + ddy, -dy - ddx );
+
+            lowerLeft  += dsnOffset;
+            upperLeft  += dsnOffset;
+            upperRight += dsnOffset;
+            lowerRight += dsnOffset;
+
+            for( int ndx=0;  ndx<reportedLayers;  ++ndx )
+            {
+                SHAPE*      shape = new SHAPE( padstack );
+                padstack->Append( shape );
+
+                // a T_polygon exists as a PATH
+                PATH*  polygon = new PATH( shape, T_polygon );
+                shape->SetShape( polygon );
+
+                polygon->SetLayerId( layerName[ndx] );
+
+                polygon->AppendPoint( lowerLeft );
+                polygon->AppendPoint( upperLeft );
+                polygon->AppendPoint( upperRight );
+                polygon->AppendPoint( lowerRight );
+            }
+
+            D(printf( "m_DeltaSize: %d,%d\n", aPad->m_DeltaSize.x, aPad->m_DeltaSize.y );)
+
+            // this string _must_ be unique for a given physical shape
+            snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_mil",
+                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y),
+                     aPad->m_DeltaSize.x < 0 ? 'm' : 'p',
+                     abs( scale( aPad->m_DeltaSize.x )),
+                     aPad->m_DeltaSize.y < 0 ? 'm' : 'p',
+                     abs( scale( aPad->m_DeltaSize.y ))
+                     );
+            name[ sizeof(name)-1 ] = 0;
+
+            padstack->SetPadstackId( name );
+        }
         break;
-*/
     }
 
     return padstack;

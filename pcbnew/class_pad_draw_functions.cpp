@@ -393,16 +393,16 @@ void D_PAD::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         ddx = ( m_DeltaSize.x >> 1 );
         ddy = ( m_DeltaSize.y >> 1 );
 
-        coord[0].x = -dx - ddy - mask_margin.x;
+        coord[0].x = -dx - ddy - mask_margin.x;     // lower left
         coord[0].y = +dy + ddx + mask_margin.y;
 
-        coord[1].x = -dx + ddy - mask_margin.x;
+        coord[1].x = -dx + ddy - mask_margin.x;     // upper left
         coord[1].y = -dy - ddx - mask_margin.y;
 
-        coord[2].x = +dx - ddy + mask_margin.x;
+        coord[2].x = +dx - ddy + mask_margin.x;     // upper right
         coord[2].y = -dy + ddx - mask_margin.y;
 
-        coord[3].x = +dx + ddy + mask_margin.x;
+        coord[3].x = +dx + ddy + mask_margin.x;     // lower right
         coord[3].y = +dy - ddx + mask_margin.y;
 
         for( ii = 0; ii < 4; ii++ )
