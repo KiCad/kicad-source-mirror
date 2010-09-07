@@ -444,10 +444,10 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             double ddy = scale( aPad->m_DeltaSize.y ) / 2.0;
 
             // see class_pad_draw_functions.cpp which draws the trapezoid pad
-            POINT   lowerLeft(  -dx - ddy, -dy + ddx );
-            POINT   upperLeft(  -dx + ddy, +dy - ddx );
-            POINT   upperRight( +dx - ddy, +dy + ddx );
-            POINT   lowerRight( +dx + ddy, -dy - ddx );
+            POINT   lowerLeft(  -dx - ddy, -dy - ddx );
+            POINT   upperLeft(  -dx + ddy, +dy + ddx );
+            POINT   upperRight( +dx - ddy, +dy - ddx );
+            POINT   lowerRight( +dx + ddy, -dy + ddx );
 
             lowerLeft  += dsnOffset;
             upperLeft  += dsnOffset;
