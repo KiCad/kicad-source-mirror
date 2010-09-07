@@ -476,9 +476,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             // this string _must_ be unique for a given physical shape
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_mil",
                      uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y),
-                     aPad->m_DeltaSize.x < 0 ? 'm' : 'p',
+                     aPad->m_DeltaSize.x < 0 ? 'n' : 'p',
                      abs( scale( aPad->m_DeltaSize.x )),
-                     aPad->m_DeltaSize.y < 0 ? 'm' : 'p',
+                     aPad->m_DeltaSize.y < 0 ? 'n' : 'p',
                      abs( scale( aPad->m_DeltaSize.y ))
                      );
             name[ sizeof(name)-1 ] = 0;
