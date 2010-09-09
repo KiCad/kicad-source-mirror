@@ -221,9 +221,9 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     /* A new name could be entered in VALUE field.
      *  Must not be an existing alias name in alias list box */
     wxString* newvalue = &m_FieldsBuf[VALUE].m_Text;
-    for( size_t i = 0; i < m_LibEntry->m_AliasList.GetCount(); i++ )
+    for( size_t i = 0; i < m_LibEntry->GetAliasList().GetCount(); i++ )
     {
-        if( newvalue->CmpNoCase( m_LibEntry->m_AliasList[i] ) == 0 )
+        if( newvalue->CmpNoCase( m_LibEntry->GetAliasList()[i] ) == 0 )
         {
             wxString msg;
             msg.Printf( _( "A new name is entered for this component\n\

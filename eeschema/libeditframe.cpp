@@ -426,9 +426,9 @@ void WinEDA_LibeditFrame::UpdateAliasSelectList()
     m_SelAliasBox->Append( m_component->GetName() );
     m_SelAliasBox->SetSelection( 0 );
 
-    if( !m_component->m_AliasList.IsEmpty() )
+    if( !m_component->GetAliasList().IsEmpty() )
     {
-        m_SelAliasBox->Append( m_component->m_AliasList );
+        m_SelAliasBox->Append( m_component->GetAliasList() );
 
         int index = m_SelAliasBox->FindString( m_aliasName );
 
@@ -571,7 +571,7 @@ void WinEDA_LibeditFrame::OnUpdateSelectAlias( wxUpdateUIEvent& event )
      * so use the pointer to alias combobox to directly enable or disable.
      */
     m_SelAliasBox->Enable( m_component != NULL
-                          && !m_component->m_AliasList.IsEmpty() );
+                           && !m_component->GetAliasList().IsEmpty() );
 }
 
 

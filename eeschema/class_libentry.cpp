@@ -384,9 +384,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 }
 
 
-void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem,
-                                    WinEDA_DrawPanel* aPanel,
-                                    wxDC* aDc )
+void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem, WinEDA_DrawPanel* aPanel, wxDC* aDc )
 {
     wxASSERT( aItem != NULL );
 
@@ -409,8 +407,7 @@ from component %s in library %s." ),
     LIB_DRAW_ITEM_LIST::iterator i;
 
     if( aDc != NULL )
-        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                    DefaultTransformMatrix );
+        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransformMatrix );
 
     for( i = drawings.begin(); i < drawings.end(); i++ )
     {
@@ -432,8 +429,7 @@ void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* aItem )
 }
 
 
-LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* aItem,
-                                               KICAD_T aType )
+LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* aItem, KICAD_T aType )
 {
     /* Return the next draw object pointer.
      * If item is NULL return the first item of type in the list.
@@ -674,8 +670,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
 
     if( strcmp( p, "DEF" ) != 0 )
     {
-        aErrorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
-                          *aLineNum );
+        aErrorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ), *aLineNum );
         return false;
     }
 
@@ -696,8 +691,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* unitCount: */
         || sscanf( p, "%d", &unitCount ) != 1 )
     {
-        aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
-                          *aLineNum );
+        aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ), *aLineNum );
         while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
         {
             p = strtok( aLine, " \t\n" );
@@ -901,7 +895,7 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
         LIB_FIELD* fixedField = GetField( field->m_FieldId );
 
         // this will fire only if somebody broke a constructor or editor.
-        // MANDATORY_FIELDS are alway present in ram resident components, no
+        // MANDATORY_FIELDS are always present in ram resident components, no
         // exceptions, and they always have their names set, even fixed fields.
         wxASSERT( fixedField );
 
@@ -960,8 +954,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
 
-        if( item.m_Convert > 0
-            && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
+        if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
 
         if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
@@ -1006,7 +999,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
     }
 
     // Reorder drawings: transparent polygons first, pins and text last.
-    // so texts have priority on sreen.
+    // so texts have priority on screen.
     drawings.sort();
 }
 
@@ -1113,8 +1106,7 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
     mon  = ( m_dateModified >> 22 ) & 15;
     year = ( m_dateModified >> 26 ) + 1990;
 
-    if ( fprintf( aFile, "Ti %d/%d/%d %d:%d:%d\n",
-                  year, mon, day, hour, min, sec ) < 0 )
+    if ( fprintf( aFile, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec ) < 0 )
         return false;
 
     return true;
@@ -1132,8 +1124,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
     text = strtok( aLine, " \r\t\n" );
     text = strtok( NULL, " \r\t\n" );
 
-    if (sscanf( aLine, "%d/%d/%d %d:%d:%d",
-                &year, &mon, &day, &hour, &min, &sec ) != 6 )
+    if (sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;
 
     m_dateModified = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
@@ -1239,7 +1230,7 @@ void LIB_COMPONENT::DeleteSelectedItems()
     // We *do not* remove the 2 mandatory fields: reference and value
     // so skip them (do not remove) if they are flagged selected.
     // Skip also not visible items.
-    // But I think fileds must not be deleted by a block delete command or other global command
+    // But I think fields must not be deleted by a block delete command or other global command
     // because they are not really graphic items
     while( item != drawings.end() )
     {
@@ -1487,11 +1478,11 @@ int LIB_COMPONENT::LocateAliasData( const wxString & aAliasName, bool aCreateIfN
     if( aCreateIfNotExist && (idx < 0) )
     {
         idx = (int) m_aliasListData.size();
-        m_aliasListData.Add(aAliasName);
-        // Add void strinds for data:
-        m_aliasListData.Add(wxEmptyString);     //Doc string
-        m_aliasListData.Add(wxEmptyString);     //keywords string
-        m_aliasListData.Add(wxEmptyString);     //Doc fliname string
+        m_aliasListData.Add( aAliasName );
+        // Add void strings for data:
+        m_aliasListData.Add( wxEmptyString );     //Doc string
+        m_aliasListData.Add( wxEmptyString );     //keywords string
+        m_aliasListData.Add( wxEmptyString );     //Doc fliname string
     }
 
     return idx;
@@ -1505,7 +1496,7 @@ int LIB_COMPONENT::LocateAliasData( const wxString & aAliasName, bool aCreateIfN
 wxString LIB_COMPONENT::GetAliasDataDoc( const wxString & aAliasName )
 {
     wxString data;
-    int idx = LocateAliasData( aAliasName);
+    int idx = LocateAliasData( aAliasName );
     if ( idx >= 0 )
         data = m_aliasListData[idx + ALIAS_DOC_IDX];
 
@@ -1520,7 +1511,7 @@ wxString LIB_COMPONENT::GetAliasDataDoc( const wxString & aAliasName )
 wxString LIB_COMPONENT::GetAliasDataKeyWords( const wxString & aAliasName )
 {
     wxString data;
-    int idx = LocateAliasData( aAliasName);
+    int idx = LocateAliasData( aAliasName );
     if ( idx >= 0 )
         data = m_aliasListData[idx + ALIAS_KEYWORD_IDX];
 
@@ -1535,7 +1526,7 @@ wxString LIB_COMPONENT::GetAliasDataKeyWords( const wxString & aAliasName )
 wxString LIB_COMPONENT::GetAliasDataDocFileName( const wxString & aAliasName )
 {
     wxString data;
-    int idx = LocateAliasData( aAliasName);
+    int idx = LocateAliasData( aAliasName );
     if ( idx >= 0 )
         data = m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX];
 
@@ -1550,7 +1541,7 @@ wxString LIB_COMPONENT::GetAliasDataDocFileName( const wxString & aAliasName )
  */
 void LIB_COMPONENT::SetAliasDataDoc( const wxString & aAliasName, const wxString & aAliasData )
 {
-    int idx = LocateAliasData( aAliasName, true);
+    int idx = LocateAliasData( aAliasName, true );
     m_aliasListData[idx + ALIAS_DOC_IDX] = aAliasData;
 }
 
@@ -1560,7 +1551,7 @@ void LIB_COMPONENT::SetAliasDataDoc( const wxString & aAliasName, const wxString
  */
 void LIB_COMPONENT::SetAliasDataKeywords( const wxString & aAliasName, const wxString & aAliasData )
 {
-    int idx = LocateAliasData( aAliasName, true);
+    int idx = LocateAliasData( aAliasName, true );
     m_aliasListData[idx + ALIAS_KEYWORD_IDX] = aAliasData;
 }
 
@@ -1568,9 +1559,10 @@ void LIB_COMPONENT::SetAliasDataKeywords( const wxString & aAliasName, const wxS
  * @param aAliasName = the alias name
  * @param aAliasData = the Doc filename string
  */
-void LIB_COMPONENT::SetAliasDataDocFileName( const wxString & aAliasName, const wxString & aAliasData )
+void LIB_COMPONENT::SetAliasDataDocFileName( const wxString & aAliasName,
+                                             const wxString & aAliasData )
 {
-    int idx = LocateAliasData( aAliasName, true);
+    int idx = LocateAliasData( aAliasName, true );
     m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX] = aAliasData;
 }
 
@@ -1581,9 +1573,9 @@ void LIB_COMPONENT::SetAliasDataDocFileName( const wxString & aAliasName, const 
  */
 void LIB_COMPONENT::RemoveAliasData(const wxString & aAliasName )
 {
-    int idx = LocateAliasData( aAliasName);
+    int idx = LocateAliasData( aAliasName );
     if ( idx >= 0 )
-        m_aliasListData.RemoveAt(idx + ALIAS_NAME_IDX, ALIAS_NEXT_IDX);
+        m_aliasListData.RemoveAt( idx + ALIAS_NAME_IDX, ALIAS_NEXT_IDX );
 }
 
 /** Function CollectAliasesData
@@ -1595,7 +1587,9 @@ void LIB_COMPONENT::CollectAliasesData( CMP_LIBRARY* aLibrary )
     for( unsigned ii = 0; ii < m_AliasList.GetCount(); ii++ )
     {
         CMP_LIB_ENTRY* entry = aLibrary->FindEntry( m_AliasList[ii] );
-        if ( ! entry ) continue;
+        if ( ! entry )
+            continue;
+
         SetAliasDataDoc( m_AliasList[ii], entry->GetDescription() );
         SetAliasDataKeywords( m_AliasList[ii], entry->GetKeyWords() );
         SetAliasDataDocFileName( m_AliasList[ii], entry->GetDocFileName() );

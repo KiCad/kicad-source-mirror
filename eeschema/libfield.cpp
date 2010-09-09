@@ -186,14 +186,13 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
         wxString msg;
 
         /* Test for an existing name in the current components alias list. */
-        if( Field->GetParent()->m_AliasList.Index( Text, false ) != wxNOT_FOUND )
+        if( Field->GetParent()->GetAliasList().Index( Text, false ) != wxNOT_FOUND )
         {
-            msg.Printf( _(
-                           "The field name <%s> is an existing alias of the \
+            msg.Printf( _( "The field name <%s> is an existing alias of the \
 component <%s>.\nPlease choose another name that does not conflict with any \
 names in the alias list." ),
-                       GetChars( Text ),
-                       GetChars( Field->GetParent()->GetName() ) );
+                        GetChars( Text ),
+                        GetChars( Field->GetParent()->GetName() ) );
             DisplayError( this, msg );
             return;
         }

@@ -132,12 +132,30 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY
  */
 class LIB_COMPONENT : public CMP_LIB_ENTRY
 {
-public:
-    wxArrayString      m_AliasList;      /* ALIAS list for the component */
-    wxArrayString      m_FootprintList;  /* list of suitable footprint names
-                                          * for the component (wildcard names
-                                          * accepted) */
+    int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
+                                         ///< to draw the pin name above the pin.
+    bool               m_unitsLocked;    ///< True if component has multiple parts and changing
+                                         ///< one part does not automatically change another part.
+    bool               m_showPinNames;   ///< Determines if component pin names are visible.
+    bool               m_showPinNumbers; ///< Determines if component pin numbers are visible.
+    long               m_dateModified;   ///< Date the component was last modified.
+    LibrEntryOptions   m_options;        ///< Special component features such as POWER or NORMAL.)
+    int                unitCount;        ///< Number of units (parts) per package.
+    LIB_DRAW_ITEM_LIST drawings;         ///< How to draw this part.
+    wxArrayString      m_aliasListData;  /* ALIAS data (name, doc, keywords and doc filename).
+                                          * Used only by the component editor LibEdit
+                                          * to store aliases info during edition
+                                          * usually void outside the component editor */
+    wxArrayString      m_AliasList;      ///< List of alias names for the component.
+    wxArrayString      m_FootprintList;  /**< List of suitable footprint names for the
+                                              component (wildcard names accepted). */
 
+
+    void deleteAllFields();
+
+    friend class CMP_LIBRARY;
+
+public:
     /* Offsets used in editing library component,
      * for handle aliases data in m_AliasListData array string
      * when editing a library component, aliases data is stored
@@ -156,25 +174,6 @@ public:
         ALIAS_NEXT_IDX         = 4
     };
 
-private:
-    int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
-                                         ///< to draw the pin name above the pin.
-    bool               m_unitsLocked;    ///< True if component has multple parts and changing
-                                         ///< one part does not automatically change another part.
-    bool               m_showPinNames;   ///< Determines if component pin names are visible.
-    bool               m_showPinNumbers; ///< Determines if component pin numbers are visible.
-    long               m_dateModified;   ///< Date the component was last modified.
-    LibrEntryOptions   m_options;        // special features (i.e. Entry is a POWER)
-    int                unitCount;        /* Units (parts) per package */
-    LIB_DRAW_ITEM_LIST drawings;         /* How to draw this part */
-    wxArrayString      m_aliasListData;  /* ALIAS data (name, doc, keywords and doc filename).
-                                          * Used only by the component editor LibEdit
-                                          * to store aliases info during edition
-                                          * usually void outside the component editor */
-
-    void deleteAllFields();
-
-public:
     LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
     LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
 
@@ -192,6 +191,10 @@ public:
         GetValueField().m_Text = aName;
     }
 
+    wxArrayString& GetAliasList() { return m_AliasList; }
+
+    wxArrayString& GetFootPrints() { return m_FootprintList; }
+
     /* accessors to aliases data, used by the component editor, during edition
     */
     /** Function CollectAliasesData
@@ -206,7 +209,7 @@ public:
      * @param aAliasName = the alias name
      * @param aCreateIfNotExist = true if the alias data must be created, when not exists
      */
-    int LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist = false);
+    int LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist = false );
 
     /** Function GetAliasDataDoc
      * @param aAliasName = the alias name

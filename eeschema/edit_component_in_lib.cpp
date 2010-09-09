@@ -93,34 +93,34 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         component->SetAliasDataDocFileName(aliasname, m_DocfileCtrl->GetValue() );
     }
 
-    if( m_PartAliasListCtrl->GetStrings() != component->m_AliasList )
+    if( m_PartAliasListCtrl->GetStrings() != component->GetAliasList() )
     {
         wxArrayString aliases = m_PartAliasListCtrl->GetStrings();
 
         /* Add names not existing in the current component alias list. */
         for( i = 0; i < aliases.GetCount(); i++ )
         {
-            index = component->m_AliasList.Index( aliases[ i ], false );
+            index = component->GetAliasList().Index( aliases[ i ], false );
 
             if( index != wxNOT_FOUND )
                 continue;
 
-            component->m_AliasList.Add( aliases[ i ] );
+            component->GetAliasList().Add( aliases[ i ] );
         }
 
         /* Remove names in the current component that are not in the new alias list. */
-        for( i = 0; i < component->m_AliasList.GetCount(); i++ )
+        for( i = 0; i < component->GetAliasList().GetCount(); i++ )
         {
-            index = aliases.Index( component->m_AliasList[ i ], false );
+            index = aliases.Index( component->GetAliasList()[ i ], false );
 
             if( index == wxNOT_FOUND )
                 continue;
 
-            component->m_AliasList.RemoveAt( i );
+            component->GetAliasList().RemoveAt( i );
             i--;
         }
 
-        component->m_AliasList = aliases;
+        component->GetAliasList() = aliases;
     }
 
     index = m_SelNumberOfUnits->GetValue();
@@ -168,8 +168,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         component->LockUnits( false );
 
     /* Update the footprint filter list */
-    component->m_FootprintList.Clear();
-    component->m_FootprintList = m_FootprintFilterListBox->GetStrings();
+    component->GetFootPrints().Clear();
+    component->GetFootPrints() = m_FootprintFilterListBox->GetStrings();
 
     EndModal( wxID_OK );
 }

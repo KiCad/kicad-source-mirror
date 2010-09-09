@@ -103,7 +103,6 @@ SCH_SHEET* SCH_SHEET::GenCopy()
 {
     SCH_SHEET* newitem = new SCH_SHEET( m_Pos );
 
-
     newitem->m_Size = m_Size;
     newitem->SetParent( m_Parent );
     newitem->m_TimeStamp = GetTimeStamp();
@@ -206,13 +205,13 @@ bool SCH_SHEET::HasLabel( const wxString& aName )
 }
 
 bool SCH_SHEET::IsVerticalOrientation()
-{ 
+{
     BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
     {
-        if( label.GetEdge()>1 ) 
-        return true;
+        if( label.GetEdge() > 1 )
+            return true;
     }
-    return false;   
+    return false;
 }
 
 
@@ -323,11 +322,10 @@ void SCH_SHEET::CleanupSheet()
 
 SCH_SHEET_PIN* SCH_SHEET::GetLabel( const wxPoint& aPosition )
 {
-    int size, dy, minx, maxx;
-
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
     {
-        if (label.HitTest(aPosition)) return &label;
+        if( label.HitTest( aPosition ) )
+            return &label;
     }
 
     return NULL;
@@ -371,17 +369,17 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
             pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
-    if (IsVerticalOrientation()) 
+    if( IsVerticalOrientation() )
     {
-        pos_sheetname=wxPoint( pos.x-8, pos.y+m_Size.y );
-        pos_filename=wxPoint( pos.x+m_Size.x+4, pos.y+m_Size.y );
-        name_orientation=TEXT_ORIENT_VERT;
+        pos_sheetname = wxPoint( pos.x-8, pos.y+m_Size.y );
+        pos_filename = wxPoint( pos.x+m_Size.x+4, pos.y+m_Size.y );
+        name_orientation = TEXT_ORIENT_VERT;
     }
     else
     {
-        pos_sheetname=wxPoint( pos.x, pos.y - 8 );
-        pos_filename=wxPoint( pos.x, pos.y + m_Size.y + 4 );
-        name_orientation=TEXT_ORIENT_HORIZ;
+        pos_sheetname = wxPoint( pos.x, pos.y - 8 );
+        pos_filename = wxPoint( pos.x, pos.y + m_Size.y + 4 );
+        name_orientation = TEXT_ORIENT_HORIZ;
     }
     /* Draw text : SheetName */
     if( aColor > 0 )
@@ -756,21 +754,28 @@ void SCH_SHEET::DisplayInfo( WinEDA_DrawFrame* frame )
 
 void SCH_SHEET::Rotate(wxPoint rotationPoint)
 {
-    RotatePoint(&m_Pos,rotationPoint,900);
-    RotatePoint(&m_Size.x,&m_Size.y,900);
-    if (m_Size.x<0) {
-        m_Pos.x+=m_Size.x;
-        NEGATE(m_Size.x);
+    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Size.x, &m_Size.y, 900 );
+
+    if( m_Size.x < 0 )
+    {
+        m_Pos.x += m_Size.x;
+        NEGATE( m_Size.x );
     }
-    if (m_Size.y<0) {
-        m_Pos.y+=m_Size.y;
-        NEGATE(m_Size.y);
+
+    if( m_Size.y < 0 )
+    {
+        m_Pos.y += m_Size.y;
+        NEGATE( m_Size.y );
     }
+
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
     {
         sheetPin.Rotate( rotationPoint );
     }
 }
+
+
 void SCH_SHEET::Mirror_X( int aXaxis_position )
 {
     m_Pos.y -= aXaxis_position;
@@ -782,6 +787,8 @@ void SCH_SHEET::Mirror_X( int aXaxis_position )
         sheetPin.Mirror_X( aXaxis_position );
     }
 }
+
+
 /** virtual function Mirror_Y
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
@@ -811,7 +818,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
     /* Move the sheet labels according to the new sheet size. */
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
     {
-        label.ConstraintOnEdge(label.m_Pos);
+        label.ConstraintOnEdge( label.m_Pos );
     }
 }
 

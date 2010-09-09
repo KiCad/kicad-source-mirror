@@ -480,7 +480,7 @@ All changes will be lost. Discard changes?" ) ) )
      */
     if( m_component->GetName().CmpNoCase( LibEntry->GetName() ) == 0 )
     {
-        if( m_component->m_AliasList.IsEmpty() )
+        if( m_component->GetAliasList().IsEmpty() )
         {
             nextEntry = m_library->GetNextEntry( m_component->GetName() );
 
@@ -489,7 +489,7 @@ All changes will be lost. Discard changes?" ) ) )
         }
         else
         {
-            newCmpName = m_component->m_AliasList[ 0 ];
+            newCmpName = m_component->GetAliasList()[ 0 ];
         }
     }
     else

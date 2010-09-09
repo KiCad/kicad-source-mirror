@@ -75,10 +75,9 @@ bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
 
 CMP_LIBRARY::CMP_LIBRARY( int aType, const wxFileName& aFileName )
 {
-    m_Type = aType;
+    type = aType;
     isModified = false;
     timeStamp = 0;
-    m_Flags = 0;
     isCache = false;
     timeStamp = wxDateTime::Now();
 
@@ -227,7 +226,7 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
 
 
 /**
- * Add /a aComponent entry to library.
+ * Add \a aComponent entry to library.
  * Note a component can have an alias list,
  * so these alias will be added in library.
  * Conflicts can happen if aliases are already existing.
@@ -344,8 +343,8 @@ LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 }
 
 /** function RemoveEntryName
- * Remove an /a aName entry from the library list names.
- * Warning: this is a partiel remove, because if aName is an alias
+ * Remove an \a aName entry from the library list names.
+ * Warning: this is a partial remove, because if aName is an alias
  * it is not removed from its root component.
  * this is for internal use only
  * Use RemoveEntry( CMP_LIB_ENTRY* aEntry ) to remove safely an entry in library.
@@ -367,7 +366,7 @@ void CMP_LIBRARY::RemoveEntryName( const wxString& aName )
 
 
 /**
- * Remove safely an /a aEntry from the library.
+ * Remove safely an \a aEntry from the library.
  *
  * If the entry is an alias, the alias is removed from the library and from
  * the alias list of the root component.  If the entry is a root component
@@ -579,7 +578,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
     }
 
     /* There is no header if this is a symbol library. */
-    if( m_Type == LIBRARY_TYPE_EESCHEMA )
+    if( type == LIBRARY_TYPE_EESCHEMA )
     {
         wxString tmp;
 
@@ -643,8 +642,7 @@ the current schematic." ),
 
     while( GetLine( file, line, &lineNumber, sizeof( line ) ) )
     {
-        if( m_Type == LIBRARY_TYPE_EESCHEMA
-            && strnicmp( line, "$HEADER", 7 ) == 0 )
+        if( type == LIBRARY_TYPE_EESCHEMA && strnicmp( line, "$HEADER", 7 ) == 0 )
         {
             if( !LoadHeader( file, &lineNumber ) )
             {
@@ -701,7 +699,7 @@ void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
     LIB_ALIAS* alias;
     unsigned   ii;
 
-    for( ii = 0; ii < component->m_AliasList.GetCount(); ii++ )
+    for( ii = 0; ii < component->GetAliasList().GetCount(); ii++ )
     {
         if( FindEntry( component->m_AliasList[ii] ) != NULL )
         {

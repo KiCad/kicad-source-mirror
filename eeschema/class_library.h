@@ -57,11 +57,7 @@ extern bool operator<( const CMP_LIBRARY& item1, const CMP_LIBRARY& item2 );
  */
 class CMP_LIBRARY
 {
-public:
-    int            m_Type;          ///< type indicator
-    int            m_Flags;
-
-protected:
+    int            type;            ///< Library type indicator.
     wxFileName     fileName;        ///< Library file name.
     wxDateTime     timeStamp;       ///< Library save time and date.
     int            versionMajor;    ///< Library major version number.
@@ -70,14 +66,13 @@ protected:
     bool           isCache;         /**< False for the "standard" libraries,
                                          True for the library cache */
     wxString       header;          ///< first line of loaded library.
+    bool           isModified;      ///< Library modification status.
 
     static CMP_LIBRARY_LIST libraryList;
     static wxArrayString    libraryListSortOrder;
 
     friend class CMP_LIB_ENTRY;
-
-private:
-    bool           isModified;      ///< Library modification status.
+    friend class LIB_COMPONENT;
 
 public:
     CMP_LIBRARY( int aType, const wxFileName& aFileName );
@@ -98,11 +93,11 @@ public:
      * saves library to a file.
      * <p>
      * Prior to component library version 3.0, two files were created.  The
-     * component objects are wer as component library (*.lib) files.  The
-     * library entry ojbect document strings were save in library document
+     * component objects are were as component library (*.lib) files.  The
+     * library entry object document strings were save in library document
      * definition (*.dcm) files.  After version component library version 3.0,
      * the document string information is saved as part of the library file.
-     * Saving separate document is maintained for backwards compatability.
+     * Saving separate document is maintained for backwards compatibility.
      * Please note that this behavior may change in the future.  If the
      * component library already exists, it is backup up in file *.bak.
      *
@@ -143,8 +138,8 @@ private:
 
     /**
      * Function RemoveEntryName
-     * removes an /a aName entry from the library list names.
-     * Warning: this is a partiel remove, because if aname is an alias
+     * removes an \a aName entry from the library list names.
+     * Warning: this is a partied remove, because if aname is an alias
      * it is not removed from its root component.
      * this is for internal use only
      * Use RemoveEntry( CMP_LIB_ENTRY* aEntry ) to remove safely an entry.
@@ -216,7 +211,7 @@ public:
      * Find components in library by key word regular expression search.
      *
      * @param aNames - String array to place found component names into.
-     * @param aRe - Regular expression used to seach component key words.
+     * @param aRe - Regular expression used to search component key words.
      * @param aSort - Sort component name list.
      */
     void SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe,
@@ -231,7 +226,7 @@ public:
     CMP_LIB_ENTRY* FindEntry( const wxChar* aName );
 
     /**
-     * Find entry by /a aName and /a aType.
+     * Find entry by \a aName and \a aType.
      *
      * @param aName - Name of entry, case insensitive.
      * @param aType - Type of entry, root or alias.
@@ -240,7 +235,7 @@ public:
     CMP_LIB_ENTRY* FindEntry( const wxChar* aName, LibrEntryType aType );
 
     /**
-     * Find component by /a aName.
+     * Find component by \a aName.
      *
      * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
      * a LIB_COMPONENT pointer is not required.
@@ -251,7 +246,7 @@ public:
     LIB_COMPONENT* FindComponent( const wxChar* aName );
 
     /**
-     * Find alias by /a nName.
+     * Find alias by \a nName.
      *
      * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
      * a LIB_ALIAS pointer is not required.
@@ -265,7 +260,7 @@ public:
     }
 
     /**
-     * Add a new /a aAlias entry to the library.
+     * Add a new \a aAlias entry to the library.
      *
      * First check if a component or alias with the same name already exists
      * in the library and add alias if no conflict occurs.  Once the alias
@@ -279,7 +274,7 @@ public:
     bool AddAlias( LIB_ALIAS* aAlias );
 
     /**
-     * Add /a aComponent entry to library.
+     * Add \a aComponent entry to library.
      * Note a component can have an alias list,
      * so these alias will be added in library.
      * Conflicts can happen if aliases are already existing.
@@ -290,7 +285,7 @@ public:
     LIB_COMPONENT* AddComponent( LIB_COMPONENT* aComponent );
 
     /**
-     * Remove safely an /a aEntry from the library.
+     * Remove safely an \a aEntry from the library.
      *
      * If the entry is an alias, the alias is removed from the library and from
      * the alias list of the root component.  If the entry is a root component
@@ -321,7 +316,7 @@ public:
     CMP_LIB_ENTRY* GetFirstEntry();
 
     /**
-     * Find next library entry by /a aName.
+     * Find next library entry by \a aName.
      *
      * If the name of the entry is the last entry in the library, the first
      * entry in the list is returned.
@@ -333,7 +328,7 @@ public:
 
 
     /**
-     * Find previous library entry by /a aName.
+     * Find previous library entry by \a aName.
      *
      * If the name of the entry is the first entry in the library, the last
      * entry in the list is returned.
@@ -420,7 +415,7 @@ public:
 
     /**
      * Function AddLibrary
-     * adds a compnent library to the library list.
+     * adds a component library to the library list.
      *
      * @param aFileName - File name object of component library.
      * @param aErrorMsg - Error message if the component library failed to load.
@@ -430,7 +425,7 @@ public:
 
     /**
      * Function AddLibrary
-     * inserts a compnent library into the library list.
+     * inserts a component library into the library list.
      *
      * @param aFileName - File name object of component library.
      * @param aErrerMsg - Error message if the component library failed to load.

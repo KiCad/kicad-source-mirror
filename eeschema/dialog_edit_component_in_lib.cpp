@@ -74,18 +74,18 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
         m_ButtonDeleteAllAlias->Enable( false );
 
     /* Place list of alias names in listbox */
-    m_PartAliasListCtrl->Append( component->m_AliasList );
+    m_PartAliasListCtrl->Append( component->GetAliasList() );
 
-    if( component->m_AliasList.GetCount() == 0 )
+    if( component->GetAliasList().GetCount() == 0 )
     {
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
     }
 
     /* Read the Footprint Filter list */
-    m_FootprintFilterListBox->Append( component->m_FootprintList );
+    m_FootprintFilterListBox->Append( component->GetFootPrints() );
 
-    if( component->m_FootprintList.GetCount() == 0 )
+    if( component->GetFootPrints().GetCount() == 0 )
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );

@@ -729,14 +729,14 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
             xlibpart->AddChild( node( sDocs,   lcomp->GetDocFileName() ) );
 
         // Write the footprint list
-        if( lcomp->m_FootprintList.GetCount() )
+        if( lcomp->GetFootPrints().GetCount() )
         {
             XNODE*  xfootprints;
             xlibpart->AddChild( xfootprints = node( sFprints ) );
 
-            for( unsigned i=0; i<lcomp->m_FootprintList.GetCount(); ++i )
+            for( unsigned i=0; i<lcomp->GetFootPrints().GetCount(); ++i )
             {
-                xfootprints->AddChild( node( sFp, lcomp->m_FootprintList[i] ) );
+                xfootprints->AddChild( node( sFp, lcomp->GetFootPrints()[i] ) );
             }
         }
 
@@ -1186,7 +1186,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
     DateAndTime( Line );
 
     ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
-             NETLIST_HEAD_STRING, Line );
+                    NETLIST_HEAD_STRING, Line );
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
@@ -1222,8 +1222,8 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
                 int ypos = drawText->m_Pos.y;
                 for( int ii = 0; ii < BUFYPOS_LEN; ii++ )
                 {
-                    bufnum[BUFYPOS_LEN - 1 -
-                           ii] = (ypos & 63) + ' '; ypos >>= 6;
+                    bufnum[BUFYPOS_LEN - 1 - ii] = (ypos & 63) + ' ';
+                    ypos >>= 6;
                 }
 
                 text = drawText->m_Text.AfterFirst( ' ' );
@@ -1363,7 +1363,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
 
             if( entry )
             {
-                if( entry->m_FootprintList.GetCount() != 0 )    // Put in list
+                if( entry->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
                     cmpList.push_back( OBJ_CMP_TO_LIST() );
 
@@ -1383,8 +1383,8 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
             field = comp->GetRef( path );
 
             ret |= fprintf( f, " ( %s %s",
-                    CONV_TO_UTF8( comp->GetPath( path ) ),
-                    CONV_TO_UTF8( footprint ) );
+                            CONV_TO_UTF8( comp->GetPath( path ) ),
+                            CONV_TO_UTF8( footprint ) );
 
             ret |= fprintf( f, "  %s", CONV_TO_UTF8( field ) );
 
@@ -1414,7 +1414,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
                 netName.Replace( wxT( " " ), wxT( "_" ) );
 
                 ret |= fprintf( f, "  ( %4.4s %s )\n", (char*) &pin->m_PinNum,
-                        CONV_TO_UTF8( netName ) );
+                                CONV_TO_UTF8( netName ) );
             }
 
             ret |= fprintf( f, " )\n" );
@@ -1444,10 +1444,9 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
             ret |= fprintf( f, "$component %s\n", CONV_TO_UTF8( ref ) );
 
             // Write the footprint list
-            for( unsigned jj = 0; jj < entry->m_FootprintList.GetCount(); jj++ )
+            for( unsigned jj = 0; jj < entry->GetFootPrints().GetCount(); jj++ )
             {
-                ret |= fprintf( f, " %s\n",
-                        CONV_TO_UTF8( entry->m_FootprintList[jj] ) );
+                ret |= fprintf( f, " %s\n", CONV_TO_UTF8( entry->GetFootPrints()[jj] ) );
             }
 
             ret |= fprintf( f, "$endlist\n" );
