@@ -21,6 +21,7 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
+#include <wx/panel.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -92,7 +93,12 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxRadioBox* m_PadOrient;
 		wxStaticText* m_PadOrientText;
 		wxTextCtrl* m_PadOrientCtrl;
-		wxStaticText* m_staticText20;
+		wxPanel* m_panelShowPad;
+		wxStaticText* m_staticTitleModuleRot;
+		wxStaticText* m_staticModuleRotValue;
+		wxStaticText* m_staticTitleModuleSide;
+		wxStaticText* m_staticModuleSideValue;
+		wxStaticText* m_staticTextWarning;
 		wxStaticText* m_staticTextNetClearance;
 		wxTextCtrl* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;
@@ -128,16 +134,19 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnValuesChanged( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ){ event.Skip(); }
 		virtual void PadOrientEvent( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnPaintShowPanel( wxPaintEvent& event ){ event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnSetLayer( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void PadPropertiesAccept( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 673,488 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER );
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,486 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER );
 		~DIALOG_PAD_PROPERTIES_BASE();
 	
 };

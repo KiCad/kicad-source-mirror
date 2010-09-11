@@ -25,6 +25,28 @@ class Pcb3D_GLCanvas;
 #define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS LAYER_BACK | SILKSCREEN_LAYER_FRONT | \
     SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
 
+// Helper class to staore parameters used to draw a pad
+class PAD_DRAWINFO
+{
+public:
+    WinEDA_DrawPanel * m_DrawPanel;    // the WinEDA_DrawPanel used to draw a PAD ; can be null
+    int m_DrawMode;             // the draw mode
+    int m_Color;                // color used to draw the pad shape , from pad layers and visible layers
+    int m_HoleColor;            // color used to draw the pad hole
+    int m_PadClearance;         // clearance value, used to draw the pad area outlines
+    wxSize m_Mask_margin;       // margin, used to draw solder paste when only one layer is shown
+    bool m_Display_padnum;      // true to show pad number
+    bool m_Display_netname;     // true to show net name
+    bool m_ShowPadFilled;       // true to show pad as solid area, false to show pas in sketch mode
+    bool m_ShowNCMark;          // true to show pad not connected mark
+    bool m_IsPrinting;          // true to print, false to display on screen.
+    wxPoint m_Offset;           // general draw offset
+#ifndef USE_WX_ZOOM
+    double m_Scale;             // Draw scaling factor
+#endif
+    PAD_DRAWINFO( );
+};
+
 
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
@@ -209,6 +231,22 @@ public:
                         int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     void          Draw3D( Pcb3D_GLCanvas* glcanvas );
+
+    /** function DrawShape
+     * basic function to draw a pad.
+     * used by Draw after calculation of parameters (color, ) final orientation ...
+     */
+    void          DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
+
+    /** function BuildPadPolygon
+     * Has meaning only for polygonal pads (trapeziod and rectangular)
+     * Build the Corner list of the polygonal shape,
+     * depending on shape, extra size (clearance ...) and orientation
+     * @param aCoord[4] = a buffer to fill.
+     * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
+     * @param aRotation = full rotation of the polygon
+     */
+    void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation );
 
     // others
     void          SetPadName( const wxString& name );       // Change pad name

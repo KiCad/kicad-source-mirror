@@ -1010,11 +1010,12 @@ bool SCH_HIERLABEL::HitTest( const wxPoint& aPosRef )
 }
 
 
-/*********************************************************************************************/
+/** Function SCH_LABEL::Draw
+ * a label is drawn like a text. So just call SCH_TEXT::Draw
+ */
 void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                       int DrawMode, int Color )
 {
-/*********************************************************************************************/
     SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
 }
 
@@ -1028,8 +1029,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 {
 /*****************************************************************************/
 
-/* Texts type Global Label  have 4 directions, and the Text origin is the
- * graphic icon
+/* Hierarchical Label have a text and a graphic icon.
+ * Texts type have 4 directions, and the text origin is the graphic icon
  */
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
@@ -1100,6 +1101,36 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     }
 }
 
+/** Virtual Function SCH_SHEET_PIN::CreateGraphicShape
+ * calculates the graphic shape (a polygon) associated to the text
+ * @param aCorner_list = a buffer to fill with polygon corners coordinates
+ * @param aPos = Position of the shape
+ */
+void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint&         aPos )
+{
+     /* This is the same icon shapes as SCH_HIERLABEL
+     * but the graphic icon is slightly different in 2 cases:
+     * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
+     * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
+     */
+    int tmp = m_Shape;
+    switch( m_Shape )
+    {
+    case NET_INPUT:
+        m_Shape = NET_OUTPUT;
+        break;
+
+    case NET_OUTPUT:
+        m_Shape = NET_INPUT;
+        break;
+
+    default:
+        break;
+    }
+    SCH_HIERLABEL::CreateGraphicShape( aCorner_list, aPos );
+    m_Shape = tmp;
+}
 
 /****************************************/
 EDA_Rect SCH_HIERLABEL::GetBoundingBox()

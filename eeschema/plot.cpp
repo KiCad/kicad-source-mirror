@@ -288,19 +288,9 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
                        aSchText->m_Bold );
 
     /* Draw graphic symbol for global or hierarchical labels */
-    if( aSchText->Type() == TYPE_SCH_GLOBALLABEL )
-    {
-        ( (SCH_GLOBALLABEL*) aSchText )->CreateGraphicShape( Poly,
-                                                             aSchText->m_Pos );
+    aSchText->CreateGraphicShape( Poly, aSchText->m_Pos );
+    if( Poly.size() )
         plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
-    }
-    if( ( aSchText->Type() == TYPE_SCH_HIERLABEL )
-       || ( aSchText->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE) )
-    {
-        ( (SCH_HIERLABEL*) aSchText )->CreateGraphicShape( Poly,
-                                                           aSchText->m_Pos );
-        plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
-    }
 }
 
 

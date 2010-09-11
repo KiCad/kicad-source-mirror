@@ -291,7 +291,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Swap Layers */
     item = new wxMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
                            _( "&Swap Layers" ),
-                           _( "Swap tracks on copper layers or drawings on others layers" ) );
+                           _( "Swap tracks on copper layers or drawings on other layers" ) );
     item->SetBitmap( swap_layer_xpm );
     editMenu->Append( item );
 
@@ -309,7 +309,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      * From hotkeys, zooming is made around the mouse cursor position
      * (obviously not possible from the toolbar or menubar command)
      *
-     * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
+     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
     /* Zoom in */

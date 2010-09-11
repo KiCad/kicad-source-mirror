@@ -1138,6 +1138,9 @@ void GRSCSegm( EDA_Rect* ClipBox,
 
 static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, wxPoint Points[] )
 {
+    if( ! ClipBox )
+        return true;
+
     int Xmin, Xmax, Ymin, Ymax;
 
     Xmin = Xmax = Points[0].x;

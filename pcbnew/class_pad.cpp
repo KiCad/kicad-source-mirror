@@ -3,6 +3,7 @@
 /***********************************************/
 
 #include "fctsys.h"
+#include "PolyLine.h"
 #include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
@@ -176,7 +177,7 @@ void D_PAD::Copy( D_PAD* source )
     m_Pos = source->m_Pos;
     m_Masque_Layer = source->m_Masque_Layer;
 
-    memcpy( m_Padname, source->m_Padname, sizeof(m_Padname) );
+    m_NumPadName = source->m_NumPadName;
     SetNet( source->GetNet() );
     m_Drill = source->m_Drill;
     m_DrillShape = source->m_DrillShape;
@@ -778,6 +779,23 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
         if( wxRound( dist ) <= dx )
             return true;
         break;
+
+    case PAD_TRAPEZOID:
+    {
+        wxPoint poly[4];
+        BuildPadPolygon( poly, wxSize(0,0), 0 );
+        // Build the same polygon with CPolyPt corners,
+        // to use TestPointInsidePolygon
+        static std::vector <CPolyPt> polysList;     // Is static to avoid memory reallocation
+        polysList.clear();
+        for(int ii= 0; ii < 4; ii++ )
+        {
+            CPolyPt corner(poly[ii].x, poly[ii].y);
+            polysList.push_back(corner);
+        }
+        RotatePoint( &deltaX, &deltaY, -m_Orient );
+        return TestPointInsidePolygon( polysList, 0, 3, deltaX, deltaY );
+    }
 
     default:
         RotatePoint( &deltaX, &deltaY, -m_Orient );

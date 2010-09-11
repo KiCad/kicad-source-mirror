@@ -93,6 +93,18 @@ public:
                           int               draw_mode,
                           int               Color = -1 );
 
+    /** function CreateGraphicShape
+     * Calculates the graphic shape (a polygon) associated to the text
+     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param Pos = Postion of the shape
+     * for texts and labels: do nothing
+     * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
+     */
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint&         Pos )
+    {
+        aCorner_list.clear();
+    }
     void     SwapData( SCH_TEXT* copyitem );
 
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
@@ -291,13 +303,13 @@ public:
      */
     EDA_Rect        GetBoundingBox();
 
-    /** function CreateGraphicShape
+    /** function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
-     * @param Pos = Position of the shape
+     * @param aPos = Position of the shape
      */
-    void            CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos );
+    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint&         aPos );
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
@@ -355,7 +367,7 @@ public:
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
      */
-    void            CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                         const wxPoint&         Pos );
 
     /**
