@@ -60,6 +60,22 @@ SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
     return newitem;
 }
 
+/** SCH_SHEET_PIN::Draw is the same as SCH_HIERLABEL::Draw
+ * but the graphic icon is slightly different
+ * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
+ * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
+ */
+void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* aPanel,
+                          wxDC*             aDC,
+                          const wxPoint&    aOffset,
+                          int               aDraw_mode,
+                          int               aColor )
+{
+    // The icon selection is handle by the virtual method CreateGraphicShape
+    // called by ::Draw
+    SCH_HIERLABEL::Draw(aPanel, aDC, aOffset, aDraw_mode, aColor );
+}
+
 
 void SCH_SHEET_PIN::SwapData( SCH_SHEET_PIN* copyitem )
 {

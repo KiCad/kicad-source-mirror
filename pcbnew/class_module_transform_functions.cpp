@@ -71,11 +71,10 @@ int ChangeSideNumLayer( int oldlayer )
 }
 
 
-/* Change the mask layer during routing cu / cmp layers for
- * Cu / CMP..
- * (Copper, mask, paste, solder)
+/* Calculate the mask layer when flipping a footprint
+ * BACK and FRONT copper layers , mask, paste, solder layers are swapped
  */
-static int ChangeSideMaskLayer( int masque )
+int ChangeSideMaskLayer( int masque )
 {
     int newmasque;
 

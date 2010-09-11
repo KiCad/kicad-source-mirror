@@ -392,7 +392,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
                 return;
             }
 
-            if( !IsOK( this, _( "Do you wish to cleanup this sheet" ) ) )
+            if( !IsOK( this, _( "Do you wish to cleanup this sheet?" ) ) )
                 return;
 
             /* Save sheet in undo list before cleaning up unreferenced hierarchical labels. */

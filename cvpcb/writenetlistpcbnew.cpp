@@ -13,11 +13,6 @@
 #include "cvpcb.h"
 #include "protos.h"
 
-#define MAX_LEN_NETNAME 16
-
-
-static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
-                          int* netNumber, bool rightJustify );
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 
 
@@ -74,7 +69,6 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
     char       Line[1024];
-    int        netNumber = 1;
 
     DateAndTime( Line );
 
@@ -103,9 +97,6 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
 
         BOOST_FOREACH( PIN& pin, component.m_Pins )
         {
-            if( pin.m_Net.Len() > MAX_LEN_NETNAME )
-                ChangePinNet( list, pin.m_Net, &netNumber, rightJustify );
-
             if( !pin.m_Net.IsEmpty() )
                 fprintf( file, "  ( %s %s )\n",
                          CONV_TO_UTF8( pin.m_Number ),
@@ -161,42 +152,3 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
         fprintf( file, "$endfootprintlist\n}\n" );
 }
 
-
-/* ???
- * Change le NetName PinNet par un nom compose des 8 derniers codes de PinNet
- * suivi de _Xnnnnn ou nnnnn est un nom de 0 a 99999
- */
-static void ChangePinNet( COMPONENT_LIST& list, wxString& PinNet,
-                          int* netNumber,  bool rightJustify )
-{
-    wxASSERT( netNumber != NULL );
-
-    wxString   OldName;
-    wxString   NewName;
-
-    OldName = PinNet;
-
-    if( rightJustify )  /* Retain the last 8 letters of the name. */
-    {
-        NewName = OldName.Right( 8 );
-        NewName << *netNumber;
-    }
-    else                /* Retain the first 8 letters of the name. */
-    {
-        NewName = OldName.Left( 8 );
-        NewName << *netNumber;
-    }
-
-    *netNumber = *netNumber + 1;
-
-    BOOST_FOREACH( COMPONENT& component, list )
-    {
-        BOOST_FOREACH( PIN& pin, component.m_Pins )
-        {
-            if( pin.m_Net != OldName )
-                continue;
-
-            pin.m_Net = NewName;
-        }
-    }
-}

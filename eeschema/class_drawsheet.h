@@ -42,11 +42,6 @@ private:
                                      */
 
 public:
-
-    //int m_Shape;
-    //bool m_IsDangling;  // TRUE non connected
-
-public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    const wxString& text = wxEmptyString );
@@ -63,6 +58,19 @@ public:
 
     SCH_SHEET_PIN* GenCopy();
 
+    virtual void    Draw( WinEDA_DrawPanel* aPanel,
+                          wxDC*             aDC,
+                          const wxPoint&    aOffset,
+                          int               aDraw_mode,
+                          int               aColor = -1 );
+
+    /** function CreateGraphicShape (virual)
+     * Calculates the graphic shape (a polygon) associated to the text
+     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param Pos = Position of the shape
+     */
+    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint&         Pos );
     SCH_SHEET_PIN* Next()
     {
         return (SCH_SHEET_PIN*) Pnext;
