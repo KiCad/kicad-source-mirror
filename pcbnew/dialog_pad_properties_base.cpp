@@ -221,12 +221,12 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_panelShowPad = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSIMPLE_BORDER|wxTAB_TRAVERSAL );
 	m_panelShowPad->SetBackgroundColour( wxColour( 0, 0, 0 ) );
 	
-	bMiddleUpperSizer->Add( m_panelShowPad, 1, wxEXPAND | wxALL, 5 );
+	bMiddleUpperSizer->Add( m_panelShowPad, 1, wxEXPAND, 5 );
 	
 	bMiddleSizer->Add( bMiddleUpperSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizeModuleInfo;
-	sbSizeModuleInfo = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint orientation") ), wxVERTICAL );
+	sbSizeModuleInfo = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint orientation") ), wxHORIZONTAL );
 	
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 2, 0, 0 );
@@ -240,7 +240,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticModuleRotValue = new wxStaticText( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleRotValue->Wrap( -1 );
-	fgSizer4->Add( m_staticModuleRotValue, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer4->Add( m_staticModuleRotValue, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_staticTitleModuleSide = new wxStaticText( this, wxID_ANY, _("Board side:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTitleModuleSide->Wrap( -1 );
@@ -248,9 +248,15 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticModuleSideValue = new wxStaticText( this, wxID_ANY, _("Front side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleSideValue->Wrap( -1 );
-	fgSizer4->Add( m_staticModuleSideValue, 0, wxALL, 5 );
+	fgSizer4->Add( m_staticModuleSideValue, 0, wxALL|wxEXPAND, 5 );
 	
-	sbSizeModuleInfo->Add( fgSizer4, 0, wxEXPAND, 5 );
+	sbSizeModuleInfo->Add( fgSizer4, 1, wxEXPAND, 5 );
+	
+	m_staticTextWarningPadFlipped = new wxStaticText( this, wxID_ANY, _("Warning:\nThis pad is flipped on board.\nBack and front layers will be swapped."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWarningPadFlipped->Wrap( -1 );
+	m_staticTextWarningPadFlipped->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	sbSizeModuleInfo->Add( m_staticTextWarningPadFlipped, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	bMiddleSizer->Add( sbSizeModuleInfo, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	

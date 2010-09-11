@@ -26,17 +26,17 @@
 
 
 // Helper class to store parameters used to draw a pad
-PAD_DRAWINFO::PAD_DRAWINFO( )
+PAD_DRAWINFO::PAD_DRAWINFO()
 {
-    m_DrawPanel = NULL;
-    m_DrawMode = 0;
-    m_Color = BLACK;
-    m_HoleColor = BLACK;      // could be DARKGRAY;
-    m_PadClearance = 0;
-    m_Display_padnum = true;
+    m_DrawPanel       = NULL;
+    m_DrawMode        = 0;
+    m_Color           = BLACK;
+    m_HoleColor       = BLACK; // could be DARKGRAY;
+    m_PadClearance    = 0;
+    m_Display_padnum  = true;
     m_Display_netname = true;
-    m_ShowPadFilled = true;
-    m_ShowNCMark = true;
+    m_ShowPadFilled   = true;
+    m_ShowNCMark      = true;
 #ifndef USE_WX_ZOOM
     m_Scale = 1.0;
 #endif
@@ -52,9 +52,9 @@ PAD_DRAWINFO::PAD_DRAWINFO( )
 void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
                   const wxPoint& aOffset )
 {
-    int color = 0;
-    wxSize  mask_margin;  // margin (clearance) used for some non copper layers
-    int     showActualMaskSize = 0; /* == layer number if the actual pad size on mask layer can be displayed
+    int    color = 0;
+    wxSize mask_margin;   // margin (clearance) used for some non copper layers
+    int    showActualMaskSize = 0;  /* == layer number if the actual pad size on mask layer can be displayed
                                      * i.e. if only one layer is shown for this pad
                                      * and this layer is a mask (solder mask or sloder paste
                                      */
@@ -319,14 +319,14 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
         DisplayIsol = FALSE;
 
 
-    drawInfo.m_DrawMode = aDraw_mode;
-    drawInfo.m_Color = color;
-    drawInfo.m_DrawPanel = aPanel;
+    drawInfo.m_DrawMode    = aDraw_mode;
+    drawInfo.m_Color       = color;
+    drawInfo.m_DrawPanel   = aPanel;
     drawInfo.m_Mask_margin = mask_margin;
-    drawInfo.m_ShowNCMark = brd->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) );
-    drawInfo.m_IsPrinting = screen->m_IsPrinting;
+    drawInfo.m_ShowNCMark  = brd->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) );
+    drawInfo.m_IsPrinting  = screen->m_IsPrinting;
 #ifndef USE_WX_ZOOM
-    drawInfo.m_Scale = (double)screen->Scale(1000) / 1000;
+    drawInfo.m_Scale = (double) screen->Scale( 1000 ) / 1000;
 #endif
     SetAlpha( &color, 170 );
 
@@ -362,16 +362,16 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
 void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
-    int rotdx,
-        delta_cx, delta_cy;
-    int angle = m_Orient;
+    int     rotdx,
+            delta_cx, delta_cy;
+    int     angle = m_Orient;
 
-    GRSetDrawMode(aDC, aDrawInfo.m_DrawMode );
+    GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
     // calculate pad shape position :
     wxPoint shape_pos = ReturnShapePos() - aDrawInfo.m_Offset;
 
-    wxSize halfsize = m_Size;
+    wxSize  halfsize = m_Size;
     halfsize.x >>= 1;
     halfsize.y >>= 1;
     switch( GetShape() )
@@ -449,7 +449,8 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         if( aDrawInfo.m_PadClearance )
         {
-            BuildPadPolygon( coord, wxSize(aDrawInfo.m_PadClearance,aDrawInfo.m_PadClearance), angle );
+            BuildPadPolygon( coord, wxSize( aDrawInfo.m_PadClearance,
+                                            aDrawInfo.m_PadClearance ), angle );
             for( int ii = 0; ii < 4; ii++ )
                 coord[ii] += shape_pos;
 
@@ -463,8 +464,8 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
 
     /* Draw the pad hole */
-    wxPoint holepos  = m_Pos - aDrawInfo.m_Offset;
-    int hole = m_Drill.x >> 1;
+    wxPoint holepos = m_Pos - aDrawInfo.m_Offset;
+    int     hole    = m_Drill.x >> 1;
 
     if( aDrawInfo.m_ShowPadFilled && hole )
     {
@@ -488,8 +489,10 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 #ifdef USE_WX_ZOOM
             if( DC->LogicalToDeviceXRel( hole ) > 1 )
 #else
-            if( aDrawInfo.m_Scale*hole > 1 ) /* draw hole if its size is enough */
+            if( aDrawInfo.m_Scale * hole > 1 ) /* draw hole if its size is enough */
 #endif
+
+
 
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 aDrawInfo.m_Color, aDrawInfo.m_HoleColor );
@@ -547,7 +550,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
         return;
 
-    wxPoint tpos0 = shape_pos;    // Position of the centre of text
+    wxPoint tpos0 = shape_pos;              // Position of the centre of text
     wxPoint tpos  = tpos0;
     wxSize  AreaSize;                       // size of text area, normalized to
                                             // AreaSize.y < AreaSize.x
@@ -599,9 +602,9 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         #define CHAR_SIZE_MIN 5
 
 #ifdef USE_WX_ZOOM
-        if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN ) // Not drawable when size too small.
+        if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )     // Not drawable when size too small.
 #else
-        if( aDrawInfo.m_Scale*tsize >= CHAR_SIZE_MIN )           // Not drawable when size too small.
+        if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )            // Not drawable when size too small.
 #endif
         {
             // tsize reserve room for marges and segments thickness
@@ -621,9 +624,9 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
 #ifdef USE_WX_ZOOM
-    if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )     // Not drawable in size too small.
+    if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )         // Not drawable in size too small.
 #else
-    if( aDrawInfo.m_Scale*tsize >= CHAR_SIZE_MIN )               // Not drawable in size too small.
+    if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )                // Not drawable in size too small.
 #endif
     {
         tpos = tpos0;
@@ -638,6 +641,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                          GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
     }
 }
+
 
 /** function BuildPadPolygon
  * Has meaning only for polygonal pads (trapeziod and rectangular)
@@ -659,14 +663,11 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     halfsize.y = m_Size.y >> 1;
 
     /* For rectangular shapes, inflate is easy
-     * Also if inflate values for X and Y directions are different
-     * the simplified inflate calculation is used for PAD_TRAPEZOID
-     * due to the complexity of offsetting a polygon with different values in X and Y
-     * (I even no be sure this has meaning)
      */
     if( GetShape() == PAD_RECT )
     {
         halfsize += aInflateValue;
+
         // Verify if do not deflate more than than size
         // Only possible for inflate negative values.
         if( halfsize.x < 0 )
@@ -676,20 +677,23 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     }
     else
     {
+        // Trapezoidal pad: verify delta values
         delta.x = ( m_DeltaSize.x >> 1 );
         delta.y = ( m_DeltaSize.y >> 1 );
+
         // be sure delta values are not to large
-        if( (delta.x < 0) && (delta.x <= -halfsize.y))
-            delta.x = -halfsize.y+1;
-        if( (delta.x > 0) && (delta.x >= halfsize.y))
-            delta.x = halfsize.y-1;
-        if( (delta.y < 0) && (delta.y <= -halfsize.x))
-            delta.y = -halfsize.x+1;
-        if( (delta.y > 0) && (delta.y >= halfsize.x))
-            delta.y = halfsize.x-1;
+        if( (delta.x < 0) && (delta.x <= -halfsize.y) )
+            delta.x = -halfsize.y + 1;
+        if( (delta.x > 0) && (delta.x >= halfsize.y) )
+            delta.x = halfsize.y - 1;
+        if( (delta.y < 0) && (delta.y <= -halfsize.x) )
+            delta.y = -halfsize.x + 1;
+        if( (delta.y > 0) && (delta.y >= halfsize.x) )
+            delta.y = halfsize.x - 1;
     }
 
     // Build the basic rectangular or trapezoid shape
+    // delta is null for rectangular shapes
     aCoord[0].x = -halfsize.x - delta.y;     // lower left
     aCoord[0].y = +halfsize.y + delta.x;
 
@@ -711,35 +715,40 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( delta.y, halfsize.y );
+            angle = atan2( m_DeltaSize.y, m_Size.y );
 
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis
             // that is delta.x +- corr.x depending on the corner
-            corr.x = wxRound(tan(angle) * aInflateValue.x);
-            delta.x = wxRound( aInflateValue.x/cos(angle));
+            corr.x  = wxRound( tan( angle ) * aInflateValue.x );
+            delta.x = wxRound( aInflateValue.x / cos( angle ) );
+
             // Horizontal sides are moved up and down by aInflateValue.y
             delta.y = aInflateValue.y;
+
             // corr.y = 0 by the constructor
         }
         else if( delta.x )          // left and right segment is vertical
         {
             // Calculate angle of lower (or upper) segment with horizontal axis
-            angle = atan2( delta.x, halfsize.x);
+            angle = atan2( m_DeltaSize.x, m_Size.x );
+
             // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the vertical axis
             // that is delta.y +- corr.y depending on the corner
-            corr.y = wxRound(tan(angle) * aInflateValue.y);
-            delta.y = wxRound( aInflateValue.y/cos(angle));
+            corr.y  = wxRound( tan( angle ) * aInflateValue.y );
+            delta.y = wxRound( aInflateValue.y / cos( angle ) );
+
             // Vertical sides are moved left and right by aInflateValue.x
             delta.x = aInflateValue.x;
+
             // corr.x = 0 by the constructor
-         }
-        else                        // the trapezoid is a rectangle
-        {
-            delta = aInflateValue; // Do nothing.
         }
-        aCoord[0].x += -delta.x - corr.x;     // lower left
+        else                                    // the trapezoid is a rectangle
+        {
+            delta = aInflateValue;              // this pad is rectangular (delta null).
+        }
+        aCoord[0].x += -delta.x - corr.x;       // lower left
         aCoord[0].y += delta.y + corr.y;
 
         aCoord[1].x += -delta.x + corr.x;     // upper left
@@ -750,6 +759,21 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
 
         aCoord[3].x += delta.x + corr.x;     // lower right
         aCoord[3].y += delta.y - corr.y;
+
+        /* test coordinates and clamp them if the offset correction is too large:
+         * Note: if a coordinate is bad, the other "symmetric" coordinate is bad
+         * So when a bad coordinate is found, the 2 symmetric coordinates
+         * are set to the minimun value (0)
+         */
+
+        if( aCoord[0].x > 0 )       // lower left x coordinate must be <= 0
+            aCoord[0].x = aCoord[3].x = 0;
+        if( aCoord[1].x > 0 )       // upper left x coordinate must be <= 0
+            aCoord[1].x = aCoord[2].x = 0;
+        if( aCoord[0].y < 0 )       // lower left y coordinate must be >= 0
+            aCoord[0].y = aCoord[1].y = 0;
+        if( aCoord[3].y < 0 )       // lower right y coordinate must be >= 0
+            aCoord[3].y = aCoord[2].y = 0;
     }
 
     if( aRotation )

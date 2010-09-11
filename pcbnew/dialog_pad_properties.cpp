@@ -119,8 +119,14 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    double scale    = (double) dc_size.x / (m_dummyPad->m_Size.x + m_dummyPad->m_LocalClearance);
-    double altscale = (double) dc_size.y / (m_dummyPad->m_Size.y + m_dummyPad->m_LocalClearance);
+    int dim = m_dummyPad->m_Size.x + ABS( m_dummyPad->m_DeltaSize.y);
+    if( m_dummyPad->m_LocalClearance > 0 )
+        dim += m_dummyPad->m_LocalClearance * 2;
+    double scale    = (double) dc_size.x / dim;
+    dim = m_dummyPad->m_Size.y + ABS( m_dummyPad->m_DeltaSize.x);
+    if( m_dummyPad->m_LocalClearance > 0 )
+        dim += m_dummyPad->m_LocalClearance * 2;
+    double altscale = (double) dc_size.y / dim;
     scale = MIN( scale, altscale );
 
     // Give a margin
@@ -212,6 +218,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         /* flip pads layers*/
         m_dummyPad->m_Masque_Layer = ChangeSideMaskLayer( m_dummyPad->m_Masque_Layer );
     }
+    m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
     m_PadNumCtrl->SetValue( m_dummyPad->ReturnStringPadName() );
     m_PadNetNameCtrl->SetValue( m_dummyPad->GetNetname() );

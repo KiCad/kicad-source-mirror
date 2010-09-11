@@ -98,6 +98,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxStaticText* m_staticModuleRotValue;
 		wxStaticText* m_staticTitleModuleSide;
 		wxStaticText* m_staticModuleSideValue;
+		wxStaticText* m_staticTextWarningPadFlipped;
 		wxStaticText* m_staticTextWarning;
 		wxStaticText* m_staticTextNetClearance;
 		wxTextCtrl* m_NetClearanceValueCtrl;
