@@ -132,9 +132,9 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     // Give a margin
     scale *= 0.7;
     dc.SetUserScale( scale, scale );
-    drawInfo.m_Scale = scale;
 
 #ifndef USE_WX_ZOOM
+    drawInfo.m_Scale = scale;
     wxPoint org   = ActiveScreen->m_DrawOrg;
     wxPoint strt  = ActiveScreen->m_StartVisu;
     int     pzoom = ActiveScreen->GetZoom();

@@ -487,7 +487,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         case PAD_CIRCLE:
 
 #ifdef USE_WX_ZOOM
-            if( DC->LogicalToDeviceXRel( hole ) > 1 )
+            if( aDC->LogicalToDeviceXRel( hole ) > 1 )
 #else
             if( aDrawInfo.m_Scale * hole > 1 ) /* draw hole if its size is enough */
 #endif
@@ -602,7 +602,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         #define CHAR_SIZE_MIN 5
 
 #ifdef USE_WX_ZOOM
-        if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )     // Not drawable when size too small.
+        if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )     // Not drawable when size too small.
 #else
         if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )            // Not drawable when size too small.
 #endif
@@ -624,7 +624,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
 #ifdef USE_WX_ZOOM
-    if( DC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )         // Not drawable in size too small.
+    if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )         // Not drawable in size too small.
 #else
     if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )                // Not drawable in size too small.
 #endif
