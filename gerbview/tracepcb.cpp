@@ -22,11 +22,6 @@
 /* tracepcb.cpp */
 /***************/
 
-static void Draw_Track_Buffer( WinEDA_DrawPanel* panel,
-                        wxDC*             DC,
-                        BOARD*            Pcb,
-                        int               drawmode,
-                        int               printmasklayer );
 static void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC,
                             BOARD* Pcb, int drawmode );
 
@@ -39,7 +34,7 @@ static void Affiche_DCodes_Pistes( WinEDA_DrawPanel* panel, wxDC* DC,
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (not used here: can be NULL)
  */
-void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintmasklayer,
+void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMasklayer,
                                 bool aPrintMirrorMode, void * aData )
 {
     DISPLAY_OPTIONS save_opt;
@@ -57,7 +52,7 @@ void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrint
 
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    Trace_Gerber( aDC, GR_COPY, aPrintmasklayer );
+    Trace_Gerber( aDC, GR_COPY, aPrintMasklayer );
 
     if( aPrint_Sheet_Ref )
         TraceWorkSheet( aDC, GetScreen(), 0 );
@@ -84,7 +79,13 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    Trace_Gerber( DC, GR_COPY, -1 );
+    //buid mask layer :
+    int masklayer = 0;
+    for( int layer = 0; layer < 32; layer++ )
+        if( GetBoard()->IsLayerVisible( layer ) )
+            masklayer |= 1 << layer;
+
+    Trace_Gerber( DC, GR_COPY, masklayer );
     TraceWorkSheet( DC, screen, 0 );
 
     if( DrawPanel->ManageCurseur )
@@ -104,20 +105,21 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 
 
 /***********************************************************************************/
-void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer )
+void WinEDA_GerberFrame::Trace_Gerber( wxDC* aDC, int aDraw_mode, int aPrintMasklayer )
 /***********************************************************************************/
 /* Trace all elements of PCBs (i.e Spots, filled polygons or lines) on the active screen
-* @param DC = current device context
-* @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
-* @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
+* @param aDC = current device context
+* @param aDraw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
+* @param aPrintMasklayer = mask for allowed layer (=-1 to draw all layers)
 */
 {
     if( !GetBoard() )
         return;
 
     bool    erase = false;
-    int     Color;
+    int     color;
     bool    filled;
+    int     layer = GetScreen()->m_Active_Layer;
 
     // Draw filled polygons
     std::vector<wxPoint>    points;
@@ -125,106 +127,61 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     // minimize reallocations of the vector's internal array by starting with a good sized one.
     points.reserve(10000);
 
-     for( TRACK* track = GetBoard()->m_Zone;  track;  track = track->Next() )
+    TRACK* next_track;
+    for( TRACK* track = GetBoard()->m_Zone; track; track = next_track )
     {
-        if( !(track->ReturnMaskLayer() & printmasklayer) )
-            continue;
-        if( GetBoard()->IsLayerVisible( track->GetLayer() ) == false )
+        next_track = track->Next();
+
+        if( !(track->ReturnMaskLayer() & aPrintMasklayer) )
             continue;
 
-//        D(printf("D:%p\n", track );)
-
-        if( track->GetNet() == 0 )  // StartPoint
+        if( (points.size() == 0) && (track->GetNet() == 0) )     // first point of a new polygon
         {
-            if( points.size() )     // we have found a new polygon: Draw the old polygon
-            {
-                if( erase )
-                {
-                    Color = g_DrawBgColor;
-                    filled = true;
-                }
-                else
-                {
-                    Color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
-                    filled = (g_DisplayPolygonsModeSketch == 0);
-                }
-
-                GRClosedPoly( &DrawPanel->m_ClipBox, DC, points.size(), &points[0],
-                              filled, Color, Color );
-            }
-
             erase = ( track->m_Flags & DRAW_ERASED );
-
-            points.clear();
             points.push_back( track->m_Start );
-            points.push_back( track->m_End );
-        }
-        else
-        {
-            points.push_back( track->m_End );
         }
 
-        if( track->Next() == NULL )    // Last point
+        points.push_back( track->m_End );
+
+        if( (next_track == NULL ) || (next_track->GetNet() == 0) )  // EndPoint of the current polygon
         {
+            color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
+            filled = (g_DisplayPolygonsModeSketch == 0);
             if( erase )
             {
-                Color = g_DrawBgColor;
+                color = g_DrawBgColor;
                 filled = true;
             }
-            else
-            {
-                Color = g_ColorsSettings.GetLayerColor( track->GetLayer() );
-                filled = (g_DisplayPolygonsModeSketch == 0);
-            }
 
-            GRClosedPoly( &DrawPanel->m_ClipBox, DC, points.size(), &points[0],
-                          filled, Color, Color );
+            GRClosedPoly( &DrawPanel->m_ClipBox, aDC, points.size(), &points[0],
+                          filled, color, color );
+            points.clear();
         }
     }
 
-    // Draw tracks and flashes down here.  This will probably not be a final solution to drawing order issues
-    Draw_Track_Buffer( DrawPanel, DC, GetBoard(), draw_mode, printmasklayer );
-
-    if( IsElementVisible( DCODES_VISIBLE) )
-        Affiche_DCodes_Pistes( DrawPanel, DC, GetBoard(), GR_COPY );
-
-    GetScreen()->ClrRefreshReq();
-}
-
-/***************************************************************************************************/
-void Draw_Track_Buffer( WinEDA_DrawPanel* panel, wxDC* DC, BOARD* Pcb, int draw_mode,
-                        int printmasklayer )
-/***************************************************************************************************/
-
-/* Function to draw the tracks (i.e Spots or lines) in gerbview
- *  Polygons are not handled here (there are in Pcb->m_Zone)
- * @param DC = device context to draw
- * @param Pcb = Board to draw (only Pcb->m_Track is used)
- * @param draw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
- * @param printmasklayer = mask for allowed layer (=-1 to draw all layers)
- */
-{
-    int           layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    // Draw tracks and flashes down here.
+    // This will probably not be a final solution to drawing order issues
     GERBER*       gerber = g_GERBER_List[layer];
     int           dcode_hightlight = 0;
 
     if( gerber )
         dcode_hightlight = gerber->m_Selected_Tool;
 
-    for( TRACK* track = Pcb->m_Track;  track;  track = track->Next() )
+    for( TRACK* track = GetBoard()->m_Track; track; track = track->Next() )
     {
-        if( !(track->ReturnMaskLayer() & printmasklayer) )
+        if( !(track->ReturnMaskLayer() & aPrintMasklayer) )
             continue;
-
-//        D(printf("D:%p\n", track );)
-
         if( dcode_hightlight == track->GetNet() && track->GetLayer()==layer )
-            Trace_Segment( Pcb, panel, DC, track, draw_mode | GR_SURBRILL );
+            Trace_Segment( GetBoard(), DrawPanel, aDC, track, aDraw_mode | GR_SURBRILL );
         else
-            Trace_Segment( Pcb, panel, DC, track, draw_mode );
+            Trace_Segment( GetBoard(), DrawPanel, aDC, track, aDraw_mode );
     }
-}
 
+    if( IsElementVisible( DCODES_VISIBLE) )
+        Affiche_DCodes_Pistes( DrawPanel, aDC, GetBoard(), GR_COPY );
+
+    GetScreen()->ClrRefreshReq();
+}
 
 #if 1
 

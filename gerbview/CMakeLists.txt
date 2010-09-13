@@ -34,6 +34,7 @@ set(GERBVIEW_SRCS
     initpcb.cpp
     lay2plot.cpp
     locate.cpp
+    menubar.cpp
     onrightclick.cpp
     options.cpp
     pcbplot.cpp
@@ -42,7 +43,7 @@ set(GERBVIEW_SRCS
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp
-    tool_gerber.cpp
+    toolbars_gerber.cpp
     tracepcb.cpp )
 
 ###
