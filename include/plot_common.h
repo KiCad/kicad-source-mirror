@@ -115,8 +115,15 @@ public:
                                  GRTraceMode trace_mode ) = 0;
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode ) = 0;
-    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                   int orient, GRTraceMode trace_mode ) = 0;
+    /** virtual function flash_pad_trapez
+     * flash a trapezoidal pad
+     * @param aPadPos = the position of the shape
+     * @param aCorners = the list of 4 corners positions, relative to the shape position, pad orientation 0
+     * @param aPadOrient = the rotation of the shape
+     * @param aTrace_Mode = FILLED or SKETCH
+     */
+    virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode ) = 0;
 
     /* Convenience functions */
     void move_to( wxPoint pos )
@@ -257,8 +264,8 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
-    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                   int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode );
 
 protected:
     void         pen_control( int plume );
@@ -306,8 +313,8 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
-    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                   int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode );
 
 protected:
     double plot_scale_adjX, plot_scale_adjY;
@@ -364,8 +371,8 @@ public:
                                                     GRTraceMode trace_mode );
     virtual void                    flash_pad_rect( wxPoint pos, wxSize size,
                                                     int orient, GRTraceMode trace_mode );
-    virtual void                    flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                                      int orient, GRTraceMode trace_mode );
+    virtual void                    flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                                      int aPadOrient, GRTraceMode aTrace_Mode );
 
 protected:
     void                            select_aperture( const wxSize&           size,
@@ -424,8 +431,8 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
-    virtual void flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                   int orient, GRTraceMode trace_mode );
+    virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode );
 
 protected:
     int current_color;

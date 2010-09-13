@@ -319,51 +319,21 @@ void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
 
 /*
  * Plot trapezoidal pad.
- * pos  its center, pos.y
- * Dimensions dim X and dimy
- * DeltaX and variations deltaY
- * Orientation and 0.1 degrees east
- * Plot mode (FILLED, SKETCH, WIRED)
- * The evidence is that a trapezoid, ie that deltaX or deltaY
- * = 0.
- *
- * The rating of the vertexes are (vis a vis the plotter)
- *      0 ------------- 3
- *        .            .
- *          .         .
- *           .       .
- *            1 --- 2
+ * aPadPos is pad position, aCorners the corners position of the basic shape
+ * Orientation aPadOrient in 0.1 degrees
+ * Plot mode = FILLED, SKETCH (unused)
  */
-
-void DXF_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                    int orient, GRTraceMode trace_mode )
+void DXF_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                     int aPadOrient, GRTraceMode aTrace_Mode )
 {
     wxASSERT( output_file );
-    wxPoint polygone[4];    /* coord of vertex or center of the pad */
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
-    int     moveX, moveY;   /* change pen position by X and Y axis to
-                             * fill the trapezoid */
-    moveX = moveY = 0;
-
-    size.x /= 2;
-    size.y /= 2;
-    delta.x /= 2;
-    delta.y /= 2;
-
-    polygone[0].x = -size.x - delta.y;
-    polygone[0].y = +size.y + delta.x;
-    polygone[1].x = -size.x + delta.y;
-    polygone[1].y = -size.y - delta.x;
-    polygone[2].x = +size.x - delta.y;
-    polygone[2].y = -size.y + delta.x;
-    polygone[3].x = +size.x + delta.y;
-    polygone[3].y = +size.y - delta.x;
 
     for( int ii = 0; ii < 4; ii++ )
     {
-        coord[ii].x = polygone[ii].x + pos.x;
-        coord[ii].y = polygone[ii].y + pos.y;
-        RotatePoint( &coord[ii], pos, orient );
+        coord[ii] = aCorners[ii];
+        RotatePoint( &coord[ii], aPadOrient );
+        coord[ii] += aPadPos;
     }
 
     // Plot edge:
