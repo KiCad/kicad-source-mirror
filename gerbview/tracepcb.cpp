@@ -84,7 +84,13 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    Trace_Gerber( DC, GR_COPY, -1 );
+    //buid mask layer :
+    int masklayer = 0;
+    for( int layer = 0; layer < 32; layer++ )
+        if( GetBoard()->IsLayerVisible( layer ) )
+            masklayer |= 1 << layer;
+
+    Trace_Gerber( DC, GR_COPY, masklayer );
     TraceWorkSheet( DC, screen, 0 );
 
     if( DrawPanel->ManageCurseur )
@@ -129,10 +135,6 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* DC, int draw_mode, int printmasklay
     {
         if( !(track->ReturnMaskLayer() & printmasklayer) )
             continue;
-        if( GetBoard()->IsLayerVisible( track->GetLayer() ) == false )
-            continue;
-
-//        D(printf("D:%p\n", track );)
 
         if( track->GetNet() == 0 )  // StartPoint
         {
