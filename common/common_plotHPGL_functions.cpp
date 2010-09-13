@@ -440,106 +440,57 @@ void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
 
 
 /* Plot trapezoidal pad.
- * Pos is pad center
- * Dimensions size.x and size.y
- * Changes delta.x and delta.y (1 of at least two must be zero)
- * Orientation east to 0.1 degrees
- * Plot mode (FILLED, SKETCH, WIRED)
- *
- * The evidence is that a trapezoid, ie that delta.x or delta.y = 0.
- *
- * The rating of the vertexes are (vis a vis the plotter)
- *
- * "       0 ------------- 3   "
- * "        .             .    "
- * "         .     O     .     "
- * "          .         .      "
- * "           1 ---- 2        "
- *
- *
- *   Example delta.y > 0, delta.x = 0
- * "           1 ---- 2        "
- * "          .         .      "
- * "         .     O     .     "
- * "        .             .    "
- * "       0 ------------- 3   "
- *
- *
- *   Example delta.y = 0, delta.x > 0
- * "       0                  "
- * "       . .                "
- * "       .     .            "
- * "       .           3      "
- * "       .           .      "
- * "       .     O     .      "
- * "       .           .      "
- * "       .           2      "
- * "       .     .            "
- * "       . .                "
- * "       1                  "
+ * aPadPos is pad position, aCorners the corners position of the basic shape
+ * Orientation aPadOrient in 0.1 degrees
+ * Plot mode FILLED or SKETCH
  */
-void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                     int orient, GRTraceMode trace_mode )
+void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                     int aPadOrient, GRTraceMode aTrace_Mode )
 {
     wxASSERT( output_file );
-    wxPoint polygone[4];
-    wxPoint coord[4];
-    int     moveX, moveY;
+    wxPoint polygone[4];        // coordinates of corners relatives to the pad
+    wxPoint coord[4];           // absolute coordinates of corners (coordinates in plotter space)
+    int     move;
 
-    moveX = moveY = wxRound( pen_diameter );
-
-    size.x  /= 2;
-    size.y  /= 2;
-    delta.x /= 2;
-    delta.y /= 2;
-
-    polygone[0].x = -size.x - delta.y;
-    polygone[0].y = +size.y + delta.x;
-    polygone[1].x = -size.x + delta.y;
-    polygone[1].y = -size.y - delta.x;
-    polygone[2].x = +size.x - delta.y;
-    polygone[2].y = -size.y + delta.x;
-    polygone[3].x = +size.x + delta.y;
-    polygone[3].y = +size.y - delta.x;
-
-    /* Trace the outline. */
-    polygone[0].x += moveX;
-    polygone[0].y -= moveY;
-    polygone[1].x += moveX;
-    polygone[1].y += moveY;
-    polygone[2].x -= moveX;
-    polygone[2].y += moveY;
-    polygone[3].x -= moveX;
-    polygone[3].y -= moveY;
+    move = wxRound( pen_diameter );
 
     for( int ii = 0; ii < 4; ii++ )
-    {
-        coord[ii].x = polygone[ii].x + pos.x;
-        coord[ii].y = polygone[ii].y + pos.y;
-        RotatePoint( &coord[ii], pos, orient );
-    }
+        polygone[ii] = aCorners[ii];
 
-    // Plot edge:
+    // polygone[0] is assumed the lower left
+    // polygone[1] is assumed the upper left
+    // polygone[2] is assumed the upper right
+    // polygone[3] is assumed the lower right
+
+    // Plot the outline:
+    for( int ii = 0; ii < 4; ii++ )
+    {
+        coord[ii] = polygone[ii];
+        RotatePoint( &coord[ii], aPadOrient );
+        coord[ii] += aPadPos;
+    }
     move_to( coord[0] );
     line_to( coord[1] );
     line_to( coord[2] );
     line_to( coord[3] );
     finish_to( coord[0] );
 
-    if( trace_mode == FILLED )
+    // Fill shape:
+    if( aTrace_Mode == FILLED )
     {
+        // TODO: replace this par the HPGL plot polygon.
         int jj;
         /* Fill the shape */
-        moveX = moveY = wxRound( pen_diameter - pen_overlap );
+        move = wxRound( pen_diameter - pen_overlap );
         /* Calculate fill height. */
 
-        if( delta.y ) /* Horizontal */
+        if( polygone[0].y == polygone[3].y ) /* Horizontal */
         {
-            jj = size.y - (int) ( pen_diameter + ( 2 * pen_overlap ) );
+            jj = polygone[3].y - (int) ( pen_diameter + ( 2 * pen_overlap ) );
         }
-        else
+        else    // vertical
         {
-            jj = size.x - (int) ( pen_diameter + ( 2 * pen_overlap ) );
+            jj = polygone[3].x - (int) ( pen_diameter + ( 2 * pen_overlap ) );
         }
 
         /* Calculation of dd = number of segments was traced to fill. */
@@ -548,14 +499,14 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
         /* Trace the outline. */
         for( ; jj > 0; jj-- )
         {
-            polygone[0].x += moveX;
-            polygone[0].y -= moveY;
-            polygone[1].x += moveX;
-            polygone[1].y += moveY;
-            polygone[2].x -= moveX;
-            polygone[2].y += moveY;
-            polygone[3].x -= moveX;
-            polygone[3].y -= moveY;
+            polygone[0].x += move;
+            polygone[0].y -= move;
+            polygone[1].x += move;
+            polygone[1].y += move;
+            polygone[2].x -= move;
+            polygone[2].y += move;
+            polygone[3].x -= move;
+            polygone[3].y -= move;
 
             /* Test for crossed vertexes. */
             if( polygone[0].x > polygone[3].x ) /* X axis intersection on
@@ -581,9 +532,9 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
 
             for( int ii = 0; ii < 4; ii++ )
             {
-                coord[ii].x = polygone[ii].x + pos.x;
-                coord[ii].y = polygone[ii].y + pos.y;
-                RotatePoint( &coord[ii], pos, orient );
+                coord[ii] = polygone[ii];
+                RotatePoint( &coord[ii], aPadOrient );
+                coord[ii] += aPadPos;
             }
 
             move_to( coord[0] );

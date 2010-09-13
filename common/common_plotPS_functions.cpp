@@ -479,75 +479,50 @@ void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
 
 
 /* Plot trapezoidal pad.
- * Pos is pad center
- * Dimensions size.x and size.y
- * Changes delta.x and delta.y (1 of at least two must be zero)
- * Orientation east to 0.1 degrees
- * Plot mode (FILLED, SKETCH, WIRED)
- *
- * The evidence is that a trapezoid, ie that delta.x or delta.y = 0.
- *
- * The rating of the vertexes are (vis a vis the plotter)
- *
- * "       0 ------------- 3   "
- * "        .             .    "
- * "         .     O     .     "
- * "          .         .      "
- * "           1 ---- 2        "
- *
- *
- *   Example delta.y > 0, delta.x = 0
- * "           1 ---- 2        "
- * "          .         .      "
- * "         .     O     .     "
- * "        .             .    "
- * "       0 ------------- 3   "
- *
- *
- *   Example delta.y = 0, delta.x > 0
- * "       0                  "
- * "       . .                "
- * "       .     .            "
- * "       .           3      "
- * "       .           .      "
- * "       .     O     .      "
- * "       .           .      "
- * "       .           2      "
- * "       .     .            "
- * "       . .                "
- * "       1                  "
+ * aPadPos is pad position, aCorners the corners position of the basic shape
+ * Orientation aPadOrient in 0.1 degrees
+ * Plot mode FILLED or SKETCH
  */
-void PS_PLOTTER::flash_pad_trapez( wxPoint centre, wxSize size, wxSize delta,
-                                   int orient, GRTraceMode modetrace )
+void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                     int aPadOrient, GRTraceMode aTrace_Mode )
 {
     wxASSERT( output_file );
-    set_current_line_width( -1 );
-    int w = current_pen_width;
-    int dx, dy;
-    int ddx, ddy;
+    wxPoint coord[5];
 
-    dx  = ( size.x - w ) / 2;
-    dy  = ( size.y - w ) / 2;
-    ddx = delta.x / 2;
-    ddy = delta.y / 2;
+    for( int ii = 0; ii < 4; ii++ )
+        coord[ii] = aCorners[ii];
 
-    int coord[10] =
+    if( aTrace_Mode == FILLED )
     {
-        -dx - ddy, +dy + ddx,
-        -dx + ddy, -dy - ddx,
-        +dx - ddy, -dy + ddx,
-        +dx + ddy, +dy - ddx,
-        0,         0
-    };
+        set_current_line_width( 0 );
+    }
+    else
+    {
+        set_current_line_width( -1 );
+        int w = current_pen_width;
+        // offset polygon by w
+        // coord[0] is assumed the lower left
+        // coord[1] is assumed the upper left
+        // coord[2] is assumed the upper right
+        // coord[3] is assumed the lower right
+
+        /* Trace the outline. */
+        coord[0].x += w;
+        coord[0].y -= w;
+        coord[1].x += w;
+        coord[1].y += w;
+        coord[2].x -= w;
+        coord[2].y += w;
+        coord[3].x -= w;
+        coord[3].y -= w;
+    }
 
     for( int ii = 0; ii < 4; ii++ )
     {
-        RotatePoint( &coord[ii * 2], &coord[ii * 2 + 1], orient );
-        coord[ii * 2]     += centre.x;
-        coord[ii * 2 + 1] += centre.y;
+        RotatePoint( &coord[ii], aPadOrient );
+        coord[ii] += aPadPos;
     }
 
-    coord[8] = coord[0];
-    coord[9] = coord[1];
-    poly( 5, coord, ( modetrace == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    coord[4] = coord[0];
+    poly( 5, &coord[0].x, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
 }

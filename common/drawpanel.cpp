@@ -832,12 +832,20 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
             break;
         xpos = org.x + xg;
         xpos = GRMapX( xpos );
+        if( xpos < m_ClipBox.GetOrigin().x) // column not in active screen area.
+            continue;
+        if( xpos > m_ClipBox.GetEnd().x)    // end of active area reached.
+            break;
         for( jj = 0; ; jj++ )
         {
             yg = wxRound( jj * screen_grid_size.y );
             if( yg > size.y )
                 break;
             ypos = org.y + yg;
+            if( ypos < m_ClipBox.GetOrigin().y) // column not in active screen area.
+                continue;
+            if( ypos > m_ClipBox.GetEnd().y)    // end of active area reached.
+                break;
             DC->DrawPoint( xpos, GRMapY( ypos ) );
         }
     }
@@ -858,7 +866,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     wxMemoryDC tmpDC;
     wxBitmap tmpBM( 1, screenSize.y );
     tmpDC.SelectObject( tmpBM );
-    GRSetColorPen( &tmpDC, g_DrawBgColor );
+    GRSetColorPen( &tmpDC, WHITE/*g_DrawBgColor*/ );
     tmpDC.DrawLine( 0, 0, 0, screenSize.y-1 );        // init background
     GRSetColorPen( &tmpDC, m_Parent->GetGridColor() );
     for( jj = 0; ; jj++ )   // draw grid points
@@ -878,6 +886,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
             break;
         xpos = GRMapX( org.x + xg );
         if( xpos < m_ClipBox.GetOrigin().x) // column not in active screen area.
+            continue;
         if( xpos > m_ClipBox.GetEnd().x)    // end of active area reached.
             break;
         DC->Blit( xpos, ypos, 1, screenSize.y, &tmpDC, 0, 0  );

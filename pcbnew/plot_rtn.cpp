@@ -26,55 +26,37 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
                                             int         masque_layer,
                                             GRTraceMode trace_mode )
 {
-    wxPoint         pos, shape_pos;
-    wxSize          size;
     bool            trace_val, trace_ref;
-    D_PAD*          pt_pad;
     TEXTE_MODULE*   pt_texte;
     EDA_BaseStruct* PtStruct;
 
     /* Plot edge layer and graphic items */
 
-    for( PtStruct = m_Pcb->m_Drawings;
-        PtStruct != NULL;
-        PtStruct = PtStruct->Next() )
+    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( plotter,
-                             (DRAWSEGMENT*) PtStruct,
-                             masque_layer,
-                             trace_mode );
+            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, masque_layer, trace_mode );
             break;
 
         case TYPE_TEXTE:
-            PlotTextePcb( plotter,
-                          (TEXTE_PCB*) PtStruct,
-                          masque_layer,
-                          trace_mode );
+            PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, masque_layer, trace_mode );
             break;
 
         case TYPE_DIMENSION:
-            PlotDimension( plotter,
-                          (DIMENSION*) PtStruct,
-                          masque_layer,
-                          trace_mode );
+            PlotDimension( plotter, (DIMENSION*) PtStruct, masque_layer, trace_mode );
             break;
 
         case TYPE_MIRE:
-            PlotMirePcb( plotter,
-                         (MIREPCB*) PtStruct,
-                         masque_layer,
-                         trace_mode );
+            PlotMirePcb( plotter, (MIREPCB*) PtStruct, masque_layer, trace_mode );
             break;
 
         case TYPE_MARKER_PCB:
             break;
 
         default:
-            DisplayError( this,
-                          wxT( "Plot_Serigraphie() error: unexpected Type()" ) );
+            DisplayError( this, wxT( "Plot_Serigraphie() error: unexpected Type()" ) );
             break;
         }
     }
@@ -85,49 +67,37 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
     /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
     if( g_pcb_plot_options.PlotPadsOnSilkLayer )
     {
-        for( MODULE* Module = m_Pcb->m_Modules;
-             Module;
-             Module = Module->Next() )
+        for( MODULE* Module = m_Pcb->m_Modules; Module; Module = Module->Next() )
         {
-            for( pt_pad = (D_PAD*) Module->m_Pads;
-                 pt_pad != NULL;
-                 pt_pad = pt_pad->Next() )
+            for( D_PAD * pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
             {
                 /* See if the pad is on this layer */
-                if( (pt_pad->m_Masque_Layer & masque_layer) == 0 )
+                if( (pad->m_Masque_Layer & masque_layer) == 0 )
                     continue;
 
-                shape_pos = pt_pad->ReturnShapePos();
-                pos  = shape_pos;
-                size = pt_pad->m_Size;
+                wxPoint shape_pos = pad->ReturnShapePos();
 
-                switch( pt_pad->m_PadShape & 0x7F )
+                switch( pad->m_PadShape & 0x7F )
                 {
                 case PAD_CIRCLE:
-                    plotter->flash_pad_circle( pos, size.x, FILAIRE );
+                    plotter->flash_pad_circle( shape_pos, pad->m_Size.x, FILAIRE );
                     break;
 
                 case PAD_OVAL:
-                    plotter->flash_pad_oval( pos, size,
-                                             pt_pad->m_Orient, FILAIRE );
+                    plotter->flash_pad_oval( shape_pos, pad->m_Size, pad->m_Orient, FILAIRE );
                     break;
 
                 case PAD_TRAPEZOID:
                 {
-                    wxSize delta;
-                    delta = pt_pad->m_DeltaSize;
-                    plotter->flash_pad_trapez( pos, size,
-                                               delta, pt_pad->m_Orient,
-                                               FILAIRE );
+                    wxPoint coord[4];
+                    pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
+                    plotter->flash_pad_trapez( shape_pos, coord, pad->m_Orient, FILAIRE );
                     break;
                 }
 
                 case PAD_RECT:
                 default:
-                    plotter->flash_pad_rect( pos,
-                                             size,
-                                             pt_pad->m_Orient,
-                                             FILAIRE );
+                    plotter->flash_pad_rect( shape_pos, pad->m_Size, pad->m_Orient, FILAIRE );
                     break;
                 }
             }
@@ -892,12 +862,9 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
 
             case PAD_TRAPEZOID:
             {
-                wxSize delta = pad->m_DeltaSize;
-                aPlotter->flash_pad_trapez( pos,
-                                            size,
-                                            delta,
-                                            pad->m_Orient,
-                                            aPlotMode );
+                wxPoint coord[4];
+                pad->BuildPadPolygon( coord, margin, 0 );
+                aPlotter->flash_pad_trapez( pos, coord, pad->m_Orient, aPlotMode );
             }
             break;
 

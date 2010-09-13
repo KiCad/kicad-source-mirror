@@ -450,94 +450,53 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
         break;
 
     default: /* plot pad shape as polygon */
-        flash_pad_trapez( pos, size, wxSize( 0, 0 ), orient, trace_mode );
+    {
+        wxPoint coord[4];
+        // coord[0] is assumed the lower left
+        // coord[1] is assumed the upper left
+        // coord[2] is assumed the upper right
+        // coord[3] is assumed the lower right
+
+        /* Trace the outline. */
+        coord[0].x = -size.x;   // lower left
+        coord[0].y = size.y;
+        coord[1].x = -size.x;   // upper left
+        coord[1].y = -size.y;
+        coord[2].x = size.x;    // upper right
+        coord[2].y = -size.y;
+        coord[3].x = size.x;    //lower right
+        coord[3].y = size.y;
+
+        flash_pad_trapez( pos, coord, orient, trace_mode );
+    }
         break;
     }
 }
 
 
 /* Plot trapezoidal pad.
- * Pos is pad center
- * Dimensions size.x and size.y
- * Changes delta.x and delta.y (1 of at least two must be zero)
- * Orientation east to 0.1 degrees
- * Plot mode (FILLED, SKETCH, WIRED)
- *
- * The evidence is that a trapezoid, ie that delta.x or delta.y = 0.
- *
- * The rating of the vertexes are (vis a vis the plotter)
- *
- * "       0 ------------- 3   "
- * "        .             .    "
- * "         .     O     .     "
- * "          .         .      "
- * "           1 ---- 2        "
- *
- *
- *   Example delta.y > 0, delta.x = 0
- * "           1 ---- 2        "
- * "          .         .      "
- * "         .     O     .     "
- * "        .             .    "
- * "       0 ------------- 3   "
- *
- *
- *   Example delta.y = 0, delta.x > 0
- * "       0                  "
- * "       . .                "
- * "       .     .            "
- * "       .           3      "
- * "       .           .      "
- * "       .     O     .      "
- * "       .           .      "
- * "       .           2      "
- * "       .     .            "
- * "       . .                "
- * "       1                  "
+ * aPadPos is pad position, aCorners the corners positions of the basic shape
+ * Orientation aPadOrient in 0.1 degrees
+ * Plot mode  = FILLED or SKETCH
  */
- void GERBER_PLOTTER::flash_pad_trapez( wxPoint pos, wxSize size, wxSize delta,
-                                        int orient, GRTraceMode trace_mode )
+ void GERBER_PLOTTER::flash_pad_trapez( wxPoint aPadPos,  wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode )
 
 {
-    wxASSERT( output_file );
-    int     ii, jj;
-    int     dx, dy;
-    wxPoint polygon[4]; /* polygon corners */
-    int     coord[10];
-    int     ddx, ddy;
+    wxPoint polygon[5];    // polygon corners list
 
-    /* Calculate the optimum size of the spot chosen by 1 / 4 of the
-     *smallest dimension */
-    dx = size.x - abs( delta.y );
-    dy = size.y - abs( delta.x );
+     for( int ii = 0; ii < 4; ii++ )
+        polygon[ii] = aCorners[ii];
 
-    dx  = size.x / 2;
-    dy  = size.y / 2;
-    ddx = delta.x / 2;
-    ddy = delta.y / 2;
-
-    polygon[0].x = -dx - ddy;
-    polygon[0].y = +dy + ddx;
-    polygon[1].x = -dx + ddy;
-    polygon[1].y = -dy - ddx;
-    polygon[2].x = +dx - ddy;
-    polygon[2].y = -dy + ddx;
-    polygon[3].x = +dx + ddy;
-    polygon[3].y = +dy - ddx;
-
-    /* Draw the polygon and fill the interior as required. */
-    for( ii = 0, jj = 0; ii < 4; ii++ )
+   /* Draw the polygon and fill the interior as required. */
+    for( int ii = 0; ii < 4; ii++ )
     {
-        RotatePoint( &polygon[ii].x, &polygon[ii].y, orient );
-        coord[jj] = polygon[ii].x += pos.x;
-        jj++;
-        coord[jj] = polygon[ii].y += pos.y;
-        jj++;
+        RotatePoint( &polygon[ii], aPadOrient );
+        polygon[ii] += aPadPos;
     }
-
-    coord[8] = coord[0];
-    coord[9] = coord[1];
+    // Close the polygon
+    polygon[4] = polygon[0];
 
     set_current_line_width( -1 );
-    poly( 5, coord, trace_mode==FILLED ? FILLED_SHAPE : NO_FILL );
+    poly( 5, &polygon[0].x, aTrace_Mode==FILLED ? FILLED_SHAPE : NO_FILL );
 }
