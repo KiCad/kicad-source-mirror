@@ -537,9 +537,9 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
 
 static bool CheckForLineEnd(  char buff[GERBER_BUFZ], char*& text, FILE* fp  )
 {
-    while( *text == '\n' || !*text )
+    while( *text == '\n' || *text == '\r' || !*text )
     {
-        if( *text == '\n' )
+        if( *text == '\n' || *text == '\r' )
             ++text;
 
         if( !*text )

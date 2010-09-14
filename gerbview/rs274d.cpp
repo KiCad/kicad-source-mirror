@@ -1209,7 +1209,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                                 pcb->m_Track.Append( track );
                                 D( printf( "R:%p\n", track ); )
                                 fillRoundFlashTRACK( track, dcode, activeLayer,
-                                                     m_CurrentPos, diameter, exposure );
+                                                     curPos, diameter, exposure );
                             }
                             break;
 
