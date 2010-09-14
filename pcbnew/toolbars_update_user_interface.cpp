@@ -282,6 +282,8 @@ void WinEDA_PcbFrame::SetToolbars()
     PrepareLayerIndicator();
     DisplayUnitsMsg();
 
-    if(m_auimgr.GetManagedWindow())
-        m_auimgr.Update();
+#ifdef __WXMAC__
+    // Needed to avoid cursor tail
+    this->Refresh(); 
+#endif
 }
