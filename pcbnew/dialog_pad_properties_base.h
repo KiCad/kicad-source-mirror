@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -18,6 +18,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
@@ -41,6 +42,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 			wxID_DIALOG_EDIT_PAD = 1000,
 			wxID_PADNUMCTRL,
 			wxID_PADNETNAMECTRL,
+			wxID_DDIRX,
+			wxID_DDIRY,
 			ID_LISTBOX_SHAPE_PAD,
 			ID_RADIOBOX_DRILL_SHAPE,
 			ID_LISTBOX_ORIENT_PAD,
@@ -82,11 +85,12 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxTextCtrl* m_ShapeOffset_Y_Ctrl;
 		wxStaticText* m_PadShapeOffsetY_Unit;
 		wxStaticText* m_staticText21;
-		wxTextCtrl* m_ShapeDelta_X_Ctrl;
-		wxStaticText* m_PadShapeDeltaX_Unit;
+		wxTextCtrl* m_ShapeDelta_Ctrl;
+		wxStaticText* m_PadShapeDelta_Unit;
 		wxStaticText* m_staticText23;
-		wxTextCtrl* m_ShapeDelta_Y_Ctrl;
-		wxStaticText* m_PadShapeDeltaY_Unit;
+		wxRadioButton* m_radioBtnDeltaXdir;
+		wxRadioButton* m_radioBtnDeltaYdir;
+		wxStaticText* m_staticTextDDirInfo;
 		wxBoxSizer* m_DrillShapeBoxSizer;
 		wxRadioBox* m_PadShape;
 		wxRadioBox* m_DrillShapeCtrl;
@@ -135,18 +139,19 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnValuesChanged( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPadShapeSelection( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnDrillShapeSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void PadOrientEvent( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPaintShowPanel( wxPaintEvent& event ){ event.Skip(); }
-		virtual void PadTypeSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnSetLayer( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void PadPropertiesAccept( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
+		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,486 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER );
 		~DIALOG_PAD_PROPERTIES_BASE();
 	

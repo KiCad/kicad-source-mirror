@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -150,27 +150,36 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadShapeOffsetY_Unit->Wrap( -1 );
 	fgSizerGeometry->Add( m_PadShapeOffsetY_Unit, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText21 = new wxStaticText( this, wxID_ANY, _("Shape delta X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21 = new wxStaticText( this, wxID_ANY, _("Shape Delta Dim"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	fgSizerGeometry->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 	
-	m_ShapeDelta_X_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerGeometry->Add( m_ShapeDelta_X_Ctrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_ShapeDelta_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerGeometry->Add( m_ShapeDelta_Ctrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_PadShapeDeltaX_Unit = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadShapeDeltaX_Unit->Wrap( -1 );
-	fgSizerGeometry->Add( m_PadShapeDeltaX_Unit, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_PadShapeDelta_Unit = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PadShapeDelta_Unit->Wrap( -1 );
+	fgSizerGeometry->Add( m_PadShapeDelta_Unit, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Shape delta Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText23 = new wxStaticText( this, wxID_ANY, _("Trap. Direction"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
 	fgSizerGeometry->Add( m_staticText23, 0, wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
-	m_ShapeDelta_Y_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerGeometry->Add( m_ShapeDelta_Y_Ctrl, 0, wxALL, 5 );
+	wxBoxSizer* bSizerbdir;
+	bSizerbdir = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_PadShapeDeltaY_Unit = new wxStaticText( this, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadShapeDeltaY_Unit->Wrap( -1 );
-	fgSizerGeometry->Add( m_PadShapeDeltaY_Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_radioBtnDeltaXdir = new wxRadioButton( this, wxID_DDIRX, _(">"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_radioBtnDeltaXdir->SetValue( true ); 
+	bSizerbdir->Add( m_radioBtnDeltaXdir, 0, wxALL, 5 );
+	
+	m_radioBtnDeltaYdir = new wxRadioButton( this, wxID_DDIRY, _("^"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerbdir->Add( m_radioBtnDeltaYdir, 0, wxALL, 5 );
+	
+	fgSizerGeometry->Add( bSizerbdir, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticTextDDirInfo = new wxStaticText( this, wxID_ANY, _("Rot 0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDDirInfo->Wrap( -1 );
+	fgSizerGeometry->Add( m_staticTextDDirInfo, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	sbSizer2->Add( fgSizerGeometry, 1, wxEXPAND, 5 );
 	
@@ -354,58 +363,45 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
 	
 	m_PadLayerCmp = new wxCheckBox( this, wxID_ANY, _("Component layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerCu = new wxCheckBox( this, wxID_ANY, _("Copper layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerCu, 0, wxALL, 5 );
 	
 	
 	m_LayersSizer->Add( 0, 8, 1, wxEXPAND, 5 );
 	
 	m_PadLayerAdhCmp = new wxCheckBox( this, wxID_ANY, _("Adhesive Cmp"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerAdhCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerAdhCu = new wxCheckBox( this, wxID_ANY, _("Adhesive Copper"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerAdhCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerPateCmp = new wxCheckBox( this, wxID_ANY, _("Solder paste Cmp"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerPateCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerPateCu = new wxCheckBox( this, wxID_ANY, _("Solder paste Copper"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerPateCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerSilkCmp = new wxCheckBox( this, wxID_ANY, _("Silkscreen Cmp"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerSilkCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerSilkCu = new wxCheckBox( this, wxID_ANY, _("Silkscreen Copper"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerSilkCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerMaskCmp = new wxCheckBox( this, wxID_ANY, _("Solder mask Cmp"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerMaskCmp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerMaskCu = new wxCheckBox( this, wxID_ANY, _("Solder mask Copper"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerMaskCu, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerDraft = new wxCheckBox( this, wxID_ANY, _("Draft layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerDraft, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerECO1 = new wxCheckBox( this, wxID_ANY, _("E.C.O.1 layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerECO1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLayerECO2 = new wxCheckBox( this, wxID_ANY, _("E.C.O.2 layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_LayersSizer->Add( m_PadLayerECO2, 0, wxALL, 5 );
 	
 	m_RightBoxSizer->Add( m_LayersSizer, 0, 0, 5 );
@@ -436,8 +432,9 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_ShapeSize_Y_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_ShapeOffset_X_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_ShapeOffset_Y_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_ShapeDelta_X_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_ShapeDelta_Y_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_ShapeDelta_Ctrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_radioBtnDeltaXdir->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_radioBtnDeltaYdir->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_PadShape->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_DrillShapeCtrl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnDrillShapeSelected ), NULL, this );
 	m_PadOrient->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadOrientEvent ), NULL, this );
@@ -473,8 +470,9 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_ShapeSize_Y_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_ShapeOffset_X_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_ShapeOffset_Y_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_ShapeDelta_X_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
-	m_ShapeDelta_Y_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_ShapeDelta_Ctrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_radioBtnDeltaXdir->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_radioBtnDeltaYdir->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_PadShape->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_DrillShapeCtrl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnDrillShapeSelected ), NULL, this );
 	m_PadOrient->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadOrientEvent ), NULL, this );
@@ -497,4 +495,5 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_PadLayerECO2->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayer ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadPropertiesAccept ), NULL, this );
+	
 }
