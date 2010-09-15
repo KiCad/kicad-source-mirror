@@ -603,6 +603,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         g_Drag_Pistes_On = true;
 
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
+        if( GetCurItem() == NULL )
+            break;
         // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
@@ -628,6 +630,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      /* get module by name and move it */
         SetCurItem( GetModuleByName() );
         module = (MODULE*) GetCurItem();
+        if( module == NULL )
+            break;
         if( module->IsLocked() )
         {
             wxString msg;
@@ -636,11 +640,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             DisplayInfoMessage( this, msg );
             break;
         }
-        if( GetCurItem() )
-        {
-            DrawPanel->MouseToCursorSchema();
-            StartMove_Module( (MODULE*) GetCurItem(), &dc );
-        }
+        DrawPanel->MouseToCursorSchema();
+        StartMove_Module( module, &dc );
         break;
 
     case ID_POPUP_PCB_DELETE_MODULE:
