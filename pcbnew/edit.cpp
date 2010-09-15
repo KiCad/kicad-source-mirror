@@ -17,6 +17,8 @@
 #include "autorout.h"
 #include "protos.h"
 
+#include "dialog_drc.h"
+
 #include "kicad_device_context.h"
 
 #include "dialog_global_edit_tracks_and_vias.h"
@@ -213,7 +215,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_DRC_CONTROL:
-        Install_Test_DRC_Frame( &dc );
+        m_drc->ShowDialog();;
         break;
 
     case ID_GET_NETLIST:

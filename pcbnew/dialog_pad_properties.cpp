@@ -232,8 +232,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadShapeSizeY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadShapeOffsetX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadShapeOffsetY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_PadShapeDeltaX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_PadShapeDeltaY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadShapeDelta_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad masks clearances units
@@ -254,8 +253,16 @@ void DIALOG_PAD_PROPERTIES::initValues()
     PutValueInLocalUnits( *m_ShapeOffset_X_Ctrl, m_dummyPad->m_Offset.x, internalUnits );
     PutValueInLocalUnits( *m_ShapeOffset_Y_Ctrl, m_dummyPad->m_Offset.y, internalUnits );
 
-    PutValueInLocalUnits( *m_ShapeDelta_X_Ctrl, m_dummyPad->m_DeltaSize.x, internalUnits );
-    PutValueInLocalUnits( *m_ShapeDelta_Y_Ctrl, m_dummyPad->m_DeltaSize.y, internalUnits );
+    if( m_dummyPad->m_DeltaSize.x )
+    {
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.x, internalUnits );
+        m_radioBtnDeltaXdir->SetValue(true);
+    }
+    else
+    {
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.y, internalUnits );
+        m_radioBtnDeltaYdir->SetValue(true);
+    }
 
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->m_LocalClearance, internalUnits );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
@@ -391,26 +398,30 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     switch( m_PadShape->GetSelection() )
     {
     case 0:     //CIRCLE:
-        m_ShapeDelta_X_Ctrl->Enable( false );
-        m_ShapeDelta_Y_Ctrl->Enable( false );
+        m_ShapeDelta_Ctrl->Enable( false );
+        m_radioBtnDeltaXdir->Enable( false );
+        m_radioBtnDeltaYdir->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( false );
         break;
 
     case 1:     //OVALE:
-        m_ShapeDelta_X_Ctrl->Enable( false );
-        m_ShapeDelta_Y_Ctrl->Enable( false );
+        m_ShapeDelta_Ctrl->Enable( false );
+        m_radioBtnDeltaXdir->Enable( false );
+        m_radioBtnDeltaYdir->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( true );
         break;
 
     case 2:     // PAD_RECT:
-        m_ShapeDelta_X_Ctrl->Enable( false );
-        m_ShapeDelta_Y_Ctrl->Enable( false );
+        m_ShapeDelta_Ctrl->Enable( false );
+        m_radioBtnDeltaXdir->Enable( false );
+        m_radioBtnDeltaYdir->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( true );
         break;
 
     case 3:     //TRAPEZE:
-        m_ShapeDelta_X_Ctrl->Enable( true );
-        m_ShapeDelta_Y_Ctrl->Enable( true );
+        m_ShapeDelta_Ctrl->Enable( true );
+        m_radioBtnDeltaXdir->Enable( true );
+        m_radioBtnDeltaYdir->Enable( true );
         m_ShapeSize_Y_Ctrl->Enable( true );
         break;
     }
@@ -704,11 +715,15 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
-    aPad->m_DeltaSize.x = ReturnValueFromTextCtrl( *m_ShapeDelta_X_Ctrl, internalUnits );
-    aPad->m_DeltaSize.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Y_Ctrl, internalUnits );
+    wxSize delta;
+    if( m_radioBtnDeltaXdir->GetValue() )
+        delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
+    else
+        delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
+    aPad->m_DeltaSize = delta;
 
     // Test bad values (be sure delta values are not to large)
-    // rememver DeltaSize.x is the Y size variation
+    // remember DeltaSize.x is the Y size variation
     bool   error    = false;
     if( (aPad->m_DeltaSize.x < 0) && (aPad->m_DeltaSize.x <= -aPad->m_Size.y) )
     {
@@ -846,12 +861,6 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         if( error )
         {
             DisplayError( this, _( "Too large value for pad delta size" ) );
-            return false;
-        }
-
-        if( aPad->m_DeltaSize.x && aPad->m_DeltaSize.y )
-        {
-            DisplayError( this, _( "Incorrect value for pad delta size: X or Y value must be NULL" ) );
             return false;
         }
     }

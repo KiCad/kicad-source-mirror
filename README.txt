@@ -20,6 +20,8 @@ Subdirectories
 --------------
 3d-viewer      - Sourcecode of 3D viewer
 bitmaps        - Menu and program icons
+bitmap2component - Sourcecode of a small application to create a footprint or a component from a B&W bitmap
+                    this component or footprint has just graphic items that show the bitmap
 CMakeModules   - Modules for the CMAKE build tool
 common         - Sourcecode of the common library (common functions shared across whole suite)
 cvpcb          - Sourcecode of CvPCB, tool to link components with footprints sourcecode
