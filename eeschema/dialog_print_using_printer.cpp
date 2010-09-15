@@ -323,7 +323,6 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 
 #ifdef __WXDEBUG__
     WinEDA_SchematicFrame* parent = m_Parent->GetParent();
-#endif
     wxLogDebug( wxT( "Printer name: " ) +
                 parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),
@@ -335,6 +334,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
                 parent->GetPageSetupData().GetPrintData().GetOrientation() );
     wxLogDebug( wxT( "Quality: %d"),
                 parent->GetPageSetupData().GetPrintData().GetQuality() );
+#endif
 
     return true;
 }
