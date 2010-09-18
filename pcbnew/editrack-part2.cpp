@@ -10,6 +10,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+#include "drc_stuff.h"
 
 #include "protos.h"
 

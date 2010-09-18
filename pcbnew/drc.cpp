@@ -42,7 +42,6 @@
 #include "protos.h"
 
 #include "drc_stuff.h"
-
 #include "dialog_drc.h"
 
 
@@ -108,12 +107,7 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 
     // m_rptFilename set to empty by its constructor
 
-    m_currentMarker = 0;
-
-    m_spotcx = 0;
-    m_spotcy = 0;
-    m_finx   = 0;
-    m_finy   = 0;
+    m_currentMarker = NULL;
 
     m_segmAngle  = 0;
     m_segmLength = 0;
@@ -539,6 +533,8 @@ void DRC::testZones( bool adoTestFillSegments )
     if( !adoTestFillSegments )
         return;
 
+    // m_pcb->m_Zone is fully obsolete. Keep this test for compatibility
+    // with old designs. Will be removed on day
     for( zoneSeg = m_pcb->m_Zone;  zoneSeg && zoneSeg->Next(); zoneSeg = zoneSeg->Next() )
     {
         // Test zoneSeg with other zone segments and with all pads
@@ -705,13 +701,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
     NETCLASS* netclass = aRefSeg->GetNetClass();
 
-    // Origine sur le PCB des axes du repere centre sur
-    //  l'origine du segment de reference
-    int org_X = aRefSeg->m_Start.x;
-    int org_Y = aRefSeg->m_Start.y;
+    /* In order to make some calculations more easier or faster,
+     * pads and tracks coordinates will be made relative to the reference segment origin
+     */
+    wxPoint origin = aRefSeg->m_Start;  // origin will be the origin of other coordinates
 
-    m_finx = dx = aRefSeg->m_End.x - org_X;
-    m_finy = dy = aRefSeg->m_End.y - org_Y;
+    m_segmEnd.x = dx = aRefSeg->m_End.x - origin.x;
+    m_segmEnd.y = dy = aRefSeg->m_End.y - origin.y;
 
     layerMask    = aRefSeg->ReturnMaskLayer();
     net_code_ref = aRefSeg->GetNet();
@@ -834,8 +830,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 pseudo_pad.m_Orient   = pad->m_Orient;
                 pseudo_pad.ComputeRayon();      // compute the radius
 
-                m_spotcx = pseudo_pad.GetPosition().x - org_X;
-                m_spotcy = pseudo_pad.GetPosition().y - org_Y;
+                m_padToTestPos.x = pseudo_pad.GetPosition().x - origin.x;
+                m_padToTestPos.y = pseudo_pad.GetPosition().y - origin.y;
 
                 if( !checkClearanceSegmToPad( &pseudo_pad, refsegm_half_width,
                                              netclass->GetClearance() ) )
@@ -856,8 +852,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // DRC for the pad
             shape_pos = pad->ReturnShapePos();
-            m_spotcx  = shape_pos.x - org_X;
-            m_spotcy  = shape_pos.y - org_Y;
+            m_padToTestPos.x  = shape_pos.x - origin.x;
+            m_padToTestPos.y  = shape_pos.y - origin.y;
 
             if( !checkClearanceSegmToPad( pad, refsegm_half_width, aRefSeg->GetClearance( pad ) ) )
             {
@@ -899,21 +895,17 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // If the reference segment is a via, we test it here
         if( aRefSeg->Type() == TYPE_VIA )
         {
-            int orgx, orgy; // origine du repere d'axe X = segment a comparer
             int angle = 0;  // angle du segment a tester;
 
-            orgx = track->m_Start.x;
-            orgy = track->m_Start.y;
+            dx = track->m_End.x - track->m_Start.x;
+            dy = track->m_End.y - track->m_Start.y;
 
-            dx = track->m_End.x - orgx;
-            dy = track->m_End.y - orgy;
-
-            x0 = aRefSeg->m_Start.x - orgx;
-            y0 = aRefSeg->m_Start.y - orgy;
+            x0 = aRefSeg->m_Start.x - track->m_Start.x;
+            y0 = aRefSeg->m_Start.y - track->m_Start.y;
 
             if( track->Type() == TYPE_VIA )
             {
-                // Test distance between two vias
+                // Test distance between two vias, i.e. two circles, trivial case
                 if( (int) hypot( x0, y0 ) < w_dist )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
@@ -944,11 +936,11 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
          * the segment to test in the new axis : the new X axis is the
          * reference segment.  We must translate and rotate the segment to test
          */
-        x0 = track->m_Start.x - org_X;
-        y0 = track->m_Start.y - org_Y;
+        x0 = track->m_Start.x - origin.x;
+        y0 = track->m_Start.y - origin.y;
 
-        xf = track->m_End.x - org_X;
-        yf = track->m_End.y - org_Y;
+        xf = track->m_End.x - origin.x;
+        yf = track->m_End.y - origin.y;
 
         RotatePoint( &x0, &y0, m_segmAngle );
         RotatePoint( &xf, &yf, m_segmAngle );
@@ -1262,8 +1254,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         goto exit;
 
     /* Here, pads are near and DRC depend on the pad shapes
-     *  We must compare distance using a fine shape analysis */
-
+     *  We must compare distance using a fine shape analysis
+     * Because a circle or oval shape is the easier shape to test, try to have
+     * aRefPad shape type = PAD_CIRCLE or PAD_OVAL. Swap aRefPad and aPad if needed
+     */
     bool swap_pads;
     swap_pads = false;
     if( (aRefPad->m_PadShape != PAD_CIRCLE) && (aPad->m_PadShape == PAD_CIRCLE) )
@@ -1280,7 +1274,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     /* Because pad exchange, aRefPad shape is PAD_CIRCLE or PAD_OVAL,
      * if one of the 2 pads was a PAD_CIRCLE or PAD_OVAL.
      * Therefore, if aRefPad is a PAD_RECT or a PAD_TRAPEZOID,
-     * the other pad is also a PAD_RECT or a PAD_TRAPEZOID
+     * aPad is also a PAD_RECT or a PAD_TRAPEZOID
      */
     switch( aRefPad->m_PadShape )
     {
@@ -1288,16 +1282,16 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         m_segmLength = 0;
         m_segmAngle  = 0;
 
-        m_finx = m_finy = 0;
+        m_segmEnd.x = m_segmEnd.y = 0;
 
-        m_spotcx = rel_pos.x;
-        m_spotcy = rel_pos.y;
+        m_padToTestPos.x = rel_pos.x;
+        m_padToTestPos.y = rel_pos.y;
 
         diag = checkClearanceSegmToPad( aPad, aRefPad->m_Rayon, dist_min );
         break;
 
     case PAD_RECT:
-        RotatePoint( &rel_pos.x, &rel_pos.y, aRefPad->m_Orient );
+        RotatePoint( &rel_pos, aRefPad->m_Orient );
 
         // pad_angle = pad orient relative to the aRefPad orient
         pad_angle = aRefPad->m_Orient + aPad->m_Orient;
@@ -1309,8 +1303,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             // The trivial case is if both rects are rotated by multiple of 90 deg
             // Most of time this is the case, and the test is fast
             if( ( (aRefPad->m_Orient == 0) || (aRefPad->m_Orient == 900)
-                 || (aRefPad->m_Orient == 1800)
-                 || (aRefPad->m_Orient == 2700) )
+                 || (aRefPad->m_Orient == 1800) || (aRefPad->m_Orient == 2700) )
                && ( (aPad->m_Orient == 0) || (aPad->m_Orient == 900) || (aPad->m_Orient == 1800)
                    || (aPad->m_Orient == 2700) ) )
             {
@@ -1394,7 +1387,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                                                                                        &x,
                                                                                        &y,
                                                                                        &d );
-                        ;
                         if( intersect || (d< dist_min) )
                         {
                             diag = false;
@@ -1436,11 +1428,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         RotatePoint( &segstart, m_segmAngle );       // True start point coordinate of the equivalent segment
 
         // move pad position relative to the segment origin
-        m_spotcx = rel_pos.x - segstart.x;
-        m_spotcy = rel_pos.y - segstart.y;
+        m_padToTestPos = rel_pos - segstart;
         // Calculate segment end
-        m_finx = -2 * segstart.x;
-        m_finy = -2 * segstart.y;                              // end of segment coordinate
+        m_segmEnd.x = -2 * segstart.x;
+        m_segmEnd.y = -2 * segstart.y;                              // end of segment coordinate
         diag   = checkClearanceSegmToPad( aPad, segm_width / 2, dist_min );
         break;
     }
@@ -1459,41 +1450,40 @@ exit:       // the only way out (hopefully) for simpler debugging
 
 bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMinDist )
 {
-    int p_dimx;
-    int p_dimy;         // half the dimension of the pad
+    wxSize padHalfsize;         // half the dimension of the pad
     int orient;
     int x0, y0, xf, yf;
     int seuil;
     int deltay;
 
     seuil  = w_segm + aMinDist;
-    p_dimx = pad_to_test->m_Size.x >> 1;
-    p_dimy = pad_to_test->m_Size.y >> 1;
+    padHalfsize.x = pad_to_test->m_Size.x >> 1;
+    padHalfsize.y = pad_to_test->m_Size.y >> 1;
 
     if( pad_to_test->m_PadShape == PAD_CIRCLE )
     {
         /* calcul des coord centre du pad dans le repere axe X confondu
          *  avec le segment en tst */
-        RotatePoint( &m_spotcx, &m_spotcy, m_segmAngle );
-        return checkMarginToCircle( m_spotcx, m_spotcy, seuil + p_dimx, m_segmLength );
+        RotatePoint( &m_padToTestPos.x, &m_padToTestPos.y, m_segmAngle );
+        return checkMarginToCircle( m_padToTestPos.x, m_padToTestPos.y, seuil + padHalfsize.x, m_segmLength );
     }
     else
     {
         /* calcul de la "surface de securite" du pad de reference */
-        m_xcliplo = m_spotcx - seuil - p_dimx;
-        m_ycliplo = m_spotcy - seuil - p_dimy;
-        m_xcliphi = m_spotcx + seuil + p_dimx;
-        m_ycliphi = m_spotcy + seuil + p_dimy;
+        m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
+        m_ycliplo = m_padToTestPos.y - seuil - padHalfsize.y;
+        m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
+        m_ycliphi = m_padToTestPos.y + seuil + padHalfsize.y;
 
         x0 = y0 = 0;
 
-        xf = m_finx;
-        yf = m_finy;
+        xf = m_segmEnd.x;
+        yf = m_segmEnd.y;
 
         orient = pad_to_test->m_Orient;
 
-        RotatePoint( &x0, &y0, m_spotcx, m_spotcy, -orient );
-        RotatePoint( &xf, &yf, m_spotcx, m_spotcy, -orient );
+        RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, -orient );
+        RotatePoint( &xf, &yf, m_padToTestPos.x, m_padToTestPos.y, -orient );
 
         if( checkLine( x0, y0, xf, yf ) )
             return true;
@@ -1507,51 +1497,51 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
 
         case PAD_OVAL:
             /* test de la pastille ovale ramenee au type ovale vertical */
-            if( p_dimx > p_dimy )
+            if( padHalfsize.x > padHalfsize.y )
             {
-                EXCHG( p_dimx, p_dimy );
+                EXCHG( padHalfsize.x, padHalfsize.y );
                 orient += 900;
                 if( orient >= 3600 )
                     orient -= 3600;
             }
-            deltay = p_dimy - p_dimx;
+            deltay = padHalfsize.y - padHalfsize.x;
 
-            /* ici: p_dimx = rayon,
+            /* ici: padHalfsize.x = rayon,
              *      delta = dist centre cercles a centre pad */
 
             /* Test du rectangle separant les 2 demi cercles */
-            m_xcliplo = m_spotcx - seuil - p_dimx;
-            m_ycliplo = m_spotcy - w_segm - deltay;
-            m_xcliphi = m_spotcx + seuil + p_dimx;
-            m_ycliphi = m_spotcy + w_segm + deltay;
+            m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
+            m_ycliplo = m_padToTestPos.y - w_segm - deltay;
+            m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
+            m_ycliphi = m_padToTestPos.y + w_segm + deltay;
 
             if( !checkLine( x0, y0, xf, yf ) )
                 return false;
 
             /* test des 2 cercles */
-            x0 = m_spotcx;     /* x0,y0 = centre du cercle superieur du pad ovale */
-            y0 = m_spotcy + deltay;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x;     /* x0,y0 = centre du cercle superieur du pad ovale */
+            y0 = m_padToTestPos.y + deltay;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
 
-            if( !checkMarginToCircle( x0, y0, p_dimx + seuil, m_segmLength ) )
+            if( !checkMarginToCircle( x0, y0, padHalfsize.x + seuil, m_segmLength ) )
                 return false;
 
-            x0 = m_spotcx;     /* x0,y0 = centre du cercle inferieur du pad ovale */
-            y0 = m_spotcy - deltay;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x;     /* x0,y0 = centre du cercle inferieur du pad ovale */
+            y0 = m_padToTestPos.y - deltay;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
 
-            if( !checkMarginToCircle( x0, y0, p_dimx + seuil, m_segmLength ) )
+            if( !checkMarginToCircle( x0, y0, padHalfsize.x + seuil, m_segmLength ) )
                 return false;
             break;
 
         case PAD_RECT:      /* 2 rectangle + 4 1/4 cercles a tester */
             /* Test du rectangle dimx + seuil, dimy */
-            m_xcliplo = m_spotcx - p_dimx - seuil;
-            m_ycliplo = m_spotcy - p_dimy;
-            m_xcliphi = m_spotcx + p_dimx + seuil;
-            m_ycliphi = m_spotcy + p_dimy;
+            m_xcliplo = m_padToTestPos.x - padHalfsize.x - seuil;
+            m_ycliplo = m_padToTestPos.y - padHalfsize.y;
+            m_xcliphi = m_padToTestPos.x + padHalfsize.x + seuil;
+            m_ycliphi = m_padToTestPos.y + padHalfsize.y;
 
             if( !checkLine( x0, y0, xf, yf ) )
             {
@@ -1559,10 +1549,10 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
             }
 
             /* Test du rectangle dimx , dimy + seuil */
-            m_xcliplo = m_spotcx - p_dimx;
-            m_ycliplo = m_spotcy - p_dimy - seuil;
-            m_xcliphi = m_spotcx + p_dimx;
-            m_ycliphi = m_spotcy + p_dimy + seuil;
+            m_xcliplo = m_padToTestPos.x - padHalfsize.x;
+            m_ycliplo = m_padToTestPos.y - padHalfsize.y - seuil;
+            m_xcliphi = m_padToTestPos.x + padHalfsize.x;
+            m_ycliphi = m_padToTestPos.y + padHalfsize.y + seuil;
 
             if( !checkLine( x0, y0, xf, yf ) )
             {
@@ -1571,9 +1561,9 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
 
             /* test des 4 cercles ( surface d'solation autour des sommets */
             /* test du coin sup. gauche du pad */
-            x0 = m_spotcx - p_dimx;
-            y0 = m_spotcy - p_dimy;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x - padHalfsize.x;
+            y0 = m_padToTestPos.y - padHalfsize.y;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
             if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
             {
@@ -1581,9 +1571,9 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
             }
 
             /* test du coin sup. droit du pad */
-            x0 = m_spotcx + p_dimx;
-            y0 = m_spotcy - p_dimy;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x + padHalfsize.x;
+            y0 = m_padToTestPos.y - padHalfsize.y;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
             if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
             {
@@ -1591,9 +1581,9 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
             }
 
             /* test du coin inf. gauche du pad */
-            x0 = m_spotcx - p_dimx;
-            y0 = m_spotcy + p_dimy;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x - padHalfsize.x;
+            y0 = m_padToTestPos.y + padHalfsize.y;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
             if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
             {
@@ -1601,9 +1591,9 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
             }
 
             /* test du coin inf. droit du pad */
-            x0 = m_spotcx + p_dimx;
-            y0 = m_spotcy + p_dimy;
-            RotatePoint( &x0, &y0, m_spotcx, m_spotcy, orient );
+            x0 = m_padToTestPos.x + padHalfsize.x;
+            y0 = m_padToTestPos.y + padHalfsize.y;
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );
             if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
             {

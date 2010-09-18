@@ -15,6 +15,7 @@
 #include "pcbnew_id.h"
 #include "protos.h"
 #include "zones_functions_for_undo_redo.h"
+#include "drc_stuff.h"
 
 bool s_Verbose = false;       // false if zone outline diags must not be shown
 

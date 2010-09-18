@@ -11,11 +11,11 @@
 #include "common.h"
 #include "confirm.h"
 #include "pcbnew.h"
+#include "drc_stuff.h"
 
-bool bDontShowSelfIntersectionArcsWarning;
-bool bDontShowSelfIntersectionWarning;
-bool bDontShowIntersectionArcsWarning;
-bool bDontShowIntersectionWarning;
+static bool bDontShowSelfIntersectionArcsWarning;
+static bool bDontShowSelfIntersectionWarning;
+static bool bDontShowIntersectionArcsWarning;
 
 
 /** Function AddArea

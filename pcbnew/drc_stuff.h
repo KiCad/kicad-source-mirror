@@ -27,49 +27,49 @@
 
 
 #include "fctsys.h"
-#include "class_marker_base.h"
+#include "class_marker_pcb.h"
 
 
-#define OK_DRC      0
-#define BAD_DRC     1
+#define OK_DRC  0
+#define BAD_DRC 1
 
 
 /// DRC error codes:
-#define DRCE_                               1   // not used yet
-#define DRCE_UNCONNECTED_PADS               2   ///< pads are unconnected
-#define DRCE_TRACK_NEAR_THROUGH_HOLE        3   ///< thru hole is too close to track
-#define DRCE_TRACK_NEAR_PAD                 4   ///< pad too close to track
-#define DRCE_TRACK_NEAR_VIA                 5   ///< track too close to via
-#define DRCE_VIA_NEAR_VIA                   6   ///< via too close to via
-#define DRCE_VIA_NEAR_TRACK                 7   ///< via too close to track
-#define DRCE_TRACK_ENDS1                    8   ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS2                    9   ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS3                    10  ///< @todo say what this problem is
-#define DRCE_TRACK_ENDS4                    11  ///< @todo say what this problem is
-#define DRCE_TRACK_UNKNOWN1                 12  ///< @todo check source code and change this comment
-#define DRCE_TRACKS_CROSSING                13  ///< tracks are crossing
-#define DRCE_ENDS_PROBLEM1                  14  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM2                  15  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM3                  16  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM4                  17  ///< track ends are too close
-#define DRCE_ENDS_PROBLEM5                  18  ///< track ends are too close
-#define DRCE_PAD_NEAR_PAD1                  19  ///< pad too close to pad
-#define DRCE_VIA_HOLE_BIGGER                20  ///< via's hole is bigger than its diameter
-#define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR 21  ///< micro via's layer pair incorrect (layers must be adjacent)
-#define COPPERAREA_INSIDE_COPPERAREA        22  ///< copper area outlines intersect
-#define COPPERAREA_CLOSE_TO_COPPERAREA      23  ///< copper area outlines are too close
-#define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE  24  ///< copper area outline has an incorrect netcode due to a netname not found
-#define DRCE_HOLE_NEAR_PAD                  25  ///< hole too close to pad
-#define DRCE_HOLE_NEAR_TRACK                26  ///< hole too close to track
-#define DRCE_TOO_SMALL_TRACK_WIDTH          27  ///< Too small track width
-#define DRCE_TOO_SMALL_VIA                  28  ///< Too small via size
-#define DRCE_TOO_SMALL_MICROVIA             29  ///< Too small micro via size
-#define DRCE_NETCLASS_TRACKWIDTH            30  ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
-#define DRCE_NETCLASS_CLEARANCE             31  ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
-#define DRCE_NETCLASS_VIASIZE               32  ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
-#define DRCE_NETCLASS_VIADRILLSIZE          33  ///< netclass has ViaDrillSize < board.m_designSettings->m_ViaDrill
-#define DRCE_NETCLASS_uVIASIZE              34
-#define DRCE_NETCLASS_uVIADRILLSIZE         35
+#define DRCE_                                  1    // not used yet
+#define DRCE_UNCONNECTED_PADS                  2    ///< pads are unconnected
+#define DRCE_TRACK_NEAR_THROUGH_HOLE           3    ///< thru hole is too close to track
+#define DRCE_TRACK_NEAR_PAD                    4    ///< pad too close to track
+#define DRCE_TRACK_NEAR_VIA                    5    ///< track too close to via
+#define DRCE_VIA_NEAR_VIA                      6    ///< via too close to via
+#define DRCE_VIA_NEAR_TRACK                    7    ///< via too close to track
+#define DRCE_TRACK_ENDS1                       8    ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS2                       9    ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS3                       10   ///< @todo say what this problem is
+#define DRCE_TRACK_ENDS4                       11   ///< @todo say what this problem is
+#define DRCE_TRACK_UNKNOWN1                    12   ///< @todo check source code and change this comment
+#define DRCE_TRACKS_CROSSING                   13   ///< tracks are crossing
+#define DRCE_ENDS_PROBLEM1                     14   ///< track ends are too close
+#define DRCE_ENDS_PROBLEM2                     15   ///< track ends are too close
+#define DRCE_ENDS_PROBLEM3                     16   ///< track ends are too close
+#define DRCE_ENDS_PROBLEM4                     17   ///< track ends are too close
+#define DRCE_ENDS_PROBLEM5                     18   ///< track ends are too close
+#define DRCE_PAD_NEAR_PAD1                     19   ///< pad too close to pad
+#define DRCE_VIA_HOLE_BIGGER                   20   ///< via's hole is bigger than its diameter
+#define DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR    21   ///< micro via's layer pair incorrect (layers must be adjacent)
+#define COPPERAREA_INSIDE_COPPERAREA           22   ///< copper area outlines intersect
+#define COPPERAREA_CLOSE_TO_COPPERAREA         23   ///< copper area outlines are too close
+#define DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE 24   ///< copper area outline has an incorrect netcode due to a netname not found
+#define DRCE_HOLE_NEAR_PAD                     25   ///< hole too close to pad
+#define DRCE_HOLE_NEAR_TRACK                   26   ///< hole too close to track
+#define DRCE_TOO_SMALL_TRACK_WIDTH             27   ///< Too small track width
+#define DRCE_TOO_SMALL_VIA                     28   ///< Too small via size
+#define DRCE_TOO_SMALL_MICROVIA                29   ///< Too small micro via size
+#define DRCE_NETCLASS_TRACKWIDTH               30   ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
+#define DRCE_NETCLASS_CLEARANCE                31   ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
+#define DRCE_NETCLASS_VIASIZE                  32   ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
+#define DRCE_NETCLASS_VIADRILLSIZE             33   ///< netclass has ViaDrillSize < board.m_designSettings->m_ViasMinDrill
+#define DRCE_NETCLASS_uVIASIZE                 34   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
+#define DRCE_NETCLASS_uVIADRILLSIZE            35   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
 
 
 class WinEDA_DrawPanel;
@@ -121,7 +121,7 @@ public:
 };
 
 
-typedef std::vector<DRC_ITEM*>  DRC_LIST;
+typedef std::vector<DRC_ITEM*> DRC_LIST;
 
 
 /**
@@ -150,29 +150,40 @@ private:
 
     // int              m_errorCount;
 
-    MARKER_PCB*       m_currentMarker;
+    MARKER_PCB* m_currentMarker;
 
-    bool              m_aboartDRC;
-    bool              m_drcInProgress;
-    int               m_spotcx;
-    int               m_spotcy;
-    int               m_finx;
-    int               m_finy;               // coord relatives de l'extremite du segm de reference
+    bool        m_aboartDRC;
+    bool        m_drcInProgress;
 
-    int               m_segmAngle;          // angle d'inclinaison du segment de reference en 0,1 degre
-    int               m_segmLength;         // length of the reference segment
+    /* In DRC functions, many calculations are using coordinates relative
+     * to the position of the segment under test (segm to segm DRC, segm to pad DRC
+     * Next variables store coordinates relative to the start point of this segment
+     */
+    wxPoint m_padToTestPos;         // Position of the pad to compare in drc test segm to pad or pad to pad
+    wxPoint m_segmEnd;              // End point of the reference segment (start point = (0,0) )
 
-    int               m_xcliplo;
-    int               m_ycliplo;
-    int               m_xcliphi;
-    int               m_ycliphi;          // coord de la surface de securite du segment a comparer
+    /* Some functions are comparing the ref segm to pads or others segments using
+     * coordinates relative to the ref segment considered as the X axis
+     * so we store the ref segment length (the end point relative to these axis)
+     * and the segment orientation (used to rotate other coordinates)
+     */
+    int m_segmAngle;                // Ref segm orientation in 0,1 degre
+    int m_segmLength;               // length of the reference segment
 
-    WinEDA_PcbFrame*  m_mainWindow;
-    WinEDA_DrawPanel* m_drawPanel;
-    BOARD*            m_pcb;
-    DIALOG_DRC_CONTROL*        m_ui;
+    /* variables used in checkLine to test DRC segm to segm:
+     * define the area relative to the ref segment that does not contains anu other segment
+     */
+    int m_xcliplo;
+    int m_ycliplo;
+    int m_xcliphi;
+    int m_ycliphi;
 
-    DRC_LIST          m_unconnected;    ///< list of unconnected pads, as DRC_ITEMs
+    WinEDA_PcbFrame*    m_mainWindow;
+    WinEDA_DrawPanel*   m_drawPanel;
+    BOARD*              m_pcb;
+    DIALOG_DRC_CONTROL* m_ui;
+
+    DRC_LIST            m_unconnected;  ///< list of unconnected pads, as DRC_ITEMs
 
 
     /**
@@ -180,7 +191,7 @@ private:
      * is a private helper function used to update needed pointers from the
      * one pointer which is known not to change, m_mainWindow.
      */
-    void    updatePointers();
+    void        updatePointers();
 
 
     /**
@@ -201,7 +212,7 @@ private:
 
     MARKER_PCB* fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe );
 
-    MARKER_PCB* fillMarker( ZONE_CONTAINER * aArea, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe );
 
     /**
      * Function fillMarker
@@ -215,7 +226,10 @@ private:
      * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
      *         first be allocated, then filled.
      */
-    MARKER_PCB* fillMarker( const ZONE_CONTAINER * aArea, const wxPoint & aPos, int aErrorCode, MARKER_PCB* fillMe );
+    MARKER_PCB* fillMarker( const ZONE_CONTAINER* aArea,
+                            const wxPoint&        aPos,
+                            int                   aErrorCode,
+                            MARKER_PCB*           fillMe );
 
     /**
      * Function fillMarker
@@ -236,20 +250,20 @@ private:
      * @return bool - true if succes, else false but only after
      *  reporting _all_ NETCLASS violations.
      */
-    bool    testNetClasses();
+    bool        testNetClasses();
 
-    void    testTracks();
+    void        testTracks();
 
-    void    testPad2Pad();
+    void        testPad2Pad();
 
-    void    testUnconnected();
+    void        testUnconnected();
 
-    void    testZones(bool adoTestFillSegments);
+    void        testZones( bool adoTestFillSegments );
 
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool    doNetClass( NETCLASS* aNetClass, wxString& msg );
+    bool        doNetClass( NETCLASS* aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc
@@ -260,8 +274,8 @@ private:
      * @param aEnd Marks the end of the list and is not included
      * @param x_limit is used to stop the test (when the any pad's X coord exceeds this)
      */
-    bool    doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart,
-                            LISTE_PAD* aEnd, int x_limit );
+    bool        doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart,
+                                LISTE_PAD* aEnd, int x_limit );
 
     /**
      * Function DoTrackDrc
@@ -272,7 +286,7 @@ private:
      * @return bool - true if no poblems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool    doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
+    bool        doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
 
 
     /**
@@ -284,7 +298,7 @@ private:
      * @param aCornerIndex The first corner of the segment to test.
      * @return bool - false if DRC error  or true if OK
      */
-    bool doEdgeZoneDrc( ZONE_CONTAINER * aArea, int aCornerIndex );
+    bool        doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
     //-----<single tests>----------------------------------------------
 
@@ -368,7 +382,7 @@ public:
      * @param CornerIndex The starting point of the segment to test.
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int Drc( ZONE_CONTAINER * aArea, int CornerIndex  );
+    int Drc( ZONE_CONTAINER* aArea, int CornerIndex  );
 
     /**
      * Function DrcBlind
@@ -385,13 +399,14 @@ public:
         return doTrackDrc( aRefSeg, aList ) ? OK_DRC : BAD_DRC;
     }
 
+
     /**
      * Function ShowDialog
      * opens a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
      * created if it is not already in existence.
      */
-    void    ShowDialog();
+    void ShowDialog();
 
     /**
      * Function DestroyDialog
@@ -399,7 +414,7 @@ public:
      * the state of the dialog's existence.
      * @param aReason Indication of which button was clicked to cause the destruction.
      */
-    void    DestroyDialog( int aReason );
+    void DestroyDialog( int aReason );
 
 
     /**
@@ -421,20 +436,21 @@ public:
         m_doCreateRptFile = aSaveReport;
     }
 
+
     /**
      * Function RunTests
      * will actually run all the tests specified with a previous call to
      * SetSettings()
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
-    void    RunTests(wxTextCtrl * aMessages = NULL);
+    void RunTests( wxTextCtrl* aMessages = NULL );
 
     /**
      * Function ListUnconnectedPad
      * gathers a list of all the unconnected pads and shows them in the
      * dialog, and optionally prints a report of such.
      */
-    void    ListUnconnectedPads();
+    void ListUnconnectedPads();
 };
 
 

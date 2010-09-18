@@ -6,8 +6,7 @@
 #define CLASS_MARKER_PCB_H
 
 #include "base_struct.h"
-
-#include "drc_stuff.h"
+#include "class_marker_base.h"
 
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
