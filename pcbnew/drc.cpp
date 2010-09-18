@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2004-2007 Jean-Pierre Charras, jean-pierre.charras@inpg.fr
+ * Copyright (C) 2004-2007 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  *
@@ -23,7 +23,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
 
 /****************************/
 /* DRC control				*/
@@ -94,7 +93,6 @@ void DRC::DestroyDialog( int aReason )
 DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
 {
     m_mainWindow = aPcbWindow;
-    m_drawPanel  = aPcbWindow->DrawPanel;
     m_pcb = aPcbWindow->GetBoard();
     m_ui  = 0;
 
@@ -116,8 +114,6 @@ DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
     m_ycliplo = 0;
     m_xcliphi = 0;
     m_ycliphi = 0;
-
-    m_drawPanel = 0;
 }
 
 
@@ -288,13 +284,11 @@ void DRC::ListUnconnectedPads()
 void DRC::updatePointers()
 {
     // update my pointers, m_mainWindow is the only unchangable one
-    m_drawPanel = m_mainWindow->DrawPanel;
     m_pcb = m_mainWindow->GetBoard();
 
     if( m_ui )  // Use diag list boxes only in DRC dialog
     {
         m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
-
         m_ui->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
     }
 }
@@ -450,8 +444,8 @@ void DRC::testPad2Pad()
     {
         D_PAD* pad = sortedPads[i];
 
-        if( pad->m_Rayon > max_size )       // m_Rayon is the radius value of the circle containing the pad
-            max_size = pad->m_Rayon;
+        if( pad->m_ShapeMaxRadius > max_size )       // m_ShapeMaxRadius is the radius value of the circle containing the pad
+            max_size = pad->m_ShapeMaxRadius;
     }
 
     // Test the pads
@@ -462,7 +456,7 @@ void DRC::testPad2Pad()
         D_PAD* pad = sortedPads[i];
 
         int    x_limit = max_size + pad->GetClearance() +
-                         pad->m_Rayon + pad->GetPosition().x;
+                         pad->m_ShapeMaxRadius + pad->GetPosition().x;
 
         if( !doPadToPadsDrc( pad, &sortedPads[i], listEnd, x_limit ) )
         {
@@ -555,137 +549,6 @@ void DRC::testZones( bool adoTestFillSegments )
             m_currentMarker = 0;
         }
     }
-}
-
-
-MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
-{
-    wxString textA = aTrack->MenuText( m_pcb );
-    wxString textB;
-
-    wxPoint  position;
-    wxPoint  posB;
-
-    if( aItem )     // aItem might be NULL
-    {
-        textB = aItem->MenuText( m_pcb );
-        posB  = aItem->GetPosition();
-
-        if( aItem->Type() == TYPE_PAD )
-            position = aItem->GetPosition();
-
-        else if( aItem->Type() == TYPE_VIA )
-            position = aItem->GetPosition();
-
-        else if( aItem->Type() == TYPE_TRACK )
-        {
-            TRACK*  track  = (TRACK*) aItem;
-            wxPoint endPos = track->m_End;
-
-            // either of aItem's start or end will be used for the marker position
-            // first assume start, then switch at end if needed.  decision made on
-            // distance from end of aTrack.
-            position = track->m_Start;
-
-            double dToEnd = hypot( endPos.x - aTrack->m_End.x,
-                                   endPos.y - aTrack->m_End.y );
-            double dToStart = hypot( position.x - aTrack->m_End.x,
-                                     position.y - aTrack->m_End.y );
-
-            if( dToEnd < dToStart )
-                position = endPos;
-        }
-    }
-    else
-        position = aTrack->GetPosition();
-
-    if( fillMe )
-    {
-        if( aItem )
-            fillMe->SetData( aErrorCode, position,
-                             textA, aTrack->GetPosition(),
-                             textB, posB );
-        else
-            fillMe->SetData( aErrorCode, position,
-                            textA, aTrack->GetPosition() );
-    }
-    else
-    {
-        if( aItem )
-            fillMe = new MARKER_PCB( aErrorCode, position,
-                                     textA, aTrack->GetPosition(),
-                                     textB, posB );
-        else
-            fillMe = new MARKER_PCB( aErrorCode, position,
-                                    textA, aTrack->GetPosition() );
-    }
-
-    return fillMe;
-}
-
-
-MARKER_PCB* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe )
-{
-    wxString textA = aPad->MenuText( m_pcb );
-    wxString textB = bPad->MenuText( m_pcb );
-
-    wxPoint  posA = aPad->GetPosition();
-    wxPoint  posB = bPad->GetPosition();
-
-    if( fillMe )
-        fillMe->SetData( aErrorCode, posA, textA, posA, textB, posB );
-    else
-        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA, textB, posB );
-
-    return fillMe;
-}
-
-
-MARKER_PCB* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe )
-{
-    wxString textA = aArea->MenuText( m_pcb );
-
-    wxPoint  posA = aArea->GetPosition();
-
-    if( fillMe )
-        fillMe->SetData( aErrorCode, posA, textA, posA );
-    else
-        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA );
-
-    return fillMe;
-}
-
-
-MARKER_PCB* DRC::fillMarker( const ZONE_CONTAINER* aArea,
-                             const wxPoint&        aPos,
-                             int                   aErrorCode,
-                             MARKER_PCB*           fillMe )
-{
-    wxString textA = aArea->MenuText( m_pcb );
-
-    wxPoint  posA = aPos;
-
-    if( fillMe )
-        fillMe->SetData( aErrorCode, posA, textA, posA );
-    else
-        fillMe = new MARKER_PCB( aErrorCode, posA, textA, posA );
-
-    return fillMe;
-}
-
-
-MARKER_PCB* DRC::fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe )
-{
-    wxPoint posA;   // not displayed
-
-    if( fillMe )
-        fillMe->SetData( aErrorCode, posA, aMessage, posA );
-    else
-        fillMe = new MARKER_PCB( aErrorCode, posA, aMessage, posA );
-
-    fillMe->SetShowNoCoordinate();
-
-    return fillMe;
 }
 
 
@@ -801,11 +664,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     /* Phase 1 : test DRC track to pads :     */
     /******************************************/
 
-    D_PAD pseudo_pad( (MODULE*) NULL );     // construct this once outside following loop
+    // Use a dummy pad to test DRC tracks versus holes, for pads not on all copper layers
+    // but having a hole
+    D_PAD dummypad( (MODULE*) NULL );     // construct this once outside following loop
+    dummypad.m_Masque_Layer   = ALL_CU_LAYERS;  // Ensure the hole is on all layers
 
     // Compute the min distance to pads
-    int   refsegm_half_width = aRefSeg->m_Width >> 1;
-
     if( testPads )
     {
         for( unsigned ii = 0;  ii<m_pcb->GetPadsCount();  ++ii )
@@ -818,22 +682,21 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
              */
             if( (pad->m_Masque_Layer & layerMask ) == 0 )
             {
-                /* We must test the pad hole. In order to use the function "checkClearanceSegmToPad",
+                /* We must test the pad hole. In order to use the function checkClearanceSegmToPad(),
                  * a pseudo pad is used, with a shape and a size like the hole
                  */
                 if( pad->m_Drill.x == 0 )
                     continue;
 
-                pseudo_pad.m_Size = pad->m_Drill;
-                pseudo_pad.SetPosition( pad->GetPosition() );
-                pseudo_pad.m_PadShape = pad->m_DrillShape;
-                pseudo_pad.m_Orient   = pad->m_Orient;
-                pseudo_pad.ComputeRayon();      // compute the radius
+                dummypad.m_Size = pad->m_Drill;
+                dummypad.SetPosition( pad->GetPosition() );
+                dummypad.m_PadShape = pad->m_DrillShape;
+                dummypad.m_Orient   = pad->m_Orient;
+                dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
+                m_padToTestPos.x = dummypad.GetPosition().x - origin.x;
+                m_padToTestPos.y = dummypad.GetPosition().y - origin.y;
 
-                m_padToTestPos.x = pseudo_pad.GetPosition().x - origin.x;
-                m_padToTestPos.y = pseudo_pad.GetPosition().y - origin.y;
-
-                if( !checkClearanceSegmToPad( &pseudo_pad, refsegm_half_width,
+                if( !checkClearanceSegmToPad( &dummypad, aRefSeg->m_Width,
                                              netclass->GetClearance() ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, pad,
@@ -852,10 +715,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // DRC for the pad
             shape_pos = pad->ReturnShapePos();
-            m_padToTestPos.x  = shape_pos.x - origin.x;
-            m_padToTestPos.y  = shape_pos.y - origin.y;
+            m_padToTestPos.x = shape_pos.x - origin.x;
+            m_padToTestPos.y = shape_pos.y - origin.y;
 
-            if( !checkClearanceSegmToPad( pad, refsegm_half_width, aRefSeg->GetClearance( pad ) ) )
+            if( !checkClearanceSegmToPad( pad, aRefSeg->m_Width, aRefSeg->GetClearance( pad ) ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, pad,
                                               DRCE_TRACK_NEAR_PAD, m_currentMarker );
@@ -1118,11 +981,18 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
                           int x_limit )
 /*****************************************************************************/
 {
-    int          layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
+    int layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
 
-    static D_PAD dummypad( (MODULE*) NULL );       // used to test DRC pad to holes: this dummypad is the hole to test
-
-    dummypad.m_Masque_Layer = ALL_CU_LAYERS;
+    // used to test DRC pad to holes: this dummypad is a pad hole to test
+    // pad to pad hole DRC, using pad to pad DRC test.
+    // this dummy pad is a circle or an oval.
+    static D_PAD dummypad( (MODULE*) NULL );
+    dummypad.m_Masque_Layer   = ALL_CU_LAYERS;  // za hole is on all layers
+    dummypad.m_LocalClearance = 1;   /* Use the minimal local clerance value for the dummy pad
+                                      *  the clearance of the active pad will be used
+                                      *  as minimum distance to a hole
+                                      *  (a value = 0 means use netclass value)
+                                      */
 
     for(  LISTE_PAD* pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
@@ -1148,19 +1018,20 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
             {
                 if( aRefPad->m_DrillShape == PAD_CIRCLE )
                     continue;
-                if( pad->m_Orient == aRefPad->m_Orient )    // for oval holes: must also have the same orientation
+                if( pad->m_Orient == aRefPad->m_Orient )                       // for oval holes: must also have the same orientation
                     continue;
             }
 
             /* Here, we must test clearance between holes and pads
              * dummypad size and shape is adjusted to pad drill size and shape
              */
-            if( pad->m_Drill.x ) // pad under testing has a hole, test this hole against pad reference
+            if( pad->m_Drill.x )  // pad under testing has a hole, test this hole against pad reference
             {
                 dummypad.SetPosition( pad->GetPosition() );
                 dummypad.m_Size     = pad->m_Drill;
-                dummypad.m_PadShape = pad->m_DrillShape == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE;
+                dummypad.m_PadShape = (pad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
                 dummypad.m_Orient   = pad->m_Orient;
+                dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
                 {
                     // here we have a drc error on pad!
@@ -1174,8 +1045,9 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
             {
                 dummypad.SetPosition( aRefPad->GetPosition() );
                 dummypad.m_Size     = aRefPad->m_Drill;
-                dummypad.m_PadShape = aRefPad->m_DrillShape == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE;
+                dummypad.m_PadShape = (aRefPad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
                 dummypad.m_Orient   = aRefPad->m_Orient;
+                dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
                 if( !checkClearancePadToPad( pad, &dummypad ) )
                 {
                     // here we have a drc erroron aRefPad!
@@ -1186,6 +1058,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
             }
             continue;
         }
+
 
         // The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
         // But no problem if pads have the same netcode (same net)
@@ -1229,28 +1102,29 @@ wxPoint rotate( wxPoint p, int angle )
 }
 
 
+/* test DRC between 2 pads.
+ * this function can be also used to test DRC between a pas and a hole,
+ * because a hole is like a round pad.
+ */
 bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 {
-    wxPoint rel_pos;
-    int     dist;;
+    int     dist;
 
-    wxPoint shape_pos;
     int     pad_angle;
 
+    // Get the clerance between the 2 pads. this is the min distance between aRefPad and aPad
     int     dist_min = aRefPad->GetClearance( aPad );
 
-    rel_pos   = aPad->ReturnShapePos();
-    shape_pos = aRefPad->ReturnShapePos();
+    // relativePadPos is the aPad shape position relative to the aRefPad shape position
+    wxPoint relativePadPos = aPad->ReturnShapePos() - aRefPad->ReturnShapePos();
 
-    // rel_pos is the aPad position relative to the aRefPad position
-    rel_pos -= shape_pos;
+    dist = (int) hypot( relativePadPos.x, relativePadPos.y );
 
-    dist = (int) hypot( rel_pos.x, rel_pos.y );
-
+    // return true if clearance between aRefPad and aPad is >= dist_min, else false
     bool diag = true;
 
     // Quick test: Clearance is OK if the bounding circles are further away than "dist_min"
-    if( (dist - aRefPad->m_Rayon - aPad->m_Rayon) >= dist_min )
+    if( (dist - aRefPad->m_ShapeMaxRadius - aPad->m_ShapeMaxRadius) >= dist_min )
         goto exit;
 
     /* Here, pads are near and DRC depend on the pad shapes
@@ -1268,7 +1142,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     if( swap_pads )
     {
         EXCHG( aRefPad, aPad );
-        rel_pos = -rel_pos;
+        relativePadPos = -relativePadPos;
     }
 
     /* Because pad exchange, aRefPad shape is PAD_CIRCLE or PAD_OVAL,
@@ -1278,20 +1152,22 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
      */
     switch( aRefPad->m_PadShape )
     {
-    case PAD_CIRCLE:        // aRefPad is like a track segment with a null lenght
+    case PAD_CIRCLE:
+        /* One can use checkClearanceSegmToPad to test clearance
+         * aRefPad is like a track segment with a null lenght and a witdth = m_Size.x
+         */
         m_segmLength = 0;
         m_segmAngle  = 0;
 
         m_segmEnd.x = m_segmEnd.y = 0;
 
-        m_padToTestPos.x = rel_pos.x;
-        m_padToTestPos.y = rel_pos.y;
-
-        diag = checkClearanceSegmToPad( aPad, aRefPad->m_Rayon, dist_min );
+        m_padToTestPos.x = relativePadPos.x;
+        m_padToTestPos.y = relativePadPos.y;
+        diag = checkClearanceSegmToPad( aPad, aRefPad->m_Size.x, dist_min );
         break;
 
     case PAD_RECT:
-        RotatePoint( &rel_pos, aRefPad->m_Orient );
+        RotatePoint( &relativePadPos, aRefPad->m_Orient );
 
         // pad_angle = pad orient relative to the aRefPad orient
         pad_angle = aRefPad->m_Orient + aPad->m_Orient;
@@ -1315,13 +1191,13 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 // Test DRC:
                 diag = false;
 
-                rel_pos.x = ABS( rel_pos.x );
-                rel_pos.y = ABS( rel_pos.y );
+                relativePadPos.x = ABS( relativePadPos.x );
+                relativePadPos.y = ABS( relativePadPos.y );
 
-                if( ( rel_pos.x - ( (size.x + aRefPad->m_Size.x) / 2 ) ) >= dist_min )
+                if( ( relativePadPos.x - ( (size.x + aRefPad->m_Size.x) / 2 ) ) >= dist_min )
                     diag = true;
 
-                if( ( rel_pos.y - ( (size.y + aRefPad->m_Size.y) / 2 ) ) >= dist_min )
+                if( ( relativePadPos.y - ( (size.y + aRefPad->m_Size.y) / 2 ) ) >= dist_min )
                     diag = true;
             }
             else        // al least on pad has any other orient. Test is more tricky
@@ -1405,10 +1281,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     {
         /* Create a track segment with same dimensions as the oval aRefPad
          * and use checkClearanceSegmToPad function to test aPad to aRefPad clearance
-        */
+         */
         int segm_width;
-        m_segmAngle = aRefPad->m_Orient;              // Segment orient.
-        if( aRefPad->m_Size.y < aRefPad->m_Size.x )   // Build an horizontal equiv segment
+        m_segmAngle = aRefPad->m_Orient;                // Segment orient.
+        if( aRefPad->m_Size.y < aRefPad->m_Size.x )     // Build an horizontal equiv segment
         {
             segm_width   = aRefPad->m_Size.y;
             m_segmLength = aRefPad->m_Size.x - aRefPad->m_Size.y;
@@ -1420,19 +1296,20 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             m_segmAngle += 900;
         }
 
-        /* the start point must be 0,0 and currently rel_pos
+        /* the start point must be 0,0 and currently relativePadPos
          * is relative the center of pad coordinate */
         wxPoint segstart;
-        segstart.x = -m_segmLength / 2;         // Start point coordinate of the horizontal equivalent segment
+        segstart.x = -m_segmLength / 2;                 // Start point coordinate of the horizontal equivalent segment
 
-        RotatePoint( &segstart, m_segmAngle );       // True start point coordinate of the equivalent segment
+        RotatePoint( &segstart, m_segmAngle );          // True start point coordinate of the equivalent segment
 
         // move pad position relative to the segment origin
-        m_padToTestPos = rel_pos - segstart;
+        m_padToTestPos = relativePadPos - segstart;
+
         // Calculate segment end
         m_segmEnd.x = -2 * segstart.x;
         m_segmEnd.y = -2 * segstart.y;                              // end of segment coordinate
-        diag   = checkClearanceSegmToPad( aPad, segm_width / 2, dist_min );
+        diag = checkClearanceSegmToPad( aPad, segm_width, dist_min );
         break;
     }
 
@@ -1448,28 +1325,39 @@ exit:       // the only way out (hopefully) for simpler debugging
 }
 
 
-bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMinDist )
+/* test if distance between a segment is > aMinDist
+ * segment start point is assumed in (0,0) and  segment start point in m_segmEnd
+ * and have aSegmentWidth.
+ */
+bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
 {
     wxSize padHalfsize;         // half the dimension of the pad
-    int orient;
-    int x0, y0, xf, yf;
-    int seuil;
-    int deltay;
+    int    orient;
+    int    x0, y0, xf, yf;
+    int    seuil;
+    int    deltay;
 
-    seuil  = w_segm + aMinDist;
-    padHalfsize.x = pad_to_test->m_Size.x >> 1;
-    padHalfsize.y = pad_to_test->m_Size.y >> 1;
+    int segmHalfWidth = aSegmentWidth / 2;
+    seuil = segmHalfWidth + aMinDist;
+    padHalfsize.x = aPad->m_Size.x >> 1;
+    padHalfsize.y = aPad->m_Size.y >> 1;
 
-    if( pad_to_test->m_PadShape == PAD_CIRCLE )
+    if( aPad->m_PadShape == PAD_CIRCLE )
     {
-        /* calcul des coord centre du pad dans le repere axe X confondu
-         *  avec le segment en tst */
+        /* Easy case: just test the distance between segment and pad centre
+         * calculate pad coordinates in the X,Y axis with X axis = segment to test
+         */
         RotatePoint( &m_padToTestPos.x, &m_padToTestPos.y, m_segmAngle );
-        return checkMarginToCircle( m_padToTestPos.x, m_padToTestPos.y, seuil + padHalfsize.x, m_segmLength );
+        return checkMarginToCircle( m_padToTestPos.x, m_padToTestPos.y,
+                                    seuil + padHalfsize.x, m_segmLength );
     }
     else
     {
-        /* calcul de la "surface de securite" du pad de reference */
+        /* calculate the bounding box of the pad, including the clearance and the segment width
+         * if the line from 0 to m_segmEnd does not intersect this bounding box,
+         * the clearance is always OK
+         * But if intersect, a better analysis of the pad shape must be done.
+         */
         m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
         m_ycliplo = m_padToTestPos.y - seuil - padHalfsize.y;
         m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
@@ -1480,7 +1368,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
         xf = m_segmEnd.x;
         yf = m_segmEnd.y;
 
-        orient = pad_to_test->m_Orient;
+        orient = aPad->m_Orient;
 
         RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, -orient );
         RotatePoint( &xf, &yf, m_padToTestPos.x, m_padToTestPos.y, -orient );
@@ -1488,15 +1376,19 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
         if( checkLine( x0, y0, xf, yf ) )
             return true;
 
-        /* Erreur DRC : analyse fine de la forme de la pastille */
-
-        switch( pad_to_test->m_PadShape )
+        /* segment intersects the bounding box. But there is not always a DRC error.
+         * A fine analysis of the pad shape must be done.
+         */
+        switch( aPad->m_PadShape )
         {
         default:
             return false;
 
         case PAD_OVAL:
-            /* test de la pastille ovale ramenee au type ovale vertical */
+            /* an oval is a complex shape, but is a rectangle and 2 circles
+             * these 3 basic shapes are more easy to test.
+             */
+            /* We use a vertical oval shape. for horizontal ovals, swap x and y size and rotate the shape*/
             if( padHalfsize.x > padHalfsize.y )
             {
                 EXCHG( padHalfsize.x, padHalfsize.y );
@@ -1506,28 +1398,30 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int aMi
             }
             deltay = padHalfsize.y - padHalfsize.x;
 
-            /* ici: padHalfsize.x = rayon,
-             *      delta = dist centre cercles a centre pad */
+            // ici: padHalfsize.x = rayon, delta = dist centre cercles a centre pad
 
-            /* Test du rectangle separant les 2 demi cercles */
+            // Test the rectangle area between the two circles
             m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
-            m_ycliplo = m_padToTestPos.y - w_segm - deltay;
+            m_ycliplo = m_padToTestPos.y - segmHalfWidth - deltay;
             m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
-            m_ycliphi = m_padToTestPos.y + w_segm + deltay;
-
+            m_ycliphi = m_padToTestPos.y + segmHalfWidth + deltay;
             if( !checkLine( x0, y0, xf, yf ) )
                 return false;
 
-            /* test des 2 cercles */
-            x0 = m_padToTestPos.x;     /* x0,y0 = centre du cercle superieur du pad ovale */
+            // test the first circle
+            x0 = m_padToTestPos.x;     // x0,y0 = centre of the upper circle of the oval shape
             y0 = m_padToTestPos.y + deltay;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
 
+            // Calculate the actual position of the circle, given the pad orientation:
+            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
+
+            // Calculate the actual position of the circle in the new X,Y axis:
+            RotatePoint( &x0, &y0, m_segmAngle );
             if( !checkMarginToCircle( x0, y0, padHalfsize.x + seuil, m_segmLength ) )
                 return false;
 
-            x0 = m_padToTestPos.x;     /* x0,y0 = centre du cercle inferieur du pad ovale */
+            // test the second circle
+            x0 = m_padToTestPos.x;     // x0,y0 = centre of the lower circle of the oval shape
             y0 = m_padToTestPos.y - deltay;
             RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
             RotatePoint( &x0, &y0, m_segmAngle );

@@ -697,7 +697,7 @@ void MODULE::Set_Rectangle_Encadrement()
      */
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        rayon = pad->m_Rayon;
+        rayon = pad->m_ShapeMaxRadius;
         cx    = pad->m_Pos0.x;
         cy    = pad->m_Pos0.y;
         xmin  = MIN( xmin, cx - rayon );

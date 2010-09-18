@@ -647,7 +647,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->m_LocalSolderPasteMargin = g_Pad_Master.m_LocalSolderPasteMargin;
         m_CurrentPad->m_LocalSolderPasteMarginRatio = g_Pad_Master.m_LocalSolderPasteMarginRatio;
 
-        m_CurrentPad->ComputeRayon();
+        m_CurrentPad->ComputeShapeMaxRadius();
 
         Module->Set_Rectangle_Encadrement();
         m_CurrentPad->DisplayInfo( m_Parent );

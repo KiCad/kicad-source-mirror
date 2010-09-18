@@ -44,7 +44,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 
     SetSubRatsnest( 0 );                            // used in ratsnest
                                                     // calculations
-    ComputeRayon();
+    ComputeShapeMaxRadius();
 }
 
 
@@ -53,24 +53,32 @@ D_PAD::~D_PAD()
 }
 
 
-/* Calculate the radius of the pad.
+/* Calculate the radius of the circle containing the pad.
  */
-void D_PAD::ComputeRayon()
+void D_PAD::ComputeShapeMaxRadius()
 {
     switch( m_PadShape & 0x7F )
     {
     case PAD_CIRCLE:
-        m_Rayon = m_Size.x / 2;
+        m_ShapeMaxRadius = m_Size.x / 2;
         break;
 
     case PAD_OVAL:
-        m_Rayon = MAX( m_Size.x, m_Size.y ) / 2;
+        m_ShapeMaxRadius = MAX( m_Size.x, m_Size.y ) / 2;
         break;
 
     case PAD_RECT:
-    case PAD_TRAPEZOID:
-        m_Rayon = (int) ( sqrt( (double) m_Size.y * m_Size.y
+        m_ShapeMaxRadius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
                                + (double) m_Size.x * m_Size.x ) / 2 );
+        break;
+
+    case PAD_TRAPEZOID:
+    {   wxSize fullsize = m_Size;
+        fullsize.x += ABS(m_DeltaSize.y);   // Remember: m_DeltaSize.y is the m_Size.x change
+        fullsize.y += ABS(m_DeltaSize.x);   // Remember: m_DeltaSize.x is the m_Size.y change
+        m_ShapeMaxRadius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
+                               + (double) m_Size.x * m_Size.x ) / 2 );
+    }
         break;
     }
 }
@@ -84,11 +92,11 @@ void D_PAD::ComputeRayon()
 EDA_Rect D_PAD::GetBoundingBox()
 {
     // Calculate area:
-    ComputeRayon();     // calculate the radius of the area, considered as a
+    ComputeShapeMaxRadius();     // calculate the radius of the area, considered as a
                         // circle
     EDA_Rect area;
     area.SetOrigin( m_Pos );
-    area.Inflate( m_Rayon, m_Rayon );
+    area.Inflate( m_ShapeMaxRadius, m_ShapeMaxRadius );
 
     return area;
 }
@@ -185,7 +193,7 @@ void D_PAD::Copy( D_PAD* source )
     m_Size = source->m_Size;
     m_DeltaSize = source->m_DeltaSize;
     m_Pos0     = source->m_Pos0;
-    m_Rayon    = source->m_Rayon;
+    m_ShapeMaxRadius    = source->m_ShapeMaxRadius;
     m_PadShape = source->m_PadShape;
     m_Attribut = source->m_Attribut;
     m_Orient   = source->m_Orient;
@@ -401,7 +409,7 @@ int D_PAD::ReadDescr( FILE* File, int* LineNum )
                 m_PadShape = PAD_TRAPEZOID; break;
             }
 
-            ComputeRayon();
+            ComputeShapeMaxRadius();
             break;
 
         case 'D':
@@ -766,7 +774,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
     deltaY = ref_pos.y - shape_pos.y;
 
     /* Quick test: a test point must be inside the circle. */
-    if( ( abs( deltaX ) > m_Rayon ) || ( abs( deltaY ) > m_Rayon ) )
+    if( ( abs( deltaX ) > m_ShapeMaxRadius ) || ( abs( deltaY ) > m_ShapeMaxRadius ) )
         return false;
 
     dx = m_Size.x >> 1; // dx also is the radius for rounded pads

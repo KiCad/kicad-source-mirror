@@ -265,7 +265,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     PtPad->m_Masque_Layer = g_TabOneLayerMask[Module->GetLayer()];
     PtPad->m_Attribut     = PAD_SMD;
     PtPad->m_PadShape     = PAD_CIRCLE;
-    PtPad->m_Rayon = PtPad->m_Size.x / 2;
+    PtPad->ComputeShapeMaxRadius();
 
     D_PAD* newpad = new D_PAD( Module );
     newpad->Copy( PtPad );
