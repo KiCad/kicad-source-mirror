@@ -869,10 +869,13 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->ClearMsgPanel();
 
     int viasCount = 0;
+    int trackSegmentsCount = 0;
     for( BOARD_ITEM* item = m_Track; item; item = item->Next() )
     {
         if( item->Type() == TYPE_VIA )
             viasCount++;
+        else
+            trackSegmentsCount++;
     }
 
     txt.Printf( wxT( "%d" ), GetPadsCount() );
@@ -880,6 +883,9 @@ void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
 
     txt.Printf( wxT( "%d" ), viasCount );
     frame->AppendMsgPanel( _( "Vias" ), txt, DARKGREEN );
+
+    txt.Printf( wxT( "%d" ), trackSegmentsCount );
+    frame->AppendMsgPanel( _( "trackSegm" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     frame->AppendMsgPanel( _( "Nodes" ), txt, DARKCYAN );

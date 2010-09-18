@@ -866,7 +866,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     wxMemoryDC tmpDC;
     wxBitmap tmpBM( 1, screenSize.y );
     tmpDC.SelectObject( tmpBM );
-    GRSetColorPen( &tmpDC, WHITE/*g_DrawBgColor*/ );
+    GRSetColorPen( &tmpDC, g_DrawBgColor );
     tmpDC.DrawLine( 0, 0, 0, screenSize.y-1 );        // init background
     GRSetColorPen( &tmpDC, m_Parent->GetGridColor() );
     for( jj = 0; ; jj++ )   // draw grid points

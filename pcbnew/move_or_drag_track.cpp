@@ -11,6 +11,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
+#include "drc_stuff.h"
 
 #include "drag.h"
 #include "pcbnew_id.h"
@@ -274,7 +275,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
         {
             // Get the segment connected to the start point
             if( ii >= 0 )
-                tSegmentToStart = g_DragSegmentList[ii].m_Segm; 
+                tSegmentToStart = g_DragSegmentList[ii].m_Segm;
         }
     }
 

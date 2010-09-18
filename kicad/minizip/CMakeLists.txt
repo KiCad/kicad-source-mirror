@@ -8,8 +8,10 @@ else(ZLIB_FOUND)
     # include files are in ${wxWidgets_ROOT_DIR}/src/zlib
     # and the corresponding library is libwxzlib-<version>.a (like libwxzlib-2.8.a)
     # and we try to use it
-    find_path(ZLIB_INCLUDE_DIR zlib.h PATHS ${wxWidgets_ROOT_DIR}/src/zlib/ DOC "location of zlib include files")
-    set(ZLIB_LIBRARIES ${wxWidgets_ROOT_DIR}/lib/libwxzlib-2.8.a)
+    # Unfortunately, we have no way to know exactlty the path of zlib.h becuase this file
+    # is in wxWidgets sources, not in wxWidgets include path.
+    find_path(ZLIB_INCLUDE_DIR  PATHS ${wxWidgets_ROOT_DIR}/../src/zlib/ ${wxWidgets_ROOT_DIR}/src/zlib/ DOC "location of zlib include files")
+	find_file(ZLIB_LIBRARIES NAMES ${wxWidgets_LIB_DIR}/libwxzlib-2.8.a ZLIB_LIBRARIES NAMES ${wxWidgets_LIB_DIR}/libwxzlib-2.9.a libwxzlib.a PATHS ${wxWidgets_ROOT_DIR}/lib/ PATH_SUFFIXES gcc_dll DOC "location of wxzlib library file")
 endif(ZLIB_FOUND)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}

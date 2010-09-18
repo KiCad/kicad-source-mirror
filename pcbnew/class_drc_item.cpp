@@ -30,6 +30,7 @@
 #include "common.h"
 
 #include "pcbnew.h"
+#include "drc_stuff.h"
 
 wxString DRC_ITEM::GetErrorText() const
 {
