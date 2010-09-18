@@ -10,7 +10,7 @@ else(ZLIB_FOUND)
     # and we try to use it
     # Unfortunately, we have no way to know exactlty the path of zlib.h becuase this file
     # is in wxWidgets sources, not in wxWidgets include path.
-    find_path(ZLIB_INCLUDE_DIR  PATHS ${wxWidgets_ROOT_DIR}/../src/zlib/ ${wxWidgets_ROOT_DIR}/src/zlib/ DOC "location of zlib include files")
+    find_path(ZLIB_INCLUDE_DIR zlib.h PATHS ${wxWidgets_ROOT_DIR}/../src/zlib/ ${wxWidgets_ROOT_DIR}/src/zlib/ DOC "location of zlib include files")
 	find_file(ZLIB_LIBRARIES NAMES ${wxWidgets_LIB_DIR}/libwxzlib-2.8.a ZLIB_LIBRARIES NAMES ${wxWidgets_LIB_DIR}/libwxzlib-2.9.a libwxzlib.a PATHS ${wxWidgets_ROOT_DIR}/lib/ PATH_SUFFIXES gcc_dll DOC "location of wxzlib library file")
 endif(ZLIB_FOUND)
 

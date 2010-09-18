@@ -179,7 +179,6 @@ private:
     int m_ycliphi;
 
     WinEDA_PcbFrame*    m_mainWindow;
-    WinEDA_DrawPanel*   m_drawPanel;
     BOARD*              m_pcb;
     DIALOG_DRC_CONTROL* m_ui;
 
@@ -306,7 +305,7 @@ private:
      * Function checkClearancePadToPad
      * @param aRefPad The reference pad to check
      * @param aPad Another pad to check against
-     * @return bool - true if clearance between aRefPad and pad is >= dist_min, else false
+     * @return bool - true if clearance between aRefPad and aPad is >= dist_min, else false
      */
     bool        checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad );
 
@@ -315,18 +314,18 @@ private:
      * Function checkClearanceSegmToPad
      * check the distance from a pad to segment.  This function uses several
      * instance variable not passed in:
-     *      segmLength = length of the segment being tested
-     *      segmAngle  = angle d'inclinaison du segment;
-     *      finx, finy = end coordinate of the segment
-     *      spot_cX, spot_cY = position of pad / origin of segment
-     * @param pad_to_test Is the pad involved in the check
-     * @param w_segm Hhalf width of the segment to test
-     * @param dist_min Is the minimum clearance needed
+     *      m_segmLength = length of the segment being tested
+     *      m_segmAngle  = angle of the segment with the X axis;
+     *      m_segmEnd    = end coordinate of the segment
+     *      m_padToTestPos = position of pad relative to the origin of segment
+     * @param aPad Is the pad involved in the check
+     * @param aSegmentWidth width of the segment to test
+     * @param aMinDist Is the minimum clearance needed
      *
-     * @return false distance >= dist_min,
-     *         true if distance < dist_min
+     * @return true distance >= dist_min,
+     *         false if distance < dist_min
      */
-    bool        checkClearanceSegmToPad( const D_PAD* pad_to_test, int w_segm, int dist_min );
+    bool        checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist );
 
 
     /**

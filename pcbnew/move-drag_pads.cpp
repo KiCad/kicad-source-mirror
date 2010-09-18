@@ -110,7 +110,7 @@ void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
                             ( (MODULE*) pt_pad->GetParent() )->m_Orient;
     g_Pad_Master.m_Size = pt_pad->m_Size;
     g_Pad_Master.m_DeltaSize = pt_pad->m_DeltaSize;
-    pt_pad->ComputeRayon();
+    pt_pad->ComputeShapeMaxRadius();
 
     g_Pad_Master.m_Offset     = pt_pad->m_Offset;
     g_Pad_Master.m_Drill      = pt_pad->m_Drill;
@@ -163,7 +163,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         aPad->m_Offset.y = 0;
     }
 
-    aPad->ComputeRayon();
+    aPad->ComputeShapeMaxRadius();
 
     if( aDraw )
         DrawPanel->PostDirtyRect( aPad->GetBoundingBox() );
@@ -234,7 +234,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 void WinEDA_BasePcbFrame::DeletePad( D_PAD* aPad, bool aQuery )
 {
     MODULE*  Module;
- 
+
     if( aPad == NULL )
         return;
 

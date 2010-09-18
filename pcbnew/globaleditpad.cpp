@@ -4,17 +4,10 @@
 
 #include "fctsys.h"
 
-//#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
-
-//#include "trigo.h"
-
-//#include "drag.h"
-
-//#include "protos.h"
 #include "dialog_global_pads_edition_base.h"
 
 
@@ -104,6 +97,8 @@ void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
         EndModal( returncode );
         break;
     }
+
+    m_Parent->OnModify();
 }
 
 
@@ -272,7 +267,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
                 break;
             }
 
-            pt_pad->ComputeRayon();
+            pt_pad->ComputeShapeMaxRadius();
         }
 
         Module->Set_Rectangle_Encadrement();

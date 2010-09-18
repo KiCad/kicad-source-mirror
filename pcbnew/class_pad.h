@@ -95,7 +95,7 @@ public:
 
     wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the module anchor, orientation 0
 
-    int     m_Rayon;                // radius of pad circle
+    int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
     int     m_Orient;               // in 1/10 degrees
     static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
@@ -252,7 +252,7 @@ public:
     void          SetPadName( const wxString& name );       // Change pad name
     wxString      ReturnStringPadName();                    // Return pad name as string in a wxString
     void          ReturnStringPadName( wxString& text );    // Return pad name as string in a buffer
-    void          ComputeRayon();                           // compute radius
+    void          ComputeShapeMaxRadius();                           // compute radius
     const wxPoint ReturnShapePos();
 
 
