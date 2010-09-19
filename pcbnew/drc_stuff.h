@@ -173,10 +173,10 @@ private:
     /* variables used in checkLine to test DRC segm to segm:
      * define the area relative to the ref segment that does not contains anu other segment
      */
-    int m_xcliplo;
-    int m_ycliplo;
-    int m_xcliphi;
-    int m_ycliphi;
+    int                 m_xcliplo;
+    int                 m_ycliplo;
+    int                 m_xcliphi;
+    int                 m_ycliphi;
 
     WinEDA_PcbFrame*    m_mainWindow;
     BOARD*              m_pcb;
@@ -329,30 +329,27 @@ private:
 
 
     /**
-     * Function checkMarginToCircle
-     * @todo this translation is no good, fix this:
-     * calculates the distance from a circle (via or round end of track) to the
-     * segment of reference on the right hand side.
-     *
-     * @param cx The x coordinate of the circle's center
-     * @param cy The y coordinate of the circle's center
-     * @param radius A "keep out" radius centered over the circle
-     * @param length The length of the segment (i.e. coordinate of end)
+     * Helper function checkMarginToCircle
+     * Check the distance from a point to
+     * a segment. the segment is expected starting at 0,0, and on the X axis
+     * (used to test DRC between a segment and a round pad, via or round end of a track
+     * @param aCentre The coordinate of the circle's center
+     * @param aRadius A "keep out" radius centered over the circle
+     * @param aLength The length of the segment (i.e. coordinate of end, becuase it is on the X axis)
      * @return bool - true if distance >= radius, else
-     *                false when distance < radius
+     *                false when distance < aRadius
      */
-    static bool checkMarginToCircle( int cx, int cy, int radius, int length );
+    static bool checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength );
 
 
     /**
      * Function checkLine
-     * tests to see if one track is in contact with another track.
-     *
-     * Cette routine controle si la ligne (x1,y1 x2,y2) a une partie s'inscrivant
-     * dans le cadre (xcliplo,ycliplo xcliphi,ycliphi) (variables globales,
-     * locales a ce fichier)
+     * (helper function used in drc calculations to see if one track is in contact with another track).
+     * Test if a line intersects a bounding box (a rectangle)
+     * The rectangle is defined by m_xcliplo, m_ycliplo and m_xcliphi, m_ycliphi
+     * return true if the line from aSegStart to aSegEnd is outside the bounding box
      */
-    bool        checkLine( int x1, int y1, int x2, int y2 );
+    bool        checkLine( wxPoint aSegStart, wxPoint aSegEnd );
 
     //-----</single tests>---------------------------------------------
 

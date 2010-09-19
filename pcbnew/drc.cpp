@@ -55,13 +55,13 @@ void DRC::ShowDialog()
 
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
                               m_pcb->GetBoardDesignSettings()->m_TrackMinWidth,
-                              m_mainWindow->m_InternalUnits );;
+                              m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
                               m_pcb->GetBoardDesignSettings()->m_ViasMinSize,
-                              m_mainWindow->m_InternalUnits );;
+                              m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
                               m_pcb->GetBoardDesignSettings()->m_MicroViasMinSize,
-                              m_mainWindow->m_InternalUnits );;
+                              m_mainWindow->m_InternalUnits );
 
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
         m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );
@@ -557,7 +557,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 /***********************************************************************/
 {
     TRACK*    track;
-    int       dx, dy;           // utilise pour calcul des dim x et dim y des segments
+    wxPoint   delta;           // lenght on X and Y axis of segments
     int       layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
@@ -569,8 +569,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
      */
     wxPoint origin = aRefSeg->m_Start;  // origin will be the origin of other coordinates
 
-    m_segmEnd.x = dx = aRefSeg->m_End.x - origin.x;
-    m_segmEnd.y = dy = aRefSeg->m_End.y - origin.y;
+    m_segmEnd = delta = aRefSeg->m_End - origin;
 
     layerMask    = aRefSeg->ReturnMaskLayer();
     net_code_ref = aRefSeg->GetNet();
@@ -612,7 +611,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
-        // and **only** one layer can be drilled
+        // and **only one layer** can be drilled
         if( aRefSeg->Shape() == VIA_MICROVIA )
         {
             int  layer1, layer2;
@@ -648,17 +647,17 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
     // for a non horizontal or vertical segment Compute the segment angle
     // in tenths of degrees and its length
-    if( dx || dy )
+    if( delta.x || delta.y )
     {
         // Compute the segment angle in 0,1 degrees
-        m_segmAngle = ArcTangente( dy, dx );
+        m_segmAngle = ArcTangente( delta.y, delta.x );
 
         // Compute the segment length: we build an equivalent rotated segment,
         // this segment is horizontal, therefore dx = length
-        RotatePoint( &dx, &dy, m_segmAngle );    // dx = length, dy = 0
+        RotatePoint( &delta, m_segmAngle );    // delta.x = length, delta.y = 0
     }
 
-    m_segmLength = dx;
+    m_segmLength = delta.x;
 
     /******************************************/
     /* Phase 1 : test DRC track to pads :     */
@@ -693,8 +692,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 dummypad.m_PadShape = pad->m_DrillShape;
                 dummypad.m_Orient   = pad->m_Orient;
                 dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
-                m_padToTestPos.x = dummypad.GetPosition().x - origin.x;
-                m_padToTestPos.y = dummypad.GetPosition().y - origin.y;
+                m_padToTestPos = dummypad.GetPosition() - origin;
 
                 if( !checkClearanceSegmToPad( &dummypad, aRefSeg->m_Width,
                                              netclass->GetClearance() ) )
@@ -715,8 +713,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // DRC for the pad
             shape_pos = pad->ReturnShapePos();
-            m_padToTestPos.x = shape_pos.x - origin.x;
-            m_padToTestPos.y = shape_pos.y - origin.y;
+            m_padToTestPos = shape_pos - origin;
 
             if( !checkClearanceSegmToPad( pad, aRefSeg->m_Width, aRefSeg->GetClearance( pad ) ) )
             {
@@ -737,10 +734,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     for( track = aStart;  track;  track = track->Next() )
     {
         // coord des extremites du segment teste dans le repere modifie
-        int x0;
-        int y0;
-        int xf;
-        int yf;
+        wxPoint segStartPoint;
+        wxPoint segEndPoint;
 
         // No problem if segments have the same net code:
         if( net_code_ref == track->GetNet() )
@@ -760,16 +755,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         {
             int angle = 0;  // angle du segment a tester;
 
-            dx = track->m_End.x - track->m_Start.x;
-            dy = track->m_End.y - track->m_Start.y;
-
-            x0 = aRefSeg->m_Start.x - track->m_Start.x;
-            y0 = aRefSeg->m_Start.y - track->m_Start.y;
+            delta = track->m_End - track->m_Start;
+            segStartPoint = aRefSeg->m_Start - track->m_Start;
 
             if( track->Type() == TYPE_VIA )
             {
                 // Test distance between two vias, i.e. two circles, trivial case
-                if( (int) hypot( x0, y0 ) < w_dist )
+                if( (int) hypot( segStartPoint.x, segStartPoint.y ) < w_dist )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_VIA_NEAR_VIA, m_currentMarker );
@@ -779,13 +771,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             else    // test via to segment
             {
                 // Compute l'angle
-                angle = ArcTangente( dy, dx );
+                angle = ArcTangente( delta.y, delta.x );
 
                 // Compute new coordinates ( the segment become horizontal)
-                RotatePoint( &dx, &dy, angle );
-                RotatePoint( &x0, &y0, angle );
+                RotatePoint( &delta, angle );
+                RotatePoint( &segStartPoint, angle );
 
-                if( !checkMarginToCircle( x0, y0, w_dist, dx ) )
+                if( !checkMarginToCircle( segStartPoint, w_dist, delta.x ) )
                 {
                     m_currentMarker = fillMarker( track, aRefSeg,
                                                   DRCE_VIA_NEAR_TRACK, m_currentMarker );
@@ -795,22 +787,19 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             continue;
         }
 
-        /* We compute x0,y0, xf,yf = starting and ending point coordinates for
+        /* We compute segStartPoint.x,segStartPoint.y, segEndPoint.x,segEndPoint.y = starting and ending point coordinates for
          * the segment to test in the new axis : the new X axis is the
          * reference segment.  We must translate and rotate the segment to test
          */
-        x0 = track->m_Start.x - origin.x;
-        y0 = track->m_Start.y - origin.y;
+        segStartPoint = track->m_Start - origin;
+        segEndPoint = track->m_End - origin;
 
-        xf = track->m_End.x - origin.x;
-        yf = track->m_End.y - origin.y;
-
-        RotatePoint( &x0, &y0, m_segmAngle );
-        RotatePoint( &xf, &yf, m_segmAngle );
+        RotatePoint( &segStartPoint, m_segmAngle );
+        RotatePoint( &segEndPoint, m_segmAngle );
 
         if( track->Type() == TYPE_VIA )
         {
-            if( checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
+            if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;
 
             m_currentMarker = fillMarker( aRefSeg, track,
@@ -822,40 +811,41 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
          *  the reference segment is Horizontal.
          *  3 cases : the segment to test can be parallel, perpendicular or have an other direction
          */
-        if( y0 == yf ) // parallel segments
+        if( segStartPoint.y == segEndPoint.y ) // parallel segments
         {
-            if( abs( y0 ) >= w_dist )
+            if( abs( segStartPoint.y ) >= w_dist )
                 continue;
 
-            if( x0 > xf )
-                EXCHG( x0, xf );                                    /* pour que x0 <= xf */
+            // Ensure segStartPoint.x <= segEndPoint.x
+            if( segStartPoint.x > segEndPoint.x )
+                EXCHG( segStartPoint.x, segEndPoint.x );
 
-            if( x0 > (-w_dist) && x0 < (m_segmLength + w_dist) )    /* possible error drc */
+            if( segStartPoint.x > (-w_dist) && segStartPoint.x < (m_segmLength + w_dist) )    /* possible error drc */
             {
-                /* Fine test : we consider the rounded shape of the ends */
-                if( x0 >= 0 && x0 <= m_segmLength )
+                // Fine test : we consider the rounded shape of each end of the track segment:
+                if( segStartPoint.x >= 0 && segStartPoint.x <= m_segmLength )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_TRACK_ENDS1, m_currentMarker );
                     return false;
                 }
-                if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
+                if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_TRACK_ENDS2, m_currentMarker );
                     return false;
                 }
             }
-            if( xf > (-w_dist) && xf < (m_segmLength + w_dist) )
+            if( segEndPoint.x > (-w_dist) && segEndPoint.x < (m_segmLength + w_dist) )
             {
                 /* Fine test : we consider the rounded shape of the ends */
-                if( xf >= 0 && xf <= m_segmLength )
+                if( segEndPoint.x >= 0 && segEndPoint.x <= m_segmLength )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_TRACK_ENDS3, m_currentMarker );
                     return false;
                 }
-                if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
+                if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_TRACK_ENDS4, m_currentMarker );
@@ -863,22 +853,22 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 }
             }
 
-            if( x0 <=0 && xf >= 0 )
+            if( segStartPoint.x <=0 && segEndPoint.x >= 0 )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
                                               DRCE_TRACK_UNKNOWN1, m_currentMarker );
                 return false;
             }
         }
-        else if( x0 == xf ) // perpendicular segments
+        else if( segStartPoint.x == segEndPoint.x ) // perpendicular segments
         {
-            if( ( x0 <= (-w_dist) ) || ( x0 >= (m_segmLength + w_dist) ) )
+            if( ( segStartPoint.x <= (-w_dist) ) || ( segStartPoint.x >= (m_segmLength + w_dist) ) )
                 continue;
 
             // Test if segments are crossing
-            if( y0 > yf )
-                EXCHG( y0, yf );
-            if( (y0 < 0) && (yf > 0) )
+            if( segStartPoint.y > segEndPoint.y )
+                EXCHG( segStartPoint.y, segEndPoint.y );
+            if( (segStartPoint.y < 0) && (segEndPoint.y > 0) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
                                               DRCE_TRACKS_CROSSING, m_currentMarker );
@@ -886,13 +876,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             }
 
             // At this point the drc error is due to an end near a reference segm end
-            if( !checkMarginToCircle( x0, y0, w_dist, m_segmLength ) )
+            if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
                                               DRCE_ENDS_PROBLEM1, m_currentMarker );
                 return false;
             }
-            if( !checkMarginToCircle( xf, yf, w_dist, m_segmLength ) )
+            if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
                                               DRCE_ENDS_PROBLEM2, m_currentMarker );
@@ -910,7 +900,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
             // A fine test is needed because a serment is not exactly a
             // rectangle, it has rounded ends
-            if( !checkLine( x0, y0, xf, yf ) )
+            if( !checkLine( segStartPoint, segEndPoint ) )
             {
                 /* 2eme passe : the track has rounded ends.
                  * we must a fine test for each rounded end and the
@@ -920,7 +910,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 m_xcliplo = 0;
                 m_xcliphi = m_segmLength;
 
-                if( !checkLine( x0, y0, xf, yf ) )
+                if( !checkLine( segStartPoint, segEndPoint ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
                                                   DRCE_ENDS_PROBLEM3, m_currentMarker );
@@ -929,39 +919,31 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 else    // The drc error is due to the starting or the ending point of the reference segment
                 {
                     // Test the starting and the ending point
-                    int angle, rx0, ry0, rxf, ryf;
-                    x0 = track->m_Start.x;
-                    y0 = track->m_Start.y;
-
-                    xf = track->m_End.x;
-                    yf = track->m_End.y;
-
-                    dx = xf - x0;
-                    dy = yf - y0;
+                    segStartPoint = track->m_Start;
+                    segEndPoint = track->m_End;
+                    delta = segEndPoint - segStartPoint;
 
                     /* Compute the segment orientation (angle) en 0,1 degre */
-                    angle = ArcTangente( dy, dx );
+                    int angle = ArcTangente( delta.y, delta.x );
 
-                    /* Compute the segment lenght: dx = longueur */
-                    RotatePoint( &dx, &dy, angle );
+                    // Compute the segment lenght: delta.x = lenght after rotation
+                    RotatePoint( &delta, angle );
 
                     /* Comute the reference segment coordinates relatives to a
                      *  X axis = current tested segment
                      */
-                    rx0 = aRefSeg->m_Start.x - x0;
-                    ry0 = aRefSeg->m_Start.y - y0;
-                    rxf = aRefSeg->m_End.x - x0;
-                    ryf = aRefSeg->m_End.y - y0;
+                    wxPoint relStartPos = aRefSeg->m_Start - segStartPoint;
+                    wxPoint relEndPos = aRefSeg->m_End - segStartPoint;
 
-                    RotatePoint( &rx0, &ry0, angle );
-                    RotatePoint( &rxf, &ryf, angle );
-                    if( !checkMarginToCircle( rx0, ry0, w_dist, dx ) )
+                    RotatePoint( &relStartPos, angle );
+                    RotatePoint( &relEndPos, angle );
+                    if( !checkMarginToCircle( relStartPos, w_dist, delta.x ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
                                                       DRCE_ENDS_PROBLEM4, m_currentMarker );
                         return false;
                     }
-                    if( !checkMarginToCircle( rxf, ryf, w_dist, dx ) )
+                    if( !checkMarginToCircle( relEndPos, w_dist, delta.x ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
                                                       DRCE_ENDS_PROBLEM5, m_currentMarker );
@@ -987,7 +969,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
     // pad to pad hole DRC, using pad to pad DRC test.
     // this dummy pad is a circle or an oval.
     static D_PAD dummypad( (MODULE*) NULL );
-    dummypad.m_Masque_Layer   = ALL_CU_LAYERS;  // za hole is on all layers
+    dummypad.m_Masque_Layer   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
     dummypad.m_LocalClearance = 1;   /* Use the minimal local clerance value for the dummy pad
                                       *  the clearance of the active pad will be used
                                       *  as minimum distance to a hole
@@ -1333,7 +1315,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 {
     wxSize padHalfsize;         // half the dimension of the pad
     int    orient;
-    int    x0, y0, xf, yf;
+    wxPoint    startPoint, endPoint;
     int    seuil;
     int    deltay;
 
@@ -1347,9 +1329,8 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         /* Easy case: just test the distance between segment and pad centre
          * calculate pad coordinates in the X,Y axis with X axis = segment to test
          */
-        RotatePoint( &m_padToTestPos.x, &m_padToTestPos.y, m_segmAngle );
-        return checkMarginToCircle( m_padToTestPos.x, m_padToTestPos.y,
-                                    seuil + padHalfsize.x, m_segmLength );
+        RotatePoint( &m_padToTestPos, m_segmAngle );
+        return checkMarginToCircle( m_padToTestPos, seuil + padHalfsize.x, m_segmLength );
     }
     else
     {
@@ -1363,17 +1344,15 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
         m_ycliphi = m_padToTestPos.y + seuil + padHalfsize.y;
 
-        x0 = y0 = 0;
-
-        xf = m_segmEnd.x;
-        yf = m_segmEnd.y;
+        startPoint.x = startPoint.y = 0;
+        endPoint = m_segmEnd;
 
         orient = aPad->m_Orient;
 
-        RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, -orient );
-        RotatePoint( &xf, &yf, m_padToTestPos.x, m_padToTestPos.y, -orient );
+        RotatePoint( &startPoint, m_padToTestPos, -orient );
+        RotatePoint( &endPoint, m_padToTestPos, -orient );
 
-        if( checkLine( x0, y0, xf, yf ) )
+        if( checkLine( startPoint, endPoint ) )
             return true;
 
         /* segment intersects the bounding box. But there is not always a DRC error.
@@ -1405,28 +1384,28 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             m_ycliplo = m_padToTestPos.y - segmHalfWidth - deltay;
             m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
             m_ycliphi = m_padToTestPos.y + segmHalfWidth + deltay;
-            if( !checkLine( x0, y0, xf, yf ) )
+            if( !checkLine( startPoint, endPoint ) )
                 return false;
 
             // test the first circle
-            x0 = m_padToTestPos.x;     // x0,y0 = centre of the upper circle of the oval shape
-            y0 = m_padToTestPos.y + deltay;
+            startPoint.x = m_padToTestPos.x;     // segStartPoint.x,segStartPoint.y = centre of the upper circle of the oval shape
+            startPoint.y = m_padToTestPos.y + deltay;
 
             // Calculate the actual position of the circle, given the pad orientation:
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
+            RotatePoint( &startPoint, m_padToTestPos, orient );
 
             // Calculate the actual position of the circle in the new X,Y axis:
-            RotatePoint( &x0, &y0, m_segmAngle );
-            if( !checkMarginToCircle( x0, y0, padHalfsize.x + seuil, m_segmLength ) )
+            RotatePoint( &startPoint, m_segmAngle );
+            if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
                 return false;
 
             // test the second circle
-            x0 = m_padToTestPos.x;     // x0,y0 = centre of the lower circle of the oval shape
-            y0 = m_padToTestPos.y - deltay;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
+            startPoint.x = m_padToTestPos.x;     // segStartPoint.x,segStartPoint.y = centre of the lower circle of the oval shape
+            startPoint.y = m_padToTestPos.y - deltay;
+            RotatePoint( &startPoint, m_padToTestPos, orient );
+            RotatePoint( &startPoint, m_segmAngle );
 
-            if( !checkMarginToCircle( x0, y0, padHalfsize.x + seuil, m_segmLength ) )
+            if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
                 return false;
             break;
 
@@ -1437,7 +1416,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             m_xcliphi = m_padToTestPos.x + padHalfsize.x + seuil;
             m_ycliphi = m_padToTestPos.y + padHalfsize.y;
 
-            if( !checkLine( x0, y0, xf, yf ) )
+            if( !checkLine( startPoint, endPoint ) )
             {
                 return false;
             }
@@ -1448,48 +1427,48 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
             m_xcliphi = m_padToTestPos.x + padHalfsize.x;
             m_ycliphi = m_padToTestPos.y + padHalfsize.y + seuil;
 
-            if( !checkLine( x0, y0, xf, yf ) )
+            if( !checkLine( startPoint, endPoint ) )
             {
                 return false;
             }
 
             /* test des 4 cercles ( surface d'solation autour des sommets */
             /* test du coin sup. gauche du pad */
-            x0 = m_padToTestPos.x - padHalfsize.x;
-            y0 = m_padToTestPos.y - padHalfsize.y;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
-            if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
+            startPoint.x = m_padToTestPos.x - padHalfsize.x;
+            startPoint.y = m_padToTestPos.y - padHalfsize.y;
+            RotatePoint( &startPoint, m_padToTestPos, orient );
+            RotatePoint( &startPoint, m_segmAngle );
+            if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             {
                 return false;
             }
 
             /* test du coin sup. droit du pad */
-            x0 = m_padToTestPos.x + padHalfsize.x;
-            y0 = m_padToTestPos.y - padHalfsize.y;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
-            if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
+            startPoint.x = m_padToTestPos.x + padHalfsize.x;
+            startPoint.y = m_padToTestPos.y - padHalfsize.y;
+            RotatePoint( &startPoint, m_padToTestPos, orient );
+            RotatePoint( &startPoint, m_segmAngle );
+            if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             {
                 return false;
             }
 
             /* test du coin inf. gauche du pad */
-            x0 = m_padToTestPos.x - padHalfsize.x;
-            y0 = m_padToTestPos.y + padHalfsize.y;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
-            if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
+            startPoint.x = m_padToTestPos.x - padHalfsize.x;
+            startPoint.y = m_padToTestPos.y + padHalfsize.y;
+            RotatePoint( &startPoint, m_padToTestPos, orient );
+            RotatePoint( &startPoint, m_segmAngle );
+            if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             {
                 return false;
             }
 
             /* test du coin inf. droit du pad */
-            x0 = m_padToTestPos.x + padHalfsize.x;
-            y0 = m_padToTestPos.y + padHalfsize.y;
-            RotatePoint( &x0, &y0, m_padToTestPos.x, m_padToTestPos.y, orient );
-            RotatePoint( &x0, &y0, m_segmAngle );
-            if( !checkMarginToCircle( x0, y0, seuil, m_segmLength ) )
+            startPoint.x = m_padToTestPos.x + padHalfsize.x;
+            startPoint.y = m_padToTestPos.y + padHalfsize.y;
+            RotatePoint( &startPoint, m_padToTestPos, orient );
+            RotatePoint( &startPoint, m_segmAngle );
+            if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             {
                 return false;
             }
@@ -1504,22 +1483,28 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 }
 
 
-/**********************************************************************/
-bool DRC::checkMarginToCircle( int cx, int cy, int radius, int longueur )
-/**********************************************************************/
+/**
+ * Helper function checkMarginToCircle
+ * Check the distance from a circle (round pad, via or round end of track) to
+ * a segment. the segment is expected starting at 0,0, and on the X axis
+ * return true if distance >= aRadius
+ */
+bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
 {
-    if( abs( cy ) > radius )
+    if( abs( aCentre.y ) > aRadius )     // trivial case
         return true;
 
-    if( (cx >= -radius ) && ( cx <= (longueur + radius) ) )
+    // Here, didstance between aCentre and X axis is < aRadius
+    if( (aCentre.x >= -aRadius ) && ( aCentre.x <= (aLength + aRadius) ) )
     {
-        if( (cx >= 0) && (cx <= longueur) )
-            return false;
+        if( (aCentre.x >= 0) && (aCentre.x <= aLength) )
+            return false;   // aCentre is between the starting point and the ending point of the segm
 
-        if( cx > longueur )
-            cx -= longueur;
+        if( aCentre.x > aLength )   // aCentre is after the ending point
+            aCentre.x -= aLength;   // move aCentre to the starting point of the segment
 
-        if( hypot( cx, cy ) < radius )
+        if( hypot( aCentre.x, aCentre.y ) < aRadius )
+            // distance between aCentre and the starting point or the ending point is < aRadius
             return false;
     }
 
@@ -1527,10 +1512,7 @@ bool DRC::checkMarginToCircle( int cx, int cy, int radius, int longueur )
 }
 
 
-/**********************************************/
-/* int Tst_Ligne(int x1,int y1,int x2,int y2) */
-/**********************************************/
-
+// Helper function used in checkLine::
 static inline int USCALE( unsigned arg, unsigned num, unsigned den )
 {
     int ii;
@@ -1540,107 +1522,109 @@ static inline int USCALE( unsigned arg, unsigned num, unsigned den )
 }
 
 
+/** Helper function checkLine
+ * Test if a line intersects a bounding box (a rectangle)
+ * The rectangle is defined by m_xcliplo, m_ycliplo and m_xcliphi, m_ycliphi
+ * return true if the line from aSegStart to aSegEnd is outside the bounding box
+ */
+bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
+{
 #define WHEN_OUTSIDE return true
 #define WHEN_INSIDE
-
-bool DRC::checkLine( int x1, int y1, int x2, int y2 )
-{
     int temp;
 
-    if( x1 > x2 )
-    {
-        EXCHG( x1, x2 );
-        EXCHG( y1, y2 );
-    }
-    if( (x2 < m_xcliplo) || (x1 > m_xcliphi) )
+    if( aSegStart.x > aSegEnd.x )
+        EXCHG( aSegStart, aSegEnd );
+
+    if( (aSegEnd.x < m_xcliplo) || (aSegStart.x > m_xcliphi) )
     {
         WHEN_OUTSIDE;
     }
-    if( y1 < y2 )
+    if( aSegStart.y < aSegEnd.y )
     {
-        if( (y2 < m_ycliplo) || (y1 > m_ycliphi) )
+        if( (aSegEnd.y < m_ycliplo) || (aSegStart.y > m_ycliphi) )
         {
             WHEN_OUTSIDE;
         }
-        if( y1 < m_ycliplo )
+        if( aSegStart.y < m_ycliplo )
         {
-            temp = USCALE( (x2 - x1), (m_ycliplo - y1), (y2 - y1) );
-            if( (x1 += temp) > m_xcliphi )
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegStart.y), (aSegEnd.y - aSegStart.y) );
+            if( (aSegStart.x += temp) > m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
-            y1 = m_ycliplo;
+            aSegStart.y = m_ycliplo;
             WHEN_INSIDE;
         }
-        if( y2 > m_ycliphi )
+        if( aSegEnd.y > m_ycliphi )
         {
-            temp = USCALE( (x2 - x1), (y2 - m_ycliphi), (y2 - y1) );
-            if( (x2 -= temp) < m_xcliplo )
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegEnd.y - m_ycliphi), (aSegEnd.y - aSegStart.y) );
+            if( (aSegEnd.x -= temp) < m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
-            y2 = m_ycliphi;
+            aSegEnd.y = m_ycliphi;
             WHEN_INSIDE;
         }
-        if( x1 < m_xcliplo )
+        if( aSegStart.x < m_xcliplo )
         {
-            temp = USCALE( (y2 - y1), (m_xcliplo - x1), (x2 - x1) );
-            y1  += temp;
-            x1   = m_xcliplo;
+            temp = USCALE( (aSegEnd.y - aSegStart.y), (m_xcliplo - aSegStart.x), (aSegEnd.x - aSegStart.x) );
+            aSegStart.y  += temp;
+            aSegStart.x   = m_xcliplo;
             WHEN_INSIDE;
         }
-        if( x2 > m_xcliphi )
+        if( aSegEnd.x > m_xcliphi )
         {
-            temp = USCALE( (y2 - y1), (x2 - m_xcliphi), (x2 - x1) );
-            y2  -= temp;
-            x2   = m_xcliphi;
+            temp = USCALE( (aSegEnd.y - aSegStart.y), (aSegEnd.x - m_xcliphi), (aSegEnd.x - aSegStart.x) );
+            aSegEnd.y  -= temp;
+            aSegEnd.x   = m_xcliphi;
             WHEN_INSIDE;
         }
     }
     else
     {
-        if( (y1 < m_ycliplo) || (y2 > m_ycliphi) )
+        if( (aSegStart.y < m_ycliplo) || (aSegEnd.y > m_ycliphi) )
         {
             WHEN_OUTSIDE;
         }
-        if( y1 > m_ycliphi )
+        if( aSegStart.y > m_ycliphi )
         {
-            temp = USCALE( (x2 - x1), (y1 - m_ycliphi), (y1 - y2) );
-            if( (x1 += temp) > m_xcliphi )
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegStart.y - m_ycliphi), (aSegStart.y - aSegEnd.y) );
+            if( (aSegStart.x += temp) > m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
-            y1 = m_ycliphi;
+            aSegStart.y = m_ycliphi;
             WHEN_INSIDE;
         }
-        if( y2 < m_ycliplo )
+        if( aSegEnd.y < m_ycliplo )
         {
-            temp = USCALE( (x2 - x1), (m_ycliplo - y2), (y1 - y2) );
-            if( (x2 -= temp) < m_xcliplo )
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegEnd.y), (aSegStart.y - aSegEnd.y) );
+            if( (aSegEnd.x -= temp) < m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
-            y2 = m_ycliplo;
+            aSegEnd.y = m_ycliplo;
             WHEN_INSIDE;
         }
-        if( x1 < m_xcliplo )
+        if( aSegStart.x < m_xcliplo )
         {
-            temp = USCALE( (y1 - y2), (m_xcliplo - x1), (x2 - x1) );
-            y1  -= temp;
-            x1   = m_xcliplo;
+            temp = USCALE( (aSegStart.y - aSegEnd.y), (m_xcliplo - aSegStart.x), (aSegEnd.x - aSegStart.x) );
+            aSegStart.y  -= temp;
+            aSegStart.x   = m_xcliplo;
             WHEN_INSIDE;
         }
-        if( x2 > m_xcliphi )
+        if( aSegEnd.x > m_xcliphi )
         {
-            temp = USCALE( (y1 - y2), (x2 - m_xcliphi), (x2 - x1) );
-            y2  += temp;
-            x2   = m_xcliphi;
+            temp = USCALE( (aSegStart.y - aSegEnd.y), (aSegEnd.x - m_xcliphi), (aSegEnd.x - aSegStart.x) );
+            aSegEnd.y  += temp;
+            aSegEnd.x   = m_xcliphi;
             WHEN_INSIDE;
         }
     }
 
-    if( ( (x2 + x1) / 2 <= m_xcliphi ) && ( (x2 + x1) / 2 >= m_xcliplo ) \
-       && ( (y2 + y1) / 2 <= m_ycliphi ) && ( (y2 + y1) / 2 >= m_ycliplo ) )
+    if( ( (aSegEnd.x + aSegStart.x) / 2 <= m_xcliphi ) && ( (aSegEnd.x + aSegStart.x) / 2 >= m_xcliplo ) \
+       && ( (aSegEnd.y + aSegStart.y) / 2 <= m_ycliphi ) && ( (aSegEnd.y + aSegStart.y) / 2 >= m_ycliplo ) )
     {
         return false;
     }
