@@ -281,9 +281,4 @@ void WinEDA_PcbFrame::SetToolbars()
 
     PrepareLayerIndicator();
     DisplayUnitsMsg();
-
-#ifdef __WXMAC__
-    // Needed to avoid cursor tail
-    this->Refresh(); 
-#endif
 }

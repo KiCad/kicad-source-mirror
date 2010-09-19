@@ -361,6 +361,10 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
         if( DrawPanel->ManageCurseur )
         {
+#ifdef __WXMAC__
+            DrawPanel->Refresh();
+            DrawPanel->Update();
+#endif
             DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
         }
     }

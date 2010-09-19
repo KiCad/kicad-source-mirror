@@ -117,6 +117,11 @@ void WinEDA_DrawPanel::DrawCursor( wxDC* aDC, int aColor )
     if( m_CursorLevel != 0 || aDC == NULL )
         return;
 
+#ifdef __WXMAC__
+    SetCursor(*wxCROSS_CURSOR);
+    return;
+#endif
+
     wxPoint Cursor = GetScreen()->m_Curseur;
 
     GRSetDrawMode( aDC, GR_XOR );
@@ -812,16 +817,32 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     // Under linux, to be tested (could be depend on linux versions
     // so perhaps could be necessary to set this option at run time.
 
-#if defined( __WXMAC__ )
-    wxWindowUpdateLocker( this );   // under macOSX: drawings are faster with this
-#endif
-
-
     /* The bitmap grid drawing code below cannot be used when wxDC scaling is used
      * as it does not scale the grid bitmap properly.  This needs to be fixed.
      */
 
-#if defined( __WXMAC__ ) || defined( USE_WX_ZOOM )
+#if defined( __WXMAC__ ) && !defined( USE_WX_ZOOM )
+    // Use a pixel based draw to display grid
+    // When is not used USE_WX_ZOOM
+    for( ii = 0; ; ii++ )
+    {
+        xg = wxRound( ii * screen_grid_size.x );
+        if( xg > size.x )
+            break;
+        xpos = org.x + xg;
+        xpos = GRMapX( xpos );
+        for( jj = 0; ; jj++ )
+        {
+            yg = wxRound( jj * screen_grid_size.y );
+            if( yg > size.y )
+                break;
+            ypos = org.y + yg;
+            DC->DrawPoint( xpos, GRMapY( ypos ) );
+        }
+    }
+#endif
+
+#if defined( USE_WX_ZOOM )
     // Use a pixel based draw to display grid
     // There is a lot of calls, so the cost is hight
     // and grid is slowly drawn on some platforms

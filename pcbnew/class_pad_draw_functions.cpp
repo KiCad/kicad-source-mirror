@@ -113,11 +113,6 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
     else
         drawInfo.m_ShowPadFilled = false;
 
-#if defined(PCBNEW) || defined(__WXMAC__)
-    if( m_Flags & IS_MOVED || !DisplayOpt.DisplayPadFill )
-        drawInfo.m_ShowPadFilled = false;
-#endif
-
     if( m_Masque_Layer & LAYER_FRONT )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
