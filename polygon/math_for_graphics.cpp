@@ -1,4 +1,4 @@
-// math for graphics utility routines, from FreePCB
+// math for graphics utility routines and RC, from FreePCB
 
 #include <vector>
 
@@ -13,13 +13,14 @@
 using namespace std;
 
 
-// test for hit on line segment
-// i.e. cursor within a given distance from segment
-// enter with:	x,y = cursor coords
-//				(xi,yi) and (xf,yf) are the end-points of the line segment
-//				dist = maximum distance for hit
-//
-int TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
+/** function TestLineHit
+ * test for hit on line segment i.e. a point within a given distance from segment
+ * @param x, y = cursor coords
+ * @param xi,yi and xf,yf = the end-points of the line segment
+ * @param dist = maximum distance for hit
+ * return true if dist < distance between the point and the segment
+ */
+bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
 {
 	double dd;
 
@@ -29,14 +30,14 @@ int TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
 		// vertical segment
 		dd = fabs( (double)(x-xi) );
 		if( dd<dist && ( (yf>yi && y<yf && y>yi) || (yf<yi && y>yf && y<yi) ) )
-			return 1;
+			return true;
 	}
 	else if( yf==yi )
 	{
 		// horizontal segment
 		dd = fabs( (double)(y-yi) );
 		if( dd<dist && ( (xf>xi && x<xf && x>xi) || (xf<xi && x>xf && x<xi) ) )
-			return 1;
+			return true;
 	}
 	else
 	{
@@ -62,10 +63,10 @@ int TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
 		{
 			// line segment more horizontal than vertical
 			if( dd<dist && ( (xf>xi && xp<xf && xp>xi) || (xf<xi && xp>xf && xp<xi) ) )
-				return 1;
+				return true;
 		}
 	}
-	return 0;	// no hit
+	return false;	// no hit
 }
 
 
@@ -482,12 +483,12 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
 	return 1;
 }
 
-// Test for intersection of line segments
-// If lines are parallel, returns false
-// If true, returns intersection coords in x, y
-// if false, returns min. distance in dist (may be 0.0 if parallel)
-// and coords on nearest point in one of the segments in (x,y)
-//
+/** function TestForIntersectionOfStraightLineSegments
+ * Test for intersection of line segments
+ * If lines are parallel, returns false
+ * If true, returns also intersection coords in x, y
+ * if false, returns min. distance in dist (may be 0.0 if parallel)
+ */
 bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y1f,
 									   int x2i, int y2i, int x2f, int y2f,
 									   int * x, int * y, double * d )
