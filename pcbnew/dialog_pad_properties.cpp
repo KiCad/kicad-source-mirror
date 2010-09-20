@@ -195,8 +195,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 {
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
-    int      tmp;
-    int      internalUnits = m_Parent->m_InternalUnits;
+    int internalUnits = m_Parent->m_InternalUnits;
     wxString msg;
     m_isFlipped = false;
     if( m_CurrentPad )
@@ -298,7 +297,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     SetPadLayersList( m_dummyPad->m_Masque_Layer );
 
     msg.Clear();
-    msg << tmp;
+    msg << m_dummyPad->m_Orient;
     m_PadOrientCtrl->SetValue( msg );
 
     // Pad Orient
@@ -350,11 +349,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadOrientCtrl->SetValue( msg );
 
     // Selection du type
-    tmp = m_dummyPad->m_Attribut;
     m_PadType->SetSelection( 0 );
     for( int ii = 0; ii < NBTYPES; ii++ )
     {
-        if( CodeType[ii] == tmp )
+        if( CodeType[ii] == m_dummyPad->m_Attribut )
         {
             m_PadType->SetSelection( ii );
             break;

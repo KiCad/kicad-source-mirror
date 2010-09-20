@@ -96,6 +96,7 @@ set(PCBNEW_SRCS
     dist.cpp
     dragsegm.cpp
     drc.cpp
+    drc_clearance_test_functions.cpp
     drc_marker_functions.cpp
     edgemod.cpp
     edit.cpp

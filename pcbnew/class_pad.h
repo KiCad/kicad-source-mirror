@@ -148,7 +148,7 @@ public:
      * Function GetShape
      * @return the shape of this pad.
      */
-    int GetShape() { return m_PadShape & 0xFF;  }
+    int GetShape() const { return m_PadShape & 0xFF;  }
 
     /**
      * Function GetPosition
@@ -239,14 +239,26 @@ public:
     void          DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
     /** function BuildPadPolygon
-     * Has meaning only for polygonal pads (trapeziod and rectangular)
+     * Has meaning only for polygonal pads (trapezoid and rectangular)
      * Build the Corner list of the polygonal shape,
      * depending on shape, extra size (clearance ...) and orientation
      * @param aCoord[4] = a buffer to fill.
      * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
-    void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation );
+    void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
+
+    /** function BuildSegmentFromOvalShape
+     * Has meaning only for OVAL (and ROUND) pads
+     * Build an equivalent segment having the same shape as the OVAL shape,
+     * Useful in draw function and in DRC and HitTest functions,
+     *  because segments are already well handled by track tests
+     * @param aSegStart = the starting point of the equivalent segment, relative to the shape position.
+     * @param aSegEnd = the ending point of the equivalent segment, relative to the shape position
+     * @param aRotation = full rotation of the segment
+     * @return the width of the segment
+     */
+    int          BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const;
 
     // others
     void          SetPadName( const wxString& name );       // Change pad name

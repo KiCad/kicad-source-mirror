@@ -44,21 +44,17 @@ bool DIALOG_DRC_CONTROL::Show( bool show )
 {
     bool ret;
 
-    D(printf("%s %d\n", __func__, show );)
-
     if( show )
     {
         ret = DIALOG_DRC_CONTROL_BASE::Show( show );
 
         if( s_LastPos.x != -1 )
         {
-            D(printf("setting window pos to (%d,%d)\n", s_LastPos.x, s_LastPos.y );)
-            //SetPosition( s_LastPos );
             SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
         }
         else
         {
-            D(printf("not setting window pos (%d,%d)\n", s_LastPos.x, s_LastPos.y );)
+            // Do nothing: last position not yet saved.
         }
     }
     else
@@ -66,9 +62,6 @@ bool DIALOG_DRC_CONTROL::Show( bool show )
         // Save the dialog's position before hiding
         s_LastPos  = GetPosition();
         s_LastSize = GetSize();
-
-        D(printf("saving window pos as (%d,%d)\n", s_LastPos.x, s_LastPos.y );)
-
         ret = DIALOG_DRC_CONTROL_BASE::Show( show );
     }
 

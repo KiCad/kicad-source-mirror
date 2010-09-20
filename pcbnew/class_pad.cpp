@@ -764,17 +764,15 @@ bool D_PAD::IsOnLayer( int aLayer ) const
  */
 bool D_PAD::HitTest( const wxPoint& ref_pos )
 {
-    int     deltaX, deltaY;
     int     dx, dy;
     double  dist;
 
     wxPoint shape_pos = ReturnShapePos();
 
-    deltaX = ref_pos.x - shape_pos.x;
-    deltaY = ref_pos.y - shape_pos.y;
+    wxPoint delta = ref_pos - shape_pos;
 
     /* Quick test: a test point must be inside the circle. */
-    if( ( abs( deltaX ) > m_ShapeMaxRadius ) || ( abs( deltaY ) > m_ShapeMaxRadius ) )
+    if( ( abs( delta.x ) > m_ShapeMaxRadius ) || ( abs( delta.y ) > m_ShapeMaxRadius ) )
         return false;
 
     dx = m_Size.x >> 1; // dx also is the radius for rounded pads
@@ -783,7 +781,7 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
     switch( m_PadShape & 0x7F )
     {
     case PAD_CIRCLE:
-        dist = hypot( deltaX, deltaY );
+        dist = hypot( delta.x, delta.y );
         if( wxRound( dist ) <= dx )
             return true;
         break;
@@ -792,22 +790,13 @@ bool D_PAD::HitTest( const wxPoint& ref_pos )
     {
         wxPoint poly[4];
         BuildPadPolygon( poly, wxSize(0,0), 0 );
-        // Build the same polygon with CPolyPt corners,
-        // to use TestPointInsidePolygon
-        static std::vector <CPolyPt> polysList;     // Is static to avoid memory reallocation
-        polysList.clear();
-        for(int ii= 0; ii < 4; ii++ )
-        {
-            CPolyPt corner(poly[ii].x, poly[ii].y);
-            polysList.push_back(corner);
-        }
-        RotatePoint( &deltaX, &deltaY, -m_Orient );
-        return TestPointInsidePolygon( polysList, 0, 3, deltaX, deltaY );
+        RotatePoint( &delta, -m_Orient );
+        return TestPointInsidePolygon( poly, 4, delta );
     }
 
     default:
-        RotatePoint( &deltaX, &deltaY, -m_Orient );
-        if( (abs( deltaX ) <= dx ) && (abs( deltaY ) <= dy) )
+        RotatePoint( &delta, -m_Orient );
+        if( (abs( delta.x ) <= dx ) && (abs( delta.y ) <= dy) )
             return true;
         break;
     }

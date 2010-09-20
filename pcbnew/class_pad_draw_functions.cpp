@@ -357,9 +357,9 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
 void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
-    int     rotdx,
-            delta_cx, delta_cy;
+    int     delta_cx, delta_cy;
     int     angle = m_Orient;
+    int     seg_width;
 
     GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
@@ -392,44 +392,30 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         break;
 
     case PAD_OVAL:
-        if( halfsize.x > halfsize.y )       /* horizontal */
-        {
-            delta_cx = halfsize.x - halfsize.y;
-            delta_cy = 0;
-            rotdx    = m_Size.y + ( aDrawInfo.m_Mask_margin.y * 2 );
-        }
-        else                /* vertical */
-        {
-            delta_cx = 0;
-            delta_cy = halfsize.y - halfsize.x;
-            rotdx    = m_Size.x + ( aDrawInfo.m_Mask_margin.x * 2 );
-        }
-        RotatePoint( &delta_cx, &delta_cy, angle );
-
+    {
+        wxPoint segStart, segEnd;
+        seg_width = BuildSegmentFromOvalShape(segStart, segEnd, angle);
+        segStart += shape_pos;
+        segEnd += shape_pos;
         if( aDrawInfo.m_ShowPadFilled )
         {
-            GRFillCSegm( aClipBox, aDC,
-                         shape_pos.x + delta_cx, shape_pos.y + delta_cy,
-                         shape_pos.x - delta_cx, shape_pos.y - delta_cy,
-                         rotdx, aDrawInfo.m_Color );
+            GRFillCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
+                         seg_width, aDrawInfo.m_Color );
         }
         else
         {
-            GRCSegm( aClipBox, aDC,
-                     shape_pos.x + delta_cx, shape_pos.y + delta_cy,
-                     shape_pos.x - delta_cx, shape_pos.y - delta_cy,
-                     rotdx, m_PadSketchModePenSize, aDrawInfo.m_Color );
+            GRCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
+                     seg_width, m_PadSketchModePenSize, aDrawInfo.m_Color );
         }
 
         /* Draw the isolation line. */
         if( aDrawInfo.m_PadClearance )
         {
-            rotdx = rotdx + 2 * aDrawInfo.m_PadClearance;
-
-            GRCSegm( aClipBox, aDC, shape_pos.x + delta_cx, shape_pos.y + delta_cy,
-                     shape_pos.x - delta_cx, shape_pos.y - delta_cy,
-                     rotdx, aDrawInfo.m_Color );
+            seg_width += 2 * aDrawInfo.m_PadClearance;
+            GRCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
+                     seg_width, aDrawInfo.m_Color );
         }
+    }
         break;
 
     case PAD_RECT:
@@ -486,9 +472,6 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 #else
             if( aDrawInfo.m_Scale * hole > 1 ) /* draw hole if its size is enough */
 #endif
-
-
-
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 aDrawInfo.m_Color, aDrawInfo.m_HoleColor );
             break;
@@ -501,18 +484,18 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             {
                 delta_cx = halfsize.x - halfsize.y;
                 delta_cy = 0;
-                rotdx    = m_Drill.y;
+                seg_width    = m_Drill.y;
             }
             else                         /* vertical */
             {
                 delta_cx = 0;
                 delta_cy = halfsize.y - halfsize.x;
-                rotdx    = m_Drill.x;
+                seg_width    = m_Drill.x;
             }
             RotatePoint( &delta_cx, &delta_cy, angle );
 
             GRFillCSegm( aClipBox, aDC, holepos.x + delta_cx, holepos.y + delta_cy,
-                         holepos.x - delta_cx, holepos.y - delta_cy, rotdx,
+                         holepos.x - delta_cx, holepos.y - delta_cy, seg_width,
                          aDrawInfo.m_HoleColor );
             break;
 
@@ -637,6 +620,42 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
 }
 
+/** function BuildSegmentFromOvalShape
+ * Has meaning only for OVAL (and ROUND) pads.
+ * Build an equivalent segment having the same shape as the OVAL shape,
+ * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
+ * aRotation is the asked rotation of the segment (usually m_Orient)
+ */
+int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const
+{
+    int width;
+    if( m_Size.y < m_Size.x )     // Build an horizontal equiv segment
+    {
+        int delta   = ( m_Size.x - m_Size.y ) / 2;
+        aSegStart.x = -delta;
+        aSegStart.y = 0;
+        aSegEnd.x = delta;
+        aSegEnd.y = 0;
+        width = m_Size.y;
+    }
+    else        // Vertical oval: build a vertical equiv segment
+    {
+        int delta   = ( m_Size.y -m_Size.x ) / 2;
+        aSegStart.x = 0;
+        aSegStart.y = -delta;
+        aSegEnd.x = 0;
+        aSegEnd.y = delta;
+        width = m_Size.x;
+    }
+
+    if( aRotation )
+    {
+        RotatePoint( &aSegStart, aRotation);
+        RotatePoint( &aSegEnd, aRotation);
+    }
+
+    return width;
+}
 
 /** function BuildPadPolygon
  * Has meaning only for polygonal pads (trapeziod and rectangular)
@@ -646,7 +665,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
  * @param aRotation = full rotation of the polygon, usually m_Orient
  */
-void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation )
+void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const
 {
     if( (GetShape() != PAD_RECT) && (GetShape() != PAD_TRAPEZOID) )
         return;
