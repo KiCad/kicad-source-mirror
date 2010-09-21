@@ -989,7 +989,7 @@ void GRSCSegm( EDA_Rect* ClipBox,
     long dx, dy, dwx2, dwy2;
     long sx1, sy1, ex1, ey1;
     long sx2, sy2, ex2, ey2;
-    bool swap_ends = FALSE;
+    bool swap_ends = false;
 
 
     GRLastMoveToX = x2;
@@ -1025,7 +1025,7 @@ void GRSCSegm( EDA_Rect* ClipBox,
     }
 
     GRSetColorPen( DC, Color, aPenSize );
-    GRSetBrush( DC, Color, FALSE );
+    GRSetBrush( DC, Color, false );
 
     radius = (width + 1) >> 1;
 
@@ -1085,15 +1085,17 @@ void GRSCSegm( EDA_Rect* ClipBox,
             {
                 if( dx <= 0 )
                 {
-                    dwx = -dwx; swap_ends = TRUE;
+                    dwx = -dwx; swap_ends = true;
                 }
             }
-            else
+            else    // dy >= 0
             {
                 if( dx > 0 )
                 {
-                    dwy = -dwy; swap_ends = TRUE;
+                    dwy = -dwy; swap_ends = true;
                 }
+                else
+                    swap_ends = true;
             }
         }
         else
@@ -1160,15 +1162,15 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, wxPoint Points[] )
     ycliphi = ClipBox->GetBottom();
 
     if( Xmax < xcliplo )
-        return FALSE;
+        return false;
     if( Xmin > xcliphi )
-        return FALSE;
+        return false;
     if( Ymax < ycliplo )
-        return FALSE;
+        return false;
     if( Ymin > ycliphi )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1406,7 +1408,7 @@ void GRSCircle( EDA_Rect* ClipBox,
     }
 
     GRSetColorPen( DC, Color, width );
-    GRSetBrush( DC, Color, FALSE );
+    GRSetBrush( DC, Color, false );
     DC->DrawEllipse( xc - r, yc - r, r + r, r + r );
 }
 
@@ -1625,7 +1627,7 @@ void GRArc( EDA_Rect* ClipBox, wxDC* DC, int xc, int yc, int StAngle,
     RotatePoint( &x2, &y2, StAngle );
 
     GRSetColorPen( DC, Color );
-    GRSetBrush( DC, Color, FALSE );
+    GRSetBrush( DC, Color, false );
     DC->DrawArc( GRMapX( xc + x1 ), GRMapY( yc - y1 ), GRMapX( xc + x2 ),
                 GRMapY( yc - y2 ), GRMapX( xc ), GRMapY( yc ) );
 }
