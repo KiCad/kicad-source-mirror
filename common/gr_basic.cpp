@@ -69,10 +69,13 @@ static int          xcliplo = 0,
                     ycliplo = 0,
                     xcliphi = 2000,
                     ycliphi = 2000;
-static int   lastcolor      = -1;
-static int   lastwidth      = -1;
-static int   s_Last_Pen_Style = -1;
-static wxDC* lastDC = NULL;
+
+static int   s_DC_lastcolor      = -1;
+static int   s_DC_lastwidth      = -1;
+static int   s_DC_lastpenstyle   = -1;
+static int   s_DC_lastbrushcolor = -1;
+static int   s_DC_lastbrushfill  = -1;
+static wxDC* s_DC_lastDC         = NULL;
 
 
 /* Local functions: */
@@ -520,9 +523,10 @@ static void WinClipAndDrawLine( EDA_Rect* ClipBox, wxDC* DC,
  */
 void GRResetPenAndBrush( wxDC* DC )
 {
-    lastcolor = -1;
     GRSetBrush( DC, BLACK );  // Force no fill
-    lastDC = NULL;
+    s_DC_lastbrushcolor = -1;
+    s_DC_lastcolor = -1;
+    s_DC_lastDC = NULL;
 }
 
 
@@ -540,10 +544,10 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
         Color = BLACK;
     }
 
-    if(   lastcolor != Color
-          || lastwidth != width
-          || s_Last_Pen_Style != style
-          || lastDC != DC  )
+    if(   s_DC_lastcolor != Color ||
+          s_DC_lastwidth != width || 
+          s_DC_lastpenstyle != style || 
+          s_DC_lastDC != DC  )
     {
         wxPen    pen;
 
@@ -555,11 +559,11 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
 
         DC->SetPen( pen );
 
-        lastcolor = Color;
-        lastwidth = width;
-        lastDC    = DC;
+        s_DC_lastcolor    = Color;
+        s_DC_lastwidth    = width;
+        s_DC_lastpenstyle = style;
+        s_DC_lastDC       = DC;
 
-        s_Last_Pen_Style = style;
     }
 }
 
@@ -568,15 +572,27 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
 {
     if( ForceBlackPen )
         Color = BLACK;
-    wxBrush DrawBrush;
-    DrawBrush.SetColour( MakeColour( Color ) );
 
-    if( fill )
-        DrawBrush.SetStyle( wxSOLID );
-    else
-        DrawBrush.SetStyle( wxTRANSPARENT );
-    DC->SetBrush( DrawBrush );
+    if(   s_DC_lastbrushcolor != Color || 
+          s_DC_lastbrushfill  != fill || 
+          s_DC_lastDC != DC  )
+    {
+      wxBrush DrawBrush;
+      DrawBrush.SetColour( MakeColour( Color ) );
+
+      if( fill )
+          DrawBrush.SetStyle( wxSOLID );
+      else
+          DrawBrush.SetStyle( wxTRANSPARENT );
+
+      DC->SetBrush( DrawBrush );
+
+      s_DC_lastbrushcolor = Color;
+      s_DC_lastbrushfill  = fill;
+      s_DC_lastDC = DC;
+    }
 }
+
 
 
 /** function GRForceBlackPen
@@ -689,10 +705,10 @@ void GRSDashedLine( EDA_Rect* ClipBox,
 {
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
-    lastcolor     = -1;
+    s_DC_lastcolor     = -1;
     GRSetColorPen( DC, Color, width, wxSHORT_DASH );
     GRSLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
-    lastcolor = -1;
+    s_DC_lastcolor = -1;
     GRSetColorPen( DC, Color, width );
 }
 
@@ -704,10 +720,10 @@ void GRSDashedLineTo( EDA_Rect* ClipBox,
                       int       width,
                       int       Color )
 {
-    lastcolor = -1;
+    s_DC_lastcolor = -1;
     GRSetColorPen( DC, Color, width, wxSHORT_DASH );
     GRSLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x2, y2, width, Color );
-    lastcolor = -1;
+    s_DC_lastcolor = -1;
     GRSetColorPen( DC, Color, width );
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
