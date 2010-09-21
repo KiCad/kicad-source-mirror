@@ -362,11 +362,17 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         if( DrawPanel->ManageCurseur )
         {
 #ifdef __WXMAC__
-            DrawPanel->Refresh();
-            DrawPanel->Update();
-#endif
+            wxDCOverlay oDC( DrawPanel->m_overlay, DC ); 
+            oDC.Clear(); 
+            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+#else
             DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+#endif
         }
+#ifdef __WXMAC__
+        else
+            DrawPanel->m_overlay.Reset(); 
+#endif
     }
 
     if( hotkey )

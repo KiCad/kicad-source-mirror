@@ -8,6 +8,7 @@
 
 #include "colors.h"
 #include "base_struct.h"
+#include <wx/overlay.h>
 
 class WinEDA_DrawFrame;
 class BASE_SCREEN;
@@ -60,6 +61,10 @@ public:
     int  m_CursorLevel;                     // Index for cursor redraw in XOR
                                             // mode
 
+#ifdef __WXMAC__
+    // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
+    wxOverlay               m_overlay; 
+#endif
     /* Cursor management (used in editing functions) */
 
     /* Mouse capture move callback function prototype. */

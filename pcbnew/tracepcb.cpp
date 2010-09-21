@@ -18,6 +18,7 @@
 #include "module_editor_frame.h"
 #include "pcbplot.h"
 #include "protos.h"
+#include <wx/overlay.h>
 
 extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw Frame references
 
@@ -53,6 +54,12 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         module->Draw( DrawPanel, DC, GR_OR );
     }
 
+#ifdef __WXMAC__
+    DrawPanel->m_overlay.Reset(); 
+    wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+    overlaydc.Clear();
+#endif
+
     screen->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
@@ -82,6 +89,12 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetBoard()->Draw( DrawPanel, DC, GR_OR );
 
     DrawGeneralRatsnest( DC );
+
+#ifdef __WXMAC__
+    DrawPanel->m_overlay.Reset(); 
+    wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+    overlaydc.Clear();
+#endif
 
     GetScreen()->ClrRefreshReq();
 
