@@ -361,9 +361,13 @@ public:
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
     void             Recadre_Trace( bool ToMouse );
-    void             PutOnGrid( wxPoint* coord ); /* set the coordinate to
-                                                   * the nearest grid
-                                                   * coordinate */
+    
+    /** Adjust the coordinate to the nearest grid value
+     * @param aCoord = coordinate to adjust
+     * @param aGridSize = pointer to a grid value. if NULL uses the current grid size 
+     */
+    void             PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize = NULL ); 
+    
     void             Zoom_Automatique( bool move_mouse_cursor );
 
     /* Set the zoom level to show the area Rect */

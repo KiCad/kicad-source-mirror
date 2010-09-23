@@ -34,7 +34,6 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
     m_Zoom             = 32 * m_ZoomScalar;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
-    m_UserGridIsON     = FALSE;
     m_Center           = true;
     m_CurrentSheetDesc = &g_Sheet_A4;
     m_IsPrinting       = false;

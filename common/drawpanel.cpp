@@ -758,11 +758,13 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
  */
 void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
 {
+    #define MIN_GRID_SIZE 10        // min grid size in pixels to allow drawing
     BASE_SCREEN* screen = GetScreen();
     int          ii, jj, xg, yg;
     wxRealPoint  screen_grid_size;
     wxSize       size;
     wxPoint      org;
+    wxRealPoint dgrid;
 
     /* The grid must be visible. this is possible only is grid value
      * and zoom value are sufficient
@@ -773,43 +775,50 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     size = GetClientSize();
 
 #ifdef USE_WX_ZOOM
-    if( DC->LogicalToDeviceXRel( wxRound( screen_grid_size.x ) ) < 5
-        || DC->LogicalToDeviceXRel( wxRound( screen_grid_size.y ) ) < 5 )
-        return;
+    dgrid.x = DC->LogicalToDeviceXRel( wxRound( screen_grid_size.x ) );
+    dgrid.y = DC->LogicalToDeviceXRel( wxRound( screen_grid_size.y ) );
 
     org = m_ClipBox.m_Pos;
     size = m_ClipBox.m_Size;
 #else
-    wxRealPoint dgrid = screen_grid_size;
+    dgrid = screen_grid_size;
     screen->Scale( dgrid );     // dgrid = grid size in pixels
-
-    // if the grid size is small ( < 5 pixels) do not display all points
-    if( dgrid.x < 5 )
-    {
-        screen_grid_size.x *= 2;
-        dgrid.x *= 2;
-    }
-    if( dgrid.x < 5 )
-        return; // The grid is too small: do not show it
-
-    if( dgrid.y < 5 )
-    {
-        screen_grid_size.y *= 2;
-        dgrid.y *= 2;
-    }
-    if( dgrid.y < 5 )
-        return; // The grid is too small
-
-
     screen->Unscale( size );
     screen->Unscale( org );
     org += screen->m_DrawOrg;
 #endif
 
+    // if the grid size is small ( < MIN_GRID_SIZE pixels ) do not display all points
+    bool double_size = false;
+    if( dgrid.x < MIN_GRID_SIZE )
+    {
+        double_size = true;
+        dgrid.x *= 2;
+    }
+    if( dgrid.x < MIN_GRID_SIZE )
+        return; // The X grid is too small: do not show it
+
+    if( dgrid.y < MIN_GRID_SIZE )
+    {
+        double_size = true;
+        dgrid.y *= 2;
+    }
+    if( dgrid.y < MIN_GRID_SIZE )
+        return; // The Y grid is too small: do not show it
+
+
     m_Parent->PutOnGrid( &org );
     GRSetColorPen( DC, m_Parent->GetGridColor() );
     int xpos, ypos;
 
+    /* When we use an double_size grid, we must align grid ord on double grid
+     */
+    int increment = double_size ? 2 : 1;
+    if( double_size )
+    {
+        wxRealPoint dblgrid = screen_grid_size * 2;
+        m_Parent->PutOnGrid(&org, &dblgrid);
+    }
 
     // Draw grid: the best algorithm depend on the platform.
     // under macOSX, the first method is better
@@ -824,14 +833,14 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
 #if defined( __WXMAC__ ) && !defined( USE_WX_ZOOM )
     // Use a pixel based draw to display grid
     // When is not used USE_WX_ZOOM
-    for( ii = 0; ; ii++ )
+    for( ii = 0; ; ii += increment )
     {
         xg = wxRound( ii * screen_grid_size.x );
         if( xg > size.x )
             break;
         xpos = org.x + xg;
         xpos = GRMapX( xpos );
-        for( jj = 0; ; jj++ )
+        for( jj = 0; ; jj += increment )
         {
             yg = wxRound( jj * screen_grid_size.y );
             if( yg > size.y )
@@ -846,7 +855,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     // Use a pixel based draw to display grid
     // There is a lot of calls, so the cost is hight
     // and grid is slowly drawn on some platforms
-    for( ii = 0; ; ii++ )
+    for( ii = 0; ; ii += increment )
     {
         xg = wxRound( ii * screen_grid_size.x );
         if( xg > size.x )
@@ -857,7 +866,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
             continue;
         if( xpos > m_ClipBox.GetEnd().x)    // end of active area reached.
             break;
-        for( jj = 0; ; jj++ )
+        for( jj = 0; ; jj += increment )
         {
             yg = wxRound( jj * screen_grid_size.y );
             if( yg > size.y )
@@ -890,7 +899,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     GRSetColorPen( &tmpDC, g_DrawBgColor );
     tmpDC.DrawLine( 0, 0, 0, screenSize.y-1 );        // init background
     GRSetColorPen( &tmpDC, m_Parent->GetGridColor() );
-    for( jj = 0; ; jj++ )   // draw grid points
+    for( jj = 0; ; jj += increment )   // draw grid points
     {
         yg = wxRound( jj * screen_grid_size.y );
         ypos = screen->Scale( yg );
@@ -900,7 +909,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     }
 
     ypos = GRMapY( org.y );
-    for( ii = 0; ; ii++ )
+    for( ii = 0; ; ii += increment )
     {
         xg = wxRound( ii * screen_grid_size.x );
         if( xg > size.x )
@@ -1107,7 +1116,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
      * in order to avoid spurious block commands.
      */
     static int MinDragEventCount;
-    if( event.Leaving() /*|| event.Entering()*/ )
+    if( event.Leaving() )
     {
         m_CanStartBlock = -1;
     }
