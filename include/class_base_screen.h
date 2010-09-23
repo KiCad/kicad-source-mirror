@@ -132,7 +132,6 @@ private:
 public:
     wxPoint	m_GridOrigin;
     GridArray  m_GridList;
-    bool       m_UserGridIsON;
 
     wxArrayInt m_ZoomList;          /* Array of standard zoom coefficients. */
     int        m_Zoom;              /* Current zoom coefficient. */

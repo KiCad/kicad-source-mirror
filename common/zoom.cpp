@@ -46,23 +46,25 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
 
 
 /** Adjust the coordinate to the nearest grid value
- * @param coord = coordinate to adjust
+ * @param aCoord = coordinate to adjust
+ * @param aGridSize = pointer to a grid value. if NULL uses the current grid size 
  */
-void WinEDA_DrawFrame::PutOnGrid( wxPoint* coord )
+void WinEDA_DrawFrame::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 {
-    wxRealPoint grid_size = GetBaseScreen()->GetGridSize();
+    wxRealPoint grid_size;
+    if( aGridSize )
+        grid_size = *aGridSize;
+    else
+       grid_size = GetBaseScreen()->GetGridSize();
 
-    if( !GetBaseScreen()->m_UserGridIsON ) // XXX UNUSED VARIABLE???
-    {
 	const wxPoint& grid_origin = GetBaseScreen()->GetGridOrigin();
 	double offset = fmod(grid_origin.x, grid_size.x);
-        int tmp = wxRound( (coord->x - offset) / grid_size.x );
-        coord->x = wxRound( tmp * grid_size.x + offset );
+    int tmp = wxRound( (aCoord->x - offset) / grid_size.x );
+    aCoord->x = wxRound( tmp * grid_size.x + offset );
 
 	offset = fmod(grid_origin.y, grid_size.y);
-        tmp = wxRound( (coord->y - offset) / grid_size.y );
-        coord->y = wxRound ( tmp * grid_size.y + offset );
-    }
+    tmp = wxRound( (aCoord->y - offset) / grid_size.y );
+    aCoord->y = wxRound ( tmp * grid_size.y + offset );
 }
 
 
