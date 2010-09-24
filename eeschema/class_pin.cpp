@@ -63,7 +63,9 @@ static const wxString pin_style_names[] =
     _( "Inverted clock" ),
     _( "Input low" ),
     _( "Clock low" ),
-    _( "Output low" )
+    _( "Output low" ),
+    _( "Falling edge clock" ),
+    _( "NonLogic" )
 };
 
 // bitmaps to show pins shapes in dialog editor
@@ -77,6 +79,8 @@ static const char ** s_icons_Pins_Shapes[] =
     pinshape_active_low_input_xpm,
     pinshape_clock_active_low_xpm,
     pinshape_active_low_output_xpm,
+    pinshape_clock_fall_xpm,
+    pinshape_nonlogic_xpm
 };
 
 
@@ -91,7 +95,9 @@ static const int pin_style_codes[] =
     CLOCK | INVERT,
     LOWLEVEL_IN,
     LOWLEVEL_IN | CLOCK,
-    LOWLEVEL_OUT
+    LOWLEVEL_OUT,
+    CLOCK_FALL,
+    NONLOGIC
 };
 
 
@@ -885,6 +891,26 @@ void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
                   MapY1 * INVERT_PIN_RADIUS * 2 + y1 );
         GRLineTo( &aPanel->m_ClipBox, aDC, posX, posY, width, color );
     }
+    else if( m_PinShape & CLOCK_FALL ) /* an alternative for Inverted Clock */
+    {
+        GRMoveTo( x1 + MapY1 * CLOCK_PIN_DIM,
+                  y1 - MapX1 * CLOCK_PIN_DIM );
+        GRLineTo( &aPanel->m_ClipBox,
+                  aDC,
+                  x1 + MapX1 * CLOCK_PIN_DIM,
+                  y1 + MapY1 * CLOCK_PIN_DIM,
+                  width,
+                  color );
+        GRLineTo( &aPanel->m_ClipBox,
+                  aDC,
+                  x1 - MapY1 * CLOCK_PIN_DIM,
+                  y1 + MapX1 * CLOCK_PIN_DIM,
+                  width,
+                  color );
+        GRMoveTo( MapX1 * CLOCK_PIN_DIM + x1,
+                  MapY1 * CLOCK_PIN_DIM + y1 );
+        GRLineTo( &aPanel->m_ClipBox, aDC, posX, posY, width, color );
+    }
     else
     {
         GRMoveTo( x1, y1 );
@@ -972,6 +998,26 @@ void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
                       width,
                       color );
         }
+    }
+
+    else if( m_PinShape & NONLOGIC ) /* NonLogic pin symbol */
+    {
+        GRMoveTo( x1 - (MapX1 + MapY1) * NONLOGIC_PIN_DIM,
+                  y1 - (MapY1 - MapX1) * NONLOGIC_PIN_DIM );
+        GRLineTo( &aPanel->m_ClipBox,
+                  aDC,
+                  x1 + (MapX1 + MapY1) * NONLOGIC_PIN_DIM,
+                  y1 + (MapY1 - MapX1) * NONLOGIC_PIN_DIM,
+                  width,
+                  color );
+        GRMoveTo( x1 - (MapX1 - MapY1) * NONLOGIC_PIN_DIM,
+                  y1 - (MapY1 + MapX1) * NONLOGIC_PIN_DIM );
+        GRLineTo( &aPanel->m_ClipBox,
+                  aDC,
+                  x1 + (MapX1 - MapY1) * NONLOGIC_PIN_DIM,
+                  y1 + (MapY1 + MapX1) * NONLOGIC_PIN_DIM,
+                  width,
+                  color );
     }
 
     /* Draw the pin end target (active end of the pin)

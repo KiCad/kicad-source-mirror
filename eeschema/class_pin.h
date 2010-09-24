@@ -26,6 +26,7 @@
 
 #define CLOCK_PIN_DIM       40  /* Dim of clock pin symbol. */
 #define IEEE_SYMBOL_PIN_DIM 40  /* Dim of special pin symbol. */
+#define NONLOGIC_PIN_DIM    30  /* Dim of nonlogic pin symbol (X). */
 
 /**
  * The component library pin object electrical types used in ERC tests.
@@ -60,7 +61,9 @@ enum DrawPinShape {
     INVERT       = 1,
     CLOCK        = 2,
     LOWLEVEL_IN  = 4,
-    LOWLEVEL_OUT = 8
+    LOWLEVEL_OUT = 8,
+    CLOCK_FALL   = 0x10, /* this is common form for inverted clock in Eastern Block */
+    NONLOGIC     = 0x20,
 };
 
 

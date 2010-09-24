@@ -308,6 +308,8 @@ set(BITMAP_SRCS
     pinshape_active_low_input.xpm
     pinshape_clock_active_low.xpm
     pinshape_active_low_output.xpm
+    pinshape_clock_fall.xpm
+    pinshape_nonlogic.xpm
     pintype_input.xpm
     pintype_output.xpm
     pintype_bidi.xpm
