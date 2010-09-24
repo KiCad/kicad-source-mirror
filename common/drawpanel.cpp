@@ -816,7 +816,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
     int increment = double_size ? 2 : 1;
     if( double_size )
     {
-        wxRealPoint dblgrid = screen_grid_size * 2;
+        wxRealPoint dblgrid = screen_grid_size + screen_grid_size;
         m_Parent->PutOnGrid(&org, &dblgrid);
     }
 
