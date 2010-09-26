@@ -645,6 +645,12 @@ bool LIB_PIN::Save( FILE* ExportFile )
     if( m_PinShape & LOWLEVEL_OUT
         && fprintf( ExportFile, "V" ) < 0 )
         return false;
+    if( m_PinShape & CLOCK_FALL
+        && fprintf( ExportFile, "F" ) < 0 )
+        return false;
+    if( m_PinShape & NONLOGIC
+        && fprintf( ExportFile, "X" ) < 0 )
+        return false;
 
     if( fprintf( ExportFile, "\n" ) < 0 )
         return false;
@@ -754,6 +760,14 @@ bool LIB_PIN::Load( char* line, wxString& errorMsg )
 
             case 'V':
                 m_PinShape |= LOWLEVEL_OUT;
+                break;
+
+            case 'F':
+                m_PinShape |= CLOCK_FALL;
+                break;
+
+            case 'X':
+                m_PinShape |= NONLOGIC;
                 break;
 
             default:

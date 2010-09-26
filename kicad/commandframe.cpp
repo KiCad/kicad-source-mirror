@@ -9,7 +9,7 @@
 
 #include "kicad.h"
 
-#include "../bitmap2component/bitmap2component_16x16.xpm"
+#include "../bitmap2component/bitmap2component.xpm"
 
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( WinEDA_MainFrame* parent ) :
     wxSashLayoutWindow( parent, wxID_ANY )
@@ -82,7 +82,7 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn = AddBitmapButton( ID_TO_GERBVIEW, wxBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
 
-    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_16x16_xpm ) );
+    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_xpm ) );
     btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
 }
