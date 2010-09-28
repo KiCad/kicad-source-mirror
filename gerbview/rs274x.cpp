@@ -360,10 +360,13 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case AP_DEFINITION:
-
-        // input example:  %ADD30R,0.081800X0.101500*%
-        // at this point, text points to 2nd 'D'
-
+        /* input example:  %ADD30R,0.081800X0.101500*%
+         * Aperture definition has 4 options: C, R, O, P
+         * (Circle, Rect, Oval, regular Polygon)
+         * and shapes can have a hole (round or rectangular).
+         * All optional parameters values start by X
+         * at this point, text points to 2nd 'D'
+         */
         if( *text++ != 'D' )
         {
             ok = FALSE;
@@ -391,7 +394,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             dcode->m_Size.x = dcode->m_Size.y =
                 wxRound( ReadDouble( text ) * conv_scale );
 
-            switch( stdAperture )
+            switch( stdAperture )   // Aperture desceiption has optional parameters. Read them
             {
             case 'C':               // Circle
                 dcode->m_Shape = APT_CIRCLE;
@@ -403,7 +406,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
                         wxRound( ReadDouble( text ) * conv_scale );
-                    dcode->m_DrillShape = 1;
+                    dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
                 while( *text == ' ' )
@@ -415,7 +418,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     dcode->m_Drill.y =
                         wxRound( ReadDouble( text ) * conv_scale );
 
-                    dcode->m_DrillShape = 2;
+                    dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
                 dcode->m_Defined = TRUE;
                 break;
@@ -442,7 +445,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
                         wxRound( ReadDouble( text ) * conv_scale );
-                    dcode->m_DrillShape = 1;
+                    dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
                 while( *text == ' ' )
@@ -453,14 +456,56 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     text++;
                     dcode->m_Drill.y =
                         wxRound( ReadDouble( text ) * conv_scale );
-                    dcode->m_DrillShape = 2;
+                    dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
                 dcode->m_Defined = TRUE;
                 break;
 
-            case 'P':               // Polygon
-                dcode->m_Shape   = APT_POLYGON;
-                dcode->m_Defined = TRUE;
+            case 'P':
+                /* Regular polygon: a command line like %ADD12P,0.040X10X25X0.025X0.025X0.0150*%
+                 * params are: <diameter>, X<edge count>, X<Rotation>, X<X hole dim>, X<Y hole dim>
+                 */
+                dcode->m_Shape = APT_POLYGON;
+                while( *text == ' ' )
+                    text++;
+
+                if( *text == 'X' )
+                {
+                    text++;
+                    dcode->m_EdgesCount = ReadInt( text );
+                }
+
+                while( *text == ' ' )
+                    text++;
+
+                if( *text == 'X' )
+                {
+                    text++;
+                    dcode->m_Rotation = ReadDouble( text );
+                }
+
+                while( *text == ' ' )
+                    text++;
+
+                if( *text == 'X' )
+                {
+                    text++;
+                    dcode->m_Drill.x = dcode->m_Drill.y =
+                        wxRound( ReadDouble( text ) * conv_scale );
+                    dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
+                }
+
+                while( *text == ' ' )
+                    text++;
+
+                if( *text == 'X' )
+                {
+                    text++;
+                    dcode->m_Drill.y =
+                        wxRound( ReadDouble( text ) * conv_scale );
+                    dcode->m_DrillShape = APT_DEF_RECT_HOLE;
+                }
+                 dcode->m_Defined = TRUE;
                 break;
             }
         }

@@ -12,12 +12,11 @@ email address.
     graphics items are now specific to gerbview (added a GERBER_DRAW_ITEM class)
     and do not use tracks from pcbnew.
     The way used to draw them is also new.
-    Apertures are now correctly drawn for round, oval and rectangular shapes
+    Apertures are now correctly drawn for round, oval, rectangular and regular polygon shapes
         (with or without holes)
     Aperture definition type Polygon is not yet handle.
     Polygons are correctly drawn.
     TODO:
-        Draw functions for aperture definition type Polygon.
         Draw functions for aperture macros.
     Work in progress.
 

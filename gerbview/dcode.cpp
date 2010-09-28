@@ -56,11 +56,12 @@ void D_CODE::Clear_D_CODE_Data()
     m_Size.y     = DEFAULT_SIZE;
     m_Shape      = APT_CIRCLE;
     m_Drill.x    = m_Drill.y = 0;
-    m_DrillShape = 0;
+    m_DrillShape = APT_DEF_NO_HOLE;
     m_InUse      = FALSE;
     m_Defined    = FALSE;
-    m_Macro      = 0;
+    m_Macro      = NULL;
     m_Rotation   = 0.0;
+    m_EdgesCount = 0;
 }
 
 
@@ -252,16 +253,28 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
             {
             case APT_LINE:          // might not appears here, but some broken
             // gerber files use it
-            case APT_CIRCLE:        /* spot round (for GERBER) */
+            case APT_CIRCLE:        /* spot round */
                 gerb_item->m_Shape = GBR_SPOT_CIRCLE;
                 break;
 
-            case APT_OVAL:          /* spot oval (for GERBER)*/
+            case APT_OVAL:          /* spot oval*/
                 gerb_item->m_Shape = GBR_SPOT_OVAL;
                 break;
 
-            default:                /* spot rect (for GERBER)*/
+            case APT_RECT:                /* spot rect*/
                 gerb_item->m_Shape = GBR_SPOT_RECT;
+                break;
+
+            case APT_POLYGON:                /* spot regular polyg 3 to 1é edges */
+                gerb_item->m_Shape = GBR_SPOT_POLY;
+                break;
+
+            case APT_MACRO:                /* spot defined by a macro */
+                gerb_item->m_Shape = GBR_SPOT_MACRO;
+                break;
+
+            default:
+                wxMessageBox( wxT("WinEDA_GerberFrame::CopyDCodesSizeToItems() error" ) );
                 break;
             }
         }
@@ -280,14 +293,16 @@ void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
 
     switch( m_Shape )
     {
+
+    case APT_MACRO: // TODO: current a round shape
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
         if( !aFilledShape )
             GRCircle( aClipBox, aDC, aShapePos.x, aShapePos.y, radius, aColor );
         else
-            if( m_DrillShape == 0 )
+            if( m_DrillShape == APT_DEF_NO_HOLE )
                 GRFilledCircle( aClipBox, aDC, aShapePos, radius, aColor );
-            else if( m_DrillShape == 1 )    // round hole
+            else if( APT_DEF_ROUND_HOLE == 1 )    // round hole in shape
             {
                 int width = (m_Size.x - m_Drill.x ) / 2;
                 GRCircle( aClipBox, aDC, aShapePos, radius - (width / 2), width, aColor );
@@ -301,21 +316,22 @@ void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
         break;
 
     case APT_LINE:
+
         // not used for flashed items
         break;
 
     case APT_RECT:
     {
         wxPoint start;
-        start.x = aShapePos.x - m_Size.x/2;
-        start.y = aShapePos.y - m_Size.y/2;
+        start.x = aShapePos.x - m_Size.x / 2;
+        start.y = aShapePos.y - m_Size.y / 2;
         wxPoint end = start + m_Size;
         if( !aFilledShape )
         {
-            GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y ,
+            GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y,
                     0, aColor );
         }
-        else if( m_DrillShape == 0 )
+        else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
             GRFilledRect( aClipBox, aDC, start.x, start.y, end.x, end.y,
                           0, aColor, aColor );
@@ -327,7 +343,7 @@ void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
             DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
-        break;
+    break;
 
     case APT_OVAL:
     {
@@ -352,7 +368,7 @@ void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
             GRCSegm( aClipBox, aDC, start.x, start.y,
                      end.x, end.y, radius, aColor );
         }
-        else if( m_DrillShape == 0 )
+        else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
             GRFillCSegm( aClipBox, aDC, start.x,
                          start.y, end.x, end.y, radius, aColor );
@@ -370,10 +386,6 @@ void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
         if( m_PolyCorners.size() == 0 )
             ConvertShapeToPolygon();
         DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
-        break;
-    
-    case APT_MACRO:
-        // TODO
         break;
     }
 }
@@ -403,6 +415,15 @@ void D_CODE::DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC,
 }
 
 
+#define SEGS_CNT 32     // number of segments to approximate a circle
+
+// A helper function for D_CODE::ConvertShapeToPolygon().
+// Add a hole to a polygon
+static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
+                              APERTURE_DEF_HOLETYPE aHoleShape,
+                              wxSize                aSize,
+                              wxPoint                aAnchorPos );
+
 /** function ConvertShapeToPolygon
  * convert a shape to an equivalent polygon.
  * Arcs and circles are approximated by segments
@@ -411,7 +432,6 @@ void D_CODE::DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC,
  */
 void D_CODE::ConvertShapeToPolygon()
 {
-    #define SEGS_CNT 32     // number of segments to approximate a circle
     wxPoint initialpos;
     wxPoint currpos;;
     m_PolyCorners.clear();
@@ -427,41 +447,18 @@ void D_CODE::ConvertShapeToPolygon()
             RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
             m_PolyCorners.push_back( currpos );
         }
-        if( m_DrillShape == 1 )
-        {
-            for( unsigned ii = 0 ; ii <= SEGS_CNT; ii++ )
-            {
-                currpos.x = m_Drill.x / 2;
-                currpos.y = 0;
-                RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
-                m_PolyCorners.push_back( currpos );
-            }
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
-        if( m_DrillShape == 2 )  // Create rectangular hole
-        {
-            currpos.x = m_Drill.x / 2;
-            currpos.y = m_Drill.y / 2;
-            m_PolyCorners.push_back( currpos );     // link to hole and begin hole
-            currpos.x -= m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y -= m_Drill.y;
-            m_PolyCorners.push_back( currpos );
-            currpos.x += m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y += m_Drill.y;
-            m_PolyCorners.push_back( currpos );     // close hole
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
+
+        addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
         break;
 
     case APT_LINE:
+
         // Not used for flashed shapes
         break;
 
     case APT_RECT:
-        currpos.x = m_Size.x / 2;
-        currpos.y = m_Size.y / 2;
+        currpos.x  = m_Size.x / 2;
+        currpos.y  = m_Size.y / 2;
         initialpos = currpos;
         m_PolyCorners.push_back( currpos );
         currpos.x -= m_Size.x;
@@ -471,33 +468,9 @@ void D_CODE::ConvertShapeToPolygon()
         currpos.x += m_Size.x;
         m_PolyCorners.push_back( currpos );
         currpos.y += m_Size.y;
-        m_PolyCorners.push_back( currpos );         // close polygon
-        if( m_DrillShape == 1 )                     // build a round hole
-        {
-            for( int ii = 0 ; ii <= SEGS_CNT; ii++ )
-            {
-                currpos.x = 0;
-                currpos.y = m_Drill.x / 2;      // m_Drill.x / 2 is the radius of the hole
-                RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
-                m_PolyCorners.push_back( currpos );
-            }
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
-        if( m_DrillShape == 2 )  // Create rectangular hole
-        {
-            currpos.x = m_Drill.x / 2;
-            currpos.y = m_Drill.y / 2;
-            m_PolyCorners.push_back( currpos );     // link to hole and begin hole
-            currpos.x -= m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y -= m_Drill.y;
-            m_PolyCorners.push_back( currpos );
-            currpos.x += m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y += m_Drill.y;
-            m_PolyCorners.push_back( currpos );     // close hole
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
+        m_PolyCorners.push_back( currpos );    // close polygon
+
+        addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
         break;
 
     case APT_OVAL:
@@ -507,7 +480,7 @@ void D_CODE::ConvertShapeToPolygon()
         // we create an horizontal oval shape. then rotate if needed
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
-            delta = (m_Size.x - m_Size.y) / 2;
+            delta  = (m_Size.x - m_Size.y) / 2;
             radius = m_Size.y / 2;
         }
         else   // vertical oval
@@ -537,47 +510,85 @@ void D_CODE::ConvertShapeToPolygon()
             currpos.x -= delta;
             m_PolyCorners.push_back( currpos );
         }
+
         m_PolyCorners.push_back( initialpos );      // close outline
-        if( m_Size.y > m_Size.x )   // vertical oval, rotate polygon.
+        if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
         {
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
                 RotatePoint( &m_PolyCorners[jj], 900 );
         }
-        if( m_DrillShape == 1 )                     // build a round hole
-        {
-            for( ii = 0 ; ii <= SEGS_CNT; ii++ )
-            {
-                currpos.x = 0;
-                currpos.y = m_Drill.x / 2;      // m_Drill.x / 2 is the radius of the hole
-                RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
-                m_PolyCorners.push_back( currpos );
-            }
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
-        if( m_DrillShape == 2 )  // Create rectangular hole
-        {
-            currpos.x = m_Drill.x / 2;
-            currpos.y = m_Drill.y / 2;
-            m_PolyCorners.push_back( currpos );     // link to hole and begin hole
-            currpos.x -= m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y -= m_Drill.y;
-            m_PolyCorners.push_back( currpos );
-            currpos.x += m_Drill.x;
-            m_PolyCorners.push_back( currpos );
-            currpos.y += m_Drill.y;
-            m_PolyCorners.push_back( currpos );     // close hole
-            m_PolyCorners.push_back( initialpos );  // link to outline
-        }
+
+        addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
     }
-        break;
+    break;
 
     case APT_POLYGON:
-        // TODO
+        currpos.x  = m_Size.x >> 1;     // first point is on X axis
+        initialpos = currpos;
+        // rs274x said: m_EdgesCount = 3 ... 12
+        if( m_EdgesCount < 3 )
+            m_EdgesCount = 3;
+        if( m_EdgesCount > 12 )
+            m_EdgesCount = 12;
+        for( int ii = 0; ii <= m_EdgesCount; ii++ )
+        {
+            currpos = initialpos;
+            RotatePoint( &currpos, ii * 3600 / m_EdgesCount );
+            m_PolyCorners.push_back( currpos );
+        }
+        addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
+        if( m_Rotation )                   // vertical oval, rotate polygon.
+        {
+            int angle = wxRound( m_Rotation*10 );
+            for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
+            {
+                // Remember the Y axis is from top to bottom when draw items.
+                RotatePoint( &m_PolyCorners[jj], -angle );
+                NEGATE(m_PolyCorners[jj].y);
+            }
+        }
         break;
-    
+
     case APT_MACRO:
+
         // TODO
         break;
+    }
+}
+
+// The helper function for D_CODE::ConvertShapeToPolygon().
+// Add a hole to a polygon
+static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
+                              APERTURE_DEF_HOLETYPE aHoleShape,
+                              wxSize                aSize,
+                              wxPoint               aAnchorPos )
+{
+    wxPoint currpos;
+    if( aHoleShape == APT_DEF_ROUND_HOLE )                     // build a round hole
+    {
+        for( int ii = 0; ii <= SEGS_CNT; ii++ )
+        {
+            currpos.x = 0;
+            currpos.y = aSize.x / 2;      // aSize.x / 2 is the radius of the hole
+            RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
+            aBuffer.push_back( currpos );
+        }
+
+        aBuffer.push_back( aAnchorPos );  // link to outline
+    }
+    if( aHoleShape == APT_DEF_RECT_HOLE )     // Create rectangular hole
+    {
+        currpos.x = aSize.x / 2;
+        currpos.y = aSize.y / 2;
+        aBuffer.push_back( currpos );     // link to hole and begin hole
+        currpos.x -= aSize.x;
+        aBuffer.push_back( currpos );
+        currpos.y -= aSize.y;
+        aBuffer.push_back( currpos );
+        currpos.x += aSize.x;
+        aBuffer.push_back( currpos );
+        currpos.y += aSize.y;
+        aBuffer.push_back( currpos );     // close hole
+        aBuffer.push_back( aAnchorPos );  // link to outline
     }
 }

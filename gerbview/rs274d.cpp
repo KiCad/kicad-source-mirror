@@ -1095,6 +1095,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
 
             switch( aperture )
             {
+            case APT_POLYGON:   // flashed regular polygon
             case APT_CIRCLE:
                 gbritem = new GERBER_DRAW_ITEM( pcb );
                 pcb->m_Drawings.Append( gbritem );
@@ -1102,6 +1103,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                 fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
                                       m_CurrentPos, size.x,
                                       !(m_LayerNegative ^ m_ImageNegative) );
+                if( aperture == APT_POLYGON )
+                    gbritem->m_Shape = GBR_SPOT_POLY;
                 break;
 
             case APT_OVAL:

@@ -40,7 +40,8 @@ enum Gbr_Basic_Shapes {
     GBR_SPOT_CIRCLE,        // flashed shape: round shape (can have hole)
     GBR_SPOT_RECT,          // flashed shape: rectangular shape can have hole)
     GBR_SPOT_OVAL,          // flashed shape: oval shape
-    GBR_MACRO,              // complex shape described by a macro
+    GBR_SPOT_POLY,          // flashed shape: regulat polygon, 3 to 12 edges
+    GBR_SPOT_MACRO,         // complex shape described by a macro
     GBR_LAST                // last value for this list
 };
 

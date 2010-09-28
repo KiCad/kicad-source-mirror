@@ -106,10 +106,13 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape()
     case GBR_SPOT_RECT:
         return wxT( "spot_rect" );
 
+    case GBR_SPOT_POLY:
+        return wxT( "spot_poly" );
+
     case GBR_POLYGON:
         return wxT( "polygon" );
 
-    case GBR_MACRO:
+    case GBR_SPOT_MACRO:
         return wxT( "apt_macro" );  // TODO: add aperture macro name
 
     default:
@@ -276,6 +279,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     case GBR_SPOT_CIRCLE:
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
+    case GBR_SPOT_POLY:
         isFilled = DisplayOpt.DisplayPadFill ? true : false;
         d_codeDescr->DrawFlashedShape( &panel->m_ClipBox, DC, color,
                                        m_Start, isFilled );
