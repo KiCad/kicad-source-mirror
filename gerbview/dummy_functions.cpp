@@ -10,7 +10,6 @@
 #include "common.h"
 #include "pcbnew.h"
 
-
 TRACK* Marque_Une_Piste( BOARD* aPcb,
                          TRACK* aStartSegm,
                          int*   aSegmCount,
@@ -19,3 +18,4 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 {
     return NULL;
 }
+

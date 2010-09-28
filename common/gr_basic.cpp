@@ -58,6 +58,10 @@ int g_DrawBgColor = WHITE;
 void ClipAndDrawFilledPoly( EDA_Rect* ClipBox, wxDC * DC, wxPoint Points[], int n );
 #endif
 
+static void GRSCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width, int Color );
+static void GRSFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
+                      int width, int Color, int BgColor );
+
 
 extern BASE_SCREEN* ActiveScreen;
 
@@ -545,8 +549,8 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
     }
 
     if(   s_DC_lastcolor != Color ||
-          s_DC_lastwidth != width || 
-          s_DC_lastpenstyle != style || 
+          s_DC_lastwidth != width ||
+          s_DC_lastpenstyle != style ||
           s_DC_lastDC != DC  )
     {
         wxPen    pen;
@@ -573,8 +577,8 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
     if( ForceBlackPen )
         Color = BLACK;
 
-    if(   s_DC_lastbrushcolor != Color || 
-          s_DC_lastbrushfill  != fill || 
+    if(   s_DC_lastbrushcolor != Color ||
+          s_DC_lastbrushfill  != fill ||
           s_DC_lastDC != DC  )
     {
       wxBrush DrawBrush;
@@ -1333,6 +1337,26 @@ void GRCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int Color )
     GRSCircle( ClipBox, DC, cx, cy, radius, 0, Color );
 }
 
+/*
+ * Draw a circle in object space.
+ */
+void GRCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width, int Color )
+{
+    r     = ZoomValue( r );
+    width = ZoomValue( width );
+    GRSCircle( ClipBox, DC, GRMapX( x ), GRMapY( y ), r, width, Color );
+}
+
+/*
+ * Draw a circle in object space.
+ */
+void GRCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWidth, int aColor )
+{
+    aRadius     = ZoomValue( aRadius );
+    aWidth = ZoomValue( aWidth );
+    GRSCircle( aClipBox, aDC, GRMapX( aPos.x ), GRMapY( aPos.y ), aRadius, aWidth, aColor );
+}
+
 
 /*
  * Draw a filled circle, in object space.
@@ -1346,6 +1370,14 @@ void GRFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
                      Color, BgColor );
 }
 
+/*
+ * Draw a filled circle, in object space.
+ */
+void GRFilledCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aColor )
+{
+    aRadius     = ZoomValue( aRadius );
+    GRSFilledCircle( aClipBox, aDC, GRMapX( aPos.x ), GRMapY( aPos.y ), aRadius, 0, aColor, aColor );
+}
 
 /*
  * Draw a filled circle, in drawing space.
@@ -1376,22 +1408,6 @@ void GRSFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
     DC->DrawEllipse( x - r, y - r, r + r, r + r );
 }
 
-
-/*
- * Draw a circle in object space.
- */
-void GRCircle( EDA_Rect* ClipBox,
-               wxDC*     DC,
-               int       x,
-               int       y,
-               int       r,
-               int       width,
-               int       Color )
-{
-    r     = ZoomValue( r );
-    width = ZoomValue( width );
-    GRSCircle( ClipBox, DC, GRMapX( x ), GRMapY( y ), r, width, Color );
-}
 
 
 /*

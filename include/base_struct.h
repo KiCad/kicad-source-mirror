@@ -87,6 +87,11 @@ enum KICAD_T {
      */
     COMPONENT_FIELD_DRAW_TYPE,
 
+    /*
+     * For Gerbview: items type:
+     */
+    TYPE_GERBER_DRAW_ITEM,
+
     // End value
     MAX_STRUCT_TYPE_ID
 };

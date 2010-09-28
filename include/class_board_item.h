@@ -9,18 +9,15 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
-/* Shapes for segments (graphic segments and tracks) ( .shape member ) */
+/* Shapes for segments (graphic segments and tracks) ( .m_Shape member ) */
 enum Track_Shapes {
     S_SEGMENT = 0,      /* usual segment : line with rounded ends */
     S_RECT,             /* segment with non rounded ends */
     S_ARC,              /* Arcs (with rounded ends)*/
     S_CIRCLE,           /* ring*/
-    S_ARC_RECT,         /* Arcs (with non rounded ends) (GERBER)*/
-    S_SPOT_OVALE,       /* Oblong spot (for GERBER)*/
-    S_SPOT_CIRCLE,      /* rounded spot (for GERBER)*/
-    S_SPOT_RECT,        /* Rectangular spott (for GERBER)*/
-    S_POLYGON,          /* polygonal shape */
-    S_CURVE             /* Bezier Curve*/
+    S_POLYGON,          /* polygonal shape (not yet used for tracks, but could be in microwave apps) */
+    S_CURVE,            /* Bezier Curve*/
+    S_LAST              /* last value for this list */
 };
 
 

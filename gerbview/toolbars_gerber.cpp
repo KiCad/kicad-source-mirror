@@ -107,10 +107,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
     choices.Clear();
 
-    choices.Alloc(MAX_TOOLS+1);
+    choices.Alloc(TOOLS_MAX_COUNT+1);
     choices.Add( _( "No tool" ) );
 
-    for( ii = 0; ii < MAX_TOOLS; ii++ )
+    for( ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
     {
         wxString msg;
         msg = _( "Tool " ); msg << ii + FIRST_DCODE;
@@ -187,11 +187,11 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
                                _( "Change cursor shape" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
                                _( "Show spots in sketch mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
                                wxBitmap( showtrack_xpm ),
                                _( "Show lines in sketch mode" ), wxITEM_CHECK );
 
@@ -215,3 +215,103 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 
     m_OptionsToolBar->Realize();
 }
+
+
+/** Function SetToolbars()
+ * Set the tools state for the toolbars, according to display options
+ */
+void WinEDA_GerberFrame::SetToolbars()
+{
+    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
+    int     layer  = screen->m_Active_Layer;
+    GERBER* gerber = g_GERBER_List[layer];
+
+    if( m_HToolBar == NULL )
+        return;
+
+    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
+    {
+        m_HToolBar->EnableTool( wxID_CUT, true );
+        m_HToolBar->EnableTool( wxID_COPY, true );
+    }
+    else
+    {
+        m_HToolBar->EnableTool( wxID_CUT, false );
+        m_HToolBar->EnableTool( wxID_COPY, false );
+    }
+
+    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != screen->m_Active_Layer) )
+    {
+        m_SelLayerBox->SetSelection( screen->m_Active_Layer );
+    }
+
+    if( m_SelLayerTool )
+    {
+        if( gerber )
+        {
+            int sel_index;
+            m_SelLayerTool->Enable( true );
+            if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
+                sel_index = 0;
+            else
+                sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
+
+            if( sel_index != m_SelLayerTool->GetSelection() )
+            {
+                m_SelLayerTool->SetSelection( sel_index );
+            }
+        }
+        else
+        {
+            m_SelLayerTool->SetSelection( 0 );
+            m_SelLayerTool->Enable( false );
+        }
+    }
+
+    if( m_OptionsToolBar )
+    {
+        m_OptionsToolBar->ToggleTool(
+            ID_TB_OPTIONS_SELECT_UNIT_MM,
+            g_UserUnit ==
+            MILLIMETRES ? true : false );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
+                                      g_UserUnit == INCHES ? true : false );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                                      DisplayOpt.DisplayPolarCood );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
+                                      IsGridVisible() );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
+                                      m_CursorShape );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
+                                      !m_DisplayPadFill );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH,
+                                      !m_DisplayPcbTrackFill );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+                                      g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
+                                      IsElementVisible( DCODES_VISIBLE ) );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                                      m_show_layer_manager_tools );
+        if( m_show_layer_manager_tools )
+            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Hide &Layers Manager" ) );
+        else
+            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Show &Layers Manager" ) );
+
+    }
+
+    DisplayUnitsMsg();
+
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
+}
+

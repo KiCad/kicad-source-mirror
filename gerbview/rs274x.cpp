@@ -448,7 +448,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 while( *text == ' ' )
                     text++;
 
-                if( *text == 'Y' )
+                if( *text == 'X' )
                 {
                     text++;
                     dcode->m_Drill.y =

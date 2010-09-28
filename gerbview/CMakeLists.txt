@@ -15,6 +15,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 set(GERBVIEW_SRCS
     block.cpp
+    class_GERBER.cpp
+    class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp
     controle.cpp
     dcode.cpp
@@ -32,7 +34,6 @@ set(GERBVIEW_SRCS
     gerbview.cpp
     hotkeys.cpp
     initpcb.cpp
-    lay2plot.cpp
     locate.cpp
     menubar.cpp
     onrightclick.cpp

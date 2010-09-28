@@ -25,12 +25,6 @@ wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
     case S_ARC:             return _( "Arc" );
     case S_CIRCLE:          return _( "Circle" );
     case S_CURVE:           return _( "Bezier Curve" );
-
-    // used in Gerbview:
-    case S_ARC_RECT:        return wxT( "arc_rect" );
-    case S_SPOT_OVALE:      return wxT( "spot_oval" );
-    case S_SPOT_CIRCLE:     return wxT( "spot_circle" );
-    case S_SPOT_RECT:       return wxT( "spot_rect" );
     case S_POLYGON:         return wxT( "polygon" );
     default:                return wxT( "??" );
     }

@@ -9,7 +9,8 @@
 #include "confirm.h"
 
 #include "gerbview.h"
-#include "protos.h"
+#include "class_gerber_draw_item.h"
+//#include "protos.h"
 
 
 bool WinEDA_GerberFrame::Clear_Pcb( bool query )
@@ -24,12 +25,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
         if( !IsOK( this, _( "Current data will be lost?" ) ) )
             return FALSE;
     }
-
     GetBoard()->m_Drawings.DeleteAll();
-
-    GetBoard()->m_Track.DeleteAll();
-
-    GetBoard()->m_Zone.DeleteAll();
 
     for( layer = 0; layer < 32; layer++ )
     {
@@ -60,26 +56,15 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
     if( query && !IsOK( this, msg ) )
         return;
 
-    /* Delete tracks (spots and lines) */
-    TRACK* PtNext;
-    for( TRACK* pt_segm = GetBoard()->m_Track;
-         pt_segm != NULL;
-         pt_segm = (TRACK*) PtNext )
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    BOARD_ITEM * next;
+    for( ; item; item = next )
     {
-        PtNext = pt_segm->Next();
-        if( pt_segm->GetLayer() != layer )
+        next = item->Next();
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        if( gerb_item->m_Layer != layer )
             continue;
-        pt_segm->DeleteStructure();
-    }
-
-    /* Delete polygons */
-    SEGZONE* Nextzone;
-    for( SEGZONE* zone = GetBoard()->m_Zone; zone != NULL; zone = Nextzone )
-    {
-        Nextzone = zone->Next();
-        if( zone->GetLayer() != layer )
-            continue;
-        zone->DeleteStructure();
+        gerb_item->DeleteStructure();
     }
 
     ScreenPcb->SetModify();

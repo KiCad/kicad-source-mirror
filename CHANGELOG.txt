@@ -4,6 +4,24 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-sept-28, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++gerbview:
+    Important changes:
+    graphic functions rewritten.
+    graphics items are now specific to gerbview (added a GERBER_DRAW_ITEM class)
+    and do not use tracks from pcbnew.
+    The way used to draw them is also new.
+    Apertures are now correctly drawn for round, oval and rectangular shapes
+        (with or without holes)
+    Aperture definition type Polygon is not yet handle.
+    Polygons are correctly drawn.
+    TODO:
+        Draw functions for aperture definition type Polygon.
+        Draw functions for aperture macros.
+    Work in progress.
+
+
 2010-Aug-9 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++CMakeModules:
@@ -67,7 +85,7 @@ email address.
 2010-jul-27, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++all:
-    Updated boost to version 1.43
+    Updated boost to version 1.44
     Added boost::polygon (experimental)
 ++pcbnew:
     Added experimental zone fill calculations with boost::polygon

@@ -171,12 +171,10 @@ void GRCircle( EDA_Rect* ClipBox, wxDC* aDC, int x, int y, int aRadius,
 
 void GRCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int  width,
                int Color );
-void GRFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
-                     int width, int Color, int BgColor );
-void GRSCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width,
-                int Color );
-void GRSFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
-                      int width, int Color, int BgColor );
+void GRFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width, int Color, int BgColor );
+void GRFilledCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aColor );
+void GRCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWidth, int aColor );
+
 void GRArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle,
             int EndAngle, int r, int Color );
 void GRArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle,

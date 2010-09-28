@@ -2,6 +2,30 @@
 /* Block operations: displacement, rotation, deletion ... */
 /**********************************************************/
 
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2010 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -11,17 +35,18 @@
 #include "confirm.h"
 
 #include "gerbview.h"
+#include "class_gerber_draw_item.h"
 #include "protos.h"
 
 
 #define BLOCK_COLOR BROWN
 
 
-static void   DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                       wxDC*             DC,
-                                       bool              erase );
+static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
+                                     wxDC*             DC,
+                                     bool              erase );
 
-static TRACK* IsSegmentInBox( BLOCK_SELECTOR& blocklocate, TRACK* PtSegm );
+static bool IsGbrItemInBox( BLOCK_SELECTOR& aBlocklocate, GERBER_DRAW_ITEM* aItem );
 
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
@@ -73,7 +98,7 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
     {
         err = TRUE;
         DisplayError( this,
-                      wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
+                     wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
     }
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
@@ -168,21 +193,10 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
             Block_Delete( DC );
             break;
 
-        case BLOCK_MIRROR_X: /* Mirror*/
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-            Block_Mirror_X( DC );
-            break;
-
-        case BLOCK_ROTATE: /* Unused */
-            break;
-
-        case BLOCK_FLIP: /* Flip, unused */
-            break;
-
-        case BLOCK_SAVE: /* Save (not used)*/
-            break;
-
+        case BLOCK_MIRROR_X:    /* Mirror, unused*/
+        case BLOCK_ROTATE:      /* Unused */
+        case BLOCK_FLIP:        /* Flip, unused */
+        case BLOCK_SAVE:        /* Save (not used)*/
         case BLOCK_PASTE:
             break;
 
@@ -273,28 +287,14 @@ void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
     GetScreen()->m_BlockLocate.Normalize();
     GetScreen()->SetCurItem( NULL );
 
-    TRACK* pt_segm, * NextS;
-    for( pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = NextS )
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    BOARD_ITEM* nextitem;
+    for( ; item; item = nextitem )
     {
-        NextS = pt_segm->Next();
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, pt_segm ) )
-        {
-            /* the track here is good to be cleared */
-            pt_segm->Draw( DrawPanel, DC, GR_XOR );
-            pt_segm->DeleteStructure();
-        }
-    }
-
-    /* Erasing areas. */
-    for( pt_segm = m_Pcb->m_Zone; pt_segm != NULL; pt_segm = NextS )
-    {
-        NextS = pt_segm->Next();
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, pt_segm ) )
-        {
-            /* The track here is good to be cleared. */
-            pt_segm->Draw( DrawPanel, DC, GR_XOR );
-            pt_segm->DeleteStructure();
-        }
+        nextitem = item->Next();
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
+            gerb_item->DeleteStructure();
     }
 
     Refresh();
@@ -320,106 +320,13 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
     /* Calculate displacement vectors. */
     delta = GetScreen()->m_BlockLocate.m_MoveVector;
 
-    /* Move the Track segments in block */
-    TRACK* track = m_Pcb->m_Track;
-    while( track )
+    /* Move items in block */
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    for( ; item; item = item->Next() )
     {
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
-        {
-            m_Pcb->m_Status_Pcb = 0;
-            track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            track->m_Start += delta;
-            track->m_End   += delta;
-
-            // the two parameters are used in gerbview to store center
-            // coordinates for arcs.  Move this center.
-            track->m_Param += delta.x;
-            track->SetSubNet( track->GetSubNet() + delta.y );
-
-            track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
-        }
-        track = track->Next();
-    }
-
-    /* Move the Zone segments in block */
-    SEGZONE* zsegment = m_Pcb->m_Zone;
-    while( zsegment )
-    {
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
-        {
-            zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            zsegment->m_Start += delta;
-            zsegment->m_End   += delta;
-
-            // the two parameters are used in gerbview to store center
-            // coordinates for arcs. Move this center
-            zsegment->m_Param += delta.x;
-            zsegment->SetSubNet( zsegment->GetSubNet() + delta.y );
-            zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone
-                                                    // segment
-        }
-        zsegment = zsegment->Next();
-    }
-
-    DrawPanel->Refresh( TRUE );
-}
-
-
-/*
- *  Function to mirror items in the current selected block
- */
-void WinEDA_GerberFrame::Block_Mirror_X( wxDC* DC )
-{
-    int     xoffset = 0;
-    wxPoint oldpos;
-
-    oldpos = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = NULL;
-
-    GetScreen()->m_Curseur = oldpos;
-    DrawPanel->MouseToCursorSchema();
-    GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
-
-    /* Calculate offset to mirror track points from block edges */
-    xoffset = GetScreen()->m_BlockLocate.m_Pos.x
-              + GetScreen()->m_BlockLocate.m_Pos.x
-              + GetScreen()->m_BlockLocate.m_Size.x;
-
-    /* Move the Track segments in block */
-    for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
-    {
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
-        {
-            m_Pcb->m_Status_Pcb = 0;
-            track->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            track->m_Start.x = xoffset - track->m_Start.x;
-            track->m_End.x   = xoffset - track->m_End.x;
-
-            // the two parameters are used in gerbview to store center
-            // coordinates for arcs.  Move this center
-            track->m_Param = xoffset - track->m_Param;
-            track->Draw( DrawPanel, DC, GR_OR ); // redraw the moved track
-        }
-    }
-
-    /* Move the Zone segments in block */
-    for( SEGZONE* zsegment = m_Pcb->m_Zone;
-        zsegment;
-        zsegment = zsegment->Next() )
-    {
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
-        {
-            zsegment->Draw( DrawPanel, DC, GR_XOR );   // erase the display
-            zsegment->m_Start.x = xoffset - zsegment->m_Start.x;
-            zsegment->m_End.x   = xoffset - zsegment->m_End.x;
-
-            // the two parameters are used in gerbview to store center
-            // coordinates for arcs.  Move this center
-            zsegment->m_Param = xoffset - zsegment->m_Param;
-            zsegment->Draw( DrawPanel, DC, GR_OR ); // redraw the moved zone
-                                                    // segment
-        }
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
+            gerb_item->Move( delta );
     }
 
     DrawPanel->Refresh( TRUE );
@@ -444,62 +351,34 @@ void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
 
     delta = GetScreen()->m_BlockLocate.m_MoveVector;
 
-    /* Copy selected track segments and move the new track its new location */
-    TRACK* track = m_Pcb->m_Track;
-    while( track )
+    /* Copy items in block */
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    for( ; item; item = item->Next() )
     {
-        TRACK* next_track = track->Next();
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, track ) )
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
         {
-            /* this track segment must be duplicated */
-            m_Pcb->m_Status_Pcb = 0;
-            TRACK* new_track = track->Copy();
-
-            m_Pcb->Add( new_track );
-
-            new_track->m_Start += delta;
-            new_track->m_End   += delta;
-
-            new_track->Draw( DrawPanel, DC, GR_OR ); // draw the new created
-                                                     // segment
+            /* this item must be duplicated */
+            BOARD_ITEM* new_item = gerb_item->Copy();
+            new_item->Move( delta );
+            GetBoard()->m_Drawings.PushFront( new_item );
         }
-        track = next_track;
     }
 
-    /* Copy the Zone segments  and move the new segment to its new location */
-    SEGZONE* zsegment = m_Pcb->m_Zone;
-    while( zsegment )
-    {
-        SEGZONE* next_zsegment = zsegment->Next();
-        if( IsSegmentInBox( GetScreen()->m_BlockLocate, zsegment ) )
-        {
-            /* this zone segment must be duplicated */
-            SEGZONE* new_zsegment = (SEGZONE*) zsegment->Copy();
-
-            m_Pcb->Add( new_zsegment );
-
-            new_zsegment->m_Start += delta;
-            new_zsegment->m_End   += delta;
-
-            new_zsegment->Draw( DrawPanel, DC, GR_OR ); // draw the new created
-                                                        // segment
-        }
-        zsegment = next_zsegment;
-    }
+    DrawPanel->Refresh();
 }
 
 
-/* Test if the structure PtStruct is listed in the block selects
- * Returns whether PtSegm
- * NULL if not
+/* Test if the structure PtStruct is inside the block
+ * Returns true or false
  */
-static TRACK* IsSegmentInBox( BLOCK_SELECTOR& blocklocate, TRACK* PtSegm )
+bool IsGbrItemInBox( BLOCK_SELECTOR& aBlocklocate, GERBER_DRAW_ITEM* aItem )
 {
-    if( blocklocate.Inside( PtSegm->m_Start.x, PtSegm->m_Start.y ) )
-        return PtSegm;
+    if( aBlocklocate.Inside( aItem->m_Start ) )
+        return true;
 
-    if( blocklocate.Inside( PtSegm->m_End.x, PtSegm->m_End.y ) )
-        return PtSegm;
+    if( aBlocklocate.Inside( aItem->m_End ) )
+        return true;
 
-    return NULL;
+    return false;
 }

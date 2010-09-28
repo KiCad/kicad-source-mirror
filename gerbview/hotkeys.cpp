@@ -39,7 +39,7 @@ static Ki_HotkeyInfo    HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
 static Ki_HotkeyInfo    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
 static Ki_HotkeyInfo    HkTrackDisplayMode( wxT(
                                                 "Track Display Mode" ),
-                                            HK_SWITCH_TRACK_DISPLAY_MODE, 'F' );
+                                            HK_SWITCH_GBR_ITEMS_DISPLAY_MODE, 'F' );
 
 static Ki_HotkeyInfo    HkSwitch2NextCopperLayer( wxT(
                                                       "Switch to Next Layer" ),
@@ -134,7 +134,7 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey,
         g_UserUnit = (g_UserUnit == INCHES ) ? MILLIMETRES : INCHES;
         break;
 
-    case HK_SWITCH_TRACK_DISPLAY_MODE:
+    case HK_SWITCH_GBR_ITEMS_DISPLAY_MODE:
         DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
         DrawPanel->Refresh();
         break;

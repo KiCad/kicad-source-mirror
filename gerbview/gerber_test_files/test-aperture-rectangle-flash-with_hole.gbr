@@ -1,0 +1,27 @@
+G04 Test flashing of rectangular apertures*
+G04 Four groups of rectangular apertures are arranged in a square*
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%ADD10R,0.050X0.080*%
+%ADD11R,0.080X0.050X0.025*%
+%ADD12R,0.050X0.025X0.025X0.0150*%
+
+G04 No hole, centered at 0,0 *
+G54D10*
+X0Y0D03*
+
+G04 Round hole, centered at 0.1,0 *
+G54D11*
+X00100Y0D03*
+
+G04 Square hole, centered at 0,0.1 *
+G54D12*
+X0Y00100D03*
+
+G04 Two, with round holes, slightly overlapping, centered at 0.1,0.1 *
+G54D11*
+X00100Y00090D03*
+X00100Y00110D03*
+
+M02*

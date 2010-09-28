@@ -47,17 +47,11 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
         {
             if( BlockActive )
             {
-                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND,
-                                 _( "Cancel Block" ) );
-                PopMenu->Append( ID_POPUP_ZOOM_BLOCK,
-                                 _( "Zoom Block (drag middle mouse)" ) );
+                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ) );
                 PopMenu->AppendSeparator();
                 PopMenu->Append( ID_POPUP_PLACE_BLOCK, _( "Place Block" ) );
-                PopMenu->Append( ID_POPUP_COPY_BLOCK,
-                                 _( "Copy Block (shift mouse)" ) );
                 PopMenu->Append( ID_POPUP_DELETE_BLOCK,
                                  _( "Delete Block (ctrl + drag mouse)" ) );
-                PopMenu->Append( ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block" ) );
             }
             else
                 PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND,
@@ -76,19 +70,6 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
         return true;
 
     GetScreen()->SetCurItem( DrawStruct );
-
-    switch( DrawStruct->Type() )
-    {
-    case TYPE_TRACK:
-        break;
-
-
-    default:
-        msg.Printf( wxT( "WinEDA_GerberFrame::OnRightClick Error: illegal or unknown DrawType %d" ),
-                    DrawStruct->Type() );
-        DisplayError( this, msg );
-        break;
-    }
 
     PopMenu->AppendSeparator();
     return true;
