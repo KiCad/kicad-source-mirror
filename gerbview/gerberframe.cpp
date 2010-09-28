@@ -13,6 +13,7 @@
 #include "class_drawpanel.h"
 
 #include "gerbview.h"
+#include "class_gerber_draw_item.h"
 #include "pcbplot.h"
 #include "bitmaps.h"
 #include "protos.h"
@@ -112,6 +113,10 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
 
 // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+                    WinEDA_GerberFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
+                    WinEDA_GerberFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
@@ -236,117 +241,22 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/** Function SetToolbars()
- * Set the tools state for the toolbars, according to display options
- */
-void WinEDA_GerberFrame::SetToolbars()
-{
-    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
-    int     layer  = screen->m_Active_Layer;
-    GERBER* gerber = g_GERBER_List[layer];
-
-    if( m_HToolBar == NULL )
-        return;
-
-    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
-    {
-        m_HToolBar->EnableTool( wxID_CUT, true );
-        m_HToolBar->EnableTool( wxID_COPY, true );
-    }
-    else
-    {
-        m_HToolBar->EnableTool( wxID_CUT, false );
-        m_HToolBar->EnableTool( wxID_COPY, false );
-    }
-
-    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != screen->m_Active_Layer) )
-    {
-        m_SelLayerBox->SetSelection( screen->m_Active_Layer );
-    }
-
-    if( m_SelLayerTool )
-    {
-        if( gerber )
-        {
-            int sel_index;
-            m_SelLayerTool->Enable( true );
-            if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
-                sel_index = 0;
-            else
-                sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
-
-            if( sel_index != m_SelLayerTool->GetSelection() )
-            {
-                m_SelLayerTool->SetSelection( sel_index );
-            }
-        }
-        else
-        {
-            m_SelLayerTool->SetSelection( 0 );
-            m_SelLayerTool->Enable( false );
-        }
-    }
-
-    if( m_OptionsToolBar )
-    {
-        m_OptionsToolBar->ToggleTool(
-            ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UserUnit ==
-            MILLIMETRES ? true : false );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UserUnit == INCHES ? true : false );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                      DisplayOpt.DisplayPolarCood );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-                                      IsGridVisible() );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      m_CursorShape );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                      !m_DisplayPadFill );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                      !m_DisplayPcbTrackFill );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                                      g_DisplayPolygonsModeSketch == 0 ? 0 : 1 );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
-                                      IsElementVisible( DCODES_VISIBLE ) );
-
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                                      m_show_layer_manager_tools );
-        if( m_show_layer_manager_tools )
-            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                    _("Hide &Layers Manager" ) );
-        else
-            GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                    _("Show &Layers Manager" ) );
-
-    }
-
-    DisplayUnitsMsg();
-
-    if( m_auimgr.GetManagedWindow() )
-        m_auimgr.Update();
-}
-
-
 int WinEDA_GerberFrame::BestZoom()
 {
     double x, y;
-    wxSize size;
+    EDA_Rect bbox;
 
-    GetBoard()->ComputeBoundaryBox();
-    size = DrawPanel->GetClientSize();
-    x = ( (double) GetBoard()->m_BoundaryBox.GetWidth() +
-          GetScreen()->GetGridSize().x ) / (double) size.x;
-    y = ( (double) GetBoard()->m_BoundaryBox.GetHeight() +
-          GetScreen()->GetGridSize().y ) / (double) size.y;
-    GetScreen()->m_Curseur = GetBoard()->m_BoundaryBox.Centre();
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    for( ; item; item = item->Next() )
+    {
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        bbox.Merge( gerb_item->GetBoundingBox() );
+    }
+
+    wxSize size = DrawPanel->GetClientSize();
+    x = ( bbox.GetWidth() + GetScreen()->GetGridSize().x ) / (double) size.x;
+    y = ( bbox.GetHeight() + GetScreen()->GetGridSize().y ) / (double) size.y;
+    GetScreen()->m_Curseur = bbox.Centre();
 
     return wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
 }
@@ -505,4 +415,66 @@ void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
     m_auimgr.Update();
 
     ReFillLayerWidget();
+}
+
+
+void WinEDA_GerberFrame::Liste_D_Codes( )
+{
+    int               ii, jj;
+    D_CODE*           pt_D_code;
+    wxString          Line;
+    WinEDA_TextFrame* List;
+    int               scale = 10000;
+    int               curr_layer = GetScreen()->m_Active_Layer;
+
+    List = new WinEDA_TextFrame( this, _( "List D codes" ) );
+
+    for( int layer = 0; layer < 32; layer++ )
+    {
+        GERBER* gerber = g_GERBER_List[layer];
+        if( gerber == NULL )
+            continue;
+
+        if( gerber->ReturnUsedDcodeNumber() == 0 )
+            continue;
+
+        if( layer == curr_layer )
+            Line.Printf( wxT( "*** Active layer (%2.2d) ***" ), layer + 1 );
+        else
+            Line.Printf( wxT( "*** layer %2.2d  ***" ), layer + 1 );
+        List->Append( Line );
+
+        for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
+        {
+            pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
+            if( pt_D_code == NULL )
+                continue;
+
+            if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
+                continue;
+
+            Line.Printf( wxT(
+                             "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
+                         jj,
+                         pt_D_code->m_Num_Dcode,
+                         (float) pt_D_code->m_Size.y / scale,
+                         (float) pt_D_code->m_Size.x / scale,
+                         D_CODE::ShowApertureType( pt_D_code->m_Shape )
+                         );
+
+            if( !pt_D_code->m_Defined )
+                Line += wxT( " ?" );
+
+            if( !pt_D_code->m_InUse )
+                Line += wxT( " *" );
+
+            List->Append( Line );
+            jj++;
+        }
+    }
+
+    ii = List->ShowModal();
+    List->Destroy();
+    if( ii < 0 )
+        return;
 }

@@ -49,7 +49,6 @@
  *
  *   Tools and D_CODES
  *   Tool number (identification of shapes)
- *   1 to 99 (Classical)
  *   1 to 999
  *   D_CODES:
  *
@@ -60,8 +59,7 @@
  *   D09 = VAPE Flash
  *   D51 = G54 preceded by -> Select VAPE
  *
- *   D10 ... D255 = Identification Tool (Opening)
- *   Not in order (see table in PCBPLOT.H)
+ *   D10 ... D999 = Identification Tool (shapes id)
  */
 
 
@@ -83,14 +81,6 @@
  * -1 = File not found
  * -2 = Error reading file
  * Rank D_code max lu (nbr of dCode)
- *
- * Internal Representation:
- *
- * Lines are represented as standard TRACKS
- * The flash is represented as DRAWSEGMENTS
- * - Round or oval: DRAWSEGMENTS
- * - Rectangles DRAWSEGMENTS
- * Reference to the D-CODE is set in the member Getnet()
  */
 
 

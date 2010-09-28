@@ -223,8 +223,6 @@ public:
      * @param DC A device context to draw on.
      */
     void         Block_Delete( wxDC* DC );
-    void         Block_Rotate( wxDC* DC );
-    void         Block_Invert( wxDC* DC );
 
     /**
      * Function Block_Move
@@ -237,14 +235,6 @@ public:
      */
     void         Block_Move( wxDC* DC );
 
-    /**
-     * Function Block_Mirror_X
-     * mirrors all tracks and segments within the currently selected block
-     * in the X axis.
-     *
-     * @param DC A device context to draw on.
-     */
-    void         Block_Mirror_X( wxDC* DC );
     /**
      * Function Block_Duplicate
      * copies-and-moves all tracks and segments within the selected block.
@@ -339,7 +329,6 @@ public:
     bool         Clear_Pcb( bool query );
     void         Erase_Current_Layer( bool query );
     void         Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
-      TRACK*       Delete_Segment( wxDC* DC, TRACK* Track );
 
     // Conversion function
     void         ExportDataInPcbnewFormat( wxCommandEvent& event );

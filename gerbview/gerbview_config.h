@@ -35,7 +35,7 @@ static PARAM_CFG_WXSTRING DrillExtBufCfg
 
 static PARAM_CFG_INT UnitCfg    // Units; 0 inches, 1 mm
 (
-    wxT("Unite"),
+    wxT("Units"),
     (int*)&g_UserUnit,
     MILLIMETRES
 );

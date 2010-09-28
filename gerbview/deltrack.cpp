@@ -1,14 +1,13 @@
 /*********************************************/
-/* Edit Track: Erase Routines                */
-/* Drop the segment, track, and net area     */
+/* Edit Track: Erase functions               */
 /*********************************************/
 
 #include "fctsys.h"
 #include "common.h"
-#include "class_drawpanel.h"
+//#include "class_drawpanel.h"
 
 #include "gerbview.h"
-#include "protos.h"
+#include "class_gerber_draw_item.h"
 
 
 void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC,
@@ -18,73 +17,22 @@ void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC,
     if( dcode_value < FIRST_DCODE )  // No tool selected
         return;
 
-    TRACK* next;
-    for( TRACK* track = GetBoard()->m_Track; track; track = next  )
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    BOARD_ITEM * next;
+    for( ; item; item = next )
     {
-        next = track->Next();
+        next = item->Next();
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
 
-        if( dcode_value != track->GetNet() )
+        if( dcode_value != gerb_item->m_DCode )
             continue;
 
-        if( layer_number >= 0 && layer_number != track->GetLayer() )
+        if( layer_number >= 0 && layer_number != gerb_item->m_Layer )
             continue;
 
-        Delete_Segment( DC, track );
+//   TODO:     Delete_Item( DC, item );
     }
 
     GetScreen()->SetCurItem( NULL );
 }
 
-
-/* Removes 1 segment of track.
- *
- * If There is evidence of new track: erase segment
- * Otherwise: Delete segment under the cursor.
- */
-TRACK* WinEDA_GerberFrame::Delete_Segment( wxDC* DC, TRACK* Track )
-{
-    if( Track == NULL )
-        return NULL;
-
-    if( Track->m_Flags & IS_NEW )  // Trace in progress, delete the last
-                                   // segment
-    {
-        if( g_CurrentTrackList.GetCount() > 0 )
-        {
-            // Change track.
-            delete g_CurrentTrackList.PopBack();
-
-            if( g_CurrentTrackList.GetCount()
-                && g_CurrentTrackSegment->Type() == TYPE_VIA )
-            {
-                delete g_CurrentTrackList.PopBack();
-            }
-
-            UpdateStatusBar();
-
-            if( g_CurrentTrackList.GetCount() == 0 )
-            {
-                DrawPanel->ManageCurseur = NULL;
-                DrawPanel->ForceCloseManageCurseur = NULL;
-                return NULL;
-            }
-            else
-            {
-                if( DrawPanel->ManageCurseur )
-                    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-                return g_CurrentTrackSegment;
-            }
-        }
-
-        return NULL;
-    }
-
-    Trace_Segment( GetBoard(), DrawPanel, DC, Track, GR_XOR );
-
-    DLIST<TRACK>* container = (DLIST<TRACK>*)Track->GetList();
-    wxASSERT( container );
-    container->Remove( Track );
-
-    GetScreen()->SetModify();
-    return NULL;
-}

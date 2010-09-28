@@ -1,0 +1,27 @@
+G04 Test flashing of polygon apertures*
+G04 Four groups of polygon apertures are arranged in a square*
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%ADD10P,0.050X3*%
+%ADD11P,0.050X6X-45X0.035*%
+%ADD12P,0.040X10X25X0.025X0.025X0.0150*%
+
+G04 Triangle, centered at 0,0 *
+G54D10*
+X0Y0D03*
+
+G04 Hexagon with round hole rotate 45 degreed ccwise, centered at 0.1,0 *
+G54D11*
+X00100Y0D03*
+
+G04 10-sided with square hole rotated 25 degrees, centered at 0,0.1 *
+G54D12*
+X0Y00100D03*
+
+G04 Two, with round holes, slightly overlapping, centered at 0.1,0.1 *
+G54D11*
+X00100Y00090D03*
+X00100Y00110D03*
+
+M02*

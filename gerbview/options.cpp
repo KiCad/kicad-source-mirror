@@ -66,7 +66,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( TRUE );
         break;
 
-    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
+    case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
         if( state )
         {
             DisplayOpt.DisplayPadFill = m_DisplayPadFill = false;
@@ -78,19 +78,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh( TRUE );
         break;
 
-    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        if( state )
-        {
-            DisplayOpt.DisplayViaFill = m_DisplayViaFill = false;
-        }
-        else
-        {
-            DisplayOpt.DisplayViaFill = m_DisplayViaFill = true;
-        }
-        DrawPanel->Refresh( TRUE );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
+    case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
         if(state )
         {
             m_DisplayPcbTrackFill = FALSE;

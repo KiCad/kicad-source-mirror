@@ -53,12 +53,11 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         DrawStruct = GerberGeneralLocateAndDisplay();
         if( DrawStruct == NULL )
             break;
-        if( DrawStruct->Type() == TYPE_TRACK )
-        {
-            Delete_Segment( DC, (TRACK*) DrawStruct );
-            GetScreen()->SetCurItem( NULL );
-            GetScreen()->SetModify();
-        }
+        /* TODO:
+        Delete_Item( DC, (GERBER_DRAW_ITEM*) DrawStruct );
+        GetScreen()->SetCurItem( NULL );
+        GetScreen()->SetModify();
+        */
         break;
 
     default:
@@ -85,13 +84,9 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     {
     case wxID_CUT:
     case wxID_COPY:
-    case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_FLIP_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_COPY_BLOCK:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -196,13 +191,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockPlace( &dc );
         break;
 
-    case ID_POPUP_COPY_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        DrawPanel->m_AutoPAN_Request = FALSE;
-        HandleBlockEnd( &dc );
-        break;
-
     case ID_POPUP_ZOOM_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
@@ -212,12 +200,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_DELETE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_MIRROR_X_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

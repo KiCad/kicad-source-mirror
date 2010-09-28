@@ -13,6 +13,7 @@
 
 #include "gerbview.h"
 #include "class_board_design_settings.h"
+#include "class_gerber_draw_item.h"
 #include "protos.h"
 
 static int SavePcbFormatAscii( WinEDA_GerberFrame* frame,
@@ -128,7 +129,6 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
                                int* LayerLookUpTable )
 {
     char   line[256];
-    TRACK* track;
     BOARD* gerberPcb = frame->GetBoard();
     BOARD* pcb;
 
@@ -136,10 +136,11 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
 
     // create an image of gerber data
     pcb = new BOARD( NULL, frame );
-
-    for( track = gerberPcb->m_Track; track; track = track->Next() )
+    BOARD_ITEM* item = gerberPcb->m_Drawings;
+    for( ; item; item = item->Next() )
     {
-        int layer = track->GetLayer();
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        int layer = gerb_item->m_Layer;
         int pcb_layer_number = LayerLookUpTable[layer];
         if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
             continue;
@@ -149,17 +150,17 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
             DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPE_DRAWSEGMENT );
 
             drawitem->SetLayer( pcb_layer_number );
-            drawitem->m_Start = track->m_Start;
-            drawitem->m_End   = track->m_End;
-            drawitem->m_Width = track->m_Width;
+            drawitem->m_Start = gerb_item->m_Start;
+            drawitem->m_End   = gerb_item->m_End;
+            drawitem->m_Width = gerb_item->m_Size.x;
 
-            if( track->m_Shape == S_ARC )
+            if( gerb_item->m_Shape == GBR_ARC )
             {
-                double cx = track->m_Param;
-                double cy = track->GetSubNet();
-                double a  = atan2( track->m_Start.y - cy,
-                                   track->m_Start.x - cx );
-                double b  = atan2( track->m_End.y - cy, track->m_End.x - cx );
+                double cx = gerb_item->m_ArcCentre.x;
+                double cy = gerb_item->m_ArcCentre.y;
+                double a  = atan2( gerb_item->m_Start.y - cy,
+                                   gerb_item->m_Start.x - cx );
+                double b  = atan2( gerb_item->m_End.y - cy, gerb_item->m_End.x - cx );
 
                 drawitem->m_Shape   = S_ARC;
                 drawitem->m_Angle   = (int) fmod(
@@ -175,34 +176,28 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
             TRACK* newtrack;
 
             // replace spots with vias when possible
-            if( track->m_Shape == S_SPOT_CIRCLE
-                || track->m_Shape == S_SPOT_RECT
-                || track->m_Shape == S_SPOT_OVALE )
+            if( gerb_item->m_Shape == GBR_SPOT_CIRCLE
+                || gerb_item->m_Shape == GBR_SPOT_RECT
+                || gerb_item->m_Shape == GBR_SPOT_OVAL )
             {
-                newtrack = new SEGVIA( (const SEGVIA &) * track );
+                newtrack = new SEGVIA( pcb );
 
                 // A spot is found, and can be a via: change it to via, and
                 // delete other
                 // spots at same location
                 newtrack->m_Shape = VIA_THROUGH;
-
                 newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
-
                 newtrack->SetDrillDefault();
-
-                // Compute the via position from track position ( Via position
-                // is the
-                // position of the middle of the track segment )
-                newtrack->m_Start.x =
-                    (newtrack->m_Start.x + newtrack->m_End.x) / 2;
-                newtrack->m_Start.y =
-                    (newtrack->m_Start.y + newtrack->m_End.y) / 2;
-                newtrack->m_End = newtrack->m_Start;
+                newtrack->m_Start = newtrack->m_End = gerb_item->m_Start;
+                newtrack->m_Width = (gerb_item->m_Size.x + gerb_item->m_Size.y) / 2;
             }
             else    // a true TRACK
             {
-                newtrack = track->Copy();
+                newtrack = new TRACK( pcb );
                 newtrack->SetLayer( pcb_layer_number );
+                newtrack->m_Start = gerb_item->m_Start;
+                newtrack->m_End = gerb_item->m_End;
+                newtrack->m_Width = gerb_item->m_Size.x;
             }
 
             pcb->Add( newtrack );
@@ -210,7 +205,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
     }
 
     // delete redundant vias
-    for( track = pcb->m_Track; track; track = track->Next() )
+    for( TRACK * track = pcb->m_Track; track; track = track->Next() )
     {
         if( track->m_Shape != VIA_THROUGH )
             continue;
