@@ -66,7 +66,10 @@ public:
      */
     virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
 
-#if wxABI_VERSION < 20811   // change the if as needed
+    // The following functions did not appear in the base class until recently.
+    // Overload them even if they are present in base class, just to make sure
+    // they are present in any older base class implementation.
+    //-----<overloads>---------------------------------------------------------
 
     wxString GetAttribute( const wxString& attrName, const wxString& defaultVal ) const
     {
@@ -84,8 +87,8 @@ public:
     {
         return GetProperties();
     }
-#endif // wx < 2.8.11
 
+    //-----</overloads>--------------------------------------------------------
 };
 
 #endif  // _XATTR_H_
