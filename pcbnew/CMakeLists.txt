@@ -219,7 +219,7 @@ endif(APPLE)
 # Create a C++ compilable string initializer containing html text into a *.h file:
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
-    COMMAND $(CMAKE_COMMAND)
+    COMMAND ${CMAKE_COMMAND}
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html
         -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
         -P ${CMAKE_MODULE_PATH}/Html2C.cmake
