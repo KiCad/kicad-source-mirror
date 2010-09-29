@@ -57,7 +57,6 @@ private:
 
 
 public:
-    int     m_Layer;
     int     m_Shape;                        // Shape and type of this gerber item
     wxPoint m_Start;                        // Line or arc start point or position of the shape
                                             // for flashed items

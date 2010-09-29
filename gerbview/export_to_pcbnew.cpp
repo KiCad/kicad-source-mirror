@@ -140,7 +140,7 @@ static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        int layer = gerb_item->m_Layer;
+        int layer = gerb_item->GetLayer();
         int pcb_layer_number = LayerLookUpTable[layer];
         if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
             continue;

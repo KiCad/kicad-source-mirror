@@ -62,10 +62,13 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
     {
         next = item->Next();
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( gerb_item->m_Layer != layer )
+        if( gerb_item->GetLayer() != layer )
             continue;
         gerb_item->DeleteStructure();
     }
+
+    if( g_GERBER_List[layer] )
+        g_GERBER_List[layer]->InitToolTable();
 
     ScreenPcb->SetModify();
     ScreenPcb->SetRefreshReq();

@@ -27,7 +27,7 @@ void WinEDA_GerberFrame::Delete_DCode_Items( wxDC* DC,
         if( dcode_value != gerb_item->m_DCode )
             continue;
 
-        if( layer_number >= 0 && layer_number != gerb_item->m_Layer )
+        if( layer_number >= 0 && layer_number != gerb_item->GetLayer() )
             continue;
 
 //   TODO:     Delete_Item( DC, item );
