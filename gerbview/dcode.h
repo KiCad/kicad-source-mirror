@@ -17,12 +17,13 @@
  * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
  */
 enum APERTURE_T {
-    APT_CIRCLE  = 'C',
-    APT_LINE    = 'L',
-    APT_RECT    = 'R',
-    APT_OVAL    = '0',
-    APT_POLYGON = 'P',
-    APT_MACRO   = 'M'
+    APT_CIRCLE  = 'C',      // Flashed shape: Circle with or without hole
+    APT_LINE    = 'L',      // tool to draw line. Not used to flash items
+    APT_RECT    = 'R',      // Flashed shape: Rectangle with or without hole
+    APT_OVAL    = '0',      // Flashed shape: Oval with or without hole
+    APT_POLYGON = 'P',      // Flashed shape: Regular polygon (3 to 12 edges)
+                            // with or without hole. Can be rotated
+    APT_MACRO   = 'M'       // Complex shape given by a macro definition (see AM_PRIMITIVE_ID)
 };
 
 // In aperture definition, round, oval and rectangular flashed shapes
@@ -101,18 +102,20 @@ private:
  * Enum AM_PRIMITIVE_ID
  * is the set of all "aperture macro primitives" (primitive numbers).  See
  * Table 3 in http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
+ * aperture macro primitives are basic shapes which can be combined to create a complex shape
+ * This complex shape is flashed.
  */
 enum AM_PRIMITIVE_ID {
-    AMP_CIRCLE = 1,
-    AMP_LINE2  = 2,
-    AMP_LINE20 = 20,
-    AMP_LINE_CENTER = 21,
-    AMP_LINE_LOWER_LEFT = 22,
-    AMP_EOF     = 3,
-    AMP_OUTLINE = 4,
-    AMP_POLYGON = 5,
-    AMP_MOIRE   = 6,
-    AMP_THERMAL = 7,
+    AMP_CIRCLE = 1,             // Circle. (diameter and position)
+    AMP_LINE2  = 2,             // Line with rectangle ends. (Width, start and end pos + rotation)
+    AMP_LINE20 = 20,            // Same as AMP_LINE2
+    AMP_LINE_CENTER = 21,       // Rectangle. (height, width and center pos + rotation)
+    AMP_LINE_LOWER_LEFT = 22,   // Rectangle. (height, width and lrft bottom corner pos + rotation)
+    AMP_EOF     = 3,            // End Of File marquer: not really a shape
+    AMP_OUTLINE = 4,            // Free polyline (n corners + rotation)
+    AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10), rotation)
+    AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation
+    AMP_THERMAL = 7,            // Thermal shape (pos, outer and inner dioameter, cross hair thickness + rotation)
 };
 
 
@@ -197,9 +200,9 @@ class D_CODE
      */
     DCODE_PARAMS          m_am_params;
 
-    std::vector <wxPoint> m_PolyCorners;    /* Polygon used to draw AMP_POLYGON shape and some other
+    std::vector <wxPoint> m_PolyCorners;    /* Polygon used to draw APT_POLYGON shape and some other
                                              * complex shapes which are converted to polygon
-                                             * (shapes with hole, rotated rectangles ...
+                                             * (shapes with hole )
                                              */
 
 public:

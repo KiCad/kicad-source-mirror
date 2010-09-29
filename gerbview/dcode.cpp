@@ -20,14 +20,14 @@
  *   1 to 999
  *
  * D_CODES:
- *   D01 ... D9 = action codes:
- *   D01 = activating light (lower pen) when di ¿½ placement
- *   D02 = light extinction (lift pen) when di ¿½ placement
- *   D03 Flash
- *   D09 = VAPE Flash
- *   D10 ... = Indentification Tool (Shape id)
+ *   D01 ... D9 = command codes:
+ *      D01 = activating light (pen down) while moving
+ *      D02 = light extinction (pen up) while moving
+ *      D03 = Flash
+ *      D04 to D09 = non used
+ *   D10 ... D999 = Indentification Tool (Shape id)
  *
- * For tools:
+ * For tools defining a shape):
  * DCode min = D10
  * DCode max = 999
  */
