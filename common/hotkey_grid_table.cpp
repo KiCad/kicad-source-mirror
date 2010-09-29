@@ -13,7 +13,7 @@ HotkeyGridTable::HotkeyGridTable( struct
 
     for( section = origin; section->m_HK_InfoList; section++ )
     {
-        hotkey_spec     spec( *section->m_SectionTag, 0 );
+        hotkey_spec     spec( *section->m_SectionTag, new Ki_HotkeyInfo( NULL, 0, 0 ) );
         m_hotkeys.push_back( spec );
 
         Ki_HotkeyInfo** info_ptr;

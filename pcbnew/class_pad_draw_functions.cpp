@@ -729,7 +729,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( m_DeltaSize.y, m_Size.y );
+            angle = atan2( double( m_DeltaSize.y ), double( m_Size.y ) );
 
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis
@@ -745,7 +745,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         else if( delta.x )          // left and right segment is vertical
         {
             // Calculate angle of lower (or upper) segment with horizontal axis
-            angle = atan2( m_DeltaSize.x, m_Size.x );
+            angle = atan2( double( m_DeltaSize.x ), double( m_Size.x ) );
 
             // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the vertical axis

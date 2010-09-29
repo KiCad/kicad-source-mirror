@@ -313,21 +313,10 @@ void WinEDA_BasicFrame::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
 }
 
 
-void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent& WXUNUSED( event ) )
-{
-    if( !wxTheClipboard->Open() )
-    {
-        wxMessageBox( _( "Could not open clipboard to write version information." ),
-                      _( "Clipboard Error" ), wxOK | wxICON_EXCLAMATION, this );
-        return;
-    }
+// This is an enhanced version of the compiler build macro provided by wxWidgets
+// in <wx/build.h>. Please do not make any of these strings translatable.  They
+// are used for conveying troubleshooting information to developers.
 
-    wxString tmp;
-    wxPlatformInfo info;
-
-    // This is an enhanced version of the compiler build macro provided by wxWidgets
-    // in <wx/build.h>. Please do not make any of these strings translatable.  They
-    // are used for conveying troubleshooting information to developers.
 #if defined(__GXX_ABI_VERSION)
     #define __ABI_VERSION  ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
 #else
@@ -354,24 +343,44 @@ void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent& WXUNUSED( ev
 #endif
 
 #if wxCHECK_VERSION( 2, 9, 0 )
-#define KICAD_BUILD_OPTIONS_SIGNATURE \
-    " (" __WX_BO_UNICODE \
-     __ABI_VERSION __BO_COMPILER \
-     __WX_BO_STL \
-     __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 \
-     ")"
+
+static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
+{
+    return
+    " (" __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
+    __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 ")"
+    ;
+}
+
 #else
-#define KICAD_BUILD_OPTIONS_SIGNATURE \
-    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE \
-     __ABI_VERSION __BO_COMPILER \
-     __WX_BO_STL \
-     __WX_BO_WXWIN_COMPAT_2_4 __WX_BO_WXWIN_COMPAT_2_6 \
-     ")"
+
+static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
+{
+    return
+    " (" __WX_BO_DEBUG ","
+    __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
+    __WX_BO_WXWIN_COMPAT_2_4 __WX_BO_WXWIN_COMPAT_2_6 ")"
+    ;
+}
+
 #endif
+
+void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent& WXUNUSED( event ) )
+{
+    if( !wxTheClipboard->Open() )
+    {
+        wxMessageBox( _( "Could not open clipboard to write version information." ),
+                      _( "Clipboard Error" ), wxOK | wxICON_EXCLAMATION, this );
+        return;
+    }
+
+    wxString tmp;
+    wxPlatformInfo info;
+
     tmp = wxT( "Application: " ) + wxGetApp().GetTitle() + wxT( "\n" );
     tmp += wxT( "Version: " ) + GetBuildVersion() + wxT( "\n" );
     tmp << wxT( "Build: " ) << wxVERSION_STRING
-        << wxT( KICAD_BUILD_OPTIONS_SIGNATURE ) << wxT( "\n" )
+        << CONV_FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
         << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
         << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
         << info.GetPortIdName();
