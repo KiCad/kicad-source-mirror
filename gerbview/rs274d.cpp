@@ -1006,7 +1006,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                 {
                     if( m_LayerNegative ^ m_ImageNegative )
                         gbritem->m_Flags |= DRAW_ERASED;
-                    D( printf( "\nm_Flags=0x%08X\n", edge_poly->m_Flags ); )
+                    D( printf( "\nm_Flags=0x%08X\n", gbritem->m_Flags ); )
                 }
                 break;
             }
