@@ -465,6 +465,9 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
         filename += m_CurrentSheet->PathHumanReadable();
         filename.Replace( wxT( "/" ), wxT( "-" ) );
         filename.RemoveLast();
+#if defined(KICAD_GOST)
+        filename.Remove( 0, 1 );
+#endif
     }
     else
     {

@@ -789,6 +789,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
     wxString        refName;
     wxString        fullRefName;        // reference + part Id (for multiple parts per package
     wxString        valName;
+#if defined(KICAD_GOST)
+    wxString        footName;
+    wxString        datsName;
+#endif
     wxString        refNames;
     wxString        lastRef;
     wxString        unitId;
@@ -819,6 +823,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         refName = aList[ii].GetRef();
         valName = currCmp->GetField( VALUE )->m_Text;
+#if defined(KICAD_GOST)
+        footName = currCmp->GetField( FOOTPRINT )->m_Text;
+        datsName = currCmp->GetField( DATASHEET )->m_Text;
+#endif
 
         int multi = 0;
         if( aIncludeSubComponents )
@@ -850,7 +858,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
         lastRef = refName;
 
         // if the next cmoponent has same value the line will be printed after.
+#if defined(KICAD_GOST)
+        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0
+            && nextCmp->GetField( FOOTPRINT )->m_Text.CmpNoCase( footName ) == 0
+            && nextCmp->GetField( DATASHEET )->m_Text.CmpNoCase( datsName ) == 0 )
+#else
         if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0 )
+#endif
             continue;
 
        // Print line for the current component value:
@@ -858,11 +872,15 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
+#if defined(KICAD_GOST)
+                     CONV_TO_UTF8( footName ) );
+#else
                      CONV_TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
+#endif
 
 #if defined(KICAD_GOST)
             fprintf( f, "%c%20s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( currCmp->GetField( DATASHEET )->m_Text ) );
+                     CONV_TO_UTF8( datsName ) );
 #endif
 
         // wrap the field in quotes, since it has commas in it.
