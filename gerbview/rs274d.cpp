@@ -19,32 +19,26 @@
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
                        || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
 
-/* Format Gerber: NOTES:
- * Functions history:
+/* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes):
  * Gn =
  * G01 linear interpolation (right trace)
  * G02, G20, G21 Circular interpolation, meaning trig <0
  * G03, G30, G31 Circular interpolation, meaning trigo> 0
- * G04 review
+ * G04 = comment
  * G06 parabolic interpolation
  * G07 Cubic Interpolation
  * G10 linear interpolation (scale x10)
  * G11 linear interpolation (0.1x range)
  * G12 linear interpolation (0.01x scale)
- * G52 plot symbol reference code by Dnn
- * G53 plot symbol reference by Dnn; symbol rotates from -90 degrees
+ * G36 Start polygon mode
+ * G37 Stop polygon mode (and close it)
  * G54 Selection Tool
- * G55 Fashion photo exhibition
- * G56 plot symbol reference code for DNN
- * G57 displays the symbol link to the console
- * G58 plot displays the symbol and link to the console
  * G60 linear interpolation (scale x100)
- * G70 Units = Inches
- * G71 Units = Millimeters
- * G74 circular interpolation removes 360 degree, has returned G01
- * Active G75 circular interpolation on 360 degree
+ * G70 Select Units = Inches
+ * G71 Select Units = Millimeters
+ * G74 circular interpolation removes 360 degree (arc draw mode) finishing by G01
+ * G75 circular interpolation on 360 degree
  * G90 mode absolute coordinates
- * G91 Fashion Related Contacts
  *
  * X, Y
  * X and Y are followed by + or - and m + n digits (not separated)
@@ -53,23 +47,20 @@
  * Classic formats: m = 2, n = 3 (size 2.3)
  * m = 3, n = 4 (size 3.4)
  * eg
- * G__ X00345Y-06123 * D__
+ * GxxX00345Y-06123*
  *
  * Tools and D_CODES
  * Tool number (identification of shapes)
- * 1 to 99 (Classical)
- * 1 to 999
+ * 10 to 999
  * D_CODES:
+ * D01 ... D9 = command codes:
+ *   D01 = activating light (pen down) when placement
+ *   D02 = light extinction (pen up) when placement
+ *   D03 = Flash
+ *   D09 = VAPE Flash (I never see this command in gerber file)
+ *   D51 = G54 preceded by -> Select VAPE
  *
- * D01 ... D9 = action codes:
- * D01 = activating light (lower pen) when placement
- * D02 = light extinction (lift pen) when placement
- * D03 = Flash
- * D09 = VAPE Flash
- * D51 = G54 preceded by -> Select VAPE
- *
- * D10 ... D255 = Identification Tool (Opening)
- * Not tj in order (see table in PCBPLOT.H)
+ * D10 ... D999 = Identification Tool: tool selection
  */
 
 // Photoplot actions:
@@ -999,9 +990,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                 NEGATE( gbritem->m_End.y );
                 gbritem->m_PolyCorners.push_back( gbritem->m_End );
 
-                // the first track of each polygon has a netcode of zero,
-                // otherwise one.  Set the erasure flag in that special track,
-                // if a negative polygon.
+                // Set the erasure flag of gbritem if a negative polygon.
                 if( !m_PolygonFillModeState )
                 {
                     if( m_LayerNegative ^ m_ImageNegative )

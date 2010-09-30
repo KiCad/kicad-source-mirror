@@ -20,14 +20,14 @@
  *   1 to 999
  *
  * D_CODES:
- *   D01 ... D9 = action codes:
- *   D01 = activating light (lower pen) when di ¿½ placement
- *   D02 = light extinction (lift pen) when di ¿½ placement
- *   D03 Flash
- *   D09 = VAPE Flash
- *   D10 ... = Indentification Tool (Shape id)
+ *   D01 ... D9 = command codes:
+ *      D01 = activating light (pen down) while moving
+ *      D02 = light extinction (pen up) while moving
+ *      D03 = Flash
+ *      D04 to D09 = non used
+ *   D10 ... D999 = Indentification Tool (Shape id)
  *
- * For tools:
+ * For tools defining a shape):
  * DCode min = D10
  * DCode max = 999
  */
@@ -96,7 +96,16 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     return ret;
 }
 
-
+/** Function Read_D_Code_File
+ * Can be useful only with old RS274D Gerber file format.
+ * Is not needed with RS274X files format.
+ * These files need an auxiliary DCode file description. Ther is no defined file format for this.
+ * This function read a file format I needed a long time ago.
+ * reads in a dcode file assuming ALSPCB file format with ';' indicating comments.
+ * Format is like CSV but with optional ';' delineated comments:
+ * tool,     Horiz,       Vert,   drill, vitesse, acc. ,Type ; [DCODE (commentaire)]
+ * ex:     1,         12,       12,     0,        0,     0,   3 ; D10
+ */
 int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
 {
     int      current_Dcode, ii, dcode_scale;
@@ -112,9 +121,7 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
     int      type_outil;
 
     if( g_GERBER_List[layer] == NULL )
-    {
         g_GERBER_List[layer] = new GERBER( layer );
-    }
 
     GERBER* gerber = g_GERBER_List[layer];
 
@@ -158,13 +165,11 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
         if( ii >= 6 )   /* valeurs en mils */
         {
             sscanf( line, "%d,%d,%d,%d,%d,%d,%d", &ii,
-                    &dimH, &dimV, &drill,
-                    &dummy, &dummy,
-                    &type_outil );
+                    &dimH, &dimV, &drill,  &dummy, &dummy, &type_outil );
 
-            dimH  = (int) ( (dimH * dcode_scale) + 0.5 );
-            dimV  = (int) ( (dimV * dcode_scale) + 0.5 );
-            drill = (int) ( (drill * dcode_scale) + 0.5 );
+            dimH  = wxRound( dimH * dcode_scale );
+            dimV  = wxRound( dimV * dcode_scale );
+            drill = wxRound( drill * dcode_scale );
             if( ii < 1 )
                 ii = 1;
             current_Dcode = ii - 1 + FIRST_DCODE;
@@ -187,9 +192,9 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
                     ptcar++;
             }
 
-            dimH  = (int) ( (fdimH * dcode_scale * 1000) + 0.5 );
-            dimV  = (int) ( (fdimV * dcode_scale * 1000) + 0.5 );
-            drill = (int) ( (fdrill * dcode_scale * 1000) + 0.5 );
+            dimH  = wxRound( fdimH * dcode_scale * 1000 );
+            dimV  = wxRound( fdimV * dcode_scale * 1000 );
+            drill = wxRound( fdrill * dcode_scale * 1000 );
 
             if( strchr( "CLROP", c_type_outil[0] ) )
                 type_outil = (APERTURE_T) c_type_outil[0];
