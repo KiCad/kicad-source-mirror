@@ -30,6 +30,7 @@
  */
 
 #include "base_struct.h"
+#include "class_board_item.h"
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
 enum Gbr_Basic_Shapes {
@@ -57,6 +58,8 @@ private:
 
 
 public:
+    bool m_UnitsMetric;                     /* store here the gerber units (inch/mm).
+                                             *  Used only to calculate aperture macros shapes sizes  */
     int     m_Shape;                        // Shape and type of this gerber item
     wxPoint m_Start;                        // Line or arc start point or position of the shape
                                             // for flashed items

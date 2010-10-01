@@ -49,6 +49,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
     m_Shape   = GBR_SEGMENT;
     m_Flashed = false;
     m_DCode   = 0;
+    m_UnitsMetric = false;
 }
 
 
@@ -70,6 +71,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_Flashed     = aSource.m_Flashed;
     m_DCode       = aSource.m_DCode;
     m_PolyCorners = aSource.m_PolyCorners;
+    m_UnitsMetric = aSource.m_UnitsMetric;
 }
 
 
@@ -176,7 +178,7 @@ bool GERBER_DRAW_ITEM::Save( FILE* aFile ) const
 
 
 /*********************************************************************/
-void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
+void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
                              const wxPoint& aOffset )
 /*********************************************************************/
 {
@@ -203,9 +205,9 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
         color = brd->GetLayerColor( GetLayer() );
 
-        if( draw_mode & GR_SURBRILL )
+        if( aDrawMode & GR_SURBRILL )
         {
-            if( draw_mode & GR_AND )
+            if( aDrawMode & GR_AND )
                 color &= ~HIGHT_LIGHT_FLAG;
             else
                 color |= HIGHT_LIGHT_FLAG;
@@ -214,7 +216,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
             color = ColorRefs[color & MASKCOLOR].m_LightColor;
     }
 
-    GRSetDrawMode( DC, draw_mode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     isFilled = DisplayOpt.DisplayPcbTrackFill ? true : false;
 
@@ -224,7 +226,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         isFilled = (g_DisplayPolygonsModeSketch == false);
         if( m_Flags & DRAW_ERASED )
             isFilled = true;
-        DrawGbrPoly( &panel->m_ClipBox, DC, color, aOffset, isFilled );
+        DrawGbrPoly( &aPanel->m_ClipBox, aDC, color, aOffset, isFilled );
         break;
 
     case GBR_CIRCLE:
@@ -236,14 +238,14 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                       radius - halfPenWidth, 0, color );
-            GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                       radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                       radius, m_Size.x, color );
         }
         break;
@@ -251,13 +253,13 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     case GBR_ARC:
         if( !isFilled )
         {
-            GRArc1( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                     m_End.x, m_End.y,
                     m_ArcCentre.x, m_ArcCentre.y, 0, color );
         }
         else
         {
-            GRArc1( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                     m_End.x, m_End.y,
                     m_ArcCentre.x, m_ArcCentre.y,
                     m_Size.x, color );
@@ -268,17 +270,18 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     case GBR_SPOT_RECT:
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
+    case GBR_SPOT_MACRO:
         isFilled = DisplayOpt.DisplayPadFill ? true : false;
-        d_codeDescr->DrawFlashedShape( &panel->m_ClipBox, DC, color,
+        d_codeDescr->DrawFlashedShape( this, &aPanel->m_ClipBox, aDC, color,
                                        m_Start, isFilled );
         break;
 
     case GBR_SEGMENT:
         if( !isFilled )
-            GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+            GRCSegm( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
                      m_End.x, m_End.y, m_Size.x, color );
         else
-            GRFillCSegm( &panel->m_ClipBox, DC, m_Start.x,
+            GRFillCSegm( &aPanel->m_ClipBox, aDC, m_Start.x,
                          m_Start.y, m_End.x, m_End.y, m_Size.x, color );
         break;
 

@@ -1163,6 +1163,9 @@ static bool IsGRSPolyDrawable( EDA_Rect* ClipBox, int n, wxPoint Points[] )
     if( ! ClipBox )
         return true;
 
+    if( n <= 0 )
+        return false;
+
     int Xmin, Xmax, Ymin, Ymax;
 
     Xmin = Xmax = Points[0].x;

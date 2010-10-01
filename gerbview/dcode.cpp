@@ -96,10 +96,11 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     return ret;
 }
 
+
 /** Function Read_D_Code_File
  * Can be useful only with old RS274D Gerber file format.
  * Is not needed with RS274X files format.
- * These files need an auxiliary DCode file description. Ther is no defined file format for this.
+ * These files need an auxiliary DCode file description. There is no defined file format for this.
  * This function read a file format I needed a long time ago.
  * reads in a dcode file assuming ALSPCB file format with ';' indicating comments.
  * Format is like CSV but with optional ';' delineated comments:
@@ -165,7 +166,7 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
         if( ii >= 6 )   /* valeurs en mils */
         {
             sscanf( line, "%d,%d,%d,%d,%d,%d,%d", &ii,
-                    &dimH, &dimV, &drill,  &dummy, &dummy, &type_outil );
+                    &dimH, &dimV, &drill, &dummy, &dummy, &type_outil );
 
             dimH  = wxRound( dimH * dcode_scale );
             dimV  = wxRound( dimV * dcode_scale );
@@ -279,7 +280,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
                 break;
 
             default:
-                wxMessageBox( wxT("WinEDA_GerberFrame::CopyDCodesSizeToItems() error" ) );
+                wxMessageBox( wxT( "WinEDA_GerberFrame::CopyDCodesSizeToItems() error" ) );
                 break;
             }
         }
@@ -291,15 +292,18 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
  * Draw the dcode shape for flashed items.
  * When an item is flashed, the DCode shape is the shape of the item
  */
-void D_CODE::DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
-                               wxPoint aShapePos, bool aFilledShape )
+void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
+                                EDA_Rect* aClipBox, wxDC* aDC, int aColor,
+                                wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
 
     switch( m_Shape )
     {
+    case APT_MACRO:
+        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aShapePos, aFilledShape);
+        break;
 
-    case APT_MACRO: // TODO: current a round shape
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
         if( !aFilledShape )
@@ -427,7 +431,7 @@ void D_CODE::DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC,
 static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
                               APERTURE_DEF_HOLETYPE aHoleShape,
                               wxSize                aSize,
-                              wxPoint                aAnchorPos );
+                              wxPoint               aAnchorPos );
 
 /** function ConvertShapeToPolygon
  * convert a shape to an equivalent polygon.
@@ -439,6 +443,7 @@ void D_CODE::ConvertShapeToPolygon()
 {
     wxPoint initialpos;
     wxPoint currpos;;
+
     m_PolyCorners.clear();
 
     switch( m_Shape )
@@ -530,6 +535,7 @@ void D_CODE::ConvertShapeToPolygon()
     case APT_POLYGON:
         currpos.x  = m_Size.x >> 1;     // first point is on X axis
         initialpos = currpos;
+
         // rs274x said: m_EdgesCount = 3 ... 12
         if( m_EdgesCount < 3 )
             m_EdgesCount = 3;
@@ -541,15 +547,16 @@ void D_CODE::ConvertShapeToPolygon()
             RotatePoint( &currpos, ii * 3600 / m_EdgesCount );
             m_PolyCorners.push_back( currpos );
         }
+
         addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
         if( m_Rotation )                   // vertical oval, rotate polygon.
         {
-            int angle = wxRound( m_Rotation*10 );
+            int angle = wxRound( m_Rotation * 10 );
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
             {
                 // Remember the Y axis is from top to bottom when draw items.
                 RotatePoint( &m_PolyCorners[jj], -angle );
-                NEGATE(m_PolyCorners[jj].y);
+                NEGATE( m_PolyCorners[jj].y );
             }
         }
         break;
@@ -561,6 +568,7 @@ void D_CODE::ConvertShapeToPolygon()
     }
 }
 
+
 // The helper function for D_CODE::ConvertShapeToPolygon().
 // Add a hole to a polygon
 static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
@@ -569,6 +577,7 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
                               wxPoint               aAnchorPos )
 {
     wxPoint currpos;
+
     if( aHoleShape == APT_DEF_ROUND_HOLE )                     // build a round hole
     {
         for( int ii = 0; ii <= SEGS_CNT; ii++ )
@@ -579,9 +588,9 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
             aBuffer.push_back( currpos );
         }
 
-        aBuffer.push_back( aAnchorPos );  // link to outline
+        aBuffer.push_back( aAnchorPos );        // link to outline
     }
-    if( aHoleShape == APT_DEF_RECT_HOLE )     // Create rectangular hole
+    if( aHoleShape == APT_DEF_RECT_HOLE )       // Create rectangular hole
     {
         currpos.x = aSize.x / 2;
         currpos.y = aSize.y / 2;
@@ -593,7 +602,7 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
         currpos.x += aSize.x;
         aBuffer.push_back( currpos );
         currpos.y += aSize.y;
-        aBuffer.push_back( currpos );     // close hole
-        aBuffer.push_back( aAnchorPos );  // link to outline
+        aBuffer.push_back( currpos );       // close hole
+        aBuffer.push_back( aAnchorPos );    // link to outline
     }
 }

@@ -631,48 +631,15 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
                 }
                 current_coord = atoi( line );
                 double real_scale = 1.0;
+                if( fmt_scale < 0 || fmt_scale > 9 )
+                    fmt_scale = 4;      // select scale 1.0
 
-                switch( fmt_scale )
-                {
-                case 0:
-                    real_scale = 10000.0;
-                    break;
-
-                case 1:
-                    real_scale = 1000.0;
-                    break;
-
-                case 2:
-                    real_scale = 100.0;
-                    break;
-
-                case 3:
-                    real_scale = 10.0;
-                    break;
-
-                case 4:
-                    break;
-
-                case 5:
-                    real_scale = 0.1;
-                    break;
-
-                case 6:
-                    real_scale = 0.01;
-                    break;
-
-                case 7:
-                    real_scale = 0.001;
-                    break;
-
-                case 8:
-                    real_scale = 0.0001;
-                    break;
-
-                case 9:
-                    real_scale = 0.00001;
-                    break;
-                }
+                double scale_list[10] =
+                {   10000.0, 1000.0, 100.0, 10.0,
+                    1,
+                    0.1, 0.01, 0.001, 0.0001, 0.00001
+                };
+                real_scale = scale_list[fmt_scale];
 
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
@@ -844,7 +811,7 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
  * Function scale
  * converts a distance given in floating point to our deci-mils
  */
-static int scale( double aCoord, bool isMetric )
+int scale( double aCoord, bool isMetric )
 {
     int ret;
 
@@ -863,7 +830,7 @@ static int scale( double aCoord, bool isMetric )
  * deci-mils coordinate system.
  * @return wxPoint - The gerbview coordinate system vector.
  */
-static wxPoint mapPt( double x, double y, bool isMetric )
+wxPoint mapPt( double x, double y, bool isMetric )
 {
     wxPoint ret( scale( x, isMetric ),
                 scale( y, isMetric ) );
@@ -908,8 +875,7 @@ static bool mapExposure( int param1, bool curExposure, bool isNegative )
 }
 
 
-bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
-                                    char*& text, int D_commande )
+bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int D_commande )
 {
     wxSize            size( 15, 15 );
 
@@ -958,6 +924,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->SetLayer( activeLayer );
                 gbritem->m_Flashed = false;
+                gbritem->m_UnitsMetric = m_GerbMetric;
             }
 
             switch( m_Iterpolation )
@@ -1033,6 +1000,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
             {
             case GERB_INTERPOL_LINEAR_1X:
                 gbritem = new GERBER_DRAW_ITEM( pcb );
+                gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
                 D( printf( "R:%p\n", gbritem ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
@@ -1049,6 +1017,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = new GERBER_DRAW_ITEM( pcb );
+                gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
                 D( printf( "R:%p\n", gbritem ); )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
@@ -1087,6 +1056,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
             case APT_POLYGON:   // flashed regular polygon
             case APT_CIRCLE:
                 gbritem = new GERBER_DRAW_ITEM( pcb );
+                gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
                 D( printf( "R:%p\n", gbritem ); )
                 fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
@@ -1099,6 +1069,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
             case APT_OVAL:
             case APT_RECT:
                 gbritem = new GERBER_DRAW_ITEM( pcb );
+                gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
                 D( printf( "R:%p\n", gbritem ); )
                 fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
@@ -1112,7 +1083,15 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
             {
                 APERTURE_MACRO* macro = tool->GetMacro();
                 wxASSERT( macro );
-
+#if 1
+                gbritem = new GERBER_DRAW_ITEM( pcb );
+                gbritem->m_UnitsMetric = m_GerbMetric;
+                pcb->m_Drawings.Append( gbritem );
+                fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
+                                      m_CurrentPos, size.x,
+                                      !(m_LayerNegative ^ m_ImageNegative) );
+                gbritem->m_Shape = GBR_SPOT_MACRO;
+#else
                 // split the macro primitives up into multiple normal GBRITEM
                 // elements
                 for( AM_PRIMITIVES::iterator p = macro->primitives.begin();
@@ -1346,6 +1325,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame,
                         break;
                     }
                 }
+#endif
             }
             break;
 
