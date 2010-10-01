@@ -78,11 +78,13 @@ ShowUnInstDetails hide
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "Polish"
 !insertmacro MUI_LANGUAGE "Dutch"
+!insertmacro MUI_LANGUAGE "Russian"
 
 !include "English.nsh"
 !include "French.nsh"
 !include "Polish.nsh"
 !include "Dutch.nsh"
+!include "Russian.nsh"
 
 ; MUI end ------
 
