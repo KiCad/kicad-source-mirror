@@ -2,6 +2,31 @@
 /* dcode.h */
 /**************/
 
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #ifndef _DCODE_H_
 #define _DCODE_H_
 
@@ -9,7 +34,7 @@
 #include <set>
 
 #include "base_struct.h"
-
+class GERBER_DRAW_ITEM;
 
 /**
  * Enum APERTURE_T
@@ -42,6 +67,7 @@ enum APERTURE_DEF_HOLETYPE {
 #define LAST_DCODE      999
 #define TOOLS_MAX_COUNT (LAST_DCODE + 1)
 
+class APERTURE_MACRO;
 class D_CODE;
 
 
@@ -97,90 +123,7 @@ private:
                         //   not used.
 };
 
-
-/**
- * Enum AM_PRIMITIVE_ID
- * is the set of all "aperture macro primitives" (primitive numbers).  See
- * Table 3 in http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
- * aperture macro primitives are basic shapes which can be combined to create a complex shape
- * This complex shape is flashed.
- */
-enum AM_PRIMITIVE_ID {
-    AMP_CIRCLE = 1,             // Circle. (diameter and position)
-    AMP_LINE2  = 2,             // Line with rectangle ends. (Width, start and end pos + rotation)
-    AMP_LINE20 = 20,            // Same as AMP_LINE2
-    AMP_LINE_CENTER = 21,       // Rectangle. (height, width and center pos + rotation)
-    AMP_LINE_LOWER_LEFT = 22,   // Rectangle. (height, width and lrft bottom corner pos + rotation)
-    AMP_EOF     = 3,            // End Of File marquer: not really a shape
-    AMP_OUTLINE = 4,            // Free polyline (n corners + rotation)
-    AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10), rotation)
-    AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation
-    AMP_THERMAL = 7,            // Thermal shape (pos, outer and inner dioameter, cross hair thickness + rotation)
-};
-
-
 typedef std::vector<DCODE_PARAM> DCODE_PARAMS;
-
-/**
- * Struct AM_PRIMITIVE
- * holds an aperture macro primitive as given in Table 3 of
- * http://gerbv.sourceforge.net/docs/rs274xrevd_e.pdf
- */
-struct AM_PRIMITIVE
-{
-    AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
-    DCODE_PARAMS    params;             ///< A sequence of parameters used by
-                                        //   the primitive
-
-    /**
-     * Function GetExposure
-     * returns the first parameter in integer form.  Some but not all primitives
-     * use the first parameter as an exposure control.
-     */
-    int GetExposure() const
-    {
-        // No D_CODE* for GetValue()
-        wxASSERT( params.size() && params[0].IsImmediate() );
-        return (int) params[0].GetValue( NULL );
-    }
-};
-
-
-typedef std::vector<AM_PRIMITIVE> AM_PRIMITIVES;
-
-/**
- * Struct APERTURE_MACRO
- * helps support the "aperture macro" defined within standard RS274X.
- */
-struct APERTURE_MACRO
-{
-    wxString      name;             ///< The name of the aperture macro
-    AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
-};
-
-
-/**
- * Struct APERTURE_MACRO_less_than
- * is used by std:set<APERTURE_MACRO> instantiation which uses
- * APERTURE_MACRO.name as its key.
- */
-struct APERTURE_MACRO_less_than
-{
-    // a "less than" test on two APERTURE_MACROs (.name wxStrings)
-    bool operator()( const APERTURE_MACRO& am1, const APERTURE_MACRO& am2 ) const
-    {
-        return am1.name.Cmp( am2.name ) < 0;  // case specific wxString compare
-    }
-};
-
-
-/**
- * Type APERTURE_MACRO_SET
- * is a sorted collection of APERTURE_MACROS whose key is the name field in
- * the APERTURE_MACRO.
- */
-typedef std::set<APERTURE_MACRO, APERTURE_MACRO_less_than> APERTURE_MACRO_SET;
-typedef std::pair<APERTURE_MACRO_SET::iterator, bool>      APERTURE_MACRO_SET_PAIR;
 
 
 /**
@@ -206,15 +149,15 @@ class D_CODE
                                              */
 
 public:
-    wxSize                m_Size;                   /* Horizontal and vertical dimensions. */
-    APERTURE_T            m_Shape;                  /* shape ( Line, rectangle, circle , oval .. ) */
-    int                   m_Num_Dcode;              /* D code ( >= 10 ) */
-    wxSize                m_Drill;                  /* dimension of the hole (if any) */
-    APERTURE_DEF_HOLETYPE m_DrillShape;             /* shape of the hole (0 = no hole, round = 1, rect = 2) */
-    double                m_Rotation;               /* shape rotation in degrees */
-    int                   m_EdgesCount;             /* in apeture definition Polygon only: number of edges for the polygon */
-    bool                  m_InUse;                  /* FALSE if not used */
-    bool                  m_Defined;                /* FALSE if not defined */
+    wxSize                m_Size;           /* Horizontal and vertical dimensions. */
+    APERTURE_T            m_Shape;          /* shape ( Line, rectangle, circle , oval .. ) */
+    int                   m_Num_Dcode;      /* D code ( >= 10 ) */
+    wxSize                m_Drill;          /* dimension of the hole (if any) */
+    APERTURE_DEF_HOLETYPE m_DrillShape;     /* shape of the hole (0 = no hole, round = 1, rect = 2) */
+    double                m_Rotation;       /* shape rotation in degrees */
+    int                   m_EdgesCount;     /* in apeture definition Polygon only: number of edges for the polygon */
+    bool                  m_InUse;          /* FALSE if not used */
+    bool                  m_Defined;        /* FALSE if not defined */
     wxString              m_SpecialDescr;
 
 public:
@@ -250,16 +193,28 @@ public:
     /** function DrawFlashedShape
      * Draw the dcode shape for flashed items.
      * When an item is flashed, the DCode shape is the shape of the item
+     * @param aClipBox = DC clip box (NULL is no clip)
+     * @param aDC = device context
+     * @param aColor = the normal color to use
+     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
+     * @param aFilled = true to draw in filled mode, false to draw in skecth mode
+     * @param aPosition = the actual shape position
      */
-    void                 DrawFlashedShape( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
-                                           wxPoint aShapePos, bool aFilledShape );
+    void                 DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
+                                            EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,
+                                            wxPoint aShapePos, bool aFilledShape );
 
     /** function DrawFlashedPolygon
      * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
      * Draw some Apertures shapes when they are defined as filled polygons.
      * APT_POLYGON is always a polygon, but some complex shapes are also converted to
      * polygons (shapes with holes, some rotated shapes)
-     */
+     * @param aClipBox = DC clip box (NULL is no clip)
+     * @param aDC = device context
+     * @param aColor = the normal color to use
+     * @param aFilled = true to draw in filled mode, false to draw in skecth mode
+     * @param aPosition = the actual shape position
+    */
     void                 DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
                                              bool aFilled, const wxPoint& aPosition );
 

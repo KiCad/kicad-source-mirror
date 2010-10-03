@@ -173,8 +173,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT /
                           25.4 : PCB_INTERNAL_UNIT;
 
-    D( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF,
-               command & 0xFF ); )
+//    D( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF ); )
 
     switch( command )
     {
@@ -663,7 +662,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
             break;
 
         case AMP_POLYGON:
-            paramCount = 4;
+            paramCount = 6;
             break;
 
         case AMP_MOIRE:
@@ -703,7 +702,8 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
         if( i < paramCount )  // maybe some day we can throw an exception and
                               // track a line number
-            printf( "i=%d, insufficient parameters\n", i );
+            printf( "read macro descr type %d: read %d parameters, insufficient parameters\n",
+                prim.primitive_id, i );
 
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )

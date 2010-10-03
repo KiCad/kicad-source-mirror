@@ -4,6 +4,14 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-oct-03, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++gerbview:
+    finished Draw functions for aperture macros.
+    Now aperture macros are draww correctly.
+    Known bug: aperture macros having parameters are incorrect: parameters are not transmited correctly.
+    Work still in progress.
+
 2010-sept-28, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 ++gerbview:

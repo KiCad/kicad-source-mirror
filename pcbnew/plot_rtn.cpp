@@ -65,7 +65,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
     Plot_Edges_Modules( plotter, m_Pcb, masque_layer, trace_mode );
 
     /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
-    bool layersmask_plotpads = masque_layer;
+    int layersmask_plotpads = masque_layer;
     // Calculate the mask layers of allowed layers for pads
     if( !g_pcb_plot_options.PlotPadsOnSilkLayer )
         layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK  || SILKSCREEN_LAYER_FRONT);

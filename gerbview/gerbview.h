@@ -9,6 +9,8 @@
 #include <set>
 
 #include "dcode.h"
+#include "class_gerber_draw_item.h"
+#include "class_aperture_macro.h"
 
 class WinEDA_GerberFrame;
 class BOARD;
