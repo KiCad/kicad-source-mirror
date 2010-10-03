@@ -293,7 +293,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
  * When an item is flashed, the DCode shape is the shape of the item
  */
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                EDA_Rect* aClipBox, wxDC* aDC, int aColor,
+                                EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,
                                 wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
@@ -301,7 +301,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     switch( m_Shape )
     {
     case APT_MACRO:
-        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aShapePos, aFilledShape);
+        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aAltColor,
+                                            aShapePos, aFilledShape);
         break;
 
     case APT_CIRCLE:

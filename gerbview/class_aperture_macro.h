@@ -84,21 +84,37 @@ public:
      * returns the first parameter in integer form.  Some but not all primitives
      * use the first parameter as an exposure control.
      */
-    int GetExposure() const
-    {
-        // No D_CODE* for GetValue()
-        wxASSERT( params.size() && params[0].IsImmediate() );
-        return (int) params[0].GetValue( NULL );
-    }
+    int GetExposure() const;
 
+    /**
+     * Function mapExposure
+     * translates the first parameter from an aperture macro into a current
+     * exposure setting.
+     * @param aParent = a GERBER_DRAW_ITEM that handle:
+     *    ** m_Exposure A dynamic setting which can change throughout the
+     *          reading of the gerber file, and it indicates whether the current tool
+     *          is lit or not.
+     *    ** m_ImageNegative A dynamic setting which can change throughout the reading
+     *          of the gerber file, and it indicates whether the current D codes are to
+     *          be interpreted as erasures or not.
+     * @return true to draw with current color, false to draw with alt color (erase)
+     */
+    bool mapExposure( GERBER_DRAW_ITEM* aParent );
 
     /* Draw functions: */
 
     /** function DrawBasicShape
      * Draw the primitive shape for flashed items.
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @param aClipBox = DC clip box (NULL is no clip)
+     * @param aDC = device context
+     * @param aColor = the normal color to use
+     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
+     * @param aShapePos = the actual shape position
+     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
-                         int aColor, wxPoint aShapePos, bool aFilledShape );
+                         int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
 private:
 
@@ -126,9 +142,16 @@ struct APERTURE_MACRO
     /** function DrawApertureMacroShape
      * Draw the primitive shape for flashed items.
      * When an item is flashed, this is the shape of the item
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @param aClipBox = DC clip box (NULL is no clip)
+     * @param aDC = device context
+     * @param aColor = the normal color to use
+     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
+     * @param aShapePos = the actual shape position
+     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
-                                 int aColor, wxPoint aShapePos, bool aFilledShape );
+                                 int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 };
 
 

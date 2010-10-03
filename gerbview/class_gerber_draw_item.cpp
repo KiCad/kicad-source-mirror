@@ -50,6 +50,8 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
     m_Flashed = false;
     m_DCode   = 0;
     m_UnitsMetric = false;
+    m_ImageNegative = false;
+    m_LayerNegative = false;
 }
 
 
@@ -72,6 +74,9 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_DCode       = aSource.m_DCode;
     m_PolyCorners = aSource.m_PolyCorners;
     m_UnitsMetric = aSource.m_UnitsMetric;
+    m_ImageNegative = aSource.m_ImageNegative;
+    m_LayerNegative = aSource.m_LayerNegative;
+
 }
 
 
@@ -183,7 +188,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
 /*********************************************************************/
 {
     static D_CODE dummyD_CODE( 0 );      // used when a D_CODE is not found. default D_CODE to draw a flashed item
-    int           color;
+    int           color, alt_color;
     bool          isFilled;
     int           radius;
     int           halfPenWidth;
@@ -194,26 +199,26 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     if( d_codeDescr == NULL )
         d_codeDescr = &dummyD_CODE;
 
+    if( brd->IsLayerVisible( GetLayer() ) == false )
+        return;
+
+    color = brd->GetLayerColor( GetLayer() );
+
+    if( aDrawMode & GR_SURBRILL )
+    {
+        if( aDrawMode & GR_AND )
+            color &= ~HIGHT_LIGHT_FLAG;
+        else
+            color |= HIGHT_LIGHT_FLAG;
+    }
+    if( color & HIGHT_LIGHT_FLAG )
+        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+
+    alt_color = g_DrawBgColor ;
+
     if( m_Flags & DRAW_ERASED )   // draw in background color ("negative" color)
     {
-        color = g_DrawBgColor;
-    }
-    else
-    {
-        if( brd->IsLayerVisible( GetLayer() ) == false )
-            return;
-
-        color = brd->GetLayerColor( GetLayer() );
-
-        if( aDrawMode & GR_SURBRILL )
-        {
-            if( aDrawMode & GR_AND )
-                color &= ~HIGHT_LIGHT_FLAG;
-            else
-                color |= HIGHT_LIGHT_FLAG;
-        }
-        if( color & HIGHT_LIGHT_FLAG )
-            color = ColorRefs[color & MASKCOLOR].m_LightColor;
+        EXCHG(color, alt_color);
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -272,7 +277,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
         isFilled = DisplayOpt.DisplayPadFill ? true : false;
-        d_codeDescr->DrawFlashedShape( this, &aPanel->m_ClipBox, aDC, color,
+        d_codeDescr->DrawFlashedShape( this, &aPanel->m_ClipBox, aDC, color, alt_color,
                                        m_Start, isFilled );
         break;
 

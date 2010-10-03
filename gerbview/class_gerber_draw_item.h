@@ -74,6 +74,8 @@ public:
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
+    bool    m_ImageNegative;                // true = item in negative image
+    bool    m_LayerNegative;                // TRUE = item in negative Layer
 
 public:
     GERBER_DRAW_ITEM( BOARD_ITEM* aParent );

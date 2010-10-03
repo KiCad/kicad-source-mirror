@@ -1,11 +1,11 @@
 /* Bits characterizing cell */
-#define HOLE           (char)0x01  /* a conducting hole or obstacle */
-#define CELL_is_MODULE (char)0x02  /* auto placement occupied by a module */
-#define CELL_is_EDGE   (char)0x20  /* Area and auto-placement: limiting cell
+#define HOLE           0x01  /* a conducting hole or obstacle */
+#define CELL_is_MODULE 0x02  /* auto placement occupied by a module */
+#define CELL_is_EDGE   0x20  /* Area and auto-placement: limiting cell
                                     * contour (Board, Zone) */
-#define CELL_is_FRIEND (char)0x40  /* Area and auto-placement: cell part of the
+#define CELL_is_FRIEND 0x40  /* Area and auto-placement: cell part of the
                                     * net */
-#define CELL_is_ZONE   (char)0x80  /* Area and auto-placement: cell available */
+#define CELL_is_ZONE   0x80  /* Area and auto-placement: cell available */
 
 /* Bit masks for presence of obstacles to autorouting */
 #define OCCUPE            1  /* Autorouting: obstacle tracks and vias. */

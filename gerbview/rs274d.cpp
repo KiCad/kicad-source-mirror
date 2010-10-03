@@ -76,123 +76,68 @@ static wxPoint LastPosition;
 
 
 /**
- * Function fillCircularGBRITEM
- * initializes a given GBRITEM so that it can draw a circle which is not filled
- * and
- * has a given pen width (\a aPenWidth ).
- *
- * @param aGbrItem The GBRITEM to fill in.
- * @param Dcode_index The DCODE value, like D14
- * @param aLayer The layer index to set into the GBRITEM
- * @param aPos The center point of the flash
- * @param aDiameter The diameter of the round flash
- * @param aPenWidth The width of the pen used to draw the circle's
- * circumference.
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
- */
-static void fillCircularGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                                  int               Dcode_index,
-                                  int               aLayer,
-                                  const wxPoint&    aPos,
-                                  int               aDiameter,
-                                  int               aPenWidth,
-                                  bool              isDark )
-{
-    aGbrItem->m_Shape = GBR_CIRCLE;
-    aGbrItem->m_Size.x = aGbrItem->m_Size.y = aPenWidth;
-
-    aGbrItem->SetLayer( aLayer );
-    aGbrItem->m_DCode = Dcode_index;
-
-    // When drawing a GBRITEM with shape GBR_CIRCLE, the hypotenuse (i.e. distance)
-    // between the Start and End points gives the radius of the circle.
-    aGbrItem->m_Start  = aGbrItem->m_End = aPos;
-    aGbrItem->m_End.x += max( 0, (aDiameter + 1) / 2 );
-
-    NEGATE( aGbrItem->m_Start.y );
-    NEGATE( aGbrItem->m_End.y );
-
-    if( !isDark )
-    {
-        aGbrItem->m_Flags |= DRAW_ERASED;
-    }
-}
-
-
-/**
- * Function fillRoundFlashGBRITEM
+ * Function fillFlashedGBRITEM
  * initializes a given GBRITEM so that it can draw a circle which is filled and
  * has no pen border.
  *
  * @param aGbrItem The GBRITEM to fill in.
+ * @param aAperture the associated type of aperture
  * @param Dcode_index The DCODE value, like D14
  * @param aLayer The layer index to set into the GBRITEM
  * @param aPos The center point of the flash
- * @param aDiameter The diameter of the round flash
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
+ * @param aSize The diameter of the round flash
+ * @param aLayerNegative = true if the current layer is negative
+ * @param aImageNegative = true if the current image is negative
  */
-static void fillRoundFlashGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                                    int               Dcode_index,
-                                    int               aLayer,
-                                    const wxPoint&    aPos,
-                                    int               aDiameter,
-                                    bool              isDark )
+static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
+                                 APERTURE_T        aAperture,
+                                 int               Dcode_index,
+                                 int               aLayer,
+                                 const wxPoint&    aPos,
+                                 wxSize            aSize,
+                                 bool              aLayerNegative,
+                                 bool              aImageNegative  )
 {
     aGbrItem->SetLayer( aLayer );
-    aGbrItem->m_Size.x = aGbrItem->m_Size.y = aDiameter;
+    aGbrItem->m_Size  = aSize;
     aGbrItem->m_Start = aPos;
     NEGATE( aGbrItem->m_Start.y );
-    aGbrItem->m_End = aGbrItem->m_Start;
+    aGbrItem->m_End   = aGbrItem->m_Start;
     aGbrItem->m_DCode = Dcode_index;
-    aGbrItem->m_Shape = GBR_SPOT_CIRCLE;
+    aGbrItem->m_LayerNegative = aLayerNegative;
+    aGbrItem->m_ImageNegative = aImageNegative;
     aGbrItem->m_Flashed = true;
-
-    if( !isDark )
+    switch( aAperture )
     {
-        aGbrItem->m_Flags |= DRAW_ERASED;
+    case APT_POLYGON:           // flashed regular polygon
+        aGbrItem->m_Shape = GBR_SPOT_POLY;
+        break;
+
+    case APT_LINE:              // Should not be used.
+    case APT_CIRCLE:
+        aGbrItem->m_Shape  = GBR_SPOT_CIRCLE;
+        aGbrItem->m_Size.y = aGbrItem->m_Size.x;
+        break;
+
+    case APT_OVAL:
+        aGbrItem->m_Shape = GBR_SPOT_OVAL;
+        break;
+
+    case APT_RECT:
+        aGbrItem->m_Shape = GBR_SPOT_RECT;
+        break;
+
+    case APT_MACRO:
+        aGbrItem->m_Shape = GBR_SPOT_MACRO;
+        break;
     }
-}
 
+    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
 
-/**
- * Function fillOvalOrRectFlashGBRITEM
- * initializes a given GBRITEM so that it can draw an oval or rectangular
- * filled rectangle.
- *
- * @param aGbrItem The GERBER_DRAW_ITEM to fill in.
- * @param Dcode_index The DCODE value, like D14
- * @param aLayer The layer index to set into the GBRITEM
- * @param aPos The center point of the rectangle
- * @param aSize The size of the flash
- * @param aShape What type of flash, GBR_SPOT_OVALE or GBR_SPOT_RECT
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
- */
-static void fillOvalOrRectFlashGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                                         int               Dcode_index,
-                                         int               aLayer,
-                                         const wxPoint&    aPos,
-                                         const wxSize&     aSize,
-                                         int               aShape,
-                                         bool              isDark )
-{
-    aGbrItem->SetLayer( aLayer );
-    aGbrItem->m_Flashed = true;
-
-    aGbrItem->m_Size = aSize;
-
-    aGbrItem->m_Start = aPos;
-    NEGATE( aGbrItem->m_Start.y );
-    aGbrItem->m_End = aGbrItem->m_Start;
-
-    aGbrItem->m_DCode = Dcode_index;
-    aGbrItem->m_Shape = aShape;
-
+    /* isDark is true if flash is positive and should use a drawing
+     *   color other than the background color, else use the background color
+     *   when drawing so that an erasure happens.
+     */
     if( !isDark )
     {
         aGbrItem->m_Flags |= DRAW_ERASED;
@@ -209,9 +154,8 @@ static void fillOvalOrRectFlashGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * @param aLayer The layer index to set into the GBRITEM
  * @param aPos The center point of the flash
  * @param aDiameter The diameter of the round flash
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
+ * @param aLayerNegative = true if the current layer is negative
+ * @param aImageNegative = true if the current image is negative
  */
 static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
@@ -219,7 +163,8 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               int               aWidth,
-                              bool              isDark )
+                              bool              aLayerNegative,
+                              bool              aImageNegative  )
 {
     aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Flashed = false;
@@ -233,7 +178,15 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     NEGATE( aGbrItem->m_End.y );
 
     aGbrItem->m_DCode = Dcode_index;
+    aGbrItem->m_LayerNegative = aLayerNegative;
+    aGbrItem->m_ImageNegative = aImageNegative;
 
+    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
+
+    /* isDark is true if flash is positive and should use a drawing
+     *   color other than the background color, else use the background color
+     *   when drawing so that an erasure happens.
+     */
     if( !isDark )
     {
         aGbrItem->m_Flags |= DRAW_ERASED;
@@ -267,20 +220,21 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * same quadrant.
  * @param aDiameter The diameter of the round flash
  * @param aWidth is the pen width.
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
+ * @param aLayerNegative = true if the current layer is negative
+ * @param aImageNegative = true if the current image is negative
  */
 static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
                              const wxPoint& aStart, const wxPoint& aEnd,
                              const wxPoint& rel_center, int aWidth,
-                             bool clockwise, bool multiquadrant, bool isDark )
+                             bool clockwise, bool multiquadrant,
+                             bool aLayerNegative,
+                             bool aImageNegative  )
 {
     wxPoint center, delta;
 
     aGbrItem->m_Shape = GBR_ARC;
     aGbrItem->SetLayer( aLayer );
-    aGbrItem->m_Size.x = aGbrItem->m_Size.y = aWidth;
+    aGbrItem->m_Size.x  = aGbrItem->m_Size.y = aWidth;
     aGbrItem->m_Flashed = false;
 
     if( multiquadrant )
@@ -347,6 +301,15 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
     NEGATE( aGbrItem->m_End.y );
     NEGATE( aGbrItem->m_ArcCentre.y );
 
+    aGbrItem->m_LayerNegative = aLayerNegative;
+    aGbrItem->m_ImageNegative = aImageNegative;
+
+    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
+
+    /* isDark is true if flash is positive and should use a drawing
+     *   color other than the background color, else use the background color
+     *   when drawing so that an erasure happens.
+     */
     if( !isDark )
     {
         aGbrItem->m_Flags |= DRAW_ERASED;
@@ -379,23 +342,38 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
  * same quadrant.
  * @param aDiameter The diameter of the round flash
  * @param aWidth is the pen width.
- * @param isDark True if flash is positive and should use a drawing
- *   color other than the background color, else use the background color
- *   when drawing so that an erasure happens.
+ * @param aLayerNegative = true if the current layer is negative
+ * @param aImageNegative = true if the current image is negative
  */
-static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGrbrItem,
+static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
                           const wxPoint& aStart, const wxPoint& aEnd,
                           const wxPoint& rel_center,
-                          bool clockwise, bool multiquadrant, bool isDark )
+                          bool clockwise, bool multiquadrant,
+                          bool aLayerNegative,
+                          bool aImageNegative  )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
      */
     static GERBER_DRAW_ITEM dummyGbrItem( NULL );
 
+    aGbrItem->m_LayerNegative = aLayerNegative;
+    aGbrItem->m_ImageNegative = aImageNegative;
+
+    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
+
+    /* isDark is true if flash is positive and should use a drawing
+     *   color other than the background color, else use the background color
+     *   when drawing so that an erasure happens.
+     */
+    if( !isDark )
+    {
+        aGbrItem->m_Flags |= DRAW_ERASED;
+    }
+
     fillArcGBRITEM(  &dummyGbrItem, 0, 0,
                      aStart, aEnd, rel_center, 0,
-                     clockwise, multiquadrant, isDark );
+                     clockwise, multiquadrant, aLayerNegative, aImageNegative );
 
     // dummyTrack has right geometric parameters, and has its Y coordinates negated (to match the pcbnew Y axis).
     // Approximate arc by 36 segments per 360 degree
@@ -457,14 +435,10 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGrbrItem,
 //        D( printf( " >> Add arc %d rot %d, edge poly item %d,%d to %d,%d\n",
 //                ii, rot, start_arc.x, start_arc.y,end_arc.x, end_arc.y ); )
 
-        if( aGrbrItem->m_PolyCorners.size() == 0 )
-            aGrbrItem->m_PolyCorners.push_back( start_arc + center );
-        aGrbrItem->m_PolyCorners.push_back( end_arc + center );
+        if( aGbrItem->m_PolyCorners.size() == 0 )
+            aGbrItem->m_PolyCorners.push_back( start_arc + center );
+        aGbrItem->m_PolyCorners.push_back( end_arc + center );
 
-        if( !isDark )
-        {
-            aGrbrItem->m_Flags |= DRAW_ERASED;
-        }
         start_arc = end_arc;
     }
 }
@@ -537,10 +511,11 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
                 if( fmt_scale < 0 || fmt_scale > 9 )
                     fmt_scale = 4;
                 double scale_list[10] =
-                    { 10000.0, 1000.0, 100.0, 10.0,
-                        1,
-                        0.1, 0.01, 0.001, 0.0001, 0.00001
-                    };
+                {
+                    10000.0, 1000.0, 100.0, 10.0,
+                    1,
+                    0.1,     0.01,   0.001, 0.0001,0.00001
+                };
                 real_scale = scale_list[fmt_scale];
 
                 if( m_GerbMetric )
@@ -635,9 +610,10 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
                     fmt_scale = 4;      // select scale 1.0
 
                 double scale_list[10] =
-                {   10000.0, 1000.0, 100.0, 10.0,
+                {
+                    10000.0, 1000.0, 100.0, 10.0,
                     1,
-                    0.1, 0.01, 0.001, 0.0001, 0.00001
+                    0.1,     0.01,   0.001, 0.0001,0.00001
                 };
                 real_scale = scale_list[fmt_scale];
 
@@ -707,7 +683,7 @@ int GERBER::ReturnDCodeNumber( char*& Text )
 
 bool GERBER::Execute_G_Command( char*& text, int G_commande )
 {
-    D( printf( "%22s: G_CODE<%d>\n", __func__, G_commande ); )
+//    D( printf( "%22s: G_CODE<%d>\n", __func__, G_commande ); )
 
     switch( G_commande )
     {
@@ -832,46 +808,9 @@ int scale( double aCoord, bool isMetric )
  */
 wxPoint mapPt( double x, double y, bool isMetric )
 {
-    wxPoint ret( scale( x, isMetric ),
-                scale( y, isMetric ) );
+    wxPoint ret( scale( x, isMetric ), scale( y, isMetric ) );
 
     return ret;
-}
-
-
-/**
- * Function mapExposure
- * translates the first parameter from an aperture macro into a current
- * exposure
- * setting.
- * @param curExposure A dynamic setting which can change throughout the
- * reading of the gerber file, and it indicates whether the current tool
- * is lit or not.
- * @param isNegative A dynamic setting which can change throughout the reading
- * of
- *    the gerber file, and it indicates whether the current D codes are to
- *    be interpreted as erasures or not.
- */
-static bool mapExposure( int param1, bool curExposure, bool isNegative )
-{
-    bool exposure;
-
-    switch( param1 )
-    {
-    case 0:
-        exposure = false;
-        break;
-
-    default:
-    case 1:
-        exposure = true;
-        break;
-
-    case 2:
-        exposure = !curExposure;
-    }
-
-    return exposure ^ isNegative;
 }
 
 
@@ -889,7 +828,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
     D_CODE*  tool  = NULL;
     wxString msg;
 
-    D( printf( "%22s: D_CODE<%d>\n", __func__, D_commande ); )
+//    D( printf( "%22s: D_CODE<%d>\n", __func__, D_commande ); )
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
@@ -923,7 +862,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 pcb->m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->SetLayer( activeLayer );
-                gbritem->m_Flashed = false;
+                gbritem->m_Flashed     = false;
                 gbritem->m_UnitsMetric = m_GerbMetric;
             }
 
@@ -932,21 +871,20 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
-                D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
-                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
-                           m_CurrentPos.y, m_PolygonFillModeState, m_Iterpolation, m_360Arc_enbl ); )
+//                D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
+//                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
+//                           m_CurrentPos.y, m_PolygonFillModeState, m_Iterpolation, m_360Arc_enbl ); )
                 fillArcPOLY( pcb, gbritem, m_PreviousPos,
                             m_CurrentPos, m_IJPos,
                             ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
-                            false : true, m_360Arc_enbl,
-                            !(m_LayerNegative ^ m_ImageNegative) );
+                            false : true, m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
                 break;
 
             default:
                 gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
-                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
-                           m_PreviousPos.x, m_PreviousPos.y,
-                           m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
+//                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
+//                           m_PreviousPos.x, m_PreviousPos.y,
+//                           m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
                 NEGATE( gbritem->m_Start.y );
@@ -962,7 +900,6 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 {
                     if( m_LayerNegative ^ m_ImageNegative )
                         gbritem->m_Flags |= DRAW_ERASED;
-                    D( printf( "\nm_Flags=0x%08X\n", gbritem->m_Flags ); )
                 }
                 break;
             }
@@ -1002,10 +939,9 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 gbritem = new GERBER_DRAW_ITEM( pcb );
                 gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
-                D( printf( "R:%p\n", gbritem ); )
+//                D( printf( "R:%p\n", gbritem ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                                m_CurrentPos, size.x,
-                                !(m_LayerNegative ^ m_ImageNegative) );
+                                m_CurrentPos, size.x, m_LayerNegative, m_ImageNegative );
                 break;
 
             case GERB_INTERPOL_LINEAR_01X:
@@ -1019,12 +955,12 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 gbritem = new GERBER_DRAW_ITEM( pcb );
                 gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
-                D( printf( "R:%p\n", gbritem ); )
+//                D( printf( "R:%p\n", gbritem ); )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
                                m_CurrentPos, m_IJPos, size.x,
                                ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
                                false : true, m_360Arc_enbl,
-                               !(m_LayerNegative ^ m_ImageNegative) );
+                                m_LayerNegative, m_ImageNegative );
                 break;
 
             default:
@@ -1051,288 +987,13 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 aperture = tool->m_Shape;
             }
 
-            switch( aperture )
-            {
-            case APT_POLYGON:   // flashed regular polygon
-            case APT_CIRCLE:
-                gbritem = new GERBER_DRAW_ITEM( pcb );
-                gbritem->m_UnitsMetric = m_GerbMetric;
-                pcb->m_Drawings.Append( gbritem );
-                D( printf( "R:%p\n", gbritem ); )
-                fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
-                                      m_CurrentPos, size.x,
-                                      !(m_LayerNegative ^ m_ImageNegative) );
-                if( aperture == APT_POLYGON )
-                    gbritem->m_Shape = GBR_SPOT_POLY;
-                break;
-
-            case APT_OVAL:
-            case APT_RECT:
-                gbritem = new GERBER_DRAW_ITEM( pcb );
-                gbritem->m_UnitsMetric = m_GerbMetric;
-                pcb->m_Drawings.Append( gbritem );
-                D( printf( "R:%p\n", gbritem ); )
-                fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                           m_CurrentPos, size,
-                                           ( aperture == APT_RECT ) ?
-                                           GBR_SPOT_RECT : GBR_SPOT_OVAL,
-                                           !(m_LayerNegative ^ m_ImageNegative) );
-                break;
-
-            case APT_MACRO:
-            {
-                APERTURE_MACRO* macro = tool->GetMacro();
-                wxASSERT( macro );
-#if 1
-                gbritem = new GERBER_DRAW_ITEM( pcb );
-                gbritem->m_UnitsMetric = m_GerbMetric;
-                pcb->m_Drawings.Append( gbritem );
-                fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
-                                      m_CurrentPos, size.x,
-                                      !(m_LayerNegative ^ m_ImageNegative) );
-                gbritem->m_Shape = GBR_SPOT_MACRO;
-#else
-                // split the macro primitives up into multiple normal GBRITEM
-                // elements
-                for( AM_PRIMITIVES::iterator p = macro->primitives.begin();
-                     p!=macro->primitives.end();
-                     ++p )
-                {
-                    bool    exposure;
-                    wxPoint curPos = m_CurrentPos;
-
-                    switch( p->primitive_id )
-                    {
-                    case AMP_CIRCLE:
-                    {
-                        exposure = mapExposure( p->GetExposure(), m_Exposure,
-                                                m_ImageNegative );
-                        curPos += mapPt( p->params[2].GetValue( tool ),
-                                         p->params[3].GetValue( tool ),
-                                         m_GerbMetric );
-                        int diameter = scale( p->params[1].GetValue( tool ),
-                                              m_GerbMetric );
-
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
-                                               curPos, diameter, exposure );
-                    }
-                    break;
-
-                    case AMP_LINE2:
-                    case AMP_LINE20:
-                    {
-                        exposure = mapExposure(
-                            p->GetExposure(), m_Exposure, m_ImageNegative );
-                        int     width = scale( p->params[1].GetValue( tool ),
-                                               m_GerbMetric );
-                        wxPoint start = mapPt( p->params[2].GetValue( tool ),
-                                               p->params[3].GetValue( tool ),
-                                               m_GerbMetric );
-                        wxPoint end = mapPt( p->params[4].GetValue( tool ),
-                                             p->params[5].GetValue( tool ),
-                                             m_GerbMetric );
-
-                        if( start.x == end.x )
-                        {
-                            size.x = width;
-                            size.y = ABS( end.y - start.y ) + 1;
-                        }
-                        else
-                        {
-                            size.x = ABS( end.x - start.x ) + 1;
-                            size.y = width;
-                        }
-
-                        wxPoint midPoint( ( start.x + end.x ) / 2,
-                                         ( start.y + end.y ) / 2 );
-                        curPos += midPoint;
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                                    curPos, size, GBR_SPOT_RECT,
-                                                    exposure );
-                    }
-                    break;
-
-                    case AMP_LINE_CENTER:
-                    {
-                        exposure = mapExposure( p->GetExposure(), m_Exposure,
-                                                m_ImageNegative );
-                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
-                                               p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        size.x  = msize.x;
-                        size.y  = msize.y;
-                        curPos += mapPt( p->params[3].GetValue( tool ),
-                                         p->params[4].GetValue( tool ),
-                                         m_GerbMetric );
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                                    curPos, size, GBR_SPOT_RECT,
-                                                    exposure );
-                    }
-                    break;
-
-                    case AMP_LINE_LOWER_LEFT:
-                    {
-                        exposure = mapExposure(
-                            p->GetExposure(), m_Exposure, m_ImageNegative );
-                        wxPoint msize = mapPt( p->params[1].GetValue( tool ),
-                                               p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        size.x = msize.x;
-                        size.y = msize.y;
-                        wxPoint lowerLeft = mapPt( p->params[3].GetValue( tool ),
-                                                   p->params[4].GetValue( tool ),
-                                                   m_GerbMetric );
-                        curPos += lowerLeft;
-
-                        // need the middle, so adjust from the lower left
-                        curPos.y += size.y / 2;
-                        curPos.x += size.x / 2;
-                        gbritem   = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                                    curPos, size, GBR_SPOT_RECT,
-                                                    exposure );
-                    }
-                    break;
-
-                    case AMP_THERMAL:
-                    {
-                        int outerDiam = scale( p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        int innerDiam = scale( p->params[3].GetValue( tool ),
-                                               m_GerbMetric );
-
-                        curPos += mapPt( p->params[0].GetValue( tool ),
-                                         p->params[1].GetValue( tool ),
-                                         m_GerbMetric );
-
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillRoundFlashGBRITEM( gbritem, dcode, activeLayer,
-                                              curPos, outerDiam,
-                                              !( m_LayerNegative ^ m_ImageNegative ) );
-
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillRoundFlashGBRITEM( gbritem, dcode, activeLayer, curPos,
-                                              innerDiam,
-                                              ( m_LayerNegative ^ m_ImageNegative ) );
-
-                        // @todo: draw the cross hairs, see page 23 of rs274
-                        // spec. this might be done with two lines, thickness
-                        // from params[4], and drawing
-                        // darkness "(m_LayerNegative ^ m_ImageNegative)"
-                    }
-                    break;
-
-                    case AMP_MOIRE:
-                    {
-                        curPos += mapPt( p->params[0].GetValue( tool ),
-                                         p->params[1].GetValue( tool ),
-                                         m_GerbMetric );
-
-                        // e.g.: "6,0,0,0.125,.01,0.01,3,0.003,0.150,0"
-                        int outerDiam = scale( p->params[2].GetValue( tool ),
-                                               m_GerbMetric );
-                        int penThickness = scale( p->params[3].GetValue( tool ),
-                                                  m_GerbMetric );
-                        int gap = scale( p->params[4].GetValue( tool ),
-                                         m_GerbMetric );
-                        int numCircles = (int) p->params[5].GetValue( tool );
-                        int crossHairThickness =
-                            scale( p->params[6].GetValue( tool ), m_GerbMetric );
-                        int crossHairLength =
-                            scale( p->params[7].GetValue( tool ), m_GerbMetric );
-
-                        // ignore rotation, not supported
-                        // adjust outerDiam by this on each nested circle
-                        int diamAdjust = 2 * (gap + penThickness);
-                        for( int i = 0; i < numCircles; ++i, outerDiam -= diamAdjust )
-                        {
-                            gbritem = new GERBER_DRAW_ITEM( pcb );
-                            pcb->m_Drawings.Append( gbritem );
-                            D( printf( "R:%p\n", gbritem ); )
-                            fillCircularGBRITEM( gbritem, dcode, activeLayer,
-                                                curPos, outerDiam,
-                                                penThickness,
-                                                !( m_LayerNegative ^ m_ImageNegative ) );
-                        }
-
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-                        fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                                   curPos,
-                                                   wxSize( crossHairThickness,
-                                                           crossHairLength ),
-                                                   GBR_SPOT_RECT,
-                                                   !( m_LayerNegative ^ m_ImageNegative ) );
-
-                        gbritem = new GERBER_DRAW_ITEM( pcb );
-                        pcb->m_Drawings.Append( gbritem );
-                        D( printf( "R:%p\n", gbritem ); )
-
-                        // swap x and y in wxSize() for this one
-                        fillOvalOrRectFlashGBRITEM( gbritem, dcode, activeLayer,
-                                                   curPos,
-                                                   wxSize( crossHairLength,
-                                                           crossHairThickness ),
-                                                   GBR_SPOT_RECT,
-                                                   !( m_LayerNegative ^ m_ImageNegative ) );
-                    }
-                    break;
-
-                    case AMP_OUTLINE:
-#if defined(DEBUG)
-                        {
-                            int numPoints = (int) p->params[1].GetValue( tool );
-
-                            printf( "AMP_OUTLINE:\n" );
-                            printf( " exposure: %g\n", p->params[0].GetValue( tool ) );
-                            printf( " # points: %d\n", numPoints );
-
-                            // numPoints does not include the starting point, so add 1.
-                            for( int i = 0;  i<numPoints + 1;  ++i )
-                            {
-                                printf( " [%d]: X=%g  Y=%g\n", i,
-                                        p->params[i * 2 + 2 + 0].GetValue( tool ),
-                                        p->params[i * 2 + 2 + 1].GetValue( tool )
-                                        );
-                            }
-
-                            printf( " rotation: %g\n", p->params[numPoints * 2 + 4].GetValue( tool ) );
-                        }
-#endif
-                        break;
-
-                    case AMP_POLYGON:
-                    case AMP_EOF:
-                    default:
-
-                        // not yet supported, waiting for you.
-                        break;
-                    }
-                }
-#endif
-            }
-            break;
-
-            default:
-                break;
-            }
-
+            gbritem = new GERBER_DRAW_ITEM( pcb );
+            gbritem->m_UnitsMetric = m_GerbMetric;
+            pcb->m_Drawings.Append( gbritem );
+//            D( printf( "R:%p dcode %d layer %d\n", gbritem, dcode, activeLayer ); )
+            fillFlashedGBRITEM( gbritem, aperture,
+                                dcode, activeLayer, m_CurrentPos,
+                                size, m_LayerNegative, m_ImageNegative  );
             m_PreviousPos = m_CurrentPos;
             break;
 
