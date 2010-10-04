@@ -50,7 +50,7 @@ enum id_kicad_frm {
     ID_SELECT_PREFERED_PDF_BROWSER,
     ID_SELECT_DEFAULT_PDF_BROWSER,
     ID_SAVE_AND_ZIP_FILES,
-    ID_READ_ZIP_ARCHIVE,
+    ID_READ_ZIP_ARCHIVE
 };
 
 
@@ -133,7 +133,7 @@ enum TreeFileType {
     TREE_NET,
     TREE_UNKNOWN,
     TREE_DIRECTORY,
-    TREE_MAX,
+    TREE_MAX
 };
 
 /** class RIGHT_KM_FRAME

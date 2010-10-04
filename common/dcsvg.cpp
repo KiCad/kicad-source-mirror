@@ -55,7 +55,7 @@
 static inline double DegToRad( double deg )
 {
     return (deg * M_PI) / 180.0;
-};
+}
 
 wxString wxColStr( wxColour c )
 {
@@ -180,17 +180,17 @@ wxSVGFileDC::wxSVGFileDC( wxString f )
 {
     // quarter 640x480 screen display at 72 dpi
     Init( f, 320, 240, 72.0 );
-};
+}
 
 wxSVGFileDC::wxSVGFileDC( wxString f, int Width, int Height )
 {
     Init( f, Width, Height, 72.0 );
-};
+}
 
 wxSVGFileDC::wxSVGFileDC( wxString f, int Width, int Height, float dpi )
 {
     Init( f, Width, Height, dpi );
-};
+}
 
 wxSVGFileDC::~wxSVGFileDC()
 {
@@ -217,7 +217,7 @@ void wxSVGFileDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
     return;
-};
+}
 
 void wxSVGFileDC::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {

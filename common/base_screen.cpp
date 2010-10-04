@@ -15,7 +15,7 @@
 
 /* Implement wxSize array for grid list implementation. */
 #include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY( GridArray );
+WX_DEFINE_OBJARRAY( GridArray )
 
 BASE_SCREEN* ActiveScreen = NULL;
 

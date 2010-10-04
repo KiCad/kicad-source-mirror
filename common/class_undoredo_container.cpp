@@ -44,7 +44,7 @@ ITEM_PICKER::ITEM_PICKER( EDA_BaseStruct* aItem, UndoRedoOpType aUndoRedoStatus 
 PICKED_ITEMS_LIST::PICKED_ITEMS_LIST()
 {
     m_Status = UR_UNSPECIFIED;
-};
+}
 
 PICKED_ITEMS_LIST::~PICKED_ITEMS_LIST()
 {
@@ -321,7 +321,7 @@ bool PICKED_ITEMS_LIST::SetPickerFlags( int aFlags, unsigned aIdx )
 
 
 /** function RemovePicker
- * remùove one entry (one picker) from the list of picked items
+ * remï¿½ove one entry (one picker) from the list of picked items
  * @param aIdx = index of the picker in the picked list
  * @return true if ok, or false if did not exist
  */

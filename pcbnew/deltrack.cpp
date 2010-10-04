@@ -204,9 +204,12 @@ void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         next_track = tracksegment->Next();
         tracksegment->SetState( BUSY, OFF );
 
-        D( printf( "%s: track %p status=\"%s\"\n", __func__, tracksegment,
-                   CONV_TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) )
-                   ); )
+        //D( printf( "%s: track %p status=\"%s\"\n", __func__, tracksegment,
+        //           CONV_TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) )
+        //          ); )
+        D( std::cout<<__func__<<": track "<<tracksegment<<" status=" \
+                   <<CONV_TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) ) \
+                   <<std::endl;)
 
         GetBoard()->m_Track.Remove( tracksegment );
 

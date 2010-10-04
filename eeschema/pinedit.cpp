@@ -279,7 +279,7 @@ another pin. Continue?" ) );
     DrawPanel->CursorOn( DC );
 
     m_drawItem = NULL;
-};
+}
 
 
 /**

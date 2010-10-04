@@ -292,6 +292,10 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MOVE3D_DOWN:
         m_Canvas->SetView3D( WXK_DOWN );
         return;
+        
+    case ID_ORTHO:
+        m_Canvas->ToggleOrtho();
+        return;
 
     case ID_TOOL_SCREENCOPY_TOCLIBBOARD:
     case ID_MENU_SCREENCOPY_PNG:

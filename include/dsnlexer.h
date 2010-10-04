@@ -65,7 +65,7 @@ enum DSN_SYNTAX_T {
     DSN_RIGHT = -4,           // right bracket, ')'
     DSN_LEFT = -3,            // left bracket, '('
     DSN_STRING = -2,          // a quoted string, stripped of the quotes
-    DSN_EOF = -1,             // special case for end of file
+    DSN_EOF = -1              // special case for end of file
 };
 
 

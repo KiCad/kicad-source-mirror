@@ -19,7 +19,7 @@ enum id_app_type {
     APP_TYPE_PCBNEW,
     APP_TYPE_CVPCB,
     APP_TYPE_GERBVIEW,
-    APP_TYPE_KICAD,
+    APP_TYPE_KICAD
 };
 
 class wxConfigBase;
@@ -227,6 +227,6 @@ public: WinEDA_App();
  * of the application pointer all over the place or worse yet in a global
  * variable.
  */
-DECLARE_APP( WinEDA_App );
+DECLARE_APP( WinEDA_App )
 
 #endif  /* APPL_WXSTRUCT_H */

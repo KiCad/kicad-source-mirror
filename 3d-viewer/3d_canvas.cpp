@@ -57,6 +57,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
     m_init   = FALSE;
     m_gllist = 0;
     m_Parent = parent;
+    m_ortho = false;
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
@@ -498,32 +499,44 @@ void Pcb3D_GLCanvas::InitGL()
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
 
-    /* set viewing projection */
+    // set viewing projection
 
-    // Ratio width / height of the window display
-    double ratio_HV = (double) size.x / size.y;
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
 #define MAX_VIEW_ANGLE 160.0 / 45.0
     if( g_Parm_3D_Visu.m_Zoom > MAX_VIEW_ANGLE )
         g_Parm_3D_Visu.m_Zoom = MAX_VIEW_ANGLE;
-    gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
 
-//	glFrustum(-1., 1.1F, -1.1F, 1.1F, ZBottom, ZTop);
+     if( ModeIsOrtho() )
+     {
+         // OrthoReductionFactor is chosen so as to provide roughly the same size as Perspective View
+         const double orthoReductionFactor = 400/g_Parm_3D_Visu.m_Zoom;
+         // Initialize Projection Matrix for Ortographic View
+         glOrtho(-size.x/orthoReductionFactor, size.x/orthoReductionFactor, -size.y/orthoReductionFactor, size.y/orthoReductionFactor, 1, 10);
+     }
+     else
+     {
+         // Ratio width / height of the window display
+         double ratio_HV = (double) size.x / size.y;
+ 
+         // Initialize Projection Matrix for Perspective View
+         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
+     }
 
-    /* position viewer */
+
+    // position viewer
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glTranslatef( 0.0F, 0.0F, -( ZBottom + ZTop) / 2 );
 
-    /* clear color and depth buffers */
+    // clear color and depth buffers
     glClearColor( g_Parm_3D_Visu.m_BgColor.m_Red,
                   g_Parm_3D_Visu.m_BgColor.m_Green,
                   g_Parm_3D_Visu.m_BgColor.m_Blue, 1 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    /* Setup light souces: */
+    // Setup light souces:
     SetLights();
 }
 

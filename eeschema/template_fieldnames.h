@@ -35,7 +35,7 @@ enum  NumFieldType {
     FIELD5,
     FIELD6,
     FIELD7,
-    FIELD8,
+    FIELD8
 };
 
 

@@ -53,6 +53,7 @@ enum id_3dview_frm
     ID_MOVE3D_RIGHT,
     ID_MOVE3D_UP,
     ID_MOVE3D_DOWN,
+    ID_ORTHO,
     ID_MENU3D_BGCOLOR_SELECTION,
     ID_MENU3D_AXIS_ONOFF,
     ID_MENU3D_MODULE_ONOFF,
@@ -137,6 +138,9 @@ public:
 private:
     bool         m_init;
     GLuint       m_gllist;
+    /// Tracks whether to use Orthographic or Perspective projection
+    //TODO: Does this belong here, or in  WinEDA3D_DrawFrame ???
+    bool         m_ortho;
 #if wxCHECK_VERSION( 2, 9, 0 )
     wxGLContext* m_glRC;
 #endif
@@ -181,6 +185,12 @@ public:
     void   Draw3D_Via( SEGVIA* via );
     void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
     void   Draw3D_DrawText( TEXTE_PCB* text );
+    
+    /// Toggles ortographic projection on and off
+    void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
+    /// Returns the orthographic projection flag
+    bool ModeIsOrtho() { return m_ortho ;};
+  
 
     //int Get3DLayerEnable(int act_layer);
 
@@ -223,7 +233,7 @@ public:
     /** function ReloadRequest
      * must be called when reloading data from Pcbnew is needed
      * mainly after edition of the board or footprint beeing displayed.
-     * mainly for the mudule editor.
+     * mainly for the module editor.
      */
     void ReloadRequest( )
     {

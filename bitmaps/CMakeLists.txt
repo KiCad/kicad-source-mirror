@@ -285,6 +285,7 @@ set(BITMAP_SRCS
     Options_Vias.xpm
     opt_show_polygon.xpm
     Orient.xpm
+    ortho.xpm
     Pad_Sketch.xpm
     pad.xpm
     pads_mask_layers.xpm

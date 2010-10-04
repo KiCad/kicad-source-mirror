@@ -52,7 +52,7 @@ enum {
     GRID_VIASIZE,
     GRID_VIADRILL,
     GRID_uVIASIZE,
-    GRID_uVIADRILL,
+    GRID_uVIADRILL
 };
 
 const wxString DIALOG_DESIGN_RULES::wildCard = _( "* (Any)" );
