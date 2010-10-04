@@ -2,7 +2,6 @@
 /**** rs274d.cpp ****/
 /********************/
 
-
 #include "fctsys.h"
 #include "polygons_defs.h"
 #include "common.h"
@@ -36,8 +35,9 @@
  * G60 linear interpolation (scale x100)
  * G70 Select Units = Inches
  * G71 Select Units = Millimeters
- * G74 circular interpolation removes 360 degree (arc draw mode) finishing by G01
- * G75 circular interpolation on 360 degree
+ * G74 disable 360 degrees circular interpolation  (return to 90 deg mode)
+ *      and circular interpolation (return tà linear)
+ * G75 enable 360 degrees circular interpolation 
  * G90 mode absolute coordinates
  *
  * X, Y
@@ -741,8 +741,9 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
         m_GerbMetric = true;            // false = Inches, true = metric
         break;
 
-    case GC_TURN_OFF_360_INTERPOL:
+    case GC_TURN_OFF_360_INTERPOL:      // disable Multi cadran arc and Arc interpol
         m_360Arc_enbl = false;
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;
         break;
 
     case GC_TURN_ON_360_INTERPOL:
@@ -871,13 +872,14 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
-//                D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
-//                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
-//                           m_CurrentPos.y, m_PolygonFillModeState, m_Iterpolation, m_360Arc_enbl ); )
+ //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
+ //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
+ //                          m_CurrentPos.y, m_PolygonFillModeState,
+//                           m_Iterpolation, m_360Arc_enbl ); )
                 fillArcPOLY( pcb, gbritem, m_PreviousPos,
                             m_CurrentPos, m_IJPos,
-                            ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
-                            false : true, m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
+                            ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
+                            m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
                 break;
 
             default:
@@ -939,7 +941,9 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 gbritem = new GERBER_DRAW_ITEM( pcb );
                 gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
-//                D( printf( "R:%p\n", gbritem ); )
+//                D( printf( "Add line %d,%d to %d,%d\n",
+//                           m_PreviousPos.x, m_PreviousPos.y,
+//                            m_CurrentPos.x, m_CurrentPos.y ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
                                 m_CurrentPos, size.x, m_LayerNegative, m_ImageNegative );
                 break;
@@ -955,7 +959,10 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 gbritem = new GERBER_DRAW_ITEM( pcb );
                 gbritem->m_UnitsMetric = m_GerbMetric;
                 pcb->m_Drawings.Append( gbritem );
-//                D( printf( "R:%p\n", gbritem ); )
+//                D( printf( "Add arc %d,%d to %d,%d center %d, %d interpol %d 360_enb %d\n",
+//                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
+//                           m_CurrentPos.y, m_IJPos.x,
+//                            m_IJPos.y, m_Iterpolation, m_360Arc_enbl ); )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
                                m_CurrentPos, m_IJPos, size.x,
                                ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
@@ -975,6 +982,9 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
             m_Exposure    = false;
+//            D( printf( "Move to %d,%d to %d,%d\n",
+//                       m_PreviousPos.x, m_PreviousPos.y,
+//                        m_CurrentPos.x, m_CurrentPos.y ); )
             m_PreviousPos = m_CurrentPos;
             break;
 
@@ -990,7 +1000,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             gbritem = new GERBER_DRAW_ITEM( pcb );
             gbritem->m_UnitsMetric = m_GerbMetric;
             pcb->m_Drawings.Append( gbritem );
-//            D( printf( "R:%p dcode %d layer %d\n", gbritem, dcode, activeLayer ); )
+//          D( printf( "Add flashed dcode %d layer %d at %d %d\n", dcode, activeLayer,
+//                                m_CurrentPos.x, m_CurrentPos.y ); )
             fillFlashedGBRITEM( gbritem, aperture,
                                 dcode, activeLayer, m_CurrentPos,
                                 size, m_LayerNegative, m_ImageNegative  );
