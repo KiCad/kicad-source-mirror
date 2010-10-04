@@ -104,9 +104,9 @@ void WinEDA3D_DrawFrame::ReCreateMenuBar()
 
     // If called from the display frame of cvpcb, only some options are
     // relevant
-    if( m_Parent->m_FrameName == wxT( "CmpFrame" ) )    // Called from cvpcb !
-        full_options = false;                           // Do not display all
-                                                        // options
+    if( m_Parent->m_FrameName == wxT( "CmpFrame" ) )
+    // Called from cvpcb: do not display all options
+        full_options = false;
 
     wxMenuBar* menuBar = new wxMenuBar;
 
@@ -118,6 +118,13 @@ void WinEDA3D_DrawFrame::ReCreateMenuBar()
                       _( "Create Image (png format)" ) );
     fileMenu->Append( ID_MENU_SCREENCOPY_JPEG,
                       _( "Create Image (jpeg format)" ) );
+
+#if (defined(__WINDOWS__) || defined(__APPLE__ ) )
+    // Does not work properly under linux
+    fileMenu->AppendSeparator();
+    fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD,
+                         _( "Copy 3D Image to Clipboard" ) );
+#endif
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _( "&Exit" ) );
 

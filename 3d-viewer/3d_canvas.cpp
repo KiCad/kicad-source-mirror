@@ -568,9 +568,9 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         fmt_is_jpeg = TRUE;
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
-        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
-        mask = wxT( "*." ) + file_ext;
-        FullFileName    = m_Parent->m_Parent->GetScreen()->m_FileName;
+        file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
+        mask         = wxT( "*." ) + file_ext;
+        FullFileName = m_Parent->m_Parent->GetScreen()->m_FileName;
         fn.SetExt( file_ext );
 
         FullFileName =
@@ -582,17 +582,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
             return;
     }
 
-    Redraw( true );
-
-    wxSize     image_size = GetClientSize();
- #ifndef __WXMAC__
-    wxClientDC dc( this );
-    wxBitmap   bitmap( image_size.x, image_size.y );
-    wxMemoryDC memdc;
-    memdc.SelectObject( bitmap );
-    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
-    memdc.SelectObject( wxNullBitmap );
-#else
+    wxSize image_size = GetClientSize();
     struct vieport_params
     {
         GLint originx;
@@ -600,7 +590,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         GLint x;
         GLint y;
     } viewport;
-
+    
+    // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );
     glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
 
@@ -610,27 +601,18 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
-    glReadPixels( viewport.originx,
-                  viewport.originy,
-                  viewport.x,
-                  viewport.y,
-                  GL_RGB,
-                  GL_UNSIGNED_BYTE,
-                  pixelbuffer );
-    glReadPixels( viewport.originx,
-                  viewport.originy,
-                  viewport.x,
-                  viewport.y,
-                  GL_ALPHA,
-                  GL_UNSIGNED_BYTE,
-                  alphabuffer );
+    glReadPixels( viewport.originx, viewport.originy,
+                  viewport.x, viewport.y,
+                  GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer );
+    glReadPixels( viewport.originx, viewport.originy,
+                  viewport.x, viewport.y,
+                  GL_ALPHA, GL_UNSIGNED_BYTE, alphabuffer );
 
 
     image.SetData( pixelbuffer );
     image.SetAlpha( alphabuffer );
     image = image.Mirror( false );
     wxBitmap bitmap( image );
-#endif
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
