@@ -44,7 +44,7 @@ public:
 };
 WX_DECLARE_LIST( cmp, CmpList );
 
-WX_DEFINE_LIST( CmpList );
+WX_DEFINE_LIST( CmpList )
 
 void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 {

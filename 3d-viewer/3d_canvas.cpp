@@ -57,6 +57,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
     m_init   = FALSE;
     m_gllist = 0;
     m_Parent = parent;
+    m_ortho = false;
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
@@ -498,32 +499,44 @@ void Pcb3D_GLCanvas::InitGL()
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     }
 
-    /* set viewing projection */
+    // set viewing projection
 
-    // Ratio width / height of the window display
-    double ratio_HV = (double) size.x / size.y;
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
 #define MAX_VIEW_ANGLE 160.0 / 45.0
     if( g_Parm_3D_Visu.m_Zoom > MAX_VIEW_ANGLE )
         g_Parm_3D_Visu.m_Zoom = MAX_VIEW_ANGLE;
-    gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
 
-//	glFrustum(-1., 1.1F, -1.1F, 1.1F, ZBottom, ZTop);
+     if( ModeIsOrtho() )
+     {
+         // OrthoReductionFactor is chosen so as to provide roughly the same size as Perspective View
+         const double orthoReductionFactor = 400/g_Parm_3D_Visu.m_Zoom;
+         // Initialize Projection Matrix for Ortographic View
+         glOrtho(-size.x/orthoReductionFactor, size.x/orthoReductionFactor, -size.y/orthoReductionFactor, size.y/orthoReductionFactor, 1, 10);
+     }
+     else
+     {
+         // Ratio width / height of the window display
+         double ratio_HV = (double) size.x / size.y;
+ 
+         // Initialize Projection Matrix for Perspective View
+         gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
+     }
 
-    /* position viewer */
+
+    // position viewer
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glTranslatef( 0.0F, 0.0F, -( ZBottom + ZTop) / 2 );
 
-    /* clear color and depth buffers */
+    // clear color and depth buffers
     glClearColor( g_Parm_3D_Visu.m_BgColor.m_Red,
                   g_Parm_3D_Visu.m_BgColor.m_Green,
                   g_Parm_3D_Visu.m_BgColor.m_Blue, 1 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    /* Setup light souces: */
+    // Setup light souces:
     SetLights();
 }
 
@@ -568,9 +581,9 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         fmt_is_jpeg = TRUE;
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
-        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
-        mask = wxT( "*." ) + file_ext;
-        FullFileName    = m_Parent->m_Parent->GetScreen()->m_FileName;
+        file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
+        mask         = wxT( "*." ) + file_ext;
+        FullFileName = m_Parent->m_Parent->GetScreen()->m_FileName;
         fn.SetExt( file_ext );
 
         FullFileName =
@@ -582,17 +595,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
             return;
     }
 
-    Redraw( true );
-
-    wxSize     image_size = GetClientSize();
- #ifndef __WXMAC__
-    wxClientDC dc( this );
-    wxBitmap   bitmap( image_size.x, image_size.y );
-    wxMemoryDC memdc;
-    memdc.SelectObject( bitmap );
-    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
-    memdc.SelectObject( wxNullBitmap );
-#else
+    wxSize image_size = GetClientSize();
     struct vieport_params
     {
         GLint originx;
@@ -600,7 +603,8 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         GLint x;
         GLint y;
     } viewport;
-
+    
+    // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );
     glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
 
@@ -610,27 +614,18 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
-    glReadPixels( viewport.originx,
-                  viewport.originy,
-                  viewport.x,
-                  viewport.y,
-                  GL_RGB,
-                  GL_UNSIGNED_BYTE,
-                  pixelbuffer );
-    glReadPixels( viewport.originx,
-                  viewport.originy,
-                  viewport.x,
-                  viewport.y,
-                  GL_ALPHA,
-                  GL_UNSIGNED_BYTE,
-                  alphabuffer );
+    glReadPixels( viewport.originx, viewport.originy,
+                  viewport.x, viewport.y,
+                  GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer );
+    glReadPixels( viewport.originx, viewport.originy,
+                  viewport.x, viewport.y,
+                  GL_ALPHA, GL_UNSIGNED_BYTE, alphabuffer );
 
 
     image.SetData( pixelbuffer );
     image.SetAlpha( alphabuffer );
     image = image.Mirror( false );
     wxBitmap bitmap( image );
-#endif
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {

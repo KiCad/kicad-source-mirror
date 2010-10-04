@@ -102,18 +102,18 @@ static inline const wxChar* GetChars( const wxString& s )
 #include "boost/typeof/typeof.hpp"
 
 // we have to register the types used with the typeof keyword with boost
-BOOST_TYPEOF_REGISTER_TYPE( wxPoint );
-BOOST_TYPEOF_REGISTER_TYPE( wxSize );
-BOOST_TYPEOF_REGISTER_TYPE( wxString );
+BOOST_TYPEOF_REGISTER_TYPE( wxPoint )
+BOOST_TYPEOF_REGISTER_TYPE( wxSize )
+BOOST_TYPEOF_REGISTER_TYPE( wxString )
 class DrawSheetLabelStruct;
-BOOST_TYPEOF_REGISTER_TYPE( DrawSheetLabelStruct* );
+BOOST_TYPEOF_REGISTER_TYPE( DrawSheetLabelStruct* )
 class EDA_BaseStruct;
-BOOST_TYPEOF_REGISTER_TYPE( EDA_BaseStruct* );
+BOOST_TYPEOF_REGISTER_TYPE( EDA_BaseStruct* )
 class D_PAD;
-BOOST_TYPEOF_REGISTER_TYPE( D_PAD* );
-BOOST_TYPEOF_REGISTER_TYPE( const D_PAD* );
+BOOST_TYPEOF_REGISTER_TYPE( D_PAD* )
+BOOST_TYPEOF_REGISTER_TYPE( const D_PAD* )
 class BOARD_ITEM;
-BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* );
+BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* )
 
 #define EXCHG( a, b ) { BOOST_TYPEOF( a ) __temp__ = (a);      \
                         (a) = (b);                           \
@@ -136,7 +136,7 @@ static inline void ADD_MENUITEM( wxMenu* menu, int id,
 #endif /* !defined( __WXMAC__ ) */
 
     menu->Append( l_item );
-};
+}
 
 static inline void ADD_MENUITEM_WITH_HELP( wxMenu* menu, int id,
                                            const wxString& text,
@@ -152,7 +152,7 @@ static inline void ADD_MENUITEM_WITH_HELP( wxMenu* menu, int id,
 #endif /* !defined( __WXMAC__ ) */
 
     menu->Append( l_item );
-};
+}
 
 #ifdef __WINDOWS__
 static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
@@ -198,7 +198,7 @@ static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
 #endif /* !defined( __WXMAC__ ) */
 
     menu->Append( l_item );
-};
+}
 
 static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
                                                        wxMenu*         submenu,
@@ -217,7 +217,7 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
 #endif /* !defined( __WXMAC__ ) */
 
     menu->Append( l_item );
-};
+}
 
 #endif
 

@@ -86,7 +86,8 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     /* Flags for cleaning the net. */
     for( pt_del = BufDeb;  pt_del;  pt_del = pt_del->Next() )
     {
-        D( printf( "track %p turning off BUSY | EDIT | CHAIN\n", pt_del ); )
+        //D( printf( "track %p turning off BUSY | EDIT | CHAIN\n", pt_del ); )
+        D( std::cout<<"track "<<pt_del<<" turning off BUSY | EDIT | CHAIN"<<std::endl; )
         pt_del->SetState( BUSY | EDIT | CHAIN, OFF );
         if( pt_del == BufEnd )  // Last segment reached
             break;

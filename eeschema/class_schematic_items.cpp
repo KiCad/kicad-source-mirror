@@ -221,7 +221,7 @@ EDA_Rect SCH_JUNCTION::GetBoundingBox()
     rect.Inflate( ( GetPenSize() + m_Size.x ) / 2 );
 
     return rect;
-};
+}
 
 
 /** Function HitTest

@@ -480,7 +480,7 @@ public:
                             int aPrintMask, bool aPrintMirrorMode,
                             void * aData = NULL);
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 

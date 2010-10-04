@@ -65,7 +65,7 @@ enum Gerb_Interpolation
     GERB_INTERPOL_LINEAR_01X,
     GERB_INTERPOL_LINEAR_001X,
     GERB_INTERPOL_ARC_NEG,
-    GERB_INTERPOL_ARC_POS,
+    GERB_INTERPOL_ARC_POS
 };
 
 
@@ -144,7 +144,7 @@ public:
     FILE*         m_FilesList[12];              // Files list
     int           m_FilesPtr;                   // Stack pointer for files list
 
-    int           m_Selected_Tool;              // Pour editions: Tool (Dcode) selectionné
+    int           m_Selected_Tool;              // Pour editions: Tool (Dcode) selectionnï¿½
 
     int           m_Transform[2][2];            // The rotation/mirror transformation matrix.
     bool          m_360Arc_enbl;                // Enbl 360 deg circular interpolation

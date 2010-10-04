@@ -28,7 +28,7 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( WinEDA_MainFrame* parent ) :
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
 
-};
+}
 
 void RIGHT_KM_FRAME::OnSize( wxSizeEvent& event )
 {

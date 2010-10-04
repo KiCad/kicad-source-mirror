@@ -544,7 +544,7 @@ enum FILL_T {
     NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
     FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
                                   * with current color ("Solid shape") */
-    FILLED_WITH_BG_BODYCOLOR,    /* Poly, Square, Circle, Arc = option Fill
+    FILLED_WITH_BG_BODYCOLOR    /* Poly, Square, Circle, Arc = option Fill
                                   * with background body color, translucent
                                   * (texts inside this shape can be seen)
                                   * not filled in B&W mode when plotting or

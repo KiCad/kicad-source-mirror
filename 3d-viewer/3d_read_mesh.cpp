@@ -2,12 +2,6 @@
 // Name:        3d_read_mesh.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "macros.h"
@@ -417,7 +411,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
             int     coord_number;
             double* buf_points = ReadCoordsList( file, line, &coord_number,
                                                  LineNum );
-            continue;
+            // Do something if needed
             free( buf_points );
             continue;
         }
@@ -445,7 +439,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
             int     coord_number;
             double* buf_points = ReadCoordsList( file, line, &coord_number,
                                                  LineNum );
-            continue;
+            // Do something if needed
             free( buf_points );
             continue;
         }

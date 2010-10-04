@@ -477,7 +477,7 @@ enum DSN_T {
     T_write_resolution,
     T_x,
     T_xy,
-    T_y,
+    T_y
 };
 
 

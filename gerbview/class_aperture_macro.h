@@ -54,7 +54,7 @@ enum AM_PRIMITIVE_ID {
     AMP_OUTLINE = 4,            // Free polyline (n corners + rotation)
     AMP_POLYGON = 5,            // Closed regular polygon(diameter, number of vertices (3 to 10), rotation)
     AMP_MOIRE   = 6,            // A cross hair with n concentric circles + rotation
-    AMP_THERMAL = 7,            // Thermal shape (pos, outer and inner diameter, cross hair thickness + rotation)
+    AMP_THERMAL = 7             // Thermal shape (pos, outer and inner diameter, cross hair thickness + rotation)
 };
 
 

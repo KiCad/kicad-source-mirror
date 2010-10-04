@@ -1193,7 +1193,7 @@ void CPolyLine::Hatch()
     if( GetClosed() )   // If not closed, the poly is beeing created and not finalised. Not not hatch
     {
         enum {
-            MAXPTS = 100,
+            MAXPTS = 100
         };
         int    xx[MAXPTS], yy[MAXPTS];
 

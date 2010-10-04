@@ -26,7 +26,7 @@
 
 
 #include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY( Contributors );
+WX_DEFINE_OBJARRAY( Contributors )
 
 // Helper functions:
 static wxString HtmlHyperlink( const wxString& url, const wxString& description = wxEmptyString );

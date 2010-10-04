@@ -63,7 +63,7 @@ enum DrawPinShape {
     LOWLEVEL_IN  = 4,
     LOWLEVEL_OUT = 8,
     CLOCK_FALL   = 0x10, /* this is common form for inverted clock in Eastern Block */
-    NONLOGIC     = 0x20,
+    NONLOGIC     = 0x20
 };
 
 
@@ -74,7 +74,7 @@ enum DrawPinOrient {
     PIN_RIGHT = 'R',
     PIN_LEFT  = 'L',
     PIN_UP    = 'U',
-    PIN_DOWN  = 'D',
+    PIN_DOWN  = 'D'
 };
 
 

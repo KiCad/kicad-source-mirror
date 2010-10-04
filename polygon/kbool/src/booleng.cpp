@@ -164,13 +164,13 @@ void Bool_Engine::error( string text, string title )
     Write_Log( "FATAL ERROR: ", title );
     Write_Log( "FATAL ERROR: ", text );
     throw Bool_Engine_Error( " Fatal Error", "Fatal Error", 9, 1 );
-};
+}
 
 void Bool_Engine::info( string text, string title )
 {
     Write_Log( "FATAL ERROR: ", title );
     Write_Log( "FATAL ERROR: ", text );
-};
+}
 
 void Bool_Engine::SetMarge( double marge )
 {

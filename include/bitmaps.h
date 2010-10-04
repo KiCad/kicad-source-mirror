@@ -93,6 +93,7 @@ extern const char* delete_xpm[];
 extern const char* directory_xpm[];
 extern const char* display_options_xpm[];
 extern const char* down_xpm[];
+extern const char* ortho_xpm[];
 extern const char* drag_module_xpm[];
 extern const char* drag_outline_segment_xpm[];
 extern const char* drag_pad_xpm[];

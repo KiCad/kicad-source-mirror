@@ -88,7 +88,7 @@ kbGraph::~kbGraph()
 kbLink* kbGraph::GetFirstLink()
 {
     return ( kbLink* ) _linklist->headitem();
-};
+}
 
 
 void kbGraph::Prepare( int intersectionruns )
@@ -2275,7 +2275,7 @@ void kbGraph::Make_Rounded_Shape( kbLink* a_link, double factor )
 
     // make a link between the last and the first to close the graph
     AddLink( _last_ins, _first );
-};
+}
 
 //make the graph clockwise orientation,
 //return if the graph needed redirection
