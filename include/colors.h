@@ -5,6 +5,8 @@
 #ifndef _COLORS_H
 #define _COLORS_H
 
+#include <wx/wx.h>
+
 /* Number of colors ( 32 bit palette. ) */
 #define NBCOLOR             24
 

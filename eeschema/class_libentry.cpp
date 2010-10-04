@@ -1,6 +1,6 @@
-/**********************************************************/
-/*  lib_entry.cpp                                         */
-/**********************************************************/
+/*************************/
+/*  class_libentry.cpp   */
+/*************************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -18,6 +18,15 @@
 #include "class_pin.h"
 
 #include <boost/foreach.hpp>
+
+
+// Set this to 1 to print debugging ouput in alias and component destructors to verify
+// objects get cleaned up properly.
+#if defined( TRACE_DESTRUCTOR )
+#undef TRACE_DESTRUCTOR
+#endif
+
+#define TRACE_DESTRUCTOR 0
 
 
 /** class CMP_LIB_ENTRY
@@ -134,41 +143,31 @@ int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem
  *  (like 74LS00, 74HC00 ... and many op amps )
  */
 
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent,
-                      CMP_LIBRARY* aLibrary ) :
-    CMP_LIB_ENTRY( ALIAS, aName, aLibrary )
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ) :
+    CMP_LIB_ENTRY( ALIAS, aName, NULL )
 {
-    wxASSERT( aRootComponent != NULL && aRootComponent->isComponent() );
-
     root = aRootComponent;
-    if( aLibrary == NULL )
-        library = aRootComponent->GetLibrary();
 }
 
 
-LIB_ALIAS::LIB_ALIAS( LIB_ALIAS& aAlias, CMP_LIBRARY* aLibrary ) :
-    CMP_LIB_ENTRY( aAlias )
+LIB_ALIAS::LIB_ALIAS( LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) : CMP_LIB_ENTRY( aAlias )
 {
-    root = aAlias.root;
+    root = aRootComponent;
 }
 
 
 LIB_ALIAS::~LIB_ALIAS()
 {
+#if TRACE_DESTRUCTOR
+    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alais list count %d." ),
+                GetChars( name ), GetChars( root->GetName() ), root->m_aliases.size() );
+#endif
 }
 
 
-void LIB_ALIAS::SetComponent( LIB_COMPONENT* aComponent )
-{
-    wxASSERT( aComponent != NULL && aComponent->isComponent() );
-
-    root = aComponent;
-}
-
-
-/********************************/
+/***********************/
 /* class LIB_COMPONENT */
-/********************************/
+/***********************/
 
 /**
  * Library component object definition.
@@ -188,6 +187,10 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
+    // Create the default alias if the name paremeter is not empty.
+    if( !aName.IsEmpty() )
+        m_aliases.push_back( new LIB_ALIAS( aName, this ) );
+
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
     LIB_FIELD* value = new LIB_FIELD( this, VALUE );
@@ -205,8 +208,6 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
 {
     LIB_DRAW_ITEM* newItem;
 
-    m_AliasList           = aComponent.m_AliasList;
-    m_aliasListData       = aComponent.m_aliasListData;
     m_FootprintList       = aComponent.m_FootprintList;
     unitCount             = aComponent.unitCount;
     m_unitsLocked         = aComponent.m_unitsLocked;
@@ -225,12 +226,37 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
         newItem->SetParent( this );
         drawings.push_back( newItem );
     }
+
+    for( size_t i = 0; i < aComponent.m_aliases.size(); i++ )
+    {
+        LIB_ALIAS* alias = new LIB_ALIAS( *aComponent.m_aliases[i], this );
+        m_aliases.push_back( alias );
+    }
 }
 
 
 LIB_COMPONENT::~LIB_COMPONENT()
 {
+#if TRACE_DESTRUCTOR
+    wxLogDebug( wxT( "Destroying component <%s> with alias list count of %d" ),
+                GetChars( GetName() ), m_aliases.size() );
+#endif
+
+    // If the component is being delete directly rather than trough the library, free all
+    // of the memory allocated by the aliases.
+    if( !m_aliases.empty() )
+    {
+        LIB_ALIAS* alias;
+
+        while( !m_aliases.empty() )
+        {
+            alias = m_aliases.back();
+            m_aliases.pop_back();
+            delete alias;
+        }
+    }
 }
+
 
 /** function IsMulti
  * @return the sub reference for component having multiple parts per package.
@@ -592,15 +618,17 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         }
     }
 
-    /* Save the alias list: a line starting by "ALIAS" */
-    if( m_AliasList.GetCount() != 0 )
+    // Save the alias list: a line starting by "ALIAS".  The first alias is the root
+    // and has the same name as the component.  In the old library file format this
+    // alias does not get added to the alias list.
+    if( m_aliases.size() > 1 )
     {
         if( fprintf( aFile, "ALIAS" ) < 0 )
             return false;
 
-        for( i = 0; i < m_AliasList.GetCount(); i++ )
+        for( i = 1; i < m_aliases.size(); i++ )
         {
-            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_AliasList[i] ) ) < 0 )
+            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_aliases[i]->GetName() ) ) < 0 )
                 return false;
         }
 
@@ -616,8 +644,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
         for( i = 0; i < m_FootprintList.GetCount(); i++ )
         {
-            if( fprintf( aFile, " %s\n",
-                         CONV_TO_UTF8( m_FootprintList[i] ) ) < 0 )
+            if( fprintf( aFile, " %s\n", CONV_TO_UTF8( m_FootprintList[i] ) ) < 0 )
                 return false;
         }
 
@@ -655,8 +682,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 }
 
 
-bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
-                          wxString& aErrorMsg )
+bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg )
 {
     int      unused;
     char*    p;
@@ -722,6 +748,9 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum,
         name = value.m_Text = CONV_FROM_UTF8( &componentName[1] );
         value.m_Attributs |= TEXT_NO_VISIBLE;
     }
+
+    // Add the root alias to the alias list.
+    m_aliases.push_back( new LIB_ALIAS( name, this ) );
 
     LIB_FIELD& reference = GetReferenceField();
 
@@ -872,7 +901,7 @@ bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
 
     while( text )
     {
-        m_AliasList.Add( CONV_FROM_UTF8( text ) );
+        m_aliases.push_back( new LIB_ALIAS( CONV_FROM_UTF8( text ), this ) );
         text = strtok( NULL, " \t\r\n" );
     }
 
@@ -1454,144 +1483,140 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
 }
 
 
-/* accessors to aliases data, used by the component editor, during edition
-*/
-/** Function LocateAliasData
- * @return an index in array string to the alias data (doc, keywords, docfile)
- *         or -1 if not found
- * @param aAliasName = the alias name
- * @param aCreateIfNotExist = true if the alias data must be created, when not exists
- */
-int LIB_COMPONENT::LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist)
+wxArrayString LIB_COMPONENT::GetAliasNames( bool aIncludeRoot ) const
 {
-    int idx = -1;
-    for( unsigned ii = 0; ii < m_aliasListData.size(); ii += ALIAS_NEXT_IDX )
+    wxArrayString names;
+
+    LIB_ALIAS_LIST::const_iterator it;
+
+    for( it=m_aliases.begin();  it<m_aliases.end();  ++it )
     {
-        if( aAliasName.CmpNoCase( m_aliasListData[ii] ) != 0 )
-            continue;
-        // Found!
-        idx = (int) ii;
-        break;
-    }
-
-    // Alias not found, create on demand
-    if( aCreateIfNotExist && (idx < 0) )
-    {
-        idx = (int) m_aliasListData.size();
-        m_aliasListData.Add( aAliasName );
-        // Add void strings for data:
-        m_aliasListData.Add( wxEmptyString );     //Doc string
-        m_aliasListData.Add( wxEmptyString );     //keywords string
-        m_aliasListData.Add( wxEmptyString );     //Doc fliname string
-    }
-
-    return idx;
-}
-
-
-/** Function GetAliasDataDoc
- * @param aAliasName = the alias name
- * @return the Doc string
- */
-wxString LIB_COMPONENT::GetAliasDataDoc( const wxString & aAliasName )
-{
-    wxString data;
-    int idx = LocateAliasData( aAliasName );
-    if ( idx >= 0 )
-        data = m_aliasListData[idx + ALIAS_DOC_IDX];
-
-    return data;
-}
-
-
-/** Function GetAliasDataKeyWords
- * @param aAliasName = the alias name
- * @return aAliasData = the keywords string
- */
-wxString LIB_COMPONENT::GetAliasDataKeyWords( const wxString & aAliasName )
-{
-    wxString data;
-    int idx = LocateAliasData( aAliasName );
-    if ( idx >= 0 )
-        data = m_aliasListData[idx + ALIAS_KEYWORD_IDX];
-
-    return data;
-}
-
-
-/** Function GetAliasDataDocFileName
- * @param aAliasName = the alias name
- * @return the Doc filename string
- */
-wxString LIB_COMPONENT::GetAliasDataDocFileName( const wxString & aAliasName )
-{
-    wxString data;
-    int idx = LocateAliasData( aAliasName );
-    if ( idx >= 0 )
-        data = m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX];
-
-    return data;
-}
-
-
-
-/** Function SetAliasDataDoc
- * @param aAliasName = the alias name
- * @param aAliasData = the Doc string
- */
-void LIB_COMPONENT::SetAliasDataDoc( const wxString & aAliasName, const wxString & aAliasData )
-{
-    int idx = LocateAliasData( aAliasName, true );
-    m_aliasListData[idx + ALIAS_DOC_IDX] = aAliasData;
-}
-
-/** Function SetAliasDataKeywords
- * @param aAliasName = the alias name
- * @param aAliasData = the keywords string
- */
-void LIB_COMPONENT::SetAliasDataKeywords( const wxString & aAliasName, const wxString & aAliasData )
-{
-    int idx = LocateAliasData( aAliasName, true );
-    m_aliasListData[idx + ALIAS_KEYWORD_IDX] = aAliasData;
-}
-
-/** Function SetAliasDataDocFileName
- * @param aAliasName = the alias name
- * @param aAliasData = the Doc filename string
- */
-void LIB_COMPONENT::SetAliasDataDocFileName( const wxString & aAliasName,
-                                             const wxString & aAliasData )
-{
-    int idx = LocateAliasData( aAliasName, true );
-    m_aliasListData[idx + ALIAS_DOC_FILENAME_IDX] = aAliasData;
-}
-
-
-/** Function RemoveAliasData
- * remove an alias data from list
- * @param aAliasName = the alias name
- */
-void LIB_COMPONENT::RemoveAliasData(const wxString & aAliasName )
-{
-    int idx = LocateAliasData( aAliasName );
-    if ( idx >= 0 )
-        m_aliasListData.RemoveAt( idx + ALIAS_NAME_IDX, ALIAS_NEXT_IDX );
-}
-
-/** Function CollectAliasesData
- * store in m_aliasListData alias data (doc, keywords, docfile)
- * for each alias found in m_AliasList
-*/
-void LIB_COMPONENT::CollectAliasesData( CMP_LIBRARY* aLibrary )
-{
-    for( unsigned ii = 0; ii < m_AliasList.GetCount(); ii++ )
-    {
-        CMP_LIB_ENTRY* entry = aLibrary->FindEntry( m_AliasList[ii] );
-        if ( ! entry )
+        if( !aIncludeRoot && (*it)->IsRoot() )
             continue;
 
-        SetAliasDataDoc( m_AliasList[ii], entry->GetDescription() );
-        SetAliasDataKeywords( m_AliasList[ii], entry->GetKeyWords() );
-        SetAliasDataDocFileName( m_AliasList[ii], entry->GetDocFileName() );
+        names.Add( (*it)->GetName() );
     }
+
+    return names;
+}
+
+
+bool LIB_COMPONENT::HasAlias( const wxString& aName ) const
+{
+    wxCHECK2_MSG( !aName.IsEmpty(), return false,
+                  wxT( "Cannot get alias with an empty name, bad programmer." ) );
+
+    for( size_t i = 0; i < m_aliases.size(); i++ )
+    {
+        if( aName.CmpNoCase( m_aliases[i]->GetName() ) == 0 )
+            return true;
+    }
+
+    return false;
+}
+
+
+void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
+{
+    wxCHECK_RET( library == NULL,
+                 wxT( "Component aliases cannot be changed when they are owned by a library." ) );
+
+    if( aAliasList == GetAliasNames() )
+        return;
+
+    // Add names not existing in the current component alias list.
+    for( size_t i = 0; i < aAliasList.GetCount(); i++ )
+    {
+        if( HasAlias( aAliasList[ i ] ) )
+            continue;
+
+        m_aliases.push_back( new LIB_ALIAS( aAliasList[ i ], this ) );
+    }
+
+    /* Remove names in the current component that are not in the new alias list. */
+    LIB_ALIAS_LIST::iterator it;
+
+    for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
+    {
+        int index = aAliasList.Index( (*it)->GetName(), false );
+
+        if( index != wxNOT_FOUND || (*it)->IsRoot() )
+            continue;
+
+        it = m_aliases.erase( it );
+    }
+}
+
+
+void LIB_COMPONENT::RemoveAlias( const wxString& aName )
+{
+    wxCHECK_RET( library == NULL,
+                 wxT( "Component aliases cannot be changed when they are owned by a library." ) );
+    wxCHECK_RET( !aName.IsEmpty(), wxT( "Cannot get alias with an empty name." ) );
+
+    LIB_ALIAS_LIST::iterator it;
+
+    for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
+    {
+        if( aName.CmpNoCase( (*it)->GetName() ) == 0 )
+        {
+            m_aliases.erase( it );
+            break;
+        }
+    }
+}
+
+
+LIB_ALIAS* LIB_COMPONENT::RemoveAlias( LIB_ALIAS* aAlias )
+{
+    wxCHECK_MSG( aAlias != NULL, NULL, wxT( "Cannot remove alias by NULL pointer." ) );
+
+    LIB_ALIAS* nextAlias = NULL;
+    LIB_ALIAS_LIST::iterator it = find( m_aliases.begin(), m_aliases.end(), aAlias );
+
+    if( it != m_aliases.end() )
+    {
+        bool rename = aAlias->IsRoot();
+
+        it = m_aliases.erase( it );
+        delete aAlias;
+
+        if( !m_aliases.empty() )
+        {
+            if( it == m_aliases.end() )
+                it = m_aliases.begin();
+
+            nextAlias = (*it);
+
+            if( rename )
+                SetName( nextAlias->GetName() );
+        }
+
+    }
+
+    return nextAlias;
+}
+
+
+LIB_ALIAS* LIB_COMPONENT::GetAlias( const wxString& aName )
+{
+    wxCHECK2_MSG( !aName.IsEmpty(), return NULL,
+                  wxT( "Cannot get alias with an empty name.  Bad programmer!" ) );
+
+    for( size_t i = 0; i < m_aliases.size(); i++ )
+    {
+        if( aName.CmpNoCase( m_aliases[i]->GetName() ) == 0 )
+            return m_aliases[i];
+    }
+
+    return NULL;
+}
+
+
+LIB_ALIAS* LIB_COMPONENT::GetAlias( size_t aIndex )
+{
+    wxCHECK2_MSG( aIndex < m_aliases.size(), return NULL,
+                  wxT( "Illegal alias list index, bad programmer." ) );
+
+    return m_aliases[aIndex];
 }

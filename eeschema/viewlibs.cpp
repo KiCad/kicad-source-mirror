@@ -266,43 +266,36 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( entry == NULL )
         return;
 
+    wxCHECK_RET( entry->isAlias(),
+                 wxT( "Entry \"" ) + entry->GetName() + wxT( "\" found in library <" ) +
+                 lib->GetName() + wxT( "> is not a LIB_ALIAS object." ) );
+
+    LIB_ALIAS* alias = (LIB_ALIAS*) entry;
+    component = alias->GetComponent();
+
     DrawPanel->DrawBackGround( DC );
 
-    if( entry->isAlias() )
+    if( !alias->IsRoot() )
     {
-        LIB_ALIAS* alias = (LIB_ALIAS*) entry;
-        component = alias->GetComponent();
-
         if( component == NULL )     // Should not occur
-        {
-            wxASSERT( component != NULL );
             return;
-        }
-        if( ! component->isComponent() )
-        {
-            wxASSERT( component->isComponent() );
-            return;
-        }
 
+        // Temporarily change the name field text to reflect the alias name.
         msg = alias->GetName();
-
-        /* Temporarily change the name field text to reflect the alias name. */
         tmp = component->GetName();
-        component->SetName( alias->GetName() );
+        component->SetName( msg );
+
         if( m_unit < 1 )
             m_unit = 1;
         if( m_convert < 1 )
             m_convert = 1;
-        component->SetName( tmp );
     }
     else
     {
-        component = (LIB_COMPONENT*) entry;
         msg = _( "None" );
     }
 
-    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert,
-                     GR_DEFAULT_DRAWMODE );
+    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
 
     /* Redraw the cursor */
     DrawPanel->DrawCursor( DC );

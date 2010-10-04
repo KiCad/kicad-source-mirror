@@ -54,8 +54,7 @@ BEGIN_EVENT_TABLE( WinEDA_ViewlibFrame, WinEDA_DrawFrame )
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, WinEDA_ViewlibFrame::ClickOnLibList )
     EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, WinEDA_ViewlibFrame::ClickOnCmpList )
 
-    EVT_MENU( ID_SET_RELATIVE_OFFSET,
-              WinEDA_ViewlibFrame::OnSetRelativeOffset )
+    EVT_MENU( ID_SET_RELATIVE_OFFSET, WinEDA_ViewlibFrame::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
@@ -136,10 +135,9 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
         m_LibListWindow->SetAlignment( wxLAYOUT_LEFT );
         m_LibListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
         m_LibListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-        m_LibList =
-            new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
-                           wxPoint( 0, 0 ), wxDefaultSize,
-                           0, NULL, wxLB_HSCROLL );
+        m_LibList = new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
+                                   wxPoint( 0, 0 ), wxDefaultSize,
+                                   0, NULL, wxLB_HSCROLL );
     }
     else
     {

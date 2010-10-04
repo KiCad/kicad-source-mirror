@@ -5,7 +5,7 @@
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
 
-
+#include "program.h"
 #include "classes_body_items.h"
 
 

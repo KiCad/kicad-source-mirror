@@ -19,6 +19,7 @@
 #include "eeschema_id.h"
 #include "netlist.h"
 #include "class_pin.h"
+#include "class_library.h"
 
 #include "annotate_dialog.h"
 #include "dialog_build_BOM.h"
@@ -258,6 +259,7 @@ WinEDA_SchematicFrame::~WinEDA_SchematicFrame()
     SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
     SAFE_DELETE( m_findReplaceData );
+    CMP_LIBRARY::RemoveAllLibraries();
 }
 
 

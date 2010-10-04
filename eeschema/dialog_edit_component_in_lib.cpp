@@ -27,9 +27,9 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_Libed
 
 	Init();
 
-    if (GetSizer())
+    if( GetSizer() )
     {
-        GetSizer()->SetSizeHints(this);
+        GetSizer()->SetSizeHints( this );
     }
 }
 
@@ -40,7 +40,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 
 /* Initialize state of check boxes and texts
 */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init()
 {
     SetFocus();
     m_AliasLocation = -1;
@@ -55,7 +55,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
 
     wxString title = _( "Properties for " );
 
-    if( !m_Parent->GetAliasName().IsEmpty() )
+    bool isRoot = m_Parent->GetAliasName().CmpNoCase( component->GetName() ) == 0;
+
+    if( !isRoot )
     {
         title += m_Parent->GetAliasName() + _( " (alias of " ) +
             component->GetName() + wxT( ")" );
@@ -63,20 +65,19 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init( )
     else
     {
         title += component->GetName();
-        m_Parent->GetAliasName().Empty();
     }
 
     SetTitle( title );
     InitPanelDoc();
     InitBasicPanel();
 
-    if( !m_Parent->GetAliasName().IsEmpty() )
+    if( isRoot && component->GetAliasCount() == 1 )
         m_ButtonDeleteAllAlias->Enable( false );
 
     /* Place list of alias names in listbox */
-    m_PartAliasListCtrl->Append( component->GetAliasList() );
+    m_PartAliasListCtrl->Append( component->GetAliasNames( false ) );
 
-    if( component->GetAliasList().GetCount() == 0 )
+    if( component->GetAliasCount() <= 1 )
     {
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
@@ -102,23 +103,24 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
 {
+    LIB_ALIAS* alias;
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
         return;
 
     wxString aliasname = m_Parent->GetAliasName();
-    if( aliasname.IsEmpty() )       // The root component is selected
+
+    if( aliasname.IsEmpty() )
+        return;
+
+    alias = component->GetAlias( aliasname );
+
+    if( alias != NULL )
     {
-        m_DocCtrl->SetValue( component->GetDescription() );
-        m_KeywordsCtrl->SetValue( component->GetKeyWords() );
-        m_DocfileCtrl->SetValue( component->GetDocFileName() );
-    }
-    else    // An alias is currently selected
-    {
-        m_DocCtrl->SetValue( component->GetAliasDataDoc( aliasname ) );
-        m_KeywordsCtrl->SetValue( component->GetAliasDataKeyWords( aliasname ) );
-        m_DocfileCtrl->SetValue( component->GetAliasDataDocFileName( aliasname ) );
+        m_DocCtrl->SetValue( alias->GetDescription() );
+        m_KeywordsCtrl->SetValue( alias->GetKeyWords() );
+        m_DocfileCtrl->SetValue( alias->GetDocFileName() );
     }
 }
 
@@ -151,6 +153,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
     m_PinsNameInsideButt->SetValue( component->GetPinNameOffset() != 0 );
     m_SelNumberOfUnits->SetValue( component->GetPartCount() );
     m_SetSkew->SetValue( component->GetPinNameOffset() );
-    m_OptionPower->SetValue( component->isPower() );
+    m_OptionPower->SetValue( component->IsPower() );
     m_OptionPartsLocked->SetValue( component->UnitsLocked() );
 }

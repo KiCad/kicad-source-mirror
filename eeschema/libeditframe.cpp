@@ -64,131 +64,89 @@ FILL_T WinEDA_LibeditFrame::        m_drawFillStyle   = NO_FILL;
 /* class WinEDA_LibeditFrame */
 /*****************************/
 BEGIN_EVENT_TABLE( WinEDA_LibeditFrame, WinEDA_DrawFrame )
-EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
-EVT_SIZE( WinEDA_LibeditFrame::OnSize )
-EVT_ACTIVATE( WinEDA_LibeditFrame::OnActivate )
+    EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
+    EVT_SIZE( WinEDA_LibeditFrame::OnSize )
+    EVT_ACTIVATE( WinEDA_LibeditFrame::OnActivate )
 
-/* Main horizontal toolbar. */
-EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_LibeditFrame::OnZoom )
-EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB,
-          WinEDA_LibeditFrame::SaveActiveLibrary )
-EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB,
-          WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_TOOL( ID_LIBEDIT_DELETE_PART,
-          WinEDA_LibeditFrame::DeleteOnePart )
-EVT_TOOL( ID_LIBEDIT_NEW_PART,
-          WinEDA_LibeditFrame::CreateNewLibraryPart )
-EVT_TOOL( ID_LIBEDIT_SELECT_PART,
-          WinEDA_LibeditFrame::LoadOneLibraryPart )
-EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART,
-          WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_TOOL( wxID_UNDO,
-          WinEDA_LibeditFrame::GetComponentFromUndoList )
-EVT_TOOL( wxID_REDO,
-          WinEDA_LibeditFrame::GetComponentFromRedoList )
-EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART,
-          WinEDA_LibeditFrame::OnEditComponentProperties )
-EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
-          WinEDA_LibeditFrame::InstallFieldsEditorDialog )
-EVT_TOOL( ID_LIBEDIT_CHECK_PART,
-          WinEDA_LibeditFrame::OnCheckComponent )
-EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT,
-          WinEDA_LibeditFrame::OnSelectBodyStyle )
-EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT,
-          WinEDA_LibeditFrame::OnSelectBodyStyle )
-EVT_TOOL( ID_LIBEDIT_VIEW_DOC,
-          WinEDA_LibeditFrame::OnViewEntryDoc )
-EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN,
-          WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_TOOL( ExportPartId, WinEDA_LibeditFrame::OnExportPart )
-EVT_TOOL( CreateNewLibAndSavePartId, WinEDA_LibeditFrame::OnExportPart )
-EVT_TOOL( ImportPartId, WinEDA_LibeditFrame::OnImportPart )
+    /* Main horizontal toolbar. */
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_LibeditFrame::OnZoom )
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, WinEDA_LibeditFrame::SaveActiveLibrary )
+    EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_DELETE_PART, WinEDA_LibeditFrame::DeleteOnePart )
+    EVT_TOOL( ID_LIBEDIT_NEW_PART, WinEDA_LibeditFrame::CreateNewLibraryPart )
+    EVT_TOOL( ID_LIBEDIT_SELECT_PART, WinEDA_LibeditFrame::LoadOneLibraryPart )
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART, WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( wxID_UNDO, WinEDA_LibeditFrame::GetComponentFromUndoList )
+    EVT_TOOL( wxID_REDO, WinEDA_LibeditFrame::GetComponentFromRedoList )
+    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, WinEDA_LibeditFrame::OnEditComponentProperties )
+    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, WinEDA_LibeditFrame::InstallFieldsEditorDialog )
+    EVT_TOOL( ID_LIBEDIT_CHECK_PART, WinEDA_LibeditFrame::OnCheckComponent )
+    EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, WinEDA_LibeditFrame::OnSelectBodyStyle )
+    EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, WinEDA_LibeditFrame::OnSelectBodyStyle )
+    EVT_TOOL( ID_LIBEDIT_VIEW_DOC, WinEDA_LibeditFrame::OnViewEntryDoc )
+    EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN, WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL( ExportPartId, WinEDA_LibeditFrame::OnExportPart )
+    EVT_TOOL( CreateNewLibAndSavePartId, WinEDA_LibeditFrame::OnExportPart )
+    EVT_TOOL( ImportPartId, WinEDA_LibeditFrame::OnImportPart )
 
+    EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_PART_NUMBER, WinEDA_LibeditFrame::OnSelectPart )
+    EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS, WinEDA_LibeditFrame::OnSelectAlias )
 
-EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_PART_NUMBER,
-                     WinEDA_LibeditFrame::OnSelectPart )
-EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS,
-                     WinEDA_LibeditFrame::OnSelectAlias )
+    /* Right vertical toolbar. */
+    EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_LibeditFrame::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
-/* Right vertical toolbar. */
-EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_LibeditFrame::Process_Special_Functions )
-EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
-                WinEDA_LibeditFrame::Process_Special_Functions )
+    /* menubar commands */
+    EVT_MENU( wxID_EXIT, WinEDA_LibeditFrame::CloseWindow )
+    EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, WinEDA_LibeditFrame::SaveActiveLibrary )
+    EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, WinEDA_LibeditFrame::OnPlotCurrentComponent )
+    EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, WinEDA_LibeditFrame::OnPlotCurrentComponent )
+    EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
 
-/* menubar commands */
-EVT_MENU( wxID_EXIT,
-          WinEDA_LibeditFrame::CloseWindow )
-EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
-          WinEDA_LibeditFrame::SaveActiveLibrary )
-EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE,
-          WinEDA_LibeditFrame::OnPlotCurrentComponent )
-EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE,
-          WinEDA_LibeditFrame::OnPlotCurrentComponent )
-EVT_MENU( ID_GENERAL_HELP,
-           WinEDA_DrawFrame::GetKicadHelp )
+    EVT_MENU( ID_CONFIG_REQ, WinEDA_LibeditFrame::InstallConfigFrame )
+    EVT_MENU( ID_CONFIG_SAVE, WinEDA_LibeditFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_READ, WinEDA_LibeditFrame::Process_Config )
+    EVT_MENU( ID_COLORS_SETUP, WinEDA_LibeditFrame::Process_Config )
+    EVT_MENU( ID_LIBEDIT_DIMENSIONS, WinEDA_LibeditFrame::InstallDimensionsDialog )
 
-EVT_MENU( ID_CONFIG_REQ,
-            WinEDA_LibeditFrame::InstallConfigFrame )
-EVT_MENU( ID_CONFIG_SAVE,
-            WinEDA_LibeditFrame::Process_Config )
-EVT_MENU( ID_CONFIG_READ,
-            WinEDA_LibeditFrame::Process_Config )
-EVT_MENU( ID_COLORS_SETUP,
-            WinEDA_LibeditFrame::Process_Config )
-EVT_MENU( ID_LIBEDIT_DIMENSIONS,
-            WinEDA_LibeditFrame::InstallDimensionsDialog )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
+                    ID_PREFERENCES_HOTKEY_END,
+                    WinEDA_LibeditFrame::Process_Config )
 
-EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
-                ID_PREFERENCES_HOTKEY_END,
-                WinEDA_LibeditFrame::Process_Config )
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, WinEDA_LibeditFrame::SetLanguage )
 
-EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                WinEDA_LibeditFrame::SetLanguage )
+  /* Context menu events and commands. */
+    EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
+    EVT_MENU( ID_LIBEDIT_ROTATE_PIN, WinEDA_LibeditFrame::OnRotatePin )
 
+    EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
+                    ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
-/* Context menu events and commands. */
-EVT_MENU( ID_LIBEDIT_EDIT_PIN, WinEDA_LibeditFrame::OnEditPin )
+    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
+                    WinEDA_LibeditFrame::Process_Special_Functions )
 
-EVT_MENU( ID_LIBEDIT_ROTATE_PIN, WinEDA_LibeditFrame::OnRotatePin )
-
-EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
-                ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
-                WinEDA_LibeditFrame::Process_Special_Functions )
-
-EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                WinEDA_LibeditFrame::Process_Special_Functions )
-
-/* Update user interface elements. */
-EVT_UPDATE_UI( ExportPartId, WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( CreateNewLibAndSavePartId,
-               WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_PART,
-               WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
-               WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART,
-               WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART,
-               WinEDA_LibeditFrame::OnUpdateEditingPart )
-EVT_UPDATE_UI( wxID_UNDO, WinEDA_LibeditFrame::OnUpdateUndo )
-EVT_UPDATE_UI( wxID_REDO, WinEDA_LibeditFrame::OnUpdateRedo )
-EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB,
-               WinEDA_LibeditFrame::OnUpdateSaveCurrentLib )
-EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, WinEDA_LibeditFrame::OnUpdateViewDoc )
-EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN,
-               WinEDA_LibeditFrame::OnUpdatePinByPin )
-EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER,
-               WinEDA_LibeditFrame::OnUpdatePartNumber )
-EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS,
-               WinEDA_LibeditFrame::OnUpdateSelectAlias )
-EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT,
-               WinEDA_LibeditFrame::OnUpdateDeMorganNormal )
-EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT,
-               WinEDA_LibeditFrame::OnUpdateDeMorganConvert )
-EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
-                     WinEDA_LibeditFrame::OnUpdateEditingPart )
-
+   /* Update user interface elements. */
+    EVT_UPDATE_UI( ExportPartId, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( CreateNewLibAndSavePartId, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_PART, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, WinEDA_LibeditFrame::OnUpdateEditingPart )
+    EVT_UPDATE_UI( wxID_UNDO, WinEDA_LibeditFrame::OnUpdateUndo )
+    EVT_UPDATE_UI( wxID_REDO, WinEDA_LibeditFrame::OnUpdateRedo )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB, WinEDA_LibeditFrame::OnUpdateSaveCurrentLib )
+    EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, WinEDA_LibeditFrame::OnUpdateViewDoc )
+    EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN, WinEDA_LibeditFrame::OnUpdatePinByPin )
+    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, WinEDA_LibeditFrame::OnUpdatePartNumber )
+    EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, WinEDA_LibeditFrame::OnUpdateSelectAlias )
+    EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, WinEDA_LibeditFrame::OnUpdateDeMorganNormal )
+    EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, WinEDA_LibeditFrame::OnUpdateDeMorganConvert )
+    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
+                         WinEDA_LibeditFrame::OnUpdateEditingPart )
 END_EVENT_TABLE()
+
 
 WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
                                           const wxString& title,
@@ -257,25 +215,24 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
     horiz.LeftDockable( false ).RightDockable( false );
 
     m_auimgr.AddPane( m_HToolBar,
-                     wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
-                     Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
+                      Row( 0 ) );
 
     m_auimgr.AddPane( m_VToolBar,
-                     wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
     m_auimgr.AddPane( DrawPanel,
-                     wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( MsgPanel,
-                     wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
     m_auimgr.Update();
 }
 
 
 WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 {
-    WinEDA_SchematicFrame* frame =
-        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
     frame->m_LibeditFrame = NULL;
     m_drawItem = m_lastDrawItem = NULL;
@@ -347,7 +304,7 @@ void WinEDA_LibeditFrame::OnCloseWindow( wxCloseEvent& Event )
         {
             wxString msg;
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
-                       GetChars( lib.GetName() ) );
+                        GetChars( lib.GetName() ) );
             if( !IsOK( this, msg ) )
             {
                 Event.Veto();
@@ -404,10 +361,8 @@ int WinEDA_LibeditFrame::BestZoom()
     }
 
     size -= wxSize( 25, 25 );   // reserve 100 mils margin
-    ii    = wxRound( ( (double) dx / (double) size.x ) *
-                    (double) GetScreen()->m_ZoomScalar );
-    jj = wxRound( ( (double) dy / (double) size.y ) *
-                 (double) GetScreen()->m_ZoomScalar );
+    ii = wxRound( ( (double) dx / (double) size.x ) * (double) GetScreen()->m_ZoomScalar );
+    jj = wxRound( ( (double) dy / (double) size.y ) * (double) GetScreen()->m_ZoomScalar );
 
     return MAX( ii + 1, jj + 1 );
 }
@@ -423,18 +378,13 @@ void WinEDA_LibeditFrame::UpdateAliasSelectList()
     if( m_component == NULL )
         return;
 
-    m_SelAliasBox->Append( m_component->GetName() );
+    m_SelAliasBox->Append( m_component->GetAliasNames() );
     m_SelAliasBox->SetSelection( 0 );
 
-    if( !m_component->GetAliasList().IsEmpty() )
-    {
-        m_SelAliasBox->Append( m_component->GetAliasList() );
+    int index = m_SelAliasBox->FindString( m_aliasName );
 
-        int index = m_SelAliasBox->FindString( m_aliasName );
-
-        if( index != wxNOT_FOUND )
-            m_SelAliasBox->SetSelection( index );
-    }
+    if( index != wxNOT_FOUND )
+        m_SelAliasBox->SetSelection( index );
 }
 
 
@@ -442,7 +392,6 @@ void WinEDA_LibeditFrame::UpdatePartSelectList()
 {
     if( m_SelpartBox == NULL )
         return;
-
 
     if( m_SelpartBox->GetCount() != 0 )
         m_SelpartBox->Clear();
@@ -493,8 +442,7 @@ void WinEDA_LibeditFrame::OnUpdateRedo( wxUpdateUIEvent& event )
 
 void WinEDA_LibeditFrame::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
-    event.Enable( m_library != NULL
-                 && ( m_library->IsModified()|| GetScreen()->IsModify() ) );
+    event.Enable( m_library != NULL && ( m_library->IsModified() || GetScreen()->IsModify() ) );
 }
 
 
@@ -504,14 +452,11 @@ void WinEDA_LibeditFrame::OnUpdateViewDoc( wxUpdateUIEvent& event )
 
     if( m_component != NULL && m_library != NULL )
     {
-        if( !m_aliasName.IsEmpty() )
-        {
-            enable = !m_component->GetAliasDataDocFileName(m_aliasName).IsEmpty();
-        }
-        else if( !m_component->GetDocFileName().IsEmpty() )
-        {
-            enable = true;
-        }
+        LIB_ALIAS* alias = m_component->GetAlias( m_aliasName );
+
+        wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
+
+        enable = !alias->GetDocFileName().IsEmpty();
     }
 
     event.Enable( enable );
@@ -545,8 +490,7 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan()
-                 || ( m_component && m_component->HasConversion() ) );
+    event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert <= 1 );
 }
 
@@ -556,8 +500,7 @@ void WinEDA_LibeditFrame::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    event.Enable( GetShowDeMorgan()
-                 || ( m_component && m_component->HasConversion() ) );
+    event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
     m_HToolBar->ToggleTool( event.GetId(), m_convert > 1 );
 }
 
@@ -570,8 +513,7 @@ void WinEDA_LibeditFrame::OnUpdateSelectAlias( wxUpdateUIEvent& event )
     /* Using the typical event.Enable() call doesn't seem to work with wxGTK
      * so use the pointer to alias combobox to directly enable or disable.
      */
-    m_SelAliasBox->Enable( m_component != NULL
-                           && !m_component->GetAliasList().IsEmpty() );
+    m_SelAliasBox->Enable( m_component != NULL && m_component->GetAliasCount() > 1 );
 }
 
 
@@ -582,12 +524,7 @@ void WinEDA_LibeditFrame::OnSelectAlias( wxCommandEvent& event )
         return;
 
     m_lastDrawItem = NULL;
-
-    if( m_SelAliasBox->GetStringSelection().CmpNoCase( m_component->GetName() )
-        == 0 )
-        m_aliasName.Empty();
-    else
-        m_aliasName = m_SelAliasBox->GetStringSelection();
+    m_aliasName = m_SelAliasBox->GetStringSelection();
 
     DisplayCmpDoc();
     DrawPanel->Refresh();
@@ -614,15 +551,14 @@ void WinEDA_LibeditFrame::OnViewEntryDoc( wxCommandEvent& event )
         return;
 
     wxString fileName;
+    LIB_ALIAS* alias = m_component->GetAlias( m_aliasName );
 
-    if( !m_aliasName.IsEmpty() )
-        fileName = m_component->GetAliasDataDocFileName(m_aliasName);
-    else
-        fileName = m_component->GetDocFileName();
+    wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
+
+    fileName = alias->GetDocFileName();
 
     if( !fileName.IsEmpty() )
-        GetAssociatedDocument( this, fileName,
-                              &wxGetApp().GetLibraryPathList() );
+        GetAssociatedDocument( this, fileName, &wxGetApp().GetLibraryPathList() );
 }
 
 
@@ -956,8 +892,7 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                     wxT( "WinEDA_LibeditFrame::Process_Special_Functions error" ) );
+        DisplayError( this, wxT( "WinEDA_LibeditFrame::Process_Special_Functions error" ) );
         break;
     }
 

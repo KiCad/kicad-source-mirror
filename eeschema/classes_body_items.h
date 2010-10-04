@@ -9,6 +9,8 @@
 
 #include "base_struct.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 
 class LIB_COMPONENT;
 class PLOTTER;

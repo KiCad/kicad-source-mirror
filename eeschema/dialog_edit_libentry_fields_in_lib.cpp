@@ -221,17 +221,15 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     /* A new name could be entered in VALUE field.
      *  Must not be an existing alias name in alias list box */
     wxString* newvalue = &m_FieldsBuf[VALUE].m_Text;
-    for( size_t i = 0; i < m_LibEntry->GetAliasList().GetCount(); i++ )
+
+    if( m_LibEntry->HasAlias( *newvalue ) )
     {
-        if( newvalue->CmpNoCase( m_LibEntry->GetAliasList()[i] ) == 0 )
-        {
-            wxString msg;
-            msg.Printf( _( "A new name is entered for this component\n\
+        wxString msg;
+        msg.Printf( _( "A new name is entered for this component\n\
 An alias %s already exists!\nCannot update this component" ),
-                        newvalue->GetData() );
-            DisplayError( this, msg );
-            return;
-        }
+                    newvalue->GetData() );
+        DisplayError( this, msg );
+        return;
     }
 
     /* save old cmp in undo list */

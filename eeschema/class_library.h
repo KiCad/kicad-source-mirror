@@ -57,16 +57,16 @@ extern bool operator<( const CMP_LIBRARY& item1, const CMP_LIBRARY& item2 );
  */
 class CMP_LIBRARY
 {
-    int            type;            ///< Library type indicator.
-    wxFileName     fileName;        ///< Library file name.
-    wxDateTime     timeStamp;       ///< Library save time and date.
-    int            versionMajor;    ///< Library major version number.
-    int            versionMinor;    ///< Library minor version number.
-    LIB_ENTRY_LIST entries;         ///< Parts themselves are saved here.
-    bool           isCache;         /**< False for the "standard" libraries,
-                                         True for the library cache */
-    wxString       header;          ///< first line of loaded library.
-    bool           isModified;      ///< Library modification status.
+    int                type;            ///< Library type indicator.
+    wxFileName         fileName;        ///< Library file name.
+    wxDateTime         timeStamp;       ///< Library save time and date.
+    int                versionMajor;    ///< Library major version number.
+    int                versionMinor;    ///< Library minor version number.
+    bool               isCache;         /**< False for the "standard" libraries,
+                                             True for the library cache */
+    wxString           header;          ///< first line of loaded library.
+    bool               isModified;      ///< Library modification status.
+    LIB_ALIAS_MAP      aliases;         ///< Map of aliases objects associated with the library.
 
     static CMP_LIBRARY_LIST libraryList;
     static wxArrayString    libraryListSortOrder;
@@ -81,12 +81,6 @@ public:
         CMP_LIBRARY( aType, wxFileName( aFileName ) );
     }
     ~CMP_LIBRARY();
-
-    /** Modify flags handling:
-     */
-    void SetModifyFlags( ) { isModified = true; }
-    void ClearModifyFlag( ) { isModified = false; }
-    bool getModifyFlag( ) { return isModified;}
 
     /**
      * Function Save
@@ -136,17 +130,6 @@ private:
     bool LoadHeader( FILE* aFile, int* aLineNum );
     void LoadAliases( LIB_COMPONENT* aComponent );
 
-    /**
-     * Function RemoveEntryName
-     * removes an \a aName entry from the library list names.
-     * Warning: this is a partied remove, because if aname is an alias
-     * it is not removed from its root component.
-     * this is for internal use only
-     * Use RemoveEntry( CMP_LIB_ENTRY* aEntry ) to remove safely an entry.
-     * @param aName - Entry name to remove from library.
-     */
-    void RemoveEntryName( const wxString& aName );
-
 public:
     /**
      * Get library entry status.
@@ -155,7 +138,7 @@ public:
      */
     bool IsEmpty() const
     {
-        return entries.empty();
+        return aliases.empty();
     }
 
     /**
@@ -166,7 +149,7 @@ public:
      */
     int GetCount() const
     {
-        return entries.size();
+        return aliases.size();
     }
 
     bool IsModified() const
@@ -175,8 +158,6 @@ public:
     }
 
     bool IsCache() const { return isCache; }
-
-    void SetModified( void ) { isModified = true; }
 
     void SetCache( void ) { isCache = true; }
 
@@ -214,8 +195,15 @@ public:
      * @param aRe - Regular expression used to search component key words.
      * @param aSort - Sort component name list.
      */
-    void SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe,
-                           bool aSort = true );
+    void SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, bool aSort = true );
+
+    /**
+     * Checks \a aComponent for name conflict in the library.
+     *
+     * @param aComponent - The component to check.
+     * @erturn True if a conflict exists.  Otherwise false.
+     */
+    bool Conflicts( LIB_COMPONENT* aComponent );
 
     /**
      * Find entry by name.
@@ -224,15 +212,6 @@ public:
      * @return Entry if found.  NULL if not found.
      */
     CMP_LIB_ENTRY* FindEntry( const wxChar* aName );
-
-    /**
-     * Find entry by \a aName and \a aType.
-     *
-     * @param aName - Name of entry, case insensitive.
-     * @param aType - Type of entry, root or alias.
-     * @return Entry if found.  NULL if not found.
-     */
-    CMP_LIB_ENTRY* FindEntry( const wxChar* aName, LibrEntryType aType );
 
     /**
      * Find component by \a aName.
@@ -256,7 +235,7 @@ public:
      */
     LIB_ALIAS* FindAlias( const wxChar* aName )
     {
-        return (LIB_ALIAS*) FindEntry( aName, ALIAS );
+        return (LIB_ALIAS*) FindEntry( aName );
     }
 
     /**
@@ -285,18 +264,17 @@ public:
     LIB_COMPONENT* AddComponent( LIB_COMPONENT* aComponent );
 
     /**
-     * Remove safely an \a aEntry from the library.
+     * Safely remove \a aEntry from the library and return the next entry.
      *
-     * If the entry is an alias, the alias is removed from the library and from
-     * the alias list of the root component.  If the entry is a root component
-     * with no aliases, it is removed from the library.  If the entry is a root
-     * component with aliases, the root component is renamed to the name of
-     * the first alias and the root name for all remaining aliases are updated
-     * to reflect the new root name.
+     * The next entry returned depends on the entry being removed.  If the entry being
+     * remove also removes the component, then the next entry from the list is returned.
+     * If the entry being used only removes an alias from a component, then the next alias
+     * of the component is returned.
      *
      * @param aEntry - Entry to remove from library.
+     * @return The next entry in the library or NULL if the library is empty.
      */
-    void RemoveEntry( CMP_LIB_ENTRY* aEntry );
+    CMP_LIB_ENTRY* RemoveEntry( CMP_LIB_ENTRY* aEntry );
 
     /**
      * Replace an existing component entry in the library.
@@ -410,8 +388,7 @@ public:
      * @return Library object if library file loaded successfully,
      *         otherwise NULL.
      */
-    static CMP_LIBRARY* LoadLibrary( const wxFileName& aFileName,
-                                     wxString& aErrorMsg );
+    static CMP_LIBRARY* LoadLibrary( const wxFileName& aFileName, wxString& aErrorMsg );
 
     /**
      * Function AddLibrary
@@ -442,6 +419,8 @@ public:
      * @param aName - Name of component library to remove.
      */
     static void RemoveLibrary( const wxString& aName );
+
+    static void RemoveAllLibraries() { libraryList.clear(); }
 
     /**
      * Function FindLibrary

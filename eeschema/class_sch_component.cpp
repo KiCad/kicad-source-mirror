@@ -1158,7 +1158,7 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
                            GetRef( ( (WinEDA_SchematicFrame*) frame )->GetSheet() ),
                            DARKCYAN );
 
-    if( root_component->isPower() )
+    if( root_component->IsPower() )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );

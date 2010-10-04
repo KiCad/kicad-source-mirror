@@ -66,9 +66,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 {
 
     /* Update the doc, keyword and doc filename strings */
-    size_t i;
     int index;
+    LIB_ALIAS* alias;
     LIB_COMPONENT* component = m_Parent->GetComponent();
+
     if( component == NULL )
     {
         EndModal( wxID_CANCEL );
@@ -77,51 +78,17 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
     m_Parent->SaveCopyInUndoList( component );
 
-    wxString aliasname = m_Parent->GetAliasName();
+    alias = component->GetAlias( m_Parent->GetAliasName() );
 
-    if( aliasname.IsEmpty() )   // The root component is selected
-    {
-        component->SetDescription( m_DocCtrl->GetValue() );
-        component->SetKeyWords( m_KeywordsCtrl->GetValue() );
-        component->SetDocFileName( m_DocfileCtrl->GetValue() );
-    }
+    wxCHECK_RET( alias != NULL,
+                 wxT( "Alias \"" ) + m_Parent->GetAliasName() + wxT( "\" of component \"" ) +
+                 component->GetName() + wxT( "\" does not exist." ) );
 
-    else    // An alias is selected: update keyworks (if thias alias is new, it will be added in aliacd data list)
-    {
-        component->SetAliasDataDoc(aliasname, m_DocCtrl->GetValue() );
-        component->SetAliasDataKeywords(aliasname, m_KeywordsCtrl->GetValue() );
-        component->SetAliasDataDocFileName(aliasname, m_DocfileCtrl->GetValue() );
-    }
+    alias->SetDescription( m_DocCtrl->GetValue() );
+    alias->SetKeyWords( m_KeywordsCtrl->GetValue() );
+    alias->SetDocFileName( m_DocfileCtrl->GetValue() );
 
-    if( m_PartAliasListCtrl->GetStrings() != component->GetAliasList() )
-    {
-        wxArrayString aliases = m_PartAliasListCtrl->GetStrings();
-
-        /* Add names not existing in the current component alias list. */
-        for( i = 0; i < aliases.GetCount(); i++ )
-        {
-            index = component->GetAliasList().Index( aliases[ i ], false );
-
-            if( index != wxNOT_FOUND )
-                continue;
-
-            component->GetAliasList().Add( aliases[ i ] );
-        }
-
-        /* Remove names in the current component that are not in the new alias list. */
-        for( i = 0; i < component->GetAliasList().GetCount(); i++ )
-        {
-            index = aliases.Index( component->GetAliasList()[ i ], false );
-
-            if( index == wxNOT_FOUND )
-                continue;
-
-            component->GetAliasList().RemoveAt( i );
-            i--;
-        }
-
-        component->GetAliasList() = aliases;
-    }
+    component->SetAliases( m_PartAliasListCtrl->GetStrings() );
 
     index = m_SelNumberOfUnits->GetValue();
     ChangeNbUnitsPerPackage( index );
@@ -175,13 +142,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 }
 
 
-/*******************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
-/******************************************************************************/
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( component == NULL || m_Parent->GetAliasName().IsEmpty() )
+    if( component == NULL )
         return;
 
     m_DocCtrl->SetValue( component->GetDescription() );
@@ -190,43 +155,30 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED 
 }
 
 
-/**********************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart(
-    wxCommandEvent& WXUNUSED (event) )
-/**********************************************************/
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& WXUNUSED (event) )
 {
-    if( m_PartAliasListCtrl->FindString( m_Parent->GetAliasName() )
-        != wxNOT_FOUND )
+    if( m_PartAliasListCtrl->FindString( m_Parent->GetAliasName() ) != wxNOT_FOUND )
     {
         wxString msg;
-        msg.Printf( _( "Alias <%s> cannot be removed while it is being \
-edited!" ),
+        msg.Printf( _( "Alias <%s> cannot be removed while it is being edited!" ),
                     GetChars( m_Parent->GetAliasName() ) );
         DisplayError( this, msg );
         return;
     }
-
-    LIB_COMPONENT* component = m_Parent->GetComponent();
-    m_Parent->GetAliasName().Empty();
 
     if( IsOK( this, _( "Remove all aliases from list?" ) ) )
     {
         m_PartAliasListCtrl->Clear();
         m_ButtonDeleteAllAlias->Enable( false );
         m_ButtonDeleteOneAlias->Enable( false );
-        if( component )
-            component->ClearAliasDataDoc();
     }
 }
 
 
-/*******************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED (event) )
-/*******************************************************************************/
-
 /* Add a new name to the alias list box
  *  New name cannot be the root name, and must not exists
  */
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED (event) )
 {
     wxString aliasname;
     LIB_COMPONENT* component = m_Parent->GetComponent();
@@ -249,23 +201,21 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
         || library->FindEntry( aliasname ) != NULL )
     {
         wxString msg;
-        msg.Printf( _( "Alias or component name <%s> already exists in \
-library <%s>." ),
+        msg.Printf( _( "Alias or component name <%s> already exists in library <%s>." ),
                     GetChars( aliasname ),
                     GetChars( library->GetName() ) );
-        DisplayError( this,  msg );
+        DisplayError( this, msg );
         return;
     }
 
     m_PartAliasListCtrl->Append( aliasname );
-    if( m_Parent->GetAliasName().IsEmpty() )
+    if( m_Parent->GetAliasName().CmpNoCase( component->GetName() ) == 0 )
         m_ButtonDeleteAllAlias->Enable( true );
     m_ButtonDeleteOneAlias->Enable( true );
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
-    wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& WXUNUSED (event) )
 {
     wxString aliasname = m_PartAliasListCtrl->GetStringSelection();
 
@@ -274,8 +224,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart(
     if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
     {
         wxString msg;
-        msg.Printf( _( "Alias <%s> cannot be removed while it is being \
-edited!" ),
+        msg.Printf( _( "Alias <%s> cannot be removed while it is being edited!" ),
                     GetChars( aliasname ) );
         DisplayError( this, msg );
         return;
@@ -284,7 +233,7 @@ edited!" ),
     m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
     LIB_COMPONENT* component = m_Parent->GetComponent();
     if( component )
-        component->RemoveAliasData(aliasname);
+        component->RemoveAlias( aliasname );
 
     if( m_PartAliasListCtrl->IsEmpty() )
     {
@@ -301,8 +250,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::ChangeNbUnitsPerPackage( int MaxUnit )
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( component == NULL || component->GetPartCount() == MaxUnit
-        || MaxUnit < 1 )
+    if( component == NULL || component->GetPartCount() == MaxUnit || MaxUnit < 1 )
         return false;
 
     if( MaxUnit < component->GetPartCount()
@@ -327,11 +275,9 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 
     if( m_Parent->GetShowDeMorgan() )
     {
-       if( !IsOK( this, _( "Add new pins for alternate body style \
-( DeMorgan ) to component?" ) ) )
-        return false;
+        if( !IsOK( this, _( "Add new pins for alternate body style ( DeMorgan ) to component?" ) ) )
+            return false;
     }
-
     else if(  component->HasConversion() )
     {
         if( !IsOK( this, _( "Delete alternate body style (DeMorgan) draw items from component?" ) ) )
@@ -342,20 +288,18 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
     }
 
     component->SetConversion( m_Parent->GetShowDeMorgan() );
-    m_Parent->OnModify( );
+    m_Parent->OnModify();
 
     return true;
 }
 
 
-/****************************************************************************/
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& event )
-/****************************************************************************/
 {
     wxString FullFileName, mask;
     wxString docpath, filename;
 
-    docpath = wxGetApp().ReturnLastVisitedLibraryPath(wxT( "doc" ));
+    docpath = wxGetApp().ReturnLastVisitedLibraryPath( wxT( "doc" ) );
 
     mask = wxT( "*" );
     FullFileName = EDA_FileSelector( _( "Doc Files" ),
@@ -374,25 +318,23 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
      * list, just add the library name to the list.  Otherwise, add
      * the library name with the full or relative path.
      * the relative path, when possible is preferable,
-     * because it preserve use of default libraries paths, when the path is a sub path of these default paths
+     * because it preserve use of default libraries paths, when the path is a sub path of
+     * these default paths
      */
     wxFileName fn = FullFileName;
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath(FullFileName);
+    filename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( FullFileName );
     // Filenames are always stored in unix like mode, ie separator "\" is stored as "/"
     // to ensure files are identical under unices and windows
 #ifdef __WINDOWS__
-    filename.Replace(wxT("\\"), wxT("/") );
+    filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
     m_DocfileCtrl->SetValue( filename );
 }
 
 
-/**********************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter(
-    wxCommandEvent& WXUNUSED (event) )
-/**********************************************************/
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent& WXUNUSED (event) )
 {
     if( IsOK( this, _( "Ok to Delete FootprintFilter LIST" ) ) )
     {
@@ -403,13 +345,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter(
 }
 
 
-/*******************************************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
-/*******************************************************************************/
-
 /* Add a new name to the footprint filter list box
  * Obvioulsy, cannot be void
  */
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
 {
     wxString Line;
     LIB_COMPONENT* component = m_Parent->GetComponent();
@@ -421,7 +360,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
-    Line = dlg.GetValue( );
+    Line = dlg.GetValue();
     Line.Replace( wxT( " " ), wxT( "_" ) );
 
     if( Line.IsEmpty() )
@@ -434,8 +373,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
     {
         wxString msg;
 
-        msg.Printf( _( "Foot print filter <%s> is already defined." ),
-                    GetChars( Line ) );
+        msg.Printf( _( "Foot print filter <%s> is already defined." ), GetChars( Line ) );
         DisplayError( this, msg );
         return;
     }
@@ -446,10 +384,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
 }
 
 
-/********************************************************/
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter(
-    wxCommandEvent& WXUNUSED (event) )
-/********************************************************/
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& WXUNUSED (event) )
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
     int ii = m_FootprintFilterListBox->GetSelection();

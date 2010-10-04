@@ -8,11 +8,27 @@
 #include "classes_body_items.h"
 #include "class_libentry_fields.h"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <map>
 
 
 class CMP_LIBRARY;
+class LIB_ALIAS;
 
+/**
+ * LIB_ALIAS map sorting.
+ */
+struct AliasMapSort
+{
+    bool operator() ( const wxString& aItem1, const wxString& aItem2 ) const
+        { return aItem1.CmpNoCase( aItem2 ) < 0; }
+};
+
+/**
+ * Alias map used by component library object.
+ */
+typedef std::map< wxString, LIB_ALIAS*, AliasMapSort > LIB_ALIAS_MAP;
+
+typedef std::vector< LIB_ALIAS* > LIB_ALIAS_LIST;
 
 /* Types for components in libraries
  * components can be a true component or an alias of a true component.
@@ -114,10 +130,9 @@ public:
     {
         return !( *this == aName );
     }
+
+    bool operator==( const wxString& aName ) const { return *this == ( const wxChar* ) aName; }
 };
-
-typedef boost::ptr_vector< CMP_LIB_ENTRY > LIB_ENTRY_LIST;
-
 
 extern bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 );
 
@@ -142,42 +157,21 @@ class LIB_COMPONENT : public CMP_LIB_ENTRY
     LibrEntryOptions   m_options;        ///< Special component features such as POWER or NORMAL.)
     int                unitCount;        ///< Number of units (parts) per package.
     LIB_DRAW_ITEM_LIST drawings;         ///< How to draw this part.
-    wxArrayString      m_aliasListData;  /* ALIAS data (name, doc, keywords and doc filename).
-                                          * Used only by the component editor LibEdit
-                                          * to store aliases info during edition
-                                          * usually void outside the component editor */
-    wxArrayString      m_AliasList;      ///< List of alias names for the component.
     wxArrayString      m_FootprintList;  /**< List of suitable footprint names for the
-                                              component (wildcard names accepted). */
-
+                                              component (wild card names accepted). */
+    LIB_ALIAS_LIST     m_aliases;        ///< List of alias object pointers associated with the
+                                         ///< component.
 
     void deleteAllFields();
 
     friend class CMP_LIBRARY;
+    friend class LIB_ALIAS;
 
 public:
-    /* Offsets used in editing library component,
-     * for handle aliases data in m_AliasListData array string
-     * when editing a library component, aliases data is stored
-     * in m_AliasListData.
-     * 4 strings by alias are stored:
-     * name, doc, keywords and doc filename
-     * these constants are indexes in m_AliasListData
-     * to read/write strings for a given alias
-     */
-    enum alias_idx
-    {
-        ALIAS_NAME_IDX         = 0,
-        ALIAS_DOC_IDX          = 1,
-        ALIAS_KEYWORD_IDX      = 2,
-        ALIAS_DOC_FILENAME_IDX = 3,
-        ALIAS_NEXT_IDX         = 4
-    };
-
     LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
     LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary = NULL );
 
-    ~LIB_COMPONENT();
+    virtual ~LIB_COMPONENT();
 
     virtual wxString GetClass() const
     {
@@ -191,72 +185,31 @@ public:
         GetValueField().m_Text = aName;
     }
 
-    wxArrayString& GetAliasList() { return m_AliasList; }
+    wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
+
+    size_t GetAliasCount() const { return m_aliases.size(); }
+
+    LIB_ALIAS* GetAlias( size_t aIndex );
+
+    LIB_ALIAS* GetAlias( const wxString& aName );
+
+    /**
+     * Test if alias \a aName is in component alias list.
+     *
+     * Alias name comparisons are case insensitive.
+     *
+     * @param aName - Name of alias.
+     * @return True if alias name in alias list.
+     */
+    bool HasAlias( const wxString& aName ) const;
+
+    void SetAliases( const wxArrayString& aAliasList );
+
+    void RemoveAlias( const wxString& aName );
+
+    LIB_ALIAS* RemoveAlias( LIB_ALIAS* aAlias );
 
     wxArrayString& GetFootPrints() { return m_FootprintList; }
-
-    /* accessors to aliases data, used by the component editor, during edition
-    */
-    /** Function CollectAliasesData
-     * store in m_aliasListData alias data (doc, keywords, docfile)
-     * for each alias found in m_AliasList
-    */
-    void CollectAliasesData( CMP_LIBRARY* aLibrary );
-
-    /** Function LocateAliasData
-     * @return an index in array string to the alias data (doc, keywords, docfile)
-     *         or -1 if not found
-     * @param aAliasName = the alias name
-     * @param aCreateIfNotExist = true if the alias data must be created, when not exists
-     */
-    int LocateAliasData( const wxString & aAliasName, bool aCreateIfNotExist = false );
-
-    /** Function GetAliasDataDoc
-     * @param aAliasName = the alias name
-     * @return the Doc string
-     */
-    wxString GetAliasDataDoc( const wxString & aAliasName );
-
-    /** Function GetAliasDataKeyWords
-     * @param aAliasName = the alias name
-     * @return aAliasData = the keywords string
-     */
-    wxString GetAliasDataKeyWords( const wxString & aAliasName );
-
-    /** Function GetAliasDataDocFileName
-     * @param aAliasName = the alias name
-     * @return the Doc filename string
-     */
-    wxString GetAliasDataDocFileName( const wxString & aAliasName );
-
-    /** Function SetAliasDataDoc
-     * @param aAliasName = the alias name
-     * @return aAliasData = the Doc string
-     */
-    void SetAliasDataDoc( const wxString & aAliasName, const wxString & aAliasData );
-
-    /** Function SetAliasDataKeywords
-     * @param aAliasName = the alias name
-     * @param aAliasData = the keywords string
-     */
-    void SetAliasDataKeywords( const wxString & aAliasName, const wxString & aAliasData );
-
-    /** Function SetAliasDataDocFileName
-     * @param aAliasName = the alias name
-     * @param aAliasData = the Doc filename string
-     */
-    void SetAliasDataDocFileName( const wxString & aAliasName, const wxString & aAliasData );
-
-    /** Function ClearAliasDataDoc
-     * clear aliases data list
-     */
-    void ClearAliasDataDoc( ) { m_aliasListData.Clear(); }
-
-    /** Function RemoveAliasData
-     * remove an alias data from list
-     * @param aAliasName = the alias name
-     */
-    void RemoveAliasData(const wxString & aAliasName );
 
     EDA_Rect GetBoundaryBox( int aUnit, int aConvert );
 
@@ -286,8 +239,8 @@ public:
     bool LoadAliases( char* aLine, wxString& aErrorMsg );
     bool LoadFootprints( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
 
-    bool isPower() { return m_options == ENTRY_POWER; }
-    bool isNormal() { return m_options == ENTRY_NORMAL; }
+    bool IsPower() { return m_options == ENTRY_POWER; }
+    bool IsNormal() { return m_options == ENTRY_NORMAL; }
 
     void SetPower() { m_options = ENTRY_POWER; }
     void SetNormal() { m_options = ENTRY_NORMAL; }
@@ -301,7 +254,7 @@ public:
      * in \a aFieldsList.  The only known caller of this function is the
      * library component field editor, and it establishes needed behavior.
      *
-     * @param aFieldsList is a set of fields to import, removing all previous fields.
+`     * @param aFieldsList is a set of fields to import, removing all previous fields.
      */
     void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
 
@@ -320,7 +273,7 @@ public:
      * finds a field within this component matching \a aFieldName and returns
      * it or NULL if not found.
      */
-    LIB_FIELD*  FindField( const wxString& aFieldName );
+    LIB_FIELD* FindField( const wxString& aFieldName );
 
     /**
      * Return pointer to the requested field.
@@ -459,20 +412,6 @@ public:
      * @return True if component has more than one conversion.
      */
     bool HasConversion() const;
-
-    /**
-     * Test if alias \a aName is in component alias list.
-     *
-     * Alias name comparisons are case insensitive.
-     *
-     * @param aName - Name of alias.
-     * @return True if alias name in alias list.
-     */
-    bool HasAlias( const wxChar* aName )
-    {
-        wxASSERT( aName != NULL );
-        return m_AliasList.Index( aName ) != wxNOT_FOUND;
-    }
 
     /**
      * Clears the status flag all draw objects in this component.
@@ -630,6 +569,8 @@ public:
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
 
     bool ShowPinNumbers() { return m_showPinNumbers; }
+
+    bool operator==( const LIB_COMPONENT* aComponent ) const { return this == aComponent; }
 };
 
 
@@ -641,23 +582,24 @@ public:
  */
 class LIB_ALIAS : public CMP_LIB_ENTRY
 {
+    friend class LIB_COMPONENT;
+
 protected:
     /**
      * The actual component of the alias.
      *
-     * @note - Do not delete the root component.  The root component is owned
-     *         by library the component is part of.  Deleting the root component
-     *         will likely cause EESchema to crash.
-     *         Or, if the root component is deleted, aliases must be deleted or their .root member
-     *         must be changed to point a new root component
+     * @note - Do not delete the root component.  The root component is actually shared by
+     *         all of the aliases associated with it.  The component pointer will be delete
+     *         in the destructor of the last alias that shares this component is deleted.
+     *         Deleting the root component will likely cause EESchema to crash.
      */
     LIB_COMPONENT* root;
 
 public:
-    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent,
-               CMP_LIBRARY* aLibrary = NULL );
-    LIB_ALIAS( LIB_ALIAS& aAlias, CMP_LIBRARY* aLibrary = NULL );
-    ~LIB_ALIAS();
+    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent );
+    LIB_ALIAS( LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent = NULL );
+
+    virtual ~LIB_ALIAS();
 
     virtual wxString GetClass() const
     {
@@ -672,10 +614,9 @@ public:
         return root;
     }
 
-    /**
-     * Set the alias root component.
-     */
-    void SetComponent( LIB_COMPONENT* aComponent );
+    bool IsRoot() const { return name.CmpNoCase( root->GetName() ) == 0; }
+
+    bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
 };
 
 
