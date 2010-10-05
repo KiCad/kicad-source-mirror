@@ -149,7 +149,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         curPos += mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), gerberMetric );
         int radius = scale( params[1].GetValue( tool ), gerberMetric ) / 2;
         if( !aFilledShape )
-            GRCircle( aClipBox, aDC, curPos.x, curPos.y, radius, aColor );
+            GRCircle( aClipBox, aDC, curPos, radius, 0, aColor );
         else
             GRFilledCircle( aClipBox, aDC, curPos, radius, aColor );
     }
@@ -242,12 +242,6 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type is not stored in parameters list, so the first parameter is center.x
          */
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ), gerberMetric );
-/*        int outerRadius   = scale( params[2].GetValue( tool ), gerberMetric ) / 2;
-        if( !aFilledShape )
-            GRCircle( aClipBox, aDC, curPos.x, curPos.y, outerRadius, aColor );
-        else
-            GRFilledCircle( aClipBox, aDC, curPos, outerRadius, aColor );
-*/
         ConvertShapeToPolygon( aParent, polybuffer, gerberMetric );
 
         // shape rotation:
@@ -298,13 +292,12 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             if( !aFilledShape )
             {
                 // draw the border of the pen's path using two circles, each as narrow as possible
-                GRCircle( aClipBox, aDC, curPos.x, curPos.y, outerDiam / 2, 0, aColor );
-                GRCircle( aClipBox, aDC, curPos.x, curPos.y,
-                          outerDiam / 2 - penThickness, 0, aColor );
+                GRCircle( aClipBox, aDC, curPos, outerDiam / 2, 0, aColor );
+                GRCircle( aClipBox, aDC, curPos, outerDiam / 2 - penThickness, 0, aColor );
             }
             else    // Filled mode
             {
-                GRCircle( aClipBox, aDC, curPos.x, curPos.y,
+                GRCircle( aClipBox, aDC, curPos,
                           (outerDiam - penThickness) / 2, penThickness, aColor );
             }
         }

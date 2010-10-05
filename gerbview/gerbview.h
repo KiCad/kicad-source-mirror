@@ -109,6 +109,7 @@ class D_CODE;
  */
 class GERBER
 {
+    WinEDA_GerberFrame * m_Parent;              // the parent WinEDA_GerberFrame (used to display messages...)
     D_CODE*       m_Aperture_List[TOOLS_MAX_COUNT];   ///< Dcode (Aperture) List for this layer
     bool          m_Exposure;                   ///< whether an aperture macro tool is flashed on or off
 
@@ -146,7 +147,6 @@ public:
 
     int           m_Selected_Tool;              // Pour editions: Tool (Dcode) selectionn�
 
-    int           m_Transform[2][2];            // The rotation/mirror transformation matrix.
     bool          m_360Arc_enbl;                // Enbl 360 deg circular interpolation
     bool          m_PolygonFillMode;            // Enbl polygon mode (read coord as a polygon descr)
     int           m_PolygonFillModeState;       // In polygon mode: 0 = first segm, 1 = next segm
@@ -154,12 +154,24 @@ public:
     APERTURE_MACRO_SET   m_aperture_macros;     ///< a collection of APERTURE_MACROS, sorted by name
 
 public:
-    GERBER( int layer );
+    GERBER( WinEDA_GerberFrame * aParent, int layer );
     ~GERBER();
     void    Clear_GERBER();
     int     ReturnUsedDcodeNumber();
     void    ResetDefaultValues();
 
+    /** function ReportMessage
+     * Add a message (a string) in message list
+     * for instance when reading a Gerber file
+     * @param aMessage = the straing to add in list
+     */
+    void ReportMessage(const wxString aMessage );
+
+    /** function ClearMessageList
+     * Clear the message list
+     * Call it before reading a Gerber file
+     */
+    void ClearMessageList( );
 
     /**
      * Function InitToolTable

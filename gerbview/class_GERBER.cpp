@@ -53,8 +53,9 @@
  */
 
 
-GERBER::GERBER( int aLayer )
+GERBER::GERBER( WinEDA_GerberFrame * aParent, int aLayer )
 {
+    m_Parent = aParent;
     m_Layer = aLayer;            // Layer Number
 
     m_Selected_Tool = FIRST_DCODE;
@@ -130,8 +131,6 @@ void GERBER::ResetDefaultValues()
                                         // DCode->
                                         // separate DCode file
 
-    m_Offset.x = m_Offset.y = 0;        // Coord Offset
-
     m_FmtScale.x = m_FmtScale.y = g_Default_GERBER_Format % 10;
     m_FmtLen.x   = m_FmtLen.y = m_FmtScale.x + (g_Default_GERBER_Format / 10);
 
@@ -153,8 +152,6 @@ void GERBER::ResetDefaultValues()
                                                     // plot arcs & circles
     m_Current_File    = NULL;                       // File to read
     m_FilesPtr        = 0;
-    m_Transform[0][0] = m_Transform[1][1] = 1;
-    m_Transform[0][1] = m_Transform[1][0] = 0;      // Rotation/mirror = Normal
     m_PolygonFillMode = FALSE;
     m_PolygonFillModeState = 0;
 }
@@ -187,4 +184,22 @@ void GERBER::InitToolTable()
     }
 }
 
+/** function ReportMessage
+ * Add a message (a string) in message list
+ * for instance when reading a Gerber file
+ * @param aMessage = the straing to add in list
+ */
+void GERBER::ReportMessage(const wxString aMessage )
+{
+    m_Parent->ReportMessage( aMessage );
+}
+
+/** function ClearMessageList
+ * Clear the message list
+ * Call it before reading a Gerber file
+ */
+void GERBER::ClearMessageList( )
+{
+    m_Parent->ClearMessageList( );
+}
 

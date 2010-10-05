@@ -49,6 +49,7 @@ public:
 
 private:
     bool m_show_layer_manager_tools;
+    wxArrayString m_Messages;           // An array sting to store warning messages when reaging a gerber file
 
 public:
     WinEDA_GerberFrame( wxWindow* father, const wxString& title,
@@ -59,6 +60,24 @@ public:
 
     void         Update_config();
     void         OnCloseWindow( wxCloseEvent& Event );
+
+    /** function ReportMessage
+     * Add a message (a string) in message list
+     * for instance when reading a Gerber file
+     * @param aMessage = the straing to add in list
+     */
+    void ReportMessage(const wxString aMessage )
+    {
+        m_Messages.Add( aMessage );
+    }
+    /** function ClearMessageList
+     * Clear the message list
+     * Call it before reading a Gerber file
+     */
+    void ClearMessageList( )
+    {
+        m_Messages.Clear( );
+    }
 
     /** Function IsGridVisible() , virtual
      * @return true if the grid must be shown

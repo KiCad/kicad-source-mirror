@@ -36,8 +36,12 @@
  * G70 Select Units = Inches
  * G71 Select Units = Millimeters
  * G74 disable 360 degrees circular interpolation  (return to 90 deg mode)
- *      and circular interpolation (return tà linear)
- * G75 enable 360 degrees circular interpolation 
+ *      and perhaps circular interpolation (return to linear interpolation )
+ *      see rs274xrevd_e.pdf pages 47 and 48
+ *      Unfortunately page 47 said G74 disable G02 or G03
+ *      and page 48 said G01 must be used to disable G02 or G03.
+ *      Currently Gerbview disable G02 or G03 after a G74 command (tests using 2 gerber files).
+ * G75 enable 360 degrees circular interpolation
  * G90 mode absolute coordinates
  *
  * X, Y
@@ -973,7 +977,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             default:
                 msg.Printf( wxT( "Execute_DCODE_Command: interpol error (type %X)" ),
                             m_Iterpolation );
-                DisplayError( frame, msg );
+                ReportMessage( msg );
                 break;
             }
 

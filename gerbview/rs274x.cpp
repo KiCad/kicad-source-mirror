@@ -295,10 +295,11 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     case KNOCKOUT:
     case STEP_AND_REPEAT:
     case ROTATE:
+    {
         msg.Printf( _( "Command <%c%c> ignored by Gerbview" ),
                     (command >> 8) & 0xFF, command & 0xFF );
-        if( g_DebugLevel > 0 )
-            wxMessageBox( msg );
+        ReportMessage( msg );
+    }
         break;
 
     case IMAGE_NAME:
@@ -342,7 +343,6 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         m_Current_File = fopen( line, "rt" );
         if( m_Current_File == 0 )
         {
-            wxString msg;
             msg.Printf( wxT( "file <%s> not found." ), line );
             DisplayError( NULL, msg, 10 );
             ok = FALSE;
@@ -531,9 +531,9 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             APERTURE_MACRO* pam = FindApertureMacro( am_lookup );
             if( !pam )
             {
-                // @todo not found, don't know how to report an error
-                D( printf( "aperture macro %s not found\n",
-                          CONV_TO_UTF8( am_lookup.name ) ); )
+                msg.Printf( "aperture macro %s not found\n",
+                          CONV_TO_UTF8( am_lookup.name ) );
+                ReportMessage( msg );
                 ok = false;
                 break;
             }
@@ -603,6 +603,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
                                 char*& text,
                                 FILE*  gerber_file )
 {
+    wxString msg;
     APERTURE_MACRO am;
 
     // read macro name
@@ -674,10 +675,9 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
             break;
 
         default:
-
             // @todo, there needs to be a way of reporting the line number
-            // and character offset.
-            D( printf( "Invalid primitive id code %d\n", prim.primitive_id ); )
+            msg.Printf( "Invalid primitive id code %d\n", prim.primitive_id );
+            ReportMessage( msg );
             return false;
         }
 
@@ -700,10 +700,12 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
                 param.SetValue( ReadDouble( text ) );
         }
 
-        if( i < paramCount )  // maybe some day we can throw an exception and
-                              // track a line number
-            printf( "read macro descr type %d: read %d parameters, insufficient parameters\n",
+        if( i < paramCount )
+        {   // maybe some day we can throw an exception and track a line number
+            msg.Printf( "read macro descr type %d: read %d parameters, insufficient parameters\n",
                 prim.primitive_id, i );
+            ReportMessage( msg );
+        }
 
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )

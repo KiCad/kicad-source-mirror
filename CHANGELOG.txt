@@ -26,6 +26,24 @@ email address.
     One example might be:
     (inherit (footprint library_uri ftprintname))
 
+2010-oct-04 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  Initial work on new component library stucture.
+  * Use C++ map in component library instead of boost::ptr_vector.
+  * Drop Boost pointer containers for standard C++ containers.
+  * Moved duplicate name user interface elements from library object to
+    library editor.
+  * Added code to support direct addition and replacement of component
+    alias objects into libraries.
+  * Removed temporary strings used to add and remove alias objects.
+  * Libraries only store alias objects, components now accessed thru alias.
+  * Simplify library API for adding, removing, and replacing components.
+  * Updated edit component in library dialog and library editor to reflect
+    component library object changes.
+  * Fixed bug in library viewer when displaying alias name.
+  * Made a few header files compile stand alone per the new coding policy.
+  * Remove some dead code and the usual code formatting fixes.
+
 
 2010-oct-03, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================

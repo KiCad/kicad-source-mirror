@@ -62,6 +62,7 @@ void D_CODE::Clear_D_CODE_Data()
     m_Macro      = NULL;
     m_Rotation   = 0.0;
     m_EdgesCount = 0;
+    m_PolyCorners.clear();
 }
 
 
@@ -122,7 +123,7 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
     int      type_outil;
 
     if( g_GERBER_List[layer] == NULL )
-        g_GERBER_List[layer] = new GERBER( layer );
+        g_GERBER_List[layer] = new GERBER( this, layer );
 
     GERBER* gerber = g_GERBER_List[layer];
 

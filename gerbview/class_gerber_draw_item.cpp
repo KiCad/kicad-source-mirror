@@ -243,15 +243,12 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                      radius - halfPenWidth, 0, color );
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                      radius + halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius - halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                      radius, m_Size.x, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius, m_Size.x, color );
         }
         break;
 

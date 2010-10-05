@@ -11,86 +11,8 @@
 #include "pcbplot.h"
 #include "protos.h"
 
-/* Format Gerber: NOTES:
- *   Functions history:
- *   Gn =
- *   G01 linear interpolation (right trace)
- *   G02, G20, G21 Circular interpolation, meaning trig <0
- *   G03, G30, G31 Circular interpolation, meaning trigo> 0
- *   G04 review
- *   G06 parabolic interpolation
- *   G07 Cubic Interpolation
- *   G10 linear interpolation (scale x10)
- *   G11 linear interpolation (0.1x range)
- *   G12 linear interpolation (0.01x scale)
- *   G52 plot symbol reference code by Dnn
- *   G53 plot symbol reference by Dnn; symbol rotates from -90 degrees
- *   G54 Selection Tool
- *   G55 Fashion photo exhibition
- *   G56 plot symbol reference code for DNN
- *   G57 displays the symbol link to the console
- *   G58 plot displays the symbol and link to the console
- *   G60 linear interpolation (scale x100)
- *   G70 Units = Inches
- *   G71 Units = Millimeters
- *   G74 circular interpolation removes 360 degree, has returned G01
- *   G75 Active circular interpolation on 360 degree
- *   G90 mode absolute coordinates
- *   G91 Fashion Related Contacts
- *
- *   X, Y coordinates
- *   X and Y are followed by + or - and m + n digits (not separated)
- *   m = integer part
- *   n = part after the comma
- *   Classic formats: m = 2, n = 3 (size 2.3)
- *   m = 3, n = 4 (size 3.4)
- *   eg
- *   G__ X00345Y-06123 * D__
- *
- *   Tools and D_CODES
- *   Tool number (identification of shapes)
- *   1 to 999
- *   D_CODES:
- *
- *   D01 ... D9 = action codes:
- *   D01 = activating light (lower pen) when placement
- *   D02 = light extinction (lift pen) when placement
- *   D03 = Flash
- *   D09 = VAPE Flash
- *   D51 = G54 preceded by -> Select VAPE
- *
- *   D10 ... D999 = Identification Tool (shapes id)
- */
 
-
-/* Routine to Read a file D Codes.
- * Accepts standard format or ALSPCB
- * A ';' starts a comment.
- *
- * Standard Format:
- * Tool, Horiz, Vert, drill, speed, acc. Type; [dCode (comment)]
- * Ex: 1, 12, 12, 0, 0, 0, 3; D10
- *
- * Format: ALSPCB
- * Ver, Hor, Type, Tool, [Drill]
- * Eg 0012, 0012, L, D10
- *
- * Rank the characters in buf_tmp tabular structures D_CODE.
- * Returns:
- * <0 if error:
- * -1 = File not found
- * -2 = Error reading file
- * Rank D_code max lu (nbr of dCode)
- */
-
-
-/* Read a gerber file (RS274D gold RS274X format).
- * Normal size:
- * Imperial
- * Absolute
- * End of block = *
- * CrLf after each command
- * G codes BROKE
+/* Read a gerber file, RS274D or RS274X format.
  */
 bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
@@ -111,10 +33,11 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
     if( g_GERBER_List[layer] == NULL )
     {
-        g_GERBER_List[layer] = new GERBER( layer );
+        g_GERBER_List[layer] = new GERBER( this, layer );
     }
 
     gerber = g_GERBER_List[layer];
+    ClearMessageList( );
 
     /* Set the gerber scale: */
     gerber->ResetDefaultValues();

@@ -58,16 +58,40 @@ int g_DrawBgColor = WHITE;
 void ClipAndDrawFilledPoly( EDA_Rect* ClipBox, wxDC * DC, wxPoint Points[], int n );
 #endif
 
-static void GRSCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width, int Color );
+/* These functions are used by corresponding functions
+ * ( GRSCircle is called by GRCircle for instance) after mapping coordinates
+ * from user units to screen units(pixels coordinates)
+ */
+static void GRSCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
+                        int width, int Color );
 static void GRSFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r,
                       int width, int Color, int BgColor );
-
+static void GRSMixedLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+                   int width, int Color );
+static void GRSDashedLineTo( EDA_Rect* ClipBox, wxDC* DC, int x2, int y2, int width,
+                      int Color );
+static void GRSDashedLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2,
+                    int y2, int width, int Color );
+static void GRSLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+              int width, int Color );
+static void GRSMoveTo( int x, int y );
+static void GRSArc1( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+              int xc, int yc, int width, int Color );
+static void GRSArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle,
+             int EndAngle, int r, int width, int Color );
+static void GRSFilledArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle,
+                   int EndAngle, int r, int width, int Color, int BgColor );
+static void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+               int width, int aPenSize, int Color );
+static void GRSFillCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
+                   int width, int Color );
+/**/
 
 extern BASE_SCREEN* ActiveScreen;
 
 
 static int          GRLastMoveToX, GRLastMoveToY;
-static bool         ForceBlackPen;   /* if true: draws in black instead of
+static bool         s_ForceBlackPen;   /* if true: draws in black instead of
                                       * color for printing. */
 static int          xcliplo = 0,
                     ycliplo = 0,
@@ -83,23 +107,18 @@ static wxDC* s_DC_lastDC         = NULL;
 
 
 /* Local functions: */
-static void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-                     int x2, int y2, int Color );
-static void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-                     int x2, int y2, int width, int Color );
+static void GRSRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1,
+                     int x2, int y2, int aWidth, int aColor,
+                     wxPenStyle aStyle =  wxPENSTYLE_SOLID );
 
 /*
  * Macro clipping the trace of a line:
  * Line (x1, y1 x2, y2) is clipped to remain within
  * (Xcliplo, ycliplo xcliphi, ycliphi) (global variables, local to this file)
  * This is necessary because under WIN95 coord trace
- * (Though an int 32 bits) are truncated to 16 bits (stupid BG)
+ * (Although an int has 32 bits) are truncated to 16 bits (stupid)
  */
-#ifndef us
-#define us unsigned int
-#endif
-
-static inline int USCALE( us arg, us num, us den )
+static inline int USCALE( unsigned int arg, unsigned int num, unsigned int den )
 {
 #ifndef USE_WX_ZOOM
     int ii;
@@ -543,7 +562,7 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
     if( width < 0 )
         width = 0;
 
-    if( ForceBlackPen )
+    if( s_ForceBlackPen )
     {
         Color = BLACK;
     }
@@ -574,7 +593,7 @@ void GRSetColorPen( wxDC* DC, int Color, int width, int style )
 
 void GRSetBrush( wxDC* DC, int Color, int fill )
 {
-    if( ForceBlackPen )
+    if( s_ForceBlackPen )
         Color = BLACK;
 
     if(   s_DC_lastbrushcolor != Color ||
@@ -604,16 +623,16 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
  */
 void GRForceBlackPen( bool flagforce )
 {
-    ForceBlackPen = flagforce;
+    s_ForceBlackPen = flagforce;
 }
 
 
 /** function GetGRForceBlackPenState
- * @return ForceBlackPen (True if  a black pen was forced)
+ * @return s_ForceBlackPen (True if  a black pen was forced)
  */
 bool GetGRForceBlackPenState( void )
 {
-    return ForceBlackPen;
+    return s_ForceBlackPen;
 }
 
 
@@ -643,6 +662,12 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
         DC->SetLogicalFunction( wxCOPY );
 #else
         DC->SetLogicalFunction( wxEQUIV );
+#endif
+    else if( draw_mode & GR_INVERT )
+#if defined( USE_WX_GRAPHICS_CONTEXT )
+        DC->SetLogicalFunction( wxCOPY );
+#else
+        DC->SetLogicalFunction( wxINVERT );
 #endif
     else
         DC->SetLogicalFunction( wxCOPY );
@@ -837,21 +862,6 @@ void GRSMoveTo( int x, int y )
 }
 
 
-/*
- * Draw line to a new position, in screen (pixels) space.
- */
-void GRSLineTo( EDA_Rect* ClipBox,
-                wxDC*     DC,
-                int       x,
-                int       y,
-                int       width,
-                int       Color )
-{
-    GRSLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x, y, width, Color );
-    GRLastMoveToX = x;
-    GRLastMoveToY = y;
-}
-
 
 /*
  * Draw line to a new position, in screen (pixels) space.
@@ -905,44 +915,6 @@ void GRLineRel( EDA_Rect* ClipBox,
              GRLineToY,
              ZoomValue( width ),
              Color );
-}
-
-
-/*
- * Move to a new position relative to current one, in screen space
- * (pixel coords.).
- */
-void GRSMoveRel( int x, int y )
-{
-    GRLastMoveToX += x;
-    GRLastMoveToY += y;
-}
-
-
-/*
- * Draw line to a new position relative to current one, in screen space
- * (pixel coords.).
- */
-void GRSLineRel( EDA_Rect* ClipBox,
-                 wxDC*     DC,
-                 int       x,
-                 int       y,
-                 int       width,
-                 int       Color )
-{
-    long GRLineToX = GRLastMoveToX + x,
-         GRLineToY = GRLastMoveToY + y;
-
-    GRSLine( ClipBox,
-             DC,
-             GRLastMoveToX,
-             GRLastMoveToY,
-             GRLineToX,
-             GRLineToY,
-             width,
-             Color );
-    GRLastMoveToX = GRLineToX;
-    GRLastMoveToY = GRLineToY;
 }
 
 
@@ -1689,28 +1661,28 @@ void GRArc( EDA_Rect* ClipBox,
 /*
  * Draw a rectangle in drawing space.
  */
-void GRRect( EDA_Rect* ClipBox, wxDC* DC,
+void GRRect( EDA_Rect* aClipBox, wxDC* aDC,
              int x1, int y1, int x2, int y2,
-             int Color )
+             int aColor )
 {
     x1 = GRMapX( x1 );
     y1 = GRMapY( y1 );
     x2 = GRMapX( x2 );
     y2 = GRMapY( y2 );
 
-    GRSRect( ClipBox, DC, x1, y1, x2, y2, Color );
+    GRSRect( aClipBox, aDC, x1, y1, x2, y2, 0, aColor );
 }
 
 void GRRect( EDA_Rect* aClipBox, wxDC* aDC,
              const EDA_Rect& aRect,
-             int aColor )
+             int aColor, wxPenStyle aStyle )
 {
     int x1 = GRMapX( aRect.GetX() );
     int y1 = GRMapY( aRect.GetY() );
     int x2 = GRMapX( aRect.GetRight() );
     int y2 = GRMapY( aRect.GetBottom() );
 
-    GRSRect( aClipBox, aDC, x1, y1, x2, y2, aColor );
+    GRSRect( aClipBox, aDC, x1, y1, x2, y2, 0, aColor, aStyle );
 }
 
 
@@ -1779,32 +1751,21 @@ void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 /*
  * Draw a rectangle in screen space.
  */
-void GRSRect( EDA_Rect* ClipBox,
-              wxDC*     DC,
-              int       x1,
-              int       y1,
-              int       x2,
-              int       y2,
-              int       Color )
-{
-    GRSRect( ClipBox, DC, x1, y1, x2, y2, 0, Color );
-}
 
-
-void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-              int width, int Color )
+void GRSRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
+              int aWidth, int aColor, wxPenStyle aStyle )
 {
     if( x1 > x2 )
         EXCHG( x1, x2 );
     if( y1 > y2 )
         EXCHG( y1, y2 );
 
-    if( ClipBox )
+    if( aClipBox )
     {
-        int xmin = ClipBox->GetX();
-        int ymin = ClipBox->GetY();
-        int xmax = ClipBox->GetRight();
-        int ymax = ClipBox->GetBottom();
+        int xmin = aClipBox->GetX();
+        int ymin = aClipBox->GetY();
+        int xmax = aClipBox->GetRight();
+        int ymax = aClipBox->GetBottom();
 
         if( x1 > xmax )
             return;
@@ -1816,13 +1777,13 @@ void GRSRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
             return;
     }
 
-    GRSetColorPen( DC, Color, width );
+    GRSetColorPen( aDC, aColor, aWidth, aStyle );
     if( ( x1 == x2 ) || ( y1 == y2 ) )
-        DC->DrawLine( x1, y1, x2, y2 );
+        aDC->DrawLine( x1, y1, x2, y2 );
     else
     {
-        GRSetBrush( DC, BLACK );
-        DC->DrawRectangle( x1, y1, x2 - x1, y2 - y1 );
+        GRSetBrush( aDC, BLACK );
+        aDC->DrawRectangle( x1, y1, x2 - x1, y2 - y1 );
     }
 }
 
