@@ -57,9 +57,6 @@ void DSNLEXER::init()
     space_in_quoted_tokens = true;
 
     commentsAreTokens = false;
-
-    limit = start;
-    next  = start;
 }
 
 
@@ -90,15 +87,28 @@ void DSNLEXER::PushReader( LINE_READER* aLineReader )
     readerStack.push_back( aLineReader );
     reader = aLineReader;
     start = (char*) (*aLineReader);
+
+    // force a new readLine() as first thing.
+    limit = start;
+    next  = start;
 }
 
 
-void DSNLEXER::PopReader()
+bool DSNLEXER::PopReader()
 {
-    readerStack.pop_back();
-    reader = &readerStack.back();
-    if( reader )
+    // the very last reader cannot be popped, for that would screw up limit and next.
+    if( readerStack.size() >= 2 )
+    {
+        readerStack.pop_back();
+
+        reader = &readerStack.back();
+    
         start = (char*) (*reader);
+    
+        // force a new readLine() as first thing.
+        limit = start;
+        next  = start;
+    }
 }
 
 

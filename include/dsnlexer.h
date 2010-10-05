@@ -172,8 +172,12 @@ public:
     /**
      * Function PushReader
      * manages a stack of LINE_READERs in order to handle nested file inclusion.
-     * Pushes aLineReader onto the top of a stack of LINE_READERs and makes
+     * This function pushes aLineReader onto the top of a stack of LINE_READERs and makes
      * it the current LINE_READER with its own GetSource(), line number and line text.
+     * A grammar must be designed such that the "include" token (whatever its various names),
+     * and any of its parameters are not followed by anything on that same line,
+     * because PopReader always starts reading from a new line upon returning to
+     * the original LINE_READER.
      */
     void PushReader( LINE_READER* aLineReader );
 
@@ -183,9 +187,15 @@ public:
      * in the case of FILE_LINE_READER this means the associated FILE is closed.
      * The most recently used former LINE_READER on the stack becomes the
      * current LINE_READER and its previous position in its input stream and the
-     * its latest line number should pertain.
+     * its latest line number should pertain.  PopReader always starts reading 
+     * from a new line upon returning to the previous LINE_READER.  A pop is only
+     * possible if there are at least 2 LINE_READERs on the stack, since popping
+     * the last one is not supported.
+     *
+     * @return bool - true if there was at least two readers on the stack and 
+     *  therefore the pop succeeded, else false and the pop failed.
      */
-    void PopReader();
+    bool PopReader();
 
     // Some functions whose return value is best overloaded to return an enum
     // in a derived class.
