@@ -108,7 +108,9 @@ bool DSNLEXER::PopReader()
         // force a new readLine() as first thing.
         limit = start;
         next  = start;
+        return true;
     }
+    return false;
 }
 
 
