@@ -166,6 +166,9 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     if( !netfile )
         return false;
 
+    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename, BUFFER_CHAR_SIZE );
+    char*   Line = netlistReader;
+
     SetLastNetListRead( aNetlistFullFilename );
 
     if( aMessageWindow )
@@ -186,12 +189,10 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
 
     wxBusyCursor dummy;        // Shows an hourglass while calculating
 
-    FILE_LINE_READER netlistReader( netfile,  BUFFER_CHAR_SIZE );
-    char* Line = netlistReader;
     /* First, read the netlist: Build the list of footprints to load (new
      * footprints)
      */
-    while( netlistReader.ReadLine( ) )
+    while( netlistReader.ReadLine() )
     {
         Text = StrPurge( Line );
 
@@ -251,8 +252,8 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
 
     /* Second read , All footprints are on board, one must update the schematic
      * info (pad netnames) */
-    netlistReader.Rewind( );
-    while( netlistReader.ReadLine( ) )
+    netlistReader.Rewind();
+    while( netlistReader.ReadLine() )
     {
         Text = StrPurge( Line );
 
@@ -311,8 +312,6 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
             State--;
         }
     }
-
-    fclose( netfile );
 
     // Delete footprints not found in netlist:
     if( aDeleteExtraFootprints )
@@ -794,7 +793,7 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
     if( !netfile )
         return -1;
 
-    FILE_LINE_READER netlistReader( netfile,  BUFFER_CHAR_SIZE );
+    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename, BUFFER_CHAR_SIZE );
     char* Line = netlistReader;
 
     State = 0; Comment = 0;
@@ -841,8 +840,6 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
             State--;
         }
     }
-
-    fclose( netfile );
 
     return nb_modules_lus;
 }
@@ -899,7 +896,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         return 0;
     }
 
-    FILE_LINE_READER netlistReader( FichCmp,  BUFFER_CHAR_SIZE );
+    FILE_LINE_READER netlistReader( FichCmp, CmpFullFileName, BUFFER_CHAR_SIZE );
     char* Line = netlistReader;
 
     while( netlistReader.ReadLine() )
@@ -947,7 +944,6 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         {
             if( RefCmp->CmpNoCase( refcurrcmp ) == 0 )  // Found!
             {
-                fclose( FichCmp );
                 NameModule = idmod;
                 return 1;
             }
@@ -957,14 +953,12 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
             if( TimeStamp->CmpNoCase( timestamp ) == 0
                 && !timestamp.IsEmpty() )                // Found
             {
-                fclose( FichCmp );
                 NameModule = idmod;
                 return 1;
             }
         }
     }
 
-    fclose( FichCmp );
     return -1;
 }
 

@@ -113,13 +113,14 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         return -1;
     }
 
-    FILE_LINE_READER netlistReader( source,  BUFFER_CHAR_SIZE );
+    // FILE_LINE_READER will close the file.
+    FILE_LINE_READER netlistReader( source, m_NetlistFileName.GetFullPath(), BUFFER_CHAR_SIZE );
     char* Line = netlistReader;
 
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
      * or "# EESchema Netlist"
      */
-    netlistReader.ReadLine( );
+    netlistReader.ReadLine();
 
     /* test for netlist type PCB2 */
     idx = strnicmp( Line, "( {", 3 );
@@ -137,7 +138,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         wxString msg, Lineconv = CONV_FROM_UTF8( Line );
         msg.Printf( _( "Unknown file format <%s>" ), Lineconv.GetData() );
         DisplayError( this, msg );
-        fclose( source );
         return -3;
     }
 
@@ -263,8 +263,6 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         ReadPinConnection( netlistReader, Cmp );
     }
 
-    fclose( source );
-
     m_components.sort();
 
     return 0;
@@ -274,8 +272,8 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& aComponentsList )
 {
     char*       Line = aNetlistReader;
-    wxString   CmpRef;
-    COMPONENT* Cmp = NULL;
+    wxString    CmpRef;
+    COMPONENT*  Cmp = NULL;
 
     for( ; ; )
     {
@@ -318,16 +316,16 @@ int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& 
 
 int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* Cmp )
 {
-    int      i, jj;
-    char*     Line = aNetlistReader;
-    char cbuffer[BUFFER_CHAR_SIZE];
+    int         i, jj;
+    char*       Line = aNetlistReader;
+    char        cbuffer[BUFFER_CHAR_SIZE];
 
     for( ; ; )
     {
         /* Find beginning of description. */
         for( ; ; )
         {
-            if( aNetlistReader.ReadLine( ) == 0 )
+            if( aNetlistReader.ReadLine() == 0 )
                 return -1;
 
             /* Remove blanks from the beginning of the line. */

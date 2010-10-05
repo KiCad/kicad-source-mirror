@@ -64,8 +64,8 @@ struct IOError
 
 /**
  * Class LINE_READER
- * reads single lines of text into its buffer and increments a line number counter.
- * It throws an exception if a line is too long.
+ * is an abstract class from which implementation specific LINE_READERs may
+ * be derived to read single lines of text and manage a line number counter.
  */
 class LINE_READER
 {
@@ -75,8 +75,15 @@ protected:
     char*               line;
     unsigned            maxLineLength;
     unsigned            capacity;
+    wxString            source;     ///< origin of text lines, e.g. filename or "clipboard"
 
 public:
+
+    /**
+     * Constructor LINE_READER
+     * builds a line reader and fixes the length of the maximum supported
+     * line length to @a aMaxLineLength.
+     */
     LINE_READER( unsigned aMaxLineLength );
 
     virtual ~LINE_READER()
@@ -94,16 +101,42 @@ public:
      */
     virtual int ReadLine() throw (IOError) = 0;
 
+    /**
+     * Function GetSource
+     * returns the name of the source of the lines in an abstract sense.
+     * This may be a file or it may be the clipboard or any other source
+     * of lines of text.  The returned string is useful for reporting error
+     * messages.
+     */
+    const wxString& GetSource()
+    {
+        return source;
+    }
+
+    /**
+     * Operator char*
+     * is a casting operator that returns a char* pointer to the start of the
+     * line buffer.
+     */
     operator char* ()
     {
         return line;
     }
 
+    /**
+     * Function Line Number
+     * returns the line number of the last line read from this LINE_READER.  Lines
+     * start from 1.
+     */
     int LineNumber()
     {
         return lineNum;
     }
 
+    /**
+     * Function Length
+     * returns the number of bytes in the last line read from this LINE_READER.
+     */
     unsigned Length()
     {
         return length;
@@ -114,22 +147,32 @@ public:
 /**
  * Class FILE_LINE_READER
  * is a LINE_READER that reads from an open file. File must be already open
- * so that this class can exist without and UI policy.
+ * so that this class can exist without any UI policy.
  */
 class FILE_LINE_READER : public LINE_READER
 {
 protected:
 
-    FILE*               fp;     ///< no ownership, no close on destruction
+    FILE*               fp;     ///< I own this file
 
 public:
+
     /**
-     * Constructor LINE_READER
-     * takes an open FILE and the size of the desired line buffer.
-     * @param aFile An open file in "ascii" mode, not binary mode.
-     * @param aMaxLineLength The number of bytes to use in the line buffer.
+     * Constructor FILE_LINE_READER
+     * takes an open FILE and the size of the desired line buffer and takes
+     * ownership of the open file, i.e. assumes the obligation to close it.
+     *
+     * @param aFile is an open file.
+     * @param aFileName is the name of the file for error reporting purposes.
+     * @param aMaxLineLength is the number of bytes to use in the line buffer.
      */
-    FILE_LINE_READER( FILE* aFile,  unsigned aMaxLineLength );
+    FILE_LINE_READER( FILE* aFile,  const wxString& aFileName, unsigned aMaxLineLength );
+
+    ~FILE_LINE_READER()
+    {
+        if( fp )
+            fclose( fp );
+    }
 
     /**
      * Function ReadLine
@@ -143,8 +186,8 @@ public:
 
     /**
      * Function Rewind
-     * a wrapper to the standard function rewind.
-     * also clear the current line number
+     * rewinds the file and resets the line number back to zero.  Line number
+     * will go to 1 on first ReadLine().
      */
     void Rewind()
     {
@@ -161,25 +204,29 @@ public:
 class STRING_LINE_READER : public LINE_READER
 {
 protected:
-    std::string     source;
+    std::string     lines;
     size_t          ndx;
 
 public:
 
     /**
      * Constructor STRING_LINE_READER( const std::string& aString )
+     *
      * @param aString is a source string consisting of one or more lines
      * of text, where multiple lines are separated with a '\n' character.
      * The last line does not necessarily need a trailing '\n'.
+     * @param aSource describes the source of aString for error reporting purposes
+     *  can be anything meaninful, such as wxT( "cliboard" ).
      */
-    STRING_LINE_READER( const std::string& aString ) :
+    STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
         LINE_READER( 4096 ),
-        source( aString ),
+        lines( aString ),
         ndx( 0 )
     {
         // Clipboard text should be nice and _use multiple lines_ so that
         // we can report _line number_ oriented error messages when parsing.
         // Therefore a line of 4096 characters max seems more than adequate.
+        source = aSource;
     }
 
     /**

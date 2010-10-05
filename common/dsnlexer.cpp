@@ -58,24 +58,18 @@ void DSNLEXER::init()
 
     commentsAreTokens = false;
 
-    // "start" should never change until we change the reader.  The DSN
-    // format spec supports an include file mechanism but we can add that later
-    // using a std::stack to hold a stack of LINE_READERs to track nesting.
-    start = (char*) (*reader);
-
     limit = start;
     next  = start;
 }
+
 
 DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
         const KEYWORD* aKeywordTable, unsigned aKeywordCount ) :
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
-    filename = aFilename;
-
-    reader = new FILE_LINE_READER( aFile, 4096 );
-
+    FILE_LINE_READER* fileReader = new FILE_LINE_READER( aFile, aFilename, 4096 );
+    PushReader( fileReader );
     init();
 }
 
@@ -85,11 +79,26 @@ DSNLEXER::DSNLEXER( const std::string& aClipboardTxt,
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
-    filename = _( "clipboard" );
-
-    reader = new STRING_LINE_READER( aClipboardTxt );
-
+    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, _( "clipboard" ) );
+    PushReader( stringReader );
     init();
+}
+
+
+void DSNLEXER::PushReader( LINE_READER* aLineReader )
+{
+    readerStack.push_back( aLineReader );
+    reader = aLineReader;
+    start = (char*) (*aLineReader);
+}
+
+
+void DSNLEXER::PopReader()
+{
+    readerStack.pop_back();
+    reader = &readerStack.back();
+    if( reader )
+        start = (char*) (*reader);
 }
 
 
@@ -207,7 +216,7 @@ bool DSNLEXER::IsSymbol( int aTok )
 void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
 {
     // append to aText, do not overwrite
-    aText << wxT(" ") << _("in") << wxT(" \"") << filename
+    aText << wxT(" ") << _("in") << wxT(" \"") << CurSource()
           << wxT("\" ") << _("on line") << wxT(" ") << reader->LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
 

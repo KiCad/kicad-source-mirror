@@ -27,6 +27,7 @@
 
 #include <cstdio>
 #include <string>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "fctsys.h"
 
@@ -81,12 +82,14 @@ class DSNLEXER
     char*               start;
     char*               limit;
 
-    LINE_READER*        reader;
+    typedef boost::ptr_vector<LINE_READER>  READER_STACK;
+
+    READER_STACK        readerStack;            ///< owns all the LINE_READERs by pointer.
+    LINE_READER*        reader;                 ///< no ownership. ownership is via readerStack.
     int                 stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
     bool                commentsAreTokens;      ///< true if should return comments as tokens
 
-    wxString            filename;
     int                 prevTok;        ///< curTok from previous NextTok() call.
     int                 curOffset;      ///< offset within current line of the current token
 
@@ -164,8 +167,25 @@ public:
 
     ~DSNLEXER()
     {
-        delete reader;
     }
+
+    /**
+     * Function PushReader
+     * manages a stack of LINE_READERs in order to handle nested file inclusion.
+     * Pushes aLineReader onto the top of a stack of LINE_READERs and makes
+     * it the current LINE_READER with its own GetSource(), line number and line text.
+     */
+    void PushReader( LINE_READER* aLineReader );
+
+    /**
+     * Function PopReader
+     * deletes the top most LINE_READER from an internal stack of LINE_READERs and
+     * in the case of FILE_LINE_READER this means the associated FILE is closed.
+     * The most recently used former LINE_READER on the stack becomes the
+     * current LINE_READER and its previous position in its input stream and the
+     * its latest line number should pertain.
+     */
+    void PopReader();
 
     // Some functions whose return value is best overloaded to return an enum
     // in a derived class.
@@ -364,12 +384,13 @@ public:
 
     /**
      * Function CurFilename
-     * returns the current input filename.
-     * @return const wxString& - the filename.
+     * returns the current LINE_READER source.
+     * @return const wxString& - the source of the lines of text,
+     *   e.g. a filename or "clipboard".
      */
-    const wxString& CurFilename()
+    const wxString& CurSource()
     {
-        return filename;
+        return reader->GetSource();
     }
 
     /**

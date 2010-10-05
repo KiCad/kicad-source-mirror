@@ -677,8 +677,6 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
 
 void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 {
-    wxFFile     file;
-
     FILE*       fp = wxFopen( filename, wxT("r") );
 
     if( !fp )
@@ -686,12 +684,10 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
         ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
     }
 
-    file.Attach( fp );      // "exception safe" way to close the file.
-
     delete lexer;
     lexer = 0;
 
-    lexer = new DSNLEXER( file.fp(), filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
+    lexer = new DSNLEXER( fp, filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
@@ -702,13 +698,14 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
     SetPCB( new PCB() );
 
     doPCB( pcb );
+
+    delete lexer;       // close the file.
+    lexer = 0;
 }
 
 
 void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
 {
-    wxFFile     file;
-
     FILE*       fp = wxFopen( filename, wxT("r") );
 
     if( !fp )
@@ -716,12 +713,10 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
         ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
     }
 
-    file.Attach( fp );      // "exception safe" way to close the file.
-
     delete lexer;
     lexer = 0;
 
-    lexer = new DSNLEXER( file.fp(), filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
+    lexer = new DSNLEXER( fp, filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
@@ -732,6 +727,9 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
     SetSESSION( new SESSION() );
 
     doSESSION( session );
+
+    delete lexer;       // close the file.
+    lexer = 0;
 }
 
 
