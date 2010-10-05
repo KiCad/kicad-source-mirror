@@ -182,6 +182,8 @@ void GERBER::InitToolTable()
         m_Aperture_List[count]->m_Num_Dcode = count + FIRST_DCODE;
         m_Aperture_List[count]->Clear_D_CODE_Data();
     }
+    
+    m_aperture_macros.clear();
 }
 
 /** function ReportMessage

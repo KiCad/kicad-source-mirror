@@ -296,7 +296,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     case STEP_AND_REPEAT:
     case ROTATE:
     {
-        msg.Printf( _( "Command <%c%c> ignored by Gerbview" ),
+        msg.Printf( _( "RS274X: Command \"%c%c\" ignored by Gerbview" ),
                     (command >> 8) & 0xFF, command & 0xFF );
         ReportMessage( msg );
     }
@@ -531,7 +531,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             APERTURE_MACRO* pam = FindApertureMacro( am_lookup );
             if( !pam )
             {
-                msg.Printf( wxT( "aperture macro %s not found\n" ),
+                msg.Printf( wxT( "RS274X: aperture macro %s not found\n" ),
                             CONV_TO_UTF8( am_lookup.name ) );
                 ReportMessage( msg );
                 ok = false;
@@ -676,7 +676,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
         default:
             // @todo, there needs to be a way of reporting the line number
-            msg.Printf( wxT( "Invalid primitive id code %d\n" ), prim.primitive_id );
+            msg.Printf( wxT( "RS274X: Invalid primitive id code %d\n" ), prim.primitive_id );
             ReportMessage( msg );
             return false;
         }
@@ -702,7 +702,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
         if( i < paramCount )
         {   // maybe some day we can throw an exception and track a line number
-            msg.Printf( wxT( "read macro descr type %d: read %d parameters, insufficient parameters\n" ),
+            msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
                         prim.primitive_id, i );
             ReportMessage( msg );
         }

@@ -42,15 +42,14 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString,
                          wxBitmap( new_xpm ),
-                         _( "New world" ) );
+                         _( "Erase all layers" ) );
 
     m_HToolBar->AddTool( wxID_FILE, wxEmptyString,
                          wxBitmap( open_xpm ),
-                         _( "Open existing Layer" ) );
+                         _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
 
     m_HToolBar->AddSeparator();
-
 
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString,
                          wxBitmap( undelete_xpm ),
@@ -59,7 +58,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_PRINT, wxEmptyString,
                          wxBitmap( print_button ),
-                         _( "Print world" ) );
+                         _( "Print layers" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_IN );

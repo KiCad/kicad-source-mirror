@@ -31,11 +31,7 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     wxMenu* filesMenu = new wxMenu;
     filesMenu->Append( wxID_FILE, _( "Load Gerber File" ),
-                       _( "Load a new Gerber file on the current layer" ),
-                       FALSE );
-
-    filesMenu->Append( ID_APPEND_FILE, _( "Append Gerber File to Current Layer" ),
-                       _( "Append a new Gerber file to the current layer" ),
+                       _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
                        FALSE );
 
     filesMenu->Append( ID_MENU_INC_LAYER_AND_APPEND_FILE,
@@ -45,26 +41,18 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
                        _( "Load D-Codes File" ), FALSE );
-#if 0
+#if 0   // TODO
     filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load EXCELLON Drill File" ),
                        _( "Load excellon drill file" ), FALSE );
 #endif
 
     filesMenu->Append( ID_NEW_BOARD, _( "&Clear All" ),
-                       _( "Clear all layers" ), FALSE );
+                       _( "Clear all layers. All data will be deleted" ), FALSE );
 
     filesMenu->AppendSeparator();
     filesMenu->Append( ID_GERBVIEW_EXPORT_TO_PCBNEW,  _( "&Export to Pcbnew" ),
                        _( "Export data in pcbnew format" ), FALSE );
 
-#if 0
-    filesMenu->AppendSeparator();
-    filesMenu->Append( ID_SAVE_BOARD, _( "&Save Layers" ),
-                       _( "Save current layers (GERBER format)" ), FALSE );
-
-    filesMenu->Append( ID_SAVE_BOARD_AS, _( "Save Layers As..." ),
-                       _( "Save current layers as.." ), FALSE );
-#endif
 
     filesMenu->AppendSeparator();
 

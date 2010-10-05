@@ -23,13 +23,13 @@ void DIALOG_LOAD_ERROR::ListClear(void)
 
 /** Function ListSet
  * Add a list of items.
- * @param list = a string containing items. Items are separated by '\n'
+ * @param aList = a string containing items. Items are separated by '\n'
  */
-void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
+void DIALOG_LOAD_ERROR::ListSet(const wxString &aList)
 {
     wxArrayString* wxStringSplit( wxString txt, wxChar splitter );
 
-    wxArrayString* strings_list = wxStringSplit( list, wxChar('\n') );
+    wxArrayString* strings_list = wxStringSplit( aList, wxChar('\n') );
     m_htmlWindow->AppendToPage(wxT("<ul>") );
 	for ( unsigned ii = 0; ii < strings_list->GetCount(); ii ++ )
     {
@@ -40,6 +40,22 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &list)
     m_htmlWindow->AppendToPage(wxT("</ul>") );
 
     delete strings_list;
+}
+
+/** Function ListSet
+ * Add a list of items.
+ * @param aList = a wxArrayString containing items
+ */
+void DIALOG_LOAD_ERROR::ListSet(const wxArrayString &aList)
+{
+    m_htmlWindow->AppendToPage(wxT("<ul>") );
+	for ( unsigned ii = 0; ii < aList.GetCount(); ii ++ )
+    {
+        m_htmlWindow->AppendToPage(wxT("<li>") );
+        m_htmlWindow->AppendToPage( aList.Item(ii) );
+        m_htmlWindow->AppendToPage(wxT("</li>") );
+    }
+    m_htmlWindow->AppendToPage(wxT("</ul>") );
 }
 
 /** Function MessageSet

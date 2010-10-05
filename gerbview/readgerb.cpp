@@ -11,6 +11,7 @@
 #include "pcbplot.h"
 #include "protos.h"
 
+#include "dialog_load_error.h"
 
 /* Read a gerber file, RS274D or RS274X format.
  */
@@ -27,7 +28,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
     char*    text;
     int      layer;         /* current layer used in gerbview */
     GERBER*  gerber;
-    int      error = 0;
 
     layer = GetScreen()->m_Active_Layer;
 
@@ -57,7 +57,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
     if( path != wxEmptyString )
         wxSetWorkingDirectory( path );
 
-    wxBusyCursor show_wait;
     SetLocaleTo_C_standard();
 
     while( TRUE )
@@ -130,15 +129,11 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 if( gerber->m_CommandState != ENTER_RS274X_CMD )
                 {
                     gerber->m_CommandState = ENTER_RS274X_CMD;
-
-                    if( !gerber->ReadRS274XCommand( this, line, text ) )
-                    {
-                        error++;
-                    }
+                    gerber->ReadRS274XCommand( this, line, text );
                 }
                 else        //Error
                 {
-                    error++;
+                    ReportMessage( wxT("Expected RS274X Command")  );
                     gerber->m_CommandState = CMD_IDLE;
                     text++;
                 }
@@ -146,25 +141,27 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
             default:
                 text++;
-                error++;
+                msg.Printf( wxT("Unexpected symbol <%c>"), *text );
+                ReportMessage( msg );
                 break;
             }
         }
     }
-
-    if( error )
-    {
-        msg.Printf( _( "%d errors while reading Gerber file [%s]" ),
-                   error, GetChars(GERBER_FullFileName) );
-        DisplayError( this, msg );
-    }
     fclose( gerber->m_Current_File );
+
+    // Display errors list
+    if( m_Messages.size() > 0 )
+    {
+        DIALOG_LOAD_ERROR dlg( this );
+        dlg.ListSet(m_Messages);
+        dlg.ShowModal();
+    }
 
     SetLocaleTo_Default();
 
     /* Init DCodes list and perhaps read a DCODES file,
-     * if the gerber file is only a RS274D file (without any aperture
-     * information)
+     * if the gerber file is only a RS274D file
+     * (i.e. without any aperture information)
      */
     if( !gerber->m_Has_DCode )
     {

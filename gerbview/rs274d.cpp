@@ -975,7 +975,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 break;
 
             default:
-                msg.Printf( wxT( "Execute_DCODE_Command: interpol error (type %X)" ),
+                msg.Printf( wxT( "RS274D: DCODE Command: interpol error (type %X)" ),
                             m_Iterpolation );
                 ReportMessage( msg );
                 break;

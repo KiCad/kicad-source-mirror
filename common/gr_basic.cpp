@@ -39,7 +39,7 @@
 
 
 /* Definitions for enabling and disabling debugging features in gr_basic.cpp.
- * Please remember to set these back to 0 before making SVN commits.
+ * Please remember to set these back to 0 before making LAUNCHPAD commits.
  */
 #define DEBUG_DUMP_CLIP_ERROR_COORDS 0  // Set to 1 to dump clip algorithm errors.
 #define DEBUG_DUMP_CLIP_COORDS       0  // Set to 1 to dump clipped coordinates.
@@ -834,6 +834,8 @@ void GRMixedLine( EDA_Rect* ClipBox,
 
 /*
  * Draw a mixed line, in screen (Pixels) space.
+ * Currently, draw a line (not a mixed line)
+ * Perhaps this function is not very useful.
  */
 void GRSMixedLine( EDA_Rect* ClipBox,
                    wxDC*     DC,

@@ -17,6 +17,9 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame,
                            const wxString&     FullFileName );
 
 
+/* Load agerber file selected from history list on current layer
+ * Previous data is deleted
+ */
 void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
@@ -53,6 +56,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         if( origLayer < NB_LAYERS )
         {
             setActiveLayer(origLayer+1);
+            Erase_Current_Layer( false );
 
             if( !LoadOneGerberFile( wxEmptyString ) )
                 setActiveLayer(origLayer);
@@ -69,10 +73,6 @@ delete an existing layer to load any new layers." ), NB_LAYERS );
     }
     break;
 
-    case ID_APPEND_FILE:
-        LoadOneGerberFile( wxEmptyString );
-        break;
-
     case ID_NEW_BOARD:
         Clear_Pcb( true );
         Zoom_Automatique( false );
@@ -85,14 +85,6 @@ delete an existing layer to load any new layers." ), NB_LAYERS );
 
     case ID_GERBVIEW_LOAD_DCODE_FILE:
         LoadDCodeFile( this, wxEmptyString );
-        break;
-
-    case ID_SAVE_BOARD:
-        SaveGerberFile( GetScreen()->m_FileName );
-        break;
-
-    case ID_SAVE_BOARD_AS:
-        SaveGerberFile( wxEmptyString );
         break;
 
     default:
