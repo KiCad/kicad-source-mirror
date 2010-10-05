@@ -60,22 +60,17 @@ bool GetGRForceBlackPenState( void );
 
 void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
 
-void GRLine( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
-             int aWidth, int aColor );
-void GRLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2,
-             int y2, int width, int Color );
+void GRLine( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth, int aColor );
+void GRLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, int Color );
 void GRMixedLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, int Color );
 void GRDashedLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int  y2,
                    int width, int Color );
-void GRDashedLineTo( EDA_Rect* ClipBox, wxDC* DC, int x2, int y2, int width,
-                     int Color );
+void GRDashedLineTo( EDA_Rect* ClipBox, wxDC* DC, int x2, int y2, int width, int Color );
 void GRMoveTo( int x, int y );
-void GRLineTo( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width,
-               int Color );
+void GRLineTo( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width, int Color );
 void GRMoveRel( int x, int y );
-void GRLineRel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width,
-                int Color );
+void GRLineRel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width, int Color );
 
 void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
              int width, int Color, int BgColor );
@@ -150,12 +145,10 @@ void GRClosedPoly( EDA_Rect* ClipBox,
  * @param aColor is an index into our color table of RGB colors.
  * @see EDA_Colors and colors.h
  */
-void GRCircle( EDA_Rect* ClipBox, wxDC* aDC, int x, int y, int aRadius,
-               int aColor );
-
-void GRCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int  width,
-               int Color );
-void GRFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width, int Color, int BgColor );
+void GRCircle( EDA_Rect* ClipBox, wxDC* aDC, int x, int y, int aRadius, int aColor );
+void GRCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int  width, int Color );
+void GRFilledCircle( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int r, int width,
+                     int Color, int BgColor );
 void GRFilledCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aColor );
 void GRCircle( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWidth, int aColor );
 
@@ -171,14 +164,13 @@ void GRFilledArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y,
                   int StAngle, int EndAngle, int r, int Color, int BgColor );
 void GRFilledArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle,
                   int EndAngle, int r, int width, int Color, int BgColor );
+void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, int Color );
 void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-              int width, int Color );
-void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-               int width, int aPenSize, int Color );
+              int width, int aPenSize, int Color );
 void GRFillCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, int Color );
 void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-               int width, int aPenSize, int Color );
+              int width, int aPenSize, int Color );
 
 void GRSetColor( int Color );
 void GRSetDefaultPalette();
@@ -188,14 +180,12 @@ void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                    int x2, int y2, int Color, int BgColor );
 void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                    int x2, int y2, int width, int Color, int BgColor );
-void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
-             int x2, int y2, int Color );
-void GRRect( EDA_Rect* ClipBox, wxDC* DC,const EDA_Rect& aRect,
-             int Color );
+void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int Color );
+void GRRect( EDA_Rect* ClipBox, wxDC* DC,const EDA_Rect& aRect, int Color );
 void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
              int x2, int y2, int width, int Color );
-void GRRect( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
-             int aWidth, int aColor, wxPenStyle aStyle =  wxPENSTYLE_SOLID );
+void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
+               int aWidth, int aColor, int aStyle = wxSOLID );
 
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );

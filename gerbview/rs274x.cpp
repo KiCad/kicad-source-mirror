@@ -531,8 +531,8 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             APERTURE_MACRO* pam = FindApertureMacro( am_lookup );
             if( !pam )
             {
-                msg.Printf( "aperture macro %s not found\n",
-                          CONV_TO_UTF8( am_lookup.name ) );
+                msg.Printf( wxT( "aperture macro %s not found\n" ),
+                            CONV_TO_UTF8( am_lookup.name ) );
                 ReportMessage( msg );
                 ok = false;
                 break;
@@ -676,7 +676,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
         default:
             // @todo, there needs to be a way of reporting the line number
-            msg.Printf( "Invalid primitive id code %d\n", prim.primitive_id );
+            msg.Printf( wxT( "Invalid primitive id code %d\n" ), prim.primitive_id );
             ReportMessage( msg );
             return false;
         }
@@ -702,8 +702,8 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
 
         if( i < paramCount )
         {   // maybe some day we can throw an exception and track a line number
-            msg.Printf( "read macro descr type %d: read %d parameters, insufficient parameters\n",
-                prim.primitive_id, i );
+            msg.Printf( wxT( "read macro descr type %d: read %d parameters, insufficient parameters\n" ),
+                        prim.primitive_id, i );
             ReportMessage( msg );
         }
 
