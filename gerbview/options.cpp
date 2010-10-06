@@ -14,7 +14,6 @@
 
 #include "pcbplot.h"
 #include "gerbview.h"
-#include "protos.h"
 
 #include "gerbview_id.h"
 

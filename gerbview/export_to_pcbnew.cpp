@@ -14,7 +14,6 @@
 #include "gerbview.h"
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
-#include "protos.h"
 
 static int SavePcbFormatAscii( WinEDA_GerberFrame* frame,
                                FILE* File, int* LayerLookUpTable );
@@ -62,7 +61,7 @@ void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
         return;
 
     int* LayerLookUpTable;
-    if( ( LayerLookUpTable = InstallDialogLayerPairChoice( this ) ) != NULL )
+    if( ( LayerLookUpTable = InstallDialogLayerPairChoice( ) ) != NULL )
     {
         if( wxFileExists( FullFileName ) )
         {

@@ -7,22 +7,16 @@
  */
 
 #include "fctsys.h"
-#include "polygons_defs.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 #include "class_gerber_draw_item.h"
-
-/***************/
-/* tracepcb.cpp */
-/***************/
+#include "class_GERBER.h"
 
 static void Show_Items_DCode_Value( WinEDA_DrawPanel* panel, wxDC* DC,
                             BOARD* Pcb, int drawmode );
@@ -94,6 +88,10 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 
     DrawPanel->DrawCursor( DC );
+
+    // Display the filename and the layer name (found in the gerber files, if any)
+    // relative to the active layer
+    UpdateTitleAndInfo();
 }
 
 /********************************************************************/

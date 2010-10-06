@@ -3,15 +3,14 @@
 /********************/
 
 #include "fctsys.h"
-#include "polygons_defs.h"
+//#include "polygons_defs.h"
 #include "common.h"
-#include "confirm.h"
-#include "macros.h"
+//#include "confirm.h"
+//#include "macros.h"
 #include "gerbview.h"
-#include "pcbplot.h"
 #include "trigo.h"
-#include "protos.h"
 #include "class_gerber_draw_item.h"
+#include "class_GERBER.h"
 
 #include <math.h>
 
@@ -776,9 +775,9 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
     case GC_MOVE:       // Non existent
     default:
     {
-        wxString msg; msg.Printf( wxT( "G%0.2d command not handled" ),
-                                  G_commande );
-        DisplayError( NULL, msg );
+        wxString msg;
+        msg.Printf( wxT( "G%0.2d command not handled" ), G_commande );
+        ReportMessage( msg );
         return false;
     }
     }

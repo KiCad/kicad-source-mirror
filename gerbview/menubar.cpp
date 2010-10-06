@@ -1,6 +1,6 @@
-/***************************************************/
-/*  tool_gerber.cpp: Build tool bars and main menu */
-/***************************************************/
+/*************************************/
+/*  menubar.cpp: Build the main menu */
+/*************************************/
 
 #include "fctsys.h"
 #include "wx/wupdlock.h"
@@ -9,8 +9,6 @@
 #include "common.h"
 #include "macros.h"
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
 #include "bitmaps.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"

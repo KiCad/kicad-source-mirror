@@ -9,7 +9,6 @@
 #include "pcbnew.h"
 #include "gerbview.h"
 #include "trigo.h"
-#include "protos.h"
 
 
 /* Display the character of the localized STRUCTURE and return a pointer
@@ -17,6 +16,7 @@
  */
 BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
 {
+    // TODO
     MsgPanel->EraseMsgBox();
     return NULL;
 }

@@ -1,19 +1,18 @@
-/***************************************************/
-/*  tool_gerber.cpp: Build tool bars and main menu */
-/***************************************************/
+/*************************************/
+/*  tool_gerber.cpp: Build tool bars */
+/*************************************/
 
 #include "fctsys.h"
 #include "wx/wupdlock.h"
 
-#include "appl_wxstruct.h"
+//#include "appl_wxstruct.h"
 #include "common.h"
 #include "macros.h"
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
 #include "bitmaps.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"
+#include "class_GERBER.h"
 
 
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
@@ -121,6 +120,10 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                                           choices );
     m_HToolBar->AddControl( m_SelLayerTool );
 
+    m_TextInfo = new wxTextCtrl(m_HToolBar, wxID_ANY, wxEmptyString,
+                                wxDefaultPosition, wxSize(150,-1),
+                                wxTE_READONLY );
+    m_HToolBar->AddControl( m_TextInfo );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes

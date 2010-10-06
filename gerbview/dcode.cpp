@@ -11,6 +11,7 @@
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
+#include "class_GERBER.h"
 
 #define DEFAULT_SIZE 100
 

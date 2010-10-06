@@ -337,22 +337,6 @@ static PARAM_CFG_SETCOLOR ColorDCodesCfg
     WHITE
 );
 
-static PARAM_CFG_INT GERBERSpotMiniCfg
-(
-    wxT("GERBmin"),
-    &g_Plot_Spot_Mini,
-    15,
-    2,0xFFFF
-);
-
-static PARAM_CFG_INT TimeOutCfg
-(
-    wxT("TimeOut"),
-    &g_TimeOut,
-    600,
-    0,60000
-);
-
 static PARAM_CFG_BOOL DisplPolairCfg
 (
     INSETUP,
@@ -404,8 +388,6 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & ColorLayer30Cfg,
     & ColorLayer31Cfg,
     & ColorDCodesCfg,
-    & GERBERSpotMiniCfg,
-    & TimeOutCfg,
     & DisplPolairCfg,
     NULL
 };

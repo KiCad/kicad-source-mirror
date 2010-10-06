@@ -8,8 +8,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
+#include "class_GERBER.h"
 
 #include "dialog_load_error.h"
 

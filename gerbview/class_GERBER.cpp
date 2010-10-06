@@ -33,6 +33,7 @@
 #include "macros.h"
 
 #include "gerbview.h"
+#include "class_GERBER.h"
 
 /* Format Gerber: NOTES:
  * Tools and D_CODES
@@ -53,10 +54,10 @@
  */
 
 
-GERBER::GERBER( WinEDA_GerberFrame * aParent, int aLayer )
+GERBER::GERBER( WinEDA_GerberFrame* aParent, int aLayer )
 {
     m_Parent = aParent;
-    m_Layer = aLayer;            // Layer Number
+    m_Layer  = aLayer;           // Layer Number
 
     m_Selected_Tool = FIRST_DCODE;
 
@@ -118,33 +119,34 @@ APERTURE_MACRO* GERBER::FindApertureMacro( const APERTURE_MACRO& aLookup )
 void GERBER::ResetDefaultValues()
 {
     m_FileName.Empty();
-    m_Name = wxT( "no name" );          // Layer name
-    m_LayerNegative = FALSE;            // TRUE = Negative Layer
-    m_ImageNegative = FALSE;            // TRUE = Negative image
-    m_GerbMetric    = FALSE;            // FALSE = Inches, TRUE = metric
-    m_Relative = FALSE;                 // FALSE = absolute Coord, RUE =
-                                        // relative Coord
-    m_NoTrailingZeros = FALSE;          // True: trailing zeros deleted
-    m_MirorA    = FALSE;                // True: miror / axe A (X)
-    m_MirorB    = FALSE;                // True: miror / axe B (Y)
-    m_Has_DCode = FALSE;                // TRUE = DCodes in file (FALSE = no
-                                        // DCode->
-                                        // separate DCode file
+    m_ImageName     = wxT( "no image name" );   // Image name from the IN command
+    m_LayerName     = wxT( "no layer name" );   // Layer name from the LN command
+    m_LayerNegative = FALSE;                    // TRUE = Negative Layer
+    m_ImageNegative = FALSE;                    // TRUE = Negative image
+    m_GerbMetric    = FALSE;                    // FALSE = Inches, TRUE = metric
+    m_Relative = FALSE;                         // FALSE = absolute Coord, RUE =
+                                                // relative Coord
+    m_NoTrailingZeros = FALSE;                  // True: trailing zeros deleted
+    m_MirorA    = FALSE;                        // True: miror / axe A (X)
+    m_MirorB    = FALSE;                        // True: miror / axe B (Y)
+    m_Has_DCode = FALSE;                        // TRUE = DCodes in file
+                                                // FALSE = no DCode->
+                                                // search for separate DCode file
 
     m_FmtScale.x = m_FmtScale.y = g_Default_GERBER_Format % 10;
     m_FmtLen.x   = m_FmtLen.y = m_FmtScale.x + (g_Default_GERBER_Format / 10);
 
-    m_LayerScale.x  = m_LayerScale.y = 1.0;         // scale (X and Y) this
+    m_LayerScale.x = m_LayerScale.y = 1.0;          // scale (X and Y) this
                                                     // layer
-    m_Rotation      = 0;
-    m_Iterpolation  = GERB_INTERPOL_LINEAR_1X;      // Linear, 90 arc, Circ.
-    m_360Arc_enbl   = FALSE;                        // 360 deg circular
+    m_Rotation     = 0;
+    m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
+    m_360Arc_enbl  = FALSE;                         // 360 deg circular
                                                     // interpolation disable
-    m_Current_Tool  = 0;                            // Current Tool (Dcode)
+    m_Current_Tool = 0;                             // Current Tool (Dcode)
                                                     // number selected
-    m_CommandState  = 0;                            // gives tate of the
+    m_CommandState = 0;                             // gives tate of the
                                                     // stacking order analysis
-    m_CurrentPos.x  = m_CurrentPos.y = 0;           // current specified coord
+    m_CurrentPos.x = m_CurrentPos.y = 0;            // current specified coord
                                                     // for plot
     m_PreviousPos.x = m_PreviousPos.y = 0;          // old current specified
                                                     // coord for plot
@@ -182,26 +184,27 @@ void GERBER::InitToolTable()
         m_Aperture_List[count]->m_Num_Dcode = count + FIRST_DCODE;
         m_Aperture_List[count]->Clear_D_CODE_Data();
     }
-    
+
     m_aperture_macros.clear();
 }
+
 
 /** function ReportMessage
  * Add a message (a string) in message list
  * for instance when reading a Gerber file
  * @param aMessage = the straing to add in list
  */
-void GERBER::ReportMessage(const wxString aMessage )
+void GERBER::ReportMessage( const wxString aMessage )
 {
     m_Parent->ReportMessage( aMessage );
 }
+
 
 /** function ClearMessageList
  * Clear the message list
  * Call it before reading a Gerber file
  */
-void GERBER::ClearMessageList( )
+void GERBER::ClearMessageList()
 {
-    m_Parent->ClearMessageList( );
+    m_Parent->ClearMessageList();
 }
-

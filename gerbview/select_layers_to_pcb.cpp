@@ -8,8 +8,7 @@
 #include "common.h"
 #include "gerbview.h"
 #include "class_board_design_settings.h"
-
-#include "protos.h"
+#include "class_GERBER.h"
 
 #include "wx/statline.h"
 
@@ -66,9 +65,9 @@ END_EVENT_TABLE()
  * between gerber layers and pcbnew layers
  * return the "lookup table" if ok, or NULL
  */
-int* InstallDialogLayerPairChoice( WinEDA_GerberFrame * parent )
+int* WinEDA_GerberFrame::InstallDialogLayerPairChoice( )
 {
-    WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( parent );
+    WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
 
     int ii = frame->ShowModal();
 

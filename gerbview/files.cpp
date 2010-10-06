@@ -10,7 +10,6 @@
 
 #include "gerbview.h"
 #include "pcbplot.h"
-#include "protos.h"
 
 
 static void LoadDCodeFile( WinEDA_GerberFrame* frame,

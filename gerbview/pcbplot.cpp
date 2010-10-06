@@ -7,7 +7,6 @@
 
 #include "gerbview.h"
 #include "pcbplot.h"
-#include "protos.h"
 
 
 

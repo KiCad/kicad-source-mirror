@@ -16,9 +16,11 @@
 #include "class_gerber_draw_item.h"
 #include "pcbplot.h"
 #include "bitmaps.h"
-#include "protos.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"
+#include "class_GERBER.h"
+
+#include "build_version.h"
 
 
 /****************************************/
@@ -367,6 +369,7 @@ void WinEDA_GerberFrame::SetGridColor(int aColor)
     GetBoard()->SetVisibleElementColor( GERBER_GRID_VISIBLE, aColor );
 }
 
+
 /**
  * Function SetElementVisibility
  * changes the visibility of an element category
@@ -384,6 +387,7 @@ void WinEDA_GerberFrame::SetElementVisibility( int aGERBER_VISIBLE, bool aNewSta
 void WinEDA_GerberFrame::syncLayerWidget( )
 {
     m_LayersManager->SelectLayer( getActiveLayer() );
+    UpdateTitleAndInfo();
 }
 
 /**
@@ -395,6 +399,7 @@ void WinEDA_GerberFrame::syncLayerWidget( )
 void WinEDA_GerberFrame::syncLayerBox()
 {
     m_SelLayerBox->SetSelection( getActiveLayer() );
+    UpdateTitleAndInfo();
 }
 
 /** function SetLanguage
@@ -473,3 +478,41 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
     if( ii < 0 )
         return;
 }
+
+/** function UpdateTitleAndInfo
+ * displays the short filename (if exists) of the selected layer
+ * on the caption of the main gerbview window
+ * and the name of the layer (found in the gerber file: LN <name> command)
+ * in the status bar
+ */
+void WinEDA_GerberFrame::UpdateTitleAndInfo()
+{
+    GERBER* gerber = g_GERBER_List[GetScreen()->m_Active_Layer];
+    wxString text;
+    // Display the gerber filename
+    if( gerber == NULL )
+    {
+        text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        SetStatusText( wxEmptyString, 0 );
+        m_TextInfo->Clear();
+        SetTitle( text );
+        return;
+    }
+
+    text = _( "File:" );
+    text << wxT( " " ) << gerber->m_FileName;
+    // Display Image Name and Layer Name (from the current gerber data):
+    text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),
+        GetChars(gerber->m_ImageName), GetChars(gerber->m_LayerName) );
+    SetStatusText( text, 0 );
+
+    // Display data format like fmt in X3.4Y3.4 or fmt mm X2.3 Y3.5
+    text.Printf(wxT("fmt %s X%d.%d Y%d.%d"),
+        gerber->m_GerbMetric ? wxT("mm") : wxT("in"),
+        gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
+        gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y );
+
+    m_TextInfo->SetValue( text );
+}
+
+

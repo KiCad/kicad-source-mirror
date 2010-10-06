@@ -1,6 +1,6 @@
-/***************/
-/* reglage.cpp */
-/***************/
+/*****************************/
+/* dialog_gerber_config.cpp */
+/****************************/
 
 /*
  * Options for file extensions
@@ -11,8 +11,6 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
 
 
 enum

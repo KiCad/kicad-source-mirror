@@ -8,8 +8,6 @@
 
 #include "pcbnew.h"
 #include "gerbview.h"
-#include "protos.h"
-
 
 BOARD_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
 {

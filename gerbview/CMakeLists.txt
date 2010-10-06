@@ -22,6 +22,7 @@ set(GERBVIEW_SRCS
     controle.cpp
     dcode.cpp
     deltrack.cpp
+    dialog_gerber_config.cpp
     dialog_print_using_printer.cpp
     dialog_print_using_printer_base.cpp
     dummy_functions.cpp
@@ -41,7 +42,6 @@ set(GERBVIEW_SRCS
     options.cpp
     pcbplot.cpp
     readgerb.cpp
-    reglage.cpp
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp

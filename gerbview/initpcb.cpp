@@ -10,7 +10,7 @@
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
-//#include "protos.h"
+#include "class_GERBER.h"
 
 
 bool WinEDA_GerberFrame::Clear_Pcb( bool query )
@@ -30,7 +30,10 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     for( layer = 0; layer < 32; layer++ )
     {
         if( g_GERBER_List[layer] )
+        {
             g_GERBER_List[layer]->InitToolTable();
+            g_GERBER_List[layer]->ResetDefaultValues();
+        }
     }
 
     GetBoard()->m_BoundaryBox.SetOrigin( 0, 0 );
@@ -68,7 +71,10 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
     }
 
     if( g_GERBER_List[layer] )
+    {
         g_GERBER_List[layer]->InitToolTable();
+        g_GERBER_List[layer]->ResetDefaultValues();
+    }
 
     ScreenPcb->SetModify();
     ScreenPcb->SetRefreshReq();

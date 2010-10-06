@@ -8,8 +8,6 @@
 #include "confirm.h"
 
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
 
 
 /* Prepare the right-click pullup menu.

@@ -46,6 +46,8 @@ protected:
 public:
     WinEDAChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelLayerTool;
+    wxTextCtrl*      m_TextInfo;        // a wxTextCtrl used to display some info about
+                                        // gerber data (format..)
 
 private:
     bool m_show_layer_manager_tools;
@@ -175,6 +177,16 @@ public:
      * getActiveLayer().  And updates the colored icon in the toolbar.
      */
     void syncLayerBox();
+
+    /** function UpdateTitleAndInfo
+     * displays the short filename (if exists) of the selected layer
+     * on the caption of the main gerbview window
+     * and some other parameters
+     *    Name of the layer (found in the gerber file: LN <name> command) in the status bar
+     *    Name of the Image (found in the gerber file: IN <name> command) in the status bar
+     *    and other data in toolbar
+     */
+    void UpdateTitleAndInfo();
 
     /**
      * Load applications settings specific to the PCBNew.
@@ -388,6 +400,14 @@ public:
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
                     int aPrintMask, bool aPrintMirrorMode,
                     void * aData = NULL);
+
+    /** InstallDialogLayerPairChoice
+     * Install a dialog frame to choose the equivalence
+     * between gerber layers and pcbnew layers
+     * @return the "lookup table" if ok, or NULL
+     */
+    int* InstallDialogLayerPairChoice( );
+
 
     DECLARE_EVENT_TABLE()
 };

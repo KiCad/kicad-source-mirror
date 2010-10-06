@@ -38,6 +38,7 @@
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 #include "class_gerber_draw_item.h"
+#include "class_GERBER.h"
 
 
 /**********************************************************/

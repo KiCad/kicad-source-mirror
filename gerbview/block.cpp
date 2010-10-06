@@ -36,7 +36,6 @@
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
-#include "protos.h"
 
 
 #define BLOCK_COLOR BROWN

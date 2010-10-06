@@ -4,11 +4,9 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "confirm.h"
-#include "macros.h"
+//#include "macros.h"
 #include "gerbview.h"
-#include "pcbplot.h"
-#include "protos.h"
+#include "class_GERBER.h"
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
 
@@ -291,7 +289,6 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     case IMAGE_ROTATION:
     case IMAGE_OFFSET:
     case PLOTTER_FILM:
-    case LAYER_NAME:
     case KNOCKOUT:
     case STEP_AND_REPEAT:
     case ROTATE:
@@ -303,12 +300,19 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case IMAGE_NAME:
-        m_Name.Empty();
+        m_ImageName.Empty();
         while( *text != '*' )
         {
-            m_Name.Append( *text++ );
+            m_ImageName.Append( *text++ );
         }
+        break;
 
+    case LAYER_NAME:
+        m_LayerName.Empty();
+        while( *text != '*' )
+        {
+            m_LayerName.Append( *text++ );
+        }
         break;
 
     case IMAGE_POLARITY:
@@ -330,10 +334,10 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case INCLUDE_FILE:
-        if( m_FilesPtr >= 10 )
+        if( m_FilesPtr >= INCLUDE_FILES_COUNT_MAX )
         {
             ok = FALSE;
-            DisplayError( NULL, _( "Too many include files!!" ) );
+            ReportMessage( _( "Too many include files!!" ) );
             break;
         }
         strcpy( line, text );
@@ -343,8 +347,8 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         m_Current_File = fopen( line, "rt" );
         if( m_Current_File == 0 )
         {
-            msg.Printf( wxT( "file <%s> not found." ), line );
-            DisplayError( NULL, msg, 10 );
+            msg.Printf( wxT( "include file <%s> not found." ), line );
+            ReportMessage( msg );
             ok = FALSE;
             m_Current_File = m_FilesList[m_FilesPtr];
             break;
