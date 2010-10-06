@@ -107,7 +107,7 @@ static wxDC* s_DC_lastDC         = NULL;
 /* Local functions: */
 static void GRSRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1,
                      int x2, int y2, int aWidth, int aColor,
-                     int aStyle = wxSOLID );
+                     wxPenStyle aStyle = wxPENSTYLE_SOLID );
 
 /*
  * Macro clipping the trace of a line:
@@ -1672,7 +1672,7 @@ void GRRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2, int 
     GRSRect( aClipBox, aDC, x1, y1, x2, y2, 0, aColor );
 }
 
-void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC, const EDA_Rect& aRect, int aColor, int aStyle )
+void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC, const EDA_Rect& aRect, int aColor, wxPenStyle aStyle )
 {
     int x1 = GRMapX( aRect.GetX() );
     int y1 = GRMapY( aRect.GetY() );
@@ -1746,7 +1746,7 @@ void GRFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
  */
 
 void GRSRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
-              int aWidth, int aColor, int aStyle )
+              int aWidth, int aColor, wxPenStyle aStyle )
 {
     if( x1 > x2 )
         EXCHG( x1, x2 );

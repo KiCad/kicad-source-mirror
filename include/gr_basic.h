@@ -24,6 +24,12 @@ class EDA_Rect;
 #define GR_M_MIDDLE_DOWN 0x40000000
 #define GR_M_DCLICK      0x80000000
 
+//wxWidgets 2.8 compatibility
+#if !wxCHECK_VERSION(2,9,0)
+#define wxPENSTYLE_SOLID wxSOLID
+typedef int wxPenStyle;
+#endif
+
 
 extern int g_XorMode;
 extern int g_DrawBgColor;
