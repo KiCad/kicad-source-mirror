@@ -733,7 +733,7 @@ void GRSDashedLine( EDA_Rect* ClipBox,
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
     s_DC_lastcolor     = -1;
-    GRSetColorPen( DC, Color, width, wxSHORT_DASH );
+    GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
     GRSLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
     s_DC_lastcolor = -1;
     GRSetColorPen( DC, Color, width );
@@ -748,7 +748,7 @@ void GRSDashedLineTo( EDA_Rect* ClipBox,
                       int       Color )
 {
     s_DC_lastcolor = -1;
-    GRSetColorPen( DC, Color, width, wxSHORT_DASH );
+    GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
     GRSLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x2, y2, width, Color );
     s_DC_lastcolor = -1;
     GRSetColorPen( DC, Color, width );
@@ -846,7 +846,7 @@ void GRSMixedLine( EDA_Rect* ClipBox,
                    int       width,
                    int       Color )
 {
-    GRSetColorPen( DC, Color, width, wxDOT_DASH );
+    GRSetColorPen( DC, Color, width, wxPENSTYLE_DOT_DASH );
     GRSLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
     GRSetColorPen( DC, Color, width );
 }

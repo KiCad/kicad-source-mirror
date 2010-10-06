@@ -27,6 +27,8 @@ class EDA_Rect;
 //wxWidgets 2.8 compatibility
 #if !wxCHECK_VERSION(2,9,0)
 #define wxPENSTYLE_SOLID wxSOLID
+#define wxPENSTYLE_SHORT_DASH wxSHORT_DASH
+#define wxPENSTYLE_DOT_DASH wxDOT_DASH
 typedef int wxPenStyle;
 #endif
 
