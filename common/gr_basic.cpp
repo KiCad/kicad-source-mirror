@@ -555,7 +555,7 @@ void GRResetPenAndBrush( wxDC* DC )
  * Function GRSetColorPen
  * sets a pen style, width, color, and alpha into the given device context.
  */
-void GRSetColorPen( wxDC* DC, int Color, int width, int style )
+void GRSetColorPen( wxDC* DC, int Color, int width, wxPenStyle style )
 {
     if( width < 0 )
         width = 0;
