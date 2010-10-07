@@ -478,8 +478,9 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 
-    if( !aDoNotRecreateRatsnest )
-        Compile_Ratsnest( DC, true );
+    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+        if( !aDoNotRecreateRatsnest )
+            Compile_Ratsnest( DC, true );
 
     if( DC )
         DrawPanel->Refresh();
@@ -541,7 +542,8 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
         {
             //  not beiing moved: redraw the module and update ratsnest
             module->Draw( DrawPanel, DC, GR_OR );
-            Compile_Ratsnest( DC, true );
+            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+                Compile_Ratsnest( DC, true );
         }
         else
         {
