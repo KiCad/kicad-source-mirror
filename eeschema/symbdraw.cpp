@@ -19,11 +19,12 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "dialog_lib_edit_draw_item.h"
+#include "lib_arc.h"
+#include "lib_circle.h"
+#include "lib_polyline.h"
+#include "lib_rectangle.h"
 
 #include <boost/foreach.hpp>
-
-#define EraseItem( item ) item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,  \
-                                      DefaultTransformMatrix )
 
 static void    SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void    ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre );
@@ -70,8 +71,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 
     dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
-    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth,
-                                          m_InternalUnits );
+    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth, m_InternalUnits );
     dialog.SetWidth( val );
     dialog.SetApplyToAllUnits( !m_drawSpecificUnit );
     dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
@@ -85,8 +85,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
         return;
 
     val = dialog.GetWidth();
-    m_drawLineWidth = ReturnValueFromString( g_UserUnit, val,
-                                             m_InternalUnits );
+    m_drawLineWidth = ReturnValueFromString( g_UserUnit, val, m_InternalUnits );
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();
 
@@ -152,7 +151,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
         // Restore old attributes, when the item was modified
         if( item->m_Flags == IS_RESIZED )
         {
-            EraseItem( item );
+            item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransformMatrix );
 
             switch( item->Type() )
             {
@@ -202,8 +201,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
-                                                       wxDC*          DC )
+LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
     DrawPanel->ManageCurseur = SymbolDisplayDraw;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
@@ -258,18 +256,6 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry,
         polyline->AddPoint( point );    // End point of the current segment
         polyline->m_Fill  = m_drawFillStyle;
         polyline->m_Width = m_drawLineWidth;
-    }
-    break;
-
-    case COMPONENT_LINE_DRAW_TYPE:
-    {
-        LIB_SEGMENT* Segment = new LIB_SEGMENT( LibEntry );
-
-        m_drawItem     = Segment;
-        Segment->m_Pos = GetScreen()->m_Curseur;
-        NEGATE( Segment->m_Pos.y );
-        Segment->m_End   = Segment->m_Pos;
-        Segment->m_Width = m_drawLineWidth;
     }
     break;
 
@@ -789,10 +775,6 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
     break;
 
-    case COMPONENT_LINE_DRAW_TYPE:
-        ( (LIB_SEGMENT*) item )->m_End = currentCursorPosition;
-        break;
-
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
         break;
 
@@ -808,10 +790,9 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     }
     else
     {
-        item->Draw( panel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
-                    DefaultTransformMatrix );
+        item->Draw( panel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL, DefaultTransformMatrix );
 
-        if( item->Type() == COMPONENT_ARC_DRAW_TYPE  && item->m_Flags != IS_RESIZED )
+        if( item->Type() == COMPONENT_ARC_DRAW_TYPE && item->m_Flags != IS_RESIZED )
         {
             int Color = ReturnLayerColor( LAYER_DEVICE );
             GRDashedLine( &panel->m_ClipBox, DC, arcState.startPoint.x, -arcState.startPoint.y,
@@ -900,8 +881,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
         m_drawItem->Move( pos );
     }
 
-    m_component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert,
-                       GR_DEFAULT_DRAWMODE );
+    m_component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
 
     m_drawItem->m_Flags = 0;
     m_drawItem = NULL;
@@ -924,10 +904,10 @@ static void ComputeArcRadiusAngles( LIB_ARC* arc )
     arc->m_Radius = wxRound( EuclideanNorm( centerStartVector ) );
 
     arc->m_t1 = (int) ( atan2( (double) centerStartVector.y,
-                              (double) centerStartVector.x ) * 1800 / M_PI );
+                               (double) centerStartVector.x ) * 1800 / M_PI );
 
     arc->m_t2 = (int) ( atan2( (double) centerEndVector.y,
-                              (double) centerEndVector.x ) * 1800 / M_PI );
+                               (double) centerEndVector.x ) * 1800 / M_PI );
 
     NORMALIZE_ANGLE( arc->m_t1 );
     NORMALIZE_ANGLE( arc->m_t2 );  // angles = 0 .. 3600
@@ -943,8 +923,7 @@ static void ComputeArcRadiusAngles( LIB_ARC* arc )
     wxString msg;
     int      angle = arc->m_t2 - arc->m_t1;
     msg.Printf( _( "Arc %.1f deg" ), (float) angle / 10 );
-    WinEDA_SchematicFrame* frame =
-        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
     frame->m_LibeditFrame->PrintMsg( msg );
 
     while( (arc->m_t2 - arc->m_t1) >= 1800 )
@@ -1002,8 +981,7 @@ static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
     dx = arcState.startPoint.x - DrawItem->m_Pos.x;
     dy = arcState.startPoint.y - DrawItem->m_Pos.y;
 
-    DrawItem->m_Radius = (int) sqrt( ( (double) dx * dx ) +
-                                    ( (double) dy * dy ) );
+    DrawItem->m_Radius = (int) sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
 
     DrawItem->m_t1 = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
 
@@ -1031,8 +1009,7 @@ static void ComputeArc( LIB_ARC* DrawItem, wxPoint ArcCentre )
     wxString msg;
     angle = DrawItem->m_t2 - DrawItem->m_t1;
     msg.Printf( _( "Arc %.1f deg" ), (float) angle / 10 );
-    WinEDA_SchematicFrame* frame =
-        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
     frame->m_LibeditFrame->PrintMsg( msg );
 
     while( (DrawItem->m_t2 - DrawItem->m_t1) >= 1800 )
@@ -1074,12 +1051,12 @@ static wxPoint ComputeCircumCenter( wxPoint A, wxPoint B, wxPoint C )
         D = 1e-7;
 
     circumCenterX = ( (Ay * Ay + Ax * Ax) * (By - Cy) +
-                     (By * By + Bx * Bx) * (Cy - Ay) +
-                     (Cy * Cy + Cx * Cx) * (Ay - By) ) / D;
+                      (By * By + Bx * Bx) * (Cy - Ay) +
+                      (Cy * Cy + Cx * Cx) * (Ay - By) ) / D;
 
     circumCenterY = ( (Ay * Ay + Ax * Ax) * (Cx - Bx) +
-                     (By * By + Bx * Bx) * (Ax - Cx) +
-                     (Cy * Cy + Cx * Cx) * (Bx - Ax) ) / D;
+                      (By * By + Bx * Bx) * (Ax - Cx) +
+                      (Cy * Cy + Cx * Cx) * (Bx - Ax) ) / D;
 
     circumCenter.x = (int) circumCenterX;
     circumCenter.y = (int) circumCenterY;

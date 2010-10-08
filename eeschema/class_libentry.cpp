@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "kicad_string.h"
-#include "confirm.h"
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "gr_basic.h"
@@ -16,6 +15,11 @@
 #include "class_library.h"
 #include "class_libentry.h"
 #include "class_pin.h"
+#include "lib_arc.h"
+#include "lib_bezier.h"
+#include "lib_circle.h"
+#include "lib_polyline.h"
+#include "lib_rectangle.h"
 
 #include <boost/foreach.hpp>
 
@@ -986,8 +990,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
         if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
 
-        if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
-            && !( ( LIB_FIELD& ) item ).IsVisible() )
+        if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE ) && !( ( LIB_FIELD& ) item ).IsVisible() )
             continue;
 
         bBox.Merge( item.GetBoundingBox() );
@@ -1198,8 +1201,7 @@ void LIB_COMPONENT::ClearStatus()
 }
 
 
-int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert,
-                                bool aEditPinByPin )
+int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert, bool aEditPinByPin )
 {
     int itemCount = 0;
 

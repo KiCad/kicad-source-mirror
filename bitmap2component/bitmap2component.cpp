@@ -154,7 +154,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
      *    Another scaling with Grid is applied on top of it to create space in the integer number for
      *    even smaller numbers.
      */
-    int GRID = (int) 10000 / DGRID;       // initial value = 10000 in kbool example
+    int GRID = (int) ( 10000 / DGRID );    // initial value = 10000 in kbool example
 
     // But we use 10000/DGRID because the scalling is made
     // by DGRID on integer pcbnew units and

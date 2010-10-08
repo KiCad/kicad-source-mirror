@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "dialog_schematic_find.h"
+#include "lib_rectangle.h"
 
 #include <wx/tokenzr.h>
 

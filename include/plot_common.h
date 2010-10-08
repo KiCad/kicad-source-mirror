@@ -11,6 +11,10 @@
 #include <vector>
 #include "drawtxt.h"
 
+
+class Ki_PageDescr;
+
+
 /**
  * Enum PlotFormat
  * must be kept in order of the radio buttons in the plot panel/window.

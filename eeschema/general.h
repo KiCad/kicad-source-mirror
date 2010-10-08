@@ -5,6 +5,16 @@
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
 
+#include <wx/string.h>
+#include <wx/gdicmn.h>
+
+#include "block_commande.h"
+
+#include "program.h"
+
+
+class SCH_ITEM;
+class SCH_SHEET;
 
 #define EESCHEMA_VERSION 2
 

@@ -1,0 +1,298 @@
+/*************************/
+/** class LIB_RECTANGLE **/
+/*************************/
+
+#include "fctsys.h"
+#include "gr_basic.h"
+#include "common.h"
+#include "class_drawpanel.h"
+#include "plot_common.h"
+#include "trigo.h"
+
+#include "general.h"
+#include "protos.h"
+#include "lib_rectangle.h"
+
+
+LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
+    LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
+{
+    m_Width                = 0;
+    m_Fill                 = NO_FILL;
+    m_isFillable           = true;
+    m_typeName             = _( "Rectangle" );
+    m_isHeightLocked       = false;
+    m_isWidthLocked        = false;
+    m_isStartPointSelected = false;
+}
+
+
+LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& aRect ) :
+    LIB_DRAW_ITEM( aRect )
+{
+    m_Pos   = aRect.m_Pos;
+    m_End   = aRect.m_End;
+    m_Width = aRect.m_Width;
+    m_Fill  = aRect.m_Fill;
+}
+
+
+bool LIB_RECTANGLE::Save( FILE* aFile )
+{
+    if( fprintf( aFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
+                 m_End.x, m_End.y, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
+        return false;
+
+    return true;
+}
+
+
+bool LIB_RECTANGLE::Load( char* aLine, wxString& aErrorMsg )
+{
+    int  cnt;
+    char tmp[256];
+
+    cnt = sscanf( &aLine[2], "%d %d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+                  &m_End.x, &m_End.y, &m_Unit, &m_Convert, &m_Width, tmp );
+
+    if( cnt < 7 )
+    {
+        aErrorMsg.Printf( _( "rectangle only had %d parameters of the required 7" ), cnt );
+        return false;
+    }
+
+    if( tmp[0] == 'F' )
+        m_Fill = FILLED_SHAPE;
+    if( tmp[0] == 'f' )
+        m_Fill = FILLED_WITH_BG_BODYCOLOR;
+
+    return true;
+}
+
+
+LIB_DRAW_ITEM* LIB_RECTANGLE::DoGenCopy()
+{
+    LIB_RECTANGLE* newitem = new LIB_RECTANGLE( GetParent() );
+
+    newitem->m_Pos     = m_Pos;
+    newitem->m_End     = m_End;
+    newitem->m_Width   = m_Width;
+    newitem->m_Unit    = m_Unit;
+    newitem->m_Convert = m_Convert;
+    newitem->m_Flags   = m_Flags;
+    newitem->m_Fill    = m_Fill;
+
+    return (LIB_DRAW_ITEM*) newitem;
+}
+
+
+int LIB_RECTANGLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+{
+    wxASSERT( aOther.Type() == COMPONENT_RECT_DRAW_TYPE );
+
+    const LIB_RECTANGLE* tmp = ( LIB_RECTANGLE* ) &aOther;
+
+    if( m_Pos.x != tmp->m_Pos.x )
+        return m_Pos.x - tmp->m_Pos.x;
+
+    if( m_Pos.y != tmp->m_Pos.y )
+        return m_Pos.y - tmp->m_Pos.y;
+
+    if( m_End.x != tmp->m_End.x )
+        return m_End.x - tmp->m_End.x;
+
+    if( m_End.y != tmp->m_End.y )
+        return m_End.y - tmp->m_End.y;
+
+    return 0;
+}
+
+
+void LIB_RECTANGLE::DoOffset( const wxPoint& aOffset )
+{
+    m_Pos += aOffset;
+    m_End += aOffset;
+}
+
+
+bool LIB_RECTANGLE::DoTestInside( EDA_Rect& aRect )
+{
+    return aRect.Inside( m_Pos.x, -m_Pos.y ) || aRect.Inside( m_End.x, -m_End.y );
+}
+
+
+void LIB_RECTANGLE::DoMove( const wxPoint& aPosition )
+{
+    wxPoint size = m_End - m_Pos;
+    m_Pos = aPosition;
+    m_End = aPosition + size;
+}
+
+
+void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
+{
+    m_Pos.x -= aCenter.x;
+    m_Pos.x *= -1;
+    m_Pos.x += aCenter.x;
+    m_End.x -= aCenter.x;
+    m_End.x *= -1;
+    m_End.x += aCenter.x;
+}
+
+
+void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                            const int aTransform[2][2] )
+{
+    wxASSERT( aPlotter != NULL );
+
+    wxPoint pos = TransformCoordinate( aTransform, m_Pos ) + aOffset;
+    wxPoint end = TransformCoordinate( aTransform, m_End ) + aOffset;
+
+    if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
+    {
+        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
+    }
+
+    aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->rect( pos, end, m_Fill, GetPenSize() );
+}
+
+
+/** Function GetPenSize
+ * @return the size of the "pen" that be used to draw or plot this item
+ */
+int LIB_RECTANGLE::GetPenSize()
+{
+    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+}
+
+void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                          const wxPoint& aOffset, int aColor, int aDrawMode,
+                          void* aData, const int aTransformMatrix[2][2] )
+{
+    wxPoint pos1, pos2;
+
+    int     color = ReturnLayerColor( LAYER_DEVICE );
+
+    if( aColor < 0 )       // Used normal color or selected color
+    {
+        if( m_Selected & IS_SELECTED )
+            color = g_ItemSelectetColor;
+    }
+    else
+        color = aColor;
+
+    pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+    pos2 = TransformCoordinate( aTransformMatrix, m_End ) + aOffset;
+
+    FILL_T fill = aData ? NO_FILL : m_Fill;
+    if( aColor >= 0 )
+        fill = NO_FILL;
+
+    GRSetDrawMode( aDC, aDrawMode );
+
+    if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
+        GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize( ),
+                      (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
+                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+    else if( m_Fill == FILLED_SHAPE  && !aData )
+        GRFilledRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
+                      GetPenSize(), color, color );
+    else
+        GRRect( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize(), color );
+
+    /* Set to one (1) to draw bounding box around rectangle to validate
+     * bounding box calculation. */
+#if 0
+    EDA_Rect bBox = GetBoundingBox();
+    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+#endif
+}
+
+
+void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
+{
+    wxString msg;
+
+    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+
+    aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
+}
+
+
+EDA_Rect LIB_RECTANGLE::GetBoundingBox()
+{
+    EDA_Rect rect;
+
+    rect.SetOrigin( m_Pos.x, m_Pos.y * -1 );
+    rect.SetEnd( m_End.x, m_End.y * -1 );
+    rect.Inflate( m_Width / 2, m_Width / 2 );
+    return rect;
+}
+
+
+/**
+ * Function HitTest
+ * tests if the given wxPoint is within the bounds of this object.
+ * @param aRefPoint A wxPoint to test in eeschema space
+ * @return true if a hit, else false
+ */
+bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
+{
+    int mindist = ( m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2 ) + 1;
+
+    // Have a minimal tolerance for hit test
+    if( mindist < MINIMUM_SELECTION_DISTANCE )
+        mindist = MINIMUM_SELECTION_DISTANCE;
+
+    return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
+}
+
+
+/** Function HitTest
+ * @return true if the point aPosRef is near this object
+ * @param aRefPoint = a wxPoint to test
+ * @param aThreshold = max distance to this object (usually the half thickness
+ *                     of a line)
+ * @param aTransMat = the transform matrix
+ */
+bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat[2][2] )
+{
+    wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos );
+    wxPoint actualEnd   = TransformCoordinate( aTransMat, m_End );
+
+    // locate lower segment
+    wxPoint start, end;
+
+    start = actualStart;
+    end.x = actualEnd.x;
+    end.y = actualStart.y;
+    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+        return true;
+
+    // locate right segment
+    start.x = actualEnd.x;
+    end.y   = actualEnd.y;
+    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+        return true;
+
+    // locate upper segment
+    start.y = actualEnd.y;
+    end.x   = actualStart.x;
+    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+        return true;
+
+    // locate left segment
+    start = actualStart;
+    end.x = actualStart.x;
+    end.y = actualEnd.y;
+    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+        return true;
+
+    return false;
+}

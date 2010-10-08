@@ -6,6 +6,7 @@
 #ifndef __INCLUDE__COMMON_H__
 #define __INCLUDE__COMMON_H__ 1
 
+#include "wx/wx.h"
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 

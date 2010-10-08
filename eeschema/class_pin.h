@@ -7,7 +7,7 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
-#include "classes_body_items.h"
+#include "lib_draw_item.h"
 
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
                                  * pins */

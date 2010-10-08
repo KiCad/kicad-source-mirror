@@ -11,7 +11,7 @@
 #include "general.h"
 #include "eeschema_id.h"
 #include "protos.h"
-#include "classes_body_items.h"
+#include "lib_draw_item.h"
 #include "class_pin.h"
 
 

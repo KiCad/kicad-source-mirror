@@ -30,7 +30,6 @@ set(EESCHEMA_SRCS
     class_schematic_items.cpp
     class_sch_screen.cpp
     class_text-label.cpp
-    classes_body_items.cpp
     cleanup.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
@@ -97,7 +96,13 @@ set(EESCHEMA_SRCS
     libedit_onrightclick.cpp
     libedit_plot_component.cpp
     libedit_undo_redo.cpp
+    lib_arc.cpp
+    lib_bezier.cpp
+    lib_circle.cpp
+    lib_draw_item.cpp
     lib_export.cpp
+    lib_polyline.cpp
+    lib_rectangle.cpp
     libfield.cpp
     load_one_schematic_file.cpp
     locate.cpp

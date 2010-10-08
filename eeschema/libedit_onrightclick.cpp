@@ -19,19 +19,18 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "class_pin.h"
+#include "lib_polyline.h"
 
 
 /* functions to add commands and submenus depending on the item */
 static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_LibeditFrame* frame );
-static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin,
-                            WinEDA_LibeditFrame* frame );
+static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, WinEDA_LibeditFrame* frame );
 
 
-bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos,
-                                        wxMenu*        PopMenu )
+bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
-    bool BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
+    bool BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE );
 
     if( m_component == NULL )
         return true;

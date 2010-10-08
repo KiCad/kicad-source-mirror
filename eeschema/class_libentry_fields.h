@@ -6,7 +6,7 @@
 #define CLASS_LIBENTRY_FIELDS_H
 
 #include "program.h"
-#include "classes_body_items.h"
+#include "lib_draw_item.h"
 
 
 /**

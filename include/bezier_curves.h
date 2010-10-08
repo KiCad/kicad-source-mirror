@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#include <wx/gdicmn.h>
+
+
 /**
  * Function Bezier2Poly
  * convert a Bezier curve to a polyline

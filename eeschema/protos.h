@@ -2,10 +2,18 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
+#include "block_commande.h"
+#include "colors.h"
+
+#include <wx/wx.h>
+
 
 class EDA_BaseStruct;
 class WinEDA_DrawPanel;
+class WinEDA_DrawFrame;
 class WinEDA_SchematicFrame;
+class WinEDA_LibeditFrame;
+class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
 class SCH_COMPONENT;
@@ -25,8 +33,7 @@ wxString ReturnDefaultFieldName( int aFieldNdx );
 /* DATABASE.CPP */
 /****************/
 void DisplayCmpDoc( wxString& Name );
-wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
-                          wxString& BufName );
+wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys, wxString& BufName );
 
 /*********************/
 /* DANGLING_ENDS.CPP */
@@ -41,13 +48,10 @@ void IncrementLabelMember( wxString& name );
 /****************/
 /* EDITPART.CPP */
 /****************/
-void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
-                          SCH_COMPONENT* m_Cmp );
+void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
 
 
-bool MapAngles( int*      Angle1,
-                int*      Angle2,
-                const int TransMat[2][2] );
+bool MapAngles( int* Angle1, int* Angle2, const int TransMat[2][2] );
 
 
 /**
@@ -57,23 +61,19 @@ bool MapAngles( int*      Angle1,
  * @param aPosition = the position to transform
  * @return the new coordinate
  */
-wxPoint        TransformCoordinate( const int      aTransformMatrix[2][2],
-                                    const wxPoint& aPosition );
+wxPoint        TransformCoordinate( const int aTransformMatrix[2][2], const wxPoint& aPosition );
 
 void           SnapLibItemPoint( int            OrigX,
                                  int            OrigY,
                                  int*           ClosestX,
                                  int*           ClosestY,
                                  SCH_COMPONENT* DrawLibItem );
-bool           LibItemInBox( int x1, int y1, int x2, int y2,
-                             SCH_COMPONENT* DrawLibItem );
+bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* DrawLibItem );
 
 /************/
 /* BLOCK.CPP */
 /************/
-void      DeleteStruct( WinEDA_DrawPanel* panel,
-                        wxDC*             DC,
-                        SCH_ITEM*         DrawStruct );
+void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 // operations_on_item_lists.cpp
 /** function DuplicateStruct
@@ -93,8 +93,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
 /* Find the item within block selection. */
-int             PickItemsInBlock( BLOCK_SELECTOR& aBlock,
-                                  BASE_SCREEN*    screen );
+int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
 
 /* function PickStruct:
  *   Search at location pos
@@ -126,25 +125,21 @@ int             PickItemsInBlock( BLOCK_SELECTOR& aBlock,
  *     Pointer to the structure if only 1 item is selected.
  *     NULL if no items are selects.
  */
-SCH_ITEM*          PickStruct( const wxPoint& refpos,
-                               BASE_SCREEN*   screen,
-                               int            SearchMask );
+SCH_ITEM*          PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask );
 
 
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
-LIB_PIN*                       LocateAnyPin( SCH_ITEM*       DrawList,
-                                             const wxPoint&  RefPos,
-                                             SCH_COMPONENT** libpart = NULL );
+LIB_PIN*       LocateAnyPin( SCH_ITEM*       DrawList,
+                             const wxPoint&  RefPos,
+                             SCH_COMPONENT** libpart = NULL );
 
-SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos,
-                                  SCH_ITEM*      DrawList );
+SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList );
 
 
 /***************/
 /* EEREDRAW.CPP */
 /***************/
-void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& pos, int Color );
+void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color );
 
 void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
                          wxDC*             aDC,
@@ -168,8 +163,7 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel,
 /**************/
 void       SeedLayers();
 EDA_Colors ReturnLayerColor( int Layer );
-void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent,
-                                   const wxPoint&    pos );
+void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent, const wxPoint& pos );
 
 
 /**************/
@@ -210,9 +204,7 @@ void DeleteAllMarkers( int type );
 /**************/
 /* PINEDIT.CPP */
 /**************/
-void InstallPineditFrame( WinEDA_LibeditFrame* parent,
-                          wxDC*                DC,
-                          const wxPoint&       pos );
+void InstallPineditFrame( WinEDA_LibeditFrame* parent, wxDC* DC, const wxPoint& pos );
 
 
 /**************/
@@ -290,8 +282,7 @@ void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen );
 /***************/
 /* OPTIONS.CPP */
 /***************/
-void DisplayOptionFrame( WinEDA_SchematicFrame* parent,
-                         const wxPoint&         framepos );
+void DisplayOptionFrame( WinEDA_SchematicFrame* parent, const wxPoint& framepos );
 
 /****************/
 /* CONTROLE.CPP */

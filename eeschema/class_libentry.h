@@ -5,7 +5,7 @@
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
-#include "classes_body_items.h"
+#include "lib_draw_item.h"
 #include "class_libentry_fields.h"
 
 #include <map>
