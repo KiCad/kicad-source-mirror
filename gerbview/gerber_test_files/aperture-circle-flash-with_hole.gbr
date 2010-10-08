@@ -21,7 +21,7 @@ X0Y00100D03*
 
 G04 Two, with round holes, slightly overlapping, centered at 0.1,0.1 *
 G54D11*
-X00100Y00090D03*
+X100Y90D03*
 X00100Y00110D03*
 
 M02*

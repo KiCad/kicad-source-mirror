@@ -27,6 +27,8 @@ class EDA_Rect;
 //wxWidgets 2.8 compatibility
 #if !wxCHECK_VERSION(2,9,0)
 #define wxPENSTYLE_SOLID wxSOLID
+#define wxPENSTYLE_SHORT_DASH wxSHORT_DASH
+#define wxPENSTYLE_DOT_DASH wxDOT_DASH
 typedef int wxPenStyle;
 #endif
 
@@ -51,7 +53,7 @@ class WinEDA_DrawPanel;
 void GRSetDrawMode( wxDC* DC, int mode );
 int  GRGetDrawMode( wxDC* DC );
 void GRResetPenAndBrush( wxDC* DC );
-void GRSetColorPen( wxDC* DC, int Color, int width = 1, int stype = wxSOLID );
+void GRSetColorPen( wxDC* DC, int Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, int Color, int fill = 0 );
 
 /** function GRForceBlackPen
@@ -191,7 +193,7 @@ void GRRect( EDA_Rect* ClipBox, wxDC* DC,const EDA_Rect& aRect, int Color );
 void GRRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
              int x2, int y2, int width, int Color );
 void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
-               int aWidth, int aColor, int aStyle = wxSOLID );
+               int aWidth, int aColor, wxPenStyle aStyle = wxPENSTYLE_SOLID );
 
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );

@@ -225,11 +225,20 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     // number of digits after the decimal point
                     m_FmtScale.x = *text - '0';
                     m_FmtLen.x   = ctmp + m_FmtScale.x;
+                    // m_FmtScale is 0 to 9
+                    if( m_FmtScale.x < 0 )
+                        m_FmtScale.x = 0;
+                    if( m_FmtScale.x > 9 )
+                        m_FmtScale.x = 9;
                 }
                 else
                 {
                     m_FmtScale.y = *text - '0';
                     m_FmtLen.y   = ctmp + m_FmtScale.y;
+                    if( m_FmtScale.y < 0 )
+                        m_FmtScale.y = 0;
+                    if( m_FmtScale.y > 9 )
+                        m_FmtScale.y = 9;
                 }
                 text++;
             }
@@ -285,6 +294,29 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case SCALE_FACTOR:
+        m_LayerScale.x = m_LayerScale.y = 1.0;
+        while( *text != '*' )
+        {
+            switch( *text )
+            {
+            case 'A':       // A axis scale
+                text++;
+                m_LayerScale.x  = ReadDouble( text );
+                break;
+
+            case 'B':       // B axis scale
+                text++;
+                m_LayerScale.y = ReadDouble( text );
+                break;
+            }
+        }
+        if( m_LayerScale.x != 1.0 || m_LayerScale.y != 1.0 )
+        {
+            msg.Printf( _( "RS274X: FS command: Gerbview uses 1.0 only scale factor") );
+            ReportMessage( msg );
+        }
+        break;
+
     case IMAGE_JUSTIFY:
     case IMAGE_ROTATION:
     case IMAGE_OFFSET:
@@ -292,11 +324,9 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     case KNOCKOUT:
     case STEP_AND_REPEAT:
     case ROTATE:
-    {
         msg.Printf( _( "RS274X: Command \"%c%c\" ignored by Gerbview" ),
                     (command >> 8) & 0xFF, command & 0xFF );
         ReportMessage( msg );
-    }
         break;
 
     case IMAGE_NAME:

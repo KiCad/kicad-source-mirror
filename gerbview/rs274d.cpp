@@ -453,7 +453,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
 wxPoint GERBER::ReadXYCoord( char*& Text )
 {
     wxPoint pos = m_CurrentPos;
-    int     type_coord = 0, current_coord, nbchar;
+    int     type_coord = 0, current_coord, nbdigits;
     bool    is_float   = false;
     char*   text;
     char    line[256];
@@ -475,15 +475,16 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
             type_coord = *Text;
             Text++;
             text   = line;
-            nbchar = 0;
+            nbdigits = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
                     is_float = true;
-                *(text++) = *(Text++);
+                // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
-                    nbchar++;
-            }
+                    nbdigits++;
+                *(text++) = *(Text++);
+             }
 
             *text = 0;
             if( is_float )
@@ -495,24 +496,21 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
             }
             else
             {
-                int fmt_scale =
-                    (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
+                int fmt_scale = (type_coord == 'X') ? m_FmtScale.x : m_FmtScale.y;
                 if( m_NoTrailingZeros )
                 {
                     int min_digit =
                         (type_coord == 'X') ? m_FmtLen.x : m_FmtLen.y;
-                    while( nbchar < min_digit )
+                    while( nbdigits < min_digit )
                     {
                         *(text++) = '0';
-                        nbchar++;
+                        nbdigits++;
                     }
 
                     *text = 0;
                 }
                 current_coord = atoi( line );
                 double real_scale = 1.0;
-                if( fmt_scale < 0 || fmt_scale > 9 )
-                    fmt_scale = 4;
                 double scale_list[10] =
                 {
                     10000.0, 1000.0, 100.0, 10.0,
@@ -557,7 +555,7 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
 {
     wxPoint pos( 0, 0 );
 
-    int     type_coord = 0, current_coord, nbchar;
+    int     type_coord = 0, current_coord, nbdigits;
     bool    is_float   = false;
     char*   text;
     char    line[256];
@@ -573,14 +571,15 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
             type_coord = *Text;
             Text++;
             text   = line;
-            nbchar = 0;
+            nbdigits = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
                     is_float = true;
-                *(text++) = *(Text++);
+                // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
-                    nbchar++;
+                    nbdigits++;
+                *(text++) = *(Text++);
             }
 
             *text = 0;
@@ -599,10 +598,10 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
                 {
                     int min_digit =
                         (type_coord == 'I') ? m_FmtLen.x : m_FmtLen.y;
-                    while( nbchar < min_digit )
+                    while( nbdigits < min_digit )
                     {
                         *(text++) = '0';
-                        nbchar++;
+                        nbdigits++;
                     }
 
                     *text = 0;

@@ -481,9 +481,11 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
 
 /** function UpdateTitleAndInfo
  * displays the short filename (if exists) of the selected layer
- * on the caption of the main gerbview window
- * and the name of the layer (found in the gerber file: LN <name> command)
- * in the status bar
+ *  on the caption of the main gerbview window
+ * displays image name and the last layer name (found in the gerber file: LN <name> command)
+ *  in the status bar
+ * Note layer name can change when reading a gerber file, and the layer name is the last found.
+ * So, show the layer name is not very useful, and can be seen as a debug feature.
  */
 void WinEDA_GerberFrame::UpdateTitleAndInfo()
 {
@@ -493,24 +495,28 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     if( gerber == NULL )
     {
         text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
         m_TextInfo->Clear();
-        SetTitle( text );
         return;
     }
 
     text = _( "File:" );
     text << wxT( " " ) << gerber->m_FileName;
+    SetTitle( text );
+    
+
     // Display Image Name and Layer Name (from the current gerber data):
     text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),
         GetChars(gerber->m_ImageName), GetChars(gerber->m_LayerName) );
     SetStatusText( text, 0 );
 
-    // Display data format like fmt in X3.4Y3.4 or fmt mm X2.3 Y3.5
-    text.Printf(wxT("fmt %s X%d.%d Y%d.%d"),
+    // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar
+    text.Printf(wxT("fmt: %s X%d.%d Y%d.%d no %cZ"),
         gerber->m_GerbMetric ? wxT("mm") : wxT("in"),
         gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
-        gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y );
+        gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
+        gerber->m_NoTrailingZeros ? 'T' : 'L');
 
     m_TextInfo->SetValue( text );
 }
