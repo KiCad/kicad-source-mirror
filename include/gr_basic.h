@@ -198,4 +198,9 @@ void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );
 
+void GRLineArray(  EDA_Rect* ClipBox, wxDC* DC, wxPoint points[],
+                   int lines, int width, int Color );
+void GRSLineArray( EDA_Rect* ClipBox, wxDC* DC, wxPoint points[],
+                   int lines, int width, int Color );
+
 #endif      /* define GR_BASIC */

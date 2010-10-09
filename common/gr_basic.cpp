@@ -12,6 +12,7 @@
 #include "class_base_screen.h"
 #include "bezier_curves.h"
 #include "math_for_graphics.h"
+#include <wx/graphics.h>
 
 
 #ifndef FILLED
@@ -880,6 +881,60 @@ void GRSLine( EDA_Rect* ClipBox,
     GRLastMoveToY = y2;
 }
 
+/*
+ * Draw an array of lines 
+ */
+
+void GRLineArray(EDA_Rect*   ClipBox,
+                  wxDC*      DC,
+                  wxPoint    points[],
+                  int        lines,
+                  int        width,
+                  int        Color )
+{
+    for(int i= 0 ; i < lines; i++) 
+    {
+      points[i].x = GRMapX( points[i].x );
+      points[i].y = GRMapY( points[i].y );
+    }
+
+    width = ZoomValue( width );
+    GRSLineArray(ClipBox,DC,points,lines,width,Color);
+}
+
+
+void GRSLineArray(EDA_Rect*  ClipBox,
+                  wxDC*      DC,
+                  wxPoint    points[],
+                  int        lines,
+                  int        width,
+                  int        Color )
+{
+    GRSetColorPen( DC, Color, width );
+#if defined( USE_WX_GRAPHICS_CONTEXT ) || defined(__WXMAC__)
+    wxGraphicsContext *gc = wxGraphicsContext::Create( DC );
+    wxASSERT(gc);
+    gc->Clip( ClipBox->GetX(), ClipBox->GetY(), ClipBox->GetRight(), ClipBox->GetHeight());
+    wxGraphicsPath path = gc->CreatePath();
+    
+    for(int i= 0 ; i < lines; i+=2)
+    {
+      path.MoveToPoint(points[i].x, points[i].y);
+      path.AddLineToPoint(points[i+1].x, points[i+1].y);
+    }
+
+    gc->StrokePath(path);
+    gc->ResetClip();
+    delete gc;
+#else
+    for(int i= 0 ; i < lines; i+=2) 
+    {
+      WinClipAndDrawLine( ClipBox, DC, points[i].x , points[i].y, points[i+1].x , points[i+1].y, Color, width );
+      GRLastMoveToX = points[i+1].x;
+      GRLastMoveToY = points[i+1].y;
+    }
+#endif
+}
 
 /*
  * Move to a new position relative to current one, in object space.

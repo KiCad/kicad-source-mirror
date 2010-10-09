@@ -195,7 +195,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "&Print" ),
+    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "&Print\tCtrl+P" ),
                            _( "Print board" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );

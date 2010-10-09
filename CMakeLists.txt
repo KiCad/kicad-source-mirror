@@ -24,6 +24,9 @@ option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF). Warning, this is 
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF). Warning, this is experimental")
 
+option(USE_WX_OVERLAY
+       "Use wxOverlay: Always ON for MAC (default OFF). Warning, this is experimental")
+
 option(USE_BOOST_POLYGON_LIBRARY
        "Use boost polygon library instead of Kbool to calculate filled areas in zones (default OFF). Warning, this is experimental")
 
@@ -53,6 +56,11 @@ endif(KICAD_GOST)
 if(USE_WX_ZOOM)
     add_definitions(-DUSE_WX_ZOOM)
 endif(USE_WX_ZOOM)
+
+if(USE_WX_OVERLAY OR APPLE)
+    add_definitions(-DUSE_WX_OVERLAY)
+endif(USE_WX_OVERLAY OR APPLE)
+
 
 if(USE_WX_GRAPHICS_CONTEXT)
     set( USE_WX_ZOOM ON )

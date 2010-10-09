@@ -186,7 +186,7 @@ void MODULE::Copy( MODULE* aModule )
 void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                    int draw_mode, const wxPoint& offset )
 {
-    if( (m_Flags & DO_NOT_DRAW) )
+    if( (m_Flags & DO_NOT_DRAW) || (m_Flags & IS_MOVED) )
         return;
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )

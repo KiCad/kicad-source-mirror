@@ -61,7 +61,7 @@ public:
     int  m_CursorLevel;                     // Index for cursor redraw in XOR
                                             // mode
 
-#ifdef __WXMAC__
+#ifdef USE_WX_OVERLAY
     // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
     wxOverlay               m_overlay; 
 #endif

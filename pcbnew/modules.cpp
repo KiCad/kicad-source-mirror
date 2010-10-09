@@ -224,6 +224,10 @@ void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
     if( pcbframe->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
         pcbframe->DrawGeneralRatsnest( DC );
+
+#ifdef __WXMAC__
+    pcbframe->GetScreen()->SetRefreshReq();
+#endif
 }
 
 

@@ -91,7 +91,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( fileMenu, wxID_PRINT, _( "&Print" ),
+    item = new wxMenuItem( fileMenu, wxID_PRINT, _( "&Print\tCtrl+P" ),
                            _( "Print the current module" ) );
     item->SetBitmap( plot_xpm );
     fileMenu->Append( item );
