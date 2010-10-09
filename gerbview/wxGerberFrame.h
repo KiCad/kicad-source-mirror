@@ -236,8 +236,7 @@ public:
     void         Process_Settings( wxCommandEvent& event );
     void         Process_Config( wxCommandEvent& event );
     void         InstallConfigFrame( const wxPoint& pos );
-    void         InstallGerberGeneralOptionsFrame( wxCommandEvent& event );
-    void         InstallGerberDisplayOptionsDialog( wxCommandEvent& event );
+    void         InstallGerberOptionsDialog( wxCommandEvent& event );
     void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */

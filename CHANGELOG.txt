@@ -4,6 +4,22 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-oct-09, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+++gerbview:
+    Fixed some issues:
+        Now aperture macro with parameters works.
+        Note: complex parameters (like $1 + 4) are not supported
+
+        other commands not yet supported:
+        SF (scale factors)
+        Offsets (image and layer)
+        Rotations (image and layer)
+        Axis definition
+        Mirroring
+        SR (Step and repeat)
+        KO
+
 2010-Oct-5 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++richio:

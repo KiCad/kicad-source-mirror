@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,6 +33,9 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public wxDialog
 	private:
 	
 	protected:
+		wxRadioBox* m_PolarDisplay;
+		wxRadioBox* m_BoxUnits;
+		wxRadioBox* m_CursorShape;
 		wxRadioBox* m_OptDisplayLines;
 		wxRadioBox* m_OptDisplayFlashedItems;
 		wxRadioBox* m_OptDisplayPolygons;
@@ -46,12 +49,13 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOKBUttonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKBUttonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Gerbview Draw Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 413,299 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Gerbview Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 446,299 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DISPLAY_OPTIONS_BASE();
 	
 };

@@ -75,7 +75,7 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
     case AMP_THERMAL:
     case AMP_POLYGON:
         // All have an exposure parameter and can return true or false
-        switch( GetExposure() )
+        switch( GetExposure(aParent) )
         {
         case 0:     // exposure always OFF
             exposure = false;
@@ -108,11 +108,11 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
  * returns the first parameter in integer form.  Some but not all primitives
  * use the first parameter as an exposure control.
  */
-int AM_PRIMITIVE::GetExposure() const
+int AM_PRIMITIVE::GetExposure(GERBER_DRAW_ITEM* aParent) const
 {
     // No D_CODE* for GetValue()
     wxASSERT( params.size() && params[0].IsImmediate() );
-    return (int) params[0].GetValue( NULL );
+    return (int) params[0].GetValue( aParent->GetDcodeDescr() );
 }
 
 /** function DrawBasicShape

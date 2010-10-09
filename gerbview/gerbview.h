@@ -51,7 +51,6 @@ extern wxString g_PhotoFilenameExt;
 extern wxString g_DrillFilenameExt;
 extern wxString g_PenFilenameExt;
 
-extern int      g_Default_GERBER_Format;
 extern int     g_DisplayPolygonsModeSketch;
 
 extern const wxString GerbviewProjectFileExt;

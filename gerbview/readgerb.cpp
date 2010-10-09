@@ -111,7 +111,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
             case 'X':
             case 'Y':                   /* Move or draw command */
-                 gerber->m_CurrentPos = gerber->ReadXYCoord( text );
+                gerber->m_CurrentPos = gerber->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
                     gerber->Execute_DCODE_Command( this, text,
@@ -121,7 +121,12 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
             case 'I':
             case 'J':       /* Auxiliary Move command */
-                 gerber->m_IJPos = gerber->ReadIJCoord( text );
+                gerber->m_IJPos = gerber->ReadIJCoord( text );
+                if( *text == '*' )      // command like X35142Y15945J504*
+                {
+                    gerber->Execute_DCODE_Command( this, text,
+                                                   gerber->m_Last_Pen_Command );
+                }
                 break;
 
             case '%':

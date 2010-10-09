@@ -79,6 +79,11 @@ bool WinEDA_App::OnInit()
 
     InitEDA_Appl( wxT( "GerbView" ), APP_TYPE_GERBVIEW );
 
+    if( m_Checker && m_Checker->IsAnotherRunning() )
+    {
+        if( !IsOK( NULL, _( "GerbView is already running. Continue?" ) ) )
+            return false;
+    }
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
 
@@ -91,12 +96,6 @@ bool WinEDA_App::OnInit()
 
     extern PARAM_CFG_BASE* ParamCfgList[];
     wxGetApp().ReadCurrentSetupValues( ParamCfgList );
-
-    if( m_Checker && m_Checker->IsAnotherRunning() )
-    {
-        if( !IsOK( NULL, _( "GerbView is already running. Continue?" ) ) )
-            return false;
-    }
 
     g_DrawBgColor = BLACK;
 

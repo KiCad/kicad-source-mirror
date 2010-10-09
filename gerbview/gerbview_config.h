@@ -6,7 +6,6 @@
 #include "colors_selection.h"
 
 #define GROUP wxT("/gerbview")
-#define GROUPLIB wxT("libraries")
 
 #define INSETUP TRUE
 
@@ -17,60 +16,31 @@
 
 static PARAM_CFG_WXSTRING PhotoExtBufCfg
 (
-    wxT("PhoExt"),
+    INSETUP,
+    wxT("GerberFileExt"),
     &g_PhotoFilenameExt
 );
 
 static PARAM_CFG_WXSTRING PenExtBufCfg
 (
-    wxT("PenExt"),
+    INSETUP,
+    wxT("PenFileExt"),
     &g_PenFilenameExt
 );
 
 static PARAM_CFG_WXSTRING DrillExtBufCfg
 (
-    wxT("DrilExt"),
+    INSETUP,
+    wxT("DrillFileExt"),
     &g_DrillFilenameExt
 );
 
-static PARAM_CFG_INT UnitCfg    // Units; 0 inches, 1 mm
+static PARAM_CFG_INT UnitsSelectionOptCfg    // Units; 0 inches, 1 mm
 (
+    INSETUP,
     wxT("Units"),
     (int*)&g_UserUnit,
     MILLIMETRES
-);
-
-static PARAM_CFG_INT GerberScaleCfg // default scale; 0 2.3, 1 3.4
-(
-    wxT("Def_fmt"),
-    &g_Default_GERBER_Format,
-    23,
-    23, 66
-);
-
-static PARAM_CFG_BOOL SegmFillCfg
-(
-    INSETUP,
-    wxT("SegFill"),
-    &DisplayOpt.DisplayPcbTrackFill,
-    TRUE
-);
-
-
-static PARAM_CFG_INT PadFillCfg
-(
-    INSETUP,
-    wxT("PadFill"),
-    (int*)&DisplayOpt.DisplayPadFill,
-    TRUE
-);
-
-static PARAM_CFG_INT ViaFillCfg
-(
-    INSETUP,
-    wxT("ViaFill"),
-    (int*)&DisplayOpt.DisplayViaFill,
-    TRUE
 );
 
 static PARAM_CFG_SETCOLOR ColorLayer0Cfg
@@ -329,18 +299,18 @@ static PARAM_CFG_SETCOLOR ColorLayer31Cfg
     7
 );
 
-static PARAM_CFG_SETCOLOR ColorDCodesCfg
+static PARAM_CFG_SETCOLOR DCodesDisplayOptCfg
 (
     INSETUP,
-    wxT("CoDCode"),
+    wxT("DCodeVisible"),
     &g_ColorsSettings.m_ItemsColors[DCODES_VISIBLE],
     WHITE
 );
 
-static PARAM_CFG_BOOL DisplPolairCfg
+static PARAM_CFG_BOOL DisplayPolairCoordinatesOptCfg
 (
     INSETUP,
-    wxT("DPolair"),
+    wxT("DisplayPolairCoordinates"),
     &DisplayOpt.DisplayPolarCood,
     FALSE
 );
@@ -350,11 +320,7 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & PhotoExtBufCfg,
     & PenExtBufCfg,
     & DrillExtBufCfg,
-    & UnitCfg,
-    & GerberScaleCfg,
-    & SegmFillCfg,
-    & PadFillCfg,
-    & ViaFillCfg,  //TODO: Will adding this line break tha pcbnew file compatibility?
+    & UnitsSelectionOptCfg,
     & ColorLayer0Cfg,
     & ColorLayer1Cfg,
     & ColorLayer2Cfg,
@@ -387,7 +353,7 @@ PARAM_CFG_BASE * ParamCfgList[] =
     & ColorLayer29Cfg,
     & ColorLayer30Cfg,
     & ColorLayer31Cfg,
-    & ColorDCodesCfg,
-    & DisplPolairCfg,
+    & DCodesDisplayOptCfg,
+    & DisplayPolairCoordinatesOptCfg,
     NULL
 };

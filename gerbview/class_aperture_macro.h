@@ -84,7 +84,7 @@ public:
      * returns the first parameter in integer form.  Some but not all primitives
      * use the first parameter as an exposure control.
      */
-    int GetExposure() const;
+    int GetExposure( GERBER_DRAW_ITEM* aParent ) const;
 
     /**
      * Function mapExposure

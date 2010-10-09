@@ -452,7 +452,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
  */
 wxPoint GERBER::ReadXYCoord( char*& Text )
 {
-    wxPoint pos = m_CurrentPos;
+    wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
     bool    is_float   = false;
     char*   text;

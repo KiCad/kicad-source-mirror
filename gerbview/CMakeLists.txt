@@ -15,7 +15,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 set(GERBVIEW_SRCS
     block.cpp
-    class_aperture_macro.cpp 
+    class_aperture_macro.cpp
     class_GERBER.cpp
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp

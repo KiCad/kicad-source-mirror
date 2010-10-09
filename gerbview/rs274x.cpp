@@ -4,38 +4,59 @@
 
 #include "fctsys.h"
 #include "common.h"
+
 //#include "macros.h"
 #include "gerbview.h"
 #include "class_GERBER.h"
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
 
+// See rs274xrevd_e.pdf, table 1: RS-274X parameters order of entry
+// in gerber files, when a coordinate is given (like X78Y600 or I0J80):
+//      Y and Y are logical coordinates
+//      A and B are plotter coordiantes
+//      Usually A = X, B = Y
+//      But we can have A = Y, B = X and/or offset, mirror, scale;
+// Also:
+//  Image is what you must plot (the entire data of the file).
+//  Layer is just a set of data blocks with their parameters. An image can have more than one layer
+//  So a gerber layer is not like a board layer or the graphic layers used in Gerbview to show a file.
 enum RS274X_PARAMETERS {
-    FORMAT_STATEMENT = CODE( 'F', 'S' ),
-    AXIS_SELECT   = CODE( 'A', 'S' ),
-    MIRROR_IMAGE  = CODE( 'M', 'I' ),
-    MODE_OF_UNITS = CODE( 'M', 'O' ),
+    // Directive parameters: single usage recommended
+    AXIS_SELECT   = CODE( 'A', 'S' ),           // Default: A=X, B=Y
+    FORMAT_STATEMENT = CODE( 'F', 'S' ),        // no default: this command must exists
+    MIRROR_IMAGE  = CODE( 'M', 'I' ),           // Default: mo mirror
+    MODE_OF_UNITS = CODE( 'M', 'O' ),           // Default:  inch
     INCH   = CODE( 'I', 'N' ),
     MILLIMETER = CODE( 'M', 'M' ),
-    OFFSET = CODE( 'O', 'F' ),
-    SCALE_FACTOR = CODE( 'S', 'F' ),
+    OFFSET = CODE( 'O', 'F' ),                  // Default: A = 0, B = 0
+    SCALE_FACTOR   = CODE( 'S', 'F' ),          // Default:  A = 1.0, B = 1.0
 
-    IMAGE_NAME   = CODE( 'I', 'N' ),
-    IMAGE_JUSTIFY   = CODE( 'I', 'J' ),
-    IMAGE_OFFSET    = CODE( 'I', 'O' ),
-    IMAGE_POLARITY  = CODE( 'I', 'P' ),
-    IMAGE_ROTATION  = CODE( 'I', 'R' ),
-    PLOTTER_FILM    = CODE( 'P', 'M' ),
-    INCLUDE_FILE    = CODE( 'I', 'F' ),
+    // Image parameters:
+    // commands used only once at the beginning of the file
+    IMAGE_JUSTIFY  = CODE( 'I', 'J' ),          // Default: no justification
+    IMAGE_NAME     = CODE( 'I', 'N' ),          // Default: void
+    IMAGE_OFFSET   = CODE( 'I', 'O' ),          // Default: A = 0, B = 0
+    IMAGE_POLARITY = CODE( 'I', 'P' ),          // Default: Positive
+    IMAGE_ROTATION = CODE( 'I', 'R' ),          // Default: 0
+    PLOTTER_FILM   = CODE( 'P', 'M' ),
 
+    // Aperture parameters:
+    // Usually for the whole file
     AP_DEFINITION   = CODE( 'A', 'D' ),
-
     AP_MACRO = CODE( 'A', 'M' ),
-    LAYER_NAME      = CODE( 'L', 'N' ),
+
+    // Layer specific parameters
+    // May be used singly or may be layer specfic
+    // theses parameters are at the beginning of the file or layer
+    LAYER_NAME      = CODE( 'L', 'N' ),         // Default: Positive
     LAYER_POLARITY  = CODE( 'L', 'P' ),
-    KNOCKOUT = CODE( 'K', 'O' ),
-    STEP_AND_REPEAT = CODE( 'S', 'P' ),
-    ROTATE = CODE( 'R', 'O' )
+    KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
+    STEP_AND_REPEAT = CODE( 'S', 'P' ),         //  Default: A = 1, B = 1
+    ROTATE = CODE( 'R', 'O' ),                  //  Default: 0
+
+    // Miscellaneous parameters:
+    INCLUDE_FILE   = CODE( 'I', 'F' )
 };
 
 
@@ -158,9 +179,9 @@ exit:
 }
 
 
-bool GERBER::ExecuteRS274XCommand( int    command,
-                                   char   buff[GERBER_BUFZ],
-                                   char*& text )
+bool GERBER::ExecuteRS274XCommand( int       command,
+                                   char buff[GERBER_BUFZ],
+                                   char*&    text )
 {
     int      code;
     int      xy_seq_len, xy_seq_char;
@@ -168,8 +189,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
-    double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT /
-                          25.4 : PCB_INTERNAL_UNIT;
+    double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
 
 //    D( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF ); )
 
@@ -222,14 +242,15 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 char ctmp = *(text++) - '0';
                 if( code == 'X' )
                 {
-                    // number of digits after the decimal point
+                    // number of digits after the decimal point (0 to 6 allowed)
                     m_FmtScale.x = *text - '0';
                     m_FmtLen.x   = ctmp + m_FmtScale.x;
-                    // m_FmtScale is 0 to 9
+
+                    // m_FmtScale is 0 to 6
                     if( m_FmtScale.x < 0 )
                         m_FmtScale.x = 0;
-                    if( m_FmtScale.x > 9 )
-                        m_FmtScale.x = 9;
+                    if( m_FmtScale.x > 6 )
+                        m_FmtScale.x = 6;
                 }
                 else
                 {
@@ -237,8 +258,8 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                     m_FmtLen.y   = ctmp + m_FmtScale.y;
                     if( m_FmtScale.y < 0 )
                         m_FmtScale.y = 0;
-                    if( m_FmtScale.y > 9 )
-                        m_FmtScale.y = 9;
+                    if( m_FmtScale.y > 6 )
+                        m_FmtScale.y = 6;
                 }
                 text++;
             }
@@ -267,8 +288,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             m_GerbMetric = FALSE;
         else if( code == MILLIMETER )
             m_GerbMetric = TRUE;
-        conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT /
-                     25.4 : PCB_INTERNAL_UNIT;
+        conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
         break;
 
     case OFFSET:        // command: OFAnnBnn (nn = float number)
@@ -301,7 +321,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             {
             case 'A':       // A axis scale
                 text++;
-                m_LayerScale.x  = ReadDouble( text );
+                m_LayerScale.x = ReadDouble( text );
                 break;
 
             case 'B':       // B axis scale
@@ -310,9 +330,10 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 break;
             }
         }
+
         if( m_LayerScale.x != 1.0 || m_LayerScale.y != 1.0 )
         {
-            msg.Printf( _( "RS274X: FS command: Gerbview uses 1.0 only scale factor") );
+            msg.Printf( _( "RS274X: FS command: Gerbview uses 1.0 only scale factor" ) );
             ReportMessage( msg );
         }
         break;
@@ -335,6 +356,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         {
             m_ImageName.Append( *text++ );
         }
+
         break;
 
     case LAYER_NAME:
@@ -343,6 +365,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         {
             m_LayerName.Append( *text++ );
         }
+
         break;
 
     case IMAGE_POLARITY:
@@ -364,7 +387,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case INCLUDE_FILE:
-        if( m_FilesPtr >= INCLUDE_FILES_COUNT_MAX )
+        if( m_FilesPtr >= INCLUDE_FILES_CNT_MAX )
         {
             ok = FALSE;
             ReportMessage( _( "Too many include files!!" ) );
@@ -393,6 +416,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
         break;
 
     case AP_DEFINITION:
+
         /* input example:  %ADD30R,0.081800X0.101500*%
          * Aperture definition has 4 options: C, R, O, P
          * (Circle, Rect, Oval, regular Polygon)
@@ -425,7 +449,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             text += 2;              // skip "C," for example
 
             dcode->m_Size.x = dcode->m_Size.y =
-                wxRound( ReadDouble( text ) * conv_scale );
+                                  wxRound( ReadDouble( text ) * conv_scale );
 
             switch( stdAperture )   // Aperture desceiption has optional parameters. Read them
             {
@@ -438,7 +462,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 {
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
-                        wxRound( ReadDouble( text ) * conv_scale );
+                                           wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
@@ -477,7 +501,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 {
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
-                        wxRound( ReadDouble( text ) * conv_scale );
+                                           wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
@@ -495,6 +519,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 break;
 
             case 'P':
+
                 /* Regular polygon: a command line like %ADD12P,0.040X10X25X0.025X0.025X0.0150*%
                  * params are: <diameter>, X<edge count>, X<Rotation>, X<X hole dim>, X<Y hole dim>
                  */
@@ -524,7 +549,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                 {
                     text++;
                     dcode->m_Drill.x = dcode->m_Drill.y =
-                        wxRound( ReadDouble( text ) * conv_scale );
+                                           wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
@@ -538,7 +563,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
                         wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                 dcode->m_Defined = TRUE;
+                dcode->m_Defined = TRUE;
                 break;
             }
         }
@@ -549,15 +574,18 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             while( *text && *text != '*' && *text != ',' )
                 am_lookup.name.Append( *text++ );
 
-            if( *text && *text == ',' )
-            {
+            // When an aperture definition is like %AMLINE2* 22,1,$1,$2,0,0,-45*
+            // the ADDxx<MACRO_NAME> command has parameters, like %ADD14LINE2,0.8X0.5*%
+            if( *text == ',' )
+            {   // Read aperture macro parameters and store them
+                text++;     // text points the first parameter
                 while( *text && *text != '*' )
                 {
                     double param = ReadDouble( text );
-                    if( *text == 'X' || isspace( *text ) )
-                        ++text;
-
                     dcode->AppendParam( param );
+                    while( isspace( *text ) ) text++;
+                    if( *text == 'X' )
+                        ++text;
                 }
             }
 
@@ -566,7 +594,7 @@ bool GERBER::ExecuteRS274XCommand( int    command,
             if( !pam )
             {
                 msg.Printf( wxT( "RS274X: aperture macro %s not found\n" ),
-                            CONV_TO_UTF8( am_lookup.name ) );
+                           CONV_TO_UTF8( am_lookup.name ) );
                 ReportMessage( msg );
                 ok = false;
                 break;
@@ -633,11 +661,11 @@ static bool CheckForLineEnd(  char buff[GERBER_BUFZ], char*& text, FILE* fp  )
 }
 
 
-bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
-                                char*& text,
-                                FILE*  gerber_file )
+bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ],
+                                char*&    text,
+                                FILE*     gerber_file )
 {
-    wxString msg;
+    wxString       msg;
     APERTURE_MACRO am;
 
     // read macro name
@@ -709,6 +737,7 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
             break;
 
         default:
+
             // @todo, there needs to be a way of reporting the line number
             msg.Printf( wxT( "RS274X: Invalid primitive id code %d\n" ), prim.primitive_id );
             ReportMessage( msg );
@@ -735,8 +764,10 @@ bool GERBER::ReadApertureMacro( char   buff[GERBER_BUFZ],
         }
 
         if( i < paramCount )
-        {   // maybe some day we can throw an exception and track a line number
-            msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
+        {
+            // maybe some day we can throw an exception and track a line number
+            msg.Printf( wxT(
+                            "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
                         prim.primitive_id, i );
             ReportMessage( msg );
         }

@@ -29,10 +29,11 @@ public:
 private:
     void OnOKBUttonClick( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
+    void initOptDialog( );
 };
 
 
-void WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog( wxCommandEvent& event )
+void WinEDA_GerberFrame::InstallGerberOptionsDialog( wxCommandEvent& event )
 {
         DIALOG_DISPLAY_OPTIONS dlg( this );
         int opt = dlg.ShowModal();
@@ -45,23 +46,31 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame *parent) :
 {
     m_Parent = parent;
     SetFocus();
+    initOptDialog( );
 
-    // Show Option Draw Lines
-    if( DisplayOpt.DisplayPcbTrackFill )        // We use DisplayPcbTrackFill as Lines draw option
-        m_OptDisplayLines->SetSelection( 1 );
-    else
-        m_OptDisplayLines->SetSelection( 0 );
+    GetSizer()->Fit( this );
+    GetSizer()->SetSizeHints( this );
+    Center();
+}
 
-    if( DisplayOpt.DisplayPadFill )
-        m_OptDisplayFlashedItems->SetSelection( 1 );
-    else
-        m_OptDisplayFlashedItems->SetSelection( 0 );
 
+void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& WXUNUSED(event) )
+{
+    EndModal( 0 );
+}
+
+void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
+{
+
+    m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
+    m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
+    m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
+
+    // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
+    m_OptDisplayLines->SetSelection( DisplayOpt.DisplayPcbTrackFill ? 1 : 0 );
+    m_OptDisplayFlashedItems->SetSelection( DisplayOpt.DisplayPadFill ? 1 : 0);
     // Show Option Draw polygons
-    if( g_DisplayPolygonsModeSketch == 0 )
-        m_OptDisplayPolygons->SetSelection( 1 );
-    else
-        m_OptDisplayPolygons->SetSelection( 0 );
+    m_OptDisplayPolygons->SetSelection( g_DisplayPolygonsModeSketch ? 0 : 1 );
 
     m_ShowPageLimits->SetSelection(0);
     if( m_Parent->m_Draw_Sheet_Ref )
@@ -77,20 +86,15 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame *parent) :
     }
 
     m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( DCODES_VISIBLE ) );
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
 }
-
-
-void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& WXUNUSED(event) )
-{
-    EndModal( 0 );
-}
-
 
 void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 {
+    DisplayOpt.DisplayPolarCood =
+        (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
+    g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
+    m_Parent->m_CursorShape = m_CursorShape->GetSelection();
+
     if( m_OptDisplayLines->GetSelection() == 1 )
         DisplayOpt.DisplayPcbTrackFill = TRUE;
     else

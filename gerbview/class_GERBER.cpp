@@ -119,28 +119,27 @@ APERTURE_MACRO* GERBER::FindApertureMacro( const APERTURE_MACRO& aLookup )
 void GERBER::ResetDefaultValues()
 {
     m_FileName.Empty();
-    m_ImageName     = wxT( "no image name" );   // Image name from the IN command
-    m_LayerName     = wxT( "no layer name" );   // Layer name from the LN command
-    m_LayerNegative = FALSE;                    // TRUE = Negative Layer
-    m_ImageNegative = FALSE;                    // TRUE = Negative image
-    m_GerbMetric    = FALSE;                    // FALSE = Inches, TRUE = metric
-    m_Relative = FALSE;                         // FALSE = absolute Coord, RUE =
-                                                // relative Coord
-    m_NoTrailingZeros = FALSE;                  // True: trailing zeros deleted
-    m_MirorA    = FALSE;                        // True: miror / axe A (X)
-    m_MirorB    = FALSE;                        // True: miror / axe B (Y)
-    m_Has_DCode = FALSE;                        // TRUE = DCodes in file
-                                                // FALSE = no DCode->
-                                                // search for separate DCode file
+    m_ImageName     = wxT( "no image name" );       // Image name from the IN command
+    m_LayerName     = wxT( "no layer name" );       // Layer name from the LN command
+    m_LayerNegative = false;                        // true = Negative Layer
+    m_ImageNegative = false;                        // true = Negative image
+    m_GerbMetric    = false;                        // false = Inches, true = metric
+    m_Relative = false;                             // false = absolute Coord,
+                                                    // true = relative Coord
+    m_NoTrailingZeros = false;                      // true: trailing zeros deleted
+    m_MirorA    = false;                            // true: miror / axe A (default = X)
+    m_MirorB    = false;                            // true: miror / axe B (default = Y)
+    m_Has_DCode = false;                            // true = DCodes in file
+                                                    // false = no DCode->
+                                                    // search for separate DCode file
 
-    m_FmtScale.x = m_FmtScale.y = g_Default_GERBER_Format % 10;
-    m_FmtLen.x   = m_FmtLen.y = m_FmtScale.x + (g_Default_GERBER_Format / 10);
+    m_FmtScale.x = m_FmtScale.y = 4;                // Initialize default format to 3.4 => 4
+    m_FmtLen.x   = m_FmtLen.y = 3+4;                // Initialize default format len = 3+4
 
-    m_LayerScale.x = m_LayerScale.y = 1.0;          // scale (X and Y) this
-                                                    // layer
-    m_Rotation     = 0;
+    m_LayerScale.x = m_LayerScale.y = 1.0;          // scale (A and B) this layer
+    m_Rotation     = 0;                             // Allowed 0, 90, 180, 270
     m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
-    m_360Arc_enbl  = FALSE;                         // 360 deg circular
+    m_360Arc_enbl  = false;                         // 360 deg circular
                                                     // interpolation disable
     m_Current_Tool = 0;                             // Current Tool (Dcode)
                                                     // number selected
@@ -154,7 +153,7 @@ void GERBER::ResetDefaultValues()
                                                     // plot arcs & circles
     m_Current_File    = NULL;                       // File to read
     m_FilesPtr        = 0;
-    m_PolygonFillMode = FALSE;
+    m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
 }
 

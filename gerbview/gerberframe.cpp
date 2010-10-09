@@ -61,8 +61,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                     WinEDA_GerberFrame::Process_Config )
 
     EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG, WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberGeneralOptionsFrame )
-    EVT_MENU( ID_GERBVIEW_DISPLAY_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberDisplayOptionsDialog )
+    EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberOptionsDialog )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
                     WinEDA_DrawFrame::SetLanguage )
@@ -504,7 +503,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     text = _( "File:" );
     text << wxT( " " ) << gerber->m_FileName;
     SetTitle( text );
-    
+
 
     // Display Image Name and Layer Name (from the current gerber data):
     text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),

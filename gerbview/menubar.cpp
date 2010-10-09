@@ -71,13 +71,11 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             _( "Hide &Layers Manager" ),
                             _( "Show/hide the layers manager toolbar" ),
                             layers_manager_xpm );
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_OPTIONS_SETUP, _( "&Options" ),
-                            _( "Select general options" ), preference_xpm );
 
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_GERBVIEW_DISPLAY_OPTIONS_SETUP,
-                            _( "Display" ),
-                            _( "Select how items are displayed" ),
-                            display_options_xpm );
+    ADD_MENUITEM_WITH_HELP( configmenu, ID_GERBVIEW_OPTIONS_SETUP,
+                            _( "&Options" ),
+                            _( "Set options to draw items" ),
+                            preference_xpm );
 
     wxGetApp().AddMenuLanguageList( configmenu );
 

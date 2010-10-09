@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,25 +22,48 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxString m_PolarDisplayChoices[] = { _("No Display"), _("Display") };
+	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
+	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Display Polar Coord"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
+	m_PolarDisplay->SetSelection( 0 );
+	bLeftSizer->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
+	
+	wxString m_BoxUnitsChoices[] = { _("Inches"), _("millimeters") };
+	int m_BoxUnitsNChoices = sizeof( m_BoxUnitsChoices ) / sizeof( wxString );
+	m_BoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_BoxUnitsNChoices, m_BoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_BoxUnits->SetSelection( 0 );
+	bLeftSizer->Add( m_BoxUnits, 0, wxALL|wxEXPAND, 5 );
+	
+	wxString m_CursorShapeChoices[] = { _("Small"), _("Big") };
+	int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
+	m_CursorShape = new wxRadioBox( this, wxID_ANY, _("Cursor"), wxDefaultPosition, wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
+	m_CursorShape->SetSelection( 0 );
+	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
+	
+	bUpperSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bMiddleSizer;
+	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
+	
 	wxString m_OptDisplayLinesChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayLinesNChoices = sizeof( m_OptDisplayLinesChoices ) / sizeof( wxString );
 	m_OptDisplayLines = new wxRadioBox( this, wxID_ANY, _("Lines:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayLinesNChoices, m_OptDisplayLinesChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayLines->SetSelection( 1 );
-	bLeftSizer->Add( m_OptDisplayLines, 0, wxALL|wxEXPAND, 5 );
+	bMiddleSizer->Add( m_OptDisplayLines, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayFlashedItemsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayFlashedItemsNChoices = sizeof( m_OptDisplayFlashedItemsChoices ) / sizeof( wxString );
 	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Spots:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayFlashedItems->SetSelection( 1 );
-	bLeftSizer->Add( m_OptDisplayFlashedItems, 0, wxALL|wxEXPAND, 5 );
+	bMiddleSizer->Add( m_OptDisplayFlashedItems, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayPolygonsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayPolygonsNChoices = sizeof( m_OptDisplayPolygonsChoices ) / sizeof( wxString );
 	m_OptDisplayPolygons = new wxRadioBox( this, wxID_ANY, _("Polygons:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPolygonsNChoices, m_OptDisplayPolygonsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayPolygons->SetSelection( 1 );
-	bLeftSizer->Add( m_OptDisplayPolygons, 0, wxALL|wxEXPAND, 5 );
+	bMiddleSizer->Add( m_OptDisplayPolygons, 0, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bMiddleSizer, 0, wxEXPAND, 5 );
 	
 	
 	bUpperSizer->Add( 20, 20, 0, 0, 5 );
@@ -58,8 +81,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bRightSizer->Add( 20, 20, 0, 0, 5 );
 	
 	m_OptDisplayDCodes = new wxCheckBox( this, wxID_ANY, _("Show D codes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayDCodes->SetValue(true);
-	
+	m_OptDisplayDCodes->SetValue(true); 
 	bRightSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
 	
 	bUpperSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
@@ -90,4 +112,5 @@ DIALOG_DISPLAY_OPTIONS_BASE::~DIALOG_DISPLAY_OPTIONS_BASE()
 	// Disconnect Events
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOKBUttonClick ), NULL, this );
+	
 }
