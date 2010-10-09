@@ -42,17 +42,24 @@
 
 
 /**********************************************************/
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams ) :
     BOARD_ITEM( aParent, TYPE_GERBER_DRAW_ITEM )
 /**********************************************************/
 {
-    m_Layer   = 0;
-    m_Shape   = GBR_SEGMENT;
-    m_Flashed = false;
-    m_DCode   = 0;
-    m_UnitsMetric = false;
+    m_imageParams = aGerberparams;
+    m_Layer         = 0;
+    m_Shape         = GBR_SEGMENT;
+    m_Flashed       = false;
+    m_DCode         = 0;
+    m_UnitsMetric   = false;
     m_ImageNegative = false;
     m_LayerNegative = false;
+    m_swapAxis      = false;
+    m_mirrorA       = false;
+    m_mirrorB       = false;
+    m_drawScale.x   = m_drawScale.y = 1.0;
+    if( m_imageParams )
+        SetLayerParameters();
 }
 
 
@@ -60,24 +67,30 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     BOARD_ITEM( aSource )
 {
+    m_imageParams = aSource.m_imageParams;
     m_Shape = aSource.m_Shape;
 
     m_Flags     = aSource.m_Flags;
     m_TimeStamp = aSource.m_TimeStamp;
 
     SetStatus( aSource.ReturnStatus() );
-    m_Start       = aSource.m_Start;
-    m_End         = aSource.m_End;
-    m_Size        = aSource.m_Size;
-    m_Layer       = aSource.m_Layer;
-    m_Shape       = aSource.m_Shape;
-    m_Flashed     = aSource.m_Flashed;
-    m_DCode       = aSource.m_DCode;
-    m_PolyCorners = aSource.m_PolyCorners;
-    m_UnitsMetric = aSource.m_UnitsMetric;
+    m_Start         = aSource.m_Start;
+    m_End           = aSource.m_End;
+    m_Size          = aSource.m_Size;
+    m_Layer         = aSource.m_Layer;
+    m_Shape         = aSource.m_Shape;
+    m_Flashed       = aSource.m_Flashed;
+    m_DCode         = aSource.m_DCode;
+    m_PolyCorners   = aSource.m_PolyCorners;
+    m_UnitsMetric   = aSource.m_UnitsMetric;
     m_ImageNegative = aSource.m_ImageNegative;
     m_LayerNegative = aSource.m_LayerNegative;
-
+    m_swapAxis      = aSource.m_swapAxis;
+    m_mirrorA       = aSource.m_mirrorA;
+    m_mirrorB       = aSource.m_mirrorB;
+    m_layerOffset   = aSource.m_layerOffset;
+    m_drawScale.x   = aSource.m_drawScale.x;
+    m_drawScale.y   = aSource.m_drawScale.y;
 }
 
 
@@ -89,6 +102,55 @@ GERBER_DRAW_ITEM::~GERBER_DRAW_ITEM()
 GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
 {
     return new GERBER_DRAW_ITEM( *this );
+}
+
+
+/**
+ * Function GetABPosition
+ * returns the image position of aPosition for this object.
+ * Image position is the value of aPosition, modified by image parameters:
+ * offsets, axis selection, scale, rotation
+ * @param aXYPosition = position in Y,X gerber axis
+ * @return const wxPoint& - The position in A,B axis.
+ */
+wxPoint GERBER_DRAW_ITEM::GetABPosition( wxPoint& aXYPosition )
+{
+    /* Note: RS274Xrevd_e is obscure about the order of transforms:
+     * For instance: Rotation must be made after or before mirroring ?
+     */
+    wxPoint abPos = aXYPosition;
+
+    if( m_swapAxis )
+        EXCHG( abPos.x, abPos.y );
+    abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
+    abPos.x = wxRound( abPos.x * m_drawScale.x );
+    abPos.y = wxRound( abPos.y * m_drawScale.y );
+    if( m_imageParams->m_Rotation )
+        RotatePoint( &abPos, m_imageParams->m_Rotation );
+    if( m_mirrorA )
+        NEGATE( abPos.x );
+    if( m_mirrorB )
+        NEGATE( abPos.y );
+    return abPos;
+}
+
+
+/** function SetLayerParameters
+ * Initialize draw parameters from Image and Layer parameters
+ * found in the gerber file:
+ *   m_UnitsMetric,
+ *   m_MirrorA, m_MirrorB,
+ *   m_DrawScale, m_DrawOffset
+ */
+void GERBER_DRAW_ITEM::SetLayerParameters()
+{
+    m_UnitsMetric = m_imageParams->m_GerbMetric;
+    m_swapAxis    = m_imageParams->m_SwapAxis;              // false if A = X, B = Y;
+                                                            // true if A =Y, B = Y
+    m_mirrorA     = m_imageParams->m_MirrorA;               // true: mirror / axe A
+    m_mirrorB     = m_imageParams->m_MirrorB;               // true: mirror / axe B
+    m_drawScale   = m_imageParams->m_LayerScale;            // A and B scaling factor
+    m_layerOffset = m_imageParams->m_Offset;                // Offset from OF command
 }
 
 
@@ -215,11 +277,11 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
-    alt_color = g_DrawBgColor ;
+    alt_color = g_DrawBgColor;
 
     if( m_Flags & DRAW_ERASED )   // draw in background color ("negative" color)
     {
-        EXCHG(color, alt_color);
+        EXCHG( color, alt_color );
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -244,27 +306,29 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius - halfPenWidth, 0, color );
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius + halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius - halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius, m_Size.x, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius, m_Size.x, color );
         }
         break;
 
     case GBR_ARC:
         if( !isFilled )
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                    m_End.x, m_End.y,
-                    m_ArcCentre.x, m_ArcCentre.y, 0, color );
+            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
+                    0, color );
         }
         else
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                    m_End.x, m_End.y,
-                    m_ArcCentre.x, m_ArcCentre.y,
+            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
                     m_Size.x, color );
         }
         break;
@@ -281,11 +345,11 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
 
     case GBR_SEGMENT:
         if( !isFilled )
-            GRCSegm( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                     m_End.x, m_End.y, m_Size.x, color );
+            GRCSegm( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                     GetABPosition( m_End ), m_Size.x, color );
         else
-            GRFillCSegm( &aPanel->m_ClipBox, aDC, m_Start.x,
-                         m_Start.y, m_End.x, m_End.y, m_Size.x, color );
+            GRFilledSegment( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                             GetABPosition( m_End ), m_Size.x, color );
         break;
 
     default:
@@ -307,7 +371,7 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
                                     wxDC*          aDC,
                                     int            aColor,
                                     const wxPoint& aOffset,
-                                    bool aFilledShape )
+                                    bool           aFilledShape )
 {
     std::vector<wxPoint> points;
 
@@ -317,6 +381,7 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
         for( unsigned ii = 0; ii < points.size(); ii++ )
         {
             points[ii] += aOffset;
+            points[ii]  = GetABPosition( points[ii] );
         }
     }
 
@@ -355,7 +420,7 @@ void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 bool GERBER_DRAW_ITEM::HitTest( const wxPoint& ref_pos )
 {
     // TODO: a better analyse od the shape (perhaps create a D_CODE::HitTest for flashed items)
-    int     radius = MIN( m_Size.x, m_Size.y) >> 1;
+    int     radius = MIN( m_Size.x, m_Size.y ) >> 1;
 
     // delta is a vector from m_Start to m_End (an origin of m_Start)
     wxPoint delta = m_End - m_Start;

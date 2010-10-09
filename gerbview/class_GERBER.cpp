@@ -123,12 +123,13 @@ void GERBER::ResetDefaultValues()
     m_LayerName     = wxT( "no layer name" );       // Layer name from the LN command
     m_LayerNegative = false;                        // true = Negative Layer
     m_ImageNegative = false;                        // true = Negative image
-    m_GerbMetric    = false;                        // false = Inches, true = metric
+    m_GerbMetric    = false;                        // false = Inches (default), true = metric
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
-    m_MirorA    = false;                            // true: miror / axe A (default = X)
-    m_MirorB    = false;                            // true: miror / axe B (default = Y)
+    m_MirrorA    = false;                           // true: miror / axe A (default = X)
+    m_MirrorB    = false;                           // true: miror / axe B (default = Y)
+    m_SwapAxis  = false;                            // false if A = X, B = Y; true if A =Y, B = Y
     m_Has_DCode = false;                            // true = DCodes in file
                                                     // false = no DCode->
                                                     // search for separate DCode file

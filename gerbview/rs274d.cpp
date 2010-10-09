@@ -358,7 +358,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
      */
-    static GERBER_DRAW_ITEM dummyGbrItem( NULL );
+    static GERBER_DRAW_ITEM dummyGbrItem( NULL, NULL );
 
     aGbrItem->m_LayerNegative = aLayerNegative;
     aGbrItem->m_ImageNegative = aImageNegative;
@@ -861,12 +861,11 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             if( !m_Exposure )
             {
                 m_Exposure = true;
-                gbritem    = new GERBER_DRAW_ITEM( pcb );
+                gbritem    = new GERBER_DRAW_ITEM( pcb, this );
                 pcb->m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->SetLayer( activeLayer );
                 gbritem->m_Flashed     = false;
-                gbritem->m_UnitsMetric = m_GerbMetric;
             }
 
             switch( m_Iterpolation )
@@ -940,8 +939,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             switch( m_Iterpolation )
             {
             case GERB_INTERPOL_LINEAR_1X:
-                gbritem = new GERBER_DRAW_ITEM( pcb );
-                gbritem->m_UnitsMetric = m_GerbMetric;
+                gbritem = new GERBER_DRAW_ITEM( pcb, this );
                 pcb->m_Drawings.Append( gbritem );
 //                D( printf( "Add line %d,%d to %d,%d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
@@ -958,8 +956,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = new GERBER_DRAW_ITEM( pcb );
-                gbritem->m_UnitsMetric = m_GerbMetric;
+                gbritem = new GERBER_DRAW_ITEM( pcb, this );
                 pcb->m_Drawings.Append( gbritem );
 //                D( printf( "Add arc %d,%d to %d,%d center %d, %d interpol %d 360_enb %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
@@ -999,8 +996,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 aperture = tool->m_Shape;
             }
 
-            gbritem = new GERBER_DRAW_ITEM( pcb );
-            gbritem->m_UnitsMetric = m_GerbMetric;
+            gbritem = new GERBER_DRAW_ITEM( pcb, this );
             pcb->m_Drawings.Append( gbritem );
 //          D( printf( "Add flashed dcode %d layer %d at %d %d\n", dcode, activeLayer,
 //                                m_CurrentPos.x, m_CurrentPos.y ); )
