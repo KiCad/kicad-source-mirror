@@ -5,11 +5,9 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
-
-#include "pcbnew.h"
 #include "gerbview.h"
 
-BOARD_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
+GERBER_DRAW_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
 {
     return Locate( CURSEUR_OFF_GRILLE );
 }

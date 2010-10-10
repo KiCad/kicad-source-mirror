@@ -112,11 +112,13 @@ GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
  * offsets, axis selection, scale, rotation
  * @param aXYPosition = position in Y,X gerber axis
  * @return const wxPoint& - The position in A,B axis.
+ * Because draw axis is top to bottom, the final y coordinates is negated
  */
-wxPoint GERBER_DRAW_ITEM::GetABPosition( wxPoint& aXYPosition )
+wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
 {
     /* Note: RS274Xrevd_e is obscure about the order of transforms:
      * For instance: Rotation must be made after or before mirroring ?
+     * Note: if something is changed here, GetYXPosition must reflect changes
      */
     wxPoint abPos = aXYPosition;
 
@@ -126,14 +128,41 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( wxPoint& aXYPosition )
     abPos.x = wxRound( abPos.x * m_drawScale.x );
     abPos.y = wxRound( abPos.y * m_drawScale.y );
     if( m_imageParams->m_Rotation )
-        RotatePoint( &abPos, m_imageParams->m_Rotation );
+        RotatePoint( &abPos, -m_imageParams->m_Rotation );
     if( m_mirrorA )
         NEGATE( abPos.x );
-    if( m_mirrorB )
+    // abPos.y must be negated, because draw axis is top to bottom
+    if( !m_mirrorB )
         NEGATE( abPos.y );
     return abPos;
 }
 
+/**
+ * Function GetXYPosition
+ * returns the image position of aPosition for this object.
+ * Image position is the value of aPosition, modified by image parameters:
+ * offsets, axis selection, scale, rotation
+ * @param aABPosition = position in A,B plotter axis
+ * @return const wxPoint - The given position in X,Y axis.
+ */
+wxPoint GERBER_DRAW_ITEM::GetXYPosition(const wxPoint& aABPosition )
+{
+    // do the inverse tranform made by GetABPosition
+   wxPoint xyPos = aABPosition;
+
+    if( m_mirrorA )
+        NEGATE( xyPos.x );
+    if( !m_mirrorB )
+        NEGATE( xyPos.y );
+    if( m_imageParams->m_Rotation )
+        RotatePoint( &xyPos, m_imageParams->m_Rotation );
+    xyPos.x = wxRound( xyPos.x / m_drawScale.x );
+    xyPos.y = wxRound( xyPos.y / m_drawScale.y );
+    xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
+    if( m_swapAxis )
+        EXCHG( xyPos.x, xyPos.y );
+    return xyPos;
+}
 
 /** function SetLayerParameters
  * Initialize draw parameters from Image and Layer parameters
@@ -216,6 +245,9 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
     EDA_Rect bbox( m_Start, wxSize( 1, 1 ) );
 
     bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
+
+    bbox.SetOrigin(GetXYPosition( bbox.GetOrigin() ) );
+    bbox.SetEnd(GetXYPosition( bbox.GetEnd() ) );
     return bbox;
 }
 
@@ -223,15 +255,16 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
 /**
  * Function Move
  * move this object.
- * @param const wxPoint& aMoveVector - the move vector for this object.
+ * @param const wxPoint& aMoveVector - the move vector for this object, in AB plotter axis.
  */
 void GERBER_DRAW_ITEM::Move( const wxPoint& aMoveVector )
 {
-    m_Start     += aMoveVector;
-    m_End       += aMoveVector;
-    m_ArcCentre += aMoveVector;
+    wxPoint xymove = GetXYPosition( aMoveVector );
+    m_Start     += xymove;
+    m_End       += xymove;
+    m_ArcCentre += xymove;
     for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
-        m_PolyCorners[ii] += aMoveVector;
+        m_PolyCorners[ii] += xymove;
 }
 
 
@@ -376,20 +409,17 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
     std::vector<wxPoint> points;
 
     points = m_PolyCorners;
-    if( aOffset != wxPoint( 0, 0 ) )
+    for( unsigned ii = 0; ii < points.size(); ii++ )
     {
-        for( unsigned ii = 0; ii < points.size(); ii++ )
-        {
-            points[ii] += aOffset;
-            points[ii]  = GetABPosition( points[ii] );
-        }
+        points[ii] += aOffset;
+        points[ii]  = GetABPosition( points[ii] );
     }
 
     GRClosedPoly( aClipBox, aDC, points.size(), &points[0], aFilledShape, aColor, aColor );
 }
 
 
-/** Function DisplayInfoBase
+/** Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about the track segment only, and does not calculate the full track length
@@ -398,28 +428,59 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
 void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
-    BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
 
     frame->ClearMsgPanel();
-
     msg = ShowGBRShape();
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
-    /* Display layer */
-    msg = board->GetLayerName( m_Layer );
-    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
+    // Display D_Code value:
+    msg.Printf( wxT("%d"), m_DCode);
+    frame->AppendMsgPanel( _( "D Code" ), msg, RED );
+
+    // Display Image name
+    if(m_imageParams)
+    {
+        msg = m_imageParams->m_ImageName;
+        frame->AppendMsgPanel( _( "Image name" ), msg, BROWN );
+    }
+
+    // Display graphic layer number
+    msg.Printf( wxT("%d"), GetLayer()+1);
+    frame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+
+    // This next info can be see as debug info, so it can be disabled
+#if 1
+    // Display offset
+    wxPoint tmp = m_layerOffset + m_imageParams->m_ImageOffset;
+    msg.Printf( wxT("X=%f Y=%f"), (double)tmp.x/10000, (double)tmp.y/10000);
+    frame->AppendMsgPanel( _( "Offset" ), msg, DARKRED );
+
+    // Display rotation
+    msg.Printf( wxT("%d"), m_imageParams->m_Rotation/10);
+    frame->AppendMsgPanel( _( "Image rotation" ), msg, DARKRED );
+
+    // Display mirroring
+    msg.Printf( wxT("X%d Y%d"), m_mirrorA, m_mirrorB);
+    frame->AppendMsgPanel( _( "Mirror" ), msg, DARKRED );
+
+    // Display AB axis swap
+    msg = m_swapAxis ? wxT("A=Y B=X") : wxT("A=X B=Y");
+    frame->AppendMsgPanel( _( "AB axis" ), msg, DARKRED );
+#endif
 }
 
 
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
+ * @param aRefPos A wxPoint to test in AB axis
  * @return bool - true if a hit, else false
  */
-bool GERBER_DRAW_ITEM::HitTest( const wxPoint& ref_pos )
+bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 {
-    // TODO: a better analyse od the shape (perhaps create a D_CODE::HitTest for flashed items)
+    wxPoint ref_pos = GetXYPosition( aRefPos );
+
+    // TODO: a better analyse of the shape (perhaps create a D_CODE::HitTest for flashed items)
     int     radius = MIN( m_Size.x, m_Size.y ) >> 1;
 
     // delta is a vector from m_Start to m_End (an origin of m_Start)
@@ -447,14 +508,16 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& ref_pos )
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
  * For now, an ending point must be inside this rect.
- * @param refArea : the given EDA_Rect
+ * @param refArea : the given EDA_Rect in AB plotter axis
  * @return bool - true if a hit, else false
  */
 bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& refArea )
 {
-    if( refArea.Inside( m_Start ) )
+    wxPoint pos = GetABPosition( m_Start );
+    if( refArea.Inside( pos ) )
         return true;
-    if( refArea.Inside( m_End ) )
+    pos = GetABPosition( m_End );
+    if( refArea.Inside( pos ) )
         return true;
     return false;
 }

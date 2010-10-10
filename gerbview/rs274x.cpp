@@ -308,7 +308,6 @@ bool GERBER::ExecuteRS274XCommand( int       command,
                 text++;
                 fcoord     = ReadDouble( text );
                 m_Offset.y = wxRound( fcoord * conv_scale );
-                NEGATE( m_Offset.y );
                 break;
             }
         }
@@ -349,7 +348,6 @@ bool GERBER::ExecuteRS274XCommand( int       command,
                 text++;
                 fcoord     = ReadDouble( text );
                 m_ImageOffset.y = wxRound( fcoord * conv_scale );
-                NEGATE( m_ImageOffset.y );
                 break;
             }
         }

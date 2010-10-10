@@ -147,6 +147,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type is not stored in parameters list, so the first parameter is exposure
          */
         curPos += mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), gerberMetric );
+        curPos = aParent->GetABPosition( curPos );
         int radius = scale( params[1].GetValue( tool ), gerberMetric ) / 2;
         if( !aFilledShape )
             GRCircle( aClipBox, aDC, curPos, radius, 0, aColor );
@@ -170,12 +171,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], rotation );
+                RotatePoint( &polybuffer[ii], -rotation );
         }
 
         // Move to current position:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
+        {
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+        }
 
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -196,12 +200,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], rotation );
+                RotatePoint( &polybuffer[ii], -rotation );
         }
 
         // Move to current position:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
+        {
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+        }
 
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -222,12 +229,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], rotation );
+                RotatePoint( &polybuffer[ii], -rotation );
         }
 
         // Move to current position:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
+        {
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+        }
 
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -255,11 +265,14 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             subshape_poly = polybuffer;
             int sub_rotation = rotation + 900 * ii;
             for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
-                RotatePoint( &subshape_poly[jj], sub_rotation );
+                RotatePoint( &subshape_poly[jj], -sub_rotation );
 
             // Move to current position:
             for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
+            {
                 subshape_poly[jj] += curPos;
+                subshape_poly[jj] = aParent->GetABPosition( subshape_poly[jj] );
+            }
 
             GRClosedPoly( aClipBox, aDC,
                           subshape_poly.size(), &subshape_poly[0], true, aAltColor,
@@ -283,6 +296,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         int gap = scale( params[4].GetValue( tool ), gerberMetric );
         int numCircles = wxRound( params[5].GetValue( tool ) );
 
+        // Draw circles:
+        wxPoint center = aParent->GetABPosition( curPos );
         // adjust outerDiam by this on each nested circle
         int diamAdjust = (gap + penThickness); //*2;     //Should we use * 2 ?
         for( int i = 0; i < numCircles; ++i, outerDiam -= diamAdjust )
@@ -292,12 +307,12 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             if( !aFilledShape )
             {
                 // draw the border of the pen's path using two circles, each as narrow as possible
-                GRCircle( aClipBox, aDC, curPos, outerDiam / 2, 0, aColor );
-                GRCircle( aClipBox, aDC, curPos, outerDiam / 2 - penThickness, 0, aColor );
+                GRCircle( aClipBox, aDC, center, outerDiam / 2, 0, aColor );
+                GRCircle( aClipBox, aDC, center, outerDiam / 2 - penThickness, 0, aColor );
             }
             else    // Filled mode
             {
-                GRCircle( aClipBox, aDC, curPos,
+                GRCircle( aClipBox, aDC, center,
                           (outerDiam - penThickness) / 2, penThickness, aColor );
             }
         }
@@ -305,17 +320,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // Draw the cross:
         ConvertShapeToPolygon( aParent, polybuffer, gerberMetric );
 
-        // shape rotation:
         rotation = wxRound( params[8].GetValue( tool ) * 10.0 );
-        if( rotation )
-        {
-            for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], rotation );
-        }
-
-        // Move to current position:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
+        {
+            // shape rotation:
+            RotatePoint( &polybuffer[ii], -rotation );
+            // Move to current position:
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+        }
 
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -344,13 +357,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // shape rotation:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            NEGATE(polybuffer[ii].y);
-            RotatePoint( &polybuffer[ii], rotation );
+            RotatePoint( &polybuffer[ii], -rotation );
        }
 
         // Move to current position:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
+        {
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
+        }
 
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -372,9 +387,9 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         rotation  = wxRound( params[5].GetValue( tool ) * 10.0 );
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            NEGATE(polybuffer[ii].y);
-            RotatePoint( &polybuffer[ii], rotation );
+            RotatePoint( &polybuffer[ii], -rotation );
             polybuffer[ii] += curPos;
+            polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
         GRClosedPoly( aClipBox, aDC,
                       polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
@@ -441,7 +456,6 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         {
             RotatePoint( &aBuffer[ii], -angle );
             aBuffer[ii] += start;
-            NEGATE( aBuffer[ii].y );
         }
     }
     break;
@@ -471,7 +485,6 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
                                        tool ), aUnitsMetric );
 
         // Build poly:
-        NEGATE( lowerLeft.y );
         aBuffer.push_back( lowerLeft );
         lowerLeft.y += size.y;          // Upper left
         aBuffer.push_back( lowerLeft );
@@ -479,10 +492,6 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( lowerLeft );
         lowerLeft.y -= size.y;          // lower right
         aBuffer.push_back( lowerLeft );
-
-        // Negate y coordinates:
-        for( unsigned ii = 0; ii < aBuffer.size(); ii++ )
-            NEGATE( aBuffer[ii].y );
     }
     break;
 

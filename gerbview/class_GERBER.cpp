@@ -127,18 +127,19 @@ void GERBER::ResetDefaultValues()
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
-    m_MirrorA    = false;                           // true: miror / axe A (default = X)
-    m_MirrorB    = false;                           // true: miror / axe B (default = Y)
-    m_SwapAxis  = false;                            // false if A = X, B = Y; true if A =Y, B = Y
+    m_MirrorA  = false;                             // true: miror / axe A (default = X)
+    m_MirrorB  = false;                             // true: miror / axe B (default = Y)
+    m_SwapAxis = false;                             // false if A = X, B = Y; true if A =Y, B = Y
+    m_ImageOffset.x = m_ImageOffset.y = 0;          // Coord Offset, from IO command
+    m_Offset.x  = m_Offset.y = 0;                   // Coord Offset, from OF command
+    m_Rotation  = 0;                                // Allowed 0, 90, 180, 270
     m_Has_DCode = false;                            // true = DCodes in file
                                                     // false = no DCode->
                                                     // search for separate DCode file
-
     m_FmtScale.x = m_FmtScale.y = 4;                // Initialize default format to 3.4 => 4
-    m_FmtLen.x   = m_FmtLen.y = 3+4;                // Initialize default format len = 3+4
+    m_FmtLen.x   = m_FmtLen.y = 3 + 4;              // Initialize default format len = 3+4
 
     m_LayerScale.x = m_LayerScale.y = 1.0;          // scale (A and B) this layer
-    m_Rotation     = 0;                             // Allowed 0, 90, 180, 270
     m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Linear, 90 arc, Circ.
     m_360Arc_enbl  = false;                         // 360 deg circular
                                                     // interpolation disable

@@ -46,6 +46,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     GetScreen()->Init();
     setActiveLayer(LAYER_N_BACK);
 
+    SetCurItem( NULL );
     return TRUE;
 }
 
@@ -58,6 +59,8 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
     msg.Printf( _( "Delete layer %d?" ), layer + 1 );
     if( query && !IsOK( this, msg ) )
         return;
+
+    SetCurItem( NULL );
 
     BOARD_ITEM* item = GetBoard()->m_Drawings;
     BOARD_ITEM * next;

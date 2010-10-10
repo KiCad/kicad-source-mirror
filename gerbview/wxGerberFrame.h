@@ -228,8 +228,8 @@ public:
     void         OnSelectOptionToolbar( wxCommandEvent& event );
     void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
-    BOARD_ITEM*  GerberGeneralLocateAndDisplay();
-    BOARD_ITEM*  Locate( int typeloc );
+    GERBER_DRAW_ITEM*  GerberGeneralLocateAndDisplay();
+    GERBER_DRAW_ITEM*  Locate( int typeloc );
 
 
     void         SetToolbars();

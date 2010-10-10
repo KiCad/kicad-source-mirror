@@ -47,7 +47,8 @@ public:
     wxSize             m_FmtScale;                                      // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
     wxSize             m_FmtLen;                                        // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
     wxRealPoint        m_LayerScale;                                    // scale (X and Y) of layer.
-    int                m_Rotation;
+    int                m_Rotation;                                      // Image rotation (0, 90, 180, 270
+                                                                        // Note these values are stored in 0.1 degrees
     int                m_Iterpolation;                                  // Linear, 90 arc, Circ.
     bool               m_ImageNegative;                                 // true = Negative image
     int                m_Current_Tool;                                  // Current Tool (Dcode) number selected

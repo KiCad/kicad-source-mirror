@@ -104,7 +104,6 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Size  = aSize;
     aGbrItem->m_Start = aPos;
-    NEGATE( aGbrItem->m_Start.y );
     aGbrItem->m_End   = aGbrItem->m_Start;
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->m_LayerNegative = aLayerNegative;
@@ -175,10 +174,7 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_Size.x = aGbrItem->m_Size.y = aWidth;
 
     aGbrItem->m_Start = aStart;
-    NEGATE( aGbrItem->m_Start.y );
-
     aGbrItem->m_End = aEnd;
-    NEGATE( aGbrItem->m_End.y );
 
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->m_LayerNegative = aLayerNegative;
@@ -299,10 +295,6 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
 
     aGbrItem->m_DCode     = Dcode_index;
     aGbrItem->m_ArcCentre = center;
-
-    NEGATE( aGbrItem->m_Start.y );
-    NEGATE( aGbrItem->m_End.y );
-    NEGATE( aGbrItem->m_ArcCentre.y );
 
     aGbrItem->m_LayerNegative = aLayerNegative;
     aGbrItem->m_ImageNegative = aImageNegative;
@@ -890,12 +882,10 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
 //                           m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
-                NEGATE( gbritem->m_Start.y );
                 if( gbritem->m_PolyCorners.size() == 0 )
                     gbritem->m_PolyCorners.push_back( gbritem->m_Start );
 
                 gbritem->m_End = m_CurrentPos;       // m_End is used as temporary storage
-                NEGATE( gbritem->m_End.y );
                 gbritem->m_PolyCorners.push_back( gbritem->m_End );
 
                 // Set the erasure flag of gbritem if a negative polygon.

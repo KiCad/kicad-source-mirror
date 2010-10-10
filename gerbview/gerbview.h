@@ -12,6 +12,9 @@
 #include "class_gerber_draw_item.h"
 #include "class_aperture_macro.h"
 
+#define CURSEUR_ON_GRILLE  0
+#define CURSEUR_OFF_GRILLE 1
+
 class WinEDA_GerberFrame;
 //class BOARD;
 

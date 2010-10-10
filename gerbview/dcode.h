@@ -193,6 +193,7 @@ public:
     /** function DrawFlashedShape
      * Draw the dcode shape for flashed items.
      * When an item is flashed, the DCode shape is the shape of the item
+     * @param aParent = the GERBER_DRAW_ITEM being drawn
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
      * @param aColor = the normal color to use
@@ -209,13 +210,15 @@ public:
      * Draw some Apertures shapes when they are defined as filled polygons.
      * APT_POLYGON is always a polygon, but some complex shapes are also converted to
      * polygons (shapes with holes, some rotated shapes)
+     * @param aParent = the GERBER_DRAW_ITEM being drawn
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
      * @param aColor = the normal color to use
      * @param aFilled = true to draw in filled mode, false to draw in skecth mode
      * @param aPosition = the actual shape position
     */
-    void                 DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC, int aColor,
+    void                 DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
+                                             EDA_Rect* aClipBox, wxDC* aDC, int aColor,
                                              bool aFilled, const wxPoint& aPosition );
 
     /** function ConvertShapeToPolygon

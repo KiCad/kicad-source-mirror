@@ -81,7 +81,7 @@ public:
     bool        m_ImageNegative;            // true = item in negative image
     bool        m_LayerNegative;            // TRUE = item in negative Layer
 private:
-    GERBER* m_imageParams;                 /* main GERBER info for this item
+    GERBER* m_imageParams;                  /* main GERBER info for this item
                                              * Note: some params stored in this class are common
                                              * to the whole gerber file (i.e) the whole graphic layer
                                              * and some can change when reaging the file, so they
@@ -148,10 +148,20 @@ public:
      * returns the image position of aPosition for this object.
      * Image position is the value of aPosition, modified by image parameters:
      * offsets, axis selection, scale, rotation
-     * @param aXYPosition = position in Y,X gerber axis
-     * @return const wxPoint - The given position in A,B axis.
+     * @param aXYPosition = position in X,Y gerber axis
+     * @return const wxPoint - The given position in plotter A,B axis.
      */
-    wxPoint GetABPosition(wxPoint& aXYPosition );
+    wxPoint GetABPosition(const wxPoint& aXYPosition );
+
+    /**
+     * Function GetXYPosition
+     * returns the image position of aPosition for this object.
+     * Image position is the value of aPosition, modified by image parameters:
+     * offsets, axis selection, scale, rotation
+     * @param aABPosition = position in A,B plotter axis
+     * @return const wxPoint - The given position in X,Y axis.
+     */
+    wxPoint GetXYPosition(const wxPoint& aABPosition );
 
     /**
      * Function GetDcodeDescr
@@ -193,19 +203,19 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( const wxPoint& refPos );
+    bool     HitTest( const wxPoint& aRefPos );
 
     /**
      * Function HitTest (overlayed)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refPos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( EDA_Rect& refArea );
+    bool     HitTest( EDA_Rect& aRefArea );
 
     /**
      * Function GetClass

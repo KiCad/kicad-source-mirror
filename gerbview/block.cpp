@@ -45,9 +45,6 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
                                      wxDC*             DC,
                                      bool              erase );
 
-static bool IsGbrItemInBox( BLOCK_SELECTOR& aBlocklocate, GERBER_DRAW_ITEM* aItem );
-
-
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
  */
@@ -292,7 +289,7 @@ void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
     {
         nextitem = item->Next();
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
+        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
             gerb_item->DeleteStructure();
     }
 
@@ -324,7 +321,7 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
+        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
             gerb_item->Move( delta );
     }
 
@@ -355,7 +352,7 @@ void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( IsGbrItemInBox( GetScreen()->m_BlockLocate, gerb_item ) )
+        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
         {
             /* this item must be duplicated */
             BOARD_ITEM* new_item = gerb_item->Copy();
@@ -367,17 +364,3 @@ void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
     DrawPanel->Refresh();
 }
 
-
-/* Test if the structure PtStruct is inside the block
- * Returns true or false
- */
-bool IsGbrItemInBox( BLOCK_SELECTOR& aBlocklocate, GERBER_DRAW_ITEM* aItem )
-{
-    if( aBlocklocate.Inside( aItem->m_Start ) )
-        return true;
-
-    if( aBlocklocate.Inside( aItem->m_End ) )
-        return true;
-
-    return false;
-}
