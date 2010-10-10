@@ -82,8 +82,8 @@ static void GRSFilledArc( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int StAngle
                           int EndAngle, int r, int width, int Color, int BgColor );
 static void GRSCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                       int width, int aPenSize, int Color );
-static void GRSFillCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                          int width, int Color );
+static void GRSLineArray( EDA_Rect* ClipBox, wxDC* DC, wxPoint points[],
+                          int lines, int width, int Color );
 /**/
 
 extern BASE_SCREEN* ActiveScreen;
@@ -882,7 +882,7 @@ void GRSLine( EDA_Rect* ClipBox,
 }
 
 /*
- * Draw an array of lines 
+ * Draw an array of lines
  */
 
 void GRLineArray(EDA_Rect*   ClipBox,
@@ -892,7 +892,7 @@ void GRLineArray(EDA_Rect*   ClipBox,
                   int        width,
                   int        Color )
 {
-    for(int i= 0 ; i < lines; i++) 
+    for(int i= 0 ; i < lines; i++)
     {
       points[i].x = GRMapX( points[i].x );
       points[i].y = GRMapY( points[i].y );
@@ -916,7 +916,7 @@ void GRSLineArray(EDA_Rect*  ClipBox,
     wxASSERT(gc);
     gc->Clip( ClipBox->GetX(), ClipBox->GetY(), ClipBox->GetRight(), ClipBox->GetHeight());
     wxGraphicsPath path = gc->CreatePath();
-    
+
     for(int i= 0 ; i < lines; i+=2)
     {
       path.MoveToPoint(points[i].x, points[i].y);
@@ -927,7 +927,7 @@ void GRSLineArray(EDA_Rect*  ClipBox,
     gc->ResetClip();
     delete gc;
 #else
-    for(int i= 0 ; i < lines; i+=2) 
+    for(int i= 0 ; i < lines; i+=2)
     {
       WinClipAndDrawLine( ClipBox, DC, points[i].x , points[i].y, points[i+1].x , points[i+1].y, Color, width );
       GRLastMoveToX = points[i+1].x;
@@ -990,6 +990,13 @@ void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
               GRMapY( y2 ), ZoomValue( width ), 0, Color );
 }
 
+void GRCSegm( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
+              int aWidth, int aColor )
+{
+    GRSCSegm( aClipBox, aDC, GRMapX( aStart.x ), GRMapY( aStart.y ),
+              GRMapX( aEnd.x ), GRMapY( aEnd.y ),
+              ZoomValue( aWidth ), 0, aColor );
+}
 
 /*
  * Draw segment (full) with rounded ends in object space (real coords.).
@@ -997,24 +1004,17 @@ void GRCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 void GRFillCSegm( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, int Color )
 {
-    GRSFillCSegm( ClipBox, DC, GRMapX( x1 ), GRMapY( y1 ), GRMapX( x2 ),
-                  GRMapY( y2 ), ZoomValue( width ), Color );
+    WinClipAndDrawLine( ClipBox, DC, GRMapX( x1 ), GRMapY( y1 ), GRMapX( x2 ),
+                  GRMapY( y2 ), Color, ZoomValue( width ) );
 }
 
 
-/*
- * Draw segment with rounded ends in screen space.
- */
-void GRSFillCSegm( EDA_Rect* ClipBox,
-                   wxDC*     DC,
-                   int       x1,
-                   int       y1,
-                   int       x2,
-                   int       y2,
-                   int       width,
-                   int       Color )
+void GRFilledSegment( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
+                      int aWidth, int aColor )
 {
-    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, Color, width );
+    WinClipAndDrawLine( aClipBox, aDC, GRMapX( aStart.x ), GRMapY( aStart.y ),
+                  GRMapX( aEnd.x ), GRMapY( aEnd.y ),
+                  aColor, ZoomValue( aWidth ) );
 }
 
 
@@ -1496,6 +1496,15 @@ void GRArc1( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
     GRSArc1( ClipBox, DC, GRMapX( x1 ), GRMapY( y1 ), GRMapX( x2 ),
              GRMapY( y2 ), GRMapX( xc ), GRMapY( yc ), ZoomValue( width ),
              Color );
+}
+
+void GRArc1( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd,
+             wxPoint aCenter, int aWidth, int aColor )
+{
+    GRSArc1( aClipBox, aDC, GRMapX( aStart.x ), GRMapY( aStart.y ),
+             GRMapX( aEnd.x ), GRMapY( aEnd.y ),
+             GRMapX( aCenter.x ), GRMapY( aCenter.y ), ZoomValue( aWidth ),
+             aColor );
 }
 
 

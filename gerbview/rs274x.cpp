@@ -23,6 +23,7 @@
 //  So a gerber layer is not like a board layer or the graphic layers used in Gerbview to show a file.
 enum RS274X_PARAMETERS {
     // Directive parameters: single usage recommended
+    // Must be at the beginning of the file
     AXIS_SELECT   = CODE( 'A', 'S' ),           // Default: A=X, B=Y
     FORMAT_STATEMENT = CODE( 'F', 'S' ),        // no default: this command must exists
     MIRROR_IMAGE  = CODE( 'M', 'I' ),           // Default: mo mirror
@@ -291,7 +292,7 @@ bool GERBER::ExecuteRS274XCommand( int       command,
         conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
         break;
 
-    case OFFSET:        // command: OFAnnBnn (nn = float number)
+    case OFFSET:        // command: OFAnnBnn (nn = float number) = layer Offset
         m_Offset.x = m_Offset.y = 0;
         while( *text != '*' )
         {
@@ -310,7 +311,6 @@ bool GERBER::ExecuteRS274XCommand( int       command,
                 break;
             }
         }
-
         break;
 
     case SCALE_FACTOR:
@@ -330,17 +330,43 @@ bool GERBER::ExecuteRS274XCommand( int       command,
                 break;
             }
         }
+        break;
 
-        if( m_LayerScale.x != 1.0 || m_LayerScale.y != 1.0 )
+    case IMAGE_OFFSET:  // command: IOAnnBnn (nn = float number) = Image Offset
+        m_ImageOffset.x = m_ImageOffset.y = 0;
+        while( *text != '*' )
         {
-            msg.Printf( _( "RS274X: FS command: Gerbview uses 1.0 only scale factor" ) );
-            ReportMessage( msg );
+            switch( *text )
+            {
+            case 'A':       // A axis offset in current unit (inch or mm)
+                text++;
+                fcoord     = ReadDouble( text );
+                m_ImageOffset.x = wxRound( fcoord * conv_scale );
+                break;
+
+            case 'B':       // B axis offset in current unit (inch or mm)
+                text++;
+                fcoord     = ReadDouble( text );
+                m_ImageOffset.y = wxRound( fcoord * conv_scale );
+                break;
+            }
         }
         break;
 
+    case IMAGE_ROTATION:    // command IR0* or IR90* or IR180* or IR270*
+        if( strnicmp( text, "0*", 2 ) == 0 )
+            m_Rotation = 0;
+        if( strnicmp( text, "90*", 2 ) == 0 )
+            m_Rotation = 900;
+        if( strnicmp( text, "180*", 2 ) == 0 )
+            m_Rotation = 1800;
+        if( strnicmp( text, "270*", 2 ) == 0 )
+            m_Rotation = 2700;
+        else
+            ReportMessage( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
+        break;
+
     case IMAGE_JUSTIFY:
-    case IMAGE_ROTATION:
-    case IMAGE_OFFSET:
     case PLOTTER_FILM:
     case KNOCKOUT:
     case STEP_AND_REPEAT:

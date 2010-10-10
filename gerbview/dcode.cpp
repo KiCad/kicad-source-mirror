@@ -310,20 +310,23 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
         if( !aFilledShape )
-            GRCircle( aClipBox, aDC, aShapePos.x, aShapePos.y, radius, aColor );
+            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos),
+                      radius, 0, aColor );
         else
             if( m_DrillShape == APT_DEF_NO_HOLE )
-                GRFilledCircle( aClipBox, aDC, aShapePos, radius, aColor );
+                GRFilledCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos),
+                                radius, aColor );
             else if( APT_DEF_ROUND_HOLE == 1 )    // round hole in shape
             {
                 int width = (m_Size.x - m_Drill.x ) / 2;
-                GRCircle( aClipBox, aDC, aShapePos, radius - (width / 2), width, aColor );
+                GRCircle( aClipBox, aDC,  aParent->GetABPosition(aShapePos),
+                          radius - (width / 2), width, aColor );
             }
             else                            // rectangular hole
             {
                 if( m_PolyCorners.size() == 0 )
                     ConvertShapeToPolygon();
-                DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
+                DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
             }
         break;
 
@@ -338,6 +341,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
         start.x = aShapePos.x - m_Size.x / 2;
         start.y = aShapePos.y - m_Size.y / 2;
         wxPoint end = start + m_Size;
+        start = aParent->GetABPosition( start );
+        end = aParent->GetABPosition( end );
         if( !aFilledShape )
         {
             GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y,
@@ -352,7 +357,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
         {
             if( m_PolyCorners.size() == 0 )
                 ConvertShapeToPolygon();
-            DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
+            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
     break;
@@ -375,6 +380,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
             end.y   += delta;
             radius   = m_Size.x;
         }
+        start = aParent->GetABPosition( start );
+        end = aParent->GetABPosition( end );
         if( !aFilledShape )
         {
             GRCSegm( aClipBox, aDC, start.x, start.y,
@@ -389,7 +396,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
         {
             if( m_PolyCorners.size() == 0 )
                 ConvertShapeToPolygon();
-            DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
+            DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
     break;
@@ -397,7 +404,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     case APT_POLYGON:
         if( m_PolyCorners.size() == 0 )
             ConvertShapeToPolygon();
-        DrawFlashedPolygon( aClipBox, aDC, aColor, aFilledShape, aShapePos );
+        DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         break;
     }
 }
@@ -409,7 +416,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
  * APT_POLYGON is always a polygon, but some complex shapes are also converted to
  * polygons (shapes with holes)
  */
-void D_CODE::DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC,
+void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
+                                 EDA_Rect* aClipBox, wxDC* aDC,
                                  int aColor, bool aFilled,
                                  const wxPoint& aPosition )
 {
@@ -421,6 +429,7 @@ void D_CODE::DrawFlashedPolygon( EDA_Rect* aClipBox, wxDC* aDC,
     for( unsigned ii = 0; ii < points.size(); ii++ )
     {
         points[ii] += aPosition;
+        points[ii] = aParent->GetABPosition( points[ii] );
     }
 
     GRClosedPoly( aClipBox, aDC, points.size(), &points[0], aFilled, aColor, aColor );
@@ -557,9 +566,7 @@ void D_CODE::ConvertShapeToPolygon()
             int angle = wxRound( m_Rotation * 10 );
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
             {
-                // Remember the Y axis is from top to bottom when draw items.
                 RotatePoint( &m_PolyCorners[jj], -angle );
-                NEGATE( m_PolyCorners[jj].y );
             }
         }
         break;

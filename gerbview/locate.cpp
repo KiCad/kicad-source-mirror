@@ -4,20 +4,56 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "class_drawpanel.h"
-
-#include "pcbnew.h"
 #include "gerbview.h"
-#include "trigo.h"
+#include "class_gerber_draw_item.h"
 
-
-/* Display the character of the localized STRUCTURE and return a pointer
- * to it.
+/* localize a gerber item and return a pointer to it.
+ * Display info about this item
  */
-BOARD_ITEM* WinEDA_GerberFrame::Locate( int typeloc )
+GERBER_DRAW_ITEM* WinEDA_GerberFrame::Locate( int aTypeloc )
 {
-    // TODO
     MsgPanel->EraseMsgBox();
+    wxPoint ref;
+    bool found = false;
+    if( aTypeloc == CURSEUR_ON_GRILLE )
+        ref = GetScreen()->m_Curseur;
+    else
+        ref = GetScreen()->m_MousePosition;
+
+    int         layer = GetScreen()->m_Active_Layer;
+
+    // Search first on active layer
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    GERBER_DRAW_ITEM* gerb_item = NULL;
+    for( ; item; item = item->Next() )
+    {
+        gerb_item = (GERBER_DRAW_ITEM*) item;
+        if( gerb_item->GetLayer()!= layer )
+            continue;
+        if( gerb_item->HitTest( ref ) )
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if( !found ) // Search on all layers
+    {
+        item = GetBoard()->m_Drawings;
+        for( ; item; item = item->Next() )
+        {
+            gerb_item = (GERBER_DRAW_ITEM*) item;
+            if( gerb_item->HitTest( ref ) )
+            {
+                found = true;
+                break;
+            }
+        }
+    }
+    if( found )
+    {
+        gerb_item->DisplayInfo( this );
+        return gerb_item;
+    }
     return NULL;
 }
-

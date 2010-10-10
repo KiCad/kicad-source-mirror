@@ -167,6 +167,8 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
             pos.y = (gerb_item->m_Start.y + gerb_item->m_End.y) / 2;
         }
 
+        pos = gerb_item->GetABPosition( pos );
+
         Line.Printf( wxT( "D%d" ), gerb_item->m_DCode );
 
         width  = MIN( gerb_item->m_Size.x, gerb_item->m_Size.y );

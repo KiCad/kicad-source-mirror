@@ -31,6 +31,7 @@
 
 #include "base_struct.h"
 #include "class_board_item.h"
+class GERBER;
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
 enum Gbr_Basic_Shapes {
@@ -58,7 +59,7 @@ private:
 
 
 public:
-    bool m_UnitsMetric;                     /* store here the gerber units (inch/mm).
+    bool    m_UnitsMetric;                  /* store here the gerber units (inch/mm).
                                              *  Used only to calculate aperture macros shapes sizes  */
     int     m_Shape;                        // Shape and type of this gerber item
     wxPoint m_Start;                        // Line or arc start point or position of the shape
@@ -67,18 +68,34 @@ public:
     wxPoint m_ArcCentre;                    // for arcs only: Centre of arc
     std::vector <wxPoint> m_PolyCorners;    // list of corners for polygons (G36 to G37 coordinates)
                                             // or for complex shapes which are converted to polygon
-    wxSize  m_Size;                         // Flashed shapes size of the shape
+    wxSize  m_Size;                         // Flashed shapes: size of the shape
                                             // Lines : m_Size.x = m_Size.y = line width
     bool    m_Flashed;                      // True for flashed items
     int     m_DCode;                        // DCode used to draw this item.
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
-    bool    m_ImageNegative;                // true = item in negative image
-    bool    m_LayerNegative;                // TRUE = item in negative Layer
+    // These values are used to draw this item, according to gerber layers parameters
+    // Because these values can change inside a gerber image, they are stored here
+    // for each item
+    bool        m_ImageNegative;            // true = item in negative image
+    bool        m_LayerNegative;            // TRUE = item in negative Layer
+private:
+    GERBER* m_imageParams;                  /* main GERBER info for this item
+                                             * Note: some params stored in this class are common
+                                             * to the whole gerber file (i.e) the whole graphic layer
+                                             * and some can change when reaging the file, so they
+                                             * are stored inside this item
+                                             * there is no redundancy for these parameters
+                                             */
+    bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
+    bool        m_mirrorA;                  // true: mirror / axe A
+    bool        m_mirrorB;                  // true: mirror / axe B
+    wxRealPoint m_drawScale;                // A and B scaling factor
+    wxPoint     m_layerOffset;               // Offset for A and B axis, from OF parameter
 
 public:
-    GERBER_DRAW_ITEM( BOARD_ITEM* aParent );
+    GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams );
     GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
 
@@ -99,6 +116,15 @@ public:
     }
 
 
+    /** function SetLayerParameters
+     * Initialize parameters from Image and Layer parameters
+     * found in the gerber file:
+     *   m_UnitsMetric,
+     *   m_MirrorA, m_MirrorB,
+     *   m_DrawScale, m_DrawOffset
+     */
+    void SetLayerParameters( );
+
     /**
      * Function Move
      * move this object.
@@ -110,12 +136,32 @@ public:
      * Function GetPosition
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
+     * This function exists mainly to satisfy the virtual GetPosition() in parent class
      */
     wxPoint& GetPosition()
     {
         return m_Start;  // it had to be start or end.
     }
 
+    /**
+     * Function GetABPosition
+     * returns the image position of aPosition for this object.
+     * Image position is the value of aPosition, modified by image parameters:
+     * offsets, axis selection, scale, rotation
+     * @param aXYPosition = position in X,Y gerber axis
+     * @return const wxPoint - The given position in plotter A,B axis.
+     */
+    wxPoint GetABPosition(const wxPoint& aXYPosition );
+
+    /**
+     * Function GetXYPosition
+     * returns the image position of aPosition for this object.
+     * Image position is the value of aPosition, modified by image parameters:
+     * offsets, axis selection, scale, rotation
+     * @param aABPosition = position in A,B plotter axis
+     * @return const wxPoint - The given position in X,Y axis.
+     */
+    wxPoint GetXYPosition(const wxPoint& aABPosition );
 
     /**
      * Function GetDcodeDescr
@@ -135,8 +181,8 @@ public:
     /** function DrawGbrPoly
      * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
      */
-    void DrawGbrPoly( EDA_Rect*      aClipBox,
-                      wxDC*          aDC, int      aColor,
+    void DrawGbrPoly( EDA_Rect* aClipBox,
+                      wxDC* aDC, int aColor,
                       const wxPoint& aOffset, bool aFilledShape );
 
     /* divers */
@@ -157,19 +203,19 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( const wxPoint& refPos );
+    bool     HitTest( const wxPoint& aRefPos );
 
     /**
      * Function HitTest (overlayed)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refPos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( EDA_Rect& refArea );
+    bool     HitTest( EDA_Rect& aRefArea );
 
     /**
      * Function GetClass
@@ -182,9 +228,10 @@ public:
     }
 
 
-    bool Save( FILE* aFile ) const;
+    bool         Save( FILE* aFile ) const;
 
 #if defined(DEBUG)
+
     /**
      * Function Show
      * is used to output the object tree, currently for debugging only.
@@ -193,6 +240,7 @@ public:
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
+
 #endif
 };
 

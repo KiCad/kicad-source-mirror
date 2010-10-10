@@ -38,15 +38,17 @@ public:
     bool               m_GerbMetric;                                    // false = Inches, true = metric
     bool               m_Relative;                                      // false = absolute Coord, true = relative Coord
     bool               m_NoTrailingZeros;                               // true: remove tailing zeros.
-    bool               m_MirorA;                                        // true: miror / axe A (X)
-    bool               m_MirorB;                                        // true: miror / axe B (Y)
-    bool               m_Has_DCode;                                     // true = DCodes in file
-                                                                        // (false = no DCode -> separate DCode file
-    wxPoint            m_Offset;                                        // Coord Offset
+    bool               m_SwapAxis;                                      // false (default) if A = X and B = Y
+                                                                        // true if A = Y, B = X
+    bool               m_MirrorA;                                       // true: miror / axe A (X)
+    bool               m_MirrorB;                                       // true: miror / axe B (Y)
+    wxPoint            m_ImageOffset;                                   // Coord Offset, from IO command
+    wxPoint            m_Offset;                                        // Coord Offset, from OF command
     wxSize             m_FmtScale;                                      // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
     wxSize             m_FmtLen;                                        // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
     wxRealPoint        m_LayerScale;                                    // scale (X and Y) of layer.
-    int                m_Rotation;
+    int                m_Rotation;                                      // Image rotation (0, 90, 180, 270
+                                                                        // Note these values are stored in 0.1 degrees
     int                m_Iterpolation;                                  // Linear, 90 arc, Circ.
     bool               m_ImageNegative;                                 // true = Negative image
     int                m_Current_Tool;                                  // Current Tool (Dcode) number selected
@@ -62,7 +64,8 @@ public:
     int                m_FilesPtr;                                      // Stack pointer for files list
 
     int                m_Selected_Tool;                                 // For hightlight: current selected Dcode
-
+    bool               m_Has_DCode;                                     // true = DCodes in file
+                                                                        // (false = no DCode -> separate DCode file
     bool               m_360Arc_enbl;                                   // Enbl 360 deg circular interpolation
     bool               m_PolygonFillMode;                               // Enable polygon mode (read coord as a polygon descr)
     int                m_PolygonFillModeState;                          // In polygon mode: 0 = first segm, 1 = next segm

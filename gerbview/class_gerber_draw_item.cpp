@@ -42,17 +42,24 @@
 
 
 /**********************************************************/
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams ) :
     BOARD_ITEM( aParent, TYPE_GERBER_DRAW_ITEM )
 /**********************************************************/
 {
-    m_Layer   = 0;
-    m_Shape   = GBR_SEGMENT;
-    m_Flashed = false;
-    m_DCode   = 0;
-    m_UnitsMetric = false;
+    m_imageParams = aGerberparams;
+    m_Layer         = 0;
+    m_Shape         = GBR_SEGMENT;
+    m_Flashed       = false;
+    m_DCode         = 0;
+    m_UnitsMetric   = false;
     m_ImageNegative = false;
     m_LayerNegative = false;
+    m_swapAxis      = false;
+    m_mirrorA       = false;
+    m_mirrorB       = false;
+    m_drawScale.x   = m_drawScale.y = 1.0;
+    if( m_imageParams )
+        SetLayerParameters();
 }
 
 
@@ -60,24 +67,30 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent ) :
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     BOARD_ITEM( aSource )
 {
+    m_imageParams = aSource.m_imageParams;
     m_Shape = aSource.m_Shape;
 
     m_Flags     = aSource.m_Flags;
     m_TimeStamp = aSource.m_TimeStamp;
 
     SetStatus( aSource.ReturnStatus() );
-    m_Start       = aSource.m_Start;
-    m_End         = aSource.m_End;
-    m_Size        = aSource.m_Size;
-    m_Layer       = aSource.m_Layer;
-    m_Shape       = aSource.m_Shape;
-    m_Flashed     = aSource.m_Flashed;
-    m_DCode       = aSource.m_DCode;
-    m_PolyCorners = aSource.m_PolyCorners;
-    m_UnitsMetric = aSource.m_UnitsMetric;
+    m_Start         = aSource.m_Start;
+    m_End           = aSource.m_End;
+    m_Size          = aSource.m_Size;
+    m_Layer         = aSource.m_Layer;
+    m_Shape         = aSource.m_Shape;
+    m_Flashed       = aSource.m_Flashed;
+    m_DCode         = aSource.m_DCode;
+    m_PolyCorners   = aSource.m_PolyCorners;
+    m_UnitsMetric   = aSource.m_UnitsMetric;
     m_ImageNegative = aSource.m_ImageNegative;
     m_LayerNegative = aSource.m_LayerNegative;
-
+    m_swapAxis      = aSource.m_swapAxis;
+    m_mirrorA       = aSource.m_mirrorA;
+    m_mirrorB       = aSource.m_mirrorB;
+    m_layerOffset   = aSource.m_layerOffset;
+    m_drawScale.x   = aSource.m_drawScale.x;
+    m_drawScale.y   = aSource.m_drawScale.y;
 }
 
 
@@ -89,6 +102,84 @@ GERBER_DRAW_ITEM::~GERBER_DRAW_ITEM()
 GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
 {
     return new GERBER_DRAW_ITEM( *this );
+}
+
+
+/**
+ * Function GetABPosition
+ * returns the image position of aPosition for this object.
+ * Image position is the value of aPosition, modified by image parameters:
+ * offsets, axis selection, scale, rotation
+ * @param aXYPosition = position in Y,X gerber axis
+ * @return const wxPoint& - The position in A,B axis.
+ * Because draw axis is top to bottom, the final y coordinates is negated
+ */
+wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
+{
+    /* Note: RS274Xrevd_e is obscure about the order of transforms:
+     * For instance: Rotation must be made after or before mirroring ?
+     * Note: if something is changed here, GetYXPosition must reflect changes
+     */
+    wxPoint abPos = aXYPosition;
+
+    if( m_swapAxis )
+        EXCHG( abPos.x, abPos.y );
+    abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
+    abPos.x = wxRound( abPos.x * m_drawScale.x );
+    abPos.y = wxRound( abPos.y * m_drawScale.y );
+    if( m_imageParams->m_Rotation )
+        RotatePoint( &abPos, -m_imageParams->m_Rotation );
+    if( m_mirrorA )
+        NEGATE( abPos.x );
+    // abPos.y must be negated, because draw axis is top to bottom
+    if( !m_mirrorB )
+        NEGATE( abPos.y );
+    return abPos;
+}
+
+/**
+ * Function GetXYPosition
+ * returns the image position of aPosition for this object.
+ * Image position is the value of aPosition, modified by image parameters:
+ * offsets, axis selection, scale, rotation
+ * @param aABPosition = position in A,B plotter axis
+ * @return const wxPoint - The given position in X,Y axis.
+ */
+wxPoint GERBER_DRAW_ITEM::GetXYPosition(const wxPoint& aABPosition )
+{
+    // do the inverse tranform made by GetABPosition
+   wxPoint xyPos = aABPosition;
+
+    if( m_mirrorA )
+        NEGATE( xyPos.x );
+    if( !m_mirrorB )
+        NEGATE( xyPos.y );
+    if( m_imageParams->m_Rotation )
+        RotatePoint( &xyPos, m_imageParams->m_Rotation );
+    xyPos.x = wxRound( xyPos.x / m_drawScale.x );
+    xyPos.y = wxRound( xyPos.y / m_drawScale.y );
+    xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
+    if( m_swapAxis )
+        EXCHG( xyPos.x, xyPos.y );
+    return xyPos;
+}
+
+/** function SetLayerParameters
+ * Initialize draw parameters from Image and Layer parameters
+ * found in the gerber file:
+ *   m_UnitsMetric,
+ *   m_MirrorA, m_MirrorB,
+ *   m_DrawScale, m_DrawOffset
+ */
+void GERBER_DRAW_ITEM::SetLayerParameters()
+{
+    m_UnitsMetric = m_imageParams->m_GerbMetric;
+    m_swapAxis    = m_imageParams->m_SwapAxis;              // false if A = X, B = Y;
+                                                            // true if A =Y, B = Y
+    m_mirrorA     = m_imageParams->m_MirrorA;               // true: mirror / axe A
+    m_mirrorB     = m_imageParams->m_MirrorB;               // true: mirror / axe B
+    m_drawScale   = m_imageParams->m_LayerScale;            // A and B scaling factor
+    m_layerOffset = m_imageParams->m_Offset;                // Offset from OF command
 }
 
 
@@ -154,6 +245,9 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
     EDA_Rect bbox( m_Start, wxSize( 1, 1 ) );
 
     bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
+
+    bbox.SetOrigin(GetXYPosition( bbox.GetOrigin() ) );
+    bbox.SetEnd(GetXYPosition( bbox.GetEnd() ) );
     return bbox;
 }
 
@@ -161,15 +255,16 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
 /**
  * Function Move
  * move this object.
- * @param const wxPoint& aMoveVector - the move vector for this object.
+ * @param const wxPoint& aMoveVector - the move vector for this object, in AB plotter axis.
  */
 void GERBER_DRAW_ITEM::Move( const wxPoint& aMoveVector )
 {
-    m_Start     += aMoveVector;
-    m_End       += aMoveVector;
-    m_ArcCentre += aMoveVector;
+    wxPoint xymove = GetXYPosition( aMoveVector );
+    m_Start     += xymove;
+    m_End       += xymove;
+    m_ArcCentre += xymove;
     for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
-        m_PolyCorners[ii] += aMoveVector;
+        m_PolyCorners[ii] += xymove;
 }
 
 
@@ -215,11 +310,11 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     if( color & HIGHT_LIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
-    alt_color = g_DrawBgColor ;
+    alt_color = g_DrawBgColor;
 
     if( m_Flags & DRAW_ERASED )   // draw in background color ("negative" color)
     {
-        EXCHG(color, alt_color);
+        EXCHG( color, alt_color );
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -244,27 +339,29 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius - halfPenWidth, 0, color );
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius + halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius - halfPenWidth, 0, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( &aPanel->m_ClipBox, aDC, m_Start, radius, m_Size.x, color );
+            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                      radius, m_Size.x, color );
         }
         break;
 
     case GBR_ARC:
         if( !isFilled )
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                    m_End.x, m_End.y,
-                    m_ArcCentre.x, m_ArcCentre.y, 0, color );
+            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
+                    0, color );
         }
         else
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                    m_End.x, m_End.y,
-                    m_ArcCentre.x, m_ArcCentre.y,
+            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
                     m_Size.x, color );
         }
         break;
@@ -281,11 +378,11 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
 
     case GBR_SEGMENT:
         if( !isFilled )
-            GRCSegm( &aPanel->m_ClipBox, aDC, m_Start.x, m_Start.y,
-                     m_End.x, m_End.y, m_Size.x, color );
+            GRCSegm( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                     GetABPosition( m_End ), m_Size.x, color );
         else
-            GRFillCSegm( &aPanel->m_ClipBox, aDC, m_Start.x,
-                         m_Start.y, m_End.x, m_End.y, m_Size.x, color );
+            GRFilledSegment( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                             GetABPosition( m_End ), m_Size.x, color );
         break;
 
     default:
@@ -307,24 +404,22 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
                                     wxDC*          aDC,
                                     int            aColor,
                                     const wxPoint& aOffset,
-                                    bool aFilledShape )
+                                    bool           aFilledShape )
 {
     std::vector<wxPoint> points;
 
     points = m_PolyCorners;
-    if( aOffset != wxPoint( 0, 0 ) )
+    for( unsigned ii = 0; ii < points.size(); ii++ )
     {
-        for( unsigned ii = 0; ii < points.size(); ii++ )
-        {
-            points[ii] += aOffset;
-        }
+        points[ii] += aOffset;
+        points[ii]  = GetABPosition( points[ii] );
     }
 
     GRClosedPoly( aClipBox, aDC, points.size(), &points[0], aFilledShape, aColor, aColor );
 }
 
 
-/** Function DisplayInfoBase
+/** Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about the track segment only, and does not calculate the full track length
@@ -333,29 +428,60 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
 void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
-    BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
 
     frame->ClearMsgPanel();
-
     msg = ShowGBRShape();
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
-    /* Display layer */
-    msg = board->GetLayerName( m_Layer );
-    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
+    // Display D_Code value:
+    msg.Printf( wxT("%d"), m_DCode);
+    frame->AppendMsgPanel( _( "D Code" ), msg, RED );
+
+    // Display Image name
+    if(m_imageParams)
+    {
+        msg = m_imageParams->m_ImageName;
+        frame->AppendMsgPanel( _( "Image name" ), msg, BROWN );
+    }
+
+    // Display graphic layer number
+    msg.Printf( wxT("%d"), GetLayer()+1);
+    frame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+
+    // This next info can be see as debug info, so it can be disabled
+#if 1
+    // Display offset
+    wxPoint tmp = m_layerOffset + m_imageParams->m_ImageOffset;
+    msg.Printf( wxT("X=%f Y=%f"), (double)tmp.x/10000, (double)tmp.y/10000);
+    frame->AppendMsgPanel( _( "Offset" ), msg, DARKRED );
+
+    // Display rotation
+    msg.Printf( wxT("%d"), m_imageParams->m_Rotation/10);
+    frame->AppendMsgPanel( _( "Image rotation" ), msg, DARKRED );
+
+    // Display mirroring
+    msg.Printf( wxT("X%d Y%d"), m_mirrorA, m_mirrorB);
+    frame->AppendMsgPanel( _( "Mirror" ), msg, DARKRED );
+
+    // Display AB axis swap
+    msg = m_swapAxis ? wxT("A=Y B=X") : wxT("A=X B=Y");
+    frame->AppendMsgPanel( _( "AB axis" ), msg, DARKRED );
+#endif
 }
 
 
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
+ * @param aRefPos A wxPoint to test in AB axis
  * @return bool - true if a hit, else false
  */
-bool GERBER_DRAW_ITEM::HitTest( const wxPoint& ref_pos )
+bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 {
-    // TODO: a better analyse od the shape (perhaps create a D_CODE::HitTest for flashed items)
-    int     radius = MIN( m_Size.x, m_Size.y) >> 1;
+    wxPoint ref_pos = GetXYPosition( aRefPos );
+
+    // TODO: a better analyse of the shape (perhaps create a D_CODE::HitTest for flashed items)
+    int     radius = MIN( m_Size.x, m_Size.y ) >> 1;
 
     // delta is a vector from m_Start to m_End (an origin of m_Start)
     wxPoint delta = m_End - m_Start;
@@ -382,14 +508,16 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& ref_pos )
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
  * For now, an ending point must be inside this rect.
- * @param refArea : the given EDA_Rect
+ * @param refArea : the given EDA_Rect in AB plotter axis
  * @return bool - true if a hit, else false
  */
 bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& refArea )
 {
-    if( refArea.Inside( m_Start ) )
+    wxPoint pos = GetABPosition( m_Start );
+    if( refArea.Inside( pos ) )
         return true;
-    if( refArea.Inside( m_End ) )
+    pos = GetABPosition( m_End );
+    if( refArea.Inside( pos ) )
         return true;
     return false;
 }
