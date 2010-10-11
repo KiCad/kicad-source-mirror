@@ -159,7 +159,7 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
         if( gerb_item->m_DCode <= 0 )
             continue;
 
-        if( gerb_item->m_Flashed )
+        if( gerb_item->m_Flashed || gerb_item->m_Shape == GBR_ARC )
             pos = gerb_item->m_Start;
         else
         {

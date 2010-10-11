@@ -57,7 +57,7 @@
 GERBER::GERBER( WinEDA_GerberFrame* aParent, int aLayer )
 {
     m_Parent = aParent;
-    m_Layer  = aLayer;           // Layer Number
+    m_GraphicLayer  = aLayer;           // Graphic layer Number
 
     m_Selected_Tool = FIRST_DCODE;
 
@@ -157,6 +157,7 @@ void GERBER::ResetDefaultValues()
     m_FilesPtr        = 0;
     m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
+    m_Selected_Tool = FIRST_DCODE;
 }
 
 

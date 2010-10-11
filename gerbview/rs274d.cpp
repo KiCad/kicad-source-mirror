@@ -3,12 +3,15 @@
 /********************/
 
 #include "fctsys.h"
+
 //#include "polygons_defs.h"
 #include "common.h"
+
 //#include "confirm.h"
 //#include "macros.h"
 #include "gerbview.h"
 #include "trigo.h"
+#include "macros.h"
 #include "class_gerber_draw_item.h"
 #include "class_GERBER.h"
 
@@ -20,8 +23,8 @@
 /* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes):
  * Gn =
  * G01 linear interpolation (right trace)
- * G02, G20, G21 Circular interpolation, meaning trig <0
- * G03, G30, G31 Circular interpolation, meaning trigo> 0
+ * G02, G20, G21 Circular interpolation, meaning trig <0 (clockwise)
+ * G03, G30, G31 Circular interpolation, meaning trigo> 0 (counterclockwise)
  * G04 = comment
  * G06 parabolic interpolation
  * G07 Cubic Interpolation
@@ -174,7 +177,7 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_Size.x = aGbrItem->m_Size.y = aWidth;
 
     aGbrItem->m_Start = aStart;
-    aGbrItem->m_End = aEnd;
+    aGbrItem->m_End   = aEnd;
 
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->m_LayerNegative = aLayerNegative;
@@ -224,8 +227,8 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  */
 static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
                              const wxPoint& aStart, const wxPoint& aEnd,
-                             const wxPoint& rel_center, int aWidth,
-                             bool clockwise, bool multiquadrant,
+                             const wxPoint& aRelCenter, int aWidth,
+                             bool aClockwise, bool aMultiquadrant,
                              bool aLayerNegative,
                              bool aImageNegative  )
 {
@@ -236,66 +239,88 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
     aGbrItem->m_Size.x  = aGbrItem->m_Size.y = aWidth;
     aGbrItem->m_Flashed = false;
 
-    if( multiquadrant )
-    {
-        center.x = aStart.x + rel_center.x;
-        center.y = aStart.y + rel_center.y;
 
-        if( clockwise )
-        {
-            aGbrItem->m_Start = aStart;
-            aGbrItem->m_End   = aEnd;
-        }
-        else
-        {
-            aGbrItem->m_Start = aEnd;
-            aGbrItem->m_End   = aStart;
-        }
-    }
+    if( aMultiquadrant )
+        center = aStart + aRelCenter;
     else
     {
-        center = rel_center;
+        // in single quadrant mode the relative coordinate aRelCenter is always >= 0
+        // So we must recalculate the actual sign of aRelCenter.x and aRelCenter.y
+        center = aRelCenter;
+
+        // calculate arc end coordinate relative to the staring point,
+        // because center is relative to the center point
         delta  = aEnd - aStart;
 
+        // now calculate the relative to aStart center position, for a draw function
+        // that use trigonometric arc angle (or counter-clockwise)
+        /* Quadrants:
+         *    Y
+         *  2 | 1
+         * -------X
+         *  3 | 4
+         * C = actual relative arc center, S = arc start (axis origin) E = relative arc end
+         */
         if( (delta.x >= 0) && (delta.y >= 0) )
         {
-            // Quadrant 2
+        /* Quadrant 1 (trigo or cclockwise):
+         *  C | E
+         * ---S---
+         *  3 | 4
+         */
+            NEGATE( center.x);
         }
         else if( (delta.x >= 0) && (delta.y < 0) )
         {
-            // Quadrant 1
-            center.y = -center.y;
+        /* Quadrant 4 (trigo or cclockwise):
+         *  2 | C
+         * ---S---
+         *  3 | E
+         */
+        // Nothing to do
         }
         else if( (delta.x < 0) && (delta.y >= 0) )
         {
-            // Quadrant 4
-            center.x = -center.x;
+        /* Quadrant 2 (trigo or cclockwise):
+         *  E | 1
+         * ---S---
+         *  C | 4
+         */
+            NEGATE( center.x);
+            NEGATE( center.y);
         }
         else
         {
-            // Quadrant 3
-            center.x = -center.x;
-            center.y = -center.y;
+        /* Quadrant 3 (trigo or cclockwise):
+         *  2 | 1
+         * ---S---
+         *  E | C
+         */
+            NEGATE( center.y);
         }
 
-        center.x += aStart.x;
-        center.y += aStart.y;
+        // Due to your draw arc function, we need this:
+        if( !aClockwise )
+            center = - center;
 
-        if( clockwise )
-        {
-            aGbrItem->m_Start = aStart;
-            aGbrItem->m_End   = aEnd;
-        }
-        else
-        {
-            aGbrItem->m_Start = aEnd;
-            aGbrItem->m_End   = aStart;
-        }
+        // Calculate actual arc center coordinate:
+        center += aStart;
     }
 
-    aGbrItem->m_DCode     = Dcode_index;
+    if( aClockwise )
+    {
+        aGbrItem->m_Start = aStart;
+        aGbrItem->m_End   = aEnd;
+    }
+    else
+    {
+        aGbrItem->m_Start = aEnd;
+        aGbrItem->m_End   = aStart;
+    }
+
     aGbrItem->m_ArcCentre = center;
 
+    aGbrItem->m_DCode     = Dcode_index;
     aGbrItem->m_LayerNegative = aLayerNegative;
     aGbrItem->m_ImageNegative = aImageNegative;
 
@@ -370,68 +395,51 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
                      aStart, aEnd, rel_center, 0,
                      clockwise, multiquadrant, aLayerNegative, aImageNegative );
 
-    // dummyTrack has right geometric parameters, and has its Y coordinates negated (to match the pcbnew Y axis).
-    // Approximate arc by 36 segments per 360 degree
-    const int increment_angle = 360 / 36;
-
     wxPoint   center;
     center = dummyGbrItem.m_ArcCentre;
 
-    // Calculate relative coordinates;
+    // Calculate coordinates relative to arc center;
     wxPoint start = dummyGbrItem.m_Start - center;
     wxPoint end   = dummyGbrItem.m_End - center;
 
     /* Calculate angle arc
-     * angle is here clockwise because Y axis is reversed
+     * angles are in 0.1 deg
+     * angle is trigonometrical (counter-clockwise),
+     * and axis is the X,Y gerber coordinates
      */
-    double start_angle = atan2( (double) start.y, (double) start.x );
-    start_angle = 180 * start_angle / M_PI;
-    double end_angle = atan2( (double) end.y, (double) end.x );
-    end_angle = 180 * end_angle / M_PI;
-    double angle = start_angle - end_angle;
+    int start_angle = wxRound(atan2( (double) start.y, (double) start.x ) * 1800 / M_PI);
+    int end_angle = wxRound(atan2( (double) end.y, (double) end.x ) * 1800 / M_PI);
 
-//    D( printf( " >>>> st %d,%d angle %f, end %d,%d angle %f delta %f\n",
-//        start.x, start.y, start_angle, end.x, end.y, end_angle, angle ) );
-    if( !clockwise )
-    {
-        EXCHG( start, end );
-        D( printf( " >>>> reverse arc\n" ) );
-    }
+    // dummyTrack has right geometric parameters, but
+    // fillArcGBRITEM calculate arc parameters for a draw function that expects
+    // start_angle < end_angle. So ensure this is the case here:
+    // Due to the fact atan2 returns angles between -180 to + 180 degrees,
+    // this not always the case ( a modulo 360.0 degrees can be lost )
+    if( start_angle > end_angle )
+        end_angle += 3600;
 
-    // Normalize angle
-    while( angle > 360.0 )
-        angle -= 360.0;
+    int arc_angle = start_angle - end_angle;
+    // Approximate arc by 36 segments per 360 degree
+    int increment_angle = 3600 / 36;
+    int count = ABS( arc_angle / increment_angle );
 
-    while( angle < 0.0 )
-        angle += 360.0;
-
-    int count = (int) ( angle / increment_angle );
-    if( count <= 0 )
-        count = 1;
-
-//    D( printf( " >>>> angle %f, cnt %d sens %d\n", angle, count, clockwise ) );
-
-    // calculate segments
+    // calculate polygon corners
+    // when not clockwise, dummyGbrItem arc goes from end to start
     wxPoint start_arc = start;
-    for( int ii = 1; ii <= count; ii++ )
+    for( int ii = 0; ii <= count; ii++ )
     {
+        int rot;
         wxPoint end_arc = start;
-        int     rot     = 10 * ii * increment_angle; // rot is in 0.1 deg
-        if( ii < count )
-        {
-            if( clockwise )
-                RotatePoint( &end_arc, rot );
-            else
-                RotatePoint( &end_arc, -rot );
-        }
+        if( clockwise )
+            rot = ii * increment_angle; // rot is in 0.1 deg
         else
-            end_arc = end;
+            rot = (count - ii) * increment_angle; // rot is in 0.1 deg
 
-//        D( printf( " >> Add arc %d rot %d, edge poly item %d,%d to %d,%d\n",
-//                ii, rot, start_arc.x, start_arc.y,end_arc.x, end_arc.y ); )
+        if( ii < count )
+                RotatePoint( &end_arc, -rot );
+        else    // last point
+            end_arc = clockwise ? end : start;
 
-        if( aGbrItem->m_PolyCorners.size() == 0 )
-            aGbrItem->m_PolyCorners.push_back( start_arc + center );
         aGbrItem->m_PolyCorners.push_back( end_arc + center );
 
         start_arc = end_arc;
@@ -466,17 +474,18 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text   = line;
+            text     = line;
             nbdigits = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
                     is_float = true;
+
                 // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
                     nbdigits++;
                 *(text++) = *(Text++);
-             }
+            }
 
             *text = 0;
             if( is_float )
@@ -502,7 +511,7 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
                     *text = 0;
                 }
                 current_coord = atoi( line );
-                double real_scale = 1.0;
+                double real_scale     = 1.0;
                 double scale_list[10] =
                 {
                     10000.0, 1000.0, 100.0, 10.0,
@@ -562,12 +571,13 @@ wxPoint GERBER::ReadIJCoord( char*& Text )
         {
             type_coord = *Text;
             Text++;
-            text   = line;
+            text     = line;
             nbdigits = 0;
             while( IsNumber( *Text ) )
             {
                 if( *Text == '.' )
                     is_float = true;
+
                 // count digits only (sign and decimal point are not counted)
                 if( (*Text >= '0') && (*Text <='9') )
                     nbdigits++;
@@ -736,8 +746,8 @@ bool GERBER::Execute_G_Command( char*& text, int G_commande )
         break;
 
     case GC_TURN_OFF_360_INTERPOL:      // disable Multi cadran arc and Arc interpol
-        m_360Arc_enbl = false;
-        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;
+        m_360Arc_enbl  = false;
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;   // not sure it should be done
         break;
 
     case GC_TURN_ON_360_INTERPOL:
@@ -857,7 +867,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
                 pcb->m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->SetLayer( activeLayer );
-                gbritem->m_Flashed     = false;
+                gbritem->m_Flashed = false;
             }
 
             switch( m_Iterpolation )
@@ -865,18 +875,20 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
- //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
- //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
- //                          m_CurrentPos.y, m_PolygonFillModeState,
+
+                //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
+                //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
+                //                          m_CurrentPos.y, m_PolygonFillModeState,
 //                           m_Iterpolation, m_360Arc_enbl ); )
                 fillArcPOLY( pcb, gbritem, m_PreviousPos,
-                            m_CurrentPos, m_IJPos,
-                            ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
-                            m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
+                             m_CurrentPos, m_IJPos,
+                             ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
+                             m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
                 break;
 
             default:
                 gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
+
 //                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
 //                           m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
@@ -931,11 +943,12 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             case GERB_INTERPOL_LINEAR_1X:
                 gbritem = new GERBER_DRAW_ITEM( pcb, this );
                 pcb->m_Drawings.Append( gbritem );
+
 //                D( printf( "Add line %d,%d to %d,%d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
 //                            m_CurrentPos.x, m_CurrentPos.y ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                                m_CurrentPos, size.x, m_LayerNegative, m_ImageNegative );
+                                 m_CurrentPos, size.x, m_LayerNegative, m_ImageNegative );
                 break;
 
             case GERB_INTERPOL_LINEAR_01X:
@@ -948,14 +961,15 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             case GERB_INTERPOL_ARC_POS:
                 gbritem = new GERBER_DRAW_ITEM( pcb, this );
                 pcb->m_Drawings.Append( gbritem );
+
 //                D( printf( "Add arc %d,%d to %d,%d center %d, %d interpol %d 360_enb %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
 //                           m_CurrentPos.y, m_IJPos.x,
 //                            m_IJPos.y, m_Iterpolation, m_360Arc_enbl ); )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                               m_CurrentPos, m_IJPos, size.x,
-                               ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
-                               false : true, m_360Arc_enbl,
+                                m_CurrentPos, m_IJPos, size.x,
+                                ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
+                                false : true, m_360Arc_enbl,
                                 m_LayerNegative, m_ImageNegative );
                 break;
 
@@ -970,7 +984,8 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            m_Exposure    = false;
+            m_Exposure = false;
+
 //            D( printf( "Move to %d,%d to %d,%d\n",
 //                       m_PreviousPos.x, m_PreviousPos.y,
 //                        m_CurrentPos.x, m_CurrentPos.y ); )
@@ -988,6 +1003,7 @@ bool GERBER::Execute_DCODE_Command( WinEDA_GerberFrame* frame, char*& text, int 
 
             gbritem = new GERBER_DRAW_ITEM( pcb, this );
             pcb->m_Drawings.Append( gbritem );
+
 //          D( printf( "Add flashed dcode %d layer %d at %d %d\n", dcode, activeLayer,
 //                                m_CurrentPos.x, m_CurrentPos.y ); )
             fillFlashedGBRITEM( gbritem, aperture,

@@ -1,0 +1,18 @@
+G04 Draw a rectangle with a rounded right side
+G04 Hand coded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%ADD10C,0.050*%
+
+G04 Draw a rectangle with a rounded right side*
+G36*
+G01X0Y0D02*
+X00200Y0D01*
+G75*
+G03X00200Y00200I0J00100D01*
+G01X0Y00200D01*
+G04 Do not close with a final line, so let gerbv automatically close*
+G37*
+
+
+M02*

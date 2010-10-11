@@ -33,7 +33,7 @@ public:
     wxString           m_FileName;                                      // Full File Name for this layer
     wxString           m_ImageName;                                     // Image name, from IN <name>* command
     wxString           m_LayerName;                                     // Layer name, from LN <name>* command
-    int                m_Layer;                                         // Layer Number
+    int                m_GraphicLayer;                                  // Graphic layer Number
     bool               m_LayerNegative;                                 // true = Negative Layer
     bool               m_GerbMetric;                                    // false = Inches, true = metric
     bool               m_Relative;                                      // false = absolute Coord, true = relative Coord

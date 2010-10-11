@@ -352,6 +352,12 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_ARC:
+#if 0     // for arc debug only
+        GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GetABPosition( m_ArcCentre ), 0, color );
+        GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_End ),
+                    GetABPosition( m_ArcCentre ), 0, color );
+#endif
         if( !isFilled )
         {
             GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
