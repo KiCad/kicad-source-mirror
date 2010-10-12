@@ -411,20 +411,21 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
     int end_angle = wxRound(atan2( (double) end.y, (double) end.x ) * 1800 / M_PI);
 
     // dummyTrack has right geometric parameters, but
-    // fillArcGBRITEM calculate arc parameters for a draw function that expects
+    // fillArcGBRITEM calculates arc parameters for a draw function that expects
     // start_angle < end_angle. So ensure this is the case here:
     // Due to the fact atan2 returns angles between -180 to + 180 degrees,
-    // this not always the case ( a modulo 360.0 degrees can be lost )
+    // this is not always the case ( a modulo 360.0 degrees can be lost )
     if( start_angle > end_angle )
         end_angle += 3600;
 
     int arc_angle = start_angle - end_angle;
     // Approximate arc by 36 segments per 360 degree
-    int increment_angle = 3600 / 36;
+    const int increment_angle = 3600 / 36;
     int count = ABS( arc_angle / increment_angle );
 
     // calculate polygon corners
-    // when not clockwise, dummyGbrItem arc goes from end to start
+    // when arc is counter-clockwise, dummyGbrItem arc goes from end to start
+    // and we must always create a polygon from start to end.
     wxPoint start_arc = start;
     for( int ii = 0; ii <= count; ii++ )
     {

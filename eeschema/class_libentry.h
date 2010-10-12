@@ -79,7 +79,7 @@ public:
         return wxT( "CMP_LIB_ENTRY" );
     }
 
-    wxString GetLibraryName();
+    virtual wxString GetLibraryName();
 
     CMP_LIBRARY* GetLibrary() { return library; }
 
@@ -184,6 +184,8 @@ public:
         CMP_LIB_ENTRY::SetName( aName );
         GetValueField().m_Text = aName;
     }
+
+    virtual wxString GetLibraryName();
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 
@@ -613,6 +615,8 @@ public:
     {
         return root;
     }
+
+    virtual wxString GetLibraryName();
 
     bool IsRoot() const { return name.CmpNoCase( root->GetName() ) == 0; }
 

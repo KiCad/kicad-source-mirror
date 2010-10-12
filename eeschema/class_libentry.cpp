@@ -80,6 +80,20 @@ wxString CMP_LIB_ENTRY::GetLibraryName()
     return wxString( _( "none" ) );
 }
 
+wxString LIB_COMPONENT::GetLibraryName()
+{
+    if( library != NULL )
+        return library->GetName();
+
+    return wxString( _( "none" ) );
+}
+wxString LIB_ALIAS::GetLibraryName()
+{
+    if( GetComponent() )
+        return GetComponent()->GetLibraryName();
+
+    return wxString( _( "none" ) );
+}
 
 /**
  * Function SaveDoc
