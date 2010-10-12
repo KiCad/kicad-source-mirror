@@ -458,14 +458,14 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
         // coord[3] is assumed the lower right
 
         /* Trace the outline. */
-        coord[0].x = -size.x;   // lower left
-        coord[0].y = size.y;
-        coord[1].x = -size.x;   // upper left
-        coord[1].y = -size.y;
-        coord[2].x = size.x;    // upper right
-        coord[2].y = -size.y;
-        coord[3].x = size.x;    //lower right
-        coord[3].y = size.y;
+        coord[0].x = -size.x/2;   // lower left
+        coord[0].y = size.y/2;
+        coord[1].x = -size.x/2;   // upper left
+        coord[1].y = -size.y/2;
+        coord[2].x = size.x/2;    // upper right
+        coord[2].y = -size.y/2;
+        coord[3].x = size.x/2;    //lower right
+        coord[3].y = size.y/2;
 
         flash_pad_trapez( pos, coord, orient, trace_mode );
     }
