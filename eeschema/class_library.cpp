@@ -344,18 +344,24 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
     wxASSERT( aNewComponent != NULL );
     wxASSERT( aOldComponent->GetName().CmpNoCase( aNewComponent->GetName() )== 0 );
 
-    /* Remove the old root component.  The component will automatically be removed when all
-     * it's aliases are deleted.
+    /* Remove the old root component.  The component will automatically be deleted
+     * when all it's aliases are deleted.  Do not place any code that accesses
+     * aOldComponent inside this loop that gets evaluated after the last alias is
+     * removed in RemoveEntry().  Failure to heed this warning will result in a
+     * segfault.
      */
-    BOOST_FOREACH( LIB_ALIAS* alias, aOldComponent->m_aliases )
+    size_t i = aOldComponent->m_aliases.size();
+
+    while( i != 0 )
     {
-        RemoveEntry( (CMP_LIB_ENTRY*) alias );
+        i -= 1;
+        RemoveEntry( (CMP_LIB_ENTRY*) aOldComponent->m_aliases[ i ] );
     }
 
     LIB_COMPONENT* newCmp = new LIB_COMPONENT( *aNewComponent, this );
 
     // Add new aliases to library alias map.
-    for( size_t i = 0; i < newCmp->m_aliases.size(); i++ )
+    for( i = 0; i < newCmp->m_aliases.size(); i++ )
     {
         aliases[ newCmp->m_aliases[ i ]->GetName() ] = newCmp->m_aliases[ i ];
     }
