@@ -18,7 +18,6 @@
 
 #include "protos.h"
 
-
 /************************/
 /* class ZONE_CONTAINER */
 /************************/
@@ -477,7 +476,8 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
 
     // draw the lines
     int i_start_contour = 0;
-    wxPoint lines[( GetNumCorners()*2)+2];
+    std::vector<wxPoint> lines;
+    lines.reserve( (GetNumCorners()*2)+2);
     for( int ic = 0; ic < GetNumCorners(); ic++ )
     {
         seg_start = GetCornerPosition( ic ) + offset;
@@ -490,23 +490,24 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
             seg_end = GetCornerPosition( i_start_contour ) + offset;
             i_start_contour = ic + 1;
         }
-        lines[ic*2].x =  seg_start.x;
-        lines[ic*2].y =  seg_start.y;
-        lines[ic*2+1].x =  seg_start.x;
-        lines[ic*2+1].y =  seg_start.y;
+        lines.push_back( seg_start );
+        lines.push_back( seg_end );
     }
-   GRLineArray(&panel->m_ClipBox, DC, lines, GetNumCorners(), 0, color);
+   GRLineArray(&panel->m_ClipBox, DC, lines, 0, color);
 
     // draw hatches
-    wxPoint hatches[(m_Poly->m_HatchLines.size() *2)+2];
+    lines.clear();
+    lines.reserve( (m_Poly->m_HatchLines.size() *2) +2 );
     for( unsigned ic = 0; ic < m_Poly->m_HatchLines.size(); ic++ )
     {
-        hatches[ic*2].x =  m_Poly->m_HatchLines[ic].xi + offset.x;
-        hatches[ic*2].y =  m_Poly->m_HatchLines[ic].yi + offset.y;
-        hatches[ic*2+1].x =  m_Poly->m_HatchLines[ic].xf + offset.x;
-        hatches[ic*2+1].y =  m_Poly->m_HatchLines[ic].yf + offset.y;
+        seg_start.x =  m_Poly->m_HatchLines[ic].xi + offset.x;
+        seg_start.y =  m_Poly->m_HatchLines[ic].yi + offset.y;
+        seg_end.x =  m_Poly->m_HatchLines[ic].xf + offset.x;
+        seg_end.y =  m_Poly->m_HatchLines[ic].yf + offset.y;
+        lines.push_back( seg_start );
+        lines.push_back( seg_end );
     }
-    GRLineArray(&panel->m_ClipBox, DC, hatches, m_Poly->m_HatchLines.size(), 0, color );
+    GRLineArray(&panel->m_ClipBox, DC, lines, 0, color );
 }
 
 

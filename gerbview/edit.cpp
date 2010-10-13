@@ -116,25 +116,9 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         Close( TRUE );
         break;
 
-    case ID_NEW_PROJECT:
-    case ID_LOAD_PROJECT:
-        Files_io( event );
-        break;
-
     case ID_GERBVIEW_GLOBAL_DELETE:
         Erase_Current_Layer( TRUE );
         break;
-
-    case ID_GET_TOOLS:
-
-//			InstallToolsFrame(this, wxPoint(-1,-1) );
-        break;
-
-    case ID_FIND_ITEMS:
-
-//			InstallFindFrame(this, pos);
-        break;
-
 
     case ID_NO_SELECT_BUTT:
         SetToolID( 0, 0, wxEmptyString );
@@ -223,19 +207,5 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
  */
 void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
-
-    switch( m_ID_current_state )
-    {
-    case 0:
-        if( (DrawStruct == NULL) || ((DrawStruct->m_Flags & ~DRAW_ERASED) == 0) )
-        {
-            DrawStruct = GerberGeneralLocateAndDisplay();
-        }
-
-        break;
-
-    default:
-        break;
-    }
+    // Currently: no nothing
 }

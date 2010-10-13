@@ -77,8 +77,6 @@ void GRDashedLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int  y2,
 void GRDashedLineTo( EDA_Rect* ClipBox, wxDC* DC, int x2, int y2, int width, int Color );
 void GRMoveTo( int x, int y );
 void GRLineTo( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width, int Color );
-void GRMoveRel( int x, int y );
-void GRLineRel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int width, int Color );
 
 void GRPoly( EDA_Rect* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
              int width, int Color, int BgColor );
@@ -204,7 +202,16 @@ void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );
 
-void GRLineArray(  EDA_Rect* ClipBox, wxDC* DC, wxPoint points[],
-                   int lines, int width, int Color );
+/** Function GRLineArray
+ * draws an array of lines (not a polygon).
+ * @param aClipBox = the clip box
+ * @param aDC = the device context into which drawing should occur.
+ * @param aLines = a list of pair of coordinate in user space: a pair for each line.
+ * @param aWidth = the width of each line.
+ * @param aColor = an index into our color table of RGB colors.
+ * @see EDA_Colors and colors.h
+ */
+void GRLineArray(  EDA_Rect* aClipBox, wxDC* aDC,std::vector<wxPoint>& aLines,
+                   int aWidth, int aColor );
 
 #endif      /* define GR_BASIC */

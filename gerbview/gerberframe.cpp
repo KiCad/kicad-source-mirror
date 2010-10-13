@@ -169,7 +169,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     ReCreateMenuBar();
     ReCreateHToolbar();
-    ReCreateVToolbar();
+//    ReCreateVToolbar();       // Currently: no right vertical toolbar
     ReCreateOptToolbar();
 
     m_auimgr.SetManagedWindow( this );

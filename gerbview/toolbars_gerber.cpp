@@ -47,13 +47,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
                          wxBitmap( open_xpm ),
                          _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
-
-    m_HToolBar->AddSeparator();
-
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString,
-                         wxBitmap( undelete_xpm ),
-                         _( "Undelete" ) );
-
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_PRINT, wxEmptyString,
                          wxBitmap( print_button ),
