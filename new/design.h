@@ -437,8 +437,12 @@ public:
      * saves the part to non-volatile storage. @a aPartName may have the revision
      * portion present.  If it is not present, and a overwrite of an existing
      * part is done, then all parts that inherit it must be reparsed.
-     * This is why most library sources are read only.  An exception is the parts
-     * list, which is in the the schematic being edited.
+     * This is why most library sources are read only.  An exception is the PARTS_LIST,
+     * not to be confused with a LIBRARY based on a parts list in another schematic.
+     * The PARTS_LIST is in the the schematic being edited and is by definition the
+     * last to inherit, so editing in the current schematic's PARTS_LIST should be harmless.
+     * There can be some self referential issues that mean all the parts in the PARTS_LIST
+     * have to reparsed.
      */
     virtual void WritePart( PART* aPart ) throw ( IO_ERROR ) = 0;
 
