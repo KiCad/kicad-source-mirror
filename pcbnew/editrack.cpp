@@ -720,7 +720,8 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
 
     // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
-    g_CurrentTrackSegment->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
+    if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
+        g_CurrentTrackSegment->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
 
     if( g_TwoSegmentTrackBuild )
     {

@@ -666,10 +666,9 @@ bool WinEDA_App::SetLanguage( bool first_time )
         delete m_Locale;
     m_Locale = new wxLocale;
 
-    if( !m_Locale->Init( m_LanguageId, wxLOCALE_CONV_ENCODING ) )
+    if( !m_Locale->Init( m_LanguageId ) )
     {
-        wxLogDebug( wxT( "Failed to initialize " ) +
-                    wxLocale::GetLanguageInfo( m_LanguageId )->Description );
+        wxLogDebug( wxT("This language is not supported by the system.") );
 
         m_LanguageId = wxLANGUAGE_DEFAULT;
         delete m_Locale;
