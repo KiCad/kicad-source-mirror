@@ -127,8 +127,6 @@ bool WinEDA_App::OnInit()
     wxFileName             filename;
     WinEDA_SchematicFrame* frame = NULL;
 
-    g_DebugLevel = 0;   // Debug level */
-
     InitEDA_Appl( wxT( "EESchema" ), APP_TYPE_EESCHEMA );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )

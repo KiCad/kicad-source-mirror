@@ -69,11 +69,14 @@ public:
     AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
     DCODE_PARAMS    params;             ///< A sequence of parameters used by
                                         //   the primitive
+    bool            m_GerbMetric;       // units for this primitive:
+                                        // false = Inches, true = metric
 
 public:
-    AM_PRIMITIVE( AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
+    AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         primitive_id = aId;
+        m_GerbMetric = aGerbMetric;
     }
 
 

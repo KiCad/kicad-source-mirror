@@ -42,6 +42,7 @@ set(GERBVIEW_SRCS
     options.cpp
     pcbplot.cpp
     readgerb.cpp
+    rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp

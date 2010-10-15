@@ -1,0 +1,18 @@
+G04 Test step and repeat 1*
+G04 Repeat a crosshair 3 times in the x direction and 2 times in the Y *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%SRX3Y2I1J1*%
+%ADD10C,0.050*%
+
+G04 Draw a simple square*
+G36*
+G01X00400Y0D02*
+X00600Y0D01*
+X00600Y00200D01*
+X00400Y00200D01*
+X00400Y0D01*
+G37*
+
+M02*

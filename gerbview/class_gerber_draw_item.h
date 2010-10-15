@@ -126,11 +126,18 @@ public:
     void SetLayerParameters( );
 
     /**
-     * Function Move
+     * Function MoveAB
      * move this object.
      * @param const wxPoint& aMoveVector - the move vector for this object.
      */
-    void Move( const wxPoint& aMoveVector );
+    void MoveAB( const wxPoint& aMoveVector );
+
+     /**
+     * Function MoveXY
+     * move this object.
+     * @param const wxPoint& aMoveVector - the move vector for this object, in XY gerber axis.
+     */
+    void MoveXY( const wxPoint& aMoveVector );
 
     /**
      * Function GetPosition

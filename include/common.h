@@ -156,7 +156,6 @@ extern wxString       g_ProductName;
 /* Default user lib path can be left void, if the standard lib path is used */
 extern wxString       g_UserLibDirBuffer;
 
-extern int            g_DebugLevel;
 extern int            g_MouseOldButtons;
 extern int            g_KeyPressed;
 

@@ -106,7 +106,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or
                              * command if xx = 0..9 */
                 D_commande = gerber->ReturnDCodeNumber( text );
-                gerber->Execute_DCODE_Command( this, text, D_commande );
+                gerber->Execute_DCODE_Command( text, D_commande );
                 break;
 
             case 'X':
@@ -114,7 +114,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 gerber->m_CurrentPos = gerber->ReadXYCoord( text );
                 if( *text == '*' )      // command like X12550Y19250*
                 {
-                    gerber->Execute_DCODE_Command( this, text,
+                    gerber->Execute_DCODE_Command( text,
                                                    gerber->m_Last_Pen_Command );
                 }
                 break;
@@ -124,7 +124,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 gerber->m_IJPos = gerber->ReadIJCoord( text );
                 if( *text == '*' )      // command like X35142Y15945J504*
                 {
-                    gerber->Execute_DCODE_Command( this, text,
+                    gerber->Execute_DCODE_Command( text,
                                                    gerber->m_Last_Pen_Command );
                 }
                 break;
@@ -133,7 +133,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 if( gerber->m_CommandState != ENTER_RS274X_CMD )
                 {
                     gerber->m_CommandState = ENTER_RS274X_CMD;
-                    gerber->ReadRS274XCommand( this, line, text );
+                    gerber->ReadRS274XCommand( line, text );
                 }
                 else        //Error
                 {

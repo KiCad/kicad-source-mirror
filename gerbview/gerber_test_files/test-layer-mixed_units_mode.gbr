@@ -1,0 +1,68 @@
+G04 Test handling of unit changes within a RS274X file *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+G04 Aperture 10 should be in Inches *
+%ADD10C,0.050*%
+%MOMM*%
+G04 Aperture 11 should be in MMs *
+%ADD11C,1.250*%
+G04 Aperture 12 should be in MMs *
+%AMTHERMAL*
+7,0,0,25.4,12.7,2.54,0*%
+%MOIN*%
+G04 Aperture 13 is in inches *
+%AMTHERMALTWO*
+7,0,0,1,0.5,0.1,0*%
+%MOMM*%
+%ADD12THERMAL*%
+%MOIN*%
+%ADD13THERMALTWO*%
+
+%MOIN*%
+G04 Box 1, using aperture 10*
+X0Y0D02*
+G54D10*
+X0Y0D01*
+X1000D01*
+Y1000D01*
+X0D01*
+Y0D01*
+
+G04 Box 2, using aperture 11*
+X2000Y0D02*
+G54D11*
+X2000Y0D01*
+X3000D01*
+Y1000D01*
+X2000D01*
+Y0D01*
+
+%MOMM*%
+G04 Box 3, using aperture 10*
+X100000Y0D02*
+G54D10*
+X100000Y0D01*
+X125000D01*
+Y25000D01*
+X100000D01*
+Y0D01*
+
+G04 Draw Thermal in box 1*
+G54D12*
+Y12000X12700D03*
+
+G04 Draw Thermal in box 2*
+G04 ..switch to inches for coordinates*
+G70*
+Y500X2500D02*
+G54D12*
+Y500X2500D03*
+
+G04 ..switch to mms for coordinates*
+G71*
+G04 Draw Thermal in box 3*
+G54D13*
+Y12000X112000D03*
+
+M02*

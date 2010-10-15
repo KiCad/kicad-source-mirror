@@ -35,6 +35,13 @@
 #include "gerbview.h"
 #include "class_GERBER.h"
 
+
+/**
+ * Function scale
+ * converts a distance given in floating point to our deci-mils
+ */
+extern int scale( double aCoord, bool isMetric );       // defined it rs274d.cpp
+
 /* Format Gerber: NOTES:
  * Tools and D_CODES
  *   tool number (identification of shapes)
@@ -133,6 +140,10 @@ void GERBER::ResetDefaultValues()
     m_ImageOffset.x = m_ImageOffset.y = 0;          // Coord Offset, from IO command
     m_Offset.x  = m_Offset.y = 0;                   // Coord Offset, from OF command
     m_Rotation  = 0;                                // Allowed 0, 90, 180, 270
+    m_StepForRepeat.x = m_StepForRepeat.y = 0;      // X and Y offsets for Step and Repeat command
+    m_XRepeatCount = 1;                             // The repeat count on X axis
+    m_YRepeatCount = 1;                             // The repeat count on Y axis
+    m_StepForRepeatMetric = false;                  // false = Inches, true = metric
     m_Has_DCode = false;                            // true = DCodes in file
                                                     // false = no DCode->
                                                     // search for separate DCode file
@@ -209,4 +220,35 @@ void GERBER::ReportMessage( const wxString aMessage )
 void GERBER::ClearMessageList()
 {
     m_Parent->ClearMessageList();
+}
+
+/** Function StepAndRepeatItem
+ * Gerber format has a command Step an Repeat
+ * This function must be called when reading a gerber file and
+ * after creating a new gerber item that must be repeated
+ * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
+ * @param aItem = the item to repeat
+ */
+void GERBER::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
+{
+    if( m_XRepeatCount < 2 && m_YRepeatCount < 2 )
+        return; // Nothing to repeat
+    // Duplicate item:
+wxString msg;
+    for( int ii = 0; ii < m_XRepeatCount; ii++ )
+    {
+        for( int jj = 0; jj < m_YRepeatCount; jj++ )
+        {
+           // the first gerber item already exists (this is the template)
+            // create duplicate only if ii or jj > 0
+            if( jj == 0 && ii == 0 )
+                continue;
+            GERBER_DRAW_ITEM* dupItem = new GERBER_DRAW_ITEM( aItem );
+            wxPoint move_vector;
+            move_vector.x = scale( ii * m_StepForRepeat.x, m_StepForRepeatMetric );
+            move_vector.y = scale( jj * m_StepForRepeat.y, m_StepForRepeatMetric );
+            dupItem->MoveXY(move_vector);
+            m_Parent->GetBoard()->m_Drawings.Append( dupItem );
+        }
+    }
 }

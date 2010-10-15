@@ -322,7 +322,7 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
-            gerb_item->Move( delta );
+            gerb_item->MoveAB( delta );
     }
 
     DrawPanel->Refresh( TRUE );
@@ -355,8 +355,8 @@ void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
         {
             /* this item must be duplicated */
-            BOARD_ITEM* new_item = gerb_item->Copy();
-            new_item->Move( delta );
+            GERBER_DRAW_ITEM* new_item = gerb_item->Copy();
+            new_item->MoveAB( delta );
             GetBoard()->m_Drawings.PushFront( new_item );
         }
     }

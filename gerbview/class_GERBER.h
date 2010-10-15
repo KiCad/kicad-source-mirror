@@ -12,6 +12,10 @@
 #include "class_gerber_draw_item.h"
 #include "class_aperture_macro.h"
 
+// An useful macro used when reading gerber files;
+#define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
+                       || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
+
 class WinEDA_GerberFrame;
 class BOARD;
 class D_CODE;
@@ -49,6 +53,14 @@ public:
     wxRealPoint        m_LayerScale;                                    // scale (X and Y) of layer.
     int                m_Rotation;                                      // Image rotation (0, 90, 180, 270
                                                                         // Note these values are stored in 0.1 degrees
+    wxRealPoint        m_StepForRepeat;                                 // X and Y offsets for Step and Repeat command
+    int                m_XRepeatCount;                                  // The repeat count on X axis
+    int                m_YRepeatCount;                                  // The repeat count on Y axis
+    bool               m_StepForRepeatMetric;                           // false = Inches, true = metric
+                                                                        // needed here because repeated
+                                                                        // gerber items can have coordinates
+                                                                        // in different units than step parameters
+                                                                        // and the actual coordinates calculation must handle this
     int                m_Iterpolation;                                  // Linear, 90 arc, Circ.
     bool               m_ImageNegative;                                 // true = Negative image
     int                m_Current_Tool;                                  // Current Tool (Dcode) number selected
@@ -115,15 +127,13 @@ public:
 
     // functions to execute G commands or D commands:
     bool    Execute_G_Command( char*& text, int G_commande );
-    bool    Execute_DCODE_Command( WinEDA_GerberFrame* frame,
-                                   char*& text, int D_commande );
+    bool    Execute_DCODE_Command( char*& text, int D_commande );
 
     /**
      * Function ReadRS274XCommand
      * reads a single RS274X command terminated with a %
      */
-    bool ReadRS274XCommand( WinEDA_GerberFrame * frame,
-                            char aBuff[GERBER_BUFZ], char* & text );
+    bool ReadRS274XCommand( char aBuff[GERBER_BUFZ], char* & text );
 
     /**
      * Function ExecuteRS274XCommand
@@ -167,6 +177,15 @@ public:
      *                           not found.
      */
     APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
+
+    /** Function StepAndRepeatItem
+     * Gerber format has a command Step an Repeat
+     * This function must be called when reading a gerber file and
+     * after creating a new gerber item that must be repeated
+     * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
+     * @param aItem = the item to repeat
+     */
+    void StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
 };
 
 

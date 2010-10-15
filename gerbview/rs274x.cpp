@@ -53,7 +53,7 @@ enum RS274X_PARAMETERS {
     LAYER_NAME      = CODE( 'L', 'N' ),         // Default: Positive
     LAYER_POLARITY  = CODE( 'L', 'P' ),
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
-    STEP_AND_REPEAT = CODE( 'S', 'P' ),         //  Default: A = 1, B = 1
+    STEP_AND_REPEAT = CODE( 'S', 'R' ),         //  Default: A = 1, B = 1
     ROTATE = CODE( 'R', 'O' ),                  //  Default: 0
 
     // Miscellaneous parameters:
@@ -126,8 +126,7 @@ static double ReadDouble( char*& text )
 }
 
 
-bool GERBER::ReadRS274XCommand( WinEDA_GerberFrame* frame,
-                                char buff[GERBER_BUFZ], char*& text )
+bool GERBER::ReadRS274XCommand( char buff[GERBER_BUFZ], char*& text )
 {
     bool ok = true;
     int  code_command;
@@ -366,10 +365,43 @@ bool GERBER::ExecuteRS274XCommand( int       command,
             ReportMessage( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
         break;
 
+    case STEP_AND_REPEAT:   // command SR, like %SRX3Y2I5.0J2*%
+        m_StepForRepeat.x = m_StepForRepeat.x = 0.0;    // offset for Step and Repeat command
+        m_XRepeatCount  = m_YRepeatCount =1;            // The repeat count
+        m_StepForRepeatMetric = m_GerbMetric;           // the step units
+        while( *text && *text != '*' )
+        {
+            switch( *text )
+            {
+            case 'I':       // X axis offset
+                text++;
+                m_StepForRepeat.x = ReadDouble( text );
+                break;
+
+            case 'J':       // Y axis offset
+                text++;
+                m_StepForRepeat.y = ReadDouble( text );
+                break;
+
+            case 'X':       // X axis repeat count
+                text++;
+                m_XRepeatCount = ReadInt( text );
+                break;
+
+            case 'Y':       // Y axis offset
+                text++;
+                m_YRepeatCount = ReadInt( text );
+                break;
+            default:
+                text++;
+                break;
+            }
+        }
+        break;
+
     case IMAGE_JUSTIFY:
     case PLOTTER_FILM:
     case KNOCKOUT:
-    case STEP_AND_REPEAT:
     case ROTATE:
         msg.Printf( _( "RS274X: Command \"%c%c\" ignored by Gerbview" ),
                     (command >> 8) & 0xFF, command & 0xFF );
@@ -706,12 +738,9 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ],
         am.name.Append( *text++ );
     }
 
-    if( g_DebugLevel > 0 )
-        wxMessageBox( am.name, wxT( "macro name" ) );
-
     for( ; ; )
     {
-        AM_PRIMITIVE prim;
+        AM_PRIMITIVE prim( m_GerbMetric );
 
         if( *text == '*' )
             ++text;
@@ -797,7 +826,6 @@ bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ],
                         prim.primitive_id, i );
             ReportMessage( msg );
         }
-
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
         {

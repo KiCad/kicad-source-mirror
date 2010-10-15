@@ -253,11 +253,11 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
 
 
 /**
- * Function Move
+ * Function MoveAB
  * move this object.
  * @param const wxPoint& aMoveVector - the move vector for this object, in AB plotter axis.
  */
-void GERBER_DRAW_ITEM::Move( const wxPoint& aMoveVector )
+void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
 {
     wxPoint xymove = GetXYPosition( aMoveVector );
     m_Start     += xymove;
@@ -267,6 +267,19 @@ void GERBER_DRAW_ITEM::Move( const wxPoint& aMoveVector )
         m_PolyCorners[ii] += xymove;
 }
 
+/**
+ * Function MoveXY
+ * move this object.
+ * @param const wxPoint& aMoveVector - the move vector for this object, in XY gerber axis.
+ */
+void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
+{
+    m_Start     += aMoveVector;
+    m_End       += aMoveVector;
+    m_ArcCentre += aMoveVector;
+    for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
+        m_PolyCorners[ii] += aMoveVector;
+}
 
 /** function Save.
  * currently: no nothing, but must be defined to meet requirements

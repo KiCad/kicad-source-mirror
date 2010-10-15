@@ -34,18 +34,26 @@
 #include "trigo.h"
 #include "gerbview.h"
 
-/** helper Function mapPt
- * translates a point from the aperture macro coordinate system to our
- * deci-mils coordinate system.
- * @return wxPoint - The gerbview coordinate system vector.
- */
-extern wxPoint mapPt( double x, double y, bool isMetric );  // defined it rs274d.cpp
+
 
 /**
  * Function scale
  * converts a distance given in floating point to our deci-mils
  */
 extern int     scale( double aCoord, bool isMetric );       // defined it rs274d.cpp
+
+/**
+ * Function mapPt
+ * translates a point from the aperture macro coordinate system to our
+ * deci-mils coordinate system.
+ * @return wxPoint - The gerbview coordinate system vector.
+ */
+static wxPoint mapPt( double x, double y, bool isMetric )
+{
+    wxPoint ret( scale( x, isMetric ), scale( y, isMetric ) );
+
+    return ret;
+}
 
 
 /**
@@ -130,7 +138,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 
     wxPoint curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
-    bool    gerberMetric = aParent->m_UnitsMetric;
+    bool    gerberMetric = m_GerbMetric;
     int rotation;
     if( mapExposure( aParent ) == false )
     {
