@@ -187,6 +187,7 @@ void GERBER_DRAW_ITEM::SetLayerParameters()
     m_layerOffset = m_imageParams->m_Offset;        // Offset from OF command
     // Rotation from RO command:
     m_layerRotation = m_imageParams->m_LocalRotation;
+    m_LayerNegative = m_imageParams->GetLayerParams().m_LayerNegative;
 }
 
 
