@@ -13,7 +13,7 @@
 /* These routines read the text string point from Text.
  * After use, advanced Text the beginning of the sequence unread
  */
-wxPoint GERBER::ReadXYCoord( char*& Text )
+wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
@@ -115,7 +115,7 @@ wxPoint GERBER::ReadXYCoord( char*& Text )
  * These coordinates are relative, so if coordinate is absent, it's value
  * defaults to 0
  */
-wxPoint GERBER::ReadIJCoord( char*& Text )
+wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
 {
     wxPoint pos( 0, 0 );
 

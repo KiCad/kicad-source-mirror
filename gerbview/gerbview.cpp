@@ -42,7 +42,7 @@ const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.
 const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
 extern const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 
-GERBER*  g_GERBER_List[32];
+GERBER_IMAGE*  g_GERBER_List[32];
 
 // List of page sizes
 Ki_PageDescr* g_GerberPageSizeList[] =

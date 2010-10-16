@@ -26,16 +26,15 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
     wxString msg;
     char*    text;
     int      layer;         /* current layer used in gerbview */
-    GERBER*  gerber;
 
     layer = GetScreen()->m_Active_Layer;
 
     if( g_GERBER_List[layer] == NULL )
     {
-        g_GERBER_List[layer] = new GERBER( this, layer );
+        g_GERBER_List[layer] = new GERBER_IMAGE( this, layer );
     }
 
-    gerber = g_GERBER_List[layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[layer];
     ClearMessageList( );
 
     /* Set the gerber scale: */

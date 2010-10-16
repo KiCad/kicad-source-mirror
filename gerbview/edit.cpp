@@ -26,7 +26,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     if( m_ID_current_state == 0 )
     {
-        if( DrawStruct && (DrawStruct->m_Flags & ~DRAW_ERASED) )
+        if( DrawStruct && DrawStruct->m_Flags  )
         {
             msg.Printf( wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
                         (unsigned) DrawStruct->Type(),
@@ -73,7 +73,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id    = event.GetId();
     int        layer = GetScreen()->m_Active_Layer;
-    GERBER*    gerber_layer = g_GERBER_List[layer];
+    GERBER_IMAGE*    gerber_layer = g_GERBER_List[layer];
     wxPoint    pos;
 
     wxGetMousePosition( &pos.x, &pos.y );

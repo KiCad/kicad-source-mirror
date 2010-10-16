@@ -1,0 +1,23 @@
+G04 Test layer rotation 1 *
+G04 Quarter star should be rotated 45 degrees counterclockwise, pointing*
+G04   the center line straight up *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%RO45*%
+%ADD10C,0.025*%
+
+G04 Quarter star *
+X1000Y0D02*
+G54D10*
+X2000Y0D01*
+
+X1000Y0D02*
+G54D10*
+X2000Y1000D01*
+
+X1000Y0D02*
+G54D10*
+X1000Y1000D01*
+
+M02*

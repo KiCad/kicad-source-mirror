@@ -18,7 +18,7 @@
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
 {
     int           layer = 0;
-    GERBER*       gerber = NULL;
+    GERBER_IMAGE* gerber = NULL;
     int           ii;
     wxString      msg;
 
@@ -219,7 +219,7 @@ void WinEDA_GerberFrame::SetToolbars()
 {
     PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
     int     layer  = screen->m_Active_Layer;
-    GERBER* gerber = g_GERBER_List[layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[layer];
 
     if( m_HToolBar == NULL )
         return;

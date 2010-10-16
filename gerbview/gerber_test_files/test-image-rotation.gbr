@@ -1,0 +1,21 @@
+G04 Test image rotation *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%IR270*%
+%ADD10C,0.050*%
+
+G04 Quarter star *
+X1000Y0D02*
+G54D10*
+X2000Y0D01*
+
+X1000Y0D02*
+G54D10*
+X2000Y1000D01*
+
+X1000Y0D02*
+G54D10*
+X1000Y1000D01*
+
+M02*

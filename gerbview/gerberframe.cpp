@@ -430,7 +430,7 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
 
     for( int layer = 0; layer < 32; layer++ )
     {
-        GERBER* gerber = g_GERBER_List[layer];
+        GERBER_IMAGE* gerber = g_GERBER_List[layer];
         if( gerber == NULL )
             continue;
 
@@ -488,7 +488,7 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
  */
 void WinEDA_GerberFrame::UpdateTitleAndInfo()
 {
-    GERBER* gerber = g_GERBER_List[GetScreen()->m_Active_Layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[GetScreen()->m_Active_Layer];
     wxString text;
     // Display the gerber filename
     if( gerber == NULL )
@@ -507,7 +507,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
 
     // Display Image Name and Layer Name (from the current gerber data):
     text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),
-        GetChars(gerber->m_ImageName), GetChars(gerber->m_LayerName) );
+        GetChars(gerber->m_ImageName), GetChars(gerber->GetLayerParams( ).m_LayerName) );
     SetStatusText( text, 0 );
 
     // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar

@@ -124,9 +124,9 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
     int      type_outil;
 
     if( g_GERBER_List[layer] == NULL )
-        g_GERBER_List[layer] = new GERBER( this, layer );
+        g_GERBER_List[layer] = new GERBER_IMAGE( this, layer );
 
-    GERBER* gerber = g_GERBER_List[layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[layer];
 
 
     /* Updating gerber scale: */

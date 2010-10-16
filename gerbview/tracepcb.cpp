@@ -19,42 +19,43 @@
 #include "class_GERBER.h"
 
 static void Show_Items_DCode_Value( WinEDA_DrawPanel* panel, wxDC* DC,
-                            BOARD* Pcb, int drawmode );
+                                    BOARD* Pcb, int drawmode );
 
 /** virtual Function PrintPage
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
  * @param aPrint_Sheet_Ref = true to print frame references
- * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMasklayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (not used here: can be NULL)
  */
 void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMasklayer,
-                                bool aPrintMirrorMode, void * aData )
+                                    bool aPrintMirrorMode, void* aData )
 {
-    DISPLAY_OPTIONS save_opt;
-    int DisplayPolygonsModeImg;
+    // Save current draw options, because print mode has specfic options:
+    int             DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
+    int             visiblemask = GetBoard()->GetVisibleLayers();
+    DISPLAY_OPTIONS save_opt    = DisplayOpt;
 
-    save_opt = DisplayOpt;
-
+    // Set draw options for printing:
+    GetBoard()->SetVisibleLayers( aPrintMasklayer );
     DisplayOpt.DisplayPcbTrackFill = FILLED;
-    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
-    DisplayOpt.DisplayZonesMode = 0;
-
-    DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
-    g_DisplayPolygonsModeSketch = 0;
+    DisplayOpt.DisplayZonesMode    = 0;
+    g_DisplayPolygonsModeSketch    = 0;
 
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    Trace_Gerber( aDC, GR_COPY, aPrintMasklayer );
+    GetBoard()->Draw( DrawPanel, aDC, GR_COPY, wxPoint( 0, 0 ) );
 
     if( aPrint_Sheet_Ref )
         TraceWorkSheet( aDC, GetScreen(), 0 );
 
     DrawPanel->m_PrintIsMirrored = false;
 
+    // Restore draw options:
+    GetBoard()->SetVisibleLayers( visiblemask );
     DisplayOpt = save_opt;
     g_DisplayPolygonsModeSketch = DisplayPolygonsModeImg;
 }
@@ -63,25 +64,24 @@ void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrint
 /*******************************************************************/
 void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*******************************************************************/
+
 /* Redraws the full screen, including axis and grid
  */
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
 
     if( !GetBoard() )
         return;
     ActiveScreen = screen;
-    GRSetDrawMode( DC, GR_COPY );
 
+    GRSetDrawMode( DC, GR_COPY );
     DrawPanel->DrawBackGround( DC );
 
-    //buid mask layer :
-    int masklayer = 0;
-    for( int layer = 0; layer < 32; layer++ )
-        if( GetBoard()->IsLayerVisible( layer ) )
-            masklayer |= 1 << layer;
+    GetBoard()->Draw( DrawPanel, DC, GR_COPY, wxPoint( 0, 0 ) );
 
-    Trace_Gerber( DC, GR_COPY, masklayer );
+    if( IsElementVisible( DCODES_VISIBLE ) )
+        Show_Items_DCode_Value( DrawPanel, DC, GetBoard(), GR_COPY );
+
     TraceWorkSheet( DC, screen, 0 );
 
     if( DrawPanel->ManageCurseur )
@@ -94,50 +94,56 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     UpdateTitleAndInfo();
 }
 
+
 /********************************************************************/
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 /********************************************************************/
 /* Redraw the BOARD items but not cursors, axis or grid */
-// @todo: replace WinEDA_GerberFrame::Trace_Gerber() by this function
 {
-}
-
-
-/***********************************************************************************/
-void WinEDA_GerberFrame::Trace_Gerber( wxDC* aDC, int aDraw_mode, int aPrintMasklayer )
-/***********************************************************************************/
-/* Trace all elements of PCBs (i.e Spots, filled polygons or lines) on the active screen
-* @param aDC = current device context
-* @param aDraw_mode = draw mode for the device context (GR_COPY, GR_OR, GR_XOR ..)
-* @param aPrintMasklayer = mask for allowed layer (=-1 to draw all layers)
-*/
-{
-    if( !GetBoard() )
-        return;
-
-    int     layer = GetScreen()->m_Active_Layer;
-    GERBER*       gerber = g_GERBER_List[layer];
-    int           dcode_hightlight = 0;
-
-    if( gerber )
-        dcode_hightlight = gerber->m_Selected_Tool;
-
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-    for( ; item; item = item->Next() )
+    // Because Images can be negative (i.e with background filled in color) items are drawn
+    // graphic layer per graphic layer, after the background is filled
+    for( int layer = 0; layer < 32; layer++ )
     {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( !(gerb_item->ReturnMaskLayer() & aPrintMasklayer) )
+        if( !GetBoard()->IsLayerVisible( layer ) )
             continue;
-        if( dcode_hightlight == gerb_item->m_DCode && item->GetLayer()==layer )
-            gerb_item->Draw( DrawPanel, aDC, aDraw_mode | GR_SURBRILL );
-        else
-            gerb_item->Draw( DrawPanel, aDC, aDraw_mode );
+        GERBER_IMAGE* gerber = g_GERBER_List[layer];
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        /* Draw background negative (i.e. in graphic layer color) for negative images:
+         *  Background is drawn here in GR_OR mode because in COPY mode
+         *  all previous graphics will be erased
+         *  Note: items in background color ("Erased" items) are always drawn in COPY mode
+         *  Some artifacts can happen when more than one gerber file is loaded
+         */
+        if( gerber->m_ImageNegative )
+        {
+            int       color = GetBoard()->GetLayerColor( layer );
+            GRSetDrawMode( aDC, GR_OR );
+            EDA_Rect* cbox = &aPanel->m_ClipBox;
+            GRSFilledRect( cbox, aDC, cbox->GetX(), cbox->GetY(),
+                           cbox->GetRight(), cbox->GetBottom(),
+                           0, color, color );
+            GRSetDrawMode( aDC, aDrawMode );
+        }
+
+        int         dcode_hightlight = 0;
+        if( layer == m_PcbFrame->GetScreen()->m_Active_Layer )
+            dcode_hightlight = gerber->m_Selected_Tool;
+        BOARD_ITEM* item = GetBoard()->m_Drawings;
+        for( ; item; item = item->Next() )
+        {
+            GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+            if( gerb_item->GetLayer()!= layer )
+                continue;
+            int drawMode = aDrawMode;
+            if( dcode_hightlight == gerb_item->m_DCode )
+                drawMode |= GR_SURBRILL;
+            gerb_item->Draw( aPanel, aDC, drawMode );
+        }
     }
 
-    if( IsElementVisible( DCODES_VISIBLE) )
-        Show_Items_DCode_Value( DrawPanel, aDC, GetBoard(), GR_COPY );
-
-    GetScreen()->ClrRefreshReq();
+    m_PcbFrame->GetScreen()->ClrRefreshReq();
 }
 
 
@@ -145,9 +151,9 @@ void WinEDA_GerberFrame::Trace_Gerber( wxDC* aDC, int aDraw_mode, int aPrintMask
 void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, int aDrawMode )
 /*****************************************************************************************/
 {
-    wxPoint  pos;
-    int      width, orient;
-    wxString Line;
+    wxPoint     pos;
+    int         width, orient;
+    wxString    Line;
 
     GRSetDrawMode( aDC, aDrawMode );
     BOARD_ITEM* item = aPcb->m_Drawings;
@@ -187,22 +193,22 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
             width /= 2;
         }
 
-        int color = g_ColorsSettings.GetItemColor(DCODES_VISIBLE);
+        int color = g_ColorsSettings.GetItemColor( DCODES_VISIBLE );
 
         DrawGraphicText( aPanel, aDC,
                          pos, (EDA_Colors) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-			  0, false, false, false);
+                         0, false, false, false );
     }
 }
 
 
 /* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
-* this is a virtual pure function in BASE_SCREEN
-* do nothing in gerbview
-* could be removed later
-*/
-void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
+ * this is a virtual pure function in BASE_SCREEN
+ * do nothing in gerbview
+ * could be removed later
+ */
+void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 {
 }

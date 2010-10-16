@@ -24,8 +24,7 @@
 static bool ShowClearance( const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
-    return !(aTrack->m_Flags & DRAW_ERASED)
-           &&  DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS
+    return DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS
            &&  aTrack->GetLayer() <= LAST_COPPER_LAYER
            && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA );
 }
@@ -567,42 +566,33 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         return;
 
     BOARD * brd =  GetBoard( );
-    if( m_Flags & DRAW_ERASED )   // draw in background color, used by classs TRACK in gerbview
+    color = brd->GetLayerColor(m_Layer);
+
+    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
+        HIGHT_LIGHT_FLAG )
+        return;
+
+    if( DisplayOpt.ContrastModeDisplay )
     {
-        color = g_DrawBgColor;
-        D( printf( "DRAW_ERASED in Track::Draw, g_DrawBgColor=%04X\n",
-                   g_DrawBgColor ); )
+        if( !IsOnLayer( curr_layer ) )
+        {
+            color &= ~MASKCOLOR;
+            color |= DARKDARKGRAY;
+        }
     }
-    else
+
+    if( draw_mode & GR_SURBRILL )
     {
-        color = brd->GetLayerColor(m_Layer);
-
-        if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
-            HIGHT_LIGHT_FLAG )
-            return;
-
-        if( DisplayOpt.ContrastModeDisplay )
-        {
-            if( !IsOnLayer( curr_layer ) )
-            {
-                color &= ~MASKCOLOR;
-                color |= DARKDARKGRAY;
-            }
-        }
-
-        if( draw_mode & GR_SURBRILL )
-        {
-            if( draw_mode & GR_AND )
-                color &= ~HIGHT_LIGHT_FLAG;
-            else
-                color |= HIGHT_LIGHT_FLAG;
-        }
-
-        if( color & HIGHT_LIGHT_FLAG )
-            color = ColorRefs[color & MASKCOLOR].m_LightColor;
-
-        SetAlpha( &color, 150 );
+        if( draw_mode & GR_AND )
+            color &= ~HIGHT_LIGHT_FLAG;
+        else
+            color |= HIGHT_LIGHT_FLAG;
     }
+
+    if( color & HIGHT_LIGHT_FLAG )
+        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+
+    SetAlpha( &color, 150 );
 
     GRSetDrawMode( DC, draw_mode );
 

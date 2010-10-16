@@ -31,7 +31,7 @@
 
 #include "base_struct.h"
 #include "class_board_item.h"
-class GERBER;
+class GERBER_IMAGE;
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
 enum Gbr_Basic_Shapes {
@@ -75,27 +75,27 @@ public:
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
-    // These values are used to draw this item, according to gerber layers parameters
-    // Because these values can change inside a gerber image, they are stored here
-    // for each item
-    bool        m_ImageNegative;            // true = item in negative image
-    bool        m_LayerNegative;            // TRUE = item in negative Layer
-private:
-    GERBER* m_imageParams;                  /* main GERBER info for this item
+    GERBER_IMAGE* m_imageParams;            /* main GERBER info for this item
                                              * Note: some params stored in this class are common
                                              * to the whole gerber file (i.e) the whole graphic layer
                                              * and some can change when reaging the file, so they
                                              * are stored inside this item
                                              * there is no redundancy for these parameters
                                              */
+private:
+    // These values are used to draw this item, according to gerber layers parameters
+    // Because they can change inside a gerber image, thery are stored here
+    // for each item
+    bool        m_LayerNegative;            // TRUE = item in negative Layer
     bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
     bool        m_mirrorA;                  // true: mirror / axe A
     bool        m_mirrorB;                  // true: mirror / axe B
     wxRealPoint m_drawScale;                // A and B scaling factor
-    wxPoint     m_layerOffset;               // Offset for A and B axis, from OF parameter
+    wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
+    int         m_layerRotation;            // Fine rotation, from OR parameter
 
 public:
-    GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams );
+    GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams );
     GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
 
@@ -115,6 +115,10 @@ public:
         return 1 << m_Layer;
     }
 
+    bool GetLayerPolarity()
+    {
+        return m_LayerNegative;
+    }
 
     /** function SetLayerParameters
      * Initialize parameters from Image and Layer parameters
@@ -124,6 +128,11 @@ public:
      *   m_DrawScale, m_DrawOffset
      */
     void SetLayerParameters( );
+
+    void SetLayerPolarity( bool aNegative)
+    {
+        m_LayerNegative = aNegative;
+    }
 
     /**
      * Function MoveAB

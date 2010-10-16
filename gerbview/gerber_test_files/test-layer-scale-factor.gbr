@@ -1,0 +1,17 @@
+G04 Test layer scale factor 1 *
+G04 Crosshairs should be centered on 0,0 and 2 inches wide and 1 inch tall*
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%SFA2B1*%
+%ADD10C,0.025*%
+
+G04 Crosshairs to be on 0,0 *
+X-500Y0D02*
+G54D10*
+X500Y0D01*
+X0Y-500D02*
+G54D10*
+X0Y500D01*
+
+M02*

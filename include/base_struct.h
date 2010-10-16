@@ -282,9 +282,7 @@ class DHEAD;
                                         // should be ignored
 
 #define DO_NOT_DRAW  (1 << 16)          ///< Used to disable draw function
-#define DRAW_ERASED  (1 << 17)          ///< draw in background color, used by
-                                        // class TRACK in gerbview
-#define IS_CANCELLED (1 << 18)          ///< flag set when edit dialogs are
+#define IS_CANCELLED (1 << 17)          ///< flag set when edit dialogs are
                                         // canceled when editing a new object
 
 class EDA_BaseStruct

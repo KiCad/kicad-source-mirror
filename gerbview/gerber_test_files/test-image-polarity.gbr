@@ -1,0 +1,17 @@
+G04 Test image polarity *
+G04 Crosshairs should be cut out of a positive background*
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%IPNEG*%
+%ADD10C,0.050*%
+
+G04 Draw crosshairs *
+X-1000Y0D02*
+G54D10*
+X1000Y0D01*
+X0Y-1000D02*
+G54D10*
+X0Y1000D01*
+
+M02*

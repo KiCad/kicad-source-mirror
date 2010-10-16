@@ -126,7 +126,7 @@ static double ReadDouble( char*& text )
 }
 
 
-bool GERBER::ReadRS274XCommand( char buff[GERBER_BUFZ], char*& text )
+bool GERBER_IMAGE::ReadRS274XCommand( char buff[GERBER_BUFZ], char*& text )
 {
     bool ok = true;
     int  code_command;
@@ -179,7 +179,7 @@ exit:
 }
 
 
-bool GERBER::ExecuteRS274XCommand( int       command,
+bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                                    char buff[GERBER_BUFZ],
                                    char*&    text )
 {
@@ -277,9 +277,35 @@ bool GERBER::ExecuteRS274XCommand( int       command,
 
         break;
 
-    case AXIS_SELECT:
-    case MIRROR_IMAGE:
-        ok = FALSE;
+    case AXIS_SELECT:       // command ASAXBY*% or %ASAYBX*%
+        m_SwapAxis = false;
+        if( strnicmp( text, "AYBX", 4 ) == 0 )
+            m_SwapAxis = true;
+        break;
+
+    case MIRROR_IMAGE:      // commanf %MIA0B0*%, %MIA0B1*%, %MIA1B0*%, %MIA1B1*%
+        m_MirrorA = m_MirrorB = 0;
+        while( *text && *text != '*' )
+        {
+            switch( *text )
+            {
+            case 'A':       // Mirror A axis ?
+                text++;
+                if( *text == '1' )
+                    m_MirrorA = true;
+                break;
+
+            case 'B':       // Mirror B axis ?
+                text++;
+                if( *text == '1' )
+                    m_MirrorB = true;
+                break;
+
+            default:
+                text++;
+                break;
+            }
+        }
         break;
 
     case MODE_OF_UNITS:
@@ -313,19 +339,19 @@ bool GERBER::ExecuteRS274XCommand( int       command,
         break;
 
     case SCALE_FACTOR:
-        m_LayerScale.x = m_LayerScale.y = 1.0;
+        m_Scale.x = m_Scale.y = 1.0;
         while( *text != '*' )
         {
             switch( *text )
             {
             case 'A':       // A axis scale
                 text++;
-                m_LayerScale.x = ReadDouble( text );
+                m_Scale.x = ReadDouble( text );
                 break;
 
             case 'B':       // B axis scale
                 text++;
-                m_LayerScale.y = ReadDouble( text );
+                m_Scale.y = ReadDouble( text );
                 break;
             }
         }
@@ -354,43 +380,45 @@ bool GERBER::ExecuteRS274XCommand( int       command,
 
     case IMAGE_ROTATION:    // command IR0* or IR90* or IR180* or IR270*
         if( strnicmp( text, "0*", 2 ) == 0 )
-            m_Rotation = 0;
+            m_ImageRotation = 0;
         if( strnicmp( text, "90*", 2 ) == 0 )
-            m_Rotation = 900;
+            m_ImageRotation = 900;
         if( strnicmp( text, "180*", 2 ) == 0 )
-            m_Rotation = 1800;
+            m_ImageRotation = 1800;
         if( strnicmp( text, "270*", 2 ) == 0 )
-            m_Rotation = 2700;
+            m_ImageRotation = 2700;
         else
             ReportMessage( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
         break;
 
     case STEP_AND_REPEAT:   // command SR, like %SRX3Y2I5.0J2*%
-        m_StepForRepeat.x = m_StepForRepeat.x = 0.0;    // offset for Step and Repeat command
-        m_XRepeatCount  = m_YRepeatCount =1;            // The repeat count
-        m_StepForRepeatMetric = m_GerbMetric;           // the step units
+        GetLayerParams().m_StepForRepeat.x = 0.0;
+        GetLayerParams().m_StepForRepeat.x = 0.0;       // offset for Step and Repeat command
+        GetLayerParams().m_XRepeatCount = 1;
+        GetLayerParams().m_YRepeatCount = 1;            // The repeat count
+        GetLayerParams().m_StepForRepeatMetric = m_GerbMetric;  // the step units
         while( *text && *text != '*' )
         {
             switch( *text )
             {
             case 'I':       // X axis offset
                 text++;
-                m_StepForRepeat.x = ReadDouble( text );
+                GetLayerParams().m_StepForRepeat.x = ReadDouble( text );
                 break;
 
             case 'J':       // Y axis offset
                 text++;
-                m_StepForRepeat.y = ReadDouble( text );
+                GetLayerParams().m_StepForRepeat.y = ReadDouble( text );
                 break;
 
             case 'X':       // X axis repeat count
                 text++;
-                m_XRepeatCount = ReadInt( text );
+                GetLayerParams().m_XRepeatCount = ReadInt( text );
                 break;
 
             case 'Y':       // Y axis offset
                 text++;
-                m_YRepeatCount = ReadInt( text );
+                GetLayerParams().m_YRepeatCount = ReadInt( text );
                 break;
             default:
                 text++;
@@ -402,10 +430,13 @@ bool GERBER::ExecuteRS274XCommand( int       command,
     case IMAGE_JUSTIFY:
     case PLOTTER_FILM:
     case KNOCKOUT:
-    case ROTATE:
         msg.Printf( _( "RS274X: Command \"%c%c\" ignored by Gerbview" ),
                     (command >> 8) & 0xFF, command & 0xFF );
         ReportMessage( msg );
+        break;
+
+    case ROTATE:        // Layer rotation: command like %RO45*%
+        m_LocalRotation = wxRound(ReadDouble( text ) * 10 );
         break;
 
     case IMAGE_NAME:
@@ -418,10 +449,10 @@ bool GERBER::ExecuteRS274XCommand( int       command,
         break;
 
     case LAYER_NAME:
-        m_LayerName.Empty();
+        GetLayerParams( ).m_LayerName.Empty();
         while( *text != '*' )
         {
-            m_LayerName.Append( *text++ );
+            GetLayerParams( ).m_LayerName.Append( *text++ );
         }
 
         break;
@@ -437,9 +468,9 @@ bool GERBER::ExecuteRS274XCommand( int       command,
 
     case LAYER_POLARITY:
         if( *text == 'C' )
-            m_LayerNegative = true;
+            GetLayerParams().m_LayerNegative = true;
         else
-            m_LayerNegative = false;
+            GetLayerParams().m_LayerNegative = false;
         D( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
                    m_LayerNegative ? "true" : "false" ); )
         break;
@@ -719,7 +750,7 @@ static bool CheckForLineEnd(  char buff[GERBER_BUFZ], char*& text, FILE* fp  )
 }
 
 
-bool GERBER::ReadApertureMacro( char buff[GERBER_BUFZ],
+bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
                                 char*&    text,
                                 FILE*     gerber_file )
 {

@@ -18,7 +18,7 @@
 class WinEDA_GerberFrame;
 //class BOARD;
 
-class GERBER;
+class GERBER_IMAGE;
 
 // Type of photoplotter action:
 #define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
@@ -113,7 +113,7 @@ enum Gerb_Analyse_Cmd
 /* rs274x.cpp */
 /**************/
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
-extern GERBER* g_GERBER_List[32];
+extern GERBER_IMAGE* g_GERBER_List[32];
 
 #include "pcbcommon.h"
 #include "wxGerberFrame.h"

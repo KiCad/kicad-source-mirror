@@ -33,6 +33,7 @@
 #include "macros.h"
 #include "trigo.h"
 #include "gerbview.h"
+#include "class_GERBER.h"
 
 
 
@@ -95,7 +96,7 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
             break;
 
         case 2:     // reverse exposure
-            exposure = !aParent->m_LayerNegative;
+            exposure = !aParent->GetLayerPolarity();
         }
         break;
 
@@ -107,7 +108,7 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
         break;
     }
 
-    return exposure ^ aParent->m_ImageNegative;
+    return exposure ^ aParent->m_imageParams->m_ImageNegative;
 }
 
 
@@ -574,12 +575,12 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( pos );
 
         // Copy the 4 shape, rotated by 90, 180 and 270 deg
-        for( int jj = 900; jj <= 2700; jj += 900 )
+        for( int jj = 1; jj <= 3; jj ++ )
         {
             for( int ii = 0; ii < 4; ii++ )
             {
                 pos = aBuffer[ii];
-                RotatePoint( &pos, jj );
+                RotatePoint( &pos, jj*900 );
                 aBuffer.push_back( pos );
             }
         }

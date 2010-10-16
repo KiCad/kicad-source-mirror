@@ -1,0 +1,15 @@
+G04 Test layer axis select *
+G04 Line is drawn along A axis, then axis select switches it and renders *
+G04   line along y axis *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%ASAYBX*%
+%ADD10C,0.050*%
+
+G04 Draw line *
+X-1000Y0D02*
+G54D10*
+X1000Y0D01*
+
+M02*

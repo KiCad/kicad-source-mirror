@@ -42,7 +42,7 @@
 
 
 /**********************************************************/
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams ) :
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams ) :
     BOARD_ITEM( aParent, TYPE_GERBER_DRAW_ITEM )
 /**********************************************************/
 {
@@ -52,12 +52,12 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER* aGerberparams )
     m_Flashed       = false;
     m_DCode         = 0;
     m_UnitsMetric   = false;
-    m_ImageNegative = false;
     m_LayerNegative = false;
     m_swapAxis      = false;
     m_mirrorA       = false;
     m_mirrorB       = false;
     m_drawScale.x   = m_drawScale.y = 1.0;
+    m_layerRotation = 0;
     if( m_imageParams )
         SetLayerParameters();
 }
@@ -83,7 +83,6 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_DCode         = aSource.m_DCode;
     m_PolyCorners   = aSource.m_PolyCorners;
     m_UnitsMetric   = aSource.m_UnitsMetric;
-    m_ImageNegative = aSource.m_ImageNegative;
     m_LayerNegative = aSource.m_LayerNegative;
     m_swapAxis      = aSource.m_swapAxis;
     m_mirrorA       = aSource.m_mirrorA;
@@ -91,6 +90,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_layerOffset   = aSource.m_layerOffset;
     m_drawScale.x   = aSource.m_drawScale.x;
     m_drawScale.y   = aSource.m_drawScale.y;
+    m_layerRotation = aSource.m_layerRotation;
 }
 
 
@@ -127,15 +127,18 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
     abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
     abPos.x = wxRound( abPos.x * m_drawScale.x );
     abPos.y = wxRound( abPos.y * m_drawScale.y );
-    if( m_imageParams->m_Rotation )
-        RotatePoint( &abPos, -m_imageParams->m_Rotation );
+    int rotation = m_layerRotation + m_imageParams->m_ImageRotation;
+    if( rotation )
+        RotatePoint( &abPos, -rotation );
     if( m_mirrorA )
         NEGATE( abPos.x );
+
     // abPos.y must be negated, because draw axis is top to bottom
     if( !m_mirrorB )
         NEGATE( abPos.y );
     return abPos;
 }
+
 
 /**
  * Function GetXYPosition
@@ -145,17 +148,18 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
  * @param aABPosition = position in A,B plotter axis
  * @return const wxPoint - The given position in X,Y axis.
  */
-wxPoint GERBER_DRAW_ITEM::GetXYPosition(const wxPoint& aABPosition )
+wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
 {
     // do the inverse tranform made by GetABPosition
-   wxPoint xyPos = aABPosition;
+    wxPoint xyPos = aABPosition;
 
     if( m_mirrorA )
         NEGATE( xyPos.x );
     if( !m_mirrorB )
         NEGATE( xyPos.y );
-    if( m_imageParams->m_Rotation )
-        RotatePoint( &xyPos, m_imageParams->m_Rotation );
+    int rotation = m_layerRotation + m_imageParams->m_ImageRotation;
+    if( rotation )
+        RotatePoint( &xyPos, rotation );
     xyPos.x = wxRound( xyPos.x / m_drawScale.x );
     xyPos.y = wxRound( xyPos.y / m_drawScale.y );
     xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
@@ -163,6 +167,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition(const wxPoint& aABPosition )
         EXCHG( xyPos.x, xyPos.y );
     return xyPos;
 }
+
 
 /** function SetLayerParameters
  * Initialize draw parameters from Image and Layer parameters
@@ -174,12 +179,14 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition(const wxPoint& aABPosition )
 void GERBER_DRAW_ITEM::SetLayerParameters()
 {
     m_UnitsMetric = m_imageParams->m_GerbMetric;
-    m_swapAxis    = m_imageParams->m_SwapAxis;              // false if A = X, B = Y;
-                                                            // true if A =Y, B = Y
-    m_mirrorA     = m_imageParams->m_MirrorA;               // true: mirror / axe A
-    m_mirrorB     = m_imageParams->m_MirrorB;               // true: mirror / axe B
-    m_drawScale   = m_imageParams->m_LayerScale;            // A and B scaling factor
-    m_layerOffset = m_imageParams->m_Offset;                // Offset from OF command
+    m_swapAxis    = m_imageParams->m_SwapAxis;     // false if A = X, B = Y;
+    // true if A =Y, B = Y
+    m_mirrorA     = m_imageParams->m_MirrorA;      // true: mirror / axe A
+    m_mirrorB     = m_imageParams->m_MirrorB;      // true: mirror / axe B
+    m_drawScale   = m_imageParams->m_Scale;         // A and B scaling factor
+    m_layerOffset = m_imageParams->m_Offset;        // Offset from OF command
+    // Rotation from RO command:
+    m_layerRotation = m_imageParams->m_LocalRotation;
 }
 
 
@@ -229,7 +236,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 {
     if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
         return NULL;
-    GERBER* gerber = g_GERBER_List[m_Layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[m_Layer];
     if( gerber == NULL )
         return NULL;
 
@@ -246,8 +253,8 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
 
     bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
 
-    bbox.SetOrigin(GetXYPosition( bbox.GetOrigin() ) );
-    bbox.SetEnd(GetXYPosition( bbox.GetEnd() ) );
+    bbox.SetOrigin( GetABPosition( bbox.GetOrigin() ) );
+    bbox.SetEnd( GetABPosition( bbox.GetEnd() ) );
     return bbox;
 }
 
@@ -260,12 +267,14 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
 void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
 {
     wxPoint xymove = GetXYPosition( aMoveVector );
+
     m_Start     += xymove;
     m_End       += xymove;
     m_ArcCentre += xymove;
     for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
         m_PolyCorners[ii] += xymove;
 }
+
 
 /**
  * Function MoveXY
@@ -280,6 +289,7 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
     for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
         m_PolyCorners[ii] += aMoveVector;
 }
+
 
 /** function Save.
  * currently: no nothing, but must be defined to meet requirements
@@ -325,8 +335,14 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
 
     alt_color = g_DrawBgColor;
 
-    if( m_Flags & DRAW_ERASED )   // draw in background color ("negative" color)
+    /* isDark is true if flash is positive and should use a drawing
+     *   color other than the background color, else use the background color
+     *   when drawing so that an erasure happens.
+     */
+    bool isDark = !(m_LayerNegative ^ m_imageParams->m_ImageNegative);
+    if( !isDark )
     {
+        // draw in background color ("negative" color)
         EXCHG( color, alt_color );
     }
 
@@ -338,7 +354,7 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     {
     case GBR_POLYGON:
         isFilled = (g_DisplayPolygonsModeSketch == false);
-        if( m_Flags & DRAW_ERASED )
+        if( !isDark )
             isFilled = true;
         DrawGbrPoly( &aPanel->m_ClipBox, aDC, color, aOffset, isFilled );
         break;
@@ -367,9 +383,9 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     case GBR_ARC:
 #if 0     // for arc debug only
         GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
-                    GetABPosition( m_ArcCentre ), 0, color );
+                GetABPosition( m_ArcCentre ), 0, color );
         GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_End ),
-                    GetABPosition( m_ArcCentre ), 0, color );
+                GetABPosition( m_ArcCentre ), 0, color );
 #endif
         if( !isFilled )
         {
@@ -453,37 +469,35 @@ void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
     // Display D_Code value:
-    msg.Printf( wxT("%d"), m_DCode);
+    msg.Printf( wxT( "%d" ), m_DCode );
     frame->AppendMsgPanel( _( "D Code" ), msg, RED );
 
     // Display Image name
-    if(m_imageParams)
+    if( m_imageParams )
     {
         msg = m_imageParams->m_ImageName;
         frame->AppendMsgPanel( _( "Image name" ), msg, BROWN );
     }
 
     // Display graphic layer number
-    msg.Printf( wxT("%d"), GetLayer()+1);
+    msg.Printf( wxT( "%d" ), GetLayer() + 1 );
     frame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
 
     // This next info can be see as debug info, so it can be disabled
 #if 1
-    // Display offset
-    wxPoint tmp = m_layerOffset + m_imageParams->m_ImageOffset;
-    msg.Printf( wxT("X=%f Y=%f"), (double)tmp.x/10000, (double)tmp.y/10000);
-    frame->AppendMsgPanel( _( "Offset" ), msg, DARKRED );
 
     // Display rotation
-    msg.Printf( wxT("%d"), m_imageParams->m_Rotation/10);
-    frame->AppendMsgPanel( _( "Image rotation" ), msg, DARKRED );
+    msg.Printf( wxT( "%.1f" ), (double)(m_imageParams->m_ImageRotation+m_layerRotation) / 10 );
+    frame->AppendMsgPanel( _( "Rotation" ), msg, DARKRED );
 
     // Display mirroring
-    msg.Printf( wxT("X%d Y%d"), m_mirrorA, m_mirrorB);
+    msg.Printf( wxT( "A:%s B:%s" ),
+                m_mirrorA ? _("Yes") : _("No"),
+                m_mirrorB ? _("Yes") : _("No"));
     frame->AppendMsgPanel( _( "Mirror" ), msg, DARKRED );
 
     // Display AB axis swap
-    msg = m_swapAxis ? wxT("A=Y B=X") : wxT("A=X B=Y");
+    msg = m_swapAxis ? wxT( "A=Y B=X" ) : wxT( "A=X B=Y" );
     frame->AppendMsgPanel( _( "AB axis" ), msg, DARKRED );
 #endif
 }
@@ -497,6 +511,7 @@ void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
  */
 bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 {
+    // calculate aRefPos in XY gerber axis:
     wxPoint ref_pos = GetXYPosition( aRefPos );
 
     // TODO: a better analyse of the shape (perhaps create a D_CODE::HitTest for flashed items)
@@ -533,6 +548,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& refArea )
 {
     wxPoint pos = GetABPosition( m_Start );
+
     if( refArea.Inside( pos ) )
         return true;
     pos = GetABPosition( m_End );

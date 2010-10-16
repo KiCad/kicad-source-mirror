@@ -20,76 +20,126 @@ class WinEDA_GerberFrame;
 class BOARD;
 class D_CODE;
 
+/* gerber files have different parameters to define units and how items must be plotted.
+ *  some are for the entire file, and other can change along a file.
+ *  In Gerber world:
+ *  an image is the entire gerber file and its "global" parameters
+ *  a layer (that is very different from a board layer) is just a sub set of a file that
+ *  have specific parameters
+ *  if a Image parameter is set more than once, only the last value is used
+ *  Some parameters can change along a file and are not layer specific: they are stored
+ *  in GERBER_ITEM items, when instancied.
+ *
+ *  In Gerbview, to handle these parameters, there are 2 classes:
+ *  GERBER_IMAGE : the main class containing most of parameters and data to plot a graphic layer
+ *  Some of them can change along the file
+ *  There is one GERBER_IMAGE per file and one graphic layer per file or GERBER_IMAGE
+ *  Gerbview does not read and merge 2 gerber file in one graphic layer:
+ *  I believe this is not possible due to the constraints in Image parameters.
+ *  GERBER_LAYER : containing the subset of parameters that is layer speficic
+ *  A GERBER_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.
+ *  But a GERBER_IMAGE can use more than one GERBER_LAYER.
+ */
+
+class GERBER_IMAGE;
+
+class GERBER_LAYER
+{
+    friend class GERBER_IMAGE;
+public:
+
+    // These parameters are layer specfic:
+    wxString    m_LayerName;            // Layer name, from LN <name>* command
+    bool        m_LayerNegative;        // true = Negative Layer: command LP
+    wxRealPoint m_StepForRepeat;        // X and Y offsets for Step and Repeat command
+    int         m_XRepeatCount;         // The repeat count on X axis
+    int         m_YRepeatCount;         // The repeat count on Y axis
+    bool        m_StepForRepeatMetric;  // false = Inches, true = metric
+                                        // needed here because repeated
+                                        // gerber items can have coordinates
+                                        // in different units than step parameters
+                                        // and the actual coordinates calculation must handle this
+
+public:
+    GERBER_LAYER();
+    ~GERBER_LAYER();
+private:
+    void ResetDefaultValues();
+};
 
 /**
- * Class GERBER
- * holds the data for one gerber file or layer
+ * Class GERBER_IMAGE
+ * holds the Image data and parameters for one gerber file
+ * and layer parameters (TODO: move them in GERBER_LAYER class
  */
-class GERBER
+class GERBER_IMAGE
 {
     WinEDA_GerberFrame* m_Parent;                           // the parent WinEDA_GerberFrame (used to display messages...)
-    D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];   ///< Dcode (Aperture) List for this layer
+    D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];   ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
-
     BOARD*             m_Pcb;
 
-public:
-    wxString           m_FileName;                                      // Full File Name for this layer
-    wxString           m_ImageName;                                     // Image name, from IN <name>* command
-    wxString           m_LayerName;                                     // Layer name, from LN <name>* command
-    int                m_GraphicLayer;                                  // Graphic layer Number
-    bool               m_LayerNegative;                                 // true = Negative Layer
-    bool               m_GerbMetric;                                    // false = Inches, true = metric
-    bool               m_Relative;                                      // false = absolute Coord, true = relative Coord
-    bool               m_NoTrailingZeros;                               // true: remove tailing zeros.
-    bool               m_SwapAxis;                                      // false (default) if A = X and B = Y
-                                                                        // true if A = Y, B = X
-    bool               m_MirrorA;                                       // true: miror / axe A (X)
-    bool               m_MirrorB;                                       // true: miror / axe B (Y)
-    wxPoint            m_ImageOffset;                                   // Coord Offset, from IO command
-    wxPoint            m_Offset;                                        // Coord Offset, from OF command
-    wxSize             m_FmtScale;                                      // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
-    wxSize             m_FmtLen;                                        // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
-    wxRealPoint        m_LayerScale;                                    // scale (X and Y) of layer.
-    int                m_Rotation;                                      // Image rotation (0, 90, 180, 270
-                                                                        // Note these values are stored in 0.1 degrees
-    wxRealPoint        m_StepForRepeat;                                 // X and Y offsets for Step and Repeat command
-    int                m_XRepeatCount;                                  // The repeat count on X axis
-    int                m_YRepeatCount;                                  // The repeat count on Y axis
-    bool               m_StepForRepeatMetric;                           // false = Inches, true = metric
-                                                                        // needed here because repeated
-                                                                        // gerber items can have coordinates
-                                                                        // in different units than step parameters
-                                                                        // and the actual coordinates calculation must handle this
-    int                m_Iterpolation;                                  // Linear, 90 arc, Circ.
-    bool               m_ImageNegative;                                 // true = Negative image
-    int                m_Current_Tool;                                  // Current Tool (Dcode) number selected
-    int                m_Last_Pen_Command;                              // Current or last pen state (0..9, set by Dn option with n <10
-    int                m_CommandState;                                  // state of gerber analysis command.
-    wxPoint            m_CurrentPos;                                    // current specified coord for plot
-    wxPoint            m_PreviousPos;                                   // old current specified coord for plot
-    wxPoint            m_IJPos;                                         // IJ coord (for arcs & circles )
+    GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
 
-    FILE*              m_Current_File;                                  // Current file to read
+public:
+    wxString           m_FileName;                              // Full File Name for this layer
+    wxString           m_ImageName;                             // Image name, from IN <name>* command
+    int                m_GraphicLayer;                          // Graphic layer Number
+    bool               m_ImageNegative;                         // true = Negative image
+    bool               m_GerbMetric;                            // false = Inches, true = metric
+    bool               m_Relative;                              // false = absolute Coord, true = relative Coord
+    bool               m_NoTrailingZeros;                       // true: remove tailing zeros.
+    wxPoint            m_ImageOffset;                           // Coord Offset, from IO command
+    wxSize             m_FmtScale;                              // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
+    wxSize             m_FmtLen;                                // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
+    int                m_ImageRotation;                         // Image rotation (0, 90, 180, 270
+                                                                // Note these values are stored in 0.1 degrees
+
+    int                m_LocalRotation;                         // Local rotation, added to m_ImageRotation
+                                                                //  Note this value is stored in 0.1 degrees
+    wxPoint            m_Offset;                                // Coord Offset, from OF command
+    wxRealPoint        m_Scale;                                 // scale (X and Y) of layer.
+    bool               m_SwapAxis;                              // false (default) if A = X and B = Y
+                                                                // true if A = Y, B = X
+    bool               m_MirrorA;                               // true: miror / axe A (X)
+    bool               m_MirrorB;                               // true: miror / axe B (Y)
+    int                m_Iterpolation;                          // Linear, 90 arc, Circ.
+    int                m_Current_Tool;                          // Current Tool (Dcode) number selected
+    int                m_Last_Pen_Command;                      // Current or last pen state (0..9, set by Dn option with n <10
+    int                m_CommandState;                          // state of gerber analysis command.
+    wxPoint            m_CurrentPos;                            // current specified coord for plot
+    wxPoint            m_PreviousPos;                           // old current specified coord for plot
+    wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
+
+    FILE*              m_Current_File;                          // Current file to read
     #define            INCLUDE_FILES_CNT_MAX 10
-    FILE*              m_FilesList[INCLUDE_FILES_CNT_MAX + 2];          // Included files list
-    int                m_FilesPtr;                                      // Stack pointer for files list
+    FILE*              m_FilesList[INCLUDE_FILES_CNT_MAX + 2];  // Included files list
+    int                m_FilesPtr;                              // Stack pointer for files list
 
-    int                m_Selected_Tool;                                 // For hightlight: current selected Dcode
-    bool               m_Has_DCode;                                     // true = DCodes in file
-                                                                        // (false = no DCode -> separate DCode file
-    bool               m_360Arc_enbl;                                   // Enbl 360 deg circular interpolation
-    bool               m_PolygonFillMode;                               // Enable polygon mode (read coord as a polygon descr)
-    int                m_PolygonFillModeState;                          // In polygon mode: 0 = first segm, 1 = next segm
+    int                m_Selected_Tool;                         // For hightlight: current selected Dcode
+    bool               m_Has_DCode;                             // true = DCodes in file
+                                                                // (false = no DCode -> separate DCode file
+    bool               m_360Arc_enbl;                           // Enbl 360 deg circular interpolation
+    bool               m_PolygonFillMode;                       // Enable polygon mode (read coord as a polygon descr)
+    int                m_PolygonFillModeState;                  // In polygon mode: 0 = first segm, 1 = next segm
 
-    APERTURE_MACRO_SET m_aperture_macros;                               ///< a collection of APERTURE_MACROS, sorted by name
+    APERTURE_MACRO_SET m_aperture_macros;                       ///< a collection of APERTURE_MACROS, sorted by name
 
 public:
-    GERBER( WinEDA_GerberFrame* aParent, int layer );
-    ~GERBER();
-    void    Clear_GERBER();
-    int     ReturnUsedDcodeNumber();
-    void    ResetDefaultValues();
+    GERBER_IMAGE( WinEDA_GerberFrame* aParent, int layer );
+    ~GERBER_IMAGE();
+    void Clear_GERBER_IMAGE();
+    int  ReturnUsedDcodeNumber();
+    void ResetDefaultValues();
+
+    /** function GetLayerParams
+     * @return the current layers params
+     */
+    GERBER_LAYER& GetLayerParams()
+    {
+        return m_GBRLayerParams;
+    }
+
 
     /** function ReportMessage
      * Add a message (a string) in message list
@@ -174,7 +224,7 @@ public:
      * looks up a previously read in aperture macro.
      * @param aLookup A dummy APERTURE_MACRO with [only] the name field set.
      * @return APERTURE_MACRO* - the one with a matching name, or NULL if
-     *                           not found.
+     *  not found.
      */
     APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
 
@@ -185,7 +235,7 @@ public:
      * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
      * @param aItem = the item to repeat
      */
-    void StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
+    void            StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
 };
 
 

@@ -353,8 +353,6 @@ public:
     void         CopyDCodesSizeToItems();
     void         Liste_D_Codes(  );
 
-    void         Trace_Gerber( wxDC* DC, int draw_mode, int printmasklayer );
-
     // PCB handling
     bool         Clear_Pcb( bool query );
     void         Erase_Current_Layer( bool query );
@@ -365,7 +363,7 @@ public:
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in gerbview.
-     * but but be defined because it is a pure virtual in WinEDA_BasePcbFrame
+     * but must be defined because it is a pure virtual in WinEDA_BasePcbFrame
      */
     virtual void SaveCopyInUndoList(
         BOARD_ITEM* aItemToCopy,
@@ -392,12 +390,12 @@ public:
      * used to print a page
      * @param aDC = wxDC given by the calling print function
      * @param aPrint_Sheet_Ref = true to print page references
-     * @param aPrintMask = not used here
+     * @param aPrintMasklayer = a 32 bits mask: bit n = 1 -> layer n is printed
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                    int aPrintMask, bool aPrintMirrorMode,
+                    int aPrintMasklayer, bool aPrintMirrorMode,
                     void * aData = NULL);
 
     /** InstallDialogLayerPairChoice

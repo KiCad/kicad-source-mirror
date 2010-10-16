@@ -94,16 +94,14 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  int               aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
-                                 bool              aLayerNegative,
-                                 bool              aImageNegative  )
+                                 bool              aLayerNegative )
 {
     aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Size  = aSize;
     aGbrItem->m_Start = aPos;
     aGbrItem->m_End   = aGbrItem->m_Start;
     aGbrItem->m_DCode = Dcode_index;
-    aGbrItem->m_LayerNegative = aLayerNegative;
-    aGbrItem->m_ImageNegative = aImageNegative;
+    aGbrItem->SetLayerPolarity( aLayerNegative );
     aGbrItem->m_Flashed = true;
     switch( aAperture )
     {
@@ -129,17 +127,6 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
         aGbrItem->m_Shape = GBR_SPOT_MACRO;
         break;
     }
-
-    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
-
-    /* isDark is true if flash is positive and should use a drawing
-     *   color other than the background color, else use the background color
-     *   when drawing so that an erasure happens.
-     */
-    if( !isDark )
-    {
-        aGbrItem->m_Flags |= DRAW_ERASED;
-    }
 }
 
 
@@ -161,8 +148,7 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               int               aWidth,
-                              bool              aLayerNegative,
-                              bool              aImageNegative  )
+                              bool              aLayerNegative  )
 {
     aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Flashed = false;
@@ -173,19 +159,7 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_End   = aEnd;
 
     aGbrItem->m_DCode = Dcode_index;
-    aGbrItem->m_LayerNegative = aLayerNegative;
-    aGbrItem->m_ImageNegative = aImageNegative;
-
-    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
-
-    /* isDark is true if flash is positive and should use a drawing
-     *   color other than the background color, else use the background color
-     *   when drawing so that an erasure happens.
-     */
-    if( !isDark )
-    {
-        aGbrItem->m_Flags |= DRAW_ERASED;
-    }
+    aGbrItem->SetLayerPolarity( aLayerNegative );
 }
 
 
@@ -222,8 +196,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
                              const wxPoint& aStart, const wxPoint& aEnd,
                              const wxPoint& aRelCenter, int aWidth,
                              bool aClockwise, bool aMultiquadrant,
-                             bool aLayerNegative,
-                             bool aImageNegative  )
+                             bool aLayerNegative  )
 {
     wxPoint center, delta;
 
@@ -314,19 +287,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
     aGbrItem->m_ArcCentre = center;
 
     aGbrItem->m_DCode     = Dcode_index;
-    aGbrItem->m_LayerNegative = aLayerNegative;
-    aGbrItem->m_ImageNegative = aImageNegative;
-
-    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
-
-    /* isDark is true if flash is positive and should use a drawing
-     *   color other than the background color, else use the background color
-     *   when drawing so that an erasure happens.
-     */
-    if( !isDark )
-    {
-        aGbrItem->m_Flags |= DRAW_ERASED;
-    }
+    aGbrItem->SetLayerPolarity( aLayerNegative );
 }
 
 
@@ -362,31 +323,18 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
                           const wxPoint& aStart, const wxPoint& aEnd,
                           const wxPoint& rel_center,
                           bool clockwise, bool multiquadrant,
-                          bool aLayerNegative,
-                          bool aImageNegative  )
+                          bool aLayerNegative  )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
      */
     static GERBER_DRAW_ITEM dummyGbrItem( NULL, NULL );
 
-    aGbrItem->m_LayerNegative = aLayerNegative;
-    aGbrItem->m_ImageNegative = aImageNegative;
-
-    bool isDark = !(aGbrItem->m_LayerNegative ^ aGbrItem->m_ImageNegative);
-
-    /* isDark is true if flash is positive and should use a drawing
-     *   color other than the background color, else use the background color
-     *   when drawing so that an erasure happens.
-     */
-    if( !isDark )
-    {
-        aGbrItem->m_Flags |= DRAW_ERASED;
-    }
+    aGbrItem->SetLayerPolarity( aLayerNegative );
 
     fillArcGBRITEM(  &dummyGbrItem, 0, 0,
                      aStart, aEnd, rel_center, 0,
-                     clockwise, multiquadrant, aLayerNegative, aImageNegative );
+                     clockwise, multiquadrant, aLayerNegative );
 
     wxPoint   center;
     center = dummyGbrItem.m_ArcCentre;
@@ -443,7 +391,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
 
 /* Read the Gnn sequence and returns the value nn.
  */
-int GERBER::ReturnGCodeNumber( char*& Text )
+int GERBER_IMAGE::ReturnGCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -466,7 +414,7 @@ int GERBER::ReturnGCodeNumber( char*& Text )
 
 /* Get the sequence Dnn and returns the value nn
  */
-int GERBER::ReturnDCodeNumber( char*& Text )
+int GERBER_IMAGE::ReturnDCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -486,7 +434,7 @@ int GERBER::ReturnDCodeNumber( char*& Text )
 }
 
 
-bool GERBER::Execute_G_Command( char*& text, int G_commande )
+bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_commande )
 {
 //    D( printf( "%22s: G_CODE<%d>\n", __func__, G_commande ); )
 
@@ -613,7 +561,7 @@ int scale( double aCoord, bool isMetric )
 }
 
 
-bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
+bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 {
     wxSize            size( 15, 15 );
 
@@ -677,7 +625,7 @@ bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
                 fillArcPOLY( pcb, gbritem, m_PreviousPos,
                              m_CurrentPos, m_IJPos,
                              ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
-                             m_360Arc_enbl, m_LayerNegative, m_ImageNegative );
+                             m_360Arc_enbl, GetLayerParams().m_LayerNegative );
                 break;
 
             default:
@@ -693,13 +641,6 @@ bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
 
                 gbritem->m_End = m_CurrentPos;       // m_End is used as temporary storage
                 gbritem->m_PolyCorners.push_back( gbritem->m_End );
-
-                // Set the erasure flag of gbritem if a negative polygon.
-                if( !m_PolygonFillModeState )
-                {
-                    if( m_LayerNegative ^ m_ImageNegative )
-                        gbritem->m_Flags |= DRAW_ERASED;
-                }
                 break;
             }
 
@@ -747,7 +688,7 @@ bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
 //                           m_PreviousPos.x, m_PreviousPos.y,
 //                            m_CurrentPos.x, m_CurrentPos.y ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                                 m_CurrentPos, size.x, m_LayerNegative, m_ImageNegative );
+                                 m_CurrentPos, size.x, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );
                 break;
 
@@ -769,8 +710,7 @@ bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
                                 m_CurrentPos, m_IJPos, size.x,
                                 ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
-                                false : true, m_360Arc_enbl,
-                                m_LayerNegative, m_ImageNegative );
+                                false : true, m_360Arc_enbl, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );
                 break;
 
@@ -809,7 +749,7 @@ bool GERBER::Execute_DCODE_Command( char*& text, int D_commande )
 //                                m_CurrentPos.x, m_CurrentPos.y ); )
             fillFlashedGBRITEM( gbritem, aperture,
                                 dcode, activeLayer, m_CurrentPos,
-                                size, m_LayerNegative, m_ImageNegative  );
+                                size, GetLayerParams().m_LayerNegative );
             StepAndRepeatItem( *gbritem );
             m_PreviousPos = m_CurrentPos;
             break;
