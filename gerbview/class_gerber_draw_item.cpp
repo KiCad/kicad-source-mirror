@@ -120,7 +120,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
      * For instance: Rotation must be made after or before mirroring ?
      * Note: if something is changed here, GetYXPosition must reflect changes
      */
-    wxPoint abPos = aXYPosition;
+    wxPoint abPos = aXYPosition + m_imageParams->m_ImageJustifyOffset;
 
     if( m_swapAxis )
         EXCHG( abPos.x, abPos.y );
@@ -165,7 +165,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
     xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
     if( m_swapAxis )
         EXCHG( xyPos.x, xyPos.y );
-    return xyPos;
+    return xyPos - m_imageParams->m_ImageJustifyOffset;
 }
 
 
@@ -458,7 +458,7 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
 /** Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
- * Display info about the track segment only, and does not calculate the full track length
+ * Display info about this GERBER item
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
 void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
@@ -472,13 +472,6 @@ void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     // Display D_Code value:
     msg.Printf( wxT( "%d" ), m_DCode );
     frame->AppendMsgPanel( _( "D Code" ), msg, RED );
-
-    // Display Image name
-    if( m_imageParams )
-    {
-        msg = m_imageParams->m_ImageName;
-        frame->AppendMsgPanel( _( "Image name" ), msg, BROWN );
-    }
 
     // Display graphic layer number
     msg.Printf( wxT( "%d" ), GetLayer() + 1 );

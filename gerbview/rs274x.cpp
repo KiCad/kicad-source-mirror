@@ -11,6 +11,9 @@
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
 
+// Helper function to read a primitive macro param (TODO: make it DCODE_PARAM function)
+static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  );
+
 // See rs274xrevd_e.pdf, table 1: RS-274X parameters order of entry
 // in gerber files, when a coordinate is given (like X78Y600 or I0J80):
 //      Y and Y are logical coordinates
@@ -94,14 +97,16 @@ static int ReadXCommand( char*& text )
  * int, then skip over that.
  * @param text A reference to a character pointer from which bytes are read
  *    and the pointer is advanced for each byte read.
- * @param int - The int read in.
+ * @param aSkipSeparator = true (default) to skip comma
+ * @return int - The int read in.
  */
-static int ReadInt( char*& text )
+static int ReadInt( char*& text, bool aSkipSeparator = true )
 {
     int ret = (int) strtol( text, &text, 10 );
 
     if( *text == ',' || isspace( *text ) )
-        ++text;
+        if( aSkipSeparator )
+            ++text;
 
     return ret;
 }
@@ -113,14 +118,16 @@ static int ReadInt( char*& text )
  * the double, then skip over that.
  * @param text A reference to a character pointer from which the ASCII double
  *          is read from and the pointer advanced for each character read.
+ * @param aSkipSeparator = true (default) to skip comma
  * @return double
  */
-static double ReadDouble( char*& text )
+static double ReadDouble( char*& text, bool aSkipSeparator = true )
 {
     double ret = strtod( text, &text );
 
     if( *text == ',' || isspace( *text ) )
-        ++text;
+        if( aSkipSeparator )
+            ++text;
 
     return ret;
 }
@@ -427,11 +434,68 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         }
         break;
 
-    case IMAGE_JUSTIFY:
-    case PLOTTER_FILM:
+    case IMAGE_JUSTIFY: // Command IJAnBn*
+        m_ImageJustifyXCenter = false;          // Image Justify Center on X axis (default = false)
+        m_ImageJustifyYCenter = false;          // Image Justify Center on Y axis (default = false)
+        m_ImageJustifyOffset = wxPoint(0,0);    // Image Justify Offset on XY axis (default = 0,0)
+        while( *text && *text != '*' )
+        {
+            // IJ command is (for A or B axis) AC or AL or A<coordinate>
+            switch( *text )
+            {
+            case 'A':       // A axis justify
+                text++;
+                if( *text == 'C' )
+                {
+                    m_ImageJustifyXCenter = true;
+                    text++;
+                }
+                else if( *text == 'L' )
+                {
+                    m_ImageJustifyXCenter = true;
+                    text++;
+                }
+                else m_ImageJustifyOffset.x = wxRound( ReadDouble( text ) * conv_scale);
+                break;
+
+            case 'B':       // B axis justify
+                text++;
+                if( *text == 'C' )
+                {
+                    m_ImageJustifyYCenter = true;
+                    text++;
+                }
+                else if( *text == 'L' )
+                {
+                    m_ImageJustifyYCenter = true;
+                    text++;
+                }
+                else m_ImageJustifyOffset.y = wxRound( ReadDouble( text ) * conv_scale);
+                break;
+            default:
+                text++;
+                break;
+            }
+        }
+        if( m_ImageJustifyXCenter )
+            m_ImageJustifyOffset.x = 0;
+        if( m_ImageJustifyYCenter )
+            m_ImageJustifyOffset.y = 0;
+        break;
+
     case KNOCKOUT:
-        msg.Printf( _( "RS274X: Command \"%c%c\" ignored by Gerbview" ),
-                    (command >> 8) & 0xFF, command & 0xFF );
+        msg = _( "RS274X: Command KNOCKOUT ignored by Gerbview" ) ;
+        ReportMessage( msg );
+        break;
+
+    case PLOTTER_FILM:  // Command PF <string>
+        // This is an info about film that must be used to plot this file
+        // Has no meaning here. We just display this string
+        msg = ( "Plotter Film info:<br>" );
+        while( *text != '*' )
+        {
+           msg.Append( *text++ );
+        }
         ReportMessage( msg );
         break;
 
@@ -498,10 +562,10 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         m_FilesPtr++;
         break;
 
-    case AP_MACRO:
+    case AP_MACRO:  // lines like %AMMYMACRO*
+                    // 5,1,8,0,0,1.08239X$1,22.5*
+                    // %
         ok = ReadApertureMacro( buff, text, m_Current_File );
-        if( !ok )
-            break;
         break;
 
     case AP_DEFINITION:
@@ -729,24 +793,39 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
     return FALSE;
 }
 
-
-static bool CheckForLineEnd(  char buff[GERBER_BUFZ], char*& text, FILE* fp  )
+/** function GetNextLine
+ * test for an end of line
+ * if an end of line is found:
+ *   read a new line
+ * @param aBuff[GERBER_BUFZ] = buffer to fill with a new line
+ * @param aText = pointer to the last useful char in aBuff
+ *          on return: points the beginning of the next line.
+ * @param aFile = the opened GERBER file to read
+ * @return a pointer to the beginning of the next line or NULL if end of file
+*/
+static char* GetNextLine(  char aBuff[GERBER_BUFZ], char* aText, FILE* aFile  )
 {
-    while( *text == '\n' || *text == '\r' || !*text )
+    for( ; ; )
     {
-        if( *text == '\n' || *text == '\r' )
-            ++text;
-
-        if( !*text )
+        switch (*aText )
         {
-            if( fgets( buff, GERBER_BUFZ, fp ) == NULL )
-                return false;
+            case ' ':     // skip blanks
+            case '\n':
+            case '\r':    // Skip line terminators
+                ++aText;
+                break;
 
-            text = buff;
+            case 0:    // End of text found in aBuff: Read a new string
+                if( fgets( aBuff, GERBER_BUFZ, aFile ) == NULL )
+                    return NULL;
+                aText = aBuff;
+                return aText;
+
+            default:
+                return aText;
         }
     }
-
-    return true;
+    return aText;
 }
 
 
@@ -769,24 +848,28 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         am.name.Append( *text++ );
     }
 
+    // Read aperture macro parameters
     for( ; ; )
     {
-        AM_PRIMITIVE prim( m_GerbMetric );
-
         if( *text == '*' )
             ++text;
 
-        if( !CheckForLineEnd(  buff, text, gerber_file ) )
+        text = GetNextLine( buff, text, gerber_file );  // Get next line
+        if( text == NULL )  // End of File
             return false;
 
+        // text points the beginning of a new line.
+
+        // Test for the last line in aperture macro lis:
+        // last line is % or *% sometime found.
+        if( *text == '*' )
+            ++text;
         if( *text == '%' )
             break;      // exit with text still pointing at %
 
-        prim.primitive_id = (AM_PRIMITIVE_ID) ReadInt( text );
-
-        int paramCount;
-
-        switch( prim.primitive_id )
+        int paramCount = 0;
+        int primitive_type = ReadInt( text );
+        switch( primitive_type )
         {
         case AMP_CIRCLE:
             paramCount = 4;
@@ -823,30 +906,26 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
             break;
 
         default:
-
             // @todo, there needs to be a way of reporting the line number
-            msg.Printf( wxT( "RS274X: Invalid primitive id code %d\n" ), prim.primitive_id );
+            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line: \"%s\"" ),
+            GetChars(am.name), primitive_type,  CONV_FROM_UTF8(buff) );
             ReportMessage( msg );
             return false;
         }
 
+        AM_PRIMITIVE prim( m_GerbMetric );
+        prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
         int i;
-        for( i = 0; i < paramCount && *text != '*'; ++i )
+        for( i = 0; i < paramCount && *text && *text != '*'; ++i )
         {
             prim.params.push_back( DCODE_PARAM() );
 
             DCODE_PARAM& param = prim.params.back();
 
-            if( !CheckForLineEnd(  buff, text, gerber_file ) )
+            text = GetNextLine(  buff, text, gerber_file );
+            if( text == NULL)   // End of File
                 return false;
-
-            if( *text == '$' )
-            {
-                ++text;
-                param.SetIndex( ReadInt( text ) );
-            }
-            else
-                param.SetValue( ReadDouble( text ) );
+            ReadMacroParam( param, text );
         }
 
         if( i < paramCount )
@@ -856,6 +935,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
                             "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
                         prim.primitive_id, i );
             ReportMessage( msg );
+
         }
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
@@ -875,16 +955,10 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
                 DCODE_PARAM& param = prim.params.back();
 
-                if( !CheckForLineEnd(  buff, text, gerber_file ) )
+                text = GetNextLine(  buff, text, gerber_file );
+                if( text == NULL )  // End of File
                     return false;
-
-                if( *text == '$' )
-                {
-                    ++text;
-                    param.SetIndex( ReadInt( text ) );
-                }
-                else
-                    param.SetValue( ReadDouble( text ) );
+                ReadMacroParam( param, text );
             }
         }
 
@@ -894,4 +968,38 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
     m_aperture_macros.insert( am );
 
     return true;
+}
+
+/** Function ReadMacroParam
+ * Read one aperture macro parameter
+ * a parameter can be:
+ *      a number
+ *      a reference to an aperture definition parameter value: $1 ot $3 ...
+ * a parameter definition can be complex and have operators between numbers and/or other parameter
+ * like $1+3 or $2x2..
+ * Parameters are separated by a comma ( of finish by *)
+ * Return if a param is read, or false
+ */
+static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  )
+{
+    bool found = false;
+    if( *aText == '$' ) // value defined later, in aperture description
+    {
+        ++aText;
+        aParam.SetIndex( ReadInt( aText, false ) );
+        found = true;
+    }
+    else
+    {
+        aParam.SetValue( ReadDouble( aText, false ) );
+        found = true;
+    }
+
+    // Skip extra characters and separator
+    while( *aText && (*aText != ',') && (*aText != '*') )
+        aText++;
+    if( *aText == ',' )
+         aText++;
+
+    return found;
 }

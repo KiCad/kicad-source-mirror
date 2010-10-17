@@ -1,0 +1,18 @@
+G04 Test image offset *
+G04 Crosshairs should be centered on 0,0 in final rendering*
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%IOA-2.0B-1.0*%
+%ADD10C,0.050*%
+
+G04 Crosshairs to be on 0,0 *
+X1000Y1000D02*
+G54D10*
+X3000Y1000D01*
+
+X2000Y0D02*
+G54D10*
+X2000Y2000D01*
+
+M02*

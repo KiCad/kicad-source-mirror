@@ -1,0 +1,19 @@
+G04 Test image justify 1*
+G04 Crosshairs should be justified to the X axis *
+G04   and 0.5 inches offset from Y axis *
+G04 Handcoded by Julian Lamb *
+%MOIN*%
+%FSLAX23Y23*%
+%IJB.5*%
+%ADD10C,0.050*%
+
+G04 Crosshairs *
+X-1000Y0D02*
+G54D10*
+X1000Y0D01*
+
+X0Y-1000D02*
+G54D10*
+X0Y1000D01*
+
+M02*

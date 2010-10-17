@@ -37,6 +37,12 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct = GerberGeneralLocateAndDisplay();
             GetScreen()->SetCurItem( DrawStruct );
+            if( DrawStruct == NULL )
+            {
+                GERBER_IMAGE* gerber = g_GERBER_List[getActiveLayer() ];
+                if( gerber )
+                    gerber->DisplayImageInfo( );
+            }
         }
     }
 

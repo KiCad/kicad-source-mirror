@@ -151,6 +151,9 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_FileName.Empty();
     m_ImageName     = wxT( "no name" );             // Image name from the IN command
     m_ImageNegative = false;                        // true = Negative image
+    m_ImageJustifyOffset  = wxPoint(0,0);           // Image justify Offset
+    m_ImageJustifyXCenter = false;                  // Image Justify Center on X axis (default = false)
+    m_ImageJustifyYCenter = false;                  // Image Justify Center on Y axis (default = false)
     m_GerbMetric    = false;                        // false = Inches (default), true = metric
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
@@ -271,3 +274,45 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
         }
     }
 }
+
+
+/** Function DisplayInfo
+ * has knowledge about the frame and how and where to put status information
+ * about this object into the frame's message panel.
+ * Display info about Image Parameters.
+ */
+void GERBER_IMAGE::DisplayImageInfo( void )
+{
+    wxString msg;
+
+    m_Parent->ClearMsgPanel();
+
+    // Display Image name
+    m_Parent->AppendMsgPanel( _( "Image name" ), m_ImageName, BROWN );
+
+    // Display graphic layer number
+    msg.Printf( wxT( "%d" ), m_GraphicLayer + 1 );
+    m_Parent->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+
+    // This next info can be see as debug info, so it can be disabled
+
+    // Display rotation
+    msg.Printf( wxT( "%d" ), m_ImageRotation / 10 );
+    m_Parent->AppendMsgPanel( _( "Rotation" ), msg, CYAN );
+
+    // Display Image justification;
+    msg = m_ImageJustifyXCenter ? _("Center") : _("Normal");
+    m_Parent->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
+
+    msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
+    m_Parent->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
+
+    if( g_UserUnit == INCHES )
+        msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x/10000,
+                                    (double) m_ImageJustifyOffset.y/10000 );
+    else
+        msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x*2.54/1000,
+                                    (double) m_ImageJustifyOffset.y*2.54/1000 );
+    m_Parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, CYAN );
+}
+

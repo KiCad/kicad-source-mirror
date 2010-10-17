@@ -86,6 +86,9 @@ public:
     wxString           m_ImageName;                             // Image name, from IN <name>* command
     int                m_GraphicLayer;                          // Graphic layer Number
     bool               m_ImageNegative;                         // true = Negative image
+    bool               m_ImageJustifyXCenter;                   // Image Justify Center on X axis (default = false)
+    bool               m_ImageJustifyYCenter;                   // Image Justify Center on Y axis (default = false)
+    wxPoint            m_ImageJustifyOffset;                    // Image Justify Offset on XY axis (default = 0,0)
     bool               m_GerbMetric;                            // false = Inches, true = metric
     bool               m_Relative;                              // false = absolute Coord, true = relative Coord
     bool               m_NoTrailingZeros;                       // true: remove tailing zeros.
@@ -236,6 +239,13 @@ public:
      * @param aItem = the item to repeat
      */
     void            StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
+
+    /** Function DisplayImageInfo
+     * has knowledge about the frame and how and where to put status information
+     * about this object into the frame's message panel.
+     * Display info about Image Parameters.
+     */
+    void DisplayImageInfo( void );
 };
 
 
