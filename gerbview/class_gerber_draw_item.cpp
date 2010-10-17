@@ -57,7 +57,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberpa
     m_mirrorA       = false;
     m_mirrorB       = false;
     m_drawScale.x   = m_drawScale.y = 1.0;
-    m_layerRotation = 0;
+    m_lyrRotation   = 0;
     if( m_imageParams )
         SetLayerParameters();
 }
@@ -90,7 +90,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_layerOffset   = aSource.m_layerOffset;
     m_drawScale.x   = aSource.m_drawScale.x;
     m_drawScale.y   = aSource.m_drawScale.y;
-    m_layerRotation = aSource.m_layerRotation;
+    m_lyrRotation   = aSource.m_lyrRotation;
 }
 
 
@@ -127,13 +127,15 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
     abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
     abPos.x = wxRound( abPos.x * m_drawScale.x );
     abPos.y = wxRound( abPos.y * m_drawScale.y );
-    int rotation = m_layerRotation + m_imageParams->m_ImageRotation;
+    int rotation = wxRound(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
     if( rotation )
         RotatePoint( &abPos, -rotation );
+
+    // Negate A axis if mirrored
     if( m_mirrorA )
         NEGATE( abPos.x );
 
-    // abPos.y must be negated, because draw axis is top to bottom
+    // abPos.y must be negated when no mirror, because draw axis is top to bottom
     if( !m_mirrorB )
         NEGATE( abPos.y );
     return abPos;
@@ -157,7 +159,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
         NEGATE( xyPos.x );
     if( !m_mirrorB )
         NEGATE( xyPos.y );
-    int rotation = m_layerRotation + m_imageParams->m_ImageRotation;
+    int rotation = wxRound(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
     if( rotation )
         RotatePoint( &xyPos, rotation );
     xyPos.x = wxRound( xyPos.x / m_drawScale.x );
@@ -186,7 +188,7 @@ void GERBER_DRAW_ITEM::SetLayerParameters()
     m_drawScale   = m_imageParams->m_Scale;         // A and B scaling factor
     m_layerOffset = m_imageParams->m_Offset;        // Offset from OF command
     // Rotation from RO command:
-    m_layerRotation = m_imageParams->m_LocalRotation;
+    m_lyrRotation = m_imageParams->m_LocalRotation;
     m_LayerNegative = m_imageParams->GetLayerParams().m_LayerNegative;
 }
 
@@ -477,23 +479,26 @@ void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%d" ), GetLayer() + 1 );
     frame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
 
-    // This next info can be see as debug info, so it can be disabled
-#if 1
+    // Display item rotation
+    // The full rotation is Image rotation + m_lyrRotation
+    // but m_lyrRotation is specific to this object
+    // so we display only this parameter
+    msg.Printf( wxT( "%f" ), m_lyrRotation );
+    frame->AppendMsgPanel( _( "Rotation" ), msg, BLUE );
 
-    // Display rotation
-    msg.Printf( wxT( "%.1f" ), (double)(m_imageParams->m_ImageRotation+m_layerRotation) / 10 );
-    frame->AppendMsgPanel( _( "Rotation" ), msg, DARKRED );
+    // Display item polarity (item specific)
+    msg = m_LayerNegative ? _("Clear") : _("Dark");
+    frame->AppendMsgPanel( _( "Polarity" ), msg, BLUE );
 
-    // Display mirroring
+    // Display mirroring (item specific)
     msg.Printf( wxT( "A:%s B:%s" ),
                 m_mirrorA ? _("Yes") : _("No"),
                 m_mirrorB ? _("Yes") : _("No"));
     frame->AppendMsgPanel( _( "Mirror" ), msg, DARKRED );
 
-    // Display AB axis swap
+    // Display AB axis swap (item specific)
     msg = m_swapAxis ? wxT( "A=Y B=X" ) : wxT( "A=X B=Y" );
     frame->AppendMsgPanel( _( "AB axis" ), msg, DARKRED );
-#endif
 }
 
 

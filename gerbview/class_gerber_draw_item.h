@@ -92,7 +92,7 @@ private:
     bool        m_mirrorB;                  // true: mirror / axe B
     wxRealPoint m_drawScale;                // A and B scaling factor
     wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
-    int         m_layerRotation;            // Fine rotation, from OR parameter
+    double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
 
 public:
     GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams );

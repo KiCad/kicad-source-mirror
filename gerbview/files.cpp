@@ -16,7 +16,7 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame,
                            const wxString&     FullFileName );
 
 
-/* Load agerber file selected from history list on current layer
+/* Load a Gerber file selected from history list on current layer
  * Previous data is deleted
  */
 void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
@@ -56,10 +56,8 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         {
             setActiveLayer(origLayer+1);
             Erase_Current_Layer( false );
-
             if( !LoadOneGerberFile( wxEmptyString ) )
                 setActiveLayer(origLayer);
-
             SetToolbars();
         }
         else
@@ -76,6 +74,7 @@ delete an existing layer to load any new layers." ), NB_LAYERS );
         Clear_Pcb( true );
         Zoom_Automatique( false );
         DrawPanel->Refresh();
+        ClearMsgPanel();
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
@@ -105,10 +104,14 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& aFullFileName, bool 
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
          * the .pho extension is the default used in Pcbnew
+         * However there are a lot of other extensions used for gerber files
+         * Because the first letter is usually g, we accept g* as extension
+         * (Mainly internal copper layers do not have specific extention,
+         *  and filenames are like *.g1, *.g2 *.gb1 ...).
          */
-        filetypes = _( "Gerber files (.gb* .gt* .lgr .ger .pho)" );
+        filetypes = _( "Gerber files (.g* .lgr .pho)" );
         filetypes << wxT("|");
-        filetypes += wxT("*.gb*;*.GB*;*.gt*;*.GT*;*.gko;*.GKO;*.GPB;*.gpb;*.lgr;*.LGR;*.ger;*.GER;*.pho;*.PHO" );
+        filetypes += wxT("*.g*;*.G*;*.lgr;*.LGR;*.pho;*.PHO" );
         filetypes << wxT("|");
 
         /* Special gerber filetypes */

@@ -25,6 +25,8 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
         if( !IsOK( this, _( "Current data will be lost?" ) ) )
             return FALSE;
     }
+
+    SetCurItem( NULL );
     GetBoard()->m_Drawings.DeleteAll();
 
     for( layer = 0; layer < 32; layer++ )
@@ -45,8 +47,6 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     SetBaseScreen( ActiveScreen = ScreenPcb );
     GetScreen()->Init();
     setActiveLayer(LAYER_N_BACK);
-
-    SetCurItem( NULL );
     return TRUE;
 }
 

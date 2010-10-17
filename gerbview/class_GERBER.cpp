@@ -159,8 +159,8 @@ void GERBER_IMAGE::ResetDefaultValues()
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
     m_ImageOffset.x   = m_ImageOffset.y = 0;        // Coord Offset, from IO command
-    m_ImageRotation = 0;                            // Allowed 0, 900, 1800, 2700 (in 0.1 degree
-    m_LocalRotation = 0;                            // Layer totation from RO command (in 0.1 degree)
+    m_ImageRotation = 0;                            // Allowed 0, 90, 180, 270 (in degree)
+    m_LocalRotation = 0.0;                          // Layer totation from RO command (in 0.1 degree)
     m_Offset.x = 0;
     m_Offset.y = 0;                                 // Coord Offset, from OF command
     m_Scale.x  = m_Scale.y = 1.0;                   // scale (A and B) this layer
@@ -276,10 +276,12 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 }
 
 
-/** Function DisplayInfo
+/** Function DisplayImageInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about Image Parameters.
+ * These parameters are valid for the entire file, and must set only once
+ * (If more than once, only the last value is used)
  */
 void GERBER_IMAGE::DisplayImageInfo( void )
 {
@@ -287,20 +289,23 @@ void GERBER_IMAGE::DisplayImageInfo( void )
 
     m_Parent->ClearMsgPanel();
 
-    // Display Image name
-    m_Parent->AppendMsgPanel( _( "Image name" ), m_ImageName, BROWN );
+    // Display Image name (Image specific)
+    m_Parent->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
 
-    // Display graphic layer number
+    // Display graphic layer number used to draw this Image
+    // (not a Gerber parameter but is also image specific)
     msg.Printf( wxT( "%d" ), m_GraphicLayer + 1 );
     m_Parent->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
 
-    // This next info can be see as debug info, so it can be disabled
+    // Display Image rotation (Image specific)
+    msg.Printf( wxT( "%d" ), m_ImageRotation );
+    m_Parent->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
 
-    // Display rotation
-    msg.Printf( wxT( "%d" ), m_ImageRotation / 10 );
-    m_Parent->AppendMsgPanel( _( "Rotation" ), msg, CYAN );
+    // Display Image polarity (Image specific)
+    msg = m_ImageNegative ? _("Negative") : _("Normal");
+    m_Parent->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
 
-    // Display Image justification;
+    // Display Image justification and offset for justification (Image specific)
     msg = m_ImageJustifyXCenter ? _("Center") : _("Normal");
     m_Parent->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
 
@@ -313,6 +318,6 @@ void GERBER_IMAGE::DisplayImageInfo( void )
     else
         msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x*2.54/1000,
                                     (double) m_ImageJustifyOffset.y*2.54/1000 );
-    m_Parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, CYAN );
+    m_Parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
 }
 

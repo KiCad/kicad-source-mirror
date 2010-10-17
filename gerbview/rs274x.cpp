@@ -53,6 +53,7 @@ enum RS274X_PARAMETERS {
     // Layer specific parameters
     // May be used singly or may be layer specfic
     // theses parameters are at the beginning of the file or layer
+    // and reset some layer parameters (like interpolation)
     LAYER_NAME      = CODE( 'L', 'N' ),         // Default: Positive
     LAYER_POLARITY  = CODE( 'L', 'P' ),
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
@@ -389,16 +390,17 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         if( strnicmp( text, "0*", 2 ) == 0 )
             m_ImageRotation = 0;
         if( strnicmp( text, "90*", 2 ) == 0 )
-            m_ImageRotation = 900;
+            m_ImageRotation = 90;
         if( strnicmp( text, "180*", 2 ) == 0 )
-            m_ImageRotation = 1800;
+            m_ImageRotation = 180;
         if( strnicmp( text, "270*", 2 ) == 0 )
-            m_ImageRotation = 2700;
+            m_ImageRotation = 270;
         else
             ReportMessage( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
         break;
 
     case STEP_AND_REPEAT:   // command SR, like %SRX3Y2I5.0J2*%
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
         GetLayerParams().m_StepForRepeat.x = 0.0;
         GetLayerParams().m_StepForRepeat.x = 0.0;       // offset for Step and Repeat command
         GetLayerParams().m_XRepeatCount = 1;
@@ -484,6 +486,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
 
     case KNOCKOUT:
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
         msg = _( "RS274X: Command KNOCKOUT ignored by Gerbview" ) ;
         ReportMessage( msg );
         break;
@@ -500,7 +503,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
 
     case ROTATE:        // Layer rotation: command like %RO45*%
-        m_LocalRotation = wxRound(ReadDouble( text ) * 10 );
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
+        m_LocalRotation =ReadDouble( text );             // Store layer rotation in degrees
         break;
 
     case IMAGE_NAME:
@@ -513,6 +517,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
 
     case LAYER_NAME:
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
         GetLayerParams( ).m_LayerName.Empty();
         while( *text != '*' )
         {

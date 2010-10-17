@@ -497,6 +497,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
         m_TextInfo->Clear();
+        ClearMsgPanel();
         return;
     }
 
@@ -504,6 +505,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     text << wxT( " " ) << gerber->m_FileName;
     SetTitle( text );
 
+    gerber->DisplayImageInfo( );
 
     // Display Image Name and Layer Name (from the current gerber data):
     text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),

@@ -4,7 +4,7 @@ G04   the center line straight up *
 G04 Handcoded by Julian Lamb *
 %MOIN*%
 %FSLAX23Y23*%
-%RO45*%
+%RO45.0*%
 %ADD10C,0.025*%
 
 G04 Quarter star *

@@ -95,10 +95,8 @@ public:
     wxPoint            m_ImageOffset;                           // Coord Offset, from IO command
     wxSize             m_FmtScale;                              // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
     wxSize             m_FmtLen;                                // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
-    int                m_ImageRotation;                         // Image rotation (0, 90, 180, 270
-                                                                // Note these values are stored in 0.1 degrees
-
-    int                m_LocalRotation;                         // Local rotation, added to m_ImageRotation
+    int                m_ImageRotation;                         // Image rotation (0, 90, 180, 270 only) in degrees
+    double             m_LocalRotation;                         // Local rotation, in degrees, added to m_ImageRotation
                                                                 //  Note this value is stored in 0.1 degrees
     wxPoint            m_Offset;                                // Coord Offset, from OF command
     wxRealPoint        m_Scale;                                 // scale (X and Y) of layer.

@@ -124,6 +124,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GERBVIEW_GLOBAL_DELETE:
         Erase_Current_Layer( TRUE );
+        ClearMsgPanel();
         break;
 
     case ID_NO_SELECT_BUTT:
