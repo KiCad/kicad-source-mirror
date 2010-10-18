@@ -239,7 +239,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
             fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
             fprintf( file, "RECTANGLE %d %d %d %d\n",
                      pad->m_Offset.x - dx, -(pad->m_Offset.y - dy),
-                     pad->m_Offset.x + dx, -(pad->m_Offset.y + dy) );
+                     pad->m_Size.x, pad->m_Size.y );
             break;
 
         case PAD_OVAL:     /* Create outline by 2 lines and 2 arcs */
