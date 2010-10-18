@@ -494,7 +494,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case PLOTTER_FILM:  // Command PF <string>
         // This is an info about film that must be used to plot this file
         // Has no meaning here. We just display this string
-        msg = ( "Plotter Film info:<br>" );
+        msg = wxT( "Plotter Film info:<br>" );
         while( *text != '*' )
         {
            msg.Append( *text++ );
@@ -913,7 +913,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         default:
             // @todo, there needs to be a way of reporting the line number
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line: \"%s\"" ),
-            GetChars(am.name), primitive_type,  CONV_FROM_UTF8(buff) );
+                        GetChars( am.name ), primitive_type,  GetChars( CONV_FROM_UTF8( buff ) ) );
             ReportMessage( msg );
             return false;
         }
@@ -936,8 +936,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         if( i < paramCount )
         {
             // maybe some day we can throw an exception and track a line number
-            msg.Printf( wxT(
-                            "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
+            msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
                         prim.primitive_id, i );
             ReportMessage( msg );
 
