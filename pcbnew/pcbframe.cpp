@@ -324,6 +324,8 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
     m_auimgr.SetManagedWindow( this );
 
+    // Create a wxAuiPaneInfo template for other wxAuiPaneInfo items
+    // Actual wxAuiPaneInfo items will be built from this item.
     wxAuiPaneInfo horiz;
     horiz.Gripper( false );
     horiz.DockFixed( true );
@@ -332,11 +334,16 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     horiz.CloseButton( false );
     horiz.CaptionVisible( false );
 
+    // Create a second template from the first:
     wxAuiPaneInfo vert( horiz );
 
+    // Set specific options for horizontal and vertical toolbars, using horiz and vert
+    // wxAuiPaneInfo items to manage them.
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
+    horiz.ToolbarPane().Gripper( false );
 
+    // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
     // LAYER_WIDGET is floatable, but initially docked at far right
     wxAuiPaneInfo   lyrs;
     lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
@@ -347,12 +354,16 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
 
 
     if( m_HToolBar )
+    {
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+    }
 
     if( m_AuxiliaryToolBar )
+    {
         m_auimgr.AddPane( m_AuxiliaryToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
+    }
 
     if( m_AuxVToolBar )
         m_auimgr.AddPane( m_AuxVToolBar,
@@ -367,7 +378,8 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     if( m_OptionsToolBar )
     {
         m_auimgr.AddPane( m_OptionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left()
+                          .ToolbarPane().Gripper( false ));
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                       m_show_layer_manager_tools );
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
@@ -384,11 +396,11 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
         m_auimgr.AddPane( MsgPanel,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
-    m_auimgr.Update();
-
     SetToolbars();
     ReFillLayerWidget();    // this is near end because contents establish size
     syncLayerWidget();
+    m_auimgr.Update();
+
 }
 
 
