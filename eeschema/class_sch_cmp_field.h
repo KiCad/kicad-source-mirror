@@ -149,9 +149,11 @@ public:
      *              the sheet path is needed for REFERENCE field because m_Text
      *              value is just the valeur displayed, and in complex hierarchies
      *              this is only one of all references (one per sheet path)
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this field text matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData );
+    virtual bool Matches( wxFindReplaceData& aSearchData,
+                          void* aAuxData, wxPoint * aFindLocation );
 };
 
 

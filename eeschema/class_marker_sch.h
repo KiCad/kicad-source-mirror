@@ -104,9 +104,10 @@ public:
      * Compare DRC marker main and auxiliary text against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData, wxPoint * aFindLocation );
 
     /**
      * Show the marker electronics rule check error on the message panel.

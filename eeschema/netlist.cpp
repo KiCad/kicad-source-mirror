@@ -325,7 +325,7 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
             item = aNetItemBuffer[ii];
         if( netcode != item->GetNet() )      // End of net found
         {
-            if( candidates.size() )         // O,e or more labels exists, find the best
+            if( candidates.size() )         // One or more labels exists, find the best
             {
                 NETLIST_OBJECT* bestlabel = FindBestNetName( candidates );
                 for (unsigned jj = idxstart; jj < ii; jj++ )

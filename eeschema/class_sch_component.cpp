@@ -16,6 +16,7 @@
 #include "class_library.h"
 #include "dialog_schematic_find.h"
 #include "lib_rectangle.h"
+#include "class_pin.h"
 
 #include <wx/tokenzr.h>
 
@@ -183,11 +184,9 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                           const wxPoint& offset, int DrawMode, int Color,
                           bool DrawPinText )
 {
-    LIB_COMPONENT* Entry;
-    int            ii;
     bool           dummy = FALSE;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     if( Entry == NULL )
     {
@@ -218,7 +217,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         }
     }
 
-    for( ii = VALUE; ii < GetFieldCount(); ii++ )
+    for( int ii = VALUE; ii < GetFieldCount(); ii++ )
     {
         field = GetField( ii );
 
@@ -1242,12 +1241,12 @@ void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
     // Search reference.
     // reference is a special field because a part identifier is added
     // in multi parts per package
-    // the .m_AddExtraText of the field msut be set to add this identifier:
+    // the .m_AddExtraText of the field must be set to add this identifier:
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     if( Entry && Entry->GetPartCount() > 1 )
@@ -1255,10 +1254,10 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     else
         GetField( REFERENCE )->m_AddExtraText = false;
 
-    if( GetField( REFERENCE )->Matches( aSearchData, aAuxData ) )
+    if( GetField( REFERENCE )->Matches( aSearchData, aAuxData, aFindLocation ) )
         return true;
 
-    if( GetField( VALUE )->Matches( aSearchData, aAuxData ) )
+    if( GetField( VALUE )->Matches( aSearchData, aAuxData, aFindLocation ) )
         return true;
 
     if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
@@ -1266,8 +1265,40 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
     for( size_t i = VALUE + 1; i < m_Fields.size(); i++ )
     {
-        if( GetField( i )->Matches( aSearchData, aAuxData ) )
+        if( GetField( i )->Matches( aSearchData, aAuxData, aFindLocation ) )
             return true;
+    }
+
+    // Search for a match in pin name or pin number.
+    // @TODO: see if the Matches method must be made in LIB_PIN.
+    // when Matches method will be used in Libedit, this is the best
+    // Currently, Pins are tested here.
+    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )
+        return false;
+
+    if( Entry )
+    {
+        LIB_PIN_LIST pinList;
+        Entry->GetPins( pinList, m_Multi, m_Convert );
+        // Search for a match in pinList
+        for( unsigned ii = 0; ii < pinList.size(); ii ++ )
+        {
+            LIB_PIN* pin = pinList[ii];
+            wxString pinNum;
+            pin->ReturnPinStringNum( pinNum );
+            if( SCH_ITEM::Matches(pin->m_PinName, aSearchData ) ||
+                SCH_ITEM::Matches(pinNum, aSearchData ) )
+            {
+                if( aFindLocation )
+                {
+                    wxPoint pinpos = pin->m_Pos;
+                    pinpos = TransformCoordinate( m_Transform, pinpos );
+                    *aFindLocation = pinpos + m_Pos;
+                }
+                return true;
+            }
+
+        }
     }
 
     return false;

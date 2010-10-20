@@ -288,6 +288,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          wxBitmap( web_support_xpm ),
                          _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
+    m_HToolBar->AddSeparator();
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
 
@@ -391,6 +392,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
                                wxITEM_CHECK );
 
 
+    m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->Realize();
 }
 
@@ -674,6 +676,7 @@ an existing track use its width\notherwise, use current width setting" ),
     }
 
     m_TrackAndViasSizesList_Changed    = true;
+    m_AuxiliaryToolBar->AddSeparator();
     ReCreateLayerBox( NULL );
 }
 

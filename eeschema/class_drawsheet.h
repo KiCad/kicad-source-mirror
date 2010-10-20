@@ -158,13 +158,18 @@ public:
     virtual void Mirror_X( int aXaxis_position );
 
 
-    /**
-     * Compare schematic sheet entry (pin?) name against search string.
+    /** function Matches
+     * Compare hierarchical pin name against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aAuxData - a pointer on auxiliary data, if needed.
+     *        When searching string in REFERENCE field we must know the sheet path
+     *          This param is used in this case
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData,
+                          void* aAuxData, wxPoint * aFindLocation );
 };
 
 
@@ -425,10 +430,15 @@ public:
      * Compare schematic sheet file and sheet name against search string.
      *
      * @param aSearchData - Criteria to search against.
+     * @param aAuxData - a pointer on auxiliary data, if needed.
+     *        When searching string in REFERENCE field we must know the sheet path
+     *          This param is used in this case
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      *
      * @return True if this item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData );
+    virtual bool Matches( wxFindReplaceData& aSearchData,
+                          void* aAuxData, wxPoint * aFindLocation );
 
     /**
      * Resize this sheet to aSize and adjust all of the labels accordingly.
@@ -436,6 +446,16 @@ public:
      * @param aSize - The new size for this sheet.
      */
     void         Resize( const wxSize& aSize );
+
+    /** function GetSheetNamePosition
+     * @return the position of the anchor of sheet name text
+     */
+    wxPoint GetSheetNamePosition ();
+
+    /** function GetFileNamePosition
+     * @return the position of the anchor of filename text
+     */
+    wxPoint GetFileNamePosition ();
 
 #if defined(DEBUG)
 

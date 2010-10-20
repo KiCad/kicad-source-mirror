@@ -341,6 +341,45 @@ int SCH_SHEET::GetPenSize()
 }
 
 
+/** function GetSheetNamePosition
+ * @return the position of the anchor of sheet name text
+ */
+wxPoint SCH_SHEET::GetSheetNamePosition()
+{
+    wxPoint  pos = m_Pos;
+    if( IsVerticalOrientation() )
+    {
+        pos.x -= 8;
+        pos.y += m_Size.y;
+    }
+    else
+    {
+        pos.y -= 8;
+    }
+
+    return pos;
+}
+
+/** function GetFileNamePosition
+ * @return the position of the anchor of filename text
+ */
+wxPoint SCH_SHEET::GetFileNamePosition()
+{
+    wxPoint  pos = m_Pos;
+    if( IsVerticalOrientation() )
+    {
+        pos.x += m_Size.x+4;
+        pos.y += m_Size.y;
+    }
+    else
+    {
+        pos.y += m_Size.y + 4;
+    }
+
+    return pos;
+}
+
+
 /** Function Draw
  *  Draw the hierarchical sheet shape
  *  @param aPanel = the current DrawPanel
@@ -369,18 +408,15 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
             pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
+
+    pos_sheetname = GetSheetNamePosition() + aOffset;
+    pos_filename = GetFileNamePosition() + aOffset;
+
     if( IsVerticalOrientation() )
-    {
-        pos_sheetname = wxPoint( pos.x-8, pos.y+m_Size.y );
-        pos_filename = wxPoint( pos.x+m_Size.x+4, pos.y+m_Size.y );
         name_orientation = TEXT_ORIENT_VERT;
-    }
     else
-    {
-        pos_sheetname = wxPoint( pos.x, pos.y - 8 );
-        pos_filename = wxPoint( pos.x, pos.y + m_Size.y + 4 );
         name_orientation = TEXT_ORIENT_HORIZ;
-    }
+
     /* Draw text : SheetName */
     if( aColor > 0 )
         txtcolor = aColor;
@@ -823,12 +859,30 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 }
 
 
-bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData )
+/** Compare schematic sheet entry (filename and sheetname) against search string.
+ * @param aSearchData - Criteria to search against.
+ * @param aAuxData - a pointer on auxiliary data, not used here.
+ * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
+ * @return True if this item matches the search criteria.
+ */
+bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData,
+                         void* aAuxData, wxPoint * aFindLocation )
 {
-    if( !SCH_ITEM::Matches( m_SheetName, aSearchData ) )
-        return SCH_ITEM::Matches( m_FileName, aSearchData );
+    if( SCH_ITEM::Matches( m_FileName, aSearchData ) )
+    {
+        if( aFindLocation )
+            *aFindLocation = GetFileNamePosition();
+        return true;
+    }
 
-    return true;
+    if( SCH_ITEM::Matches( m_SheetName, aSearchData ) )
+    {
+        if( aFindLocation )
+            *aFindLocation = GetSheetNamePosition();
+        return true;
+    }
+
+    return false;
 }
 
 

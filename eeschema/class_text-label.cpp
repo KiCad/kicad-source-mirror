@@ -181,9 +181,17 @@ wxPoint SCH_TEXT::GetSchematicTextOffset()
 }
 
 
-bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
-    return SCH_ITEM::Matches( m_Text, aSearchData );
+    if( SCH_ITEM::Matches( m_Text, aSearchData ) )
+    {
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        if( aFindLocation )
+            *aFindLocation = BoundaryBox.Centre();
+        return true;
+    }
+    
+    return false;
 }
 
 

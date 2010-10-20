@@ -106,9 +106,11 @@ public:
      * @param aAuxData - a pointer on auxiliary data, if needed (NULL if not used).
      *        When searching string in REFERENCE field we must know the sheet path
      *          This param is used in such cases
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void * aAuxData )
+    virtual bool Matches( wxFindReplaceData& aSearchData,
+                          void * aAuxData, wxPoint * aFindLocation )
         { return false; }
 
     /**

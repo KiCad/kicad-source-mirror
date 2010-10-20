@@ -202,9 +202,11 @@ public:
      *
      * @param aSearchData - Criteria to search item against.
      * @param aLastItem - Find next item after aLastItem if not NULL.
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
      */
-    SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData, SCH_ITEM* aLastItem = NULL );
+    SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData, SCH_ITEM* aLastItem,
+                             wxPoint * aFindLocation  );
 
     bool operator=( const SCH_SHEET_PATH& d1 );
 
@@ -338,11 +340,13 @@ public:
      * @param aSheetFound - The sheet the item was found in.  NULL if the next item
      *                      is not found.
      * @param aLastItem - Find next item after aLastItem if not NULL.
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
      */
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData,
-                             SCH_SHEET_PATH**   aSheetFound = NULL,
-                             SCH_ITEM*          aLastItem = NULL );
+                             SCH_SHEET_PATH**   aSheetFound,
+                             SCH_ITEM*          aLastItem,
+                             wxPoint * aFindLocation );
 
 private:
 

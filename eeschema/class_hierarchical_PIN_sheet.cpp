@@ -259,9 +259,24 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 }
 
 
-bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData )
+/** function Matches
+ * Compare hierarchical pin name against search string.
+ * @param aSearchData - Criteria to search against.
+ * @param aAuxData - a pointer on auxiliary data, not used here
+ * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
+ * @return True if this item matches the search criteria.
+ */
+bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
+                             void* aAuxData, wxPoint * aFindLocation )
 {
-    return SCH_ITEM::Matches( m_Text, aSearchData );
+    if( SCH_ITEM::Matches( m_Text, aSearchData ) )
+    {
+        if( aFindLocation )
+            *aFindLocation = m_Pos;
+        return true;
+    }
+
+    return false;
 }
 
 

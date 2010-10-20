@@ -290,7 +290,11 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
  */
 void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
 {
-    static SCH_ITEM*  lastItem = NULL;
+    static SCH_ITEM*  lastItem = NULL;  /* last item found when searching a match
+                                         * note: the actual matched item can be a
+                                         * part of lastItem (for instance a field in a component
+                                         */
+    static wxPoint  lastItemPosition;   // the actual position of the matched sub item
 
     SCH_SHEET_LIST    schematic;
     wxString          msg;
@@ -304,11 +308,11 @@ void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem );
+        lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem, &lastItemPosition );
     }
     else
     {
-        lastItem = schematic.MatchNextItem( searchCriteria, &sheetFoundIn, lastItem );
+        lastItem = schematic.MatchNextItem( searchCriteria, &sheetFoundIn, lastItem, &lastItemPosition );
     }
 
     if( lastItem != NULL )
@@ -321,7 +325,8 @@ void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->m_Curseur = lastItem->GetBoundingBox().Centre();
+//        sheetFoundIn->LastScreen()->m_Curseur = lastItem->GetBoundingBox().Centre();
+        sheetFoundIn->LastScreen()->m_Curseur = lastItemPosition;
         Recadre_Trace( true );
 
         msg = event.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();

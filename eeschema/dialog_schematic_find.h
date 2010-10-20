@@ -31,11 +31,14 @@ enum SchematicFindReplaceFlags
     /* Search all fields in component, not just the value and reference fields. */
     FR_SEARCH_ALL_FIELDS     = wxFR_MATCHCASE << 2,
 
+    /* Search texts (name and number (a 4 letters text) )in pins. */
+    FR_SEARCH_ALL_PINS     = wxFR_MATCHCASE << 3,
+
     /* Perform search using simple wild card matching (* & ?). */
-    FR_MATCH_WILDCARD        = wxFR_MATCHCASE << 3,
+    FR_MATCH_WILDCARD        = wxFR_MATCHCASE << 4,
 
     /* Wrap around the beginning or end of search list. */
-    FR_SEARCH_WRAP           = wxFR_MATCHCASE << 4
+    FR_SEARCH_WRAP           = wxFR_MATCHCASE << 5
 };
 
 

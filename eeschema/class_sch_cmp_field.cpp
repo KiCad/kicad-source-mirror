@@ -405,10 +405,15 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
+    bool match;
     if( aAuxData && m_FieldId == REFERENCE )
     {
+        // reference is a special field because:
+        // >> a part identifier is added in multi parts per package
+        //      (the .m_AddExtraText of the field is set in this case )
+        // >> In complex hierarchies, the actual reference depend on the sheet path.
         SCH_COMPONENT*  pSch     = (SCH_COMPONENT*) m_Parent;
         SCH_SHEET_PATH* sheet    = (SCH_SHEET_PATH*) aAuxData;
         wxString        fulltext = pSch->GetRef( sheet );
@@ -419,10 +424,19 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
             int part_id = pSch->GetUnitSelection( sheet );
             fulltext << LIB_COMPONENT::ReturnSubReference( part_id );
         }
-        return SCH_ITEM::Matches( fulltext, aSearchData );
+        match = SCH_ITEM::Matches( fulltext, aSearchData );
     }
 
-    return SCH_ITEM::Matches( m_Text, aSearchData );
+    else
+        match = SCH_ITEM::Matches( m_Text, aSearchData );
+    if( match )
+    {
+        EDA_Rect BoundaryBox = GetBoundaryBox();
+        if( aFindLocation )
+            *aFindLocation = GetBoundaryBox().Centre();
+        return true;
+    }
+    return false;
 }
 
 

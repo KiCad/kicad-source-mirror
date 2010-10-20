@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,6 +46,7 @@ class DIALOG_SCH_FIND_BASE : public wxDialog
 		wxCheckBox* m_checkWildcardMatch;
 		wxCheckBox* m_checkWrap;
 		wxCheckBox* m_checkAllFields;
+		wxCheckBox* m_checkAllPins;
 		wxCheckBox* m_checkCurrentSheetOnly;
 		wxButton* m_buttonFind;
 		wxButton* m_buttonReplace;
@@ -53,16 +54,17 @@ class DIALOG_SCH_FIND_BASE : public wxDialog
 		wxButton* m_buttonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnUpdateDrcUI( wxUpdateUIEvent& event ){ event.Skip(); }
-		virtual void OnUpdateWholeWordUI( wxUpdateUIEvent& event ){ event.Skip(); }
-		virtual void OnUpdateWildcardUI( wxUpdateUIEvent& event ){ event.Skip(); }
-		virtual void OnFind( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnUpdateFindUI( wxUpdateUIEvent& event ){ event.Skip(); }
-		virtual void OnCancel( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUpdateDrcUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnUpdateWholeWordUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnUpdateWildcardUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnFind( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateFindUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SCH_FIND_BASE();
 	

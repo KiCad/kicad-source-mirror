@@ -26,11 +26,12 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     m_checkMatchCase->SetValue( flags & wxFR_MATCHCASE );
     m_checkWholeWord->SetValue( flags & wxFR_WHOLEWORD );
 
-    /* Whole work and wild card searches are mutually exclusive. */
+    /* Whole word and wild card searches are mutually exclusive. */
     if( !( flags & wxFR_WHOLEWORD ) )
         m_checkWildcardMatch->SetValue( flags & FR_MATCH_WILDCARD );
 
     m_checkAllFields->SetValue( flags & FR_SEARCH_ALL_FIELDS );
+    m_checkAllPins->SetValue( flags & FR_SEARCH_ALL_PINS );
     m_checkWrap->SetValue( flags & FR_SEARCH_WRAP );
     m_checkCurrentSheetOnly->SetValue( flags & FR_CURRENT_SHEET_ONLY );
 
@@ -120,6 +121,9 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
 
     if( m_checkAllFields->GetValue() )
         flags |= FR_SEARCH_ALL_FIELDS;
+
+    if( m_checkAllPins->GetValue() )
+        flags |= FR_SEARCH_ALL_PINS;
 
     if( m_checkWrap->GetValue() )
         flags |= FR_SEARCH_WRAP;

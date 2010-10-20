@@ -164,9 +164,11 @@ public:
      *
      * @param aSearchData - Criterial to search against.
      * @param aAuxData - a pointer on auxiliary data, if needed. Can be null
+     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData );
+    virtual bool Matches( wxFindReplaceData& aSearchData,
+                           void* aAuxData, wxPoint * aFindLocation );
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );

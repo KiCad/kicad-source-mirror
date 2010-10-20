@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,29 +68,26 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	leftSizer->Add( leftGridSizer, 1, wxALL|wxEXPAND, 6 );
 	
 	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Match &whole word"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	leftSizer->Add( m_checkWholeWord, 0, wxALL, 6 );
 	
 	m_checkMatchCase = new wxCheckBox( this, wxID_ANY, _("&Match case"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	leftSizer->Add( m_checkMatchCase, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkWildcardMatch = new wxCheckBox( this, wxID_ANY, _("Search &using simple wildcard matching"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	leftSizer->Add( m_checkWildcardMatch, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkWrap = new wxCheckBox( this, wxID_ANY, _("Wrap around &end of search list"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkWrap->SetValue(true);
-	
+	m_checkWrap->SetValue(true); 
 	leftSizer->Add( m_checkWrap, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search all component &fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	leftSizer->Add( m_checkAllFields, 0, wxALL, 6 );
 	
-	leftSizer->Add( m_checkAllFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
+	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search all pin names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	leftSizer->Add( m_checkAllPins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 	
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current sheet on&ly"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
+	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxALL, 6 );
 	
 	mainSizer->Add( leftSizer, 1, wxALL|wxEXPAND, 6 );
 	
@@ -99,7 +96,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_buttonFind = new wxButton( this, wxID_FIND, _("&Find"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonFind->SetDefault(); 
-	rightSizer->Add( m_buttonFind, 0, wxALL, 6 );
+	rightSizer->Add( m_buttonFind, 0, wxALL|wxEXPAND, 6 );
 	
 	m_buttonReplace = new wxButton( this, wxID_ANY, _("&Replace"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonReplace->Hide();
@@ -112,7 +109,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	rightSizer->Add( m_buttonReplaceAll, 0, wxALL, 5 );
 	
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	rightSizer->Add( m_buttonCancel, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
+	rightSizer->Add( m_buttonCancel, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 6 );
 	
 	mainSizer->Add( rightSizer, 0, wxALL|wxEXPAND, 6 );
 	
@@ -144,4 +141,5 @@ DIALOG_SCH_FIND_BASE::~DIALOG_SCH_FIND_BASE()
 	m_buttonFind->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnFind ), NULL, this );
 	m_buttonFind->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SCH_FIND_BASE::OnUpdateFindUI ), NULL, this );
 	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_FIND_BASE::OnCancel ), NULL, this );
+	
 }

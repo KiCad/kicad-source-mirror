@@ -115,11 +115,21 @@ void SCH_MARKER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData )
+bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, wxPoint * aFindLocation )
 {
     if( !SCH_ITEM::Matches( m_drc.GetMainText(), aSearchData ) )
-        return SCH_ITEM::Matches( m_drc.GetAuxiliaryText(), aSearchData );
+    {
+        if( SCH_ITEM::Matches( m_drc.GetAuxiliaryText(), aSearchData ) )
+        {
+            if( aFindLocation )
+                *aFindLocation = m_Pos;
+            return true;
+        }
+        return false;
+    }
 
+    if( aFindLocation )
+        *aFindLocation = m_Pos;
     return true;
 }
 

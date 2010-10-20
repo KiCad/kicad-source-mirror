@@ -320,7 +320,8 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
 
 
 SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
-                                         SCH_ITEM*          aLastItem )
+                                         SCH_ITEM*          aLastItem,
+                                         wxPoint * aFindLocation )
 {
     bool hasWrapped = false;
     bool firstItemFound = false;
@@ -335,7 +336,7 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
         }
         else
         {
-            if( drawItem->Matches( aSearchData, this ) )
+            if( drawItem->Matches( aSearchData, this, aFindLocation ) )
                 return drawItem;
         }
 
@@ -618,7 +619,8 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
 
 SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
                                          SCH_SHEET_PATH**   aSheetFoundIn,
-                                         SCH_ITEM*          aLastItem )
+                                         SCH_ITEM*          aLastItem,
+                                         wxPoint * aFindLocation )
 {
     bool hasWrapped = false;
     bool firstItemFound = false;
@@ -638,7 +640,7 @@ SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
             }
             else
             {
-                if( drawItem->Matches( aSearchData, sheet ) )
+                if( drawItem->Matches( aSearchData, sheet, aFindLocation ) )
                 {
                     if( aSheetFoundIn )
                         *aSheetFoundIn = sheet;
