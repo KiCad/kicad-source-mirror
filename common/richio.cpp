@@ -71,9 +71,11 @@ void LINE_READER::expandCapacity( unsigned newsize )
         // resize the buffer, and copy the original data
         char* bigger = new char[capacity];
 
+        wxASSERT( capacity >= length );
+
         memcpy( bigger, line, length );
 
-        delete line;
+        delete[] line;
         line = bigger;
     }
 }
