@@ -37,15 +37,45 @@
 LINE_READER::LINE_READER( unsigned aMaxLineLength )
 {
     lineNum = 0;
+
+    if( aMaxLineLength == 0 )       // caller is goofed up.
+        aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX;
+
     maxLineLength = aMaxLineLength;
 
-    // the real capacity is 10 bytes larger than requested.
-    capacity = aMaxLineLength + 10;
+    // start at the INITIAL size, expand as needed up to the MAX size in maxLineLength
+    capacity = LINE_READER_LINE_INITIAL_SIZE;
+
+    // but never go above user's aMaxLineLength, and leave space for trailing nul
+    if( capacity > aMaxLineLength-1 )
+        capacity = aMaxLineLength-1;
 
     line = new char[capacity];
 
     line[0] = '\0';
     length  = 0;
+}
+
+
+void LINE_READER::expandCapacity( unsigned newsize )
+{
+    // length can equal maxLineLength and nothing breaks, there's room for
+    // the terminating nul. cannot go over this.
+    if( newsize > maxLineLength+1 )
+        newsize = maxLineLength+1;
+
+    if( newsize > capacity )
+    {
+        capacity = newsize;
+
+        // resize the buffer, and copy the original data
+        char* bigger = new char[capacity];
+
+        memcpy( bigger, line, length );
+
+        delete line;
+        line = bigger;
+    }
 }
 
 
@@ -57,56 +87,61 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName, unsi
 }
 
 
-int FILE_LINE_READER::ReadLine() throw (IOError)
+unsigned FILE_LINE_READER::ReadLine() throw (IOError)
 {
-    const char* p = fgets( line, capacity, fp );
+    length  = 0;
+    line[0] = 0;
 
-    if( !p )
+    // fgets always put a terminating nul at end of its read.
+    while( fgets( line + length, capacity - length, fp ) )
     {
-        line[0] = 0;
-        length  = 0;
-    }
-    else
-    {
-        length = strlen( line );
+        length += strlen( line + length );
 
-        if( length > maxLineLength )
+        if( length == maxLineLength )
             throw IOError( _("Line length exceeded") );
 
-        ++lineNum;
+        // a normal line breaks here, once through
+        if( length < capacity-1 || line[length-1] == '\n' )
+            break;
+
+        expandCapacity( capacity * 2 );
     }
+
+    if( length )
+        ++lineNum;
 
     return length;
 }
 
 
-int STRING_LINE_READER::ReadLine() throw (IOError)
+unsigned STRING_LINE_READER::ReadLine() throw (IOError)
 {
     size_t      nlOffset = lines.find( '\n', ndx );
-    size_t      advance;
 
     if( nlOffset == std::string::npos )
-        advance = lines.length() - ndx;
+        length = lines.length() - ndx;
     else
-        advance = nlOffset - ndx + 1;     // include the newline, so +1
+        length = nlOffset - ndx + 1;     // include the newline, so +1
 
-    if( advance )
+    if( length )
     {
-        if( advance > maxLineLength )
+        if( length >= maxLineLength )
             throw IOError( _("Line length exceeded") );
 
-        wxASSERT( ndx + advance <= lines.length() );
+        if( length > capacity )
+            expandCapacity( length );
 
-        memcpy( line, &source[ndx], advance );
+        wxASSERT( ndx + length <= lines.length() );
+
+        memcpy( line, &source[ndx], length );
 
         ++lineNum;
-        ndx += advance;
+        ndx += length;
     }
 
-    length = advance;
-    line[advance] = 0;
+    line[length] = 0;
 
-    return advance;
+    return length;
 }
 
 

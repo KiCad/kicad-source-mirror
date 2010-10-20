@@ -79,7 +79,6 @@ enum DSN_SYNTAX_T {
 class DSNLEXER
 {
     char*               next;
-    char*               start;
     char*               limit;
 
     typedef boost::ptr_vector<LINE_READER>  READER_STACK;
@@ -100,14 +99,21 @@ class DSNLEXER
     const KEYWORD*      keywords;
     unsigned            keywordCount;
 
+    /// Use casting char* operator to get start of line, which is dynamic since reader
+    /// can be resizing its buffer at each reader->ReadLine() only.
+    char*               start() const { return (char*) (*reader); }
+
     void init();
 
     int readLine() throw (IOError)
     {
-        int len = reader->ReadLine();
+        unsigned len = reader->ReadLine();
 
-        next  = start;
-        limit = start + len;
+        // set next and limit to start() and start() + len.
+        // start() is constant until the next ReadLine(), which could resize and
+        // relocate reader's line buffer.
+        next  = start();
+        limit = next + len;
 
         return len;
     }
@@ -187,12 +193,12 @@ public:
      * in the case of FILE_LINE_READER this means the associated FILE is closed.
      * The most recently used former LINE_READER on the stack becomes the
      * current LINE_READER and its previous position in its input stream and the
-     * its latest line number should pertain.  PopReader always starts reading 
+     * its latest line number should pertain.  PopReader always starts reading
      * from a new line upon returning to the previous LINE_READER.  A pop is only
      * possible if there are at least 2 LINE_READERs on the stack, since popping
      * the last one is not supported.
      *
-     * @return bool - true if there was at least two readers on the stack and 
+     * @return bool - true if there was at least two readers on the stack and
      *  therefore the pop succeeded, else false and the pop failed.
      */
     bool PopReader();

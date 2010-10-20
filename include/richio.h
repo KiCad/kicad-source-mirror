@@ -61,6 +61,8 @@ struct IOError
     }
 };
 
+#define LINE_READER_LINE_DEFAULT_MAX        100000
+#define LINE_READER_LINE_INITIAL_SIZE       5000
 
 /**
  * Class LINE_READER
@@ -70,12 +72,17 @@ struct IOError
 class LINE_READER
 {
 protected:
-    unsigned            length;
-    int                 lineNum;
-    char*               line;
-    unsigned            maxLineLength;
-    unsigned            capacity;
-    wxString            source;     ///< origin of text lines, e.g. filename or "clipboard"
+    unsigned    length;         ///< no. bytes in line before trailing nul.
+    int         lineNum;
+
+    char*       line;           ///< the read line of UTF8 text
+    unsigned    capacity;       ///< no. bytes allocated for line.
+
+    unsigned    maxLineLength;  ///< maximum allowed capacity using resizing.
+
+    wxString    source;         ///< origin of text lines, e.g. filename or "clipboard"
+
+    void        expandCapacity( unsigned newsize );
 
 public:
 
@@ -84,7 +91,7 @@ public:
      * builds a line reader and fixes the length of the maximum supported
      * line length to @a aMaxLineLength.
      */
-    LINE_READER( unsigned aMaxLineLength );
+    LINE_READER( unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
     virtual ~LINE_READER()
     {
@@ -96,10 +103,10 @@ public:
      * reads a line of text into the buffer and increments the line number
      * counter.  If the line is larger than the buffer size, then an exception
      * is thrown.
-     * @return int - The number of bytes read, 0 at end of file.
+     * @return unsigned - The number of bytes read, 0 at end of file.
      * @throw IOError only when a line is too long.
      */
-    virtual int ReadLine() throw (IOError) = 0;
+    virtual unsigned ReadLine() throw (IOError) = 0;
 
     /**
      * Function GetSource
@@ -118,7 +125,7 @@ public:
      * is a casting operator that returns a char* pointer to the start of the
      * line buffer.
      */
-    operator char* ()
+    operator char* () const
     {
         return line;
     }
@@ -166,7 +173,7 @@ public:
      * @param aFileName is the name of the file for error reporting purposes.
      * @param aMaxLineLength is the number of bytes to use in the line buffer.
      */
-    FILE_LINE_READER( FILE* aFile,  const wxString& aFileName, unsigned aMaxLineLength );
+    FILE_LINE_READER( FILE* aFile,  const wxString& aFileName, unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
     ~FILE_LINE_READER()
     {
@@ -179,10 +186,10 @@ public:
      * reads a line of text into the buffer and increments the line number
      * counter.  If the line is larger than the buffer size, then an exception
      * is thrown.
-     * @return int - The number of bytes read, 0 at end of file.
+     * @return unsigned - The number of bytes read, 0 at end of file.
      * @throw IOError only when a line is too long.
      */
-    int ReadLine() throw (IOError);
+    unsigned ReadLine() throw (IOError);
 
     /**
      * Function Rewind
@@ -234,10 +241,10 @@ public:
      * reads a line of text into the buffer and increments the line number
      * counter.  If the line is larger than the buffer size, then an exception
      * is thrown.
-     * @return int - The number of bytes read, 0 at end of file.
+     * @return unsigned - The number of bytes read, 0 at end of file.
      * @throw IOError only when a line is too long.
      */
-    int ReadLine() throw (IOError);
+    unsigned ReadLine() throw (IOError);
 };
 
 

@@ -86,11 +86,10 @@ void DSNLEXER::PushReader( LINE_READER* aLineReader )
 {
     readerStack.push_back( aLineReader );
     reader = aLineReader;
-    start = (char*) (*aLineReader);
 
     // force a new readLine() as first thing.
-    limit = start;
-    next  = start;
+    limit = start();
+    next  = start();
 }
 
 
@@ -102,12 +101,10 @@ bool DSNLEXER::PopReader()
         readerStack.pop_back();
 
         reader = &readerStack.back();
-    
-        start = (char*) (*reader);
-    
+
         // force a new readLine() as first thing.
-        limit = start;
-        next  = start;
+        limit = start();
+        next  = start();
         return true;
     }
     return false;
@@ -334,7 +331,7 @@ L_read:
                 goto exit;
             }
 
-            cur = start;
+            cur = start();
 
             // skip leading whitespace
             while( cur<limit && isSpace(*cur) )
@@ -348,8 +345,8 @@ L_read:
                 {
                     // save the entire line, including new line as the current token.
                     // the '#' character may not be at offset zero.
-                    curText = start;        // entire line is the token
-                    cur     = start;        // ensure a good curOffset below
+                    curText = start();      // entire line is the token
+                    cur     = start();      // ensure a good curOffset below
                     curTok  = DSN_COMMENT;
                     head    = limit;        // do a readLine() on next call in here.
                     goto exit;
@@ -417,7 +414,7 @@ L_read:
             like:  U2-14 or "U2"-"14"
             This is detectable by a non-space immediately preceeding the dash.
         */
-        if( *cur == '-' && cur>start && !isSpace( cur[-1] ) )
+        if( *cur == '-' && cur>start() && !isSpace( cur[-1] ) )
         {
             curText = '-';
             curTok = DSN_DASH;
@@ -538,7 +535,7 @@ L_read:
 
 exit:   // single point of exit, no returns elsewhere please.
 
-    curOffset = cur - start;
+    curOffset = cur - start();
 
     next = head;
 
