@@ -17,15 +17,16 @@
 #include "general.h"
 #include "protos.h"
 #include "class_libentry.h"
+#include "transform.h"
 
 #include <wx/tokenzr.h>
 #include <wx/stream.h>
 #include <wx/txtstrm.h>
 
 
-/***************************/
-/* class LibraryFieldEntry */
-/***************************/
+/*******************/
+/* class LIB_FIELD */
+/*******************/
 
 /**
  * a Field is a string linked to a component.
@@ -82,6 +83,8 @@ void LIB_FIELD::Init( int id )
     m_FieldId = id;
     m_Size.x = m_Size.y = DEFAULT_SIZE_TEXT;
     m_typeName = _( "Field" );
+    m_Orient = TEXT_ORIENT_HORIZ;
+    m_rotate = false;
 
     // fields in RAM must always have names, because we are trying to get
     // less dependent on field ids and more dependent on names.
@@ -288,9 +291,8 @@ int LIB_FIELD::GetPenSize()
  * if aData not NULL, aData must point a wxString which is used instead of
  * the m_Text
  */
-void LIB_FIELD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                      const wxPoint& aOffset, int aColor, int aDrawMode,
-                      void* aData, const int aTransformMatrix[2][2] )
+void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                             int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
     int      color;
@@ -312,29 +314,22 @@ void LIB_FIELD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     }
 
     if( color < 0 )
-    {
-        switch( m_FieldId )
-        {
-        case REFERENCE:
-            color = ReturnLayerColor( LAYER_REFERENCEPART );
-            break;
+        color = GetDefaultColor();
 
-        case VALUE:
-            color = ReturnLayerColor( LAYER_VALUEPART );
-            break;
+    text_pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
-        default:
-            color = ReturnLayerColor( LAYER_FIELDS );
-            break;
-        }
-    }
+    wxString text;
 
-    text_pos = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
-    wxString* text = aData ? (wxString*)aData : &m_Text;
+    if( aData )
+        text = *(wxString*)aData;
+    else if( InEditMode() )
+        text = GetFullText( m_Unit );
+    else
+        text = m_Text;
+
     GRSetDrawMode( aDC, aDrawMode );
-    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, *text,
-                     m_Orient, m_Size, m_HJustify, m_VJustify, linewidth,
-                     m_Italic, m_Bold );
+    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, text, m_Orient, m_Size,
+                     m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
 
     /* Set to one (1) to draw bounding box around field text to validate
      * bounding box calculation. */
@@ -350,6 +345,20 @@ void LIB_FIELD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
+void LIB_FIELD::saveAttributes()
+{
+    m_savedPos = m_Pos;
+    m_savedOrientation = m_Orient;
+}
+
+
+void LIB_FIELD::restoreAttributes()
+{
+    m_Pos = m_savedPos;
+    m_Orient = m_savedOrientation;
+}
+
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -358,7 +367,7 @@ void LIB_FIELD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  */
 bool LIB_FIELD::HitTest( const wxPoint& refPos )
 {
-    return HitTest( refPos, 0, DefaultTransformMatrix );
+    return HitTest( refPos, 0, DefaultTransform );
 }
 
 
@@ -369,8 +378,7 @@ bool LIB_FIELD::HitTest( const wxPoint& refPos )
  * @param aThreshold =  unused here (TextHitTest calculates its threshold )
  * @param aTransMat = the transform matrix
  */
-bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold,
-                         const int aTransMat[2][2] )
+bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     int extraCharCount = 0;
     // Reference designator text has one or 2 additional character (displays
@@ -387,14 +395,14 @@ bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold,
         }
     }
 
-    wxPoint physicalpos = TransformCoordinate( aTransMat, m_Pos );
+    wxPoint physicalpos = aTransform.TransformCoordinate( m_Pos );
     wxPoint tmp = m_Pos;
     m_Pos = physicalpos;
     /* The text orientation may need to be flipped if the
      *  transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
     */
-    int t1 = ( aTransMat[0][0] != 0 ) ^ ( m_Orient != 0 );
+    int t1 = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
     EXCHG( m_Orient, orient );
 
@@ -501,7 +509,7 @@ void LIB_FIELD::DoMirrorHorizontal( const wxPoint& center )
 
 
 void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                        const int transform[2][2] )
+                        const TRANSFORM& aTransform )
 {
 }
 
@@ -543,4 +551,102 @@ EDA_Rect LIB_FIELD::GetBoundingBox()
     rect.SetEnd( end );
 
     return rect;
+}
+
+
+int LIB_FIELD::GetDefaultColor()
+{
+    int color;
+
+    switch( m_FieldId )
+    {
+    case REFERENCE:
+        color = ReturnLayerColor( LAYER_REFERENCEPART );
+        break;
+
+    case VALUE:
+        color = ReturnLayerColor( LAYER_VALUEPART );
+        break;
+
+    default:
+        color = ReturnLayerColor( LAYER_FIELDS );
+        break;
+    }
+
+    return color;
+}
+
+
+void LIB_FIELD::Rotate()
+{
+    if( InEditMode() )
+    {
+        m_rotate = true;
+    }
+    else
+    {
+        m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
+    }
+}
+
+
+void LIB_FIELD::BeginEdit( int aEditMode, const wxPoint aPosition )
+{
+    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
+                 wxT( "Invalid edit mode for LIB_FIELD object." ) );
+
+    if( aEditMode == IS_MOVED )
+    {
+        m_initialPos = m_Pos;
+        m_initialCursorPos = aPosition;
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+    else
+    {
+        m_Pos = aPosition;
+    }
+
+    m_Flags = aEditMode;
+}
+
+
+bool LIB_FIELD::ContinueEdit( const wxPoint aPosition )
+{
+    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0, false,
+                   wxT( "Bad call to ContinueEdit().  Text is not being edited." ) );
+
+    return false;
+}
+
+
+void LIB_FIELD::EndEdit( const wxPoint& aPosition, bool aAbort )
+{
+    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0,
+                   wxT( "Bad call to EndEdit().  Text is not being edited." ) );
+
+    if( aAbort && !IsNew() )
+        restoreAttributes();
+
+    m_Flags = 0;
+    SetEraseLastDrawItem( false );
+}
+
+
+void LIB_FIELD::calcEdit( const wxPoint& aPosition )
+{
+    if( m_rotate )
+    {
+        m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
+        m_rotate = false;
+    }
+
+    if( m_Flags == IS_NEW )
+    {
+        m_Pos = aPosition;
+    }
+    else if( m_Flags == IS_MOVED )
+    {
+        Move( m_initialPos + aPosition - m_initialCursorPos );
+    }
 }

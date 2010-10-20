@@ -13,6 +13,7 @@
 #include "general.h"
 #include "protos.h"
 #include "lib_polyline.h"
+#include "transform.h"
 
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
@@ -186,7 +187,7 @@ void LIB_POLYLINE::DoMirrorHorizontal( const wxPoint& aCenter )
 
 
 void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                           const int aTransform[2][2] )
+                           const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -200,7 +201,7 @@ void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill
     for( i = 0; i < m_PolyPoints.size(); i++ )
     {
         wxPoint pos = m_PolyPoints[i];
-        pos = TransformCoordinate( aTransform, pos ) + aOffset;
+        pos =  aTransform.TransformCoordinate(pos ) + aOffset;
         Poly[i * 2]     = pos.x;
         Poly[i * 2 + 1] = pos.y;
     }
@@ -232,9 +233,9 @@ int LIB_POLYLINE::GetPenSize()
 }
 
 
-void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                         const wxPoint& aOffset, int aColor, int aDrawMode,
-                         void* aData, const int aTransformMatrix[2][2] )
+void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                                int aColor, int aDrawMode, void* aData,
+                                const TRANSFORM& aTransform )
 {
     wxPoint         pos1;
     int             color = ReturnLayerColor( LAYER_DEVICE );
@@ -273,8 +274,7 @@ void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 
     for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
     {
-        Buf_Poly_Drawings[ii] = TransformCoordinate( aTransformMatrix,
-                                                     m_PolyPoints[ii] ) + aOffset;
+        Buf_Poly_Drawings[ii] = aTransform.TransformCoordinate( m_PolyPoints[ii] ) + aOffset;
     }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
@@ -306,6 +306,18 @@ void LIB_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
+void LIB_POLYLINE::saveAttributes()
+{
+    m_savedPolyPoints = m_PolyPoints;
+}
+
+
+void LIB_POLYLINE::restoreAttributes()
+{
+    m_PolyPoints = m_savedPolyPoints;
+}
+
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -319,7 +331,7 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
-    return HitTest( aRefPos, mindist, DefaultTransformMatrix );
+    return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
 
@@ -329,14 +341,14 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
-        end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
+        start = aTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
+        end   = aTransform.TransformCoordinate( m_PolyPoints[ii] );
 
         if( TestSegmentHit( aPosRef, start, end, aThreshold ) )
             return true;
@@ -373,6 +385,22 @@ EDA_Rect LIB_POLYLINE::GetBoundingBox()
 }
 
 
+void LIB_POLYLINE::DeleteSegment( const wxPoint aPosition )
+{
+    // First segment is kept, only its end point is changed
+    while( GetCornerCount() > 2 )
+    {
+        m_PolyPoints.pop_back();
+
+        if( m_PolyPoints[ GetCornerCount() - 1 ] != aPosition )
+        {
+            m_PolyPoints[ GetCornerCount() - 1 ] = aPosition;
+            break;
+        }
+    }
+}
+
+
 void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 {
     wxString msg;
@@ -380,8 +408,7 @@ void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width,
-                                 EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
     aFrame->AppendMsgPanel(_( "Line width" ), msg, BLUE );
 
@@ -389,4 +416,109 @@ void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
+{
+    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                 wxT( "Invalid edit mode for LIB_POLYLINE object." ) );
+
+    if( aEditMode == IS_NEW )
+    {
+        m_PolyPoints.push_back( aPosition );  // Start point of first segment.
+        m_PolyPoints.push_back( aPosition );  // End point of first segment.
+    }
+    else if( aEditMode == IS_RESIZED )
+    {
+        saveAttributes();
+
+        // Drag one edge point of the polyline
+        // Find the nearest edge point to be dragged
+        wxPoint startPoint = m_PolyPoints[0];
+
+        // Begin with the first list point as nearest point
+        int index = 0;
+        m_ModifyIndex = 0;
+        m_initialPos = startPoint;
+
+        // First distance is the current minimum distance
+        int distanceMin = (aPosition - startPoint).x * (aPosition - startPoint).x
+                          + (aPosition - startPoint).y * (aPosition - startPoint).y;
+
+        // Find the right index of the point to be dragged
+        BOOST_FOREACH( wxPoint point, m_PolyPoints )
+        {
+            int distancePoint = (aPosition - point).x * (aPosition - point).x +
+                                (aPosition - point).y * (aPosition - point).y;
+
+            if( distancePoint < distanceMin )
+            {
+                // Save point.
+                m_initialPos = point;
+                m_ModifyIndex = index;
+                distanceMin = distancePoint;
+                break;
+            }
+
+            index++;
+        }
+
+        SetEraseLastDrawItem();
+    }
+    else if( aEditMode == IS_MOVED )
+    {
+        m_initialCursorPos = aPosition;
+        m_initialPos = m_PolyPoints[0];
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+
+    m_Flags = aEditMode;
+}
+
+
+bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
+{
+    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
+                   wxT( "Bad call to ContinueEdit().  LIB_POLYLINE is not being edited." ) );
+
+    if( m_Flags == IS_NEW )
+    {
+        m_PolyPoints.push_back( aPosition );
+        return true;
+    }
+
+    return false;
+}
+
+
+void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
+{
+    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                   wxT( "Bad call to EndEdit().  LIB_POLYLINE is not being edited." ) );
+
+    if( aAbort && !IsNew() )
+        restoreAttributes();
+
+    m_Flags = 0;
+    SetEraseLastDrawItem( false );
+}
+
+
+void LIB_POLYLINE::calcEdit( const wxPoint& aPosition )
+{
+    if( m_Flags == IS_NEW )
+    {
+        m_PolyPoints[ GetCornerCount() - 1 ] = aPosition;
+        SetEraseLastDrawItem();
+    }
+    else if( m_Flags == IS_RESIZED )
+    {
+        m_PolyPoints[ m_ModifyIndex ] = aPosition;
+    }
+    else if( m_Flags == IS_MOVED )
+    {
+        Move( m_initialPos + aPosition - m_initialCursorPos );
+    }
 }

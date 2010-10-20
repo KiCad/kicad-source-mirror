@@ -88,16 +88,13 @@ static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
 /* Undo */
-static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z',
-                             (int) wxID_UNDO );
+static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 
 /* Redo */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
-                             (int) wxID_REDO );
+static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
-static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
-                             GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z',
                              (int) wxID_REDO );
 #endif
 
@@ -131,27 +128,21 @@ static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                             HK_COPY_COMPONENT_OR_LABEL, 'C',
                                             ID_POPUP_SCH_COPY_ITEM );
 
-static Ki_HotkeyInfo HkDrag( wxT( "Drag Schematic Item" ),
-                             HK_DRAG, 'G',
+static Ki_HotkeyInfo HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
                              ID_POPUP_SCH_DRAG_CMP_REQUEST );
 static Ki_HotkeyInfo HkMove2Drag( wxT( "Switch move block to drag block" ),
                                   HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
-static Ki_HotkeyInfo HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST,
-                               WXK_INSERT );
+static Ki_HotkeyInfo HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static Ki_HotkeyInfo HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
-static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F'
-                                 + GR_KB_CTRL );
-static Ki_HotkeyInfo HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM,
-                                     WXK_F5 );
+static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static Ki_HotkeyInfo HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
 static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find next DRC marker" ), HK_FIND_NEXT_DRC_MARKER,
                                           WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
-static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ),
-                                  HK_LIBEDIT_CREATE_PIN, 'P' );
-static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST,
-                                  WXK_INSERT );
+static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
+static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 
@@ -256,8 +247,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     cmd.SetEventObject( this );
 
-    bool        ItemInEdit = GetScreen()->GetCurItem()
-                             && GetScreen()->GetCurItem()->m_Flags;
+    bool        ItemInEdit = GetScreen()->GetCurItem()&& GetScreen()->GetCurItem()->m_Flags;
     bool        RefreshToolBar = FALSE;
     SCH_SCREEN* screen = GetScreen();
 
@@ -272,8 +262,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         hotkey += 'A' - 'a';
 
     // Search command from key :
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey,
-                                                       s_Common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_Schematic_Hotkey_List );
     if( HK_Descr == NULL )
@@ -322,8 +311,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_REDO:
         if( !ItemInEdit )
         {
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
         }
         break;
@@ -383,8 +371,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             // switch to m_ID_current_state = ID_COMPONENT_BUTT;
             if( m_ID_current_state != ID_COMPONENT_BUTT )
-                SetToolID( ID_COMPONENT_BUTT, wxCURSOR_PENCIL,
-                          _( "Add Component" ) );
+                SetToolID( ID_COMPONENT_BUTT, wxCURSOR_PENCIL, _( "Add Component" ) );
             OnLeftClick( DC, MousePos );
         }
         break;
@@ -428,8 +415,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         if( !ItemInEdit )
         {
             if( m_ID_current_state != ID_NOCONN_BUTT )
-                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL,
-                          _( "Add \"NoNonnect\" Flags" ) );
+                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"NoNonnect\" Flags" ) );
             OnLeftClick( DC, MousePos );
         }
         break;
@@ -439,7 +425,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         {
             HandleBlockEndByPopUp(BLOCK_ROTATE, DC );
             break;
-        } 
+        }
         if( DrawStruct == NULL )
         {
             // Find the schematic object to rotate under the cursor
@@ -494,11 +480,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK)
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
         {
             HandleBlockEndByPopUp(BLOCK_MIRROR_Y, DC );
             break;
-        } 
+        }
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
         if( DrawStruct )
@@ -513,11 +499,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK) //allows bloc operation on hotkey
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK ) //allows bloc operation on hotkey
 		{
             HandleBlockEndByPopUp(BLOCK_MIRROR_X, DC );
             break;
-		} 
+		}
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct )
@@ -567,7 +553,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             {
                 // If it's a sheet, then check if a pinsheet is under the cursor
                 SCH_SHEET_PIN* slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct,
-                                                         GetScreen()->m_Curseur );
+                                                          GetScreen()->m_Curseur );
                 if( slabel )
                     DrawStruct = slabel;
             }
@@ -648,9 +634,8 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
         if( DrawStruct == NULL )
         {
-            DrawStruct = PickStruct( GetScreen()->m_Curseur,
-                                     GetScreen(), LIBITEM | TEXTITEM |
-                                     LABELITEM | SHEETITEM );
+            DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(),
+                                     LIBITEM | TEXTITEM | LABELITEM | SHEETITEM );
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
@@ -721,8 +706,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  * under the mouse cursor
  * Commands are case insensitive
  */
-void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
-                                    EDA_BaseStruct* DrawStruct )
+void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );
@@ -730,8 +714,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     cmd.SetEventObject( this );
 
     wxPoint MousePos   = GetScreen()->m_MousePosition;
-    bool    ItemInEdit = GetScreen()->GetCurItem()
-                         && GetScreen()->GetCurItem()->m_Flags;
+    bool    ItemInEdit = GetScreen()->GetCurItem()&& GetScreen()->GetCurItem()->m_Flags;
 
     if( hotkey == 0 )
         return;
@@ -740,8 +723,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
      * with non ascii codes like function keys */
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey,
-                                                       s_Common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, s_Common_Hotkey_List );
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( hotkey, s_LibEdit_Hotkey_List );
     if( HK_Descr == NULL )
@@ -843,7 +825,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_ROTATE:
         m_drawItem = LocateItemUsingCursor();
 
-        if( m_drawItem )
+        if( m_drawItem && !m_drawItem->InEditMode() )
         {
             switch( m_drawItem->Type() )
             {
@@ -875,7 +857,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_DELETE:
         m_drawItem = LocateItemUsingCursor();
 
-        if( m_drawItem )
+        if( m_drawItem && !m_drawItem->InEditMode() )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
@@ -886,7 +868,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
         m_drawItem = LocateItemUsingCursor();
 
-        if( m_drawItem )
+        if( m_drawItem && !m_drawItem->InEditMode() )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
@@ -897,7 +879,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_DRAG:
         m_drawItem = LocateItemUsingCursor();
 
-        if( m_drawItem )
+        if( m_drawItem && !m_drawItem->InEditMode() )
         {
             wxCommandEvent evt;
             evt.SetId( ID_POPUP_LIBEDIT_MODIFY_ITEM );

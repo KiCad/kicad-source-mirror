@@ -98,7 +98,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     orient = m_Orient;
-    if( parentComponent->m_Transform[0][1] )  // Rotate component 90 degrees.
+    if( parentComponent->m_Transform.y1 )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -245,11 +245,11 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
     hjustify = m_HJustify;
     vjustify = m_VJustify;
 
-    pos2 = pos + TransformCoordinate( parentComponent->m_Transform, pos1 );
+    pos2 = pos + parentComponent->m_Transform.TransformCoordinate( pos1 );
 
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
-    if( parentComponent->m_Transform[0][1] )
+    if( parentComponent->m_Transform.y1 )
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -259,20 +259,20 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
 
     /* Calculate the text justification, according to the component
      * orientation/mirror */
-    if( parentComponent->m_Transform[0][1] )
+    if( parentComponent->m_Transform.y1 )
     {
         /* is it mirrored (for text justify)*/
         EXCHG( hjustify, vjustify );
-        if( parentComponent->m_Transform[1][0] < 0 )
+        if( parentComponent->m_Transform.x2 < 0 )
             NEGATE( vjustify );
-        if( parentComponent->m_Transform[0][1] > 0 )
+        if( parentComponent->m_Transform.y1 > 0 )
             NEGATE( hjustify );
     }
     else    /* component horizontal: is it mirrored (for text justify)*/
     {
-        if( parentComponent->m_Transform[0][0] < 0 )
+        if( parentComponent->m_Transform.x1 < 0 )
             NEGATE( hjustify );
-        if( parentComponent->m_Transform[1][1] > 0 )
+        if( parentComponent->m_Transform.y2 > 0 )
             NEGATE( vjustify );
     }
 

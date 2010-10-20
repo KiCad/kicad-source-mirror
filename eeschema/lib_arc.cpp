@@ -12,17 +12,56 @@
 #include "general.h"
 #include "protos.h"
 #include "lib_arc.h"
+#include "transform.h"
+
+
+//! @brief Given three points A B C, compute the circumcenter of the resulting triangle
+//! reference: http://en.wikipedia.org/wiki/Circumscribed_circle
+//! Coordinates of circumcenter in Cartesian coordinates
+static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C )
+{
+    double  circumCenterX, circumCenterY;
+    double  Ax = (double) A.x;
+    double  Ay = (double) A.y;
+    double  Bx = (double) B.x;
+    double  By = (double) B.y;
+    double  Cx = (double) C.x;
+    double  Cy = (double) C.y;
+
+    wxPoint circumCenter;
+
+    double  D = 2.0 * ( Ax * ( By - Cy ) + Bx * ( Cy - Ay ) + Cx * ( Ay - By ) );
+
+    // prevent division / 0
+    if( fabs( D ) < 1e-7 )
+        D = 1e-7;
+
+    circumCenterX = ( (Ay * Ay + Ax * Ax) * (By - Cy) +
+                      (By * By + Bx * Bx) * (Cy - Ay) +
+                      (Cy * Cy + Cx * Cx) * (Ay - By) ) / D;
+
+    circumCenterY = ( (Ay * Ay + Ax * Ax) * (Cx - Bx) +
+                      (By * By + Bx * Bx) * (Ax - Cx) +
+                      (Cy * Cy + Cx * Cx) * (Bx - Ax) ) / D;
+
+    circumCenter.x = (int) circumCenterX;
+    circumCenter.y = (int) circumCenterY;
+
+    return circumCenter;
+}
 
 
 LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
 {
-    m_Radius     = 0;
-    m_t1         = 0;
-    m_t2         = 0;
-    m_Width      = 0;
-    m_Fill       = NO_FILL;
-    m_isFillable = true;
-    m_typeName   = _( "Arc" );
+    m_Radius        = 0;
+    m_t1            = 0;
+    m_t2            = 0;
+    m_Width         = 0;
+    m_Fill          = NO_FILL;
+    m_isFillable    = true;
+    m_typeName      = _( "Arc" );
+    m_editState     = 0;
+    m_lastEditState = 0;
 }
 
 
@@ -130,7 +169,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
 
-    return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
+    return HitTest( aRefPoint, mindist, DefaultTransform );
 }
 
 /** Function HitTest
@@ -140,8 +179,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
  *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold,
-                       const int aTransformationMatrix[2][2] )
+bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM& aTransform )
 {
 
     // TODO: use aTransMat to calculmates parameters
@@ -149,7 +187,7 @@ bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold,
 
     NEGATE( relativePosition.y );       // reverse Y axis
 
-    int distance = wxRound( EuclideanNorm( TwoPointVector(m_Pos, relativePosition) ) );
+    int distance = wxRound( EuclideanNorm( TwoPointVector( m_Pos, relativePosition ) ) );
 
     if( abs( distance - m_Radius ) > aThreshold )
         return false;
@@ -160,8 +198,8 @@ bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold,
     wxPoint startEndVector = TwoPointVector( m_ArcStart, m_ArcEnd);
     wxPoint startRelativePositionVector = TwoPointVector( m_ArcStart, relativePosition );
 
-    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart);
-    wxPoint centerEndVector = TwoPointVector( m_Pos, m_ArcEnd);
+    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart );
+    wxPoint centerEndVector = TwoPointVector( m_Pos, m_ArcEnd );
     wxPoint centerRelativePositionVector = TwoPointVector( m_Pos, relativePosition );
 
     // Compute the cross product to check if the point is in the sector
@@ -172,7 +210,7 @@ bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold,
     // relative to the start point to end point vector lies
     if( CrossProduct( startEndVector, startRelativePositionVector ) < 0 )
     {
-    	EXCHG(crossProductStart, crossProductEnd);
+    	EXCHG( crossProductStart, crossProductEnd );
     }
 
     // When the cross products have a different sign, the point lies in sector
@@ -265,15 +303,15 @@ void LIB_ARC::DoMirrorHorizontal( const wxPoint& aCenter )
 
 
 void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                      const int aTransform[2][2] )
+                      const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
     int t1 = m_t1;
     int t2 = m_t2;
-    wxPoint pos = TransformCoordinate( aTransform, m_Pos ) + aOffset;
+    wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
-    MapAngles( &t1, &t2, aTransform );
+    aTransform.MapAngles( &t1, &t2 );
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
@@ -295,12 +333,35 @@ int LIB_ARC::GetPenSize()
 }
 
 
-void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                    const wxPoint& aOffset, int aColor, int aDrawMode,
-                    void* aData, const int aTransformMatrix[2][2] )
+void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
 {
-    wxPoint pos1, pos2, posc;
+    // Thie edit indicators only get drawn when a new arc is being drawn.
+    if( ( m_Flags & IS_NEW ) == 0 )
+        return;
 
+    // Use the last edit state so when the drawing switches from the end mode to the center
+    // point mode, the last line between the center points gets erased.
+    if( m_lastEditState == 1 )
+    {
+        GRLine( aClipBox, aDC, m_ArcStart.x, -m_ArcStart.y, m_ArcEnd.x, -m_ArcEnd.y, 0, aColor );
+    }
+    else
+    {
+        GRDashedLine( aClipBox, aDC, m_ArcStart.x, -m_ArcStart.y, m_Pos.x, -m_Pos.y, 0, aColor );
+        GRDashedLine( aClipBox, aDC, m_ArcEnd.x, -m_ArcEnd.y, m_Pos.x, -m_Pos.y, 0, aColor );
+    }
+}
+
+
+void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                           int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
+{
+    // DOn't draw the arc until the end point is selected.  Only the edit indicators
+    // get drawn at this time.
+    if( ( m_Flags & IS_NEW ) && m_lastEditState == 1 )
+        return;
+
+    wxPoint pos1, pos2, posc;
     int     color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
@@ -309,14 +370,16 @@ void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
             color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
-    pos1 = TransformCoordinate( aTransformMatrix, m_ArcEnd ) + aOffset;
-    pos2 = TransformCoordinate( aTransformMatrix, m_ArcStart ) + aOffset;
-    posc = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+    pos1 = aTransform.TransformCoordinate( m_ArcEnd ) + aOffset;
+    pos2 = aTransform.TransformCoordinate( m_ArcStart ) + aOffset;
+    posc = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     int  pt1  = m_t1;
     int  pt2  = m_t2;
-    bool swap = MapAngles( &pt1, &pt2, aTransformMatrix );
+    bool swap = aTransform.MapAngles( &pt1, &pt2 );
     if( swap )
     {
         EXCHG( pos1.x, pos2.x );
@@ -335,18 +398,17 @@ void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE && !aData )
-        GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Radius, color, color );
+        GRFilledArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
     else
     {
+
 #ifdef DRAW_ARC_WITH_ANGLE
 
-        GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2,
-               m_Radius, GetPenSize( ), color );
+        GRArc( &aPanel->m_ClipBox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, GetPenSize(), color );
 #else
 
         GRArc1( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                posc.x, posc.y, GetPenSize( ), color );
+                posc.x, posc.y, GetPenSize(), color );
 #endif
     }
 
@@ -357,6 +419,26 @@ void LIB_ARC::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
+}
+
+
+void LIB_ARC::saveAttributes()
+{
+    m_savedPos = m_Pos;
+    m_savedStartPos = m_ArcStart;
+    m_savedEndPos = m_ArcEnd;
+    m_savedAngle1 = m_t1;
+    m_savedAngle2 = m_t2;
+}
+
+
+void LIB_ARC::restoreAttributes()
+{
+    m_Pos = m_savedPos;
+    m_ArcStart = m_savedStartPos;
+    m_ArcEnd = m_savedEndPos;
+    m_t1 = m_savedAngle1;
+    m_t2 = m_savedAngle2;
 }
 
 
@@ -377,13 +459,13 @@ start(%d, %d), end(%d, %d), radius %d" ),
         return rect;
     }
 
-    endPos     = TransformCoordinate( DefaultTransformMatrix, m_ArcEnd );
-    startPos   = TransformCoordinate( DefaultTransformMatrix, m_ArcStart );
-    centerPos  = TransformCoordinate( DefaultTransformMatrix, m_Pos );
+    endPos     = DefaultTransform.TransformCoordinate( m_ArcEnd );
+    startPos   = DefaultTransform.TransformCoordinate( m_ArcStart );
+    centerPos  = DefaultTransform.TransformCoordinate( m_Pos );
     angleStart = m_t1;
     angleEnd   = m_t2;
 
-    if( MapAngles( &angleStart, &angleEnd, DefaultTransformMatrix ) )
+    if( DefaultTransform.MapAngles( &angleStart, &angleEnd ) )
     {
         EXCHG( endPos.x, startPos.x );
         EXCHG( endPos.y, startPos.y );
@@ -435,4 +517,260 @@ void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
+{
+    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                 wxT( "Invalid edit mode for LIB_ARC object." ) );
+
+    if( aEditMode == IS_NEW )
+    {
+        m_ArcStart  = m_ArcEnd = aPosition;
+        m_editState = m_lastEditState = 1;
+    }
+    else if( aEditMode == IS_MOVED )
+    {
+        m_initialPos = m_Pos;
+        m_initialCursorPos = aPosition;
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+    else
+    {
+        // Save the current arc positions in case the resize ia aborted.
+        saveAttributes();
+
+        // The arc center point has to be rotated with while adjusting the
+        // start or end point, determine the side of this point and the distance
+        // from the start / end point
+        wxPoint middlePoint = wxPoint( (m_ArcStart.x + m_ArcEnd.x) / 2,
+                                       (m_ArcStart.y + m_ArcEnd.y) / 2 );
+        wxPoint centerVector   = m_Pos - middlePoint;
+        wxPoint startEndVector = TwoPointVector( m_ArcStart, m_ArcEnd );
+        m_editCenterDistance = EuclideanNorm( centerVector );
+
+        // Determine on which side is the center point
+        m_editDirection = CrossProduct( startEndVector, centerVector ) ? 1 : -1;
+
+        // Drag either the start, end point or the outline
+        if( HitTestPoints( m_ArcStart, aPosition, MINIMUM_SELECTION_DISTANCE ) )
+        {
+            m_editSelectPoint = START;
+        }
+        else if( HitTestPoints( m_ArcEnd, aPosition, MINIMUM_SELECTION_DISTANCE ) )
+        {
+            m_editSelectPoint = END;
+        }
+        else
+            m_editSelectPoint = OUTLINE;
+
+        m_editState = 0;
+        SetEraseLastDrawItem();
+    }
+
+    m_Flags = aEditMode;
+}
+
+
+bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
+{
+    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
+                   wxT( "Bad call to ContinueEdit().  LIB_ARC is not being edited." ) );
+
+    if( m_Flags == IS_NEW )
+    {
+        if( m_editState == 1 )        // Second position yields the arc segment length.
+        {
+            m_ArcEnd = aPosition;
+            m_editState = 2;
+            SetEraseLastDrawItem( false );
+            return true;              // Need third position to calculate center point.
+        }
+    }
+
+    return false;
+}
+
+
+void LIB_ARC::EndEdit( const wxPoint& aPosition, bool aAbort )
+{
+    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                   wxT( "Bad call to EndEdit().  LIB_ARC is not being edited." ) );
+
+    if( aAbort && !IsNew() )
+        restoreAttributes();
+
+    SetEraseLastDrawItem( false );
+    m_lastEditState = 0;
+    m_editState = 0;
+    m_Flags = 0;
+}
+
+
+void LIB_ARC::calcEdit( const wxPoint& aPosition )
+{
+    if( m_Flags == IS_RESIZED )
+    {
+        wxPoint newCenterPoint, startPos, endPos;
+
+        // Choose the point of the arc to be adjusted
+        if( m_editSelectPoint == START )
+        {
+            startPos = aPosition;
+            endPos   = m_ArcEnd;
+        }
+        else if( m_editSelectPoint == END )
+        {
+            endPos   = aPosition;
+            startPos = m_ArcStart;
+        }
+        else
+        {
+            // Use the cursor for adjusting the arc curvature
+            startPos = m_ArcStart;
+            endPos   = m_ArcEnd;
+
+            wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,
+                                           (startPos.y + endPos.y) / 2 );
+
+
+            // If the distance is too small, use the old center point
+            // else the new center point is calculated over the three points start/end/cursor
+            if( DistanceLinePoint( startPos, endPos, aPosition ) > MINIMUM_SELECTION_DISTANCE )
+            {
+                newCenterPoint = calcCenter( startPos, aPosition, endPos );
+            }
+            else
+            {
+                newCenterPoint = m_Pos;
+            }
+
+            // Determine if the arc angle is larger than 180 degrees -> this happens if both
+            // points (cursor position, center point) lie on the same side of the vector
+            // start-end
+            int  crossA = CrossProduct( TwoPointVector( startPos, endPos ),
+                                        TwoPointVector( endPos, aPosition ) );
+            int  crossB = CrossProduct( TwoPointVector( startPos, endPos ),
+                                        TwoPointVector( endPos, newCenterPoint ) );
+
+            if( ( crossA < 0 && crossB < 0 ) || ( crossA >= 0 && crossB >= 0 ) )
+                newCenterPoint = m_Pos;
+        }
+
+        if( m_editSelectPoint == START || m_editSelectPoint == END )
+        {
+            // Compute the new center point when the start/end points are modified
+            wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,
+                                           (startPos.y + endPos.y) / 2 );
+
+            wxPoint startEndVector = TwoPointVector( startPos, endPos );
+            wxPoint perpendicularVector = wxPoint( -startEndVector.y, startEndVector.x );
+            double  lengthPerpendicularVector = EuclideanNorm( perpendicularVector );
+
+            // prevent too large values, division / 0
+            if( lengthPerpendicularVector < 1e-1 )
+                lengthPerpendicularVector = 1e-1;
+
+            perpendicularVector.x = (int) ( (double) perpendicularVector.x *
+                                            m_editCenterDistance /
+                                            lengthPerpendicularVector ) * m_editDirection;
+            perpendicularVector.y = (int) ( (double) perpendicularVector.y *
+                                            m_editCenterDistance /
+                                            lengthPerpendicularVector ) * m_editDirection;
+
+            newCenterPoint = middlePoint + perpendicularVector;
+
+            m_ArcStart = startPos;
+            m_ArcEnd   = endPos;
+        }
+
+        m_Pos = newCenterPoint;
+        calcRadiusAngles();
+    }
+    else if( m_Flags == IS_NEW )
+    {
+        if( m_editState == 1 )
+        {
+            m_ArcEnd = aPosition;
+        }
+
+        if( m_editState != m_lastEditState )
+            m_lastEditState = m_editState;
+
+        // Keep the arc center point up to date.  Otherwise, there will be edit graphic
+        // artifacts left behind from the initial draw.
+        int dx, dy;
+        int cX, cY;
+        int angle;
+
+        cX = aPosition.x;
+        cY = aPosition.y;
+
+        dx = m_ArcEnd.x - m_ArcStart.x;
+        dy = m_ArcEnd.y - m_ArcStart.y;
+        cX -= m_ArcStart.x;
+        cY -= m_ArcStart.y;
+        angle = (int) ( atan2( (double) dy, (double) dx ) * 1800 / M_PI );
+        RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
+                                             * -> Length = dx, dy = 0 */
+        RotatePoint( &cX, &cY, angle );
+        cX = dx / 2;           /* cX, cY is on the median segment 0.0 a dx, 0 */
+
+        RotatePoint( &cX, &cY, -angle );
+        cX += m_ArcStart.x;
+        cY += m_ArcStart.y;
+        m_Pos.x = cX;
+        m_Pos.y = cY;
+        calcRadiusAngles();
+
+        SetEraseLastDrawItem();
+    }
+    else if( m_Flags == IS_MOVED )
+    {
+        Move( m_initialPos + aPosition - m_initialCursorPos );
+    }
+}
+
+
+void LIB_ARC::calcRadiusAngles()
+{
+    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart );
+    wxPoint centerEndVector   = TwoPointVector( m_Pos, m_ArcEnd );
+
+    m_Radius = wxRound( EuclideanNorm( centerStartVector ) );
+
+    m_t1 = (int) ( atan2( (double) centerStartVector.y,
+                          (double) centerStartVector.x ) * 1800 / M_PI );
+
+    m_t2 = (int) ( atan2( (double) centerEndVector.y,
+                          (double) centerEndVector.x ) * 1800 / M_PI );
+
+    NORMALIZE_ANGLE( m_t1 );
+    NORMALIZE_ANGLE( m_t2 );  // angles = 0 .. 3600
+
+    // Restrict angle to less than 180 to avoid PBS display mirror Trace because it is
+    // assumed that the arc is less than 180 deg to find orientation after rotate or mirror.
+    if( (m_t2 - m_t1) > 1800 )
+        m_t2 -= 3600;
+    else if( (m_t2 - m_t1) <= -1800 )
+        m_t2 += 3600;
+
+    while( (m_t2 - m_t1) >= 1800 )
+    {
+        m_t2--;
+        m_t1++;
+    }
+
+    while( (m_t1 - m_t2) >= 1800 )
+    {
+        m_t2++;
+        m_t1--;
+    }
+
+    NORMALIZE_ANGLE( m_t1 );
+
+    if( !IsMoving() )
+        NORMALIZE_ANGLE( m_t2 );
 }

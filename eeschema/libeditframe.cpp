@@ -11,6 +11,7 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "bitmaps.h"
+#include "gr_basic.h"
 
 #include "program.h"
 #include "general.h"
@@ -18,6 +19,7 @@
 #include "eeschema_id.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "lib_polyline.h"
 
 #include "kicad_device_context.h"
 #include "hotkeys.h"
@@ -163,6 +165,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
+    m_savedComponent      = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
 
     // Give an icon
@@ -743,13 +746,20 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
 
 
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-
+    {
         // Delete the last created segment, while creating a polyline draw item
         if( m_drawItem == NULL )
             break;
+
         DrawPanel->MouseToCursorSchema();
-        DeleteDrawPoly( &dc );
+        int oldFlags = m_drawItem->GetFlags();
+        m_drawItem->SetFlags( 0 );
+        m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCursorDrawPosition() );
+        m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->SetFlags( oldFlags );
         break;
+    }
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
         if( m_drawItem == NULL )
@@ -780,8 +790,6 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
             StartMovePin( &dc );
-        else if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
-            StartMoveField( &dc, (LIB_FIELD*) m_drawItem );
         else
             StartMoveDrawSymbol( &dc );
         break;
@@ -798,35 +806,63 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
             || m_drawItem->Type() == COMPONENT_ARC_DRAW_TYPE
             )
         {
-            SaveCopyInUndoList( m_component );
             StartModifyDrawSymbol( &dc );
         }
 
         break;
 
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
-        if( m_drawItem == NULL )
+        if( m_drawItem == NULL && m_drawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
             break;
         DrawPanel->CursorOff( &dc );
         DrawPanel->MouseToCursorSchema();
-        if( (m_drawItem->m_Flags & IS_NEW) == 0 )
+        if( !m_drawItem->InEditMode() )
+        {
             SaveCopyInUndoList( m_component );
-        RotateSymbolText( &dc );
+            m_drawItem->SetUnit( m_unit );
+            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                              DefaultTransform );
+        }
+
+        m_drawItem->Rotate();
+
+        if( !m_drawItem->InEditMode() )
+        {
+            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                              DefaultTransform );
+            DrawPanel->Refresh();
+        }
+
         DrawPanel->CursorOn( &dc );
         break;
 
     case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
-        if( m_drawItem == NULL )
+    {
+        if( m_drawItem == NULL || ( m_drawItem->Type() != COMPONENT_FIELD_DRAW_TYPE ) )
             break;
         DrawPanel->CursorOff( &dc );
         DrawPanel->MouseToCursorSchema();
-        if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
+
+        if( !m_drawItem->InEditMode() )
         {
             SaveCopyInUndoList( m_component );
-            RotateField( &dc, (LIB_FIELD*) m_drawItem );
+            m_drawItem->SetUnit( m_unit );
+            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                              DefaultTransform );
         }
+
+        m_drawItem->Rotate();
+
+        if( !m_drawItem->InEditMode() )
+        {
+            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
+                              DefaultTransform );
+            DrawPanel->Refresh();
+        }
+
         DrawPanel->CursorOn( &dc );
         break;
+    }
 
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
         if( m_drawItem == NULL )
@@ -925,9 +961,20 @@ void WinEDA_LibeditFrame::EnsureActiveLibExists()
         m_library = NULL;
 }
 
+
 void WinEDA_LibeditFrame::SetLanguage( wxCommandEvent& event )
 {
     WinEDA_BasicFrame::SetLanguage( event );
     WinEDA_SchematicFrame *parent = (WinEDA_SchematicFrame *)GetParent();
     parent->WinEDA_BasicFrame::SetLanguage( event );
+}
+
+
+void WinEDA_LibeditFrame::DeleteSavedComponent()
+{
+    if( m_savedComponent )
+    {
+        delete m_savedComponent;
+        m_savedComponent = NULL;
+    }
 }

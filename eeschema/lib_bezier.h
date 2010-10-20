@@ -11,6 +11,12 @@
 /**************************************************/
 class LIB_BEZIER : public LIB_DRAW_ITEM
 {
+    /**
+     * Draw the bezier curve.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
 public:
     int m_Width;                            /* Line width */
     std::vector<wxPoint> m_BezierPoints;      // list of parameter (3|4)
@@ -54,10 +60,10 @@ public:
     /**
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to a segment
-     * @param aTransMat = the transform matrix
+     * @param aTransform = the transform matrix
      * @return true if the point aPosRef is near a segment
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * @return the boundary box for this, in library coordinates
@@ -68,10 +74,6 @@ public:
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
-
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
@@ -93,7 +95,7 @@ protected:
     virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };

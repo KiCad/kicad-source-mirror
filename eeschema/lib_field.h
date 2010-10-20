@@ -18,6 +18,32 @@
  */
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
+    int m_savedOrientation;
+    bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
+
+    /**
+     * Draw the field.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
+    /**
+     * See LIB_DRAW_ITEM::saveAttributes().
+     */
+    void saveAttributes();
+
+    /**
+     * See LIB_DRAW_ITEM::restoreAttributes().
+     */
+    void restoreAttributes();
+
+    /**
+     * Calculate the new circle at \a aPosition when editing.
+     *
+     * @param aPosition - The position to edit the circle in drawing coordinates.
+     */
+    void calcEdit( const wxPoint& aPosition );
+
 public:
     int         m_FieldId;  ///< @see enum NumFieldType
 
@@ -67,10 +93,6 @@ public:
 
     void          SetFields( const std::vector <LIB_FIELD> aFields );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
-
     /**
      * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
@@ -98,11 +120,10 @@ public:
       * @param aPosRef = a wxPoint to test
       * @param aThreshold = max distance to this object (usually the half
       *                     thickness of a line)
-      * @param aTransMat = the transform matrix
+      * @param aTransform = the transform matrix
       * @return True if the point aPosRef is near this object
       */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
-                          const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     void operator=( const LIB_FIELD& field )
     {
@@ -134,6 +155,25 @@ public:
      */
     wxString GetFullText( int unit = 1 );
 
+    int GetDefaultColor();
+
+    /**
+     * See LIB_DRAW_ITEM::BeginEdit().
+     */
+    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * See LIB_DRAW_ITEM::ContinueEdit().
+     */
+    bool ContinueEdit( const wxPoint aNextPoint );
+
+    /**
+     * See LIB_DRAW_ITEM::AbortEdit().
+     */
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
+
+    void Rotate();
+
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
 
@@ -157,7 +197,7 @@ protected:
     virtual wxPoint DoGetPosition( void ) { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                         const int transform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth( void ) { return m_Width; }
     virtual void DoSetWidth( int width ) { m_Width = width; }
 };

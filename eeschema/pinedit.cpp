@@ -275,7 +275,7 @@ another pin. Continue?" ) );
     DrawPanel->CursorOff( DC );
     bool showPinText = true;
     CurrentPin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
-                      &showPinText, DefaultTransformMatrix );
+                      &showPinText, DefaultTransform );
     DrawPanel->CursorOn( DC );
 
     m_drawItem = NULL;
@@ -346,14 +346,13 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     {
         CurrentPin->m_Pos = PinPreviousPos;
         CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                          &showPinText, DefaultTransformMatrix );
+                          &showPinText, DefaultTransform );
     }
 
     /* Redraw pin in new position */
     CurrentPin->m_Pos.x = panel->GetScreen()->m_Curseur.x;
     CurrentPin->m_Pos.y = -panel->GetScreen()->m_Curseur.y;
-    CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                      &showPinText, DefaultTransformMatrix );
+    CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
     PinPreviousPos = CurrentPin->m_Pos;
 
@@ -471,14 +470,13 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
         DrawPanel->ForceCloseManageCurseur = AbortPinMove;
         if( DC )
             pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
-                       DefaultTransformMatrix );
+                       DefaultTransform );
 
     }
 }
 
 
-static void CreateImagePins( LIB_PIN* Pin, int unit, int convert,
-                             bool asDeMorgan )
+static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan )
 {
     int      ii;
     LIB_PIN* NewPin;
@@ -556,8 +554,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
         if( selected && ( Pin->m_Selected & IS_SELECTED ) == 0 )
             continue;
 
-        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                   &showPinText, DefaultTransformMatrix );
+        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
         switch( id )
         {
@@ -574,8 +571,8 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
             break;
         }
 
-        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
-                   &showPinText, DefaultTransformMatrix );
+        ( ( LIB_DRAW_ITEM* )Pin )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
+                                         &showPinText, DefaultTransform );
     }
 }
 

@@ -183,7 +183,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
         }
         wxPoint delta;
         pos  -= Component->m_Pos;
-        delta = TransformCoordinate( Component->m_Transform, pos );
+        delta = Component->m_Transform.TransformCoordinate( pos );
         pos   = delta + Component->m_Pos;
 
         wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;

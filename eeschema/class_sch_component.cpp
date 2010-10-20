@@ -151,10 +151,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     m_Convert = 0;  // De Morgan Handling
 
     // The rotation/mirror transformation matrix. pos normal
-    m_Transform[0][0] = 1;
-    m_Transform[0][1] = 0;
-    m_Transform[1][0] = 0;
-    m_Transform[1][1] = -1;
+    m_Transform = TRANSFORM();
 
     // construct only the mandatory fields, which are the first 4 only.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
@@ -578,10 +575,10 @@ EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
     }
 
     /* Compute the real Boundary box (rotated, mirrored ...)*/
-    int x1 = m_Transform[0][0] *x0 + m_Transform[0][1] *y0;
-    int y1 = m_Transform[1][0] *x0 + m_Transform[1][1] *y0;
-    int x2 = m_Transform[0][0] *xm + m_Transform[0][1] *ym;
-    int y2 = m_Transform[1][0] *xm + m_Transform[1][1] *ym;
+    int x1 = m_Transform.x1 * x0 + m_Transform.y1 * y0;
+    int y1 = m_Transform.x2 * x0 + m_Transform.y2 * y0;
+    int x2 = m_Transform.x1 * xm + m_Transform.y1 * ym;
+    int y2 = m_Transform.x2 * xm + m_Transform.y2 * ym;
 
     // H and W must be > 0:
     if( x2 < x1 )
@@ -608,10 +605,10 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Multi, copyitem->m_Multi );
     EXCHG( m_Convert, copyitem->m_Convert );
-    EXCHG( m_Transform[0][0], copyitem->m_Transform[0][0] );
-    EXCHG( m_Transform[0][1], copyitem->m_Transform[0][1] );
-    EXCHG( m_Transform[1][0], copyitem->m_Transform[1][0] );
-    EXCHG( m_Transform[1][1], copyitem->m_Transform[1][1] );
+
+    TRANSFORM tmp = m_Transform;
+    m_Transform = copyitem->m_Transform;
+    copyitem->m_Transform = tmp;
 
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 
@@ -727,44 +724,44 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 /*****************************************************************/
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
-    int  TempMat[2][2];
-    bool Transform = FALSE;
+    TRANSFORM temp = TRANSFORM();
+    bool Transform = false;
 
     switch( aOrientation )
     {
     case CMP_ORIENT_0:
     case CMP_NORMAL:            /* Position Initiale */
-        m_Transform[0][0] = 1;
-        m_Transform[1][1] = -1;
-        m_Transform[1][0] = m_Transform[0][1] = 0;
+        m_Transform.x1 = 1;
+        m_Transform.y2 = -1;
+        m_Transform.x2 = m_Transform.y1 = 0;
         break;
 
     case CMP_ROTATE_CLOCKWISE:            /* Rotate + */
-        TempMat[0][0] = TempMat[1][1] = 0;
-        TempMat[0][1] = 1;
-        TempMat[1][0] = -1;
-        Transform     = TRUE;
+        temp.x1   = temp.y2 = 0;
+        temp.y1   = 1;
+        temp.x2   = -1;
+        Transform = true;
         break;
 
     case CMP_ROTATE_COUNTERCLOCKWISE:             /* Rotate - */
-        TempMat[0][0] = TempMat[1][1] = 0;
-        TempMat[0][1] = -1;
-        TempMat[1][0] = 1;
-        Transform     = TRUE;
+        temp.x1   = temp.y2 = 0;
+        temp.y1   = -1;
+        temp.x2   = 1;
+        Transform = true;
         break;
 
     case CMP_MIRROR_Y:          /* MirrorY */
-        TempMat[0][0] = -1;
-        TempMat[1][1] = 1;
-        TempMat[0][1] = TempMat[1][0] = 0;
-        Transform     = TRUE;
+        temp.x1   = -1;
+        temp.y2   = 1;
+        temp.y1   = temp.x2 = 0;
+        Transform = true;
         break;
 
     case CMP_MIRROR_X:            /* MirrorX */
-        TempMat[0][0] = 1;
-        TempMat[1][1] = -1;
-        TempMat[0][1] = TempMat[1][0] = 0;
-        Transform     = TRUE;
+        temp.x1   = 1;
+        temp.y2   = -1;
+        temp.y1   = temp.x2 = 0;
+        Transform = TRUE;
         break;
 
     case CMP_ORIENT_90:
@@ -841,24 +838,13 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
          *  have:
          *     transform coord = old_m_Transform * coord * TempMat
          */
-        int NewMatrix[2][2];
+        TRANSFORM newTransform;
 
-        NewMatrix[0][0] = m_Transform[0][0] *TempMat[0][0] +
-                          m_Transform[1][0] *TempMat[0][1];
-
-        NewMatrix[0][1] = m_Transform[0][1] *TempMat[0][0] +
-                          m_Transform[1][1] *TempMat[0][1];
-
-        NewMatrix[1][0] = m_Transform[0][0] *TempMat[1][0] +
-                          m_Transform[1][0] *TempMat[1][1];
-
-        NewMatrix[1][1] = m_Transform[0][1] *TempMat[1][0] +
-                          m_Transform[1][1] *TempMat[1][1];
-
-        m_Transform[0][0] = NewMatrix[0][0];
-        m_Transform[0][1] = NewMatrix[0][1];
-        m_Transform[1][0] = NewMatrix[1][0];
-        m_Transform[1][1] = NewMatrix[1][1];
+        newTransform.x1 = m_Transform.x1 * temp.x1 + m_Transform.x2 * temp.y1;
+        newTransform.y1 = m_Transform.y1 * temp.x1 + m_Transform.y2 * temp.y1;
+        newTransform.x2 = m_Transform.x1 * temp.x2 + m_Transform.x2 * temp.y2;
+        newTransform.y2 = m_Transform.y1 * temp.x2 + m_Transform.y2 * temp.y2;
+        m_Transform = newTransform;
     }
 }
 
@@ -879,7 +865,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
 int SCH_COMPONENT::GetOrientation()
 {
     int type_rotate = CMP_ORIENT_0;
-    int ComponentMatOrient[2][2];
+    TRANSFORM transform;
     int ii;
 
     #define ROTATE_VALUES_COUNT 12
@@ -896,20 +882,21 @@ int SCH_COMPONENT::GetOrientation()
     };
 
     // Try to find the current transform option:
-    memcpy( ComponentMatOrient, m_Transform, sizeof( ComponentMatOrient ) );
+    transform = m_Transform;
 
     for( ii = 0; ii < ROTATE_VALUES_COUNT; ii++ )
     {
         type_rotate = rotate_value[ii];
         SetOrientation( type_rotate );
-        if( memcmp( ComponentMatOrient, m_Transform,
-                   sizeof(ComponentMatOrient) ) == 0 )
+
+        if( transform == m_Transform )
             return type_rotate;
     }
 
     // Error: orientation not found in list (should not happen)
     wxMessageBox( wxT( "Component orientation matrix internal error" ) );
-    memcpy( m_Transform, ComponentMatOrient, sizeof( ComponentMatOrient ) );
+    m_Transform = transform;
+
     return CMP_NORMAL;
 }
 
@@ -921,11 +908,7 @@ int SCH_COMPONENT::GetOrientation()
  */
 wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
 {
-    wxPoint screenpos;
-
-    screenpos.x = m_Transform[0][0] *coord.x + m_Transform[0][1] *coord.y;
-    screenpos.y = m_Transform[1][0] *coord.x + m_Transform[1][1] *coord.y;
-    return screenpos;
+    return m_Transform.TransformCoordinate( coord );
 }
 
 
@@ -1100,8 +1083,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         return false;
 
     if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
-                 m_Transform[0][0], m_Transform[0][1],
-                 m_Transform[1][0], m_Transform[1][1] ) == EOF )
+                 m_Transform.x1, m_Transform.y1, m_Transform.x2, m_Transform.y2 ) == EOF )
         return false;
 
     if( fprintf( f, "$EndComp\n" ) == EOF )
@@ -1292,7 +1274,7 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxP
                 if( aFindLocation )
                 {
                     wxPoint pinpos = pin->m_Pos;
-                    pinpos = TransformCoordinate( m_Transform, pinpos );
+                    pinpos = m_Transform.TransformCoordinate( pinpos );
                     *aFindLocation = pinpos + m_Pos;
                 }
                 return true;

@@ -13,6 +13,7 @@
 #include "general.h"
 #include "protos.h"
 #include "lib_bezier.h"
+#include "transform.h"
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
@@ -197,7 +198,7 @@ void LIB_BEZIER::DoMirrorHorizontal( const wxPoint& aCenter )
 
 
 void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] )
+                         const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -211,7 +212,7 @@ void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     for( i = 0; i < m_PolyPoints.size(); i++ )
     {
         wxPoint pos = m_PolyPoints[i];
-        pos = TransformCoordinate( aTransform, pos ) + aOffset;
+        pos = aTransform.TransformCoordinate( pos ) + aOffset;
         Poly[i * 2]     = pos.x;
         Poly[i * 2 + 1] = pos.y;
     }
@@ -236,9 +237,8 @@ int LIB_BEZIER::GetPenSize()
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LIB_BEZIER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, int aColor, int aDrawMode,
-                       void* aData, const int aTransformMatrix[2][2] )
+void LIB_BEZIER::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                              int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint              pos1;
     std::vector<wxPoint> PolyPointsTraslated;
@@ -253,8 +253,8 @@ void LIB_BEZIER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     PolyPointsTraslated.clear();
 
     for( unsigned int i = 0; i < m_PolyPoints.size() ; i++ )
-        PolyPointsTraslated.push_back( TransformCoordinate( aTransformMatrix,
-                                                            m_PolyPoints[i] ) + aOffset );
+        PolyPointsTraslated.push_back( aTransform.TransformCoordinate( m_PolyPoints[i] ) +
+                                       aOffset );
 
     if( aColor < 0 )                // Used normal color or selected color
     {
@@ -305,7 +305,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
     // Have a minimal tolerance for hit test
     if ( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
-    return HitTest( aRefPos, mindist, DefaultTransformMatrix );
+    return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
 /** Function HitTest
@@ -314,14 +314,14 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        start = TransformCoordinate( aTransMat, m_PolyPoints[ii - 1] );
-        end   = TransformCoordinate( aTransMat, m_PolyPoints[ii] );
+        start = aTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
+        end   = aTransform.TransformCoordinate( m_PolyPoints[ii] );
 
         if ( TestSegmentHit( aPosRef, start, end, aThreshold ) )
             return true;

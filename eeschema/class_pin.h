@@ -9,8 +9,8 @@
 
 #include "lib_draw_item.h"
 
-#define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of
-                                 * pins */
+
+#define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of pins */
 
 #define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
 #define PART_NAME_LEN       15  /* Maximum length of part name. */
@@ -80,6 +80,12 @@ enum DrawPinOrient {
 
 class LIB_PIN : public LIB_DRAW_ITEM
 {
+    /**
+     * Draw the pin.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
 public:
     int      m_PinLen;      /* Pin length */
     int      m_Orient;      /* Pin orientation (Up, Down, Left, Right) */
@@ -106,7 +112,7 @@ public:
     int      m_Width;       /* Line width */
 
 public:
-    LIB_PIN(LIB_COMPONENT * aParent);
+    LIB_PIN( LIB_COMPONENT * aParent );
     LIB_PIN( const LIB_PIN& aPin );
     ~LIB_PIN() { }
 
@@ -148,13 +154,13 @@ public:
      * @param aTransMat - the transform matrix
      * @return - true if the point aPosRef is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
     virtual EDA_Rect GetBoundingBox();
     wxPoint ReturnPinEndPoint();
 
-    int ReturnPinDrawOrient( const int TransMat[2][2] );
+    int ReturnPinDrawOrient( const TRANSFORM& aTransform );
 
     /**
      * Fill a string buffer with pin number.
@@ -194,7 +200,7 @@ public:
     void SetName( const wxString& aName );
 
     /**
-     * Set the /a aSize of the pin name text.
+     * Set the \a aSize of the pin name text.
      *
      * This will also update the text size of the name of the pins marked
      * by EnableEditMode().
@@ -323,9 +329,6 @@ public:
      */
     virtual int GetPenSize();
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData, const int aTransformMatrix[2][2] );
-
     void DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, int aDrawMode, int aColor = -1 );
 
@@ -438,7 +441,7 @@ protected:
     virtual wxPoint DoGetPosition() { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };

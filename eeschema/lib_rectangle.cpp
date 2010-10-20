@@ -12,6 +12,7 @@
 #include "general.h"
 #include "protos.h"
 #include "lib_rectangle.h"
+#include "transform.h"
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
@@ -141,12 +142,12 @@ void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
 
 
 void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                            const int aTransform[2][2] )
+                            const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
-    wxPoint pos = TransformCoordinate( aTransform, m_Pos ) + aOffset;
-    wxPoint end = TransformCoordinate( aTransform, m_End ) + aOffset;
+    wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    wxPoint end = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
@@ -167,9 +168,9 @@ int LIB_RECTANGLE::GetPenSize()
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                          const wxPoint& aOffset, int aColor, int aDrawMode,
-                          void* aData, const int aTransformMatrix[2][2] )
+void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                                 const wxPoint& aOffset, int aColor, int aDrawMode,
+                                 void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1, pos2;
 
@@ -183,8 +184,8 @@ void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     else
         color = aColor;
 
-    pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
-    pos2 = TransformCoordinate( aTransformMatrix, m_End ) + aOffset;
+    pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    pos2 = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
     if( aColor >= 0 )
@@ -210,6 +211,20 @@ void LIB_RECTANGLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
+}
+
+
+void LIB_RECTANGLE::saveAttributes()
+{
+    m_savedPos = m_Pos;
+    m_savedEndPos = m_End;
+}
+
+
+void LIB_RECTANGLE::restoreAttributes()
+{
+    m_Pos = m_savedPos;
+    m_End = m_savedEndPos;
 }
 
 
@@ -250,7 +265,7 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
 
-    return HitTest( aRefPoint, mindist, DefaultTransformMatrix );
+    return HitTest( aRefPoint, mindist, DefaultTransform );
 }
 
 
@@ -261,10 +276,10 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
  *                     of a line)
  * @param aTransMat = the transform matrix
  */
-bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const int aTransMat[2][2] )
+bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const TRANSFORM& aTransform )
 {
-    wxPoint actualStart = TransformCoordinate( aTransMat, m_Pos );
-    wxPoint actualEnd   = TransformCoordinate( aTransMat, m_End );
+    wxPoint actualStart = aTransform.TransformCoordinate( m_Pos );
+    wxPoint actualEnd   = aTransform.TransformCoordinate( m_End );
 
     // locate lower segment
     wxPoint start, end;
@@ -295,4 +310,106 @@ bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const int aTrans
         return true;
 
     return false;
+}
+
+
+void LIB_RECTANGLE::BeginEdit( int aEditMode, const wxPoint aPosition )
+{
+    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                 wxT( "Invalid edit mode for LIB_RECTANGLE object." ) );
+
+    if( aEditMode == IS_NEW )
+    {
+        m_Pos = m_End = aPosition;
+    }
+    else if( aEditMode == IS_RESIZED )
+    {
+        m_isStartPointSelected = abs( m_Pos.x - aPosition.x ) < MINIMUM_SELECTION_DISTANCE
+            || abs( m_Pos.y - aPosition.y ) < MINIMUM_SELECTION_DISTANCE;
+
+        if( m_isStartPointSelected )
+        {
+            m_isWidthLocked = abs( m_Pos.x - aPosition.x ) >= MINIMUM_SELECTION_DISTANCE;
+            m_isHeightLocked = abs( m_Pos.y - aPosition.y ) >= MINIMUM_SELECTION_DISTANCE;
+        }
+        else
+        {
+            m_isWidthLocked = abs( m_End.x - aPosition.x ) >= MINIMUM_SELECTION_DISTANCE;
+            m_isHeightLocked = abs( m_End.y - aPosition.y ) >= MINIMUM_SELECTION_DISTANCE;
+        }
+
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+    else if( aEditMode == IS_MOVED )
+    {
+        m_initialPos = m_Pos;
+        m_initialCursorPos = aPosition;
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+
+    m_Flags = aEditMode;
+}
+
+
+bool LIB_RECTANGLE::ContinueEdit( const wxPoint aPosition )
+{
+    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
+                   wxT( "Bad call to ContinueEdit().  LIB_RECTANGLE is not being edited." ) );
+
+    return false;
+}
+
+
+void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition, bool aAbort )
+{
+    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                   wxT( "Bad call to EndEdit().  LIB_RECTANGLE is not being edited." ) );
+
+    if( aAbort && !IsNew() )
+        restoreAttributes();
+
+    m_Flags = 0;
+    m_isHeightLocked = false;
+    m_isWidthLocked  = false;
+    SetEraseLastDrawItem( false );
+}
+
+
+void LIB_RECTANGLE::calcEdit( const wxPoint& aPosition )
+{
+    if( m_Flags == IS_NEW )
+    {
+        m_End = aPosition;
+        SetEraseLastDrawItem();
+    }
+    else if( m_Flags == IS_RESIZED )
+    {
+        if( m_isHeightLocked )
+        {
+            if( m_isStartPointSelected )
+                m_Pos.x = aPosition.x;
+            else
+                m_End.x = aPosition.x;
+        }
+        else if( m_isWidthLocked )
+        {
+            if( m_isStartPointSelected )
+                m_Pos.y = aPosition.y;
+            else
+                m_End.y = aPosition.y;
+        }
+        else
+        {
+            if( m_isStartPointSelected )
+                m_Pos = aPosition;
+            else
+                m_End = aPosition;
+        }
+    }
+    else if( m_Flags == IS_MOVED )
+    {
+        Move( m_initialPos + aPosition - m_initialCursorPos );
+    }
 }

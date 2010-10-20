@@ -167,6 +167,16 @@ public:
      */
     wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
 
+    /**
+     * Return the current cursor position in drawing coordinates.
+     *
+     * This call inverts the Y axis coordinated of m_Curseur to correct for the difference
+     * between the wxWidgets GDI and the Kicad drawing coordinates.
+     *
+     * @return - The cursor position in drawing coordinates.
+     */
+    wxPoint      GetCursorDrawPosition() { return wxPoint( m_Curseur.x, -m_Curseur.y ); }
+
     /* general Undo/Redo command control */
 
     /** function ClearUndoORRedoList (virtual).
@@ -180,10 +190,7 @@ public:
      *                     old commands this will empty the list of commands.
      *  Commands are deleted from the older to the last.
      */
-    virtual void ClearUndoORRedoList(
-        UNDO_REDO_CONTAINER& aList,
-        int
-                             aItemCount = -1 ) = 0;
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) = 0;
 
     /** Function ClearUndoRedoList
      * clear undo and redo list, using ClearUndoORRedoList()

@@ -222,26 +222,23 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
 
 
 
-void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
+void WinEDA_LibeditFrame::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 {
     int DrawMode = g_XorMode;
 
-    if ( ( DrawItem == NULL )
-         || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
+    if ( ( DrawItem == NULL ) || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
         return;
 
     /* Deleting old text. */
-    if( DC)
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
-                        DefaultTransformMatrix );
+    if( DC )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL, DefaultTransform );
 
 
     Dialog_BodyGraphicText_Properties * frame =
-            new Dialog_BodyGraphicText_Properties( this,
-                                                   (LIB_TEXT*) DrawItem );
+            new Dialog_BodyGraphicText_Properties( this, (LIB_TEXT*) DrawItem );
     frame->ShowModal();
     frame->Destroy();
-    OnModify( );
+    OnModify();
 
     /* Display new text. */
     if( DC )
@@ -249,42 +246,6 @@ void WinEDA_LibeditFrame::EditSymbolText(wxDC* DC, LIB_DRAW_ITEM* DrawItem)
         if ( ( DrawItem->m_Flags & IS_MOVED ) == 0 )
             DrawMode = GR_DEFAULT_DRAWMODE;
 
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL,
-                        DefaultTransformMatrix );
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL, DefaultTransform );
     }
-}
-
-
-/****************************************************/
-void WinEDA_LibeditFrame::RotateSymbolText(wxDC * DC)
-/****************************************************/
-/*
-    90 deg Graphic text Rotation .
-*/
-{
-    LIB_TEXT* DrawItem = (LIB_TEXT *) m_drawItem;
-
-    if( DrawItem == NULL )
-        return;
-
-    /* Erase drawing (can be within a move command) */
-    if ( DrawPanel->ManageCurseur == NULL)
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                        DefaultTransformMatrix );
-    else
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
-
-    if( DrawItem->m_Orient == TEXT_ORIENT_HORIZ )
-        DrawItem->m_Orient = TEXT_ORIENT_VERT;
-    else
-        DrawItem->m_Orient = TEXT_ORIENT_HORIZ;
-
-    OnModify( );
-
-    /* Redraw item with new orient */
-    if ( DrawPanel->ManageCurseur == NULL )
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
-                        NULL, DefaultTransformMatrix );
-    else
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 }

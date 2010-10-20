@@ -50,19 +50,6 @@ void IncrementLabelMember( wxString& name );
 /****************/
 void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
 
-
-bool MapAngles( int* Angle1, int* Angle2, const int TransMat[2][2] );
-
-
-/**
- * Calculate new coordinate according to the transform matrix.
- *
- * @param aTransformMatrix = rotation, mirror .. matrix
- * @param aPosition = the position to transform
- * @return the new coordinate
- */
-wxPoint        TransformCoordinate( const int aTransformMatrix[2][2], const wxPoint& aPosition );
-
 void           SnapLibItemPoint( int            OrigX,
                                  int            OrigY,
                                  int*           ClosestX,

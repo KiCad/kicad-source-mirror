@@ -8,6 +8,7 @@
 
 #include "class_sch_screen.h"
 #include "class_sch_cmp_field.h"
+#include "transform.h"
 
 
 class SCH_SHEET_PATH;
@@ -62,8 +63,8 @@ public:
 
     int m_Convert;                    /* Handle multiple shape (for instance
                                        * De Morgan conversion) */
-    int m_Transform[2][2];             /* The rotation/mirror transformation
-                                        * matrix. */
+    TRANSFORM m_Transform;            /* The rotation/mirror transformation
+                                       * matrix. */
 
 private:
 

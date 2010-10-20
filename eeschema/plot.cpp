@@ -40,18 +40,18 @@ static void PlotNoConnectStruct( PLOTTER* plotter, SCH_NO_CONNECT* Struct )
 static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
 {
     LIB_COMPONENT* Entry;
-    int            TransMat[2][2];
+    TRANSFORM temp = TRANSFORM();
 
     Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
 
     if( Entry == NULL )
         return;;
 
-    memcpy( TransMat, DrawLibItem->m_Transform, sizeof(TransMat) );
+    temp = DrawLibItem->m_Transform;
 
-    Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert,
-                 DrawLibItem->m_Pos, TransMat );
+    Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert, DrawLibItem->m_Pos, temp );
     bool isMulti = Entry->GetPartCount() > 1;
+
     for( int fieldId = 0; fieldId < DrawLibItem->GetFieldCount(); fieldId++ )
     {
         PlotTextField( plotter, DrawLibItem, fieldId, isMulti, 0 );
@@ -85,7 +85,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     int orient = field->m_Orient;
-    if( DrawLibItem->m_Transform[0][1] )  // Rotate component 90 deg.
+    if( DrawLibItem->m_Transform.y1 )  // Rotate component 90 deg.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;

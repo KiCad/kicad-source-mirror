@@ -23,8 +23,8 @@
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC );
 
-static int     OldTransMat[2][2];
-static wxPoint OldPos;
+static TRANSFORM OldTransform;
+static wxPoint   OldPos;
 
 
 wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
@@ -294,7 +294,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         wxPoint move_vector = OldPos - Component->m_Pos;
         Component->Move( move_vector );
-        memcpy( Component->m_Transform, OldTransMat, sizeof(OldTransMat) );
+        Component->m_Transform = OldTransform;
         Component->m_Flags = 0;
     }
 
@@ -401,8 +401,7 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
 }
 
 
-void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
-                                           wxDC*          DC )
+void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
 {
     if( Component == NULL )
         return;
@@ -426,7 +425,7 @@ void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component,
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
     GetScreen()->SetCurItem( Component );
     OldPos = Component->m_Pos;
-    memcpy( OldTransMat, Component->m_Transform, sizeof(OldTransMat) );
+    OldTransform = Component->m_Transform;
 
 #if 1
 

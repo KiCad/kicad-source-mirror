@@ -51,10 +51,10 @@ void WinEDA_SchematicFrame::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
     // under some circumstances, but that inversion is not preserved by all
     // combinations of mirroring and rotation.  The following clause is true
     // when the number of rotations and the number of mirrorings are both odd.
-    if( comp->m_Transform[1][0] * comp->m_Transform[0][1] < 0 )
+    if( comp->m_Transform.x2 * comp->m_Transform.y1 < 0 )
         NEGATE( newpos.y );
 
-    newpos = TransformCoordinate( comp->m_Transform, newpos ) + pos;
+    newpos = comp->m_Transform.TransformCoordinate( newpos ) + pos;
 
     DrawPanel->CursorOff( DC );
     GetScreen()->m_Curseur = newpos;
@@ -184,7 +184,6 @@ modified!\nYou must create a new power"  ) );
 static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     wxPoint pos;
-    int x1, y1;
     int fieldNdx;
 
     WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) panel->GetParent();
@@ -205,13 +204,9 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
 
     /* Positions are calculated by the transpose matrix,  Rotating mirror. */
-    x1 = panel->GetScreen()->m_Curseur.x - pos.x;
-    y1 = panel->GetScreen()->m_Curseur.y - pos.y;
+    wxPoint pt( panel->GetScreen()->m_Curseur - pos );
 
-    currentField->m_Pos.x = pos.x + component->m_Transform[0][0] * x1 +
-                            component->m_Transform[1][0] * y1;
-    currentField->m_Pos.y = pos.y + component->m_Transform[0][1] * x1 +
-                            component->m_Transform[1][1] * y1;
+    currentField->m_Pos = pos + component->m_Transform.TransformCoordinate( pt );
 
     currentField->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }

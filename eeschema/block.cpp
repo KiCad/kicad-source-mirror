@@ -906,7 +906,8 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
                                     bool           aSearchFirst )
 {
     static LIB_COMPONENT* Entry;
-    static int Multi, convert, TransMat[2][2];
+    static int Multi, convert;
+    TRANSFORM transform;
     static wxPoint CmpPosition;
     static LIB_PIN* Pin;
 
@@ -921,7 +922,7 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         Multi       = aDrawLibItem->m_Multi;
         convert     = aDrawLibItem->m_Convert;
         CmpPosition = aDrawLibItem->m_Pos;
-        memcpy( TransMat, aDrawLibItem->m_Transform, sizeof(TransMat) );
+        transform   = aDrawLibItem->m_Transform;
     }
     else
         Pin = Entry->GetNextPin( Pin );
@@ -938,7 +939,7 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
 
         /* Calculate the pin position (according to the component orientation)
          */
-        aPosition = TransformCoordinate( TransMat, Pin->m_Pos ) + CmpPosition;
+        aPosition = DefaultTransform.TransformCoordinate( Pin->m_Pos ) + CmpPosition;
         return Pin;
     }
 

@@ -11,6 +11,31 @@
 
 class LIB_RECTANGLE  : public LIB_DRAW_ITEM
 {
+    wxPoint m_savedEndPos;   ///< Tempory storage of the current end position before editing.
+
+    /**
+     * Draw the rectangle.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
+    /**
+     * See LIB_DRAW_ITEM::saveAttributes().
+     */
+    void saveAttributes();
+
+    /**
+     * See LIB_DRAW_ITEM::restoreAttributes().
+     */
+    void restoreAttributes();
+
+    /**
+     * Calculate the rectangle attrubites ralative to \a aPosition while editing.
+     *
+     * @param aPosition - Edit position in drawing units.
+     */
+    void calcEdit( const wxPoint& aPosition );
+
 public:
     wxPoint m_End;     /* Rectangle end point. */
     wxPoint m_Pos;     /* Rectangle start point. */
@@ -20,7 +45,7 @@ public:
     bool	m_isStartPointSelected; /* Flag: is the upper left edge selected ? */
 
 public:
-    LIB_RECTANGLE(LIB_COMPONENT * aParent);
+    LIB_RECTANGLE( LIB_COMPONENT * aParent );
     LIB_RECTANGLE( const LIB_RECTANGLE& aRect );
     ~LIB_RECTANGLE() { }
     virtual wxString GetClass() const
@@ -50,22 +75,33 @@ public:
      * @param aPosRef - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat - the transform matrix
+     * @param aTransform - the transform matrix
      * @return true if the point aPosRef is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
-
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+
+    /**
+     * See LIB_DRAW_ITEM::BeginEdit().
+     */
+    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * See LIB_DRAW_ITEM::ContinueEdit().
+     */
+    bool ContinueEdit( const wxPoint aNextPoint );
+
+    /**
+     * See LIB_DRAW_ITEM::AbortEdit().
+     */
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -87,7 +123,7 @@ protected:
     virtual wxPoint DoGetPosition() { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };

@@ -6,13 +6,14 @@
 #define CLASS_LIBENTRY_H
 
 #include "lib_draw_item.h"
-#include "class_libentry_fields.h"
+#include "lib_field.h"
 
 #include <map>
 
 
 class CMP_LIBRARY;
 class LIB_ALIAS;
+
 
 /**
  * LIB_ALIAS map sorting.
@@ -312,7 +313,7 @@ public:
      */
     void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aOffset,
                int aMulti, int aConvert, int aDrawMode, int aColor = -1,
-               const int aTransform[2][2] = DefaultTransformMatrix,
+               const TRANSFORM& aTransform = DefaultTransform,
                bool aShowPinText = true, bool aDrawFields = true,
                bool aOnlySelected = false );
 
@@ -325,7 +326,7 @@ public:
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-               const int aTransform[2][2] );
+               const TRANSFORM& aTransform );
 
     /**
      * Add a new draw \a aItem to the draw object list.
@@ -493,7 +494,7 @@ public:
      * @return The draw object if found.  Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                   const wxPoint& aPoint, const int aTransfrom[2][2] );
+                                   const wxPoint& aPoint, const TRANSFORM& aTransfrom );
 
     /**
      * Return a reference to the draw item list.

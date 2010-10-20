@@ -12,6 +12,7 @@
 #include "general.h"
 #include "protos.h"
 #include "lib_circle.h"
+#include "transform.h"
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
@@ -79,7 +80,7 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
 
-    return HitTest( aPosRef, mindist, DefaultTransformMatrix );
+    return HitTest( aPosRef, mindist, DefaultTransform );
 }
 
 
@@ -90,9 +91,9 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
  *                     thickness of a line)
  * @param aTransMat = the transform matrix
  */
-bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] )
+bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
-    wxPoint relpos = aPosRef - TransformCoordinate( aTransMat, m_Pos );
+    wxPoint relpos = aPosRef - aTransform.TransformCoordinate( m_Pos );
 
     int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) +
                               ( (double) relpos.y * relpos.y ) ) );
@@ -169,9 +170,9 @@ void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
 
 
 void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] )
+                         const TRANSFORM& aTransform )
 {
-    wxPoint pos = TransformCoordinate( aTransform, m_Pos ) + aOffset;
+    wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
@@ -193,9 +194,8 @@ int LIB_CIRCLE::GetPenSize()
 }
 
 
-void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, int aColor, int aDrawMode,
-                       void* aData, const int aTransformMatrix[2][2] )
+void LIB_CIRCLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                              int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1;
 
@@ -209,7 +209,7 @@ void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     else
         color = aColor;
 
-    pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+    pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     GRSetDrawMode( aDC, aDrawMode );
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
@@ -217,8 +217,7 @@ void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         fill = NO_FILL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y,
-                        m_Radius, GetPenSize( ),
+        GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(),
                         (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                         ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
@@ -233,6 +232,20 @@ void LIB_CIRCLE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
+}
+
+
+void LIB_CIRCLE::saveAttributes()
+{
+    m_savedPos = m_Pos;
+    m_savedRadius = m_Radius;
+}
+
+
+void LIB_CIRCLE::restoreAttributes()
+{
+    m_Pos = m_savedPos;
+    m_Radius = m_savedRadius;
 }
 
 
@@ -266,4 +279,70 @@ void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+void LIB_CIRCLE::BeginEdit( int aEditMode, const wxPoint aPosition )
+{
+    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                 wxT( "Invalid edit mode for LIB_CIRCLE object." ) );
+
+    if( aEditMode == IS_NEW )
+    {
+        m_Pos = m_initialPos = aPosition;
+    }
+    else if( aEditMode == IS_MOVED )
+    {
+        m_initialPos = m_Pos;
+        m_initialCursorPos = aPosition;
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+    else if( aEditMode == IS_RESIZED )
+    {
+        saveAttributes();
+        SetEraseLastDrawItem();
+    }
+
+    m_Flags = aEditMode;
+}
+
+
+bool LIB_CIRCLE::ContinueEdit( const wxPoint aPosition )
+{
+    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
+                   wxT( "Bad call to ContinueEdit().  LIB_CIRCLE is not being edited." ) );
+
+    return false;
+}
+
+
+void LIB_CIRCLE::EndEdit( const wxPoint& aPosition, bool aAbort )
+{
+    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
+                   wxT( "Bad call to EndEdit().  LIB_CIRCLE is not being edited." ) );
+
+    if( aAbort && !IsNew() )
+        restoreAttributes();
+
+    SetEraseLastDrawItem( false );
+    m_Flags = 0;
+}
+
+
+void LIB_CIRCLE::calcEdit( const wxPoint& aPosition )
+{
+    if( m_Flags == IS_NEW || m_Flags == IS_RESIZED )
+    {
+        if( m_Flags == IS_NEW )
+            SetEraseLastDrawItem();
+
+        int dx = m_Pos.x - aPosition.x;
+        int dy = m_Pos.y - aPosition.y;
+        m_Radius = wxRound( sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) ) );
+    }
+    else
+    {
+        Move( m_initialPos + aPosition - m_initialCursorPos );
+    }
 }

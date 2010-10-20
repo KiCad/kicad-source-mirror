@@ -8,6 +8,7 @@
 #define _LIB_DRAW_ITEM_H_
 
 #include "base_struct.h"
+#include "transform.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -20,6 +21,11 @@ class LIB_PIN;
 
 extern const int fill_tab[];
 
+// Set KICAD_USE_LIB_OJBECT_EDIT to 1 to use build in ojbect editing mode.
+#if !defined( KICAD_USE_LIB_OJBECT_EDIT )
+#undef KICAD_USE_LIB_OJBECT_EDIT
+#define KICAD_USE_LIB_OJBECT_EDIT 1
+#endif
 
 #define MINIMUM_SELECTION_DISTANCE 15 // Minimum selection distance in mils
 
@@ -51,7 +57,53 @@ typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
  */
 class LIB_DRAW_ITEM : public EDA_BaseStruct
 {
-    wxPoint m_lastPosition;  ///< Last position when moving the draw item.
+    /**
+     * Draws the item.
+     */
+    virtual void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                              const wxPoint& aOffset, int aColor,
+                              int aDrawMode, void* aData, const TRANSFORM& aTransform ) = 0;
+
+    /**
+     * Draw any editing specific graphics when the item is being edited.
+     *
+     * @param aClipBox - Clip box of the current device context.
+     * @param aDC - The device context to draw on.
+     * @param aColor - The index of the color to draw.
+     */
+    virtual void drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor ) {}
+
+    /**
+     * Calculates the attributes of an item  at \a aPosition when it is being edited.
+     *
+     * This method gets called by the Draw() method when the item is being edited.  This
+     * probably should be a pure virtual method but bezier curves are not yet editable in
+     * the component library editor.  Therefore, the default method does nothing.
+     *
+     * @param aPosition - The current mouse position in drawing coordinates.
+     */
+    virtual void calcEdit( const wxPoint& aPosition ) {}
+
+
+    /**
+     * Save the current item attributes while editing.
+     *
+     * This method is used to save the drawing attributes of the item during editing.
+     * These values are restored when an edit is canceled by calling EndEdit().
+     */
+    virtual void saveAttributes() {}
+
+    /**
+     * Restore the saved attributes when an existing item edit is cancelled.
+     */
+    virtual void restoreAttributes() {}
+
+    bool    m_eraseLastDrawItem; ///< Used when editing a new draw item to prevent drawing
+                                 ///< artifacts.
+protected:
+    wxPoint m_savedPos;          ///< Temporary position when editng an existing item.
+    wxPoint m_initialPos;        ///< Temporary position when moving an existing item.
+    wxPoint m_initialCursorPos;  ///< Iniital cursor position at the begining of a move.
 
 public:
     /**
@@ -93,7 +145,7 @@ public:
     virtual ~LIB_DRAW_ITEM() { }
 
     /**
-     * Begin an editing a component library draw item in \a aEditMode at \a aStartPoint.
+     * Begin an editing a component library draw item in \a aEditMode at \a aPosition.
      *
      * This is used to start an editing action such as resize or move a draw object.
      * It typically would be called on a left click when a draw tool is selected in
@@ -103,30 +155,36 @@ public:
      *
      * @param aEditMode - The editing mode being performed.  See base_struct.h for a list
      *                    of mode flags.
-     * @param aStartPoint - The where the editing mode was started.  This may or may not
-     *                      be required depending on the item being edited and the edit
-     *                      mode.
+     * @param aPosition - The position in drawing coordinates where the editing mode was
+     *                    started.  This may or may not be required depending on the item
+     *                    being edited and the edit mode.
      */
-    virtual void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) {}
+    virtual void BeginEdit( int aEditMode, const wxPoint aPosition = wxPoint( 0, 0 ) ) {}
 
     /**
-     * Continue an edit in progress at \a aNextPoint.
+     * Continue an edit in progress at \a aPosition.
      *
      * This is used to perform the next action while editing a draw item.  This would be
      * called for each additional left click when the mouse is captured while the item
      * is being edited.
+     *
+     * @param aPosition - The position of the mouse left click in drawing coordinates.
+     * @return True if additional mouse clicks are required to complete the edit in progress.
      */
-    virtual void ContinueEdit( const wxPoint aNextPoint ) {}
+    virtual bool ContinueEdit( const wxPoint aPosition ) { return false; }
 
     /**
      * End an object editing action.
      *
-     * This is used to abort an edit action in progress initiated by BeginEdit().
+     * This is used to end or abort an edit action in progress initiated by BeginEdit().
+     *
+     * @param aPosition - The position of the last edit event in drawing coordinates.
+     * @param aAbort - Set to true to abort the current edit in progress.
      */
-    virtual void AbortEdit() { m_Flags = 0; }
+    virtual void EndEdit( const wxPoint& aPosition, bool aAbort = false ) { m_Flags = 0; }
 
     /**
-     * Draw a body item
+     * Draw an item
      *
      * @param aPanel - DrawPanel to use (can be null) mainly used for clipping
      *                 purposes
@@ -140,11 +198,10 @@ public:
      *                to force no fill mode ( has meaning only for items what
      *                can be filled ). used in printing or moving objects mode
      *                or to pass reference to the lib component for pins
-     * @param aTransformMatrix - Transform Matrix (rotation, mirror ..)
+     * @param aTransform - Transform Matrix (rotation, mirror ..)
      */
-    virtual void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC,
-                       const wxPoint &aOffset, int aColor, int aDrawMode,
-                       void* aData, const int aTransformMatrix[2][2] ) = 0;
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint &aOffset, int aColor,
+                       int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item
@@ -152,7 +209,7 @@ public:
     virtual int GetPenSize() = 0;
 
     /**
-     * Write draw item object to /a aFile in "*.lib" format.
+     * Write draw item object to \a aFile in "*.lib" format.
      *
      * @param aFile - The file to write to.
      * @param aErrorMsg - Error message if write fails.
@@ -183,10 +240,10 @@ public:
      * @param aPosRef - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat - the transform matrix
+     * @param aTransform - the transform matrix
      * @return - true if the point aPosRef is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] ) = 0;
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform ) = 0;
 
    /**
      * @return the boundary box for this, in library coordinates
@@ -247,7 +304,7 @@ public:
     bool Inside( EDA_Rect& aRect ) { return DoTestInside( aRect ); }
 
     /**
-     * Move a draw object to a new /a aPosition.
+     * Move a draw object to a new \a aPosition.
      *
      * The real work is done by the DoMove method for each derived object type.
      *
@@ -271,6 +328,11 @@ public:
     }
 
     /**
+     * Rotate the draw item.
+     */
+    virtual void Rotate() {}
+
+    /**
      * Plot the draw item using the plot object.
      *
      * @param aPlotter - The plot object to plot to.
@@ -278,8 +340,7 @@ public:
      * @param aFill - Flag to indicate whether or not the object is filled.
      * @param aTransform - The plot transform.
      */
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const int aTransform[2][2] )
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill, const TRANSFORM& aTransform )
     {
         DoPlot( aPlotter, aOffset, aFill, aTransform );
     }
@@ -315,6 +376,27 @@ public:
      * @return - True if the draw item has been added to the parent component.
      */
     bool IsNew() { return ( m_Flags & IS_NEW ) != 0; }
+    bool IsMoving() { return ( m_Flags & IS_MOVED ); }
+    bool IsResizing() { return ( m_Flags & IS_RESIZED ); }
+
+    /**
+     * Return the draw item editing mode status.
+     *
+     * @return - True if the item is being edited.
+     */
+    bool InEditMode() { return ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0; }
+
+    void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
+
+    virtual int GetDefaultColor();
+
+    void SetUnit( int aUnit ) { m_Unit = aUnit; }
+
+    int GetUnit() { return m_Unit; }
+
+    void SetConvert( int aConvert ) { m_Convert = aConvert; }
+
+    int GetConvert() { return m_Convert; }
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
@@ -337,7 +419,7 @@ protected:
     virtual wxPoint DoGetPosition() = 0;
     virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] ) = 0;
+                         const TRANSFORM& aTransform ) = 0;
     virtual int DoGetWidth() = 0;
     virtual void DoSetWidth( int aWidth ) = 0;
 
@@ -354,15 +436,41 @@ protected:
 /*********************************************/
 class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
+    int m_savedOrientation;       ///< Temporary storage for orientation when editing.
+    bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
+
+    /**
+     * Draw the polyline.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
+    /**
+     * See LIB_DRAW_ITEM::saveAttributes().
+     */
+    void saveAttributes();
+
+    /**
+     * See LIB_DRAW_ITEM::restoreAttributes().
+     */
+    void restoreAttributes();
+
+    /**
+     * Calculate the text attributes ralative to \a aPosition while editing.
+     *
+     * @param aPosition - Edit position in drawing units.
+     */
+    void calcEdit( const wxPoint& aPosition );
+
 public:
-    LIB_TEXT(LIB_COMPONENT * aParent);
+    LIB_TEXT( LIB_COMPONENT * aParent );
     LIB_TEXT( const LIB_TEXT& aText );
     ~LIB_TEXT() { }
+
     virtual wxString GetClass() const
     {
         return wxT( "LIB_TEXT" );
     }
-
 
     /**
      * Write text object out to a FILE in "*.lib" format.
@@ -384,11 +492,10 @@ public:
      /**
       * @param aPosRef = a wxPoint to test, in eeschema coordinates
       * @param aThreshold = max distance to a segment
-      * @param aTransMat = the transform matrix
+      * @param aTransform = the transform matrix
       * @return true if the point aPosRef is near a segment
       */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
-                          const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * Test if the given rectangle intersects this object.
@@ -408,13 +515,26 @@ public:
      */
     virtual int GetPenSize( );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
-
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     virtual EDA_Rect GetBoundingBox();
+
+    void Rotate();
+
+    /**
+     * See LIB_DRAW_ITEM::BeginEdit().
+     */
+    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * See LIB_DRAW_ITEM::ContinueEdit().
+     */
+    bool ContinueEdit( const wxPoint aNextPoint );
+
+    /**
+     * See LIB_DRAW_ITEM::AbortEdit().
+     */
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -437,7 +557,7 @@ protected:
     virtual wxPoint DoGetPosition() { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };

@@ -4,17 +4,11 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
-#include "plot_common.h"
-#include "drawtxt.h"
-#include "trigo.h"
-#include "bezier_curves.h"
-#include "confirm.h"
+#include "wxstruct.h"
 
-#include "program.h"
-#include "general.h"
 #include "protos.h"
+#include "general.h"
 #include "lib_draw_item.h"
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
@@ -30,12 +24,13 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T        aType,
                               FILL_T         aFillType ) :
     EDA_BaseStruct( aType )
 {
-    m_Unit       = aUnit;
-    m_Convert    = aConvert;
-    m_Fill       = aFillType;
-    m_Parent     = (EDA_BaseStruct*) aComponent;
-    m_typeName   = _( "Undefined" );
-    m_isFillable = false;
+    m_Unit              = aUnit;
+    m_Convert           = aConvert;
+    m_Fill              = aFillType;
+    m_Parent            = (EDA_BaseStruct*) aComponent;
+    m_typeName          = _( "Undefined" );
+    m_isFillable        = false;
+    m_eraseLastDrawItem = false;
 }
 
 
@@ -110,4 +105,45 @@ bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& aOther ) const
         return result < 0;
 
     return ( DoCompare( aOther ) < 0 );
+}
+
+
+void LIB_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
+                          int aDrawMode, void* aData, const TRANSFORM& aTransform )
+{
+    if( InEditMode() )
+    {
+        // Temporarily disable filling while the item is being edited.
+        FILL_T fillMode = m_Fill;
+        int  color = GetDefaultColor();
+
+        m_Fill = NO_FILL;
+
+        // Erase the old items using the previous attributes.
+        if( m_eraseLastDrawItem )
+        {
+            GRSetDrawMode( aDC, g_XorMode );
+            drawEditGraphics( &aPanel->m_ClipBox, aDC, color );
+            drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
+        }
+
+        // Calculte the new attributes at the current cursor position.
+        calcEdit( aOffset );
+
+        // Draw the items using the new attributes.
+        drawEditGraphics( &aPanel->m_ClipBox, aDC, color );
+        drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
+
+        m_Fill = fillMode;
+    }
+    else
+    {
+        drawGraphic( aPanel, aDC, aOffset, aColor, aDrawMode, aData, aTransform );
+    }
+}
+
+
+int LIB_DRAW_ITEM::GetDefaultColor()
+{
+    return ReturnLayerColor( LAYER_DEVICE );
 }

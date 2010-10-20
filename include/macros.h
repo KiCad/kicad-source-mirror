@@ -5,6 +5,9 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#include <wx/wx.h>
+
+
 #if wxUSE_UNICODE
 #define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvCurrent->cWX2MB( wxstring ) )
 #define CONV_FROM_UTF8( utf8string ) ( wxConvCurrent->cMB2WC( utf8string ) )

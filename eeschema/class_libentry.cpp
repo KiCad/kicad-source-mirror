@@ -293,12 +293,9 @@ wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
 }
 
 
-void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
-                          const wxPoint& aOffset, int aMulti,
-                          int aConvert, int aDrawMode, int aColor,
-                          const int aTransformMatrix[2][2],
-                          bool aShowPinText, bool aDrawFields,
-                          bool aOnlySelected )
+void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
+                          int aConvert, int aDrawMode, int aColor, const TRANSFORM& aTransform,
+                          bool aShowPinText, bool aDrawFields, bool aOnlySelected )
 {
     BASE_SCREEN*   screen = aPanel->GetScreen();
 
@@ -336,14 +333,12 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
 
             if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
             {
-                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
-                               (void*) NULL, aTransformMatrix );
+                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, NULL, aTransform );
             }
 
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
-                           (void*) false, aTransformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, false, aTransform );
         }
     }
 
@@ -368,19 +363,18 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
 
         if( drawItem.Type() == COMPONENT_PIN_DRAW_TYPE )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
-                           (void*) aShowPinText, aTransformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) aShowPinText,
+                           aTransform );
         }
         else if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
-                           (void*) NULL, aTransformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
         }
         else
         {
             bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode,
-                           (void*) forceNoFill, aTransformMatrix );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) forceNoFill,
+                           aTransform );
         }
 
     }
@@ -409,7 +403,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc,
 
 
 void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
-                          const wxPoint& aOffset, const int aTransform[2][2] )
+                          const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -451,7 +445,7 @@ from component %s in library %s." ),
     LIB_DRAW_ITEM_LIST::iterator i;
 
     if( aDc != NULL )
-        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransformMatrix );
+        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
 
     for( i = drawings.begin(); i < drawings.end(); i++ )
     {
@@ -1383,30 +1377,33 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
  *                         Otherwise NULL.
  */
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                              const wxPoint& aPoint, const int aTransform[2][2] )
+                                              const wxPoint& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
      * wxPoint& pt ) to search items.
      * because this function uses DefaultTransformMatrix as orient/mirror matrix
      * we temporary copy aTransMat in DefaultTransformMatrix
      */
-    LIB_DRAW_ITEM * item;
-    int matrix[2][2];
+    LIB_DRAW_ITEM* item;
+    TRANSFORM transform;
+
     for ( int ii = 0; ii < 2; ii++ )
     {
         for ( int jj = 0; jj < 2; jj++ )
         {
-            matrix[ii][jj] = aTransform[ii][jj];
-            EXCHG( matrix[ii][jj], DefaultTransformMatrix[ii][jj] );
+            transform = DefaultTransform;
+            DefaultTransform = aTransform;
         }
     }
+
     item = LocateDrawItem( aUnit, aConvert, aType, aPoint );
+
     //Restore matrix
     for ( int ii = 0; ii < 2; ii++ )
     {
         for ( int jj = 0; jj < 2; jj++ )
         {
-            EXCHG( matrix[ii][jj], DefaultTransformMatrix[ii][jj] );
+            DefaultTransform = transform;
         }
     }
 

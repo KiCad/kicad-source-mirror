@@ -5,14 +5,18 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+
+class TRANSFORM;
+
+
 #define HIGHLIGHT_COLOR WHITE
 #define TEXT_NO_VISIBLE 1
 
 #include "wxEeschemaStruct.h"
 #include "macros.h"
 #include "base_struct.h"
-#include "sch_item_struct.h"
 
+#include "sch_item_struct.h"
 #include "class_sch_component.h"
 #include "class_sch_screen.h"
 #include "class_drawsheet.h"
@@ -26,10 +30,8 @@
  * a defualt matix ( no rotation, no mirror but Y axis is bottom to top, and
  * Y draw axis is to to bottom so we must have a default matix that reverses
  * the Y coordinate and keeps the X coordiate
- *      DefaultTransformMatrix[0][0] = 1; DefaultTransformMatrix[1][1] = -1;
- *      DefaultTransformMatrix[1][0] = DefaultTransformMatrix[0][1] = 0;
  */
-extern int DefaultTransformMatrix[2][2];
+extern TRANSFORM DefaultTransform;
 
 #define MIN_BUSLINES_THICKNESS 12   // min bus lines and entries thickness
 

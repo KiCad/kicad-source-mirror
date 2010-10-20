@@ -16,8 +16,7 @@
 #include "libeditframe.h"
 
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
-                                     bool erase );
+static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 
 
 /*
@@ -102,8 +101,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_COPY:        /* Copy */
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
-                                              m_unit, m_convert,
-                                              g_EditPinByPinIsOn );
+                                                  m_unit, m_convert,
+                                                  g_EditPinByPinIsOn );
         if( ItemCount )
         {
             MustDoPlace = 1;
@@ -127,8 +126,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DELETE:     /* Delete */
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
-                                              m_unit, m_convert,
-                                              g_EditPinByPinIsOn );
+                                                  m_unit, m_convert,
+                                                  g_EditPinByPinIsOn );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
         if ( m_component )
@@ -146,8 +145,8 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_MIRROR_Y:
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
-                                              m_unit, m_convert,
-                                              g_EditPinByPinIsOn );
+                                                  m_unit, m_convert,
+                                                  g_EditPinByPinIsOn );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.Centre();
@@ -169,7 +168,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 
     if( MustDoPlace <= 0 )
     {
-        if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
+        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY )
             if ( m_component )
                 m_component->ClearSelectedItems();
 
@@ -179,8 +178,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor,
-                   wxEmptyString );
+        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
         DrawPanel->Refresh( TRUE );
     }
 
@@ -269,8 +267,7 @@ void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
     GetScreen()->SetCurItem( NULL );
     DrawPanel->Refresh( TRUE );
 
-    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor,
-               wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
 }
 
 
@@ -298,25 +295,19 @@ void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     if( erase )
     {
-        PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
-                       PtBlock->m_Color );
+        PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
         component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
-                         g_XorMode, -1, DefaultTransformMatrix,
-                         true, true, true );
+                         g_XorMode, -1, DefaultTransform, true, true, true );
     }
 
     /* Repaint new view */
-    PtBlock->m_MoveVector.x =
-        screen->m_Curseur.x - PtBlock->m_BlockLastCursorPosition.x;
-    PtBlock->m_MoveVector.y =
-        screen->m_Curseur.y - PtBlock->m_BlockLastCursorPosition.y;
+    PtBlock->m_MoveVector.x = screen->m_Curseur.x - PtBlock->m_BlockLastCursorPosition.x;
+    PtBlock->m_MoveVector.y = screen->m_Curseur.y - PtBlock->m_BlockLastCursorPosition.y;
 
     GRSetDrawMode( DC, g_XorMode );
-    PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode,
-                   PtBlock->m_Color );
+    PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
     component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
-                     g_XorMode, -1, DefaultTransformMatrix,
-                     true, true, true );
+                     g_XorMode, -1, DefaultTransform, true, true, true );
 }

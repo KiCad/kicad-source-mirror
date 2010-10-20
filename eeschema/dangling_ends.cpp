@@ -147,8 +147,7 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM*      DrawList,
                                 // and in schematic Y axis is top to bottom
 
     else                        // calculate the pin position in schematic
-        pinpos = TransformCoordinate( DrawLibItem->m_Transform, pinpos )
-                 + DrawLibItem->m_Pos;
+        pinpos = DrawLibItem->m_Transform.TransformCoordinate( pinpos ) + DrawLibItem->m_Pos;
 
     if( pos == pinpos )
         return Pin;
@@ -261,8 +260,7 @@ wxPoint ReturnPinPhysicalPosition( LIB_PIN* Pin, SCH_COMPONENT* DrawLibItem )
         NEGATE( PinPos.y );
 
     else
-        PinPos = TransformCoordinate( DrawLibItem->m_Transform,
-                                      Pin->m_Pos ) + DrawLibItem->m_Pos;
+        PinPos = DrawLibItem->m_Transform.TransformCoordinate( Pin->m_Pos ) + DrawLibItem->m_Pos;
 
     return PinPos;
 }

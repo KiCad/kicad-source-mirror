@@ -14,13 +14,11 @@ set(EESCHEMA_SRCS
     build_BOM.cpp
     busentry.cpp
     bus-wire-junction.cpp
-    class_BodyItem_Text.cpp
     class_drawsheet.cpp
     class_drawsheetpath.cpp
     class_drc_erc_item.cpp
     class_hierarchical_PIN_sheet.cpp
     class_libentry.cpp
-    class_libentry_fields.cpp
     class_library.cpp
     class_marker_sch.cpp
     class_netlist_object.cpp
@@ -77,7 +75,6 @@ set(EESCHEMA_SRCS
     edit_component_in_schematic.cpp
     edit_label.cpp
     eelayer.cpp
-    eelibs_draw_components.cpp
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
@@ -101,8 +98,10 @@ set(EESCHEMA_SRCS
     lib_circle.cpp
     lib_draw_item.cpp
     lib_export.cpp
+    lib_field.cpp
     lib_polyline.cpp
     lib_rectangle.cpp
+    lib_text.cpp
     libfield.cpp
     load_one_schematic_file.cpp
     locate.cpp
@@ -135,6 +134,7 @@ set(EESCHEMA_SRCS
     tool_lib.cpp
     tool_sch.cpp
     tool_viewlib.cpp
+    transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp)
 

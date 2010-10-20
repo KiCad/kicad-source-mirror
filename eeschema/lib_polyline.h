@@ -11,13 +11,38 @@
 
 class LIB_POLYLINE : public LIB_DRAW_ITEM
 {
+    std::vector<wxPoint> m_savedPolyPoints;
+
+    /**
+     * Draw the polyline.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
+    /**
+     * See LIB_DRAW_ITEM::saveAttributes().
+     */
+    void saveAttributes();
+
+    /**
+     * See LIB_DRAW_ITEM::restoreAttributes().
+     */
+    void restoreAttributes();
+
+    /**
+     * Calculate the polyline attributes ralative to \a aPosition while editing.
+     *
+     * @param aPosition - Edit position in drawing units.
+     */
+    void calcEdit( const wxPoint& aPosition );
+
 public:
     int m_Width;                            /* Line width */
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
     int m_ModifyIndex;						// Index of the polyline point to modify
 
 public:
-    LIB_POLYLINE(LIB_COMPONENT * aParent);
+    LIB_POLYLINE( LIB_COMPONENT * aParent );
     LIB_POLYLINE( const LIB_POLYLINE& aPolyline );
     ~LIB_POLYLINE() { }
 
@@ -39,6 +64,11 @@ public:
     void AddPoint( const wxPoint& aPoint );
 
     /**
+     * Delete the segment at \a aPosition.
+     */
+    void DeleteSegment( const wxPoint aPosition );
+
+    /**
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
@@ -54,11 +84,10 @@ public:
     /**
      * @param aPosRef = a wxPoint to test
      * @param aThreshold = max distance to a segment
-     * @param aTransMat = the transform matrix
+     * @param aTransform = the transform matrix
      * @return true if the point aPosRef is near a segment
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold,
-                          const int aTransMat[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * @return the boundary box for this, in library coordinates
@@ -70,11 +99,22 @@ public:
      */
     virtual int GetPenSize( );
 
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
-
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+
+    /**
+     * See LIB_DRAW_ITEM::BeginEdit().
+     */
+    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * See LIB_DRAW_ITEM::ContinueEdit().
+     */
+    bool ContinueEdit( const wxPoint aNextPoint );
+
+    /**
+     * See LIB_DRAW_ITEM::AbortEdit().
+     */
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -94,10 +134,10 @@ protected:
     virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
-#endif   // _LIB_POLYLIN_H_
+#endif   // _LIB_POLYLINE_H_

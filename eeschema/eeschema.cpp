@@ -17,6 +17,8 @@
 #include "protos.h"
 #include "hotkeys.h"
 
+#include "transform.h"
+
 #include <wx/snglinst.h>
 
 
@@ -83,7 +85,7 @@ int g_ItemSelectetColor = BROWN;
 // in eeschema
 int g_InvisibleItemColor = DARKGRAY;
 
-int DefaultTransformMatrix[2][2] = { { 1, 0 }, { 0, -1 } };
+TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
 
 /************************************/

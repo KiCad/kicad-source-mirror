@@ -22,6 +22,8 @@ class Dialog_BodyGraphicText_Properties;
  */
 class WinEDA_LibeditFrame : public WinEDA_DrawFrame
 {
+    LIB_COMPONENT*   m_savedComponent;  ///< Temporary copy of current component during edit.
+
 public:
     WinEDAChoiceBox* m_SelpartBox;      // a Box to select a part to edit (if any)
     WinEDAChoiceBox* m_SelAliasBox;     // a box to select the alias to edit (if any)
@@ -94,11 +96,9 @@ public:
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
-    void OnHotKey( wxDC* DC, int hotkey,
-                   EDA_BaseStruct* DrawStruct );
+    void OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
 
-    void GeneralControle( wxDC*   DC,
-                          wxPoint MousePositionInPixels );
+    void GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
     void LoadSettings();
     void SaveSettings();
@@ -167,6 +167,8 @@ public:
 
     FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
 
+    void           DeleteSavedComponent();
+
 private:
 
     /**
@@ -182,16 +184,14 @@ private:
     void           SelectActiveLibrary();
     void           SaveActiveLibrary( wxCommandEvent& event );
 
-    bool           LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry,
-                                          CMP_LIBRARY*   Library );
+    bool           LoadOneLibraryPartAux( CMP_LIB_ENTRY* LibEntry, CMP_LIBRARY* Library );
 
     void           DisplayCmpDoc();
     void           EditComponentProperties();
 
     // General editing
 public:
-    void           SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
-                                       int             flag_type_command = 0 );
+    void           SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
 
 private:
     void           GetComponentFromUndoList( wxCommandEvent& event );
@@ -199,9 +199,7 @@ private:
 
     // Editing pins
     void           CreatePin( wxDC* DC );
-    void           DeletePin( wxDC*          DC,
-                              LIB_COMPONENT* LibEntry,
-                              LIB_PIN*       Pin );
+    void           DeletePin( wxDC* DC, LIB_COMPONENT* LibEntry, LIB_PIN* Pin );
     void           StartMovePin( wxDC* DC );
 
     // Editing anchor
@@ -215,16 +213,10 @@ private:
     void           EndDrawGraphicItem( wxDC* DC );
     void           LoadOneSymbol();
     void           SaveOneSymbol();
-    void           EditGraphicSymbol( wxDC*          DC,
-                                      LIB_DRAW_ITEM* DrawItem );
+    void           EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
     void           EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
-    void           RotateSymbolText( wxDC* DC );
-    void           DeleteDrawPoly( wxDC* DC );
     LIB_DRAW_ITEM* LocateItemUsingCursor();
-    void           RotateField( wxDC* DC, LIB_FIELD* Field );
-    void           PlaceField( wxDC* DC, LIB_FIELD* Field );
     void           EditField( wxDC* DC, LIB_FIELD* Field );
-    void           StartMoveField( wxDC* DC, LIB_FIELD* field );
 
 public:
     /* Block commands: */
@@ -311,9 +303,8 @@ protected:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                    int aPrintMask, bool aPrintMirrorMode,
-                    void * aData = NULL);
+    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
+                            bool aPrintMirrorMode, void * aData = NULL);
 
     /** function SVG_Print_component
      * Creates the SVG print file for the current edited component.

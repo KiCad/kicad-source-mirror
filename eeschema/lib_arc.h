@@ -9,8 +9,63 @@
 #include "lib_draw_item.h"
 
 
+class TRANSFORM;
+
+
 class LIB_ARC : public LIB_DRAW_ITEM
 {
+    enum SELECT_T
+    {
+        START,
+        END,
+        OUTLINE,
+    };
+
+    wxPoint  m_savedStartPos;
+    wxPoint  m_savedEndPos;
+    int      m_savedAngle1;
+    int      m_savedAngle2;
+    double   m_editCenterDistance;
+    SELECT_T m_editSelectPoint;
+    int      m_editState;
+    int      m_editDirection;
+    int      m_lastEditState;
+
+    /**
+     * Draws the arc.
+     */
+    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+
+    /**
+     * Draw the graphics when the arc is being edited.
+     */
+    void drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor );
+
+    /**
+     * See LIB_DRAW_ITEM::saveAttributes().
+     */
+    void saveAttributes();
+
+    /**
+     * See LIB_DRAW_ITEM::restoreAttributes().
+     */
+    void restoreAttributes();
+
+    /**
+     * Calculates the center, radius, and angles at \a aPosition when the arc is being edited.
+     *
+     * Note: The center may not necessarily be on the grid.
+     *
+     * @param aPosition - The current mouse position in drawing coordinates.
+     */
+    void calcEdit( const wxPoint& aPosition );
+
+    /**
+     * Calculate the radius and angle of an arc using the start, end, and center points.
+     */
+    void calcRadiusAngles();
+
 public:
     int     m_Radius;
     int     m_t1;       /* First radius angle of the arc in 0.1 degrees. */
@@ -21,7 +76,7 @@ public:
     int     m_Width;    /* Line width */
 
 public:
-    LIB_ARC(LIB_COMPONENT * aParent);
+    LIB_ARC( LIB_COMPONENT * aParent );
     LIB_ARC( const LIB_ARC& aArc );
     ~LIB_ARC() { }
     virtual wxString GetClass() const
@@ -51,14 +106,10 @@ public:
      * @param aPosRef - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat - the transform matrix
+     * @param aTransform - the transform matrix
      * @return - True if the point aPosRef is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const int aTransMat[2][2] );
-
-    void Draw( WinEDA_DrawPanel * aPanel, wxDC * aDC, const wxPoint &aOffset,
-               int aColor, int aDrawMode, void* aData,
-               const int aTransformMatrix[2][2] );
+    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     virtual EDA_Rect GetBoundingBox();
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
@@ -67,6 +118,21 @@ public:
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( );
+
+    /**
+     * See LIB_DRAW_ITEM::BeginEdit().
+     */
+    void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+
+    /**
+     * See LIB_DRAW_ITEM::ContinueEdit().
+     */
+    bool ContinueEdit( const wxPoint aNextPoint );
+
+    /**
+     * See LIB_DRAW_ITEM::AbortEdit().
+     */
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
@@ -87,7 +153,7 @@ protected:
     virtual wxPoint DoGetPosition() { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const int aTransform[2][2] );
+                         const TRANSFORM& aTransform );
     virtual int DoGetWidth() { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };

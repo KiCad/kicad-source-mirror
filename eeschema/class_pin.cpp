@@ -17,6 +17,7 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "class_pin.h"
+#include "transform.h"
 
 #include "bitmaps.h"
 
@@ -536,7 +537,7 @@ bool LIB_PIN::HitTest( const wxPoint& aRefPos )
     if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
-    return HitTest( aRefPos, mindist, DefaultTransformMatrix );
+    return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
 /** Function HitTest
@@ -545,11 +546,10 @@ bool LIB_PIN::HitTest( const wxPoint& aRefPos )
  * @param aThreshold = max distance to a segment
  * @param aTransMat = the transform matrix
  */
-bool LIB_PIN::HitTest( wxPoint aRefPos, int aThreshold,
-                       const int aTransMat[2][2] )
+bool LIB_PIN::HitTest( wxPoint aRefPos, int aThreshold, const TRANSFORM& aTransform )
 {
-    wxPoint pinPos = TransformCoordinate( aTransMat, m_Pos );
-    wxPoint pinEnd = TransformCoordinate( aTransMat, ReturnPinEndPoint() );
+    wxPoint pinPos = aTransform.TransformCoordinate( m_Pos );
+    wxPoint pinEnd = aTransform.TransformCoordinate( ReturnPinEndPoint() );
 
     return TestSegmentHit( aRefPos, pinPos, pinEnd, aThreshold );
 }
@@ -791,18 +791,17 @@ int LIB_PIN::GetPenSize()
 }
 
 
-void LIB_PIN::Draw( WinEDA_DrawPanel* aPanel,
-                    wxDC*             aDC,
-                    const wxPoint&    aOffset,
-                    int               aColor,
-                    int               aDrawMode,
-                    void*             aData,
-                    const int         aTransformMatrix[2][2] )
+void LIB_PIN::drawGraphic( WinEDA_DrawPanel* aPanel,
+                           wxDC*             aDC,
+                           const wxPoint&    aOffset,
+                           int               aColor,
+                           int               aDrawMode,
+                           void*             aData,
+                           const TRANSFORM&  aTransform )
 {
     // Invisible pins are only drawn on request.  In libedit they are drawn
     // in g_InvisibleItemColor because we must see them.
-    WinEDA_SchematicFrame* frame =
-        (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
 
     if( ( m_Attributs & PINNOTDRAW ) )
     {
@@ -819,10 +818,10 @@ void LIB_PIN::Draw( WinEDA_DrawPanel* aPanel,
         DrawPinText = false;
 
     /* Calculate pin orient taking in account the component orientation. */
-    int orient = ReturnPinDrawOrient( aTransformMatrix );
+    int orient = ReturnPinDrawOrient( aTransform );
 
     /* Calculate the pin position */
-    wxPoint pos1 = TransformCoordinate( aTransformMatrix, m_Pos ) + aOffset;
+    wxPoint pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
     /* Drawing from the pin and the special symbol combination */
     DrawPinSymbol( aPanel, aDC, pos1, orient, aDrawMode, aColor );
@@ -1476,7 +1475,7 @@ wxPoint LIB_PIN::ReturnPinEndPoint()
  *  according to its orientation and the matrix transform (rot, mirror) TransMat
  * @param  TransMat = transform matrix
  */
-int LIB_PIN::ReturnPinDrawOrient( const int TransMat[2][2] )
+int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform )
 {
     int     orient;
     wxPoint end;    // position of a end pin starting at 0,0 according to its orientation, lenght = 1
@@ -1497,7 +1496,7 @@ int LIB_PIN::ReturnPinDrawOrient( const int TransMat[2][2] )
     }
 
     // = pos of end point, according to the component orientation
-    end = TransformCoordinate( TransMat, end );
+    end = aTransform.TransformCoordinate( end );
     orient = PIN_UP;
     if( end.x == 0 )
     {
@@ -1653,14 +1652,14 @@ void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
 
 
 void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                      const int transform[2][2] )
+                      const TRANSFORM& aTransform )
 {
     if( m_Attributs & PINNOTDRAW )
         return;
 
-    int orient = ReturnPinDrawOrient( transform );
+    int orient = ReturnPinDrawOrient( aTransform );
 
-    wxPoint pos = TransformCoordinate( transform, m_Pos ) + offset;
+    wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + offset;
 
     plotter->set_current_line_width( GetPenSize() );
     PlotPinSymbol( plotter, pos, m_PinLen, orient, m_PinShape );

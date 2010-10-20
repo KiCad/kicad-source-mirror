@@ -373,6 +373,9 @@ public:
         m_Status = new_status;
     }
 
+    void SetFlags( int aFlags ) { m_Flags = aFlags; }
+
+    int GetFlags() { return m_Flags; }
 
     /**
      * Function DisplayInfo
