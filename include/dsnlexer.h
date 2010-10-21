@@ -78,6 +78,7 @@ enum DSN_SYNTAX_T {
  */
 class DSNLEXER
 {
+    char*               start;
     char*               next;
     char*               limit;
 
@@ -99,20 +100,17 @@ class DSNLEXER
     const KEYWORD*      keywords;
     unsigned            keywordCount;
 
-    /// Use casting char* operator to get start of line, which is dynamic since reader
-    /// can be resizing its buffer at each reader->ReadLine() only.
-    char*               start() const { return (char*) (*reader); }
-
     void init();
 
     int readLine() throw (IOError)
     {
         unsigned len = reader->ReadLine();
 
-        // set next and limit to start() and start() + len.
-        // start() is constant until the next ReadLine(), which could resize and
+        // start may have changed in ReadLine(), which can resize and
         // relocate reader's line buffer.
-        next  = start();
+        start = (*reader);
+
+        next  = start;
         limit = next + len;
 
         return len;

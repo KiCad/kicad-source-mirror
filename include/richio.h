@@ -101,12 +101,12 @@ public:
     /**
      * Function ReadLine
      * reads a line of text into the buffer and increments the line number
-     * counter.  If the line is larger than the buffer size, then an exception
-     * is thrown.
+     * counter.  If the line is larger than aMaxLineLength passed to the
+     * constructor, then an exception is thrown.  The line is nul terminated.
      * @return unsigned - The number of bytes read, 0 at end of file.
-     * @throw IOError only when a line is too long.
+     * @throw IOError when a line is too long.
      */
-    virtual unsigned ReadLine() throw (IOError) = 0;
+    virtual unsigned ReadLine() throw( IOError ) = 0;
 
     /**
      * Function GetSource
@@ -160,7 +160,7 @@ class FILE_LINE_READER : public LINE_READER
 {
 protected:
 
-    FILE*               fp;     ///< I own this file
+    FILE*   fp;     ///< I own this file
 
 public:
 
@@ -181,15 +181,7 @@ public:
             fclose( fp );
     }
 
-    /**
-     * Function ReadLine
-     * reads a line of text into the buffer and increments the line number
-     * counter.  If the line is larger than the buffer size, then an exception
-     * is thrown.
-     * @return unsigned - The number of bytes read, 0 at end of file.
-     * @throw IOError only when a line is too long.
-     */
-    unsigned ReadLine() throw (IOError);
+    unsigned ReadLine() throw( IOError );   // see LINE_READER::ReadLine() description
 
     /**
      * Function Rewind
@@ -217,34 +209,26 @@ protected:
 public:
 
     /**
-     * Constructor STRING_LINE_READER( const std::string& aString )
+     * Constructor STRING_LINE_READER( const std::string&, const wxString& )
      *
      * @param aString is a source string consisting of one or more lines
      * of text, where multiple lines are separated with a '\n' character.
      * The last line does not necessarily need a trailing '\n'.
+     *
      * @param aSource describes the source of aString for error reporting purposes
      *  can be anything meaninful, such as wxT( "cliboard" ).
      */
     STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
-        LINE_READER( 4096 ),
+        LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
         lines( aString ),
         ndx( 0 )
     {
         // Clipboard text should be nice and _use multiple lines_ so that
         // we can report _line number_ oriented error messages when parsing.
-        // Therefore a line of 4096 characters max seems more than adequate.
         source = aSource;
     }
 
-    /**
-     * Function ReadLine
-     * reads a line of text into the buffer and increments the line number
-     * counter.  If the line is larger than the buffer size, then an exception
-     * is thrown.
-     * @return unsigned - The number of bytes read, 0 at end of file.
-     * @throw IOError only when a line is too long.
-     */
-    unsigned ReadLine() throw (IOError);
+     unsigned ReadLine() throw(IOError);    // see LINE_READER::ReadLine() description
 };
 
 

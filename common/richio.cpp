@@ -47,8 +47,8 @@ LINE_READER::LINE_READER( unsigned aMaxLineLength )
     capacity = LINE_READER_LINE_INITIAL_SIZE;
 
     // but never go above user's aMaxLineLength, and leave space for trailing nul
-    if( capacity > aMaxLineLength-1 )
-        capacity = aMaxLineLength-1;
+    if( capacity > aMaxLineLength+1 )
+        capacity = aMaxLineLength+1;
 
     line = new char[capacity];
 
@@ -71,9 +71,10 @@ void LINE_READER::expandCapacity( unsigned newsize )
         // resize the buffer, and copy the original data
         char* bigger = new char[capacity];
 
-        wxASSERT( capacity >= length );
+        wxASSERT( capacity >= length+1 );
 
         memcpy( bigger, line, length );
+        bigger[length] = 0;
 
         delete[] line;
         line = bigger;
@@ -102,8 +103,8 @@ unsigned FILE_LINE_READER::ReadLine() throw (IOError)
         if( length == maxLineLength )
             throw IOError( _("Line length exceeded") );
 
-        // a normal line breaks here, once through
-        if( length < capacity-1 || line[length-1] == '\n' )
+        // a normal line breaks here, once through while loop
+        if( length+1 < capacity || line[length-1] == '\n' )
             break;
 
         expandCapacity( capacity * 2 );
@@ -130,12 +131,13 @@ unsigned STRING_LINE_READER::ReadLine() throw (IOError)
         if( length >= maxLineLength )
             throw IOError( _("Line length exceeded") );
 
-        if( length > capacity )
-            expandCapacity( length );
+        if( length+1 > capacity )
+            expandCapacity( length+1 );
 
         wxASSERT( ndx + length <= lines.length() );
 
         memcpy( line, &source[ndx], length );
+        line[length] = 0;
 
         ++lineNum;
         ndx += length;
