@@ -11,24 +11,18 @@
 #include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "richio.h"
 
+#define line         ((char*)(*aLine))
 
-SCH_ITEM* ReadTextDescr( FILE*     aFile,
-                         wxString& aMsgDiag,
-                         char*     aLine,
-                         int       aBufsize,
-                         int*      aLineNum,
-                         int       aSchematicFileVersion )
+SCH_ITEM* ReadTextDescr( LINE_READER* aLine, wxString& aMsgDiag, int aSchematicFileVersion )
 {
 /**
  * Function ReadTextDescr
  * Reads the data structures for a Text (Comment, label, Hlabel and Hlabel
  * from a FILE in "*.sch" format.
- * @param aFile The FILE to read.
- * @param aLine The buffer used to read the first line of description.
- * @param aBufsize The size of aLine.
- * @param aLineNum a pointer to the line count.
- * @return a poiner to the new created object if success reading else NULL.
+ * @param aLine is a LINE_READER to use.
+ * @return a pointer to the new created object if success reading else NULL.
  */
     SCH_ITEM* Struct = NULL;
     char      Name1[256];
@@ -37,35 +31,37 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
     int       thickness = 0, size = 0, orient = 0;
     wxPoint   pos;
 
-    char*     SLine = aLine;
-
-    while( (*SLine != ' ' ) && *SLine )
-        SLine++;
-
-    // SLine points the start of parameters
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
-    int ii = sscanf( SLine, "%s %d %d %d %d %s %s %d", Name1, &pos.x, &pos.y,
+
+    char*     sline = line;
+    while( (*sline != ' ' ) && *sline )
+        sline++;
+
+    // sline points the start of parameters
+    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &pos.x, &pos.y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
     {
         aMsgDiag.Printf(
             wxT( "EESchema file text struct error line %d, aborted" ),
-            *aLineNum );
+            aLine->LineNumber() );
         return NULL;
     }
 
-    if( feof( aFile ) || GetLine( aFile, aLine, aLineNum, aBufsize ) == NULL )
+    if( !aLine->ReadLine() )
     {
         aMsgDiag.Printf(
             wxT( "EESchema file text struct error line %d (No text), aborted" ),
-            *aLineNum );
+            aLine->LineNumber() );
         return NULL;
     }
-    if( size == 0 )
+
+   if( size == 0 )
         size = DEFAULT_SIZE_TEXT;
-    char* text = strtok( aLine, "\n\r" );
+
+    char* text = strtok( line, "\n\r" );
     if( text == NULL )
         return NULL;
 
@@ -168,6 +164,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 
         if( strnicmp( Name2, "Italic", 6 ) == 0 )
             TextStruct->m_Italic = 1;
+
         Struct = TextStruct;
     }
 
@@ -178,8 +175,7 @@ SCH_ITEM* ReadTextDescr( FILE*     aFile,
 /* Function used by LoadEEFile().
  * Get the lines for a description of a piece of hierarchy.
  */
-int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
-                    int* aLineNum, BASE_SCREEN* Window )
+int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     int              ii, fieldNdx, size;
     char             Name1[256], Char1[256], Char2[256];
@@ -198,10 +194,9 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     // must be a duplicate, references just work for a two-layer structure.
     // this is accomplished through the Sync() function.
 
-    if( Line[0] == '$' )   /* Line should be "$Sheet" */
+    if( line[0] == '$' )   // line should be "$Sheet"
     {
-        *aLineNum++;
-        if( fgets( Line, 256 - 1, f ) == 0 )
+        if( !aLine->ReadLine() )
         {
             aMsgDiag.Printf( wxT( "Read File Errror" ) );
             return TRUE;
@@ -210,15 +205,16 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
     /* Next line: must be "S xx yy nn mm" with xx, yy = sheet position
      *  ( upper left corner  ) et nn,mm = sheet size */
-    if( (sscanf( &Line[1], "%d %d %d %d",
+    if( (sscanf( &line[1], "%d %d %d %d",
                  &SheetStruct->m_Pos.x, &SheetStruct->m_Pos.y,
                  &SheetStruct->m_Size.x, &SheetStruct->m_Size.y ) != 4)
-       || (Line[0] != 'S' ) )
+       || (line[0] != 'S' ) )
     {
         aMsgDiag.Printf(
             wxT( " ** EESchema file sheet struct error at line %d, aborted\n" ),
-            *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8( Line );
+            aLine->LineNumber() );
+
+        aMsgDiag << CONV_FROM_UTF8( line );
         Failed = TRUE;
         return Failed;
     }
@@ -226,19 +222,21 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     /* Read fields */
     for( ; ; ) /* Analysis of lines "Fn" text. */
     {
-        *aLineNum++;
-        if( fgets( Line, 256 - 1, f ) == NULL )
+        if( !aLine->ReadLine() )
             return TRUE;
-        if( Line[0] == 'U' )
+
+        if( line[0] == 'U' )
         {
-            sscanf( Line + 1, "%lX", &(SheetStruct->m_TimeStamp) );
-            if( SheetStruct->m_TimeStamp == 0 )  //zero is not unique!
+            sscanf( line + 1, "%lX", &SheetStruct->m_TimeStamp );
+            if( SheetStruct->m_TimeStamp == 0 )  // zero is not unique!
                 SheetStruct->m_TimeStamp = GetTimeStamp();
             continue;
         }
-        if( Line[0] != 'F' )
+
+        if( line[0] != 'F' )
             break;
-        sscanf( Line + 1, "%d", &fieldNdx );
+
+        sscanf( line + 1, "%d", &fieldNdx );
 
 
         /* Read the field:
@@ -246,32 +244,36 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
          * If F0 "text" for SheetName
          * F1 and "text" for filename
          */
-        ptcar = Line; while( *ptcar && ( *ptcar != '"' ) )
+        ptcar = line;
+        while( *ptcar && ( *ptcar != '"' ) )
             ptcar++;
 
         if( *ptcar != '"' )
         {
             aMsgDiag.Printf(
                 wxT( "EESchema file sheet label F%d at line %d, aborted\n" ),
-                fieldNdx, *aLineNum );
-            aMsgDiag << CONV_FROM_UTF8( Line );
+                fieldNdx, aLine->LineNumber() );
+            aMsgDiag << CONV_FROM_UTF8( line );
             return TRUE;
         }
 
         for( ptcar++, ii = 0; ; ii++, ptcar++ )
         {
             Name1[ii] = *ptcar;
+
             if( *ptcar == 0 )
             {
                 aMsgDiag.Printf(
                     wxT( "EESchema file sheet field F at line %d, aborted\n" ),
-                    *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8( Line );
+                    aLine->LineNumber() );
+                aMsgDiag << CONV_FROM_UTF8( line );
                 return TRUE;
             }
+
             if( *ptcar == '"' )
             {
-                Name1[ii] = 0; ptcar++;
+                Name1[ii] = 0;
+                ptcar++;
                 break;
             }
         }
@@ -280,14 +282,15 @@ int ReadSheetDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
         {
             if( sscanf( ptcar, "%d", &size ) != 1 )
             {
-                aMsgDiag.Printf( wxT( "EESchema file sheet Label Caract \
-error line %d, aborted\n" ),
-                    *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8( Line );
+                aMsgDiag.Printf( wxT( "EESchema file sheet Label Caract error line %d, aborted\n" ),
+                    aLine->LineNumber() );
+
+                aMsgDiag << CONV_FROM_UTF8( line );
                 DisplayError( frame, aMsgDiag );
             }
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
+
             if( fieldNdx == 0 )
             {
                 SheetStruct->m_SheetName     = CONV_FROM_UTF8( Name1 );
@@ -311,8 +314,8 @@ error line %d, aborted\n" ),
             if( sscanf( ptcar, "%s %s %d %d %d", Char1, Char2, &x, &y, &size ) != 5 )
             {
                 aMsgDiag.Printf( wxT( "EESchema file sheet label error at line %d, ignoring.\n" ),
-                                 *aLineNum );
-                aMsgDiag << CONV_FROM_UTF8( Line );
+                                 aLine->LineNumber() );
+                aMsgDiag << CONV_FROM_UTF8( line );
                 DisplayError( frame, aMsgDiag );
                 continue;
             }
@@ -322,6 +325,7 @@ error line %d, aborted\n" ),
 
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
+
             SheetLabelStruct->m_Size.x = SheetLabelStruct->m_Size.y = size;
             SheetLabelStruct->m_Pos.x=x; //to readjust x of first label if vertical
             switch( Char1[0] )
@@ -347,7 +351,7 @@ error line %d, aborted\n" ),
                 break;
             }
 
-            switch( Char2[0] ) 
+            switch( Char2[0] )
             {
             case 'R' : /* pin on right side */
                 SheetLabelStruct->SetEdge(1);
@@ -367,13 +371,14 @@ error line %d, aborted\n" ),
         }
     }
 
-    if( strnicmp( "$End", Line, 4 ) != 0 )
+    if( strnicmp( "$End", line, 4 ) != 0 )
     {
         aMsgDiag.Printf( wxT( "**EESchema file end_sheet struct error at line %d, aborted\n" ),
-                         *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8( Line );
+                         aLine->LineNumber() );
+        aMsgDiag << CONV_FROM_UTF8( line );
         Failed = TRUE;
     }
+
     if( !Failed )
     {
         SheetStruct->SetNext( Window->EEDrawList );
@@ -386,8 +391,7 @@ error line %d, aborted\n" ),
 
 
 /* Read the schematic header. */
-bool ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
-                      int* aLineNum, BASE_SCREEN* Window )
+bool ReadSchemaDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     char Text[256], buf[1024];
     int  ii;
@@ -400,7 +404,7 @@ bool ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     };
     wxSize               PageSize;
 
-    sscanf( Line, "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
+    sscanf( line, "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
 
     wxString pagename = CONV_FROM_UTF8( Text );
     for( ii = 0; SheetFormatList[ii] != NULL; ii++ )
@@ -421,8 +425,8 @@ bool ReadSchemaDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
     {
         aMsgDiag.Printf( wxT( "EESchema file dimension definition error \
 line %d, \aAbort reading file.\n" ),
-                         *aLineNum );
-        aMsgDiag << CONV_FROM_UTF8( Line );
+                         aLine->LineNumber() );
+        aMsgDiag << CONV_FROM_UTF8( line );
         DisplayError( frame, aMsgDiag );
     }
 
@@ -430,67 +434,68 @@ line %d, \aAbort reading file.\n" ),
 
     for( ; ; )
     {
-        if( GetLine( f, Line, aLineNum, 1024 ) == NULL )
+        if( !aLine->ReadLine() )
             return TRUE;
-        if( strnicmp( Line, "$End", 4 ) == 0 )
+
+        if( strnicmp( line, "$End", 4 ) == 0 )
             break;
 
-        if( strnicmp( Line, "Sheet", 2 ) == 0 )
-            sscanf( Line + 5, " %d %d",
+        if( strnicmp( line, "Sheet", 2 ) == 0 )
+            sscanf( line + 5, " %d %d",
                     &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
 
-        if( strnicmp( Line, "Title", 2 ) == 0 )
+        if( strnicmp( line, "Title", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Title = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Date", 2 ) == 0 )
+        if( strnicmp( line, "Date", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Date = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Rev", 2 ) == 0 )
+        if( strnicmp( line, "Rev", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Revision = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comp", 4 ) == 0 )
+        if( strnicmp( line, "Comp", 4 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Company = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment1", 8 ) == 0 )
+        if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Commentaire1 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment2", 8 ) == 0 )
+        if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Commentaire2 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment3", 8 ) == 0 )
+        if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Commentaire3 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment4", 8 ) == 0 )
+        if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             Window->m_Commentaire4 = CONV_FROM_UTF8( buf );
             continue;
         }
@@ -503,8 +508,8 @@ line %d, \aAbort reading file.\n" ),
 /* Function used by LoadEEFile ().
  * Get the lines for a description of a schematic component.
  */
-int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
-                   int* aLineNum, BASE_SCREEN* Window )
+
+int ReadPartDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     int            ii;
     char           Name1[256], Name2[256],
@@ -518,20 +523,20 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
     component->m_Convert = 1;
 
-    if( Line[0] == '$' )
+    if( line[0] == '$' )
     {
         newfmt = 1;
-        *aLineNum++;
-        if( fgets( Line, 256 - 1, f ) == 0 )
+
+        if( !aLine->ReadLine() )
             return TRUE;
     }
 
-    if( sscanf( &Line[1], "%s %s", Name1, Name2 ) != 2 )
+    if( sscanf( &line[1], "%s %s", Name1, Name2 ) != 2 )
     {
         aMsgDiag.Printf(
             wxT( "EESchema Component descr error at line %d, aborted" ),
-            *aLineNum );
-        aMsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( Line );
+            aLine->LineNumber() );
+        aMsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
         Failed = TRUE;
         return Failed;
     }
@@ -608,19 +613,18 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
      */
     for( ; ; )
     {
-        *aLineNum++;
-        if( fgets( Line, 256 - 1, f ) == NULL )
+        if( !aLine->ReadLine() )
             return TRUE;
 
-        if( Line[0] == 'U' )
+        if( line[0] == 'U' )
         {
-            sscanf( Line + 1, "%d %d %lX",
+            sscanf( line + 1, "%d %d %lX",
                     &component->m_Multi, &component->m_Convert,
                     &component->m_TimeStamp );
         }
-        else if( Line[0] == 'P' )
+        else if( line[0] == 'P' )
         {
-            sscanf( Line + 1, "%d %d",
+            sscanf( line + 1, "%d %d",
                     &component->m_Pos.x, &component->m_Pos.y );
 
             // Set fields position to a default position (that is the
@@ -632,7 +636,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                     component->GetField( i )->m_Pos = component->m_Pos;
             }
         }
-        else if( Line[0] == 'A' && Line[1] == 'R' )
+        else if( line[0] == 'A' && line[1] == 'R' )
         {
             /* format:
              * AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
@@ -641,7 +645,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
              * C99 is the reference given this path.
              */
             int ii;
-            ptcar = Line + 2;
+            ptcar = line + 2;
 
             //copy the path.
             ii     = ReadDelimitedText( Name1, ptcar, 255 );
@@ -663,7 +667,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
             component->AddHierarchicalReference( path, ref, multi );
             component->GetField( REFERENCE )->m_Text = ref;
         }
-        else if( Line[0] == 'F' )
+        else if( line[0] == 'F' )
         {
             int  fieldNdx;
 
@@ -673,7 +677,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
 
             FieldUserName[0] = 0;
 
-            ptcar = Line;
+            ptcar = line;
 
             while( *ptcar && (*ptcar != '"') )
                 ptcar++;
@@ -682,7 +686,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
             {
                 aMsgDiag.Printf(
                     wxT( "EESchema file lib field F at line %d, aborted" ),
-                    *aLineNum );
+                    aLine->LineNumber() );
                 return TRUE;
             }
 
@@ -693,7 +697,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                 {
                     aMsgDiag.Printf(
                         wxT( "Component field F at line %d, aborted" ),
-                        *aLineNum );
+                        aLine->LineNumber() );
                     return TRUE;
                 }
 
@@ -705,7 +709,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
                 }
             }
 
-            fieldNdx = atoi( Line + 2 );
+            fieldNdx = atoi( line + 2 );
 
             ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
 
@@ -749,7 +753,7 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
             {
                 aMsgDiag.Printf(
                     wxT( "Component Field error line %d, aborted" ),
-                    *aLineNum );
+                    aLine->LineNumber() );
                 DisplayError( frame, aMsgDiag );
                 continue;
             }
@@ -796,39 +800,38 @@ int ReadPartDescr( wxWindow* frame, char* Line, FILE* f, wxString& aMsgDiag,
             break;
     }
 
-    if( sscanf( Line, "%d %d %d", &component->m_Multi,
+    if( sscanf( line, "%d %d %d", &component->m_Multi,
                 &component->m_Pos.x, &component->m_Pos.y ) != 3 )
     {
         aMsgDiag.Printf(
             wxT( "Component unit & pos error at line %d, aborted" ),
-            *aLineNum );
+            aLine->LineNumber() );
         Failed = TRUE;
         return Failed;
     }
 
-    *aLineNum++;
-    if( ( fgets( Line, 256 - 1, f ) == NULL )
-       || ( sscanf( Line, "%d %d %d %d",
+    if( !aLine->ReadLine() ||
+        sscanf( line, "%d %d %d %d",
                     &component->m_Transform.x1,
                     &component->m_Transform.y1,
                     &component->m_Transform.x2,
-                    &component->m_Transform.y2 ) != 4 ) )
+                    &component->m_Transform.y2 ) != 4 )
     {
-        aMsgDiag.Printf( wxT( "Component orient error at line %d, aborted" ), *aLineNum );
+        aMsgDiag.Printf( wxT( "Component orient error at line %d, aborted" ), aLine->LineNumber() );
         Failed = TRUE;
         return Failed;
     }
 
     if( newfmt )
     {
-        *aLineNum++;
-        if( fgets( Line, 256 - 1, f ) == NULL )
+        if( !aLine->ReadLine() )
             return TRUE;
-        if( strnicmp( "$End", Line, 4 ) != 0 )
+
+        if( strnicmp( "$End", line, 4 ) != 0 )
         {
             aMsgDiag.Printf(
                 wxT( "Component End expected at line %d, aborted" ),
-                *aLineNum );
+                aLine->LineNumber() );
             Failed = TRUE;
         }
     }

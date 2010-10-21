@@ -115,7 +115,7 @@ public:
      * of lines of text.  The returned string is useful for reporting error
      * messages.
      */
-    const wxString& GetSource()
+    const wxString& GetSource() const
     {
         return source;
     }
@@ -135,7 +135,7 @@ public:
      * returns the line number of the last line read from this LINE_READER.  Lines
      * start from 1.
      */
-    int LineNumber()
+    int LineNumber() const
     {
         return lineNum;
     }
@@ -144,7 +144,7 @@ public:
      * Function Length
      * returns the number of bytes in the last line read from this LINE_READER.
      */
-    unsigned Length()
+    unsigned Length() const
     {
         return length;
     }
