@@ -248,7 +248,7 @@ namespace boost { namespace polygon {
         data.push_back(vertex_half_edge((*itr).first.first, (*itr).first.second, (*itr).second));
         data.push_back(vertex_half_edge((*itr).first.second, (*itr).first.first, -1 * (*itr).second));
       }
-      std::sort(data.begin(), data.end());
+      gtlsort(data.begin(), data.end());
       pf.scan(container, data.begin(), data.end());
       //std::cout << "DONE FORMING POLYGONS\n";
     }
@@ -321,7 +321,7 @@ namespace boost { namespace polygon {
 
     void sort() const{
       if(unsorted_) {
-        std::sort(data_.begin(), data_.end());
+        gtlsort(data_.begin(), data_.end());
         unsorted_ = false;
       }
     }
@@ -364,7 +364,7 @@ namespace boost { namespace polygon {
         if(resizing < 0)
           return shrink(-resizing);
         if(resizing > 0)
-          return bloat(-resizing);
+          return bloat(resizing);
         return *this;
       }
       if(resizing == 0) return *this;
@@ -791,7 +791,7 @@ namespace boost { namespace polygon {
         data.push_back(vertex_half_edge((*itr).first.first, (*itr).first.second, (*itr).second));
         data.push_back(vertex_half_edge((*itr).first.second, (*itr).first.first, -1 * (*itr).second));
       }
-      std::sort(data.begin(), data.end());
+      gtlsort(data.begin(), data.end());
       pf.scan(container, data.begin(), data.end());
     }
   };

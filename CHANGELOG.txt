@@ -4,6 +4,22 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-oct-20 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+Eeschema:
+  Major component library ojbect editing code refactor.
+
+  * All library component object editing is now performed with the ojbect
+    except LIB_PIN (coming soon).
+  * Added TRANFORM class to handle coordinate transforms.
+  * Remove old transform matrix functions.
+  * More file renaming to align them with the other component library
+    object file names.
+  * Fix hot key bugs in library editor to disable edit keys while an item
+    is being edited.
+  * Fixed bug when cancelling rotation of text and field objects while
+    being moved.
+
 2010-Oct-20 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++richio:

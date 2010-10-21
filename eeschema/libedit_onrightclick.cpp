@@ -248,10 +248,15 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_field_xpm );
         }
+        msg = AddHotkeyName( _( "Field Rotate" ), s_Libedit_Hokeys_Descr,
+                             HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
-                      _( "Field Rotate" ), rotate_field_xpm );
+                      msg, rotate_field_xpm );
+
+        msg = AddHotkeyName( _( "Field Edit" ), s_Libedit_Hokeys_Descr,
+                             HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM,
-                      _( "Field Edit" ), edit_text_xpm );
+                      msg, edit_text_xpm );
         break;
 
 

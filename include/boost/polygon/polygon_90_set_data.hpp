@@ -286,7 +286,7 @@ namespace boost { namespace polygon{
 
     void sort() const{
       if(unsorted_) {
-        std::sort(data_.begin(), data_.end());
+        gtlsort(data_.begin(), data_.end());
         unsorted_ = false;
       }
     }

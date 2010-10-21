@@ -38,8 +38,8 @@ static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
-void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
-
+void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event )
+{
 	// Check, if the item is a pin, else return
 	if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
 		return;
@@ -50,7 +50,7 @@ void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
 
 	// Save old pin orientation
 	LastPinOrient = pin -> m_Orient;
-	SaveCopyInUndoList( pin->GetParent() );
+    SaveCopyInUndoList( pin->GetParent() );
 
 	// Get the actual pin orientation index
 	int orientationIndex = pin -> GetOrientationCodeIndex(pin -> m_Orient);
@@ -144,6 +144,8 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     LastPinCommonUnit = dlg.GetAddToAllParts();
     LastPinVisible = dlg.GetVisible();
 
+    if( !pin->IsNew() )
+        SaveCopyInUndoList( pin->GetParent() );
     pin->EnableEditMode( true, g_EditPinByPinIsOn );
     pin->SetName( dlg.GetName() );
     pin->SetNameTextSize( LastPinNameSize );
@@ -159,9 +161,6 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
 
     if( pin->IsModified() || pin->IsNew() )
     {
-        if( !pin->IsNew() )
-            SaveCopyInUndoList( pin->GetParent() );
-
         OnModify( );
         pin->DisplayInfo( this );
         DrawPanel->Refresh();
