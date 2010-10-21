@@ -119,7 +119,7 @@ unsigned FILE_LINE_READER::ReadLine() throw (IOError)
 
 unsigned STRING_LINE_READER::ReadLine() throw (IOError)
 {
-    size_t      nlOffset = lines.find( '\n', ndx );
+    size_t  nlOffset = lines.find( '\n', ndx );
 
     if( nlOffset == std::string::npos )
         length = lines.length() - ndx;
@@ -131,13 +131,12 @@ unsigned STRING_LINE_READER::ReadLine() throw (IOError)
         if( length >= maxLineLength )
             throw IOError( _("Line length exceeded") );
 
-        if( length+1 > capacity )
+        if( length+1 > capacity )   // +1 for terminating nul
             expandCapacity( length+1 );
 
         wxASSERT( ndx + length <= lines.length() );
 
-        memcpy( line, &source[ndx], length );
-        line[length] = 0;
+        memcpy( line, &lines[ndx], length );
 
         ++lineNum;
         ndx += length;
