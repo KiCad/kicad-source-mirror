@@ -35,7 +35,9 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
     wxArrayString  nameList;
     wxString       msg;
 
+#ifndef KICAD_KEEPCASE
     BufName.MakeUpper();
+#endif
     Keys.MakeUpper();
 
     /* Review the list of libraries for counting. */

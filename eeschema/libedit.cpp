@@ -497,7 +497,11 @@ lost!\n\nClear the current component from the screen?" ) ) )
         return;
     }
 
+#ifndef KICAD_KEEPCASE
     name = dlg.GetName().MakeUpper();
+#else
+    name = dlg.GetName();
+#endif
     name.Replace( wxT( " " ), wxT( "_" ) );
 
     /* Test if there a component with this name already. */

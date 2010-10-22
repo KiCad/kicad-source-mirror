@@ -124,7 +124,9 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         return NULL;
     }
 
+#ifndef KICAD_KEEPCASE
     Name.MakeUpper();
+#endif
 
     if( Name.GetChar( 0 ) == '=' )
     {

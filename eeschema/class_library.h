@@ -169,7 +169,13 @@ public:
      * @param aMakeUpperCase - Force entry names to upper case.
      */
     void GetEntryNames( wxArrayString& aNames, bool aSort = true,
-                        bool aMakeUpperCase = true );
+                        bool aMakeUpperCase = 
+#ifndef KICAD_KEEPCASE
+                                              true
+#else
+                                              false
+#endif
+                        );
 
     /**
      * Load string array with entry names matching name and/or key word.

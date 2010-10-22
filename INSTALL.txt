@@ -169,6 +169,10 @@ Require on locale utf8 for build the KiCad with cyrillic fonts support.
 -DKICAD_GOST=ON
 Build the KiCad with russian GOST support.
 
+-DKICAD_KEEPCASE=ON
+Build the KiCad with no component name conversion to uppercase (if you want your
+ADuC.../Si.../bq... components named as just so).
+
 -DCMAKE_CXX_FLAGS=<some extra flags>
 Extra flags for the c++ compiler for your system required.
 

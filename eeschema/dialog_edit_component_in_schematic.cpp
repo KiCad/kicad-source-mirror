@@ -148,7 +148,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
     wxString newname = chipnameTextCtrl->GetValue();
 
+#ifndef KICAD_KEEPCASE
     newname.MakeUpper();
+#endif
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )

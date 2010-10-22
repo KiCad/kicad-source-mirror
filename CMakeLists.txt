@@ -19,6 +19,9 @@ option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
 
+#for those who bored with uppercase
+option(KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected")
+
 option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF). Warning, this is experimental" )
 
 option(USE_WX_GRAPHICS_CONTEXT
@@ -52,6 +55,10 @@ endif(wxUSE_UNICODE)
 if(KICAD_GOST)
     add_definitions(-DKICAD_GOST)
 endif(KICAD_GOST)
+
+if(KICAD_KEEPCASE)
+    add_definitions(-DKICAD_KEEPCASE)
+endif(KICAD_KEEPCASE)
 
 if(USE_WX_ZOOM)
     add_definitions(-DUSE_WX_ZOOM)
