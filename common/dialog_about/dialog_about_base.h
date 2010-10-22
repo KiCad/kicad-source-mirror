@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep 12 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,11 +47,12 @@ class dialog_about_base : public wxDialog
 		wxAuiNotebook* m_auiNotebook;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		dialog_about_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About..."), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 510,434 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSTAY_ON_TOP );
 		~dialog_about_base();
 	
