@@ -120,36 +120,40 @@ bool DiagErcTableInit;       // go to TRUE after DiagErc init
 /* Default Look up table which gives the diag for a pair of connected pins
  *  Same as DiagErc, but cannot be modified
  *  Used to init or reset DiagErc
+ *  note also, to avoid inconsistancy:
+ *    DefaultDiagErc[i][j] = DefaultDiagErc[j][i]
  */
 int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 {
 /*         I,   O,    Bi,   3S,   Pas,  UnS,  PwrI, PwrO, OC,   OE,   NC */
-/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   WAR },
-/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  WAR },
-/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  WAR },
-/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  WAR },
-/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   WAR },
-/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR },
+/* I */  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/* O */  { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* Bi*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   WAR,  OK,   WAR,  ERR },
+/* 3S*/  { OK,  WAR,  OK,   OK,   OK,   WAR,  WAR,  ERR,  WAR,  WAR,  ERR },
+/*Pas*/  { OK,  OK,   OK,   OK,   OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
+/*UnS */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  ERR },
 /*PwrI*/ { OK,  OK,   OK,   WAR,  OK,   WAR,  OK,   OK,   OK,   OK,   ERR },
-/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  WAR },
-/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   WAR },
-/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   WAR },
-/* NC */ { WAR, WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR,  WAR }
+/*PwrO*/ { OK,  ERR,  WAR,  ERR,  OK,   WAR,  OK,   ERR,  ERR,  ERR,  ERR },
+/* OC */ { OK,  ERR,  OK,   WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* OE */ { OK,  ERR,  WAR,  WAR,  OK,   WAR,  OK,   ERR,  OK,   OK,   ERR },
+/* NC */ { ERR, ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR,  ERR }
 };
 
 
 /* Minimal connection table */
+#define NPI    4    /* Net with Pin isolated, but this pin has type Not Connected, and must be left N.C. */
 #define DRV    3    /* Net driven by a signal (a pin output for instance) */
 #define NET_NC 2    /* Net "connected" to a "NoConnect symbol" */
 #define NOD    1    /* Net not driven ( Such as 2 or more connected inputs )*/
-#define NOC    0    /* Pin isolated, no connection */
+#define NOC    0    /* initial state of a net: no connection */
 
 /* Look up table which gives the minimal drive for a pair of connected pins on
  * a net
- *  Initial state of a net is NOC (No Connection)
- *  Can be updated to NET_NC, or NOD (Not Driven) or DRV (DRIven)
+ *  Initial state of a net is NOC (Net with No Connection)
+ *  Can be updated to NPI (Pin Isolated), NET_NC (Net with a no connect symbol),
+ *                  NOD (Not Driven) or DRV (DRIven)
  *
- *  Can be updated to NET_NC only if the previous state is NOC
+ *  Can be updated to NET_NC with no error only if there is only one pin in net
  *
  *  Nets are OK when their final state is NET_NC or DRV
  *  Nets with the state NOD have no source signal
@@ -157,17 +161,17 @@ int DefaultDiagErc[PIN_NMAX][PIN_NMAX] =
 static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 {
 /*         In   Out, Bi,  3S,  Pas, UnS, PwrI,PwrO,OC,  OE,  NC */
-/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NOC },
-/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NOC },
-/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NOC },
-/* NC*/  { NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC, NOC }
+/* In*/  { NOD, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*Out*/  { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
+/* Bi*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* 3S*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*Pas*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*UnS*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/*PwrI*/ { NOD, DRV, NOD, NOD, NOD, NOD, NOD, DRV, NOD, NOD, NPI },
+/*PwrO*/ { DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, DRV, NPI },
+/* OC*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* OE*/  { DRV, DRV, DRV, DRV, DRV, DRV, NOD, DRV, DRV, DRV, NPI },
+/* NC*/  { NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI, NPI }
 };
 
 
@@ -303,7 +307,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     {
         if( g_NetObjectslist[OldItem]->GetNet() !=
            g_NetObjectslist[NetItemRef]->GetNet() )
-        {
+        {   // New ne found:
             MinConn    = NOC;
             NetNbItems = 0;
             StartNet   = NetItemRef;
@@ -550,6 +554,8 @@ static void TestOthersItems( WinEDA_DrawPanel* panel,
 
     NetItemTst    = netstart;
     local_minconn = NOC;
+    if( ref_elect_type == PIN_NC )
+        local_minconn = NPI;
 
     /* Test pins connected to NetItemRef */
     for( ; ; NetItemTst++ )

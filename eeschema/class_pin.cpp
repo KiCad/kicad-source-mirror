@@ -150,6 +150,7 @@ const wxChar* MsgPinElectricType[] =
     wxT( "power_out" ),
     wxT( "openCol" ),
     wxT( "openEm" ),
+    wxT( "NotConnected" ),
     wxT( "?????" )
 };
 
@@ -602,6 +603,10 @@ bool LIB_PIN::Save( FILE* ExportFile )
     case PIN_OPENEMITTER:
         Etype = 'E';
         break;
+
+    case PIN_NC:
+        Etype = 'N';
+        break;
     }
 
     ReturnPinStringNum( StringPinNum );
@@ -726,6 +731,10 @@ bool LIB_PIN::Load( char* line, wxString& errorMsg )
 
     case 'E':
         m_PinType = PIN_OPENEMITTER;
+        break;
+
+    case 'N':
+        m_PinType = PIN_NC;
         break;
 
     default:
@@ -1034,16 +1043,26 @@ void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
     }
 
     /* Draw the pin end target (active end of the pin)
-     * Draw but do not print the pin end target 1 pixel width
      */
-    if( !screen->m_IsPrinting )
+    #define NCSYMB_PIN_DIM TARGET_PIN_DIAM
+    if( m_PinType == PIN_NC )   // Draw a N.C. symbol
+    {
+        GRLine( &aPanel->m_ClipBox, aDC,
+                posX-NCSYMB_PIN_DIM, posY-NCSYMB_PIN_DIM,
+                posX+NCSYMB_PIN_DIM, posY+NCSYMB_PIN_DIM,
+                width, color);
+        GRLine( &aPanel->m_ClipBox, aDC,
+                posX+NCSYMB_PIN_DIM, posY-NCSYMB_PIN_DIM,
+                posX-NCSYMB_PIN_DIM, posY+NCSYMB_PIN_DIM,
+                width, color);
+    }
+    /* Draw but do not print the pin end target 1 pixel width
+    */
+    else if( !screen->m_IsPrinting )
         GRCircle( &aPanel->m_ClipBox,
-                  aDC,
-                  posX,
-                  posY,
+                  aDC, posX, posY,
                   TARGET_PIN_DIAM,
-                  0,
-                  color );
+                  0, color );
 }
 
 
