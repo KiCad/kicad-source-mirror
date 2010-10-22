@@ -13,6 +13,7 @@
 
 class CMP_LIBRARY;
 class LIB_ALIAS;
+class LIB_FIELD;
 
 
 /**
@@ -180,11 +181,7 @@ public:
     }
 
 
-    virtual void SetName( const wxString& aName )
-    {
-        CMP_LIB_ENTRY::SetName( aName );
-        GetValueField().m_Text = aName;
-    }
+    virtual void SetName( const wxString& aName );
 
     virtual wxString GetLibraryName();
 

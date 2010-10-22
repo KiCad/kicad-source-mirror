@@ -18,7 +18,7 @@
 #include "protos.h"
 #include "eeschema_id.h"
 #include "netlist.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "class_library.h"
 
 #include "annotate_dialog.h"

@@ -16,7 +16,8 @@
 #include "class_library.h"
 #include "dialog_schematic_find.h"
 #include "lib_rectangle.h"
-#include "class_pin.h"
+#include "lib_pin.h"
+#include "lib_text.h"
 
 #include <wx/tokenzr.h>
 

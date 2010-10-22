@@ -153,9 +153,8 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
     {   // We can locate an item
-        m_drawItem =
-            m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                         GetScreen()->m_MousePosition );
+        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                                  GetScreen()->m_MousePosition );
         if( m_drawItem == NULL )
         {
             m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,

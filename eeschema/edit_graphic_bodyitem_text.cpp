@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
+#include "lib_text.h"
 
 #include "dialog_bodygraphictext_properties_base.h"
 
@@ -145,20 +146,18 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
     wxString Line;
 
     Line = m_TextValue->GetValue();
-    m_Parent->m_textOrientation =
-        m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+    m_Parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_Parent->m_textSize = ReturnValueFromString( g_UserUnit, msg,
-                                                  m_Parent->m_InternalUnits );
+    m_Parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
     m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
     m_Parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
 
     if ( m_GraphicText )
     {
         if ( ! Line.IsEmpty() )
-            m_GraphicText->m_Text = Line;
+            m_GraphicText->SetText( Line );
         else
-            m_GraphicText->m_Text = wxT("[null]");
+            m_GraphicText->SetText( wxT( "[null]" ) );
 
         m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = m_Parent->m_textSize;
         m_GraphicText->m_Orient = m_Parent->m_textOrientation;
@@ -224,14 +223,12 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
 
 void WinEDA_LibeditFrame::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 {
-    int DrawMode = g_XorMode;
-
     if ( ( DrawItem == NULL ) || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
         return;
 
     /* Deleting old text. */
-    if( DC )
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL, DefaultTransform );
+    if( DC && !DrawItem->InEditMode() )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
 
 
     Dialog_BodyGraphicText_Properties * frame =
@@ -241,11 +238,7 @@ void WinEDA_LibeditFrame::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     OnModify();
 
     /* Display new text. */
-    if( DC )
-    {
-        if ( ( DrawItem->m_Flags & IS_MOVED ) == 0 )
-            DrawMode = GR_DEFAULT_DRAWMODE;
-
-        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, DrawMode, NULL, DefaultTransform );
-    }
+    if( DC && !DrawItem->InEditMode() )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, NULL,
+                        DefaultTransform );
 }

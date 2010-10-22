@@ -12,7 +12,7 @@
 #include "libeditframe.h"
 #include "eeschema_id.h"
 #include "class_libentry.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
 

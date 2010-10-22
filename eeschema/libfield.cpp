@@ -15,53 +15,35 @@
 #include "class_library.h"
 
 
-extern int     m_unit;
-
 void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
 {
     wxString Text;
     wxString title;
-    bool     save = true;
+    wxString oldName;
 
     if( Field == NULL )
         return;
 
-    switch( Field->m_FieldId )
-    {
-    case REFERENCE:
-        title = _( "Reference:" );
-        break;
-
-    case VALUE:
-        title = _( "Component Name / Value:" );
-        break;
-
-    default:
-        break;
-    }
-
+    title = Field->GetName();
     Text = Field->m_Text;
 
-    {
-        wxTextEntryDialog dlg( this, title, _( "Edit field" ), Text );
-        if( dlg.ShowModal() != wxID_OK )
-            return; // cancelled by user
-        Text = dlg.GetValue( );
-    }
+    wxTextEntryDialog dlg( this, title + wxT( ":" ), _( "Edit field" ), Text );
+
+    if( dlg.ShowModal() != wxID_OK || dlg.GetValue() == Text )
+        return;
+
+    Text = dlg.GetValue();
 
     Text.Replace( wxT( " " ), wxT( "_" ) );
 
-    if( Field->m_FieldId == REFERENCE || Field->m_FieldId == VALUE )
+    if( ( Field->m_FieldId == REFERENCE || Field->m_FieldId == VALUE ) && Text.IsEmpty ( ) )
     {
-        if( Text.IsEmpty ( ) )
-        {
-            DisplayError( this, _( "Value or Reference cannot be void. Aborted" ) );
-            return;
-        }
+        DisplayError( this, title + _( " field cannot be empty." ) );
+        return;
     }
 
-
     wxString fieldText = Field->GetFullText( m_unit );
+    LIB_COMPONENT* parent = Field->GetParent();
 
     /* If the value field is changed, this is equivalent to creating a new
      * component from the old one.  Check for an existing library entry of
@@ -72,22 +54,11 @@ void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
     {
         wxString msg;
 
-        /* Test for an existing name in the current components alias list. */
-        if( Field->GetParent()->HasAlias( Text ) )
-        {
-            msg.Printf( _( "The field name <%s> is an existing alias of the \
-component <%s>.\nPlease choose another name that does not conflict with any \
-names in the alias list." ),
-                        GetChars( Text ),
-                        GetChars( Field->GetParent()->GetName() ) );
-            DisplayError( this, msg );
-            return;
-        }
-
-        /* Test for an existing entry in the library to prevent duplicate
-         * entry names.
+        /* Test for an existing name in the current components alias list and in
+         * the current library.
          */
-        if( m_library && m_library->FindEntry( Text ) != NULL )
+        if( ( parent->HasAlias( Text ) && !parent->GetAlias( Text )->IsRoot() )
+            || ( m_library && m_library->FindEntry( Text ) != NULL ) )
         {
             msg.Printf( _( "The field name <%s> conflicts with an existing \
 entry in the component library <%s>.\nPlease choose another name that does \
@@ -97,34 +68,26 @@ not conflict with any library entries." ),
             DisplayError( this, msg );
             return;
         }
-
-        SaveCopyInUndoList( Field->GetParent() );
-        save = false;
-        Field->GetParent()->SetName( Text );
     }
 
-    ( ( LIB_DRAW_ITEM* )Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                       &fieldText, DefaultTransform );
+    if( Field->m_FieldId == VALUE && Field->m_Text == m_aliasName )
+        m_aliasName = Text;
 
-    if( !Text.IsEmpty() )
+    if( !Field->InEditMode() )
     {
-        if( save )
-            SaveCopyInUndoList( Field->GetParent() );
-        Field->m_Text = Text;
+        SaveCopyInUndoList( parent );
+        ( (LIB_DRAW_ITEM*) Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                          &fieldText, DefaultTransform );
     }
-    else
+
+    Field->SetText( Text );
+
+    if( !Field->InEditMode() )
     {
-        DisplayError( this, _( "No new text: no change" ) );
+        fieldText = Field->GetFullText( m_unit );
+        ( (LIB_DRAW_ITEM*) Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                          &fieldText, DefaultTransform );
     }
-
-    fieldText = Field->GetFullText( m_unit );
-    int drawMode = g_XorMode;
-
-    if( Field->m_Flags == 0 )
-        drawMode = GR_DEFAULT_DRAWMODE;
-
-    ( ( LIB_DRAW_ITEM* )Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, drawMode,
-                                       &fieldText, DefaultTransform );
 
     OnModify();
     UpdateAliasSelectList();

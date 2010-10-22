@@ -7,12 +7,13 @@
 
 #include "wxstruct.h"
 
+#include "lib_draw_item.h"
+
 
 class SCH_SCREEN;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
-class LIB_DRAW_ITEM;
 class WinEDA_bodygraphics_PropertiesFrame;
 class Dialog_BodyGraphicText_Properties;
 
@@ -23,6 +24,9 @@ class Dialog_BodyGraphicText_Properties;
 class WinEDA_LibeditFrame : public WinEDA_DrawFrame
 {
     LIB_COMPONENT*   m_savedComponent;  ///< Temporary copy of current component during edit.
+    wxString         m_oldRootName;     ///< The actual pointer of the component loaded from
+                                        ///< a library.  Do not do anything with this pointer.
+                                        ///< It is to be used for reference purposes only.
 
 public:
     WinEDAChoiceBox* m_SelpartBox;      // a Box to select a part to edit (if any)
@@ -168,6 +172,8 @@ public:
     FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
 
     void           DeleteSavedComponent();
+
+    bool           IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
 
 private:
 

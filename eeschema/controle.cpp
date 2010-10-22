@@ -15,7 +15,7 @@
 #include "libeditframe.h"
 #include "viewlib_frame.h"
 #include "lib_draw_item.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "class_marker_sch.h"
 
 

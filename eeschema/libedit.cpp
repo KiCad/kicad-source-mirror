@@ -162,6 +162,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* aEntry, CMP_LIBR
     {
         SAFE_DELETE( m_component );
         m_aliasName.Empty();
+        m_oldRootName.Empty();
     }
 
     m_component = new LIB_COMPONENT( *component );
@@ -175,7 +176,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* aEntry, CMP_LIBR
         return false;
     }
 
-    m_aliasName = aEntry->GetName();
+    m_oldRootName = m_aliasName = aEntry->GetName();
     m_unit = 1;
     m_convert = 1;
 
@@ -458,6 +459,7 @@ All changes will be lost. Discard changes?" ) ) )
     {
         SAFE_DELETE( m_component );
         m_aliasName.Empty();
+        m_oldRootName.Empty();
     }
 
     DrawPanel->Refresh();
@@ -509,6 +511,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
         return;
     }
 
+    m_oldRootName.Empty();
     LIB_COMPONENT* component = new LIB_COMPONENT( name );
     component->GetReferenceField().m_Text = dlg.GetReference();
     component->SetPartCount( dlg.GetPartCount() );
@@ -573,6 +576,7 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
     LIB_COMPONENT* oldComponent;
     LIB_COMPONENT* Component;
     wxString       msg;
+    wxString       rootName;
 
     if( m_component == NULL )
     {
@@ -591,12 +595,19 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
 
     GetBaseScreen()->ClrModify();
 
-    oldComponent = m_library->FindComponent( m_component->GetName() );
+    // If the component root name was changed, that is still the name of the component
+    // in the library.
+    if( !m_oldRootName.IsEmpty() && m_oldRootName != m_component->GetName() )
+        rootName = m_oldRootName;
+    else
+        rootName = m_component->GetName();
+
+    oldComponent = m_library->FindComponent( rootName );
 
     if( oldComponent != NULL )
     {
-        msg.Printf( _( "Component \"%s\" exists. Change it?" ),
-                    GetChars( oldComponent->GetName() ) );
+        msg.Printf( _( "Component \"%s\" exists. Change it?" ), GetChars( rootName ) );
+
         if( !IsOK( this, msg ) )
             return;
     }

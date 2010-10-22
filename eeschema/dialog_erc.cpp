@@ -15,7 +15,7 @@
 #include "general.h"
 #include "netlist.h"
 #include "class_marker_sch.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "protos.h"
 
 #include "dialog_erc.h"

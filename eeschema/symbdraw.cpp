@@ -18,6 +18,7 @@
 #include "lib_circle.h"
 #include "lib_polyline.h"
 #include "lib_rectangle.h"
+#include "lib_text.h"
 
 
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

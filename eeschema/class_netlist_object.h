@@ -6,7 +6,7 @@
 #ifndef _CLASS_NETLIST_OBJECT_H_
 #define _CLASS_NETLIST_OBJECT_H_
 
-#include "class_pin.h"      // LIB_PIN::ReturnPinStringNum( m_PinNum )
+#include "lib_pin.h"      // LIB_PIN::ReturnPinStringNum( m_PinNum )
 
 
 /* Type of Net objects (wires, labels, pins...) */

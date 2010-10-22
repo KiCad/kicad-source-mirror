@@ -43,7 +43,7 @@
 #include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 
 #include "xnode.h"      // also nests: <wx/xml/xml.h>
 

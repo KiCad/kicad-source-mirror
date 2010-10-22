@@ -15,7 +15,7 @@
 #include "class_library.h"
 #include "protos.h"
 #include "netlist.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 
 
 static int  AddComponentsInSheetToList( std::vector <OBJ_CMP_TO_LIST>& aComponentsList,

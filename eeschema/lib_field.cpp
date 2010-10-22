@@ -18,10 +18,7 @@
 #include "protos.h"
 #include "class_libentry.h"
 #include "transform.h"
-
-#include <wx/tokenzr.h>
-#include <wx/stream.h>
-#include <wx/txtstrm.h>
+#include "lib_field.h"
 
 
 /*******************/
@@ -85,6 +82,7 @@ void LIB_FIELD::Init( int id )
     m_typeName = _( "Field" );
     m_Orient = TEXT_ORIENT_HORIZ;
     m_rotate = false;
+    m_updateText = false;
 
     // fields in RAM must always have names, because we are trying to get
     // less dependent on field ids and more dependent on names.
@@ -348,6 +346,7 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 void LIB_FIELD::saveAttributes()
 {
     m_savedPos = m_Pos;
+    m_savedText = m_Text;
     m_savedOrientation = m_Orient;
 }
 
@@ -355,6 +354,7 @@ void LIB_FIELD::saveAttributes()
 void LIB_FIELD::restoreAttributes()
 {
     m_Pos = m_savedPos;
+    m_Text = m_savedText;
     m_Orient = m_savedOrientation;
 }
 
@@ -590,6 +590,68 @@ void LIB_FIELD::Rotate()
 }
 
 
+wxString LIB_FIELD::GetName()
+{
+    wxString name;
+
+    switch( m_FieldId )
+    {
+    case REFERENCE:
+        name = _( "Reference" );
+        break;
+
+    case VALUE:
+        name = _( "Value" );
+        break;
+
+    case FOOTPRINT:
+        name = _( "Footprint" );
+        break;
+
+    case DATASHEET:
+        name = _( "Datasheet" );
+        break;
+
+    default:
+        if( m_Name.IsEmpty() )
+            name.Printf( _( "Field%d" ), m_FieldId );
+        else
+            name = m_Name;
+    }
+
+    return name;
+}
+
+
+void LIB_FIELD::SetText( const wxString& aText )
+{
+    if( aText == m_Text )
+        return;
+
+    wxString oldName = m_Text;
+
+    if( m_FieldId == VALUE && m_Parent != NULL )
+    {
+        LIB_COMPONENT* parent = GetParent();
+
+        // Set the parent component and root alias to the new name.
+        if( parent->GetName().CmpNoCase( aText ) != 0 )
+            parent->SetName( aText );
+    }
+
+    if( InEditMode() )
+    {
+        m_Text = oldName;
+        m_savedText = aText;
+        m_updateText = true;
+    }
+    else
+    {
+        m_Text = aText;
+    }
+}
+
+
 void LIB_FIELD::BeginEdit( int aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
@@ -629,6 +691,8 @@ void LIB_FIELD::EndEdit( const wxPoint& aPosition, bool aAbort )
         restoreAttributes();
 
     m_Flags = 0;
+    m_rotate = false;
+    m_updateText = false;
     SetEraseLastDrawItem( false );
 }
 
@@ -639,6 +703,12 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
     {
         m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
         m_rotate = false;
+    }
+
+    if( m_updateText )
+    {
+        EXCHG( m_Text, m_savedText );
+        m_updateText = false;
     }
 
     if( m_Flags == IS_NEW )

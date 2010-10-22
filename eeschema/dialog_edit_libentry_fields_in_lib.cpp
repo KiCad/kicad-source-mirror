@@ -218,16 +218,16 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     if( !copyPanelToSelectedField() )
         return;
 
-    /* A new name could be entered in VALUE field.
-     *  Must not be an existing alias name in alias list box */
-    wxString* newvalue = &m_FieldsBuf[VALUE].m_Text;
+    /* If a new name entered in the VALUE field, that it not an existing alias name
+     * or root alias of the component */
+    wxString newvalue = m_FieldsBuf[VALUE].m_Text;
 
-    if( m_LibEntry->HasAlias( *newvalue ) )
+    if( m_LibEntry->HasAlias( newvalue ) && !m_LibEntry->GetAlias( newvalue )->IsRoot() )
     {
         wxString msg;
         msg.Printf( _( "A new name is entered for this component\n\
 An alias %s already exists!\nCannot update this component" ),
-                    newvalue->GetData() );
+                    GetChars( newvalue ) );
         DisplayError( this, msg );
         return;
     }
@@ -249,12 +249,11 @@ An alias %s already exists!\nCannot update this component" ),
     }
 
 #if defined(DEBUG)
-    for( unsigned i=0; i<m_FieldsBuf.size();  ++i )
+    for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
         printf( "save[%d].name:'%s' value:'%s'\n", i,
-            CONV_TO_UTF8( m_FieldsBuf[i].m_Name ),
-            CONV_TO_UTF8( m_FieldsBuf[i].m_Text )
-            );
+                CONV_TO_UTF8( m_FieldsBuf[i].m_Name ),
+                CONV_TO_UTF8( m_FieldsBuf[i].m_Text ) );
     }
 #endif
 
@@ -262,9 +261,9 @@ An alias %s already exists!\nCannot update this component" ),
     m_LibEntry->SetFields( m_FieldsBuf );
 
     // We need to keep the name and the value the same at the moment!
-    SetName(m_LibEntry->GetValueField().m_Text);
+    SetName( m_LibEntry->GetValueField().m_Text );
 
-    m_Parent->OnModify( );
+    m_Parent->OnModify();
 
     EndModal( 0 );
 }

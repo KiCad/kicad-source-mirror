@@ -10,7 +10,7 @@
 
 #include "program.h"
 #include "lib_draw_item.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
 

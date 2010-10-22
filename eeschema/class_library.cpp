@@ -342,7 +342,6 @@ LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
 {
     wxASSERT( aOldComponent != NULL );
     wxASSERT( aNewComponent != NULL );
-    wxASSERT( aOldComponent->GetName().CmpNoCase( aNewComponent->GetName() )== 0 );
 
     /* Remove the old root component.  The component will automatically be deleted
      * when all it's aliases are deleted.  Do not place any code that accesses
@@ -980,8 +979,7 @@ LIB_COMPONENT* CMP_LIBRARY::FindLibraryComponent( const wxString& aName,
 }
 
 
-CMP_LIB_ENTRY* CMP_LIBRARY::FindLibraryEntry( const wxString& aName,
-                                              const wxString& aLibraryName )
+CMP_LIB_ENTRY* CMP_LIBRARY::FindLibraryEntry( const wxString& aName, const wxString& aLibraryName )
 {
     CMP_LIB_ENTRY* entry = NULL;
 

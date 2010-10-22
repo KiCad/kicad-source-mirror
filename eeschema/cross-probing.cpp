@@ -12,7 +12,7 @@
 #include "eeschema_id.h"
 #include "protos.h"
 #include "lib_draw_item.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 
 
 /***************************************************************/

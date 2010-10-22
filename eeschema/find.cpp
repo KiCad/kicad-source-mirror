@@ -20,7 +20,7 @@
 #include "class_marker_sch.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 
 #include "kicad_device_context.h"
 

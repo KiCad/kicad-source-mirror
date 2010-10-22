@@ -79,6 +79,7 @@ public:
     LIB_ARC( LIB_COMPONENT * aParent );
     LIB_ARC( const LIB_ARC& aArc );
     ~LIB_ARC() { }
+
     virtual wxString GetClass() const
     {
         return wxT( "LIB_ARC" );

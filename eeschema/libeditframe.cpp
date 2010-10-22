@@ -218,8 +218,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
     horiz.LeftDockable( false ).RightDockable( false );
 
     m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
-                      Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
     m_auimgr.AddPane( m_VToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
@@ -432,14 +431,14 @@ void WinEDA_LibeditFrame::OnUpdateNotEditingPart( wxUpdateUIEvent& event )
 void WinEDA_LibeditFrame::OnUpdateUndo( wxUpdateUIEvent& event )
 {
     event.Enable( m_component != NULL && GetScreen() != NULL
-                  && GetScreen()->GetUndoCommandCount() != 0 );
+                  && GetScreen()->GetUndoCommandCount() != 0 && !IsEditingDrawItem() );
 }
 
 
 void WinEDA_LibeditFrame::OnUpdateRedo( wxUpdateUIEvent& event )
 {
     event.Enable( m_component != NULL && GetScreen() != NULL
-                  && GetScreen()->GetRedoCommandCount() != 0 );
+                  && GetScreen()->GetRedoCommandCount() != 0 && !IsEditingDrawItem() );
 }
 
 
@@ -457,7 +456,7 @@ void WinEDA_LibeditFrame::OnUpdateViewDoc( wxUpdateUIEvent& event )
     {
         LIB_ALIAS* alias = m_component->GetAlias( m_aliasName );
 
-        wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
+        wxCHECK_RET( alias != NULL, wxT( "Alias <" ) + m_aliasName + wxT( "> not found." ) );
 
         enable = !alias->GetDocFileName().IsEmpty();
     }

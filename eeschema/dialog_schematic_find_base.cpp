@@ -65,7 +65,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	leftGridSizer->Add( directionSizer, 1, wxEXPAND, 5 );
 	
-	leftSizer->Add( leftGridSizer, 1, wxALL|wxEXPAND, 6 );
+	leftSizer->Add( leftGridSizer, 0, wxALL|wxEXPAND, 6 );
 	
 	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Match &whole word"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkWholeWord, 0, wxALL, 6 );
@@ -81,13 +81,13 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	leftSizer->Add( m_checkWrap, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search all component &fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	leftSizer->Add( m_checkAllFields, 0, wxALL, 6 );
+	leftSizer->Add( m_checkAllFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search all pin names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkAllPins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 	
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current sheet on&ly"), wxDefaultPosition, wxDefaultSize, 0 );
-	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxALL, 6 );
+	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	mainSizer->Add( leftSizer, 1, wxALL|wxEXPAND, 6 );
 	

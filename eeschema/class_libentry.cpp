@@ -14,12 +14,13 @@
 #include "protos.h"
 #include "class_library.h"
 #include "class_libentry.h"
-#include "class_pin.h"
+#include "lib_pin.h"
 #include "lib_arc.h"
 #include "lib_bezier.h"
 #include "lib_circle.h"
 #include "lib_polyline.h"
 #include "lib_rectangle.h"
+#include "lib_text.h"
 
 #include <boost/foreach.hpp>
 
@@ -290,6 +291,14 @@ wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
     subRef.Append( wxChar(aUnit + 'A' - 1) );
 #endif
     return subRef;
+}
+
+
+void LIB_COMPONENT::SetName( const wxString& aName )
+{
+    CMP_LIB_ENTRY::SetName( aName );
+    GetValueField().m_Text = aName;
+    m_aliases[0]->SetName( aName );
 }
 
 

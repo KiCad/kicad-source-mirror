@@ -13,10 +13,7 @@
 #include "class_libentry.h"
 
 
-/*************************************************************************/
-void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
-                                              int             unused_flag )
-/*************************************************************************/
+void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int unused_flag )
 {
     LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
@@ -27,46 +24,47 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy,
         return;
 
     lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(CopyItem, UR_LIBEDIT);
+    ITEM_PICKER wrapper( CopyItem, UR_LIBEDIT );
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
-    /* Clear current flags (which can be temporary set by a current edit
-     * command) */
+
+    // Clear current flags (which can be temporary set by a current edit command).
     CopyItem->ClearStatus();
 
-    /* Clear redo list, because after new save there is no redo to do */
+    // Clear redo list, because after new save there is no redo to do.
     GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
 }
 
 
-/*************************************************************************/
-void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
-/*************************************************************************/
-
 /* Redo the last edition:
-  * - Place the current edited library component in undo list
-  * - Get old version of the current edited library component
+ * - Place the current edited library component in undo list
+ * - Get old version of the current edited library component
  */
+void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
 {
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(m_component, UR_LIBEDIT);
-    lastcmd->PushItem(wrapper);
+    ITEM_PICKER wrapper( m_component, UR_LIBEDIT );
+    lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
-    lastcmd = GetScreen()->PopCommandFromRedoList( );
+    lastcmd = GetScreen()->PopCommandFromRedoList();
 
     wrapper = lastcmd->PopItem();
     m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
-    if( m_component )
-        m_component->SetNext( NULL );
+
+    if( m_component == NULL )
+        return;
+
+    if( !m_aliasName.IsEmpty() && !m_component->HasAlias( m_aliasName ) )
+        m_aliasName = m_component->GetName();
+
     m_drawItem = NULL;
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    if( m_component )
-        SetShowDeMorgan( m_component->HasConversion() );
+    SetShowDeMorgan( m_component->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
     OnModify( );
@@ -74,37 +72,37 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
 }
 
 
-/************************************************************************/
-void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
-/************************************************************************/
-
 /** Undo the last edition:
-  * - Place the current edited library component in Redo list
-  * - Get old version of the current edited library component
+ * - Place the current edited library component in Redo list
+ * - Get old version of the current edited library component
  */
+void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper(m_component, UR_LIBEDIT);
-    lastcmd->PushItem(wrapper);
+    ITEM_PICKER wrapper( m_component, UR_LIBEDIT );
+    lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToRedoList( lastcmd );
 
-    lastcmd = GetScreen()->PopCommandFromUndoList( );
+    lastcmd = GetScreen()->PopCommandFromUndoList();
 
     wrapper = lastcmd->PopItem();
     m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
 
-    if( m_component )
-        m_component->SetNext( NULL );
+    if( m_component == NULL )
+        return;
+
+    if( !m_aliasName.IsEmpty() && !m_component->HasAlias( m_aliasName ) )
+        m_aliasName = m_component->GetName();
+
     m_drawItem = NULL;
     UpdateAliasSelectList();
     UpdatePartSelectList();
-    if( m_component )
-        SetShowDeMorgan( m_component->HasConversion() );
+    SetShowDeMorgan( m_component->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
-    OnModify( );
+    OnModify();
     DrawPanel->Refresh();
 }

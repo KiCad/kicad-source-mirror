@@ -116,9 +116,6 @@ public:
     LIB_PIN( const LIB_PIN& aPin );
     ~LIB_PIN() { }
 
-    LIB_PIN* Next() const { return (LIB_PIN*) Pnext; }
-    LIB_PIN* Back() const { return (LIB_PIN*) Pback; }
-
     virtual wxString GetClass() const
     {
         return wxT( "LIB_PIN" );

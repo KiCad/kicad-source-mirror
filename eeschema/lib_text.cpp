@@ -20,15 +20,17 @@
 #include "general.h"
 #include "protos.h"
 #include "transform.h"
+#include "lib_text.h"
 
 
 LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
     EDA_TextStruct()
 {
-    m_Size     = wxSize( 50, 50 );
-    m_typeName = _( "Text" );
-    m_rotate   = false;
+    m_Size       = wxSize( 50, 50 );
+    m_typeName   = _( "Text" );
+    m_rotate     = false;
+    m_updateText = false;
 }
 
 
@@ -361,6 +363,7 @@ void LIB_TEXT::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& 
 void LIB_TEXT::saveAttributes()
 {
     m_savedPos = m_Pos;
+    m_savedText = m_Text;
     m_savedOrientation = m_Orient;
 }
 
@@ -368,6 +371,7 @@ void LIB_TEXT::saveAttributes()
 void LIB_TEXT::restoreAttributes()
 {
     m_Pos = m_savedPos;
+    m_Text = m_savedText;
     m_Orient = m_savedOrientation;
 }
 
@@ -423,6 +427,23 @@ void LIB_TEXT::Rotate()
 }
 
 
+void LIB_TEXT::SetText( const wxString& aText )
+{
+    if( aText == m_Text )
+        return;
+
+    if( InEditMode() )
+    {
+        m_savedText = aText;
+        m_updateText = true;
+    }
+    else
+    {
+        m_Text = aText;
+    }
+}
+
+
 void LIB_TEXT::BeginEdit( int aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
@@ -462,6 +483,8 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
         restoreAttributes();
 
     m_Flags = 0;
+    m_rotate = false;
+    m_updateText = false;
     SetEraseLastDrawItem( false );
 }
 
@@ -472,6 +495,12 @@ void LIB_TEXT::calcEdit( const wxPoint& aPosition )
     {
         m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
         m_rotate = false;
+    }
+
+    if( m_updateText )
+    {
+        EXCHG( m_Text, m_savedText );
+        m_updateText = false;
     }
 
     if( m_Flags == IS_NEW )

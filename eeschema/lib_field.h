@@ -18,8 +18,10 @@
  */
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
-    int m_savedOrientation;
+    wxString m_savedText;         ///< Temporary storage for the string when edition.
+    int m_savedOrientation;       ///< Temporary storage for orientation when editing.
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
+    bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 
     /**
      * Draw the field.
@@ -51,10 +53,6 @@ public:
 
 public:
 
-    LIB_FIELD* Next() const { return (LIB_FIELD*) Pnext; }
-    LIB_FIELD* Back() const { return (LIB_FIELD*) Pback; }
-
-
     LIB_FIELD( int idfield = 2 );
     LIB_FIELD( LIB_COMPONENT * aParent, int idfield = 2 );
     LIB_FIELD( const LIB_FIELD& field );
@@ -69,6 +67,17 @@ public:
      * Object constructor initialization helper.
      */
     void Init( int idfield );
+
+    /**
+     * Returns the field name.
+     *
+     * The first four field IDs are reserved and therefore always return their respective
+     * names.  The user definable fields will return FieldN where N is the ID of the field
+     * when the m_Name member is empty.
+     *
+     * @return Name of the field.
+     */
+    wxString GetName();
 
     /** Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
@@ -173,6 +182,19 @@ public:
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
     void Rotate();
+
+    /**
+     * Sets the field text to \a aText.
+     *
+     * This method does more than juat set the set the field text.  There are special
+     * cases when changing the text string alone is not enough.  If the field is the
+     * value field, the parent component's name is changed as well.  If the field is
+     * being moved, the name change must be delayed until the next redraw to prevent
+     * drawing artifacts.
+     *
+     * @param aText - New text value.
+     */
+    void SetText( const wxString& aText );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();

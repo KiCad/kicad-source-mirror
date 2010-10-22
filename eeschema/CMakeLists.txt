@@ -22,7 +22,6 @@ set(EESCHEMA_SRCS
     class_library.cpp
     class_marker_sch.cpp
     class_netlist_object.cpp
-    class_pin.cpp
     class_sch_cmp_field.cpp
     class_sch_component.cpp
     class_schematic_items.cpp
@@ -99,6 +98,7 @@ set(EESCHEMA_SRCS
     lib_draw_item.cpp
     lib_export.cpp
     lib_field.cpp
+    lib_pin.cpp
     lib_polyline.cpp
     lib_rectangle.cpp
     lib_text.cpp
