@@ -69,7 +69,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 #endif
 
     // Save copy for undo if not in edit (edit command already handle the save copy)
-    if( DrawItem->m_Flags == 0 )
+    if( !DrawItem->InEditMode() )
         SaveCopyInUndoList( DrawItem->GetParent() );
 
     if( m_drawSpecificUnit )
@@ -113,11 +113,11 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( newItem )
     {
         delete item;
-        parent->SetDrawItem( NULL );
     }
     else
         parent->RestoreComponent();
 
+    parent->SetDrawItem( NULL );
     Panel->Refresh();
 }
 
@@ -127,6 +127,10 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
     DrawPanel->ManageCurseur = SymbolDisplayDraw;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
     wxPoint drawPos = GetScreen()->GetCursorDrawPosition();
+
+    // no temp copy -> the current version of component will be used for Undo
+    // This is normal when adding new items to the current component
+    ClearTempCopyComponent();
 
     switch( m_ID_current_state )
     {
@@ -156,12 +160,12 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
         // Enter the graphic text info
         DrawPanel->m_IgnoreMouseEvents = true;
         EditSymbolText( NULL, Text );
-        DrawPanel->MouseToCursorSchema();
         DrawPanel->m_IgnoreMouseEvents = false;
+        DrawPanel->MouseToCursorSchema();
 
         if( Text->m_Text.IsEmpty() )
         {
-            SAFE_DELETE( Text );
+            delete Text;
             m_drawItem = NULL;
         }
         else
@@ -186,7 +190,8 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
         if( m_drawSpecificConvert )
             m_drawItem->m_Convert = m_convert;
 
-        TempCopyComponent();
+        // Draw initial symbol:
+        DrawPanel->ManageCurseur( DrawPanel, DC, false );
     }
     else
     {
@@ -282,13 +287,15 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     if( item == NULL )
         return;
 
+    item->SetEraseLastDrawItem( erase );
     item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
                 DefaultTransform );
 }
 
 
 /*
- * Place the new graphic object in the list of component drawing objects.
+ * Place the new graphic object in the list of component drawing objects,
+ * or terminate a draw item edition
  */
 void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
 {
@@ -300,7 +307,11 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     else
         SetCursor( wxCURSOR_ARROW );
 
-    SaveCopyInUndoList( GetTempCopyComponent() );
+    if( GetTempCopyComponent() )    // used when editing an existing item
+        SaveCopyInUndoList( GetTempCopyComponent() );
+    else    // When creating a new item, there is still no change for the current component
+            // So save it.
+        SaveCopyInUndoList( m_component );
 
     if( m_drawItem->IsNew() )
         m_component->AddDrawItem( m_drawItem );

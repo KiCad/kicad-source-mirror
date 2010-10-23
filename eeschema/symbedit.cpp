@@ -236,5 +236,5 @@ void WinEDA_LibeditFrame::PlaceAncre()
     /* Redraw the symbol */
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
     Recadre_Trace( TRUE );
-    GetScreen()->SetRefreshReq();
+    DrawPanel->Refresh();
 }

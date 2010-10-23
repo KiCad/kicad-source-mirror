@@ -785,12 +785,8 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
     case HK_REPEAT_LAST:
         if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
            && ( m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) )
-        {
             RepeatPinItem( DC, (LIB_PIN*) m_lastDrawItem );
-        }
-        else
-            wxBell();
-        break;
+         break;
 
     case HK_EDIT:
         m_drawItem = LocateItemUsingCursor();
@@ -827,7 +823,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
     case HK_ROTATE:
         m_drawItem = LocateItemUsingCursor();
 
-        if( m_drawItem && !m_drawItem->InEditMode() )
+        if( m_drawItem )
         {
             switch( m_drawItem->Type() )
             {

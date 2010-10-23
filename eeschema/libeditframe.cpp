@@ -816,53 +816,31 @@ void WinEDA_LibeditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
         if( m_drawItem == NULL && m_drawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
             break;
-        DrawPanel->CursorOff( &dc );
         DrawPanel->MouseToCursorSchema();
         if( !m_drawItem->InEditMode() )
         {
             SaveCopyInUndoList( m_component );
             m_drawItem->SetUnit( m_unit );
-            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                              DefaultTransform );
         }
 
         m_drawItem->Rotate();
-
-        if( !m_drawItem->InEditMode() )
-        {
-            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                              DefaultTransform );
-            DrawPanel->Refresh();
-        }
-
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
     {
         if( m_drawItem == NULL || ( m_drawItem->Type() != COMPONENT_FIELD_DRAW_TYPE ) )
             break;
-        DrawPanel->CursorOff( &dc );
         DrawPanel->MouseToCursorSchema();
 
         if( !m_drawItem->InEditMode() )
         {
             SaveCopyInUndoList( m_component );
             m_drawItem->SetUnit( m_unit );
-            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                              DefaultTransform );
         }
 
         m_drawItem->Rotate();
-
-        if( !m_drawItem->InEditMode() )
-        {
-            m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL,
-                              DefaultTransform );
-            DrawPanel->Refresh();
-        }
-
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->Refresh();
         break;
     }
 
@@ -980,6 +958,7 @@ void WinEDA_LibeditFrame::TempCopyComponent()
 {
     if( m_tempCopyComponent )
         delete m_tempCopyComponent;
+    m_tempCopyComponent = NULL;
     if( m_component )
         m_tempCopyComponent = new LIB_COMPONENT( *m_component );
 }
@@ -990,8 +969,19 @@ void WinEDA_LibeditFrame::TempCopyComponent()
  */
 void WinEDA_LibeditFrame::RestoreComponent()
 {
+    if( m_tempCopyComponent == NULL )
+        return;
     if( m_component )
         delete m_component;
     m_component = m_tempCopyComponent;
+    m_tempCopyComponent = NULL;
+}
+
+/** Function ClearTempCopyComponent
+ * delete temporary copy of the current component and clear pointer
+ */
+void WinEDA_LibeditFrame::ClearTempCopyComponent()
+{
+    delete m_tempCopyComponent;
     m_tempCopyComponent = NULL;
 }

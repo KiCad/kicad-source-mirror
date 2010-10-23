@@ -50,7 +50,8 @@ void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
 
 	// Save old pin orientation
 	LastPinOrient = pin -> m_Orient;
-	SaveCopyInUndoList( pin->GetParent() );
+    if( !pin->InEditMode() )
+        SaveCopyInUndoList( pin->GetParent() );
 
 	// Get the actual pin orientation index
 	int orientationIndex = pin -> GetOrientationCodeIndex(pin -> m_Orient);
@@ -159,7 +160,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
 
     if( pin->IsModified() || pin->IsNew() )
     {
-        if( !pin->IsNew() )
+        if( !pin->InEditMode() )
             SaveCopyInUndoList( pin->GetParent() );
 
         OnModify( );
@@ -192,7 +193,7 @@ static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
     if( CurrentPin->m_Flags & IS_NEW )
         delete CurrentPin;
     else
-        CurrentPin->m_Flags = 0;
+        parent->RestoreComponent();
 
     /* clear edit flags */
     Panel->ManageCurseur = NULL;
@@ -246,6 +247,13 @@ another pin. Continue?" ) );
         }
     }
 
+    // Create Undo from GetTempCopyComponent() if exists ( i.e. after a pin move)
+    // or from m_component (pin add ...)
+    if( GetTempCopyComponent() )
+        SaveCopyInUndoList( GetTempCopyComponent() );
+    else
+        SaveCopyInUndoList( m_component );
+
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
     OnModify( );
@@ -293,6 +301,8 @@ void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
     LIB_PIN* Pin;
     LIB_PIN* CurrentPin = (LIB_PIN*) m_drawItem;
     wxPoint  startPos;
+
+    TempCopyComponent();
 
     /* Mark pins for moving. */
     Pin = m_component->GetNextPin();
@@ -466,6 +476,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     }
     else
     {
+        ClearTempCopyComponent();
         DrawPanel->ManageCurseur = DrawMovePin;
         DrawPanel->ForceCloseManageCurseur = AbortPinMove;
         if( DC )
@@ -609,6 +620,7 @@ void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 
     // Add this new pin in list, and creates pins for others parts if needed
     m_drawItem = Pin;
+    ClearTempCopyComponent();
     PlacePin( DC );
     m_lastDrawItem = Pin;
 

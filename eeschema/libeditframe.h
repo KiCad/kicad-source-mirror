@@ -188,6 +188,11 @@ public:
      */
     LIB_COMPONENT* GetTempCopyComponent() { return m_tempCopyComponent; }
 
+    /** Function ClearTempCopyComponent
+     * delete temporary copy of the current component and clear pointer
+     */
+    void ClearTempCopyComponent();
+
     bool           IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
 
 private:

@@ -75,7 +75,6 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             else
             {
-                SaveCopyInUndoList( m_component );
                 PlacePin( DC );
             }
             break;
