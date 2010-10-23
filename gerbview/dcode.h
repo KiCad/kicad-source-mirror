@@ -228,6 +228,18 @@ public:
      * rotated shape ... ) and cannot be easily drawn.
      */
     void                 ConvertShapeToPolygon();
+
+    /** GetShapeDim
+     * Calculate a value that can be used to evaluate the size of text
+     * when displaying the D-Code of an item
+     * due to the complexity of some shapes,
+     * one cannot calculate the "size" of a shape (only a bounding box)
+     * but here, the "dimension" of the shape is the diameter of the primitive
+     * or for lines the width of the line if the shape is a line
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return a dimension, or -1 if no dim to calculate
+     */
+    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
 };
 
 

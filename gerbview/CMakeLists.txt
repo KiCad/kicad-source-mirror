@@ -26,6 +26,7 @@ set(GERBVIEW_SRCS
     dialog_print_using_printer.cpp
     dialog_print_using_printer_base.cpp
     dummy_functions.cpp
+    draw_gerber_screen.cpp
     edit.cpp
     export_to_pcbnew.cpp
     files.cpp
@@ -46,8 +47,7 @@ set(GERBVIEW_SRCS
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp
-    toolbars_gerber.cpp
-    tracepcb.cpp )
+    toolbars_gerber.cpp )
 
 ###
 # We need some extra sources from pcbnew

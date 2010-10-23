@@ -98,6 +98,47 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     return ret;
 }
 
+/** GetShapeDim
+ * Calculate a value that can be used to evaluate the size of text
+ * when displaying the D-Code of an item
+ * due to the complexity of some shapes,
+ * one cannot calculate the "size" of a shape (only a bounding box)
+ * but here, the "dimension" of the shape is the diameter of the primitive
+ * or for lines the width of the line if the shape is a line
+ * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+ * @return a dimension, or -1 if no dim to calculate
+ */
+int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
+{
+    int dim = -1;
+    switch( m_Shape )
+    {
+    case APT_CIRCLE:
+    case APT_LINE:
+        dim = m_Size.x;
+        break;
+
+    case APT_RECT:
+    case APT_OVAL:
+        dim = MIN( m_Size.x, m_Size.y );
+        break;
+
+    case APT_POLYGON:
+        dim = MIN( m_Size.x, m_Size.y );
+        break;
+
+    case APT_MACRO:
+        if( m_Macro )
+            dim = m_Macro->GetShapeDim( aParent );
+        break;
+
+    default:
+        break;
+    }
+
+    return dim;
+}
+
 
 /** Function Read_D_Code_File
  * Can be useful only with old RS274D Gerber file format.

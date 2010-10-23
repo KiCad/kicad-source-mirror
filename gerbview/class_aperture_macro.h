@@ -119,6 +119,18 @@ public:
     void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
                          int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
+    /** GetShapeDim
+     * Calculate a value that can be used to evaluate the size of text
+     * when displaying the D-Code of an item
+     * due to the complexity of the shape of some primitives
+     * one cannot calculate the "size" of a shape (only a bounding box)
+     * but here, the "dimension" of the shape is the diameter of the primitive
+     * or for lines the width of the line
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return a dimension, or -1 if no dim to calculate
+     */
+    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+
 private:
 
     /** function ConvertShapeToPolygon
@@ -127,7 +139,7 @@ private:
      * Useful when a shape is not a graphic primitive (shape with hole,
      * rotated shape ... ) and cannot be easily drawn.
      */
-    void ConvertShapeToPolygon( GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer, bool aUnitsMetric);
+    void ConvertShapeToPolygon( GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer );
 };
 
 
@@ -155,6 +167,19 @@ struct APERTURE_MACRO
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
                                  int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
+
+    /** GetShapeDim
+     * Calculate a value that can be used to evaluate the size of text
+     * when displaying the D-Code of an item
+     * due to the complexity of a shape using many primitives
+     * one cannot calculate the "size" of a shape (only abounding box)
+     * but most of aperture macro are using one or few primitives
+     * and the "dimension" of the shape is the diameter of the primitive
+     * (or the max diameter of primitives)
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return a dimension, or -1 if no dim to calculate
+     */
+    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
 };
 
 

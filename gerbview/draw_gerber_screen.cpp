@@ -177,19 +177,24 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
 
         Line.Printf( wxT( "D%d" ), gerb_item->m_DCode );
 
-        width  = MIN( gerb_item->m_Size.x, gerb_item->m_Size.y );
+        if( gerb_item->GetDcodeDescr() )
+            width  = gerb_item->GetDcodeDescr()->GetShapeDim( gerb_item );
+        else
+            width  = MIN( gerb_item->m_Size.x, gerb_item->m_Size.y );
+
         orient = TEXT_ORIENT_HORIZ;
         if( gerb_item->m_Flashed )
         {
+            // A reasonnable size for text is width/3 because most ot time this text has 3 chars.
             width /= 3;
         }
-        else        // lines
+        else        // this item is a line
         {
-            int dx, dy;
-            dx = gerb_item->m_Start.x - gerb_item->m_End.x;
-            dy = gerb_item->m_Start.y - gerb_item->m_End.y;
-            if( abs( dx ) < abs( dy ) )
+            wxPoint delta = gerb_item->m_Start - gerb_item->m_End;
+            if( abs( delta.x ) < abs( delta.y ) )
                 orient = TEXT_ORIENT_VERT;
+            // A reasonnable size for text is width/2 because text needs margin below and above it.
+            // a margin = width/4 seems good
             width /= 2;
         }
 

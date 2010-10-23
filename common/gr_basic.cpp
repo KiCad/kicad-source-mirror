@@ -56,7 +56,7 @@ int g_DrawBgColor = WHITE;
 #define USE_CLIP_FILLED_POLYGONS
 
 #ifdef USE_CLIP_FILLED_POLYGONS
-void ClipAndDrawFilledPoly( EDA_Rect * ClipBox, wxDC * DC, wxPoint Points[], int n );
+static void ClipAndDrawFilledPoly( EDA_Rect * ClipBox, wxDC * DC, wxPoint Points[], int n );
 #endif
 
 /* These functions are used by corresponding functions
@@ -1281,7 +1281,11 @@ static void GRSClosedPoly( EDA_Rect* ClipBox,
     {
         GRSMoveTo( aPoints[aPointCount - 1].x, aPoints[aPointCount - 1].y );
         GRSetBrush( DC, BgColor, FILLED );
-        DC->DrawPolygon( aPointCount, aPoints, 0, 0, wxODDEVEN_RULE );
+#ifdef USE_CLIP_FILLED_POLYGONS
+        ClipAndDrawFilledPoly( ClipBox, DC, aPoints, aPointCount );
+#else
+        DC->DrawPolygon( aPointCount, aPoints );  // does not work very well under linux
+#endif
     }
     else
     {
