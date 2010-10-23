@@ -111,15 +111,12 @@ static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ),
                                          HK_MIRROR_X_COMPONENT, 'X' );
 static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static Ki_HotkeyInfo HkRotate( wxT( "Rotate Schematic Item" ),
-                               HK_ROTATE, 'R' );
-static Ki_HotkeyInfo HkEdit( wxT( "Edit Schematic Item" ),
-                             HK_EDIT, 'E' );
+static Ki_HotkeyInfo HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
+static Ki_HotkeyInfo HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
 static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
                                            HK_EDIT_COMPONENT_VALUE, 'V' );
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
-                                               HK_EDIT_COMPONENT_FOOTPRINT,
-                                               'F' );
+                                               HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
 static Ki_HotkeyInfo HkMove( wxT( "Move Schematic Item" ),
                              HK_MOVE_COMPONENT_OR_ITEM, 'M',
                              ID_POPUP_SCH_MOVE_CMP_REQUEST );
@@ -143,7 +140,7 @@ static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find next DRC marker" ), HK_FIND
 // Special keys for library editor:
 static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-static Ki_HotkeyInfo HkMovePin( wxT( "Move Pin" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
+static Ki_HotkeyInfo HkMoveLibItem( wxT( "Move Lib Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 
 // List of common hotkey descriptors
@@ -193,7 +190,7 @@ Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
     &HkCreatePin,
     &HkInsertPin,
     &HkEdit,
-    &HkMovePin,
+    &HkMoveLibItem,
     &HkDelete,
     &HkRotate,
     &HkDrag,
@@ -816,6 +813,11 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 
+            case COMPONENT_FIELD_DRAW_TYPE:
+                cmd.SetId( ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM );
+                GetEventHandler()->ProcessEvent( cmd );
+                break;
+
             default:
                 break;
             }
@@ -836,6 +838,11 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
 
             case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
                 cmd.SetId( ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT );
+                GetEventHandler()->ProcessEvent( cmd );
+                break;
+
+            case COMPONENT_FIELD_DRAW_TYPE:
+                cmd.SetId( ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 

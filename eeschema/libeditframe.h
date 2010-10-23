@@ -23,10 +23,10 @@ class Dialog_BodyGraphicText_Properties;
  */
 class WinEDA_LibeditFrame : public WinEDA_DrawFrame
 {
-    LIB_COMPONENT*   m_savedComponent;  ///< Temporary copy of current component during edit.
-    wxString         m_oldRootName;     ///< The actual pointer of the component loaded from
-                                        ///< a library.  Do not do anything with this pointer.
-                                        ///< It is to be used for reference purposes only.
+    LIB_COMPONENT*   m_tempCopyComponent;  ///< Temporary copy of current component during edit.
+    wxString         m_oldRootName;         ///< The actual pointer of the component loaded from
+                                            ///< a library.  Do not do anything with this pointer.
+                                            ///< It is to be used for reference purposes only.
 
 public:
     WinEDAChoiceBox* m_SelpartBox;      // a Box to select a part to edit (if any)
@@ -171,7 +171,22 @@ public:
 
     FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
 
-    void           DeleteSavedComponent();
+    /** Function TempCopyComponent
+     * create a temporary copy of the current edited component
+     * Used to prepare an Undo ant/or abort command before editing the component
+     */
+    void           TempCopyComponent();
+
+    /** Function RestoreComponent
+     * Restore the current edited component from its temporary copy.
+     * Used to abort a command
+     */
+    void           RestoreComponent();
+
+    /** Function GetTempCopyComponent
+     * @return the temporary copy of the current component.
+     */
+    LIB_COMPONENT* GetTempCopyComponent() { return m_tempCopyComponent; }
 
     bool           IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
 

@@ -4,6 +4,26 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-oct-22 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  Component library editor bug fixes and other minor fixes.
+  * Fix bug that prevented component from being replaced in library when
+    the component root name was changed.
+  * Fix drawing bug when changing text or field item string while move in
+    progress.
+  * Fix drawing bug when rotating text item while move in progress.
+  * Prevent undo or redo when editing a component draw item.
+  * Fix assert bug when replacing component in library when the component
+    root name was changed.
+  * Fix bug in field editor caused by new root alias implementation that
+    prevented any field from being changed.
+  * Fix minor spacing issues with EESchema find dialog.
+  * Deprecate remaining internal linked list code from component library
+    objects.
+  * Rename pin object files to match new library object file naming
+    scheme.
+  * Move LIB_TEXT object definition into it's own header file.
+
 2010-Oct-20 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++richio:

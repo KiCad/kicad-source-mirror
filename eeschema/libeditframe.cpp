@@ -165,7 +165,7 @@ WinEDA_LibeditFrame::WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
-    m_savedComponent      = NULL;
+    m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
 
     // Give an icon
@@ -238,6 +238,9 @@ WinEDA_LibeditFrame::~WinEDA_LibeditFrame()
 
     frame->m_LibeditFrame = NULL;
     m_drawItem = m_lastDrawItem = NULL;
+    if ( m_tempCopyComponent )
+        delete m_tempCopyComponent;
+    m_tempCopyComponent = NULL;
 }
 
 
@@ -969,11 +972,26 @@ void WinEDA_LibeditFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-void WinEDA_LibeditFrame::DeleteSavedComponent()
+/** Function TempCopyComponent
+ * create a temporary copy of the current edited component
+ * Used to prepare an Undo ant/or abort command before editing the component
+ */
+void WinEDA_LibeditFrame::TempCopyComponent()
 {
-    if( m_savedComponent )
-    {
-        delete m_savedComponent;
-        m_savedComponent = NULL;
-    }
+    if( m_tempCopyComponent )
+        delete m_tempCopyComponent;
+    if( m_component )
+        m_tempCopyComponent = new LIB_COMPONENT( *m_component );
+}
+
+/** Function RestoreComponent
+ * Restore the current edited component from its temporary copy.
+ * Used to abort a command
+ */
+void WinEDA_LibeditFrame::RestoreComponent()
+{
+    if( m_component )
+        delete m_component;
+    m_component = m_tempCopyComponent;
+    m_tempCopyComponent = NULL;
 }

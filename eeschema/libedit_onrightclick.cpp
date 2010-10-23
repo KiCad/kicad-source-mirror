@@ -80,7 +80,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_ARC_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Arc " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Arc" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_arc_xpm );
@@ -97,7 +97,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
 
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Delete Arc " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete Arc" ), s_Libedit_Hokeys_Descr,
                                  HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_arc_xpm );
@@ -107,7 +107,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_CIRCLE_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Circle " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Circle" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_circle_xpm );
@@ -128,7 +128,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
 
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Delete Circle " ),
+            msg = AddHotkeyName( _( "Delete Circle" ),
                                  s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_circle_xpm );
@@ -138,7 +138,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_RECT_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Rectangle " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Rectangle" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_rectangle_xpm );
@@ -159,7 +159,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
 
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Delete Rectangle " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete Rectangle" ), s_Libedit_Hokeys_Descr,
                                  HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_rectangle_xpm );
@@ -170,25 +170,25 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Text " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Text" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_text_xpm );
         }
 
-        msg = AddHotkeyName( _( "Edit Text " ), s_Libedit_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Edit Text" ), s_Libedit_Hokeys_Descr,
                              HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM,
                       msg, edit_text_xpm );
 
-        msg = AddHotkeyName( _( "Rotate Text " ), s_Libedit_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Rotate Text" ), s_Libedit_Hokeys_Descr,
                              HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
                       msg, edit_text_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Delete Text " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Delete Text" ), s_Libedit_Hokeys_Descr,
                                  HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM,
                           msg, delete_text_xpm );
@@ -198,7 +198,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_POLYLINE_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Line " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Line" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_line_xpm );
@@ -230,7 +230,7 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
         {
             if( ( (LIB_POLYLINE*) DrawEntry )->GetCornerCount() > 2 )
             {
-                msg = AddHotkeyName( _( "Delete Segment " ),
+                msg = AddHotkeyName( _( "Delete Segment" ),
                                      s_Libedit_Hokeys_Descr, HK_DELETE );
                 ADD_MENUITEM( PopMenu,
                               ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
@@ -243,15 +243,19 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
     case COMPONENT_FIELD_DRAW_TYPE:
         if( DrawEntry->m_Flags == 0 )
         {
-            msg = AddHotkeyName( _( "Move Field " ), s_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Field" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,
                           msg, move_field_xpm );
         }
+        msg = AddHotkeyName( _( "Field Rotate" ), s_Libedit_Hokeys_Descr,
+                                 HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM,
-                      _( "Field Rotate" ), rotate_field_xpm );
+                      msg, rotate_field_xpm );
+        msg = AddHotkeyName( _( "Field Edit" ), s_Libedit_Hokeys_Descr,
+                                 HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM,
-                      _( "Field Edit" ), edit_text_xpm );
+                      msg, edit_text_xpm );
         break;
 
 

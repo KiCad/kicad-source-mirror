@@ -11,6 +11,7 @@
 
 #include "eeschema_id.h"
 #include "program.h"
+#include "general.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "dialog_lib_edit_draw_item.h"
@@ -61,14 +62,14 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     /* TODO: see if m_drawFillStyle must retain the last fill option or not.
      * if the last is Filled, having next new graphic items created
      * with filled body is often bad.
-     * currently m_drawFillStyle is left with the defualt value (not filled)
+     * currently m_drawFillStyle is left with the default value (not filled)
      */
     if( DrawItem->IsFillable() )
         m_drawFillStyle = (FILL_T) dialog.GetFillStyle();
 #endif
 
-    // Save copy for undo is done before place.
-    if( !( DrawItem->m_Flags & IS_NEW ) )
+    // Save copy for undo if not in edit (edit command already handle the save copy)
+    if( DrawItem->m_Flags == 0 )
         SaveCopyInUndoList( DrawItem->GetParent() );
 
     if( m_drawSpecificUnit )
@@ -106,19 +107,17 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
     Panel->ManageCurseur  = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 
-    bool deleteItem = item->IsNew();
+    bool newItem = item->IsNew();
     item->EndEdit( parent->GetScreen()->GetCursorDrawPosition(), true );
 
-    // This draw is required to restore the item to it's last state.
-    item->Draw( Panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
-
-    if( deleteItem )
+    if( newItem )
     {
-        SAFE_DELETE( item );
+        delete item;
         parent->SetDrawItem( NULL );
     }
+    else
+        parent->RestoreComponent();
 
-    parent->DeleteSavedComponent();
     Panel->Refresh();
 }
 
@@ -187,7 +186,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
         if( m_drawSpecificConvert )
             m_drawItem->m_Convert = m_convert;
 
-        m_savedComponent = new LIB_COMPONENT( *m_component );
+        TempCopyComponent();
     }
     else
     {
@@ -236,6 +235,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 
     BASE_SCREEN* Screen = panel->GetScreen();
 
+    item->SetEraseLastDrawItem( erase );
     item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
                 DefaultTransform );
 }
@@ -251,7 +251,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
     if( m_drawItem->m_Unit != m_unit )
         m_drawItem->m_Unit = m_unit;
 
-    m_savedComponent = new LIB_COMPONENT( *m_component );
+    TempCopyComponent();
     m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCursorDrawPosition() );
     DrawPanel->ManageCurseur = RedrawWhileMovingCursor;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
@@ -265,7 +265,7 @@ void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
     if( m_drawItem == NULL )
         return;
 
-    m_savedComponent = new LIB_COMPONENT( *m_component );
+    TempCopyComponent();
     m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCursorDrawPosition() );
     DrawPanel->ManageCurseur = SymbolDisplayDraw;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
@@ -300,8 +300,7 @@ void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
     else
         SetCursor( wxCURSOR_ARROW );
 
-    SaveCopyInUndoList( m_savedComponent );
-    DeleteSavedComponent();
+    SaveCopyInUndoList( GetTempCopyComponent() );
 
     if( m_drawItem->IsNew() )
         m_component->AddDrawItem( m_drawItem );
