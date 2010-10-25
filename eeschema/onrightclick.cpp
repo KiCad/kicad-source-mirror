@@ -244,18 +244,13 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     }
 
     wxString       msg;
-    CMP_LIB_ENTRY* libEntry;
+    LIB_ALIAS*     libEntry;
     LIB_COMPONENT* libComponent = NULL;
 
     libEntry = CMP_LIBRARY::FindLibraryEntry( Component->m_ChipName );
 
     if( libEntry )
-    {
-        if( libEntry->isAlias() )
-            libComponent = ( (LIB_ALIAS*) libEntry )->GetComponent();
-        else
-            libComponent = (LIB_COMPONENT*) libEntry;
-    }
+        libComponent = libEntry->GetComponent();
 
     if( !Component->m_Flags )
     {

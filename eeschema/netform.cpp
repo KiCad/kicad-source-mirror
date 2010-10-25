@@ -722,11 +722,11 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
         xlibpart->AddAttribute( sPart, lcomp->GetName()  );
 
         //----- show the important properties -------------------------
-        if( !lcomp->GetDescription().IsEmpty() )
-            xlibpart->AddChild( node( sDescr, lcomp->GetDescription() ) );
+        if( !lcomp->GetAlias( 0 )->GetDescription().IsEmpty() )
+            xlibpart->AddChild( node( sDescr, lcomp->GetAlias( 0 )->GetDescription() ) );
 
-        if( !lcomp->GetDocFileName().IsEmpty() )
-            xlibpart->AddChild( node( sDocs,   lcomp->GetDocFileName() ) );
+        if( !lcomp->GetAlias( 0 )->GetDocFileName().IsEmpty() )
+            xlibpart->AddChild( node( sDocs,  lcomp->GetAlias( 0 )->GetDocFileName() ) );
 
         // Write the footprint list
         if( lcomp->GetFootPrints().GetCount() )
@@ -1581,10 +1581,10 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
             {
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                if( pin->m_Unit && pin->m_Unit != unit2 )
+                if( pin->GetUnit() && pin->GetUnit() != unit2 )
                     continue;
 
-                if( pin->m_Convert && pin->m_Convert != comp2->m_Convert )
+                if( pin->GetConvert() && pin->GetConvert() != comp2->m_Convert )
                     continue;
 
                 // A suitable pin is found: add it to the current list

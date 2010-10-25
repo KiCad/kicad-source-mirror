@@ -62,9 +62,9 @@ void Dialog_BodyGraphicText_Properties::InitDialog(  )
         m_TextSize->SetValue( msg );
         m_TextValue->SetValue( m_GraphicText->m_Text );
 
-        if ( m_GraphicText->m_Unit == 0 )
+        if ( m_GraphicText->GetUnit() == 0 )
             m_CommonUnit->SetValue( TRUE );
-        if ( m_GraphicText->m_Convert == 0 )
+        if ( m_GraphicText->GetConvert() == 0 )
             m_CommonConvert->SetValue( TRUE );
         if ( m_GraphicText->m_Orient == TEXT_ORIENT_VERT )
             m_Orient->SetValue( TRUE );
@@ -163,14 +163,14 @@ void Dialog_BodyGraphicText_Properties::OnOkClick( wxCommandEvent& event )
         m_GraphicText->m_Orient = m_Parent->m_textOrientation;
 
         if( m_Parent->m_drawSpecificUnit )
-            m_GraphicText->m_Unit = m_Parent->GetUnit();
+            m_GraphicText->SetUnit( m_Parent->GetUnit() );
         else
-            m_GraphicText->m_Unit = 0;
+            m_GraphicText->SetUnit( 0 );
 
         if( m_Parent->m_drawSpecificConvert )
-            m_GraphicText->m_Convert = m_Parent->GetConvert();
+            m_GraphicText->SetConvert( m_Parent->GetConvert() );
         else
-            m_GraphicText->m_Convert = 0;
+            m_GraphicText->SetConvert( 0 );
 
         if ( (m_TextShapeOpt->GetSelection() & 1 ) != 0 )
             m_GraphicText->m_Italic = true;

@@ -91,10 +91,10 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
     {
         if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
             continue;
-        if( item.m_Unit )
-            item.m_Unit = m_unit;
-        if( item.m_Convert )
-            item.m_Convert = m_convert;
+        if( item.GetUnit() )
+            item.SetUnit( m_unit );
+        if( item.GetConvert() )
+            item.SetConvert( m_convert );
         item.m_Flags    = IS_NEW;
         item.m_Selected = IS_SELECTED;
 
@@ -202,9 +202,9 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
         if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
             continue;
         /* Don't save unused parts or alternate body styles. */
-        if( m_unit && item.m_Unit && ( item.m_Unit != m_unit ) )
+        if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
             continue;
-        if( m_convert && item.m_Convert && ( item.m_Convert != m_convert ) )
+        if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
             continue;
 
         if( !item.Save( file.fp() ) )

@@ -21,11 +21,6 @@ class LIB_PIN;
 
 extern const int fill_tab[];
 
-// Set KICAD_USE_LIB_OJBECT_EDIT to 1 to use build in ojbect editing mode.
-#if !defined( KICAD_USE_LIB_OJBECT_EDIT )
-#undef KICAD_USE_LIB_OJBECT_EDIT
-#define KICAD_USE_LIB_OJBECT_EDIT 1
-#endif
 
 #define MINIMUM_SELECTION_DISTANCE 15 // Minimum selection distance in mils
 
@@ -40,7 +35,7 @@ typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
 
 /**
  * Helper for defining a list of pin object pointers.  The list does not
- * use a Boost pointer class so the ojbect pointers do not accidently get
+ * use a Boost pointer class so the object pointers do not accidently get
  * deleted when the container is deleted.
  */
 typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
@@ -84,7 +79,6 @@ class LIB_DRAW_ITEM : public EDA_BaseStruct
      */
     virtual void calcEdit( const wxPoint& aPosition ) {}
 
-
     /**
      * Save the current item attributes while editing.
      *
@@ -100,12 +94,10 @@ class LIB_DRAW_ITEM : public EDA_BaseStruct
 
     bool    m_eraseLastDrawItem; ///< Used when editing a new draw item to prevent drawing
                                  ///< artifacts.
-protected:
-    wxPoint m_savedPos;          ///< Temporary position when editng an existing item.
-    wxPoint m_initialPos;        ///< Temporary position when moving an existing item.
-    wxPoint m_initialCursorPos;  ///< Iniital cursor position at the begining of a move.
 
-public:
+    friend class LIB_COMPONENT;
+
+protected:
     /**
      * Unit identification for multiple parts per package.  Set to 0 if the
      * item is common to all units.
@@ -125,7 +117,11 @@ public:
      */
     FILL_T   m_Fill;
 
-    wxString m_typeName;   ///< Name of object displayed in the message panel.
+    wxString m_typeName;          ///< Name of object displayed in the message panel.
+
+    wxPoint  m_savedPos;          ///< Temporary position when editing an existing item.
+    wxPoint  m_initialPos;        ///< Temporary position when moving an existing item.
+    wxPoint  m_initialCursorPos;  ///< Initial cursor position at the beginning of a move.
 
 public:
 
@@ -139,13 +135,15 @@ public:
 
     virtual ~LIB_DRAW_ITEM() { }
 
+    wxString GetTypeName() { return m_typeName; }
+
     /**
      * Begin an editing a component library draw item in \a aEditMode at \a aPosition.
      *
      * This is used to start an editing action such as resize or move a draw object.
      * It typically would be called on a left click when a draw tool is selected in
      * the component library editor and one of the graphics tools is selected.  It
-     * allows the draw item to maintian it's own internal state while it is being
+     * allows the draw item to maintain it's own internal state while it is being
      * edited. Call AbortEdit() to quit the editing mode.
      *
      * @param aEditMode - The editing mode being performed.  See base_struct.h for a list
@@ -223,7 +221,7 @@ public:
      *
      * Derived classes should override this function.
      *
-     * @param aPosition - The coordinats to test.
+     * @param aPosition - The coordinates to test.
      * @return - true if a hit, else false
      */
     virtual bool HitTest( const wxPoint& aPosition )
@@ -283,7 +281,7 @@ public:
     /**
      * Set drawing object offset from the current position.
      *
-     * @param aOffset - Cooridinates to offset position.
+     * @param aOffset - Coordinates to offset position.
      */
     void SetOffset( const wxPoint& aOffset ) { DoOffset( aOffset ); }
 
@@ -296,7 +294,7 @@ public:
      * @param aRect - Rectangle to check against.
      * @return - True if object is inside rectangle.
      */
-    bool Inside( EDA_Rect& aRect ) { return DoTestInside( aRect ); }
+    bool Inside( EDA_Rect& aRect ) const { return DoTestInside( aRect ); }
 
     /**
      * Move a draw object to a new \a aPosition.
@@ -310,7 +308,7 @@ public:
     /**
      * Return the current draw object start position.
      */
-    wxPoint GetPosition() { return DoGetPosition(); }
+    wxPoint GetPosition() const { return DoGetPosition(); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about a point.
@@ -345,7 +343,7 @@ public:
      *
      * @return Width of draw object.
      */
-    int GetWidth() { return DoGetWidth(); }
+    int GetWidth() const { return DoGetWidth(); }
     void SetWidth( int aWidth ) { DoSetWidth( aWidth ); }
 
     /**
@@ -356,30 +354,14 @@ public:
      *
      * @return - True if draw object can be fill.  Default is false.
      */
-    bool IsFillable() { return m_isFillable; }
-
-    /**
-     * Return the modified status of the draw object.
-     *
-     * @return - True if the draw object has been modified.
-     */
-    bool IsModified() { return ( m_Flags & IS_CHANGED ) != 0; }
-
-    /**
-     * Return the new item status of the draw object.
-     *
-     * @return - True if the draw item has been added to the parent component.
-     */
-    bool IsNew() { return ( m_Flags & IS_NEW ) != 0; }
-    bool IsMoving() { return ( m_Flags & IS_MOVED ); }
-    bool IsResizing() { return ( m_Flags & IS_RESIZED ); }
+    bool IsFillable() const { return m_isFillable; }
 
     /**
      * Return the draw item editing mode status.
      *
      * @return - True if the item is being edited.
      */
-    bool InEditMode() { return ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0; }
+    bool InEditMode() const { return ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0; }
 
     void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
 
@@ -387,11 +369,15 @@ public:
 
     void SetUnit( int aUnit ) { m_Unit = aUnit; }
 
-    int GetUnit() { return m_Unit; }
+    int GetUnit() const { return m_Unit; }
 
     void SetConvert( int aConvert ) { m_Convert = aConvert; }
 
-    int GetConvert() { return m_Convert; }
+    int GetConvert() const { return m_Convert; }
+
+    void SetFillMode( FILL_T aFillMode ) { m_Fill = aFillMode; }
+
+    FILL_T GetFillMode() const { return m_Fill; }
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
@@ -409,13 +395,13 @@ protected:
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const = 0;
     virtual void DoOffset( const wxPoint& aOffset ) = 0;
-    virtual bool DoTestInside( EDA_Rect& aRect ) = 0;
+    virtual bool DoTestInside( EDA_Rect& aRect ) const = 0;
     virtual void DoMove( const wxPoint& aPosition ) = 0;
-    virtual wxPoint DoGetPosition() = 0;
+    virtual wxPoint DoGetPosition() const = 0;
     virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform ) = 0;
-    virtual int DoGetWidth() = 0;
+    virtual int DoGetWidth() const = 0;
     virtual void DoSetWidth( int aWidth ) = 0;
 
     /** Flag to indicate if draw item is fillable.  Default is false. */

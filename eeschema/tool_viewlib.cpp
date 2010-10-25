@@ -17,16 +17,16 @@
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()
 {
-    int  ii; wxString msg;
+    int  ii;
+    wxString msg;
     CMP_LIBRARY* lib;
     LIB_COMPONENT* component = NULL;
-    CMP_LIB_ENTRY* entry = NULL;
+    LIB_ALIAS* entry = NULL;
     bool asdeMorgan = false;
 
     if( m_HToolBar  == NULL )
     {
-        m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR,
-                                         true );
+        m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
         // Set up toolbar
         m_HToolBar->AddTool( ID_LIBVIEW_SELECT_LIB, wxEmptyString,
@@ -105,8 +105,7 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
         m_HToolBar->Realize();
     }
 
-    if( (m_libraryName != wxEmptyString)
-        && (m_entryName != wxEmptyString) )
+    if( (m_libraryName != wxEmptyString) && (m_entryName != wxEmptyString) )
     {
         lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 

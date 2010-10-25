@@ -158,7 +158,7 @@ void LIB_BEZIER::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_BEZIER::DoTestInside( EDA_Rect& aRect )
+bool LIB_BEZIER::DoTestInside( EDA_Rect& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {

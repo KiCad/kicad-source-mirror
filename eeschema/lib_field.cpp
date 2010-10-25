@@ -484,7 +484,7 @@ void LIB_FIELD::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_FIELD::DoTestInside( EDA_Rect& rect )
+bool LIB_FIELD::DoTestInside( EDA_Rect& rect ) const
 {
     /*
      * FIXME: This fails to take into acount the size and/or orientation of

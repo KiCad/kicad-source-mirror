@@ -33,33 +33,25 @@
 void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
 {
     bool partLocked = GetComponent()->UnitsLocked();
-    EditComponentProperties();
-    if( partLocked != GetComponent()->UnitsLocked() )
-    {   // g_EditPinByPinIsOn is set to the better value,
-        // if m_UnitSelectionLocked has changed
-        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
-        m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
-    }
 
-    m_HToolBar->Refresh();
-    DrawPanel->Refresh();
-}
-
-
-void WinEDA_LibeditFrame::EditComponentProperties()
-{
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    if( partLocked != GetComponent()->UnitsLocked() )
+    {
+        // g_EditPinByPinIsOn is set to the better value, if m_UnitSelectionLocked has changed
+        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
+    }
+
     UpdateAliasSelectList();
     UpdatePartSelectList();
     DisplayLibInfos();
     DisplayCmpDoc();
-    OnModify( );
+    OnModify();
+    DrawPanel->Refresh();
 }
-
 
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
@@ -144,14 +136,23 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
 {
+    if( m_Parent == NULL )
+        return;
+
+    LIB_ALIAS* alias;
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
         return;
 
-    m_DocCtrl->SetValue( component->GetDescription() );
-    m_DocfileCtrl->SetValue( component->GetDocFileName() );
-    m_KeywordsCtrl->SetValue( component->GetKeyWords() );
+    alias = component->GetAlias( m_Parent->GetAliasName() );
+
+    if( alias == NULL )
+        return;
+
+    m_DocCtrl->SetValue( alias->GetDescription() );
+    m_DocfileCtrl->SetValue( alias->GetDocFileName() );
+    m_KeywordsCtrl->SetValue( alias->GetKeyWords() );
 }
 
 

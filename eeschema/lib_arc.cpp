@@ -182,7 +182,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM& aTransform )
 {
 
-    // TODO: use aTransMat to calculmates parameters
+    // TODO: use aTransMat to calculates parameters
     wxPoint relativePosition = aReferencePoint;
 
     NEGATE( relativePosition.y );       // reverse Y axis
@@ -271,7 +271,7 @@ void LIB_ARC::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_ARC::DoTestInside( EDA_Rect& aRect )
+bool LIB_ARC::DoTestInside( EDA_Rect& aRect ) const
 {
     return aRect.Inside( m_ArcStart.x, -m_ArcStart.y )
         || aRect.Inside( m_ArcEnd.x, -m_ArcEnd.y );
@@ -335,7 +335,7 @@ int LIB_ARC::GetPenSize()
 
 void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
 {
-    // Thie edit indicators only get drawn when a new arc is being drawn.
+    // The edit indicators only get drawn when a new arc is being drawn.
     if( ( m_Flags & IS_NEW ) == 0 )
         return;
 
@@ -356,7 +356,7 @@ void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
 void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
-    // DOn't draw the arc until the end point is selected.  Only the edit indicators
+    // Don't draw the arc until the end point is selected.  Only the edit indicators
     // get drawn at this time.
     if( ( m_Flags & IS_NEW ) && m_lastEditState == 1 )
         return;
@@ -539,7 +539,7 @@ void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
     }
     else
     {
-        // Save the current arc positions in case the resize ia aborted.
+        // Save the current arc positions in case the resize is aborted.
         saveAttributes();
 
         // The arc center point has to be rotated with while adjusting the

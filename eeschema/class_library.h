@@ -71,7 +71,6 @@ class CMP_LIBRARY
     static CMP_LIBRARY_LIST libraryList;
     static wxArrayString    libraryListSortOrder;
 
-    friend class CMP_LIB_ENTRY;
     friend class LIB_COMPONENT;
 
 public:
@@ -217,12 +216,12 @@ public:
      * @param aName - Name of entry, case insensitive.
      * @return Entry if found.  NULL if not found.
      */
-    CMP_LIB_ENTRY* FindEntry( const wxChar* aName );
+    LIB_ALIAS* FindEntry( const wxChar* aName );
 
     /**
      * Find component by \a aName.
      *
-     * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
+     * This is a helper for FindEntry so casting a LIB_ALIAS pointer to
      * a LIB_COMPONENT pointer is not required.
      *
      * @param aName - Name of component, case insensitive.
@@ -233,7 +232,7 @@ public:
     /**
      * Find alias by \a nName.
      *
-     * This is a helper for FindEntry so casting a CMP_LIB_ENTRY pointer to
+     * This is a helper for FindEntry so casting a LIB_ALIAS pointer to
      * a LIB_ALIAS pointer is not required.
      *
      * @param aName - Name of alias, case insensitive.
@@ -280,7 +279,7 @@ public:
      * @param aEntry - Entry to remove from library.
      * @return The next entry in the library or NULL if the library is empty.
      */
-    CMP_LIB_ENTRY* RemoveEntry( CMP_LIB_ENTRY* aEntry );
+    LIB_ALIAS* RemoveEntry( LIB_ALIAS* aEntry );
 
     /**
      * Replace an existing component entry in the library.
@@ -297,7 +296,7 @@ public:
      *
      * @return The first entry or NULL if the library has no entries.
      */
-    CMP_LIB_ENTRY* GetFirstEntry();
+    LIB_ALIAS* GetFirstEntry();
 
     /**
      * Find next library entry by \a aName.
@@ -308,7 +307,7 @@ public:
      * @param aName - Name of current entry.
      * @return Next entry if entry name is found. Otherwise NULL.
      */
-    CMP_LIB_ENTRY* GetNextEntry( const wxChar* aName );
+    LIB_ALIAS* GetNextEntry( const wxChar* aName );
 
 
     /**
@@ -320,7 +319,7 @@ public:
      * @param aName - Name of current entry.
      * @return Previous entry if entry name is found, otherwise NULL.
      */
-    CMP_LIB_ENTRY* GetPreviousEntry( const wxChar* aName );
+    LIB_ALIAS* GetPreviousEntry( const wxChar* aName );
 
     /**
      * Return the file name without path or extension.
@@ -471,8 +470,8 @@ public:
      * @param aLibraryName - Name of the library to search.
      * @return The entry object if found, otherwise NULL.
      */
-    static CMP_LIB_ENTRY* FindLibraryEntry( const wxString& aEntryName,
-                                            const wxString& aLibraryName = wxEmptyString );
+    static LIB_ALIAS* FindLibraryEntry( const wxString& aEntryName,
+                                        const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Function RemoveCacheLibrary

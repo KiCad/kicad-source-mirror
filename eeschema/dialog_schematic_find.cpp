@@ -35,8 +35,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     m_checkWrap->SetValue( flags & FR_SEARCH_WRAP );
     m_checkCurrentSheetOnly->SetValue( flags & FR_CURRENT_SHEET_ONLY );
 
+    m_buttonFind->SetDefault();
     m_comboFind->SetFocus();
-
     SetPosition( aPosition );
     SetSize( aSize );
 }

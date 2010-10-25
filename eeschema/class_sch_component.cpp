@@ -43,8 +43,8 @@ void CreateDummyCmp()
 
     LIB_RECTANGLE* Square = new LIB_RECTANGLE( DummyCmp );
 
-    Square->m_Pos = wxPoint( -200, 200 );
-    Square->m_End = wxPoint( 200, -200 );
+    Square->Move( wxPoint( -200, 200 ) );
+    Square->SetEndPosition( wxPoint( 200, -200 ) );
 
     LIB_TEXT* Text = new LIB_TEXT( DummyCmp );
 
@@ -536,8 +536,6 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 
     if( Entry == NULL )
         return NULL;
-
-    wxASSERT( Entry->isComponent() );
 
     return Entry->GetPin( number, m_Multi, m_Convert );
 }
@@ -1127,10 +1125,10 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     // search for the component in lib
     // Entry and root_component can differ if Entry is an alias
-    CMP_LIB_ENTRY* Entry = CMP_LIBRARY::FindLibraryEntry( m_ChipName );
+    LIB_ALIAS* alias = CMP_LIBRARY::FindLibraryEntry( m_ChipName );
     LIB_COMPONENT* root_component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
-    if( (Entry == NULL) || (root_component == NULL) )
+    if( (alias == NULL) || (root_component == NULL) )
         return;
 
     wxString msg;
@@ -1149,13 +1147,13 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     // Display component reference in library and library
     frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
-    if( Entry->isAlias() )
+    if( alias->GetName() != root_component->GetName() )
         frame->AppendMsgPanel( _( "Alias of" ), root_component->GetName(), BROWN );
-    frame->AppendMsgPanel( _( "Library" ), Entry->GetLibraryName(), BROWN );
+    frame->AppendMsgPanel( _( "Library" ), alias->GetLibraryName(), BROWN );
 
     // Display description of the component, and keywords found in lib
-    frame->AppendMsgPanel( _( "Description" ), Entry->GetDescription(), DARKCYAN );
-    frame->AppendMsgPanel( _( "Key words" ), Entry->GetKeyWords(), DARKCYAN );
+    frame->AppendMsgPanel( _( "Description" ), alias->GetDescription(), DARKCYAN );
+    frame->AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKCYAN );
 }
 
 

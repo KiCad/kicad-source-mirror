@@ -227,7 +227,7 @@ void LIB_TEXT::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_TEXT::DoTestInside( EDA_Rect& rect )
+bool LIB_TEXT::DoTestInside( EDA_Rect& rect ) const
 {
     /*
      * FIXME: This should calculate the text size and justification and

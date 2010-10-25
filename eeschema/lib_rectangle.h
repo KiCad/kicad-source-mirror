@@ -11,7 +11,14 @@
 
 class LIB_RECTANGLE  : public LIB_DRAW_ITEM
 {
-    wxPoint m_savedEndPos;   ///< Tempory storage of the current end position before editing.
+    wxPoint m_End;                  // Rectangle end point.
+    wxPoint m_Pos;                  // Rectangle start point.
+    int     m_Width;                // Line width
+    bool    m_isWidthLocked;        // Flag: Keep width locked
+    bool    m_isHeightLocked;       // Flag: Keep height locked
+    bool    m_isStartPointSelected; // Flag: is the upper left edge selected?
+
+    wxPoint m_savedEndPos;          // Temporary storage of current end position before editing.
 
     /**
      * Draw the rectangle.
@@ -30,20 +37,13 @@ class LIB_RECTANGLE  : public LIB_DRAW_ITEM
     void restoreAttributes();
 
     /**
-     * Calculate the rectangle attrubites ralative to \a aPosition while editing.
+     * Calculate the rectangle attributes relative to \a aPosition while editing.
      *
      * @param aPosition - Edit position in drawing units.
      */
     void calcEdit( const wxPoint& aPosition );
 
 public:
-    wxPoint m_End;     /* Rectangle end point. */
-    wxPoint m_Pos;     /* Rectangle start point. */
-    int     m_Width;   /* Line width */
-    bool	m_isWidthLocked; /* Flag: Keep width locked */
-    bool	m_isHeightLocked; /* Flag: Keep height locked */
-    bool	m_isStartPointSelected; /* Flag: is the upper left edge selected ? */
-
 public:
     LIB_RECTANGLE( LIB_COMPONENT * aParent );
     LIB_RECTANGLE( const LIB_RECTANGLE& aRect );
@@ -53,6 +53,7 @@ public:
         return wxT( "LIB_RECTANGLE" );
     }
 
+    void SetEndPosition( const wxPoint& aPosition ) { m_End = aPosition; }
 
     /**
      * Write rectangle object out to a FILE in "*.lib" format.
@@ -118,15 +119,15 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() { return m_Width; }
+    virtual int DoGetWidth() const { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 
 
-#endif    // _LIB_REACTANGLE_H_
+#endif    // _LIB_RECTANGLE_H_

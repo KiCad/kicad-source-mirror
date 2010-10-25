@@ -11,16 +11,15 @@
 /**************************************************/
 class LIB_BEZIER : public LIB_DRAW_ITEM
 {
+    int m_Width;                           // Line width
+    std::vector<wxPoint> m_BezierPoints;   // list of parameter (3|4)
+    std::vector<wxPoint> m_PolyPoints;     // list of points (>= 2)
+
     /**
      * Draw the bezier curve.
      */
     void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-public:
-    int m_Width;                            /* Line width */
-    std::vector<wxPoint> m_BezierPoints;      // list of parameter (3|4)
-    std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
     LIB_BEZIER( LIB_COMPONENT * aParent );
@@ -90,13 +89,13 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
+    virtual wxPoint DoGetPosition() const { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() { return m_Width; }
+    virtual int DoGetWidth() const { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 

@@ -11,7 +11,11 @@
 
 class LIB_CIRCLE : public LIB_DRAW_ITEM
 {
-    int m_savedRadius;    ///< Temporary storage of radius before editing begins.
+    int     m_Radius;
+    wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
+    int     m_Width;          // Line width.
+
+    int     m_savedRadius;    // Temporary storage of radius before editing begins.
 
     /**
      * Draws the arc.
@@ -35,12 +39,6 @@ class LIB_CIRCLE : public LIB_DRAW_ITEM
      * @param aPosition - The position to edit the circle in drawing coordinates.
      */
     void calcEdit( const wxPoint& aPosition );
-
-
-public:
-    int     m_Radius;
-    wxPoint m_Pos;    /* Position or centre (Arc and Circle) or start point (segments) */
-    int     m_Width;  /* Line width */
 
 public:
     LIB_CIRCLE( LIB_COMPONENT * aParent );
@@ -115,13 +113,13 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() { return m_Width; }
+    virtual int DoGetWidth() const { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 

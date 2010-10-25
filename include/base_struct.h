@@ -71,7 +71,8 @@ enum KICAD_T {
      * If you add a new draw item, type, please make sure you add it so the
      * sort order is logical.
      */
-    LIBCOMPONENT_STRUCT_TYPE,
+    LIB_COMPONENT_T,
+    LIB_ALIAS_T,
     COMPONENT_ARC_DRAW_TYPE,
     COMPONENT_CIRCLE_DRAW_TYPE,
     COMPONENT_GRAPHIC_TEXT_DRAW_TYPE,
@@ -258,32 +259,25 @@ class DHEAD;
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_BaseStruct
-#define IS_CHANGED    (1 << 0)
-#define IS_LINKED     (1 << 1)
-#define IN_EDIT       (1 << 2)
-#define IS_MOVED      (1 << 3)
-#define IS_NEW        (1 << 4)
-#define IS_RESIZED    (1 << 5)
-#define IS_DRAGGED    (1 << 6)
-#define IS_DELETED    (1 << 7)
-#define IS_WIRE_IMAGE (1 << 8)
-#define STARTPOINT    (1 << 9)
-#define ENDPOINT      (1 << 10)
-#define SELECTED      (1 << 11)
-#define SELECTEDNODE  (1 << 12)         ///< flag indicating that the structure
-                                        // has already selected
-
-#define STRUCT_DELETED (1 << 13)        ///< flag indication structures to be
-                                        // erased
-
-#define CANDIDATE   (1 << 14)           ///< flag indicating that the structure
-                                        // is connected
-#define SKIP_STRUCT (1 << 15)           ///< flag indicating that the structure
-                                        // should be ignored
-
-#define DO_NOT_DRAW  (1 << 16)          ///< Used to disable draw function
-#define IS_CANCELLED (1 << 17)          ///< flag set when edit dialogs are
-                                        // canceled when editing a new object
+#define IS_CHANGED     (1 << 0)
+#define IS_LINKED      (1 << 1)
+#define IN_EDIT        (1 << 2)
+#define IS_MOVED       (1 << 3)
+#define IS_NEW         (1 << 4)
+#define IS_RESIZED     (1 << 5)
+#define IS_DRAGGED     (1 << 6)
+#define IS_DELETED     (1 << 7)
+#define IS_WIRE_IMAGE  (1 << 8)
+#define STARTPOINT     (1 << 9)
+#define ENDPOINT       (1 << 10)
+#define SELECTED       (1 << 11)
+#define SELECTEDNODE   (1 << 12)   ///< flag indicating that the structure has already selected
+#define STRUCT_DELETED (1 << 13)   ///< flag indication structures to be erased
+#define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
+#define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
+#define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
+#define IS_CANCELLED   (1 << 17)   ///< flag set when edit dialogs are canceled when editing a
+                                   ///< new object
 
 class EDA_BaseStruct
 {
@@ -350,6 +344,10 @@ public:
     void SetSon( EDA_BaseStruct* aSon )         { m_Son = aSon; }
     void SetList( DHEAD* aList )                { m_List = aList; }
 
+    inline bool IsNew() const { return m_Flags & IS_NEW; }
+    inline bool IsModified() const { return m_Flags & IS_CHANGED; }
+    inline bool IsMoving() const { return m_Flags & IS_MOVED; }
+    inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
 
     int GetState( int type ) const
     {

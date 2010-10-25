@@ -76,7 +76,7 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
 
 void DisplayCmpDoc( wxString& Name )
 {
-    CMP_LIB_ENTRY* CmpEntry = NULL;
+    LIB_ALIAS* CmpEntry = NULL;
 
     CmpEntry = CMP_LIBRARY::FindLibraryEntry( Name );
 

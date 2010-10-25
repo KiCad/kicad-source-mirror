@@ -25,9 +25,9 @@
 
 void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
 {
-    wxString msg;
-    CMP_LIB_ENTRY* LibEntry;
-    int     ii, id = event.GetId();
+    wxString   msg;
+    LIB_ALIAS* LibEntry;
+    int        ii, id = event.GetId();
 
     switch( id )
     {
@@ -48,8 +48,7 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_VIEWDOC:
-        LibEntry = CMP_LIBRARY::FindLibraryEntry( m_entryName,
-                                                  m_libraryName );
+        LibEntry = CMP_LIBRARY::FindLibraryEntry( m_entryName, m_libraryName );
 
         if( LibEntry && ( !LibEntry->GetDocFileName().IsEmpty() ) )
             GetAssociatedDocument( this, LibEntry->GetDocFileName(),
@@ -168,7 +167,7 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
         return;
     }
 
-    CMP_LIB_ENTRY* LibEntry = Lib->FindEntry( m_entryName );
+    LIB_ALIAS* LibEntry = Lib->FindEntry( m_entryName );
 
     if( LibEntry == NULL )
         return;
@@ -186,9 +185,9 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 /*************************************************/
 void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 {
-    int            NumOfParts = 0;
-    CMP_LIB_ENTRY* LibEntry;
-    wxString       CmpName;
+    int        NumOfParts = 0;
+    LIB_ALIAS* LibEntry;
+    wxString   CmpName;
 
     if( Lib )
         NumOfParts = Lib->GetCount();
@@ -249,7 +248,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     LIB_COMPONENT* component;
-    CMP_LIB_ENTRY* entry;
+    LIB_ALIAS*     entry;
     CMP_LIBRARY*   lib;
     wxString       msg;
     wxString       tmp;
@@ -266,22 +265,17 @@ void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( entry == NULL )
         return;
 
-    wxCHECK_RET( entry->isAlias(),
-                 wxT( "Entry \"" ) + entry->GetName() + wxT( "\" found in library <" ) +
-                 lib->GetName() + wxT( "> is not a LIB_ALIAS object." ) );
-
-    LIB_ALIAS* alias = (LIB_ALIAS*) entry;
-    component = alias->GetComponent();
+    component = entry->GetComponent();
 
     DrawPanel->DrawBackGround( DC );
 
-    if( !alias->IsRoot() )
+    if( !entry->IsRoot() )
     {
         if( component == NULL )     // Should not occur
             return;
 
         // Temporarily change the name field text to reflect the alias name.
-        msg = alias->GetName();
+        msg = entry->GetName();
         tmp = component->GetName();
         component->SetName( msg );
 

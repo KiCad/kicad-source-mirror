@@ -59,15 +59,15 @@ void WinEDA_LibeditFrame::SelectActiveLibrary()
  */
 void WinEDA_LibeditFrame::LoadOneLibraryPart( wxCommandEvent& event )
 {
-    int            i;
-    wxString       msg;
-    wxString       CmpName;
-    CMP_LIB_ENTRY* LibEntry = NULL;
+    int        i;
+    wxString   msg;
+    wxString   CmpName;
+    LIB_ALIAS* LibEntry = NULL;
 
     DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
 
-    if( GetBaseScreen()->IsModify() && !IsOK( this, _( "Current part not \
-saved.\n\nDiscard current changes?" ) ) )
+    if( GetBaseScreen()->IsModify()
+        && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
         return;
 
      // No current lib, ask user for the library to use.
@@ -97,7 +97,7 @@ saved.\n\nDiscard current changes?" ) ) )
 
     if( LibEntry == NULL )
     {
-        msg.Printf( _( "Component or alias name \"%s\" not found in library \"%s\"." ),
+        msg.Printf( _( "Component name \"%s\" not found in library \"%s\"." ),
                     GetChars( CmpName ),
                     GetChars( m_library->GetName() ) );
         DisplayError( this, msg );
@@ -125,7 +125,7 @@ saved.\n\nDiscard current changes?" ) ) )
  * 1 if error
  * m_component advanced copy and created
  */
-bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* aEntry, CMP_LIBRARY* aLibrary )
+bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLibrary )
 {
     wxString msg, cmpName, rootName;
     LIB_COMPONENT* component;
@@ -142,21 +142,14 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( CMP_LIB_ENTRY* aEntry, CMP_LIBR
 
     cmpName = m_aliasName = aEntry->GetName();
 
-    if( aEntry->isAlias() )
-    {
-        LIB_ALIAS* alias = (LIB_ALIAS*) aEntry;
-        component = alias->GetComponent();
+    LIB_ALIAS* alias = (LIB_ALIAS*) aEntry;
+    component = alias->GetComponent();
 
-        wxASSERT( component != NULL && component->isComponent() );
+    wxASSERT( component != NULL );
 
-        wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
-                    GetChars( cmpName ),
-                    GetChars( component->GetName() ) );
-    }
-    else
-    {
-        component = (LIB_COMPONENT*) aEntry;
-    }
+    wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
+                GetChars( cmpName ),
+                GetChars( component->GetName() ) );
 
     if( m_component )
     {
@@ -376,10 +369,10 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
  */
 void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
 {
-    wxString       CmpName;
-    CMP_LIB_ENTRY* LibEntry;
-    wxArrayString  ListNames;
-    wxString       msg;
+    wxString      CmpName;
+    LIB_ALIAS*    LibEntry;
+    wxArrayString ListNames;
+    wxString      msg;
 
     DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
 
@@ -448,7 +441,7 @@ void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
 All changes will be lost. Discard changes?" ) ) )
         return;
 
-    CMP_LIB_ENTRY* nextEntry = m_library->RemoveEntry( LibEntry );
+    LIB_ALIAS* nextEntry = m_library->RemoveEntry( LibEntry );
 
     if( nextEntry != NULL )
     {
@@ -617,8 +610,6 @@ void WinEDA_LibeditFrame::SaveOnePartInMemory()
     }
 
     m_drawItem = m_lastDrawItem = NULL;
-
-    wxASSERT( m_component->isComponent() );
 
     if( oldComponent != NULL )
         Component = m_library->ReplaceComponent( oldComponent, m_component );

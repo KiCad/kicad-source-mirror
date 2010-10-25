@@ -8,7 +8,6 @@
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "trigo.h"
-#include "bezier_curves.h"
 
 #include "general.h"
 #include "protos.h"
@@ -155,7 +154,7 @@ void LIB_POLYLINE::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_POLYLINE::DoTestInside( EDA_Rect& aRect )
+bool LIB_POLYLINE::DoTestInside( EDA_Rect& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -252,7 +251,7 @@ void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoi
     else
         color = aColor;
 
-    // Set the size of the buffer od coordinates
+    // Set the size of the buffer of coordinates
     if( Buf_Poly_Drawings == NULL )
     {
         Buf_Poly_Size     = m_PolyPoints.size();

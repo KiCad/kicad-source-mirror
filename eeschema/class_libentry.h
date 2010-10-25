@@ -13,6 +13,7 @@
 
 class CMP_LIBRARY;
 class LIB_ALIAS;
+class LIB_COMPONENT;
 class LIB_FIELD;
 
 
@@ -32,15 +33,6 @@ typedef std::map< wxString, LIB_ALIAS*, AliasMapSort > LIB_ALIAS_MAP;
 
 typedef std::vector< LIB_ALIAS* > LIB_ALIAS_LIST;
 
-/* Types for components in libraries
- * components can be a true component or an alias of a true component.
- */
-enum LibrEntryType
-{
-    ROOT,       /* This is a true component standard LIB_COMPONENT */
-    ALIAS       /* This is an alias of a true component */
-};
-
 /* values for member .m_options */
 enum  LibrEntryOptions
 {
@@ -50,50 +42,59 @@ enum  LibrEntryOptions
 
 
 /**
- * Class CMP_LIB_ENTRY
- * is a base class to describe library components and aliases.
+ * Component library alias object definition.
  *
- * This class is not to be used directly.
+ * Component aliases are not really components.  They are references
+ * to an actual component object.
  */
-class CMP_LIB_ENTRY : public EDA_BaseStruct
+class LIB_ALIAS : public EDA_BaseStruct
 {
+    /**
+     * The actual component of the alias.
+     *
+     * @note - Do not delete the root component.  The root component is actually shared by
+     *         all of the aliases associated with it.  The component pointer will be delete
+     *         in the destructor of the last alias that shares this component is deleted.
+     *         Deleting the root component will likely cause EESchema to crash.
+     */
+    LIB_COMPONENT*   root;
+
+    friend class LIB_COMPONENT;
+
 protected:
     wxString         name;
-
-    /// Library object that entry is attached to.
-    CMP_LIBRARY*     library;
-
-    /// Entry type, either ROOT or ALIAS.
-    LibrEntryType    type;
-
     wxString         description;  ///< documentation for info
     wxString         keyWords;     ///< keyword list (used for search for components by keyword)
     wxString         docFileName;  ///< Associate doc file name
 
 public:
-    CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName, CMP_LIBRARY* aLibrary = NULL );
-    CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary = NULL );
+    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent );
+    LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent = NULL );
 
-    virtual ~CMP_LIB_ENTRY();
+    virtual ~LIB_ALIAS();
 
     virtual wxString GetClass() const
     {
-        return wxT( "CMP_LIB_ENTRY" );
+        return wxT( "LIB_ALIAS" );
+    }
+
+    /**
+     * Get the alias root component.
+     */
+    LIB_COMPONENT* GetComponent() const
+    {
+        return root;
     }
 
     virtual wxString GetLibraryName();
 
-    CMP_LIBRARY* GetLibrary() { return library; }
+    bool IsRoot() const;
+
+    CMP_LIBRARY* GetLibrary();
 
     virtual const wxString& GetName() const { return name; }
 
     virtual void SetName( const wxString& aName ) { name = aName; }
-
-    bool isComponent() const { return type == ROOT; }
-
-    bool isAlias() const { return type == ALIAS; }
-
-    int GetType() const { return type; }
 
     void SetDescription( const wxString& aDescription )
     {
@@ -133,12 +134,12 @@ public:
         return !( *this == aName );
     }
 
-    bool operator==( const wxString& aName ) const { return *this == ( const wxChar* ) aName; }
+    bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
 };
 
-extern bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 );
+extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
 
-extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem2 );
+extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 );
 
 
 /**
@@ -147,8 +148,9 @@ extern int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY
  * A library component object is typically saved and loaded in a component library file (.lib).
  * Library components are different from schematic components.
  */
-class LIB_COMPONENT : public CMP_LIB_ENTRY
+class LIB_COMPONENT : public EDA_BaseStruct
 {
+    wxString           m_name;
     int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
                                          ///< to draw the pin name above the pin.
     bool               m_unitsLocked;    ///< True if component has multiple parts and changing
@@ -157,12 +159,13 @@ class LIB_COMPONENT : public CMP_LIB_ENTRY
     bool               m_showPinNumbers; ///< Determines if component pin numbers are visible.
     long               m_dateModified;   ///< Date the component was last modified.
     LibrEntryOptions   m_options;        ///< Special component features such as POWER or NORMAL.)
-    int                unitCount;        ///< Number of units (parts) per package.
+    int                m_unitCount;      ///< Number of units (parts) per package.
     LIB_DRAW_ITEM_LIST drawings;         ///< How to draw this part.
     wxArrayString      m_FootprintList;  /**< List of suitable footprint names for the
                                               component (wild card names accepted). */
     LIB_ALIAS_LIST     m_aliases;        ///< List of alias object pointers associated with the
                                          ///< component.
+    CMP_LIBRARY*       m_library;        ///< Library the component belongs to if any.
 
     void deleteAllFields();
 
@@ -183,7 +186,11 @@ public:
 
     virtual void SetName( const wxString& aName );
 
-    virtual wxString GetLibraryName();
+    wxString GetName() { return m_name; }
+
+    wxString GetLibraryName();
+
+    CMP_LIBRARY* GetLibrary() { return m_library; }
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 
@@ -512,13 +519,13 @@ public:
      */
     void SetPartCount( int count );
 
-    int GetPartCount() { return unitCount; }
+    int GetPartCount() { return m_unitCount; }
 
     /** function IsMulti
      * @return true if the component has multiple parts per package.
      * When happens, the reference has a sub reference ti identify part
      */
-    bool IsMulti() { return unitCount > 1; }
+    bool IsMulti() { return m_unitCount > 1; }
 
     /** function IsMulti
      * @return the sub reference for component having multiple parts per package.
@@ -571,54 +578,6 @@ public:
     bool ShowPinNumbers() { return m_showPinNumbers; }
 
     bool operator==( const LIB_COMPONENT* aComponent ) const { return this == aComponent; }
-};
-
-
-/**
- * Component library alias object definition.
- *
- * Component aliases are not really components.  They are references
- * to an actual component object.
- */
-class LIB_ALIAS : public CMP_LIB_ENTRY
-{
-    friend class LIB_COMPONENT;
-
-protected:
-    /**
-     * The actual component of the alias.
-     *
-     * @note - Do not delete the root component.  The root component is actually shared by
-     *         all of the aliases associated with it.  The component pointer will be delete
-     *         in the destructor of the last alias that shares this component is deleted.
-     *         Deleting the root component will likely cause EESchema to crash.
-     */
-    LIB_COMPONENT* root;
-
-public:
-    LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent );
-    LIB_ALIAS( LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent = NULL );
-
-    virtual ~LIB_ALIAS();
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "LIB_ALIAS" );
-    }
-
-    /**
-     * Get the alias root component.
-     */
-    LIB_COMPONENT* GetComponent() const
-    {
-        return root;
-    }
-
-    virtual wxString GetLibraryName();
-
-    bool IsRoot() const { return name.CmpNoCase( root->GetName() ) == 0; }
-
-    bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
 };
 
 

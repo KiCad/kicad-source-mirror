@@ -932,9 +932,9 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
         /* Skip items not used for this part */
-        if( Multi && Pin->m_Unit && ( Pin->m_Unit != Multi ) )
+        if( Multi && Pin->GetUnit() && ( Pin->GetUnit() != Multi ) )
             continue;
-        if( convert && Pin->m_Convert && ( Pin->m_Convert != convert ) )
+        if( convert && Pin->GetConvert() && ( Pin->GetConvert() != convert ) )
             continue;
 
         /* Calculate the pin position (according to the component orientation)

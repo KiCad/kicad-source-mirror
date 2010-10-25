@@ -21,6 +21,13 @@ class LIB_ARC : public LIB_DRAW_ITEM
         OUTLINE,
     };
 
+    int      m_Radius;
+    int      m_t1;              /* First radius angle of the arc in 0.1 degrees. */
+    int      m_t2;              /* Second radius angle of the arc in 0.1 degrees. */
+    wxPoint  m_ArcStart;
+    wxPoint  m_ArcEnd;          /* Arc end position. */
+    wxPoint  m_Pos;             /* Radius center point. */
+    int      m_Width;           /* Line width */
     wxPoint  m_savedStartPos;
     wxPoint  m_savedEndPos;
     int      m_savedAngle1;
@@ -65,15 +72,6 @@ class LIB_ARC : public LIB_DRAW_ITEM
      * Calculate the radius and angle of an arc using the start, end, and center points.
      */
     void calcRadiusAngles();
-
-public:
-    int     m_Radius;
-    int     m_t1;       /* First radius angle of the arc in 0.1 degrees. */
-    int     m_t2;       /* Second radius angle of the arc in 0.1 degrees. */
-    wxPoint m_ArcStart;
-    wxPoint m_ArcEnd;   /* Arc end position. */
-    wxPoint m_Pos;      /* Radius center point. */
-    int     m_Width;    /* Line width */
 
 public:
     LIB_ARC( LIB_COMPONENT * aParent );
@@ -149,13 +147,13 @@ protected:
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() { return m_Pos; }
+    virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() { return m_Width; }
+    virtual int DoGetWidth() const { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 

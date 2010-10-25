@@ -1465,7 +1465,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER *plotter,
 
 
 /* return the pin end position, for a component in normal orient */
-wxPoint LIB_PIN::ReturnPinEndPoint()
+wxPoint LIB_PIN::ReturnPinEndPoint() const
 {
     wxPoint pos = m_Pos;
 
@@ -1642,7 +1642,7 @@ void LIB_PIN::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_PIN::DoTestInside( EDA_Rect& rect )
+bool LIB_PIN::DoTestInside( EDA_Rect& rect ) const
 {
     wxPoint end = ReturnPinEndPoint();
 

@@ -34,10 +34,10 @@ extern int ExportPartId;
  */
 void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
 {
-    wxString       errMsg;
-    wxFileName     fn;
-    CMP_LIBRARY*   LibTmp;
-    CMP_LIB_ENTRY* LibEntry;
+    wxString     errMsg;
+    wxFileName   fn;
+    CMP_LIBRARY* LibTmp;
+    LIB_ALIAS*   LibEntry;
 
     m_lastDrawItem = NULL;
 
@@ -61,8 +61,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
     {
         wxString msg;
 
-        msg.Printf( _( "Component library file <%s> is empty." ),
-                    GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Component library file <%s> is empty." ), GetChars( fn.GetFullPath() ) );
         DisplayError( this,  msg );
         return;
     }

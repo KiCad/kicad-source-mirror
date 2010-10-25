@@ -346,12 +346,11 @@ void RebuildEndPointsList( std::vector <DANGLING_END_ITEM>& aItemList, SCH_ITEM*
             {
                 wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                if( Pin->m_Unit && STRUCT->m_Multi
-                   && ( STRUCT->m_Multi != Pin->m_Unit ) )
+                if( Pin->GetUnit() && STRUCT->m_Multi && ( STRUCT->m_Multi != Pin->GetUnit() ) )
                     continue;
 
-                if( Pin->m_Convert && STRUCT->m_Convert
-                   && ( STRUCT->m_Convert != Pin->m_Convert ) )
+                if( Pin->GetConvert() && STRUCT->m_Convert
+                    && ( STRUCT->m_Convert != Pin->GetConvert() ) )
                     continue;
 
                 DANGLING_END_ITEM item( PIN_END, Pin );

@@ -161,7 +161,9 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         if( m_drawItem == NULL )
         {
-            EditComponentProperties();
+            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+            cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
+            GetEventHandler()->ProcessEvent( cmd );
         }
     }
 

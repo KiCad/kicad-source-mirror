@@ -594,12 +594,11 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             {
                 wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
 
-                if( pin->m_Unit &&
-                        ( pin->m_Unit != DrawLibItem->GetUnitSelection( sheetlist ) ) )
+                if( pin->GetUnit() &&
+                    ( pin->GetUnit() != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
-                if( pin->m_Convert &&
-                        ( pin->m_Convert != DrawLibItem->m_Convert ) )
+                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->m_Convert ) )
                     continue;
 
                 wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->m_Pos ) +

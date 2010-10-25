@@ -36,7 +36,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 
     LIB_COMPONENT* component = DrawItem->GetParent();
 
-    DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem->m_typeName );
+    DIALOG_LIB_EDIT_DRAW_ITEM dialog( this, DrawItem->GetTypeName() );
 
     dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
@@ -47,7 +47,7 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     dialog.SetApplyToAllConversions( !m_drawSpecificConvert );
     dialog.EnableApplyToAllConversions( component && component->HasConversion() );
 //    dialog.SetFillStyle( m_drawFillStyle );   // could better to show the current setting
-    dialog.SetFillStyle( DrawItem->m_Fill);
+    dialog.SetFillStyle( DrawItem->GetFillMode() );
     dialog.EnableFillStyle( DrawItem->IsFillable() );
 
     if( dialog.ShowModal() == wxID_CANCEL )
@@ -73,17 +73,17 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
         SaveCopyInUndoList( DrawItem->GetParent() );
 
     if( m_drawSpecificUnit )
-        DrawItem->m_Unit = GetUnit();
+        DrawItem->SetUnit( GetUnit() );
     else
-        DrawItem->m_Unit = 0;
+        DrawItem->SetUnit( 0 );
 
     if( m_drawSpecificConvert )
-        DrawItem->m_Convert = GetConvert();
+        DrawItem->SetConvert( GetConvert() );
     else
-        DrawItem->m_Convert = 0;
+        DrawItem->SetConvert( 0 );
 
     if( DrawItem->IsFillable() )
-        DrawItem->m_Fill = (FILL_T) dialog.GetFillStyle();
+        DrawItem->SetFillMode( (FILL_T) dialog.GetFillStyle() );
 
     DrawItem->SetWidth( m_drawLineWidth );
 
@@ -183,12 +183,12 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
     {
         m_drawItem->BeginEdit( IS_NEW, drawPos );
         m_drawItem->SetWidth( m_drawLineWidth );
-        m_drawItem->m_Fill  = m_drawFillStyle;
+        m_drawItem->SetFillMode( m_drawFillStyle );
 
         if( m_drawSpecificUnit )
-            m_drawItem->m_Unit = m_unit;
+            m_drawItem->SetUnit( m_unit );
         if( m_drawSpecificConvert )
-            m_drawItem->m_Convert = m_convert;
+            m_drawItem->SetConvert( m_convert );
 
         // Draw initial symbol:
         DrawPanel->ManageCurseur( DrawPanel, DC, false );
@@ -253,8 +253,8 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
 
     SetCursor( wxCURSOR_HAND );
 
-    if( m_drawItem->m_Unit != m_unit )
-        m_drawItem->m_Unit = m_unit;
+    if( m_drawItem->GetUnit() != m_unit )
+        m_drawItem->SetUnit( m_unit );
 
     TempCopyComponent();
     m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCursorDrawPosition() );

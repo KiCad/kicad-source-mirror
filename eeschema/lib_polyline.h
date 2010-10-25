@@ -11,6 +11,10 @@
 
 class LIB_POLYLINE : public LIB_DRAW_ITEM
 {
+    int m_Width;                              // Line width
+    std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
+
+    int m_ModifyIndex;                        // Index of the polyline point to modify
     std::vector<wxPoint> m_savedPolyPoints;
 
     /**
@@ -30,17 +34,13 @@ class LIB_POLYLINE : public LIB_DRAW_ITEM
     void restoreAttributes();
 
     /**
-     * Calculate the polyline attributes ralative to \a aPosition while editing.
+     * Calculate the polyline attributes relative to \a aPosition while editing.
      *
      * @param aPosition - Edit position in drawing units.
      */
     void calcEdit( const wxPoint& aPosition );
 
 public:
-    int m_Width;                            /* Line width */
-    std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
-    int m_ModifyIndex;						// Index of the polyline point to modify
-
 public:
     LIB_POLYLINE( LIB_COMPONENT * aParent );
     LIB_POLYLINE( const LIB_POLYLINE& aPolyline );
@@ -120,7 +120,7 @@ protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();
 
     /**
-     * Provide the ployline segment draw object specific comparison.
+     * Provide the polyline segment draw object specific comparison.
      *
      * The sort order for each polyline segment point is as follows:
      *      - Line segment point horizontal (X) position.
@@ -129,13 +129,13 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect );
+    virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() { return m_PolyPoints[0]; }
+    virtual wxPoint DoGetPosition() const { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() { return m_Width; }
+    virtual int DoGetWidth() const { return m_Width; }
     virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
 };
 

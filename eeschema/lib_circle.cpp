@@ -145,10 +145,10 @@ void LIB_CIRCLE::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_CIRCLE::DoTestInside( EDA_Rect& aRect )
+bool LIB_CIRCLE::DoTestInside( EDA_Rect& aRect ) const
 {
     /*
-     * FIXME: This fails to take into acount the radius around the center
+     * FIXME: This fails to take into account the radius around the center
      *        point.
      */
     return aRect.Inside( m_Pos.x, -m_Pos.y );

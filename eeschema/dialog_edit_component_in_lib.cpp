@@ -154,5 +154,5 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
     m_SelNumberOfUnits->SetValue( component->GetPartCount() );
     m_SetSkew->SetValue( component->GetPinNameOffset() );
     m_OptionPower->SetValue( component->IsPower() );
-    m_OptionPartsLocked->SetValue( component->UnitsLocked() );
+    m_OptionPartsLocked->SetValue( component->UnitsLocked() && component->GetPartCount() > 1 );
 }

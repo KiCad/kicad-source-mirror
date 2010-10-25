@@ -116,7 +116,7 @@ void LIB_RECTANGLE::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_RECTANGLE::DoTestInside( EDA_Rect& aRect )
+bool LIB_RECTANGLE::DoTestInside( EDA_Rect& aRect ) const
 {
     return aRect.Inside( m_Pos.x, -m_Pos.y ) || aRect.Inside( m_End.x, -m_End.y );
 }

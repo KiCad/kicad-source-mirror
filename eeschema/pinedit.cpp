@@ -105,8 +105,8 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->m_PinLen,
                                           m_InternalUnits ) );
     dlg.SetLengthUnits( units );
-    dlg.SetAddToAllParts( pin->m_Unit == 0 );
-    dlg.SetAddToAllBodyStyles( pin->m_Convert == 0 );
+    dlg.SetAddToAllParts( pin->GetUnit() == 0 );
+    dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );
     dlg.SetVisible( pin->IsVisible() );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
@@ -429,9 +429,9 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 
     m_drawItem = pin;
 
-    pin->m_Flags   = IS_NEW;
-    pin->m_Unit    = m_unit;
-    pin->m_Convert = m_convert;
+    pin->m_Flags = IS_NEW;
+    pin->SetUnit( m_unit );
+    pin->SetConvert( m_convert );
 
     /* Flag pins to consider */
     if( g_EditPinByPinIsOn == false )
@@ -447,14 +447,14 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     pin->m_PinNumSize  = LastPinNumSize;
 
     if( LastPinCommonConvert )
-        pin->m_Convert = 0;
+        pin->SetConvert( 0 );
     else
-        pin->m_Convert = m_convert;
+        pin->SetConvert( m_convert );
 
     if( LastPinCommonUnit )
-        pin->m_Unit = 0;
+        pin->SetUnit( 0 );
     else
-        pin->m_Unit = m_unit;
+        pin->SetUnit( m_unit );
 
     if( LastPinVisible )
         pin->m_Attributs &= ~PINNOTDRAW;
@@ -497,38 +497,38 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
     if( g_EditPinByPinIsOn )
         return;
 
-    if( asDeMorgan && ( Pin->m_Convert != 0 ) )
+    if( asDeMorgan && ( Pin->GetConvert() != 0 ) )
         CreateConv = true;
 
     /* Create "convert" pin at the current position. */
     if( CreateConv == true )
     {
         NewPin = (LIB_PIN*) Pin->GenCopy();
-        if( Pin->m_Convert > 1 )
-            NewPin->m_Convert = 1;
+        if( Pin->GetConvert() > 1 )
+            NewPin->SetConvert( 1 );
         else
-            NewPin->m_Convert = 2;
+            NewPin->SetConvert( 2 );
         Pin->GetParent()->AddDrawItem( NewPin );
     }
 
     for( ii = 1; ii <= Pin->GetParent()->GetPartCount(); ii++ )
     {
-        if( ii == unit || Pin->m_Unit == 0 )
+        if( ii == unit || Pin->GetUnit() == 0 )
             continue;                       /* Pin common to all units. */
 
         NewPin = (LIB_PIN*) Pin->GenCopy();
         if( convert != 0 )
-            NewPin->m_Convert = 1;
-        NewPin->m_Unit = ii;
+            NewPin->SetConvert( 1 );
+        NewPin->SetUnit( ii );
         Pin->GetParent()->AddDrawItem( NewPin );
 
         if( CreateConv == false )
             continue;
 
         NewPin = (LIB_PIN*) Pin->GenCopy();
-        NewPin->m_Convert = 2;
-        if( Pin->m_Unit != 0 )
-            NewPin->m_Unit = ii;
+        NewPin->SetConvert( 2 );
+        if( Pin->GetUnit() != 0 )
+            NewPin->SetUnit( ii );
         Pin->GetParent()->AddDrawItem( NewPin );
     }
 }
@@ -558,7 +558,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
     Pin = m_component->GetNextPin();
     for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
-        if( ( Pin->m_Convert ) && ( Pin->m_Convert != m_convert ) )
+        if( ( Pin->GetConvert() ) && ( Pin->GetConvert() != m_convert ) )
             continue;
 
         // Is it the "selected mode" ?
@@ -639,11 +639,11 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 
     if( test == 0 )
     {
-        test = ref->m_Convert - tst->m_Convert;
+        test = ref->GetConvert() - tst->GetConvert();
     }
     if( test == 0 )
     {
-        test = ref->m_Unit - tst->m_Unit;
+        test = ref->GetUnit() - tst->GetUnit();
     }
     return test < 0;
 }
@@ -693,8 +693,8 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
         Pin = PinList[ii - 1];
 
         if( Pin->m_PinNum != curr_pin->m_PinNum
-            || Pin->m_Convert != curr_pin->m_Convert
-            || Pin->m_Unit != curr_pin->m_Unit )
+            || Pin->GetConvert() != curr_pin->GetConvert()
+            || Pin->GetUnit() != curr_pin->GetUnit() )
             continue;
 
         dup_error++;
@@ -713,13 +713,13 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
 
         if( m_component->GetPartCount() > 1 )
         {
-            aux_msg.Printf( _( " in part %c" ), 'A' + curr_pin->m_Unit );
+            aux_msg.Printf( _( " in part %c" ), 'A' + curr_pin->GetUnit() );
             msg += aux_msg;
         }
 
         if( m_showDeMorgan )
         {
-            if( curr_pin->m_Convert )
+            if( curr_pin->GetConvert() )
                 msg += _( "  of converted" );
             else
                 msg += _( "  of normal" );
@@ -752,13 +752,13 @@ void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
 
         if( m_component->GetPartCount() > 1 )
         {
-            aux_msg.Printf( _( " in part %c" ), 'A' + Pin->m_Unit );
+            aux_msg.Printf( _( " in part %c" ), 'A' + Pin->GetUnit() );
             msg += aux_msg;
         }
 
         if( m_showDeMorgan )
         {
-            if( Pin->m_Convert )
+            if( Pin->GetConvert() )
                 msg += _( "  of converted" );
             else
                 msg += _( "  of normal" );

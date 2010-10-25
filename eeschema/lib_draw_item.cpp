@@ -127,7 +127,7 @@ void LIB_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aO
             drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
         }
 
-        // Calculte the new attributes at the current cursor position.
+        // Calculate the new attributes at the current cursor position.
         calcEdit( aOffset );
 
         // Draw the items using the new attributes.

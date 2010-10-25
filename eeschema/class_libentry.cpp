@@ -34,60 +34,47 @@
 #define TRACE_DESTRUCTOR 0
 
 
-/** class CMP_LIB_ENTRY
- * Base class to describe library components and aliases.
- * This class is not to be used directly.
- * There are 2 derived classes
- * class LIB_COMPONENT that describes a component in library
- * class LIB_ALIAS that describes an alias of an existing component
- * a LIB_COMPONENT object handle all info to draw a component
- *  (pins, graphic body items, fields, name, keywords and documentation)
- * a LIB_ALIAS object use info of its LIB_COMPONENT parent
- *   and has just a name, keywords and documentation
+/*******************************/
+/* class LIB_ALIAS */
+/*******************************/
+
+/* Class to define an alias of a component
+ *  An alias uses the component definition (graphic, pins...)
+ *  but has its own name, keywords and documentation.
+ *  Therefore, when the component is modified, alias of this component are
+ *   modified.
+ *  This is a simple method to create components with differs very few
+ *  (like 74LS00, 74HC00 ... and many op amps )
  */
 
-CMP_LIB_ENTRY::CMP_LIB_ENTRY( LibrEntryType aType, const wxString& aName,
-                              CMP_LIBRARY* aLibrary ) :
-    EDA_BaseStruct( LIBCOMPONENT_STRUCT_TYPE )
+LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
+    EDA_BaseStruct( LIB_ALIAS_T )
 {
-    type = aType;
+    root = aRootComponent;
     name = aName;
-    library = aLibrary;
 }
 
 
-CMP_LIB_ENTRY::CMP_LIB_ENTRY( CMP_LIB_ENTRY& aEntry, CMP_LIBRARY* aLibrary ) :
-    EDA_BaseStruct( aEntry )
+LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) :
+    EDA_BaseStruct( aAlias )
 {
-    type = aEntry.type;
-    name = aEntry.name;
-    description = aEntry.description;
-    keyWords = aEntry.keyWords;
-    docFileName = aEntry.docFileName;
-    library = aLibrary;
+    name = aAlias.name;
+    root = aRootComponent;
+    description = aAlias.description;
+    keyWords = aAlias.keyWords;
+    docFileName = aAlias.docFileName;
 }
 
 
-CMP_LIB_ENTRY::~CMP_LIB_ENTRY()
+LIB_ALIAS::~LIB_ALIAS()
 {
+#if TRACE_DESTRUCTOR
+    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alais list count %d." ),
+                GetChars( name ), GetChars( root->GetName() ), root->m_aliases.size() );
+#endif
 }
 
 
-wxString CMP_LIB_ENTRY::GetLibraryName()
-{
-    if( library != NULL )
-        return library->GetName();
-
-    return wxString( _( "none" ) );
-}
-
-wxString LIB_COMPONENT::GetLibraryName()
-{
-    if( library != NULL )
-        return library->GetName();
-
-    return wxString( _( "none" ) );
-}
 wxString LIB_ALIAS::GetLibraryName()
 {
     if( GetComponent() )
@@ -95,6 +82,13 @@ wxString LIB_ALIAS::GetLibraryName()
 
     return wxString( _( "none" ) );
 }
+
+
+bool LIB_ALIAS::IsRoot() const
+{
+    return name.CmpNoCase( root->GetName() ) == 0;
+}
+
 
 /**
  * Function SaveDoc
@@ -104,7 +98,7 @@ wxString LIB_ALIAS::GetLibraryName()
  * @param aFile The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
+bool LIB_ALIAS::SaveDoc( FILE* aFile )
 {
     if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
         return true;
@@ -131,56 +125,21 @@ bool CMP_LIB_ENTRY::SaveDoc( FILE* aFile )
 }
 
 
-bool CMP_LIB_ENTRY::operator==( const wxChar* aName ) const
+bool LIB_ALIAS::operator==( const wxChar* aName ) const
 {
     return name.CmpNoCase( aName ) == 0;
 }
 
 
-bool operator<( const CMP_LIB_ENTRY& aItem1, const CMP_LIB_ENTRY& aItem2 )
+bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 {
     return aItem1.GetName().CmpNoCase( aItem2.GetName() ) < 0;
 }
 
 
-int LibraryEntryCompare( const CMP_LIB_ENTRY* aItem1, const CMP_LIB_ENTRY* aItem2 )
+int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
 {
     return aItem1->GetName().CmpNoCase( aItem2->GetName() );
-}
-
-
-/*******************************/
-/* class LIB_ALIAS */
-/*******************************/
-
-/* Class to define an alias of a component
- *  An alias uses the component definition (graphic, pins...)
- *  but has its own name, keywords and documentation.
- *  Therefore, when the component is modified, alias of this component are
- *   modified.
- *  This is a simple method to create components with differs very few
- *  (like 74LS00, 74HC00 ... and many op amps )
- */
-
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ) :
-    CMP_LIB_ENTRY( ALIAS, aName, NULL )
-{
-    root = aRootComponent;
-}
-
-
-LIB_ALIAS::LIB_ALIAS( LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) : CMP_LIB_ENTRY( aAlias )
-{
-    root = aRootComponent;
-}
-
-
-LIB_ALIAS::~LIB_ALIAS()
-{
-#if TRACE_DESTRUCTOR
-    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alais list count %d." ),
-                GetChars( name ), GetChars( root->GetName() ), root->m_aliases.size() );
-#endif
 }
 
 
@@ -196,10 +155,12 @@ LIB_ALIAS::~LIB_ALIAS()
  * Library components are different from schematic components.
  */
 LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
-    CMP_LIB_ENTRY( ROOT, aName, aLibrary )
+    EDA_BaseStruct( LIB_COMPONENT_T )
 {
+    m_name                = aName;
+    m_library             = aLibrary;
     m_dateModified        = 0;
-    unitCount             = 1;
+    m_unitCount           = 1;
     m_pinNameOffset       = 40;
     m_options             = ENTRY_NORMAL;
     m_unitsLocked         = FALSE;
@@ -223,12 +184,14 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
 
 
 LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary ) :
-    CMP_LIB_ENTRY( aComponent, aLibrary )
+    EDA_BaseStruct( aComponent )
 {
     LIB_DRAW_ITEM* newItem;
 
+    m_library             = aLibrary;
+    m_name                = aComponent.m_name;
     m_FootprintList       = aComponent.m_FootprintList;
-    unitCount             = aComponent.unitCount;
+    m_unitCount           = aComponent.m_unitCount;
     m_unitsLocked         = aComponent.m_unitsLocked;
     m_pinNameOffset       = aComponent.m_pinNameOffset;
     m_showPinNumbers      = aComponent.m_showPinNumbers;
@@ -277,6 +240,15 @@ LIB_COMPONENT::~LIB_COMPONENT()
 }
 
 
+wxString LIB_COMPONENT::GetLibraryName()
+{
+    if( m_library != NULL )
+        return m_library->GetName();
+
+    return wxString( _( "none" ) );
+}
+
+
 /** function IsMulti
  * @return the sub reference for component having multiple parts per package.
  * The sub reference identify the part (or unit)
@@ -296,7 +268,7 @@ wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
 
 void LIB_COMPONENT::SetName( const wxString& aName )
 {
-    CMP_LIB_ENTRY::SetName( aName );
+    m_name = aName;
     GetValueField().m_Text = aName;
     m_aliases[0]->SetName( aName );
 }
@@ -600,7 +572,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
                  0, m_pinNameOffset,
                  m_showPinNumbers ? 'Y' : 'N',
                  m_showPinNames ? 'Y' : 'N',
-                 unitCount, m_unitsLocked ? 'L' : 'F',
+                 m_unitCount, m_unitsLocked ? 'L' : 'F',
                  m_options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
         return false;
 
@@ -735,8 +707,8 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
         || sscanf( p, "%c", &drawnum ) != 1
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
         || sscanf( p, "%c", &drawname ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* unitCount: */
-        || sscanf( p, "%d", &unitCount ) != 1 )
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* m_unitCount: */
+        || sscanf( p, "%d", &m_unitCount ) != 1 )
     {
         aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ), *aLineNum );
         while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
@@ -749,9 +721,9 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
         return false;
     }
 
-    // Ensure unitCount is >= 1 (could be read as 0 in old libraries)
-    if( unitCount < 1 )
-        unitCount = 1;
+    // Ensure m_unitCount is >= 1 (could be read as 0 in old libraries)
+    if( m_unitCount < 1 )
+        m_unitCount = 1;
 
     m_showPinNumbers = ( drawnum == 'N' ) ? false : true;
     m_showPinNames = ( drawname == 'N' ) ? false : true;
@@ -762,16 +734,16 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
     strupper( componentName );
     if( componentName[0] != '~' )
     {
-        name = value.m_Text = CONV_FROM_UTF8( componentName );
+        m_name = value.m_Text = CONV_FROM_UTF8( componentName );
     }
     else
     {
-        name = value.m_Text = CONV_FROM_UTF8( &componentName[1] );
+        m_name = value.m_Text = CONV_FROM_UTF8( &componentName[1] );
         value.m_Attributs |= TEXT_NO_VISIBLE;
     }
 
     // Add the root alias to the alias list.
-    m_aliases.push_back( new LIB_ALIAS( name, this ) );
+    m_aliases.push_back( new LIB_ALIAS( m_name, this ) );
 
     LIB_FIELD& reference = GetReferenceField();
 
@@ -952,7 +924,7 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
         *fixedField = *field;
 
         if( field->m_FieldId == VALUE )
-            name = field->m_Text;
+            m_name = field->m_Text;
 
         SAFE_DELETE( field );
     }
@@ -1000,7 +972,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( ( item.m_Unit > 0 ) && ( ( unitCount > 1 ) && ( aUnit > 0 )
+        if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
 
@@ -1422,10 +1394,10 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T a
 
 void LIB_COMPONENT::SetPartCount( int aCount )
 {
-    if( unitCount == aCount )
+    if( m_unitCount == aCount )
         return;
 
-    if( aCount < unitCount )
+    if( aCount < m_unitCount )
     {
         LIB_DRAW_ITEM_LIST::iterator i;
         i = drawings.begin();
@@ -1440,7 +1412,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
     }
     else
     {
-        int prevCount = unitCount;
+        int prevCount = m_unitCount;
 
         // We cannot use an iterator here, because when adding items in vector
         // the buffer can be reallocated, that change the previous value of
@@ -1462,7 +1434,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
         drawings.sort();
     }
 
-    unitCount = aCount;
+    m_unitCount = aCount;
 }
 
 
@@ -1540,7 +1512,7 @@ bool LIB_COMPONENT::HasAlias( const wxString& aName ) const
 
 void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
 {
-    wxCHECK_RET( library == NULL,
+    wxCHECK_RET( m_library == NULL,
                  wxT( "Component aliases cannot be changed when they are owned by a library." ) );
 
     if( aAliasList == GetAliasNames() )
@@ -1572,7 +1544,7 @@ void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
 
 void LIB_COMPONENT::RemoveAlias( const wxString& aName )
 {
-    wxCHECK_RET( library == NULL,
+    wxCHECK_RET( m_library == NULL,
                  wxT( "Component aliases cannot be changed when they are owned by a library." ) );
     wxCHECK_RET( !aName.IsEmpty(), wxT( "Cannot get alias with an empty name." ) );
 

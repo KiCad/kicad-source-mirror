@@ -214,13 +214,13 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
 
     virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect );
+    virtual bool DoTestInside( EDA_Rect& rect ) const;
     virtual void DoMove( const wxPoint& newPosition );
-    virtual wxPoint DoGetPosition( void ) { return m_Pos; }
+    virtual wxPoint DoGetPosition( void ) const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth( void ) { return m_Width; }
+    virtual int DoGetWidth( void ) const { return m_Width; }
     virtual void DoSetWidth( int width ) { m_Width = width; }
 };
 

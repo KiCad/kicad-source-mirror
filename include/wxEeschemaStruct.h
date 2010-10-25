@@ -20,7 +20,6 @@ class SCH_ITEM;
 class SCH_NO_CONNECT;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
-class CMP_LIB_ENTRY;
 class LIB_DRAW_ITEM;
 class EDA_BaseStruct;
 class SCH_BUS_ENTRY;
