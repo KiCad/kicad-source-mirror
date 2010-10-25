@@ -325,7 +325,8 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
     module->SetState( DELETED, ON );
     SaveCopyInUndoList( module, UR_DELETED );
 
-    Compile_Ratsnest( DC, true );
+    if( DC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+        Compile_Ratsnest( DC, true );
 
     // Redraw the full screen to ensure perfect display of board and ratsnest.
     if( DC )
@@ -393,7 +394,8 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC )
         {
             Module->Draw( DrawPanel, DC, GR_OR );
-            Compile_Ratsnest( DC, true );
+            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+                Compile_Ratsnest( DC, true );
         }
     }
     else
