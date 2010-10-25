@@ -43,7 +43,6 @@ class GERBER_DRAW_ITEM;
  */
 enum APERTURE_T {
     APT_CIRCLE  = 'C',      // Flashed shape: Circle with or without hole
-    APT_LINE    = 'L',      // tool to draw line. Not used to flash items
     APT_RECT    = 'R',      // Flashed shape: Rectangle with or without hole
     APT_OVAL    = '0',      // Flashed shape: Oval with or without hole
     APT_POLYGON = 'P',      // Flashed shape: Regular polygon (3 to 12 edges)

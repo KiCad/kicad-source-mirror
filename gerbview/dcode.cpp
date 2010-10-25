@@ -76,9 +76,6 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     case APT_CIRCLE:
         ret = wxT( "Round" );   break;
 
-    case APT_LINE:
-        ret = wxT( "Line" );    break;
-
     case APT_RECT:
         ret = wxT( "Rect" );    break;
 
@@ -114,7 +111,6 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
     switch( m_Shape )
     {
     case APT_CIRCLE:
-    case APT_LINE:
         dim = m_Size.x;
         break;
 
@@ -300,8 +296,6 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
         {
             switch( dcode->m_Shape )
             {
-            case APT_LINE:          // might not appears here, but some broken
-            // gerber files use it
             case APT_CIRCLE:        /* spot round */
                 gerb_item->m_Shape = GBR_SPOT_CIRCLE;
                 break;
@@ -369,11 +363,6 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
                     ConvertShapeToPolygon();
                 DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
             }
-        break;
-
-    case APT_LINE:
-
-        // not used for flashed items
         break;
 
     case APT_RECT:
@@ -512,11 +501,6 @@ void D_CODE::ConvertShapeToPolygon()
         }
 
         addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
-        break;
-
-    case APT_LINE:
-
-        // Not used for flashed shapes
         break;
 
     case APT_RECT:

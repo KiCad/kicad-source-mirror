@@ -109,7 +109,6 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
         aGbrItem->m_Shape = GBR_SPOT_POLY;
         break;
 
-    case APT_LINE:              // Should not be used.
     case APT_CIRCLE:
         aGbrItem->m_Shape  = GBR_SPOT_CIRCLE;
         aGbrItem->m_Size.y = aGbrItem->m_Size.x;

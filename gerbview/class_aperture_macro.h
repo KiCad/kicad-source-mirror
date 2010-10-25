@@ -44,7 +44,8 @@
  * This complex shape is flashed.
  */
 enum AM_PRIMITIVE_ID {
-    AMP_UNKNOWN = 0,            // A value for uninitialized AM_PRIMITIVE.
+    AMP_UNKNOWN = -1,           // A value for uninitialized AM_PRIMITIVE.
+    AMP_COMMENT = 0,            // A primitive description is not really a primitive, this is a comment
     AMP_CIRCLE  = 1,            // Circle. (diameter and position)
     AMP_LINE2   = 2,            // Line with rectangle ends. (Width, start and end pos + rotation)
     AMP_LINE20  = 20,           // Same as AMP_LINE2

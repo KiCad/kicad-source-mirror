@@ -606,6 +606,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
     }
         break;
 
+    case AMP_COMMENT:
     case AMP_UNKNOWN:
     case AMP_EOF:
         break;
@@ -707,6 +708,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
         dim = scale( params[4].GetValue( tool ), m_GerbMetric ) / 2;      // Radius
         break;
 
+    case AMP_COMMENT:
     case AMP_UNKNOWN:
     case AMP_EOF:
         break;

@@ -873,9 +873,37 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
             break;      // exit with text still pointing at %
 
         int paramCount = 0;
-        int primitive_type = ReadInt( text );
+        int primitive_type = AMP_UNKNOWN;
+        // Test for a valid symbol at the beginning of a description:
+        // it can be: a parameter declaration like $1=$2/4
+        // or a digit (macro primitive selection)
+        // all other symbols are illegal.
+        if( *text == '$' )  // parameter declaration, not yet supported
+        {
+            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Operator $ not yet supported here, line: \"%s\"" ),
+                        GetChars( am.name ), GetChars( CONV_FROM_UTF8( buff ) ) );
+            ReportMessage( msg );
+            primitive_type = AMP_COMMENT;
+        }
+        else if( !isdigit(*text)  )     // Ill. symbol
+        {
+            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": ill. symbol, line: \"%s\"" ),
+                        GetChars( am.name ), GetChars( CONV_FROM_UTF8( buff ) ) );
+            ReportMessage( msg );
+            primitive_type = AMP_COMMENT;
+        }
+        else
+            primitive_type = ReadInt( text );
+
         switch( primitive_type )
         {
+        case 0:     // lines starting by 0 are a comment
+            paramCount = AMP_COMMENT;
+            // Skip comment
+            while( *text && (*text != '*') )
+                text++;
+            break;
+
         case AMP_CIRCLE:
             paramCount = 4;
             break;
