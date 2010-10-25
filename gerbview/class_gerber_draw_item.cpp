@@ -88,8 +88,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_mirrorA       = aSource.m_mirrorA;
     m_mirrorB       = aSource.m_mirrorB;
     m_layerOffset   = aSource.m_layerOffset;
-    m_drawScale.x   = aSource.m_drawScale.x;
-    m_drawScale.y   = aSource.m_drawScale.y;
+    m_drawScale     = aSource.m_drawScale;
     m_lyrRotation   = aSource.m_lyrRotation;
 }
 
@@ -222,7 +221,13 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape()
         return wxT( "polygon" );
 
     case GBR_SPOT_MACRO:
-        return wxT( "apt_macro" );  // TODO: add aperture macro name
+    {
+        wxString name = wxT( "apt_macro" );
+        D_CODE* dcode = GetDcodeDescr();
+        if( dcode && dcode->GetMacro() )
+            name << wxT(" ") << dcode->GetMacro()->name;
+        return name;
+    }
 
     default:
         return wxT( "??" );
@@ -363,8 +368,8 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_CIRCLE:
-        radius = (int) hypot( (double) ( m_End.x - m_Start.x ),
-                             (double) ( m_End.y - m_Start.y ) );
+        radius = wxRound(hypot( (double) ( m_End.x - m_Start.x ),
+                             (double) ( m_End.y - m_Start.y ) ));
 
         halfPenWidth = m_Size.x >> 1;
 
@@ -384,6 +389,8 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_ARC:
+        // Currently, arcs plotted witha rectangular aperture are not supported.
+        // a round pen only is expected.
 #if 0     // for arc debug only
         GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
                 GetABPosition( m_ArcCentre ), 0, color );
@@ -415,12 +422,30 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_SEGMENT:
-        if( !isFilled )
-            GRCSegm( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
-                     GetABPosition( m_End ), m_Size.x, color );
+        /* Plot a line from m_Start to m_End.
+         * Usually, a round pen is used, but some gerber files use a rectangular pen
+         * In fact, any aperture can be used to plot a line.
+         * currently: only a square pen is handled (I believe using a polygon gives a strange plot).
+         */
+        if( d_codeDescr->m_Shape == APT_RECT )
+        {
+            if( m_PolyCorners.size() == 0 )
+                ConvertSegmentToPolygon( );
+            DrawGbrPoly( &aPanel->m_ClipBox, aDC, color, aOffset, isFilled );
+        }
         else
-            GRFilledSegment( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+        {
+            if( !isFilled )
+            {
+                    GRCSegm( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
                              GetABPosition( m_End ), m_Size.x, color );
+            }
+            else
+            {
+                GRFilledSegment( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                                 GetABPosition( m_End ), m_Size.x, color );
+            }
+        }
         break;
 
     default:
@@ -433,9 +458,71 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     }
 }
 
+/** function ConvertSegmentToPolygon
+ * convert a line to an equivalent polygon.
+ * Useful when a line is plotted using a rectangular pen.
+ * In this case, the usual segment plot cannot be used
+ * The equivalent polygon is the area paint by the rectancular pen
+ * from m_Start to m_End.
+ */
+void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
+{
+    m_PolyCorners.clear();
+    m_PolyCorners.reserve(6);
+
+    wxPoint start = m_Start;
+    wxPoint end = m_End;
+    // make calculations more easy if ensure start.x < end.x
+    // (only 2 quadrants to consider)
+    if( start.x > end.x )
+        EXCHG( start, end );
+
+    // calculate values relative to start point:
+    wxPoint delta = end - start;
+    // calculate corners for the first quadrant only (delta.x and delta.y > 0 )
+    // currently, delta.x already is > 0.
+    // make delta.y > 0
+    bool change = delta.y < 0;
+    if( change )
+        NEGATE( delta.y);
+    // Now create the full polygon.
+    // Due to previous chnages, the shape is always something like
+    //          3 4
+    // 2          5
+    // 1 6
+    wxPoint corner;
+    corner.x -= m_Size.x/2;
+    corner.y -= m_Size.y/2;
+    m_PolyCorners.push_back( corner );  // Lower left corner, start point (1)
+    corner.y += m_Size.y;
+    m_PolyCorners.push_back( corner );  // upper left corner, start point (2)
+    if( delta.x || delta.y)
+    {
+        corner += delta;
+        m_PolyCorners.push_back( corner );  // upper left corner, end point (3)
+    }
+    corner.x += m_Size.x;
+    m_PolyCorners.push_back( corner );  // upper right corner, end point (4)
+    corner.y -= m_Size.y;
+    m_PolyCorners.push_back( corner );  // lower right corner, end point (5)
+    if( delta.x || delta.y )
+    {
+        corner -= delta;
+        m_PolyCorners.push_back( corner );  // lower left corner, start point (6)
+    }
+
+    // Create final polygon:
+    for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
+    {
+        if( change )
+            NEGATE( m_PolyCorners[ii].y);
+         m_PolyCorners[ii] += start;
+    }
+}
+
 
 /** function DrawGbrPoly
- * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
+ * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
  * Draw filled polygons
  */
 void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,

@@ -137,23 +137,23 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * @param aGbrItem The GERBER_DRAW_ITEM to fill in.
  * @param Dcode_index The DCODE value, like D14
  * @param aLayer The layer index to set into the GBRITEM
- * @param aPos The center point of the flash
- * @param aDiameter The diameter of the round flash
+ * @param aStart The starting point of the line
+ * @param aEnd The ending point of the line
+ * @param aPenSize The size of the flash. Note rectangular shapes are legal.
  * @param aLayerNegative = true if the current layer is negative
- * @param aImageNegative = true if the current image is negative
  */
 static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
                               int               aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
-                              int               aWidth,
+                              wxSize            aPenSize,
                               bool              aLayerNegative  )
 {
     aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Flashed = false;
 
-    aGbrItem->m_Size.x = aGbrItem->m_Size.y = aWidth;
+    aGbrItem->m_Size = aPenSize;
 
     aGbrItem->m_Start = aStart;
     aGbrItem->m_End   = aEnd;
@@ -188,13 +188,12 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *   must be calculated from the previously given constraint: arc only in the
  * same quadrant.
  * @param aDiameter The diameter of the round flash
- * @param aWidth is the pen width.
+ * @param aPenSize The size of the flash. Note rectangular shapes are legal.
  * @param aLayerNegative = true if the current layer is negative
- * @param aImageNegative = true if the current image is negative
  */
 static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
                              const wxPoint& aStart, const wxPoint& aEnd,
-                             const wxPoint& aRelCenter, int aWidth,
+                             const wxPoint& aRelCenter, wxSize aPenSize,
                              bool aClockwise, bool aMultiquadrant,
                              bool aLayerNegative  )
 {
@@ -202,7 +201,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
 
     aGbrItem->m_Shape = GBR_ARC;
     aGbrItem->SetLayer( aLayer );
-    aGbrItem->m_Size.x  = aGbrItem->m_Size.y = aWidth;
+    aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
 
@@ -333,7 +332,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
     fillArcGBRITEM(  &dummyGbrItem, 0, 0,
-                     aStart, aEnd, rel_center, 0,
+                     aStart, aEnd, rel_center, wxSize(0, 0),
                      clockwise, multiquadrant, aLayerNegative );
 
     wxPoint   center;
@@ -688,7 +687,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 //                           m_PreviousPos.x, m_PreviousPos.y,
 //                            m_CurrentPos.x, m_CurrentPos.y ); )
                 fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                                 m_CurrentPos, size.x, GetLayerParams().m_LayerNegative );
+                                 m_CurrentPos, size, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );
                 break;
 
@@ -708,7 +707,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 //                           m_CurrentPos.y, m_IJPos.x,
 //                            m_IJPos.y, m_Iterpolation, m_360Arc_enbl ); )
                 fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
-                                m_CurrentPos, m_IJPos, size.x,
+                                m_CurrentPos, m_IJPos, size,
                                 ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
                                 false : true, m_360Arc_enbl, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );

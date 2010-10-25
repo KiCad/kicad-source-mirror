@@ -245,9 +245,11 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     GRSetDrawMode( DC, draw_mode );
     l_piste = m_Width >> 1;  /* half trace width */
 
+    // Line start point or Circle and Arc center
     ux0 = m_Start.x;
     uy0 = m_Start.y;
 
+    // Line end point or circle and arc start point
     dx = m_End.x;
     dy = m_End.y;
 

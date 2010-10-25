@@ -818,9 +818,9 @@ void CreateTracksInfoData( FILE* file, BOARD* pcb )
  */
 void FootprintWriteShape( FILE* file, MODULE* module )
 {
-    EDGE_MODULE*    PtEdge;
-    EDA_BaseStruct* PtStruct;
-    int             Yaxis_sign = -1; // Control Y axis change sign (as normal
+    EDGE_MODULE*    edge;
+    EDA_BaseStruct* item;
+    int             y_axis_sign = -1; // Control Y axis change sign (as normal
                                      // module / mirror axis and conventions)
 
     /* creates header: */
@@ -840,46 +840,53 @@ void FootprintWriteShape( FILE* file, MODULE* module )
     }
 
     /* creates Drawing */
-    PtStruct = module->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    item = module->m_Drawings;
+    for( ; item != NULL; item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case TYPE_TEXTE_MODULE:
             break;
 
         case TYPE_EDGE_MODULE:
-            PtEdge = (EDGE_MODULE*) PtStruct;
+            edge = (EDGE_MODULE*) item;
 
-            switch( PtEdge->m_Shape )
+            switch( edge->m_Shape )
             {
             case S_SEGMENT:
                 fprintf( file, "LINE %d %d %d %d\n",
-                         PtEdge->m_Start0.x, Yaxis_sign * PtEdge->m_Start0.y,
-                         PtEdge->m_End0.x, Yaxis_sign * PtEdge->m_End0.y );
+                         edge->m_Start0.x, y_axis_sign * edge->m_Start0.y,
+                         edge->m_End0.x, y_axis_sign * edge->m_End0.y );
                 break;
 
             case S_CIRCLE:
             {
                 int rayon = (int) hypot(
-                    (double) ( PtEdge->m_End0.x - PtEdge->m_Start0.x ),
-                    (double) ( PtEdge->m_End0.y - PtEdge->m_Start0.y ) );
+                    (double) ( edge->m_End0.x - edge->m_Start0.x ),
+                    (double) ( edge->m_End0.y - edge->m_Start0.y ) );
                 fprintf( file, "CIRCLE %d %d %d\n",
-                         PtEdge->m_Start0.x, Yaxis_sign * PtEdge->m_Start0.y,
+                         edge->m_Start0.x, y_axis_sign * edge->m_Start0.y,
                          rayon );
                 break;
             }
 
             case S_ARC:         /* print ARC x,y start x,y end x,y center */
-            {
-                int arcendx, arcendy;
-                arcendx = PtEdge->m_Start0.x;
-                arcendy = PtEdge->m_Start0.y;
-                RotatePoint( &arcendx, &arcendy, PtEdge->m_Angle );
+            {   // Arcs are defined counter clockwise (positive trigonometric)
+                // from the start point to the end point (0 to 360 degrees)
+                wxPoint arcStart, arcEnd;
+                // edge->m_Start0 is the arc center relative to the shape position
+                // edge->m_End0 is the arc start point relative to the shape position
+                arcStart = edge->m_End0;
+                // calculate arcEnd arc end point relative to the shape position, in pcbnew coordinates
+                arcEnd = arcStart;
+                RotatePoint( &arcEnd, edge->m_Start0, -edge->m_Angle );
+                // due to difference between pcbnew and gencad, swap arc start and arc end
+                EXCHG(arcEnd, arcStart);
+                // print arc shape:
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         PtEdge->m_End0.x, Yaxis_sign * PtEdge->m_End0.y,
-                         arcendx, Yaxis_sign * arcendy,
-                         PtEdge->m_Start0.x, Yaxis_sign * PtEdge->m_Start0.y );
+                         arcStart.x, y_axis_sign * arcStart.y,   // Start point
+                         arcEnd.x, y_axis_sign * arcEnd.y,               // End point
+                         edge->m_Start0.x, y_axis_sign * edge->m_Start0.y );
                 break;
             }
 

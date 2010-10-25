@@ -10,8 +10,8 @@ class DRAWSEGMENT : public BOARD_ITEM
 {
 public:
     int     m_Width;            // thickness of lines ...
-    wxPoint m_Start;            // Line start point
-    wxPoint m_End;              // Line end point
+    wxPoint m_Start;            // Line start point or Circle and Arc center
+    wxPoint m_End;              // Line end point or circle and arc start point
 
     int     m_Shape;            // Shape: line, Circle, Arc
     int     m_Type;             // Used in complex associations ( Dimensions.. )

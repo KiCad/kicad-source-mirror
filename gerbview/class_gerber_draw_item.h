@@ -194,8 +194,15 @@ public:
                    int               aDrawMode,
                    const wxPoint&    aOffset = ZeroOffset );
 
+    /** function ConvertSegmentToPolygon
+     * convert a line to an equivalent polygon.
+     * Useful when a line is plotted using a rectangular pen.
+     * In this case, the usual segment plot function cannot be used
+     */
+    void ConvertSegmentToPolygon( );
+
     /** function DrawGbrPoly
-     * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
+     * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
      */
     void DrawGbrPoly( EDA_Rect* aClipBox,
                       wxDC* aDC, int aColor,
