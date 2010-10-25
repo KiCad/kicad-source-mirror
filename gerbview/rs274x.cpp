@@ -897,8 +897,8 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
         switch( primitive_type )
         {
-        case 0:     // lines starting by 0 are a comment
-            paramCount = AMP_COMMENT;
+        case AMP_COMMENT:     // lines starting by 0 are a comment
+            paramCount = 0;
             // Skip comment
             while( *text && (*text != '*') )
                 text++;
