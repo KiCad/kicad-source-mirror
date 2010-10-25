@@ -1901,12 +1901,23 @@ void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC,
  *  too large coordinates (seems due to integer overflows in calculations)
  *  Could be removed in some years, if become unnecessary.
  */
+
+/* Note: aClipBox == NULL is legal, so if aClipBox == NULL,
+ * the polygon is drawn, but not clipped
+ */
 #include "SutherlandHodgmanClipPoly.h"
 void ClipAndDrawFilledPoly( EDA_Rect* aClipBox,
                             wxDC*     aDC,
                             wxPoint   aPoints[],
                             int       n )
 {
+    if( aClipBox == NULL )
+    {
+        aDC->DrawPolygon( n, aPoints );
+        return;
+    }
+
+    // A clip box exists: clip and draw the polygon.
     static vector<wxPoint> clippedPolygon;
     static pointVector     inputPolygon, outputPolygon;
 
