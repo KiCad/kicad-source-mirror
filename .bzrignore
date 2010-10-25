@@ -16,3 +16,4 @@ config.h
 install_manifest.txt
 Documentation/doxygen
 *.cmake
+*.bak

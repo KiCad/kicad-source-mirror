@@ -319,8 +319,9 @@ void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         aPlotter->arc( pos, -t2, -t1, m_Radius, FILLED_SHAPE, 0 );
     }
 
+    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->arc( pos, -t2, -t1, m_Radius, m_Fill, GetPenSize() );
+    aPlotter->arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

@@ -223,8 +223,9 @@ void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         aPlotter->poly( i, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
+    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->poly( i, Poly, m_Fill, GetPenSize() );
+    aPlotter->poly( i, Poly, already_filled ? NO_FILL : m_Fill, GetPenSize() );
     MyFree( Poly );
 }
 

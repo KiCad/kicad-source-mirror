@@ -2,6 +2,7 @@ add_definitions(-DEESCHEMA)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/common
+                    ${CMAKE_SOURCE_DIR}/dialogs
                     ${Boost_INCLUDE_DIR}
                    )
 
@@ -36,6 +37,8 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
+    dialogs/dialog_plot_schematic_PS.cpp
+    dialogs/dialog_plot_schematic_PS_base.cpp
     dialog_annotate_base.cpp
     dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
@@ -116,7 +119,6 @@ set(EESCHEMA_SRCS
     pinedit.cpp
     plot.cpp
     plothpgl.cpp
-    plotps.cpp
     plotdxf.cpp
     read_from_file_schematic_items_descriptions.cpp
     save_schemas.cpp

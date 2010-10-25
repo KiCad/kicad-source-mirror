@@ -27,6 +27,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 static bool Block_Include_Modules     = TRUE;
+static bool BlockIncludeLockedModules = TRUE;
 static bool Block_Include_Tracks      = TRUE;
 static bool Block_Include_Zones       = TRUE;
 static bool Block_Include_Draw_Items  = TRUE;
@@ -44,6 +45,7 @@ private:
 
     WinEDA_BasePcbFrame* m_Parent;
     wxCheckBox*          m_Include_Modules;
+    wxCheckBox*          m_IncludeLockedModules;
     wxCheckBox*          m_Include_Tracks;
     wxCheckBox*          m_Include_Zones;
     wxCheckBox*          m_Include_Draw_Items;
@@ -62,6 +64,7 @@ public:
 private:
     void ExecuteCommand( wxCommandEvent& event );
     void Cancel( wxCommandEvent& event );
+    void checkBoxClicked( wxCommandEvent& aEvent );
 
     DECLARE_EVENT_TABLE()
 };
@@ -70,6 +73,7 @@ private:
 BEGIN_EVENT_TABLE( WinEDA_ExecBlockCmdFrame, wxDialog )
     EVT_BUTTON( wxID_OK, WinEDA_ExecBlockCmdFrame::ExecuteCommand )
     EVT_BUTTON( wxID_CANCEL, WinEDA_ExecBlockCmdFrame::Cancel )
+    EVT_CHECKBOX( wxID_ANY, WinEDA_ExecBlockCmdFrame::checkBoxClicked )
 END_EVENT_TABLE()
 
 
@@ -125,31 +129,41 @@ WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
     m_Include_Modules->SetValue( Block_Include_Modules );
     fgSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
 
-    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include tracks" ),
+    m_IncludeLockedModules = new wxCheckBox( this, -1, _( "Include Locked Modules" ),
+                                            wxDefaultPosition, wxDefaultSize,
+                                            0 );
+    m_IncludeLockedModules->SetValue( BlockIncludeLockedModules );
+    if( m_Include_Modules->GetValue() )
+        m_IncludeLockedModules->Enable();
+    else
+        m_IncludeLockedModules->Disable();
+    fgSizer1->Add( m_IncludeLockedModules, 0, wxALL, 5 );
+
+    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include Tracks" ),
                                        wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Tracks->SetValue( Block_Include_Tracks );
     fgSizer1->Add( m_Include_Tracks, 0, wxALL, 5 );
 
-    m_Include_Zones = new wxCheckBox( this, -1, _( "Include zones" ),
+    m_Include_Zones = new wxCheckBox( this, -1, _( "Include Zones" ),
                                       wxDefaultPosition, wxDefaultSize, 0 );
     m_Include_Zones->SetValue( Block_Include_Zones );
     fgSizer1->Add( m_Include_Zones, 0, wxALL, 5 );
 
     m_Include_PcbTextes = new wxCheckBox( this, -1,
-                                          _( "Include Text on copper layers" ),
+                                          _( "Include Text on Copper Layers" ),
                                           wxDefaultPosition,
                                           wxDefaultSize, 0 );
     m_Include_PcbTextes->SetValue( Block_Include_PcbTextes );
     fgSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
 
-    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include drawings" ),
+    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include Drawings" ),
                                            wxDefaultPosition,
                                            wxDefaultSize, 0 );
     m_Include_Draw_Items->SetValue( Block_Include_Draw_Items );
     fgSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
 
     m_Include_Edges_Items = new wxCheckBox( this, -1,
-                                            _( "Include board outline layer" ),
+                                            _( "Include Board Outline Layer" ),
                                             wxDefaultPosition,
                                             wxDefaultSize, 0 );
     m_Include_Edges_Items->SetValue( Block_Include_Edges_Items );
@@ -181,10 +195,18 @@ void WinEDA_ExecBlockCmdFrame::Cancel( wxCommandEvent& WXUNUSED (event) )
     EndModal( -1 );
 }
 
+void WinEDA_ExecBlockCmdFrame::checkBoxClicked( wxCommandEvent& WXUNUSED (aEvent) )
+{
+    if( m_Include_Modules->GetValue() )
+        m_IncludeLockedModules->Enable();
+    else
+        m_IncludeLockedModules->Disable();
+}
 
 void WinEDA_ExecBlockCmdFrame::ExecuteCommand( wxCommandEvent& event )
 {
     Block_Include_Modules     = m_Include_Modules->GetValue();
+    BlockIncludeLockedModules = m_IncludeLockedModules->GetValue();
     Block_Include_Tracks      = m_Include_Tracks->GetValue();
     Block_Include_Zones       = m_Include_Zones->GetValue();
     Block_Include_Draw_Items  = m_Include_Draw_Items->GetValue();
@@ -414,7 +436,8 @@ void WinEDA_PcbFrame::Block_SelectItems()
         for( MODULE* module = m_Pcb->m_Modules; module != NULL;
              module = module->Next() )
         {
-            if( module->HitTest( GetScreen()->m_BlockLocate ) )
+            if( module->HitTest( GetScreen()->m_BlockLocate ) &&
+                ( !module->IsLocked() || BlockIncludeLockedModules ) )
             {
                 picker.m_PickedItem     = module;
                 picker.m_PickedItemType = module->Type();
@@ -729,6 +752,9 @@ void WinEDA_PcbFrame::Block_Flip()
 #define INVERT( pos ) (pos) = center.y - ( (pos) - center.y )
     wxPoint memo;
     wxPoint center; /* Position of the axis for inversion of all elements */
+
+    if( !InstallBlockCmdFrame( this, _( "Flip Block" ) ) )
+        return;
 
     Block_SelectItems();
     if( GetScreen()->m_BlockLocate.GetCount() == 0 )

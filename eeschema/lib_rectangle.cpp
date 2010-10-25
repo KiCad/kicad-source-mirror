@@ -155,8 +155,9 @@ void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFil
         aPlotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
+    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->rect( pos, end, m_Fill, GetPenSize() );
+    aPlotter->rect( pos, end, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

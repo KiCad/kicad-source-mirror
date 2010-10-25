@@ -180,8 +180,9 @@ void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         aPlotter->circle( pos, m_Radius * 2, FILLED_SHAPE, 0 );
     }
 
+    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->circle( pos, m_Radius * 2, m_Fill, GetPenSize() );
+    aPlotter->circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

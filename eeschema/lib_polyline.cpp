@@ -203,16 +203,19 @@ void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill
         pos =  aTransform.TransformCoordinate(pos ) + aOffset;
         Poly[i * 2]     = pos.x;
         Poly[i * 2 + 1] = pos.y;
+
     }
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->poly( i, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aFill = false;  // body is now filled, do not fill it later.
     }
 
+    bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->poly( i, Poly, m_Fill, GetPenSize() );
+    aPlotter->poly( i, Poly, already_filled ? NO_FILL : m_Fill, GetPenSize() );
     MyFree( Poly );
 }
 
