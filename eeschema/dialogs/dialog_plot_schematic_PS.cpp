@@ -1,4 +1,4 @@
-/** @file dialog_plot_schematic_ps.cpp
+/** @file dialog_plot_schematic_PS.cpp
  */
 
 /*
@@ -60,8 +60,8 @@ private:
     static bool m_plot_Sheet_Ref;
     bool        m_select_PlotAll;
 private:
-    void OnPlotPsCurrentExecuteClick( wxCommandEvent& event );
-    void OnPlotPsAllExecuteClick( wxCommandEvent& event );
+    void OnPlotCurrent( wxCommandEvent& event );
+    void OnPlotAll( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 
     void initDlg();
@@ -71,7 +71,7 @@ private:
                          SCH_SCREEN* screen, Ki_PageDescr* sheet,
                          wxPoint plot_offset, double scale );
 };
-/* static variables (staic to remember last state: */
+/* static members (static to remember last state): */
 bool DIALOG_PLOT_SCHEMATIC_PS::m_plotColorOpt   = false;
 int DIALOG_PLOT_SCHEMATIC_PS:: m_pageSizeSelect = PAGE_SIZE_AUTO;
 bool DIALOG_PLOT_SCHEMATIC_PS::m_plot_Sheet_Ref = true;
@@ -120,7 +120,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::initDlg()
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
  */
 
-void DIALOG_PLOT_SCHEMATIC_PS::OnPlotPsCurrentExecuteClick( wxCommandEvent& event )
+void DIALOG_PLOT_SCHEMATIC_PS::OnPlotCurrent( wxCommandEvent& event )
 {
     m_select_PlotAll = false;
 
@@ -134,7 +134,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::OnPlotPsCurrentExecuteClick( wxCommandEvent& even
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON1
  */
 
-void DIALOG_PLOT_SCHEMATIC_PS::OnPlotPsAllExecuteClick( wxCommandEvent& event )
+void DIALOG_PLOT_SCHEMATIC_PS::OnPlotAll( wxCommandEvent& event )
 {
     m_select_PlotAll = TRUE;
 

@@ -19,9 +19,9 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_SizeOptionChoices[] = { wxT("Schematic size"), wxT("Force size A4"), wxT("Force size A") };
+	wxString m_SizeOptionChoices[] = { _("Schematic size"), _("Force size A4"), _("Force size A") };
 	int m_SizeOptionNChoices = sizeof( m_SizeOptionChoices ) / sizeof( wxString );
-	m_SizeOption = new wxRadioBox( this, wxID_ANY, wxT("Plot Page Size:"), wxDefaultPosition, wxDefaultSize, m_SizeOptionNChoices, m_SizeOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_SizeOption = new wxRadioBox( this, wxID_ANY, _("Plot Page Size:"), wxDefaultPosition, wxDefaultSize, m_SizeOptionNChoices, m_SizeOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_SizeOption->SetSelection( 0 );
 	bupperSizer->Add( m_SizeOption, 1, wxALL, 5 );
 	
@@ -31,13 +31,13 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	wxBoxSizer* sbSizerMiddle;
 	sbSizerMiddle = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_PlotPSColorOptionChoices[] = { wxT("B/W"), wxT("Color") };
+	wxString m_PlotPSColorOptionChoices[] = { _("B/W"), _("Color") };
 	int m_PlotPSColorOptionNChoices = sizeof( m_PlotPSColorOptionChoices ) / sizeof( wxString );
-	m_PlotPSColorOption = new wxRadioBox( this, wxID_ANY, wxT("Plot Mode:"), wxDefaultPosition, wxDefaultSize, m_PlotPSColorOptionNChoices, m_PlotPSColorOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_PlotPSColorOption = new wxRadioBox( this, wxID_ANY, _("Plot Mode:"), wxDefaultPosition, wxDefaultSize, m_PlotPSColorOptionNChoices, m_PlotPSColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_PlotPSColorOption->SetSelection( 0 );
 	sbSizerMiddle->Add( m_PlotPSColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	m_Plot_Sheet_Ref_Ctrl = new wxCheckBox( this, wxID_ANY, wxT("Print page references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Plot_Sheet_Ref_Ctrl = new wxCheckBox( this, wxID_ANY, _("Print page references"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Plot_Sheet_Ref_Ctrl->SetValue(true); 
 	sbSizerMiddle->Add( m_Plot_Sheet_Ref_Ctrl, 0, wxALL|wxEXPAND, 5 );
 	
@@ -49,13 +49,13 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonPlotPage = new wxButton( this, wxID_ANY, wxT("&Plot Page"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPlotPage = new wxButton( this, wxID_ANY, _("&Plot Page"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonPlotPage, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonPlotAll = new wxButton( this, wxID_ANY, wxT("Plot A&LL"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPlotAll = new wxButton( this, wxID_ANY, _("Plot A&LL"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( this, wxID_ANY, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonClose = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	bupperSizer->Add( bbuttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -65,7 +65,7 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerLineWidth;
 	bSizerLineWidth = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, wxT("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultLineWidthTitle->Wrap( -1 );
 	bSizerLineWidth->Add( m_defaultLineWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -74,7 +74,7 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	
 	bmainSizer->Add( bSizerLineWidth, 0, wxEXPAND, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Messages :"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Messages :"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bmainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -89,16 +89,16 @@ DIALOG_PLOT_SCHEMATIC_PS_BASE::DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_buttonPlotPage->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotPsCurrentExecuteClick ), NULL, this );
-	m_buttonPlotAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotPsAllExecuteClick ), NULL, this );
+	m_buttonPlotPage->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotCurrent ), NULL, this );
+	m_buttonPlotAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotAll ), NULL, this );
 	m_buttonClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnCancelClick ), NULL, this );
 }
 
 DIALOG_PLOT_SCHEMATIC_PS_BASE::~DIALOG_PLOT_SCHEMATIC_PS_BASE()
 {
 	// Disconnect Events
-	m_buttonPlotPage->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotPsCurrentExecuteClick ), NULL, this );
-	m_buttonPlotAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotPsAllExecuteClick ), NULL, this );
+	m_buttonPlotPage->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotCurrent ), NULL, this );
+	m_buttonPlotAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnPlotAll ), NULL, this );
 	m_buttonClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_SCHEMATIC_PS_BASE::OnCancelClick ), NULL, this );
 	
 }
