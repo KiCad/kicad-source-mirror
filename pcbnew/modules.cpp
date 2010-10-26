@@ -28,40 +28,6 @@ static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
                                                          * and dragged tracks
                                                          */
 
-
-/* Show or hide module pads.
- */
-void Show_Pads_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
-{
-    D_PAD* pt_pad;
-    bool   pad_fill_tmp;
-
-    if( module == 0 )
-        return;
-
-    pad_fill_tmp = DisplayOpt.DisplayPadFill;
-    DisplayOpt.DisplayPadFill = true; /* Trace en SKETCH */
-    pt_pad = module->m_Pads;
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-    {
-        pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
-    }
-
-    DisplayOpt.DisplayPadFill = pad_fill_tmp;
-}
-
-
-/* Show or hide ratsnest
- */
-void Rastnest_On_Off( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
-{
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
-
-    frame->build_ratsnest_module( DC, module );
-    frame->trace_ratsnest_module( DC );
-}
-
-
 /* Get a module name from user and return a pointer to the corresponding module
  */
 MODULE* WinEDA_BasePcbFrame::GetModuleByName()
@@ -113,7 +79,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         DrawGeneralRatsnest( DC );
 
     EraseDragList();
- 
+
     if( g_Drag_Pistes_On )
     {
         Build_Drag_Liste( DrawPanel, DC, module );

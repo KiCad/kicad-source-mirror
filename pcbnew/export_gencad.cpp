@@ -238,7 +238,7 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
             pad_type = "RECTANGULAR";
             fprintf( file, " %s %d\n", pad_type, pad->m_Drill.x );
             fprintf( file, "RECTANGLE %d %d %d %d\n",
-                     pad->m_Offset.x - dx, -(pad->m_Offset.y - dy),
+                     pad->m_Offset.x - dx, -pad->m_Offset.y - dy,
                      pad->m_Size.x, pad->m_Size.y );
             break;
 
