@@ -37,6 +37,8 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
+    dialogs/dialog_plot_schematic_DXF.cpp
+    dialogs/dialog_plot_schematic_DXF_base.cpp
     dialogs/dialog_plot_schematic_HPGL.cpp
     dialogs/dialog_plot_schematic_HPGL_base.cpp
     dialogs/dialog_plot_schematic_PS.cpp
@@ -120,7 +122,6 @@ set(EESCHEMA_SRCS
     operations_on_items_lists.cpp
     pinedit.cpp
     plot.cpp
-    plotdxf.cpp
     read_from_file_schematic_items_descriptions.cpp
     save_schemas.cpp
     schedit.cpp
