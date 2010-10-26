@@ -12,7 +12,7 @@
         <property name="file">dialog_plot_schematic_PS_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">dialog_plot_schematic_PS</property>
         <property name="namespace"></property>
         <property name="path">.</property>
@@ -339,7 +339,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick">OnPlotPsCurrentExecuteClick</event>
+                                        <event name="OnButtonClick">OnPlotCurrent</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
@@ -396,7 +396,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnButtonClick">OnPlotPsAllExecuteClick</event>
+                                        <event name="OnButtonClick">OnPlotAll</event>
                                         <event name="OnChar"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
