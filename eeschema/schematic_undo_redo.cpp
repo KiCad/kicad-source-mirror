@@ -499,36 +499,3 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
     TestDanglingEnds( GetScreen()->EEDrawList, NULL );
     DrawPanel->Refresh();
 }
-
-
-/** Function ClearUndoORRedoList
- * free the undo or redo list from List element
- *  Wrappers are deleted.
- *  datas pointed by wrappers are deleted if not in use in schematic
- *  i.e. when they are copy of a schematic item or they are no more in use
- *  (DELETED)
- * @param aList = the UNDO_REDO_CONTAINER to clear
- * @param aItemCount = the count of items to remove. < 0 for all items
- * items (commands stored in list) are removed from the beginning of the list.
- * So this function can be called to remove old commands
- */
-void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList,
-                                      int                  aItemCount )
-{
-    if( aItemCount == 0 )
-        return;
-
-    unsigned icnt = aList.m_CommandsList.size();
-    if( aItemCount > 0 )
-        icnt = aItemCount;
-    for( unsigned ii = 0; ii < icnt; ii++ )
-    {
-        if( aList.m_CommandsList.size() == 0 )
-            break;
-        PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
-        aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
-
-        curr_cmd->ClearListAndDeleteItems();
-        delete curr_cmd;    // Delete command
-    }
-}

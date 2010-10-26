@@ -184,8 +184,8 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
  */
 int TestDuplicateSheetNames(bool aCreateMarker)
 {
-    int            err_count = 0;
-    EDA_ScreenList ScreenList;      // Created the list of screen
+    int         err_count = 0;
+    SCH_SCREENS ScreenList;      // Created the list of screen
 
     for( SCH_SCREEN* Screen = ScreenList.GetFirst();
          Screen != NULL;
@@ -270,7 +270,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     g_EESchemaVar.NbWarningErc = 0;
 
     /* Cleanup the entire hierarchy */
-    EDA_ScreenList ScreenList;
+    SCH_SCREENS ScreenList;
 
     for( SCH_SCREEN* Screen = ScreenList.GetFirst();
          Screen != NULL;

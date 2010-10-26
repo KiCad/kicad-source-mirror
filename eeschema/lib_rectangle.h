@@ -18,23 +18,11 @@ class LIB_RECTANGLE  : public LIB_DRAW_ITEM
     bool    m_isHeightLocked;       // Flag: Keep height locked
     bool    m_isStartPointSelected; // Flag: is the upper left edge selected?
 
-    wxPoint m_savedEndPos;          // Temporary storage of current end position before editing.
-
     /**
      * Draw the rectangle.
      */
     void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-    /**
-     * See LIB_DRAW_ITEM::saveAttributes().
-     */
-    void saveAttributes();
-
-    /**
-     * See LIB_DRAW_ITEM::restoreAttributes().
-     */
-    void restoreAttributes();
 
     /**
      * Calculate the rectangle attributes relative to \a aPosition while editing.

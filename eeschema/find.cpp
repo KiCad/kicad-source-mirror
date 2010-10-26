@@ -26,7 +26,7 @@
 
 #include <boost/foreach.hpp>
 
-#include "dialog_schematic_find.h"
+#include "dialogs/dialog_schematic_find.h"
 
 
 void WinEDA_SchematicFrame::OnFindDrcMarker( wxFindDialogEvent& event )

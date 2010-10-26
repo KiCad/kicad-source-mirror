@@ -14,7 +14,7 @@
 #include "general.h"
 #include "dlist.h"
 
-#include "dialog_schematic_find.h"
+#include "dialogs/dialog_schematic_find.h"
 
 
 /**********************************************/

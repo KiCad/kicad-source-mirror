@@ -29,52 +29,6 @@ SCH_ITEM* s_OldWiresList;
 wxPoint   s_ConnexionStartPoint;
 
 
-/* Extract the old wires, junctions and buses, an if CreateCopy replace them
- * by a copy.  Old ones must be put in undo list, and the new ones can be
- * modified by clean up safely.
- * If an abort command is made, old wires must be put in EEDrawList, and
- * copies must be deleted.  This is because previously stored undo commands
- * can handle pointers on wires or bus, and we do not delete wires or bus,
- * we must put they in undo list.
- *
- * Because cleanup delete and/or modify bus and wires, the more easy is to put
- * all wires in undo list and use a new copy of wires for cleanup.
- */
-SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
-{
-    SCH_ITEM* item, * next_item, * new_item, * List = NULL;
-
-    for( item = EEDrawList; item != NULL; item = next_item )
-    {
-        next_item = item->Next();
-
-        switch( item->Type() )
-        {
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
-            RemoveFromDrawList( item );
-            item->SetNext( List );
-            List = item;
-            if( CreateCopy )
-            {
-                if( item->Type() == DRAW_JUNCTION_STRUCT_TYPE )
-                    new_item = ( (SCH_JUNCTION*) item )->GenCopy();
-                else
-                    new_item = ( (SCH_LINE*) item )->GenCopy();
-                new_item->SetNext( EEDrawList );
-                EEDrawList = new_item;
-            }
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    return List;
-}
-
-
 /* Replace the wires in screen->EEDrawList by s_OldWiresList wires.
  */
 static void RestoreOldWires( SCH_SCREEN* screen )

@@ -343,22 +343,6 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 }
 
 
-void LIB_FIELD::saveAttributes()
-{
-    m_savedPos = m_Pos;
-    m_savedText = m_Text;
-    m_savedOrientation = m_Orient;
-}
-
-
-void LIB_FIELD::restoreAttributes()
-{
-    m_Pos = m_savedPos;
-    m_Text = m_savedText;
-    m_Orient = m_savedOrientation;
-}
-
-
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -661,7 +645,6 @@ void LIB_FIELD::BeginEdit( int aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        saveAttributes();
         SetEraseLastDrawItem();
     }
     else
@@ -686,9 +669,6 @@ void LIB_FIELD::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0,
                    wxT( "Bad call to EndEdit().  Text is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     m_Flags = 0;
     m_rotate = false;

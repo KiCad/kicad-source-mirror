@@ -13,7 +13,7 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 
-#include "dialog_schematic_find.h"
+#include "dialogs/dialog_schematic_find.h"
 
 
 /* How to add a new hotkey:

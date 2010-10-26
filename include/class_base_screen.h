@@ -143,10 +143,6 @@ public:
     BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~BASE_SCREEN();
 
-    BASE_SCREEN* Next() const { return (BASE_SCREEN*) Pnext; }
-    BASE_SCREEN* Back() const { return (BASE_SCREEN*) Pback; }
-
-
     /**
      * Function setCurItem
      * sets the currently selected object, m_CurrentItem.

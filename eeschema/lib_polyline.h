@@ -15,23 +15,12 @@ class LIB_POLYLINE : public LIB_DRAW_ITEM
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
 
     int m_ModifyIndex;                        // Index of the polyline point to modify
-    std::vector<wxPoint> m_savedPolyPoints;
 
     /**
      * Draw the polyline.
      */
     void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-    /**
-     * See LIB_DRAW_ITEM::saveAttributes().
-     */
-    void saveAttributes();
-
-    /**
-     * See LIB_DRAW_ITEM::restoreAttributes().
-     */
-    void restoreAttributes();
 
     /**
      * Calculate the polyline attributes relative to \a aPosition while editing.

@@ -233,7 +233,7 @@ bool SCH_JUNCTION::HitTest( const wxPoint& aPosRef )
     wxPoint dist = aPosRef - m_Pos;
 
     return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
+                 ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
 }
 
 
@@ -295,8 +295,7 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-                                 << m_Pos << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_Pos << "/>\n";
 }
 
 
@@ -517,8 +516,7 @@ EDA_Rect SCH_LINE::GetBoundingBox()
     int      ymax = MAX( m_Start.y, m_End.y ) + width;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_Rect ret( wxPoint( xmin, ymin ),
-                 wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -631,6 +629,70 @@ void SCH_LINE::Rotate( wxPoint rotationPoint )
 }
 
 
+bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
+{
+    wxCHECK_MSG( aLine != NULL && aLine->Type() == DRAW_SEGMENT_STRUCT_TYPE, false,
+                 wxT( "Cannot test line segment for overlap." ) );
+
+    if( this == aLine )
+        return false;
+    if( GetLayer() != aLine->GetLayer() )
+        return false;
+
+    // Search for a common end, and modify coordinates to ensure RefSegm->m_End
+    // == TstSegm->m_Start
+    if( m_Start == aLine->m_Start )
+    {
+        if( m_End == aLine->m_End )
+            return true;
+
+        EXCHG( m_Start, aLine->m_End );
+    }
+    else if( m_Start == aLine->m_End )
+    {
+        EXCHG( m_Start, m_End );
+        EXCHG( aLine->m_Start, aLine->m_End );
+    }
+    else if( m_End == aLine->m_End )
+    {
+        EXCHG( aLine->m_Start, aLine->m_End );
+    }
+    else if( m_End != aLine->m_Start )
+        // No common end point, segments cannot be merged.
+        return false;
+
+    /* Test alignment: */
+    if( m_Start.y == m_End.y )       // Horizontal segment
+    {
+        if( aLine->m_Start.y == aLine->m_End.y )
+        {
+            m_End = aLine->m_End;
+            return true;
+        }
+    }
+    else if( m_Start.x == m_End.x )  // Vertical segment
+    {
+        if( aLine->m_Start.x == aLine->m_End.x )
+        {
+            m_End = aLine->m_End;
+            return true;
+        }
+    }
+    else
+    {
+        if( atan2( (double) ( m_Start.x - m_End.x ), (double) ( m_Start.y - m_End.y ) )
+            == atan2( (double) ( aLine->m_Start.x - aLine->m_End.x ),
+                      (double) ( aLine->m_Start.y - aLine->m_End.y ) ) )
+        {
+            m_End = aLine->m_End;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 /***********************/
 /* Class SCH_POLYLINE */
 /***********************/
@@ -686,15 +748,13 @@ bool SCH_POLYLINE::Save( FILE* aFile ) const
         layer = "Wire";
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
-    if( fprintf( aFile, "Poly %s %s %d\n",
-                width, layer, GetCornerCount() ) == EOF )
+    if( fprintf( aFile, "Poly %s %s %d\n", width, layer, GetCornerCount() ) == EOF )
     {
         return false;
     }
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        if( fprintf( aFile, "\t%-4d %-4d\n",
-                     m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
+        if( fprintf( aFile, "\t%-4d %-4d\n", m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
         {
             success = false;
             break;

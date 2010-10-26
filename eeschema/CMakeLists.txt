@@ -73,8 +73,8 @@ set(EESCHEMA_SRCS
     dialog_print_using_printer.cpp
     dialog_sch_sheet_props.cpp
     dialog_sch_sheet_props_base.cpp
-    dialog_schematic_find.cpp
-    dialog_schematic_find_base.cpp
+    dialogs/dialog_schematic_find.cpp
+    dialogs/dialog_schematic_find_base.cpp
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     edit_component_in_lib.cpp
@@ -123,7 +123,6 @@ set(EESCHEMA_SRCS
     pinedit.cpp
     plot.cpp
     read_from_file_schematic_items_descriptions.cpp
-    save_schemas.cpp
     schedit.cpp
     schematic_undo_redo.cpp
     schframe.cpp

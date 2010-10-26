@@ -96,6 +96,18 @@ public:
     virtual void Mirror_Y( int aYaxis_position );
     virtual void Rotate( wxPoint rotationPoint );
 
+    /**
+     * Check line against \a aLine to see if it overlaps and merge if it does.
+     *
+     * This method will change the line to be equivalent of the line and \a aLine if the
+     * two lines overlap.  This method is used to merge multple line segments into a single
+     * line.
+     *
+     * @param aLine - Line to compare.
+     * @retuen True if lines overlap and the line was merged with \a aLine.
+     */
+    bool MergeOverlap( SCH_LINE* aLine );
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 

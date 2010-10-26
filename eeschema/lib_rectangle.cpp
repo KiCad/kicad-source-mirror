@@ -215,20 +215,6 @@ void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-void LIB_RECTANGLE::saveAttributes()
-{
-    m_savedPos = m_Pos;
-    m_savedEndPos = m_End;
-}
-
-
-void LIB_RECTANGLE::restoreAttributes()
-{
-    m_Pos = m_savedPos;
-    m_End = m_savedEndPos;
-}
-
-
 void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 {
     wxString msg;
@@ -339,14 +325,12 @@ void LIB_RECTANGLE::BeginEdit( int aEditMode, const wxPoint aPosition )
             m_isHeightLocked = abs( m_End.y - aPosition.y ) >= MINIMUM_SELECTION_DISTANCE;
         }
 
-        saveAttributes();
         SetEraseLastDrawItem();
     }
     else if( aEditMode == IS_MOVED )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        saveAttributes();
         SetEraseLastDrawItem();
     }
 
@@ -367,9 +351,6 @@ void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_RECTANGLE is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     m_Flags = 0;
     m_isHeightLocked = false;

@@ -35,8 +35,8 @@ static int  ReplaceDuplicatedTimeStamps();
  */
 void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
 {
-    wxString       date = GenDate();
-    EDA_ScreenList s_list;
+    wxString    date = GenDate();
+    SCH_SCREENS s_list;
 
     // Set the date
     for( SCH_SCREEN* screen = s_list.GetFirst(); screen != NULL;
@@ -204,9 +204,9 @@ static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
 void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
                                               bool aRedraw )
 {
-    SCH_ITEM*      strct;
-    SCH_SCREEN*    screen;
-    EDA_ScreenList ScreenList;
+    SCH_ITEM*   strct;
+    SCH_SCREEN* screen;
+    SCH_SCREENS ScreenList;
 
     screen = ScreenList.GetFirst();
 
@@ -989,7 +989,7 @@ static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
 int ReplaceDuplicatedTimeStamps()
 {
     /* Build the whole screen list */
-    EDA_ScreenList ScreenList;
+    SCH_SCREENS ScreenList;
 
     /* Build the list of items with time stamps (components and sheets)
      * note: if all items have a different time stamp, this ensure also

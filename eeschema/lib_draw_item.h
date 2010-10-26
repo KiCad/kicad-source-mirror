@@ -79,19 +79,6 @@ class LIB_DRAW_ITEM : public EDA_BaseStruct
      */
     virtual void calcEdit( const wxPoint& aPosition ) {}
 
-    /**
-     * Save the current item attributes while editing.
-     *
-     * This method is used to save the drawing attributes of the item during editing.
-     * These values are restored when an edit is canceled by calling EndEdit().
-     */
-    virtual void saveAttributes() {}
-
-    /**
-     * Restore the saved attributes when an existing item edit is cancelled.
-     */
-    virtual void restoreAttributes() {}
-
     bool    m_eraseLastDrawItem; ///< Used when editing a new draw item to prevent drawing
                                  ///< artifacts.
 
@@ -119,7 +106,6 @@ protected:
 
     wxString m_typeName;          ///< Name of object displayed in the message panel.
 
-    wxPoint  m_savedPos;          ///< Temporary position when editing an existing item.
     wxPoint  m_initialPos;        ///< Temporary position when moving an existing item.
     wxPoint  m_initialCursorPos;  ///< Initial cursor position at the beginning of a move.
 

@@ -15,23 +15,11 @@ class LIB_CIRCLE : public LIB_DRAW_ITEM
     wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
     int     m_Width;          // Line width.
 
-    int     m_savedRadius;    // Temporary storage of radius before editing begins.
-
     /**
      * Draws the arc.
      */
     void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-    /**
-     * See LIB_DRAW_ITEM::saveAttributes().
-     */
-    void saveAttributes();
-
-    /**
-     * See LIB_DRAW_ITEM::restoreAttributes().
-     */
-    void restoreAttributes();
 
     /**
      * Calculate the new circle at \a aPosition when editing.

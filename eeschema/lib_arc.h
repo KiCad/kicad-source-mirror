@@ -28,10 +28,6 @@ class LIB_ARC : public LIB_DRAW_ITEM
     wxPoint  m_ArcEnd;          /* Arc end position. */
     wxPoint  m_Pos;             /* Radius center point. */
     int      m_Width;           /* Line width */
-    wxPoint  m_savedStartPos;
-    wxPoint  m_savedEndPos;
-    int      m_savedAngle1;
-    int      m_savedAngle2;
     double   m_editCenterDistance;
     SELECT_T m_editSelectPoint;
     int      m_editState;
@@ -48,16 +44,6 @@ class LIB_ARC : public LIB_DRAW_ITEM
      * Draw the graphics when the arc is being edited.
      */
     void drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor );
-
-    /**
-     * See LIB_DRAW_ITEM::saveAttributes().
-     */
-    void saveAttributes();
-
-    /**
-     * See LIB_DRAW_ITEM::restoreAttributes().
-     */
-    void restoreAttributes();
 
     /**
      * Calculates the center, radius, and angles at \a aPosition when the arc is being edited.

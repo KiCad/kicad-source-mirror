@@ -231,7 +231,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings(wxCommandEvent& event)
     /* Exports settings to other sheets if requested: */
     SCH_SCREEN * screen;
     /* Build the screen list */
-    EDA_ScreenList ScreenList;
+    SCH_SCREENS ScreenList;
     /* Update the datas */
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {

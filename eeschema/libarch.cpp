@@ -23,8 +23,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     wxString   msg;
     LIB_COMPONENT* Entry;
     CMP_LIBRARY* libCache;
-
-    EDA_ScreenList ScreenList;
+    SCH_SCREENS ScreenList;
 
     libCache = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, ArchFullFileName );
     libCache->SetCache();

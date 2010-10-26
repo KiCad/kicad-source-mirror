@@ -19,7 +19,6 @@
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
     wxString m_savedText;         ///< Temporary storage for the string when edition.
-    int m_savedOrientation;       ///< Temporary storage for orientation when editing.
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
     bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 
@@ -28,16 +27,6 @@ class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
      */
     void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-    /**
-     * See LIB_DRAW_ITEM::saveAttributes().
-     */
-    void saveAttributes();
-
-    /**
-     * See LIB_DRAW_ITEM::restoreAttributes().
-     */
-    void restoreAttributes();
 
     /**
      * Calculate the new circle at \a aPosition when editing.

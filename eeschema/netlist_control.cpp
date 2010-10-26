@@ -538,7 +538,7 @@ bool WinEDA_SchematicFrame::CreateNetlist( int aFormat, const wxString& aFullFil
     }
 
     /* Cleanup the entire hierarchy */
-    EDA_ScreenList ScreenList;
+    SCH_SCREENS ScreenList;
     for( SCH_SCREEN* screen = ScreenList.GetFirst();
         screen != NULL;
         screen = ScreenList.GetNext() )

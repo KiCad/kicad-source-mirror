@@ -360,22 +360,6 @@ void LIB_TEXT::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-void LIB_TEXT::saveAttributes()
-{
-    m_savedPos = m_Pos;
-    m_savedText = m_Text;
-    m_savedOrientation = m_Orient;
-}
-
-
-void LIB_TEXT::restoreAttributes()
-{
-    m_Pos = m_savedPos;
-    m_Text = m_savedText;
-    m_Orient = m_savedOrientation;
-}
-
-
 void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 {
     wxString msg;
@@ -453,7 +437,6 @@ void LIB_TEXT::BeginEdit( int aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        saveAttributes();
         SetEraseLastDrawItem();
     }
     else
@@ -478,9 +461,6 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0,
                    wxT( "Bad call to EndEdit().  Text is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     m_Flags = 0;
     m_rotate = false;

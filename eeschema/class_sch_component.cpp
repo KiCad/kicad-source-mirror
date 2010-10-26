@@ -14,7 +14,7 @@
 #include "macros.h"
 #include "protos.h"
 #include "class_library.h"
-#include "dialog_schematic_find.h"
+#include "dialogs/dialog_schematic_find.h"
 #include "lib_rectangle.h"
 #include "lib_pin.h"
 #include "lib_text.h"

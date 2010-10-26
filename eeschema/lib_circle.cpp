@@ -236,20 +236,6 @@ void LIB_CIRCLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint
 }
 
 
-void LIB_CIRCLE::saveAttributes()
-{
-    m_savedPos = m_Pos;
-    m_savedRadius = m_Radius;
-}
-
-
-void LIB_CIRCLE::restoreAttributes()
-{
-    m_Pos = m_savedPos;
-    m_Radius = m_savedRadius;
-}
-
-
 EDA_Rect LIB_CIRCLE::GetBoundingBox()
 {
     EDA_Rect rect;
@@ -296,12 +282,10 @@ void LIB_CIRCLE::BeginEdit( int aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        saveAttributes();
         SetEraseLastDrawItem();
     }
     else if( aEditMode == IS_RESIZED )
     {
-        saveAttributes();
         SetEraseLastDrawItem();
     }
 
@@ -322,9 +306,6 @@ void LIB_CIRCLE::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_CIRCLE is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     SetEraseLastDrawItem( false );
     m_Flags = 0;

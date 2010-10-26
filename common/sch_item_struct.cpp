@@ -15,7 +15,7 @@
 #include "general.h"
 #include "protos.h"
 
-#include "../eeschema/dialog_schematic_find.h"
+#include "../eeschema/dialogs/dialog_schematic_find.h"
 
 
 /* Constructor and destructor for SCH_ITEM */

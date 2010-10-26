@@ -423,26 +423,6 @@ void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-void LIB_ARC::saveAttributes()
-{
-    m_savedPos = m_Pos;
-    m_savedStartPos = m_ArcStart;
-    m_savedEndPos = m_ArcEnd;
-    m_savedAngle1 = m_t1;
-    m_savedAngle2 = m_t2;
-}
-
-
-void LIB_ARC::restoreAttributes()
-{
-    m_Pos = m_savedPos;
-    m_ArcStart = m_savedStartPos;
-    m_ArcEnd = m_savedEndPos;
-    m_t1 = m_savedAngle1;
-    m_t2 = m_savedAngle2;
-}
-
-
 EDA_Rect LIB_ARC::GetBoundingBox()
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
@@ -535,14 +515,10 @@ void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
     {
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
-        saveAttributes();
         SetEraseLastDrawItem();
     }
     else
     {
-        // Save the current arc positions in case the resize is aborted.
-        saveAttributes();
-
         // The arc center point has to be rotated with while adjusting the
         // start or end point, determine the side of this point and the distance
         // from the start / end point
@@ -599,9 +575,6 @@ void LIB_ARC::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_ARC is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     SetEraseLastDrawItem( false );
     m_lastEditState = 0;

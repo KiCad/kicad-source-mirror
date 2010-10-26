@@ -83,14 +83,12 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
     DIALOG_LIB_EDIT_PIN dlg( this );
 
     wxString units = GetUnitsLabel( g_UserUnit );
-    dlg.SetOrientationList( LIB_PIN::GetOrientationNames(),
-                            LIB_PIN::GetOrientationSymbols() );
+    dlg.SetOrientationList( LIB_PIN::GetOrientationNames(), LIB_PIN::GetOrientationSymbols() );
     dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->m_Orient ) );
-    dlg.SetStyleList( LIB_PIN::GetStyleNames(),
-                      LIB_PIN::GetStyleSymbols());
+    dlg.SetStyleList( LIB_PIN::GetStyleNames(), LIB_PIN::GetStyleSymbols() );
     dlg.SetStyle( LIB_PIN::GetStyleCodeIndex( pin->m_PinShape ) );
     dlg.SetElectricalTypeList( LIB_PIN::GetElectricalTypeNames(),
-                               LIB_PIN::GetElectricalTypeSymbols());
+                               LIB_PIN::GetElectricalTypeSymbols() );
     dlg.SetElectricalType( pin->m_PinType );
     dlg.SetName( pin->m_PinName );
     dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
@@ -102,8 +100,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
                                                   pin->m_PinNumSize,
                                                   m_InternalUnits ) );
     dlg.SetNumberTextSizeUnits( units );
-    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->m_PinLen,
-                                          m_InternalUnits ) );
+    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->m_PinLen, m_InternalUnits ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
     dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );
@@ -137,8 +134,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
                                             dlg.GetNumberTextSize(),
                                             m_InternalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
-    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(),
-                                           m_InternalUnits );
+    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(), m_InternalUnits );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
     LastPinType = dlg.GetElectricalType();
     LastPinCommonConvert = dlg.GetAddToAllBodyStyles();
@@ -271,8 +267,7 @@ another pin. Continue?" ) );
     }
 
     /* Put linked pins in new position, and clear flags */
-    for( Pin = m_component->GetNextPin(); Pin != NULL;
-         Pin = m_component->GetNextPin( Pin ) )
+    for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin->m_Flags == 0 )
             continue;
@@ -437,8 +432,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
     if( g_EditPinByPinIsOn == false )
         pin->m_Flags |= IS_LINKED;
 
-    pin->m_Pos.x       = GetScreen()->m_Curseur.x;
-    pin->m_Pos.y       = -GetScreen()->m_Curseur.y;
+    pin->m_Pos         = GetScreen()->GetCursorDrawPosition();
     pin->m_PinLen      = LastPinLength;
     pin->m_Orient      = LastPinOrient;
     pin->m_PinType     = LastPinType;
@@ -471,7 +465,7 @@ void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
 
     if (pin->m_Flags & IS_CANCELLED)
     {
-        DeletePin(NULL, m_component, pin);
+        DeletePin( NULL, m_component, pin );
         m_drawItem = NULL;
     }
     else

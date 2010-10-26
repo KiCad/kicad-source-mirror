@@ -9,6 +9,7 @@
 #include "base_struct.h"
 #include "class_base_screen.h"
 
+
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500
 
@@ -44,11 +45,21 @@ public:
         return wxT( "SCH_SCREEN" );
     }
 
-    void         FreeDrawList();    // Free EESchema drawing list (does not delete the sub hierarchies)
+    /**
+     * Free all the items from the schematic associated with the screen.
+     *
+     * This does not delete any sub hierarchies.
+     */
+    void         FreeDrawList();
 
     void         Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
 
-    void         RemoveFromDrawList( SCH_ITEM* DrawStruct );    /* remove DrawStruct from EEDrawList. */
+    /**
+     * Remove \a aItem from the schematic associated with this screen.
+     *
+     * @param aItem - Item to be removed from schematic.
+     */
+    void         RemoveFromDrawList( SCH_ITEM* DrawStruct );
     bool         CheckIfOnDrawList( SCH_ITEM* st );
     void         AddToDrawList( SCH_ITEM* DrawStruct );
 
@@ -62,7 +73,7 @@ public:
     /** Function ClearUndoORRedoList
      * free the undo or redo list from List element
      *  Wrappers are deleted.
-     *  datas pointed by wrappers are deleted if not in use in schematic
+     *  data pointed by wrappers are deleted if not in use in schematic
      *  i.e. when they are copy of a schematic item or they are no more in use (DELETED)
      * @param aList = the UNDO_REDO_CONTAINER to clear
      * @param aItemCount = the count of items to remove. < 0 for all items
@@ -73,7 +84,8 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
+     * writes the data structures for this object out to \a aFile in "*.sch" format.
+     *
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -86,25 +98,23 @@ public:
 /********************************************************/
 
 // screens are unique, and correspond to .sch files.
-WX_DEFINE_ARRAY( SCH_SCREEN *, ScreenGrowArray );
-
-class EDA_ScreenList
+class SCH_SCREENS
 {
 private:
-    ScreenGrowArray m_List;
-    unsigned int    m_Index;
+    std::vector< SCH_SCREEN* > m_screens;
+    unsigned int               m_index;
 
 public:
-    EDA_ScreenList();
-    ~EDA_ScreenList() { }
-    int GetCount() { return m_List.GetCount(); }
+    SCH_SCREENS();
+    ~SCH_SCREENS();
+    int GetCount() const { return m_screens.size(); }
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
-    SCH_SCREEN* GetScreen( unsigned int index );
+    SCH_SCREEN* GetScreen( unsigned int aIndex );
 
 private:
-    void        AddScreenToList( SCH_SCREEN* testscreen );
-    void        BuildScreenList( EDA_BaseStruct* sheet );
+    void        AddScreenToList( SCH_SCREEN* aScreen );
+    void        BuildScreenList( EDA_BaseStruct* aItem );
 };
 
 #endif /* CLASS_SCREEN_H */

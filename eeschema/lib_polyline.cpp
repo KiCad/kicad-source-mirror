@@ -308,18 +308,6 @@ void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoi
 }
 
 
-void LIB_POLYLINE::saveAttributes()
-{
-    m_savedPolyPoints = m_PolyPoints;
-}
-
-
-void LIB_POLYLINE::restoreAttributes()
-{
-    m_PolyPoints = m_savedPolyPoints;
-}
-
-
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -433,8 +421,6 @@ void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
     }
     else if( aEditMode == IS_RESIZED )
     {
-        saveAttributes();
-
         // Drag one edge point of the polyline
         // Find the nearest edge point to be dragged
         wxPoint startPoint = m_PolyPoints[0];
@@ -472,7 +458,6 @@ void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
     {
         m_initialCursorPos = aPosition;
         m_initialPos = m_PolyPoints[0];
-        saveAttributes();
         SetEraseLastDrawItem();
     }
 
@@ -499,9 +484,6 @@ void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_POLYLINE is not being edited." ) );
-
-    if( aAbort && !IsNew() )
-        restoreAttributes();
 
     m_Flags = 0;
     SetEraseLastDrawItem( false );

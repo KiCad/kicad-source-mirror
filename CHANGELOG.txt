@@ -4,6 +4,22 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-oct-26 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
+  * Change screen list object array type from wxARRAY to std::vector.
+  * Move all SCH_SCREEN methods into file class_sch_screen.cpp.
+  * Move find dialog files to dialogs sub-directory.
+  * Remove hallucinatory save and restore methods I wrote from component
+    library draw objects.
+  * Merge external TstAlignSegment function to SCH_LINE::MergeOverlap method.
+  * Move save schematic method to files-io.cpp and remove empty file
+    save_schemas.cpp.
+++include
+  * Remove unused internal link list next and back methods from base screen
+    object.
+
+
 2010-oct-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++EESchema

@@ -17,6 +17,86 @@
 
 
 
+/*****************************************************************************
+* Routine to save an EESchema file.                                          *
+* FileSave controls how the file is to be saved - under what name.           *
+* Returns TRUE if the file has been saved.                                   *
+*****************************************************************************/
+bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
+{
+    wxString msg;
+    wxFileName schematicFileName, backupFileName;
+    FILE*    f;
+
+    if( screen == NULL )
+        screen = (SCH_SCREEN*) GetScreen();
+
+    /* If no name exists in the window yet - save as new. */
+    if( screen->m_FileName.IsEmpty() )
+        FileSave = FILE_SAVE_NEW;
+
+    switch( FileSave )
+    {
+    case FILE_SAVE_AS:
+        schematicFileName = screen->m_FileName;
+        backupFileName = schematicFileName;
+
+        /* Rename the old file to a '.bak' one: */
+        if( schematicFileName.FileExists() )
+        {
+            backupFileName.SetExt( wxT( "bak" ) );
+            wxRemoveFile( backupFileName.GetFullPath() );
+
+            if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+            {
+                DisplayError( this, wxT( "Warning: unable to rename old file" ) );
+            }
+        }
+        break;
+
+    case FILE_SAVE_NEW:
+    {
+        wxFileDialog dlg( this, _( "Schematic Files" ), wxGetCwd(),
+                          screen->m_FileName, SchematicFileWildcard,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        screen->m_FileName = dlg.GetPath();
+        schematicFileName = dlg.GetPath();
+
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    if( ( f = wxFopen( schematicFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
+    {
+        msg = _( "Failed to create file " ) + schematicFileName.GetFullPath();
+        DisplayError( this, msg );
+        return false;
+    }
+
+    if( FileSave == FILE_SAVE_NEW )
+        screen->m_FileName = schematicFileName.GetFullPath();
+
+    bool success = screen->Save( f );
+
+    if( !success )
+        DisplayError( this, _( "File write operation failed." ) );
+    else
+        screen->ClrModify();
+
+
+    fclose( f );
+
+    return success;
+}
+
+
 /* Commands to save project or the current page.
  */
 void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
@@ -52,11 +132,10 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
  */
 bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
 {
-    SCH_SCREEN*    screen;
-    wxString       FullFileName, msg;
-    bool           LibCacheExist = false;
-
-    EDA_ScreenList ScreenList;
+    SCH_SCREEN* screen;
+    wxString    FullFileName, msg;
+    bool        LibCacheExist = false;
+    SCH_SCREENS ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
@@ -230,9 +309,9 @@ bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsN
  */
 void WinEDA_SchematicFrame::SaveProject()
 {
-    SCH_SCREEN*    screen;
-    wxFileName     fn;
-    EDA_ScreenList ScreenList;
+    SCH_SCREEN* screen;
+    wxFileName  fn;
+    SCH_SCREENS ScreenList;
 
     for( screen = ScreenList.GetFirst(); screen != NULL;
         screen = ScreenList.GetNext() )
