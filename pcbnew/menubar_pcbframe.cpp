@@ -37,15 +37,17 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      */
     wxMenu* filesMenu = new wxMenu;
 
-    /* New Board */
-    item = new wxMenuItem( filesMenu, ID_NEW_BOARD, _( "&New" ),
+    /* New */
+    item = new wxMenuItem( filesMenu, ID_NEW_BOARD,
+                          _( "&New" ),
                           _( "Clear current board and initialize a new one" ) );
     item->SetBitmap( new_xpm );
     filesMenu->Append( item );
 
-    /* Load Board */
-    item = new wxMenuItem( filesMenu, ID_LOAD_FILE, _( "&Open\tCtrl+O" ),
-                          _( "Delete current board and load new board" ) );
+    /* Open */
+    item = new wxMenuItem( filesMenu, ID_LOAD_FILE,
+                           _( "&Open\tCtrl+O" ),
+                           _( "Delete current board and load new board" ) );
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
@@ -54,12 +56,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
                                         -1, _( "Open &Recent" ),
-                                        _( "Open a recent opened board" ), open_project_xpm );
+                                        _( "Open a recent opened board" ),
+                                        open_project_xpm );
 
 
     /* PCBNew Board */
-    item = new wxMenuItem( filesMenu, ID_APPEND_FILE, _( "&Append Board" ),
-                           _( "Append another PCBNew board to the current loaded board" ) );
+    item = new wxMenuItem( filesMenu, ID_APPEND_FILE,
+               _( "&Append Board" ),
+               _( "Append another PCBNew board to the current loaded board" ) );
     item->SetBitmap( import_xpm );
     filesMenu->Append( item );
 
@@ -168,7 +172,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( export_xpm );
     submenuexport->Append( item );
 
-    /* Export GenCAD Format */
+    /* GenCAD */
     item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
                            _( "&GenCAD" ), _( "Export GenCAD format" ) );
     item->SetBitmap( export_xpm );
@@ -181,6 +185,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( tools_xpm );
     submenuexport->Append( item );
 
+    /* VRML */
     item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
                            _( "&VRML" ),
                            _( "Export a VRML board representation" ) );
@@ -195,43 +200,52 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     /* Print */
-    item = new wxMenuItem( filesMenu, wxID_PRINT, _( "&Print\tCtrl+P" ),
+    item = new wxMenuItem( filesMenu, wxID_PRINT,
+                           _( "&Print\tCtrl+P" ),
                            _( "Print board" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
 
     /* Print SVG */
-    item = new wxMenuItem( filesMenu, ID_GEN_PLOT_SVG, _( "Print S&VG" ),
+    item = new wxMenuItem( filesMenu, ID_GEN_PLOT_SVG,
+                           _( "Print S&VG" ),
                            _( "Plot board in Scalable Vector Graphics format" ) );
     item->SetBitmap( print_button );
     filesMenu->Append( item );
 
     /* Plot */
-    item = new wxMenuItem( filesMenu, ID_GEN_PLOT, _( "&Plot" ),
-                           _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ) );
+    item = new wxMenuItem( filesMenu, ID_GEN_PLOT,
+              _( "&Plot" ),
+              _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ) );
     item->SetBitmap( plot_xpm );
     filesMenu->Append( item );
 
-    /* Archive Footprints */
+    /* Archive Footprints Submenu */
     filesMenu->AppendSeparator();
+
     wxMenu* submenuarchive = new wxMenu();
+
+    /* Add New Footprints */
     item = new wxMenuItem( submenuarchive, ID_MENU_ARCHIVE_NEW_MODULES,
                            _( "Add New Footprints" ),
                            _( "Archive new footprints only in a library (keep other footprints in this lib)" ) );
     item->SetBitmap( library_update_xpm );
     submenuarchive->Append( item );
+
+    /* Create FootPrint Archive */
     item = new wxMenuItem( submenuarchive, ID_MENU_ARCHIVE_ALL_MODULES,
                            _( "Create Footprint Archive" ),
                            _( "Archive all footprints in a library (old library will be deleted)" ) );
     item->SetBitmap( library_xpm );
     submenuarchive->Append( item );
+
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuarchive,
                                         ID_MENU_ARCHIVE_MODULES,
                                         _( "Archive Footprints" ),
                                         _( "Archive or add footprints in a library file" ),
                                         library_xpm );
 
-    /* Quit on all platforms except WXMAC */
+    /* Quit */
 #if !defined( __WXMAC__ )
 
     filesMenu->AppendSeparator();
@@ -262,12 +276,20 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );
 
+    /* Delete */
+    item = new wxMenuItem( editMenu, ID_PCB_DELETE_ITEM_BUTT,
+                           _( "Delete" ),
+                           _( "Delete items" ) );
+    item->SetBitmap( delete_body_xpm );
+    editMenu->Append( item );
+
     /* Separator */
     editMenu->AppendSeparator();
 
     /* Find */
     text = AddHotkeyName( _( "&Find" ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
-    item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND );
+    item = new wxMenuItem( editMenu, ID_FIND_ITEMS,
+                           text, HELP_FIND );
     item->SetBitmap( find_xpm );
     editMenu->Append( item );
 
@@ -281,7 +303,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( general_deletions_xpm );
     editMenu->Append( item );
 
-    /* Tracks */
+    /* Cleanup Tracks and Vias */
     item = new wxMenuItem( editMenu, ID_MENU_PCB_CLEAN,
                            _( "&Cleanup Tracks and Vias" ),
                            _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ) );
@@ -312,17 +334,20 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
-    /* Zoom in */
-    text = _( "Zoom In" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
-                           wxITEM_NORMAL );
+    /* Zoom In */
+    text = AddHotkeyName( _( "Zoom In" ), s_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ZOOM_IN );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text,
+                           HELP_ZOOM_IN, wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
-    /* Zoom out */
-    text = _( "Zoom Out" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
-                           wxITEM_NORMAL );
+    /* Zoom Out */
+    text = AddHotkeyName( _( "Zoom Out" ), s_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ZOOM_OUT );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text,
+                           HELP_ZOOM_OUT, wxITEM_NORMAL );
+
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
 
@@ -337,7 +362,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    /* Redraw view */
+    /* Redraw */
     text = AddHotkeyName( _( "Redraw" ), s_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_REDRAW );
 
@@ -350,19 +375,117 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Separator */
     viewMenu->AppendSeparator();
 
-    /* List of Nets */
-    item = new wxMenuItem( viewMenu, ID_MENU_LIST_NETS, _( "&List Nets" ),
+    /* 3D Display */
+    wxMenu* Display3DMenu = new wxMenu;
+    item = new wxMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
+                           _( "3D Display" ),
+                           _( "Show board in 3D viewer" ) );
+    item->SetBitmap( show_3d_xpm );
+    viewMenu->Append( item );
+
+    /* List Nets */
+    item = new wxMenuItem( viewMenu, ID_MENU_LIST_NETS,
+                           _( "&List Nets" ),
                            _( "View a list of nets with names and id's" ) );
     item->SetBitmap( tools_xpm );
     viewMenu->Append( item );
 
 
-    /* 3D Display */
-    wxMenu* Display3DMenu = new wxMenu;
-    item = new wxMenuItem( Display3DMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                           _( "3D Display" ), _( "Show board in 3D viewer" ) );
-    item->SetBitmap( show_3d_xpm );
-    Display3DMenu->Append( item );
+
+    /**
+     * Place Menu
+     */
+    wxMenu* placeMenu = new wxMenu;
+
+    /* Module */
+    text = AddHotkeyName( _( "Module" ), s_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ADD_MODULE );
+    item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
+                           _( "Place a module" ), wxITEM_NORMAL );
+
+    item->SetBitmap( module_xpm );
+    placeMenu->Append( item );
+
+    /* Track */
+    text = AddHotkeyName( _( "Track" ), s_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ADD_NEW_TRACK );
+    item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
+                           _( "Place a track" ), wxITEM_NORMAL );
+
+    item->SetBitmap( add_tracks_xpm );
+    placeMenu->Append( item );
+
+    /* Zone */
+    item = new wxMenuItem( placeMenu, ID_PCB_ZONES_BUTT,
+                         _( "Zone" ),
+                         _( "Place a filled zone" ));
+    item->SetBitmap( add_zone_xpm );
+    placeMenu->Append( item );
+
+    /* Text */
+    item = new wxMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
+                           _( "Text" ),
+                           _( "Place text" ) );
+    item->SetBitmap( add_text_xpm );
+    placeMenu->Append( item );
+
+    /* Graphics submenu */	
+    wxMenu *graphicsSubMenu = new wxMenu;
+
+    /* Graphic Arc */
+    item = new wxMenuItem( graphicsSubMenu, ID_PCB_ARC_BUTT,
+                         _( "Arc" ),
+                         _( "Place a graphic arc" ) );
+    item->SetBitmap( add_arc_xpm );
+    graphicsSubMenu->Append( item );
+
+    /* Graphic Circle */
+    item = new wxMenuItem( graphicsSubMenu, ID_PCB_CIRCLE_BUTT,
+                         _( "Circle" ),
+                         _( "Place a graphic circle" ));
+    item->SetBitmap( add_circle_xpm );
+    graphicsSubMenu->Append( item );
+
+    /* Dimension */
+    item = new wxMenuItem( graphicsSubMenu, ID_PCB_DIMENSION_BUTT,
+                         _( "Dimension" ),
+                         _( "Place a dimension" ) );
+    item->SetBitmap( add_dimension_xpm );
+    graphicsSubMenu->Append( item );
+
+    /* Line or Polygon */
+    item = new wxMenuItem( graphicsSubMenu, ID_PCB_ADD_LINE_BUTT,
+                           _( "Line or Polygon" ),
+                           _( "Place a graphic line or polygon" ));
+    item->SetBitmap( add_dashed_line_xpm );
+    graphicsSubMenu->Append( item );
+
+    /* Append graphics submenu to placeMenu */
+    placeMenu->AppendSubMenu(graphicsSubMenu, _( "Graphics" ));
+
+    /* Separator */
+    placeMenu->AppendSeparator();
+
+    /* Layer alignment target */
+    item = new wxMenuItem( placeMenu, ID_PCB_MIRE_BUTT,
+                           _( "Layer alignment target" ),
+                           _( "Place a layer alignment target" )); 
+    item->SetBitmap( add_mires_xpm );
+    placeMenu->Append( item );
+
+    /* Drill & Place Offset */
+    item = new wxMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
+                      _( "Drill and Place Offset" ),
+                      _( "Place the offset adjust for drill and place files" ));
+    placeMenu->Append( item );
+
+    /* Grid Origin */
+    item = new wxMenuItem( placeMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
+                           _( "Grid Origin" ),
+                           _( "Place origin point for the grid" ));
+    item->SetBitmap( grid_select_axis_xpm );
+    placeMenu->Append( item );
+
 
 
     /**
@@ -371,7 +494,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* configmenu = new wxMenu;
 
     /* Library */
-    item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
+    item = new wxMenuItem( configmenu, ID_CONFIG_REQ,
+                           _( "&Library" ),
                            _( "Setting libraries, directories and others..." ) );
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
@@ -386,7 +510,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->Append( item );
 
     /* General */
-    item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP, _( "&General" ),
+    item = new wxMenuItem( configmenu, ID_OPTIONS_SETUP,
+                           _( "&General" ),
                            _( "Select general options for PCBnew" ) );
     item->SetBitmap( preference_xpm );
     configmenu->Append( item );
@@ -402,7 +527,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* dimensionsMenu = new wxMenu;
 
     /* Grid */
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_USER_GRID_SETUP, _( "Grid" ),
+    item = new wxMenuItem( dimensionsMenu, ID_PCB_USER_GRID_SETUP,
+                           _( "Grid" ),
                            _( "Adjust user grid dimensions" ) );
     item->SetBitmap( grid_xpm );
     dimensionsMenu->Append( item );
@@ -415,7 +541,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     dimensionsMenu->Append( item );
 
     /* Pads */
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_PAD_SETUP, _( "Pads" ),
+    item = new wxMenuItem( dimensionsMenu, ID_PCB_PAD_SETUP,
+                           _( "Pads" ),
                            _( "Adjust default pad characteristics" ) );
     item->SetBitmap( pad_xpm );
     dimensionsMenu->Append( item );
@@ -430,7 +557,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Save dimension preferences */
     dimensionsMenu->AppendSeparator();
-    item = new wxMenuItem( dimensionsMenu, ID_CONFIG_SAVE, _( "&Save" ),
+    item = new wxMenuItem( dimensionsMenu, ID_CONFIG_SAVE,
+                           _( "&Save" ),
                            _( "Save dimension preferences" ) );
     item->SetBitmap( save_xpm );
     dimensionsMenu->Append( item );
@@ -451,16 +579,19 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     configmenu->AppendSeparator();
 
     /* Save Preferences */
-    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save Preferences" ),
+    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
+                           _( "&Save Preferences" ),
                            _( "Save application preferences" ) );
     item->SetBitmap( save_setup_xpm );
     configmenu->Append( item );
 
     /* Read Preferences */
-    item = new wxMenuItem( configmenu, ID_CONFIG_READ, _( "&Read Preferences" ),
+    item = new wxMenuItem( configmenu, ID_CONFIG_READ,
+                           _( "&Read Preferences" ),
                            _( "Read application preferences" ) );
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
+
 
 
     /**
@@ -476,7 +607,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     designRulesMenu->Append( item );
 
     /* Layers Setup */
-    item = new wxMenuItem( configmenu, ID_PCB_LAYERS_SETUP, _( "&Layers Setup" ),
+    item = new wxMenuItem( configmenu, ID_PCB_LAYERS_SETUP,
+                           _( "&Layers Setup" ),
                            _( "Enable and set layer properties" ) );
     item->SetBitmap( copper_layers_setup_xpm );
     designRulesMenu->Append( item );
@@ -489,21 +621,25 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     AddHelpVersionInfoMenuEntry( helpMenu );
 
-    item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
+    /* Contents */
+    item = new wxMenuItem( helpMenu, ID_GENERAL_HELP,
+                           _( "&Contents" ),
                            _( "Open the PCBnew manual" ) );
     item->SetBitmap( online_help_xpm );
     helpMenu->Append( item );
 
-
-    /* About on all platforms except WXMAC */
+    /* About */
 #if !defined(__WXMAC__)
 
-    item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
+    item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT,
+                           _( "&About" ),
                            _( "About PCBnew printed circuit board designer" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
 
 #endif /* !defined(__WXMAC__) */
+
+
 
     /**
      * Append all menus to the menuBar
@@ -511,9 +647,9 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
-    menuBar->Append( Display3DMenu, _( "&3D Display" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     /* Associate the menu bar with the frame */
