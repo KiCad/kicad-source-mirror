@@ -84,7 +84,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
-    Component = (LIB_COMPONENT*) Lib->GetFirstEntry();
+    Component = Lib->GetFirstEntry()->GetComponent();
     LIB_DRAW_ITEM_LIST& drawList = Component->GetDrawItemList();
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )

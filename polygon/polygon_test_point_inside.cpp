@@ -17,7 +17,7 @@
  * Because the starting point of a segment is also the ending point of the previous, only one must be used.
  * And we do no use twice the same segment, so we do NOT use both starting and ending points of these 2 segments.
  * So we must use only one ending point of each segment when calculating intersections
- * but it cannot be always the starting or the endind point. This depend on relative position of 2 consectutive segments
+ * but it cannot be always the starting or the ending point. This depend on relative position of 2 consectutive segments
  * Here, the ending point above the Y reference position is used
  *   and the ending point below or equal the Y reference position is NOT used
  * Obviously, others cases are irrelevant because there is not intersection.
@@ -35,10 +35,9 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
 /** Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.
  * the polygon must have only lines (not arcs) for outlines.
- * Use TestPointInside or TestPointInsideContour for more complex polygons
  * @param aPolysList: the list of polygons
  * @param aIdxstart: the starting point of a given polygon in m_FilledPolysList.
- * @param aIdxend: the ending point of the polygon in m_FilledPolysList.
+ * @param aIdxend: the ending point of this polygon in m_FilledPolysList.
  * @param aRefx, aRefy: the point coordinate to test
  * @return true if the point is inside, false for outside
  */

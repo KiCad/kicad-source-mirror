@@ -13,6 +13,14 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 # Sources
 ###
+set(DIALOGS_SRCS
+    dialogs/gerbview_dialog_display_options_frame_base.cpp
+    dialogs/gerbview_dialog_display_options_frame.cpp
+    dialogs/dialog_gerber_config.cpp
+    dialogs/dialog_print_using_printer.cpp
+    dialogs/dialog_print_using_printer_base.cpp
+    )
+
 set(GERBVIEW_SRCS
     block.cpp
     class_aperture_macro.cpp
@@ -22,9 +30,6 @@ set(GERBVIEW_SRCS
     controle.cpp
     dcode.cpp
     deltrack.cpp
-    dialog_gerber_config.cpp
-    dialog_print_using_printer.cpp
-    dialog_print_using_printer_base.cpp
     dummy_functions.cpp
     draw_gerber_screen.cpp
     edit.cpp
@@ -32,8 +37,6 @@ set(GERBVIEW_SRCS
     files.cpp
     gerberframe.cpp
     gerbview_config.cpp
-    gerbview_dialog_display_options_frame_base.cpp
-    gerbview_dialog_display_options_frame.cpp
     gerbview.cpp
     hotkeys.cpp
     initpcb.cpp
@@ -87,6 +90,7 @@ endif(APPLE)
 ###
 add_executable(gerbview WIN32 MACOSX_BUNDLE
                ${GERBVIEW_SRCS}
+               ${DIALOGS_SRCS}
                ${GERBVIEW_EXTRA_SRCS}
                ${GERBVIEW_RESOURCES})
 

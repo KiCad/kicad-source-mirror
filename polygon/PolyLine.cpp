@@ -11,6 +11,7 @@
 #include "PolyLine.h"
 #include "gr_basic.h"
 #include "bezier_curves.h"
+#include "polygon_test_point_inside.h"
 
 using namespace std;
 
@@ -1366,149 +1367,24 @@ bool CPolyLine::TestPointInside( int px, int py )
         wxASSERT( 0 );
     }
 
-    // define line passing through (x,y), with slope = 2/3;
-    // get intersection points
-    int    xx, yy;
-    double slope = (double) 2.0 / 3.0;
-    double a      = py - slope * px;
-    int    nloops = 0;
-    int    npts;
-    bool   inside = false;
-
-    // make this a loop so if my homebrew algorithm screws up, we try it again
-    do
+    // Test all polygons.
+    // Since the first is the main outline, and other are hole,
+    // if the tested point is inside only one contour, it is inside the whole polygon
+    // (in fact inside the main outline, and outside all holes).
+    // if inside 2 contours (the main outline + an hole), it is outside the poly.
+    int polycount = GetNumContours();
+    bool inside = false;
+    for( int icont = 0; icont < polycount; icont++ )
     {
-        // now find all intersection points of line with polyline sides
-        npts   = 0;
-        inside = false;
-        for( int icont = 0; icont<GetNumContours(); icont++ )
-        {
-            int istart = GetContourStart( icont );
-            int iend   = GetContourEnd( icont );
-            for( int ic = istart; ic<=iend; ic++ )
-            {
-                double x, y, x2, y2;
-                int    ok;
-                if( ic == istart )
-                    ok = FindLineSegmentIntersection( a, slope,
-                        corner[iend].x, corner[iend].y,
-                        corner[istart].x, corner[istart].y,
-                        side_style[iend],
-                        &x, &y, &x2, &y2 );
-                else
-                    ok = FindLineSegmentIntersection( a, slope,
-                        corner[ic - 1].x, corner[ic - 1].y,
-                        corner[ic].x, corner[ic].y,
-                        side_style[ic - 1],
-                        &x, &y, &x2, &y2 );
-                if( ok )
-                {
-                    xx = (int) x;
-                    yy = (int) y;
-                    if( xx == px && yy == py )
-                        return FALSE; // (x,y) is on a side, call it outside
-                    else if( xx > px )
-                        inside = not inside;
-                    npts++;
-                }
-                if( ok == 2 )
-                {
-                    xx = (int) x2;
-                    yy = (int) y2;
-                    if( xx == px && yy == py )
-                        return FALSE; // (x,y) is on a side, call it outside
-                    else if( xx > px )
-                        inside = not inside;
-                    npts++;
-                }
-            }
-        }
-
-        nloops++;
-        a += PCBU_PER_MIL / 100;
-    } while( npts % 2 != 0 && nloops < 3 );
-
-    wxASSERT( npts % 2==0 );  // odd number of intersection points, error
-
-    return inside;
-}
-
-
-// test to see if a point is inside polyline contour
-//
-bool CPolyLine::TestPointInsideContour( int icont, int px, int py )
-{
-    if( icont >= GetNumContours() )
-        return FALSE;
-    if( !GetClosed() )
-    {
-        wxASSERT( 0 );
-    }
-
-// define line passing through (x,y), with slope = 2/3;
-// get intersection points
-    int    xx, yy;
-    double slope = (double) 2.0 / 3.0;
-    double a      = py - slope * px;
-    int    nloops = 0;
-    int    npts;
-    bool   inside = false;
-
-// make this a loop so if my homebrew algorithm screws up, we try it again
-    do
-    {
-        // now find all intersection points of line with polyline sides
-        npts   = 0;
-        inside = false;
         int istart = GetContourStart( icont );
         int iend   = GetContourEnd( icont );
-        for( int ic = istart; ic<=iend; ic++ )
-        {
-            double x, y, x2, y2;
-            int    ok;
-            if( ic == istart )
-                ok = FindLineSegmentIntersection( a, slope,
-                    corner[iend].x, corner[iend].y,
-                    corner[istart].x, corner[istart].y,
-                    side_style[iend],
-                    &x, &y, &x2, &y2 );
-            else
-                ok = FindLineSegmentIntersection( a, slope,
-                    corner[ic - 1].x, corner[ic - 1].y,
-                    corner[ic].x, corner[ic].y,
-                    side_style[ic - 1],
-                    &x, &y, &x2, &y2 );
-            if( ok )
-            {
-                xx = (int) x;
-                yy = (int) y;
-                npts++;
-                if( xx == px && yy == py )
-                    return FALSE; // (x,y) is on a side, call it outside
-                else if( xx > px )
-                    inside = not inside;
-            }
-            if( ok == 2 )
-            {
-                xx = (int) x2;
-                yy = (int) y2;
-                npts++;
-                if( xx == px && yy == py )
-                    return FALSE; // (x,y) is on a side, call it outside
-                else if( xx > px )
-                    inside = not inside;
-            }
-        }
-
-        nloops++;
-        a += PCBU_PER_MIL / 100;
-    } while( npts % 2 != 0 && nloops < 3 );
-
-    wxASSERT( npts % 2==0 );  // odd number of intersection points, error
+        // Test this polygon:
+        if( TestPointInsidePolygon( corner, istart, iend, px, py) )   // test point inside the current polygon
+            inside = not inside;
+    }
 
     return inside;
 }
-
 
 // copy data from another poly, but don't draw it
 //
