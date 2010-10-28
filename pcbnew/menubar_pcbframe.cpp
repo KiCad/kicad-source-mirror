@@ -336,7 +336,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      */
     /* Zoom In */
     text = AddHotkeyName( _( "Zoom In" ), s_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_IN );
+                          HK_ZOOM_IN, false );
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text,
                            HELP_ZOOM_IN, wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
@@ -344,7 +344,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
 
     /* Zoom Out */
     text = AddHotkeyName( _( "Zoom Out" ), s_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_OUT );
+                          HK_ZOOM_OUT, false );
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text,
                            HELP_ZOOM_OUT, wxITEM_NORMAL );
 
@@ -376,7 +376,6 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     /* 3D Display */
-    wxMenu* Display3DMenu = new wxMenu;
     item = new wxMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
                            _( "3D Display" ),
                            _( "Show board in 3D viewer" ) );
@@ -429,7 +428,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 
-    /* Graphics submenu */	
+    /* Graphics submenu */
     wxMenu *graphicsSubMenu = new wxMenu;
 
     /* Graphic Arc */
@@ -469,7 +468,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Layer alignment target */
     item = new wxMenuItem( placeMenu, ID_PCB_MIRE_BUTT,
                            _( "Layer alignment target" ),
-                           _( "Place a layer alignment target" )); 
+                           _( "Place a layer alignment target" ));
     item->SetBitmap( add_mires_xpm );
     placeMenu->Append( item );
 
@@ -477,6 +476,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item = new wxMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
                       _( "Drill and Place Offset" ),
                       _( "Place the offset adjust for drill and place files" ));
+    item->SetBitmap( pcb_offset_xpm );
     placeMenu->Append( item );
 
     /* Grid Origin */

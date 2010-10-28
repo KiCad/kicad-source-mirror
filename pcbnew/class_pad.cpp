@@ -212,13 +212,7 @@ void D_PAD::Copy( D_PAD* source )
 /** Virtual function GetClearance
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
- * aItem's clearance.  If \a aItem is NULL, then this objects
-<<<<<<< TREE
- * clearance is returned.
-=======
- * clearance
- * is returned.
->>>>>>> MERGE-SOURCE
+ * aItem's clearance.  If \a aItem is NULL, then this object clearance is returned.
  * @param aItem is another BOARD_CONNECTED_ITEM or NULL
  * @return int - the clearance in internal units.
  */
@@ -234,17 +228,10 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
             clearance = ( (MODULE*) GetParent() )->m_LocalClearance;
     }
 
-<<<<<<< TREE
-    if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
-        return BOARD_CONNECTED_ITEM::GetClearance( aItem );
-
-    // We have a specific clearance
-=======
     if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
         return BOARD_CONNECTED_ITEM::GetClearance( aItem );
 
     // We have a specific clearance.
->>>>>>> MERGE-SOURCE
     // if aItem, return the biggest clearance
     if( aItem )
     {
