@@ -556,10 +556,14 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
 {
     int layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
 
-    // used to test DRC pad to holes: this dummypad is a pad hole to test
-    // pad to pad hole DRC, using pad to pad DRC test.
-    // this dummy pad is a circle or an oval.
-    static D_PAD dummypad( (MODULE*) NULL );
+    /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
+     * to test pad to pad hole DRC, using the pad to pad DRC test function.
+     * Therefore, this dummy pad is a circle or an oval.
+     * A pad must have a parent because some functions expect a non null parent
+     * to find the parent board, and some other data
+     */
+    MODULE dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD dummypad( &dummymodule );
     dummypad.m_Masque_Layer   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
     dummypad.m_LocalClearance = 1;   /* Use the minimal local clerance value for the dummy pad
                                       *  the clearance of the active pad will be used

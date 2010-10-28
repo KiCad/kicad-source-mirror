@@ -209,7 +209,15 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     static std::vector <CPolyPt> cornerBufferPolysToSubstract;
     cornerBufferPolysToSubstract.clear();
 
-    D_PAD  dummyPad( (MODULE*) NULL );
+    /* Use a dummy pad to calculate hole clerance when a pad is not on all copper layers
+     * and this pad has a hole
+     * This dummy pad has the size and shape of the hole
+    * Therefore, this dummy pad is a circle or an oval.
+     * A pad must have a parent because some functions expect a non null parent
+     * to find the parent board, and some other data
+     */
+    MODULE dummymodule( aPcb );    // Creates a dummy parent
+    D_PAD dummypad( &dummymodule );
     D_PAD* nextpad;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
@@ -226,11 +234,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     continue;
 
                 // Use a dummy pad to calculate a hole shape that have the same dimension as the pad hole
-                dummyPad.m_Size     = pad->m_Drill;
-                dummyPad.m_Orient   = pad->m_Orient;
-                dummyPad.m_PadShape = pad->m_DrillShape;
-                dummyPad.m_Pos = pad->m_Pos;
-                pad = &dummyPad;
+                dummypad.m_Size     = pad->m_Drill;
+                dummypad.m_Orient   = pad->m_Orient;
+                dummypad.m_PadShape = pad->m_DrillShape;
+                dummypad.m_Pos = pad->m_Pos;
+                pad = &dummypad;
             }
 
             if( pad->GetNet() != GetNet() )

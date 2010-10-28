@@ -145,7 +145,6 @@ public:
     CRect      GetCornerBounds( int icont );
     void       Copy( CPolyLine* src );
     bool       TestPointInside( int x, int y );
-    bool       TestPointInsideContour( int icont, int x, int y );
     bool       IsCutoutContour( int icont );
     void       AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 

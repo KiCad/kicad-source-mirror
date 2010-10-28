@@ -264,9 +264,16 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     /* Phase 1 : test DRC track to pads :     */
     /******************************************/
 
-    // Use a dummy pad to test DRC tracks versus holes, for pads not on all copper layers
-    // but having a hole
-    D_PAD dummypad( (MODULE*) NULL );           // construct this once outside following loop
+    /* Use a dummy pad to test DRC tracks versus holes, for pads not on all copper layers
+     * but having a hole
+     * This dummy pad has the size and shape of the hole
+     * to test tracks to pad hole DRC, using checkClearanceSegmToPad test function.
+     * Therefore, this dummy pad is a circle or an oval.
+     * A pad must have a parent because some functions expect a non null parent
+     * to find the parent board, and some other data
+     */
+    MODULE dummymodule( m_pcb );    // Creates a dummy parent
+    D_PAD dummypad( &dummymodule );
     dummypad.m_Masque_Layer = ALL_CU_LAYERS;    // Ensure the hole is on all layers
 
     // Compute the min distance to pads

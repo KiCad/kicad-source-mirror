@@ -4,6 +4,7 @@ add_definitions(-DCVPCB)
 # Includes
 ###
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../pcbnew
@@ -13,6 +14,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 # Sources
 ###
+set(CVPCB_DIALOGS
+    dialogs/dialog_cvpcb_config.cpp
+    dialogs/dialog_cvpcb_config_fbp.cpp
+    dialogs/dialog_display_options.cpp
+    dialogs/dialog_display_options_base.cpp
+    )
+
 set(CVPCB_SRCS
     autosel.cpp
     cfg.cpp
@@ -22,10 +30,6 @@ set(CVPCB_SRCS
     class_footprints_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
-    dialog_cvpcb_config.cpp
-    dialog_cvpcb_config_fbp.cpp
-    dialog_display_options.cpp
-    dialog_display_options_base.cpp
     dummy_functions.cpp
     genequiv.cpp
     init.cpp
@@ -69,6 +73,7 @@ endif(APPLE)
 ###
 add_executable(cvpcb WIN32 MACOSX_BUNDLE
                ${CVPCB_SRCS}
+               ${CVPCB_DIALOGS}
                ${CVPCB_RESOURCES})
 
 ###

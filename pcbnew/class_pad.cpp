@@ -213,8 +213,8 @@ void D_PAD::Copy( D_PAD* source )
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
  * aItem's clearance.  If \a aItem is NULL, then this objects
- * clearance
- * is returned.
+ * clearance is returned.
+ * note also if the pad is not on copper layers, just ist local clearance is returned
  * @param aItem is another BOARD_CONNECTED_ITEM or NULL
  * @return int - the clearance in internal units.
  */
@@ -224,16 +224,24 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     // overrides its NETCLASS clearance value
     int clearance = m_LocalClearance;
 
-    if( clearance == 0 )
-    {   // If local clearance is 0, use the parent footprint clearance value
-        if( GetParent() && ( (MODULE*) GetParent() )->m_LocalClearance )
-            clearance = ( (MODULE*) GetParent() )->m_LocalClearance;
+    // if not on copper layers, this pad has no netclass,
+    // So return just use its local clearance
+    // Old versions of pcbnew allow a hole in a pad which is not on copper layers
+    // (this is obviously a mistake, but we must support it)
+    // else see other clearance values
+    if( (m_Masque_Layer & ALL_CU_LAYERS) != 0 )
+    {
+        if( clearance == 0 )
+        {   // If local clearance is 0, use the parent footprint clearance value
+            if( GetParent() && ( (MODULE*) GetParent() )->m_LocalClearance )
+                clearance = ( (MODULE*) GetParent() )->m_LocalClearance;
+        }
+
+        if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
+            return BOARD_CONNECTED_ITEM::GetClearance( aItem );
     }
 
-    if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
-        return BOARD_CONNECTED_ITEM::GetClearance( aItem );
-
-    // We have a specific clearance.
+    // We have a specific clearance or a pad with no netclass (not on copper layers).
     // if aItem, return the biggest clearance
     if( aItem )
     {
