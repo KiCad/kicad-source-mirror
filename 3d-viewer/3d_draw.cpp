@@ -20,6 +20,8 @@
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
+extern void CheckGLError();
+
 static void    Draw3D_FilledCircle( double posx, double posy, double rayon,
                                     double hole_rayon, double zpos );
 static void    Draw3D_FilledSegment( double startx, double starty,
@@ -348,9 +350,8 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     glEndList();
 
     /* Test for errors */
-    GLenum err = glGetError();
-    if( err != GL_NO_ERROR )
-        DisplayError( this, wxT( "Error in GL commands" ) );
+    CheckGLError();
+
     return m_gllist;
 }
 
@@ -786,8 +787,6 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         delta_cx, delta_cy,
         xc, yc;
     int     angle, delta_angle;
-    int     coord[4][2];
-    double  fcoord[8][2], f_hole_coord[8][2];
     double  scale;
     double  zpos;
     wxPoint shape_pos;
@@ -917,33 +916,18 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         break;
 
     case PAD_RECT:
-
     case PAD_TRAPEZOID:
     {
-        int ddx, ddy;
-        ddx = m_DeltaSize.x >> 1;
-        ddy = m_DeltaSize.y >> 1;
-
-        coord[0][0] = -dx - ddy;
-        coord[0][1] = +dy + ddx;
-
-        coord[1][0] = -dx + ddy;
-        coord[1][1] = -dy - ddx;
-
-        coord[2][0] = +dx - ddy;
-        coord[2][1] = -dy + ddx;
-
-        coord[3][0] = +dx + ddy;
-        coord[3][1] = +dy - ddx;
-
+        wxPoint  coord[5];
+        wxRealPoint  fcoord[8], f_hole_coord[8];
+        BuildPadPolygon( coord, wxSize(0,0), angle );
         for( ii = 0; ii < 4; ii++ )
         {
-            RotatePoint( &coord[ii][0], &coord[ii][1], angle );
-            coord[ii][0] += ux0;
-            coord[ii][1] += uy0;
+            coord[ii].x += ux0;
+            coord[ii].y += uy0;
             ll = ii * 2;
-            fcoord[ll][0] = coord[ii][0] *scale;
-            fcoord[ll][1] = coord[ii][1] *scale;
+            fcoord[ll].x = coord[ii].x *scale;
+            fcoord[ll].y = coord[ii].y *scale;
         }
 
         for( ii = 0; ii < 7; ii += 2 )
@@ -951,18 +935,17 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             ll = ii + 2;
             if( ll > 7 )
                 ll -= 8;
-            fcoord[ii + 1][0] = (fcoord[ii][0] + fcoord[ll][0]) / 2;
-            fcoord[ii + 1][1] = (fcoord[ii][1] + fcoord[ll][1]) / 2;
+            fcoord[ii + 1].x = (fcoord[ii].x + fcoord[ll].x) / 2;
+            fcoord[ii + 1].y = (fcoord[ii].y + fcoord[ll].y) / 2;
         }
 
         for( ii = 0; ii < 8; ii++ )
         {
-            f_hole_coord[ii][0] = -hole * 0.707;
-            f_hole_coord[ii][1] = hole * 0.707;
-            RotatePoint( &f_hole_coord[ii][0], &f_hole_coord[ii][1],
-                        angle - (ii * 450) );
-            f_hole_coord[ii][0] += drillx;
-            f_hole_coord[ii][1] += drilly;
+            f_hole_coord[ii].x = -hole * 0.707;
+            f_hole_coord[ii].y = hole * 0.707;
+            RotatePoint( &f_hole_coord[ii].x, &f_hole_coord[ii].y, angle - (ii * 450) );
+            f_hole_coord[ii].x += drillx;
+            f_hole_coord[ii].y += drilly;
         }
 
         for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
@@ -991,12 +974,12 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             glBegin( GL_QUAD_STRIP );
             for( ii = 0; ii < 8; ii++ )
             {
-                glVertex3f( f_hole_coord[ii][0], -f_hole_coord[ii][1], zpos );
-                glVertex3f( fcoord[ii][0], -fcoord[ii][1], zpos );
+                glVertex3f( f_hole_coord[ii].x, -f_hole_coord[ii].y, zpos );
+                glVertex3f( fcoord[ii].x, -fcoord[ii].y, zpos );
             }
 
-            glVertex3f( f_hole_coord[0][0], -f_hole_coord[0][1], zpos );
-            glVertex3f( fcoord[0][0], -fcoord[0][1], zpos );
+            glVertex3f( f_hole_coord[0].x, -f_hole_coord[0].y, zpos );
+            glVertex3f( fcoord[0].x, -fcoord[0].y, zpos );
             glEnd();
         }
     }
