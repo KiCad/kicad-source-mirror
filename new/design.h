@@ -1,42 +1,87 @@
 
 
-// This file describes the early phases of some new classes which may
-// eventually be used to implement a distributed library system.
 
 // Designer and copyright holder: Dick Hollenbeck <dick@softplc.com>
 
 
+/** @mainpage
+
+This file describes the design of new C++ classes which may
+be used to implement a distributed library system for EESCHEMA, and with
+some modification, PCBNEW also.
+
+@author Dick Hollenbeck <dick@softplc.com>
+
+@date   October 2010
+
+@section intr_sec Introduction
+
+This is the introduction.
+
+
+@section summary Summary
+
+This is the summary.
+
+*/
+
+
+
+/**
+ * \defgroup STRING Types
+ * Provide some string types for use within the API.
+ * @{
+ */
+
 typedef std::string STRING;
+
+/**
+ * Type STRING_TOKS
+ * documents a STRING which holds a sequence of s-expressions suitable for parsing
+ * with DSNLEXER.  This can either be a sequence of DSN_SYMBOLs or a sequence of
+ * fully parenthesis delimited s-expressions.  There are 2 types: <ol>
+ * <li> R C R33 "quoted-name" J2
+ * <li> (part R ())(part C ())
+ * </ol>
+ * Notice that in the 1st example, there are 5 tokens in sequence, and in the
+ * 2nd example there are two top most s-expressions in sequence.  So the counts
+ * in these are 5 and 2 respectively.
+ */
+typedef STRING      STRING_TOKS;
+
+
 typedef std::vector< STRING >  STRINGS;
 
 
 const STRING StrEmpty = "";
+
+/** @} STRING Types */
 
 
 /**
  * Class PART
  * will have to be unified with what Wayne is doing.  I want a separate copy
  * here until I can get the state management correct.  Since a PART only lives
- * within a cache called a LIBRARY, its constructor is private (only a LIBRARY
+ * within a cache called a LIB, its constructor is private (only a LIB
  * can instantiate one), and it exists in various states of freshness and
- * completeness relative to the LIBRARY_SOURCE within the LIBRARY.
+ * completeness relative to the LIB_SOURCE within the LIB.
  */
 class PART
 {
-    /// LIBRARY class has great license to modify what's in here, nobody else does.
-    /// Modification is done through the LIBRARY so it can track the state of the
+    /// LIB class has great license to modify what's in here, nobody else does.
+    /// Modification is done through the LIB so it can track the state of the
     /// PART and take action as needed.  Actually most of the modification will
-    /// be done by PARTS_LIST, a class derived from LIBRARY.
-    friend class LIBRARY;
+    /// be done by PARTS_LIST, a class derived from LIB.
+    friend class LIB;
 
 
-    /// a private constructor, only a LIBRARY can instantiate one.
+    /// a private constructor, only a LIB can instantiate one.
     PART() {}
 
 
 protected:      // not likely to have descendants, but protected none-the-less.
 
-    LIBRARY*    owner;      ///< which LIBRARY am I a part of (pun if you want)
+    LIB*    owner;      ///< which LIB am I a part of (pun if you want)
     STRING      extends;    ///< LPID of base part
 
     STRING      name;       ///< example "passives/R", immutable.
@@ -94,6 +139,7 @@ public:
  * <li> "subversion"
  * <li> "bazaar"
  * <li> "http"
+ * </ul>
  * <p>
  * For now, the Library URI types needed to support the various types can be one of those
  * shown below, which are typical of each type:
@@ -102,6 +148,7 @@ public:
  * <li> "file://home/user/kicadwork/jtagboard.sch"
  * <li> "svn://kicad.org/partlib/trunk"
  * <li> "http://kicad.org/partlib"
+ * </ul>
  * <p>
  * The library table is built up from several sources, and is a contatonation
  * of those sources.
@@ -189,15 +236,16 @@ class LPID  // aka GUID
 
 
 /**
- * Class LIBRARY_SOURCE
- * is an abstract class from which implementation specific LIBRARY_SOURCEs
+ * Class LIB_SOURCE
+ * is an abstract class from which implementation specific LIB_SOURCEs
  * may be derived, one for each kind of library type allowed in the library table.
  * The class name stems from the fact that this interface only provides READ ONLY
  * functions.
  */
-class LIBRARY_SOURCE
+class LIB_SOURCE
 {
-    friend class LIBRARY;   ///< only the LIBRARY uses these functions.
+    friend class LIBS;      ///< the LIB factory is LIBS::GetLibrary()
+    friend class LIB;       ///< the LIB uses these functions.
 
 protected:                  ///< derived classes must implement
 
@@ -228,14 +276,16 @@ protected:                  ///< derived classes must implement
      * Function ReadParts
      * fetches the s-expressions for each part given in @a aPartNames, into @a aResults,
      * honoring the array indices respectfully.
+     * @param aPartNames is a list of part names, one name per vector element.
+     * @param aResults receives the s-expressions
      */
-    virtual void ReadParts( STRINGS* aResults, const STRINGS& aPartNames ) throw( IO_ERROR ) = 0;
+    virtual void ReadParts( STRING_TOKS* aResults, const STRINGS& aPartNames ) throw( IO_ERROR ) = 0;
 
     /**
      * Function GetCategories
      * fetches all categories present in the library source into @a aResults
      */
-    virtual void GetCategories( STRINGS* aResults ) throw( IO_ERROR ) = 0;
+    virtual void GetCategories( STRING_TOKS* aResults ) throw( IO_ERROR ) = 0;
 
     /**
      * Function GetCategoricalPartNames
@@ -243,15 +293,17 @@ protected:                  ///< derived classes must implement
      *
      * @param aCategory is a subdividing navigator within the library source, but may default to empty
      *  which will be taken to mean all categories.
+     *
+     * @param aResults is a place to put the fetched result, one category per STRING.
      */
-    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
+    virtual void GetCategoricalPartNames( STRING_TOKS* aResults, const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
 
     /**
      * Function GetRevisions
      * fetches all revisions for @a aPartName into @a aResults.  Revisions are strings
      * like "rev12", "rev279", and are library source agnostic.  These
      */
-    virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName ) throw( IO_ERROR ) = 0;
+    virtual void GetRevisions( STRING_TOKS* aResults, const STRING& aPartName ) throw( IO_ERROR ) = 0;
 
     /**
      * Function FindParts
@@ -265,8 +317,10 @@ protected:                  ///< derived classes must implement
      * @param aQuery is a string holding a domain specific language expression.  One candidate
      *  here is an s-expression that uses (and ..) and (or ..) operators. For example
      *  "(and (footprint 0805)(value 33ohm)(category passives))"
+     *
+     * @param aResults is a place to put the fetched part names, one part per STRING.
      */
-    virtual void FindParts( STRINGS* aResults, const STRING& aQuery ) throw( IO_ERROR ) = 0;
+    virtual void FindParts( STRING_TOKS* aResults, const STRING& aQuery ) throw( IO_ERROR ) = 0;
 
 protected:
     STRING      sourceType;
@@ -275,15 +329,85 @@ protected:
 
 
 /**
- * Class LIBRARY_SINK
- * is an abstract class from which implementation specific LIBRARY_SINKs
+ * Class DIR_LIB_SOURCE
+ * implements a LIB_SOURCE in a file system directory.
+ */
+class DIR_LIB_SOURCE : public LIB_SOURCE
+{
+    friend class LIBS;   ///< LIBS::GetLib() can construct one.
+
+protected:
+
+    /**
+     * Constructor DIR_LIB_SOURCE( const STRING& aDirectoryPath )
+     * sets up a LIB_SOURCE using aDirectoryPath in a file system.
+     * @see LIBS::GetLibrary().
+     *
+     * @param aDirectoryPath is a full pathname of a directory which contains
+     *  the library source of part files.  Examples might be "C:\kicad_data\mylib" or
+     *  "/home/designer/mylibdir".
+     */
+    DIR_LIB_SOURCE( const STRING& aDirectoryPath ) throws( IO_ERROR );
+};
+
+
+/**
+ * Class SVN_LIB_SOURCE
+ * implements a LIB_SOURCE in a file system directory.
+ */
+class SVN_LIB_SOURCE : public LIB_SOURCE
+{
+    friend class LIBS;   ///< constructor the LIB uses these functions.
+
+protected:
+
+    /**
+     * Constructor SVN_LIB_SOURCE( const STRING& aSvnURL )
+     * sets up a LIB_SOURCE using aSvnURI which points to a subversion
+     * repository.
+     * @see LIBS::GetLibrary().
+     *
+     * @param aSvnURL is a full URL of a subversion repo directory.  Example might
+     *  be "svn://kicad.org/repos/library/trunk"
+     */
+    SVN_LIB_SOURCE( const STRING& aSvnURL ) throws( IO_ERROR );
+};
+
+
+/**
+ * Class PARTS_LIST_LIB_SOURCE
+ * implements a LIB_SOURCE in on a schematic file.
+ */
+class PARTS_LIST_LIB_SOURCE : public LIB_SOURCE
+{
+    friend class LIBS;   ///< constructor the LIB uses these functions.
+
+protected:
+
+    /**
+     * Constructor PARTS_LIST_LIB_SOURCE( const STRING& aSchematicFile )
+     * sets up a LIB_SOURCE using aSchematicFile which is a full path and filename
+     * for a schematic not related to the schematic being editing in
+     * this EESCHEMA session.
+     * @see LIBS::GetLibrary().
+     *
+     * @param aSchematicFile is a full path and filename.  Example:
+     *  "/home/user/kicadproject/design.sch"
+     */
+    PARTS_LIST_LIB_SOURCE( const STRING& aSchematicFile ) throws( IO_ERROR );
+};
+
+
+/**
+ * Class LIB_SINK
+ * is an abstract class from which implementation specific LIB_SINKs
  * may be derived, one for each kind of library type in the library table that
  * supports writing.  The class name stems from the fact that this interface
  * only provides WRITE functions.
  */
-class LIBRARY_SINK
+class LIB_SINK
 {
-    friend class LIBRARY;   ///< only the LIBRARY uses these functions.
+    friend class LIB;   ///< only the LIB uses these functions.
 
 protected:                  ///< derived classes must implement
 
@@ -291,7 +415,7 @@ protected:                  ///< derived classes must implement
      * Function WritePart
      * saves the part to non-volatile storage. @a aPartName may have the revision
      * portion present.  If it is not present, and a overwrite of an existhing
-     * part is done, then LIBRARY::ReloadPart() must be called on this same part
+     * part is done, then LIB::ReloadPart() must be called on this same part
      * and all parts that inherit it must be reparsed.
      */
     virtual void WritePart( const STRING& aPartName, const STRING& aSExpression ) throw ( IO_ERROR ) = 0;
@@ -305,85 +429,87 @@ protected:
 
 /**
  * Class LIBS
- * houses a handful of functions that manage all the RAM resident LIBRARYs, and
+ * houses a handful of functions that manage all the RAM resident LIBs, and
  * provide for a global part lookup function, GetPart(), which can be the basis
- * of cross LIBRARY hyperlink.
+ * of a cross LIB hyperlink.
  */
 class LIBS
 {
+public:
+
     /**
      * Function GetPart
      * finds and loads a PART, and parses it.  As long as the part is
-     * accessible in any LIBRARY_SOURCE, opened or not opened, this function
-     * will find it and load it into its containing LIBRARY, even if that means
-     * having to load a new LIBRARY as given in the library table.
+     * accessible in any LIB_SOURCE, opened or not opened, this function
+     * will find it and load it into its containing LIB, even if that means
+     * having to load a new LIB as given in the library table.
      */
     static PART* GetPart( const LPID& aLogicalPartID ) throw ( IO_ERROR );
 
     /**
-     * Function GetLIBRARY
+     * Function GetLib
      * is first a lookup function and then if needed, a factory function.
      * If aLogicalLibraryName has been opened, then return the already opened
-     * LIBRARY.  If not, then instantiate the library and fill the initial
+     * LIB.  If not, then instantiate the library and fill the initial
      * library PARTs (unparsed) and categories, and add it to LIB::libraries
      * for future reference.
      */
-    static LIBRARY* GetLibrary( const STRING& aLogicalLibraryName ) throw( IO_ERROR );
+    static LIB* GetLib( const STRING& aLogicalLibraryName ) throw( IO_ERROR );
 
     /**
-     * Function GetOpenedLibraryNames
-     * returns the logical library names of LIBRARYs that are already opened.
+     * Function GetOpenedLibNames
+     * returns the logical library names of LIBs that are already opened.
      * @see LPID::GetLogicalLibraries()
      */
-    static STRINGS GetOpendedLogicalLibraryNames();
+    static STRINGS GetOpendedLogicalLibNames();
 
     /**
      * Function CloseLibrary
-     * closes an open library @a aLibrary and removes it from LIBS::libraries.
+     * closes an open library @a aLibrary and removes it from class LIBS.
      */
-    static void CloseLibrary( LIBRARY* aLibrary ) throw( IO_ERROR );
+    static void CloseLibrary( LIB* aLibrary ) throw( IO_ERROR );
 
 
 private:
 
-    /// collection of LIBRARYs, searchable by logical name.
-    static std::map< STRING, LIBRARY* > libraries;      // owns the LIBRARYs.
+    /// collection of LIBs, searchable by logical name.
+    static std::map< STRING, LIB* > libraries;      // owns the LIBs.
 };
 
 
 /**
- * Class LIBRARY
- * is a cache of parts, and because the LIBRARY_SOURCE is abstracted, there
+ * Class LIB
+ * is a cache of parts, and because the LIB_SOURCE is abstracted, there
  * should be no need to extend from this class in any case except for the
  * PARTS_LIST.
  */
-class LIBRARY
+class LIB
 {
-    friend class LIBS;      ///< the LIBRARY factory is LIBS::GetLibrary()
+    friend class LIBS;      ///< the LIB factory is LIBS::GetLibrary()
 
 protected:  // constructor is not public, called from LIBS only.
 
     /**
-     * Constructor LIBRARY
-     * is not public and is only called from LIBS::GetLibrary()
+     * Constructor LIB
+     * is not public and is only called from LIBS::GetLib()
      *
      * @param aLogicalLibrary is the name of a well know logical library, and is
      *  known because it already exists in the library table.
      *
-     * @param aLibrarySource is an open LIBRARY_SOURCE whose ownership is
-     *          given over to this LIBRARY.
+     * @param aSource is an open LIB_SOURCE whose ownership is
+     *          given over to this LIB.
      *
-     * @param aLibrarySink is an open LIBRARY_SINK whose ownership is given over
-     *          to this LIBRARY, and it is normally NULL.
+     * @param aSink is an open LIB_SINK whose ownership is given over
+     *          to this LIB, and it is normally NULL.
      */
-     LIBRARY( const STRING& aLogicalLibrary, LIBRARY_SOURCE* aSource, LIBRARY_SINK* aSink ) :
+    LIB( const STRING& aLogicalLibrary, LIB_SOURCE* aSource, LIB_SINK* aSink=NULL ) :
         name( aLogicalLibrary ),
         source( aSource ),
         sink( aSink )
     {
     }
 
-    ~LIBRARY()
+    ~LIB()
     {
         delete source;
         delete sink;
@@ -394,8 +520,8 @@ public:
 
     /**
      * Function HasSink
-     * returns true if this library has write/save capability.  Most LIBARARYs
-     * are read only, and all remote ones are.
+     * returns true if this library has write/save capability.  Most LIBs
+     * are read only.
      */
     bool HasSave()  { return sink != NULL; }
 
@@ -405,6 +531,8 @@ public:
     /**
      * Function GetPart
      * returns a PART given @a aPartName, such as "passives/R".
+     * @param aPartName is local to this LIB and does not have the logical
+     *  library name prefixed.
      */
     const PART* GetPart( const STRING& aPartName ) throw( IO_ERROR );
 
@@ -418,17 +546,17 @@ public:
 
     /**
      * Function GetCategories
-     * fetches all categories of parts within this LIBRARY into @a aResults.
+     * fetches all categories of parts within this LIB into @a aResults.
      */
-    void GetCategories( STRINGS* aResults ) throw( IO_ERROR ) = 0;
+    STRINGS GetCategories() throw( IO_ERROR ) = 0;
 
     /**
-     * Function GetCategoricalPartName
-     * fetches the part names for @a aCategory into @a aResults, and at the same time
+     * Function GetCategoricalPartNames
+     * returns the part names for @a aCategory, and at the same time
      * creates cache entries for the very same parts if they do not already exist
-     * in this LIBRARY cache.
+     * in this LIB (i.e. cache).
      */
-    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
+    STRINGS GetCategoricalPartNames( const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
 
     //-----<.use delegates: source and sink>--------------------------------
 
@@ -438,7 +566,7 @@ public:
      * portion present.  If it is not present, and a overwrite of an existing
      * part is done, then all parts that inherit it must be reparsed.
      * This is why most library sources are read only.  An exception is the PARTS_LIST,
-     * not to be confused with a LIBRARY based on a parts list in another schematic.
+     * not to be confused with a LIB based on a parts list in another schematic.
      * The PARTS_LIST is in the the schematic being edited and is by definition the
      * last to inherit, so editing in the current schematic's PARTS_LIST should be harmless.
      * There can be some self referential issues that mean all the parts in the PARTS_LIST
@@ -450,7 +578,7 @@ public:
 
     /**
      * Function GetRevisions
-     * returns the revisions of @a aPartName that are present in this LIBRARY.
+     * returns the revisions of @a aPartName that are present in this LIB.
      * The returned STRINGS will look like "rev1", "rev2", etc.
      */
     STRINGS GetRevisions( const STRING& aPartName ) throw( IO_ERROR ) = 0;
@@ -465,22 +593,22 @@ public:
      * to honor this portion of the API contract.
      *
      * @param aQuery is a string holding a domain specific language expression.  One candidate
-     *  here is an s-expression that uses (and ..) and (or ..) operators. For example
+     *  here is an RPN s-expression that uses (and ..) and (or ..) operators. For example
      *  "(and (footprint 0805)(value 33ohm)(category passives))"
      */
     STRINGS FindParts( const STRING& aQuery ) throw( IO_ERROR ) = 0
     {
         // run the query on the cached data first for any PARTS which are fully
-        // parsed (i.e. cached), then on the LIBRARY_SOURCE to find any that
+        // parsed (i.e. cached), then on the LIB_SOURCE to find any that
         // are not fully parsed, then unify the results.
     }
 
 private:
 
-    STRING              fetched;    ///< scratch, used to fetch things, grows to worst case size.
+    STRING              fetch;      ///< scratch, used to fetch things, grows to worst case size.
 
-    LIBARARY_SOURCE*    source;
-    LIBRARY_SINK*       sink;
+    LIB_SOURCE*         source;
+    LIB_SINK*           sink;
 
     STRING              name;
     STRING              libraryType;
@@ -488,9 +616,11 @@ private:
 
     STRINGS             categories;
 
-    typedef std::map<STRING, PART*> PARTS;
+    typedef boost::ptr_vector<PART>     PARTS;
 
     PARTS               parts;
+
+    std::vector<PART*>  orderByName;
 };
 
 // EOF
