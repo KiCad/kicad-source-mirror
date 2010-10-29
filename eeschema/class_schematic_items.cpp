@@ -646,7 +646,7 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         if( m_End == aLine->m_End )
             return true;
 
-        EXCHG( m_Start, aLine->m_End );
+        EXCHG( m_Start, m_End );
     }
     else if( m_Start == aLine->m_End )
     {
