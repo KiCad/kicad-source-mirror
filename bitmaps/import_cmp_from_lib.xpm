@@ -1,0 +1,38 @@
+/* XPM */
+const char *import_cmp_from_lib_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"O c #76787C",
+"$ c #979A9C",
+"= c #404440",
+"; c #ACB1B5",
+"# c #04BA04",
+"+ c #CACCCC",
+"o c #F5F6F7",
+". c #2E3031",
+"  c None",
+"* c #124912",
+"@ c #049304",
+"& c #505355",
+"X c #0C290C",
+"% c #046404",
+"- c #DADBDB",
+": c #83888C",
+/* pixels */
+"      .X        ",
+"     ooO        ",
+"    +o++.       ",
+" @#X$++.$       ",
+" %#@X$+X.&      ",
+" *##@%%%%=&.=.. ",
+" OX######%Oooo-.",
+"  $&*@@##%Ooo-; ",
+"  :;+:&%@&ooo+: ",
+"   O;+$*=-oo-;X ",
+"   =:$+.oooo+O  ",
+"    &O-+oooo;   ",
+"    X&++--o+:   ",
+"      .=O$$$    ",
+"         .XX    ",
+"                "
+};

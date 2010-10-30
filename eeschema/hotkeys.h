@@ -32,6 +32,7 @@ enum hotkey_id_commnand {
     HK_ADD_NEW_COMPONENT,
     HK_BEGIN_WIRE,
     HK_ADD_LABEL,
+    HK_ADD_JUNCTION,
     HK_ADD_NOCONN_FLAG
 };
 

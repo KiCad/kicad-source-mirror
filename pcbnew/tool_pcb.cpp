@@ -434,7 +434,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString,
                          wxBitmap( add_zone_xpm ),
-                         _( "Add zones" ), wxITEM_CHECK );
+                         _( "Add filled zones" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString,
@@ -451,7 +451,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString,
                          wxBitmap( add_text_xpm ),
-                         _( "Add text" ), wxITEM_CHECK );
+                         _( "Add text on copper layers or graphic text" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString,
@@ -470,7 +470,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxEmptyString,
                          wxBitmap( pcb_offset_xpm ),
-                         _( "Offset adjust for drill and place files" ),
+                         _( "Place the origin point for drill and place files" ),
                          wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,

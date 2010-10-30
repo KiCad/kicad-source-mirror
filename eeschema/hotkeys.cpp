@@ -32,7 +32,7 @@
  * s_LibEdit_Hotkey_List list or s_Common_Hotkey_List if the same command is
  * added both in eeschema and libedit)
  * Add the new code in the switch in OnHotKey() function.
- * when the variable ItemInEdit is true, an item is currently edited.
+ * when the variable itemInEdit is true, an item is currently edited.
  * This can be useful if the new function cannot be executed while an item is
  * currently being edited
  * ( For example, one cannot start a new wire when a component is moving.)
@@ -100,6 +100,7 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 
 
 // Schematic editor
 static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
+static Ki_HotkeyInfo HkAddJunction( wxT( "add Junction" ), HK_ADD_JUNCTION, 'J' );
 static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
 static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ),
                                      HK_ADD_NEW_COMPONENT, 'A' );
@@ -180,6 +181,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkEditComponentFootprint,
     &HkBeginWire,
     &HkAddLabel,
+    &HkAddJunction,
     &HkAddNoConn,
     NULL
 };
@@ -244,9 +246,13 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     cmd.SetEventObject( this );
 
-    bool        ItemInEdit = GetScreen()->GetCurItem()&& GetScreen()->GetCurItem()->m_Flags;
-    bool        RefreshToolBar = FALSE;
     SCH_SCREEN* screen = GetScreen();
+    // itemInEdit == false means no item currently edited. We can ask for editing a new item
+    bool        itemInEdit = screen->GetCurItem() && screen->GetCurItem()->m_Flags;
+    // notBusy == true means no item currently edited and no other command in progress
+    // We can change active tool and ask for editing a new item
+    bool        notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
+    bool        RefreshToolBar = FALSE;
 
     if( hotkey == 0 )
         return;
@@ -306,7 +312,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_UNDO:
     case HK_REDO:
-        if( !ItemInEdit )
+        if( notBusy )
         {
             wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
@@ -318,7 +324,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_DELETE:
-        if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+        if( notBusy)
         {
             RefreshToolBar = LocateAndDeleteItem( this, DC );
             OnModify();
@@ -328,12 +334,12 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_REPEAT_LAST:
-        if( !ItemInEdit && g_ItemToRepeat && ( g_ItemToRepeat->m_Flags == 0 ) )
+        if( notBusy && g_ItemToRepeat && ( g_ItemToRepeat->m_Flags == 0 ) )
             RepeatDrawItem( DC );
         break;
 
     case HK_FIND_ITEM:
-        if( !ItemInEdit )
+        if( notBusy )
         {
             wxCommandEvent evt;
             evt.SetId( ID_FIND_ITEMS );
@@ -342,7 +348,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_FIND_NEXT_ITEM:
-        if( !ItemInEdit )
+        if( notBusy )
         {
             wxFindDialogEvent event( wxEVT_COMMAND_FIND, GetId() );
             event.SetEventObject( this );
@@ -353,7 +359,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_FIND_NEXT_DRC_MARKER:
-        if( !ItemInEdit )
+        if( notBusy )
         {
             wxFindDialogEvent event( EVT_COMMAND_FIND_DRC_MARKER, GetId() );
             event.SetEventObject( this );
@@ -364,7 +370,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ADD_NEW_COMPONENT:      // Add component
-        if( !ItemInEdit )
+        if( !itemInEdit )
         {
             // switch to m_ID_current_state = ID_COMPONENT_BUTT;
             if( m_ID_current_state != ID_COMPONENT_BUTT )
@@ -374,7 +380,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ADD_LABEL:
-        if( !ItemInEdit )
+        if( notBusy )
         {
             // switch to m_ID_current_state = ID_LABEL_BUTT;
             if( m_ID_current_state != ID_LABEL_BUTT )
@@ -383,11 +389,19 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_BEGIN_WIRE:
+    case HK_ADD_JUNCTION:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_JUNCTION_BUTT;
+            if( m_ID_current_state != ID_JUNCTION_BUTT )
+                SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add Junction" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
 
-        /* An item is selected. If edited and not a wire, a new command is not
-         * possible */
-        if( !ItemInEdit && screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+    case HK_BEGIN_WIRE:
+        // An item is selected. If not a wire, a new command is not possible
+        if( notBusy )
         {
             if( DrawStruct && DrawStruct->m_Flags )
             {
@@ -409,7 +423,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_ADD_NOCONN_FLAG:      // Add a no connected flag
-        if( !ItemInEdit )
+        if( notBusy )
         {
             if( m_ID_current_state != ID_NOCONN_BUTT )
                 SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"NoNonnect\" Flags" ) );
@@ -532,7 +546,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
     case HK_DRAG:                           // Start drag
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
     case HK_COPY_COMPONENT_OR_LABEL:        // Duplicate component or text/label
-        if( ItemInEdit )
+        if( itemInEdit )
             break;
 
         if( DrawStruct == NULL )
@@ -627,7 +641,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
     case HK_EDIT:
 
-        if( ItemInEdit )
+        if( itemInEdit )
             break;
         if( DrawStruct == NULL )
         {
@@ -671,7 +685,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_EDIT_COMPONENT_VALUE:
-        if( ItemInEdit )
+        if( itemInEdit )
             break;
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( GetScreen() );
@@ -682,7 +696,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         break;
 
     case HK_EDIT_COMPONENT_FOOTPRINT:
-        if( ItemInEdit )
+        if( itemInEdit )
             break;
         if( DrawStruct == NULL )
             DrawStruct = LocateSmallestComponent( GetScreen() );
@@ -711,7 +725,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
     cmd.SetEventObject( this );
 
     wxPoint MousePos   = GetScreen()->m_MousePosition;
-    bool    ItemInEdit = GetScreen()->GetCurItem()&& GetScreen()->GetCurItem()->m_Flags;
+    bool    itemInEdit = GetScreen()->GetCurItem()&& GetScreen()->GetCurItem()->m_Flags;
 
     if( hotkey == 0 )
         return;
@@ -767,7 +781,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
         break;
 
     case HK_UNDO:
-        if( !ItemInEdit )
+        if( !itemInEdit )
         {
             toolCmd.SetId( wxID_UNDO );
             GetEventHandler()->ProcessEvent( toolCmd );
@@ -775,7 +789,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
         break;
 
     case HK_REDO:
-        if( !ItemInEdit )
+        if( !itemInEdit )
         {
             toolCmd.SetId( wxID_REDO );
             GetEventHandler()->ProcessEvent( toolCmd );
