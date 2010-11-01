@@ -44,7 +44,6 @@
 #define BUTT_SIZE_Y             18
 #define BUTT_VOID               4
 
-
 /* XPM */
 static const char * clear_xpm[] = {
 "10 14 1 1",
@@ -152,9 +151,13 @@ wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, int aColor, in
     // then create a wxBitmapButton from it.
     wxBitmap bitmap = makeBitmap( aColor );
 
+#ifndef __WXMAC__
     wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
         wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
-
+#else
+    wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
+        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y));
+#endif
     // save the color value in the name, no where else to put it.
     ret->SetName( makeColorTxt( aColor ) );
     return ret;
