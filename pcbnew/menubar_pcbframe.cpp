@@ -367,7 +367,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     text = AddHotkeyName( _( "Module" ), s_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_MODULE, false );
     item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
-                           _( "Place a module" ), wxITEM_NORMAL );
+                           _( "Add modules" ), wxITEM_NORMAL );
 
     item->SetBitmap( module_xpm );
     placeMenu->Append( item );
@@ -376,7 +376,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     text = AddHotkeyName( _( "Track" ), s_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_NEW_TRACK, false );
     item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
-                           _( "Place a track" ), wxITEM_NORMAL );
+                           _( "Add tracks and vias" ), wxITEM_NORMAL );
 
     item->SetBitmap( add_tracks_xpm );
     placeMenu->Append( item );
@@ -384,35 +384,35 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Zone
     item = new wxMenuItem( placeMenu, ID_PCB_ZONES_BUTT,
                          _( "Zone" ),
-                         _( "Place a filled zone" ));
+                         _( "Add filled zones" ));
     item->SetBitmap( add_zone_xpm );
     placeMenu->Append( item );
 
     // Text
     item = new wxMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
                            _( "Text" ),
-                           _( "Place text" ) );
+                           _( "Add text on copper layers or graphic text" ) );
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 
     // Graphic Arc
     item = new wxMenuItem( placeMenu, ID_PCB_ARC_BUTT,
                          _( "Arc" ),
-                         _( "Place a graphic arc" ) );
+                         _( "Add graphic arc" ) );
     item->SetBitmap( add_arc_xpm );
     placeMenu->Append( item );
 
     // Graphic Circle
     item = new wxMenuItem( placeMenu, ID_PCB_CIRCLE_BUTT,
                          _( "Circle" ),
-                         _( "Place a graphic circle" ));
+                         _( "Add graphic circle" ));
     item->SetBitmap( add_circle_xpm );
     placeMenu->Append( item );
 
     // Line or Polygon
     item = new wxMenuItem( placeMenu, ID_PCB_ADD_LINE_BUTT,
                            _( "Line or Polygon" ),
-                           _( "Place a graphic line or polygon" ));
+                           _( "Add graphic line or polygon" ));
     item->SetBitmap( add_dashed_line_xpm );
     placeMenu->Append( item );
     placeMenu->AppendSeparator();
@@ -420,14 +420,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Dimension
     item = new wxMenuItem( placeMenu, ID_PCB_DIMENSION_BUTT,
                          _( "Dimension" ),
-                         _( "Place a dimension" ) );
+                         _( "Add dimension" ) );
     item->SetBitmap( add_dimension_xpm );
     placeMenu->Append( item );
 
     // Layer alignment target
     item = new wxMenuItem( placeMenu, ID_PCB_MIRE_BUTT,
                            _( "Layer alignment target" ),
-                           _( "Place a layer alignment target" ));
+                           _( "Add layer alignment target" ));
     item->SetBitmap( add_mires_xpm );
     placeMenu->Append( item );
     placeMenu->AppendSeparator();
@@ -435,14 +435,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     // Drill & Place Offset
     item = new wxMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
                       _( "Drill and Place Offset" ),
-                      _( "Place the offset adjust for drill and place files" ));
+                      _( "Place the origin point for drill and place files" ));
     item->SetBitmap( pcb_offset_xpm );
     placeMenu->Append( item );
 
     // Grid Origin
     item = new wxMenuItem( placeMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
                            _( "Grid Origin" ),
-                           _( "Place origin point for the grid" ));
+                           _( "Set the origin point for the grid" ));
     item->SetBitmap( grid_select_axis_xpm );
     placeMenu->Append( item );
 
@@ -578,7 +578,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     /* Contents */
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP,
                            _( "&Contents" ),
-                           _( "Open the PCBnew manual" ) );
+                           _( "Open the on line PCBnew documentation" ) );
     item->SetBitmap( online_help_xpm );
     helpMenu->Append( item );
 
