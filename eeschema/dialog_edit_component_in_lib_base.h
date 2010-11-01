@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -91,19 +91,20 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public wxDialog
 		wxButton* m_sdbSizer2Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void CopyDocToAlias( wxCommandEvent& event ){ event.Skip(); }
-		virtual void BrowseAndSelectDocFile( wxCommandEvent& event ){ event.Skip(); }
-		virtual void AddAliasOfPart( wxCommandEvent& event ){ event.Skip(); }
-		virtual void DeleteAliasOfPart( wxCommandEvent& event ){ event.Skip(); }
-		virtual void DeleteAllAliasOfPart( wxCommandEvent& event ){ event.Skip(); }
-		virtual void AddFootprintFilter( wxCommandEvent& event ){ event.Skip(); }
-		virtual void DeleteOneFootprintFilter( wxCommandEvent& event ){ event.Skip(); }
-		virtual void DeleteAllFootprintFilter( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void CopyDocToAlias( wxCommandEvent& event ) { event.Skip(); }
+		virtual void BrowseAndSelectDocFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void AddAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DeleteAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DeleteAllAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
+		virtual void AddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DeleteOneFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DeleteAllFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Lib Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 546,384 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
 	

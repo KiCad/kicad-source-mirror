@@ -508,7 +508,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     gerber->DisplayImageInfo( );
 
     // Display Image Name and Layer Name (from the current gerber data):
-    text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),
+    text.Printf( _("Image name: \"%s\"  Layer name: \"%s\""),
         GetChars(gerber->m_ImageName), GetChars(gerber->GetLayerParams( ).m_LayerName) );
     SetStatusText( text, 0 );
 

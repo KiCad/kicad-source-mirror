@@ -1,17 +1,13 @@
-* Copyright (C) 1992-2009 Jean-Pierre Charras
-* Copyright (C) 1992-2009 Kicad Developers Team
+* Copyright (C) 1992-2010 Jean-Pierre Charras
+* Copyright (C) 1992-2010 Kicad Developers Team
 * under GNU General Public License (see copyright.txt)
 
-== Main Author
+== Main Authors
 Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab-dot-inpg-dot-fr>
-IUT1 GEII2
-Universite Joseph Fourier (U.J.F.)
-Saint Martin d'Hères (38402)
-Laboratiore GIPSA-Lab
-Saint Martin d'Hères
+Dick Hollenbeck <dick[at]softplc-dot-com>
+Wayne Stambaugh <stambaughw[at]verizon-dot-net>
 
 == Contributors
-Dick Hollenbeck <dick[at]softplc-dot-com>
 Hauptmech <hauptmech[at]gmail-dot-com>
 Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
 Jonas Diemer <diemer[at]gmx-dot-de>
@@ -21,7 +17,6 @@ Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
 Rok Markovic <rok[at]kanardia.eu>
 Tim Hanson <sideskate[at]gmail-dot-com>
 Vesa Solonen <vesa.solonen[at]hut-dot-fi>
-Wayne Stambaugh <stambaughw[at]verizon-dot-net>
 
 See also CHANGELOG.txt for contributors.
 

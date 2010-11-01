@@ -259,7 +259,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
     }
     else
     {
-        msg.Printf( _( "Help file %s not found" ), GetChars( wxGetApp().m_HelpFileName ) );
+        msg.Printf( _( "Help file %s not found." ), GetChars( wxGetApp().m_HelpFileName ) );
         DisplayError( this, msg );
     }
 

@@ -80,7 +80,7 @@ void WinEDA_SchematicFrame::LoadLibraries( void )
         {
             wxString prompt;
 
-            prompt.Printf( _( "Component library <%s> failed to load.\n\nError: %s" ),
+            prompt.Printf( _( "Component library <%s> failed to load.\nError: %s" ),
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );

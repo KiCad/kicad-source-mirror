@@ -269,7 +269,7 @@ bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsN
         {
             wxString prompt;
 
-            prompt.Printf( _( "Component library <%s> failed to load.\n\n Error: %s" ),
+            prompt.Printf( _( "Component library <%s> failed to load.\nError: %s" ),
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );

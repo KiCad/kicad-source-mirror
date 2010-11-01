@@ -87,11 +87,11 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
                          _( "Move up ^" ) );
 
     m_HToolBar->AddTool( ID_MOVE3D_DOWN, wxEmptyString, wxBitmap( down_xpm ),
-                         _( "Move down" ) );
-                         
+                         _( "Move down v" ) );
+
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ORTHO, wxEmptyString, wxBitmap( ortho_xpm ),
-                         _( "Enable/Disable ortographic projection" ),
+                         _( "Enable/Disable orthographic projection" ),
                          wxITEM_CHECK );
 
     m_HToolBar->Realize();

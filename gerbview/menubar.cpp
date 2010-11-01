@@ -97,8 +97,8 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
                             tools_xpm );
     miscellaneous_menu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_GLOBAL_DELETE,
-                            _( "&Delete Layer" ),
-                            _( "Delete current layer" ), general_deletions_xpm );
+                            _( "&Clear Layer" ),
+                            _( "Clear current layer" ), general_deletions_xpm );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
