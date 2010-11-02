@@ -341,7 +341,6 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     // wxAuiPaneInfo items to manage them.
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
-    horiz.ToolbarPane().Gripper( false );
 
     // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
     // LAYER_WIDGET is floatable, but initially docked at far right
