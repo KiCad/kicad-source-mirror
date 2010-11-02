@@ -27,6 +27,7 @@
 #include "hotkeys.h"
 
 #include "help_common_strings.h"
+#include "class_layerchoicebox.h"
 
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
@@ -266,8 +267,13 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          _( "Perform design rules check" ) );
 
     m_HToolBar->AddSeparator();
+    
+    if(m_SelLayerBox == NULL)
+        m_SelLayerBox = new WinEDALayerChoiceBox( this, ID_TOOLBARH_PCB_SELECT_LAYER);
 
     ReCreateLayerBox( m_HToolBar );
+    m_HToolBar->AddControl( m_SelLayerBox );
+   
     PrepareLayerIndicator();    // Initialize the bitmap with current
                                 // active layer colors for the next tool
     m_HToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
@@ -685,97 +691,17 @@ void WinEDA_PcbFrame::syncLayerBox()
 {
     wxASSERT( m_SelLayerBox );
 
-    // Enable the display on the correct layer
-    // To avoid reentrancy ( Bug wxGTK Linux version? ), the selection is
-    // made only if it needs changing ( corrected on wxGTK 2.6.0 )
-    int     count  = m_SelLayerBox->GetCount();
-    int     choice = m_SelLayerBox->GetChoice();
     int     layer  = getActiveLayer();
-
-    for( int listNdx=0;  listNdx<count;  ++listNdx )
-    {
-        int clientData = (int) (size_t) m_SelLayerBox->wxItemContainer::GetClientData( listNdx );
-
-        if( clientData == layer )
-        {
-            if( listNdx != choice )
-                m_SelLayerBox->SetSelection( listNdx );
-            break;
-        }
-    }
+    m_SelLayerBox->SetLayerSelection(layer);
 }
 
 
-WinEDAChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
+WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 {
-    if( m_SelLayerBox == NULL )
-    {
-        if( parent == NULL )
-            return NULL;
+    if( m_SelLayerBox == NULL ) 
+        return NULL;
 
-        m_SelLayerBox = new WinEDAChoiceBox( parent,
-                                             ID_TOOLBARH_PCB_SELECT_LAYER,
-                                             wxPoint( -1, -1 ),
-#if defined (__UNIX__)
-
-                                             // Width enough for the longest
-                                             // string: "Component (Page Down)"
-                                             // Maybe that string is too long?
-                                             wxSize( 230, -1 )
-#else
-                                             wxSize( LISTBOX_WIDTH + 30, -1 )
-#endif
-                                             );
-
-        parent->AddControl( m_SelLayerBox );
-    }
-    int      layer_mask = GetBoard()->GetEnabledLayers();
-    unsigned length  = 0;
-
-    m_SelLayerBox->Clear();
-
-    static DECLARE_LAYERS_ORDER_LIST(layerOrder_for_display);
-
-    for( int idx=0, listNdx=0;  idx <= EDGE_N;  idx++ )
-    {
-        int layer = layerOrder_for_display[idx];
-        // List to append hotkeys in layer box selection
-        static const int HK_SwitchLayer[EDGE_N + 1] = {
-            HK_SWITCH_LAYER_TO_COPPER,
-            HK_SWITCH_LAYER_TO_INNER1,
-            HK_SWITCH_LAYER_TO_INNER2,
-            HK_SWITCH_LAYER_TO_INNER3,
-            HK_SWITCH_LAYER_TO_INNER4,
-            HK_SWITCH_LAYER_TO_INNER5,
-            HK_SWITCH_LAYER_TO_INNER6,
-            HK_SWITCH_LAYER_TO_INNER7,
-            HK_SWITCH_LAYER_TO_INNER8,
-            HK_SWITCH_LAYER_TO_INNER9,
-            HK_SWITCH_LAYER_TO_INNER10,
-            HK_SWITCH_LAYER_TO_INNER11,
-            HK_SWITCH_LAYER_TO_INNER12,
-            HK_SWITCH_LAYER_TO_INNER13,
-            HK_SWITCH_LAYER_TO_INNER14,
-            HK_SWITCH_LAYER_TO_COMPONENT
-        };
-
-        if( g_TabOneLayerMask[layer] & layer_mask )
-        {
-            wxString msg = GetBoard()->GetLayerName( layer );
-            msg << wxT("  ");
-            msg = AddHotkeyName( msg, s_Board_Editor_Hokeys_Descr,
-                                 HK_SwitchLayer[layer], false );
-
-            m_SelLayerBox->Append( msg );
-
-            //D(printf("appending layername=%s, ndx=%d, layer=%d\n", CONV_TO_UTF8(msg), listNdx, layer );)
-
-            m_SelLayerBox->wxItemContainer::SetClientData( listNdx, (void*) layer );
-            length = MAX( length, msg.Len() );
-            listNdx++;
-        }
-    }
-
+    m_SelLayerBox->Resync();
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 
     syncLayerBox();

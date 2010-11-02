@@ -9,6 +9,7 @@
 #include "wxstruct.h"
 #include "base_struct.h"
 #include "param_config.h"
+#include "class_layerchoicebox.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -114,7 +115,7 @@ protected:
 
 
 public:
-    WinEDAChoiceBox* m_SelLayerBox;         // a combo box to display and
+    WinEDALayerChoiceBox* m_SelLayerBox;    // a combo box to display and
                                             // select active layer
     WinEDAChoiceBox* m_SelTrackWidthBox;    // a combo box to display and
                                             // select current track width
@@ -308,7 +309,7 @@ public:
     void             ReCreateMicrowaveVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
-    WinEDAChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
+    WinEDALayerChoiceBox* ReCreateLayerBox( WinEDA_Toolbar* parent );
 
     /** Virtual Function OnModify()
      * Must be called after a board change
