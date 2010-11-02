@@ -342,6 +342,10 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
+    // Create a template from the horiz wxAuiPaneInfo, specific for horizontal toolbars:
+    wxAuiPaneInfo horiz_tb( horiz );
+    horiz_tb.ToolbarPane().Gripper( false );
+
     // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
     // LAYER_WIDGET is floatable, but initially docked at far right
     wxAuiPaneInfo   lyrs;
@@ -355,13 +359,13 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     if( m_HToolBar )
     {
         m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+                          wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
     }
 
     if( m_AuxiliaryToolBar )
     {
         m_auimgr.AddPane( m_AuxiliaryToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
+                          wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
     }
 
     if( m_AuxVToolBar )
@@ -378,7 +382,8 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     {
         m_auimgr.AddPane( m_OptionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left()
-                          .ToolbarPane().Gripper( false ));
+                          .ToolbarPane().Gripper( false ) );
+
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                       m_show_layer_manager_tools );
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
