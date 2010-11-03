@@ -103,7 +103,7 @@
 
            layername = board->GetLayerName( layerid );
 
-           layername.Append("\t");
+           layername.Append( wxT( "\t" ) );
            layername = AddHotkeyName( layername, s_Board_Editor_Hokeys_Descr, layerhk[layerid], false );
 
 
