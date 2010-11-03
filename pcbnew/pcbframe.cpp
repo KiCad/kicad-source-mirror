@@ -342,7 +342,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
     vert.TopDockable( false ).BottomDockable( false );
     horiz.LeftDockable( false ).RightDockable( false );
 
-    // Create a template from the horiz wxAuiPaneInfo, specific for horizontal toolbars:
+    // Create a template from the horiz wxAuiPaneInfo, specific to horizontal toolbars:
     wxAuiPaneInfo horiz_tb( horiz );
     horiz_tb.ToolbarPane().Gripper( false );
 

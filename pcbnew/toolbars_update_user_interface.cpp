@@ -184,6 +184,8 @@ void WinEDA_PcbFrame::SetToolbars()
 
     state = GetScreen()->GetRedoCommandCount() > 0;
     m_HToolBar->EnableTool( wxID_REDO, state );
+    syncLayerBox();
+    PrepareLayerIndicator();
     m_HToolBar->Refresh();
 
     if( m_OptionsToolBar )
@@ -276,9 +278,5 @@ void WinEDA_PcbFrame::SetToolbars()
 
     if( m_AuxiliaryToolBar )
         AuxiliaryToolBar_Update_UI();
-
-    syncLayerBox();
-
-    PrepareLayerIndicator();
     DisplayUnitsMsg();
 }

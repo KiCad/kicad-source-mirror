@@ -10,12 +10,12 @@
 class WinEDALayerChoiceBox : public wxBitmapComboBox
 {
 public:
-    WinEDALayerChoiceBox( wxWindow* parent, wxWindowID id,
+    WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int n = 0, const wxString choices[] = NULL );
 
-    WinEDALayerChoiceBox( wxWindow* parent, wxWindowID id,
+    WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
                      const wxPoint& pos, const wxSize& size,
                      const wxArrayString& choices );
 

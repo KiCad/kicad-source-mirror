@@ -267,13 +267,13 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          _( "Perform design rules check" ) );
 
     m_HToolBar->AddSeparator();
-    
+
     if(m_SelLayerBox == NULL)
-        m_SelLayerBox = new WinEDALayerChoiceBox( this, ID_TOOLBARH_PCB_SELECT_LAYER);
+        m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER);
 
     ReCreateLayerBox( m_HToolBar );
     m_HToolBar->AddControl( m_SelLayerBox );
-   
+
     PrepareLayerIndicator();    // Initialize the bitmap with current
                                 // active layer colors for the next tool
     m_HToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
@@ -683,7 +683,6 @@ an existing track use its width\notherwise, use current width setting" ),
 
     m_TrackAndViasSizesList_Changed    = true;
     m_AuxiliaryToolBar->AddSeparator();
-    ReCreateLayerBox( NULL );
 }
 
 
@@ -698,7 +697,7 @@ void WinEDA_PcbFrame::syncLayerBox()
 
 WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
 {
-    if( m_SelLayerBox == NULL ) 
+    if( m_SelLayerBox == NULL )
         return NULL;
 
     m_SelLayerBox->Resync();
