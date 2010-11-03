@@ -186,7 +186,7 @@ void WinEDA_PcbFrame::SetToolbars()
     m_HToolBar->EnableTool( wxID_REDO, state );
     syncLayerBox();
     PrepareLayerIndicator();
-    m_HToolBar->Refresh();
+    m_HToolBar->Refresh(true);
 
     if( m_OptionsToolBar )
     {
