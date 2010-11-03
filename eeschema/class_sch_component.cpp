@@ -973,9 +973,9 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         if( GetField( REFERENCE )->m_Text.IsEmpty() )
             strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof( Name1 ) );
         else
-            strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ),
-                    sizeof( Name1 ) );
+            strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
     }
+
     for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
     {
 #if defined(KICAD_GOST)
@@ -1283,4 +1283,78 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxP
     }
 
     return false;
+}
+
+
+void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+{
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+
+    if( Entry == NULL )
+        return;
+
+    for( LIB_PIN* Pin = Entry->GetNextPin(); Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
+    {
+        wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+
+        if( Pin->GetUnit() && m_Multi && ( m_Multi != Pin->GetUnit() ) )
+            continue;
+
+        if( Pin->GetConvert() && m_Convert && ( m_Convert != Pin->GetConvert() ) )
+            continue;
+
+        DANGLING_END_ITEM item( PIN_END, Pin );
+        item.m_Pos = GetPinPhysicalPosition( Pin );
+        aItemList.push_back( item );
+    }
+}
+
+
+wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
+{
+    wxCHECK_MSG( Pin != NULL && Pin->Type() == COMPONENT_PIN_DRAW_TYPE, wxPoint( 0, 0 ),
+                 wxT( "Cannot get physical position of pin." ) );
+
+    return m_Transform.TransformCoordinate( Pin->m_Pos ) + m_Pos;
+}
+
+
+bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    EDA_Rect boundingBox = GetBoundingBox();
+
+    if( aRect.Intersects( boundingBox ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    LIB_PIN* pin;
+    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+
+    wxCHECK_RET( component != NULL,
+                 wxT( "Cannot add connection points to list.  Cannot find component <" ) +
+                 m_ChipName + wxT( "> in any of the loaded libraries." ) );
+
+    for( pin = component->GetNextPin( pin ); pin != NULL; pin = component->GetNextPin( pin ) )
+    {
+        wxCHECK_RET( pin->Type() == COMPONENT_PIN_DRAW_TYPE,
+                     wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
+
+        // Skip items not used for this part.
+        if( m_Multi && pin->GetUnit() && ( pin->GetUnit() != m_Multi ) )
+            continue;
+        if( m_Convert && pin->GetConvert() && ( pin->GetConvert() != m_Convert ) )
+            continue;
+
+        // Calculate the pin position relative to the component position and orientation.
+        aPoints.push_back( m_Transform.TransformCoordinate( pin->m_Pos ) + m_Pos );
+    }
 }

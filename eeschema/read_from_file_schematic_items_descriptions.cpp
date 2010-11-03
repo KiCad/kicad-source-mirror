@@ -175,7 +175,7 @@ SCH_ITEM* ReadTextDescr( LINE_READER* aLine, wxString& aMsgDiag, int aSchematicF
 /* Function used by LoadEEFile().
  * Get the lines for a description of a piece of hierarchy.
  */
-int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
+int ReadSheetDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     int              ii, fieldNdx, size;
     char             Name1[256], Char1[256], Char2[256];
@@ -286,7 +286,6 @@ int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BAS
                     aLine->LineNumber() );
 
                 aMsgDiag << CONV_FROM_UTF8( line );
-                DisplayError( frame, aMsgDiag );
             }
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
@@ -316,7 +315,6 @@ int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BAS
                 aMsgDiag.Printf( wxT( "EESchema file sheet label error at line %d, ignoring.\n" ),
                                  aLine->LineNumber() );
                 aMsgDiag << CONV_FROM_UTF8( line );
-                DisplayError( frame, aMsgDiag );
                 continue;
             }
 
@@ -391,7 +389,7 @@ int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BAS
 
 
 /* Read the schematic header. */
-bool ReadSchemaDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     char Text[256], buf[1024];
     int  ii;
@@ -427,7 +425,6 @@ bool ReadSchemaDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, B
 line %d, \aAbort reading file.\n" ),
                          aLine->LineNumber() );
         aMsgDiag << CONV_FROM_UTF8( line );
-        DisplayError( frame, aMsgDiag );
     }
 
     Window->m_CurrentSheetDesc = wsheet;
@@ -509,7 +506,7 @@ line %d, \aAbort reading file.\n" ),
  * Get the lines for a description of a schematic component.
  */
 
-int ReadPartDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
+int ReadPartDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
 {
     int            ii;
     char           Name1[256], Name2[256],
@@ -754,7 +751,6 @@ int ReadPartDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE
                 aMsgDiag.Printf(
                     wxT( "Component Field error line %d, aborted" ),
                     aLine->LineNumber() );
-                DisplayError( frame, aMsgDiag );
                 continue;
             }
 

@@ -340,6 +340,46 @@ void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
 }
 
 
+/** Virtual Function SCH_SHEET_PIN::CreateGraphicShape
+ * calculates the graphic shape (a polygon) associated to the text
+ * @param aCorner_list = a buffer to fill with polygon corners coordinates
+ * @param aPos = Position of the shape
+ */
+void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
+                                        const wxPoint&         aPos )
+{
+     /* This is the same icon shapes as SCH_HIERLABEL
+     * but the graphic icon is slightly different in 2 cases:
+     * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
+     * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
+     */
+    int tmp = m_Shape;
+    switch( m_Shape )
+    {
+    case NET_INPUT:
+        m_Shape = NET_OUTPUT;
+        break;
+
+    case NET_OUTPUT:
+        m_Shape = NET_INPUT;
+        break;
+
+    default:
+        break;
+    }
+    SCH_HIERLABEL::CreateGraphicShape( aCorner_list, aPos );
+    m_Shape = tmp;
+}
+
+
+void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+{
+    DANGLING_END_ITEM item( SHEET_LABEL_END, this );
+    item.m_Pos  = m_Pos;
+    aItemList.push_back( item );
+}
+
+
 #if defined(DEBUG)
 void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
 {

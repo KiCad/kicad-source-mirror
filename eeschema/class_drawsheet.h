@@ -23,7 +23,6 @@ extern SCH_SHEET* g_RootSheet;
  * the sheet, it corresponds to a hierarchical label.
  */
 
-//class SCH_SHEET_PIN : public SCH_ITEM, public EDA_TextStruct
 class SCH_SHEET_PIN : public SCH_HIERLABEL
 {
 private:
@@ -31,15 +30,15 @@ private:
                         ///< Sheet label numbering begins at 2.
                         ///< 0 is reserved for the sheet name.
                         ///< 1 is reserve for the sheet file name.
-    int m_Edge;                     /* For pin labels only: sheet edge (0 to 3) of the pin
-                                     * m_Edge define on which edge the pin is positionned:
-                                     *        0: pin on left side
-                                     *        1: pin on right side
-                                     *        2: pin on top side
-                                     *        3: pin on bottom side
-                                     *  for compatibility reasons, this does not follow same values as text
-                                     *  orientation.
-                                     */
+    int m_Edge;         /* For pin labels only: sheet edge (0 to 3) of the pin
+                         * m_Edge define on which edge the pin is positionned:
+                         *        0: pin on left side
+                         *        1: pin on right side
+                         *        2: pin on top side
+                         *        3: pin on bottom side
+                         *  for compatibility reasons, this does not follow same values as text
+                         *  orientation.
+                         */
 
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
@@ -168,8 +167,9 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData,
-                          void* aAuxData, wxPoint * aFindLocation );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
 };
 
 
@@ -250,6 +250,11 @@ public:
     void           AddLabel( SCH_SHEET_PIN* aLabel );
 
     SCH_SHEET_PIN_LIST& GetSheetPins() { return m_labels; }
+
+    SCH_SHEET_PIN_LIST& GetSheetPins() const
+    {
+        return const_cast< SCH_SHEET_PIN_LIST& >( m_labels );
+    }
 
     /**
      * Remove a sheet label from this sheet.
@@ -412,7 +417,9 @@ public:
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
-        BOOST_FOREACH( SCH_SHEET_PIN & label, m_labels ) {
+
+        BOOST_FOREACH( SCH_SHEET_PIN & label, m_labels )
+        {
             label.Move( aMoveVector );
         }
     }
@@ -437,8 +444,7 @@ public:
      *
      * @return True if this item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData,
-                          void* aAuxData, wxPoint * aFindLocation );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     /**
      * Resize this sheet to aSize and adjust all of the labels accordingly.
@@ -456,6 +462,16 @@ public:
      * @return the position of the anchor of filename text
      */
     wxPoint GetFileNamePosition ();
+
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+
+    virtual bool IsDangling() const;
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)
 

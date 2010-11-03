@@ -1,6 +1,6 @@
-/*****************************************************/
+/******************************************************/
 /* Definitions for the Component classes for EESchema */
-/*****************************************************/
+/******************************************************/
 
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
@@ -85,8 +85,7 @@ private:
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
 public:
-    SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ),
-                   SCH_ITEM* aParent = NULL );
+    SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
 
     /**
      * Create schematic component from library component object.
@@ -122,6 +121,7 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
+    TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_Transform ); }
 
     /**
      * Function Save
@@ -312,8 +312,7 @@ public:
     int            GetUnitSelection( SCH_SHEET_PATH* aSheet );
 
     // Set the unit selection, for the given sheet path.
-    void           SetUnitSelection( SCH_SHEET_PATH* aSheet,
-                                     int             aUnitSelection );
+    void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
     /** Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
@@ -355,8 +354,15 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this component reference or value field matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData,
-                            void* aAuxData, wxPoint * aFindLocation );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
     #if defined(DEBUG)
 

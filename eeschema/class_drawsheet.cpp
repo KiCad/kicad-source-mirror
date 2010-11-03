@@ -898,6 +898,70 @@ void SCH_SHEET::renumberLabels()
 }
 
 
+void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+{
+    // Using BOOST_FOREACH here creates problems (bad pointer value to pinsheet).
+    // I do not know why.
+    for( unsigned ii = 0; ii < GetSheetPins().size(); ii++ )
+    {
+        SCH_SHEET_PIN &pinsheet = GetSheetPins()[ii];
+
+        wxCHECK2_MSG( pinsheet.Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE, continue,
+                      wxT( "Invalid item in schematic sheet pin list.  Bad programmer!" ) );
+
+        pinsheet.GetEndPoints( aItemList );
+    }
+}
+
+
+bool SCH_SHEET::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    bool currentState = IsDangling();
+
+    BOOST_FOREACH( SCH_SHEET_PIN& pinsheet, GetSheetPins() )
+    {
+        pinsheet.IsDanglingStateChanged( aItemList );
+    }
+
+    return currentState != IsDangling();
+}
+
+
+bool SCH_SHEET::IsDangling() const
+{
+    // If any hierarchical label in the sheet is dangling, then the sheet is dangling.
+    for( size_t i = 0; i < GetSheetPins().size(); i++ )
+    {
+        if( GetSheetPins()[i].IsDangling() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    EDA_Rect boundingBox = GetBoundingBox();
+
+    if( aRect.Intersects( boundingBox ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    for( size_t i = 0; i < GetSheetPins().size(); i++ )
+        aPoints.push_back( GetSheetPins()[i].m_Pos );
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os )

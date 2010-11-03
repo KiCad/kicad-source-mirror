@@ -348,6 +348,7 @@ public:
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }
     inline bool IsMoving() const { return m_Flags & IS_MOVED; }
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
+    inline bool IsSelected() const { return m_Flags & SELECTED; }
 
     int GetState( int type ) const
     {
