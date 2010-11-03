@@ -27,6 +27,8 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
                       n, choices, wxCB_READONLY )
 {
+    m_layerorder   = true;
+    m_layerhotkeys = true;
 }
 
 
@@ -36,6 +38,22 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
                       choices, wxCB_READONLY )
 {
+    m_layerorder   = true;
+    m_layerhotkeys = true;
+}
+
+
+bool WinEDALayerChoiceBox::SetLayersOrdered( bool value )
+{
+    m_layerorder = value;
+    return m_layerorder;
+}
+
+
+bool WinEDALayerChoiceBox::SetLayersHotkeys( bool value )
+{
+    m_layerhotkeys = value;
+    return m_layerhotkeys;
 }
 
 
@@ -47,7 +65,7 @@ int WinEDALayerChoiceBox::GetChoice()
 
 
 // Get Current Layer
-int WinEDALayerChoiceBox::GetLayerChoice()
+int WinEDALayerChoiceBox::GetLayerSelection()
 {
     return (long) GetClientData( GetSelection() );
 }
@@ -97,9 +115,12 @@ void WinEDALayerChoiceBox::Resync()
         wxMemoryDC bmpDC;
         wxBrush    brush;
         wxString   layername;
+        int        layerid = i;
 
-        int        layerid = layertranscode[i];
-        if( ! board->IsLayerEnabled( layerid ) )
+        if( m_layerorder )
+            layerid = layertranscode[i];
+
+        if( !board->IsLayerEnabled( layerid ) )
             continue;
 
         // Prepare Bitmap
@@ -114,7 +135,11 @@ void WinEDALayerChoiceBox::Resync()
         bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
 
         layername = board->GetLayerName( layerid );
-        layername = AddHotkeyName( layername, s_Board_Editor_Hokeys_Descr, layerhk[layerid], false );
+
+        if( m_layerhotkeys )
+            layername = AddHotkeyName( layername, s_Board_Editor_Hokeys_Descr,
+                                       layerhk[layerid], false );
+
         Append( layername, layerbmp, (void*) layerid );
     }
 }

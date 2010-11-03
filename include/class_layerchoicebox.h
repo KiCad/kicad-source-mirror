@@ -9,6 +9,9 @@
 
 class WinEDALayerChoiceBox : public wxBitmapComboBox
 {
+private:
+    bool m_layerhotkeys;
+    bool m_layerorder;
 public:
     WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
@@ -23,13 +26,16 @@ public:
     int GetChoice();
 
     // Get Current Layer
-    int GetLayerChoice();
+    int GetLayerSelection();
 
     // Set Layer #
     int SetLayerSelection(int layer);
 
     // Reload the Layers
     void Resync();
+
+    bool SetLayersOrdered(bool value);
+    bool SetLayersHotkeys(bool value);
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[LAYER_COUNT] = \
