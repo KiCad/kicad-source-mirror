@@ -74,13 +74,27 @@ WinEDA_SelColorFrame::WinEDA_SelColorFrame( wxWindow*      parent,
     GetSizer()->SetSizeHints( this );
 
     // Ensure the whole frame is visible, whenever the asked position.
+    // Moreover with a work station having dual monitors, the asked position can be relative to a monitor
+    // and this frame can be displayed on the other monitor, with an "out of screen" position.
     // Give also a small margin.
-    wxPoint endCornerPosition = GetPosition();
     int margin = 10;
+    wxPoint windowPosition = GetPosition();
+    if( framepos != wxDefaultPosition )
+    {
+        if( windowPosition.x < margin )
+            windowPosition.x = margin;
+        // Under MACOS, a vertical margin >= 20 is needed by the system menubar
+        int v_margin = MAX(20, margin);
+        if( windowPosition.y < v_margin )
+            windowPosition.y = v_margin;
+        if( windowPosition != framepos )
+            SetPosition(windowPosition);
+    }
+    wxPoint endCornerPosition = GetPosition();
     endCornerPosition.x += GetSize().x + margin;
     endCornerPosition.y += GetSize().y + margin;
 
-    wxPoint windowPosition = GetPosition();
+    windowPosition = GetPosition();
     wxRect freeScreenArea( wxGetClientDisplayRect( ) );
     if( freeScreenArea.GetRight() < endCornerPosition.x )
     {

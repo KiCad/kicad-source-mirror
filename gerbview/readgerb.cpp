@@ -94,7 +94,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 gerber->m_CommandState = CMD_IDLE;
                 while( *text )
                     text++;
-
                 break;
 
             case 'G':    /* Line type Gxx : command */

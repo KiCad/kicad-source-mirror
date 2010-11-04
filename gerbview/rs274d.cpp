@@ -455,7 +455,9 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_commande )
         break;
 
     case GC_COMMENT:
-        text = NULL;
+        // Skip comment
+        while ( *text && (*text != '*') )
+            text++;
         break;
 
     case GC_LINEAR_INTERPOL_10X:
