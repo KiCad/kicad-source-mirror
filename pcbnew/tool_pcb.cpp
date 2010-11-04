@@ -700,6 +700,7 @@ WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent 
     if( m_SelLayerBox == NULL )
         return NULL;
 
+    m_SelLayerBox->m_hotkeys = s_Board_Editor_Hokeys_Descr;
     m_SelLayerBox->Resync();
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 

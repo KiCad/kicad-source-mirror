@@ -29,6 +29,10 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
 {
     m_layerorder   = true;
     m_layerhotkeys = true;
+    m_hotkeys      = NULL;
+
+    if( choices != NULL )
+        ResyncBitmapOnly();
 }
 
 
@@ -40,6 +44,10 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
 {
     m_layerorder   = true;
     m_layerhotkeys = true;
+    m_hotkeys      = NULL;
+
+    if( !choices.IsEmpty() )
+        ResyncBitmapOnly();
 }
 
 
@@ -136,10 +144,38 @@ void WinEDALayerChoiceBox::Resync()
 
         layername = board->GetLayerName( layerid );
 
-        if( m_layerhotkeys )
-            layername = AddHotkeyName( layername, s_Board_Editor_Hokeys_Descr,
-                                       layerhk[layerid], false );
+        if( m_layerhotkeys && m_hotkeys != NULL )
+            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], false );
 
         Append( layername, layerbmp, (void*) layerid );
+    }
+}
+
+void WinEDALayerChoiceBox::ResyncBitmapOnly()
+{
+    WinEDA_BasePcbFrame* pcbFrame = (WinEDA_BasePcbFrame*) GetParent()->GetParent();
+    BOARD* board = pcbFrame->GetBoard();
+
+    int elements = GetCount();
+    for( int i = 0; i < elements; i++ )
+    {
+        wxBitmap   layerbmp( 14, 14 );
+        wxMemoryDC bmpDC;
+        wxBrush    brush;
+        wxString   layername;
+        int        layerid = i;
+
+        // Prepare Bitmap
+        bmpDC.SelectObject( layerbmp );
+        brush.SetColour( MakeColour( board->GetLayerColor( layerid ) ) );
+        brush.SetStyle( wxSOLID );
+
+        bmpDC.SetBrush( brush );
+        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
+        bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
+        bmpDC.SetPen( *wxBLACK_PEN );
+        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
+
+        SetItemBitmap(i, layerbmp); 
     }
 }

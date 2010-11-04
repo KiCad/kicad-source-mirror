@@ -1,6 +1,7 @@
 #ifndef CLASS_LAYERCHOICEBOX_H
 #define CLASS_LAYERCHOICEBOX_H 1
 
+#include "hotkeys_basic.h"
 #include <wx/bmpcbox.h>
 
 /* class to display a layer list.
@@ -33,9 +34,12 @@ public:
 
     // Reload the Layers
     void Resync();
+    void ResyncBitmapOnly();
 
     bool SetLayersOrdered(bool value);
     bool SetLayersHotkeys(bool value);
+    // Hotkey Info
+    struct Ki_HotkeyInfoSectionDescriptor* m_hotkeys;
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[LAYER_COUNT] = \

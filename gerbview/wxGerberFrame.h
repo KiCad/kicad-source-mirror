@@ -8,7 +8,7 @@
 
 #include "id.h"
 #include "class_gerbview_layer_widget.h"
-
+#include "class_layerchoicebox.h"
 
 /**
  * Command IDs for the gerber file viewer.
@@ -44,7 +44,7 @@ protected:
     GERBER_LAYER_WIDGET* m_LayersManager;
 
 public:
-    WinEDAChoiceBox* m_SelLayerBox;
+    WinEDALayerChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelLayerTool;
     wxTextCtrl*      m_TextInfo;        // a wxTextCtrl used to display some info about
                                         // gerber data (format..)
