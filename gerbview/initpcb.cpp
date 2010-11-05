@@ -47,6 +47,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
     SetBaseScreen( ActiveScreen = ScreenPcb );
     GetScreen()->Init();
     setActiveLayer(LAYER_N_BACK);
+    syncLayerBox();
     return TRUE;
 }
 
@@ -81,4 +82,5 @@ void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
 
     ScreenPcb->SetModify();
     ScreenPcb->SetRefreshReq();
+    syncLayerBox();
 }

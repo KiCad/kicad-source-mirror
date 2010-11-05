@@ -217,6 +217,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     ReFillLayerWidget();    // this is near end because contents establish size
 
+    SetToolbars();
     m_auimgr.Update();
 
 }

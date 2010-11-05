@@ -17,9 +17,8 @@
 bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
 {
-    int      G_commande = 0,
-             D_commande = 0;            /* command number for G or D commands
-                                         * (like G04 or D02) */
+    int      G_commande = 0;        // command number for G commands like G04
+    int      D_commande = 0;        // command number for D commands like D02
 
     char     line[GERBER_BUFZ];
 
@@ -57,7 +56,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
 
     SetLocaleTo_C_standard();
 
-    while( TRUE )
+    while( true )
     {
         if( fgets( line, sizeof(line), gerber->m_Current_File ) == NULL )
         {
