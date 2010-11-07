@@ -994,25 +994,24 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
 
 
 /*
- * Search if a junction is connected to segments and include the Netcode
- * objects connect to the junction.
+ * Search if a junction is connected to segments and propagate the junction Netcode
+ * to objects connected by the junction.
  * The junction must have a valid Netcode
- * The list of objects is SUPPOSED class by NumSheet ??? Croissants,
- * And research is done from the start element, 1st element
- * Leaf schema
- * (There can be no physical connection between elements of different sheets)
+ * The list of objects is expected sorted by sheets.
+ * Search is done from index aIdxStart to the last element of g_NetObjectslist
  */
-static void SegmentToPointConnect( NETLIST_OBJECT* Jonction,
-                                   int IsBus, int start )
+static void SegmentToPointConnect( NETLIST_OBJECT* aJonction,
+                                   int aIsBus, int aIdxStart )
 {
-    for( unsigned i = start; i < g_NetObjectslist.size(); i++ )
+    for( unsigned i = aIdxStart; i < g_NetObjectslist.size(); i++ )
     {
         NETLIST_OBJECT* Segment = g_NetObjectslist[i];
 
-        if( Segment->m_SheetList != Jonction->m_SheetList )
+        // if different sheets, no physical connection between elements is possible.
+        if( Segment->m_SheetList != aJonction->m_SheetList )
             continue;
 
-        if( IsBus == 0 )
+        if( aIsBus == 0 )
         {
             if( Segment->m_Type != NET_SEGMENT )
                 continue;
@@ -1023,24 +1022,24 @@ static void SegmentToPointConnect( NETLIST_OBJECT* Jonction,
                 continue;
         }
 
-        if( SegmentIntersect( Segment->m_Start, Segment->m_End, Jonction->m_Start ) )
+        if( SegmentIntersect( Segment->m_Start, Segment->m_End, aJonction->m_Start ) )
         {
             /* Propagation Netcode has all the objects of the same Netcode. */
-            if( IsBus == 0 )
+            if( aIsBus == 0 )
             {
                 if( Segment->GetNet() )
                     PropageNetCode( Segment->GetNet(),
-                                    Jonction->GetNet(), IsBus );
+                                    aJonction->GetNet(), aIsBus );
                 else
-                    Segment->SetNet( Jonction->GetNet() );
+                    Segment->SetNet( aJonction->GetNet() );
             }
             else
             {
                 if( Segment->m_BusNetCode )
                     PropageNetCode( Segment->m_BusNetCode,
-                                    Jonction->m_BusNetCode, IsBus );
+                                    aJonction->m_BusNetCode, aIsBus );
                 else
-                    Segment->m_BusNetCode = Jonction->m_BusNetCode;
+                    Segment->m_BusNetCode = aJonction->m_BusNetCode;
             }
         }
     }

@@ -10,6 +10,7 @@
 
 #include "cvpcb.h"
 #include "cvstruct.h"
+#include "cvpcb_id.h"
 
 #include "bitmaps.h"
 

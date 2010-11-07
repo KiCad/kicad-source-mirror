@@ -305,13 +305,14 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
 
     /* Global label */
     item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, _( "Global label" ),
-                           _( "Place a global label. Warning: all global labels with the same name are connected in whole hierarchy" ),
-                           wxITEM_NORMAL );
+                           HELP_PLACE_GLOBALLABEL, wxITEM_NORMAL );
     item->SetBitmap( add_glabel_xpm );
     placeMenu->Append( item );
 
     /* Junction */
-    item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, _( "Junction" ),
+    text = AddHotkeyName( _( "Junction" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_JUNCTION, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, text,
                            HELP_PLACE_JUNCTION, wxITEM_NORMAL );
     item->SetBitmap( add_junction_xpm );
     placeMenu->Append( item );

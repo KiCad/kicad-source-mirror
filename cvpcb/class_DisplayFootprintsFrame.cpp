@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "cvstruct.h"
 #include "class_DisplayFootprintsFrame.h"
+#include "cvpcb_id.h"
 
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
