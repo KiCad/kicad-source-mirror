@@ -24,7 +24,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     COMPONENT* Component;
     bool       isUndefined = false;
     int        NumCmp;
-    wxString   Line;
+    wxString   msg;
 
     if( m_components.empty() )
         return;
@@ -45,7 +45,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 
     Component->m_Module = package;
 
-    Line.Printf( CMP_FORMAT, NumCmp + 1,
+    msg.Printf( CMP_FORMAT, NumCmp + 1,
                  GetChars( Component->m_Reference ),
                  GetChars( Component->m_Value ),
                  GetChars( Component->m_Module ) );
@@ -54,7 +54,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
     if( isUndefined )
         m_undefinedComponentCnt -= 1;
 
-    m_ListCmp->SetString( NumCmp, Line );
+    m_ListCmp->SetString( NumCmp, msg );
     m_ListCmp->SetSelection( NumCmp, FALSE );
 
     // We activate next component:
@@ -62,9 +62,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
         NumCmp++;
     m_ListCmp->SetSelection( NumCmp, TRUE );
 
-    Line.Printf( _( "Components: %d (free: %d)" ),
-                 m_components.size(), m_undefinedComponentCnt );
-    SetStatusText( Line, 1 );
+    DisplayStatus();
 }
 
 
@@ -112,9 +110,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
     if( !m_components.empty() )
         m_ListCmp->SetSelection( 0, TRUE );
 
-    msg.Printf( _( "Components: %d (free: %d)" ), m_components.size(),
-                m_undefinedComponentCnt );
-    SetStatusText( msg, 1 );
+    DisplayStatus();
 
     /* Update the title of the main window. */
     SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +

@@ -9,6 +9,7 @@
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "cvpcb_id.h"
 
 
 /******************************************************************************
@@ -122,7 +123,5 @@ void WinEDA_CvpcbFrame::BuildFOOTPRINTS_LISTBOX()
     }
 
     m_FootprintList->SetFootprintFullList( m_footprints );
-
-    msg.Printf( _( "Footprints: %d" ), m_FootprintList->GetCount() );
-    SetStatusText( msg, 2 );
+    DisplayStatus();
 }

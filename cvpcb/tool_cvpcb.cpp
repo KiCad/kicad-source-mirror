@@ -11,6 +11,7 @@
 #include "cvpcb.h"
 #include "protos.h"
 #include "cvstruct.h"
+#include "cvpcb_id.h"
 
 
 void WinEDA_CvpcbFrame::ReCreateHToolbar()

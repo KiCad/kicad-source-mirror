@@ -485,9 +485,8 @@ the current schematic." ),
         {
             versionMajor = (int) major;
             versionMinor = (int) minor;
-
-            wxLogDebug( wxT( "Component library <%s> is version %d.%d." ),
-                        GetChars( GetName() ), versionMajor, versionMinor );
+//            wxLogDebug( wxT( "Component library <%s> is version %d.%d." ),
+//                        GetChars( GetName() ), versionMajor, versionMinor );
         }
     }
 

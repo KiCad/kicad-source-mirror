@@ -23,7 +23,7 @@ FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( WinEDA_CvpcbFrame* parent,
 {
     m_UseFootprintFullList = true;
     m_ActiveFootprintList  = NULL;
-    SetActiveFootprintList( TRUE );
+    SetActiveFootprintList( true );
 }
 
 
@@ -61,8 +61,8 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
     if( ii >= 0 )
     {
         wxString msg = (*m_ActiveFootprintList)[ii];
-        msg.Trim( TRUE );
-        msg.Trim( FALSE );
+        msg.Trim( true );
+        msg.Trim( false );
         FootprintName = msg.AfterFirst( wxChar( ' ' ) );
     }
 
@@ -121,11 +121,11 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
         m_FullFootprintList.Add( msg );
     }
 
-    SetActiveFootprintList( TRUE );
+    SetActiveFootprintList( true );
 
     if( ( GetCount() == 0 )
        || ( OldSelection < 0 ) || ( OldSelection >= GetCount() ) )
-        SetSelection( 0, TRUE );
+        SetSelection( 0, true );
     Refresh();
 }
 
@@ -137,7 +137,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      Component,
     wxString msg;
     unsigned jj;
     int      OldSelection = GetSelection();
-    bool     HasItem = FALSE;
+    bool     HasItem = false;
 
     m_FilteredFootprintList.Clear();
 
@@ -150,17 +150,17 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      Component,
             msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
                        footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
-            HasItem = TRUE;
+            HasItem = true;
         }
     }
 
     if( HasItem )
-        SetActiveFootprintList( FALSE );
+        SetActiveFootprintList( false );
     else
-        SetActiveFootprintList( TRUE );
+        SetActiveFootprintList( true );
 
     if( ( GetCount() == 0 ) || ( OldSelection >= GetCount() ) )
-        SetSelection( 0, TRUE );
+        SetSelection( 0, true );
 
     Refresh();
 }
@@ -189,49 +189,35 @@ void FOOTPRINTS_LISTBOX::SetActiveFootprintList( bool FullList, bool Redraw )
     {
         bool new_selection;
         if( FullList )
-            new_selection = TRUE;
+            new_selection = true;
         else
-            new_selection = FALSE;
+            new_selection = false;
         if( new_selection != old_selection )
-            SetSelection( 0, TRUE );
+            SetSelection( 0, true );
     }
 #endif
     if( FullList )
     {
-        m_UseFootprintFullList = TRUE;
+        m_UseFootprintFullList = true;
         m_ActiveFootprintList  = &m_FullFootprintList;
         SetItemCount( m_FullFootprintList.GetCount() );
     }
     else
     {
-        m_UseFootprintFullList = FALSE;
+        m_UseFootprintFullList = false;
         m_ActiveFootprintList  = &m_FilteredFootprintList;
         SetItemCount( m_FilteredFootprintList.GetCount() );
     }
 
     if( Redraw )
     {
-        if( !m_UseFootprintFullList
-           || ( m_UseFootprintFullList != old_selection ) )
+        if( !m_UseFootprintFullList || ( m_UseFootprintFullList != old_selection ) )
         {
             Refresh();
         }
     }
 
-    if( !m_UseFootprintFullList || ( m_UseFootprintFullList != old_selection ) )
-    {
-        GetParent()->SetStatusText( wxEmptyString, 0 );
-        GetParent()->SetStatusText( wxEmptyString, 1 );
-    }
-
-    wxString msg;
-    if( FullList )
-        msg.Printf( _( "Footprints (All): %d" ),
-                   m_ActiveFootprintList->GetCount() );
-    else
-        msg.Printf( _( "Footprints (filtered): %d" ),
-                   m_ActiveFootprintList->GetCount() );
-    GetParent()->SetStatusText( msg, 2 );
+    GetParent()->DisplayStatus();
 }
 
 
@@ -253,6 +239,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
     wxString   FootprintName = GetSelectedFootprint();
 
     Module = GetModuleDescrByName( FootprintName, GetParent()->m_footprints );
+    wxASSERT(Module);
     if( GetParent()->DrawFrame )
     {
         GetParent()->CreateScreenCmp(); /* refresh general */
