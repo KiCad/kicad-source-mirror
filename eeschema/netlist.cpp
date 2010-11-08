@@ -405,7 +405,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
         }
         if( candidate_priority > item_priority )
         {
-             item = candidate;
+            item = candidate;
             item_priority = candidate_priority;
         }
         else if( candidate_priority == item_priority )
@@ -414,15 +414,29 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             // because they have no sheetpath as prefix name
             // for other labels, we select them before by sheet deep order
             // because the actual name is /sheetpath/label
-            // and for a given path lenght, by alphabetic order
-            if( ( item_priority < PRIO_MAX-1 ) &&    // Not a global label or pin label
-                candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )
-            {
-                item = candidate;
+            // and for a given path length, by alphabetic order
+            
+            if( item_priority >= PRIO_MAX-1 )     // global label or pin label
+            {   // selection by alphabetic order:
+                if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+                    item = candidate;
             }
-            else if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+            else    // not global: names are prefixed by their sheetpath
             {
-                item = candidate;
+                // use name defined in highter hierarchical sheet
+                // (i.e. shorter path because paths are /<timestamp1>/<timestamp2>/...
+                // and timestamp = 8 letters.
+                if( candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )
+                {
+                    item = candidate;
+                }
+                else if( candidate->m_SheetList.Path().Length() == item->m_SheetList.Path().Length() )
+                {
+                    // For labels on sheets having an equivalent deep in hierarchy, use
+                    // alphabetic label name order:
+                    if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+                        item = candidate;
+                }
             }
         }
     }
