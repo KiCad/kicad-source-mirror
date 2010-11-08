@@ -405,8 +405,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
         }
         if( candidate_priority > item_priority )
         {
-            printf(" prio (%d %d) ", item_priority, candidate_priority );
-            item = candidate;
+             item = candidate;
             item_priority = candidate_priority;
         }
         else if( candidate_priority == item_priority )
@@ -420,12 +419,10 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
                 candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )
             {
                 item = candidate;
-                printf(" path (pr %d) ", item_priority);
             }
             else if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
             {
                 item = candidate;
-                printf(" alpha ");
             }
         }
     }
