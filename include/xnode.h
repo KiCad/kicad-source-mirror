@@ -52,9 +52,9 @@ public:
      * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 
     /**
      * Function FormatContents
@@ -62,9 +62,9 @@ public:
      * This is the same as Format() except that the outer wrapper is not included.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 
     // The following functions did not appear in the base class until recently.
     // Overload them even if they are present in base class, just to make sure

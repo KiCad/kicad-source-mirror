@@ -613,7 +613,7 @@ void WinEDA_SchematicFrame::LoadSettings()
         {
             m_TemplateFieldNames.Parse( &lexer );
         }
-        catch( IOError e )
+        catch( IO_ERROR e )
         {
             // @todo show error msg
             D(printf("templatefieldnames parsing error: '%s'\n",

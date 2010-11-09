@@ -294,7 +294,7 @@ protected:                  ///< derived classes must implement
      * part is done, then LIBRARY::ReloadPart() must be called on this same part
      * and all parts that inherit it must be reparsed.
      */
-    virtual void WritePart( const STRING& aPartName, const STRING& aSExpression ) throw ( IO_ERROR ) = 0;
+    virtual void WritePart( const STRING& aPartName, const STRING& aSExpression ) throw( IO_ERROR ) = 0;
 
 
 protected:
@@ -318,7 +318,7 @@ class LIBS
      * will find it and load it into its containing LIBRARY, even if that means
      * having to load a new LIBRARY as given in the library table.
      */
-    static PART* GetPart( const LPID& aLogicalPartID ) throw ( IO_ERROR );
+    static PART* GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR );
 
     /**
      * Function GetLIBRARY
@@ -444,9 +444,9 @@ public:
      * There can be some self referential issues that mean all the parts in the PARTS_LIST
      * have to reparsed.
      */
-    virtual void WritePart( PART* aPart ) throw ( IO_ERROR ) = 0;
+    virtual void WritePart( PART* aPart ) throw( IO_ERROR ) = 0;
 
-    virtual void SetPartBody( PART* aPart, const STRING& aSExpression ) throw ( IO_ERROR );
+    virtual void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
 
     /**
      * Function GetRevisions

@@ -63,7 +63,7 @@ int main( int argc, char** argv )
 //        db.LoadPCB( filename );
         db.LoadSESSION( filename );
     }
-    catch( IOError ioe )
+    catch( IO_ERROR ioe )
     {
         fprintf( stderr, "%s\n", CONV_TO_UTF8(ioe.errorText) );
         failed = true;

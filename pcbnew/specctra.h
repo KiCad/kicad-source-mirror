@@ -554,9 +554,9 @@ struct POINT
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
     {
         out->Print( nestLevel, " %.6g %.6g", x, y );
     }
@@ -576,9 +576,9 @@ struct PROPERTY
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
     {
         const char* quoteName  = out->GetQuoteChar( name.c_str() );
         const char* quoteValue = out->GetQuoteChar( value.c_str() );
@@ -654,9 +654,9 @@ public:
      * SPECCTRA DSN format.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 
 
     /**
@@ -666,9 +666,9 @@ public:
      * wrapper is not included.
      * @param out The formatter to write to.
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
-     * @throw IOError if a system error writing the output, such as a full disk.
+     * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         // overridden in ELEM_HOLDER
     }
@@ -700,7 +700,7 @@ public:
     {
     }
 
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 
 
     //-----< list operations >--------------------------------------------
@@ -796,7 +796,7 @@ public:
 
     PARSER( ELEM* aParent );
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 };
 
 
@@ -831,7 +831,7 @@ public:
     DSN_T   GetEngUnits() const  { return units; }
     int     GetValue() const  { return value; }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( type == T_unit )
             out->Print( nestLevel, "(%s %s)\n", Name(),
@@ -874,7 +874,7 @@ public:
         point1.FixNegativeZero();
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -907,7 +907,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -953,7 +953,7 @@ public:
         delete rule;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -1012,7 +1012,7 @@ public:
         aperture_width = aWidth;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -1071,7 +1071,7 @@ public:
         delete rectangle;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -1104,7 +1104,7 @@ public:
         diameter = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -1151,7 +1151,7 @@ public:
         aperture_width = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -1233,7 +1233,7 @@ public:
         }
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -1316,7 +1316,7 @@ public:
         windows.push_back( aWindow );
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* newline = "\n";
 
@@ -1393,7 +1393,7 @@ public:
         padstacks.push_back( aViaName );
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const int RIGHTMARGIN = 80;
         int perLine = out->Print( nestLevel, "(%s", Name() );
@@ -1447,7 +1447,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( STRINGS::iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
         {
@@ -1485,7 +1485,7 @@ public:
         delete classes;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( classes )
             classes->Format( out, nestLevel );
@@ -1515,7 +1515,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -1570,7 +1570,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( name.c_str() );
 
@@ -1644,7 +1644,7 @@ public:
         layer_weight = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote0 = out->GetQuoteChar( layer_id0.c_str() );
         const char* quote1 = out->GetQuoteChar( layer_id1.c_str() );
@@ -1671,7 +1671,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -1717,7 +1717,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s %s)\n", Name(),
                    GetTokenText( value ) );
@@ -1743,7 +1743,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( value.c_str() );
 
@@ -1786,7 +1786,7 @@ public:
         delete rules;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( region_id.size() )
         {
@@ -1834,7 +1834,7 @@ public:
         image_type= T_NONE;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s %s %.6g",
                    Name(),
@@ -1878,7 +1878,7 @@ public:
         delete rules;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
             i->Format( out, nestLevel );
@@ -1962,7 +1962,7 @@ public:
             place_boundary->SetParent( this );
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2094,7 +2094,7 @@ public:
         rotation = aRotation;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 };
 typedef boost::ptr_vector<PLACE>    PLACES;
 
@@ -2131,7 +2131,7 @@ public:
      */
 //    static int Compare( IMAGE* lhs, IMAGE* rhs );
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( image_id.c_str() );
         out->Print( nestLevel, "(%s %s%s%s\n", Name(),
@@ -2142,7 +2142,7 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
             i->Format( out, nestLevel );
@@ -2195,7 +2195,7 @@ public:
         return added;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2261,7 +2261,7 @@ public:
         connect = aConnect;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -2320,7 +2320,7 @@ public:
         vertex.FixNegativeZero();
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
         if( isRotated )
@@ -2405,7 +2405,7 @@ public:
         return image_id;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         std::string imageId = GetImageId();
 
@@ -2420,7 +2420,7 @@ public:
     }
 
     // this is here for makeHash()
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( side != T_both )
             out->Print( 0, " (side %s)", GetTokenText( side ) );
@@ -2520,7 +2520,7 @@ public:
         padstack_id = aPadstackId;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
 
@@ -2534,7 +2534,7 @@ public:
 
 
     // this factored out for use by Compare()
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2763,7 +2763,7 @@ public:
         return NULL;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2808,7 +2808,7 @@ struct PIN_REF : public ELEM
      * is like Format() but is not virual and returns the number of characters
      * that were output.
      */
-    int FormatIt( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    int FormatIt( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         // only print the newline if there is a nest level, and make
         // the quotes unconditional on this one.
@@ -2852,7 +2852,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         // no quoting on these two, the lexer preserved the quotes on input
         out->Print( nestLevel, "(%s %s %s ",
@@ -2910,7 +2910,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -2993,7 +2993,7 @@ public:
         return -1;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( net_id.c_str() );
         const char* space = " ";
@@ -3070,7 +3070,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( FROMTOS::iterator i=fromtos.begin();  i!=fromtos.end();  ++i )
             i->Format( out, nestLevel );
@@ -3117,7 +3117,7 @@ public:
     }
 
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( class_id.c_str() );
 
@@ -3186,7 +3186,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
             i->Format( out, nestLevel );
@@ -3267,7 +3267,7 @@ public:
         }
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -3351,7 +3351,7 @@ public:
         return padstack_id;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
 
@@ -3477,7 +3477,7 @@ public:
         delete unit;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -3540,7 +3540,7 @@ public:
         delete wiring;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( pcbname.c_str() );
 
@@ -3603,7 +3603,7 @@ public:
         time_stamp = time(NULL);
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         char    temp[80];
         struct  tm* tmp;
@@ -3647,7 +3647,7 @@ public:
         time_stamp = time(NULL);
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( ANCESTORS::iterator i=ancestors.begin();  i!=ancestors.end();  ++i )
             i->Format( out, nestLevel );
@@ -3690,7 +3690,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         bool singleLine = pin_refs.size() <= 1;
         out->Print( nestLevel, "(%s", Name() );
@@ -3749,7 +3749,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( net_id.c_str() );
 
@@ -3816,7 +3816,7 @@ public:
         return ELEM::GetUnits();
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         if( resolution )
             resolution->Format( out, nestLevel );
@@ -3879,7 +3879,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         for( PIN_PAIRS::iterator i=pin_pairs.begin();  i!=pin_pairs.end();  ++i )
         {
@@ -3936,7 +3936,7 @@ public:
         delete route;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     {
         const char* quote = out->GetQuoteChar( session_id.c_str() );
         out->Print( nestLevel, "(%s %s%s%s\n", Name(),
@@ -4048,10 +4048,10 @@ class SPECCTRA_DB
     /**
      * Function needLEFT
      * calls nextTok() and then verifies that the token read in is a T_LEFT.
-     * If it is not, an IOError is thrown.
-     * @throw IOError, if the next token is not a T_LEFT
+     * If it is not, an IO_ERROR is thrown.
+     * @throw IO_ERROR, if the next token is not a T_LEFT
      */
-    void needLEFT() throw( IOError )
+    void needLEFT() throw( IO_ERROR )
     {
         lexer->NeedLEFT();
     }
@@ -4059,10 +4059,10 @@ class SPECCTRA_DB
     /**
      * Function needRIGHT
      * calls nextTok() and then verifies that the token read in is a T_RIGHT.
-     * If it is not, an IOError is thrown.
-     * @throw IOError, if the next token is not a T_RIGHT
+     * If it is not, an IO_ERROR is thrown.
+     * @throw IO_ERROR, if the next token is not a T_RIGHT
      */
-    void needRIGHT() throw( IOError )
+    void needRIGHT() throw( IO_ERROR )
     {
         lexer->NeedRIGHT();
     }
@@ -4071,11 +4071,11 @@ class SPECCTRA_DB
      * Function needSYMBOL
      * calls nextTok() and then verifies that the token read in
      * satisfies bool isSymbol().
-     * If not, an IOError is thrown.
+     * If not, an IO_ERROR is thrown.
      * @return DSN_T - the actual token read in.
-     * @throw IOError, if the next token does not satisfy isSymbol()
+     * @throw IO_ERROR, if the next token does not satisfy isSymbol()
      */
-    DSN_T needSYMBOL() throw( IOError )
+    DSN_T needSYMBOL() throw( IO_ERROR )
     {
         return (DSN_T) lexer->NeedSYMBOL();
     }
@@ -4084,11 +4084,11 @@ class SPECCTRA_DB
      * Function needSYMBOLorNUMBER
      * calls nextTok() and then verifies that the token read in
      * satisfies bool isSymbol() or tok==T_NUMBER.
-     * If not, an IOError is thrown.
+     * If not, an IO_ERROR is thrown.
      * @return DSN_T - the actual token read in.
-     * @throw IOError, if the next token does not satisfy the above test
+     * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    DSN_T needSYMBOLorNUMBER() throw( IOError )
+    DSN_T needSYMBOLorNUMBER() throw( IO_ERROR )
     {
         return (DSN_T) lexer->NeedSYMBOLorNUMBER();
     }
@@ -4106,10 +4106,10 @@ class SPECCTRA_DB
      *
      * @param component_id Where to put the text preceeding the '-' hyphen.
      * @param pin_d Where to put the text which trails the '-'.
-     * @throw IOError, if the next token or two do no make up a pin_reference,
+     * @throw IO_ERROR, if the next token or two do no make up a pin_reference,
      * or there is an error reading from the input stream.
      */
-    void readCOMPnPIN( std::string* component_id, std::string* pid_id ) throw( IOError );
+    void readCOMPnPIN( std::string* component_id, std::string* pid_id ) throw( IO_ERROR );
 
 
     /**
@@ -4123,80 +4123,80 @@ class SPECCTRA_DB
      * time stamp.
      *
      * @param time_stamp Where to put the parsed time value.
-     * @throw IOError, if the next token or 8 do no make up a time stamp,
+     * @throw IO_ERROR, if the next token or 8 do no make up a time stamp,
      * or there is an error reading from the input stream.
      */
-    void readTIME( time_t* time_stamp ) throw( IOError );
+    void readTIME( time_t* time_stamp ) throw( IO_ERROR );
 
 
     /**
      * Function expecting
-     * throws an IOError exception with an input file specific error message.
+     * throws an IO_ERROR exception with an input file specific error message.
      * @param int is the token type which was expected at the current input location.
-     * @throw IOError with the location within the input file of the problem.
+     * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void expecting( DSN_T aTok ) throw( IOError )
+    void expecting( DSN_T aTok ) throw( IO_ERROR )
     {
         lexer->Expecting( aTok );
     }
-    void unexpected( DSN_T aTok ) throw( IOError )
+    void unexpected( DSN_T aTok ) throw( IO_ERROR )
     {
         lexer->Unexpected( aTok );
     }
-    void expecting( const char* text ) throw( IOError );
-    void unexpected( const char* text ) throw( IOError );
+    void expecting( const char* text ) throw( IO_ERROR );
+    void unexpected( const char* text ) throw( IO_ERROR );
 
-    void doPCB( PCB* growth ) throw(IOError);
-    void doPARSER( PARSER* growth ) throw(IOError);
-    void doRESOLUTION( UNIT_RES* growth ) throw(IOError);
-    void doUNIT( UNIT_RES* growth ) throw( IOError );
-    void doSTRUCTURE( STRUCTURE* growth ) throw( IOError );
-    void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IOError );
-    void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError );
-    void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError );
-    void doBOUNDARY( BOUNDARY* growth ) throw( IOError );
-    void doRECTANGLE( RECTANGLE* growth ) throw( IOError );
-    void doPATH( PATH* growth ) throw( IOError );
-    void doSTRINGPROP( STRINGPROP* growth ) throw( IOError );
-    void doTOKPROP( TOKPROP* growth ) throw( IOError );
-    void doVIA( VIA* growth ) throw( IOError );
-    void doCONTROL( CONTROL* growth ) throw( IOError );
-    void doLAYER( LAYER* growth ) throw( IOError );
-    void doRULE( RULE* growth ) throw( IOError );
-    void doKEEPOUT( KEEPOUT* growth ) throw( IOError );
-    void doCIRCLE( CIRCLE* growth ) throw( IOError );
-    void doQARC( QARC* growth ) throw( IOError );
-    void doWINDOW( WINDOW* growth ) throw( IOError );
-    void doREGION( REGION* growth ) throw( IOError );
-    void doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError );
-    void doLAYER_RULE( LAYER_RULE* growth ) throw( IOError );
-    void doCLASSES( CLASSES* growth ) throw( IOError );
-    void doGRID( GRID* growth ) throw( IOError );
-    void doPLACE( PLACE* growth ) throw( IOError );
-    void doCOMPONENT( COMPONENT* growth ) throw( IOError );
-    void doPLACEMENT( PLACEMENT* growth ) throw( IOError );
-    void doPROPERTIES( PROPERTIES* growth ) throw( IOError );
-    void doPADSTACK( PADSTACK* growth ) throw( IOError );
-    void doSHAPE( SHAPE* growth ) throw( IOError );
-    void doIMAGE( IMAGE* growth ) throw( IOError );
-    void doLIBRARY( LIBRARY* growth ) throw( IOError );
-    void doPIN( PIN* growth ) throw( IOError );
-    void doNET( NET* growth ) throw( IOError );
-    void doNETWORK( NETWORK* growth ) throw( IOError );
-    void doCLASS( CLASS* growth ) throw( IOError );
-    void doTOPOLOGY( TOPOLOGY* growth ) throw( IOError );
-    void doFROMTO( FROMTO* growth ) throw( IOError );
-    void doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError );
-    void doWIRE( WIRE* growth ) throw( IOError );
-    void doWIRE_VIA( WIRE_VIA* growth ) throw( IOError );
-    void doWIRING( WIRING* growth ) throw( IOError );
-    void doSESSION( SESSION* growth ) throw( IOError );
-    void doANCESTOR( ANCESTOR* growth ) throw( IOError );
-    void doHISTORY( HISTORY* growth ) throw( IOError );
-    void doROUTE( ROUTE* growth ) throw( IOError );
-    void doWAS_IS( WAS_IS* growth ) throw( IOError );
-    void doNET_OUT( NET_OUT* growth ) throw( IOError );
-    void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError );
+    void doPCB( PCB* growth ) throw( IO_ERROR );
+    void doPARSER( PARSER* growth ) throw( IO_ERROR );
+    void doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR );
+    void doUNIT( UNIT_RES* growth ) throw( IO_ERROR );
+    void doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR );
+    void doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR );
+    void doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR );
+    void doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR );
+    void doBOUNDARY( BOUNDARY* growth ) throw( IO_ERROR );
+    void doRECTANGLE( RECTANGLE* growth ) throw( IO_ERROR );
+    void doPATH( PATH* growth ) throw( IO_ERROR );
+    void doSTRINGPROP( STRINGPROP* growth ) throw( IO_ERROR );
+    void doTOKPROP( TOKPROP* growth ) throw( IO_ERROR );
+    void doVIA( VIA* growth ) throw( IO_ERROR );
+    void doCONTROL( CONTROL* growth ) throw( IO_ERROR );
+    void doLAYER( LAYER* growth ) throw( IO_ERROR );
+    void doRULE( RULE* growth ) throw( IO_ERROR );
+    void doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR );
+    void doCIRCLE( CIRCLE* growth ) throw( IO_ERROR );
+    void doQARC( QARC* growth ) throw( IO_ERROR );
+    void doWINDOW( WINDOW* growth ) throw( IO_ERROR );
+    void doREGION( REGION* growth ) throw( IO_ERROR );
+    void doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR );
+    void doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR );
+    void doCLASSES( CLASSES* growth ) throw( IO_ERROR );
+    void doGRID( GRID* growth ) throw( IO_ERROR );
+    void doPLACE( PLACE* growth ) throw( IO_ERROR );
+    void doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR );
+    void doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR );
+    void doPROPERTIES( PROPERTIES* growth ) throw( IO_ERROR );
+    void doPADSTACK( PADSTACK* growth ) throw( IO_ERROR );
+    void doSHAPE( SHAPE* growth ) throw( IO_ERROR );
+    void doIMAGE( IMAGE* growth ) throw( IO_ERROR );
+    void doLIBRARY( LIBRARY* growth ) throw( IO_ERROR );
+    void doPIN( PIN* growth ) throw( IO_ERROR );
+    void doNET( NET* growth ) throw( IO_ERROR );
+    void doNETWORK( NETWORK* growth ) throw( IO_ERROR );
+    void doCLASS( CLASS* growth ) throw( IO_ERROR );
+    void doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR );
+    void doFROMTO( FROMTO* growth ) throw( IO_ERROR );
+    void doCOMP_ORDER( COMP_ORDER* growth ) throw( IO_ERROR );
+    void doWIRE( WIRE* growth ) throw( IO_ERROR );
+    void doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR );
+    void doWIRING( WIRING* growth ) throw( IO_ERROR );
+    void doSESSION( SESSION* growth ) throw( IO_ERROR );
+    void doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR );
+    void doHISTORY( HISTORY* growth ) throw( IO_ERROR );
+    void doROUTE( ROUTE* growth ) throw( IO_ERROR );
+    void doWAS_IS( WAS_IS* growth ) throw( IO_ERROR );
+    void doNET_OUT( NET_OUT* growth ) throw( IO_ERROR );
+    void doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR );
 
     //-----<FromBOARD>-------------------------------------------------------
 
@@ -4206,7 +4206,7 @@ class SPECCTRA_DB
      * @param aBoard The BOARD to get information from in order to make the BOUNDARY.
      * @param aBoundary The empty BOUNDARY to fill in.
      */
-    void fillBOUNDARY( BOARD* aBoard, BOUNDARY* aBoundary ) throw( IOError );
+    void fillBOUNDARY( BOARD* aBoard, BOUNDARY* aBoundary ) throw( IO_ERROR );
 
 
     /**
@@ -4280,7 +4280,7 @@ class SPECCTRA_DB
      * Function makeTRACK
      * creates a TRACK form the PATH and BOARD info.
      */
-    TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError );
+    TRACK* makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR );
 
 
     /**
@@ -4288,7 +4288,7 @@ class SPECCTRA_DB
      * instantiates a Kicad SEGVIA on the heap and initializes it with internal
      * values consistent with the given PADSTACK, POINT, and netcode.
      */
-    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IOError );
+    SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR );
 
     //-----</FromSESSION>----------------------------------------------------
 
@@ -4357,9 +4357,9 @@ public:
      * missing only the silkscreen stuff).
      *
      * @param filename The name of the dsn file to load.
-     * @throw IOError if there is a lexer or parser error.
+     * @throw IO_ERROR if there is a lexer or parser error.
      */
-    void LoadPCB( const wxString& filename ) throw( IOError );
+    void LoadPCB( const wxString& filename ) throw( IO_ERROR );
 
 
     /**
@@ -4370,12 +4370,12 @@ public:
      * tracks, vias, and component locations.
      *
      * @param filename The name of the dsn file to load.
-     * @throw IOError if there is a lexer or parser error.
+     * @throw IO_ERROR if there is a lexer or parser error.
      */
-    void LoadSESSION( const wxString& filename ) throw( IOError );
+    void LoadSESSION( const wxString& filename ) throw( IO_ERROR );
 
 
-    void ThrowIOError( const wxChar* fmt, ... ) throw( IOError );
+    void ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR );
 
 
     /**
@@ -4385,9 +4385,9 @@ public:
      * @param aFilename The file to save to.
      * @param aNameChange If true, causes the pcb's name to change to "aFilename"
      *          and also to to be changed in the output file.
-     * @throw IOError, if an i/o error occurs saving the file.
+     * @throw IO_ERROR, if an i/o error occurs saving the file.
      */
-    void ExportPCB( wxString aFilename,  bool aNameChange=false ) throw( IOError );
+    void ExportPCB( wxString aFilename,  bool aNameChange=false ) throw( IO_ERROR );
 
 
     /**
@@ -4401,7 +4401,7 @@ public:
      *
      * @param aBoard The BOARD to convert to a PCB.
      */
-    void FromBOARD( BOARD* aBoard ) throw( IOError );
+    void FromBOARD( BOARD* aBoard ) throw( IO_ERROR );
 
     /**
      * Function FromSESSION
@@ -4411,7 +4411,7 @@ public:
      *
      * @param aBoard The BOARD to merge the SESSION information into.
      */
-    void FromSESSION( BOARD* aBoard ) throw( IOError );
+    void FromSESSION( BOARD* aBoard ) throw( IO_ERROR );
 
     /**
      * Function ExportSESSION

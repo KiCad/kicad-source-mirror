@@ -66,7 +66,7 @@ struct TEMPLATE_FIELDNAME
      * Function Format
      * serializes this object out as text into the given OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
     /**
      * Function Parse
@@ -81,7 +81,7 @@ struct TEMPLATE_FIELDNAME
      *
      * @param aSpec is the input token stream of keywords and symbols.
      */
-    void Parse( TEMPLATE_FIELDNAMES_LEXER* aSpec ) throw( IOError );
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* aSpec ) throw( IO_ERROR );
 
     /**
      * Function GetDefaultFieldName
@@ -106,13 +106,13 @@ public:
      * Function Format
      * serializes this object out as text into the given OUTPUTFORMATTER.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
     /**
      * Function Parse
      * fills this object from information in the input stream handled by TEMPLATE_FIELDNAMES_LEXER
      */
-    void Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError );
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR );
 
 
     /**

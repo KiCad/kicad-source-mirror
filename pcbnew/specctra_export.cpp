@@ -112,7 +112,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.
     }
-    catch( IOError ioe )
+    catch( IO_ERROR ioe )
     {
         ok = false;
 
@@ -719,7 +719,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 }
 
 
-void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IOError )
+void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ERROR )
 {
     TYPE_COLLECTOR          items;
 
@@ -905,7 +905,7 @@ typedef std::set<std::string>  STRINGSET;
 typedef std::pair<STRINGSET::iterator, bool> STRINGSET_PAIR;
 
 
-void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IOError )
+void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 {
     TYPE_COLLECTOR          items;
 

@@ -1055,7 +1055,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
             STREAM_OUTPUTFORMATTER  outputFormatter( os );
             xroot->Format( &outputFormatter, 0 );
         }
-        catch( IOError ioe )
+        catch( IO_ERROR ioe )
         {
             delete xroot;
             goto L_error;
