@@ -5,22 +5,20 @@
 #include "fctsys.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
+#include "richio.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_marker_sch.h"
-#include "richio.h"
+#include "class_schematic_items.h"
+#include "class_sch_component.h"
+#include "class_text-label.h"
+#include "class_drawsheet.h"
 
-
-/* in read_from_file_schematic_items_description.cpp */
-SCH_ITEM* ReadTextDescr( LINE_READER* aLine, wxString& aMsgDiag, int aSchematicFileVersion );
-
-int ReadSheetDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
 
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
-
-int ReadPartDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
 
 static void LoadLayers( LINE_READER* aLine );
 
@@ -31,17 +29,11 @@ static void LoadLayers( LINE_READER* aLine );
  */
 bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
 {
-    char            Name1[256],
-                    Name2[256];
-    int             ii, layer;
-    wxPoint         pos;
-    bool            Failed = FALSE;
-    SCH_ITEM*       Phead, * Pnext;
-    SCH_JUNCTION*   ConnectionStruct;
-    SCH_POLYLINE*   PolylineStruct;
-    SCH_LINE*       SegmentStruct;
-    SCH_BUS_ENTRY*  busEntry;
-    SCH_NO_CONNECT* NoConnectStruct;
+    char            Name1[256];
+    bool            itemLoaded;
+    SCH_ITEM*       Phead;
+    SCH_ITEM*       Pnext;
+    SCH_ITEM*       item;
     wxString        MsgDiag;            // Error and log messages
 
 #define line        ((char*)reader)
@@ -72,8 +64,7 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
     PrintMsg( MsgDiag );
 
     if( !reader.ReadLine()
-        || strncmp( line + 9, SCHEMATIC_HEAD_STRING,
-                    sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
+        || strncmp( line + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
     {
         MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
@@ -113,6 +104,8 @@ again." );
 
     while( reader.ReadLine() )
     {
+        item = NULL;
+
         char* sline = line;
         while( (*sline != ' ' ) && *sline )
             sline++;
@@ -121,186 +114,31 @@ again." );
         {
         case '$':           // identification block
             if( line[1] == 'C' )
-                Failed = ReadPartDescr( &reader, MsgDiag, screen );
-
+                item = new SCH_COMPONENT();
             else if( line[1] == 'S' )
-                Failed = ReadSheetDescr( &reader, MsgDiag, screen );
-
+                item = new SCH_SHEET();
             else if( line[1] == 'D' )
-                Failed = ReadSchemaDescr( &reader, MsgDiag, screen );
-
-            else if( line[1] == 'T' ) // text part
-            {
-                printf( "**** TEXT PART\n" );
-                SCH_ITEM* Struct = ReadTextDescr( &reader, MsgDiag, version );
-
-                if( Struct )
-                {
-                    Struct->SetNext( screen->EEDrawList );
-                    screen->EEDrawList = Struct;
-                }
-                else
-                {
-                    Failed = true;
-                }
-            }
+                itemLoaded = ReadSchemaDescr( &reader, MsgDiag, screen );
             break;
 
         case 'L':        // Its a library item.
-            Failed = ReadPartDescr( &reader, MsgDiag, screen );
+            item = new SCH_COMPONENT();
             break;
 
         case 'W':        // Its a Segment (WIRE or BUS) item.
-            if( sscanf( sline, "%s %s", Name1, Name2 ) != 2  )
-            {
-                MsgDiag.Printf( wxT( "EESchema file segment error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                break;
-            }
-
-            layer = LAYER_NOTES;
-
-            if( Name1[0] == 'W' )
-                layer = LAYER_WIRE;
-            if( Name1[0] == 'B' )
-                layer = LAYER_BUS;
-
-            SegmentStruct = new SCH_LINE( wxPoint( 0, 0 ), layer );
-
-            if( !reader.ReadLine()
-                || sscanf( line, "%d %d %d %d ", &SegmentStruct->m_Start.x,
-                           &SegmentStruct->m_Start.y, &SegmentStruct->m_End.x,
-                           &SegmentStruct->m_End.y ) != 4 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file Segment struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                SAFE_DELETE( SegmentStruct );
-                break;
-            }
-
-            if( !Failed )
-            {
-                SegmentStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = SegmentStruct;
-            }
+            item = new SCH_LINE();
             break;
 
         case 'E':        // Its a WIRE or BUS item.
-            if( sscanf( sline, "%s %s", Name1, Name2 ) != 2  )
-            {
-                MsgDiag.Printf( wxT( "EESchema file record struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                break;
-            }
-
-            ii = WIRE_TO_BUS;
-            if( Name1[0] == 'B' )
-                ii = BUS_TO_BUS;
-
-            busEntry = new SCH_BUS_ENTRY( wxPoint( 0, 0 ), '\\', ii );
-
-            if( !reader.ReadLine()
-                || sscanf( line, "%d %d %d %d ", &busEntry->m_Pos.x, &busEntry->m_Pos.y,
-                           &busEntry->m_Size.x, &busEntry->m_Size.y ) != 4 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file Bus Entry struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                SAFE_DELETE( busEntry );
-                break;
-            }
-
-            if( !Failed )
-            {
-                busEntry->m_Size.x -= busEntry->m_Pos.x;
-                busEntry->m_Size.y -= busEntry->m_Pos.y;
-                busEntry->SetNext( screen->EEDrawList );
-                screen->EEDrawList = busEntry;
-            }
+            item = new SCH_BUS_ENTRY();
             break;
 
         case 'P':        // Its a polyline item.
-            if( sscanf( sline, "%s %s %d", Name1, Name2, &ii ) != 3 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                break;
-            }
-            layer = LAYER_NOTES;
-            if( Name2[0] == 'W' )
-                layer = LAYER_WIRE;
-            if( Name2[0] == 'B' )
-                layer = LAYER_BUS;
-
-            PolylineStruct = new SCH_POLYLINE( layer );
-
-            for( unsigned jj = 0; jj < (unsigned)ii; jj++ )
-            {
-                wxPoint point;
-
-                if( !reader.ReadLine()
-                    || sscanf( line, "%d %d", &point.x, &point.y ) != 2 )
-                {
-                    MsgDiag.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
-                                    reader.LineNumber() );
-                    MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                    Failed = true;
-                    SAFE_DELETE( PolylineStruct );
-                    break;
-                }
-
-                PolylineStruct->AddPoint( point );
-            }
-
-            if( !Failed )
-            {
-                PolylineStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = PolylineStruct;
-            }
+            item = new SCH_POLYLINE();
             break;
 
-        case 'C':                       // It is a connection item.
-            ConnectionStruct = new SCH_JUNCTION( wxPoint( 0, 0 ) );
-
-            if( sscanf( sline, "%s %d %d", Name1, &ConnectionStruct->m_Pos.x,
-                        &ConnectionStruct->m_Pos.y ) != 3 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file connection struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-                SAFE_DELETE( ConnectionStruct );
-            }
-            else
-            {
-                ConnectionStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = ConnectionStruct;
-            }
-            break;
-
-        case 'N':                       // It is a NoConnect item.
-            if( sscanf( sline, "%s %d %d", Name1, &pos.x, &pos.y ) != 3 )
-            {
-                MsgDiag.Printf( wxT( "EESchema file NoConnect struct error at line %d, aborted" ),
-                                reader.LineNumber() );
-                MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-                Failed = true;
-            }
-            else
-            {
-                NoConnectStruct = new SCH_NO_CONNECT( pos );
-                NoConnectStruct->SetNext( screen->EEDrawList );
-                screen->EEDrawList = NoConnectStruct;
-            }
+        case 'C':        // It is a connection item.
+            item = new SCH_JUNCTION();
             break;
 
         case 'K':                       // It is a Marker item.
@@ -308,28 +146,50 @@ again." );
             // demand in schematic
             break;
 
+        case 'N':                       // It is a NoConnect item.
+            item = new SCH_NO_CONNECT();
+            break;
+
         case 'T':                       // It is a text item.
+            if( sscanf( sline, "%s", Name1 ) != 1 )
             {
-                SCH_ITEM* Struct = ReadTextDescr( &reader, MsgDiag, version);
-                if( Struct )
-                {
-                    Struct->SetNext( screen->EEDrawList );
-                    screen->EEDrawList = Struct;
-                }
-                else
-                    Failed = true;
+                MsgDiag.Printf( wxT( "EESchema file text load error at line %d" ),
+                                reader.LineNumber() );
+                itemLoaded = false;
             }
+            else if( Name1[0] == 'L' )
+                item = new SCH_LABEL();
+            else if( Name1[0] == 'G' && ver > '1' )
+                item = new SCH_GLOBALLABEL();
+            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && ver == '1') )
+                item = new SCH_HIERLABEL();
+            else
+                item = new SCH_TEXT();
             break;
 
         default:
-            Failed = true;
+            itemLoaded = false;
             MsgDiag.Printf( wxT( "EESchema file undefined object at line %d, aborted" ),
                             reader.LineNumber() );
             MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
-            break;
         }
 
-        if( Failed )
+        if( item )
+        {
+            itemLoaded = item->Load( reader, MsgDiag );
+
+            if( !itemLoaded )
+            {
+                SAFE_DELETE( item );
+            }
+            else
+            {
+                item->SetNext( screen->EEDrawList );
+                screen->EEDrawList = item;
+            }
+        }
+
+        if( !itemLoaded )
         {
             DisplayError( this, MsgDiag );
             break;
@@ -389,4 +249,118 @@ static void LoadLayers( LINE_READER* aLine )
         if( strnicmp( *aLine, "EELAYER END", 11 ) == 0 )
             break;
     }
+}
+
+
+/* Read the schematic header. */
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
+{
+    char Text[256], buf[1024];
+    int  ii;
+    Ki_PageDescr*        wsheet = &g_Sheet_A4;
+    static Ki_PageDescr* SheetFormatList[] =
+    {
+        &g_Sheet_A4,   &g_Sheet_A3,   &g_Sheet_A2,   &g_Sheet_A1, &g_Sheet_A0,
+        &g_Sheet_A,    &g_Sheet_B,    &g_Sheet_C,    &g_Sheet_D,  &g_Sheet_E,
+        &g_Sheet_user, NULL
+    };
+    wxSize               PageSize;
+
+    sscanf( ((char*)(*aLine)), "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
+
+    wxString pagename = CONV_FROM_UTF8( Text );
+    for( ii = 0; SheetFormatList[ii] != NULL; ii++ )
+    {
+        wsheet = SheetFormatList[ii];
+        if( wsheet->m_Name.CmpNoCase( pagename ) == 0 ) /* Descr found ! */
+        {
+            // Get the user page size and make it the default
+            if( wsheet == &g_Sheet_user )
+            {
+                g_Sheet_user.m_Size = PageSize;
+            }
+            break;
+        }
+    }
+
+    if( SheetFormatList[ii] == NULL )
+    {
+        aMsgDiag.Printf( wxT( "EESchema file dimension definition error \
+line %d, \aAbort reading file.\n" ),
+                         aLine->LineNumber() );
+        aMsgDiag << CONV_FROM_UTF8( ((char*)(*aLine)) );
+    }
+
+    Window->m_CurrentSheetDesc = wsheet;
+
+    for( ; ; )
+    {
+        if( !aLine->ReadLine() )
+            return TRUE;
+
+        if( strnicmp( ((char*)(*aLine)), "$End", 4 ) == 0 )
+            break;
+
+        if( strnicmp( ((char*)(*aLine)), "Sheet", 2 ) == 0 )
+            sscanf( ((char*)(*aLine)) + 5, " %d %d",
+                    &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
+
+        if( strnicmp( ((char*)(*aLine)), "Title", 2 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Title = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Date", 2 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Date = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Rev", 2 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Revision = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Comp", 4 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Company = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Comment1", 8 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Commentaire1 = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Comment2", 8 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Commentaire2 = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Comment3", 8 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Commentaire3 = CONV_FROM_UTF8( buf );
+            continue;
+        }
+
+        if( strnicmp( ((char*)(*aLine)), "Comment4", 8 ) == 0 )
+        {
+            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            Window->m_Commentaire4 = CONV_FROM_UTF8( buf );
+            continue;
+        }
+    }
+
+    return true;
 }

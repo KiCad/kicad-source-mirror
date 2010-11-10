@@ -9,14 +9,17 @@
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 #include "class_marker_sch.h"
 #include "lib_pin.h"
 #include "protos.h"
 #include "erc.h"
+#include "class_sch_component.h"
+#include "class_drawsheet.h"
 
 #include "dialog_erc.h"
 

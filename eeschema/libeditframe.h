@@ -6,14 +6,16 @@
 #define __LIBEDITFRM_H__
 
 #include "wxstruct.h"
+#include "class_sch_screen.h"
 
 #include "lib_draw_item.h"
 
 
-class SCH_SCREEN;
+class WinEDA_SchematicFrame;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
+class LIB_FIELD;
 class WinEDA_bodygraphics_PropertiesFrame;
 class Dialog_BodyGraphicText_Properties;
 

@@ -9,8 +9,9 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
+#include "wxstruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "viewlib_frame.h"

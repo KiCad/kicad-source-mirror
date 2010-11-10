@@ -7,6 +7,9 @@
 
 #include "wx/statline.h"
 
+#include "general.h"
+
+
 class wxBoxSizer;
 class wxStaticLine;
 class wxStdDialogButtonSizer;

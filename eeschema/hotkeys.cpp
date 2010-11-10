@@ -6,12 +6,15 @@
 #include "common.h"
 #include "eeschema_id.h"
 #include "hotkeys.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
+#include "class_schematic_items.h"
+#include "class_sch_component.h"
+#include "class_drawsheet.h"
 
 #include "dialogs/dialog_schematic_find.h"
 

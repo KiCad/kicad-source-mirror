@@ -50,7 +50,11 @@
  */
 
 
+class wxFindReplaceData;
+class SCH_SCREEN;
 class SCH_MARKER;
+class SCH_SHEET;
+class SCH_ITEM;
 
 
 /**

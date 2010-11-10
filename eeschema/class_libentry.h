@@ -5,6 +5,7 @@
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
+#include "general.h"
 #include "lib_draw_item.h"
 #include "lib_field.h"
 

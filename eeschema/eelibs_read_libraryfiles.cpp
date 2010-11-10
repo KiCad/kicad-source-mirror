@@ -4,9 +4,10 @@
 
 #include "fctsys.h"
 #include "confirm.h"
+#include "macros.h"
 #include "appl_wxstruct.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "class_library.h"
 

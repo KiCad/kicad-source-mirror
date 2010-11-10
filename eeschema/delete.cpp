@@ -5,15 +5,19 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_marker_sch.h"
+#include "class_schematic_items.h"
+#include "class_drawsheet.h"
+#include "class_text-label.h"
+
 
 // Imported function:
-void DeleteItemsInList( WinEDA_DrawPanel*  panel,
-                        PICKED_ITEMS_LIST& aItemsList );
+void DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
 
 
 /*
@@ -28,7 +32,7 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
                                 bool TstJunction )
 {
     SCH_ITEM* Struct;
-    int             count = 0;
+    int       count = 0;
 
     if( frame->LocatePinEnd( ListStruct, pos ) )
         count++;

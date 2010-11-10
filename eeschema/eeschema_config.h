@@ -8,8 +8,6 @@
 #define GROUPCOMMON wxT( "/common" )
 #define GROUPLIB    wxT( "libraries" )
 
-#include "netlist.h"
-
 extern int g_PenMinWidth;
 
 /* saving parameters option : */

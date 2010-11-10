@@ -12,15 +12,20 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "class_drawsheet.h"
 
 #include "dialog_sch_sheet_props.h"
+
+#include <boost/foreach.hpp>
 
 
 static int     s_PreviousSheetWidth;

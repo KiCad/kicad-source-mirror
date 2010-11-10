@@ -14,6 +14,12 @@
  */
 
 
+#include "sch_item_struct.h"
+
+#include "general.h"
+
+
+class WinEDA_SchematicFrame;
 class SCH_COMPONENT;
 class LIB_FIELD;
 

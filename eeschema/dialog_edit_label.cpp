@@ -8,13 +8,15 @@
 
 #include "fctsys.h"
 #include "wx/valgen.h"
+#include "wxEeschemaStruct.h"
 
 #include "common.h"
 #include "class_drawpanel.h"
-#include "program.h"
 #include "general.h"
 #include "drawtxt.h"
 #include "confirm.h"
+#include "class_text-label.h"
+
 #include "dialog_edit_label.h"
 
 

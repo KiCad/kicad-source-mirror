@@ -3,15 +3,15 @@
 /*******************************************/
 
 #include "fctsys.h"
+#include "wxstruct.h"
 #include "class_drawpanel.h"
-
 #include "common.h"
-#include "program.h"
-#include "general.h"
 #include "trigo.h"
 
+#include "general.h"
 #include "class_marker_sch.h"
 #include "erc.h"
+
 
 /* Marker are mainly used to show an ERC error
  * but they could be used to give a specific info
@@ -51,8 +51,7 @@ SCH_MARKER::~SCH_MARKER()
 
 SCH_MARKER* SCH_MARKER::GenCopy()
 {
-    SCH_MARKER* newitem = new SCH_MARKER( GetPos(),
-                                         GetReporter().GetMainText() );
+    SCH_MARKER* newitem = new SCH_MARKER( GetPos(), GetReporter().GetMainText() );
 
     newitem->SetMarkerType( GetMarkerType() );
     newitem->SetErrorLevel( GetErrorLevel() );

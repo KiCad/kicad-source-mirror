@@ -6,7 +6,12 @@
 #define _NETLIST_H_
 
 
+#include "macros.h"
+
 #include "class_libentry.h"
+
+
+class SCH_COMPONENT;
 
 
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"

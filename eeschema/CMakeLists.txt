@@ -122,7 +122,6 @@ set(EESCHEMA_SRCS
     operations_on_items_lists.cpp
     pinedit.cpp
     plot.cpp
-    read_from_file_schematic_items_descriptions.cpp
     schedit.cpp
     schematic_undo_redo.cpp
     schframe.cpp

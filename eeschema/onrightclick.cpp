@@ -8,13 +8,20 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "bitmaps.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "class_marker_sch.h"
 #include "protos.h"
 #include "hotkeys.h"
 #include "class_library.h"
+#include "class_text-label.h"
+#include "class_schematic_items.h"
+#include "class_sch_component.h"
+#include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
+
 #include <iostream>
 using namespace std;
 

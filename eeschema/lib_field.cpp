@@ -6,6 +6,7 @@
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "base_struct.h"
 #include "drawtxt.h"
 #include "kicad_string.h"
@@ -13,12 +14,12 @@
 #include "plot_common.h"
 #include "trigo.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_libentry.h"
 #include "transform.h"
 #include "lib_field.h"
+#include "template_fieldnames.h"
 
 
 /*******************/

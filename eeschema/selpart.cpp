@@ -6,8 +6,8 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
+#include "wxstruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"

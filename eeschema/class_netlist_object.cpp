@@ -5,9 +5,11 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "program.h"
-#include "general.h"
+#include "macros.h"
+#include "wxEeschemaStruct.h"
 
+#include "general.h"
+#include "class_sch_component.h"
 #include "class_netlist_object.h"
 
 #if defined(DEBUG)

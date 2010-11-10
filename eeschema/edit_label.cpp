@@ -10,10 +10,13 @@
 #include "drawtxt.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "class_text-label.h"
+
 
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );

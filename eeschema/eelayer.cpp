@@ -9,9 +9,9 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "eeschema_id.h"
+#include "wxstruct.h"
 #include "class_drawpanel.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 

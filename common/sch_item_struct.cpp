@@ -11,7 +11,6 @@
 #include "class_drawpanel.h"
 #include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 
@@ -29,9 +28,16 @@ SCH_ITEM::SCH_ITEM( EDA_BaseStruct* aParent, KICAD_T aType ) :
     m_Layer = 0;
 }
 
+
 SCH_ITEM::~SCH_ITEM()
 {
+    // Do not let the connections container go out of scope with any ojbects or they
+    // will be deleted by the container will cause the EESchema to crash.  These objects
+    // are owned by the sheet object container.
+    if( !m_connections.empty() )
+        m_connections.release();
 }
+
 
 /**
  * place the struct in EEDrawList.

@@ -8,9 +8,12 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "bitmaps.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
+#include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
 
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"

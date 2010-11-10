@@ -13,18 +13,23 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 #include "confirm.h"
 #include "trigo.h"
+#include "richio.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
+#include "class_sch_component.h"
 
 
-SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
-    SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
+SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
 {
     m_Layer = LAYER_SHEET;
     m_Pos = pos;
@@ -91,6 +96,152 @@ bool SCH_SHEET::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "$EndSheet\n" ) == EOF )
         return false;
+
+    return true;
+}
+
+
+bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    int              ii, fieldNdx, size;
+    char             Name1[256];
+    SCH_SHEET_PIN*   SheetLabel;
+    char*            ptcar;
+
+    m_TimeStamp = GetTimeStamp();
+
+    // sheets are added to the EEDrawList like other schematic components.
+    // however, in order to preserve the hierarchy (through m_Parent pointers),
+    // a duplicate of the sheet is added to m_SubSheet array.
+    // must be a duplicate, references just work for a two-layer structure.
+    // this is accomplished through the Sync() function.
+
+    if( ((char*)aLine)[0] == '$' )   // line should be "$Sheet"
+    {
+        if( !aLine.ReadLine() )
+        {
+            aErrorMsg.Printf( wxT( "Read File Errror" ) );
+            return false;
+        }
+    }
+
+    /* Next line: must be "S xx yy nn mm" with xx, yy = sheet position
+     *  ( upper left corner  ) et nn,mm = sheet size */
+    if( ( sscanf( &((char*)aLine)[1], "%d %d %d %d",
+                  &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y ) != 4 )
+        || ( ((char*)aLine)[0] != 'S' ) )
+    {
+        aErrorMsg.Printf( wxT( " ** EESchema file sheet struct error at line %d, aborted\n" ),
+                          aLine.LineNumber() );
+
+        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        return false;
+    }
+
+    /* Read fields */
+    for( ; ; ) /* Analysis of lines "Fn" text. */
+    {
+        if( !aLine.ReadLine() )
+            return false;
+
+        if( ((char*)aLine)[0] == 'U' )
+        {
+            sscanf( ((char*)aLine) + 1, "%lX", &m_TimeStamp );
+            if( m_TimeStamp == 0 )  // zero is not unique!
+                m_TimeStamp = GetTimeStamp();
+            continue;
+        }
+
+        if( ((char*)aLine)[0] != 'F' )
+            break;
+
+        sscanf( ((char*)aLine) + 1, "%d", &fieldNdx );
+
+        /* Read the field:
+         * If fieldNdx> = 2: Fn "text" t s posx posy
+         * If F0 "text" for SheetName
+         * F1 and "text" for filename
+         */
+        ptcar = ((char*)aLine);
+        while( *ptcar && ( *ptcar != '"' ) )
+            ptcar++;
+
+        if( *ptcar != '"' )
+        {
+            aErrorMsg.Printf( wxT( "EESchema file sheet label F%d at line %d, aborted\n" ),
+                              fieldNdx, aLine.LineNumber() );
+            aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+            return false;
+        }
+
+        for( ptcar++, ii = 0; ; ii++, ptcar++ )
+        {
+            Name1[ii] = *ptcar;
+
+            if( *ptcar == 0 )
+            {
+                aErrorMsg.Printf( wxT( "EESchema file sheet field F at line %d, aborted\n" ),
+                                  aLine.LineNumber() );
+                aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+                return false;
+            }
+
+            if( *ptcar == '"' )
+            {
+                Name1[ii] = 0;
+                ptcar++;
+                break;
+            }
+        }
+
+        if( ( fieldNdx == 0 ) || ( fieldNdx == 1 ) )
+        {
+            if( sscanf( ptcar, "%d", &size ) != 1 )
+            {
+                aErrorMsg.Printf( wxT( "EESchema file sheet Label error line %d, aborted\n" ),
+                                  aLine.LineNumber() );
+
+                aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+            }
+            if( size == 0 )
+                size = DEFAULT_SIZE_TEXT;
+
+            if( fieldNdx == 0 )
+            {
+                m_SheetName     = CONV_FROM_UTF8( Name1 );
+                m_SheetNameSize = size;
+            }
+            else
+            {
+                SetFileName( CONV_FROM_UTF8( Name1 ) );
+
+                //printf( "in ReadSheetDescr : m_FileName = %s \n", Name1 );
+                m_FileNameSize = size;
+            }
+        }
+
+        if( fieldNdx > 1 )
+        {
+            SheetLabel = new SCH_SHEET_PIN( this );
+
+            if( !SheetLabel->Load( aLine, aErrorMsg ) )
+            {
+                delete SheetLabel;
+                SheetLabel = NULL;
+                return false;
+            }
+
+            AddLabel( SheetLabel );
+        }
+    }
+
+    if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
+    {
+        aErrorMsg.Printf( wxT( "**EESchema file end_sheet struct error at line %d, aborted\n" ),
+                          aLine.LineNumber() );
+        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        return false;
+    }
 
     return true;
 }

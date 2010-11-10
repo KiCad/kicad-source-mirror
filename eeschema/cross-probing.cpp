@@ -5,14 +5,16 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "macros.h"
 #include "eda_dde.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "eeschema_id.h"
 #include "protos.h"
 #include "lib_draw_item.h"
 #include "lib_pin.h"
+#include "class_sch_component.h"
 
 
 /***************************************************************/

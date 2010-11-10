@@ -6,7 +6,6 @@
 #include "class_drawpanel.h"
 
 #include "common.h"
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"

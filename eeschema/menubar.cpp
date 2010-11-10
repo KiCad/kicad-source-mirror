@@ -10,8 +10,8 @@
 #include "common.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"

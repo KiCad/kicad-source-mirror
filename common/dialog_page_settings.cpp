@@ -12,13 +12,12 @@
 #include "common.h"
 #include "base_struct.h"
 #include "class_drawpanel.h"
-#include "class_base_screen.h"
+#include "class_sch_screen.h"
 #include "wxstruct.h"
 
 #include "wx/valgen.h"
 
 #ifdef EESCHEMA
-#include "program.h"
 #include "general.h"
 #endif
 

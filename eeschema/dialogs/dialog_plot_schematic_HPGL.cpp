@@ -31,10 +31,13 @@
 #include "confirm.h"
 #include "plot_common.h"
 #include "worksheet.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "class_drawsheetpath.h"
+
 #include "dialog_plot_schematic_HPGL_base.h"
 
 enum PageFormatReq

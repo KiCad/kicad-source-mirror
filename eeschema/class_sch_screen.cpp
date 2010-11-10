@@ -6,11 +6,17 @@
 #include "eeschema_id.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
+#include "sch_item_struct.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "class_schematic_items.h"
+#include "class_drawsheet.h"
+
+#include <boost/foreach.hpp>
 
 
 void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )

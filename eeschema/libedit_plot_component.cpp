@@ -11,13 +11,12 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "eeschema_id.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
-
-//#include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+
 
 /** function OnPlotCurrentComponent
  * plot in SVG or PNG format the curren component

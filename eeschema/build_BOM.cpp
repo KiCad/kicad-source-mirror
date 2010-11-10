@@ -15,12 +15,15 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "class_library.h"
 #include "netlist.h"
 #include "protos.h"
+#include "class_drawsheet.h"
+#include "template_fieldnames.h"
+#include "class_sch_component.h"
 
 #include "build_version.h"
 

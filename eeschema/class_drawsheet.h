@@ -5,12 +5,19 @@
 #ifndef CLASS_DRAWSHEET_H
 #define CLASS_DRAWSHEET_H
 
-#include "base_struct.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 #include "class_text-label.h"
 
-extern SCH_SHEET* g_RootSheet;
+
+class LINE_READER;
+class SCH_SCREEN;
+class SCH_SHEET;
+class SCH_SHEET_PIN;
+class SCH_SHEET_PATH;
+class DANGLING_END_ITEM;
+class WinEDA_SchematicFrame;
+
 
 /**
  * Pin (label) used in sheets to create hierarchical schematics.
@@ -117,6 +124,16 @@ public:
      */
     bool        Save( FILE* aFile ) const;
 
+    /**
+     * Load schematic sheet hierarchical lable from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the sheet hierarchical label  from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet
+     *                    hierarchical label.
+     * @return True if the sheet heirarchical label loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
 #if defined(DEBUG)
 
     // comment inherited by Doxygen from Base_Struct
@@ -169,7 +186,7 @@ public:
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
 };
 
 
@@ -228,6 +245,15 @@ public:
      * @return bool - true if success writing else false.
      */
     bool           Save( FILE* aFile ) const;
+
+    /**
+     * Load schematic sheet from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the component from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet.
+     * @return True if the sheet loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     SCH_SHEET*     GenCopy();

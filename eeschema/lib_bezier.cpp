@@ -5,9 +5,11 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "trigo.h"
+#include "wxstruct.h"
 #include "bezier_curves.h"
 
 #include "general.h"

@@ -4,6 +4,13 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-nov-10 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
+  * Header file rationalization.
+  * Move schematic object load code into the appropriate schematic object.
+
+
 2010-nov-3 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++common

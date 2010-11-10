@@ -6,12 +6,14 @@
 #define COMPONENT_CLASS_H
 
 
-#include "class_sch_screen.h"
 #include "class_sch_cmp_field.h"
 #include "transform.h"
+#include "general.h"
 
 
 class SCH_SHEET_PATH;
+class LIB_PIN;
+class LIB_COMPONENT;
 
 
 /**
@@ -132,6 +134,14 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
+    /**
+     * Load schematic component from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the component from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the component.
+     * @return True if the component loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
      * Function Load

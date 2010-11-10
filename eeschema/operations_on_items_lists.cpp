@@ -8,11 +8,16 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "class_marker_sch.h"
 #include "protos.h"
+#include "class_drawsheet.h"
+#include "class_sch_component.h"
+#include "class_schematic_items.h"
+
 
 void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
 {

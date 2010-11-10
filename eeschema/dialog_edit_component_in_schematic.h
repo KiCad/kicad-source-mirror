@@ -3,6 +3,9 @@
 #define __dialog_edit_component_in_schematic__
 
 
+#include "class_sch_cmp_field.h"
+#include "template_fieldnames.h"
+
 #include "dialog_edit_component_in_schematic_fbp.h"
 
 /**

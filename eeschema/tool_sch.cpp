@@ -7,8 +7,8 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "bitmaps.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "hotkeys.h"

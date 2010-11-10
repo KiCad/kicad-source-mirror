@@ -10,11 +10,11 @@
 
 #include "block_commande.h"
 
-#include "program.h"
-
 
 class SCH_ITEM;
 class SCH_SHEET;
+class TRANSFORM;
+
 
 #define EESCHEMA_VERSION 2
 
@@ -28,14 +28,14 @@ class SCH_SHEET;
 
 #define MAX_PIN_INFO 10
 
-#define TXTMARGE 10                 /* Offset in mils for placement of labels
-                                     * and pin numbers. */
+#define TXTMARGE 10                 // Offset in mils for placement of labels and pin numbers.
 
 #define HIGHLIGHT_COLOR WHITE
 
 /* Used for EDA_BaseStruct, .m_Select member */
 #define IS_SELECTED 1
 
+#define TEXT_NO_VISIBLE 1
 
 //#define GR_DEFAULT_DRAWMODE GR_COPY
 #define GR_DEFAULT_DRAWMODE GR_COPY
@@ -104,6 +104,31 @@ typedef enum
     FILE_SAVE_NEW
 } FileSaveType;
 
+
+/* Rotation, mirror of graphic items in components bodies are handled by a
+ * transform matrix.  The default matix is useful to draw lib entries with
+ * a defualt matix ( no rotation, no mirror but Y axis is bottom to top, and
+ * Y draw axis is to to bottom so we must have a default matix that reverses
+ * the Y coordinate and keeps the X coordiate
+ */
+extern TRANSFORM DefaultTransform;
+
+#define MIN_BUSLINES_THICKNESS 12   // min bus lines and entries thickness
+
+#define MAX_LAYERS 44
+
+class LayerStruct
+{
+public:
+    char LayerNames[MAX_LAYERS + 1][8];
+    int  LayerColor[MAX_LAYERS + 1];
+    char LayerStatus[MAX_LAYERS + 1];
+    int  NumberOfLayers;
+    int  CurrentLayer;
+    int  CurrentWidth;
+    int  CommonColor;
+    int  Flags;
+};
 
 extern SCH_ITEM*      g_ItemToRepeat; /* Pointer to the last structure used
                                        * by the repeat command.   NULL if no

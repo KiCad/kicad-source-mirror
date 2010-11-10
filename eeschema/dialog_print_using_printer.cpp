@@ -8,10 +8,13 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "eeschema_config.h"
+#include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
 
 #include "dialog_print_using_printer_base.h"
 

@@ -18,11 +18,15 @@
 #include "drawtxt.h"
 #include "macros.h"
 #include "trigo.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "class_sch_component.h"
+#include "class_sch_cmp_field.h"
+#include "template_fieldnames.h"
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,

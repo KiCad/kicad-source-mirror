@@ -5,11 +5,12 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
-#include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "program.h"
+#include "wxEeschemaStruct.h"
+
+#include "eeschema_id.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
@@ -17,6 +18,8 @@
 #include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
+#include "class_drawsheet.h"
+
 #include "dialog_eeschema_options.h"
 #include "dialog_hotkeys_editor.h"
 

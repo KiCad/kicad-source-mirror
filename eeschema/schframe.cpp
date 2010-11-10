@@ -13,13 +13,14 @@
 #include "gestfich.h"
 #include "bitmaps.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
 #include "netlist.h"
 #include "lib_pin.h"
 #include "class_library.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
 #include "annotate_dialog.h"
 #include "dialog_build_BOM.h"
@@ -29,6 +30,7 @@
 #include "libeditframe.h"
 #include "viewlib_frame.h"
 #include "hotkeys.h"
+#include "class_drawsheet.h"
 
 #include "dialogs/dialog_schematic_find.h"
 

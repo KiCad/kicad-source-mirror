@@ -10,10 +10,12 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "wxstruct.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "class_library.h"
 #include "protos.h"
+#include "class_sch_screen.h"
+#include "class_sch_component.h"
 #include "netlist.h"
 #include "lib_pin.h"
 

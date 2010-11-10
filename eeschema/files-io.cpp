@@ -7,13 +7,14 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
 #include "class_library.h"
 #include "libeditframe.h"
+#include "class_drawsheet.h"
 
 
 

@@ -9,14 +9,18 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
+#include "kicad_device_context.h"
 
 #include "class_marker_sch.h"
-#include "program.h"
 #include "general.h"
 #include "eeschema_id.h"
 #include "protos.h"
 #include "class_library.h"
-#include "kicad_device_context.h"
+#include "class_sch_component.h"
+#include "class_schematic_items.h"
+#include "class_drawsheet.h"
 
 
 void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )

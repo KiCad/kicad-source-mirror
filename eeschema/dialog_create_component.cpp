@@ -19,7 +19,6 @@
 #include "common.h"
 #include "confirm.h"
 
-#include "program.h"
 #include "class_libentry.h"
 #include "libeditframe.h"
 

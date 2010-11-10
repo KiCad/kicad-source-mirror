@@ -7,12 +7,17 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "lib_draw_item.h"
 #include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
+#include "class_schematic_items.h"
+#include "class_text-label.h"
+#include "class_sch_component.h"
+#include "class_drawsheet.h"
 
 
 /* Routines Locales */

@@ -10,8 +10,8 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "wxstruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 

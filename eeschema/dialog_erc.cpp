@@ -10,8 +10,9 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "bitmaps.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 #include "class_marker_sch.h"

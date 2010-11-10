@@ -10,9 +10,15 @@
 #include "fctsys.h"
 
 #include "common.h"
-#include "program.h"
 #include "general.h"
 #include "dlist.h"
+#include "class_sch_screen.h"
+#include "sch_item_struct.h"
+
+#include "class_drawsheet.h"
+#include "class_drawsheetpath.h"
+#include "class_sch_component.h"
+#include "template_fieldnames.h"
 
 #include "dialogs/dialog_schematic_find.h"
 

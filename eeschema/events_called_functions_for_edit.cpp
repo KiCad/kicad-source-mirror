@@ -2,15 +2,20 @@
  *  events_called_functions.cpp
  *  some events functions
  */
+
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "program.h"
 #include "general.h"
 #include "kicad_device_context.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
 #include "protos.h"
+#include "class_sch_component.h"
+#include "class_text-label.h"
+
 
 /** Event function WinEDA_SchematicFrame::OnCopySchematicItemRequest
  * duplicate the current located item

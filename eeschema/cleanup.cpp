@@ -7,11 +7,12 @@
 #include "trigo.h"
 #include "confirm.h"
 #include "macros.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "netlist.h"
+#include "class_schematic_items.h"
 
 
 /* Routine to start/end segment (BUS or wires) on junctions.

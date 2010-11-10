@@ -5,11 +5,12 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"

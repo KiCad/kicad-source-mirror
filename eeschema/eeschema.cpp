@@ -11,8 +11,9 @@
 #include "bitmaps.h"
 #include "eda_dde.h"
 #include "id.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "hotkeys.h"

@@ -8,7 +8,7 @@
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
 #include "common.h"
-#include "program.h"
+#include "wxEeschemaStruct.h"
 
 #include "annotate_dialog.h"
 

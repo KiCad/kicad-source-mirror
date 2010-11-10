@@ -9,7 +9,6 @@
 #include "confirm.h"
 #include "block_commande.h"
 
-#include "program.h"
 #include "general.h"
 #include "class_library.h"
 #include "protos.h"

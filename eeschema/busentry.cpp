@@ -8,10 +8,13 @@
 #include "class_drawpanel.h"
 #include "eeschema_id.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "class_schematic_items.h"
+
 
 static int     s_LastShape = '\\';
 static wxPoint ItemInitialPosition;
@@ -20,8 +23,7 @@ static wxPoint ItemInitialPosition;
 static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     /* Exit bus entry mode. */
-    SCH_BUS_ENTRY* BusEntry =
-        (SCH_BUS_ENTRY*) Panel->GetScreen()->GetCurItem();
+    SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) Panel->GetScreen()->GetCurItem();
 
     if( BusEntry )
     {

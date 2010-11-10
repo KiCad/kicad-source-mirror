@@ -12,7 +12,7 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "program.h"
+//#include "general.h"
 #include "class_marker_sch.h"
 
 /**
