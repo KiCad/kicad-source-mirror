@@ -262,9 +262,9 @@ public:
      * this lower level function returning an int (so the enum does not collide
      * with another usage).
      * @return ${enum} - the type of token found next.
-     * @throw IO_ERROR - only if the LINE_READER throws it.
+     * @throw IOError - only if the LINE_READER throws it.
      */
-    ${enum} NextTok() throw( IO_ERROR )
+    ${enum} NextTok() throw (IO_ERROR)
     {
         return (${enum}) DSNLEXER::NextTok();
     }
@@ -273,9 +273,9 @@ public:
      * Function NeedSYMBOL
      * calls NextTok() and then verifies that the token read in
      * satisfies bool IsSymbol().
-     * If not, an IO_ERROR is thrown.
+     * If not, an IOError is thrown.
      * @return int - the actual token read in.
-     * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
+     * @throw IOError, if the next token does not satisfy IsSymbol()
      */
     ${enum} NeedSYMBOL() throw( IO_ERROR )
     {
@@ -286,9 +286,9 @@ public:
      * Function NeedSYMBOLorNUMBER
      * calls NextTok() and then verifies that the token read in
      * satisfies bool IsSymbol() or tok==T_NUMBER.
-     * If not, an IO_ERROR is thrown.
+     * If not, an IOError is thrown.
      * @return int - the actual token read in.
-     * @throw IO_ERROR, if the next token does not satisfy the above test
+     * @throw IOError, if the next token does not satisfy the above test
      */
     ${enum} NeedSYMBOLorNUMBER() throw( IO_ERROR )
     {
