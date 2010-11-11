@@ -103,16 +103,21 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 
 
 // Schematic editor
 static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
+static Ki_HotkeyInfo HkAddHierarchicalLabel( wxT( "add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
+static Ki_HotkeyInfo HkAddGlobalLabel( wxT( "add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
 static Ki_HotkeyInfo HkAddJunction( wxT( "add Junction" ), HK_ADD_JUNCTION, 'J' );
 static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
-static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ),
-                                     HK_ADD_NEW_COMPONENT, 'A' );
-static Ki_HotkeyInfo HkAddNoConn( wxT( "Add NoConnected Flag" ),
-                                  HK_ADD_NOCONN_FLAG, 'Q' );
-static Ki_HotkeyInfo HkMirrorYComponent( wxT( "Mirror Y Component" ),
-                                         HK_MIRROR_Y_COMPONENT, 'Y' );
-static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ),
-                                         HK_MIRROR_X_COMPONENT, 'X' );
+static Ki_HotkeyInfo HkBeginBus( wxT( "begin Bus" ), HK_BEGIN_BUS, 'B' );
+static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
+static Ki_HotkeyInfo HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
+static Ki_HotkeyInfo HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
+static Ki_HotkeyInfo HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S' );
+static Ki_HotkeyInfo HkAddBusEntry( wxT( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/' );
+static Ki_HotkeyInfo HkAddWireEntry( wxT( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z' );
+static Ki_HotkeyInfo HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I' );
+static Ki_HotkeyInfo HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T' );
+static Ki_HotkeyInfo HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y' );
+static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
 static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static Ki_HotkeyInfo HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
@@ -175,6 +180,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkCopyComponentOrText,
     &HkDrag,
     &HkAddComponent,
+    &HkAddPower,
     &HkRotate,
     &HkMirrorXComponent,
     &HkMirrorYComponent,
@@ -183,9 +189,17 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
     &HkEditComponentValue,
     &HkEditComponentFootprint,
     &HkBeginWire,
+    &HkBeginBus,
     &HkAddLabel,
+    &HkAddHierarchicalLabel,
+    &HkAddGlobalLabel,
     &HkAddJunction,
     &HkAddNoConn,
+    &HkAddHierSheet,
+    &HkAddWireEntry,
+    &HkAddBusEntry,
+    &HkAddGraphicPolyLine,
+    &HkAddGraphicText,
     NULL
 };
 
@@ -382,12 +396,42 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
+    case HK_ADD_NEW_POWER:      // Add power component
+        if( !itemInEdit )
+        {
+            // switch to m_ID_current_state = ID_PLACE_POWER_BUTT;
+            if( m_ID_current_state != ID_PLACE_POWER_BUTT )
+                SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
     case HK_ADD_LABEL:
         if( notBusy )
         {
             // switch to m_ID_current_state = ID_LABEL_BUTT;
             if( m_ID_current_state != ID_LABEL_BUTT )
                 SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_HLABEL:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_HIERLABEL_BUTT;
+            if( m_ID_current_state != ID_HIERLABEL_BUTT )
+                SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Hierarchical Label" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_GLABEL:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_GLABEL_BUTT;
+            if( m_ID_current_state != ID_GLABEL_BUTT )
+                SetToolID( ID_GLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Global Label" ) );
             OnLeftClick( DC, MousePos );
         }
         break;
@@ -402,26 +446,99 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         break;
 
-    case HK_BEGIN_WIRE:
-        // An item is selected. If not a wire, a new command is not possible
+    case HK_ADD_WIRE_ENTRY:
         if( notBusy )
         {
-            if( DrawStruct && DrawStruct->m_Flags )
-            {
-                if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
-                {
-                    SCH_LINE* segment = (SCH_LINE*) DrawStruct;
-                    if( segment->GetLayer() != LAYER_WIRE )
-                        break;
-                }
-                else
-                    break;
-            }
+            // switch to m_ID_current_state = ID_WIRETOBUS_ENTRY_BUTT;
+            if( m_ID_current_state != ID_WIRETOBUS_ENTRY_BUTT )
+                SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Wire to Bus entry" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
 
+    case HK_ADD_BUS_ENTRY:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_BUSTOBUS_ENTRY_BUTT;
+            if( m_ID_current_state != ID_BUSTOBUS_ENTRY_BUTT )
+                SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Bus to Bus entry" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_HIER_SHEET:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_SHEET_SYMBOL_BUTT;
+            if( m_ID_current_state != ID_SHEET_SYMBOL_BUTT )
+                SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add Sheet" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_GRAPHIC_TEXT:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_TEXT_COMMENT_BUTT;
+            if( m_ID_current_state != ID_TEXT_COMMENT_BUTT )
+                SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Text" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_ADD_GRAPHIC_POLYLINE:
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_LINE_COMMENT_BUTT;
+            if( m_ID_current_state != ID_LINE_COMMENT_BUTT )
+                SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Lines" ) );
+            OnLeftClick( DC, MousePos );
+        }
+        break;
+
+    case HK_BEGIN_BUS:
+        // An item can be selected. If not a Bus, a begin command is not possible
+        if( notBusy )
+        {
+            // switch to m_ID_current_state = ID_WIRE_BUTT;
+            if( m_ID_current_state != ID_BUS_BUTT )
+                SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add Bus" ) );
+            OnLeftClick( DC, MousePos );
+            break;
+        }
+        if( DrawStruct && DrawStruct->IsNew() && ( m_ID_current_state == ID_BUS_BUTT ) )
+        {
+            if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+            {
+                SCH_LINE* segment = (SCH_LINE*) DrawStruct;
+                if( segment->GetLayer() != LAYER_BUS )
+                    break;
+            // Bus in progress:
+            OnLeftClick( DC, MousePos );
+            }
+        }
+        break;
+
+    case HK_BEGIN_WIRE:
+        // An item can be selected. If not a wire, a begin command is not possible
+        if( notBusy )
+        {
             // switch to m_ID_current_state = ID_WIRE_BUTT;
             if( m_ID_current_state != ID_WIRE_BUTT )
                 SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add Wire" ) );
             OnLeftClick( DC, MousePos );
+            break;
+        }
+        if( DrawStruct && DrawStruct->IsNew() && ( m_ID_current_state == ID_WIRE_BUTT ) )
+        {
+            if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+            {
+                SCH_LINE* segment = (SCH_LINE*) DrawStruct;
+                if( segment->GetLayer() != LAYER_WIRE )
+                    break;
+            // Wire in progress:
+            OnLeftClick( DC, MousePos );
+            }
         }
         break;
 

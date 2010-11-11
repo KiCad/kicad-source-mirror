@@ -533,13 +533,13 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* fr
 
     PopMenu->AppendSeparator();
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
+    msg = AddHotkeyName( _( "Add Junction" ), s_Schematic_Hokeys_Descr, HK_ADD_JUNCTION );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, msg, add_junction_xpm );
     msg = AddHotkeyName( _( "Add Label" ), s_Schematic_Hokeys_Descr, HK_ADD_LABEL );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, add_line_label_xpm );
 
     // Add global label command only if the cursor is over one end of the wire.
-    if( ( pos.x == Wire->m_Start.x && pos.y == Wire->m_Start.y)
-       || ( pos.x == Wire->m_End.x && pos.y == Wire->m_End.y ) )
+    if( ( pos == Wire->m_Start ) || ( pos == Wire->m_End ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
 }
 
@@ -548,24 +548,26 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, WinEDA_SchematicFrame* fram
 {
     bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
     wxPoint pos    = frame->GetScreen()->m_Curseur;
-
+    wxString msg;
     if( is_new )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Bus End" ), apply_xpm );
         return;
     }
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Bus" ), delete_bus_xpm );
+    msg = AddHotkeyName( _( "Delete Bus" ), s_Schematic_Hokeys_Descr, HK_DELETE );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_bus_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), break_bus_xpm );
 
     PopMenu->AppendSeparator();
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, _( "Add Junction" ), add_junction_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, _( "Add Label" ), add_line_label_xpm );
+    msg = AddHotkeyName( _( "Add Junction" ), s_Schematic_Hokeys_Descr, HK_ADD_JUNCTION );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, msg, add_junction_xpm );
+    msg = AddHotkeyName( _( "Add Label" ), s_Schematic_Hokeys_Descr, HK_ADD_LABEL );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, add_line_label_xpm );
 
     // Add global label command only if the cursor is over one end of the bus.
-    if( ( pos.x == Bus->m_Start.x && pos.y == Bus->m_Start.y)
-       || ( pos.x == Bus->m_End.x && pos.y == Bus->m_End.y ) )
+    if( ( pos == Bus->m_Start ) || ( pos == Bus->m_End ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ), add_glabel_xpm );
 }
 
@@ -593,7 +595,6 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
     else
     {
         msg = AddHotkeyName( _( "Edit Sheet" ), s_Schematic_Hokeys_Descr, HK_EDIT );
-
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET, msg, edit_sheet_xpm );
 
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize Sheet" ),
@@ -606,7 +607,8 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_CLEANUP_SHEET, _( "Cleanup PinSheets" ),
                           options_pinsheet_xpm );
         PopMenu->AppendSeparator();
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Sheet" ), delete_sheet_xpm );
+        msg = AddHotkeyName( _( "Delete Sheet" ), s_Schematic_Hokeys_Descr, HK_DELETE );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_sheet_xpm );
     }
 }
 

@@ -192,7 +192,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LINE_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Drawing" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add Lines" ) );
         break;
 
     case ID_JUNCTION_BUTT:
@@ -208,7 +208,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_HIERLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Hierarchal label" ) );
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add Hierarchical label" ) );
         break;
 
     case ID_TEXT_COMMENT_BUTT:

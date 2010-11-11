@@ -124,7 +124,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
         }
 
         newsegment->m_Flags = IS_NEW;
-        if( g_HVLines ) // We need 2 segments to go from a given start pint to
+        if( g_HVLines ) // We need 2 segments to go from a given start pin to
                         // an end point
         {
             nextsegment = newsegment->GenCopy();

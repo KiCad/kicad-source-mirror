@@ -443,13 +443,8 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1028,7 +1023,7 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 {
     /* The global label is NOT really mirrored.
      *  for an horizontal label, the schematic orientation is changed.
-     *  for a vericalal label, the schematic orientation is not changed.
+     *  for a vertical label, the schematic orientation is not changed.
      *  and the label is moved to a suitable position
      */
     switch( GetSchematicTextOrientation() )
@@ -1210,13 +1205,8 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1555,13 +1545,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }

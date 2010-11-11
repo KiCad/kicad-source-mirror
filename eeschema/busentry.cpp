@@ -49,7 +49,7 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    /*  Drawing of the bus entry segment" while moving the cursor. */
+    // Draws the bus entry while moving the cursor
     BASE_SCREEN*   screen   = panel->GetScreen();
     SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) screen->GetCurItem();
 
@@ -69,21 +69,12 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 SCH_BUS_ENTRY* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
                                                       int   entry_type )
 {
-    /* Create a new bus entry, and prepare moving function (for later place it)
-     */
+    // Create and place a new bus entry at cursor position
     SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->m_Curseur,
-                                                 s_LastShape,
-                                                 entry_type );
-
+                                                 s_LastShape, entry_type );
     BusEntry->m_Flags = IS_NEW;
-
-    DrawPanel->CursorOff( DC );     // Erase schematic cursor
-    RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
-    DrawPanel->CursorOn( DC );      // Display schematic cursor
-
+    BusEntry->Place( this, DC );;
     OnModify( );
-
-    StartMoveBusEntry( BusEntry, DC );
     return BusEntry;
 }
 
