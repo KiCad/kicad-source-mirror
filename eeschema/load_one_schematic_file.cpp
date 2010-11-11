@@ -30,7 +30,7 @@ static void LoadLayers( LINE_READER* aLine );
 bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
 {
     char            Name1[256];
-    bool            itemLoaded;
+    bool            itemLoaded = false;
     SCH_ITEM*       Phead;
     SCH_ITEM*       Pnext;
     SCH_ITEM*       item;

@@ -110,6 +110,15 @@ public:
     {
         return m_ItemsSelection.GetCount();
     }
+
+    /** Function SetLastCursorPosition
+     * sets m_BlockLastCursorPosition
+     * @param aPosition = new position
+     **/
+    void SetLastCursorPosition( wxPoint aPosition )
+    {
+        m_BlockLastCursorPosition = aPosition;
+    }
 };
 
 

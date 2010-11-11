@@ -554,7 +554,8 @@ bool TRACK::Save( FILE* aFile ) const
 
 
 /*********************************************************************/
-void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& notUsed )
+void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
+                  const wxPoint& aOffset )
 /*********************************************************************/
 {
     int l_piste;
@@ -610,7 +611,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
 #endif
         {
-            GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
+            GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                      m_Start.y + aOffset.y, rayon, color );
         }
         else
         {
@@ -621,16 +623,20 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
             if( panel->GetScreen()->Scale( l_piste ) <= 1 ) /* Sketch mode if l_piste/zoom <= 1 */
 #endif
             {
-                GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
+                GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                          m_Start.y + aOffset.y, rayon, color );
             }
             else if( ( !DisplayOpt.DisplayPcbTrackFill) || GetState( FORCE_SKETCH ) )
             {
-                GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon - l_piste, color );
-                GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon + l_piste, color );
+                GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                          m_Start.y + aOffset.y, rayon - l_piste, color );
+                GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                          m_Start.y + aOffset.y, rayon + l_piste, color );
             }
             else
             {
-                GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon,
+                GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                          m_Start.y + aOffset.y, rayon,
                           m_Width, color );
             }
         }
@@ -643,20 +649,23 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
 #endif
     {
-        GRLine( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                m_End.x, m_End.y, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                m_Start.y + aOffset.y,
+                m_End.x + aOffset.x, m_End.y + aOffset.y, 0, color );
         return;
     }
 
     if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
-        GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                 m_End.x, m_End.y, m_Width, color );
+        GRCSegm( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                 m_Start.y + aOffset.y,
+                 m_End.x + aOffset.x, m_End.y + aOffset.y, m_Width, color );
     }
     else
     {
-        GRFillCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                     m_End.x, m_End.y, m_Width, color );
+        GRFillCSegm( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                     m_Start.y + aOffset.y,
+                     m_End.x + aOffset.x, m_End.y + aOffset.y, m_Width, color );
     }
 
     if( panel->GetScreen()->m_IsPrinting )
@@ -665,8 +674,9 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
     // Show clearance for tracks, not for zone segments
     if( ShowClearance( this ) )
     {
-        GRCSegm( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
-                 m_End.x, m_End.y,
+        GRCSegm( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                 m_Start.y + aOffset.y,
+                 m_End.x + aOffset.x, m_End.y + aOffset.y,
                  m_Width + (GetClearance() * 2), color );
     }
 
@@ -683,10 +693,12 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
         return;
 
     #define THRESHOLD 10
-    if( (m_End.x - m_Start.x) != 0 &&  (m_End.y - m_Start.y) != 0 )
+    if( (m_End.x - m_Start.x) != 0
+        &&  (m_End.y - m_Start.y) != 0 )
         return;
 
-    int len = ABS( (m_End.x - m_Start.x) + (m_End.y - m_Start.y) );
+    int len = ABS( (m_End.x - m_Start.x)
+                   + (m_End.y - m_Start.y) );
 
     if( len < THRESHOLD * m_Width )
         return;
@@ -738,7 +750,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoin
 
 
 /*******************************************************************************************/
-void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& notUsed )
+void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
+                   const wxPoint& aOffset )
 /*******************************************************************************************/
 {
     int color;
@@ -811,14 +824,17 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
     }
 
     if( fillvia )
-        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, 0, color, color );
+        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                        m_Start.y + aOffset.y, rayon, 0, color, color );
 
     else
     {
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y, rayon, color );
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                  m_Start.y + aOffset.y, rayon, color );
         if ( fast_draw )
             return;
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                  m_Start.y + aOffset.y,
                   inner_rayon, color );
     }
 
@@ -850,8 +866,8 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
 #else
                 if( screen->Scale( drill_rayon ) > 1 )     /* draw hole if its size is enought */
 #endif
-                    GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x,
-                                    m_Start.y, drill_rayon, 0, color, color );
+                    GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                                    m_Start.y + aOffset.y, drill_rayon, 0, color, color );
 
                 if( screen->m_IsPrinting )
                     GRForceBlackPen( blackpenstate );
@@ -859,14 +875,16 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
             else
             {
                 if( drill_rayon < inner_rayon )         // We can show the via hole
-                    GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+                    GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                              m_Start.y + aOffset.y,
                               drill_rayon, color );
             }
         }
     }
 
     if( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x, m_Start.y,
+        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
+                  m_Start.y + aOffset.y,
                   rayon + GetClearance(), color );
 
     // for Micro Vias, draw a partial cross :
@@ -888,16 +906,24 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         }
 
         /* lines | or \ */
-        GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
-                m_Start.x - bx, m_Start.y - by, 0, color );
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + bx, m_Start.y + by,
-                m_Start.x + ax, m_Start.y + ay, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x - ax,
+                m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx,
+                m_Start.y + aOffset.y - by, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x + bx,
+                m_Start.y + aOffset.y + by,
+                m_Start.x + aOffset.x + ax,
+                m_Start.y + aOffset.y + ay, 0, color );
 
         /* lines - or / */
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + ay, m_Start.y - ax,
-                m_Start.x + by, m_Start.y - bx, 0, color );
-        GRLine( &panel->m_ClipBox, DC, m_Start.x - by, m_Start.y + bx,
-                m_Start.x - ay, m_Start.y + ax, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x + ay,
+                m_Start.y + aOffset.y - ax,
+                m_Start.x + aOffset.x + by,
+                m_Start.y + aOffset.y - bx, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x - by,
+                m_Start.y + aOffset.y + bx,
+                m_Start.x + aOffset.x - ay,
+                m_Start.y + aOffset.y + ax, 0, color );
     }
 
     // for Buried Vias, draw a partial line :
@@ -913,15 +939,19 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoi
         /* lines for the top layer */
         RotatePoint( &ax, &ay, layer_top * 3600 / brd->GetCopperLayerCount( ) );
         RotatePoint( &bx, &by, layer_top * 3600 / brd->GetCopperLayerCount( ) );
-        GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
-                m_Start.x - bx, m_Start.y - by, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x - ax,
+                m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx,
+                m_Start.y + aOffset.y - by, 0, color );
 
         /* lines for the bottom layer */
         ax = 0; ay = rayon; bx = 0; by = drill_rayon;
         RotatePoint( &ax, &ay, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
         RotatePoint( &bx, &by, layer_bottom * 3600 / brd->GetCopperLayerCount( ) );
-        GRLine( &panel->m_ClipBox, DC, m_Start.x - ax, m_Start.y - ay,
-                m_Start.x - bx, m_Start.y - by, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x - ax,
+                m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx,
+                m_Start.y + aOffset.y - by, 0, color );
     }
 
     // Display the short netname:

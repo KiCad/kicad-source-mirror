@@ -532,8 +532,8 @@ void DIMENSION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 {
     int ox, oy, typeaff, width, gcolor;
 
-    ox = offset.x;
-    oy = offset.y;
+    ox = -offset.x;
+    oy = -offset.y;
 
     m_Text->Draw( panel, DC, mode_color, offset );
 

@@ -238,7 +238,8 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 
     msg = AddHotkeyName( _( "Rotate Field" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_FIELD, msg, rotate_field_xpm );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_FIELD, _( "Edit Field" ), edit_text_xpm );
+    msg = AddHotkeyName( _( "Edit Field" ), s_Schematic_Hokeys_Descr, HK_EDIT );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_FIELD, msg, edit_text_xpm );
 }
 
 
