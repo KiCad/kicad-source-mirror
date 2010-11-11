@@ -25,6 +25,10 @@
 #ifndef _ERC_H
 #define _ERC_H
 
+
+class WinEDA_DrawPanel;
+class NETLIST_OBJECT;
+
 /* For ERC markers: error types (used in diags, and to set the color):
 */
 enum errortype
@@ -45,6 +49,26 @@ enum errortype
 #define ERCE_PIN_TO_PIN_ERROR     5    // pin connected to an other pin: error level
 #define ERCE_HIERACHICAL_LABEL    6    // mismatch between hierarchical labels and pins sheets
 #define ERCE_NOCONNECT_CONNECTED  7    // a no connect symbol is connected to more than 1 pin
+
+/* Minimal connection table */
+#define NPI    4  // Net with Pin isolated, this pin has type Not Connected and must be left N.C.
+#define DRV    3  // Net driven by a signal (a pin output for instance)
+#define NET_NC 2  // Net "connected" to a "NoConnect symbol"
+#define NOD    1  // Net not driven ( Such as 2 or more connected inputs )
+#define NOC    0  // initial state of a net: no connection
+
+
+extern bool WriteDiagnosticERC( const wxString& FullFileName );
+
+extern void Diagnose( WinEDA_DrawPanel* panel, NETLIST_OBJECT* NetItemRef,
+                      NETLIST_OBJECT* NetItemTst, int MinConnexion, int Diag );
+
+extern void TestOthersItems( WinEDA_DrawPanel* panel, unsigned NetItemRef, unsigned NetStart,
+                             int* NetNbItems, int* MinConnexion );
+
+extern void TestLabel( WinEDA_DrawPanel* panel, unsigned NetItemRef, unsigned StartNet );
+
+extern int TestDuplicateSheetNames( bool aCreateMarker );
 
 
 #endif  // _ERC_H

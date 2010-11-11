@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-
-// Name:        class_hierarchical_PIN_sheet.cpp
+// Name:        sch_sheet_pin.cpp
 // Purpose:     member functions SCH_SHEET_PIN
-//              header = class_drawsheet.h
+//              header = sch_sheet.h
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     08/02/2006 18:37:02
@@ -23,7 +22,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 
 /* m_Edge define on which edge the pin is positionned:

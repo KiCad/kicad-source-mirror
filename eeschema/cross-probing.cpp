@@ -14,7 +14,7 @@
 #include "protos.h"
 #include "lib_draw_item.h"
 #include "lib_pin.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 
 
 /***************************************************************/

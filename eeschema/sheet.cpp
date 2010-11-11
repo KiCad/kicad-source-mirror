@@ -21,7 +21,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 #include "dialog_sch_sheet_props.h"
 

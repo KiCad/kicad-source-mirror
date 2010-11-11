@@ -18,7 +18,7 @@
 #include "eeschema_config.h"
 #include "worksheet.h"
 #include "hotkeys.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 #include "dialog_eeschema_options.h"
 #include "dialog_hotkeys_editor.h"

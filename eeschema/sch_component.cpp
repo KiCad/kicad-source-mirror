@@ -1,6 +1,6 @@
-/**************************************************************/
-/* class_sch_component.cpp : handle the  class SCH_COMPONENT  */
-/**************************************************************/
+/*******************************************************/
+/* sch_component.cpp : handle the class SCH_COMPONENT  */
+/*******************************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -19,9 +19,9 @@
 #include "lib_rectangle.h"
 #include "lib_pin.h"
 #include "lib_text.h"
-#include "class_sch_component.h"
-#include "class_drawsheet.h"
-#include "class_drawsheetpath.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
 #include "template_fieldnames.h"
 
 #include "dialogs/dialog_schematic_find.h"

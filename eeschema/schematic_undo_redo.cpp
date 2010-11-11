@@ -10,10 +10,10 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_marker_sch.h"
-#include "class_schematic_items.h"
-#include "class_sch_component.h"
-#include "class_drawsheet.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 
 /* Functions to undo and redo edit commands.

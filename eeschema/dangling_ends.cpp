@@ -11,7 +11,7 @@
 #include "protos.h"
 #include "class_libentry.h"
 #include "lib_pin.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 
 
 /* Returns true if the point P is on the segment S. */

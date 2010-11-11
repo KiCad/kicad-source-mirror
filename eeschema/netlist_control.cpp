@@ -24,7 +24,7 @@
 #include "netlist.h"
 #include "protos.h"
 #include "netlist_control.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 
 //Imported function:

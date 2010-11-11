@@ -20,7 +20,7 @@
 
 #include "general.h"
 #include "libeditframe.h"
-#include "class_drawsheetpath.h"
+#include "sch_sheet_path.h"
 
 
 // Keys for configuration

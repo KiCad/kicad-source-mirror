@@ -6,7 +6,7 @@
 #define COMPONENT_CLASS_H
 
 
-#include "class_sch_cmp_field.h"
+#include "sch_field.h"
 #include "transform.h"
 #include "general.h"
 

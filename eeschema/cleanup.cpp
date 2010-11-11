@@ -12,7 +12,7 @@
 #include "general.h"
 #include "protos.h"
 #include "netlist.h"
-#include "class_schematic_items.h"
+#include "sch_items.h"
 
 
 /* Routine to start/end segment (BUS or wires) on junctions.

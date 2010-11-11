@@ -6,7 +6,7 @@
 #ifndef _CLASS_NETLIST_OBJECT_H_
 #define _CLASS_NETLIST_OBJECT_H_
 
-#include "class_drawsheetpath.h"
+#include "sch_sheet_path.h"
 
 #include "lib_pin.h"      // LIB_PIN::ReturnPinStringNum( m_PinNum )
 

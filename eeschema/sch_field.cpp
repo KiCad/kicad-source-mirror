@@ -1,6 +1,6 @@
-/**************************************************************/
-/* class_sch_cmp_field.cpp : handle the  class SCH_FIELD  */
-/**************************************************************/
+/***********************************************/
+/* sch_field.cpp : handle the class SCH_FIELD  */
+/***********************************************/
 
 /* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
@@ -24,8 +24,8 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_sch_component.h"
-#include "class_sch_cmp_field.h"
+#include "sch_component.h"
+#include "sch_field.h"
 #include "template_fieldnames.h"
 
 

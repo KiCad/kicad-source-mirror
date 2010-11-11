@@ -22,16 +22,17 @@
 #include "wxEeschemaStruct.h"
 #include "class_sch_screen.h"
 
-#include "annotate_dialog.h"
 #include "dialog_build_BOM.h"
-#include "dialog_erc.h"
 #include "netlist_control.h"
-#include "dialog_erc.h"
 #include "libeditframe.h"
 #include "viewlib_frame.h"
 #include "hotkeys.h"
-#include "class_drawsheet.h"
+#include "eeschema_config.h"
+#include "sch_sheet.h"
 
+#include "dialogs/annotate_dialog.h"
+#include "dialogs/dialog_erc.h"
+#include "dialogs/dialog_print_using_printer.h"
 #include "dialogs/dialog_schematic_find.h"
 
 
@@ -759,3 +760,21 @@ void WinEDA_SchematicFrame::SetLanguage( wxCommandEvent& event )
         m_LibeditFrame->WinEDA_BasicFrame::SetLanguage( event );
 }
 
+
+void WinEDA_SchematicFrame::OnPrint( wxCommandEvent& event )
+{
+    wxFileName fn;
+    DIALOG_PRINT_USING_PRINTER dlg( this );
+
+    dlg.ShowModal();
+
+    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+
+    wxString default_name = NAMELESS_PROJECT;
+    default_name += wxT( ".sch" );
+    if( fn.GetFullName() != default_name )
+    {
+        fn.SetExt( ProjectFileExtension );
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
+    }
+}

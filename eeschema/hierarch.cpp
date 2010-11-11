@@ -12,8 +12,8 @@
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
-#include "class_drawsheet.h"
-#include "class_drawsheetpath.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
 
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"

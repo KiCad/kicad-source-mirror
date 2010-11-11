@@ -11,7 +11,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 
 /**************************************************************************/

@@ -14,10 +14,10 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_drawsheet.h"
-#include "class_drawsheetpath.h"
-#include "class_sch_component.h"
-#include "class_schematic_items.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
+#include "sch_items.h"
 
 #include "build_version.h"
 

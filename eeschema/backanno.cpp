@@ -13,8 +13,8 @@
 #include "build_version.h"
 
 #include "general.h"
-#include "class_drawsheetpath.h"
-#include "class_sch_component.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
 
 
 /** function FillFootprintFieldForAllInstancesofComponent

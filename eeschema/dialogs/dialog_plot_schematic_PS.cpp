@@ -36,7 +36,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheetpath.h"
+#include "sch_sheet_path.h"
 
 
 enum PageFormatReq {

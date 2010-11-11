@@ -13,7 +13,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_schematic_items.h"
+#include "sch_items.h"
 
 
 static int     s_LastShape = '\\';

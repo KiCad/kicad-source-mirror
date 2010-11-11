@@ -15,7 +15,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_text-label.h"
+#include "sch_text.h"
 
 
 static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

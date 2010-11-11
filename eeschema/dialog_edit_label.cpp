@@ -15,7 +15,7 @@
 #include "general.h"
 #include "drawtxt.h"
 #include "confirm.h"
-#include "class_text-label.h"
+#include "sch_text.h"
 
 #include "dialog_edit_label.h"
 

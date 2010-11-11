@@ -13,33 +13,10 @@
 
 #include "general.h"
 #include "eeschema_config.h"
-#include "class_drawsheet.h"
-#include "class_drawsheetpath.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
 
-#include "dialog_print_using_printer_base.h"
-
-
-/**
- * Print schematic dialog.
- *
- * Class derived from DIALOG_PRINT_USING_PRINTER_base created by wxFormBuilder
- */
-class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
-{
-public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent );
-    ~DIALOG_PRINT_USING_PRINTER() {};
-
-    WinEDA_SchematicFrame* GetParent() const;
-
-private:
-    void OnCloseWindow( wxCloseEvent& event );
-    void OnInitDialog( wxInitDialogEvent& event );
-    void OnPageSetup( wxCommandEvent& event );
-    void OnPrintPreview( wxCommandEvent& event );
-    void OnPrintButtonClick( wxCommandEvent& event );
-    void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
-};
+#include "dialog_print_using_printer.h"
 
 
 /**
@@ -110,25 +87,6 @@ BEGIN_EVENT_TABLE( SCH_PREVIEW_FRAME, wxPreviewFrame )
 END_EVENT_TABLE()
 
 
-void WinEDA_SchematicFrame::OnPrint( wxCommandEvent& event )
-{
-    wxFileName fn;
-    DIALOG_PRINT_USING_PRINTER dlg( this );
-
-    dlg.ShowModal();
-
-    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
-
-    wxString default_name = NAMELESS_PROJECT;
-    default_name += wxT( ".sch" );
-    if( fn.GetFullName() != default_name )
-    {
-        fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
-    }
-}
-
-
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent ) :
     DIALOG_PRINT_USING_PRINTER_BASE( aParent )
 {
@@ -164,6 +122,8 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     }
 
     SetFocus();
+
+    m_buttonPrint->SetDefault();
 }
 
 

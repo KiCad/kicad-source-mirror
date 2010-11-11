@@ -9,7 +9,7 @@
 #include "trigo.h"
 
 #include "general.h"
-#include "class_marker_sch.h"
+#include "sch_marker.h"
 #include "erc.h"
 
 

@@ -14,7 +14,7 @@
 #include "eeschema_id.h"
 #include "class_library.h"
 #include "libeditframe.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 
 
 

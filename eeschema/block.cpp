@@ -13,14 +13,14 @@
 #include "class_sch_screen.h"
 
 #include "general.h"
-#include "class_marker_sch.h"
 #include "class_library.h"
 #include "lib_pin.h"
 #include "protos.h"
-#include "class_schematic_items.h"
-#include "class_text-label.h"
-#include "class_sch_component.h"
-#include "class_drawsheet.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_text.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 #include <boost/foreach.hpp>
 

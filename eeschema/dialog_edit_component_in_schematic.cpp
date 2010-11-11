@@ -14,7 +14,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 
 #include "dialog_edit_component_in_schematic.h"
 

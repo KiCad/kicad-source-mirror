@@ -13,8 +13,8 @@
 #include "wxEeschemaStruct.h"
 
 #include "protos.h"
-#include "class_sch_component.h"
-#include "class_text-label.h"
+#include "sch_component.h"
+#include "sch_text.h"
 
 
 /** Event function WinEDA_SchematicFrame::OnCopySchematicItemRequest

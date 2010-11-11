@@ -10,10 +10,10 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_marker_sch.h"
-#include "class_schematic_items.h"
-#include "class_drawsheet.h"
-#include "class_text-label.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_sheet.h"
+#include "sch_text.h"
 
 
 // Imported function:

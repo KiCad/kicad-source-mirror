@@ -14,10 +14,10 @@
 #include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
-#include "class_schematic_items.h"
-#include "class_text-label.h"
-#include "class_sch_component.h"
-#include "class_drawsheet.h"
+#include "sch_items.h"
+#include "sch_text.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 
 /* Routines Locales */

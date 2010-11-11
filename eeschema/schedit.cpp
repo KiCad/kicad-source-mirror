@@ -13,14 +13,14 @@
 #include "class_sch_screen.h"
 #include "kicad_device_context.h"
 
-#include "class_marker_sch.h"
 #include "general.h"
 #include "eeschema_id.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_sch_component.h"
-#include "class_schematic_items.h"
-#include "class_drawsheet.h"
+#include "sch_marker.h"
+#include "sch_component.h"
+#include "sch_items.h"
+#include "sch_sheet.h"
 
 
 void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )

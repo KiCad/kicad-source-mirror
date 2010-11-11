@@ -36,7 +36,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheetpath.h"
+#include "sch_sheet_path.h"
 
 #include "dialog_plot_schematic_HPGL_base.h"
 

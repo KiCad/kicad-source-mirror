@@ -9,19 +9,26 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "kicad_string.h"
+#include "gestfich.h"
 #include "bitmaps.h"
+#include "appl_wxstruct.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
 #include "netlist.h"
-#include "class_marker_sch.h"
+#include "sch_marker.h"
+#include "sch_sheet.h"
 #include "lib_pin.h"
 #include "protos.h"
 
 #include "dialog_erc.h"
 #include "dialog_erc_listbox.h"
 #include "erc.h"
+
+
+bool DIALOG_ERC::m_writeErcFile = false;
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
@@ -50,15 +57,13 @@ void DIALOG_ERC::Init()
         for( int jj = 0; jj < PIN_NMAX; jj++ )
             m_ButtonList[ii][jj] = NULL;
 
-    m_WriteResultOpt->SetValue( WriteFichierERC );
+    m_WriteResultOpt->SetValue( m_writeErcFile );
 
     wxString num;
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
     m_TotalErrCount->SetLabel( num );
 
-    num.Printf( wxT(
-                    "%d" ), g_EESchemaVar.NbErrorErc -
-                g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
     m_LastErrCount->SetLabel( num );
 
     num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
@@ -68,6 +73,9 @@ void DIALOG_ERC::Init()
 
     // Init Panel Matrix
     ReBuildMatrixPanel();
+
+    // Set the run ERC button as the default button.
+    m_buttonERC->SetDefault();
 }
 
 
@@ -377,10 +385,171 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
     if( new_bitmap_xpm )
     {
         delete Butt;
-        Butt = new wxBitmapButton( m_PanelERCOptions, id,
-                                   wxBitmap( new_bitmap_xpm ), pos );
+        Butt = new wxBitmapButton( m_PanelERCOptions, id, wxBitmap( new_bitmap_xpm ), pos );
 
         m_ButtonList[y][x] = Butt;
         DiagErc[y][x] = DiagErc[x][y] = level;
+    }
+}
+
+
+void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
+{
+    wxFileName fn;
+    unsigned   NetItemRef;
+    unsigned   OldItem;
+    unsigned   StartNet;
+
+    int        NetNbItems, MinConn;
+
+    if( !DiagErcTableInit )
+    {
+        memcpy( DiagErc, DefaultDiagErc, sizeof(DefaultDiagErc) );
+        DiagErcTableInit = TRUE;
+    }
+
+    m_writeErcFile = m_WriteResultOpt->GetValue();
+
+    ReAnnotatePowerSymbolsOnly();
+
+    if( m_Parent->CheckAnnotate( aMessagesList, false ) )
+    {
+        if( aMessagesList )
+        {
+            wxString msg = _( "Annotation required!" );
+            msg += wxT( "\n" );
+            aMessagesList->Add( msg );
+        }
+        return;
+    }
+
+    /* Erase all DRC markers */
+    DeleteAllMarkers( MARK_ERC );
+
+    g_EESchemaVar.NbErrorErc   = 0;
+    g_EESchemaVar.NbWarningErc = 0;
+
+    /* Cleanup the entire hierarchy */
+    SCH_SCREENS ScreenList;
+
+    for( SCH_SCREEN* Screen = ScreenList.GetFirst();
+         Screen != NULL;
+         Screen = ScreenList.GetNext() )
+    {
+        bool ModifyWires;
+        ModifyWires = Screen->SchematicCleanUp( NULL );
+
+        /* if wire list has changed, delete Undo Redo list to avoid
+         *  pointers on deleted data problems */
+        if( ModifyWires )
+            Screen->ClearUndoRedoList();
+    }
+
+    /* Test duplicate sheet names
+     * inside a given sheet, one cannot have sheets with duplicate names (file
+     * names can be duplicated).
+     */
+    int errcnt = TestDuplicateSheetNames( true );
+    g_EESchemaVar.NbErrorErc   += errcnt;
+
+    m_Parent->BuildNetListBase();
+
+    /* Reset the flag m_FlagOfConnection, that will be used next, in
+     * calculations */
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
+
+    StartNet   = OldItem = 0;
+    NetNbItems = 0;
+    MinConn    = NOC;
+
+    for( NetItemRef = 0; NetItemRef < g_NetObjectslist.size(); NetItemRef++ )
+    {
+        if( g_NetObjectslist[OldItem]->GetNet() != g_NetObjectslist[NetItemRef]->GetNet() )
+        {   // New net found:
+            MinConn    = NOC;
+            NetNbItems = 0;
+            StartNet   = NetItemRef;
+        }
+
+        switch( g_NetObjectslist[NetItemRef]->m_Type )
+        {
+        case NET_ITEM_UNSPECIFIED:
+        case NET_SEGMENT:
+        case NET_BUS:
+        case NET_JONCTION:
+        case NET_LABEL:
+        case NET_BUSLABELMEMBER:
+        case NET_PINLABEL:
+        case NET_GLOBLABEL:
+        case NET_GLOBBUSLABELMEMBER:
+
+            // These items do not create erc problems
+            break;
+
+        case NET_HIERLABEL:
+        case NET_HIERBUSLABELMEMBER:
+        case NET_SHEETLABEL:
+        case NET_SHEETBUSLABELMEMBER:
+
+            // ERC problems when pin sheets do not match hierarchical labels.
+            // Each pin sheet must match a hierarchical label
+            // Each hierarchical label must match a pin sheet
+            TestLabel( m_Parent->DrawPanel, NetItemRef, StartNet );
+            break;
+
+        case NET_NOCONNECT:
+
+            // ERC problems when a noconnect symbol is connected to more than
+            // one pin.
+            MinConn = NET_NC;
+            if( NetNbItems != 0 )
+                Diagnose( m_Parent->DrawPanel, g_NetObjectslist[NetItemRef], NULL, MinConn, UNC );
+            break;
+
+        case NET_PIN:
+
+            // Look for ERC problems between pins:
+            TestOthersItems( m_Parent->DrawPanel, NetItemRef, StartNet, &NetNbItems, &MinConn );
+            break;
+        }
+
+        OldItem = NetItemRef;
+    }
+
+    // Displays global results:
+    wxString num;
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
+    m_TotalErrCount->SetLabel( num );
+
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    m_LastErrCount->SetLabel( num );
+
+    num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
+    m_LastWarningCount->SetLabel( num );
+
+    // Display diags:
+    DisplayERC_MarkersList();
+
+    // Display new markers:
+    m_Parent->DrawPanel->Refresh();
+
+    if( m_writeErcFile )
+    {
+        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn.SetExt( wxT( "erc" ) );
+
+        wxFileDialog dlg( this, _( "ERC File" ), fn.GetPath(), fn.GetFullName(),
+                          _( "Electronic rule check file (.erc)|*.erc" ),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        if( WriteDiagnosticERC( dlg.GetPath() ) )
+        {
+            Close( TRUE );
+            ExecuteFile( this, wxGetApp().GetEditorName(), QuoteFullPath( fn ) );
+        }
     }
 }

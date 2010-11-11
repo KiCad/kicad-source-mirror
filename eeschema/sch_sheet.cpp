@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        class_drawsheet.cpp
+// Name:        sch_sheet.cpp
 // Purpose:     member functions for SCH_SHEET
-//              header = class_drawsheet.h
+//              header = sch_sheet.h
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     08/02/2006 18:37:02
@@ -24,9 +24,9 @@
 
 #include "general.h"
 #include "protos.h"
-#include "class_drawsheet.h"
-#include "class_drawsheetpath.h"
-#include "class_sch_component.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )

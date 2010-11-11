@@ -8,26 +8,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 set(EESCHEMA_SRCS
     annotate.cpp
-    annotate_dialog.cpp
     backanno.cpp
     block.cpp
     block_libedit.cpp
     build_BOM.cpp
     busentry.cpp
     bus-wire-junction.cpp
-    class_drawsheet.cpp
-    class_drawsheetpath.cpp
     class_drc_erc_item.cpp
-    class_hierarchical_PIN_sheet.cpp
     class_libentry.cpp
     class_library.cpp
-    class_marker_sch.cpp
     class_netlist_object.cpp
-    class_sch_cmp_field.cpp
-    class_sch_component.cpp
-    class_schematic_items.cpp
-    class_sch_screen.cpp
-    class_text-label.cpp
     cleanup.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
@@ -43,7 +33,8 @@ set(EESCHEMA_SRCS
     dialogs/dialog_plot_schematic_HPGL_base.cpp
     dialogs/dialog_plot_schematic_PS.cpp
     dialogs/dialog_plot_schematic_PS_base.cpp
-    dialog_annotate_base.cpp
+    dialogs/annotate_dialog.cpp
+    dialogs/dialog_annotate_base.cpp
     dialog_bodygraphictext_properties_base.cpp
     dialog_build_BOM.cpp
     dialog_build_BOM_base.cpp
@@ -59,8 +50,8 @@ set(EESCHEMA_SRCS
     dialog_eeschema_config_fbp.cpp
     dialog_eeschema_options_base.cpp
     dialog_eeschema_options.cpp
-    dialog_erc.cpp
-    dialog_erc_base.cpp
+    dialogs/dialog_erc.cpp
+    dialogs/dialog_erc_base.cpp
     dialog_libedit_dimensions.cpp
     dialog_libedit_dimensions_base.cpp
     dialog_lib_edit_draw_item.cpp
@@ -69,8 +60,8 @@ set(EESCHEMA_SRCS
     dialog_lib_edit_pin_base.cpp
     dialog_lib_new_component.cpp
     dialog_lib_new_component_base.cpp
-    dialog_print_using_printer_base.cpp
-    dialog_print_using_printer.cpp
+    dialogs/dialog_print_using_printer_base.cpp
+    dialogs/dialog_print_using_printer.cpp
     dialog_sch_sheet_props.cpp
     dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
@@ -122,6 +113,15 @@ set(EESCHEMA_SRCS
     operations_on_items_lists.cpp
     pinedit.cpp
     plot.cpp
+    sch_component.cpp
+    sch_field.cpp
+    sch_items.cpp
+    sch_marker.cpp
+    sch_screen.cpp
+    sch_sheet.cpp
+    sch_sheet_path.cpp
+    sch_sheet_pin.cpp
+    sch_text.cpp
     schedit.cpp
     schematic_undo_redo.cpp
     schframe.cpp

@@ -45,9 +45,9 @@
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
-#include "class_sch_component.h"
-#include "class_text-label.h"
-#include "class_drawsheet.h"
+#include "sch_component.h"
+#include "sch_text.h"
+#include "sch_sheet.h"
 #include "template_fieldnames.h"
 
 #include "xnode.h"      // also nests: <wx/xml/xml.h>

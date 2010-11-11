@@ -13,8 +13,8 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_schematic_items.h"
-#include "class_drawsheet.h"
+#include "sch_items.h"
+#include "sch_sheet.h"
 
 #include <boost/foreach.hpp>
 

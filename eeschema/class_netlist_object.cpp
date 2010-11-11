@@ -9,7 +9,7 @@
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 #include "class_netlist_object.h"
 
 #if defined(DEBUG)

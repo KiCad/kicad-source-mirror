@@ -21,9 +21,9 @@
 #include "class_library.h"
 #include "netlist.h"
 #include "protos.h"
-#include "class_drawsheet.h"
+#include "sch_sheet.h"
 #include "template_fieldnames.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 
 #include "build_version.h"
 

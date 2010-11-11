@@ -13,7 +13,7 @@
 #include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
-#include "class_sch_component.h"
+#include "sch_component.h"
 
 
 /*
