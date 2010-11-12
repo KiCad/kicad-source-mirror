@@ -704,6 +704,9 @@ static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
             pcbMarker->Draw( aPanel, aDC, GR_XOR, aOffset );
             break;
         }
+
+        default:
+            break;
         }
     }
     g_Offset_Module = wxPoint( 0, 0 );
