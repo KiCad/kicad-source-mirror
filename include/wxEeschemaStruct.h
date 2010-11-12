@@ -180,7 +180,7 @@ public:
 
 
     /**
-     * Function OnModify()
+     * Function OnModify
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
      * and update the date in frame reference
@@ -548,7 +548,7 @@ public:
 private:
 
     /**
-     * Function PutDataInPreviousState()
+     * Function PutDataInPreviousState
      * Used in undo or redo command.
      * Put data pointed by List in the previous state, i.e. the state
      * memorized by List

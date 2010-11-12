@@ -21,7 +21,7 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
 /**
- * Function WinEDA_ModuleEditFrame::PrintPage
+ * Function PrintPage
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
@@ -101,8 +101,9 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
 }
 
 
-/** WinEDA_PcbFrame::Function PrintPage
- * Used to print the board (on printer, or when creating SVF files).
+/**
+ * Function PrintPage
+ * is used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
  * @param aPrint_Sheet_Ref = true to print frame references

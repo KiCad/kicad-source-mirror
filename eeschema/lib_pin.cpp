@@ -1570,7 +1570,7 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
 
 
 /**
- * Function LIB_PIN::SetPinNumFromString()
+ * Function SetPinNumFromString
  * fill the buffer with pin num as a wxString
  *  Pin num is coded as a long
  *  Used to print/draw the pin num
@@ -1696,7 +1696,7 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
 
 /**
- * Function LIB_PIN::DisplayInfo
+ * Function DisplayInfo
  * Displays info (pin num and name, orientation ...
  * on the Info window
  */
@@ -1737,7 +1737,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
 
 
 /**
- * Function LIB_PIN::GetBoundingBox
+ * Function GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
  */
 EDA_Rect LIB_PIN::GetBoundingBox()

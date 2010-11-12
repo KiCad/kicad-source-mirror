@@ -226,7 +226,7 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
 
 
 /**
- * Function SaveCurrentSetupValues()
+ * Function SaveCurrentSetupValues
  * Save the current setup values in m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
@@ -393,7 +393,7 @@ bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
 
 
 /**
- * Function ReadCurrentSetupValues()
+ * Function ReadCurrentSetupValues
  * Raed the current setup values previously saved, from m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers

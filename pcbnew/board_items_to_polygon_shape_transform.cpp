@@ -80,7 +80,7 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
 
 
 /**
- * Function TEXTE_PCB::TransformShapeWithClearanceToPolygon
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -127,7 +127,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
 
 
 /**
- * Function DRAWSEGMENT::TransformShapeWithClearanceToPolygon
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -169,7 +169,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon(
 }
 
 /**
- * Function EDGE_MODULE::TransformShapeWithClearanceToPolygon
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -215,7 +215,7 @@ void EDGE_MODULE::TransformShapeWithClearanceToPolygon(
 
 
 /**
- * Function TRACK::TransformShapeWithClearanceToPolygon
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles (vias) and arcs (ends of tracks) are approximated by segments
@@ -351,7 +351,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
 
 
 /**
- * Function D_PAD::TransformShapeWithClearanceToPolygon
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the pad shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments

@@ -110,13 +110,13 @@ public:
 
 
     /**
-     * Function Set_Rectangle_Encadrement()
+     * Function Set_Rectangle_Encadrement
      * calculates the bounding box for orient 0 at origin = module anchor)
      */
     void     Set_Rectangle_Encadrement();
 
     /**
-     * Function SetRectangleExinscrit()
+     * Function SetRectangleExinscrit
      * Calculates the real bounding box according to the board position,
      * and real orientation and also calculates the area value (used in
      * automatic placement)

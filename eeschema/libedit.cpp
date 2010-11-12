@@ -53,7 +53,7 @@ void WinEDA_LibeditFrame::SelectActiveLibrary()
 
 
 /**
- * Function LoadOneLibraryPart()
+ * Function LoadOneLibraryPart
  * load a library component from the current selected library
  * Prompt user for component name
  * If there is no current selected library,

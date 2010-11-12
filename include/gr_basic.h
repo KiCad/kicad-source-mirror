@@ -56,12 +56,14 @@ void GRResetPenAndBrush( wxDC* DC );
 void GRSetColorPen( wxDC* DC, int Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, int Color, int fill = 0 );
 
-/** function GRForceBlackPen
+/**
+ * Function GRForceBlackPen
  * @param flagforce True to force a black pen whenever the asked color
  */
 void GRForceBlackPen( bool flagforce );
 
-/** function GetGRForceBlackPenState
+/**
+ * Function GetGRForceBlackPenState
  * @return ForceBlackPen (True if a black pen was forced)
  */
 bool GetGRForceBlackPenState( void );
@@ -202,7 +204,8 @@ void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );
 
-/** Function GRLineArray
+/**
+ * Function GRLineArray
  * draws an array of lines (not a polygon).
  * @param aClipBox = the clip box
  * @param aDC = the device context into which drawing should occur.

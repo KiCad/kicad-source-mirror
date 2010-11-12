@@ -133,7 +133,7 @@ public:
     void        ClearListAndDeleteItems();
 
     /**
-     * Function GetCount()
+     * Function GetCount
      * @return the count of pickers stored in this list
      */
     unsigned        GetCount() const
@@ -142,7 +142,7 @@ public:
     }
 
     /**
-     * Function ReversePickersListOrder()
+     * Function ReversePickersListOrder
      * reverses the order of pickers stored in this list
      * Useful when pop a list from Undo to Redo (and vice-versa)
      * because sometimes undo (or redo) a command needs to keep the

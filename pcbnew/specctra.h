@@ -2580,7 +2580,7 @@ typedef boost::ptr_vector<PADSTACK> PADSTACKS;
 
 
 /**
- * Function operator<()
+ * Function operator<
  * is used by the PADSTACKSET boost::ptr_set below
  */
 inline bool operator<( const PADSTACK& lhs, const PADSTACK& rhs )

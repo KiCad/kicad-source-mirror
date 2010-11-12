@@ -272,7 +272,7 @@ public:
     }
 
     /**
-     * Function GetCount()
+     * Function GetCount
      * @return the number of sheets in list:
      * usually the number of sheets found in the whole hierarchy
      */

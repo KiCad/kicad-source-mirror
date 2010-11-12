@@ -465,7 +465,7 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
 }
 
 /**
- * Function OnModify()
+ * Function OnModify
  * Must be called after a schematic change
  * in order to set the "modify" flag of the current screen
  * and update the date in frame reference

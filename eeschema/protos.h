@@ -63,7 +63,8 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* Draw
 void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 // operations_on_item_lists.cpp
-/** function DuplicateStruct
+/**
+ * Function DuplicateStruct
  *  Routine to create a new copy of given struct.
  * @param aDrawStruct = the SCH_ITEM to duplicate
  * @param aClone (defualt = true)

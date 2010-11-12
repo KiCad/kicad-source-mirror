@@ -267,7 +267,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
 
 /**
- *  Function used by Marque_Une_Piste()
+ * Function used by Marque_Une_Piste
  *  - Set the BUSY flag of connected segments, the first search point is
  *      ref_pos on layers allowed in masque_layer
  *  - Put segments fount in aList

@@ -14,7 +14,7 @@
 
 
 /**
- * Function GetBuildVersion()
+ * Function GetBuildVersion
  * Return the build date and version
  */
 wxString GetBuildVersion()

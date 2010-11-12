@@ -28,7 +28,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
 /**************************************************************************************************/
 
 /**
- * Function Merge_Two_SubNets()
+ * Function Merge_Two_SubNets
  * Used by Propagate_SubNet()
  * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
  * for pads and tracks, this is the .m_Subnet member that is tested and modified

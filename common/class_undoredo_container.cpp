@@ -358,7 +358,7 @@ void PICKED_ITEMS_LIST::CopyList( const PICKED_ITEMS_LIST& aSource )
 }
 
 /**
- * Function ReversePickersListOrder()
+ * Function ReversePickersListOrder
  * reverses the order of pickers stored in this list
  * Useful when pop a list from Undo to Redo (and vice-versa)
  * because sometimes undo (or redo) a command needs to keep the

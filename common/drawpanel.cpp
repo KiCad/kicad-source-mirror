@@ -338,7 +338,7 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 
 
 /**
- * Function GetScreenCenterRealPosition()
+ * Function GetScreenCenterRealPosition
  * @return position (in internal units) of the current area center showed
  *         on screen
  */
@@ -513,7 +513,7 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 
 
 /**
- * Function SetBoundaryBox()
+ * Function SetBoundaryBox
  * Set the clip box to the current displayed rectangle dimensions.
  *
  * When using wxDC for scaling, the clip box coordinates are in drawing (logical)

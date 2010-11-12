@@ -100,7 +100,7 @@ int NegableTextLength( const wxString& aText )
 }
 
 
-/* Function GetHersheyShapeDescription()
+/* Function GetHersheyShapeDescription
  * return a pointer to the shape corresponding to unicode value AsciiCode
  * Note we use the same font for Bold and Normal texts
  * because kicad handles a variable pen size to do that

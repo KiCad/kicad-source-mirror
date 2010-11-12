@@ -106,7 +106,8 @@ TRACK* TRACK::Copy() const
     return NULL;    // should never happen
 }
 
-/** Virtual function GetClearance
+/**
+ * Function GetClearance (virtual)
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
  * aItem's clearance.  If \a aItem is NULL, then this objects

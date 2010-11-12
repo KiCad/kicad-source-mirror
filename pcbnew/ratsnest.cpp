@@ -192,7 +192,7 @@ static int sort_by_length( const void* o1, const void* o2 )
 
 
 /**
- *  Function used by Build_Board_Ratsnest()
+ * Function used by Build_Board_Ratsnest
  *  This function creates a ratsnest between two blocks ( which fit the same
  * net )
  *  A block is a group of pads already linked (by a previous ratsnest
@@ -297,7 +297,7 @@ static int gen_rats_block_to_block(
 
 
 /**
- * Function used by Build_Board_Ratsnest()
+ * Function used by Build_Board_Ratsnest
  * this is the first pass of the lee algorithm
  * This function creates the link (ratsnest) between 2 pads ( fitting the same
  * net )
@@ -548,7 +548,7 @@ void WinEDA_BasePcbFrame::DrawGeneralRatsnest( wxDC* DC, int net_code )
 
 
 /**
- *  Function used by Tst_Ratsnest()
+ * Function used by Tst_Ratsnest
  *  Function like gen_rats_block_to_block(..)
  *  Function testing the ratsnest between 2 blocks ( same net )
  *  The search is made between pads in block 1 and the others blocks
@@ -613,7 +613,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 
 
 /**
- *  Function used by Tst_Ratsnest_general()
+ * Function used by Tst_Ratsnest_general
  *  The general ratsnest list must exists
  *  Activates the ratsnest between 2 pads ( supposes du meme net )
  *  The function links 1 pad not already connected an other pad and activate

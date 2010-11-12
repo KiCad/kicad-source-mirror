@@ -12,7 +12,8 @@
 class WinEDA_DrawPanel;
 class PLOTTER;
 
-/** Function  Clamp_Text_PenSize
+/**
+ * Function  Clamp_Text_PenSize
  *As a rule, pen width should not be >1/4em, otherwise the character
  * will be cluttered up in its own fatness
  * The pen width max is aSize/4 for bold texts, and aSize/6 for normal texts
@@ -26,23 +27,27 @@ class PLOTTER;
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold = true );
 int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true );
 
-/** Function GetPensizeForBold
+/**
+ * Function GetPensizeForBold
  * @return the "best" value for a pen size to draw/plot a bold text
  * @param aTextSize = the char size (height or width)
  */
 int GetPenSizeForBold( int aTextSize );
 
-/** Function ReturnGraphicTextWidth
+/**
+ * Function ReturnGraphicTextWidth
  * @return the X size of the graphic text
  * the full X size is ReturnGraphicTextWidth + the thickness of graphic lines
  */
 int ReturnGraphicTextWidth( const wxString& aText, int size_h, bool italic, bool bold );
 
-/** Function NegableTextLength
+/**
+ * Function NegableTextLength
  * Return the text length of a negable string, excluding the ~ markers */
 int NegableTextLength( const wxString& aText );
 
-/** Function DrawGraphicText
+/**
+ * Function DrawGraphicText
  * Draw a graphic text (like module texts)
  *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas

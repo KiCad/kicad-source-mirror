@@ -856,7 +856,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 /**
- * Function SCH_LABEL::Draw
+ * Function Draw
  * a label is drawn like a text. So just call SCH_TEXT::Draw
  */
 void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,

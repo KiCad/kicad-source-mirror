@@ -92,7 +92,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( )
 /***********************************************************************************/
 
 /**
- * Function Fill_Zone_Areas_With_Segments()
+ * Function Fill_Zone_Areas_With_Segments
  *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
  * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
  * all intersecting points with the horizontal infinite line and polygons to fill are calculated
@@ -220,7 +220,7 @@ int Propagation( WinEDA_PcbFrame* frame )
 /********************************************/
 
 /**
- * Function Propagation()
+ * Function Propagation
  * Used now only in autoplace calculations
  * Uses the routing matrix to fill the cells within the zone
  * Search and mark cells within the zone, and agree with DRC options.

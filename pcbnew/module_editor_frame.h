@@ -85,7 +85,7 @@ public:
     // BOARD handling
 
     /**
-     * Function Clear_Pcb()
+     * Function Clear_Pcb
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to
      *                 initialize silently

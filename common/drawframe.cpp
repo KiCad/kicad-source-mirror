@@ -184,7 +184,8 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
-/** Virtual function PrintPage
+/**
+ * Function PrintPage (virtual)
  * used to print a page
  * this basic function must be derived to be used for printing
  * because WinEDA_DrawFrame does not know how to print a page
@@ -593,7 +594,7 @@ double RoundTo0( double x, double precision )
 }
 
 /**
- * Function UpdateStatusBar()
+ * Function UpdateStatusBar
  * Displays in the bottom of the main window a stust:
  *  - Absolute Cursor coordinates
  *  - Relative Cursor coordinates (relative to the last coordinate stored

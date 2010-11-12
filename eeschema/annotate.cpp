@@ -349,7 +349,7 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 
 
 /**
- * Function AddComponentsInSheetToList()
+ * Function AddComponentsInSheetToList
  * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
  * in sheet
  * @param aComponentsList = a std::vector list to fill

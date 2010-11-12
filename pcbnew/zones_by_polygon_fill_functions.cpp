@@ -93,7 +93,7 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 /***************************************************************************************/
 
 /**
- * Function Fill_Zone()
+ * Function Fill_Zone
  *  Calculate the zone filling for the outline zone_container
  *  The zone outline is a frontier, and can be complex (with holes)
  *  The filling starts from starting points like pads, tracks.
@@ -149,7 +149,7 @@ int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
 /************************************************************/
 
 /**
- * Function Fill_All_Zones()
+ * Function Fill_All_Zones
  *  Fill all zones on the board
  * The old fillings are removed
  * @param verbose = true to show error messages

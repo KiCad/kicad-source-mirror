@@ -16,7 +16,8 @@
 class WinEDAListBox;
 
 
-/** Function OpenPDF
+/**
+ * Function OpenPDF
  * run the PDF viewer and display a PDF file
  * @param file = PDF file to open
  * @return true is success, false if no PDF viewer found

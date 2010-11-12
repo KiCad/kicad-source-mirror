@@ -45,7 +45,8 @@
 #define ZONES_FUNCTIONS_TO_UNDO_REDO_H
 
 
-/** function SaveCopyOfZones()
+/**
+ * Function SaveCopyOfZones
  * creates a copy of zones having a given netcode on a given layer,
  * and fill a pick list with pickers to handle these copies
  * @param aPickList = the pick list
@@ -57,7 +58,8 @@
 int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, int aLayer );
 
 
-/** function UpdateCopyOfZonesList()
+/**
+ * Function UpdateCopyOfZonesList
  * check a pick list to remove zones identical to their copies
  * and set the type of operation in picker (UR_DELETED, UR_CHANGED)
  * @param aPickList = the main pick list

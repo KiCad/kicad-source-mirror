@@ -273,7 +273,7 @@ void WinEDA_ModuleEditFrame::CloseModuleEditor( wxCommandEvent& Event )
 }
 
 /**
- * Function WinEDA_ModuleEditFrame::SetToolbars()
+ * Function SetToolbars
  * Enable or disable some tools and menus, according to
  * the current state of the footprint editor:
  *  >> a footprint is loaded or not
@@ -554,7 +554,8 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 }
 
 
-/** Virtual Function OnModify()
+/**
+ * Function OnModify() (virtual)
  * Must be called after a change
  * in order to set the "modify" flag of the current screen
  * and prepare, if needed the refresh of the 3D frame showing the footprint

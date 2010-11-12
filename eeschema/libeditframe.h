@@ -110,7 +110,7 @@ public:
     void SaveSettings();
 
     /**
-     * Function CloseWindow()
+     * Function CloseWindow
      * triggers the wxCloseEvent, which is handled by the function given
      * to EVT_CLOSE() macro:
      * <p>
@@ -123,7 +123,7 @@ public:
     }
 
     /**
-     * Function OnModify()
+     * Function OnModify
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
      */

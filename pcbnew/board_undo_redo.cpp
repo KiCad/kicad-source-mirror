@@ -474,7 +474,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
 
 /**
- * Function PutDataInPreviousState()
+ * Function PutDataInPreviousState
  * Used in undo or redo command.
  * Put data pointed by List in the previous state, i.e. the state memorised by List
  * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo

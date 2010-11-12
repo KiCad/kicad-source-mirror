@@ -857,7 +857,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
 
 
 /**
- * Function GetOrientation()
+ * Function GetOrientation
  * Used to display component orientation (in dialog editor or info)
  * @return the orientation and mirror
  * Note: Because there are different ways to have a given orientation/mirror,

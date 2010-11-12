@@ -246,7 +246,7 @@ public:
     bool HitTest( EDA_Rect& refArea );
 
     /**
-     * Function Fill_Zone()
+     * Function Fill_Zone
      * Calculate the zone filling
      * The zone outline is a frontier, and can be complex (with holes)
      * The filling starts from starting points like pads, tracks.
@@ -259,7 +259,7 @@ public:
     int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
 
     /**
-     * Function Fill_Zone_Areas_With_Segments()
+     * Function Fill_Zone_Areas_With_Segments
      *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
@@ -360,7 +360,7 @@ public:
         return m_Poly->GetHatchStyle();
     }
     /**
-     * Function IsSame()
+     * Function IsSame
      * test is 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines
      * info relative to filling is not take in account

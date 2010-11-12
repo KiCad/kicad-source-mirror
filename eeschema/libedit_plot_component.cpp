@@ -124,7 +124,8 @@ void WinEDA_LibeditFrame::CreatePNGorJPEGFile( const wxString& aFileName, bool a
     image.Destroy();
 }
 
-/** Virtual function PrintPage
+/**
+ * Function PrintPage (virtual)
  * used to print a page.
  * @param aDC = wxDC given by the calling print function
  * @param aPrint_Sheet_Ref = true to print page references

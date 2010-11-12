@@ -216,7 +216,7 @@ public:
     MODULE* GetModuleByName();
 
     /**
-     * Function OnModify()
+     * Function OnModify
      * Virtual
      * Must be called after a change
      * in order to set the "modify" flag of the current screen

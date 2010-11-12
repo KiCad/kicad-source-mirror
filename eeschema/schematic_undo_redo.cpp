@@ -345,7 +345,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 
 
 /**
- * Function PutDataInPreviousState()
+ * Function PutDataInPreviousState
  * Used in undo or redo command.
  * Put data pointed by List in the previous state, i.e. the state memorized
  * by List

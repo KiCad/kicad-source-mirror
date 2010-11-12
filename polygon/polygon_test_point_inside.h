@@ -10,7 +10,8 @@ public:
     int x, y;
 };
 #endif
-/** Function TestPointInsidePolygon
+/**
+ * Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.
  * @param aPolysList: the list of polygons
  * @param aIdxstart: the starting point of a given polygon in m_FilledPolysList.
@@ -23,7 +24,8 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
                              int                   aIdxend,
                              int                   aRefx,
                              int                   aRefy);
-/** Function TestPointInsidePolygon (overlaid)
+/**
+ * Function TestPointInsidePolygon (overlaid)
  * same as previous, but mainly use wxPoint
  * @param aPolysList: the list of polygons
  * @param aCount: corners count in aPolysList.

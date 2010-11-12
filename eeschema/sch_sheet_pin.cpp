@@ -412,7 +412,8 @@ void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
 }
 
 
-/** Virtual Function SCH_SHEET_PIN::CreateGraphicShape
+/**
+ * Function CreateGraphicShape (virtual)
  * calculates the graphic shape (a polygon) associated to the text
  * @param aCorner_list = a buffer to fill with polygon corners coordinates
  * @param aPos = Position of the shape

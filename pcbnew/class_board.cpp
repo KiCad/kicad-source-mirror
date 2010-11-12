@@ -742,7 +742,7 @@ unsigned BOARD::GetNodesCount()
 
 
 /**
- * Function ComputeBoundaryBox()
+ * Function ComputeBoundaryBox
  * Calculate the bounding box of the board
  *  This box contains pcb edges, pads , vias and tracks
  *  Update m_PcbBox member

@@ -174,7 +174,7 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
 
 
 /**
- * Function DisplayMarkerInfo()
+ * Function DisplayMarkerInfo
  * Displays the full info of this marker, within an HTML window
  */
 void MARKER_BASE::DisplayMarkerInfo( WinEDA_DrawFrame* aFrame )

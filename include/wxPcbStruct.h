@@ -437,7 +437,7 @@ public:
                                         wxPoint( 0, 0 ) );
 
     /**
-     * Function PutDataInPreviousState()
+     * Function PutDataInPreviousState
      * Used in undo or redo command.
      * Put data pointed by List in the previous state, i.e. the state memorized
      * by List
@@ -582,7 +582,7 @@ public:
     // BOARD handling
 
     /**
-     * Function Clear_Pcb()
+     * Function Clear_Pcb
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to
      *                 initialize silently
@@ -887,7 +887,7 @@ public:
     bool End_Zone( wxDC* DC );
 
     /**
-     * Function Fill_Zone()
+     * Function Fill_Zone
      *  Calculate the zone filling for the outline zone_container
      *  The zone outline is a frontier, and can be complex (with holes)
      *  The filling starts from starting points like pads, tracks.
@@ -899,7 +899,7 @@ public:
     int  Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
 
     /**
-     * Function Fill_All_Zones()
+     * Function Fill_All_Zones
      *  Fill all zones on the board
      * The old fillings are removed
      * @param verbose = true to show error messages

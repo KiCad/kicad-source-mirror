@@ -60,7 +60,8 @@ extern wxString g_ModuleEditSectionTag;
 void            AddHotkeyConfigMenu( wxMenu* menu );
 void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id );
 
-/** function ReturnKeyNameFromKeyCode
+/**
+ * Function ReturnKeyNameFromKeyCode
  * return the key name from the key code
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
@@ -70,7 +71,8 @@ void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id
  */
 wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
 
-/** function ReturnKeyNameFromCommandId
+/**
+ * Function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
  * @param aCommandId = Command Id value
@@ -78,7 +80,8 @@ wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL )
  */
 wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId );
 
-/** function ReturnKeyCodeFromKeyName
+/**
+ * Function ReturnKeyCodeFromKeyName
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
  * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
@@ -87,7 +90,8 @@ wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandI
  */
 int ReturnKeyCodeFromKeyName( const wxString& keyname );
 
-/** function AddHotkeyName
+/**
+ * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
@@ -100,7 +104,8 @@ wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
                                int  aCommandId,
                                bool aIsShortCut = true);
 
-/** function AddHotkeyName
+/**
+ * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
@@ -114,7 +119,8 @@ wxString        AddHotkeyName( const wxString&                        aText,
                                int                                    aCommandId,
                                bool                                   aIsShortCut = true);
 
-/** function DisplayHotkeyList
+/**
+ * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
@@ -124,7 +130,8 @@ wxString        AddHotkeyName( const wxString&                        aText,
 void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
                                    struct Ki_HotkeyInfoSectionDescriptor* aList );
 
-/** function GetDescriptorFromHotkey
+/**
+ * Function GetDescriptorFromHotkey
  * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
  * @param aKey = key code (ascii value, or wxWidgets value for function keys
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
@@ -156,8 +163,8 @@ enum common_hotkey_id_commnand {
     HK_ZOOM_REDRAW,
     HK_ZOOM_CENTER,
     HK_ZOOM_AUTO,
-	HK_UNDO,
-	HK_REDO,
+    HK_UNDO,
+    HK_REDO,
     HK_COMMON_END
 };
 

@@ -491,7 +491,7 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
 
 
 /**
- * Function InitRulesList()
+ * Function InitRulesList
  * Fill the grid showing current rules with values
  */
 void DIALOG_DESIGN_RULES::InitRulesList()

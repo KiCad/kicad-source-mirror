@@ -1254,7 +1254,7 @@ static void Draw3D_CircleSegment( double startx, double starty, double endx,
 
 
 /**
- * Function Pcb3D_GLCanvas::Draw3D_Polygon
+ * Function Draw3D_Polygon
  * draw one solid polygon
  * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
  * @param aZpos = the z position in 3D units

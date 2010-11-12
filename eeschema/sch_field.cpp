@@ -226,7 +226,7 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
 
 
 /**
- * Function GetBoundaryBox()
+ * Function GetBoundaryBox
  * @return an EDA_Rect contains the real (user coordinates) boundary box for
  *         a text field,
  *  according to the component position, rotation, mirror ...

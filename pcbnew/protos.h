@@ -11,7 +11,8 @@
 
 class COMMAND;
 
-/** Function SwapData
+/**
+ * Function SwapData
  * Used in undo / redo command:
  *  swap data between Item and a copy
  *  swapped data is data modified by edition, so NOT ALL values are swapped

@@ -46,7 +46,7 @@ public:
 
 
     /**
-     * Function GetPlotterType()
+     * Function GetPlotterType
      * @return the format of the plot file
      */
     PlotFormat GetPlotterType()

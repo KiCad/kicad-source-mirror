@@ -209,7 +209,8 @@ void D_PAD::Copy( D_PAD* source )
 }
 
 
-/** Virtual function GetClearance
+/**
+ * Function GetClearance (virtual)
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
  * aItem's clearance.  If \a aItem is NULL, then this object clearance is returned.

@@ -17,7 +17,8 @@
 int  KeyWordOk( const wxString& KeyList,
                 const wxString& Database );
 
-/** Function GetAssociatedDocument
+/**
+ * Function GetAssociatedDocument
  * open a document (file) with the suitable browser
  * @param aFrame = main frame
  * @param aDocName = filename of file to open (Full filename or short filename)

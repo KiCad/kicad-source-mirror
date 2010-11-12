@@ -707,7 +707,8 @@ void WinEDA_PcbFrame::SetLastNetListRead( const wxString& aLastNetListRead )
     }
 }
 
-/** Virtual Function OnModify()
+/**
+ * Function OnModify() (virtual)
  * Must be called after a change
  * in order to set the "modify" flag of the current screen
  * and prepare, if needed the refresh of the 3D frame showing the footprint

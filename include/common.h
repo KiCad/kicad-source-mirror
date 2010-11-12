@@ -196,7 +196,8 @@ extern BASE_SCREEN* ActiveScreen;
 
 /* COMMON.CPP */
 
-/** function SetLocaleTo_C_standard
+/**
+ * Function SetLocaleTo_C_standard
  *  because kicad is internationalized, switch internalization to "C" standard
  *  i.e. uses the . (dot) as separator in print/read float numbers
  *  (some countries (France, Germany ..) use , (comma) as separator)
@@ -209,7 +210,8 @@ extern BASE_SCREEN* ActiveScreen;
  */
 void               SetLocaleTo_C_standard( void );
 
-/** function SetLocaleTo_Default
+/**
+ * Function SetLocaleTo_Default
  *  because kicad is internationalized, switch internalization to default
  *  to use the default separator in print/read float numbers
  *  (. (dot) but some countries (France, Germany ..) use , (comma) as
@@ -331,7 +333,8 @@ wxString        GetAbbreviatedUnitsLabel( UserUnitType aUnit = g_UserUnit );
 int             ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
                                        int Internal_Unit );
 
-/** Function ReturnStringFromValue
+/**
+ * Function ReturnStringFromValue
  * Return the string from Value, according to units (inch, mm ...) for display,
  * and the initial unit for value
  * @param aUnit = display units (INCHES, MILLIMETRE ..)
