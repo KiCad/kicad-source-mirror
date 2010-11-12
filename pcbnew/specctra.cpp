@@ -533,7 +533,7 @@ int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
 }
 
 
-void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
+void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR )
 {
     wxString    errText;
     va_list     args;
@@ -542,18 +542,18 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IOError )
     errText.PrintfV( fmt, args );
     va_end( args );
 
-    throw IOError( errText );
+    throw IO_ERROR( errText );
 }
 
 
-void SPECCTRA_DB::expecting( const char* text ) throw( IOError )
+void SPECCTRA_DB::expecting( const char* text ) throw( IO_ERROR )
 {
     wxString    errText = CONV_FROM_UTF8( text );
     lexer->Expecting( errText );
 }
 
 
-void SPECCTRA_DB::unexpected( const char* text ) throw( IOError )
+void SPECCTRA_DB::unexpected( const char* text ) throw( IO_ERROR )
 {
     wxString    errText = CONV_FROM_UTF8( text );
     lexer->Unexpected( errText );
@@ -566,7 +566,7 @@ DSN_T SPECCTRA_DB::nextTok()
     return ret;
 }
 
-void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IOError )
+void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IO_ERROR )
 {
     DSN_T  tok;
 
@@ -609,7 +609,7 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
 }
 
 
-void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
+void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
 {
     DSN_T tok;
 
@@ -675,7 +675,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
+void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
 {
     FILE*       fp = wxFopen( filename, wxT("r") );
 
@@ -704,7 +704,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
+void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
 {
     FILE*       fp = wxFopen( filename, wxT("r") );
 
@@ -733,7 +733,7 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
+void SPECCTRA_DB::doPCB( PCB* growth ) throw( IO_ERROR )
 {
     DSN_T tok;
 
@@ -838,7 +838,7 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
+void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IO_ERROR )
 {
     DSN_T       tok;
     std::string const1;
@@ -977,7 +977,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw(IOError)
+void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1004,7 +1004,7 @@ void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw(IOError)
 }
 
 
-void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw(IOError)
+void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1025,7 +1025,7 @@ void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw(IOError)
 }
 
 
-void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
+void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR )
 {
     needSYMBOL();
     growth->layer_id0 = lexer->CurText();
@@ -1041,7 +1041,7 @@ void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOError )
+void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -1060,7 +1060,7 @@ void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IOEr
 }
 
 
-void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw(IOError)
+void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -1194,7 +1194,7 @@ L_place:
 }
 
 
-void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IOError )
+void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR )
 {
     /*
     <structure_out_descriptor >::=
@@ -1237,7 +1237,7 @@ void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
+void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1326,7 +1326,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
+void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1378,7 +1378,7 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
+void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1425,7 +1425,7 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
+void SPECCTRA_DB::doPATH( PATH* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1473,7 +1473,7 @@ void SPECCTRA_DB::doPATH( PATH* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
+void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IO_ERROR )
 {
     needSYMBOL();
     growth->layer_id = lexer->CurText();
@@ -1498,7 +1498,7 @@ void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
+void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -1526,7 +1526,7 @@ void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
+void SPECCTRA_DB::doQARC( QARC* growth ) throw( IO_ERROR )
 {
     needSYMBOL();
     growth->layer_id = lexer->CurText();
@@ -1550,7 +1550,7 @@ void SPECCTRA_DB::doQARC( QARC* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
+void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IO_ERROR )
 {
     needSYMBOL();
     growth->value = lexer->CurText();
@@ -1558,7 +1558,7 @@ void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
+void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IO_ERROR )
 {
     DSN_T tok = nextTok();
 
@@ -1571,7 +1571,7 @@ void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doVIA( VIA* growth ) throw( IOError )
+void SPECCTRA_DB::doVIA( VIA* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -1600,7 +1600,7 @@ void SPECCTRA_DB::doVIA( VIA* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
+void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -1647,7 +1647,7 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
+void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IO_ERROR )
 {
     DSN_T       tok;
     PROPERTY    property;  // construct it once here, append multiple times.
@@ -1670,7 +1670,7 @@ void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
+void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -1792,7 +1792,7 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
+void SPECCTRA_DB::doRULE( RULE* growth ) throw( IO_ERROR )
 {
     std::string     builder;
     int             bracketNesting = 1; // we already saw the opening T_LEFT
@@ -1838,7 +1838,7 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IOError )
 
 
 #if 0
-void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) throw( IOError )
+void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) throw( IO_ERROR )
 {
     /*   (place_rule [<structure_place_rule_object> ]
          {[<spacing_descriptor> |
@@ -1924,7 +1924,7 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
 #endif
 
 
-void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
+void SPECCTRA_DB::doREGION( REGION* growth ) throw( IO_ERROR )
 {
     DSN_T tok = nextTok();
 
@@ -1993,7 +1993,7 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
+void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2038,7 +2038,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IOError )
+void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2061,7 +2061,7 @@ void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
+void SPECCTRA_DB::doGRID( GRID* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2126,7 +2126,7 @@ void SPECCTRA_DB::doGRID( GRID* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
+void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -2151,7 +2151,7 @@ void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
+void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2266,7 +2266,7 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
+void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2296,7 +2296,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
+void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -2355,7 +2355,7 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
+void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2455,7 +2455,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IOError )
+void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -2538,7 +2538,7 @@ L_done_that:
 }
 
 
-void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
+void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2634,7 +2634,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
+void SPECCTRA_DB::doPIN( PIN* growth ) throw( IO_ERROR )
 {
     DSN_T   tok = nextTok();
 
@@ -2681,7 +2681,7 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
+void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -2735,7 +2735,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doNET( NET* growth ) throw( IOError )
+void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR )
 {
     DSN_T       tok = nextTok();
     PIN_REFS*   pin_refs;
@@ -2875,7 +2875,7 @@ L_pins:
 }
 
 
-void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
+void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -2913,7 +2913,7 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
+void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3023,7 +3023,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
+void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3068,7 +3068,7 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError )
+void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3086,7 +3086,7 @@ void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
+void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3172,7 +3172,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
+void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3295,7 +3295,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
+void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
     POINT   point;
@@ -3399,7 +3399,7 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
+void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3455,7 +3455,7 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IOError )
+void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3493,7 +3493,7 @@ void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IOError )
+void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3549,7 +3549,7 @@ void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
+void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3626,7 +3626,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IOError )
+void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
 {
     DSN_T       tok;
     PIN_PAIR    empty( growth );
@@ -3667,7 +3667,7 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
+void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3743,7 +3743,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IOError )
+void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
 
@@ -3811,7 +3811,7 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError )
+void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR )
 {
     DSN_T   tok;
     PIN_REF empty(growth);
@@ -3847,7 +3847,7 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IOError )
 }
 
 
-void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IOError )
+void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IO_ERROR )
 {
     if( pcb )
     {
@@ -3938,7 +3938,7 @@ UNIT_RES* ELEM::GetUnits() const
 }
 
 
-void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     out->Print( nestLevel, "(%s\n", Name() );
 
@@ -3948,7 +3948,7 @@ void ELEM::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 }
 
 
-void ELEM_HOLDER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void ELEM_HOLDER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     for( int i=0;  i<Length();  ++i )
     {
@@ -4061,7 +4061,7 @@ PARSER::PARSER( ELEM* aParent ) :
 }
 
 
-void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     out->Print( nestLevel, "(string_quote %c)\n", string_quote );
     out->Print( nestLevel, "(space_in_quoted_tokens %s)\n", space_in_quoted_tokens ? "on" : "off" );
@@ -4097,7 +4097,7 @@ void PARSER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOErro
 }
 
 
-void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     bool        useMultiLine;
 

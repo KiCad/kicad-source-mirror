@@ -6,7 +6,7 @@
 #define CLASS_SCREEN_H
 
 #include "macros.h"
-#include "base_struct.h"
+#include "sch_item_struct.h"
 #include "class_base_screen.h"
 
 
@@ -17,8 +17,9 @@
 class SCH_SCREEN : public BASE_SCREEN
 {
 public:
-    int m_RefCount;                             /*how many sheets reference this screen?
-                                                  * delete when it goes to zero. */
+    int       m_RefCount;     ///< Number of sheets referencing this screen.
+                              ///< Delete when it goes to zero.
+
     SCH_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
     ~SCH_SCREEN();
 
@@ -80,7 +81,7 @@ public:
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    virtual void         ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
 
     /**
      * Function Save
@@ -90,6 +91,17 @@ public:
      * @return bool - true if success writing else false.
      */
     bool         Save( FILE* aFile ) const;
+
+    /**
+     * Clear the state flags of all the items in the screen.
+     */
+    void ClearDrawingState();
+
+    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_BaseStruct*) aItem ); }
+    virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
+    {
+        BASE_SCREEN::InsertItem( aIter, (EDA_BaseStruct*) aItem );
+    }
 };
 
 

@@ -626,6 +626,18 @@ void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
     }
 
     m_EDA_Config->Read( wxT( "BgColor" ), &g_DrawBgColor );
+
+    /* Load per-user search paths from settings file */
+    
+    wxString   upath;
+    int i = 1;
+    while( 1 ) 
+    { 
+        upath = m_EDA_CommonConfig->Read( wxString::Format( wxT( "LibraryPath%d" ), i ), wxT( "" ) );
+        if( upath.IsSameAs( wxT( "" ) ) ) break;
+        m_libSearchPaths.Add( upath );
+        i ++;
+    }
 }
 
 

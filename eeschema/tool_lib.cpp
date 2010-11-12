@@ -113,11 +113,11 @@ void WinEDA_LibeditFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
                          wxBitmap( new_component_xpm ),
-                         _( "New component" ) );
+                         _( "Create a new component" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
-                         wxBitmap( add_component_xpm ),
-                         _( "Select component to edit" ) );
+                         wxBitmap( import_cmp_from_lib_xpm ),
+                         _( "Load component to edit from the current lib" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
                          wxBitmap( save_part_in_mem_xpm ),

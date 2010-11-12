@@ -96,7 +96,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
         db.LoadSESSION( fullFileName );
         db.FromSESSION( GetBoard() );
     }
-    catch( IOError ioe )
+    catch( IO_ERROR ioe )
     {
         SetLocaleTo_Default( );    // revert to the current locale
 
@@ -193,7 +193,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 }
 
 
-TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IOError )
+TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR )
 {
     int layerNdx = findLayerName( aPath->layer_id );
 
@@ -216,7 +216,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 }
 
 
-SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IOError )
+SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR )
 {
     SEGVIA* via = 0;
     SHAPE*  shape;
@@ -351,7 +351,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 // no UI code in this function, throw exception to report problems to the
 // UI handler: void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
 
-void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IOError )
+void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 {
     sessionBoard = aBoard;      // not owned here
 

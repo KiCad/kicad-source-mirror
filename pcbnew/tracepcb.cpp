@@ -55,9 +55,12 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
 #ifdef USE_WX_OVERLAY
-    DrawPanel->m_overlay.Reset(); 
-    wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
-    overlaydc.Clear();
+    if(IsShown())
+    {
+        DrawPanel->m_overlay.Reset(); 
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+        overlaydc.Clear();
+    }
 #endif
 
     screen->ClrRefreshReq();
@@ -91,9 +94,12 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawGeneralRatsnest( DC );
 
 #ifdef USE_WX_OVERLAY
-    DrawPanel->m_overlay.Reset(); 
-    wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
-    overlaydc.Clear();
+    if(IsShown())
+    {
+        DrawPanel->m_overlay.Reset(); 
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+        overlaydc.Clear();
+    }
 #endif
 
     GetScreen()->ClrRefreshReq();

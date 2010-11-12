@@ -542,6 +542,22 @@ PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 }
 
 
+void BASE_SCREEN::AddItem( EDA_BaseStruct* aItem )
+{
+    wxCHECK_RET( aItem != NULL, wxT( "Attempt to add NULL item pointer to " ) + GetClass() +
+                 wxT( "item list" ) );
+    m_items.push_back( aItem );
+}
+
+
+void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_BaseStruct* aItem )
+{
+    wxCHECK_RET( aItem != NULL, wxT( "Attempt to insert NULL item pointer to " ) + GetClass() +
+                 wxT( "item list" ) );
+    m_items.insert( aIter, aItem );
+}
+
+
 #if defined(DEBUG)
 /**
  * Function Show

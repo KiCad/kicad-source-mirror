@@ -31,7 +31,7 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     }
 }
 
-void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
+void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
 {
     // user may want spaces in his field name, ug, so quote them for the parser.
     out->Print( nestLevel, "(field (name \"%s\")", CONV_TO_UTF8(m_Name) );
@@ -46,7 +46,7 @@ void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const thr
 }
 
 
-void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError )
+void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
 {
     TFIELD_T    tok;
 
@@ -87,7 +87,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError )
 }
 
 
-void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOError )
+void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
 {
     // We'll keep this general, and include the \n, even though the only known
     // use at this time will not want the newlines or the indentation.
@@ -97,7 +97,7 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IOErr
     out->Print( 0, ")\n" );
 }
 
-void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IOError )
+void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
 {
     TFIELD_T        tok;
 

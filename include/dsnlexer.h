@@ -102,7 +102,7 @@ class DSNLEXER
 
     void init();
 
-    int readLine() throw (IOError)
+    int readLine() throw( IO_ERROR )
     {
         unsigned len = reader->ReadLine();
 
@@ -213,29 +213,29 @@ public:
      * this lower level function returning an int (so the enum does not collide
      * with another usage).
      * @return int - the type of token found next.
-     * @throw IOError - only if the LINE_READER throws it.
+     * @throw IO_ERROR - only if the LINE_READER throws it.
      */
-    int NextTok() throw (IOError);
+    int NextTok() throw( IO_ERROR );
 
     /**
      * Function NeedSYMBOL
      * calls NextTok() and then verifies that the token read in
      * satisfies bool IsSymbol().
-     * If not, an IOError is thrown.
+     * If not, an IO_ERROR is thrown.
      * @return int - the actual token read in.
-     * @throw IOError, if the next token does not satisfy IsSymbol()
+     * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
      */
-    int NeedSYMBOL() throw( IOError );
+    int NeedSYMBOL() throw( IO_ERROR );
 
     /**
      * Function NeedSYMBOLorNUMBER
      * calls NextTok() and then verifies that the token read in
      * satisfies bool IsSymbol() or tok==DSN_NUMBER.
-     * If not, an IOError is thrown.
+     * If not, an IO_ERROR is thrown.
      * @return int - the actual token read in.
-     * @throw IOError, if the next token does not satisfy the above test
+     * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    int NeedSYMBOLorNUMBER() throw( IOError );
+    int NeedSYMBOLorNUMBER() throw( IO_ERROR );
 
     /**
      * Function CurTok
@@ -311,58 +311,58 @@ public:
      * encapsulates the formatting of an error message which contains the exact
      * location within the input file of something the caller is rejecting.
      */
-    void ThrowIOError( wxString aText, int charOffset ) throw (IOError);
+    void ThrowIOError( wxString aText, int charOffset ) throw( IO_ERROR );
 
     /**
      * Function Expecting
-     * throws an IOError exception with an input file specific error message.
+     * throws an IO_ERROR exception with an input file specific error message.
      * @param aTok is the token/keyword type which was expected at the current input location.
-     * @throw IOError with the location within the input file of the problem.
+     * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( int aTok ) throw( IOError );
+    void Expecting( int aTok ) throw( IO_ERROR );
 
     /**
      * Function Expecting
-     * throws an IOError exception with an input file specific error message.
+     * throws an IO_ERROR exception with an input file specific error message.
      * @param aErrorMsg is the token/keyword type which was expected at the
      *         current input location.
-     * @throw IOError with the location within the input file of the problem.
+     * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( const wxString& aErrorMsg ) throw( IOError );
+    void Expecting( const wxString& aErrorMsg ) throw( IO_ERROR );
 
     /**
      * Function Unexpected
-     * throws an IOError exception with an input file specific error message.
+     * throws an IO_ERROR exception with an input file specific error message.
      * @param aTok is the token/keyword type which was not expected at the
      *         current input location.
-     * @throw IOError with the location within the input file of the problem.
+     * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( int aTok ) throw( IOError );
+    void Unexpected( int aTok ) throw( IO_ERROR );
 
     /**
      * Function Unexpected
-     * throws an IOError exception with an input file specific error message.
+     * throws an IO_ERROR exception with an input file specific error message.
      * @param aErrorMsg is the token/keyword type which was not expected at the
      *         current input location.
-     * @throw IOError with the location within the input file of the problem.
+     * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( const wxString& aErrorMsg ) throw( IOError );
+    void Unexpected( const wxString& aErrorMsg ) throw( IO_ERROR );
 
     /**
      * Function NeedLEFT
      * calls NextTok() and then verifies that the token read in is a DSN_LEFT.
-     * If it is not, an IOError is thrown.
-     * @throw IOError, if the next token is not a DSN_LEFT
+     * If it is not, an IO_ERROR is thrown.
+     * @throw IO_ERROR, if the next token is not a DSN_LEFT
      */
-    void NeedLEFT() throw( IOError );
+    void NeedLEFT() throw( IO_ERROR );
 
     /**
      * Function NeedRIGHT
      * calls NextTok() and then verifies that the token read in is a DSN_RIGHT.
-     * If it is not, an IOError is thrown.
-     * @throw IOError, if the next token is not a DSN_RIGHT
+     * If it is not, an IO_ERROR is thrown.
+     * @throw IO_ERROR, if the next token is not a DSN_RIGHT
      */
-    void NeedRIGHT() throw( IOError );
+    void NeedRIGHT() throw( IO_ERROR );
 
     /**
      * Function GetTokenText

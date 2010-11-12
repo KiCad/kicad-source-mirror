@@ -13,7 +13,7 @@
 WinEDA_Toolbar::WinEDA_Toolbar( id_toolbar type, wxWindow * parent,
                                 wxWindowID id, bool horizontal ):
     wxAuiToolBar( parent, id, wxDefaultPosition, wxDefaultSize,
-                  wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | ( ( horizontal ) ?
+                  wxAUI_TB_DEFAULT_STYLE | ( ( horizontal ) ?
                                              wxAUI_TB_HORZ_LAYOUT :
                                              wxAUI_TB_VERTICAL ) )
 {

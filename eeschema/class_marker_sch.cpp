@@ -180,3 +180,16 @@ void SCH_MARKER::Mirror_Y( int aYaxis_position )
     m_Pos.x  = -m_Pos.x;
     m_Pos.x += aYaxis_position;
 }
+
+
+bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    if( aRect.Contains( m_Pos ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}

@@ -24,6 +24,34 @@
 #include "bitmaps.h"
 
 
+// -----------------
+// helper function (from wxWidgets, opengl/cube.cpp sample
+// -----------------
+void CheckGLError()
+{
+    GLenum errLast = GL_NO_ERROR;
+
+    for ( ;; )
+    {
+        GLenum err = glGetError();
+        if ( err == GL_NO_ERROR )
+            return;
+
+        // normally the error is reset by the call to glGetError() but if
+        // glGetError() itself returns an error, we risk looping forever here
+        // so check that we get a different error than the last time
+        if ( err == errLast )
+        {
+            wxLogError(wxT("OpenGL error state couldn't be reset."));
+            return;
+        }
+
+        errLast = err;
+
+        wxLogError(wxT("OpenGL error %d"), err);
+    }
+}
+
 /*
  * Pcb3D_GLCanvas implementation
  */
@@ -519,7 +547,7 @@ void Pcb3D_GLCanvas::InitGL()
      {
          // Ratio width / height of the window display
          double ratio_HV = (double) size.x / size.y;
- 
+
          // Initialize Projection Matrix for Perspective View
          gluPerspective( 45.0 * g_Parm_3D_Visu.m_Zoom, ratio_HV, 1, 10 );
      }
@@ -538,6 +566,8 @@ void Pcb3D_GLCanvas::InitGL()
 
     // Setup light souces:
     SetLights();
+
+    CheckGLError();
 }
 
 
@@ -603,7 +633,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         GLint x;
         GLint y;
     } viewport;
-    
+
     // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );
     glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );

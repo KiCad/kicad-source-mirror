@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,28 +25,24 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_OptionsBoxSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelBasic, wxID_ANY, _("General :") ), wxVERTICAL );
 	
 	m_AsConvertButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("As Convert"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_AsConvertButt->SetToolTip( _("Check this option for components that have a De Morgan representation.\nThis is usual for gates.") );
 	
 	m_OptionsBoxSizer->Add( m_AsConvertButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ShowPinNumButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show Pin Num"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ShowPinNumButt->SetValue(true);
-	
+	m_ShowPinNumButt->SetValue(true); 
 	m_ShowPinNumButt->SetToolTip( _("Show or hide pin numbers") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNumButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ShowPinNameButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Show Pin Name"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ShowPinNameButt->SetValue(true);
-	
+	m_ShowPinNameButt->SetValue(true); 
 	m_ShowPinNameButt->SetToolTip( _("Show or hide pin names") );
 	
 	m_OptionsBoxSizer->Add( m_ShowPinNameButt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PinsNameInsideButt = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Pin Name Inside"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PinsNameInsideButt->SetValue(true);
-	
+	m_PinsNameInsideButt->SetValue(true); 
 	m_PinsNameInsideButt->SetToolTip( _("Check this option to have pin names inside the body and pin number outside.\nIf not checked pins names and pins numbers are outside.") );
 	
 	m_OptionsBoxSizer->Add( m_PinsNameInsideButt, 0, wxALL, 5 );
@@ -93,13 +89,11 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bSizerBasicPanel->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_OptionPower = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Power Symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_OptionPower->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties for Eeschema:\n- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n- Reference is updated automatically when a netlist is created (no need to run Annotate)") );
 	
 	bSizerBasicPanel->Add( m_OptionPower, 0, wxALL, 5 );
 	
 	m_OptionPartsLocked = new wxCheckBox( m_PanelBasic, wxID_ANY, _("Parts are locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_OptionPartsLocked->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizerBasicPanel->Add( m_OptionPartsLocked, 0, wxALL, 5 );
@@ -123,7 +117,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	m_staticTextKeywords = new wxStaticText( m_PanelDoc, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextKeywords->Wrap( -1 );
-	m_staticTextKeywords->SetToolTip( _("Enter key words that can be used to select this composant.\nKey words cannot have spaces and are separated by a space.") );
+	m_staticTextKeywords->SetToolTip( _("Enter key words that can be used to select this component.\nKey words cannot have spaces and are separated by a space.") );
 	
 	m_PanelDocBoxSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -266,4 +260,5 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE()
 	m_ButtonDeleteAllFootprintFilter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DeleteAllFootprintFilter ), NULL, this );
 	m_sdbSizer2Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer2OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnOkClick ), NULL, this );
+	
 }

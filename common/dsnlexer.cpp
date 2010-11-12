@@ -224,18 +224,18 @@ bool DSNLEXER::IsSymbol( int aTok )
 }
 
 
-void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw (IOError)
+void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw( IO_ERROR )
 {
     // append to aText, do not overwrite
     aText << wxT(" ") << _("in") << wxT(" \"") << CurSource()
           << wxT("\" ") << _("on line") << wxT(" ") << reader->LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
 
-    throw IOError( aText );
+    throw IO_ERROR( aText );
 }
 
 
-void DSNLEXER::Expecting( int aTok ) throw( IOError )
+void DSNLEXER::Expecting( int aTok ) throw( IO_ERROR )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" ") << GetTokenString( aTok );
@@ -243,7 +243,7 @@ void DSNLEXER::Expecting( int aTok ) throw( IOError )
 }
 
 
-void DSNLEXER::Expecting( const wxString& text ) throw( IOError )
+void DSNLEXER::Expecting( const wxString& text ) throw( IO_ERROR )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" '") << text << wxT("'");
@@ -251,7 +251,7 @@ void DSNLEXER::Expecting( const wxString& text ) throw( IOError )
 }
 
 
-void DSNLEXER::Unexpected( int aTok ) throw( IOError )
+void DSNLEXER::Unexpected( int aTok ) throw( IO_ERROR )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" ") << GetTokenString( aTok );
@@ -259,7 +259,7 @@ void DSNLEXER::Unexpected( int aTok ) throw( IOError )
 }
 
 
-void DSNLEXER::Unexpected( const wxString& text ) throw( IOError )
+void DSNLEXER::Unexpected( const wxString& text ) throw( IO_ERROR )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" '") << text << wxT("'");
@@ -267,7 +267,7 @@ void DSNLEXER::Unexpected( const wxString& text ) throw( IOError )
 }
 
 
-void DSNLEXER::NeedLEFT() throw( IOError )
+void DSNLEXER::NeedLEFT() throw( IO_ERROR )
 {
     int tok = NextTok();
     if( tok != DSN_LEFT )
@@ -275,7 +275,7 @@ void DSNLEXER::NeedLEFT() throw( IOError )
 }
 
 
-void DSNLEXER::NeedRIGHT() throw( IOError )
+void DSNLEXER::NeedRIGHT() throw( IO_ERROR )
 {
     int tok = NextTok();
     if( tok != DSN_RIGHT )
@@ -283,7 +283,7 @@ void DSNLEXER::NeedRIGHT() throw( IOError )
 }
 
 
-int DSNLEXER::NeedSYMBOL() throw( IOError )
+int DSNLEXER::NeedSYMBOL() throw( IO_ERROR )
 {
     int tok = NextTok();
     if( !IsSymbol( tok ) )
@@ -292,7 +292,7 @@ int DSNLEXER::NeedSYMBOL() throw( IOError )
 }
 
 
-int DSNLEXER::NeedSYMBOLorNUMBER() throw( IOError )
+int DSNLEXER::NeedSYMBOLorNUMBER() throw( IO_ERROR )
 {
     int  tok = NextTok();
     if( !IsSymbol( tok ) && tok!=DSN_NUMBER )
@@ -312,7 +312,7 @@ static inline bool isSpace( int cc )
 }
 
 
-int DSNLEXER::NextTok() throw (IOError)
+int DSNLEXER::NextTok() throw( IO_ERROR )
 {
     char*   cur  = next;
     char*   head = cur;
@@ -1380,7 +1380,7 @@ class DSNTEST : public wxApp
     DSNLEXER*   lexer;
     int         nestLevel;
 
-    void        recursion() throw( IOError );
+    void        recursion() throw( IO_ERROR );
 
     void        indent()
     {
@@ -1485,7 +1485,7 @@ bool DSNTEST::OnInit()
         }
         printf("\n");
     }
-    catch( IOError ioe )
+    catch( IO_ERROR ioe )
     {
         fprintf( stderr, "%s\n", CONV_TO_UTF8( ioe.errorText ) );
     }
@@ -1494,7 +1494,7 @@ bool DSNTEST::OnInit()
 }
 
 
-void DSNTEST::recursion() throw(IOError)
+void DSNTEST::recursion() throw( IO_ERROR )
 {
     int         tok;
     const char* space = "";

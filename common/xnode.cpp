@@ -29,7 +29,7 @@
 typedef wxXmlProperty   XATTR;
 
 
-void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     switch( GetType() )
     {
@@ -48,7 +48,7 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
 }
 
 
-void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IOError )
+void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
     std::string utf8;
 

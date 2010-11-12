@@ -108,6 +108,16 @@ public:
      */
     bool MergeOverlap( SCH_LINE* aLine );
 
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+
+    virtual bool IsDangling() const { return m_StartIsDangling || m_EndIsDangling; }
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 
@@ -185,6 +195,10 @@ public:
     virtual void Mirror_Y( int aYaxis_position );
     virtual void Mirror_X( int aXaxis_position );
     virtual void Rotate( wxPoint rotationPoint );
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 };
 
 
@@ -259,6 +273,12 @@ public:
     virtual void Mirror_Y( int aYaxis_position );
     virtual void Mirror_X( int aXaxis_position );
     virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 };
 
 class SCH_POLYLINE : public SCH_ITEM
@@ -404,6 +424,12 @@ public:
     virtual void Mirror_Y( int aYaxis_position );
     virtual void Mirror_X( int aXaxis_position );
     virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );

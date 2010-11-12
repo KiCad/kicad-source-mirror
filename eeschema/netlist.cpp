@@ -369,14 +369,19 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
     if( aLabelItemBuffer.size() == 0 )
         return NULL;
 
-    int priority_order[4] =
-    { NET_LABEL, NET_HIERLABEL, NET_PINLABEL, NET_GLOBLABEL };
+    // Define a priority (from low to high) to sort labels:
+    // NET_PINLABEL and NET_GLOBLABEL are global labels
+    // and priority >= PRIO_MAX-1 is for global connections
+    // ( i.e. for labels that are not prefixed by a sheetpath)
+    #define PRIO_MAX 4
+    int priority_order[PRIO_MAX+1] =
+    { NET_ITEM_UNSPECIFIED, NET_LABEL, NET_HIERLABEL, NET_PINLABEL, NET_GLOBLABEL };
 
     NETLIST_OBJECT*item = aLabelItemBuffer[0];
 
-    // Calculate item priority
+    // Calculate item priority (initial priority)
     int item_priority = 0;
-    for( unsigned ii = 0; ii < 4; ii++ )
+    for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
     {
         if ( item->m_Type == priority_order[ii]  )
         {
@@ -388,14 +393,9 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
     for( unsigned ii = 1; ii < aLabelItemBuffer.size(); ii++ )
     {
         NETLIST_OBJECT* candidate = aLabelItemBuffer[ii];
-        if( candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )
-        {
-            item = candidate;
-            continue;
-        }
         // Calculate candidate priority
         int candidate_priority = 0;
-        for( unsigned ii = 0; ii < 4; ii++ )
+        for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
         {
             if ( candidate->m_Type == priority_order[ii]  )
             {
@@ -404,13 +404,43 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             }
         }
         if( candidate_priority > item_priority )
+        {
             item = candidate;
+            item_priority = candidate_priority;
+        }
         else if( candidate_priority == item_priority )
         {
-            if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
-                item = candidate;
+            // for global labels, we select the best candidate by alphabetic order
+            // because they have no sheetpath as prefix name
+            // for other labels, we select them before by sheet deep order
+            // because the actual name is /sheetpath/label
+            // and for a given path length, by alphabetic order
+            
+            if( item_priority >= PRIO_MAX-1 )     // global label or pin label
+            {   // selection by alphabetic order:
+                if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+                    item = candidate;
+            }
+            else    // not global: names are prefixed by their sheetpath
+            {
+                // use name defined in highter hierarchical sheet
+                // (i.e. shorter path because paths are /<timestamp1>/<timestamp2>/...
+                // and timestamp = 8 letters.
+                if( candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )
+                {
+                    item = candidate;
+                }
+                else if( candidate->m_SheetList.Path().Length() == item->m_SheetList.Path().Length() )
+                {
+                    // For labels on sheets having an equivalent deep in hierarchy, use
+                    // alphabetic label name order:
+                    if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
+                        item = candidate;
+                }
+            }
         }
     }
+
     return item;
 }
 
@@ -994,25 +1024,24 @@ static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start )
 
 
 /*
- * Search if a junction is connected to segments and include the Netcode
- * objects connect to the junction.
+ * Search if a junction is connected to segments and propagate the junction Netcode
+ * to objects connected by the junction.
  * The junction must have a valid Netcode
- * The list of objects is SUPPOSED class by NumSheet ??? Croissants,
- * And research is done from the start element, 1st element
- * Leaf schema
- * (There can be no physical connection between elements of different sheets)
+ * The list of objects is expected sorted by sheets.
+ * Search is done from index aIdxStart to the last element of g_NetObjectslist
  */
-static void SegmentToPointConnect( NETLIST_OBJECT* Jonction,
-                                   int IsBus, int start )
+static void SegmentToPointConnect( NETLIST_OBJECT* aJonction,
+                                   int aIsBus, int aIdxStart )
 {
-    for( unsigned i = start; i < g_NetObjectslist.size(); i++ )
+    for( unsigned i = aIdxStart; i < g_NetObjectslist.size(); i++ )
     {
         NETLIST_OBJECT* Segment = g_NetObjectslist[i];
 
-        if( Segment->m_SheetList != Jonction->m_SheetList )
+        // if different sheets, no physical connection between elements is possible.
+        if( Segment->m_SheetList != aJonction->m_SheetList )
             continue;
 
-        if( IsBus == 0 )
+        if( aIsBus == 0 )
         {
             if( Segment->m_Type != NET_SEGMENT )
                 continue;
@@ -1023,24 +1052,24 @@ static void SegmentToPointConnect( NETLIST_OBJECT* Jonction,
                 continue;
         }
 
-        if( SegmentIntersect( Segment->m_Start, Segment->m_End, Jonction->m_Start ) )
+        if( SegmentIntersect( Segment->m_Start, Segment->m_End, aJonction->m_Start ) )
         {
             /* Propagation Netcode has all the objects of the same Netcode. */
-            if( IsBus == 0 )
+            if( aIsBus == 0 )
             {
                 if( Segment->GetNet() )
                     PropageNetCode( Segment->GetNet(),
-                                    Jonction->GetNet(), IsBus );
+                                    aJonction->GetNet(), aIsBus );
                 else
-                    Segment->SetNet( Jonction->GetNet() );
+                    Segment->SetNet( aJonction->GetNet() );
             }
             else
             {
                 if( Segment->m_BusNetCode )
                     PropageNetCode( Segment->m_BusNetCode,
-                                    Jonction->m_BusNetCode, IsBus );
+                                    aJonction->m_BusNetCode, aIsBus );
                 else
-                    Segment->m_BusNetCode = Jonction->m_BusNetCode;
+                    Segment->m_BusNetCode = aJonction->m_BusNetCode;
             }
         }
     }
@@ -1072,10 +1101,11 @@ void LabelConnect( NETLIST_OBJECT* LabelRef )
                 continue;
         }
 
-        //regular labels are sheet-local;
-        //NET_HIERLABEL are used to connect sheets.
-        //NET_LABEL is sheet-local (***)
-        //NET_GLOBLABEL is global.
+        // regular labels are sheet-local;
+        // NET_HIERLABEL are used to connect sheets.
+        // NET_LABEL is sheet-local (***)
+        // NET_GLOBLABEL is global.
+        // NET_PINLABEL is a kind of global label (generated by a power pin invisible)
         NetObjetType ntype = g_NetObjectslist[i]->m_Type;
         if(  ntype == NET_LABEL
              || ntype == NET_GLOBLABEL

@@ -90,7 +90,7 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName, unsi
 }
 
 
-unsigned FILE_LINE_READER::ReadLine() throw (IOError)
+unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     length  = 0;
     line[0] = 0;
@@ -101,7 +101,7 @@ unsigned FILE_LINE_READER::ReadLine() throw (IOError)
         length += strlen( line + length );
 
         if( length == maxLineLength )
-            throw IOError( _("Line length exceeded") );
+            throw IO_ERROR( _("Line length exceeded") );
 
         // a normal line breaks here, once through while loop
         if( length+1 < capacity || line[length-1] == '\n' )
@@ -117,7 +117,7 @@ unsigned FILE_LINE_READER::ReadLine() throw (IOError)
 }
 
 
-unsigned STRING_LINE_READER::ReadLine() throw (IOError)
+unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     size_t  nlOffset = lines.find( '\n', ndx );
 
@@ -129,7 +129,7 @@ unsigned STRING_LINE_READER::ReadLine() throw (IOError)
     if( length )
     {
         if( length >= maxLineLength )
-            throw IOError( _("Line length exceeded") );
+            throw IO_ERROR( _("Line length exceeded") );
 
         if( length+1 > capacity )   // +1 for terminating nul
             expandCapacity( length+1 );
@@ -186,7 +186,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
 }
 
 
-int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IOError )
+int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IO_ERROR )
 {
     int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     if( ret >= (int) buffer.size() )
@@ -202,7 +202,7 @@ int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IOError )
 }
 
 
-int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IOError )
+int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IO_ERROR )
 {
     va_list     args;
 
@@ -214,7 +214,7 @@ int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IOError )
 }
 
 
-int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError )
+int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IO_ERROR )
 {
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
@@ -243,7 +243,7 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IOError
 }
 
 
-const char* OUTPUTFORMATTER::Quoted( std::string* aWrapee ) throw( IOError )
+const char* OUTPUTFORMATTER::Quoted( std::string* aWrapee ) throw( IO_ERROR )
 {
     // derived class's notion of what a quote character is
     char quote          = *GetQuoteChar( "(" );
@@ -268,7 +268,7 @@ const char* OUTPUTFORMATTER::Quoted( std::string* aWrapee ) throw( IOError )
             // a decision was made to make all S-expression strings be on a single
             // line.  You can embedd \n (human readable) in the text but not
             // '\n' which is 0x0a.
-            throw IOError( _( "S-expression string has newline" ) );
+            throw IO_ERROR( _( "S-expression string has newline" ) );
         }
     }
 
@@ -285,7 +285,7 @@ const char* OUTPUTFORMATTER::Quoted( std::string* aWrapee ) throw( IOError )
 
 //-----<STRING_FORMATTER>----------------------------------------------------
 
-void STRING_FORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
+void STRING_FORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
 {
     mystring.append( aOutBuf, aCount );
 }
@@ -314,7 +314,7 @@ const char* STREAM_OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
 }
 
 
-void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IOError )
+void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
 {
     int lastWrite;
 
@@ -326,7 +326,7 @@ void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IOE
 
         if( !os.IsOk() )
         {
-            throw IOError( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
+            throw IO_ERROR( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
         }
     }
 }

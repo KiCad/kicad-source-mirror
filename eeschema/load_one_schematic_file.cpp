@@ -16,11 +16,11 @@
 /* in read_from_file_schematic_items_description.cpp */
 SCH_ITEM* ReadTextDescr( LINE_READER* aLine, wxString& aMsgDiag, int aSchematicFileVersion );
 
-int ReadSheetDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
+int ReadSheetDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
 
-bool ReadSchemaDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
 
-int ReadPartDescr( wxWindow* frame, LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
+int ReadPartDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
 
 static void LoadLayers( LINE_READER* aLine );
 
@@ -29,8 +29,7 @@ static void LoadLayers( LINE_READER* aLine );
  * Routine to load an EESchema file.
  *  Returns true if file has been loaded (at least partially.)
  */
-bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen,
-                                           const wxString& FullFileName )
+bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
 {
     char            Name1[256],
                     Name2[256];
@@ -122,13 +121,13 @@ again." );
         {
         case '$':           // identification block
             if( line[1] == 'C' )
-                Failed = ReadPartDescr( this, &reader, MsgDiag, screen );
+                Failed = ReadPartDescr( &reader, MsgDiag, screen );
 
             else if( line[1] == 'S' )
-                Failed = ReadSheetDescr( this, &reader, MsgDiag, screen );
+                Failed = ReadSheetDescr( &reader, MsgDiag, screen );
 
             else if( line[1] == 'D' )
-                Failed = ReadSchemaDescr( this, &reader, MsgDiag, screen );
+                Failed = ReadSchemaDescr( &reader, MsgDiag, screen );
 
             else if( line[1] == 'T' ) // text part
             {
@@ -148,7 +147,7 @@ again." );
             break;
 
         case 'L':        // Its a library item.
-            Failed = ReadPartDescr( this, &reader, MsgDiag, screen );
+            Failed = ReadPartDescr( &reader, MsgDiag, screen );
             break;
 
         case 'W':        // Its a Segment (WIRE or BUS) item.

@@ -167,12 +167,45 @@ void SCH_BUS_ENTRY::Rotate( wxPoint rotationPoint )
 }
 
 
+void SCH_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    DANGLING_END_ITEM item( ENTRY_END, this );
+    item.m_Pos = m_Pos;
+
+    DANGLING_END_ITEM item1( ENTRY_END, this );
+    item1.m_Pos = m_End();
+    aItemList.push_back( item );
+    aItemList.push_back( item1 );
+}
+
+
+bool SCH_BUS_ENTRY::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    // If either end of the bus entry is inside the selection rectangle, the entire
+    // bus entry is selected.  Bus entries have a fixed length and angle.
+    if( aRect.Contains( m_Pos ) || aRect.Contains( m_End() ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_BUS_ENTRY::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    aPoints.push_back( m_Pos );
+    aPoints.push_back( m_End() );
+}
+
+
 /**********************/
 /* class SCH_JUNCTION */
 /**********************/
 
-SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
-    SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
+SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
 {
 #define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
     m_Pos    = pos;
@@ -289,6 +322,33 @@ void SCH_JUNCTION::Rotate( wxPoint rotationPoint )
 }
 
 
+void SCH_JUNCTION::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+{
+    DANGLING_END_ITEM item( JUNCTION_END, this );
+    item.m_Pos = m_Pos;
+    aItemList.push_back( item );
+}
+
+
+bool SCH_JUNCTION::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    if( aRect.Contains( m_Pos ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_JUNCTION::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    aPoints.push_back( m_Pos );
+}
+
+
 #if defined(DEBUG)
 void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 {
@@ -306,8 +366,7 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 /* class SCH_NO_CONNECT */
 /************************/
 
-SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
-    SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
+SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
 {
 #define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
     m_Pos    = pos;
@@ -427,6 +486,25 @@ void SCH_NO_CONNECT::Mirror_Y( int aYaxis_position )
 void SCH_NO_CONNECT::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
+}
+
+
+bool SCH_NO_CONNECT::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    if( aRect.Contains( m_Pos ) )
+        m_Flags |= SELECTED;
+    else
+        m_Flags &= ~SELECTED;
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    aPoints.push_back( m_Pos );
 }
 
 
@@ -634,9 +712,7 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     wxCHECK_MSG( aLine != NULL && aLine->Type() == DRAW_SEGMENT_STRUCT_TYPE, false,
                  wxT( "Cannot test line segment for overlap." ) );
 
-    if( this == aLine )
-        return false;
-    if( GetLayer() != aLine->GetLayer() )
+    if( this == aLine || GetLayer() != aLine->GetLayer() )
         return false;
 
     // Search for a common end, and modify coordinates to ensure RefSegm->m_End
@@ -646,7 +722,7 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         if( m_End == aLine->m_End )
             return true;
 
-        EXCHG( m_Start, aLine->m_End );
+        EXCHG( m_Start, m_End );
     }
     else if( m_Start == aLine->m_End )
     {
@@ -658,8 +734,10 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         EXCHG( aLine->m_Start, aLine->m_End );
     }
     else if( m_End != aLine->m_Start )
+    {
         // No common end point, segments cannot be merged.
         return false;
+    }
 
     /* Test alignment: */
     if( m_Start.y == m_End.y )       // Horizontal segment
@@ -693,12 +771,86 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 }
 
 
-/***********************/
-/* Class SCH_POLYLINE */
-/***********************/
+void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+{
+    if( GetLayer() == LAYER_NOTES )
+        return;
 
-SCH_POLYLINE::SCH_POLYLINE( int layer ) :
-    SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
+    if( ( GetLayer() == LAYER_BUS ) || ( GetLayer() == LAYER_WIRE ) )
+    {
+        DANGLING_END_ITEM item( (GetLayer() == LAYER_BUS) ? BUS_START_END : WIRE_START_END, this );
+        item.m_Pos = m_Start;
+        DANGLING_END_ITEM item1( (GetLayer() == LAYER_BUS) ? BUS_END_END : WIRE_END_END, this );
+        item1.m_Pos = m_End;
+
+        aItemList.push_back( item );
+        aItemList.push_back( item1 );
+    }
+}
+
+
+bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    bool previousStartState = m_StartIsDangling;
+    bool previousEndState = m_EndIsDangling;
+
+    if( GetLayer() == LAYER_WIRE )
+    {
+        BOOST_FOREACH( DANGLING_END_ITEM item, aItemList )
+        {
+            if( item.m_Item == this )
+                continue;
+
+            if( m_Start == item.m_Pos )
+                m_StartIsDangling = false;
+
+            if( m_End == item.m_Pos )
+                m_EndIsDangling = false;
+
+            if( (m_StartIsDangling == false) && (m_EndIsDangling == false) )
+                break;
+        }
+    }
+    else if( GetLayer() == LAYER_BUS || GetLayer() == LAYER_NOTES )
+    {
+        // Lines on the notes layer and the bus layer cannot be tested for dangling ends.
+        previousStartState = previousEndState = m_StartIsDangling = m_EndIsDangling = false;
+    }
+
+    return ( previousStartState != m_StartIsDangling ) || ( previousEndState != m_EndIsDangling );
+}
+
+
+bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
+{
+    bool previousState = IsSelected();
+
+    if( aRect.Contains( m_Start ) )
+        m_Flags |= STARTPOINT | SELECTED;
+    else
+        m_Flags &= ~( STARTPOINT | SELECTED );
+
+    if( aRect.Contains( m_End ) )
+        m_Flags |= ENDPOINT | SELECTED;
+    else
+        m_Flags &= ~( ENDPOINT | SELECTED );
+
+    return previousState != IsSelected();
+}
+
+
+void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+{
+    aPoints.push_back( m_Start );
+    aPoints.push_back( m_End );
+}
+
+
+/**********************/
+/* Class SCH_POLYLINE */
+/**********************/
+
+SCH_POLYLINE::SCH_POLYLINE( int layer ) : SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
 {
     m_Width = 0;
 

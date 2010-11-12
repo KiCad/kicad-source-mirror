@@ -633,37 +633,43 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     }
 
     /* The following sadly is an if eeschema/if pcbnew */
-    wxString formatter;
+    wxString absformatter;
+    wxString locformatter;
     switch( g_UserUnit )
     {
     case INCHES:
         if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
         {
-            formatter = wxT( "X %.3f  Y %.3f" );
+            absformatter = wxT( "X %.3f  Y %.3f" );
+            locformatter = wxT( "dx %.3f  dy %.3f" );
         }
         else
         {
-            formatter = wxT( "X %.4f  Y %.4f" );
+            absformatter = wxT( "X %.4f  Y %.4f" );
+            locformatter = wxT( "dx %.4f  dy %.4f" );
         }
         break;
 
     case MILLIMETRES:
         if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
         {
-            formatter = wxT( "X %.2f  Y %.2f" );
+            absformatter = wxT( "X %.2f  Y %.2f" );
+            locformatter = wxT( "dx %.2f  dy %.2f" );
         }
         else
         {
-            formatter = wxT( "X %.3f  Y %.3f" );
+            absformatter = wxT( "X %.3f  Y %.3f" );
+            locformatter = wxT( "dx %.3f  dy %.3f" );
         }
         break;
 
     case UNSCALED_UNITS:
-        formatter = wxT( "X %f  Y %f" );
+        absformatter = wxT( "X %f  Y %f" );
+        locformatter = wxT( "dx %f  dy %f" );
         break;
     }
 
-    Line.Printf( formatter, dXpos, dYpos );
+    Line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( Line, 2 );
 
     /* Display relative coordinates:  */
@@ -678,7 +684,7 @@ void WinEDA_DrawFrame::UpdateStatusBar()
     }
 
     /* We already decided the formatter above */
-    Line.Printf( formatter, dXpos, dYpos );
+    Line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( Line, 3 );
 }
 

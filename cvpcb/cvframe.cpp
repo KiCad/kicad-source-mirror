@@ -16,6 +16,7 @@
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
 #include "class_DisplayFootprintsFrame.h"
+#include "cvpcb_id.h"
 
 #include "build_version.h"
 
@@ -114,7 +115,6 @@ WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
     m_isEESchemaNetlist     = false;
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
-
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -422,9 +422,7 @@ void WinEDA_CvpcbFrame::DelAssociations( wxCommandEvent& event )
         m_undefinedComponentCnt = m_components.size();
     }
 
-    Line.Printf( _( "Components: %d (free: %d)" ), m_components.size(),
-                 m_components.size() );
-    SetStatusText( Line, 1 );
+    DisplayStatus();
 }
 
 
@@ -557,6 +555,7 @@ void WinEDA_CvpcbFrame::OnSelectComponent( wxListEvent& event )
 
     m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
                                                m_footprints );
+    DisplayStatus();
 }
 
 
@@ -584,4 +583,31 @@ void WinEDA_CvpcbFrame::OnSelectFilteringFootprint( wxCommandEvent& event )
 void WinEDA_CvpcbFrame::OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event )
 {
     event.Check( m_KeepCvpcbOpen );
+}
+
+
+/** DisplayStatus()
+ * Displays info to the status line at bottom of the main frame
+ */
+void WinEDA_CvpcbFrame::DisplayStatus()
+{
+    wxString msg;
+    msg.Printf( _( "Components: %d (free: %d)" ),
+                 m_components.size(), m_undefinedComponentCnt );
+    SetStatusText( msg, 0 );
+
+    SetStatusText( wxEmptyString, 1 );
+
+    if( m_FootprintList )
+    {
+        if( m_FootprintList->m_UseFootprintFullList )
+            msg.Printf( _( "Footprints (All): %d" ),
+                       m_FootprintList->m_ActiveFootprintList->GetCount() );
+        else
+            msg.Printf( _( "Footprints (filtered): %d" ),
+                       m_FootprintList->m_ActiveFootprintList->GetCount() );
+    }
+    else
+        msg.Empty();
+    SetStatusText( msg, 2 );
 }

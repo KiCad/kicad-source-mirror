@@ -13,7 +13,7 @@
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include "class_GERBER.h"
-
+#include "class_layerchoicebox.h"
 
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
 {
@@ -89,7 +89,7 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerBox = new WinEDAChoiceBox( m_HToolBar,
+    m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar,
                                          ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ),
                                          choices );
@@ -223,17 +223,6 @@ void WinEDA_GerberFrame::SetToolbars()
 
     if( m_HToolBar == NULL )
         return;
-
-    if( GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
-    {
-        m_HToolBar->EnableTool( wxID_CUT, true );
-        m_HToolBar->EnableTool( wxID_COPY, true );
-    }
-    else
-    {
-        m_HToolBar->EnableTool( wxID_CUT, false );
-        m_HToolBar->EnableTool( wxID_COPY, false );
-    }
 
     if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != screen->m_Active_Layer) )
     {

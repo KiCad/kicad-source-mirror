@@ -80,7 +80,7 @@ void WinEDA_SchematicFrame::LoadLibraries( void )
         {
             wxString prompt;
 
-            prompt.Printf( _( "Component library <%s> failed to load.\n\nError: %s" ),
+            prompt.Printf( _( "Component library <%s> failed to load.\nError: %s" ),
                            GetChars( fn.GetFullPath() ),
                            GetChars( errMsg ) );
             DisplayError( this, prompt );
@@ -104,8 +104,8 @@ void WinEDA_SchematicFrame::LoadLibraries( void )
     CMP_LIBRARY::SetSortOrder( sortOrder );
     CMP_LIBRARY::GetLibraryList().sort();
 
-#ifdef __WXDEBUG__
-    wxLogDebug( wxT( "LoadLibraries () requested component library sort order:" ) );
+#if 0   // #ifdef __WXDEBUG__
+    wxLogDebug( wxT( "LoadLibraries() requested component library sort order:" ) );
 
     for( size_t i = 0; i < sortOrder.GetCount(); i++ )
         wxLogDebug( wxT( "    " ) + sortOrder[i] );

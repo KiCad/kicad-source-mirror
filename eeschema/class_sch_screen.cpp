@@ -353,6 +353,13 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 }
 
 
+void SCH_SCREEN::ClearDrawingState()
+{
+    for( SCH_ITEM* item = EEDrawList; item != NULL; item = item->Next() )
+        item->m_Flags = 0;
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/

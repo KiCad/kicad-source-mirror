@@ -42,20 +42,20 @@
 
 
 /**
- * Struct IOError
+ * Struct IO_ERROR
  * is a class used to hold an error message and may be used to throw exceptions
  * containing meaningful error messages.
  */
-struct IOError
+struct IO_ERROR
 {
     wxString    errorText;
 
-    IOError( const wxChar* aMsg ) :
+    IO_ERROR( const wxChar* aMsg ) :
         errorText( aMsg )
     {
     }
 
-    IOError( const wxString& aMsg ) :
+    IO_ERROR( const wxString& aMsg ) :
         errorText( aMsg )
     {
     }
@@ -104,9 +104,9 @@ public:
      * counter.  If the line is larger than aMaxLineLength passed to the
      * constructor, then an exception is thrown.  The line is nul terminated.
      * @return unsigned - The number of bytes read, 0 at end of file.
-     * @throw IOError when a line is too long.
+     * @throw IO_ERROR when a line is too long.
      */
-    virtual unsigned ReadLine() throw( IOError ) = 0;
+    virtual unsigned ReadLine() throw( IO_ERROR ) = 0;
 
     /**
      * Function GetSource
@@ -181,7 +181,7 @@ public:
             fclose( fp );
     }
 
-    unsigned ReadLine() throw( IOError );   // see LINE_READER::ReadLine() description
+    unsigned ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
 
     /**
      * Function Rewind
@@ -228,31 +228,32 @@ public:
         source = aSource;
     }
 
-     unsigned ReadLine() throw(IOError);    // see LINE_READER::ReadLine() description
+     unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 
 /**
  * Class OUTPUTFORMATTER
- * is an important interface (abstract) class used to output UTF8 text in a convenient
- * way. The primary interface is "printf() - like" but with support for indentation
- * control.  The destination of the 8 bit wide text is up to the implementer.
+ * is an important interface (abstract) class used to output UTF8 text in
+ * a convenient way. The primary interface is "printf() - like" but
+ * with support for indentation control.  The destination of the 8 bit
+ * wide text is up to the implementer.
  * <p>
- * The implementer only has to implement the write() function, but can also optionaly
- * re-implement GetQuoteChar().
+ * The implementer only has to implement the write() function, but can
+ * also optionally re-implement GetQuoteChar().
  * <p>
- * If you want to output a wxString, then use CONV_TO_UTF8() on it before passing
- * it as an argument to Print().
+ * If you want to output a wxString, then use CONV_TO_UTF8() on it
+ * before passing it as an argument to Print().
  * <p>
- * Since this is an abstract interface, only classes derived from this one
- * may actually be used.
+ * Since this is an abstract interface, only classes derived from
+ * this one may actually be used.
  */
 class OUTPUTFORMATTER
 {
     std::vector<char>       buffer;
 
-    int sprint( const char* fmt, ... )  throw( IOError );
-    int vprint( const char* fmt,  va_list ap )  throw( IOError );
+    int sprint( const char* fmt, ... )  throw( IO_ERROR );
+    int vprint( const char* fmt,  va_list ap )  throw( IO_ERROR );
 
 
 protected:
@@ -283,9 +284,9 @@ protected:
      *
      * @param aOutBuf is the start of a byte buffer to write.
      * @param aCount  tells how many bytes to write.
-     * @throw IOError, if there is a problem outputting, such as a full disk.
+     * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
      */
-    virtual void write( const char* aOutBuf, int aCount ) throw( IOError ) = 0;
+    virtual void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) = 0;
 
 #if defined(__GNUG__)   // The GNU C++ compiler defines this
 
@@ -307,14 +308,14 @@ public:
      * Function Print
      * formats and writes text to the output stream.
      *
-     * @param nestLevel The multiple of spaces to preceed the output with.
+     * @param nestLevel The multiple of spaces to precede the output with.
      * @param fmt A printf() style format string.
      * @param ... a variable list of parameters that will get blended into
      *  the output under control of the format string.
      * @return int - the number of characters output.
-     * @throw IOError, if there is a problem outputting, such as a full disk.
+     * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
      */
-    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IO_ERROR );
 
     /**
      * Function GetQuoteChar
@@ -350,11 +351,11 @@ public:
      *
      * @return const char* - useful for passing to printf() style functions that
      *  must output utf8 streams.
-     * @throw IOError, if aWrapee has any \r or \n bytes in it which is
+     * @throw IO_ERROR, if aWrapee has any \r or \n bytes in it which is
      *        illegal according to the DSNLEXER who does not ever want them
      *        within a string.
      */
-    virtual const char* Quoted( std::string* aWrapee )  throw( IOError );
+    virtual const char* Quoted( std::string* aWrapee )  throw( IO_ERROR );
 
     //-----</interface functions>-----------------------------------------
 };
@@ -402,7 +403,7 @@ public:
 
     //-----<OUTPUTFORMATTER>------------------------------------------------
 protected:
-    void write( const char* aOutBuf, int aCount ) throw( IOError );
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 
@@ -434,7 +435,7 @@ public:
     const char* GetQuoteChar( const char* wrapee );
 
 protected:
-    void write( const char* aOutBuf, int aCount ) throw( IOError );
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 

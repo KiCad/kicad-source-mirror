@@ -152,6 +152,7 @@ extern const char* icon_gerbview_xpm[];
 extern const char* icon_modedit_xpm[];
 extern const char* icon_txt_xpm[];
 extern const char* icon_w3d_xpm[];
+extern const char* import_cmp_from_lib_xpm[];
 extern const char* import_hierarchical_label_xpm[];
 extern const char* import_module_xpm[];
 extern const char* import_xpm[];

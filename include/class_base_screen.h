@@ -14,10 +14,21 @@
 #include "block_commande.h"
 #include "common.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 
 // Forward declarations:
 class SCH_ITEM;
 class Ki_PageDescr;
+
+
+/**
+ * Define list of drawing items for screens.
+ *
+ * The Boost containter was choosen over the statand C++ contain because you can detach
+ * the pointer from a list with the release method.
+ */
+typedef boost::ptr_vector< EDA_BaseStruct > EDA_ITEMS;
 
 
 /* Simple class for handling grid arrays. */
@@ -56,17 +67,16 @@ WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
 /*******************************************************************/
 class BASE_SCREEN : public EDA_BaseStruct
 {
+    EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
+
 public:
-    wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the
-                                 * screen */
-    wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user
-                                 * units. */
-    wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user
-                                 * units. */
+    wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
+    wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user units. */
+    wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint m_MousePositionInPixels;
-    wxPoint m_O_Curseur;       /* Relative Screen cursor coordinate (on grid)
-                                * in user units.
-                                * (coordinates from last reset position)*/
+    wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
+                                 * in user units.
+                                 * (coordinates from last reset position)*/
     // Scrollbars management:
     int     m_ScrollPixelsPerUnitX; /* Pixels per scroll unit in the horizontal direction. */
     int     m_ScrollPixelsPerUnitY; /* Pixels per scroll unit in the vertical direction. */
@@ -280,8 +290,7 @@ public:
     /**
      * Function SetZoomList
      * sets the list of zoom factors.
-     * @param aZoomList An array of zoom factors in ascending order, zero
-     *                  terminated
+     * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
     void        SetZoomList( const wxArrayInt& zoomlist );
 
@@ -300,8 +309,7 @@ public:
     bool        SetFirstZoom();
     bool        SetLastZoom();
 
-    //----<grid
-    // stuff>----------------------------------------------------------
+    //----<grid stuff>----------------------------------------------------------
 
     /**
      * Return the command ID of the currently selected grid.
@@ -359,6 +367,13 @@ public:
         return wxT( "BASE_SCREEN" );
     }
 
+    /**
+     * Helpers for accessing the draw item list.
+     */
+    EDA_ITEMS::iterator Begin() { return m_items.begin(); }
+    EDA_ITEMS::iterator End() { return m_items.end(); }
+    virtual void AddItem( EDA_BaseStruct* aItem );
+    virtual void InsertItem(  EDA_ITEMS::iterator aIter, EDA_BaseStruct* aItem );
 
 #if defined(DEBUG)
 

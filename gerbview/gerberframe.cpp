@@ -217,6 +217,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 
     ReFillLayerWidget();    // this is near end because contents establish size
 
+    SetToolbars();
     m_auimgr.Update();
 
 }
@@ -239,6 +240,10 @@ void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
 
 int WinEDA_GerberFrame::BestZoom()
 {
+    // gives a minimal value to zoom, if no item in list
+    if( GetBoard()->m_Drawings == NULL  )
+        return(16 * GetScreen()->m_ZoomScalar) ;
+
     double x, y;
     EDA_Rect bbox;
 
@@ -248,13 +253,14 @@ int WinEDA_GerberFrame::BestZoom()
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
         bbox.Merge( gerb_item->GetBoundingBox() );
     }
-
+    bbox.Inflate( GetScreen()->GetGridSize().x * 2, GetScreen()->GetGridSize().y * 2);
     wxSize size = DrawPanel->GetClientSize();
-    x = ( bbox.GetWidth() + GetScreen()->GetGridSize().x ) / (double) size.x;
-    y = ( bbox.GetHeight() + GetScreen()->GetGridSize().y ) / (double) size.y;
+    x = bbox.GetWidth() / (double) size.x;
+    y = bbox.GetHeight() / (double) size.y;
     GetScreen()->m_Curseur = bbox.Centre();
 
-    return wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
+    int best_zoom = wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar ) ;
+    return  best_zoom;
 }
 
 /**************************************/
@@ -508,7 +514,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     gerber->DisplayImageInfo( );
 
     // Display Image Name and Layer Name (from the current gerber data):
-    text.Printf( _("Image name: \"%s\"  Layer name \"%s\""),
+    text.Printf( _("Image name: \"%s\"  Layer name: \"%s\""),
         GetChars(gerber->m_ImageName), GetChars(gerber->GetLayerParams( ).m_LayerName) );
     SetStatusText( text, 0 );
 

@@ -110,6 +110,5 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         wxSafeYield();
     }
 
-    SetToolbars();
     UpdateStatusBar();
 }

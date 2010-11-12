@@ -116,6 +116,8 @@ public:
      */
     void         DisplayInfo( WinEDA_DrawFrame* aFrame );
 
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 

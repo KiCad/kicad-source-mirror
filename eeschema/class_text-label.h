@@ -167,8 +167,17 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this schematic text item matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData,
-                           void* aAuxData, wxPoint * aFindLocation );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+
+    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+
+    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+
+    virtual bool IsDangling() const { return m_IsDangling; }
+
+    virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );

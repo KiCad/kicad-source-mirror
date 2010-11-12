@@ -449,13 +449,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aIte
         break;
 
     case HK_ADD_VIA: // Switch to alternate layer and Place a via if a track is in progress
-        if( m_ID_current_state != ID_TRACK_BUTT )
-            return;
         if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, aDC );
             break;
         }
+        if( m_ID_current_state != ID_TRACK_BUTT )
+            return;
         if( GetCurItem()->Type() != TYPE_TRACK )
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
