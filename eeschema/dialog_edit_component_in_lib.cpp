@@ -9,12 +9,10 @@
 #include "confirm.h"
 #include "gestfich.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
-//#include "class_libentry.h"
 
 #include "dialog_edit_component_in_lib.h"
 

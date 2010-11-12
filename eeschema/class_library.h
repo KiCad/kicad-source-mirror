@@ -6,7 +6,10 @@
 #define CLASS_LIBRARY_H
 
 
+#include <wx/filename.h>
+
 #include "class_libentry.h"
+
 
 /*
  * Component Library version and file header  macros.

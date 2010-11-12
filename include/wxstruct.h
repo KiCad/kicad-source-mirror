@@ -129,13 +129,15 @@ public:
 
     // Read/Save and Import/export hotkeys config
 
-    /** Function ReadHotkeyConfig
+    /**
+     * Function ReadHotkeyConfig
      * Read configuration data and fill the current hotkey list with hotkeys
      * @param aDescList = current hotkey list descr. to initialise.
      */
     int          ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
-    /** Function WriteHotkeyConfig
+    /**
+     * Function WriteHotkeyConfig
      * Store the current hotkey list
      * It is stored using the standard wxConfig mechanism or a file.
      *
@@ -148,7 +150,8 @@ public:
     int          WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
                                     wxString * aFullFileName = NULL);
 
-    /** Function ReadHotkeyConfigFile
+    /**
+     * Function ReadHotkeyConfigFile
      * Read an old configuration file (<file>.key) and fill the current hotkey list
      * with hotkeys
      * @param aFilename = file name to read.
@@ -157,19 +160,22 @@ public:
     int          ReadHotkeyConfigFile( const wxString& Filename,
                                        struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
-    /** Function ImportHotkeyConfigFromFile
+    /**
+     * Function ImportHotkeyConfigFromFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialise.
      */
     void         ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
-    /** Function ExportHotkeyConfigToFile
+    /**
+     * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialise.
      */
     void         ExportHotkeyConfigToFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
-    /** function SetLanguage
+    /**
+     * Function SetLanguage
      * called on a language menu selection
      * when using a derived function, do not forget to call this one
      */
@@ -266,7 +272,8 @@ public:
     virtual void     OnHotKey( wxDC* DC, int hotkey,
                                EDA_BaseStruct* DrawStruct );
 
-    /** Function AddMenuZoomAndGrid (virtual)
+    /**
+     * Function AddMenuZoomAndGrid (virtual)
      * Add standard zoom commands and submenu zoom and grid selection to a popup menu
      * uses zoom hotkeys info base to add hotkeys info to menu commands
      * @param aMasterMenu = the menu to populate.
@@ -277,7 +284,8 @@ public:
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
     virtual void     SetToolbars();
-    /** function SetLanguage
+    /**
+     * Function SetLanguage
      * called on a language menu selection
      * when using a derived function, do not forget to call this one
      */
@@ -287,7 +295,8 @@ public:
     virtual void     ReCreateVToolbar() = 0;
     virtual void     ReCreateMenuBar();
     virtual void     ReCreateAuxiliaryToolbar();
-    /** Function SetToolID
+    /**
+     * Function SetToolID
      * Enables the icon of the selected tool in the vertical toolbar.
      * (Or tool ID_NO_SELECT_BUTT default if no new selection)
      * @param aId = new m_ID_current_state value (if aId >= 0)
@@ -306,7 +315,8 @@ public:
      * and /get/set grid color.
      * These parameters are saved in kicad config for each main frame
      */
-    /** Function IsGridVisible() , virtual
+    /**
+     * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
     virtual bool     IsGridVisible()
@@ -314,7 +324,8 @@ public:
         return m_DrawGrid;
     }
 
-    /** Function SetGridVisibility() , virtual
+    /**
+     * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
      * @param aVisible = true if the grid must be shown
      */
@@ -323,7 +334,8 @@ public:
         m_DrawGrid = aVisible;
     }
 
-    /** Function GetGridColor() , virtual
+    /**
+     * Function GetGridColor() , virtual
      * @return the color of the grid
      */
     virtual int     GetGridColor()
@@ -331,7 +343,8 @@ public:
         return m_GridColor;
     }
 
-    /** Function SetGridColor() , virtual
+    /**
+     * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
     virtual void     SetGridColor(int aColor)
@@ -361,13 +374,13 @@ public:
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
     void             Recadre_Trace( bool ToMouse );
-    
+
     /** Adjust the coordinate to the nearest grid value
      * @param aCoord = coordinate to adjust
-     * @param aGridSize = pointer to a grid value. if NULL uses the current grid size 
+     * @param aGridSize = pointer to a grid value. if NULL uses the current grid size
      */
-    void             PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize = NULL ); 
-    
+    void             PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize = NULL );
+
     void             Zoom_Automatique( bool move_mouse_cursor );
 
     /* Set the zoom level to show the area Rect */
@@ -384,7 +397,8 @@ public:
     void             TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
     void             PlotWorkSheet( PLOTTER *plotter, BASE_SCREEN* screen );
 
-    /** Function GetXYSheetReferences
+    /**
+     * Function GetXYSheetReferences
      * Return the X,Y sheet references where the point position is located
      * @param aScreen = screen to use
      * @param aPosition = position to identify by YX ref
@@ -805,7 +819,8 @@ public:
     void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
     void SetRows( int nRows ) {};
 
-    /** Function GetDimension
+    /**
+     * Function GetDimension
      * @return the dimension of this toolbar (Height if horizontal, Width if vertical.
      */
     int GetDimension( );

@@ -3,14 +3,11 @@
  * Handles the dialog so set current texts and pins sizes in LibEdit
  */
 #include "fctsys.h"
-//#include "appl_wxstruct.h"
 #include "common.h"
-//#include "class_drawpanel.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "libeditframe.h"
-
 
 #include "dialog_libedit_dimensions_base.h"
 

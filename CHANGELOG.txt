@@ -4,6 +4,27 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-nov-11 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
+  * Make schematic object file naming consistent.
+  * Move annotate dialog to dialogs subdirectory and set the "Annotation"
+    button as the default.
+  * Move ERC dialog to dialogs subdirectory and set the "Test Erc" button
+    as the default.
+  * Move the print dialog to dialogs subdirectory and set the "Print" button
+    as the default.
+  * Create print dialog header and move the OnPrint() method into
+    schframe.cpp.
+
+
+2010-nov-10 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
+  * Header file rationalization.
+  * Move schematic object load code into the appropriate schematic object.
+
+
 2010-nov-3 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++common

@@ -141,13 +141,15 @@ public:
 
     void             OnQuit( wxCommandEvent & WXUNUSED(event) );
 
-    /** Function ToPlotter
+    /**
+     * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
     void             ToPlotter( wxCommandEvent& event );
 
-    /** function ToPrinter
+    /**
+     * Function ToPrinter
      * Install the print dialog
      */
     void             ToPrinter( wxCommandEvent& event );
@@ -167,24 +169,28 @@ public:
 
     void             GetKicadAbout( wxCommandEvent& event );
 
-    /** Function IsGridVisible() , virtual
+    /**
+     * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
     virtual bool     IsGridVisible();
 
-    /** Function SetGridVisibility() , virtual
+    /**
+     * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
     virtual void     SetGridVisibility(bool aVisible);
 
-    /** Function GetGridColor() , virtual
+    /**
+     * Function GetGridColor() , virtual
      * @return the color of the grid
      */
     virtual int     GetGridColor();
 
-    /** Function SetGridColor() , virtual
+    /**
+     * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
     virtual void     SetGridColor(int aColor);
@@ -254,7 +260,8 @@ public:
      */
     void             SetLastNetListRead( const wxString& aNetListFile );
 
-    /** Function OnHotKey.
+    /**
+     * Function OnHotKey.
      *  ** Commands are case insensitive **
      *  Some commands are relatives to the item under the mouse cursor
      *  @param aDC = current device context
@@ -265,7 +272,8 @@ public:
                                int             aHotkeyCode,
                                EDA_BaseStruct* aItem );
 
-    /** Function OnHotkeyDeleteItem
+    /**
+     * Function OnHotkeyDeleteItem
      * Delete the item found under the mouse cursor
      *  Depending on the current active tool::
      *      Tool track
@@ -280,7 +288,8 @@ public:
 
     bool             OnHotkeyEditItem( int aIdCommand );
 
-    /** Function OnHotkeyMoveItem
+    /**
+     * Function OnHotkeyMoveItem
      * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
      * Only a footprint or a track can be dragged
      * @param aIdCommand = the hotkey command id
@@ -288,7 +297,8 @@ public:
      */
     bool             OnHotkeyMoveItem( int aIdCommand );
 
-    /** Function OnHotkeyRotateItem
+    /**
+     * Function OnHotkeyRotateItem
      * Rotate the item (text or footprint) found under the mouse cursor
      * @param aIdCommand = the hotkey command id
      * @return true if an item was moved
@@ -357,7 +367,8 @@ public:
     void             Show3D_Frame( wxCommandEvent& event );
     void             GeneralControle( wxDC* DC, wxPoint Mouse );
 
-    /** function ShowDesignRulesEditor
+    /**
+     * Function ShowDesignRulesEditor
      * Display the Design Rules Editor.
      */
     void             ShowDesignRulesEditor( wxCommandEvent& event );
@@ -397,7 +408,8 @@ public:
     void             OnSelectOptionToolbar( wxCommandEvent& event );
     void             ToolOnRightClick( wxCommandEvent& event );
 
-    /** Function SaveCopyInUndoList.
+    /**
+     * Function SaveCopyInUndoList.
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItemToCopy = the board item modified by the command to undo
@@ -410,7 +422,8 @@ public:
                                         const wxPoint& aTransformPoint =
                                             wxPoint( 0, 0 ) );
 
-    /** Function SaveCopyInUndoList (overloaded).
+    /**
+     * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
@@ -423,7 +436,8 @@ public:
                                     const wxPoint& aTransformPoint =
                                         wxPoint( 0, 0 ) );
 
-    /** Function PutDataInPreviousState()
+    /**
+     * Function PutDataInPreviousState()
      * Used in undo or redo command.
      * Put data pointed by List in the previous state, i.e. the state memorized
      * by List
@@ -439,7 +453,8 @@ public:
                                  bool               aRedoCommand,
                                  bool               aRebuildRatsnet = true );
 
-    /** Function GetBoardFromRedoList
+    /**
+     * Function GetBoardFromRedoList
      *  Redo the last edition:
      *  - Save the current board in Undo list
      *  - Get an old version of the board from Redo list
@@ -447,7 +462,8 @@ public:
      */
     void GetBoardFromRedoList( wxCommandEvent& event );
 
-    /** Function GetBoardFromUndoList
+    /**
+     * Function GetBoardFromUndoList
      *  Undo the last edition:
      *  - Save the current board in Redo list
      *  - Get an old version of the board from Undo list
@@ -533,7 +549,8 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void Files_io( wxCommandEvent& event );
 
-    /** Function LoadOnePcbFile
+    /**
+     * Function LoadOnePcbFile
      *  Load a Kicad board (.brd) file.
      *
      *  @param aFileName - File name including path. If empty, a file dialog will
@@ -564,7 +581,8 @@ public:
 
     // BOARD handling
 
-    /** function Clear_Pcb()
+    /**
+     * Function Clear_Pcb()
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to
      *                 initialize silently
@@ -648,7 +666,8 @@ public:
 
     MODULE*    ListAndSelectModuleName();
 
-    /** Function ListNetsAndSelect
+    /**
+     * Function ListNetsAndSelect
      * called by a command event
      * displays the sorted list of nets in a dialog frame
      * If a net is selected, it is highlighted
@@ -681,7 +700,8 @@ public:
 
     void       InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
 
-    /** function Exchange_Module
+    /**
+     * Function Exchange_Module
      * Replaces OldModule by NewModule, using OldModule settings:
      * position, orientation, pad netnames ...)
      * OldModule is deleted or put in undo list.
@@ -699,7 +719,8 @@ public:
     // Board handling
     void   RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
 
-    /** Function OnEditItemRequest
+    /**
+     * Function OnEditItemRequest
      * Install the corresponding dialog editor for the given item
      * @param DC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
@@ -742,7 +763,8 @@ public:
     void   Delete_net( wxDC* DC, TRACK* Track );
     void   Remove_One_Track( wxDC* DC, TRACK* pt_segm );
 
-    /** function Reset_All_Tracks_And_Vias_To_Netclass_Values
+    /**
+     * Function Reset_All_Tracks_And_Vias_To_Netclass_Values
      * Reset all tracks width and/or vias diameters and drill
      * to their default Netclass value
      * @param aTrack : bool true to modify tracks
@@ -751,7 +773,8 @@ public:
     bool   Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack,
                                                          bool aVia );
 
-    /** function Change_Net_Tracks_And_Vias_Sizes
+    /**
+     * Function Change_Net_Tracks_And_Vias_Sizes
      * Reset all tracks width and vias diameters and drill
      * to their default Netclass value or current values
      * @param aNetcode : the netcode of the net to edit
@@ -761,7 +784,8 @@ public:
     bool   Change_Net_Tracks_And_Vias_Sizes( int  aNetcode,
                                              bool aUseNetclassValue );
 
-    /** Function Edit_Track_Width
+    /**
+     * Function Edit_Track_Width
      * Modify a full track width (using DRC control).
      * a full track is the set of track segments between 2 ends: pads or a
      * point that has more than 2 segments ends connected
@@ -770,7 +794,8 @@ public:
      */
     void   Edit_Track_Width( wxDC* DC, TRACK* Track );
 
-    /** Function Edit_TrackSegm_Width
+    /**
+     * Function Edit_TrackSegm_Width
      *  Modify one track segment width or one via diameter (using DRC control).
      * @param  DC = the current device context (can be NULL)
      * @param aTrackItem = the track segment or via to modify
@@ -790,7 +815,8 @@ public:
     bool   Add_45_degrees_Segment( wxDC* DC );
     bool   Genere_Pad_Connexion( wxDC* DC, int layer );
 
-    /** function EraseRedundantTrack
+    /**
+     * Function EraseRedundantTrack
      * Called after creating a track
      * Remove (if exists) the old track that have the same starting and the
      * same ending point as the new created track
@@ -807,7 +833,8 @@ public:
                                 int                aNewTrackSegmentsCount,
                                 PICKED_ITEMS_LIST* aItemsListPicker );
 
-    /** Function SetTrackSegmentWidth
+    /**
+     * Function SetTrackSegmentWidth
      *  Modify one track segment width or one via diameter (using DRC control).
      *  Basic routine used by other routines when editing tracks or vias
      * @param aTrackItem = the track segment or via to modify
@@ -824,7 +851,8 @@ public:
 
     // zone handling
 
-    /** Function Delete_Zone_Fill
+    /**
+     * Function Delete_Zone_Fill
      * Remove the zone filling which include the segment aZone, or the zone
      * which have the given time stamp.  A zone is a group of segments which
      * have the same TimeStamp
@@ -835,7 +863,8 @@ public:
     void Delete_Zone_Fill( SEGZONE* Track, long aTimestamp = 0 );
 
 
-    /** Function Delete_LastCreatedCorner
+    /**
+     * Function Delete_LastCreatedCorner
      * Used only while creating a new zone outline
      * Remove and delete the current outline segment in progress
      * @return 0 if no corner in list, or corner number
@@ -857,7 +886,8 @@ public:
      */
     bool End_Zone( wxDC* DC );
 
-    /** Function Fill_Zone()
+    /**
+     * Function Fill_Zone()
      *  Calculate the zone filling for the outline zone_container
      *  The zone outline is a frontier, and can be complex (with holes)
      *  The filling starts from starting points like pads, tracks.
@@ -868,7 +898,8 @@ public:
      */
     int  Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
 
-    /** Function Fill_All_Zones()
+    /**
+     * Function Fill_All_Zones()
      *  Fill all zones on the board
      * The old fillings are removed
      * @param verbose = true to show error messages
@@ -939,7 +970,8 @@ public:
      */
     void         Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-    /** Function Delete_Zone
+    /**
+     * Function Delete_Zone
      * Remove the zone which include the segment aZone, or the zone which have
      * the given time stamp.  A zone is a group of segments which have the
      * same TimeStamp
@@ -984,7 +1016,8 @@ public:
     // netlist  handling:
     void         InstallNetlistFrame( wxDC* DC, const wxPoint& pos );
 
-    /** Function ReadPcbNetlist
+    /**
+     * Function ReadPcbNetlist
      * Update footprints (load missing footprints and delete on request extra
      * footprints)
      * Update connectivity info ( Net Name list )
@@ -1017,7 +1050,8 @@ public:
                          bool             aDeleteExtraFootprints,
                          bool             aSelect_By_Timestamp );
 
-    /** Function RemoveMisConnectedTracks
+    /**
+     * Function RemoveMisConnectedTracks
      * finds all track segments which are mis-connected (to more than one net).
      * When such a bad segment is found, mark it as needing to be removed.
      * and remove all tracks having at least one flagged segment.
@@ -1031,12 +1065,14 @@ public:
     // Autoplacement:
     void         AutoPlace( wxCommandEvent& event );
 
-    /** function OnOrientFootprints
+    /**
+     * Function OnOrientFootprints
      * install the dialog box for the common Orient Footprints
      */
     void         OnOrientFootprints( void );
 
-    /** function ReOrientModules
+    /**
+     * Function ReOrientModules
      * Set the orientation of footprints
      * @param ModuleMask = mask (wildcard allowed) selection
      * @param Orient = new orientation
@@ -1083,7 +1119,8 @@ public:
     void         Begin_Self( wxDC* DC );
     MODULE*      Genere_Self( wxDC* DC );
 
-    /** function SetLanguage
+    /**
+     * Function SetLanguage
      * called on a language menu selection
      */
     virtual void SetLanguage( wxCommandEvent& event );

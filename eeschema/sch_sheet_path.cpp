@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        class_drawsheet.cpp
-// Purpose:     member functions for SCH_SHEET
-//              header = class_drawsheet.h
+// Name:        sch_sheet_path.cpp
+// Purpose:     member functions for SCH_SHEET_PATH
+//              header = sch_sheet_path.h
 // Author:      jean-pierre Charras
 // Modified by:
 // License:     License GNU
@@ -10,9 +10,15 @@
 #include "fctsys.h"
 
 #include "common.h"
-#include "program.h"
 #include "general.h"
 #include "dlist.h"
+#include "class_sch_screen.h"
+#include "sch_item_struct.h"
+
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
+#include "template_fieldnames.h"
 
 #include "dialogs/dialog_schematic_find.h"
 

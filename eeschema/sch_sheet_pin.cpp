@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-
-// Name:        class_hierarchical_PIN_sheet.cpp
+// Name:        sch_sheet_pin.cpp
 // Purpose:     member functions SCH_SHEET_PIN
-//              header = class_drawsheet.h
+//              header = sch_sheet.h
 // Author:      jean-pierre Charras
 // Modified by:
 // Created:     08/02/2006 18:37:02
@@ -18,10 +17,13 @@
 #include "drawtxt.h"
 #include "plot_common.h"
 #include "trigo.h"
+#include "richio.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_sheet.h"
+
 
 /* m_Edge define on which edge the pin is positionned:
  *
@@ -253,6 +255,74 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
                  m_Size.x ) == EOF )
     {
         return false;
+    }
+
+    return true;
+}
+
+
+bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    int  size;
+    char number[256];
+    char name[256];
+    char connectType[256];
+    char sheetSide[256];
+
+    /* Read coordinates. */
+    if( sscanf( ((char*)aLine), "%s %s %s %s %d %d %d",
+                number, name, connectType, sheetSide, &m_Pos.x, &m_Pos.y, &size ) != 7 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file sheet hierarchical label error at line %d.\n" ),
+                          aLine.LineNumber() );
+        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        return false;
+    }
+
+    m_Text = CONV_FROM_UTF8( name );
+
+    m_Text = m_Text.AfterFirst( wxChar( '"' ) );
+    m_Text = m_Text.BeforeLast( wxChar( '"' ) );
+
+    if( size == 0 )
+        size = DEFAULT_SIZE_TEXT;
+
+    m_Size.x = m_Size.y = size;
+
+    switch( connectType[0] )
+    {
+    case 'I':
+        m_Shape = NET_INPUT;
+        break;
+    case 'O':
+        m_Shape = NET_OUTPUT;
+        break;
+    case 'B':
+        m_Shape = NET_BIDI;
+        break;
+    case 'T':
+        m_Shape = NET_TRISTATE;
+        break;
+    case 'U':
+        m_Shape = NET_UNSPECIFIED;
+        break;
+    }
+
+    switch( sheetSide[0] )
+    {
+    case 'R' : /* pin on right side */
+        SetEdge( 1 );
+        break;
+    case 'T' : /* pin on top side */
+        SetEdge( 2 );
+        break;
+    case 'B' : /* pin on bottom side */
+        SetEdge( 3 );
+        break;
+    case 'L' : /* pin on left side */
+    default  :
+        SetEdge( 0 );
+        break;
     }
 
     return true;

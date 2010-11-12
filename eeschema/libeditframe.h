@@ -6,14 +6,16 @@
 #define __LIBEDITFRM_H__
 
 #include "wxstruct.h"
+#include "class_sch_screen.h"
 
 #include "lib_draw_item.h"
 
 
-class SCH_SCREEN;
+class WinEDA_SchematicFrame;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
+class LIB_FIELD;
 class WinEDA_bodygraphics_PropertiesFrame;
 class Dialog_BodyGraphicText_Properties;
 
@@ -120,7 +122,8 @@ public:
         Close( false );
     }
 
-    /** Function OnModify()
+    /**
+     * Function OnModify()
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
      */
@@ -171,24 +174,28 @@ public:
 
     FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
 
-    /** Function TempCopyComponent
+    /**
+     * Function TempCopyComponent
      * create a temporary copy of the current edited component
      * Used to prepare an Undo ant/or abort command before editing the component
      */
     void           TempCopyComponent();
 
-    /** Function RestoreComponent
+    /**
+     * Function RestoreComponent
      * Restore the current edited component from its temporary copy.
      * Used to abort a command
      */
     void           RestoreComponent();
 
-    /** Function GetTempCopyComponent
+    /**
+     * Function GetTempCopyComponent
      * @return the temporary copy of the current component.
      */
     LIB_COMPONENT* GetTempCopyComponent() { return m_tempCopyComponent; }
 
-    /** Function ClearTempCopyComponent
+    /**
+     * Function ClearTempCopyComponent
      * delete temporary copy of the current component and clear pointer
      */
     void ClearTempCopyComponent();
@@ -310,7 +317,8 @@ protected:
 
     friend class Dialog_BodyGraphicText_Properties;
 
-    /** function CreatePNGorJPEGFile
+    /**
+     * Function CreatePNGorJPEGFile
      * Create an image (screenshot) of the current component.
      *  Output file format is png or jpeg
      * @param aFileName = the full filename
@@ -331,7 +339,8 @@ protected:
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
                             bool aPrintMirrorMode, void * aData = NULL);
 
-    /** function SVG_Print_component
+    /**
+     * Function SVG_Print_component
      * Creates the SVG print file for the current edited component.
      * @param aFullFileName = the full filename of the file
     */

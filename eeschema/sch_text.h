@@ -5,8 +5,13 @@
 #ifndef CLASS_TEXT_LABEL_H
 #define CLASS_TEXT_LABEL_H
 
+
 #include "macros.h"
-#include "base_struct.h"
+#include "sch_item_struct.h"
+
+
+class LINE_READER;
+
 
 /* Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
@@ -23,8 +28,7 @@ typedef enum {
 
 extern const char* SheetLabelType[];    /* names of types of labels */
 
-class SCH_TEXT : public SCH_ITEM,
-    public EDA_TextStruct
+class SCH_TEXT : public SCH_ITEM, public EDA_TextStruct
 {
 public:
     int  m_Layer;
@@ -61,7 +65,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a text )
@@ -77,7 +82,8 @@ public:
 
     int          GetSchematicTextOrientation() { return m_SchematicOrientation; }
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -93,7 +99,8 @@ public:
                           int               draw_mode,
                           int               Color = -1 );
 
-    /** function CreateGraphicShape
+    /**
+     * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
@@ -109,7 +116,8 @@ public:
 
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -133,7 +141,18 @@ public:
      */
     bool     Save( FILE* aFile ) const;
 
-    /** Function GetPenSize
+    /**
+     * Load schematic text entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic text from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic text.
+     * @return True if the schematic text loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     int      GetPenSize();
@@ -204,7 +223,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a label)
@@ -218,7 +238,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -246,6 +267,16 @@ public:
      * @return bool - true if success writing else false.
      */
     bool            Save( FILE* aFile ) const;
+
+    /**
+     * Load schematic label entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic label from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic label.
+     * @return True if the schematic label loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 };
 
 
@@ -267,7 +298,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -281,7 +313,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -299,7 +332,18 @@ public:
      */
     bool            Save( FILE* aFile ) const;
 
-    /** Function HitTest
+    /**
+     * Load schematic global label entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic global label from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic global label.
+     * @return True if the schematic global label loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -314,7 +358,8 @@ public:
      */
     EDA_Rect        GetBoundingBox();
 
-    /** function CreateGraphicShape (virual)
+    /**
+     * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
@@ -350,7 +395,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -364,7 +410,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -373,7 +420,8 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset();
 
-    /** function CreateGraphicShape
+    /**
+     * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
@@ -390,7 +438,18 @@ public:
      */
     bool            Save( FILE* aFile ) const;
 
-    /** Function HitTest
+    /**
+     * Load schematic hierarchical label entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic hierarchical label from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic hierarchical label.
+     * @return True if the schematic hierarchical label loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */

@@ -10,6 +10,11 @@
 
 #include "dialog_edit_label_base.h"
 
+
+class WinEDA_SchematicFrame;
+class SCH_TEXT;
+
+
 class DialogLabelEditor : public DialogLabelEditor_Base
 {
 private:

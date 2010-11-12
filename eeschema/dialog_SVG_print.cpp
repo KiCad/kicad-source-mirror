@@ -12,13 +12,16 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
 #include "dialog_SVG_print_base.h"
 #include "dcsvg.h"
 
-#include "program.h"
 #include "general.h"
 #include "libeditframe.h"
+#include "sch_sheet_path.h"
+
 
 // Keys for configuration
 #define PLOTSVGMODECOLOR_KEY  wxT( "PlotSVGModeColor" )

@@ -1,6 +1,6 @@
-/**************************************************************/
-/* class_sch_component.cpp : handle the  class SCH_COMPONENT  */
-/**************************************************************/
+/*******************************************************/
+/* sch_component.cpp : handle the class SCH_COMPONENT  */
+/*******************************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -8,16 +8,23 @@
 #include "gr_basic.h"
 #include "common.h"
 #include "trigo.h"
+#include "kicad_string.h"
+#include "richio.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "macros.h"
 #include "protos.h"
 #include "class_library.h"
-#include "dialogs/dialog_schematic_find.h"
 #include "lib_rectangle.h"
 #include "lib_pin.h"
 #include "lib_text.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
+#include "template_fieldnames.h"
+
+#include "dialogs/dialog_schematic_find.h"
 
 #include <wx/tokenzr.h>
 
@@ -1087,6 +1094,320 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
     if( fprintf( f, "$EndComp\n" ) == EOF )
         return false;
+
+    return true;
+}
+
+
+bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    int            ii;
+    char           Name1[256], Name2[256],
+                   Char1[256], Char2[256], Char3[256];
+    int            newfmt = 0;
+    char*          ptcar;
+    wxString       fieldName;
+
+    m_Convert = 1;
+
+    if( ((char*)aLine)[0] == '$' )
+    {
+        newfmt = 1;
+
+        if( !aLine.ReadLine() )
+            return TRUE;
+    }
+
+    if( sscanf( &((char*)aLine)[1], "%s %s", Name1, Name2 ) != 2 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema Component descr error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( ((char*)aLine) );
+        return false;
+    }
+
+    if( strcmp( Name1, NULL_STRING ) != 0 )
+    {
+        for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
+            if( Name1[ii] == '~' )
+                Name1[ii] = ' ';
+
+        m_ChipName = CONV_FROM_UTF8( Name1 );
+        if( !newfmt )
+            GetField( VALUE )->m_Text = CONV_FROM_UTF8( Name1 );
+    }
+    else
+    {
+        m_ChipName.Empty();
+        GetField( VALUE )->m_Text.Empty();
+        GetField( VALUE )->m_Orient    = TEXT_ORIENT_HORIZ;
+        GetField( VALUE )->m_Attributs = TEXT_NO_VISIBLE;
+    }
+
+    if( strcmp( Name2, NULL_STRING ) != 0 )
+    {
+        bool isDigit = false;
+        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+        {
+            if( Name2[ii] == '~' )
+                Name2[ii] = ' ';
+
+            // get RefBase from this, too. store in Name1.
+            if( Name2[ii] >= '0' && Name2[ii] <= '9' )
+            {
+                isDigit   = true;
+                Name1[ii] = 0;  //null-terminate.
+            }
+            if( !isDigit )
+            {
+                Name1[ii] = Name2[ii];
+            }
+        }
+
+        Name1[ii] = 0; //just in case
+        int  jj;
+        for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
+            ;
+
+        if( jj == ii )
+        {
+            // blank string.
+            m_PrefixString = wxT( "U" );
+        }
+        else
+        {
+            m_PrefixString = CONV_FROM_UTF8( &Name1[jj] );
+
+            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_PrefixString));
+        }
+
+        if( !newfmt )
+            GetField( REFERENCE )->m_Text = CONV_FROM_UTF8( Name2 );
+    }
+    else
+    {
+        GetField( REFERENCE )->m_Attributs = TEXT_NO_VISIBLE;
+    }
+
+    /* Parse component description
+     * These lines begin with:
+     * "P" = Position
+     * U = Num Unit and Conversion
+     * "Fn" = Fields (0 .. n = = number of field)
+     * "Ar" = Alternate reference in the case of multiple sheets referring to
+     *        one schematic file.
+     */
+    for( ; ; )
+    {
+        if( !aLine.ReadLine() )
+            return false;
+
+        if( ((char*)aLine)[0] == 'U' )
+        {
+            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_Multi, &m_Convert, &m_TimeStamp );
+        }
+        else if( ((char*)aLine)[0] == 'P' )
+        {
+            sscanf( ((char*)aLine) + 1, "%d %d", &m_Pos.x, &m_Pos.y );
+
+            // Set fields position to a default position (that is the
+            // component position.  For existing fields, the real position
+            // will be set later
+            for( int i = 0; i<GetFieldCount();  ++i )
+            {
+                if( GetField( i )->m_Text.IsEmpty() )
+                    GetField( i )->m_Pos = m_Pos;
+            }
+        }
+        else if( ((char*)aLine)[0] == 'A' && ((char*)aLine)[1] == 'R' )
+        {
+            /* format:
+             * AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
+             * where 9086AF6E is the unique timestamp of the containing sheet
+             * and 67452AA0 is the timestamp of this component.
+             * C99 is the reference given this path.
+             */
+            int ii;
+            ptcar = ((char*)aLine) + 2;
+
+            //copy the path.
+            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ptcar += ii + 1;
+            wxString path = CONV_FROM_UTF8( Name1 );
+
+            // copy the reference
+            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ptcar += ii + 1;
+            wxString ref = CONV_FROM_UTF8( Name1 );
+
+            // copy the multi, if exists
+            ii = ReadDelimitedText( Name1, ptcar, 255 );
+            if( Name1[0] == 0 )  // Nothing read, put a default value
+                sprintf( Name1, "%d", m_Multi );
+            int multi = atoi( Name1 );
+            if( multi < 0 || multi > 25 )
+                multi = 1;
+            AddHierarchicalReference( path, ref, multi );
+            GetField( REFERENCE )->m_Text = ref;
+        }
+        else if( ((char*)aLine)[0] == 'F' )
+        {
+            int  fieldNdx;
+
+            char FieldUserName[1024];
+            GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
+            GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
+
+            FieldUserName[0] = 0;
+
+            ptcar = (char*) aLine;
+
+            while( *ptcar && (*ptcar != '"') )
+                ptcar++;
+
+            if( *ptcar != '"' )
+            {
+                aErrorMsg.Printf( wxT( "EESchema file lib field F at line %d, aborted" ),
+                                  aLine.LineNumber() );
+                return false;
+            }
+
+            for( ptcar++, ii = 0; ; ii++, ptcar++ )
+            {
+                Name1[ii] = *ptcar;
+                if( *ptcar == 0 )
+                {
+                    aErrorMsg.Printf( wxT( "Component field F at line %d, aborted" ),
+                                      aLine.LineNumber() );
+                    return false;
+                }
+
+                if( *ptcar == '"' )
+                {
+                    Name1[ii] = 0;
+                    ptcar++;
+                    break;
+                }
+            }
+
+            fieldNdx = atoi( ((char*)aLine) + 2 );
+
+            ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
+
+            if( !FieldUserName[0] )
+                fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
+            else
+                fieldName = CONV_FROM_UTF8( FieldUserName );
+
+            if( fieldNdx >= GetFieldCount() )
+            {
+                // The first MANDATOR_FIELDS _must_ be constructed within
+                // the SCH_COMPONENT constructor.  This assert is simply here
+                // to guard against a change in that constructor.
+                wxASSERT( GetFieldCount() >= MANDATORY_FIELDS );
+
+                // Ignore the _supplied_ fieldNdx.  It is not important anymore
+                // if within the user defined fields region (i.e. >= MANDATORY_FIELDS).
+                // We freely renumber the index to fit the next available field slot.
+
+                fieldNdx = GetFieldCount();  // new has this index after insertion
+
+                SCH_FIELD field( wxPoint( 0, 0 ),
+                                 -1,     // field id is not relavant for user defined fields
+                                 this, fieldName );
+
+                AddField( field );
+            }
+            else
+            {
+                GetField( fieldNdx )->m_Name = fieldName;
+            }
+
+            GetField( fieldNdx )->m_Text = CONV_FROM_UTF8( Name1 );
+            memset( Char3, 0, sizeof(Char3) );
+            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
+                               &GetField( fieldNdx )->m_Pos.x,
+                               &GetField( fieldNdx )->m_Pos.y,
+                               &GetField( fieldNdx )->m_Size.x,
+                               &GetField( fieldNdx )->m_Attributs,
+                               Char2, Char3 ) ) < 4 )
+            {
+                aErrorMsg.Printf( wxT( "Component Field error line %d, aborted" ),
+                                  aLine.LineNumber() );
+                continue;
+            }
+
+            if( (GetField( fieldNdx )->m_Size.x == 0 ) || (ii == 4) )
+                GetField( fieldNdx )->m_Size.x = DEFAULT_SIZE_TEXT;
+
+            GetField( fieldNdx )->m_Orient = TEXT_ORIENT_HORIZ;
+            GetField( fieldNdx )->m_Size.y = GetField( fieldNdx )->m_Size.x;
+
+            if( Char1[0] == 'V' )
+                GetField( fieldNdx )->m_Orient = TEXT_ORIENT_VERT;
+
+            if( ii >= 7 )
+            {
+                if( *Char2 == 'L' )
+                    hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                else if( *Char2 == 'R' )
+                    hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                if( Char3[0] == 'B' )
+                    vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                else if( Char3[0] == 'T' )
+                    vjustify = GR_TEXT_VJUSTIFY_TOP;
+                if( Char3[1] == 'I' )
+                    GetField( fieldNdx )->m_Italic = true;
+                else
+                    GetField( fieldNdx )->m_Italic = false;
+                if( Char3[2] == 'B' )
+                    GetField( fieldNdx )->m_Bold = true;
+                else
+                    GetField( fieldNdx )->m_Bold = false;
+
+                GetField( fieldNdx )->m_HJustify = hjustify;
+                GetField( fieldNdx )->m_VJustify = vjustify;
+            }
+
+            if( fieldNdx == REFERENCE )
+                if( GetField( fieldNdx )->m_Text[0] == '#' )
+                    GetField( fieldNdx )->m_Attributs |= TEXT_NO_VISIBLE;
+        }
+        else
+            break;
+    }
+
+    if( sscanf( ((char*)aLine), "%d %d %d", &m_Multi, &m_Pos.x, &m_Pos.y ) != 3 )
+    {
+        aErrorMsg.Printf( wxT( "Component unit & pos error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( !aLine.ReadLine() ||
+        sscanf( ((char*)aLine), "%d %d %d %d",
+                &m_Transform.x1,
+                &m_Transform.y1,
+                &m_Transform.x2,
+                &m_Transform.y2 ) != 4 )
+    {
+        aErrorMsg.Printf( wxT( "Component orient error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( newfmt )
+    {
+        if( !aLine.ReadLine() )
+            return false;
+
+        if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
+        {
+            aErrorMsg.Printf( wxT( "Component End expected at line %d, aborted" ),
+                              aLine.LineNumber() );
+            return false;
+        }
+    }
 
     return true;
 }

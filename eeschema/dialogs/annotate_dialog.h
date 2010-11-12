@@ -26,6 +26,11 @@
 
 #include "dialog_annotate_base.h"
 
+
+class WinEDA_SchematicFrame;
+class wxConfig;
+
+
 /*!
  * DIALOG_ANNOTATE class declaration
  */

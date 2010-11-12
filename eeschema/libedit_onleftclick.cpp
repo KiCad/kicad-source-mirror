@@ -12,7 +12,6 @@
 #include "confirm.h"
 #include "eeschema_id.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"

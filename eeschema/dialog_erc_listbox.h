@@ -12,8 +12,7 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "program.h"
-#include "class_marker_sch.h"
+#include "sch_marker.h"
 
 /**
  * Class ERC_HTML_LISTBOX

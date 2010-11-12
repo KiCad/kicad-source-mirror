@@ -7,12 +7,13 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "template_fieldnames.h"
 
 
 void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )

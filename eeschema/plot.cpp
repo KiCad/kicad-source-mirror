@@ -10,11 +10,15 @@
 #include "drawtxt.h"
 #include "trigo.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
+#include "sch_text.h"
+#include "template_fieldnames.h"
 
 
 /* Local functions : */

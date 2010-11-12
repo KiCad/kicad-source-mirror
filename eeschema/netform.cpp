@@ -37,13 +37,18 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
+#include "sch_component.h"
+#include "sch_text.h"
+#include "sch_sheet.h"
+#include "template_fieldnames.h"
 
 #include "xnode.h"      // also nests: <wx/xml/xml.h>
 
@@ -353,7 +358,7 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
  * @return true if success.
  */
 bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
-                   bool aUse_netnames )
+                                              bool aUse_netnames )
 {
     bool        ret = true;
     FILE*       f = NULL;

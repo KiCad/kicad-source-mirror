@@ -14,7 +14,6 @@
 #include "dialog_erc_base.h"
 
 /* Variable locales */
-extern int           WriteFichierERC;
 extern int           DiagErc[PIN_NMAX][PIN_NMAX];
 extern bool          DiagErcTableInit; // go to TRUE after DiagErc init
 extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
@@ -35,7 +34,8 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
 private:
     WinEDA_SchematicFrame* m_Parent;
     wxBitmapButton*        m_ButtonList[PIN_NMAX][PIN_NMAX];
-    bool m_Initialized;
+    bool                   m_Initialized;
+    static bool            m_writeErcFile;
 
 public:
 

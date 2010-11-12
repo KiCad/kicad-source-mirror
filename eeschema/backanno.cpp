@@ -5,15 +5,16 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "program.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "wxEeschemaStruct.h"
+#include "build_version.h"
 
 #include "general.h"
-
-#include "build_version.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
 
 
 /** function FillFootprintFieldForAllInstancesofComponent

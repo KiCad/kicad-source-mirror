@@ -144,12 +144,13 @@ public:
 
 
     /* Display on screen: */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
 
-    /** Function TransformShapeWithClearanceToPolygon
+    /**
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments
@@ -341,7 +342,7 @@ public:
     }
 
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
 
     /**

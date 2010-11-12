@@ -5,14 +5,16 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "trigo.h"
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_text.h"
 
 
 /************************/
@@ -441,13 +443,8 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -487,6 +484,80 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char      Name1[256];
+    char      Name2[256];
+    char      Name3[256];
+    int       thickness = 0, size = 0, orient = 0;
+
+    Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
+
+    char*     sline = (char*) aLine;
+
+    while( ( *sline != ' ' ) && *sline )
+        sline++;
+
+    // sline points the start of parameters
+    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+                     &orient, &size, Name2, Name3, &thickness );
+
+    if( ii < 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( !aLine.ReadLine() )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( size == 0 )
+        size = DEFAULT_SIZE_TEXT;
+
+    char* text = strtok( (char*) aLine, "\n\r" );
+
+    if( text == NULL )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    wxString val = CONV_FROM_UTF8( text );
+
+    for( ;; )
+    {
+        int i = val.find( wxT( "\\n" ) );
+
+        if( i == wxNOT_FOUND )
+            break;
+        val.erase( i, 2 );
+        val.insert( i, wxT( "\n" ) );
+    }
+
+    m_Text = val;
+    m_Size.x = m_Size.y = size;
+    SetSchematicTextOrientation( orient );
+
+    if( isdigit( Name3[0] ) )
+    {
+        thickness = atol( Name3 );
+        m_Bold = ( thickness != 0 );
+        m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+    }
+
+    if( strnicmp( Name2, "Italic", 6 ) == 0 )
+        m_Italic = 1;
+
+    return true;
 }
 
 
@@ -713,6 +784,68 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 }
 
 
+bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char      Name1[256];
+    char      Name2[256];
+    char      Name3[256];
+    int       thickness = 0, size = 0, orient = 0;
+
+    Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
+
+    char*     sline = (char*) aLine;
+
+    while( ( *sline != ' ' ) && *sline )
+        sline++;
+
+    // sline points the start of parameters
+    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+                     &orient, &size, Name2, Name3, &thickness );
+
+    if( ii < 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( !aLine.ReadLine() )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file label load error atline %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( size == 0 )
+        size = DEFAULT_SIZE_TEXT;
+
+    char* text = strtok( (char*) aLine, "\n\r" );
+
+    if( text == NULL )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    m_Text = CONV_FROM_UTF8( text );
+    m_Size.x = m_Size.y = size;
+    SetSchematicTextOrientation( orient );
+
+    if( isdigit( Name3[0] ) )
+    {
+        thickness = atol( Name3 );
+        m_Bold = ( thickness != 0 );
+        m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+    }
+
+    if( stricmp( Name2, "Italic" ) == 0 )
+        m_Italic = 1;
+
+    return true;
+}
+
+
 /** Function SCH_LABEL::Draw
  * a label is drawn like a text. So just call SCH_TEXT::Draw
  */
@@ -805,6 +938,71 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 }
 
 
+bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char      Name1[256];
+    char      Name2[256];
+    char      Name3[256];
+    int       thickness = 0, size = 0, orient = 0;
+
+    Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
+
+    char*     sline = (char*) aLine;
+    while( (*sline != ' ' ) && *sline )
+        sline++;
+
+    // sline points the start of parameters
+    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+                     &orient, &size, Name2, Name3, &thickness );
+
+    if( ii < 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file global label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( !aLine.ReadLine() )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file global label load  error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( size == 0 )
+        size = DEFAULT_SIZE_TEXT;
+
+    char* text = strtok( (char*) aLine, "\n\r" );
+
+    if( text == NULL )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file global label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    m_Text = CONV_FROM_UTF8( text );
+    m_Size.x = m_Size.y = size;
+    SetSchematicTextOrientation( orient );
+    m_Shape  = NET_INPUT;
+    m_Bold = ( thickness != 0 );
+    m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+
+    if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
+        m_Shape = NET_OUTPUT;
+    if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
+        m_Shape = NET_BIDI;
+    if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
+        m_Shape = NET_TRISTATE;
+    if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
+        m_Shape = NET_UNSPECIFIED;
+    if( stricmp( Name3, "Italic" ) == 0 )
+        m_Italic = 1;
+
+    return true;
+}
+
+
 /** Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
@@ -825,7 +1023,7 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 {
     /* The global label is NOT really mirrored.
      *  for an horizontal label, the schematic orientation is changed.
-     *  for a vericalal label, the schematic orientation is not changed.
+     *  for a vertical label, the schematic orientation is not changed.
      *  and the label is moved to a suitable position
      */
     switch( GetSchematicTextOrientation() )
@@ -1007,13 +1205,8 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1193,6 +1386,70 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
 }
 
 
+bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char      Name1[256];
+    char      Name2[256];
+    char      Name3[256];
+    int       thickness = 0, size = 0, orient = 0;
+
+    Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
+
+    char*     sline = (char*) aLine;
+    while( (*sline != ' ' ) && *sline )
+        sline++;
+
+    // sline points the start of parameters
+    int ii = sscanf( sline, "%s %d %d %d %d %s %s %d", Name1, &m_Pos.x, &m_Pos.y,
+                     &orient, &size, Name2, Name3, &thickness );
+
+    if( ii < 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( !aLine.ReadLine() )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load  error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    if( size == 0 )
+        size = DEFAULT_SIZE_TEXT;
+
+    char* text = strtok( (char*) aLine, "\n\r" );
+
+    if( text == NULL )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load error at line %d" ),
+                          aLine.LineNumber() );
+        return false;
+    }
+
+    m_Text = CONV_FROM_UTF8( text );
+    m_Size.x = m_Size.y = size;
+    SetSchematicTextOrientation( orient );
+    m_Shape  = NET_INPUT;
+    m_Bold = ( thickness != 0 );
+    m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+
+    if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
+        m_Shape = NET_OUTPUT;
+    if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
+        m_Shape = NET_BIDI;
+    if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
+        m_Shape = NET_TRISTATE;
+    if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
+        m_Shape = NET_UNSPECIFIED;
+    if( stricmp( Name3, "Italic" ) == 0 )
+        m_Italic = 1;
+
+    return true;
+}
+
 
 /** Function HitTest
  * @return true if the point aPosRef is within item area
@@ -1288,13 +1545,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundingBox();
-        int      x1 = BoundaryBox.GetX();
-        int      y1 = BoundaryBox.GetY();
-        int      x2 = BoundaryBox.GetRight();
-        int      y2 = BoundaryBox.GetBottom();
-        GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+        EDA_Rect BoundaryBox = GetBoundingBox();
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }

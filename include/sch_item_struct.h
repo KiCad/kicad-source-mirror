@@ -12,6 +12,7 @@ using namespace std;
 
 
 class SCH_ITEM;
+class LINE_READER;
 class WinEDA_SchematicFrame;
 class wxFindReplaceData;
 
@@ -84,7 +85,8 @@ public:
      */
     void  SetLayer( int aLayer )  { m_Layer = aLayer; }
 
-    /** Function GetPenSize virtual pure
+    /**
+     * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( ) = 0;
@@ -126,6 +128,15 @@ public:
      * @return bool - true if success writing else false.
      */
     virtual bool    Save( FILE* aFile ) const = 0;
+
+    /**
+     * Load schematic item from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the object from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the object.
+     * @return True if the object loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) { return false; }
 
     /**
      * Compare schematic item against search string.

@@ -5,6 +5,12 @@
 #ifndef CLASS_SCHEMATIC_ITEMS_H
 #define CLASS_SCHEMATIC_ITEMS_H
 
+
+#include "sch_item_struct.h"
+
+#include "general.h"
+
+
 /* Flags for BUS ENTRY (bus to bus or wire to bus */
 #define WIRE_TO_BUS 0
 #define BUS_TO_BUS  1
@@ -26,7 +32,7 @@ public:
     bool    m_EndIsDangling;    // TRUE if not connected  (wires, tracks...)
 
 public:
-    SCH_LINE( const wxPoint& pos, int layer );
+    SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
     ~SCH_LINE() { }
 
     SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
@@ -68,7 +74,18 @@ public:
      */
     bool         Save( FILE* aFile ) const;
 
-    /** Function GetPenSize
+    /**
+     * Load schematic line from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic line from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic line.
+     * @return True if the schematic line loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int  GetPenSize();
@@ -132,7 +149,7 @@ public:
     wxSize  m_Size;                     // size of this symbol
 
 public:
-    SCH_NO_CONNECT( const wxPoint& pos );
+    SCH_NO_CONNECT( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~SCH_NO_CONNECT() { }
     virtual wxString GetClass() const
     {
@@ -142,7 +159,8 @@ public:
 
     SCH_NO_CONNECT* GenCopy();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int     GetPenSize();
@@ -160,7 +178,18 @@ public:
      */
     bool            Save( FILE* aFile ) const;
 
-    /** Function HitTest
+    /**
+     * Load schematic no connect entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic no connect from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic no connect.
+     * @return True if the schematic no connect loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -215,7 +244,7 @@ public:
     wxSize  m_Size;
 
 public:
-    SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id );
+    SCH_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), int shape = '\\', int id = WIRE_TO_BUS );
     ~SCH_BUS_ENTRY() { }
 
     virtual wxString GetClass() const
@@ -240,6 +269,16 @@ public:
     bool           Save( FILE* aFile ) const;
 
     /**
+     * Load schematic bus entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic bus entry from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic bus entry.
+     * @return True if the schematic bus entry loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display
      * purposes.  This box should be an enclosing perimeter for visible
@@ -249,7 +288,8 @@ public:
      */
     EDA_Rect       GetBoundingBox();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int    GetPenSize();
@@ -288,7 +328,7 @@ public:
     std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
 
 public:
-    SCH_POLYLINE( int layer );
+    SCH_POLYLINE( int layer = LAYER_NOTES );
     ~SCH_POLYLINE();
 
     virtual wxString GetClass() const
@@ -311,7 +351,18 @@ public:
      */
     bool          Save( FILE* aFile ) const;
 
-    /** Function AddPoint
+    /**
+     * Load schematic poly line entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic poly line from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic poly line.
+     * @return True if the schematic poly line loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+    /**
+     * Function AddPoint
      * add a corner to m_PolyPoints
      */
     void           AddPoint( const wxPoint& point )
@@ -320,13 +371,15 @@ public:
     }
 
 
-    /** Function GetCornerCount
+    /**
+     * Function GetCornerCount
      * @return the number of corners
      */
 
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize();
@@ -361,7 +414,7 @@ public:
     wxSize  m_Size;
 
 public:
-    SCH_JUNCTION( const wxPoint& pos );
+    SCH_JUNCTION( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~SCH_JUNCTION() { }
 
     virtual wxString GetClass() const
@@ -370,7 +423,8 @@ public:
     }
 
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -388,7 +442,8 @@ public:
 
     SCH_JUNCTION* GenCopy();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int   GetPenSize();
@@ -404,6 +459,16 @@ public:
      * @return bool - true if success writing else false.
      */
     bool          Save( FILE* aFile ) const;
+
+    /**
+     * Load schematic junction entry from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read schematic junction from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the
+     *                    schematic junction.
+     * @return True if the schematic junction loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     // Geometric transforms (used in block operations):
 

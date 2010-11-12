@@ -9,12 +9,14 @@
 #include "common.h"
 #include "confirm.h"
 #include "class_drawpanel.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "sch_field.h"
+#include "template_fieldnames.h"
 
 #include "dialog_edit_libentry_fields_in_lib_base.h"
 

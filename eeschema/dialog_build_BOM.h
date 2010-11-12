@@ -10,6 +10,11 @@
 #include "dialog_build_BOM_base.h"
 
 
+class WinEDA_DrawFrame;
+class SCH_COMPONENT;
+class wxConfig;
+
+
 class DIALOG_BUILD_BOM : public DIALOG_BUILD_BOM_BASE
 {
 private:

@@ -120,7 +120,8 @@ public:
         return m_LayerNegative;
     }
 
-    /** function SetLayerParameters
+    /**
+     * Function SetLayerParameters
      * Initialize parameters from Image and Layer parameters
      * found in the gerber file:
      *   m_UnitsMetric,
@@ -194,14 +195,16 @@ public:
                    int               aDrawMode,
                    const wxPoint&    aOffset = ZeroOffset );
 
-    /** function ConvertSegmentToPolygon
+    /**
+     * Function ConvertSegmentToPolygon
      * convert a line to an equivalent polygon.
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
      */
     void ConvertSegmentToPolygon( );
 
-    /** function DrawGbrPoly
+    /**
+     * Function DrawGbrPoly
      * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
      */
     void DrawGbrPoly( EDA_Rect* aClipBox,

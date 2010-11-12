@@ -5,11 +5,15 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
-#include "class_marker_sch.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 
 /* Functions to undo and redo edit commands.

@@ -5,17 +5,19 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "eeschema_id.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
+#include "eeschema_id.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "template_fieldnames.h"
 
 #include "dialog_lib_new_component.h"
 

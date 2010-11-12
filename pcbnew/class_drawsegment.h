@@ -65,7 +65,7 @@ public:
 
 
     void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                       int aDrawMode, const wxPoint& offset = ZeroOffset );
+                       int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /**
      * Function DisplayInfo
@@ -145,7 +145,8 @@ public:
      */
     virtual void Flip( const wxPoint& aCentre );
 
-    /** Function TransformShapeWithClearanceToPolygon
+    /**
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments

@@ -4,12 +4,18 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "trigo.h"
 #include "common.h"
-#include "program.h"
+#include "richio.h"
+
 #include "general.h"
 #include "protos.h"
+#include "sch_items.h"
+
+#include <boost/foreach.hpp>
+
 
 /* used to calculate the pen size from default value
  * the actual pen size is default value * BUS_WIDTH_EXPAND
@@ -91,6 +97,44 @@ bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char Name1[256];
+    char Name2[256];
+    char* line = (char*) aLine;
+
+    while( (*line != ' ' ) && *line )
+        line++;
+
+    if( sscanf( line, "%s %s", Name1, Name2 ) != 2  )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file bus entry load error at line %d" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    m_Layer = LAYER_WIRE;
+
+    if( Name1[0] == 'B' )
+        m_Layer = LAYER_BUS;
+
+    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ", &m_Pos.x, &m_Pos.y,
+                                      &m_Size.x, &m_Size.y ) != 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file bus entry load error at line %d" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    m_Size.x -= m_Pos.x;
+    m_Size.y -= m_Pos.y;
+
+    return true;
 }
 
 
@@ -243,6 +287,26 @@ bool SCH_JUNCTION::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char name[256];
+    char* line = (char*) aLine;
+
+    while( (*line != ' ' ) && *line )
+        line++;
+
+    if( sscanf( line, "%s %d %d", name, &m_Pos.x, &m_Pos.y ) != 3 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file connection load error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -432,6 +496,26 @@ bool SCH_NO_CONNECT::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char name[256];
+    char* line = (char*) aLine;
+
+    while( (*line != ' ' ) && *line )
+        line++;
+
+    if( sscanf( line, "%s %d %d", name, &m_Pos.x, &m_Pos.y ) != 3 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file No Connect load error at line %d" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( ((char*)aLine) );
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -628,6 +712,43 @@ bool SCH_LINE::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char  Name1[256];
+    char  Name2[256];
+    char* line = (char*) aLine;
+
+    while( (*line != ' ' ) && *line )
+        line++;
+
+    if( sscanf( line, "%s %s", Name1, Name2 ) != 2  )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file segment error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    m_Layer = LAYER_NOTES;
+
+    if( Name1[0] == 'W' )
+        m_Layer = LAYER_WIRE;
+    if( Name1[0] == 'B' )
+        m_Layer = LAYER_BUS;
+
+    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
+                                      &m_Start.x, &m_Start.y, &m_End.x, &m_End.y ) != 4 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file Segment struct error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -914,6 +1035,50 @@ bool SCH_POLYLINE::Save( FILE* aFile ) const
     }
 
     return success;
+}
+
+
+bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
+{
+    char Name1[256];
+    char Name2[256];
+    wxPoint pt;
+    int ii;
+    char* line = (char*) aLine;
+
+    while( (*line != ' ' ) && *line )
+        line++;
+
+    if( sscanf( line, "%s %s %d", Name1, Name2, &ii ) != 3 )
+    {
+        aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
+                          aLine.LineNumber() );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        return false;
+    }
+
+    m_Layer = LAYER_NOTES;
+    if( Name2[0] == 'W' )
+        m_Layer = LAYER_WIRE;
+    if( Name2[0] == 'B' )
+        m_Layer = LAYER_BUS;
+
+    for( unsigned jj = 0; jj < (unsigned)ii; jj++ )
+    {
+        wxPoint point;
+
+        if( !aLine.ReadLine() || sscanf( ((char*) aLine), "%d %d", &pt.x, &pt.y ) != 2 )
+        {
+            aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
+                              aLine.LineNumber() );
+            aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+            return false;
+        }
+
+        AddPoint( pt );
+    }
+
+    return true;
 }
 
 

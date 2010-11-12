@@ -50,7 +50,11 @@
  */
 
 
+class wxFindReplaceData;
+class SCH_SCREEN;
 class SCH_MARKER;
+class SCH_SHEET;
+class SCH_ITEM;
 
 
 /**
@@ -89,25 +93,29 @@ public:
     }
 
 
-    /** Function Cmp
+    /**
+     * Function Cmp
      * Compare if this is the same sheet path as aSheetPathToTest
      * @param aSheetPathToTest = sheet path to compare
      * @return -1 if different, 0 if same
      */
     int              Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
-    /** Function Last
+    /**
+     * Function Last
      * returns a pointer to the last sheet of the list
      * One can see the others sheet as the "path" to reach this last sheet
      */
     SCH_SHEET*      Last();
 
-    /** Function LastScreen
+    /**
+     * Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
      */
     SCH_SCREEN*      LastScreen();
 
-    /** Function LastScreen
+    /**
+     * Function LastScreen
      * @return a pointer to the first schematic item handled by the
      * SCH_SCREEN relative to the last sheet in list
      */
@@ -121,7 +129,8 @@ public:
      */
     SCH_ITEM*        FirstDrawList();
 
-    /** Function Push
+    /**
+     * Function Push
      * store (push) aSheet in list
      * @param aSheet = pointer to the SCH_SHEET to store in list
      * Push is used when entered a sheet to select or analyze it
@@ -129,7 +138,8 @@ public:
      */
     void             Push( SCH_SHEET* aSheet );
 
-    /** Function Pop
+    /**
+     * Function Pop
      * retrieves (pop) the last entered sheet and remove it from list
      * @return a SCH_SHEET* pointer to the removed sheet in list
      * Pop is used when leaving a sheet after a selection or analyze
@@ -137,7 +147,8 @@ public:
      */
     SCH_SHEET*      Pop();
 
-    /** Function Path
+    /**
+     * Function Path
      * the path uses the time stamps which do not changes even when editing
      * sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
@@ -153,7 +164,8 @@ public:
      */
     wxString         PathHumanReadable()  const;
 
-    /** Function BuildSheetPathInfoFromSheetPathValue
+    /**
+     * Function BuildSheetPathInfoFromSheetPathValue
      * Fill this with data to access to the hierarchical sheet known by its
      * path aPath
      * @param aPath = path of the sheet to reach (in non human readable format)

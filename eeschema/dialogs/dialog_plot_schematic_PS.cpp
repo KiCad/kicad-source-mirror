@@ -31,10 +31,13 @@
 #include "confirm.h"
 #include "worksheet.h"
 #include "plot_common.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_sheet_path.h"
+
 
 enum PageFormatReq {
     PAGE_SIZE_AUTO,

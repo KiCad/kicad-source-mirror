@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "trigo.h"
+#include "wxstruct.h"
 
 #include "general.h"
 #include "protos.h"

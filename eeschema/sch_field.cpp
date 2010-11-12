@@ -1,6 +1,6 @@
-/**************************************************************/
-/* class_sch_cmp_field.cpp : handle the  class SCH_FIELD  */
-/**************************************************************/
+/***********************************************/
+/* sch_field.cpp : handle the class SCH_FIELD  */
+/***********************************************/
 
 /* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
@@ -18,11 +18,15 @@
 #include "drawtxt.h"
 #include "macros.h"
 #include "trigo.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "sch_component.h"
+#include "sch_field.h"
+#include "template_fieldnames.h"
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,

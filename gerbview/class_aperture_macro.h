@@ -107,7 +107,8 @@ public:
 
     /* Draw functions: */
 
-    /** function DrawBasicShape
+    /**
+     * Function DrawBasicShape
      * Draw the primitive shape for flashed items.
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @param aClipBox = DC clip box (NULL is no clip)
@@ -134,7 +135,8 @@ public:
 
 private:
 
-    /** function ConvertShapeToPolygon
+    /**
+     * Function ConvertShapeToPolygon
      * convert a shape to an equivalent polygon.
      * Arcs and circles are approximated by segments
      * Useful when a shape is not a graphic primitive (shape with hole,
@@ -155,7 +157,8 @@ struct APERTURE_MACRO
     wxString      name;             ///< The name of the aperture macro
     AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
 
-    /** function DrawApertureMacroShape
+    /**
+     * Function DrawApertureMacroShape
      * Draw the primitive shape for flashed items.
      * When an item is flashed, this is the shape of the item
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn

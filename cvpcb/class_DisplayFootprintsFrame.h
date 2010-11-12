@@ -26,18 +26,21 @@ public:
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
 
-    /** Function IsGridVisible() , virtual
+    /**
+     * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
     virtual bool     IsGridVisible();
 
-    /** Function SetGridVisibility() , virtual
+    /**
+     * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
      * if you want to store/retrieve the grid visiblity in configuration.
      * @param aVisible = true if the grid must be shown
      */
     virtual void     SetGridVisibility(bool aVisible);
-    /** Function GetGridColor() , virtual
+    /**
+     * Function GetGridColor() , virtual
      * @return the color of the grid
      */
     virtual int     GetGridColor();
@@ -64,7 +67,8 @@ public:
     }
 
 
-    /** Function SaveCopyInUndoList (overloaded).
+    /**
+     * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo

@@ -10,8 +10,8 @@
 #include "common.h"
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "eeschema_id.h"
@@ -249,7 +249,7 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     wxMenu* placeMenu = new wxMenu;
 
     /* Component */
-    text = AddHotkeyName( _( "&Component" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Component" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NEW_COMPONENT, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
                            HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
@@ -257,13 +257,15 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* Power port */
-    item = new wxMenuItem( placeMenu, ID_PLACE_POWER_BUTT, _( "&Power port" ),
+    text = AddHotkeyName( _( "Power port" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_NEW_POWER, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_PLACE_POWER_BUTT, text,
                            HELP_PLACE_POWERPORT, wxITEM_NORMAL );
     item->SetBitmap( add_power_xpm );
     placeMenu->Append( item );
 
     /* Wire */
-    text = AddHotkeyName( _( "&Wire" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Wire" ), s_Schematic_Hokeys_Descr,
                           HK_BEGIN_WIRE, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, text,
                            HELP_PLACE_WIRE, wxITEM_NORMAL );
@@ -271,19 +273,25 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* Bus */
-    item = new wxMenuItem( placeMenu, ID_BUS_BUTT, _( "&Bus" ),
+    text = AddHotkeyName( _( "Bus" ), s_Schematic_Hokeys_Descr,
+                          HK_BEGIN_BUS, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_BUS_BUTT, text,
                            HELP_PLACE_BUS, wxITEM_NORMAL );
     item->SetBitmap( add_bus_xpm );
     placeMenu->Append( item );
 
-    /* Wire to Bus */
-    item = new wxMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, _( "W&ire to bus entry" ),
+    /* Wire to Bus entry */
+    text = AddHotkeyName( _( "Wire to bus entry" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_WIRE_ENTRY, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, text,
                            HELP_PLACE_WIRE2BUS_ENTRY, wxITEM_NORMAL );
     item->SetBitmap( add_line2bus_xpm );
     placeMenu->Append( item );
 
-    /* Bus to Bus */
-    item = new wxMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT, _( "B&us to bus entry" ),
+    /* Bus to Bus entry */
+    text = AddHotkeyName( _( "Bus to bus entry" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_BUS_ENTRY, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT, text,
                            HELP_PLACE_BUS2BUS_ENTRY, wxITEM_NORMAL );
     item->SetBitmap( add_bus2bus_xpm );
     placeMenu->Append( item );
@@ -304,7 +312,9 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     /* Global label */
-    item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, _( "Global label" ),
+    text = AddHotkeyName( _( "Global label" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_GLABEL, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, text,
                            HELP_PLACE_GLOBALLABEL, wxITEM_NORMAL );
     item->SetBitmap( add_glabel_xpm );
     placeMenu->Append( item );
@@ -321,13 +331,17 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     /* Hierarchical label */
-    item = new wxMenuItem( placeMenu, ID_HIERLABEL_BUTT, _( "Hierarchical label" ),
+    text = AddHotkeyName( _( "Hierarchical label" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_HLABEL, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_HIERLABEL_BUTT, text,
                            HELP_PLACE_HIER_LABEL, wxITEM_NORMAL );
     item->SetBitmap( add_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Hierarchical sheet */
-    item = new wxMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, _( "Hierarchical sheet" ),
+    text = AddHotkeyName( _( "Hierarchical sheet" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_HIER_SHEET, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
                            HELP_PLACE_SHEET, wxITEM_NORMAL );
     item->SetBitmap( add_hierarchical_subsheet_xpm );
     placeMenu->Append( item );
@@ -348,13 +362,17 @@ void WinEDA_SchematicFrame::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     /* Graphic line or polygon */
-    item = new wxMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, _( "Graphic line or polygon" ),
+    text = AddHotkeyName( _( "Graphic polyline" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_GRAPHIC_POLYLINE, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
                            HELP_PLACE_GRAPHICLINES, wxITEM_NORMAL );
     item->SetBitmap( add_dashed_line_xpm );
     placeMenu->Append( item );
 
     /* Graphic text */
-    item = new wxMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, _( "Graphic text" ),
+    text = AddHotkeyName( _( "Graphic text" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_GRAPHIC_TEXT, false );    // add comment, not a shortcut
+    item = new wxMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
                            HELP_PLACE_GRAPHICTEXTS, wxITEM_NORMAL );
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );

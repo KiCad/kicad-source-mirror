@@ -50,7 +50,8 @@ public:
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
     // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
 
-    /** Function ClearUndoORRedoList
+    /**
+     * Function ClearUndoORRedoList
      * free the undo or redo list from List element
      *  Wrappers are deleted.
      *  datas pointed by wrappers are deleted if not in use in schematic

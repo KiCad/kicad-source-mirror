@@ -5,6 +5,7 @@
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
+#include "general.h"
 #include "lib_draw_item.h"
 #include "lib_field.h"
 
@@ -521,13 +522,15 @@ public:
 
     int GetPartCount() { return m_unitCount; }
 
-    /** function IsMulti
+    /**
+     * Function IsMulti
      * @return true if the component has multiple parts per package.
      * When happens, the reference has a sub reference ti identify part
      */
     bool IsMulti() { return m_unitCount > 1; }
 
-    /** function IsMulti
+    /**
+     * Function IsMulti
      * @return the sub reference for component having multiple parts per package.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)

@@ -17,12 +17,15 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
 #include "netlist_control.h"
+#include "sch_sheet.h"
+
 
 //Imported function:
 int TestDuplicateSheetNames( bool aCreateMarker );

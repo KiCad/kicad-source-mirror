@@ -5,12 +5,15 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_sheet.h"
 
 
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );

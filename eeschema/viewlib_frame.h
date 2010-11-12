@@ -2,6 +2,14 @@
 #define __LIBVIEWFRM_H__
 
 
+#include <wx/gdicmn.h>
+
+#include "wxstruct.h"
+
+
+class wxSashLayoutWindow;
+class wxListBox;
+class wxSemaphore;
 class WinEDAChoiceBox;
 class SCH_SCREEN;
 class CMP_LIBRARY;

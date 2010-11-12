@@ -6,10 +6,12 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_sheet.h"
 
 
 /**************************************************************************/

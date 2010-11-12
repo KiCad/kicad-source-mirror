@@ -7,8 +7,8 @@
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "libeditframe.h"
 #include "eeschema_id.h"
 #include "class_libentry.h"

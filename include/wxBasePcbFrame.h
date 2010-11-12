@@ -193,7 +193,8 @@ public:
 
     MODULE* Copie_Module( MODULE* module );
 
-    /** Function Save_Module_In_Library
+    /**
+     * Function Save_Module_In_Library
      *  Save in an existing library a given footprint
      * @param aLibName = name of the library to use
      * @param aModule = the given footprint
@@ -214,7 +215,8 @@ public:
                              bool            NewModulesOnly );
     MODULE* GetModuleByName();
 
-    /** Function OnModify()
+    /**
+     * Function OnModify()
      * Virtual
      * Must be called after a change
      * in order to set the "modify" flag of the current screen
@@ -225,7 +227,8 @@ public:
     virtual void OnModify( );
 
     // Modules (footprints)
-    /** Function Create_1_Module
+    /**
+     * Function Create_1_Module
      * Creates a new module or footprint : A new module contains 2 texts :
      *  First = REFERENCE
      *  Second = VALUE: "VAL**"
@@ -257,7 +260,8 @@ public:
                                               wxDC*         DC );
 
     void          AddPad( MODULE* Module, bool draw );
-    /** Function DeletePad
+    /**
+     * Function DeletePad
      * Delete the pad aPad.
      * Refresh the modified screen area
      * Refresh modified parameters of the parent module (bounding box, last date)
@@ -276,7 +280,8 @@ public:
 
     // loading footprints
 
-    /** function Get_Librairie_Module
+    /**
+     * Function Get_Librairie_Module
      *
      *  Read active libraries or one library to find and load a given module
      *  If found the module is linked to the tail of linked list of modules
@@ -291,7 +296,8 @@ public:
                                    const wxString& aModuleName,
                                    bool            aDisplayMessageError );
 
-    /** Function Select_1_Module_From_List
+    /**
+     * Function Select_1_Module_From_List
      *  Display a list of modules found in active libraries or a given library
      *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename
      *                                == void, list all modules)
@@ -354,7 +360,8 @@ public:
                                int         masque_layer,
                                GRTraceMode trace_mode );
 
-    /** function PlotDrillMark
+    /**
+     * Function PlotDrillMark
      * Draw a drill mark for pads and vias.
      * Must be called after all drawings, because it
      * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
@@ -371,7 +378,8 @@ public:
     /* Functions relative to Undo/redo commands:
      */
 
-    /** Function SaveCopyInUndoList (virtual pure)
+    /**
+     * Function SaveCopyInUndoList (virtual pure)
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItemToCopy = the board item modified by the command to undo
@@ -384,7 +392,8 @@ public:
                                      const wxPoint& aTransformPoint =
                                      wxPoint( 0, 0 ) ) = 0;
 
-    /** Function SaveCopyInUndoList (virtual pure, overloaded).
+    /**
+     * Function SaveCopyInUndoList (virtual pure, overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo

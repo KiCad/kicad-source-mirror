@@ -28,13 +28,16 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "plot_common.h"
 #include "confirm.h"
 #include "worksheet.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_sheet_path.h"
 
 #include "dialog_plot_schematic_DXF_base.h"
 

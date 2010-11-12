@@ -7,12 +7,17 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "lib_draw_item.h"
 #include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_items.h"
+#include "sch_text.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 
 /* Routines Locales */
@@ -119,7 +124,7 @@ void WinEDA_SchematicFrame::BeginSegment( wxDC* DC, int type )
         }
 
         newsegment->m_Flags = IS_NEW;
-        if( g_HVLines ) // We need 2 segments to go from a given start pint to
+        if( g_HVLines ) // We need 2 segments to go from a given start pin to
                         // an end point
         {
             nextsegment = newsegment->GenCopy();

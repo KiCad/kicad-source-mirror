@@ -5,12 +5,19 @@
 #ifndef CLASS_DRAWSHEET_H
 #define CLASS_DRAWSHEET_H
 
-#include "base_struct.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
-#include "class_text-label.h"
+#include "sch_text.h"
 
-extern SCH_SHEET* g_RootSheet;
+
+class LINE_READER;
+class SCH_SCREEN;
+class SCH_SHEET;
+class SCH_SHEET_PIN;
+class SCH_SHEET_PATH;
+class DANGLING_END_ITEM;
+class WinEDA_SchematicFrame;
+
 
 /**
  * Pin (label) used in sheets to create hierarchical schematics.
@@ -63,7 +70,8 @@ public:
                           int               aDraw_mode,
                           int               aColor = -1 );
 
-    /** function CreateGraphicShape (virual)
+    /**
+     * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Position of the shape
@@ -117,6 +125,16 @@ public:
      */
     bool        Save( FILE* aFile ) const;
 
+    /**
+     * Load schematic sheet hierarchical lable from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the sheet hierarchical label  from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet
+     *                    hierarchical label.
+     * @return True if the sheet heirarchical label loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
 #if defined(DEBUG)
 
     // comment inherited by Doxygen from Base_Struct
@@ -124,12 +142,14 @@ public:
 
 #endif
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize();
 
-    /** function CreateGraphicShape
+    /**
+     * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = list to fill with polygon corners coordinates
      * @param Pos = Position of the shape
@@ -157,7 +177,8 @@ public:
     virtual void Mirror_X( int aXaxis_position );
 
 
-    /** function Matches
+    /**
+     * Function Matches
      * Compare hierarchical pin name against search string.
      *
      * @param aSearchData - Criteria to search against.
@@ -169,7 +190,7 @@ public:
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
 };
 
 
@@ -228,6 +249,15 @@ public:
      * @return bool - true if success writing else false.
      */
     bool           Save( FILE* aFile ) const;
+
+    /**
+     * Load schematic sheet from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the component from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet.
+     * @return True if the sheet loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
     SCH_SHEET*     GenCopy();
@@ -298,12 +328,14 @@ public:
      */
     bool           HasUndefinedLabels();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int    GetPenSize();
 
-    /** Function Draw
+    /**
+     * Function Draw
      *  Draw the hierarchical sheet shape
      *  @param aPanel = the current DrawPanel
      *  @param aDc = the current Device Context
@@ -318,26 +350,30 @@ public:
                          int               aDrawMode,
                          int               aColor = -1 );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
     bool     HitTest( const wxPoint& aPosRef );
 
-    /** Function GetBoundingBox
+    /**
+     * Function GetBoundingBox
      *  @return an EDA_Rect giving the bounding box of the sheet
      */
     EDA_Rect GetBoundingBox();
 
     void     SwapData( SCH_SHEET* copyitem );
 
-    /** Function ComponentCount
+    /**
+     * Function ComponentCount
      *  count our own components, without the power components.
      *  @return the component count.
      */
     int      ComponentCount();
 
-    /** Function Load.
+    /**
+     * Function Load.
      *  for the sheet: load the file m_FileName
      *  if a screen already exists, the file is already read.
      *  m_AssociatedScreen point on the screen, and its m_RefCount is
@@ -349,7 +385,8 @@ public:
      */
     bool     Load( WinEDA_SchematicFrame* aFrame );
 
-    /** Function SearchHierarchy
+    /**
+     * Function SearchHierarchy
      *  search the existing hierarchy for an instance of screen "FileName".
      *  @param aFilename = the filename to find
      *  @param aFilename = a location to return a pointer to the screen (if
@@ -358,7 +395,8 @@ public:
      */
     bool     SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen );
 
-    /** Function LocatePathOfScreen
+    /**
+     * Function LocatePathOfScreen
      *  search the existing hierarchy for an instance of screen "FileName".
      *  don't bother looking at the root sheet - it must be unique,
      *  no other references to its m_AssociatedScreen otherwise there would be
@@ -371,14 +409,16 @@ public:
     bool     LocatePathOfScreen( SCH_SCREEN*     aScreen,
                                  SCH_SHEET_PATH* aList );
 
-    /** Function CountSheets
+    /**
+     * Function CountSheets
      * calculates the number of sheets found in "this"
      * this number includes the full subsheets count
      * @return the full count of sheets+subsheets contained by "this"
      */
     int      CountSheets();
 
-    /** Function GetFileName
+    /**
+     * Function GetFileName
      * return the filename corresponding to this sheet
      * @return a wxString containing the filename
      */
@@ -391,7 +431,8 @@ public:
     }
 
 
-    /** Function ChangeFileName
+    /**
+     * Function ChangeFileName
      * Set a new filename and manage data and associated screen
      * The main difficulty is the filename change in a complex hierarchy.
      * - if new filename is not already used: change to the new name (and if an
@@ -453,12 +494,14 @@ public:
      */
     void         Resize( const wxSize& aSize );
 
-    /** function GetSheetNamePosition
+    /**
+     * Function GetSheetNamePosition
      * @return the position of the anchor of sheet name text
      */
     wxPoint GetSheetNamePosition ();
 
-    /** function GetFileNamePosition
+    /**
+     * Function GetFileNamePosition
      * @return the position of the anchor of filename text
      */
     wxPoint GetFileNamePosition ();

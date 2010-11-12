@@ -115,7 +115,8 @@ public:
      */
     void     Set_Rectangle_Encadrement();
 
-    /** function SetRectangleExinscrit()
+    /**
+     * Function SetRectangleExinscrit()
      * Calculates the real bounding box according to the board position,
      * and real orientation and also calculates the area value (used in
      * automatic placement)
@@ -217,7 +218,8 @@ public:
 
     /* drawing functions */
 
-    /** Function Draw
+    /**
+     * Function Draw
      * Draw the text according to the footprint pos and orient
      * @param panel = draw panel, Used to know the clip box
      * @param DC = Current Device Context

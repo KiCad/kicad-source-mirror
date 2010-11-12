@@ -133,7 +133,8 @@ public:
      */
     void     Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
 
-    /** function CalculateSubAreaBoundaryBox
+    /**
+     * Function CalculateSubAreaBoundaryBox
      * Calculates the bounding box of a a filled area ( list of CPolyPt )
      * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
      * @return an EDA_Rect as bounding box
@@ -177,7 +178,8 @@ public:
      */
     bool HitTestFilledArea( const wxPoint& aRefPos );
 
-    /** function BuildFilledPolysListData
+    /**
+     * Function BuildFilledPolysListData
      * Build m_FilledPolysList data from real outlines (m_Poly)
      * in order to have drawable (and plottable) filled polygons
      * drawable filled polygons are polygons without hole
@@ -188,7 +190,8 @@ public:
      */
     int  BuildFilledPolysListData( BOARD* aPcb );
 
-    /** function AddClearanceAreasPolygonsToPolysList
+    /**
+     * Function AddClearanceAreasPolygonsToPolysList
      * Add non copper areas polygons (pads and tracks with clearence)
      * to a filled copper area
      * used in BuildFilledPolysListData when calculating filled areas in a zone
@@ -200,14 +203,16 @@ public:
      */
     void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
 
-    /** Function CopyPolygonsFromBoolengineToFilledPolysList
+    /**
+     * Function CopyPolygonsFromBoolengineToFilledPolysList
      * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
      * @param aBoolengine = the kbool engine used in Do_Operation
      * @return the corner count
      */
     int  CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine );
 
-    /** Function CopyPolygonsFromFilledPolysListToBoolengine
+    /**
+     * Function CopyPolygonsFromFilledPolysListToBoolengine
      * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
      * @param aBoolengine = kbool engine
      * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
@@ -253,7 +258,8 @@ public:
      */
     int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
 
-    /** Function Fill_Zone_Areas_With_Segments()
+    /**
+     * Function Fill_Zone_Areas_With_Segments()
      *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
@@ -353,7 +359,8 @@ public:
     {
         return m_Poly->GetHatchStyle();
     }
-    /** function IsSame()
+    /**
+     * Function IsSame()
      * test is 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines
      * info relative to filling is not take in account

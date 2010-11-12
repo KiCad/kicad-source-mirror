@@ -9,13 +9,20 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "block_commande.h"
+#include "wxEeschemaStruct.h"
+#include "class_sch_screen.h"
 
-#include "program.h"
 #include "general.h"
-#include "class_marker_sch.h"
 #include "class_library.h"
 #include "lib_pin.h"
 #include "protos.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_text.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
+
+#include <boost/foreach.hpp>
 
 
 // Imported functions:

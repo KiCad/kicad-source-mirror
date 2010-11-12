@@ -229,7 +229,7 @@ wxPoint DRAWSEGMENT::GetEnd() const
 
 
 void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        int draw_mode, const wxPoint& notUsed )
+                        int draw_mode, const wxPoint& aOffset )
 {
     int ux0, uy0, dx, dy;
     int l_piste;
@@ -246,12 +246,12 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     l_piste = m_Width >> 1;  /* half trace width */
 
     // Line start point or Circle and Arc center
-    ux0 = m_Start.x;
-    uy0 = m_Start.y;
+    ux0 = m_Start.x + aOffset.x;
+    uy0 = m_Start.y + aOffset.y;
 
     // Line end point or circle and arc start point
-    dx = m_End.x;
-    dy = m_End.y;
+    dx = m_End.x + aOffset.x;
+    dy = m_End.y + aOffset.y;
 
     mode = DisplayOpt.DisplayDrawItems;
     if( m_Flags & FORCE_SKETCH )

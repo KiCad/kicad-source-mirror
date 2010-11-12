@@ -51,7 +51,8 @@ public:
 
     ~MARKER_BASE();
 
-    /** Function DrawMarker
+    /**
+     * Function DrawMarker
      */
     void DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset );
 
@@ -66,7 +67,8 @@ public:
     }
 
 
-    /** Function SetColor
+    /**
+     * Function SetColor
      * Set the color of this marker
      */
     void SetColor( EDA_Colors aColor )
@@ -75,7 +77,8 @@ public:
     }
 
 
-    /** Function to set/get error levels (warning, fatal ..)
+    /**
+     * Function to set/get error levels (warning, fatal ..)
      * this value is stored in m_MarkerType
      */
     void SetErrorLevel( int aErrorLevel )
@@ -163,7 +166,8 @@ public:
     }
 
 
-    /** Function DisplayMarkerInfo()
+    /**
+     * Function DisplayMarkerInfo()
      * Displays the full info of this marker, in a HTML window
      */
     void DisplayMarkerInfo(WinEDA_DrawFrame * aFrame);

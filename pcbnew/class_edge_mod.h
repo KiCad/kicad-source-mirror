@@ -103,7 +103,8 @@ public:
     }
 
 
-    /** Function TransformShapeWithClearanceToPolygon
+    /**
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments

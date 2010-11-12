@@ -177,7 +177,8 @@ public:
     }
 
 
-    /** Function ReturnPinStringNum (static function)
+    /**
+     * Function ReturnPinStringNum (static function)
      * Pin num is coded as a long or 4 ascii chars
      * @param aPinNum = a long containing a pin num
      * @return aStringBuffer = the wxString to store the pin num as an

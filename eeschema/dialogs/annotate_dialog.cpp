@@ -8,7 +8,7 @@
 #include "appl_wxstruct.h"
 #include "bitmaps.h"
 #include "common.h"
-#include "program.h"
+#include "wxEeschemaStruct.h"
 
 #include "annotate_dialog.h"
 
@@ -69,6 +69,8 @@ void DIALOG_ANNOTATE::InitValues()
 	annotate_right_down_bitmap->SetBitmap(bitmap1);
     wxBitmap bitmap2(add_text_xpm);
 	annotate_by_value_bitmap->SetBitmap(bitmap2);
+
+    m_btnApply->SetDefault();
 }
 
 
@@ -92,12 +94,10 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
         message += _( "on the current sheet?" );
 
     message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
-    response = wxMessageBox( message, wxT( "" ),
-                             wxICON_EXCLAMATION | wxOK | wxCANCEL );
+    response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
-    AnnotateComponents( m_Parent, GetLevel(), GetSortOrder(),
-                        GetResetItems() , true );
+    AnnotateComponents( m_Parent, GetLevel(), GetSortOrder(), GetResetItems() , true );
     m_btnClear->Enable();
 }
 

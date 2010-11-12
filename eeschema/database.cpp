@@ -5,11 +5,12 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "confirm.h"
 #include "eda_doc.h"
 #include "kicad_string.h"
+#include "wxstruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
@@ -29,8 +30,7 @@
  * Place the name of the component has loaded, select from a list in
  * BufName
  */
-wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys,
-                          wxString& BufName )
+wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys, wxString& BufName )
 {
     wxArrayString  nameList;
     wxString       msg;

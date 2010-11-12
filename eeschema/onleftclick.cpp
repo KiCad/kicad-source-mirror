@@ -7,11 +7,16 @@
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
-#include "class_marker_sch.h"
 #include "protos.h"
+#include "sch_text.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
 
 
 static wxArrayString s_CmpNameList;

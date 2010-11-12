@@ -9,7 +9,6 @@
 #include "common.h"
 #include "class_drawpanel.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"

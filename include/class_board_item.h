@@ -280,7 +280,8 @@ public:
       */
      NETCLASS* GetNetClass() const;
 
-    /** function GetNetClassName
+    /**
+     * Function GetNetClassName
      * @return the Net Class name of this item
      */
     wxString GetNetClassName( ) const;

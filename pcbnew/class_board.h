@@ -379,7 +379,8 @@ public:
     void SetVisibleElementColor( int aPCB_VISIBLE, int aColor );
 
 
-    /** Function GetBoardDesignSettings
+    /**
+     * Function GetBoardDesignSettings
      * @return the current BOARD_DESIGN_SETTINGS in use
      */
     BOARD_DESIGN_SETTINGS* GetBoardDesignSettings() const
@@ -388,7 +389,8 @@ public:
     }
 
 
-    /** Function SetBoardDesignSettings
+    /**
+     * Function SetBoardDesignSettings
      * @param aDesignSettings = the new BOARD_DESIGN_SETTINGS to use
      */
     void SetBoardDesignSettings( BOARD_DESIGN_SETTINGS* aDesignSettings)
@@ -396,7 +398,8 @@ public:
         m_boardDesignSettings = aDesignSettings;
     }
 
-    /** Function SetBoardSettings
+    /**
+     * Function SetBoardSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
     COLORS_DESIGN_SETTINGS* GetColorsSettings() const
@@ -404,7 +407,8 @@ public:
         return m_colorsSettings;
     }
 
-    /** Function SetColorsSettings
+    /**
+     * Function SetColorsSettings
      * @param aColorsSettings = the new COLORS_DESIGN_SETTINGS to use
      */
     void SetColorsSettings(COLORS_DESIGN_SETTINGS* aColorsSettings)
@@ -480,12 +484,14 @@ public:
     }
 
 
-    /** Function GetNodesCount
+    /**
+     * Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
     unsigned GetNodesCount();
 
-    /** Function GetPadsCount
+    /**
+     * Function GetPadsCount
      * @return the number of pads in board
      */
     unsigned     GetPadsCount()
@@ -572,7 +578,8 @@ public:
     int           ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount );
 
     /**************************************/
-    /** function relative to NetClasses: **/
+    /**
+    * Function relative to NetClasses: **/
     /**************************************/
 
     /**
@@ -596,12 +603,14 @@ public:
      */
     bool SetCurrentNetClass( const wxString& aNetClassName );
 
-    /** function GetBiggestClearanceValue
+    /**
+     * Function GetBiggestClearanceValue
      * @return the biggest clearance value found in NetClasses list
      */
     int  GetBiggestClearanceValue();
 
-    /** function GetCurrentTrackWidth
+    /**
+     * Function GetCurrentTrackWidth
      * @return the current track width, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
@@ -612,7 +621,8 @@ public:
     }
 
 
-    /** function GetCurrentViaSize
+    /**
+     * Function GetCurrentViaSize
      * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
@@ -623,7 +633,8 @@ public:
     }
 
 
-    /** function GetCurrentViaDrill
+    /**
+     * Function GetCurrentViaDrill
      * @return the current via size, according to the selected options
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
@@ -635,13 +646,15 @@ public:
     }
 
 
-    /** function GetCurrentMicroViaSize
+    /**
+     * Function GetCurrentMicroViaSize
      * @return the current micro via size,
      * that is the current netclass value
      */
     int  GetCurrentMicroViaSize();
 
-    /** function GetCurrentMicroViaDrill
+    /**
+     * Function GetCurrentMicroViaDrill
      * @return the current micro via drill,
      * that is the current netclass value
      */
@@ -775,7 +788,8 @@ public:
 
     /* Functions used in test, merge and cut outlines */
 
-    /** Function AddArea
+    /**
+     * Function AddArea
      * Add an empty copper area to board areas list
      * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas  pickers (useful in undo commands)
      *                      can be NULL
@@ -874,7 +888,8 @@ public:
                               bool               bMessageBox,
                               bool               bUseUtility );
 
-    /** Function RemoveArea
+    /**
+     * Function RemoveArea
      * remove copper area from net, and put it in a deleted list (if exists)
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands
      *                      can be NULL

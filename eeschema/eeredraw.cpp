@@ -8,13 +8,19 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "appl_wxstruct.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
+#include "sch_component.h"
+#include "sch_items.h"
 
 #include "build_version.h"
+
 
 static EDA_BaseStruct* HighLightStruct = NULL;
 

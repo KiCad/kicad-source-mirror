@@ -124,7 +124,7 @@ public:
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */
     double    m_LayerZcoord[32];
-	double	  m_ActZpos;
+    double	  m_ActZpos;
 public: Info_3D_Visu();
     ~Info_3D_Visu();
 };
@@ -170,13 +170,15 @@ public:
     void   InitGL();
     void   SetLights();
     void   Draw3D_Track( TRACK* track );
-    /** Function Draw3D_SolidPolygonsInZones
+    /**
+     * Function Draw3D_SolidPolygonsInZones
      * draw all solid polygons used as filles areas in a zone
      * @param aZone_c = the zone to draw
     */
-	void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone_c );
+    void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone_c );
 
-    /** Function Draw3D_Polygon
+    /**
+     * Function Draw3D_Polygon
      * draw one solid polygon
      * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
      * @param aZpos = the z position in 3D units
@@ -185,12 +187,12 @@ public:
     void   Draw3D_Via( SEGVIA* via );
     void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
     void   Draw3D_DrawText( TEXTE_PCB* text );
-    
+
     /// Toggles ortographic projection on and off
     void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
     /// Returns the orthographic projection flag
     bool ModeIsOrtho() { return m_ortho ;};
-  
+
 
     //int Get3DLayerEnable(int act_layer);
 
@@ -230,7 +232,8 @@ public:
     void SetToolbars();
     void GetSettings();
     void SaveSettings();
-    /** function ReloadRequest
+    /**
+     * Function ReloadRequest
      * must be called when reloading data from Pcbnew is needed
      * mainly after edition of the board or footprint beeing displayed.
      * mainly for the module editor.

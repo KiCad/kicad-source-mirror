@@ -76,13 +76,15 @@ public:
     BLOCK_SELECTOR();
     ~BLOCK_SELECTOR();
 
-    /** function InitData
+    /**
+     * Function InitData
      *  Init the initial values of a BLOCK_SELECTOR, before starting a block
      *command
      */
     void InitData( WinEDA_DrawPanel* Panel, const wxPoint& startpos );
 
-    /** Function SetMessageBlock
+    /**
+     * Function SetMessageBlock
      * Displays the type of block command in the status bar of the window
      */
     void SetMessageBlock( WinEDA_DrawFrame* frame );
@@ -92,13 +94,15 @@ public:
                int aDrawMode,
                int aColor );
 
-    /** Function PushItem
+    /**
+     * Function PushItem
      * Add aItem to the list of items
      * @param aItem = an ITEM_PICKER to add to the list
      */
     void PushItem( ITEM_PICKER& aItem );
 
-    /** Function ClearListAndDeleteItems
+    /**
+     * Function ClearListAndDeleteItems
      * delete only the list of EDA_BaseStruct * pointers, AND the data printed
      * by m_Item
      */
@@ -109,6 +113,16 @@ public:
     unsigned        GetCount()
     {
         return m_ItemsSelection.GetCount();
+    }
+
+    /**
+     * Function SetLastCursorPosition
+     * sets m_BlockLastCursorPosition
+     * @param aPosition = new position
+     **/
+    void SetLastCursorPosition( wxPoint aPosition )
+    {
+        m_BlockLastCursorPosition = aPosition;
     }
 };
 

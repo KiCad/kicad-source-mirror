@@ -3,6 +3,9 @@
 #define __dialog_edit_component_in_schematic__
 
 
+#include "sch_field.h"
+#include "template_fieldnames.h"
+
 #include "dialog_edit_component_in_schematic_fbp.h"
 
 /**
@@ -85,7 +88,8 @@ public:
     void InitBuffers( SCH_COMPONENT* aComponent );
 
 private:
-    /** Function updateDisplay
+    /**
+     * Function updateDisplay
      * update the listbox showing fields, according to the fields texts
      * must be called after a text change in fields, if this change is not an edition
      */

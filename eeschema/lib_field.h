@@ -5,7 +5,7 @@
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
 
-#include "program.h"
+//#include "general.h"
 #include "lib_draw_item.h"
 
 
@@ -68,7 +68,8 @@ public:
      */
     wxString GetName();
 
-    /** Function GetPenSize virtual pure
+    /**
+     * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
     int GetPenSize( );

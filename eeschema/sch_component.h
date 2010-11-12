@@ -6,12 +6,14 @@
 #define COMPONENT_CLASS_H
 
 
-#include "class_sch_screen.h"
-#include "class_sch_cmp_field.h"
+#include "sch_field.h"
 #include "transform.h"
+#include "general.h"
 
 
 class SCH_SHEET_PATH;
+class LIB_PIN;
+class LIB_COMPONENT;
 
 
 /**
@@ -132,6 +134,14 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
+    /**
+     * Load schematic component from \a aLine in a .sch file.
+     *
+     * @param aLine - Essentially this is file to read the component from.
+     * @param aErrorMsg - Description of the error if an error occurs while loading the component.
+     * @return True if the component loaded successfully.
+     */
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
      * Function Load
@@ -157,7 +167,8 @@ public:
 
     void       SetOrientation( int aOrientation );
 
-    /** function GetOrientation()
+    /**
+     * Function GetOrientation()
      * Used to display component orientation (in dialog editor or info)
      * @return the orientation and mirror
      * Note: Because there are different ways to have a given orientation/mirror,
@@ -182,7 +193,8 @@ public:
      */
     void       ClearAnnotation( SCH_SHEET_PATH* aSheet );
 
-    /** function SetTimeStamp
+    /**
+     * Function SetTimeStamp
      * Change the old time stamp to the new time stamp.
      * the time stamp is also modified in paths
      * @param aNewTimeStamp = new time stamp
@@ -314,7 +326,8 @@ public:
     // Set the unit selection, for the given sheet path.
     void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      * for a component, has no meaning, but it is necessary to satisfy the
      * SCH_ITEM class requirements.

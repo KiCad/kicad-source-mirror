@@ -4,14 +4,19 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "program.h"
 #include "trigo.h"
 #include "macros.h"
+#include "class_sch_screen.h"
 
 #include "general.h"
-#include "class_marker_sch.h"
 #include "protos.h"
 #include "class_library.h"
+#include "sch_marker.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_sheet.h"
+#include "lib_pin.h"
+#include "template_fieldnames.h"
 
 
 static bool IsItemInBox(EDA_Rect& aBox, SCH_ITEM* DrawStruct );

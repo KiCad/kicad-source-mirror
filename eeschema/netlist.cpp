@@ -4,15 +4,22 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
-#include "program.h"
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
+#include "sch_items.h"
+#include "sch_component.h"
+#include "sch_text.h"
+#include "sch_sheet.h"
 
 #include "algorithm"
+
+#include <boost/foreach.hpp>
 
 
 // Buffer to build the list of items used in netlist and erc calculations
