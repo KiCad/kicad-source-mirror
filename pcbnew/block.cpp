@@ -380,8 +380,10 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
             return 0;
         }
+
         DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
         Block_SelectItems();
+
         // Exit if no items found
         if( !GetScreen()->m_BlockLocate.GetCount() ) {
             DrawPanel->ManageCurseur = NULL;
@@ -393,6 +395,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             DisplayToolMsg( wxEmptyString );
             return 0;
         }
+
         // Move cursor to the center of the smallest rectangle
         // containing the centers of all selected items.
         // Also set m_BlockLocate to the size of the rectangle.
@@ -401,6 +404,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         int minX, minY, maxX, maxY;
         int tempX, tempY;
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( 0 );
+
         minX = item->GetPosition().x;
         minY = item->GetPosition().y;
         maxX = minX;
@@ -419,6 +423,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             if( tempY < minY )
                 minY = tempY;
         }
+
         blockCenter.x = ( minX + maxX ) / 2;
         blockCenter.y = ( minY + maxY ) / 2;
         DrawPanel->CursorOff( DC );
@@ -431,6 +436,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
     }
 
     if( DrawPanel->ManageCurseur )
+    {
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
         case BLOCK_IDLE:
@@ -469,7 +475,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             if( GetScreen()->m_BlockLocate.GetCount() )
             {
-// TODO (if useful)         Save_Block( );
+                // @todo (if useful)         Save_Block( );
             }
             break;
 
@@ -487,6 +493,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         default:
             break;
         }
+    }
 
     if( endcommande == TRUE )
     {
@@ -641,7 +648,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
             }
         }
     }
- }
+}
 
 static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              wxPoint aOffset )
@@ -649,6 +656,7 @@ static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     PICKED_ITEMS_LIST* itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
     g_Offset_Module = -aOffset;
+
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
@@ -840,6 +848,7 @@ void WinEDA_PcbFrame::Block_Rotate()
         wxASSERT(item);
         itemsList->SetPickedItemStatus( UR_ROTATED, ii );
         item->Rotate(centre, rotAngle);
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -881,7 +890,7 @@ void WinEDA_PcbFrame::Block_Rotate()
 
 /**
  * Function Block_Flip
- * Flip items within the selected block.
+ * flips items within the selected block.
  * The flip center is the center of the block
  * @param none
  */
@@ -906,6 +915,7 @@ void WinEDA_PcbFrame::Block_Flip()
         wxASSERT(item);
         itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
         item->Flip(center);
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -1008,7 +1018,7 @@ void WinEDA_PcbFrame::Block_Move()
 
 /**
  * Function Block_Duplicate
- * Duplicate all items within the selected block.
+ * duplicates all items within the selected block.
  * New location is determined by the current offset from the selected block's
  * original location.
  * @param none
@@ -1034,85 +1044,85 @@ void WinEDA_PcbFrame::Block_Duplicate()
         switch( item->Type() )
         {
         case TYPE_MODULE:
-        {
-            MODULE* module = (MODULE*) item;
-            MODULE* new_module;
-            m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags     = 0;
-            newitem = new_module = new MODULE( m_Pcb );
-            new_module->Copy( module );
-            new_module->m_TimeStamp = GetTimeStamp();
-            m_Pcb->m_Modules.PushFront( new_module );
-        }
-        break;
+            {
+                MODULE* module = (MODULE*) item;
+                MODULE* new_module;
+                m_Pcb->m_Status_Pcb = 0;
+                module->m_Flags     = 0;
+                newitem = new_module = new MODULE( m_Pcb );
+                new_module->Copy( module );
+                new_module->m_TimeStamp = GetTimeStamp();
+                m_Pcb->m_Modules.PushFront( new_module );
+            }
+            break;
 
         case TYPE_TRACK:
         case TYPE_VIA:
-        {
-            TRACK* track = (TRACK*) item;
-            m_Pcb->m_Status_Pcb = 0;
-            TRACK* new_track = track->Copy();
-            newitem = new_track;
-            m_Pcb->m_Track.PushFront( new_track );
-        }
-        break;
+            {
+                TRACK* track = (TRACK*) item;
+                m_Pcb->m_Status_Pcb = 0;
+                TRACK* new_track = track->Copy();
+                newitem = new_track;
+                m_Pcb->m_Track.PushFront( new_track );
+            }
+            break;
 
         case TYPE_ZONE:                  // SEG_ZONE items are now deprecated
             break;
 
         case TYPE_ZONE_CONTAINER:
-        {
-            ZONE_CONTAINER* new_zone =
-                new ZONE_CONTAINER( (BOARD*) item->GetParent() );
-            new_zone->Copy( (ZONE_CONTAINER*) item );
-            new_zone->m_TimeStamp = GetTimeStamp();
-            newitem = new_zone;
-            m_Pcb->Add( new_zone );
-        }
-        break;
+            {
+                ZONE_CONTAINER* new_zone =
+                    new ZONE_CONTAINER( (BOARD*) item->GetParent() );
+                new_zone->Copy( (ZONE_CONTAINER*) item );
+                new_zone->m_TimeStamp = GetTimeStamp();
+                newitem = new_zone;
+                m_Pcb->Add( new_zone );
+            }
+            break;
 
         case TYPE_DRAWSEGMENT:
-        {
-            DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
-            new_drawsegment->Copy( (DRAWSEGMENT*) item );
-            m_Pcb->Add( new_drawsegment );
-            newitem = new_drawsegment;
-        }
-        break;
+            {
+                DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
+                new_drawsegment->Copy( (DRAWSEGMENT*) item );
+                m_Pcb->Add( new_drawsegment );
+                newitem = new_drawsegment;
+            }
+            break;
 
         case TYPE_TEXTE:
-        {
-            TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
-            new_pcbtext->Copy( (TEXTE_PCB*) item );
-            m_Pcb->Add( new_pcbtext );
-            newitem = new_pcbtext;
-        }
-        break;
+            {
+                TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
+                new_pcbtext->Copy( (TEXTE_PCB*) item );
+                m_Pcb->Add( new_pcbtext );
+                newitem = new_pcbtext;
+            }
+            break;
 
         case TYPE_MIRE:
-        {
-            MIREPCB* new_mire = new MIREPCB( m_Pcb );
-            new_mire->Copy( (MIREPCB*) item );
-            m_Pcb->Add( new_mire );
-            newitem = new_mire;
-        }
-        break;
+            {
+                MIREPCB* new_mire = new MIREPCB( m_Pcb );
+                new_mire->Copy( (MIREPCB*) item );
+                m_Pcb->Add( new_mire );
+                newitem = new_mire;
+            }
+            break;
 
         case TYPE_DIMENSION:
-        {
-            DIMENSION* new_cotation = new DIMENSION( m_Pcb );
-            new_cotation->Copy( (DIMENSION*) item );
-            m_Pcb->Add( new_cotation );
-            newitem = new_cotation;
-        }
-        break;
+            {
+                DIMENSION* new_cotation = new DIMENSION( m_Pcb );
+                new_cotation->Copy( (DIMENSION*) item );
+                m_Pcb->Add( new_cotation );
+                newitem = new_cotation;
+            }
+            break;
 
         default:
             wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Duplicate( ) error: unexpected type" ) );
             break;
         }
 
-        if ( newitem )
+        if( newitem )
         {
             newitem->Move( MoveVector );
             picker.m_PickedItem = newitem;

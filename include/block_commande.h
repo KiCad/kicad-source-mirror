@@ -78,8 +78,8 @@ public:
 
     /**
      * Function InitData
-     *  Init the initial values of a BLOCK_SELECTOR, before starting a block
-     *command
+     * sets the initial values of a BLOCK_SELECTOR, before starting a block
+     * command
      */
     void InitData( WinEDA_DrawPanel* Panel, const wxPoint& startpos );
 
@@ -96,14 +96,14 @@ public:
 
     /**
      * Function PushItem
-     * Add aItem to the list of items
+     * adds aItem to the list of items
      * @param aItem = an ITEM_PICKER to add to the list
      */
     void PushItem( ITEM_PICKER& aItem );
 
     /**
      * Function ClearListAndDeleteItems
-     * delete only the list of EDA_BaseStruct * pointers, AND the data printed
+     * deletes only the list of EDA_BaseStruct * pointers, AND the data printed
      * by m_Item
      */
     void ClearListAndDeleteItems();
