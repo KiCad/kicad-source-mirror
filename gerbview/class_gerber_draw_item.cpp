@@ -170,7 +170,8 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
 }
 
 
-/** function SetLayerParameters
+/**
+ * Function SetLayerParameters
  * Initialize draw parameters from Image and Layer parameters
  * found in the gerber file:
  *   m_UnitsMetric,
@@ -299,7 +300,8 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
 }
 
 
-/** function Save.
+/**
+ * Function Save.
  * currently: no nothing, but must be defined to meet requirements
  * of the basic class
  */
@@ -458,7 +460,8 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     }
 }
 
-/** function ConvertSegmentToPolygon
+/**
+ * Function ConvertSegmentToPolygon
  * convert a line to an equivalent polygon.
  * Useful when a line is plotted using a rectangular pen.
  * In this case, the usual segment plot cannot be used
@@ -521,7 +524,8 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 }
 
 
-/** function DrawGbrPoly
+/**
+ * Function DrawGbrPoly
  * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
  * Draw filled polygons
  */
@@ -544,7 +548,8 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
 }
 
 
-/** Function DisplayInfo
+/**
+ * Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about this GERBER item

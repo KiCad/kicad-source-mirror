@@ -85,7 +85,8 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to this object (usually the half
@@ -187,7 +188,8 @@ void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_CIRCLE::GetPenSize()

@@ -32,7 +32,8 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
                              int                   aRefx,
                              int                   aRefy)
 
-/** Function TestPointInsidePolygon
+/**
+ * Function TestPointInsidePolygon
  * test if a point is inside or outside a polygon.
  * the polygon must have only lines (not arcs) for outlines.
  * @param aPolysList: the list of polygons

@@ -37,7 +37,8 @@ CPolyLine::~CPolyLine()
 }
 
 
-/** Function NormalizeWithKbool
+/**
+ * Function NormalizeWithKbool
  * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
  * is converted to non self-crossing polygon by adding extra points at the crossing locations
  * and reordering corners
@@ -201,7 +202,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
 }
 
 
-/** Function AddPolygonsToBoolEng
+/**
+ * Function AddPolygonsToBoolEng
  * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
  * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
  * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
@@ -248,7 +250,8 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine*        aBooleng,
 }
 
 
-/** Function MakeKboolPoly
+/**
+ * Function MakeKboolPoly
  * fill a kbool engine with a closed polyline contour
  * approximates arcs with multiple straight-line segments
  * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
@@ -515,7 +518,8 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
 }
 
 
-/** Function ArmBoolEng
+/**
+ * Function ArmBoolEng
  * Initialise parameters used in kbool
  * @param aBooleng = pointer to the Bool_Engine to initialise
  * @param aConvertHoles = mode for holes when a boolean operation is made
@@ -566,11 +570,11 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 
 
    /*
-		Grid makes sure that the integer data used within the algorithm has room for extra intersections
-		smaller than the smallest number within the input data.
-		The input data scaled up with DGrid is related to the accuracy the user has in his input data.
+        Grid makes sure that the integer data used within the algorithm has room for extra intersections
+        smaller than the smallest number within the input data.
+        The input data scaled up with DGrid is related to the accuracy the user has in his input data.
         Another scaling with Grid is applied on top of it to create space in the integer number for
-		even smaller numbers.
+        even smaller numbers.
    */
     int GRID = (int) 10000/DGRID;       // initial value = 10000 in kbool example
                                         // But we use 10000/DGRID because the scalling is made
@@ -918,7 +922,8 @@ void CPolyLine::RemoveAllContours( void )
 }
 
 
-/** Function InsertCorner
+/**
+ * Function InsertCorner
  * insert a new corner between two existing corners
  * @param ic = index for the insertion point: the corner is inserted AFTER ic
  * @param x, y = coordinates corner to insert

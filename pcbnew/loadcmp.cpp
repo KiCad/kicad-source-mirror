@@ -42,7 +42,8 @@ static void ReadDocLib( const wxString& ModLibName );
 
 static ModList* MList;
 
-/** function Load_Module_From_BOARD
+/**
+ * Function Load_Module_From_BOARD
  * load in Modedit a footfrint from the main board
  * @param Module = the module to load. If NULL, a module reference will we asked to user
  * @return true if a module isloaded, false otherwise.
@@ -195,7 +196,8 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 }
 
 
-/** function Get_Librairie_Module
+/**
+ * Function Get_Librairie_Module
  *
  *  Read active libraries or one library to find and load a given module
  *  If found the module is linked to the tail of linked list of modules
@@ -337,7 +339,8 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
 }
 
 
-/** Function Select_1_Module_From_List
+/**
+ * Function Select_1_Module_From_List
  *  Display a list of modules found in active libraries or a given library
  *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
  *                                void, list all modules)
@@ -600,7 +603,8 @@ static void ReadDocLib( const wxString& ModLibName )
 }
 
 
-/** Function Select_1_Module_From_BOARD
+/**
+ * Function Select_1_Module_From_BOARD
  * Display the list of modules currently existing on the BOARD
  * @return a pointer to a module if this module is selected or NULL otherwise
  * @param aPcb = the board from modules can be loaded

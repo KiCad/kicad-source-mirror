@@ -68,7 +68,8 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-/** Function GetAssociatedDocument
+/**
+ * Function GetAssociatedDocument
  * open a document (file) with the suitable browser
  * @param aFrame = main frame
  * if DocName is starting by http: or ftp: or www. the default internet

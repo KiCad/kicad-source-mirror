@@ -218,7 +218,8 @@ wxIcon dialog_orient_footprints::GetIconResource( const wxString& name )
 /***********************************************/
 void WinEDA_PcbFrame::OnOrientFootprints( void )
 /***********************************************/
-/** function OnOrientFootprints
+/**
+ * Function OnOrientFootprints
  * install the dialog box for the comman Orient Footprints
  */
 {
@@ -232,7 +233,8 @@ void WinEDA_PcbFrame::OnOrientFootprints( void )
 void WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
                                        int Orient, bool include_fixe )
 /*******************************************************************/
-/** function ReOrientModules
+/**
+ * Function ReOrientModules
  * Set the orientation of footprints
  * @param ModuleMask = mask (wildcard allowed) selection
  * @param Orient = new orientation

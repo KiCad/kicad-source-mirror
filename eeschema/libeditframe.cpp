@@ -952,7 +952,8 @@ void WinEDA_LibeditFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-/** Function TempCopyComponent
+/**
+ * Function TempCopyComponent
  * create a temporary copy of the current edited component
  * Used to prepare an Undo ant/or abort command before editing the component
  */
@@ -965,7 +966,8 @@ void WinEDA_LibeditFrame::TempCopyComponent()
         m_tempCopyComponent = new LIB_COMPONENT( *m_component );
 }
 
-/** Function RestoreComponent
+/**
+ * Function RestoreComponent
  * Restore the current edited component from its temporary copy.
  * Used to abort a command
  */
@@ -979,7 +981,8 @@ void WinEDA_LibeditFrame::RestoreComponent()
     m_tempCopyComponent = NULL;
 }
 
-/** Function ClearTempCopyComponent
+/**
+ * Function ClearTempCopyComponent
  * delete temporary copy of the current component and clear pointer
  */
 void WinEDA_LibeditFrame::ClearTempCopyComponent()

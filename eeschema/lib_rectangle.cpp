@@ -162,7 +162,8 @@ void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFil
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_RECTANGLE::GetPenSize()
@@ -257,7 +258,8 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aRefPoint = a wxPoint to test
  * @param aThreshold = max distance to this object (usually the half thickness

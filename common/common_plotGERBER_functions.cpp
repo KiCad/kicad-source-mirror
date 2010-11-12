@@ -15,7 +15,8 @@
 #include "build_version.h"
 
 
-/** function set_viewport
+/**
+ * Function set_viewport
  * Set the plot offset for the current plotting
  * @param aOffset = plot offset
  * @param aScale = coordinate scale (scale coefficient for coordinates)
@@ -34,7 +35,8 @@ void GERBER_PLOTTER::set_viewport( wxPoint offset,
 }
 
 
-/** Function start_plot
+/**
+ * Function start_plot
  * Write GERBER header to file
  * initialize global variable g_Plot_PlotOutputFile
  * @param aFile: an opened file to write to
@@ -259,7 +261,8 @@ void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 }
 
 
-/** Function circle
+/**
+ * Function circle
  * writes a non filled circle to output file
  * Plot one circle as segments (6 to 16 depending on its radius
  * @param aCentre = center coordinates
@@ -290,7 +293,8 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill,
 }
 
 
-/** Function PlotFilledPolygon_GERBER
+/**
+ * Function PlotFilledPolygon_GERBER
  * writes a filled polyline to output file
  * @param aCornersCount = number of corners
  * @param aCoord = buffer of corners coordinates

@@ -51,7 +51,8 @@ BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-/** Function InstallConfigFrame
+/**
+ * Function InstallConfigFrame
  * install the dialog box to configure some gerbview options
  * mainly the default file extensions
  */

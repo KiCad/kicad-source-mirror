@@ -1519,7 +1519,8 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
 }
 
 
-/** Function GetXYSheetReferences
+/**
+ * Function GetXYSheetReferences
  * Return the X,Y sheet references where the point position is located
  * @param aScreen = screen to use
  * @param aPosition = position to identify by YX ref

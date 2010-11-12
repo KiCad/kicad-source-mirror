@@ -197,7 +197,8 @@ static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
 }
 
 
-/** Function DeleteAnnotation
+/**
+ * Function DeleteAnnotation
  * Remove current component annotations
  * @param aCurrentSheetOnly : if false: remove all annotations, else remove
  *                             annotation relative to the current sheet only
@@ -347,7 +348,8 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 }
 
 
-/** function AddComponentsInSheetToList()
+/**
+ * Function AddComponentsInSheetToList()
  * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
  * in sheet
  * @param aComponentsList = a std::vector list to fill
@@ -984,7 +986,8 @@ static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
 }
 
 
-/** Function ReplaceDuplicatedTimeStamps
+/**
+ * Function ReplaceDuplicatedTimeStamps
  * Search for duplicate time stamps in the whole hierarchy, and replace
  * duplicate by new time stamps
  */

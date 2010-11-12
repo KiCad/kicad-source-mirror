@@ -71,7 +71,8 @@ double s_Correction;     /* mult coeff used to enlarge rounded and oval pads (an
                           * create a smaller gap than a true circle
                           */
 
-/** function AddClearanceAreasPolygonsToPolysList
+/**
+ * Function AddClearanceAreasPolygonsToPolysList
  * Supports a min thickness area constraint.
  * Add non copper areas polygons (pads and tracks with clearence)
  * to the filled copper area found

@@ -491,7 +491,8 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
 
 
-/** Function OnEditItemRequest
+/**
+ * Function OnEditItemRequest
  * Install the corresponding dialog editor for the given item
  * @param DC = the current device context
  * @param aItem = a pointer to the BOARD_ITEM to edit

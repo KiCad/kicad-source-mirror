@@ -58,7 +58,8 @@ void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint 
 }
 
 
-/** Function MoveItemsInList
+/**
+ * Function MoveItemsInList
  *  Move a list of items to a given move vector
  * @param aItemsList = list of picked items
  * @param aMoveVector = the move vector value
@@ -73,7 +74,8 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
 }
 
 
-/** function DeleteItemsInList
+/**
+ * Function DeleteItemsInList
  * delete schematic items in aItemsList
  * deleted items are put in undo list
  */
@@ -206,7 +208,8 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/** function DuplicateStruct
+/**
+ * Function DuplicateStruct
  *  Routine to create a new copy of given struct.
  *  The new object is not put in draw list (not linked)
  * @param aDrawStruct = the SCH_ITEM to duplicate

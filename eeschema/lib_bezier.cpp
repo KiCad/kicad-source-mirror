@@ -232,7 +232,8 @@ void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_BEZIER::GetPenSize()
@@ -311,7 +312,8 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
     return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return if the point aPosRef is near a segment
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to a segment
@@ -334,7 +336,8 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-/** Function GetBoundingBox
+/**
+ * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
 EDA_Rect LIB_BEZIER::GetBoundingBox()

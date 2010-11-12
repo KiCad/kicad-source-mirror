@@ -141,7 +141,8 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
 }
 
 
-/** function GetBiggestClearanceValue
+/**
+ * Function GetBiggestClearanceValue
  * @return the biggest clearance value found in NetClasses list
  */
 int BOARD::GetBiggestClearanceValue()
@@ -161,7 +162,8 @@ int BOARD::GetBiggestClearanceValue()
 }
 
 
-/** function GetCurrentMicroViaSize
+/**
+ * Function GetCurrentMicroViaSize
  * @return the current micro via size,
  * that is the current netclass value
  */
@@ -173,7 +175,8 @@ int BOARD::GetCurrentMicroViaSize()
 }
 
 
-/** function GetCurrentMicroViaDrill
+/**
+ * Function GetCurrentMicroViaDrill
  * @return the current micro via drill,
  * that is the current netclass value
  */
@@ -738,7 +741,8 @@ unsigned BOARD::GetNodesCount()
 }
 
 
-/** Function ComputeBoundaryBox()
+/**
+ * Function ComputeBoundaryBox()
  * Calculate the bounding box of the board
  *  This box contains pcb edges, pads , vias and tracks
  *  Update m_PcbBox member

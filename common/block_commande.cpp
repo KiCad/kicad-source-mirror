@@ -115,7 +115,8 @@ void BLOCK_SELECTOR::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/** function InitData
+/**
+ * Function InitData
  *  Init the initial values of a BLOCK_SELECTOR, before starting a block command
  */
 void BLOCK_SELECTOR::InitData( WinEDA_DrawPanel* aPanel,
@@ -130,7 +131,8 @@ void BLOCK_SELECTOR::InitData( WinEDA_DrawPanel* aPanel,
 }
 
 
-/** Function ClearItemsList
+/**
+ * Function ClearItemsList
  * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data
  * itself
  */
@@ -139,7 +141,8 @@ void BLOCK_SELECTOR::ClearItemsList()
     m_ItemsSelection.ClearItemsList();
 }
 
-/** Function ClearListAndDeleteItems
+/**
+ * Function ClearListAndDeleteItems
  * delete only the list of EDA_BaseStruct * pointers, AND the data pinted
  * by m_Item
  */
@@ -148,7 +151,8 @@ void BLOCK_SELECTOR::ClearListAndDeleteItems()
      m_ItemsSelection.ClearListAndDeleteItems();
 }
 
-/** Function PushItem
+/**
+ * Function PushItem
  * Add aItem to the list of items
  * @param aItem = an ITEM_PICKER to add to the list
  */

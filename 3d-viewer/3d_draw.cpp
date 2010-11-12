@@ -384,7 +384,8 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
 }
 
 
-/** Function Draw3D_SolidPolygonsInZones
+/**
+ * Function Draw3D_SolidPolygonsInZones
  * draw all solid polygons used as filles areas in a zone
  * @param aZone_c = the zone to draw
  */
@@ -1252,7 +1253,8 @@ static void Draw3D_CircleSegment( double startx, double starty, double endx,
 }
 
 
-/** Function Pcb3D_GLCanvas::Draw3D_Polygon
+/**
+ * Function Pcb3D_GLCanvas::Draw3D_Polygon
  * draw one solid polygon
  * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
  * @param aZpos = the z position in 3D units

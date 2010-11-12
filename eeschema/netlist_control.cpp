@@ -38,7 +38,8 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 wxString ReturnUserNetlistTypeName( bool first_item )
 /****************************************************/
 
-/** Function ReturnUserNetlistTypeName
+/**
+ * Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
  * @param first = true: return first name of the list, false = return next
  * @return a wxString : name of the type netlist or empty string
@@ -442,7 +443,8 @@ void WinEDA_NetlistFrame::NetlistUpdateOpt()
 void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 /**********************************************************/
 
-/** Function GenNetlist
+/**
+ * Function GenNetlist
  * Create the netlist file:
  * calculate the filename with the suitable extensions
  * and run the netlist creator
@@ -509,7 +511,8 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 }
 
 
-/** Function CreateNetlist
+/**
+ * Function CreateNetlist
  * Create a netlist file:
  *  build netlist info
  *  test issues
@@ -605,7 +608,8 @@ void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
 void WinEDA_NetlistFrame::WriteCurrentNetlistSetup( void )
 /*********************************************************/
 
-/** Function WriteCurrentNetlistSetup
+/**
+ * Function WriteCurrentNetlistSetup
  * Write the current netlist options setup in the configuration
  */
 {
@@ -648,7 +652,8 @@ void WinEDA_NetlistFrame::WriteCurrentNetlistSetup( void )
 void WinEDA_NetlistFrame::DeletePluginPanel( wxCommandEvent& event )
 /******************************************************************/
 
-/** Function DeletePluginPanel
+/**
+ * Function DeletePluginPanel
  * Remove a panel relative to a netlist plugin
  */
 {
@@ -671,7 +676,8 @@ void WinEDA_NetlistFrame::DeletePluginPanel( wxCommandEvent& event )
 void WinEDA_NetlistFrame::ValidatePluginPanel( wxCommandEvent& event )
 /******************************************************************/
 
-/** Function ValidatePluginPanel
+/**
+ * Function ValidatePluginPanel
  * Validate the panel info relative to a new netlist plugin
  */
 {

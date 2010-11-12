@@ -98,7 +98,8 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_SHEET_PIN::GetPenSize()
@@ -329,7 +330,8 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** function Matches
+/**
+ * Function Matches
  * Compare hierarchical pin name against search string.
  * @param aSearchData - Criteria to search against.
  * @param aAuxData - a pointer on auxiliary data, not used here

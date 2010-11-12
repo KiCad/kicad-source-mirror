@@ -116,7 +116,8 @@ static struct hotkey_name_descr s_Hotkey_Name_List[] =
 #define MODIFIER_SHIFT  wxT( "Shift+" )
 
 
-/** function ReturnKeyNameFromKeyCode
+/**
+ * Function ReturnKeyNameFromKeyCode
  * return the key name from the key code
  * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
@@ -169,7 +170,8 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 }
 
 
-/** function AddHotkeyName
+/**
+ * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
@@ -198,7 +200,8 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
 }
 
 
-/** function AddHotkeyName
+/**
+ * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
@@ -237,7 +240,8 @@ wxString AddHotkeyName( const wxString&                        aText,
 }
 
 
-/** function ReturnKeyNameFromCommandId
+/**
+ * Function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
  * @param aCommandId = Command Id value
@@ -261,7 +265,8 @@ wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId )
 }
 
 
-/** function ReturnKeyCodeFromKeyName
+/**
+ * Function ReturnKeyCodeFromKeyName
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key
  * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
@@ -320,7 +325,8 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/** function DisplayHotkeyList
+/**
+ * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
@@ -351,7 +357,8 @@ void DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
 }
 
 
-/** function GetDescriptorFromHotkey
+/**
+ * Function GetDescriptorFromHotkey
  * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
  * @param aKey = key code (ascii value, or wxWidgets value for function keys
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
@@ -370,7 +377,8 @@ Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
 }
 
 
-/** Function WriteHotkeyConfig
+/**
+ * Function WriteHotkeyConfig
  * Store the current hotkey list
  * It is stored using the standard wxConfig mechanism or a file.
  *
@@ -437,7 +445,8 @@ int WinEDA_BasicFrame::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor*
 }
 
 
-/** Function ReadHotkeyConfigFile
+/**
+ * Function ReadHotkeyConfigFile
  * Read an old configuration file (<file>.key) and fill the current hotkey list
  * with hotkeys
  * @param aFilename = file name to read.
@@ -488,7 +497,8 @@ void ReadHotkeyConfig( const wxString&                        Appname,
 }
 
 
-/** Function ReadHotkeyConfig
+/**
+ * Function ReadHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys
  * @param aDescList = current hotkey list descr. to initialise.
  */
@@ -499,7 +509,8 @@ int WinEDA_BasicFrame::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* 
 }
 
 
-/** Function ParseHotkeyConfig
+/**
+ * Function ParseHotkeyConfig
  * the input format is: shortcut  "key"  "function"
  * lines starting by # are ignored (comments)
  * lines like [xxx] are tags (example: [common] or [libedit] which identify
@@ -570,7 +581,8 @@ void ParseHotkeyConfig(
 }
 
 
-/** Function ImportHotkeyConfigFromFile
+/**
+ * Function ImportHotkeyConfigFromFile
  * Prompt the user for an old hotkey file to read, and read it.
  * @param aDescList = current hotkey list descr. to initialise.
  */
@@ -598,7 +610,8 @@ void WinEDA_BasicFrame::ImportHotkeyConfigFromFile(
 }
 
 
-/** Function ExportHotkeyConfigToFile
+/**
+ * Function ExportHotkeyConfigToFile
  * Prompt the user for an old hotkey file to read, and read it.
  * @param aDescList = current hotkey list descr. to initialise.
  */

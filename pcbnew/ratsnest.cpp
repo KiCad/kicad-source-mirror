@@ -105,7 +105,8 @@ static bool DisplayRastnestInProgress;          // Enable the display of the
  * ( see tst_rats_block_to_block() )
  */
 
-/** Function Compile_Ratsnest
+/**
+ * Function Compile_Ratsnest
  *  Create the entire board ratsnest.
  *  Must be called after a board change (changes for
  *  pads, footprints or a read netlist ).
@@ -391,7 +392,8 @@ static int gen_rats_pad_to_pad( vector<RATSNEST_ITEM>& aRatsnestBuffer,
 }
 
 
-/**  Function to compute the full ratsnest (using the LEE algorithm )
+/**
+ * Function to compute the full ratsnest (using the LEE algorithm )
  *  In the functions tracks are not considered
  *  This is only the "basic" ratsnest depending only on pads.
  *
@@ -739,7 +741,8 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 }
 
 
-/** function Test_1_Net_Ratsnest
+/**
+ * Function Test_1_Net_Ratsnest
  *  Compute the ratsnest relative to the net "net_code"
  *  @param ref_netcode = netcode used to compute the ratsnest.
  */

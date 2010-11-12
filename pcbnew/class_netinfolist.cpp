@@ -23,7 +23,8 @@ NETINFO_LIST::~NETINFO_LIST()
 }
 
 
-/** Function GetItem
+/**
+ * Function GetItem
  * @param aNetcode = netcode to identify a given NETINFO_ITEM
  * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
  */
@@ -35,7 +36,8 @@ NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
 }
 
 
-/** Function DeleteData
+/**
+ * Function DeleteData
  * delete the list of nets (and free memory)
  */
 void NETINFO_LIST::DeleteData()
@@ -156,7 +158,8 @@ void NETINFO_LIST::BuildListOfNets()
 void NETINFO_LIST::Build_Pads_Full_List()
 /*****************************************/
 
-/** Function Build_Pads_Full_List
+/**
+ * Function Build_Pads_Full_List
  *  Create the pad list, sorted by net names (sorted by an alphabetic case sensitive sort)
  * initialise:
  *   m_Pads (list of pads)

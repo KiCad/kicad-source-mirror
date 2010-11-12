@@ -97,7 +97,8 @@ void COMPONENTS_LISTBOX::SetSelection( unsigned index, bool State )
 }
 
 
-/** function OnChar
+/**
+ * Function OnChar
  * called on a key pressed
  * Call default handler for some special keys,
  * and for "ascii" keys, select the first component

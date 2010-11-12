@@ -13,7 +13,8 @@
 #define VERSION_STABILITY       "testing"
 
 
-/** Function GetBuildVersion()
+/**
+ * Function GetBuildVersion()
  * Return the build date and version
  */
 wxString GetBuildVersion()

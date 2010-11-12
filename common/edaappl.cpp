@@ -258,7 +258,8 @@ WinEDA_App::~WinEDA_App()
 }
 
 
-/** Function InitEDA_Appl
+/**
+ * Function InitEDA_Appl
  * initialise some general parameters
  *  - Default paths (help, libs, bin)and configuration flies names
  *  - Language and locale
@@ -595,7 +596,8 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 }
 
 
-/** Function GetSettings
+/**
+ * Function GetSettings
  * Get application settings
  * @param aReopenLastUsedDirectory = true to switch to last opened directory, false to use current CWD
  * @return  none
@@ -628,11 +630,11 @@ void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
     m_EDA_Config->Read( wxT( "BgColor" ), &g_DrawBgColor );
 
     /* Load per-user search paths from settings file */
-    
+
     wxString   upath;
     int i = 1;
-    while( 1 ) 
-    { 
+    while( 1 )
+    {
         upath = m_EDA_CommonConfig->Read( wxString::Format( wxT( "LibraryPath%d" ), i ), wxT( "" ) );
         if( upath.IsSameAs( wxT( "" ) ) ) break;
         m_libSearchPaths.Add( upath );
@@ -787,7 +789,8 @@ void WinEDA_App::SetLanguagePath( void )
 }
 
 
-/** Function AddMenuLanguageList
+/**
+ * Function AddMenuLanguageList
  * Create menu list for language choice, and add it as submenu to a main menu
  * @param   MasterMenu : The main menu. The sub menu list will be accessible
  *          from the menu item with id ID_LANGUAGE_CHOICE
@@ -1084,7 +1087,8 @@ wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 }
 
 
-/** Function RemoveLibraryPath
+/**
+ * Function RemoveLibraryPath
  * Removes the given path(s) from the library path list
  * @param aPaths = path or path list to remove. paths must be separated by ";"
  */
@@ -1103,7 +1107,8 @@ void WinEDA_App::RemoveLibraryPath( const wxString& aPaths )
 }
 
 
-/** Function InsertLibraryPath
+/**
+ * Function InsertLibraryPath
  * insert path(s) int lib paths list.
  * @param aPaths = path or path list to add. paths must be separated by ";"
  * @param aIndex = insertion point

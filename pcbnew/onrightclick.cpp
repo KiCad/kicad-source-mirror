@@ -835,7 +835,8 @@ void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aP
 static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 /*******************************************************/
 
-/** function Append_Track_Width_List
+/**
+ * Function Append_Track_Width_List
  * creates a wxMenu * which shows the last used track widths and via diameters
  * @return a pointeur to the menu
  */

@@ -348,7 +348,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
 }
 
 
-/** function DrawShape
+/**
+ * Function DrawShape
  * basic function to draw a pad.
  * used by D_PAD::Draw after calculation of parameters (color, final orientation ...)
  * this function can be called to draw a pad on a panel
@@ -620,7 +621,8 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
 }
 
-/** function BuildSegmentFromOvalShape
+/**
+ * Function BuildSegmentFromOvalShape
  * Has meaning only for OVAL (and ROUND) pads.
  * Build an equivalent segment having the same shape as the OVAL shape,
  * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
@@ -657,7 +659,8 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
     return width;
 }
 
-/** function BuildPadPolygon
+/**
+ * Function BuildPadPolygon
  * Has meaning only for polygonal pads (trapeziod and rectangular)
  * Build the Corner list of the polygonal shape,
  * depending on shape, extra size (clearance ...) and orientation

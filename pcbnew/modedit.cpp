@@ -132,7 +132,8 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
     return item;
 }
 
-/** function LoadModuleFromBoard
+/**
+ * Function LoadModuleFromBoard
  * called from the main toolbar
  * to load a footprint from board mainly to edit it
  */

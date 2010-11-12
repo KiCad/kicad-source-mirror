@@ -140,7 +140,8 @@ void WinEDA_PcbGlobalDeleteFrame::AcceptPcbDelete( wxCommandEvent& event )
 }
 
 
-/** function WinEDA_PcbFrame::Clear_Pcb()
+/**
+ * Function WinEDA_PcbFrame::Clear_Pcb()
  * delete all and reinitialize the current board
  * @param aQuery = true to prompt user for confirmation, false to initialize silently
  */
@@ -198,7 +199,8 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
 
 
 
-/** function WinEDA_ModuleEditFrame::Clear_Pcb()
+/**
+ * Function WinEDA_ModuleEditFrame::Clear_Pcb()
  * delete all and reinitialize the current board
  * @param aQuery = true to prompt user for confirmation, false to initialize silently
  */

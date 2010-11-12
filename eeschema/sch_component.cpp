@@ -409,7 +409,8 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
-/** function SetTimeStamp
+/**
+ * Function SetTimeStamp
  * Change the old time stamp to the new time stamp.
  * the time stamp is also modified in paths
  * @param aNewTimeStamp = new time stamp
@@ -855,7 +856,8 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
 }
 
 
-/** function GetOrientation()
+/**
+ * Function GetOrientation()
  * Used to display component orientation (in dialog editor or info)
  * @return the orientation and mirror
  * Note: Because there are different ways to have a given orientation/mirror,
@@ -1478,7 +1480,8 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -1501,7 +1504,8 @@ void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 }
 
 
-/** virtual function Mirror_X
+/**
+ * Function Mirror_X (virtual)
  * mirror item relative to an X axis
  * @param aXaxis_position = the x axis position
  */

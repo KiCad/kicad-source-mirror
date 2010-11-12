@@ -124,7 +124,8 @@ int AM_PRIMITIVE::GetExposure(GERBER_DRAW_ITEM* aParent) const
     return (int) params[0].GetValue( aParent->GetDcodeDescr() );
 }
 
-/** function DrawBasicShape
+/**
+ * Function DrawBasicShape
  * Draw the primitive shape for flashed items.
  */
 void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
@@ -414,7 +415,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 }
 
 
-/** function ConvertShapeToPolygon (virtual)
+/**
+ * Function ConvertShapeToPolygon (virtual)
  * convert a shape to an equivalent polygon.
  * Arcs and circles are approximated by segments
  * Useful when a shape is not a graphic primitive (shape with hole,
@@ -717,7 +719,8 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-/** function DrawApertureMacroShape
+/**
+ * Function DrawApertureMacroShape
  * Draw the primitive shape for flashed items.
  * When an item is flashed, this is the shape of the item
  */

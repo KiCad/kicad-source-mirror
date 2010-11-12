@@ -962,7 +962,8 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
 }
 
 
-/** function PlotDrillMark
+/**
+ * Function PlotDrillMark
  * Draw a drill mark for pads and vias.
  * Must be called after all drawings, because it
  * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in

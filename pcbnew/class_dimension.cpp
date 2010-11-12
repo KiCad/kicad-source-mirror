@@ -411,7 +411,8 @@ out:
 }
 
 
-/** function AdjustDimensionDetails
+/**
+ * Function AdjustDimensionDetails
  * Calculate coordinates of segments used to draw the dimension.
  * @param aDoNotChangeText (bool) if false, the dimension text is initialized
  */

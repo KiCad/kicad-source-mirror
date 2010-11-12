@@ -340,7 +340,8 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
     syncLayerWidget();
 }
 
-/** Function IsGridVisible() , virtual
+/**
+ * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
  */
 bool WinEDA_GerberFrame::IsGridVisible()
@@ -348,7 +349,8 @@ bool WinEDA_GerberFrame::IsGridVisible()
     return IsElementVisible( GERBER_GRID_VISIBLE );
 }
 
-/** Function SetGridVisibility() , virtual
+/**
+ * Function SetGridVisibility() , virtual
  * It may be overloaded by derived classes
  * if you want to store/retrieve the grid visiblity in configuration.
  * @param aVisible = true if the grid must be shown
@@ -358,7 +360,8 @@ void WinEDA_GerberFrame::SetGridVisibility(bool aVisible)
     SetElementVisibility(GERBER_GRID_VISIBLE, aVisible);
 }
 
-/** Function GetGridColor() , virtual
+/**
+ * Function GetGridColor() , virtual
  * @return the color of the grid
  */
 int WinEDA_GerberFrame::GetGridColor()
@@ -366,7 +369,8 @@ int WinEDA_GerberFrame::GetGridColor()
     return GetBoard()->GetVisibleElementColor( GERBER_GRID_VISIBLE );
 }
 
-/** Function SetGridColor() , virtual
+/**
+ * Function SetGridColor() , virtual
  * @param aColor = the new color of the grid
  */
 void WinEDA_GerberFrame::SetGridColor(int aColor)
@@ -407,7 +411,8 @@ void WinEDA_GerberFrame::syncLayerBox()
     UpdateTitleAndInfo();
 }
 
-/** function SetLanguage
+/**
+ * Function SetLanguage
  * called on a language menu selection
  * Update Layer manager title and tabs texts
  */
@@ -484,7 +489,8 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
         return;
 }
 
-/** function UpdateTitleAndInfo
+/**
+ * Function UpdateTitleAndInfo
  * displays the short filename (if exists) of the selected layer
  *  on the caption of the main gerbview window
  * displays image name and the last layer name (found in the gerber file: LN <name> command)

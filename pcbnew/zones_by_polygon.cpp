@@ -616,7 +616,8 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 /*********************************************/
 
-/** Function End_Zone
+/**
+ * Function End_Zone
  * Terminates a zone outline creation
  * terminates (if no DRC error ) the zone edge creation process
  * @param DC = current Device Context
@@ -835,7 +836,8 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
 void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container )
 /************************************************************************************/
 
-/** Function Delete_Zone_Contour
+/**
+ * Function Delete_Zone_Contour
  * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
  *  A zone is a group of segments which have the same TimeStamp
  * @param DC = current Device Context (can be NULL)

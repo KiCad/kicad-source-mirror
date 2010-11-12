@@ -261,7 +261,8 @@ SCH_SHEET_PATH* WinEDA_SchematicFrame::GetSheet()
 }
 
 
-/** Function SetSheetNumberAndCount
+/**
+ * Function SetSheetNumberAndCount
  * Set the m_ScreenNumber and m_NumberOfScreen members for screens
  * must be called after a delete or add sheet command, and when entering a
  * sheet
@@ -421,7 +422,8 @@ int WinEDA_SchematicFrame::BestZoom()
 }
 
 
-/** Function GetUniqueFilenameForCurrentSheet
+/**
+ * Function GetUniqueFilenameForCurrentSheet
  * @return a filename that can be used in plot and print functions
  * for the current screen and sheet path.
  * This filename is unique and must be used insteed of the screen filename
@@ -462,7 +464,8 @@ wxString WinEDA_SchematicFrame::GetUniqueFilenameForCurrentSheet()
     return filename;
 }
 
-/** Function OnModify()
+/**
+ * Function OnModify()
  * Must be called after a schematic change
  * in order to set the "modify" flag of the current screen
  * and update the date in frame reference
@@ -749,7 +752,8 @@ void WinEDA_SchematicFrame::OnExit( wxCommandEvent& event )
     Close( true );
 }
 
-/** function SetLanguage
+/**
+ * Function SetLanguage
  * called on a language menu selection
  */
 void WinEDA_SchematicFrame::SetLanguage( wxCommandEvent& event )

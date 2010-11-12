@@ -211,7 +211,8 @@ struct Ki_HotkeyInfoSectionDescriptor s_Module_Editor_Hokeys_Descr[] =
       NULL, NULL, NULL
   } };
 
-/** Function OnHotKey.
+/**
+ * Function OnHotKey.
  *  ** Commands are case insensitive **
  *  Some commands are relatives to the item under the mouse cursor
  *  @param aDC = current device context
@@ -837,7 +838,8 @@ bool WinEDA_ModuleEditFrame::OnHotkeyRotateItem( int aIdCommand )
     return false;
 }
 
-/** Function OnHotkeyDeleteItem
+/**
+ * Function OnHotkeyDeleteItem
  * Delete the item found under the mouse cursor
  *  Depending on the current active tool::
  *      Tool track
@@ -985,7 +987,8 @@ bool WinEDA_PcbFrame::OnHotkeyEditItem( int aIdCommand )
     return false;
 }
 
-/** Function OnHotkeyMoveItem
+/**
+ * Function OnHotkeyMoveItem
  * Move or drag the item (footprint, track, text .. ) found under the mouse cursor
  * An item can be moved (or dragged) only if there is no item currently edited
  * Only a footprint, a pad or a track can be dragged
@@ -1083,7 +1086,8 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
 }
 
 
-/** Function OnHotkeyRotateItem
+/**
+ * Function OnHotkeyRotateItem
  * Rotate the item (text or footprint) found under the mouse cursor
  * Note:
  *     this command can be used with an item currently in edit

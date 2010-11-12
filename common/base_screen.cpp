@@ -122,7 +122,8 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
     return curpos;
 }
 
-/** Function SetScalingFactor
+/**
+ * Function SetScalingFactor
  * calculates the .m_Zoom member to have a given scaling factor
  * @param the the current scale used to draw items on screen
  * draw coordinates are user coordinates * GetScalingFactor( )

@@ -751,7 +751,8 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 }
 
 
-/** Function WriteSheetDescr
+/**
+ * Function WriteSheetDescr
  * Save the page information (size, texts, date ..)
  * @param screen BASE_SCREEN to save
  * @param File = an open FILE to write info

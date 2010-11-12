@@ -624,7 +624,8 @@ void GRSetBrush( wxDC* DC, int Color, int fill )
 }
 
 
-/** function GRForceBlackPen
+/**
+ * Function GRForceBlackPen
  * @param flagforce True to force a black pen whenever the asked color
  */
 void GRForceBlackPen( bool flagforce )
@@ -633,7 +634,8 @@ void GRForceBlackPen( bool flagforce )
 }
 
 
-/** function GetGRForceBlackPenState
+/**
+ * Function GetGRForceBlackPenState
  * @return s_ForceBlackPen (True if  a black pen was forced)
  */
 bool GetGRForceBlackPenState( void )
@@ -898,7 +900,8 @@ void GRSLine( EDA_Rect* ClipBox,
 }
 
 
-/** Function GRLineArray
+/**
+ * Function GRLineArray
  * draws an array of lines (not a polygon).
  * @param aClipBox = the clip box
  * @param aDC = the device context into which drawing should occur.
@@ -1893,7 +1896,8 @@ void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC,
 
 #ifdef USE_CLIP_FILLED_POLYGONS
 
-/** Function ClipAndDrawFilledPoly
+/**
+ * Function ClipAndDrawFilledPoly
  *  Used to clip a polygon and draw it as Filled Polygon
  *  uses the Sutherland and Hodgman algo to clip the given poly against a
  *  rectangle.  This rectangle is the drawing area this is useful under

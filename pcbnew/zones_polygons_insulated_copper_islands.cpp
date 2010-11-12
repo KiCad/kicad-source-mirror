@@ -125,7 +125,8 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
 EDA_Rect ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
 /**************************************************************************************/
 
-/** function CalculateSubAreaBoundaryBox
+/**
+ * Function CalculateSubAreaBoundaryBox
  * Calculates the bounding box of a a filled area ( list of CPolyPt )
  * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
  * @return an EDA_Rect as bounding box

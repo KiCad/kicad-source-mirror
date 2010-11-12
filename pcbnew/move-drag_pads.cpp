@@ -224,7 +224,8 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
 }
 
 
-/** Function DeletePad
+/**
+ * Function DeletePad
  * Delete the pad aPad.
  * Refresh the modified screen area
  * Refresh modified parameters of the parent module (bounding box, last date)

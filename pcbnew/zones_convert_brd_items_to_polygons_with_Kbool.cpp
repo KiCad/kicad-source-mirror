@@ -76,7 +76,8 @@ double s_Correction;     /* mult coeff used to enlarge rounded and oval pads (an
                           * create a smaller gap than a true circle
                           */
 
-/** function AddClearanceAreasPolygonsToPolysList
+/**
+ * Function AddClearanceAreasPolygonsToPolysList
  * Supports a min thickness area constraint.
  * Add non copper areas polygons (pads and tracks with clearence)
  * to the filled copper area found
@@ -653,7 +654,8 @@ int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aB
                                                                  GroupType    aGroup )
 /************************************************************************************************************/
 
-/** Function CopyPolygonsFromFilledPolysListToBoolengine
+/**
+ * Function CopyPolygonsFromFilledPolysListToBoolengine
  * Copy (Add) polygons found in m_FilledPolysList to kbool BoolEngine
  * m_FilledPolysList may have more than one polygon
  * @param aBoolengine = kbool engine
@@ -693,7 +695,8 @@ int ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aB
 int ZONE_CONTAINER::CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine )
 /*****************************************************************************************/
 
-/** Function CopyPolygonsFromBoolengineToFilledPolysList
+/**
+ * Function CopyPolygonsFromBoolengineToFilledPolysList
  * Copy (Add) polygons created by kbool (after Do_Operation) to m_FilledPolysList
  * @param aBoolengine = kbool engine
  * @return the corner count

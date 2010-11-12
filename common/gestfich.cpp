@@ -114,7 +114,8 @@ static wxString    s_KicadBinaryPathList[] = {
 };
 
 
-/** Function MakeReducedFileName
+/**
+ * Function MakeReducedFileName
  * Calculate the "reduced" filename from
  * @param  fullfilename = full filename
  * @param  default_path = default path
@@ -180,7 +181,8 @@ wxString MakeReducedFileName( const wxString& fullfilename,
 }
 
 
-/** Function AddDelimiterString
+/**
+ * Function AddDelimiterString
  * Add un " to the start and the end of string (if not already done).
  * @param string = string to modify
  */
@@ -287,7 +289,8 @@ wxString EDA_FileSelector( const wxString& Title,
 }
 
 
-/** Function FindKicadHelpPath
+/**
+ * Function FindKicadHelpPath
  * Find an absolute path for KiCad "help" (or "help/<language>")
  *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
  *  from BinDir
@@ -563,7 +566,8 @@ wxString& WinEDA_App::GetEditorName()
 }
 
 
-/** Function OpenPDF
+/**
+ * Function OpenPDF
  * run the PDF viewer and display a PDF file
  * @param file = PDF file to open
  * @return true is success, false if no PDF viewer found

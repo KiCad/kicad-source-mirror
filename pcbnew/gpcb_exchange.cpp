@@ -504,7 +504,8 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
 bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_name )
 /***********************************************************************************/
 
-/** Function TestFlags
+/**
+ * Function TestFlags
  * Test flag flg_mask or flg_name.
  * @param flg_string = flsg list to test: can be a bit field flag or a list name flsg
  * a bit field flag is an hexadecimal value: Ox00020000

@@ -567,7 +567,8 @@ void WinEDA_PcbFrame::SaveSettings()
 
 }
 
-/** Function IsGridVisible() , virtual
+/**
+ * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
  */
 bool WinEDA_PcbFrame::IsGridVisible()
@@ -575,7 +576,8 @@ bool WinEDA_PcbFrame::IsGridVisible()
     return IsElementVisible(GRID_VISIBLE);
 }
 
-/** Function SetGridVisibility() , virtual
+/**
+ * Function SetGridVisibility() , virtual
  * It may be overloaded by derived classes
  * if you want to store/retrieve the grid visiblity in configuration.
  * @param aVisible = true if the grid must be shown
@@ -585,7 +587,8 @@ void WinEDA_PcbFrame::SetGridVisibility(bool aVisible)
     SetElementVisibility(GRID_VISIBLE, aVisible);
 }
 
-/** Function GetGridColor() , virtual
+/**
+ * Function GetGridColor() , virtual
  * @return the color of the grid
  */
 int WinEDA_PcbFrame::GetGridColor()
@@ -593,7 +596,8 @@ int WinEDA_PcbFrame::GetGridColor()
     return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
 }
 
-/** Function SetGridColor() , virtual
+/**
+ * Function SetGridColor() , virtual
  * @param aColor = the new color of the grid
  */
 void WinEDA_PcbFrame::SetGridColor(int aColor)
@@ -657,7 +661,8 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
         m_Layers->SetRenderState( ii, true );
 }
 
-/** function SetLanguage
+/**
+ * Function SetLanguage
  * called on a language menu selection
  */
 void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )

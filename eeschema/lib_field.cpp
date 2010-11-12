@@ -277,7 +277,8 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_FIELD::GetPenSize()
@@ -412,7 +413,8 @@ LIB_DRAW_ITEM* LIB_FIELD::DoGenCopy()
 }
 
 
-/** Function Copy
+/**
+ * Function Copy
  * copy parameters of this to Target. Pointers are not copied
  * @param Target = the LIB_FIELD to set with "this" values
  */

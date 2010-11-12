@@ -176,7 +176,8 @@ void MODULE::Copy( MODULE* aModule )
 }
 
 
-/** Function Draw
+/**
+ * Function Draw
  *  Draws the footprint to the current Device Context
  *  @param panel = The active Draw Panel (used to know the clip box)
  *  @param DC = current Device Context
@@ -234,7 +235,8 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/** Function DrawEdgesOnly
+/**
+ * Function DrawEdgesOnly
  *  Draws the footprint edges only to the current Device Context
  *  @param panel = The active Draw Panel (used to know the clip box)
  *  @param DC = current Device Context

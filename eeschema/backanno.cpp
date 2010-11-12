@@ -17,7 +17,8 @@
 #include "sch_component.h"
 
 
-/** function FillFootprintFieldForAllInstancesofComponent
+/**
+ * Function FillFootprintFieldForAllInstancesofComponent
  * Search for component "aReference", and place a Footprint in Footprint field
  * @param aReference = reference of the component to initialize
  * @param aFootPrint = new value for the filed Footprint component
@@ -85,7 +86,8 @@ bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
 }
 
 
-/** Function ProcessStuffFile
+/**
+ * Function ProcessStuffFile
  * Read a "stuff" file created by cvpcb.
  * That file has lines like:
  * comp = "C1" module = "CP6"

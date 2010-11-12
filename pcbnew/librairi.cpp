@@ -392,7 +392,8 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library(
 }
 
 
-/** function Archive_Modules
+/**
+ * Function Archive_Modules
  * Save in the library:
  * All new modules (ie modules not found in this lib) (if NewModulesOnly == true)
  * all modules (if NewModulesOnly == false)
@@ -482,7 +483,8 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
 }
 
 
-/** Function Save_Module_In_Library
+/**
+ * Function Save_Module_In_Library
  *  Save in an existing library a given footprint
  * @param aLibName = name of the library to use
  * @param aModule = the given footprint
@@ -715,7 +717,8 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 }
 
 
-/** Function Create_1_Module
+/**
+ * Function Create_1_Module
  * Creates a new module or footprint : A new module contains 2 texts :
  *  First = REFERENCE
  *  Second = VALUE: "VAL**"

@@ -55,7 +55,8 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 }
 
 
-/** Function ReadTextePcbDescr
+/**
+ * Function ReadTextePcbDescr
  * Read a text description from pcb file.
  *
  * For a single line text:
@@ -179,7 +180,8 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 }
 
 
-/** Function Draw
+/**
+ * Function Draw
  *  DrawMode = GR_OR, GR_XOR ..
  * Like tracks, texts are drawn in filled or sketch mode, never in line mode
  * because the line mode does not keep the actual size of the text

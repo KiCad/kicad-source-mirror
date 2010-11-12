@@ -246,7 +246,8 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 // Mask margins handling:
 
-/** Function GetSolderMaskMargin
+/**
+ * Function GetSolderMaskMargin
  * @return the margin for the solder mask layer
  * usually > 0 (mask shape bigger than pad
  * value is
@@ -283,7 +284,8 @@ int D_PAD::GetSolderMaskMargin()
 }
 
 
-/** Function GetSolderPasteMargin
+/**
+ * Function GetSolderPasteMargin
  * @return the margin for the solder mask layer
  * usually < 0 (mask shape smaller than pad
  * value is

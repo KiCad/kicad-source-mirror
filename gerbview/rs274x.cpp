@@ -798,7 +798,8 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
     return FALSE;
 }
 
-/** function GetNextLine
+/**
+ * Function GetNextLine
  * test for an end of line
  * if an end of line is found:
  *   read a new line
@@ -1002,7 +1003,8 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
     return true;
 }
 
-/** Function ReadMacroParam
+/**
+ * Function ReadMacroParam
  * Read one aperture macro parameter
  * a parameter can be:
  *      a number

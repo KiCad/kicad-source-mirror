@@ -44,9 +44,10 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 
 
 
-/** virtual function GetPosition
-* @return a wxPoint, position of the first point of the outline
-*/
+/**
+ * Function GetPosition (virtual)
+ * @return a wxPoint, position of the first point of the outline
+ */
 wxPoint& ZONE_CONTAINER::GetPosition()
 {
     static wxPoint pos;
@@ -216,7 +217,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 /**********************************************************/
 
-/** Function ReadDescr
+/**
+ * Function ReadDescr
  * @param aFile = opened file
  * @param aLineNum = pointer on a line number counter (can be NULL or missing)
  * @return 1 if ok or 0
@@ -431,7 +433,8 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 /****************************************************************************************************/
 
-/** Function Draw
+/**
+ * Function Draw
  * @param panel = current Draw Panel
  * @param DC = current Device Context
  * @param offset = Draw offset (usually wxPoint(0,0))
@@ -1121,7 +1124,8 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 }
 
 
-/** Function copy
+/**
+ * Function copy
  * copy usefull data from the source.
  * flags and linked list pointers are NOT copied
  */

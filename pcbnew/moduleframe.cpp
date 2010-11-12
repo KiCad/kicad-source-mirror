@@ -272,7 +272,8 @@ void WinEDA_ModuleEditFrame::CloseModuleEditor( wxCommandEvent& Event )
     Close();
 }
 
-/** function WinEDA_ModuleEditFrame::SetToolbars()
+/**
+ * Function WinEDA_ModuleEditFrame::SetToolbars()
  * Enable or disable some tools and menus, according to
  * the current state of the footprint editor:
  *  >> a footprint is loaded or not

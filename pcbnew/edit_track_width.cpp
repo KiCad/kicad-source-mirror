@@ -15,7 +15,8 @@
 #include "protos.h"
 
 
-/** Function SetTrackSegmentWidth
+/**
+ * Function SetTrackSegmentWidth
  *  Modify one track segment width or one via diameter and drill (using DRC control).
  *  Basic routine used by other routines when editing tracks or vias
  * @param aTrackItem = the track segment or via to modify
@@ -96,7 +97,8 @@ bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
 }
 
 
-/** Function Edit_TrackSegm_Width
+/**
+ * Function Edit_TrackSegm_Width
  * Modify one track segment width or one via diameter (using DRC control).
  * @param  DC = the curred device context (can be NULL)
  * @param aTrackItem = the track segment or via to modify
@@ -123,7 +125,8 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
 }
 
 
-/** Function Edit_Track_Width
+/**
+ * Function Edit_Track_Width
  * Modify a full track width (using DRC control).
  * a full track is the set of track segments between 2 ends: pads or a point that has more than 2 segments ends connected
  * @param  DC = the curred device context (can be NULL)
@@ -171,7 +174,8 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* aTrackSegment )
 }
 
 
-/** function Change_Net_Tracks_And_Vias_Sizes
+/**
+ * Function Change_Net_Tracks_And_Vias_Sizes
  * Reset all tracks width and vias diameters and drill
  * to their default Netclass value ou current values
  * @param aNetcode : the netcode of the net to edit

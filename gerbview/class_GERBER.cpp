@@ -220,7 +220,8 @@ void GERBER_IMAGE::InitToolTable()
 }
 
 
-/** function ReportMessage
+/**
+ * Function ReportMessage
  * Add a message (a string) in message list
  * for instance when reading a Gerber file
  * @param aMessage = the straing to add in list
@@ -231,7 +232,8 @@ void GERBER_IMAGE::ReportMessage( const wxString aMessage )
 }
 
 
-/** function ClearMessageList
+/**
+ * Function ClearMessageList
  * Clear the message list
  * Call it before reading a Gerber file
  */
@@ -241,7 +243,8 @@ void GERBER_IMAGE::ClearMessageList()
 }
 
 
-/** Function StepAndRepeatItem
+/**
+ * Function StepAndRepeatItem
  * Gerber format has a command Step an Repeat
  * This function must be called when reading a gerber file and
  * after creating a new gerber item that must be repeated
@@ -276,7 +279,8 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 }
 
 
-/** Function DisplayImageInfo
+/**
+ * Function DisplayImageInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about Image Parameters.

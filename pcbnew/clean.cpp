@@ -731,7 +731,8 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
 }
 
 
-/** Function RemoveMisConnectedTracks
+/**
+ * Function RemoveMisConnectedTracks
  * finds all track segments which are mis-connected (to more than one net).
  * When such a bad segment is found, mark it as needing to be removed.
  * and remove all tracks having at least one flagged segment.

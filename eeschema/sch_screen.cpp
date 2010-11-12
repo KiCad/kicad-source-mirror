@@ -326,7 +326,8 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
-/** Function ClearUndoORRedoList
+/**
+ * Function ClearUndoORRedoList
  * free the undo or redo list from List element
  *  Wrappers are deleted.
  *  datas pointed by wrappers are deleted if not in use in schematic

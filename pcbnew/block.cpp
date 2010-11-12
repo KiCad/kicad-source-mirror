@@ -20,7 +20,8 @@
 
 #define BLOCK_OUTLINE_COLOR YELLOW
 
-/** Function drawPickedItems
+/**
+ * Function drawPickedItems
  * draws items currently selected in a block
  * @param aPanel = Current draw panel
  * @param aDC = Current device context
@@ -28,7 +29,8 @@
  **/
 static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              wxPoint aOffset );
-/** Function drawMovingBlock
+/**
+ * Function drawMovingBlock
  * handles drawing of a moving block
  * @param aPanel = Current draw panel
  * @param aDC = Current device context

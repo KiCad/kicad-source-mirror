@@ -153,7 +153,8 @@ EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_BUS_ENTRY::GetPenSize()
@@ -321,7 +322,8 @@ EDA_Rect SCH_JUNCTION::GetBoundingBox()
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
@@ -334,7 +336,8 @@ bool SCH_JUNCTION::HitTest( const wxPoint& aPosRef )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  * has no meaning for SCH_JUNCTION
  */
@@ -519,7 +522,8 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_NO_CONNECT::GetPenSize()
@@ -752,7 +756,8 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_LINE::GetPenSize()
@@ -1082,7 +1087,8 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_POLYLINE::GetPenSize()

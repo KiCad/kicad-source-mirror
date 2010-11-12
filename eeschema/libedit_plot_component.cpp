@@ -18,7 +18,8 @@
 #include "class_library.h"
 
 
-/** function OnPlotCurrentComponent
+/**
+ * Function OnPlotCurrentComponent
  * plot in SVG or PNG format the curren component
  */
 void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
@@ -90,7 +91,8 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
 }
 
 
-/** function CreatePNGorJPEGFile
+/**
+ * Function CreatePNGorJPEGFile
  * Create an image (screenshot) of the current component.
  *  Output file format is png or jpeg
  * @param aFileName = the full filename

@@ -152,7 +152,8 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 };
 
 
-/** Function TestDuplicateSheetNames( )
+/**
+ * Function TestDuplicateSheetNames( )
  * inside a given sheet, one cannot have sheets with duplicate names (file
  * names can be duplicated).
  * @return the error count

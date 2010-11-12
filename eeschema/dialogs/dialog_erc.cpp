@@ -301,7 +301,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 }
 
 
-/** Function DisplayERC_MarkersList
+/**
+ * Function DisplayERC_MarkersList
  * read the schematic and display the list of ERC markers
  */
 void DIALOG_ERC::DisplayERC_MarkersList()

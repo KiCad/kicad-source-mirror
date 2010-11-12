@@ -49,7 +49,8 @@ SCH_FIELD::~SCH_FIELD()
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_FIELD::GetPenSize()

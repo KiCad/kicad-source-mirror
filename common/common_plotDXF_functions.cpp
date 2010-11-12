@@ -111,7 +111,7 @@ void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
             fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
             fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x+r,centre.y);
             fprintf( output_file, "0\nSEQEND\n");
-	}
+    }
      }
 }
 
@@ -175,7 +175,8 @@ void DXF_PLOTTER::set_dash( bool dashed )
 }
 
 
-/** Function Plot a filled segment (track)
+/**
+ * Function Plot a filled segment (track)
  * @param start = starting point
  * @param end = ending point
  * @param aWidth = segment width (thickness)

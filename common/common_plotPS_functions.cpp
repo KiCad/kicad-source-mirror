@@ -168,7 +168,8 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
 }
 
 
-/** Function poly
+/**
+ * Function poly
  * @brief Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
  * @param nb_segm = corner count
  * @param coord = corner list (a corner uses 2 int = X coordinate followed by Y

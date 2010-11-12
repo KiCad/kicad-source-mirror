@@ -242,7 +242,8 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 }
 
 
-/** function RedrawActiveWindow
+/**
+ * Function RedrawActiveWindow
  * Display the current selected component.
  * If the component is an alias, the ROOT component is displayed
 */

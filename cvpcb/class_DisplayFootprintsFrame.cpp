@@ -535,7 +535,8 @@ void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
 {
 }
 
-/** Function IsGridVisible() , virtual
+/**
+ * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
  */
 bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible()
@@ -543,7 +544,8 @@ bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible()
     return m_DrawGrid;
 }
 
-/** Function SetGridVisibility() , virtual
+/**
+ * Function SetGridVisibility() , virtual
  * It may be overloaded by derived classes
  * if you want to store/retrieve the grid visiblity in configuration.
  * @param aVisible = true if the grid must be shown
@@ -553,7 +555,8 @@ void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
     m_DrawGrid = aVisible;
 }
 
-/** Function GetGridColor() , virtual
+/**
+ * Function GetGridColor() , virtual
  * @return the color of the grid
  */
 int DISPLAY_FOOTPRINTS_FRAME::GetGridColor()

@@ -230,7 +230,8 @@ void LIB_POLYLINE::AddPoint( const wxPoint& point )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_POLYLINE::GetPenSize()
@@ -329,7 +330,8 @@ bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near a segment
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to a segment
@@ -352,7 +354,8 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aT
 }
 
 
-/** Function GetBoundingBox
+/**
+ * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
 EDA_Rect LIB_POLYLINE::GetBoundingBox()

@@ -166,7 +166,8 @@ void HPGL_PLOTTER::set_dash( bool dashed )
 }
 
 
-/** Function Plot a filled segment (track)
+/**
+ * Function Plot a filled segment (track)
  * @param start = starting point
  * @param end = ending point
  * @param aWidth = segment width (thickness)

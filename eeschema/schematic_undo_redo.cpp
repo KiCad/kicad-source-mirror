@@ -183,7 +183,8 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 }
 
 
-/** function SaveCopyInUndoList
+/**
+ * Function SaveCopyInUndoList
  * Create a copy of the current schematic item, and put it in the undo list.
  *
  *  flag_type_command =
@@ -269,7 +270,8 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
 }
 
 
-/** function SaveCopyInUndoList
+/**
+ * Function SaveCopyInUndoList
  * @param aItemsList = a PICKED_ITEMS_LIST of items to save
  * @param aTypeCommand = type of command ( UR_CHANGED, UR_NEW, UR_DELETED ...
  */
@@ -342,7 +344,8 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/** Function PutDataInPreviousState()
+/**
+ * Function PutDataInPreviousState()
  * Used in undo or redo command.
  * Put data pointed by List in the previous state, i.e. the state memorized
  * by List
@@ -440,7 +443,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
 }
 
 
-/** Function GetSchematicFromUndoList
+/**
+ * Function GetSchematicFromUndoList
  *  Undo the last edition:
  *  - Save the current schematic in Redo list
  *  - Get the previous version of the schematic from undo list
@@ -472,7 +476,8 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
 }
 
 
-/** Function GetSchematicFromRedoList
+/**
+ * Function GetSchematicFromRedoList
  * Redo the last edition:
  *  - Save the current schematic in undo list
  *  - Get the previous version from Redo list

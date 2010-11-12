@@ -102,7 +102,8 @@ void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 }
 
 
-/** function Draw (TODO)
+/**
+ * Function Draw (TODO)
  */
 void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
                          wxDC*             DC,
@@ -185,7 +186,8 @@ RATSNEST_ITEM::RATSNEST_ITEM()
 }
 
 
-/** function Draw
+/**
+ * Function Draw
  * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
 void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,

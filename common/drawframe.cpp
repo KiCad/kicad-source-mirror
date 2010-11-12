@@ -364,7 +364,8 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/** Function SetToolID
+/**
+ * Function SetToolID
  * Enables the icon of the selected tool in the vertical toolbar.
  * (Or tool ID_NO_SELECT_BUTT default if no new selection)
  * @param aId = new m_ID_current_state value (if aId >= 0)
@@ -552,7 +553,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 }
 
 
-/** function SetLanguage
+/**
+ * Function SetLanguage
  * called on a language menu selection
  * when using a derived function, do not forget to call this one
  */

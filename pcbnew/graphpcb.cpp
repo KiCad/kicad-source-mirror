@@ -69,7 +69,8 @@ static void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     }
 
 
-/** Function ToMatrixCoordinate
+/**
+ * Function ToMatrixCoordinate
  * compute the coordinate in the routing matrix from the real (board) value
  * @param aPhysicalCoordinate = value to convert
  * @return the coordinate relative to the matrix

@@ -313,7 +313,8 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/** Function OnLeftDClick
+/**
+ * Function OnLeftDClick
  * called on a double click event from the drawpanel mouse handler
  *  if an editable item is found (text, component)
  *      Call the suitable dialog editor.

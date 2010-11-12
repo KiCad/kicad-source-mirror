@@ -207,7 +207,8 @@ int EDA_TextStruct::LenSize( const wxString& aLine ) const
 }
 
 
-/** Function GetTextBox
+/**
+ * Function GetTextBox
  * useful in multiline texts to calculate the full text or a line area (for zones filling, locate functions....)
  * @return the rect containing the line of text (i.e. the position and the size of one line)
  * this rectangle is calculated for 0 orient text. if orient is not 0 the rect must be rotated to match the physical area
@@ -346,7 +347,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 /***************************************************************/
 
-/** Function Draw
+/**
+ * Function Draw
  * Draws this, that can be a multiline text
  *  @param aPanel = the current DrawPanel
  *  @param aDC = the current Device Context
@@ -397,7 +399,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/** Function DrawOneLineOfText
+/**
+ * Function DrawOneLineOfText
  * Draw a single text line.
  * Used to draw each line of this EDA_TextStruct, that can be multiline
  *  @param aPanel = the current DrawPanel
@@ -485,7 +488,8 @@ void EDA_Rect::Normalize()
 
 
 
-/** Function Move
+/**
+ * Function Move
  * Move this rectangle by the aMoveVector value (this is a relative move)
  * @param aMoveVector = a wxPoint that is the value to move this rectangle
  */
@@ -548,7 +552,8 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 EDA_Rect& EDA_Rect::Inflate( int aDelta )
 /**************************************************/
 
-/** Function Inflate
+/**
+ * Function Inflate
  * Inflate "this": move each horizontal edgeand each vertical edge by aDelta
  * toward rect outside
  * if aDelta is negative, move toward rect inside (deflate)
@@ -564,7 +569,8 @@ EDA_Rect& EDA_Rect::Inflate( int aDelta )
 EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 /**************************************************/
 
-/** Function Inflate
+/**
+ * Function Inflate
  * Inflate "this": move each horizontal edge by dx and each vertical edge by dy
  * toward rect outside
  * if dx and/or dy is negative, move toward rect inside (deflate)

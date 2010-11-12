@@ -87,7 +87,8 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
@@ -137,7 +138,8 @@ SCH_TEXT* SCH_TEXT::GenCopy()
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -187,7 +189,8 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -232,7 +235,8 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
 }
 
 
-/** virtual function Mirror_X
+/**
+ * Function Mirror_X (virtual)
  * mirror item relative to an X axis
  * @param aXaxis_position = the x axis position
  */
@@ -310,7 +314,8 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
 }
 
 
-/** function SetTextOrientAndJustifyParmeters (virtual)
+/**
+ * Function SetTextOrientAndJustifyParmeters (virtual)
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -394,7 +399,8 @@ void SCH_TEXT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int SCH_TEXT::GetPenSize()
@@ -693,7 +699,8 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -705,7 +712,8 @@ wxPoint SCH_LABEL::GetSchematicTextOffset()
 }
 
 
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation (for a label)
@@ -733,7 +741,8 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-/** virtual function Mirror_X
+/**
+ * Function Mirror_X (virtual)
  * mirror item relative to an X axis
  * @param aXaxis_position = the x axis position
  */
@@ -846,7 +855,8 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function SCH_LABEL::Draw
+/**
+ * Function SCH_LABEL::Draw
  * a label is drawn like a text. So just call SCH_TEXT::Draw
  */
 void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -1003,7 +1013,8 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
@@ -1015,7 +1026,8 @@ bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosRef )
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -1069,7 +1081,8 @@ void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -1124,7 +1137,8 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 }
 
 
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -1212,7 +1226,8 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/** function CreateGraphicShape
+/**
+ * Function CreateGraphicShape
  * Calculates the graphic shape (a polygon) associated to the text
  * @param aCorner_list = a buffer to fill with polygon corners coordinates
  * @param Pos = Position of the shape
@@ -1451,7 +1466,8 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is within item area
  * @param aPosRef = a wxPoint to test
  */
@@ -1463,7 +1479,8 @@ bool SCH_HIERLABEL::HitTest( const wxPoint& aPosRef )
 }
 
 
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -1552,7 +1569,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/** Function CreateGraphicShape
+/**
+ * Function CreateGraphicShape
  * calculates the graphic shape (a polygon) associated to the text
  * @param aCorner_list = a buffer to fill with polygon corners coordinates
  * @param Pos = Postion of the shape
@@ -1631,7 +1649,8 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -1668,7 +1687,8 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */

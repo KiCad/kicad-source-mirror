@@ -541,7 +541,8 @@ bool LIB_PIN::HitTest( const wxPoint& aRefPos )
     return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near a pin
  * @param aRefPos = a wxPoint to test
  * @param aThreshold = max distance to a segment
@@ -791,7 +792,8 @@ bool LIB_PIN::Load( char* line, wxString& errorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_PIN::GetPenSize()
@@ -853,7 +855,8 @@ void LIB_PIN::drawGraphic( WinEDA_DrawPanel* aPanel,
 }
 
 
-/** Function DrawPinSymbol
+/**
+ * Function DrawPinSymbol
  * Draw the pin symbol (without texts)
  *  if Color != 0 draw with Color, else with the normal pin color
  */
@@ -1489,7 +1492,8 @@ wxPoint LIB_PIN::ReturnPinEndPoint() const
 }
 
 
-/** Function ReturnPinDrawOrient
+/**
+ * Function ReturnPinDrawOrient
  * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
  *  according to its orientation and the matrix transform (rot, mirror) TransMat
  * @param  TransMat = transform matrix
@@ -1533,7 +1537,8 @@ int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform )
 }
 
 
-/** Function ReturnPinStringNum
+/**
+ * Function ReturnPinStringNum
  * fill a buffer with pin num as a wxString
  *  Pin num is coded as a long or 4 ascii chars
  *  Used to print/draw the pin num
@@ -1545,7 +1550,8 @@ void LIB_PIN::ReturnPinStringNum( wxString& aStringBuffer ) const
 }
 
 
-/** Function ReturnPinStringNum (static function)
+/**
+ * Function ReturnPinStringNum (static function)
  *  Pin num is coded as a long or 4 ascii chars
  * @param aPinNum = a long containing a pin num
  * @return aStringBuffer = the wxString to store the pin num as an unicode string
@@ -1563,7 +1569,8 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
 }
 
 
-/** Function LIB_PIN::SetPinNumFromString()
+/**
+ * Function LIB_PIN::SetPinNumFromString()
  * fill the buffer with pin num as a wxString
  *  Pin num is coded as a long
  *  Used to print/draw the pin num
@@ -1688,7 +1695,8 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/** Function LIB_PIN::DisplayInfo
+/**
+ * Function LIB_PIN::DisplayInfo
  * Displays info (pin num and name, orientation ...
  * on the Info window
  */
@@ -1728,7 +1736,8 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-/** Function LIB_PIN::GetBoundingBox
+/**
+ * Function LIB_PIN::GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
  */
 EDA_Rect LIB_PIN::GetBoundingBox()

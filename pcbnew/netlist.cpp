@@ -104,7 +104,8 @@ static MODULEtoLOAD* s_ModuleToLoad_List;
 
 #define BUFFER_CHAR_SIZE 2048
 
-/** function OpenNetlistFile
+/**
+ * Function OpenNetlistFile
  *  used to open a netlist file
  */
 FILE * OpenNetlistFile( const wxString& aFullFileName )
@@ -124,7 +125,8 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
 }
 
 
-/** Function ReadPcbNetlist
+/**
+ * Function ReadPcbNetlist
  * Update footprints (load missing footprints and delete on request extra
  * footprints)
  * Update connectivity info ( Net Name list )
@@ -563,7 +565,8 @@ is [%s] and netlist said [%s]\n" ),
 }
 
 
-/** Function SetPadNetName
+/**
+ * Function SetPadNetName
  *  Update a pad netname in a given footprint
  *  @param Text = Text from netlist (format: (pad = net) )
  *  @param Module = the given footprint
@@ -666,7 +669,8 @@ MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 }
 
 
-/** Function TestFor_Duplicate_Missing_And_Extra_Footprints
+/**
+ * Function TestFor_Duplicate_Missing_And_Extra_Footprints
  * Build a list from the given board and netlist :
  *  1 - for duplicate footprints on board
  *  2 - for missing footprints
@@ -776,7 +780,8 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 }
 
 
-/** Function BuildFootprintsListFromNetlistFile
+/**
+ * Function BuildFootprintsListFromNetlistFile
  *  Fill BufName with footprints names read from the netlist.
  * @param aNetlistFullFilename = netlist file name
  * @param BufName = wxArrayString to fill with footprint names

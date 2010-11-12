@@ -174,7 +174,8 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
     return HitTest( aRefPoint, mindist, DefaultTransform );
 }
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aRefPoint = a wxPoint to test
  * @param aThreshold = max distance to this object (usually the half thickness
@@ -212,14 +213,14 @@ bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM&
     // relative to the start point to end point vector lies
     if( CrossProduct( startEndVector, startRelativePositionVector ) < 0 )
     {
-    	EXCHG( crossProductStart, crossProductEnd );
+        EXCHG( crossProductStart, crossProductEnd );
     }
 
     // When the cross products have a different sign, the point lies in sector
     // also check, if the reference is near start or end point
     return 	HitTestPoints( m_ArcStart, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-    		HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-    		( crossProductStart <= 0 && crossProductEnd >= 0 );
+            HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
+            ( crossProductStart <= 0 && crossProductEnd >= 0 );
 }
 
 
@@ -327,7 +328,8 @@ void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_ARC::GetPenSize()

@@ -62,7 +62,8 @@
 BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
 
 
-/** function TestForExistingItem
+/**
+ * Function TestForExistingItem
  * test if aItem exists somewhere in lists of items
  * This is a function unsed by PutDataInPreviousState to be sure an item was not deleted
  * since an undo or redo.
@@ -110,7 +111,8 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 /***************************************************************/
 
-/** Function SwapData
+/**
+ * Function SwapData
  * Used in undo / redo command:
  *  swap data between Item and a copy
  *  swapped data is data modified by edition, mainly sizes and texts
@@ -330,7 +332,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
                                           const wxPoint& aTransformPoint )
 /***********************************************************************/
 
-/** function SaveCopyInUndoList
+/**
+ * Function SaveCopyInUndoList
  * Create a copy of the current schematic item, and put it in the undo list.
  *
  *  flag_type_command =
@@ -397,7 +400,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 }
 
 
-/** function SaveCopyInUndoList
+/**
+ * Function SaveCopyInUndoList
  * @param aItemsList = a PICKED_ITEMS_LIST of items to save
  * @param aTypeCommand = type of comand ( UR_CHANGED, UR_NEW, UR_DELETED ...
  */
@@ -469,7 +473,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/** Function PutDataInPreviousState()
+/**
+ * Function PutDataInPreviousState()
  * Used in undo or redo command.
  * Put data pointed by List in the previous state, i.e. the state memorised by List
  * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
@@ -579,7 +584,8 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 /**********************************************************/
 
-/** Function GetBoardFromUndoList
+/**
+ * Function GetBoardFromUndoList
  *  Undo the last edition:
  *  - Save the current board state in Redo list
  *  - Get an old version of the board state from Undo list
@@ -606,7 +612,8 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
 }
 
 
-/** Function GetBoardFromRedoList
+/**
+ * Function GetBoardFromRedoList
  *  Redo the last edition:
  *  - Save the current board in Undo list
  *  - Get an old version of the board from Redo list
@@ -640,7 +647,8 @@ void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
 void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 /**********************************************************************************/
 
-/** Function ClearUndoORRedoList
+/**
+ * Function ClearUndoORRedoList
  * free the undo or redo list from List element
  *  Wrappers are deleted.
  *  datas pointed by wrappers are deleted if not in use in schematic

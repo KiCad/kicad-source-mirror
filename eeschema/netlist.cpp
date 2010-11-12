@@ -307,7 +307,8 @@ void WinEDA_SchematicFrame::BuildNetListBase()
 }
 
 
-/** function FindBestNetNameForEachNet
+/**
+ * Function FindBestNetNameForEachNet
  * fill the .m_NetNameCandidate member of each item of aNetItemBuffer
  * with a reference to the "best" NETLIST_OBJECT usable to give a name to the net
  * If no suitable object found, .m_NetNameCandidate is filled with 0.
@@ -359,7 +360,8 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
     }
 }
 
-/** Function FindBestNetName
+/**
+ * Function FindBestNetName
  * @return a reference to the "best" label that can be used to give a name
  *  to a net.
  * @param aLabelItemBuffer = list of NETLIST_OBJECT type labels candidates.
@@ -422,7 +424,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             // for other labels, we select them before by sheet deep order
             // because the actual name is /sheetpath/label
             // and for a given path length, by alphabetic order
-            
+
             if( item_priority >= PRIO_MAX-1 )     // global label or pin label
             {   // selection by alphabetic order:
                 if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
@@ -488,7 +490,8 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 }
 
 
-/** Function AddConnectedObjects
+/**
+ * Function AddConnectedObjects
  * Creates the list of objects related to connections (pins of components,
  * wires, labels, junctions ...)
  *

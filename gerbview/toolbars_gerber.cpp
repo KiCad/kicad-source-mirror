@@ -212,7 +212,8 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 }
 
 
-/** Function SetToolbars()
+/**
+ * Function SetToolbars()
  * Set the tools state for the toolbars, according to display options
  */
 void WinEDA_GerberFrame::SetToolbars()

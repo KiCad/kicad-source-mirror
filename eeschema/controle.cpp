@@ -22,7 +22,8 @@
 #include "sch_component.h"
 
 
-/** Function SchematicGeneralLocateAndDisplay
+/**
+ * Function SchematicGeneralLocateAndDisplay
  * Overlaid function
  *  Find the schematic item at cursor position
  *  the priority order is:
@@ -100,7 +101,8 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
 }
 
 
-/** Function SchematicGeneralLocateAndDisplay
+/**
+ * Function SchematicGeneralLocateAndDisplay
  * Overlaid function
  *  Find the schematic item at a given position
  *  the priority order is:

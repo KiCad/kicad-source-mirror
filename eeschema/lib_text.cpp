@@ -148,7 +148,8 @@ bool LIB_TEXT::HitTest( const wxPoint& refPos )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this item
  * @param aPosRef = a wxPoint to test, in eeschema space
  * @param aThreshold = unused here (TextHitTest calculates its threshold )
@@ -269,7 +270,8 @@ void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_TEXT::GetPenSize( )

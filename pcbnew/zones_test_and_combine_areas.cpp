@@ -18,7 +18,8 @@ static bool bDontShowSelfIntersectionWarning;
 static bool bDontShowIntersectionArcsWarning;
 
 
-/** Function AddArea
+/**
+ * Function AddArea
  * Add an empty copper area to board areas list
  * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in undo commands)
  *                      can be NULL
@@ -45,7 +46,8 @@ ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
 }
 
 
-/** Function RemoveArea
+/**
+ * Function RemoveArea
  * remove copper area from net, and put it in a deleted list (if exists)
  * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo commands)
  *                      can be NULL

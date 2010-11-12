@@ -252,7 +252,8 @@ wxString LIB_COMPONENT::GetLibraryName()
 }
 
 
-/** function IsMulti
+/**
+ * Function IsMulti
  * @return the sub reference for component having multiple parts per package.
  * The sub reference identify the part (or unit)
  * @param aUnit = the part identifier ( 1 to 26)
@@ -1350,7 +1351,8 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
     return NULL;
 }
 
-/** Function HitTest (overlaid)
+/**
+ * Function HitTest (overlaid)
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to this object (usually the half

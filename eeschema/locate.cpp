@@ -123,7 +123,8 @@ SCH_ITEM* PickStruct( const wxPoint& refpos,
 }
 
 
-/** Function PickStruct
+/**
+ * Function PickStruct
  * Search items in a block
  * @return items count
  * @param aBlock a BLOCK_SELECTOR that gives the search area boundary
@@ -417,11 +418,11 @@ bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
         break;
 
     case DRAW_JUNCTION_STRUCT_TYPE:
-		#undef STRUCT
+        #undef STRUCT
         #define STRUCT ( (SCH_JUNCTION*) DrawStruct )
-    	if( aBox.Inside(STRUCT->m_Pos) )
-    		return true;
-    	break;
+        if( aBox.Inside(STRUCT->m_Pos) )
+            return true;
+        break;
 
     case DRAW_NOCONNECT_STRUCT_TYPE:
     case TYPE_SCH_LABEL:

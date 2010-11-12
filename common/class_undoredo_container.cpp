@@ -78,7 +78,8 @@ ITEM_PICKER PICKED_ITEMS_LIST::PopItem()
 }
 
 
-/** Function ClearItemsList
+/**
+ * Function ClearItemsList
  * delete only the list of pickers, NOT the picked data itself
  */
 void PICKED_ITEMS_LIST::ClearItemsList()
@@ -87,7 +88,8 @@ void PICKED_ITEMS_LIST::ClearItemsList()
 }
 
 
-/** Function ClearListAndDeleteItems
+/**
+ * Function ClearListAndDeleteItems
  * delete the list of pickers, AND the data pointed
  * by m_PickedItem or m_PickedItemLink, according to the type of undo/redo command recorded
  */
@@ -161,7 +163,8 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 }
 
 
-/** function GetItemWrapper
+/**
+ * Function GetItemWrapper
  * @return the picker of a picked item
  * @param aIdx = index of the picker in the picked list
  * if this picker does not exist, a picker is returned,
@@ -178,7 +181,8 @@ ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
 }
 
 
-/** function GetPickedItem
+/**
+ * Function GetPickedItem
  * @return a pointer to the picked item, or null if does not exist
  * @param aIdx = index of the picked item in the picked list
  */
@@ -191,7 +195,8 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 }
 
 
-/** function GetPickedItemLink
+/**
+ * Function GetPickedItemLink
  * @return link of the picked item, or null if does not exist
  * @param aIdx = index of the picked item in the picked list
  */
@@ -204,7 +209,8 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 }
 
 
-/** function GetPickedItemStatus
+/**
+ * Function GetPickedItemStatus
  * @return the type of undo/redo opertaion associated to the picked item,
  *   or UR_UNSPECIFIED if does not exist
  * @param aIdx = index of the picked item in the picked list
@@ -217,7 +223,8 @@ UndoRedoOpType PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
         return UR_UNSPECIFIED;
 }
 
-/** function GetPickerFlags
+/**
+ * Function GetPickerFlags
  * return the value of the picker flag
   * @param aIdx = index of the picker in the picked list
  * @return the value stored in the picker, if the picker exists, or 0 if does not exist
@@ -230,7 +237,8 @@ int PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
         return 0;
 }
 
-/** function SetPickedItem
+/**
+ * Function SetPickedItem
  * @param aItem = a pointer to the item to pick
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
@@ -247,7 +255,8 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx )
 }
 
 
-/** function SetPickedItemLink
+/**
+ * Function SetPickedItemLink
  * Set the link associated to a given picked item
  * @param aLink = the link to the item associated to the picked item
  * @param aIdx = index of the picker in the picked list
@@ -265,7 +274,8 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx 
 }
 
 
-/** function SetPickedItem
+/**
+ * Function SetPickedItem
  * @param aItem = a pointer to the item to pick
  * @param aStatus = the type of undo/redo operation associated to the item to pick
  * @param aIdx = index of the picker in the picked list
@@ -286,7 +296,8 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem,
 }
 
 
-/** function SetPickedItemStatus
+/**
+ * Function SetPickedItemStatus
  * Set the the type of undo/redo operation for a given picked item
  * @param aStatus = the type of undo/redo operation associated to the picked item
  * @param aIdx = index of the picker in the picked list
@@ -302,7 +313,8 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aI
     else
         return false;
 }
-/** function SetPickerFlags
+/**
+ * Function SetPickerFlags
  * Set the flags of the picker (usually to the picked item m_Flags value)
  * @param aFlags = the value to save in picker
  * @param aIdx = index of the picker in the picked list
@@ -320,7 +332,8 @@ bool PICKED_ITEMS_LIST::SetPickerFlags( int aFlags, unsigned aIdx )
 }
 
 
-/** function RemovePicker
+/**
+ * Function RemovePicker
  * rem�ove one entry (one picker) from the list of picked items
  * @param aIdx = index of the picker in the picked list
  * @return true if ok, or false if did not exist
@@ -334,7 +347,8 @@ bool PICKED_ITEMS_LIST::RemovePicker( unsigned aIdx )
 }
 
 
-/** Function CopyList
+/**
+ * Function CopyList
  * copy all data from aSource
  * Picked items are not copied. just pointers on them are copied
  */
@@ -343,7 +357,8 @@ void PICKED_ITEMS_LIST::CopyList( const PICKED_ITEMS_LIST& aSource )
     m_ItemsList = aSource.m_ItemsList;  // Vector's copy
 }
 
-/** function ReversePickersListOrder()
+/**
+ * Function ReversePickersListOrder()
  * reverses the order of pickers stored in this list
  * Useful when pop a list from Undo to Redo (and vice-versa)
  * because sometimes undo (or redo) a command needs to keep the

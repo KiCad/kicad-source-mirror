@@ -177,7 +177,8 @@ void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
 bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly )
 /********************************************************************************************/
 
-/** Function dialog_copper_zone::AcceptOptions(
+/**
+ * Function dialog_copper_zone::AcceptOptions(
  * @return false if incorrect options, true if Ok.
  * @param aPromptForErrors = true to prompt user on incorrectparams
  * @param aUseExportableSetupOnly = true to use exportable parametres only (used to export this setup to other zones)

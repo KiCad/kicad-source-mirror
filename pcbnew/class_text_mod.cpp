@@ -245,7 +245,8 @@ void TEXTE_MODULE:: SetLocalCoord()
 }
 
 
-/** Function GetTextRect
+/**
+ * Function GetTextRect
  * @return an EDA_Rect which gives the position and size of the text area
  *         (for the footprint orientation)
  */
@@ -322,7 +323,8 @@ EDA_Rect TEXTE_MODULE::GetBoundingBox()
 }
 
 
-/** Function Draw
+/**
+ * Function Draw
  * Draw the text according to the footprint pos and orient
  * @param panel = draw panel, Used to know the clip box
  * @param DC = Current Device Context

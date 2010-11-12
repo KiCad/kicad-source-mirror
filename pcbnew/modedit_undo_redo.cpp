@@ -13,7 +13,8 @@
 #include "protos.h"
 
 
-/** Function SaveCopyInUndoList.
+/**
+ * Function SaveCopyInUndoList.
  * Creates a new entry in undo list of commands.
  * add a picker to handle aItemToCopy
  * @param aItem = the board item modified by the command to undo
@@ -46,7 +47,8 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 }
 
 
-/** Function SaveCopyInUndoList (overloaded).
+/**
+ * Function SaveCopyInUndoList (overloaded).
  * Creates a new entry in undo list of commands.
  * add a list of pickers to handle a list of items
  * @param aItemsList = the list of items modified by the command to undo

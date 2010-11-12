@@ -85,7 +85,8 @@ wxString NETS_LIST_CTRL::OnGetItemText( long item, long column ) const
 }
 
 
-/** Function setRowItems
+/**
+ * Function setRowItems
  * Initialize the net name and the net class name at row aRow
  * @param aRow = row index (if aRow > number of stored row, empty rows will be created)
  * @param aNetname = the string to display in row aRow, column 0
@@ -489,7 +490,8 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
 }
 
 
-/** Function InitRulesList()
+/**
+ * Function InitRulesList()
  * Fill the grid showing current rules with values
  */
 void DIALOG_DESIGN_RULES::InitRulesList()
