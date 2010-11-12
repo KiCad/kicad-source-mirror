@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "cvstruct.h"
 #include "colors_selection.h"
+#include "cvpcb_id.h"
 
 #include "build_version.h"
 

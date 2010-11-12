@@ -71,10 +71,14 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         return FALSE;
     }
 
-    // get the file version here. TODO: Support version numbers > 9
-    char version = line[9 + sizeof(SCHEMATIC_HEAD_STRING)];
-    int  ver     = version - '0';
-    if( ver > EESCHEMA_VERSION )
+    // get the file version here.
+    char *strversion = line + 9 + sizeof(SCHEMATIC_HEAD_STRING);
+    // Skip blanks
+    while( *strversion && *strversion < '0' )
+        strversion++;
+    int  version = atoi(strversion);
+
+    if( version > EESCHEMA_VERSION )
     {
         MsgDiag = FullFileName + _( " was created by a more recent \
 version of EESchema and may not load correctly. Please consider updating!" );
@@ -83,7 +87,7 @@ version of EESchema and may not load correctly. Please consider updating!" );
 
 #if 0
     // Compile it if the new version is unreadable by previous eeschema versions
-    else if( ver < EESCHEMA_VERSION )
+    else if( version < EESCHEMA_VERSION )
     {
         MsgDiag = FullFileName + _( " was created by an older version of \
 EESchema. It will be stored in the new file format when you save this file \
@@ -159,9 +163,9 @@ again." );
             }
             else if( Name1[0] == 'L' )
                 item = new SCH_LABEL();
-            else if( Name1[0] == 'G' && ver > '1' )
+            else if( Name1[0] == 'G' && version > 1 )
                 item = new SCH_GLOBALLABEL();
-            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && ver == '1') )
+            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == 1) )
                 item = new SCH_HIERLABEL();
             else
                 item = new SCH_TEXT();

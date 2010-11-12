@@ -4,6 +4,7 @@ add_definitions(-DPCBNEW)
 # Includes
 ###
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../common
@@ -41,6 +42,7 @@ set(PCBNEW_SRCS
     cross-probing.cpp
     debug_kbool_key_file_fct.cpp
     deltrack.cpp
+    dialogs/dialog_block_options_base.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
     dialog_design_rules.cpp
