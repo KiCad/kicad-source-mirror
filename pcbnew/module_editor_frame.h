@@ -48,7 +48,8 @@ public:
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
 
-    /** function LoadModuleFromBoard
+    /**
+     * Function LoadModuleFromBoard
      * called from the main toolbar
      * to load a footprint from board mainly to edit it
      */
@@ -62,7 +63,8 @@ public:
      */
     virtual void OnModify( );
 
-    /** function ToPrinter
+    /**
+     * Function ToPrinter
      * Install the print dialog
      */
     void         ToPrinter( wxCommandEvent& event );
@@ -82,7 +84,8 @@ public:
 
     // BOARD handling
 
-    /** function Clear_Pcb()
+    /**
+     * Function Clear_Pcb()
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to
      *                 initialize silently
@@ -99,7 +102,8 @@ public:
     /* Undo and redo functions */
 public:
 
-    /** Function SaveCopyInUndoList.
+    /**
+     * Function SaveCopyInUndoList.
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItem = the board item modified by the command to undo
@@ -112,7 +116,8 @@ public:
                                     const wxPoint& aTransformPoint =
                                         wxPoint( 0, 0 ) );
 
-    /** Function SaveCopyInUndoList (overloaded).
+    /**
+     * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
@@ -151,14 +156,16 @@ public:
     MODULE* Import_Module( );
 
 
-    /** function Load_Module_From_BOARD
+    /**
+     * Function Load_Module_From_BOARD
      * load in Modedit a footfrint from the main board
      * @param Module = the module to load. If NULL, a module reference will we asked to user
      * @return true if a module isloaded, false otherwise.
      */
     bool         Load_Module_From_BOARD( MODULE* Module );
 
-    /** Function Select_1_Module_From_BOARD
+    /**
+     * Function Select_1_Module_From_BOARD
      * Display the list of modules currently existing on the BOARD
      * @return a pointer to a module if this module is selected or NULL otherwise
      * @param aPcb = the board from modules can be loaded
@@ -167,7 +174,8 @@ public:
 
     // functions to edit footprint edges
 
-    /** Function Edit_Edge_Width
+    /**
+     * Function Edit_Edge_Width
      * changes the width of module perimeter lines, EDGE_MODULEs.
      * param ModuleSegmentWidth (global) = new width
      * @param aEdge = edge to edit, or NULL.  If aEdge == NULL change
@@ -178,7 +186,8 @@ public:
     void         Delete_Edge_Module( EDGE_MODULE* Edge );
     EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, int type_edge );
     void         End_Edge_Module( EDGE_MODULE* Edge );
-    /** function Enter_Edge_Width
+    /**
+     * Function Enter_Edge_Width
      * Edition of the edge items width
      * Ask for a new width.
      * Change the width of EDGE_MODULE Edge if aEdge != NULL

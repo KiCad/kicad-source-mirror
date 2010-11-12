@@ -65,7 +65,8 @@ public:
      */
     virtual void Flip(const wxPoint& aCentre );
 
-    /** Function Draw
+    /**
+     * Function Draw
      */
     void    Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset = ZeroOffset )
     {
@@ -82,7 +83,8 @@ public:
     }
 
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */

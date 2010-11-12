@@ -77,7 +77,8 @@ public:
 
     ~WinEDA_MainFrame();
 
-    /** Function CreateCommandToolbar
+    /**
+     * Function CreateCommandToolbar
      * Create the main buttons (fast launch buttons)
      */
     void OnCloseWindow( wxCloseEvent& Event );

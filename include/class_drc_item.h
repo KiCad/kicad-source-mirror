@@ -76,7 +76,8 @@ public:
     }
 
 
-    /** Function SetData
+    /**
+     * Function SetData
      * initialize all data in item
      * @param aErrorCode = error code
      * @param aMainText = the text concerning the schematic or board item
@@ -91,7 +92,8 @@ public:
         m_hasSecondItem = false;
     }
 
-    /** Function SetData
+    /**
+     * Function SetData
      * initialize all data in item
      * @param aErrorCode = error code
      * @param aMainText = the first text (main text) concerning the main schematic or board item
@@ -111,7 +113,8 @@ public:
         m_hasSecondItem     = true;
     }
 
-    /** Function SetAuxiliaryData
+    /**
+     * Function SetAuxiliaryData
      * initialize data for the second (auxiliary) item
      * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
      * @param aAuxiliaryPos = position the second item

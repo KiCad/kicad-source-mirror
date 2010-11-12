@@ -166,7 +166,8 @@ public:
         m_Pos = aPos;
     }
 
-    /** function TransformShapeWithClearanceToPolygon
+    /**
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the pad shape to a closed polygon
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
@@ -193,7 +194,8 @@ public:
 
    // Mask margins handling:
 
-    /** Function GetSolderMaskMargin
+    /**
+     * Function GetSolderMaskMargin
      * @return the margin for the solder mask layer
      * usually > 0 (mask shape bigger than pad
      * value is
@@ -203,7 +205,8 @@ public:
      */
     int           GetSolderMaskMargin();
 
-    /** Function GetSolderPasteMargin
+    /**
+     * Function GetSolderPasteMargin
      * @return the margin for the solder mask layer
      * usually < 0 (mask shape smaller than pad
      * because the margin can be dependent on the pad size, the margin has a x and a y value
@@ -232,13 +235,15 @@ public:
 
     void          Draw3D( Pcb3D_GLCanvas* glcanvas );
 
-    /** function DrawShape
+    /**
+     * Function DrawShape
      * basic function to draw a pad.
      * used by Draw after calculation of parameters (color, ) final orientation ...
      */
     void          DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
-    /** function BuildPadPolygon
+    /**
+     * Function BuildPadPolygon
      * Has meaning only for polygonal pads (trapezoid and rectangular)
      * Build the Corner list of the polygonal shape,
      * depending on shape, extra size (clearance ...) and orientation
@@ -248,7 +253,8 @@ public:
      */
     void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
 
-    /** function BuildSegmentFromOvalShape
+    /**
+     * Function BuildSegmentFromOvalShape
      * Has meaning only for OVAL (and ROUND) pads
      * Build an equivalent segment having the same shape as the OVAL shape,
      * Useful in draw function and in DRC and HitTest functions,

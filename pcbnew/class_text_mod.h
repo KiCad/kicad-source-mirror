@@ -50,7 +50,8 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     int      GetDrawRotation();     // Return text rotation for drawings and
                                     // plotting
 
-    /** Function GetTextRect
+    /**
+     * Function GetTextRect
      * @return an EDA_Rect which gives the position and size of the text area
      * (for the 0 orient text and footprint)
      */

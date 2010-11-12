@@ -65,7 +65,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a text )
@@ -81,7 +82,8 @@ public:
 
     int          GetSchematicTextOrientation() { return m_SchematicOrientation; }
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -97,7 +99,8 @@ public:
                           int               draw_mode,
                           int               Color = -1 );
 
-    /** function CreateGraphicShape
+    /**
+     * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
@@ -113,7 +116,8 @@ public:
 
     void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -147,7 +151,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     int      GetPenSize();
@@ -218,7 +223,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a label)
@@ -232,7 +238,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -291,7 +298,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -305,7 +313,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -333,7 +342,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -348,7 +358,8 @@ public:
      */
     EDA_Rect        GetBoundingBox();
 
-    /** function CreateGraphicShape (virual)
+    /**
+     * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
@@ -384,7 +395,8 @@ public:
     }
 
 
-    /** function SetTextOrientAndJustifyParmeters
+    /**
+     * Function SetTextOrientAndJustifyParmeters
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -398,7 +410,8 @@ public:
      */
     virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
 
-    /** function GetSchematicTextOffset (virtual)
+    /**
+     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself
      * position
      * This offset depend on orientation, and the type of text
@@ -407,7 +420,8 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset();
 
-    /** function CreateGraphicShape
+    /**
+     * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
@@ -434,7 +448,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */

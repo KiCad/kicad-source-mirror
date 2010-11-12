@@ -167,7 +167,8 @@ public:
 
     void       SetOrientation( int aOrientation );
 
-    /** function GetOrientation()
+    /**
+     * Function GetOrientation()
      * Used to display component orientation (in dialog editor or info)
      * @return the orientation and mirror
      * Note: Because there are different ways to have a given orientation/mirror,
@@ -192,7 +193,8 @@ public:
      */
     void       ClearAnnotation( SCH_SHEET_PATH* aSheet );
 
-    /** function SetTimeStamp
+    /**
+     * Function SetTimeStamp
      * Change the old time stamp to the new time stamp.
      * the time stamp is also modified in paths
      * @param aNewTimeStamp = new time stamp
@@ -324,7 +326,8 @@ public:
     // Set the unit selection, for the given sheet path.
     void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      * for a component, has no meaning, but it is necessary to satisfy the
      * SCH_ITEM class requirements.

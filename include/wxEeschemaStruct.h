@@ -179,7 +179,8 @@ public:
     }
 
 
-    /** Function OnModify()
+    /**
+     * Function OnModify()
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
      * and update the date in frame reference
@@ -238,7 +239,8 @@ public:
     /* netlist generation */
     void         BuildNetListBase();
 
-    /** Function CreateNetlist
+    /**
+     * Function CreateNetlist
      * Create a netlist file:
      *  build netlist info
      *  test issues
@@ -254,7 +256,8 @@ public:
                                 const wxString& aFullFileName,
                                 bool            aUse_netnames );
 
-    /** function  WriteNetListFile
+    /**
+     * Function  WriteNetListFile
      * Create the netlist file. Netlist info must be existing
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
@@ -281,7 +284,8 @@ public:
     void         InstallPreviousSheet();
     void         InstallNextScreen( SCH_SHEET* Sheet );
 
-    /** Function GetUniqueFilenameForCurrentSheet
+    /**
+     * Function GetUniqueFilenameForCurrentSheet
      * @return a filename that can be used in plot and print functions
      * for the current screen and sheet path.
      * This filename is unique and must be used instead of the screen filename
@@ -407,7 +411,8 @@ private:
     void            OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void            OnUpdateBusOrientation( wxUpdateUIEvent& event );
 
-    /** function SetLanguage
+    /**
+     * Function SetLanguage
      * called on a language menu selection
      */
     void            SetLanguage( wxCommandEvent& event );
@@ -461,7 +466,8 @@ private:
 public:
     bool            EditSheet( SCH_SHEET* Sheet, wxDC* DC );
 
-    /** Function UpdateSheetNumberAndDate
+    /**
+     * Function UpdateSheetNumberAndDate
      * Set a sheet number, the sheet count for sheets in the whole schematic
      * and update the date in all screens
      */
@@ -513,7 +519,8 @@ private:
     /* Undo - redo */
 public:
 
-    /** Function SaveCopyInUndoList.
+    /**
+     * Function SaveCopyInUndoList.
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItemToCopy = the schematic item modified by the command to undo
@@ -525,7 +532,8 @@ public:
                             UndoRedoOpType aTypeCommand,
                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
-    /** Function SaveCopyInUndoList (overloaded).
+    /**
+     * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
@@ -539,7 +547,8 @@ public:
 
 private:
 
-    /** Function PutDataInPreviousState()
+    /**
+     * Function PutDataInPreviousState()
      * Used in undo or redo command.
      * Put data pointed by List in the previous state, i.e. the state
      * memorized by List
@@ -549,7 +558,8 @@ private:
      */
     void     PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
-    /** Function GetSchematicFromRedoList
+    /**
+     * Function GetSchematicFromRedoList
      *  Redo the last edition:
      *  - Save the current schematic in Undo list
      *  - Get an old version of the schematic from Redo list
@@ -557,7 +567,8 @@ private:
      */
     void     GetSchematicFromRedoList( wxCommandEvent& event );
 
-    /** Function GetSchematicFromUndoList
+    /**
+     * Function GetSchematicFromUndoList
      *  Undo the last edition:
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list

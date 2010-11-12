@@ -84,7 +84,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int  GetPenSize();
@@ -158,7 +159,8 @@ public:
 
     SCH_NO_CONNECT* GenCopy();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int     GetPenSize();
@@ -186,7 +188,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -285,7 +288,8 @@ public:
      */
     EDA_Rect       GetBoundingBox();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int    GetPenSize();
@@ -357,7 +361,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** Function AddPoint
+    /**
+     * Function AddPoint
      * add a corner to m_PolyPoints
      */
     void           AddPoint( const wxPoint& point )
@@ -366,13 +371,15 @@ public:
     }
 
 
-    /** Function GetCornerCount
+    /**
+     * Function GetCornerCount
      * @return the number of corners
      */
 
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize();
@@ -416,7 +423,8 @@ public:
     }
 
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */
@@ -434,7 +442,8 @@ public:
 
     SCH_JUNCTION* GenCopy();
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int   GetPenSize();

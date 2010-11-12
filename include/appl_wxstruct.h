@@ -83,7 +83,8 @@ public: WinEDA_App();
 
     virtual void MacOpenFile(const wxString &fileName);
 
-    /** Function InitEDA_Appl
+    /**
+     * Function InitEDA_Appl
      * initialize some general parameters
      *  - Default paths (help, libs, bin)and configuration files names
      *  - Language and locale
@@ -97,7 +98,8 @@ public: WinEDA_App();
 
     bool      SetLanguage( bool first_time = FALSE );
 
-    /** Function AddMenuLanguageList
+    /**
+     * Function AddMenuLanguageList
      *
      * Create menu list for language choice, and add it as submenu to a main
      * menu
@@ -113,7 +115,8 @@ public: WinEDA_App();
     void      SetLanguagePath( void );
     void      InitOnLineHelp();
 
-    /** Function GetSettings
+    /**
+     * Function GetSettings
      * Get application settings
      * @param aReopenLastUsedDirectory = true to switch to last opened
      * directory, false to use current CWD
@@ -130,7 +133,8 @@ public: WinEDA_App();
                                   const wxString&  GroupName,
                                   PARAM_CFG_ARRAY& params );
 
-    /** Function SaveCurrentSetupValues()
+    /**
+     * Function SaveCurrentSetupValues()
      * Save the current setup values in m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to
      * true
@@ -139,7 +143,8 @@ public: WinEDA_App();
     void      SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
     void      SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
-    /** Function ReadCurrentSetupValues()
+    /**
+     * Function ReadCurrentSetupValues()
      * Raed the current setup values previously saved, from m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to
      * true
@@ -207,14 +212,16 @@ public: WinEDA_App();
     wxString ReturnFilenameWithRelativePathInLibPath(
         const wxString& aFullFilename );
 
-    /** Function RemoveLibraryPath
+    /**
+     * Function RemoveLibraryPath
      * Removes the given path(s) from the library path list
      * @param aPaths = path or path list to remove. paths must be separated by
      * ";"
      */
     void     RemoveLibraryPath( const wxString& aPaths );
 
-    /** Function InsertLibraryPath
+    /**
+     * Function InsertLibraryPath
      * insert path(s) int lib paths list.
      * @param aPaths = path or path list to add. paths must be separated by ";"
      * @param aIndex = insertion point

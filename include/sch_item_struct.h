@@ -85,7 +85,8 @@ public:
      */
     void  SetLayer( int aLayer )  { m_Layer = aLayer; }
 
-    /** Function GetPenSize virtual pure
+    /**
+     * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( ) = 0;

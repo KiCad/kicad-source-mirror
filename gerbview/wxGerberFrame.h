@@ -63,7 +63,8 @@ public:
     void         Update_config();
     void         OnCloseWindow( wxCloseEvent& Event );
 
-    /** function ReportMessage
+    /**
+     * Function ReportMessage
      * Add a message (a string) in message list
      * for instance when reading a Gerber file
      * @param aMessage = the straing to add in list
@@ -72,7 +73,8 @@ public:
     {
         m_Messages.Add( aMessage );
     }
-    /** function ClearMessageList
+    /**
+     * Function ClearMessageList
      * Clear the message list
      * Call it before reading a Gerber file
      */
@@ -81,24 +83,28 @@ public:
         m_Messages.Clear( );
     }
 
-    /** Function IsGridVisible() , virtual
+    /**
+     * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
     virtual bool     IsGridVisible();
 
-    /** Function SetGridVisibility() , virtual
+    /**
+     * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
      * if you want to store/retrieve the grid visiblity in configuration.
      * @param aVisible = true if the grid must be shown
      */
     virtual void     SetGridVisibility(bool aVisible);
 
-    /** Function GetGridColor() , virtual
+    /**
+     * Function GetGridColor() , virtual
      * @return the color of the grid
      */
     virtual int     GetGridColor();
 
-    /** Function SetGridColor() , virtual
+    /**
+     * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
     virtual void     SetGridColor(int aColor);
@@ -178,7 +184,8 @@ public:
      */
     void syncLayerBox();
 
-    /** function UpdateTitleAndInfo
+    /**
+     * Function UpdateTitleAndInfo
      * displays the short filename (if exists) of the selected layer
      * on the caption of the main gerbview window
      * and some other parameters
@@ -210,7 +217,8 @@ public:
      */
     virtual void SaveSettings();
 
-    /** function SetLanguage
+    /**
+     * Function SetLanguage
      * called on a language menu selection
      */
     virtual void SetLanguage( wxCommandEvent& event );
@@ -279,13 +287,15 @@ public:
     void         InstallDrillFrame( wxCommandEvent& event );
     void         ToPostProcess( wxCommandEvent& event );
 
-    /** Function ToPlotter
+    /**
+     * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
     void ToPlotter( wxCommandEvent& event );
 
-    /** Function ToPrinter
+    /**
+     * Function ToPrinter
      * Open a dialog frame to print layers
      */
     void ToPrinter( wxCommandEvent& event );
@@ -370,7 +380,8 @@ public:
         UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,
         const wxPoint& aTransformPoint = wxPoint(0,0) ) { }
 
-    /** Function SaveCopyInUndoList (overloaded).
+    /**
+     * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo

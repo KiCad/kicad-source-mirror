@@ -133,7 +133,8 @@ public:
     int  ReturnUsedDcodeNumber();
     void ResetDefaultValues();
 
-    /** function GetLayerParams
+    /**
+     * Function GetLayerParams
      * @return the current layers params
      */
     GERBER_LAYER& GetLayerParams()
@@ -142,14 +143,16 @@ public:
     }
 
 
-    /** function ReportMessage
+    /**
+     * Function ReportMessage
      * Add a message (a string) in message list
      * for instance when reading a Gerber file
      * @param aMessage = the straing to add in list
      */
     void    ReportMessage( const wxString aMessage );
 
-    /** function ClearMessageList
+    /**
+     * Function ClearMessageList
      * Clear the message list
      * Call it before reading a Gerber file
      */
@@ -160,12 +163,14 @@ public:
      */
     void    InitToolTable();
 
-    /** function ReadXYCoord
+    /**
+     * Function ReadXYCoord
      * Returns the current coordinate type pointed to by XnnYnn Text (XnnnnYmmmm)
      */
     wxPoint ReadXYCoord( char*& Text );
 
-    /** function ReadIJCoord
+    /**
+     * Function ReadIJCoord
      * Returns the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
      * These coordinates are relative, so if coordinate is absent, it's value
      * defaults to 0
@@ -229,7 +234,8 @@ public:
      */
     APERTURE_MACRO* FindApertureMacro( const APERTURE_MACRO& aLookup );
 
-    /** Function StepAndRepeatItem
+    /**
+     * Function StepAndRepeatItem
      * Gerber format has a command Step an Repeat
      * This function must be called when reading a gerber file and
      * after creating a new gerber item that must be repeated
@@ -238,7 +244,8 @@ public:
      */
     void            StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
 
-    /** Function DisplayImageInfo
+    /**
+     * Function DisplayImageInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Display info about Image Parameters.

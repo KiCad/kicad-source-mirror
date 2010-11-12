@@ -26,13 +26,15 @@ public:
 public:
     ZONE_SETTING( void );
 
-    /** function ImportSetting
+    /**
+     * Function ImportSetting
      * copy settings from a given zone
      * @param aSource: the given zone
      */
     void ImportSetting( const ZONE_CONTAINER& aSource );
 
-    /** function ExportSetting
+    /**
+     * Function ExportSetting
      * copy settings to a given zone
      * @param aTarget: the given zone
      * @param aFullExport: if false: some parameters are NOT exported

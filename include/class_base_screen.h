@@ -167,7 +167,8 @@ public:
     wxSize       ReturnPageSize( void );
     virtual int  GetInternalUnits( void );
 
-    /** Function CursorRealPosition
+    /**
+     * Function CursorRealPosition
      * @return the position in user units of location ScreenPos
      * @param ScreenPos = the screen (in pixel) position co convert
      */
@@ -185,7 +186,8 @@ public:
 
     /* general Undo/Redo command control */
 
-    /** function ClearUndoORRedoList (virtual).
+    /**
+     * Function ClearUndoORRedoList (virtual).
      * this function must remove the aItemCount old commands from aList
      * and delete commands, pickers and picked items if needed
      * Because picked items must be deleted only if they are not in use, this
@@ -198,14 +200,16 @@ public:
      */
     virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) = 0;
 
-    /** Function ClearUndoRedoList
+    /**
+     * Function ClearUndoRedoList
      * clear undo and redo list, using ClearUndoORRedoList()
      * picked items are deleted by ClearUndoORRedoList() according to their
      * status
      */
     virtual void               ClearUndoRedoList();
 
-    /** function PushCommandToUndoList
+    /**
+     * Function PushCommandToUndoList
      * add a command to undo in undo list
      * delete the very old commands when the max count of undo commands is
      * reached
@@ -213,7 +217,8 @@ public:
      */
     virtual void               PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
 
-    /** function PushCommandToRedoList
+    /**
+     * Function PushCommandToRedoList
      * add a command to redo in redo list
      * delete the very old commands when the max count of redo commands is
      * reached
@@ -258,7 +263,8 @@ public:
 
     //----<zoom stuff>---------------------------------------------------------
 
-    /** Function GetScalingFactor
+    /**
+     * Function GetScalingFactor
      * @return the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
@@ -268,13 +274,15 @@ public:
     }
 
 
-    /** Function SetScalingFactor
+    /**
+     * Function SetScalingFactor
      * @param the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
     void        SetScalingFactor( double aScale );
 
-    /** Function GetZoom
+    /**
+     * Function GetZoom
      * @return the current zoom factor
      * Note: the zoom factor is NOT the scaling factor
      *       the scaling factor is m_ZoomScalar * GetZoom()

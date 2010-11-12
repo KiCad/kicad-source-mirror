@@ -149,7 +149,8 @@ public:
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
 
-    /** Function TransformShapeWithClearanceToPolygon
+    /**
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
      * Used in filling zones calculations
      * Circles (vias) and arcs (ends of tracks) are approximated by segments

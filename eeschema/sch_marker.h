@@ -53,14 +53,16 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      * for a marker, has no meaning, but it is necessary to satisfy the
      * SCH_ITEM class requirements
      */
     virtual int GetPenSize() { return 0; };
 
-    /** Function HitTest
+    /**
+     * Function HitTest
      * @return true if the point aPosRef is within item area
      * @param aPosRef = a wxPoint to test
      */

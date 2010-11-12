@@ -236,7 +236,8 @@ public:
      */
     EDA_Rect& Inflate( int aDelta );
 
-    /** Function Merge
+    /**
+     * Function Merge
      * Modify Position and Size of this in order to contain the given rect
      * mainly used to calculate bounding boxes
      * @param aRect = given rect to merge with this
@@ -586,7 +587,8 @@ public:
 
     int     GetLength() const { return m_Text.Length(); };
 
-    /** Function Draw
+    /**
+     * Function Draw
      *  @param aPanel = the current DrawPanel
      *  @param aDC = the current Device Context
      *  @param aOffset = draw offset (usually (0,0))
@@ -603,7 +605,8 @@ public:
 
 private:
 
-    /** Function DrawOneLineOfText
+    /**
+     * Function DrawOneLineOfText
      * Draw a single text line.
      * Used to draw each line of this EDA_TextStruct, that can be multiline
      *  @param aPanel = the current DrawPanel
@@ -650,7 +653,8 @@ public:
      */
     int      LenSize( const wxString& aLine ) const;
 
-    /** Function GetTextBox
+    /**
+     * Function GetTextBox
      * useful in multiline texts to calculate the full text or a line area (for
      * zones filling, locate functions....)
      * @return the rect containing the line of text (i.e. the position and the
@@ -663,7 +667,8 @@ public:
      */
     EDA_Rect GetTextBox( int aLine = -1 );
 
-    /** Function GetInterline
+    /**
+     * Function GetInterline
      * return the distance between 2 text lines
      * has meaning only for multiline texts
      */

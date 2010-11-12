@@ -57,7 +57,8 @@ public:
     }
 
 
-    /** function Draw
+    /**
+     * Function Draw
      */
     void Draw( WinEDA_DrawPanel* panel,
                wxDC*             DC,
@@ -85,7 +86,8 @@ public:
 public: NETINFO_LIST( BOARD* aParent );
     ~NETINFO_LIST();
 
-    /** Function GetItem
+    /**
+     * Function GetItem
      * @param aNetcode = netcode to identify a given NETINFO_ITEM
      * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its
      * netcode, or NULL if not found
@@ -105,18 +107,21 @@ public: NETINFO_LIST( BOARD* aParent );
      */
     void AppendNet( NETINFO_ITEM* aNewElement );
 
-    /** Function DeleteData
+    /**
+     * Function DeleteData
      * delete the list of nets (and free memory)
      */
     void DeleteData();
 
-    /** Function BuildListOfNets
+    /**
+     * Function BuildListOfNets
      * Build or rebuild the list of NETINFO_ITEM m_NetBuffer
      * The list is sorted by names.
      */
     void BuildListOfNets();
 
-    /** Function GetPadsCount
+    /**
+     * Function GetPadsCount
      * @return the number of pads in board
      */
     unsigned     GetPadsCount()
@@ -125,7 +130,8 @@ public: NETINFO_LIST( BOARD* aParent );
     }
 
 
-    /** Function GetPad
+    /**
+     * Function GetPad
      * @return the pad idx from m_PadsFullList
      */
     D_PAD* GetPad( unsigned aIdx )
@@ -139,7 +145,8 @@ public: NETINFO_LIST( BOARD* aParent );
 
 private:
 
-    /** Function Build_Pads_Full_List
+    /**
+     * Function Build_Pads_Full_List
      *  Create the pad list
      * initialise:
      *   m_Pads (list of pads)
@@ -322,7 +329,8 @@ public:
     bool Save( FILE* aFile ) const;
 
 
-    /** function Draw
+    /**
+     * Function Draw
      * @todo we actually could show a NET, simply show all the tracks and
      *       a pads or net name on pad and vias
      */

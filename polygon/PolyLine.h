@@ -23,10 +23,10 @@
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
 enum
 {
-	IM_NONE = 0,
-	IM_90_45,
-	IM_45_90,
-	IM_90
+    IM_NONE = 0,
+    IM_90_45,
+    IM_45_90,
+    IM_90
 };
 
 
@@ -181,7 +181,8 @@ public:
 
     // KBOOL functions
 
-    /** Function AddPolygonsToBoolEng
+    /**
+     * Function AddPolygonsToBoolEng
      * and edges contours to a kbool engine, preparing a boolean op between polygons
      * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
      * @param aEnd_contour: ending contour number (-1 = all after  aStart_contour)
@@ -195,7 +196,8 @@ public:
                               int                 aEnd_contour = -1,
                               std::vector<CArc> * arc_array = NULL );
 
-    /** Function MakeKboolPoly
+    /**
+     * Function MakeKboolPoly
      * fill a kbool engine with a closed polyline contour
      * approximates arcs with multiple straight-line segments
      * @param aStart_contour: starting contour number (-1 = all, 0 is the outlines of zone, > 1 = holes in zone
@@ -213,7 +215,8 @@ public:
                        std::vector<CArc> * arc_array = NULL,
                        bool aConvertHoles = false);
 
-    /** Function NormalizeWithKbool
+    /**
+     * Function NormalizeWithKbool
      * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
      * is converted to non self-crossing polygon by adding extra points at the crossing locations
      * and reordering corners
@@ -226,11 +229,13 @@ public:
      */
     int NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs );
 
-    /** function GetKboolEngine
+    /**
+     * Function GetKboolEngine
      * @return the current used Kbool Engine (after normalization using kbool)
      */
     Bool_Engine* GetKboolEngine( ) { return  m_Kbool_Poly_Engine; }
-    /** function FreeKboolEngine
+    /**
+     * Function FreeKboolEngine
      * delete the current used Kbool Engine (free memory after normalization using kbool)
      */
     void FreeKboolEngine( ) { delete m_Kbool_Poly_Engine; m_Kbool_Poly_Engine = NULL; }

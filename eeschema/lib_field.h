@@ -68,7 +68,8 @@ public:
      */
     wxString GetName();
 
-    /** Function GetPenSize virtual pure
+    /**
+     * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
     int GetPenSize( );

@@ -63,7 +63,7 @@ public:
 
 #ifdef USE_WX_OVERLAY
     // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
-    wxOverlay               m_overlay; 
+    wxOverlay               m_overlay;
 #endif
     /* Cursor management (used in editing functions) */
 
@@ -89,7 +89,8 @@ public:
     void         OnPaint( wxPaintEvent& event );
     void         OnSize( wxSizeEvent& event );
 
-    /**  Function DrawBackGround
+    /**
+     * Function DrawBackGround
      * @param DC = current Device Context
      * Draws (if allowed) :
      * the grid
@@ -98,7 +99,8 @@ public:
      */
     void         DrawBackGround( wxDC* DC );
 
-    /**  Function DrawGrid
+    /**
+     * Function DrawGrid
      * @param DC = current Device Context
      * draws the grid
      *  - the grid is drawn only if the zoom level allows a good visibility
@@ -106,7 +108,8 @@ public:
      */
     void         DrawGrid( wxDC* DC );
 
-    /** function DrawAuxiliaryAxis
+    /**
+     * Function DrawAuxiliaryAxis
      * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
      * for gerber and excellon files
      * @param DC = current Device Context
@@ -159,13 +162,15 @@ public:
     void         SetBoundaryBox( wxDC* dc );
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
 
-    /** Function CursorRealPosition
+    /**
+     * Function CursorRealPosition
      * @return the position in user units of location ScreenPos
      * @param ScreenPos = the screen (in pixel) position to convert
      */
     wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
 
-    /** Function CursorScreenPosition
+    /**
+     * Function CursorScreenPosition
      * @return the curseur current position in pixels in the screen draw area
      */
     wxPoint      CursorScreenPosition();

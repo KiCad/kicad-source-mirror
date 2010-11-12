@@ -72,19 +72,22 @@ public:
 
     void SwapData( SCH_FIELD* copyitem );
 
-    /** Function ImportValues
+    /**
+     * Function ImportValues
      * copy parameters from a source.
      * Pointers and specific values (position) are not copied
      * @param aSource = the LIB_FIELD to read
      */
     void ImportValues( const LIB_FIELD& aSource );
 
-    /** Function GetPenSize
+    /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     int  GetPenSize();
 
-    /** Function IsVisible
+    /**
+     * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */
     bool IsVisible()

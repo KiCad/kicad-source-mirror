@@ -189,7 +189,8 @@ public:
      */
     static const wxChar* ShowApertureType( APERTURE_T aType );
 
-    /** function DrawFlashedShape
+    /**
+     * Function DrawFlashedShape
      * Draw the dcode shape for flashed items.
      * When an item is flashed, the DCode shape is the shape of the item
      * @param aParent = the GERBER_DRAW_ITEM being drawn
@@ -204,7 +205,8 @@ public:
                                             EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,
                                             wxPoint aShapePos, bool aFilledShape );
 
-    /** function DrawFlashedPolygon
+    /**
+     * Function DrawFlashedPolygon
      * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
      * Draw some Apertures shapes when they are defined as filled polygons.
      * APT_POLYGON is always a polygon, but some complex shapes are also converted to
@@ -220,7 +222,8 @@ public:
                                              EDA_Rect* aClipBox, wxDC* aDC, int aColor,
                                              bool aFilled, const wxPoint& aPosition );
 
-    /** function ConvertShapeToPolygon
+    /**
+     * Function ConvertShapeToPolygon
      * convert a shape to an equivalent polygon.
      * Arcs and circles are approximated by segments
      * Useful when a shape is not a graphic primitive (shape with hole,

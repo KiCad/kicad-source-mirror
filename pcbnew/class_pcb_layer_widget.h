@@ -75,7 +75,8 @@ public:
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
     void OnRenderColorChange( int aId, int aColor );
     void OnRenderEnable( int aId, bool isEnabled );
-    /** Function SetLayersManagerTabsText
+    /**
+     * Function SetLayersManagerTabsText
      * Update the layer manager tabs labels
      * Useful when changing Language or to set labels to a non default value
      */
