@@ -462,9 +462,9 @@ void WinEDA_DrawFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 {
-    return 0;
+    return false;
 }
 
 

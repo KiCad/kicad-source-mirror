@@ -473,9 +473,36 @@ public:
 
     /* Block operations: */
 
-    int  ReturnBlockCommand( int key );
-    void HandleBlockPlace( wxDC* DC );
-    int  HandleBlockEnd( wxDC* DC );
+    /**
+     * Function ReturnBlockCommand
+     * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
+     * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
+     * block command is started by dragging the mouse.
+     * @param aKey = the key modifiers (Alt, Shift ...)
+     * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
+     */
+    virtual int  ReturnBlockCommand( int key );
+
+    /**
+     * Function HandleBlockPlace( )
+     * Called after HandleBlockEnd, when a block command needs to be
+     * executed after the block is moved to its new place
+     * (bloc move, drag, copy .. )
+     * Parameters must be initialized in GetScreen()->m_BlockLocate
+     */
+    virtual void HandleBlockPlace( wxDC* DC );
+
+    /**
+     * Function HandleBlockEnd( )
+     * Handle the "end"  of a block command,
+     * i.e. is called at the end of the definition of the area of a block.
+     * depending on the current block command, this command is executed
+     * or parameters are initialized to prepare a call to HandleBlockPlace
+     * in GetScreen()->m_BlockLocate
+     * @return false if no item selected, or command finished,
+     * true if some items found and HandleBlockPlace must be called later
+     */
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     /**
      * Function Block_SelectItems

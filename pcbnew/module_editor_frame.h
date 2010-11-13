@@ -93,9 +93,9 @@ public:
     bool         Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    int          ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int key );
     virtual void HandleBlockPlace( wxDC* DC );
-    virtual int  HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     BOARD_ITEM*  ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 

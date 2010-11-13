@@ -248,9 +248,9 @@ public:
     void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */
-    int          ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int key );
     virtual void HandleBlockPlace( wxDC* DC );
-    virtual int  HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     /* Block operations: */
     /**

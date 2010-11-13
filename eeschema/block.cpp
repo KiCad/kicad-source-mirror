@@ -101,19 +101,19 @@ void WinEDA_SchematicFrame::InitBlockPasteInfos()
  */
 void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 {
-    bool            err   = FALSE;
+    bool            err   = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
-        err = TRUE;
+        err = true;
         DisplayError( this, wxT( "HandleBlockPLace() : ManageCurseur = NULL" ) );
     }
 
     if( block->GetCount() == 0 )
     {
         wxString msg;
-        err = TRUE;
+        err = true;
         msg.Printf( wxT( "HandleBlockPLace() error : no items to place (cmd %d, state %d)" ),
                     block->m_Command, block->m_State );
         DisplayError( this, msg );
@@ -124,7 +124,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     switch( block->m_Command )
     {
     case BLOCK_IDLE:
-        err = TRUE;
+        err = true;
         break;
 
     case BLOCK_ROTATE:
@@ -133,7 +133,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
 
         SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
         MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
@@ -143,7 +143,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_COPY:                /* Copy */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
 
         DuplicateItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
 
@@ -155,7 +155,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_PASTE:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         PasteListOfItems( DC );
         block->ClearItemsList();
         break;
@@ -194,16 +194,20 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-/* Manage end block command
- * Returns:
- * 0 if no features selected
- * 1 otherwise
- * -1 If control ended and components selection (block delete, block save)
+/**
+ * Function HandleBlockEnd( )
+ * Handle the "end"  of a block command,
+ * i.e. is called at the end of the definition of the area of a block.
+ * depending on the current block command, this command is executed
+ * or parameters are initialized to prepare a call to HandleBlockPlace
+ * in GetScreen()->m_BlockLocate
+ * @return false if no item selected, or command finished,
+ * true if some items found and HandleBlockPlace must be called later
  */
-int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 {
-    int             ii = 0;
-    bool            zoom_command = FALSE;
+    bool            nextcmd = false;
+    bool            zoom_command = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     if( block->GetCount() )
@@ -241,16 +245,16 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
             if( block->GetCount() )
             {
-                ii = 1;
+                nextcmd = true;
                 CollectStructsToDrag( GetScreen() );
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, false );
                 DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, false );
                 block->m_State = STATE_BLOCK_MOVE;
             }
             else
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, false );
                 DrawPanel->ManageCurseur = NULL;
                 DrawPanel->ForceCloseManageCurseur = NULL;
             }
@@ -258,10 +262,9 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DELETE: /* Delete */
             PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
-            DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
+            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
             if( block->GetCount() )
             {
-                ii = -1;
                 DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
                 OnModify();
             }
@@ -272,14 +275,13 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_SAVE:  /* Save */
             PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
-            DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
+            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
             if( block->GetCount() )
             {
                 wxPoint move_vector = -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
                 SaveStructListForPaste( block->m_ItemsSelection );
                 MoveItemsInList( g_BlockSaveDataList.m_ItemsSelection, move_vector );
-                ii = -1;
-            }
+             }
             block->ClearItemsList();
             break;
 
@@ -292,7 +294,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
 
 
         case BLOCK_ZOOM: /* Window Zoom */
-            zoom_command = TRUE;
+            zoom_command = true;
             break;
 
         case BLOCK_SELECT_ITEMS_ONLY:   /* Not used */
@@ -305,7 +307,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
         GetScreen()->ClearDrawingState();
     }
 
-    if( ii <= 0 )
+    if( ! nextcmd )
     {
         block->m_Flags   = 0;
         block->m_State   = STATE_NO_BLOCK;
@@ -319,7 +321,7 @@ int WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
     if( zoom_command )
         Window_Zoom( GetScreen()->m_BlockLocate );
 
-    return ii;
+    return nextcmd ;
 }
 
 
@@ -359,7 +361,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DRAG:     /* move to Drag */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
 
@@ -371,14 +373,14 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             blockCmdFinished = false;
             CollectStructsToDrag( (SCH_SCREEN*) GetScreen() );
             if( DrawPanel->ManageCurseur )
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, false );
             block->m_State = STATE_BLOCK_MOVE;
         }
         break;
 
     case BLOCK_DELETE:     /* move to Delete */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         if( block->GetCount() )
         {
             DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
@@ -390,7 +392,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_SAVE:     /* Save list in paste buffer*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         if( block->GetCount() )
         {
             wxPoint move_vector = -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
@@ -408,7 +410,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_ROTATE:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         if( block->GetCount() )
         {
 //            blockCmdFinished = true;
@@ -427,7 +429,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_X:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         if( block->GetCount() )
         {
 //            blockCmdFinished = true;
@@ -446,7 +448,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_Y:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         if( block->GetCount() )
         {
 //            blockCmdFinished = true;

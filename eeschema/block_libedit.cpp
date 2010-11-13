@@ -69,10 +69,10 @@ int WinEDA_LibeditFrame::ReturnBlockCommand( int key )
  *  1 if HandleBlockPlace must follow (items found, and a block place
  * command must follow)
  */
-int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
 {
     int ItemCount = 0;
-    int MustDoPlace = 0;
+    int nextCmd = false;
     wxPoint pt;
 
     if( GetScreen()->m_BlockLocate.GetCount() )
@@ -104,7 +104,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
                                                   g_EditPinByPinIsOn );
         if( ItemCount )
         {
-            MustDoPlace = 1;
+            nextCmd = true;
             if( DrawPanel->ManageCurseur != NULL )
             {
                 DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
@@ -117,7 +117,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
-        MustDoPlace = 1;
+        nextCmd = true;
         DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
@@ -165,7 +165,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
         break;
     }
 
-    if( MustDoPlace <= 0 )
+    if( ! nextCmd )
     {
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY )
             if ( m_component )
@@ -182,7 +182,7 @@ int WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
     }
 
 
-    return MustDoPlace;
+    return nextCmd;
 }
 
 

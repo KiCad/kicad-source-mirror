@@ -88,11 +88,11 @@ int WinEDA_GerberFrame::ReturnBlockCommand( int key )
 /* Routine to handle the BLOCK PLACE command */
 void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
 {
-    bool err = FALSE;
+    bool err = false;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
-        err = TRUE;
+        err = true;
         DisplayError( this,
                      wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
     }
@@ -101,21 +101,21 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case BLOCK_IDLE:
-        err = TRUE;
+        err = true;
         break;
 
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         Block_Move( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         Block_Duplicate( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -152,16 +152,20 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-/* Routine management command END BLOCK
- * Returns:
- * 0 if no and selects compounds
- * 1 otherwise
- * -1 If order is completed and components found (block delete, block save)
+/**
+ * Function HandleBlockEnd( )
+ * Handle the "end"  of a block command,
+ * i.e. is called at the end of the definition of the area of a block.
+ * depending on the current block command, this command is executed
+ * or parameters are initialized to prepare a call to HandleBlockPlace
+ * in GetScreen()->m_BlockLocate
+ * @return false if no item selected, or command finished,
+ * true if some items found and HandleBlockPlace must be called later
  */
-int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 {
-    int  endcommande  = TRUE;
-    bool zoom_command = FALSE;
+    bool nextcmd  = false;
+    bool zoom_command = false;
 
     if( DrawPanel->ManageCurseur )
 
@@ -177,15 +181,15 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_COPY:            /* Copy */
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            endcommande = FALSE;
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            nextcmd = true;
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
             DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
             Block_Delete( DC );
             break;
 
@@ -197,7 +201,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_ZOOM: /* Window Zoom */
-            zoom_command = TRUE;
+            zoom_command = true;
             break;
 
         case BLOCK_ABORT:
@@ -206,7 +210,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
             break;
         }
 
-    if( endcommande == TRUE )
+    if( ! nextcmd )
     {
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
@@ -220,7 +224,7 @@ int WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
     if( zoom_command )
         Window_Zoom( GetScreen()->m_BlockLocate );
 
-    return endcommande;
+    return nextcmd ;
 }
 
 
@@ -325,7 +329,7 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
             gerb_item->MoveAB( delta );
     }
 
-    DrawPanel->Refresh( TRUE );
+    DrawPanel->Refresh( true );
 }
 
 
