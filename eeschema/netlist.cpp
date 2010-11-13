@@ -380,17 +380,17 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
 
     // Define a priority (from low to high) to sort labels:
     // NET_PINLABEL and NET_GLOBLABEL are global labels
-    // and priority >= PRIO_MAX-1 is for global connections
+    // and priority >= NET_PRIO_MAX-1 is for global connections
     // ( i.e. for labels that are not prefixed by a sheetpath)
-    #define PRIO_MAX 4
-    int priority_order[PRIO_MAX+1] =
+    #define NET_PRIO_MAX 4
+    int priority_order[NET_PRIO_MAX+1] =
     { NET_ITEM_UNSPECIFIED, NET_LABEL, NET_HIERLABEL, NET_PINLABEL, NET_GLOBLABEL };
 
     NETLIST_OBJECT*item = aLabelItemBuffer[0];
 
     // Calculate item priority (initial priority)
     int item_priority = 0;
-    for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
+    for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
     {
         if ( item->m_Type == priority_order[ii]  )
         {
@@ -404,7 +404,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
         NETLIST_OBJECT* candidate = aLabelItemBuffer[ii];
         // Calculate candidate priority
         int candidate_priority = 0;
-        for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
+        for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
         {
             if ( candidate->m_Type == priority_order[ii]  )
             {
@@ -425,7 +425,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             // because the actual name is /sheetpath/label
             // and for a given path length, by alphabetic order
 
-            if( item_priority >= PRIO_MAX-1 )     // global label or pin label
+            if( item_priority >= NET_PRIO_MAX-1 )     // global label or pin label
             {   // selection by alphabetic order:
                 if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
                     item = candidate;
