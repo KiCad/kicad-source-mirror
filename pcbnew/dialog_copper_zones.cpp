@@ -19,9 +19,10 @@
 
 #include "dialog_copper_zones.h"
 
-wxString dialog_copper_zone::m_netNameShowFilter( wxT( "*" ) );    /* the filter to show nets (default * "*").
-                                             *  static to keep this pattern for an entire pcbnew session
-                                             */
+/* the filter to show nets (default * "*").
+ *  static to keep this pattern for an entire pcbnew session
+ */
+wxString dialog_copper_zone::m_netNameShowFilter( wxT( "*" ) );
 
 /************************************************************************************************/
 dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting ) :
@@ -31,8 +32,10 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
     m_Zone_Setting = zone_setting;
-    m_NetSorting   = 1;     // 0 = alphabetic sort, 1 = pad count sort, and filtering net names
-    m_OnExitCode   = ZONE_ABORT;
+    m_NetSortingByPadCount = true;     /* false = alphabetic sort.
+                                        *  true = pad count sort.
+                                        */
+    m_OnExitCode = ZONE_ABORT;
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
 
@@ -156,7 +159,7 @@ void dialog_copper_zone::initDialog()
     else
         m_NetDisplayOption->SetSelection( 1 );
 
-    m_ShowNetNameFilter->SetValue(m_netNameShowFilter);
+    m_ShowNetNameFilter->SetValue( m_netNameShowFilter );
     initListNetsParams();
 
     // Build list of nets:
@@ -392,7 +395,7 @@ void dialog_copper_zone::OnPadsInZoneClick( wxCommandEvent& event )
 }
 
 
-/** init m_NetSorting and m_NetFiltering values
+/** init m_NetSortingByPadCount and m_NetFiltering values
  * according to m_NetDisplayOption selection
  */
 void dialog_copper_zone::initListNetsParams()
@@ -400,22 +403,22 @@ void dialog_copper_zone::initListNetsParams()
     switch( m_NetDisplayOption->GetSelection() )
     {
     case 0:
-        m_NetSorting   = true;
+        m_NetSortingByPadCount = false;
         m_NetFiltering = false;
         break;
 
     case 1:
-        m_NetSorting   = false;
+        m_NetSortingByPadCount = true;
         m_NetFiltering = false;
         break;
 
     case 2:
-        m_NetSorting   = true;
+        m_NetSortingByPadCount = false;
         m_NetFiltering = true;
         break;
 
     case 3:
-        m_NetSorting   = false;
+        m_NetSortingByPadCount = true;
         m_NetFiltering = true;
         break;
     }
@@ -429,6 +432,7 @@ void dialog_copper_zone::initListNetsParams()
 void dialog_copper_zone::OnRunFiltersButtonClick( wxCommandEvent& event )
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
+
     // Ensure filtered option for nets:
     if( m_NetDisplayOption->GetSelection() == 0 )
         m_NetDisplayOption->SetSelection( 2 );
@@ -443,8 +447,7 @@ void dialog_copper_zone::buildAvailableListOfNets()
 {
     wxArrayString listNetName;
 
-    m_Parent->GetBoard()->ReturnSortedNetnamesList(
-        listNetName, m_NetSorting == 0 ? false : true );
+    m_Parent->GetBoard()->ReturnSortedNetnamesList( listNetName, m_NetSortingByPadCount );
 
     if( m_NetFiltering )
     {

@@ -486,7 +486,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     booleng = new Bool_Engine();
     ArmBoolEng( booleng, true );
     cornerBufferPolysToSubstract.clear();
-
 // Test thermal stubs connections and add polygons to remove unconnected stubs.
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
@@ -535,62 +534,60 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
                 // translate point
                 ptTest[i] += pad->ReturnShapePos();
-                bool inside = HitTestFilledArea( ptTest[i] );
+                if( HitTestFilledArea( ptTest[i] ) )
+                    continue;
 
-                if( inside == false )
+                // polygon buffer
+                std::vector<wxPoint> corners_buffer;
+
+                // polygons are rectangles with width of copper bridge value
+                // contour line width has to be taken into calculation to avoid "thermal stub bleed"
+                const int iDTRC =
+                    ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
+
+                switch( i )
                 {
-                    // polygon buffer
-                    std::vector<wxPoint> corners_buffer;
+                case 0:
+                    corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                    break;
 
-                    // polygons are rectangles with width of copper bridge value
-                    // contour line width has to be taken into calculation to avoid "thermal stub bleed"
-                    const int iDTRC =
-                        ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
+                case 1:
+                    corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                    break;
 
-                    switch( i )
-                    {
-                    case 0:
-                        corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                        corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                        break;
+                case 2:
+                    corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( dx, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                    break;
 
-                    case 1:
-                        corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                        corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                        break;
-
-                    case 2:
-                        corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
-                        corners_buffer.push_back( wxPoint( dx, iDTRC ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                        corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                        break;
-
-                    case 3:
-                        corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
-                        corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
-                        corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                        corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                        break;
-                    }
+                case 3:
+                    corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                    break;
+                }
 
 
-                    // add computed polygon to list
-                    for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
-                    {
-                        wxPoint cpos = corners_buffer[ic];
-                        RotatePoint( &cpos, fAngle );                           // Rotate according to module orientation
-                        cpos += pad->ReturnShapePos();                          // Shift origin to position
-                        CPolyPt corner;
-                        corner.x = cpos.x;
-                        corner.y = cpos.y;
-                        corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
-                        cornerBufferPolysToSubstract.push_back( corner );
-                    }
+                // add computed polygon to list
+                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
+                {
+                    wxPoint cpos = corners_buffer[ic];
+                    RotatePoint( &cpos, fAngle );                           // Rotate according to module orientation
+                    cpos += pad->ReturnShapePos();                          // Shift origin to position
+                    CPolyPt corner;
+                    corner.x = cpos.x;
+                    corner.y = cpos.y;
+                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
+                    cornerBufferPolysToSubstract.push_back( corner );
                 }
             }
         }

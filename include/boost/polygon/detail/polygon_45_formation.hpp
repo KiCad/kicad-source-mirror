@@ -478,7 +478,7 @@ namespace boost { namespace polygon{
       ct counts[4];
     };
 
-    typedef Vertex45CountT<signed char> Vertex45Count;
+    typedef Vertex45CountT<int> Vertex45Count;
 
 //     inline std::ostream& operator<< (std::ostream& o, const Vertex45Count& c) {
 //       o << c[0] << ", " << c[1] << ", ";

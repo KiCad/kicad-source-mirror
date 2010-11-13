@@ -83,8 +83,8 @@ bool TestPointInsidePolygon( std::vector <CPolyPt> aPolysList,
         // with the horizontal line at the new refy position
         // the line slope  = seg_endY/seg_endX;
         // and the x pos relative to the new origin is intersec_x = refy/slope
-        // Note: because horizontal segments are skipped, 1/slope exists (seg_end_y never == O)
-        double intersec_x = newrefy * seg_endX / seg_endY;
+        // Note: because horizontal segments are skipped, 1/slope exists (seg_endY never == O)
+        double intersec_x = (newrefy * seg_endX) / seg_endY;
         if( newrefx < intersec_x )  // Intersection found with the semi-infinite line from refx to infinite
             count++;
     }
@@ -101,7 +101,6 @@ bool TestPointInsidePolygon( wxPoint *aPolysList, int aCount,wxPoint aRefPoint )
     // count intersection points to right of (refx,refy). If odd number, point (refx,refy) is inside polyline
     int ics, ice;
     int count = 0;
-
     // find all intersection points of line with polyline sides
     for( ics = 0, ice = aCount-1; ics < aCount; ice = ics++ )
     {
@@ -138,8 +137,8 @@ bool TestPointInsidePolygon( wxPoint *aPolysList, int aCount,wxPoint aRefPoint )
         // with the horizontal line at the new refy position
         // the line slope  = seg_endY/seg_endX;
         // and the x pos relative to the new origin is intersec_x = refy/slope
-        // Note: because horizontal segments are skipped, 1/slope exists (seg_end_y never == O)
-        double intersec_x = newrefy * seg_endX / seg_endY;
+        // Note: because horizontal segments are skipped, 1/slope exists (seg_endY never == O)
+        double intersec_x = (newrefy * seg_endX) / seg_endY;
         if( newrefx < intersec_x )  // Intersection found with the semi-infinite line from refx to infinite
             count++;
     }

@@ -24,7 +24,7 @@
 
 ZONE_SETTING::ZONE_SETTING( void )
 {
-    m_FillMode = 1;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
+    m_FillMode = 0;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
     m_ZoneClearance      = 200;                                     // Clearance value
     m_ZoneMinThickness   = 100;                                     // Min thickness value in filled areas
     m_NetcodeSelection   = 0;                                       // Net code selection for the current zone

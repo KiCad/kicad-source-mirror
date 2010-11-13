@@ -29,6 +29,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     m_NetCode = -1;                           // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                       // fill status : true when the zone is filled
+    m_FillMode = 0;                           // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     utility  = 0;                             // flags used in polygon calculations
     utility2 = 0;                             // flags used in polygon calculations
     m_Poly   = new CPolyLine();               // Outlines
@@ -903,6 +904,8 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
                 inside = true;
                 break;
             }
+        // Prepare test of next area which starts after the current indexend (if exists)
+        indexstart = indexend+1;
         }
     }
     return inside;

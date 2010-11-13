@@ -18,7 +18,9 @@ private:
                                      */
 
     ZONE_SETTING*   m_Zone_Setting;
-    long            m_NetSorting;
+    bool            m_NetSortingByPadCount;   /* false = alphabetic sort.
+                                               *  true = pad count sort.
+                                               */
     long            m_NetFiltering;
     int             m_LayerId[LAYER_COUNT]; // Handle the real layer number from layer name position in m_LayerSelectionCtrl
     static wxString m_netNameShowFilter;    /* the filter to show nets (default * "*").

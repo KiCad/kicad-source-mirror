@@ -41,7 +41,7 @@ public:
     int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
-    int                   m_FillMode;                       // How to fillingareas: 0 = use polygonal areas , != 0 fill with segments
+    int                   m_FillMode;                       // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     int                   m_ArcToSegmentsCount;             // number of segments to convert a circle to a polygon
                                                             // (uses ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
     int                   m_PadOption;                      //
