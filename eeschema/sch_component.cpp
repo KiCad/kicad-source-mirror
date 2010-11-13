@@ -1668,7 +1668,7 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
                  wxT( "Cannot add connection points to list.  Cannot find component <" ) +
                  m_ChipName + wxT( "> in any of the loaded libraries." ) );
 
-    for( pin = component->GetNextPin( pin ); pin != NULL; pin = component->GetNextPin( pin ) )
+    for( pin = component->GetNextPin(); pin != NULL; pin = component->GetNextPin( pin ) )
     {
         wxCHECK_RET( pin->Type() == COMPONENT_PIN_DRAW_TYPE,
                      wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
