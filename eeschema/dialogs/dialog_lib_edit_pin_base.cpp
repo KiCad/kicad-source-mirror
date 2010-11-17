@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,6 +10,10 @@
 #include "dialog_lib_edit_pin_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
+
+BEGIN_EVENT_TABLE( DIALOG_LIB_EDIT_PIN_BASE, wxDialog )
+	EVT_CHECKBOX( wxID_ANY, DIALOG_LIB_EDIT_PIN_BASE::_wxFB_OnCBpartSelection )
+END_EVENT_TABLE()
 
 DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
@@ -101,10 +105,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
 	fgSizer1->Add( 0, 0, 0, wxEXPAND, 3 );
@@ -120,10 +124,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	mainSizer->Add( fgSizer1, 0, wxALL|wxEXPAND, 12 );
 	
@@ -131,16 +135,13 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	boarderSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Add to all &parts in package"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	boarderSizer->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Add to all alternate &body styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	boarderSizer->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_checkShow = new wxCheckBox( this, wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkShow->SetValue(true);
-	
+	m_checkShow->SetValue(true); 
 	boarderSizer->Add( m_checkShow, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	

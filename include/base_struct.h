@@ -243,6 +243,14 @@ public:
      * @param aRect = given rect to merge with this
      */
     void      Merge( const EDA_Rect& aRect );
+
+    /**
+     * Function Merge
+     * Modify Position and Size of this in order to contain the given point
+     * mainly used to calculate bounding boxes
+     * @param aPoint = given point to merge with this
+     */
+    void      Merge( const wxPoint& aPoint );
 };
 
 
@@ -676,6 +684,12 @@ public:
     {
         return (( m_Size.y * 14 ) / 10) + m_Width;
     }
+
+    /**
+     * Function GetTextStyleName
+     * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
+     */
+    wxString GetTextStyleName();
 };
 
 #endif /* BASE_STRUCT_H */

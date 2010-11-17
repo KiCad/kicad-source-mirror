@@ -463,6 +463,27 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
+/**
+ * Function GetStyleName
+ * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
+ */
+wxString EDA_TextStruct::GetTextStyleName()
+{
+    int style = 0;
+    if( m_Italic )
+        style = 1;
+    if( m_Bold )
+        style += 2;
+    wxString stylemsg[4] = {
+        _("Normal"),
+        _("Italic"),
+        _("Bold"),
+        _("Bold+Italic")
+    };
+
+    return stylemsg[style];
+}
+
 
 /******************/
 /* Class EDA_Rect */
@@ -666,3 +687,23 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     end.y   = MAX( end.y, rect_end.y );
     SetEnd( end );
 }
+
+/**
+ * Function Merge
+ * modifies Position and Size of this in order to contain the given point
+ * mainly used to calculate bounding boxes
+ * @param aPoint = given point to merge with this
+ */
+void EDA_Rect::Merge( const wxPoint& aPoint )
+{
+    Normalize();        // ensure width and height >= 0
+
+    wxPoint  end = GetEnd();
+    // Change origin and size in order to contain the given rect
+    m_Pos.x = MIN( m_Pos.x, aPoint.x );
+    m_Pos.y = MIN( m_Pos.y, aPoint.y );
+    end.x   = MAX( end.x, aPoint.x );
+    end.y   = MAX( end.y, aPoint.y );
+    SetEnd( end );
+}
+

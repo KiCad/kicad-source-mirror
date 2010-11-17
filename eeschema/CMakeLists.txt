@@ -56,8 +56,8 @@ set(EESCHEMA_SRCS
     dialog_libedit_dimensions_base.cpp
     dialog_lib_edit_draw_item.cpp
     dialog_lib_edit_draw_item_base.cpp
-    dialog_lib_edit_pin.cpp
-    dialog_lib_edit_pin_base.cpp
+    dialogs/dialog_lib_edit_pin.cpp
+    dialogs/dialog_lib_edit_pin_base.cpp
     dialog_lib_new_component.cpp
     dialog_lib_new_component_base.cpp
     dialogs/dialog_print_using_printer_base.cpp

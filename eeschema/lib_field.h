@@ -108,6 +108,13 @@ public:
     virtual EDA_Rect GetBoundingBox();
 
     /**
+     * Displays info (type, part  convert filed name and value)
+     * in msg panel
+     * @param aFrame = main frame where the message manel info is.
+     */
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+
+    /**
      * Test if the given point is within the bounds of this object.
      *
      * @param refPos A point to test in field coordinate system

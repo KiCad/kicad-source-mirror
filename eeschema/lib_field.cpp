@@ -298,7 +298,10 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
     int      color;
     int      linewidth = GetPenSize();
 
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    if( m_Bold )
+        linewidth = GetPenSizeForBold( m_Size.x );
+    else
+        linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( ( m_Attributs & TEXT_NO_VISIBLE ) && ( aColor < 0 ) )
     {
@@ -339,8 +342,7 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
     EDA_Rect bBox = GetBoundingBox();
     m_Text = tmp;
     bBox.Inflate( 1, 1 );
-    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
+    GRRect( &aPanel->m_ClipBox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -703,3 +705,28 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }
 }
+
+void LIB_FIELD::DisplayInfo( WinEDA_DrawFrame* aFrame )
+{
+    wxString msg;
+
+    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+
+    // Display style:
+    msg = GetTextStyleName();
+    aFrame->AppendMsgPanel( _( "Style" ), msg, MAGENTA );
+
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, EESCHEMA_INTERNAL_UNIT, true );
+    aFrame->AppendMsgPanel( _( "Size X" ), msg, BLUE );
+
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, EESCHEMA_INTERNAL_UNIT, true );
+    aFrame->AppendMsgPanel( _( "Size Y" ), msg, BLUE );
+
+    // Display field name (ref, value ...)
+    msg = GetName();
+    aFrame->AppendMsgPanel( _( "Field" ), msg, BROWN );
+
+    // Display field text:
+    aFrame->AppendMsgPanel( _( "Value" ), m_Text, BROWN );
+}
+

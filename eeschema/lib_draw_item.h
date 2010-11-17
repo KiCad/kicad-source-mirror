@@ -232,6 +232,11 @@ public:
         return EDA_BaseStruct::GetBoundingBox();
     }
 
+    /**
+     * Displays basic info (type, part and convert) about item
+     * in msg panel
+     * @param aFrame = main frame where the message manel info is.
+     */
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     /**

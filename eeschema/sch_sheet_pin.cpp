@@ -58,6 +58,7 @@ SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
 
     newitem->SetEdge( GetEdge() );
     newitem->m_Shape = m_Shape;
+    newitem->m_Size = m_Size;
     newitem->SetNumber( GetNumber() );
     return newitem;
 }

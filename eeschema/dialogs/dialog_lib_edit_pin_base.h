@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,12 @@ class wxBitmapComboBox;
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog 
 {
+	DECLARE_EVENT_TABLE()
 	private:
+		
+		// Private event handlers
+		void _wxFB_OnCBpartSelection( wxCommandEvent& event ){ OnCBpartSelection( event ); }
+		
 	
 	protected:
 		wxStaticText* m_staticText1;
@@ -71,8 +76,13 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnCBpartSelection( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
+		
 		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
