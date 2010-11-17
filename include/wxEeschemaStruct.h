@@ -345,6 +345,7 @@ public:
     void             SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
     bool             GetShowSheetReference() { return m_showSheetReference; }
     void             SetShowSheetReference( bool aShow ) { m_showSheetReference = aShow; }
+    void             SVG_Print( wxCommandEvent& event );
 
     // Plot functions:
     void            ToPlot_PS( wxCommandEvent& event );

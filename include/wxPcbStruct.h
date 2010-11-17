@@ -154,7 +154,10 @@ public:
      */
     void             ToPrinter( wxCommandEvent& event );
 
-    /** Virtual function PrintPage
+    void             SVG_Print( wxCommandEvent& event );
+
+    /**
+     * Function PrintPage , virtual
      * used to print a page
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function

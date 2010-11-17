@@ -22,7 +22,6 @@
 #include "wxEeschemaStruct.h"
 #include "class_sch_screen.h"
 
-#include "dialog_build_BOM.h"
 #include "netlist_control.h"
 #include "libeditframe.h"
 #include "viewlib_frame.h"
@@ -31,9 +30,11 @@
 #include "sch_sheet.h"
 
 #include "dialogs/annotate_dialog.h"
+#include "dialogs/dialog_build_BOM.h"
 #include "dialogs/dialog_erc.h"
 #include "dialogs/dialog_print_using_printer.h"
 #include "dialogs/dialog_schematic_find.h"
+#include "dialogs/dialog_SVG_print.h"
 
 
 BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
@@ -58,7 +59,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
     EVT_MENU( wxID_PRINT, WinEDA_SchematicFrame::OnPrint )
     EVT_MENU( ID_GEN_PLOT_PS, WinEDA_SchematicFrame::ToPlot_PS )
     EVT_MENU( ID_GEN_PLOT_HPGL, WinEDA_SchematicFrame::ToPlot_HPGL )
-    EVT_MENU( ID_GEN_PLOT_SVG, WinEDA_DrawFrame::SVG_Print )
+    EVT_MENU( ID_GEN_PLOT_SVG, WinEDA_SchematicFrame::SVG_Print )
     EVT_MENU( ID_GEN_PLOT_DXF, WinEDA_SchematicFrame::ToPlot_DXF )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
     EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
@@ -781,4 +782,14 @@ void WinEDA_SchematicFrame::OnPrint( wxCommandEvent& event )
         fn.SetExt( ProjectFileExtension );
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
     }
+}
+
+
+/* Creates the SVG print file for the current edited component.
+ */
+void WinEDA_SchematicFrame::SVG_Print( wxCommandEvent& event )
+{
+    DIALOG_SVG_PRINT frame( this );
+
+    frame.ShowModal();
 }

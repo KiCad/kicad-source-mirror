@@ -12,13 +12,14 @@
 #include "confirm.h"
 #include "gestfich.h"
 
-#include "dialog_SVG_print_base.h"
-
 #include "dcsvg.h"
 
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "printout_controler.h"
+
+#include "dialog_SVG_print.h"
+
 
 // Keys for configuration
 #define PLOTSVGMODECOLOR_KEY wxT( "PlotSVGModeColor" )
@@ -33,42 +34,6 @@ extern int g_DrawDefaultLineThickness;
 static PRINT_PARAMETERS  s_Parameters;
 static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
                                   SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
-
-class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
-{
-private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxConfig*            m_Config;
-    long m_PrintMaskLayer;
-    wxCheckBox*          m_BoxSelectLayer[32];
-
-public:
-    DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent );
-    ~DIALOG_SVG_PRINT() {}
-
-private:
-    void OnCloseWindow( wxCloseEvent& event );
-    void initDialog( );
-    void OnButtonPrintSelectedClick( wxCommandEvent& event );
-    void OnButtonPrintBoardClick( wxCommandEvent& event );
-    void OnButtonCancelClick( wxCommandEvent& event );
-    void OnSetColorModeSelected( wxCommandEvent& event );
-    void SetPenWidth();
-    void PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref );
-    bool DrawPage( const wxString& FullFileName, BASE_SCREEN* screen,
-                   bool aPrint_Frame_Ref );
-};
-
-
-/* Prepare the data structures of print management
- * And displays the dialog window management of printing sheets
- */
-void WinEDA_DrawFrame::SVG_Print( wxCommandEvent& event )
-{
-    DIALOG_SVG_PRINT frame( this );
-
-    frame.ShowModal();
-}
 
 
 /*!

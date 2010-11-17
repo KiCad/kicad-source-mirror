@@ -26,6 +26,9 @@
 #include "kicad_device_context.h"
 #include "hotkeys.h"
 
+#include "dialogs/dialog_lib_edit_text.h"
+#include "dialogs/dialog_SVG_print.h"
+
 #include <boost/foreach.hpp>
 
 
@@ -989,4 +992,34 @@ void WinEDA_LibeditFrame::ClearTempCopyComponent()
 {
     delete m_tempCopyComponent;
     m_tempCopyComponent = NULL;
+}
+
+
+/* Creates the SVG print file for the current edited component.
+ */
+void WinEDA_LibeditFrame::SVG_Print_Component( const wxString& FullFileName )
+{
+    DIALOG_SVG_PRINT::DrawSVGPage( this, FullFileName, GetScreen() );
+}
+
+
+void WinEDA_LibeditFrame::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
+{
+    if ( ( DrawItem == NULL ) || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
+        return;
+
+    /* Deleting old text. */
+    if( DC && !DrawItem->InEditMode() )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+
+
+    DIALOG_LIB_EDIT_TEXT* frame = new DIALOG_LIB_EDIT_TEXT( this, (LIB_TEXT*) DrawItem );
+    frame->ShowModal();
+    frame->Destroy();
+    OnModify();
+
+    /* Display new text. */
+    if( DC && !DrawItem->InEditMode() )
+        DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, NULL,
+                        DefaultTransform );
 }

@@ -14,12 +14,13 @@
 #include "general.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
-#include "dialog_lib_edit_draw_item.h"
 #include "lib_arc.h"
 #include "lib_circle.h"
 #include "lib_polyline.h"
 #include "lib_rectangle.h"
 #include "lib_text.h"
+
+#include "dialogs/dialog_lib_edit_draw_item.h"
 
 
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );

@@ -16,8 +16,7 @@ class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
 class LIB_FIELD;
-class WinEDA_bodygraphics_PropertiesFrame;
-class Dialog_BodyGraphicText_Properties;
+class DIALOG_LIB_EDIT_TEXT;
 
 
 /**
@@ -317,7 +316,7 @@ protected:
 
     static wxSize m_clientSize;
 
-    friend class Dialog_BodyGraphicText_Properties;
+    friend class DIALOG_LIB_EDIT_TEXT;
 
     /**
      * Function CreatePNGorJPEGFile
@@ -342,11 +341,11 @@ protected:
                             bool aPrintMirrorMode, void* aData = NULL );
 
     /**
-     * Function SVG_Print_component
+     * Function SVG_Print_Component
      * Creates the SVG print file for the current edited component.
      * @param aFullFileName = the full filename of the file
-     */
-    void         SVG_Print_Component( const wxString& aFullFileName );
+    */
+    void SVG_Print_Component( const wxString& aFullFileName );
 
 
     DECLARE_EVENT_TABLE()

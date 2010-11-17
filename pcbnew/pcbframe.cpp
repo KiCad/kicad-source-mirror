@@ -49,6 +49,7 @@
 #include "hotkeys.h"
 #include "pcbnew_config.h"
 #include "module_editor_frame.h"
+#include "dialog_SVG_print.h"
 
 
 extern int g_DrawDefaultLineThickness;
@@ -168,7 +169,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_UNDO, WinEDA_PcbFrame::GetBoardFromUndoList )
     EVT_TOOL( wxID_REDO, WinEDA_PcbFrame::GetBoardFromRedoList )
     EVT_TOOL( wxID_PRINT, WinEDA_PcbFrame::ToPrinter )
-    EVT_TOOL( ID_GEN_PLOT_SVG, WinEDA_DrawFrame::SVG_Print )
+    EVT_TOOL( ID_GEN_PLOT_SVG, WinEDA_PcbFrame::SVG_Print )
     EVT_TOOL( ID_GEN_PLOT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_FIND_ITEMS, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( ID_GET_NETLIST, WinEDA_PcbFrame::Process_Special_Functions )
@@ -721,3 +722,13 @@ void WinEDA_PcbFrame::OnModify( )
         m_Draw3DFrame->ReloadRequest( );
 }
 
+
+/* Prepare the data structures of print management
+ * And displays the dialog window management of printing sheets
+ */
+void WinEDA_PcbFrame::SVG_Print( wxCommandEvent& event )
+{
+    DIALOG_SVG_PRINT frame( this );
+
+    frame.ShowModal();
+}
