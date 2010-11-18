@@ -419,6 +419,22 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
+void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
+                                  wxDC*             aDC,
+                                  int               aDrawMode,
+                                  const wxPoint&    aOffset )
+{
+    MODULE* parent = (MODULE*) GetParent();
+    if( !parent )
+        return;
+
+    GRSetDrawMode( aDC, GR_XOR );
+    GRLine( &aPanel->m_ClipBox, aDC,
+            parent->GetPosition().x, parent->GetPosition().y,
+            GetPosition().x + aOffset.x,
+            GetPosition().y + aOffset.y,
+            0, UMBILICAL_COLOR);
+}
 
 /* Return text rotation for drawings and plotting
  */

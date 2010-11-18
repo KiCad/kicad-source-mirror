@@ -175,6 +175,7 @@ set(PCBNEW_SRCS
     work.cpp
     xchgmod.cpp
     ${PCBNEW_SRC_FILL_ZONE}
+    zones_convert_to_polygons_aux_functions.cpp
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp
     zone_filling_algorithm.cpp

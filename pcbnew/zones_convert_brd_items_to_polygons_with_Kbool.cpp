@@ -44,6 +44,10 @@
 // See debug_kbool_key_file_fct.h
 
 
+extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
+                                                      double aArcCorrection,
+                                                      int aRoundPadThermalRotation);
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );
 extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
@@ -483,117 +487,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 #define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
 #ifdef REMOVE_UNUSED_THERMAL_STUBS
 
+// Test thermal stubs connections and add polygons to remove unconnected stubs.
     booleng = new Bool_Engine();
     ArmBoolEng( booleng, true );
     cornerBufferPolysToSubstract.clear();
-// Test thermal stubs connections and add polygons to remove unconnected stubs.
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
-    {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
-        {
-            // check
-            if( !pad->IsOnLayer( GetLayer() ) )
-                continue;
-            if( pad->GetNet() != GetNet() )
-                continue;
-
-            item_boundingbox = pad->GetBoundingBox();
-            item_boundingbox.Inflate( m_ThermalReliefGapValue );
-            if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
-                continue;
-
-            // test point
-            int dx =
-                ( pad->m_Size.x / 2 ) + m_ThermalReliefGapValue;
-            int dy =
-                ( pad->m_Size.y / 2 ) + m_ThermalReliefGapValue;
-
-            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-            int fAngle = pad->m_Orient;
-            if( pad->m_PadShape == PAD_CIRCLE )
-            {
-                dx     = (int) ( dx * s_Correction );
-                dy     = dx;
-                fAngle = s_thermalRot;
-            }
-
-            // compute north, south, west and east points for zone connection.
-            // Add a small value to ensure point is inside (or outside) zone, not on an edge
-            wxPoint ptTest[4];
-            ptTest[0] = wxPoint( 0, 3 + dy + margin );
-            ptTest[1] = wxPoint( 0, -(3 + dy + margin) );
-            ptTest[2] = wxPoint( 3 + dx + margin, 0 );
-            ptTest[3] = wxPoint( -(3 + dx + margin), 0 );
-
-
-            // Test all sides
-            for( int i = 0; i<4; i++ )
-            {
-                // rotate point
-                RotatePoint( &ptTest[i], fAngle );
-
-                // translate point
-                ptTest[i] += pad->ReturnShapePos();
-                if( HitTestFilledArea( ptTest[i] ) )
-                    continue;
-
-                // polygon buffer
-                std::vector<wxPoint> corners_buffer;
-
-                // polygons are rectangles with width of copper bridge value
-                // contour line width has to be taken into calculation to avoid "thermal stub bleed"
-                const int iDTRC =
-                    ( m_ThermalReliefCopperBridgeValue - m_ZoneMinThickness ) / 2;
-
-                switch( i )
-                {
-                case 0:
-                    corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                    break;
-
-                case 1:
-                    corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                    break;
-
-                case 2:
-                    corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( dx, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                    break;
-
-                case 3:
-                    corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                    break;
-                }
-
-
-                // add computed polygon to list
-                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
-                {
-                    wxPoint cpos = corners_buffer[ic];
-                    RotatePoint( &cpos, fAngle );                           // Rotate according to module orientation
-                    cpos += pad->ReturnShapePos();                          // Shift origin to position
-                    CPolyPt corner;
-                    corner.x = cpos.x;
-                    corner.y = cpos.y;
-                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
-                    cornerBufferPolysToSubstract.push_back( corner );
-                }
-            }
-        }
-    }
-
-/* compute copper areas */
+    BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this, s_Correction, s_thermalRot );
+    /* remove copper areas */
     if( cornerBufferPolysToSubstract.size() )
     {
         /* Add the main corrected polygon (i.e. the filled area using only one outline)

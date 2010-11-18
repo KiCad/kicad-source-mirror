@@ -920,6 +920,8 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
     bool previousStartState = m_StartIsDangling;
     bool previousEndState = m_EndIsDangling;
 
+    m_StartIsDangling = m_EndIsDangling = true;
+
     if( GetLayer() == LAYER_WIRE )
     {
         BOOST_FOREACH( DANGLING_END_ITEM item, aItemList )

@@ -11,6 +11,7 @@
 #define TEXT_is_VALUE     1
 #define TEXT_is_DIVERS    2
 
+#define UMBILICAL_COLOR   LIGHTBLUE
 
 class TEXTE_MODULE : public BOARD_ITEM, public EDA_TextStruct
 {
@@ -94,6 +95,19 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
                    int               aDrawMode,
                    const wxPoint&    offset = ZeroOffset );
 
+    /**
+     * Function DrawUmbilical
+     * draws a line from the TEXTE_MODULE origin
+     * to parent MODULE origin.
+     * @param aPanel = the current DrawPanel
+     * @param aDC = the current device context
+     * @param aDrawMode = drawing mode, typically GR_XOR
+     * @param aOffset = offset for TEXTE_MODULE
+     */
+    void     DrawUmbilical( WinEDA_DrawPanel* aPanel,
+                            wxDC*             aDC,
+                            int               aDrawMode,
+                            const wxPoint&    aOffset = ZeroOffset );
 
     /**
      * Function DisplayInfo

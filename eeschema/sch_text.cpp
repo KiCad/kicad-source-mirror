@@ -586,6 +586,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
         return false;
 
     bool previousState = m_IsDangling;
+    m_IsDangling = true;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {

@@ -1,0 +1,153 @@
+/***********************************************/
+/* zones_convert_to_polygons_aux_functions.cpp */
+/***********************************************/
+/* auxiliary functions used to calculare filled copper zones areas
+*/
+
+#include <vector>
+
+#include "fctsys.h"
+#include "polygons_defs.h"
+
+#include "common.h"
+#include "pcbnew.h"
+#include "wxPcbStruct.h"
+#include "trigo.h"
+
+#include "zones.h"
+#include "PolyLine.h"
+
+
+/**
+ * Function BuildUnconnectedThermalStubsPolygonList
+ * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
+ * which are not connected to a zone (dangling bridges)
+ * @param aCornerBuffer = a std::vector<CPolyPt> where to store polygons
+ * @param aPcb = the board.
+ * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
+ * @param aArcCorrection = a pointer to the ZONE_CONTAINER  to examine.
+ * @param aRoundPadThermalRotation = the rotation in 1.0 degree for thermal stubs in round pads
+ */
+
+void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+                                               BOARD*                aPcb,
+                                               ZONE_CONTAINER*       aZone,
+                                                double aArcCorrection,
+                                                int aRoundPadThermalRotation)
+{
+    std::vector<wxPoint> corners_buffer;    // a local polygon buffer to store one stub
+    corners_buffer.reserve( 4 );
+    wxPoint  ptTest[4];
+
+    int      zone_clearance = aZone->m_ZoneClearance;
+
+    EDA_Rect item_boundingbox;
+    EDA_Rect zone_boundingbox  = aZone->GetBoundingBox();
+    int      biggest_clearance = aPcb->GetBiggestClearanceValue();
+    biggest_clearance = MAX( biggest_clearance, zone_clearance );
+    zone_boundingbox.Inflate( biggest_clearance );
+
+    // Calculate thermal bridge half width
+    int iDTRC = aZone->m_ThermalReliefCopperBridgeValue / 2;
+    // half size of the pen used to draw/plot zones outlines
+    int pen_radius = aZone->m_ZoneMinThickness / 2;
+
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        {
+            // check
+            if( !pad->IsOnLayer( aZone->GetLayer() ) )
+                continue;
+            if( pad->GetNet() != aZone->GetNet() )
+                continue;
+
+            item_boundingbox = pad->GetBoundingBox();
+            item_boundingbox.Inflate( aZone->m_ThermalReliefGapValue );
+            if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
+                continue;
+
+            // test point
+            int dx = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGapValue;
+            int dy = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGapValue;
+
+            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
+            int fAngle = pad->m_Orient;
+            if( pad->m_PadShape == PAD_CIRCLE )
+            {
+                dx     = (int) ( dx * aArcCorrection );
+                dy     = dx;
+                fAngle = aRoundPadThermalRotation;
+            }
+
+            // contour line width has to be taken into calculation to avoid "thermal stub bleed"
+            dx += pen_radius;
+            dy += pen_radius;
+            // compute north, south, west and east points for zone connection.
+            ptTest[0] = wxPoint( 0, dy );
+            ptTest[1] = wxPoint( 0, -dy );
+            ptTest[2] = wxPoint( dx, 0 );
+            ptTest[3] = wxPoint( -dx, 0 );
+
+            // Test all sides
+            for( int i = 0; i < 4; i++ )
+            {
+                // rotate point
+                RotatePoint( &ptTest[i], fAngle );
+
+                // translate point
+                ptTest[i] += pad->ReturnShapePos();
+                if( aZone->HitTestFilledArea( ptTest[i] ) )
+                    continue;
+
+                corners_buffer.clear();
+
+                // polygons are rectangles with width of copper bridge value
+                switch( i )
+                {
+                case 0:
+                    corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                    break;
+
+                case 1:
+                    corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                    break;
+
+                case 2:
+                    corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( dx, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
+                    break;
+
+                case 3:
+                    corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
+                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
+                    break;
+                }
+
+
+                // add computed polygon to list
+                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
+                {
+                    wxPoint cpos = corners_buffer[ic];
+                    RotatePoint( &cpos, fAngle );                               // Rotate according to module orientation
+                    cpos += pad->ReturnShapePos();                              // Shift origin to position
+                    CPolyPt corner;
+                    corner.x = cpos.x;
+                    corner.y = cpos.y;
+                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
+                    aCornerBuffer.push_back( corner );
+                }
+            }
+        }
+    }
+}
