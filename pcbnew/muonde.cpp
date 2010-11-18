@@ -13,6 +13,7 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "protos.h"
+#include "dialog_helpers.h"
 
 
 #define COEFF_COUNT 6

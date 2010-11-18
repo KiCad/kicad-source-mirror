@@ -54,7 +54,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PCB_LAYERS_SETUP:
-        DisplayDialogLayerSetup( this );
+        InstallDialogLayerSetup();
         break;
 
     case ID_CONFIG_REQ:

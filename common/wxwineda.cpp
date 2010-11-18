@@ -2,14 +2,10 @@
 /* wxwineda.cpp */
 /****************/
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include "fctsys.h"
 #include "common.h"
 #include "wxstruct.h"
-
+#include "dialog_helpers.h"
 
 /*
  * Text entry dialog to enter one or more lines of text.
@@ -386,64 +382,6 @@ void WinEDA_ValueCtrl::SetValue( int new_value )
 
 
 void WinEDA_ValueCtrl::Enable( bool enbl )
-{
-    m_ValueCtrl->Enable( enbl );
-    m_Text->Enable( enbl );
-}
-
-
-/**********************************************************************/
-/* Class to display and edit a double precision floating point value. */
-/**********************************************************************/
-WinEDA_DFloatValueCtrl::WinEDA_DFloatValueCtrl( wxWindow* parent,
-                                                const wxString& title,
-                                                double value,
-                                                wxBoxSizer* BoxSizer )
-{
-    wxString buffer;
-    wxString label = title;
-
-    m_Value = value;
-
-    m_Text = new wxStaticText( parent, -1, label );
-
-    BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-
-    buffer.Printf( wxT( "%f" ), m_Value );
-    m_ValueCtrl = new   wxTextCtrl( parent, -1, buffer );
-
-    BoxSizer->Add( m_ValueCtrl, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-}
-
-
-WinEDA_DFloatValueCtrl::~WinEDA_DFloatValueCtrl()
-{
-    delete m_ValueCtrl;
-    delete m_Text;
-}
-
-
-double WinEDA_DFloatValueCtrl::GetValue()
-{
-    double coord = 0;
-
-    m_ValueCtrl->GetValue().ToDouble( &coord );
-    return coord;
-}
-
-
-void WinEDA_DFloatValueCtrl::SetValue( double new_value )
-{
-    wxString buffer;
-
-    m_Value = new_value;
-
-    buffer.Printf( wxT( "%f" ), m_Value );
-    m_ValueCtrl->SetValue( buffer );
-}
-
-
-void WinEDA_DFloatValueCtrl::Enable( bool enbl )
 {
     m_ValueCtrl->Enable( enbl );
     m_Text->Enable( enbl );

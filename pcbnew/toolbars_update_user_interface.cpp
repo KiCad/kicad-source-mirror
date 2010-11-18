@@ -17,6 +17,7 @@
 #include "drc_stuff.h"
 #include "3d_viewer.h"
 #include "class_board_design_settings.h"
+#include "dialog_helpers.h"
 
 /* helper to convert an integer value to a string, using mils or mm
  * according to g_UserUnit value

@@ -10,6 +10,7 @@
 #include "wxPcbStruct.h"
 #include "drawtxt.h"
 #include "confirm.h"
+#include "dialog_helpers.h"
 
 enum id_TextPCB_properties {
     ID_TEXTPCB_SELECT_LAYER = 1900

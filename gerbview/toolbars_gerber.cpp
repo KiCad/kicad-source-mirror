@@ -14,6 +14,7 @@
 #include "hotkeys.h"
 #include "class_GERBER.h"
 #include "class_layerchoicebox.h"
+#include "dialog_helpers.h"
 
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
 {

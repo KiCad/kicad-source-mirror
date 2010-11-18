@@ -17,6 +17,7 @@
 #include "class_library.h"
 #include "sch_field.h"
 #include "template_fieldnames.h"
+#include "dialog_helpers.h"
 
 #include "dialog_edit_libentry_fields_in_lib_base.h"
 

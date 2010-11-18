@@ -62,10 +62,9 @@ DialogNonCopperZonesEditor::~DialogNonCopperZonesEditor()
 }
 
 
-/* install function for DialogNonCopperZonesEditor dialog frame :*/
-bool InstallDialogNonCopperZonesEditor( WinEDA_PcbFrame* aParent, ZONE_CONTAINER* aZone )
+bool WinEDA_PcbFrame::InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone )
 {
-    DialogNonCopperZonesEditor frame( aParent, aZone, &g_Zone_Default_Setting );
+    DialogNonCopperZonesEditor frame( this, aZone, &g_Zone_Default_Setting );
     bool diag = frame.ShowModal();
 
     return diag;

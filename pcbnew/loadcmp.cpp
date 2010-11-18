@@ -16,7 +16,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-#include "protos.h"
+#include "dialog_helpers.h"
 
 class ModList
 {

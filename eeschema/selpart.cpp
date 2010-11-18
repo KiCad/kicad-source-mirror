@@ -11,6 +11,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "dialog_helpers.h"
 
 
 CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame )

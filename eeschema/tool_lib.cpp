@@ -11,6 +11,7 @@
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
+#include "dialog_helpers.h"
 
 #include "help_common_strings.h"
 

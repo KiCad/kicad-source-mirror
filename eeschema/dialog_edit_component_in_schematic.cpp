@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "sch_component.h"
+#include "dialog_helpers.h"
 
 #include "dialog_edit_component_in_schematic.h"
 
@@ -685,9 +686,9 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(), 
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(),
             EESCHEMA_INTERNAL_UNIT );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(), 
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(),
             EESCHEMA_INTERNAL_UNIT );
 
     return true;

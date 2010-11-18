@@ -8,6 +8,7 @@
 #include "common.h"
 #include "macros.h"
 #include "kicad_string.h"
+#include "dialog_helpers.h"
 
 
 enum listbox {

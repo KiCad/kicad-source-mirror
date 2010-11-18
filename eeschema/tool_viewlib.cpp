@@ -14,6 +14,7 @@
 #include "hotkeys.h"
 #include "class_library.h"
 #include "viewlib_frame.h"
+#include "dialog_helpers.h"
 
 
 void WinEDA_ViewlibFrame::ReCreateHToolbar()

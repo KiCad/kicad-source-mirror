@@ -36,6 +36,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "richio.h"
+#include "dialog_helpers.h"
 
 #include "dialog_netlist.h"
 

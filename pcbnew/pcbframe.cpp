@@ -50,6 +50,7 @@
 #include "pcbnew_config.h"
 #include "module_editor_frame.h"
 #include "dialog_SVG_print.h"
+#include "dialog_helpers.h"
 
 
 extern int g_DrawDefaultLineThickness;

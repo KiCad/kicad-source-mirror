@@ -16,6 +16,7 @@
 #include "viewlib_frame.h"
 #include "class_library.h"
 #include "hotkeys.h"
+#include "dialog_helpers.h"
 
 
 /**

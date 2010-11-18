@@ -10,9 +10,8 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
-
+#include "dialog_helpers.h"
 #include "bitmaps.h"
-
 #include "pcbnew_id.h"
 
 #ifdef __UNIX__

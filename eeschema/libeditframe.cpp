@@ -28,6 +28,7 @@
 
 #include "dialogs/dialog_lib_edit_text.h"
 #include "dialogs/dialog_SVG_print.h"
+#include "dialog_helpers.h"
 
 #include <boost/foreach.hpp>
 

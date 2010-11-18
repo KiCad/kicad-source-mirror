@@ -22,6 +22,7 @@
 #include "wxEeschemaStruct.h"
 #include "class_sch_screen.h"
 
+#include "dialog_helpers.h"
 #include "netlist_control.h"
 #include "libeditframe.h"
 #include "viewlib_frame.h"
