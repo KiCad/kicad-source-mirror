@@ -179,6 +179,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    stdDialogButtonSizerOK->SetDefault();
 }
 
 

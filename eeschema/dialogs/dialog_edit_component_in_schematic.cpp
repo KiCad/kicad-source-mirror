@@ -47,10 +47,8 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
         wxSize sizeNow = dialog->GetSize();
 
         // this relies on wxDefaultSize being -1,-1, be careful here.
-        if( sizeNow.GetWidth()
-            < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
-          || sizeNow.GetHeight()
-            < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
+        if( sizeNow.GetWidth() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
+            || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
         {
             dialog->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
         }
@@ -254,8 +252,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         ++i;
     }
 
-    LIB_COMPONENT* entry =
-        CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
+    LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
 
     if( entry &&  entry->IsPower() )
         m_FieldsBuf[VALUE].m_Text = m_Cmp->m_ChipName;
@@ -268,7 +265,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // reference.
     m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
 
-    m_Parent->OnModify( );
+    m_Parent->OnModify();
 
     m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, NULL );
 
@@ -292,7 +289,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
     blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
 
     m_FieldsBuf.push_back( blank );
-    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName(fieldNdx);
+    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
 
     m_skipCopyFromPanel = true;
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
@@ -350,7 +347,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     D( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
-              CONV_TO_UTF8( tmp.m_Text ), CONV_TO_UTF8( tmp.m_Name ) ); )
+               CONV_TO_UTF8( tmp.m_Text ), CONV_TO_UTF8( tmp.m_Name ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -437,6 +434,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     // Please do not break the field constructors.
 
     m_FieldsBuf.clear();
+
     for( int i=0;  i<MANDATORY_FIELDS;  ++i )
     {
         m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
@@ -685,10 +683,10 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(), 
-            EESCHEMA_INTERNAL_UNIT );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(), 
-            EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(),
+                                           EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(),
+                                           EESCHEMA_INTERNAL_UNIT );
 
     return true;
 }
@@ -715,6 +713,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     // For components with multiple parts per package, set the unit selection
     choiceCount = unitChoice->GetCount();
+
     if( m_Cmp->m_Multi <= choiceCount )
         unitChoice->SetSelection( m_Cmp->m_Multi - 1 );
 

@@ -28,6 +28,7 @@
 
 #include "dialogs/dialog_lib_edit_text.h"
 #include "dialogs/dialog_SVG_print.h"
+#include "dialogs/dialog_edit_component_in_lib.h"
 
 #include <boost/foreach.hpp>
 
@@ -1022,4 +1023,28 @@ void WinEDA_LibeditFrame::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
     if( DC && !DrawItem->InEditMode() )
         DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, NULL,
                         DefaultTransform );
+}
+
+
+void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
+{
+    bool partLocked = GetComponent()->UnitsLocked();
+
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( partLocked != GetComponent()->UnitsLocked() )
+    {
+        // g_EditPinByPinIsOn is set to the better value, if m_UnitSelectionLocked has changed
+        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
+    }
+
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
+    DisplayLibInfos();
+    DisplayCmpDoc();
+    OnModify();
+    DrawPanel->Refresh();
 }

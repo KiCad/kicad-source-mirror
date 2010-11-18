@@ -155,6 +155,8 @@ void DialogLabelEditor::InitDialog()
     {
         m_TextShape->Show( false );
     }
+
+    m_sdbSizer1OK->SetDefault();
 }
 
 

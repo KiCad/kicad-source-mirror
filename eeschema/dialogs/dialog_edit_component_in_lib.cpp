@@ -1,57 +1,160 @@
-/**************************************************************/
-/*  librairy editor: edition of component general properties  */
-/**************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+// Name:        dialog_edit_component_in_lib.cpp
+// Author:      jean-pierre Charras
+// Licence:     GPL
+/////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
-#include "appl_wxstruct.h"
 #include "common.h"
-#include "macros.h"
-#include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "wxEeschemaStruct.h"
+#include "appl_wxstruct.h"
 
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
-#include "eeschema_id.h"
-
-
-/* Dialog box to edit a libentry (a component in library) properties */
-
-/* Creates a NoteBook dialog
- *  Edition:
- *  Doc and keys words
- *  Parts per package
- *  General properties
- * Fields are NOT edited here. There is a specific dialog box to do that
- */
 
 #include "dialog_edit_component_in_lib.h"
 
 
-void WinEDA_LibeditFrame::OnEditComponentProperties( wxCommandEvent& event )
+DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_LibeditFrame* aParent ):
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( aParent )
 {
-    bool partLocked = GetComponent()->UnitsLocked();
+	m_Parent = aParent;
+	m_RecreateToolbar = false;
 
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
+	Init();
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    if( partLocked != GetComponent()->UnitsLocked() )
+    if( GetSizer() )
     {
-        // g_EditPinByPinIsOn is set to the better value, if m_UnitSelectionLocked has changed
-        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
+        GetSizer()->SetSizeHints( this );
+    }
+}
+
+
+DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
+{
+}
+
+/* Initialize state of check boxes and texts
+*/
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init()
+{
+    SetFocus();
+    m_AliasLocation = -1;
+
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+
+    if( component == NULL )
+    {
+        SetTitle( _( "Library Component Properties" ) );
+        return;
     }
 
-    UpdateAliasSelectList();
-    UpdatePartSelectList();
-    DisplayLibInfos();
-    DisplayCmpDoc();
-    OnModify();
-    DrawPanel->Refresh();
+    wxString title = _( "Properties for " );
+
+    bool isRoot = m_Parent->GetAliasName().CmpNoCase( component->GetName() ) == 0;
+
+    if( !isRoot )
+    {
+        title += m_Parent->GetAliasName() + _( " (alias of " ) + component->GetName() + wxT( ")" );
+    }
+    else
+    {
+        title += component->GetName();
+    }
+
+    SetTitle( title );
+    InitPanelDoc();
+    InitBasicPanel();
+
+    if( isRoot && component->GetAliasCount() == 1 )
+        m_ButtonDeleteAllAlias->Enable( false );
+
+    /* Place list of alias names in listbox */
+    m_PartAliasListCtrl->Append( component->GetAliasNames( false ) );
+
+    if( component->GetAliasCount() <= 1 )
+    {
+        m_ButtonDeleteAllAlias->Enable( false );
+        m_ButtonDeleteOneAlias->Enable( false );
+    }
+
+    /* Read the Footprint Filter list */
+    m_FootprintFilterListBox->Append( component->GetFootPrints() );
+
+    if( component->GetFootPrints().GetCount() == 0 )
+    {
+        m_ButtonDeleteAllFootprintFilter->Enable( false );
+        m_ButtonDeleteOneFootprintFilter->Enable( false );
+    }
+
+    m_sdbSizer2OK->SetDefault();
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
+{
+	EndModal( wxID_CANCEL );
+}
+
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitPanelDoc()
+{
+    LIB_ALIAS* alias;
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+
+    if( component == NULL )
+        return;
+
+    wxString aliasname = m_Parent->GetAliasName();
+
+    if( aliasname.IsEmpty() )
+        return;
+
+    alias = component->GetAlias( aliasname );
+
+    if( alias != NULL )
+    {
+        m_DocCtrl->SetValue( alias->GetDescription() );
+        m_KeywordsCtrl->SetValue( alias->GetKeyWords() );
+        m_DocfileCtrl->SetValue( alias->GetDocFileName() );
+    }
+}
+
+
+/*
+ * create the basic panel for component properties editing
+ */
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::InitBasicPanel()
+{
+    LIB_COMPONENT* component = m_Parent->GetComponent();
+
+    if( m_Parent->GetShowDeMorgan() )
+        m_AsConvertButt->SetValue( true );
+
+    /* Default values for a new component. */
+    if( component == NULL )
+    {
+        m_ShowPinNumButt->SetValue( true );
+        m_ShowPinNameButt->SetValue( true );
+        m_PinsNameInsideButt->SetValue( true );
+        m_SelNumberOfUnits->SetValue( 1 );
+        m_SetSkew->SetValue( 40 );
+        m_OptionPower->SetValue( false );
+        m_OptionPartsLocked->SetValue( false );
+        return;
+    }
+
+    m_ShowPinNumButt->SetValue( component->ShowPinNumbers() );
+    m_ShowPinNameButt->SetValue( component->ShowPinNames() );
+    m_PinsNameInsideButt->SetValue( component->GetPinNameOffset() != 0 );
+    m_SelNumberOfUnits->SetValue( component->GetPartCount() );
+    m_SetSkew->SetValue( component->GetPinNameOffset() );
+    m_OptionPower->SetValue( component->IsPower() );
+    m_OptionPartsLocked->SetValue( component->UnitsLocked() && component->GetPartCount() > 1 );
 }
 
 
@@ -124,6 +227,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     /* Set the option "Units locked".
      *  Obviously, cannot be true if there is only one part */
     component->LockUnits( m_OptionPartsLocked->GetValue() );
+
     if( component->GetPartCount() <= 1 )
         component->LockUnits( false );
 
@@ -190,6 +294,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
         return;
 
     wxTextEntryDialog dlg( this, _( "New alias:" ), _( "Component Alias" ), aliasname );
+
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
@@ -211,8 +316,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
     }
 
     m_PartAliasListCtrl->Append( aliasname );
+
     if( m_Parent->GetAliasName().CmpNoCase( component->GetName() ) == 0 )
         m_ButtonDeleteAllAlias->Enable( true );
+
     m_ButtonDeleteOneAlias->Enable( true );
 }
 
@@ -223,6 +330,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& WXUNUS
 
     if( aliasname.IsEmpty() )
         return;
+
     if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
     {
         wxString msg;
@@ -234,6 +342,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& WXUNUS
 
     m_PartAliasListCtrl->Delete( m_PartAliasListCtrl->GetSelection() );
     LIB_COMPONENT* component = m_Parent->GetComponent();
+
     if( component )
         component->RemoveAlias( aliasname );
 
@@ -271,8 +380,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::SetUnsetConvert()
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
-    if( component == NULL
-        || ( m_Parent->GetShowDeMorgan() == component->HasConversion() ) )
+    if( component == NULL || ( m_Parent->GetShowDeMorgan() == component->HasConversion() ) )
         return false;
 
     if( m_Parent->GetShowDeMorgan() )
@@ -386,14 +494,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& WXUNUSED( event ) )
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
     int ii = m_FootprintFilterListBox->GetSelection();
 
     m_FootprintFilterListBox->Delete( ii );
 
-    if( !component || (m_FootprintFilterListBox->GetCount() == 0) )
+    if( !component || ( m_FootprintFilterListBox->GetCount() == 0 ) )
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );

@@ -39,14 +39,14 @@ set(EESCHEMA_SRCS
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_build_BOM.cpp
     dialogs/dialog_build_BOM_base.cpp
-    dialog_edit_component_in_lib.cpp
-    dialog_edit_component_in_lib_base.cpp
-    dialog_edit_component_in_schematic_fbp.cpp
-    dialog_edit_component_in_schematic.cpp
-    dialog_edit_label.cpp
-    dialog_edit_label_base.cpp
-    dialog_edit_libentry_fields_in_lib.cpp
-    dialog_edit_libentry_fields_in_lib_base.cpp
+    dialogs/dialog_edit_component_in_lib.cpp
+    dialogs/dialog_edit_component_in_lib_base.cpp
+    dialogs/dialog_edit_component_in_schematic_fbp.cpp
+    dialogs/dialog_edit_component_in_schematic.cpp
+    dialogs/dialog_edit_label.cpp
+    dialogs/dialog_edit_label_base.cpp
+    dialogs/dialog_edit_libentry_fields_in_lib.cpp
+    dialogs/dialog_edit_libentry_fields_in_lib_base.cpp
     dialog_eeschema_config.cpp
     dialog_eeschema_config_fbp.cpp
     dialog_eeschema_options_base.cpp
@@ -69,7 +69,6 @@ set(EESCHEMA_SRCS
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
-    edit_component_in_lib.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
     eelayer.cpp
