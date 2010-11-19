@@ -22,7 +22,7 @@
  * Function OnPlotCurrentComponent
  * plot in SVG or PNG format the curren component
  */
-void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 {
     LIB_COMPONENT* cmp = GetComponent();
     wxString   FullFileName;
@@ -98,7 +98,7 @@ void WinEDA_LibeditFrame::OnPlotCurrentComponent( wxCommandEvent& event )
  * @param aFileName = the full filename
  * @param aFmt_jpeg = true to use JPEG file format, false to use PNG file format
  */
-void WinEDA_LibeditFrame::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
+void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
 {
     wxSize     image_size = DrawPanel->GetClientSize();
 
@@ -112,9 +112,7 @@ void WinEDA_LibeditFrame::CreatePNGorJPEGFile( const wxString& aFileName, bool a
 
     wxImage image = bitmap.ConvertToImage();
 
-    if( !image.SaveFile( aFileName,
-                         aFmt_jpeg ? wxBITMAP_TYPE_JPEG :
-                         wxBITMAP_TYPE_PNG ) )
+    if( !image.SaveFile( aFileName, aFmt_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
     {
         wxString msg;
         msg.Printf( _( "Can't save file <%s>" ), GetChars( aFileName ) );
@@ -133,14 +131,13 @@ void WinEDA_LibeditFrame::CreatePNGorJPEGFile( const wxString& aFileName, bool a
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void WinEDA_LibeditFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                                  int aPrintMask, bool aPrintMirrorMode,
-                                    void * aData)
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
+                                bool aPrintMirrorMode, void* aData)
 {
     if( ! m_component )
         return;
 
-    wxSize pagesize = GetScreen()->ReturnPageSize( );
+    wxSize pagesize = GetScreen()->ReturnPageSize();
     /* Plot item centered to the page
      * In libedit, the component is centered at 0,0 coordinates.
      * So we must plot it with an offset = pagesize/2.
@@ -149,8 +146,7 @@ void WinEDA_LibeditFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
     plot_offset.x = pagesize.x/2;
     plot_offset.y = pagesize.y/2;
 
-    m_component->Draw( DrawPanel, aDC, plot_offset, m_unit,
-                       m_convert, GR_DEFAULT_DRAWMODE );
+    m_component->Draw( DrawPanel, aDC, plot_offset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
 }
 
 

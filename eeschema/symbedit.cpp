@@ -31,7 +31,7 @@
  * A symbol file *.sym has the same format as a library, and contains only
  * one symbol
  */
-void WinEDA_LibeditFrame::LoadOneSymbol( void )
+void LIB_EDIT_FRAME::LoadOneSymbol( void )
 {
     LIB_COMPONENT* Component;
     wxString       msg, err;
@@ -122,7 +122,7 @@ void WinEDA_LibeditFrame::LoadOneSymbol( void )
  *
  * Invisible pins are not saved
  */
-void WinEDA_LibeditFrame::SaveOneSymbol()
+void LIB_EDIT_FRAME::SaveOneSymbol()
 {
     wxString msg;
 
@@ -223,7 +223,7 @@ void WinEDA_LibeditFrame::SaveOneSymbol()
  *
  * All coordinates of the object are offset to the cursor position.
  */
-void WinEDA_LibeditFrame::PlaceAncre()
+void LIB_EDIT_FRAME::PlaceAncre()
 {
     if( m_component == NULL )
         return;

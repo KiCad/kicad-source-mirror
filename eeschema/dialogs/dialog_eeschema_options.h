@@ -94,7 +94,7 @@ public:
 
 
     /** Set the field \a aNdx textctrl to \a aName */
-    void SetFieldName( int aNdx, wxString aName);
+    void SetFieldName( int aNdx, wxString aName );
 
     /** Get the field \a aNdx name from the fields textctrl */
     wxString GetFieldName( int aNdx );

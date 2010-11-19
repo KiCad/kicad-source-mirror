@@ -1,6 +1,7 @@
-/*****************************/
-/* class WinEDA_LibeditFrame */
-/*****************************/
+
+/************************/
+/* class LIB_EDIT_FRAME */
+/************************/
 
 #ifndef __LIBEDITFRM_H__
 #define __LIBEDITFRM_H__
@@ -22,7 +23,7 @@ class DIALOG_LIB_EDIT_TEXT;
 /**
  * The component library editor main window.
  */
-class WinEDA_LibeditFrame : public WinEDA_DrawFrame
+class LIB_EDIT_FRAME : public WinEDA_DrawFrame
 {
     LIB_COMPONENT* m_tempCopyComponent;     ///< Temporary copy of current component during edit.
     wxString       m_oldRootName;           ///< The actual pointer of the component loaded from
@@ -34,12 +35,11 @@ public:
     WinEDAChoiceBox* m_SelAliasBox;     // a box to select the alias to edit (if any)
 
 public:
-    WinEDA_LibeditFrame( WinEDA_SchematicFrame* aParent,
-                         const wxString& title,
-                         const wxPoint& pos, const wxSize& size,
-                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    LIB_EDIT_FRAME( WinEDA_SchematicFrame* aParent, const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_LibeditFrame();
+    ~LIB_EDIT_FRAME();
 
     void        ReCreateMenuBar();
 
@@ -113,7 +113,7 @@ public:
      * triggers the wxCloseEvent, which is handled by the function given
      * to EVT_CLOSE() macro:
      * <p>
-     * EVT_CLOSE( WinEDA_LibeditFrame::OnCloseWindow )
+     * EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
      */
     void CloseWindow( wxCommandEvent& WXUNUSED(event) )
     {

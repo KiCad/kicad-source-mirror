@@ -20,8 +20,10 @@
 #include "hotkeys.h"
 #include "sch_sheet.h"
 
-#include "dialog_eeschema_options.h"
 #include "dialog_hotkeys_editor.h"
+
+#include "dialogs/dialog_eeschema_config.h"
+#include "dialogs/dialog_eeschema_options.h"
 
 #include <wx/fdrepdlg.h>
 
@@ -30,7 +32,16 @@
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
-void WinEDA_LibeditFrame::Process_Config( wxCommandEvent& event )
+
+void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
+{
+    DIALOG_EESCHEMA_CONFIG CfgFrame( (WinEDA_SchematicFrame *)GetParent(), this );
+
+    CfgFrame.ShowModal();
+}
+
+
+void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -87,10 +98,17 @@ void WinEDA_LibeditFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_LibeditFrame::Process_Config error" ) );
+        DisplayError( this, wxT( "LIB_EDIT_FRAME::Process_Config error" ) );
     }
 }
 
+
+void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
+{
+    DIALOG_EESCHEMA_CONFIG CfgFrame( this, this );
+
+    CfgFrame.ShowModal();
+}
 
 
 void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )

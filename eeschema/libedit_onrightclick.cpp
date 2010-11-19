@@ -24,11 +24,11 @@
 
 
 /* functions to add commands and submenus depending on the item */
-static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_LibeditFrame* frame );
-static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, WinEDA_LibeditFrame* frame );
+static void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame );
+static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame );
 
 
-bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
     bool BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE );
@@ -262,9 +262,8 @@ bool WinEDA_LibeditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu
 
     default:
         wxString msg;
-        msg.Printf( wxT( "WinEDA_LibeditFrame::OnRightClick Error: unknown \
-StructType %d" ),
-            DrawEntry->Type() );
+        msg.Printf( wxT( "LIB_EDIT_FRAME::OnRightClick Error: unknown StructType %d" ),
+                    DrawEntry->Type() );
         DisplayError( this, msg );
         m_drawItem = NULL;
         break;
@@ -275,9 +274,7 @@ StructType %d" ),
 }
 
 
-void AddMenusForPin( wxMenu*              PopMenu,
-                     LIB_PIN*             Pin,
-                     WinEDA_LibeditFrame* frame )
+void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 {
     bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;
     bool not_in_move = (Pin->m_Flags == 0);
@@ -325,7 +322,7 @@ void AddMenusForPin( wxMenu*              PopMenu,
 
 /* Add menu commands for block */
 
-void AddMenusForBlock( wxMenu* PopMenu, WinEDA_LibeditFrame* frame )
+void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
 {
     ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
                   _( "Cancel Block" ), cancel_xpm );

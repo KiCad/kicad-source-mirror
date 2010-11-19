@@ -31,16 +31,15 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN
 /*****************************************************************************************/
 {
 private:
-    WinEDA_LibeditFrame*    m_Parent;
-    LIB_COMPONENT*          m_LibEntry;
-    bool                    m_skipCopyFromPanel;
+    LIB_EDIT_FRAME*    m_Parent;
+    LIB_COMPONENT*     m_LibEntry;
+    bool               m_skipCopyFromPanel;
 
     /// a copy of the edited component's LIB_FIELDs
     std::vector <LIB_FIELD> m_FieldsBuf;
 
 public:
-    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( WinEDA_LibeditFrame* aParent,
-                                        LIB_COMPONENT* aLibEntry );
+    DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB( LIB_EDIT_FRAME* aParent, LIB_COMPONENT* aLibEntry );
     ~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB();
 
 private:
@@ -104,7 +103,7 @@ private:
 };
 
 
-void WinEDA_LibeditFrame::InstallFieldsEditorDialog( wxCommandEvent& event )
+void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
 {
     if( m_component == NULL )
         return;
@@ -127,8 +126,8 @@ void WinEDA_LibeditFrame::InstallFieldsEditorDialog( wxCommandEvent& event )
 
 /***********************************************************************/
 DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
-    WinEDA_LibeditFrame* aParent,
-    LIB_COMPONENT*       aLibEntry ) :
+    LIB_EDIT_FRAME* aParent,
+    LIB_COMPONENT*  aLibEntry ) :
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( aParent )
 /***********************************************************************/
 {

@@ -17,7 +17,7 @@
 #include "dialog_lib_edit_text.h"
 
 
-DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( WinEDA_LibeditFrame* aParent, LIB_TEXT* aText ) :
+DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
     DIALOG_LIB_EDIT_TEXT_BASE( aParent )
 {
     m_Parent = aParent;
@@ -34,8 +34,8 @@ void DIALOG_LIB_EDIT_TEXT::InitDialog( )
 
     if ( m_GraphicText )
     {
-        msg = ReturnStringFromValue(g_UserUnit, m_GraphicText->m_Size.x,
-                                    m_Parent->m_InternalUnits);
+        msg = ReturnStringFromValue( g_UserUnit, m_GraphicText->m_Size.x,
+                                     m_Parent->m_InternalUnits );
         m_TextSize->SetValue( msg );
         m_TextValue->SetValue( m_GraphicText->m_Text );
 

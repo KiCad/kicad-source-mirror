@@ -13,7 +13,7 @@ class EDA_BaseStruct;
 class WinEDA_DrawPanel;
 class WinEDA_DrawFrame;
 class WinEDA_SchematicFrame;
-class WinEDA_LibeditFrame;
+class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
@@ -229,7 +229,7 @@ void DeleteAllMarkers( int type );
 /**************/
 /* PINEDIT.CPP */
 /**************/
-void InstallPineditFrame( WinEDA_LibeditFrame* parent, wxDC* DC, const wxPoint& pos );
+void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
 
 
 /**************/

@@ -837,7 +837,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  * under the mouse cursor
  * Commands are case insensitive
  */
-void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
+void LIB_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );

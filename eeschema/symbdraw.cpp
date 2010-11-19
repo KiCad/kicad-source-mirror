@@ -30,7 +30,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 /*
  * Show the dialog box for editing a graphical item properties
  */
-void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
+void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 {
     if( DrawItem == NULL )
         return;
@@ -99,8 +99,8 @@ void WinEDA_LibeditFrame::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 
 static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) Panel->GetParent();
-    LIB_DRAW_ITEM*       item   = parent->GetDrawItem();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
+    LIB_DRAW_ITEM*  item   = parent->GetDrawItem();
 
     if( item == NULL )
         return;
@@ -123,7 +123,7 @@ static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
+LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
     DrawPanel->ManageCurseur = SymbolDisplayDraw;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
@@ -176,7 +176,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
         break;
     }
     default:
-        DisplayError( this, wxT( "WinEDA_LibeditFrame::CreateGraphicItem() error" ) );
+        DisplayError( this, wxT( "LIB_EDIT_FRAME::CreateGraphicItem() error" ) );
         return NULL;
     }
 
@@ -210,7 +210,7 @@ LIB_DRAW_ITEM* WinEDA_LibeditFrame::CreateGraphicItem( LIB_COMPONENT* LibEntry, 
 
 /* Create new library component graphic object.
  */
-void WinEDA_LibeditFrame::GraphicItemBeginDraw( wxDC* DC )
+void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 {
     if( m_drawItem == NULL )
         return;
@@ -234,7 +234,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 {
     LIB_DRAW_ITEM* item;
 
-    item = ( (WinEDA_LibeditFrame*) panel->GetParent() )->GetDrawItem();
+    item = ( (LIB_EDIT_FRAME*) panel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
@@ -247,7 +247,7 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
 }
 
 
-void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
+void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 {
     if( m_drawItem == NULL )
         return;
@@ -266,7 +266,7 @@ void WinEDA_LibeditFrame::StartMoveDrawSymbol( wxDC* DC )
 
 
 // @brief Modify a graphic symbol (drag edges etc.)
-void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
+void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 {
     if( m_drawItem == NULL )
         return;
@@ -283,7 +283,7 @@ void WinEDA_LibeditFrame::StartModifyDrawSymbol( wxDC* DC )
 static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     BASE_SCREEN*   Screen   = panel->GetScreen();
-    LIB_DRAW_ITEM* item = ( (WinEDA_LibeditFrame*) panel->GetParent() )->GetDrawItem();
+    LIB_DRAW_ITEM* item = ( (LIB_EDIT_FRAME*) panel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
@@ -298,7 +298,7 @@ static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  * Place the new graphic object in the list of component drawing objects,
  * or terminate a draw item edition
  */
-void WinEDA_LibeditFrame::EndDrawGraphicItem( wxDC* DC )
+void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 {
     if( m_component == NULL || m_drawItem == NULL )
         return;

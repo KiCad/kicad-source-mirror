@@ -8,6 +8,7 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
 {
     m_choiceUnits->SetFocus();
+    m_sdbSizer1OK->SetDefault();
 }
 
 
@@ -21,8 +22,7 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GridArray& grid_sizes,
-                                            int              grid_id )
+void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GridArray& grid_sizes, int grid_id )
 {
     wxASSERT( grid_sizes.GetCount() > 0 );
 

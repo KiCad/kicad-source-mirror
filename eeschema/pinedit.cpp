@@ -38,7 +38,9 @@ static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
-void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
+
+void LIB_EDIT_FRAME::OnRotatePin( wxCommandEvent& event )
+{
 
 	// Check, if the item is a pin, else return
 	if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
@@ -72,7 +74,7 @@ void WinEDA_LibeditFrame::OnRotatePin( wxCommandEvent& event ){
 	pin->m_Flags = item_flags;
 }
 
-void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 {
     if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
         return;
@@ -176,7 +178,7 @@ void WinEDA_LibeditFrame::OnEditPin( wxCommandEvent& event )
  */
 static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
-    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) Panel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
 
     if( parent == NULL )
         return;
@@ -203,7 +205,7 @@ static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
 /**
  * Managed cursor callback for placing component pins.
  */
-void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
+void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
 {
     LIB_PIN* Pin;
     LIB_PIN* CurrentPin  = (LIB_PIN*) m_drawItem;
@@ -214,7 +216,7 @@ void WinEDA_LibeditFrame::PlacePin( wxDC* DC )
     // Some tests
     if( (CurrentPin == NULL) || (CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE) )
     {
-        wxMessageBox( wxT("WinEDA_LibeditFrame::PlacePin() error") );
+        wxMessageBox( wxT("LIB_EDIT_FRAME::PlacePin() error") );
         return;
     }
 
@@ -291,7 +293,7 @@ another pin. Continue?" ) );
  * Locate the pin pointed to by the cursor, and set the cursor management
  * function move the pin.
  */
-void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
+void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 {
     LIB_PIN* Pin;
     LIB_PIN* CurrentPin = (LIB_PIN*) m_drawItem;
@@ -333,7 +335,7 @@ void WinEDA_LibeditFrame::StartMovePin( wxDC* DC )
  * cursor management code. */
 static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
-    WinEDA_LibeditFrame* parent = (WinEDA_LibeditFrame*) panel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) panel->GetParent();
 
     if( parent == NULL )
         return;
@@ -374,9 +376,7 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  *    All pins at the same position will be erased.
  *    Otherwise only the pin of the current unit and convert will be  erased.
  */
-void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
-                                     LIB_COMPONENT* LibEntry,
-                                     LIB_PIN*       Pin )
+void LIB_EDIT_FRAME::DeletePin( wxDC* DC, LIB_COMPONENT* LibEntry, LIB_PIN* Pin )
 {
     LIB_PIN* tmp;
     wxPoint  PinPos;
@@ -410,7 +410,7 @@ void WinEDA_LibeditFrame::DeletePin( wxDC*          DC,
 /*
  * Create a new pin.
  */
-void WinEDA_LibeditFrame::CreatePin( wxDC* DC )
+void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 {
     LIB_PIN* pin;
     bool     showPinText = true;
@@ -535,7 +535,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
  * If Pin is selected ( .m_flag == IS_SELECTED ) only the other selected
  * pins are modified
  */
-void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
+void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
 
 {
     LIB_PIN* Pin;
@@ -583,7 +583,7 @@ void WinEDA_LibeditFrame::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
 
 
 /* Create a new pin based on the previous pin with an incremented pin number. */
-void WinEDA_LibeditFrame::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
+void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 {
     LIB_PIN* Pin;
     wxString msg;
@@ -647,7 +647,7 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
  * Pins are considered off grid when they are not on the 25 mils grid
  * A grid smaller than 25 mils must be used only to build graphic shapes.
  */
-void WinEDA_LibeditFrame::OnCheckComponent( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 {
     #define MIN_GRID_SIZE 25
     int          dup_error;

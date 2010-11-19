@@ -16,7 +16,7 @@
 #include "template_fieldnames.h"
 
 
-void WinEDA_LibeditFrame::EditField( wxDC* DC, LIB_FIELD* Field )
+void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* Field )
 {
     wxString Text;
     wxString title;
@@ -95,7 +95,7 @@ not conflict with any library entries." ),
 }
 
 
-LIB_DRAW_ITEM* WinEDA_LibeditFrame::LocateItemUsingCursor()
+LIB_DRAW_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor()
 {
     if( m_component == NULL )
         return NULL;

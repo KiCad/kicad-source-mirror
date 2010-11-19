@@ -26,7 +26,7 @@ extern int ImportPartId;
 extern int CreateNewLibAndSavePartId;
 
 
-void WinEDA_LibeditFrame::ReCreateVToolbar()
+void LIB_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_VToolBar != NULL )
         return;
@@ -86,7 +86,7 @@ void WinEDA_LibeditFrame::ReCreateVToolbar()
 }
 
 
-void WinEDA_LibeditFrame::ReCreateHToolbar()
+void LIB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 

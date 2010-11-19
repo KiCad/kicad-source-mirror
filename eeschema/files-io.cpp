@@ -218,7 +218,7 @@ bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsN
 
     // Clear (if needed) the current active library in libedit because it could be
     // removed from memory
-    WinEDA_LibeditFrame::EnsureActiveLibExists();
+    LIB_EDIT_FRAME::EnsureActiveLibExists();
 
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();

@@ -14,13 +14,13 @@
 class DIALOG_EDIT_COMPONENT_IN_LIBRARY: public DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE
 {
 public:
-	WinEDA_LibeditFrame * m_Parent;
+	LIB_EDIT_FRAME* m_Parent;
 	bool m_RecreateToolbar;
 	int m_AliasLocation;
 
 public:
     /// Constructors
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY( WinEDA_LibeditFrame* parent);
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* parent);
     ~DIALOG_EDIT_COMPONENT_IN_LIBRARY();
 
 private:

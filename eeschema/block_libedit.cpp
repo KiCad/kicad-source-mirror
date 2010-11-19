@@ -22,7 +22,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
  * Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
  */
-int WinEDA_LibeditFrame::ReturnBlockCommand( int key )
+int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
 {
     int cmd;
 
@@ -69,7 +69,7 @@ int WinEDA_LibeditFrame::ReturnBlockCommand( int key )
  *  1 if HandleBlockPlace must follow (items found, and a block place
  * command must follow)
  */
-bool WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
+bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     int ItemCount = 0;
     int nextCmd = false;
@@ -192,7 +192,7 @@ bool WinEDA_LibeditFrame::HandleBlockEnd( wxDC* DC )
  *  - block move & drag
  *  - block copy & paste
  */
-void WinEDA_LibeditFrame::HandleBlockPlace( wxDC* DC )
+void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     bool err = FALSE;
     wxPoint pt;
@@ -281,7 +281,7 @@ void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     wxPoint move_offset;
     PtBlock = &screen->m_BlockLocate;
 
-    WinEDA_LibeditFrame* parent = ( WinEDA_LibeditFrame* ) panel->GetParent();
+    LIB_EDIT_FRAME* parent = ( LIB_EDIT_FRAME* ) panel->GetParent();
     wxASSERT( parent != NULL );
 
     LIB_COMPONENT* component = parent->GetComponent();

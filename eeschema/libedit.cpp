@@ -23,7 +23,7 @@
 
 
 /* Update the main window title bar with the current library name. */
-void WinEDA_LibeditFrame::DisplayLibInfos()
+void LIB_EDIT_FRAME::DisplayLibInfos()
 {
     wxString msg = _( "Component Library Editor: " );
 
@@ -39,7 +39,7 @@ void WinEDA_LibeditFrame::DisplayLibInfos()
 
 
 /* Function to select the current library (working library) */
-void WinEDA_LibeditFrame::SelectActiveLibrary()
+void LIB_EDIT_FRAME::SelectActiveLibrary()
 {
     CMP_LIBRARY* Lib;
 
@@ -59,7 +59,7 @@ void WinEDA_LibeditFrame::SelectActiveLibrary()
  * If there is no current selected library,
  * prompt user for library name and make the selected library the current lib.
  */
-void WinEDA_LibeditFrame::LoadOneLibraryPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 {
     int        i;
     wxString   msg;
@@ -127,7 +127,7 @@ void WinEDA_LibeditFrame::LoadOneLibraryPart( wxCommandEvent& event )
  * 1 if error
  * m_component advanced copy and created
  */
-bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLibrary )
+bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLibrary )
 {
     wxString msg, cmpName, rootName;
     LIB_COMPONENT* component;
@@ -194,7 +194,7 @@ bool WinEDA_LibeditFrame::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY*
 
 
 /* Function to redraw the current loaded library component */
-void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     if( GetScreen() == NULL )
         return;
@@ -233,7 +233,7 @@ void WinEDA_LibeditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * Save (on disk) the current library
  *  if exists the old file is renamed (.bak)
  */
-void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
+void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
 {
     wxFileName fn;
     wxString   msg;
@@ -306,7 +306,7 @@ void WinEDA_LibeditFrame::SaveActiveLibrary( wxCommandEvent& event )
  *
  * Used when displaying the list of library components.
  */
-void WinEDA_LibeditFrame::DisplayCmpDoc()
+void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
     wxString msg;
     LIB_ALIAS* alias;
@@ -369,7 +369,7 @@ void WinEDA_LibeditFrame::DisplayCmpDoc()
  *   Otherwise the alias becomes the new component name, and the other
  *   aliases become dependent on newly named component.
  */
-void WinEDA_LibeditFrame::DeleteOnePart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 {
     wxString      CmpName;
     LIB_ALIAS*    LibEntry;
@@ -467,7 +467,7 @@ All changes will be lost. Discard changes?" ) ) )
  *
  * If an old component is currently in edit, it is deleted.
  */
-void WinEDA_LibeditFrame::CreateNewLibraryPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 {
     wxString name;
 
@@ -570,7 +570,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
  * The routine deletes the old component (and / or aliases) to replace
  * If any, and saves the new and creates the corresponding alias.
  */
-void WinEDA_LibeditFrame::SaveOnePartInMemory()
+void LIB_EDIT_FRAME::SaveOnePartInMemory()
 {
     LIB_COMPONENT* oldComponent;
     LIB_COMPONENT* Component;

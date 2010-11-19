@@ -11,7 +11,7 @@
 #include "template_fieldnames.h"
 
 
-class WinEDA_LibeditFrame;
+class LIB_EDIT_FRAME;
 class WinEDA_ViewlibFrame;
 class SCH_SCREEN;
 class DRAWSEGMENT;
@@ -63,7 +63,7 @@ public:
     int m_NetlistFormat;
     bool                  m_ShowAllPins;
     wxPoint               m_OldPos;
-    WinEDA_LibeditFrame*  m_LibeditFrame;
+    LIB_EDIT_FRAME*       m_LibeditFrame;
     WinEDA_ViewlibFrame*  m_ViewlibFrame;
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;

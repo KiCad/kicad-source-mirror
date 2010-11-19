@@ -738,10 +738,10 @@ void WinEDA_SchematicFrame::OnOpenLibraryEditor( wxCommandEvent& event )
     }
     else
     {
-        m_LibeditFrame = new WinEDA_LibeditFrame( this,
-                                                  wxT( "Library Editor" ),
-                                                  wxPoint( -1, -1 ),
-                                                  wxSize( 600, 400 ) );
+        m_LibeditFrame = new LIB_EDIT_FRAME( this,
+                                             wxT( "Library Editor" ),
+                                             wxPoint( -1, -1 ),
+                                             wxSize( 600, 400 ) );
         ActiveScreen = GetBaseScreen();
         m_LibeditFrame->AdjustScrollBars();
     }

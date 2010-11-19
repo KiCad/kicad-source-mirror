@@ -47,14 +47,14 @@ set(EESCHEMA_SRCS
     dialogs/dialog_edit_label_base.cpp
     dialogs/dialog_edit_libentry_fields_in_lib.cpp
     dialogs/dialog_edit_libentry_fields_in_lib_base.cpp
-    dialog_eeschema_config.cpp
-    dialog_eeschema_config_fbp.cpp
-    dialog_eeschema_options_base.cpp
-    dialog_eeschema_options.cpp
+    dialogs/dialog_eeschema_config.cpp
+    dialogs/dialog_eeschema_config_fbp.cpp
+    dialogs/dialog_eeschema_options_base.cpp
+    dialogs/dialog_eeschema_options.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
-    dialog_libedit_dimensions.cpp
-    dialog_libedit_dimensions_base.cpp
+    dialogs/dialog_libedit_dimensions.cpp
+    dialogs/dialog_libedit_dimensions_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
     dialogs/dialog_lib_edit_pin.cpp

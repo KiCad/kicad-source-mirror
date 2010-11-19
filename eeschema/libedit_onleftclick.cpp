@@ -18,7 +18,7 @@
 #include "class_libentry.h"
 
 
-void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     LIB_DRAW_ITEM* DrawEntry = m_drawItem;
 
@@ -129,7 +129,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         default:
-            DisplayError( this, wxT( "WinEDA_LibeditFrame::OnLeftClick error" ) );
+            DisplayError( this, wxT( "LIB_EDIT_FRAME::OnLeftClick error" ) );
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
             break;
         }
@@ -142,7 +142,7 @@ void WinEDA_LibeditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  If an editable item  (field, pin, graphic):
  *      Call the suitable dialog editor.
  */
-void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     wxPoint pos = GetPosition();
 
@@ -222,7 +222,7 @@ void WinEDA_LibeditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         wxString msg;
-        msg.Printf( wxT( "WinEDA_LibeditFrame::OnLeftDClick Error: unknown StructType %d" ),
+        msg.Printf( wxT( "LIB_EDIT_FRAME::OnLeftDClick Error: unknown StructType %d" ),
                     m_drawItem->Type() );
         DisplayError( this, msg );
         break;
