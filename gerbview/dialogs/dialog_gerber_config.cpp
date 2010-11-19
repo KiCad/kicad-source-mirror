@@ -11,6 +11,7 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "gerbview.h"
+#include "dialog_helpers.h"
 
 
 enum

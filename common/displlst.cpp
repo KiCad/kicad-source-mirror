@@ -8,6 +8,7 @@
 #include "common.h"
 #include "macros.h"
 #include "kicad_string.h"
+#include "dialog_helpers.h"
 
 
 enum listbox {
@@ -16,65 +17,54 @@ enum listbox {
 
 
 BEGIN_EVENT_TABLE( WinEDAListBox, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDAListBox::OnCancelClick )
-    EVT_LISTBOX( ID_LISTBOX_LIST, WinEDAListBox::ClickOnList )
-    EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList )
-    EVT_CHAR( WinEDAListBox::OnKeyEvent )
-    EVT_CHAR_HOOK( WinEDAListBox::OnKeyEvent )
-    EVT_CLOSE( WinEDAListBox::OnClose )
+EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
+EVT_BUTTON( wxID_CANCEL, WinEDAListBox::OnCancelClick )
+EVT_LISTBOX( ID_LISTBOX_LIST, WinEDAListBox::ClickOnList )
+EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList )
+EVT_CHAR( WinEDAListBox::OnKeyEvent )
+EVT_CHAR_HOOK( WinEDAListBox::OnKeyEvent )
+EVT_CLOSE( WinEDAListBox::OnClose )
 END_EVENT_TABLE()
 
 
-/* Used to display a list of elements for selection.
- * ITEMLIST* = pointer to the list of names
- * = Reftext preselection
- * = Movefct callback function to display comments
+/**
+ * Used to display a list of elements for selection, and display comment of info lines
+ * about the selected item.
+ * @param aParent = apointeur to the parent window
+ * @param aTitle = the title shown on top.
+ * @param aItemList = a wxArrayString: the list of elements.
+ * @param aRefText = an item name if an item must be preselected.
+ * @param aCallBackFunction callback function to display comments
+ * @param aPos = position of the dialog.
  */
-WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
-                              const wxChar** itemlist, const wxString& reftext,
-                              void(* movefct)(wxString& Text) ,
-                              const wxColour& colour, wxPoint dialog_position ) :
-    wxDialog( parent, -1, title, dialog_position, wxDefaultSize,
+WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* aParent, const wxString& aTitle,
+                              const wxArrayString& aItemList, const wxString& aRefText,
+                              void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
+    wxDialog( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
-    const wxChar** names;
-
-    m_ItemList = itemlist;
-    m_Parent   = parent;
-    m_MoveFct  = movefct;
-    m_WinMsg   = NULL;
-    SetReturnCode( -1 );
+    m_callBackFct = aCallBackFunction;
+    m_messages    = NULL;
 
     wxBoxSizer* GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
 
     SetSizer( GeneralBoxSizer );
 
-    m_List = new wxListBox( this, ID_LISTBOX_LIST, wxDefaultPosition,
+    m_listBox = new wxListBox( this, ID_LISTBOX_LIST, wxDefaultPosition,
                             wxSize( 300, 200 ), 0, NULL,
                             wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
 
-    if( colour != wxNullColour )
-    {
-        m_List->SetBackgroundColour( colour );
-        m_List->SetForegroundColour( *wxBLACK );
-    }
+    GeneralBoxSizer->Add( m_listBox, 0, wxGROW | wxALL, 5 );
 
-    GeneralBoxSizer->Add( m_List, 0, wxGROW | wxALL, 5 );
+    InsertItems( aItemList, 0 );
 
-    if( itemlist )
+    if( m_callBackFct )
     {
-        for( names = m_ItemList; *names != NULL; names++ )
-            m_List->Append( *names );
-    }
-
-    if( m_MoveFct )
-    {
-        m_WinMsg = new wxTextCtrl( this, -1, wxEmptyString,
+        m_messages = new wxTextCtrl( this, -1, wxEmptyString,
                                    wxDefaultPosition, wxSize( -1, 60 ),
                                    wxTE_READONLY | wxTE_MULTILINE );
 
-        GeneralBoxSizer->Add( m_WinMsg, 0, wxGROW | wxALL, 5 );
+        GeneralBoxSizer->Add( m_messages, 0, wxGROW | wxALL, 5 );
     }
 
     wxSizer* buttonSizer = CreateButtonSizer( wxOK | wxCANCEL );
@@ -84,32 +74,7 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* parent, const wxString& title,
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
-
-    if( dialog_position == wxDefaultPosition )
-    {
-        Centre();
-    }
-    else    // Ensure the window dialog is inside the main window :
-    {
-        wxPoint pos = dialog_position;
-        wxPoint maxpos;
-        maxpos.x = parent->GetPosition().x + parent->GetSize().x;
-        maxpos.y = parent->GetPosition().y + parent->GetSize().y;
-        wxPoint endpoint;
-        endpoint.x = pos.x + GetSize().x;
-        endpoint.y = pos.y + GetSize().y;
-
-        if( endpoint.x > maxpos.x )
-            pos.x -= endpoint.x - maxpos.x;
-        if( endpoint.y > maxpos.y )
-            pos.y -= endpoint.y - maxpos.y;
-
-        if( pos.x < parent->GetPosition().x )
-            pos.x = parent->GetPosition().x;
-        if( pos.y < parent->GetPosition().y )
-            pos.y = parent->GetPosition().y;
-        Move( pos );
-    }
+    Centre();
 }
 
 
@@ -121,9 +86,9 @@ WinEDAListBox::~WinEDAListBox()
 void WinEDAListBox::MoveMouseToOrigin()
 {
     int    x, y, w, h;
-    wxSize list_size = m_List->GetSize();
-    int    orgx = m_List->GetRect().GetLeft();
-    int    orgy = m_List->GetRect().GetTop();
+    wxSize list_size = m_listBox->GetSize();
+    int    orgx = m_listBox->GetRect().GetLeft();
+    int    orgy = m_listBox->GetRect().GetTop();
 
     wxClientDisplayRect( &x, &y, &w, &h );
 
@@ -133,27 +98,26 @@ void WinEDAListBox::MoveMouseToOrigin()
 
 wxString WinEDAListBox::GetTextSelection()
 {
-    wxString text = m_List->GetStringSelection();
-
+    wxString text = m_listBox->GetStringSelection();
     return text;
 }
 
 
 void WinEDAListBox::Append( const wxString& item )
 {
-    m_List->Append( item );
+    m_listBox->Append( item );
 }
 
 
 void WinEDAListBox::InsertItems( const wxArrayString& itemlist, int position )
 {
-    m_List->InsertItems( itemlist, position );
+    m_listBox->InsertItems( itemlist, position );
 }
 
 
 void WinEDAListBox::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -161,35 +125,31 @@ void WinEDAListBox::ClickOnList( wxCommandEvent& event )
 {
     wxString text;
 
-    if( m_MoveFct )
+    if( m_callBackFct )
     {
-        m_WinMsg->Clear();
-        text = m_List->GetStringSelection();
-        m_MoveFct( text );
-        m_WinMsg->WriteText( text );
+        m_messages->Clear();
+        text = m_listBox->GetStringSelection();
+        m_callBackFct( text );
+        m_messages->WriteText( text );
     }
 }
 
 
 void WinEDAListBox::D_ClickOnList( wxCommandEvent& event )
 {
-    int ii = m_List->GetSelection();
-
-    EndModal( ii );
+    EndModal( wxID_OK );
 }
 
 
 void WinEDAListBox::OnOkClick( wxCommandEvent& event )
 {
-    int ii = m_List->GetSelection();
-
-    EndModal( ii );
+    EndModal( wxID_OK );
 }
 
 
 void WinEDAListBox::OnClose( wxCloseEvent& event )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -203,7 +163,7 @@ static int SortItems( const wxString** ptr1, const wxString** ptr2 )
 
 void WinEDAListBox:: SortList()
 {
-    int ii, NbItems = m_List->GetCount();
+    int ii, NbItems = m_listBox->GetCount();
     const wxString** BufList;
 
     if( NbItems <= 0 )
@@ -212,16 +172,16 @@ void WinEDAListBox:: SortList()
     BufList = (const wxString**) MyZMalloc( 100 * NbItems * sizeof(wxString*) );
     for( ii = 0; ii < NbItems; ii++ )
     {
-        BufList[ii] = new wxString( m_List->GetString (ii) );
+        BufList[ii] = new wxString( m_listBox->GetString( ii ) );
     }
 
     qsort( BufList, NbItems, sizeof(wxString*),
            ( int( * ) ( const void*, const void* ) )SortItems );
 
-    m_List->Clear();
+    m_listBox->Clear();
     for( ii = 0; ii < NbItems; ii++ )
     {
-        m_List->Append( *BufList[ii] );
+        m_listBox->Append( *BufList[ii] );
         delete BufList[ii];
     }
 

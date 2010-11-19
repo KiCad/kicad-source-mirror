@@ -14,6 +14,7 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_sheet.h"
+#include "dialog_helpers.h"
 
 
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );

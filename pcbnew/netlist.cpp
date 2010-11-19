@@ -36,6 +36,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "richio.h"
+#include "dialog_helpers.h"
 
 #include "dialog_netlist.h"
 
@@ -633,36 +634,30 @@ int SetPadNetName( wxWindow*   frame,
  */
 MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 {
-    int     ii, jj;
     MODULE* Module;
 
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayError( this, _( "No Modules" ) ); return 0;
+        DisplayError( this, _( "No Modules" ) );
+        return 0;
     }
 
-    WinEDAListBox listbox( this, _( "Components" ), NULL, wxEmptyString );
+    wxArrayString listnames;
     Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-    {
-        listbox.Append( Module->m_Reference->m_Text );
-    }
+        listnames.Add( Module->m_Reference->m_Text );
 
-    ii = listbox.ShowModal();
+    WinEDAListBox dlg( this, _( "Components" ), listnames, wxEmptyString );
 
-    if( ii < 0 )
+    if( dlg.ShowModal() != wxID_OK )
+        return NULL;
+
+    wxString ref = dlg.GetTextSelection();
+    Module = (MODULE*) GetBoard()->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        Module = NULL;
-    }
-    else /* Search for the selected footprint */
-    {
-        wxString ref = listbox.GetTextSelection();
-        Module = (MODULE*) GetBoard()->m_Modules;
-        for( jj = 0; Module != NULL; Module = (MODULE*) Module->Next(), jj++ )
-        {
-            if( Module->m_Reference->m_Text.Cmp( ref ) == 0 )
-                break;
-        }
+        if( Module->m_Reference->m_Text == ref )
+            break;
     }
 
     return Module;

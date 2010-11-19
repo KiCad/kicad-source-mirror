@@ -570,6 +570,8 @@ public:
     void OnConfigurePcbOptions( wxCommandEvent& aEvent );
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
+    bool InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone );
+    void InstallDialogLayerSetup();
 
     void GenModulesPosition( wxCommandEvent& event );
     void GenModuleReport( wxCommandEvent& event );

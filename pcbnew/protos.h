@@ -22,10 +22,6 @@ class COMMAND;
 void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
 
 
-/* install function for DialogNonCopperZonesEditor dialog frame :*/
-bool InstallDialogNonCopperZonesEditor( WinEDA_PcbFrame* aParent,
-                                        ZONE_CONTAINER*  aZone );
-
 /*******************/
 /* PAD_CONNECT.CPP */
 /*******************/
@@ -213,10 +209,6 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel,
                                 bool              erase );
 
 
-/* LOADCMP.C : */
-MODULE* Load_Module_From_Library( WinEDA_DrawFrame* frame, wxDC* DC );
-
-
 /****************/
 /* EDITRACK.C : */
 /****************/
@@ -277,31 +269,10 @@ int  ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 void ListSetState( EDA_BaseStruct* Start, int Nbitem, int State, int onoff );
 
 
-/**************/
-/* CLEAN.CPP : */
-/**************/
-
-/* Remove segments connected incorrectly.
- */
-int Netliste_Controle_piste( WinEDA_PcbFrame* frame, wxDC* DC, int affiche );
-
-
 /************/
 /* ZONES.CPP */
 /************/
 int Propagation( WinEDA_PcbFrame* frame );
-
-/****************/
-/* ATTRIBUT.CPP */
-/****************/
-
-/* Compute the attributes that are 0 (masque_clr) and put a 1
- * (Masque_set), depending on the options attribute.
- *
- * These attributes are normally the member flags of the structure TRACK
- * Pointers NULLs are accepted.
- */
-void MasqueAttributs( int* masque_set, int* masque_clr );
 
 
 /***************/
@@ -346,27 +317,5 @@ TRACK*      CreateLockPoint( BOARD* aPcb,
 void RemoteCommand( const char* cmdline );
 bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track );
 
-
-/***************/
-/* AUTOROUT.CPP */
-/***************/
-void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC );    /* for Debugging */
-
-
-/**************/
-/* NETLIST.CPP */
-/**************/
-
-/* List the names of the modules of PCB
- * Returns a pointer to the module selected or NULL if no selection.
- */
-MODULE* ListAndSelectModuleName( COMMAND* Cmd );
-
-
-/***************************/
-/* DIALOG_LAYERS_SETUP.CPP */
-/***************************/
-
-void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent );
 
 #endif  /* #define PROTO_H */

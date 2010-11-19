@@ -15,6 +15,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "sch_component.h"
+#include "dialog_helpers.h"
 
 #include "dialog_edit_component_in_schematic.h"
 

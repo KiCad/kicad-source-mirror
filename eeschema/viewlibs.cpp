@@ -17,6 +17,7 @@
 #include "viewlib_frame.h"
 #include "eeschema_id.h"
 #include "class_library.h"
+#include "dialog_helpers.h"
 
 
 #define NEXT_PART      1

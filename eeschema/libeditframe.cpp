@@ -31,6 +31,8 @@
 #include "dialogs/dialog_edit_component_in_lib.h"
 #include "dialogs/dialog_libedit_dimensions.h"
 
+#include "dialog_helpers.h"
+
 #include <boost/foreach.hpp>
 
 

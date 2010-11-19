@@ -660,7 +660,6 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
 
 /**
  * @brief  Create or modify the tree showing project file names
- * @return TODO
  */
 /*****************************************************************************/
 void TREE_PROJECT_FRAME::ReCreateTreePrj()

@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
+#include "dialog_helpers.h"
 
 #include "3d_viewer.h"
 

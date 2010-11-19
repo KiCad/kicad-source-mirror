@@ -12,7 +12,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-#include "protos.h"
+#include "dialog_helpers.h"
 
 /*
  * Module library header format:
@@ -788,17 +788,12 @@ void WinEDA_ModuleEditFrame::Select_Active_Library()
     if( g_LibName_List.GetCount() == 0 )
         return;
 
-    WinEDAListBox* LibListBox = new WinEDAListBox( this, _( "Active Lib:" ),
-                                                   NULL, m_CurrentLib, NULL,
-                                                   wxColour( 200, 200, 255 ) );
+    WinEDAListBox dlg( this, _( "Active Lib:" ), g_LibName_List, m_CurrentLib );
 
-    LibListBox->InsertItems( g_LibName_List );
+    if( dlg.ShowModal() != wxID_OK )
+        return;
 
-    int ii = LibListBox->ShowModal();
-    if( ii >= 0 )
-        m_CurrentLib = LibListBox->GetTextSelection();
-
-    LibListBox->Destroy();
+    m_CurrentLib = dlg.GetTextSelection();
 
     SetTitle( _( "Module Editor (lib: " ) + m_CurrentLib + wxT( ")" ) );
     return;

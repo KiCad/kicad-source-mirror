@@ -19,6 +19,7 @@
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include "class_GERBER.h"
+#include "dialog_helpers.h"
 
 #include "build_version.h"
 

@@ -23,8 +23,9 @@
 #include "general.h"
 #include "netlist.h"
 #include "protos.h"
-#include "netlist_control.h"
 #include "sch_sheet.h"
+#include "dialog_helpers.h"
+#include "netlist_control.h"
 
 
 //Imported function:

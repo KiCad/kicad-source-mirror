@@ -526,7 +526,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
-                diag = InstallDialogNonCopperZonesEditor( this, zone );
+                diag = InstallDialogNonCopperZonesEditor( zone );
                 g_Zone_Default_Setting.m_NetcodeSelection = 0;     // No net for non copper zones
             }
             DrawPanel->MouseToCursorSchema();
@@ -787,7 +787,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
         frame->Destroy();
     }
     else   // edit a zone on a non copper layer (technical layer)
-        diag = InstallDialogNonCopperZonesEditor( this, zone_container );
+        diag = InstallDialogNonCopperZonesEditor( zone_container );
 
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = FALSE;

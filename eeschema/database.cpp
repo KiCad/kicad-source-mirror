@@ -14,6 +14,7 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "dialog_helpers.h"
 
 #include <boost/foreach.hpp>
 
@@ -64,13 +65,15 @@ wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys, wxString& Buf
         return wxEmptyString;
     }
 
-    wxSingleChoiceDialog dlg( frame, wxEmptyString, _( "Select Component" ),
-                              nameList );
-
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+    // Show candidate list:
+    wxString cmpname;
+    WinEDAListBox dlg( frame, _( "Select Component" ),
+                               nameList, cmpname, DisplayCmpDoc );
+    if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 
-    return dlg.GetStringSelection();
+    cmpname = dlg.GetTextSelection();
+    return cmpname;
 }
 
 

@@ -16,7 +16,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-#include "protos.h"
+#include "dialog_helpers.h"
 
 class ModList
 {
@@ -358,23 +358,18 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
     const wxString& aMask, const wxString& aKeyWord )
 {
     int             LineNum;
-    unsigned        ii, NbModules;
+    unsigned        ii;
     char            Line[1024];
     wxFileName      fn;
     static wxString OldName;    /* Save the name of the last module loaded. */
     wxString        CmpName, tmp;
     FILE*           file;
     wxString        msg;
-
-    WinEDAListBox*  ListBox = new WinEDAListBox( active_window, wxEmptyString,
-                                                 NULL, OldName, DisplayCmpDoc,
-                                                 wxColour( 200, 200, 255 ),
-                                                 GetComponentDialogPosition() );
+    wxArrayString   itemslist;
 
     wxBeginBusyCursor();
 
     /* Find modules in libraries. */
-    NbModules = 0;
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         /* Calculate the full file name of the library. */
@@ -450,15 +445,9 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
                     strupper( Line );
                     msg = CONV_FROM_UTF8( StrPurge( Line ) );
                     if( aMask.IsEmpty() )
-                    {
-                        ListBox->Append( msg );
-                        NbModules++;
-                    }
+                        itemslist.Add( msg );
                     else if( WildCompareString( aMask, msg, false ) )
-                    {
-                        ListBox->Append( msg );
-                        NbModules++;
-                    }
+                        itemslist.Add( msg );
                 }
             } /* End read INDEX */
         }
@@ -478,27 +467,23 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         while( ItemMod != NULL )
         {
             if( KeyWordOk( aKeyWord, ItemMod->m_KeyWord ) )
-            {
-                NbModules++;
-                ListBox->Append( ItemMod->m_Name );
-            }
+                itemslist.Add( ItemMod->m_Name );
             ItemMod = ItemMod->Next;
         }
     }
 
     wxEndBusyCursor();
 
-    msg.Printf( _( "Modules [%d items]" ), NbModules );
-    ListBox->SetTitle( msg );
-    ListBox->SortList();
+    msg.Printf( _( "Modules [%d items]" ), itemslist.GetCount() );
+    WinEDAListBox dlg( active_window, msg, itemslist, OldName,
+                        DisplayCmpDoc, GetComponentDialogPosition() );
 
-    ii = ListBox->ShowModal();
-    if( ii >= 0 )
-        CmpName = ListBox->GetTextSelection();
+    dlg.SortList();
+
+    if( dlg.ShowModal() == wxID_OK )
+        CmpName = dlg.GetTextSelection();
     else
         CmpName.Empty();
-
-    ListBox->Destroy();
 
     while( MList != NULL )
     {
@@ -611,37 +596,24 @@ static void ReadDocLib( const wxString& ModLibName )
  */
 MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
-    int             ii;
     MODULE*         Module;
     static wxString OldName;       /* Save name of last module selectec. */
     wxString        CmpName, msg;
 
-    WinEDAListBox*  ListBox = new WinEDAListBox( this, wxEmptyString,
-                                                 NULL, wxEmptyString, NULL,
-                                                 wxColour( 200, 200, 255 ) );
+    wxArrayString listnames;
 
-    ii     = 0;
     Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-    {
-        ii++;
-        ListBox->Append( Module->m_Reference->m_Text );
-    }
+        listnames.Add( Module->m_Reference->m_Text );
 
-    msg.Printf( _( "Modules [%d items]" ), ii );
-    ListBox->SetTitle( msg );
+    msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
-    ListBox->SortList();
+    WinEDAListBox dlg( this, msg, listnames, wxEmptyString );
+    dlg.SortList();
 
-    ii = ListBox->ShowModal();
-    if( ii >= 0 )
-        CmpName = ListBox->GetTextSelection();
+    if( dlg.ShowModal() == wxID_OK )
+        CmpName = dlg.GetTextSelection();
     else
-        CmpName.Empty();
-
-    ListBox->Destroy();
-
-    if( CmpName == wxEmptyString )
         return NULL;
 
     OldName = CmpName;
@@ -649,7 +621,7 @@ MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
     Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
-        if( CmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )
+        if( CmpName == Module->m_Reference->m_Text )
             break;
     }
 

@@ -698,10 +698,8 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 }
 
 
-void DisplayDialogLayerSetup( WinEDA_PcbFrame* parent )
+void WinEDA_PcbFrame::InstallDialogLayerSetup()
 {
-    DIALOG_LAYERS_SETUP frame( parent );
-
-    frame.ShowModal();
-    frame.Destroy();
+    DIALOG_LAYERS_SETUP dlg( this );
+    dlg.ShowModal();
 }

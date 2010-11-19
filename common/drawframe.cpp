@@ -18,6 +18,7 @@
 #include "wxstruct.h"
 #include "confirm.h"
 #include "kicad_device_context.h"
+#include "dialog_helpers.h"
 
 #include <wx/fontdlg.h>
 

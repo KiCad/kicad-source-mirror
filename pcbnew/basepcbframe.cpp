@@ -14,7 +14,6 @@
 
 #include "pcbnew.h"
 #include "bitmaps.h"
-#include "protos.h"
 #include "pcbnew_id.h"
 #include "class_board_design_settings.h"
 

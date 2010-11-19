@@ -10,6 +10,7 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "drawtxt.h"
+#include "dialog_helpers.h"
 
 /* Loca functions */
 static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC );

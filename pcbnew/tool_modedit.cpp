@@ -8,14 +8,12 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-
-#include "protos.h"
-
+#include "dialog_helpers.h"
 #include "bitmaps.h"
-
 #include "pcbnew_id.h"
-
 #include "hotkeys.h"
+
+//#include "protos.h"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
