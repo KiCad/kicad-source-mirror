@@ -25,7 +25,7 @@
 #define PREVIOUS_PART -1
 
 
-void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
+void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     wxString   msg;
     LIB_ALIAS* LibEntry;
@@ -80,27 +80,26 @@ void WinEDA_ViewlibFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        msg << wxT( "WinEDA_ViewlibFrame::Process_Special_Functions error: id = " ) << id;
+        msg << wxT( "LIB_VIEW_FRAME::Process_Special_Functions error: id = " ) << id;
         DisplayError( this, msg );
         break;
     }
 }
 
 
-void WinEDA_ViewlibFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void LIB_VIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 
-bool WinEDA_ViewlibFrame::OnRightClick( const wxPoint& MousePos,
-                                        wxMenu*        PopMenu )
+bool LIB_VIEW_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     return true;
 }
 
 
 /* Displays the name of the current opened library in the caption */
-void WinEDA_ViewlibFrame::DisplayLibInfos()
+void LIB_VIEW_FRAME::DisplayLibInfos()
 {
     wxString     msg;
     CMP_LIBRARY* Lib;
@@ -123,16 +122,18 @@ void WinEDA_ViewlibFrame::DisplayLibInfos()
 /*****************************************/
 /* Function to Select Current library      */
 /*****************************************/
-void WinEDA_ViewlibFrame::SelectCurrentLibrary()
+void LIB_VIEW_FRAME::SelectCurrentLibrary()
 {
     CMP_LIBRARY* Lib;
 
     Lib = SelectLibraryFromList( this );
+
     if( Lib )
     {
         m_entryName.Empty();
         m_libraryName = Lib->GetName();
         DisplayLibInfos();
+
         if( m_LibList )
         {
             ReCreateListCmp();
@@ -140,6 +141,7 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
             DisplayLibInfos();
             ReCreateHToolbar();
             int id = m_LibList->FindString( m_libraryName.GetData() );
+
             if( id >= 0 )
                 m_LibList->SetSelection( id );
         }
@@ -150,7 +152,7 @@ void WinEDA_ViewlibFrame::SelectCurrentLibrary()
 /*
  * Routine to select and view library Part (NEW, NEXT or PREVIOUS)
  */
-void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
+void LIB_VIEW_FRAME::SelectAndViewLibraryPart( int option )
 {
     CMP_LIBRARY* Lib;
 
@@ -160,6 +162,7 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
         return;
 
     Lib = CMP_LIBRARY::FindLibrary( m_libraryName );
+
     if( Lib == NULL )
         return;
 
@@ -185,7 +188,7 @@ void WinEDA_ViewlibFrame::SelectAndViewLibraryPart( int option )
 /*************************************************/
 /* Routine to view one selected library content. */
 /*************************************************/
-void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
+void LIB_VIEW_FRAME::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
 {
     int        NumOfParts = 0;
     LIB_ALIAS* LibEntry;
@@ -248,7 +251,7 @@ void WinEDA_ViewlibFrame::ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag )
  * Display the current selected component.
  * If the component is an alias, the ROOT component is displayed
 */
-void WinEDA_ViewlibFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     LIB_COMPONENT* component;
     LIB_ALIAS*     entry;

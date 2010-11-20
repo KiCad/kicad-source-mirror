@@ -418,7 +418,7 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 }
 
 
-void WinEDA_ViewlibFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();

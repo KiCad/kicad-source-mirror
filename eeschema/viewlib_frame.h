@@ -18,7 +18,7 @@ class CMP_LIBRARY;
 /**
  * Component library viewer main window.
  */
-class WinEDA_ViewlibFrame : public WinEDA_DrawFrame
+class LIB_VIEW_FRAME : public WinEDA_DrawFrame
 {
 private:
     WinEDAChoiceBox*    SelpartBox;
@@ -47,11 +47,9 @@ protected:
     static wxSize   m_clientSize;
 
 public:
-    WinEDA_ViewlibFrame( wxWindow*    father,
-                         CMP_LIBRARY* Library = NULL,
-                         wxSemaphore* semaphore = NULL );
+    LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library = NULL, wxSemaphore* semaphore = NULL );
 
-    ~WinEDA_ViewlibFrame();
+    ~LIB_VIEW_FRAME();
 
     void OnSize( wxSizeEvent& event );
     void OnSashDrag( wxSashEvent& event );

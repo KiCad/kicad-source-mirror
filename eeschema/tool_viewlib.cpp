@@ -17,7 +17,7 @@
 #include "dialog_helpers.h"
 
 
-void WinEDA_ViewlibFrame::ReCreateHToolbar()
+void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
     int  ii;
     wxString msg;
@@ -159,6 +159,6 @@ void WinEDA_ViewlibFrame::ReCreateHToolbar()
 }
 
 
-void WinEDA_ViewlibFrame::ReCreateVToolbar()
+void LIB_VIEW_FRAME::ReCreateVToolbar()
 {
 }

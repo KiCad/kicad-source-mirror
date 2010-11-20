@@ -16,6 +16,8 @@
 #include "sch_sheet.h"
 #include "dialog_helpers.h"
 
+#include "dialogs/dialog_sch_edit_sheet_pin.h"
+
 
 static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
 static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
@@ -25,110 +27,6 @@ static int     s_CurrentTypeLabel = NET_INPUT;
 static wxSize  NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 static wxPoint s_InitialPosition;  // remember the initial value of the pin label when moving it
 static int     s_InitialEdge;
-
-/****************************************/
-/* class WinEDA_PinSheetPropertiesFrame */
-/****************************************/
-
-
-class WinEDA_PinSheetPropertiesFrame : public wxDialog
-{
-private:
-
-    WinEDA_SchematicFrame*  m_Parent;
-    SCH_SHEET_PIN*          m_CurrentPinSheet;
-    wxRadioBox*             m_PinSheetType;
-    wxRadioBox*             m_PinSheetShape;
-    WinEDA_GraphicTextCtrl* m_TextWin;
-
-public: WinEDA_PinSheetPropertiesFrame( WinEDA_SchematicFrame* parent,
-                                       SCH_SHEET_PIN* curr_pinsheet,
-                                       const wxPoint& framepos = wxPoint( -1, -1 ) );
-    ~WinEDA_PinSheetPropertiesFrame() { };
-
-private:
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE( WinEDA_PinSheetPropertiesFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_PinSheetPropertiesFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_PinSheetPropertiesFrame::OnCancelClick )
-END_EVENT_TABLE()
-
-
-WinEDA_PinSheetPropertiesFrame::WinEDA_PinSheetPropertiesFrame(
-    WinEDA_SchematicFrame* parent,
-    SCH_SHEET_PIN*         curr_pinsheet,
-    const wxPoint&         framepos ) :
-    wxDialog( parent, -1, _( "PinSheet Properties:" ), framepos,
-              wxSize( 340, 220 ), DIALOG_STYLE )
-{
-    wxPoint   pos;
-    wxString  number;
-    wxButton* Button;
-
-    m_Parent = parent;
-
-    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( MainBoxSizer );
-    wxBoxSizer* LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    m_CurrentPinSheet = curr_pinsheet;
-
-    /* Create buttons: */
-    Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    m_TextWin = new WinEDA_GraphicTextCtrl( this, _( "Text:" ),
-                                            m_CurrentPinSheet->m_Text,
-                                            m_CurrentPinSheet->m_Size.x,
-                                            g_UserUnit, LeftBoxSizer, 200 );
-
-    // Display shape selection :
-    #define NBSHAPES 5
-    wxString shape_list[NBSHAPES] =
-    {
-        _( "Input" ), _( "Output" ), _( "Bidi" ), _( "TriState" ),
-        _( "Passive" )
-    };
-    m_PinSheetShape = new wxRadioBox( this, -1, _( "PinSheet Shape:" ),
-                                      wxDefaultPosition, wxSize( -1, -1 ),
-                                      NBSHAPES, shape_list, 1 );
-    m_PinSheetShape->SetSelection( m_CurrentPinSheet->m_Shape );
-    LeftBoxSizer->Add( m_PinSheetShape, 0, wxGROW | wxALL, 5 );
-
-    m_TextWin->SetFocus();
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Centre();
-}
-
-
-void WinEDA_PinSheetPropertiesFrame::OnCancelClick( wxCommandEvent& WXUNUSED(
-                                                       event) )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
-void WinEDA_PinSheetPropertiesFrame::OnOkClick( wxCommandEvent& event )
-{
-    m_CurrentPinSheet->m_Text   = m_TextWin->GetText();
-    m_CurrentPinSheet->m_Size.x = m_CurrentPinSheet->m_Size.y = m_TextWin->GetTextSize();
-
-    m_CurrentPinSheet->m_Shape = m_PinSheetShape->GetSelection();
-    EndModal( wxID_OK );
-}
 
 
 /* Called when aborting a move pinsheet label
@@ -195,8 +93,7 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
-                                                wxDC*          DC )
+void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
 {
     NetSheetTextSize     = SheetLabel->m_Size;
     s_CurrentTypeLabel   = SheetLabel->m_Shape;
@@ -226,24 +123,44 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
+int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
 {
-    if( SheetLabel == NULL )
+    if( aLabel == NULL )
         return wxID_CANCEL;
 
-    if( DC )
-        RedrawOneStruct( DrawPanel, DC, SheetLabel, g_XorMode );
+    if( aDC )
+        RedrawOneStruct( DrawPanel, aDC, aLabel, g_XorMode );
 
-    WinEDA_PinSheetPropertiesFrame* frame =
-        new WinEDA_PinSheetPropertiesFrame( this, SheetLabel );
+    DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
-    int diag = frame->ShowModal();
-    frame->Destroy();
+    dlg.SetLabelName( aLabel->m_Text );
+    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aLabel->m_Size.y, m_InternalUnits ) );
+    dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
+    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aLabel->m_Size.x, m_InternalUnits ) );
+    dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
+    dlg.SetConnectionType( aLabel->m_Shape );
 
-    if( DC )
-        RedrawOneStruct( DrawPanel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
+    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
+     * the flex grid sizer in wxGTK that prevents the last column from being sized
+     * correctly.  It doesn't cause any problems on win32 so it doesn't need to wrapped
+     * in ugly #ifdef __WXGTK__ #endif.
+     */
+    dlg.Layout();
+    dlg.Fit();
+    dlg.SetMinSize( dlg.GetSize() );
 
-    return diag;
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return wxID_CANCEL;
+
+    aLabel->m_Text = dlg.GetLabelName();
+    aLabel->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );
+    aLabel->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_InternalUnits );
+    aLabel->m_Shape = dlg.GetConnectionType();
+
+    if( aDC )
+        RedrawOneStruct( DrawPanel, aDC, aLabel, GR_DEFAULT_DRAWMODE );
+
+    return wxID_OK;
 }
 
 
@@ -266,6 +183,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet, wxDC* D
         delete NewSheetLabel;
         return NULL;
     }
+
     GetScreen()->SetCurItem( NewSheetLabel );
     s_CurrentTypeLabel = NewSheetLabel->m_Shape;
 

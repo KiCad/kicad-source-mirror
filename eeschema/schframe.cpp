@@ -725,7 +725,7 @@ void WinEDA_SchematicFrame::OnOpenLibraryViewer( wxCommandEvent& event )
     }
     else
     {
-        m_ViewlibFrame = new WinEDA_ViewlibFrame( this );
+        m_ViewlibFrame = new LIB_VIEW_FRAME( this );
         m_ViewlibFrame->AdjustScrollBars();
     }
 }

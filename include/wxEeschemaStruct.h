@@ -12,7 +12,7 @@
 
 
 class LIB_EDIT_FRAME;
-class WinEDA_ViewlibFrame;
+class LIB_VIEW_FRAME;
 class SCH_SCREEN;
 class DRAWSEGMENT;
 class DrawPickedStruct;
@@ -64,7 +64,7 @@ public:
     bool                  m_ShowAllPins;
     wxPoint               m_OldPos;
     LIB_EDIT_FRAME*       m_LibeditFrame;
-    WinEDA_ViewlibFrame*  m_ViewlibFrame;
+    LIB_VIEW_FRAME*       m_ViewlibFrame;
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;
 

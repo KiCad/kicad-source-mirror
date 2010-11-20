@@ -7,6 +7,17 @@ email address.
 2010-nov-19 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++EESchema
+  * Move library new component and schematic edit sheet dialogs to dialogs
+    folder.
+  * Set library new component and schematic edit sheet dialogs default button.
+  * Create wxFormBuilder version of edit sheet label dialog and remove hand
+    coded version.
+  * More coding policy fixes.
+
+
+2010-nov-19 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++EESchema
   * Move library dimension, schematic configuration, and schematic options
     dialogs to dialogs folder.
   * Set library dimension, schematic configuration, and schematic options

@@ -41,7 +41,7 @@ wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
         m_ViewlibFrame = NULL;
     }
 
-    m_ViewlibFrame = new WinEDA_ViewlibFrame( this, NULL, &semaphore );
+    m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
     m_ViewlibFrame->AdjustScrollBars();
 
     // Show the library viewer frame until it is closed

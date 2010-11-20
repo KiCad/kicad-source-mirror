@@ -59,12 +59,14 @@ set(EESCHEMA_SRCS
     dialogs/dialog_lib_edit_draw_item_base.cpp
     dialogs/dialog_lib_edit_pin.cpp
     dialogs/dialog_lib_edit_pin_base.cpp
-    dialog_lib_new_component.cpp
-    dialog_lib_new_component_base.cpp
+    dialogs/dialog_lib_new_component.cpp
+    dialogs/dialog_lib_new_component_base.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_print_using_printer.cpp
-    dialog_sch_sheet_props.cpp
-    dialog_sch_sheet_props_base.cpp
+    dialogs/dialog_sch_edit_sheet_pin.cpp
+    dialogs/dialog_sch_edit_sheet_pin_base.cpp
+    dialogs/dialog_sch_sheet_props.cpp
+    dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_SVG_print.cpp

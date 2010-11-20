@@ -23,7 +23,7 @@
 #include "protos.h"
 #include "sch_sheet.h"
 
-#include "dialog_sch_sheet_props.h"
+#include "dialogs/dialog_sch_sheet_props.h"
 
 #include <boost/foreach.hpp>
 
@@ -110,7 +110,7 @@ structures and cannot be undone.\nOk to continue renaming?" );
                     aSheet->ChangeFileName( this, fileName.GetFullPath() );
                 }
             }
-            
+
             else
                 SaveCopyInUndoList( aSheet, UR_CHANGED );
 
@@ -294,7 +294,7 @@ void WinEDA_SchematicFrame::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
     DrawPanel->ManageCurseur( DrawPanel, aDC, true );
     DrawPanel->CursorOn( aDC );
-    
+
     if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
     {
         delete g_ItemToUndoCopy;

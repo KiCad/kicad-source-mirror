@@ -19,7 +19,7 @@
 #include "class_library.h"
 #include "template_fieldnames.h"
 
-#include "dialog_lib_new_component.h"
+#include "dialogs/dialog_lib_new_component.h"
 
 
 /* Update the main window title bar with the current library name. */
