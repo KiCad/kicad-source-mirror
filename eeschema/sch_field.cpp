@@ -151,8 +151,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         DrawGraphicText( panel, DC, textpos, color, fulltext,
                          orient,
                          m_Size, hjustify, vjustify,
-                         LineWidth, m_Italic,
-                         m_Bold, false );
+                         LineWidth, m_Italic, m_Bold );
     }
 
     /* Enable this to draw the bounding box around the text field to validate

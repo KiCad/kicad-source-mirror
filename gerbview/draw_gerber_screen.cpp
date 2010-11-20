@@ -205,7 +205,7 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
                          pos, (EDA_Colors) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         0, false, false, false );
+                         0, false, false );
     }
 }
 
