@@ -40,6 +40,8 @@ private:
 protected:
     static wxString m_libraryName;
     static wxString m_entryName;
+    static wxString m_exportToEeschemaCmpName;  // When the viewer is used to select a component
+                                                // in schematic, the selected component is here
     static int      m_unit;
     static int      m_convert;
     static wxSize   m_clientSize;
@@ -75,6 +77,7 @@ public:
     void SaveSettings();
 
     wxString& GetEntryName( void ) const { return m_entryName; }
+    wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
 
     int  GetUnit( void ) { return m_unit; }
     int  GetConvert( void ) { return m_convert; }

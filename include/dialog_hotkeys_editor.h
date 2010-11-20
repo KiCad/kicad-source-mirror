@@ -19,7 +19,7 @@
 #include "hotkeys_basic.h"
 #include "hotkey_grid_table.h"
 #include "wxstruct.h"
-#include "dialog_hotkeys_editor_base.h"
+#include "../common/dialogs/dialog_hotkeys_editor_base.h"
 
 class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 {

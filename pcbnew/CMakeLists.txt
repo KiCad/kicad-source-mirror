@@ -190,7 +190,7 @@ set(PCBNEW_SRCS
 # We need some extra sources from common
 ###
 set(PCBNEW_EXTRA_SRCS
-    ../common/dialog_page_settings.cpp
+    ../common/dialogs/dialog_page_settings.cpp
 )
 
 ###

@@ -17,7 +17,7 @@
 #include "sch_component.h"
 #include "viewlib_frame.h"
 
-#include "get_component_dialog.h"
+#include "dialog_get_component.h"
 
 #include <boost/foreach.hpp>
 
@@ -51,7 +51,7 @@ wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    return m_ViewlibFrame->GetEntryName();
+    return m_ViewlibFrame->GetSelectedComponent();
 }
 
 
@@ -97,7 +97,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     /* Ask for a component name or key words */
     msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
 
-    WinEDA_SelectCmp dlg( this, GetComponentDialogPosition(), HistoryList,
+    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
                           msg, UseLibBrowser );
     dlg.SetComponentName( lastCommponentName );
 

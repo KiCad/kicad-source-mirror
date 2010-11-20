@@ -16,7 +16,7 @@
 #include "general.h"
 #include "protos.h"
 
-#include "dialog_display_info_HTML_base.h"
+#include "../common/dialogs/dialog_display_info_HTML_base.h"
 #include "dialog_lib_edit_pin.h"
 
 

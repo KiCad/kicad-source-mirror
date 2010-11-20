@@ -1,57 +1,44 @@
 /**
  * This file is part of the common libary.
- * @file  get_component_dialog.h
- * @see   common.h
+ * @file  dialog_get_component.h
  */
 
-#ifndef __INCLUDE__GET_COMPONENT_DIALOG_H__
-#define __INCLUDE__GET_COMPONENT_DIALOG_H__ 1
+#ifndef __INCLUDE_DIALOG_GET_COMPONENT_H__
+#define __INCLUDE_DIALOG_GET_COMPONENT_H__
 
+#include "../common/dialogs/dialog_get_component_base.h"
 
 wxPoint  GetComponentDialogPosition( void );
 
 void     AddHistoryComponentName( wxArrayString& HistoryList,
                                   const wxString& Name );
 
-/* Add the string "Name" to the history list */
-
-enum selcmp_id {
-    ID_ACCEPT_NAME = 3900,
-    ID_ACCEPT_KEYWORD,
-    ID_LIST_ALL,
-    ID_EXTRA_TOOL,
-    ID_SEL_BY_LISTBOX
-};
-
 /* Dialog frame to choose a component name */
-class WinEDA_SelectCmp : public wxDialog
+class DIALOG_GET_COMPONENT : public DIALOG_GET_COMPONENT_BASE
 {
 private:
-    bool        m_AuxTool;
+    bool        m_auxToolSelector;
     wxString    m_Text;
-    wxTextCtrl* m_TextCtrl;
-    wxListBox*  m_List;
 
 public:
     bool        m_GetExtraFunction;
 
 public:
     // Constructor and destructor
-    WinEDA_SelectCmp( WinEDA_DrawFrame* parent, const wxPoint& framepos,
+    DIALOG_GET_COMPONENT( WinEDA_DrawFrame* parent, const wxPoint& framepos,
                       wxArrayString& HistoryList, const wxString& Title,
                       bool show_extra_tool );
-    ~WinEDA_SelectCmp() {};
+    ~DIALOG_GET_COMPONENT() {};
 
     wxString GetComponentName( void );
     void     SetComponentName( const wxString& name );
 
 private:
-    void     InitDialog( wxArrayString& aHistoryList );
+    void     initDialog( wxArrayString& aHistoryList );
+    void     OnCancel( wxCommandEvent& event );
     void     Accept( wxCommandEvent& event );
     void     GetExtraSelection( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
 };
 
 
-#endif /* __INCLUDE__GET_COMPONENT_DIALOG_H__ */
+#endif /* __INCLUDE_DIALOG_GET_COMPONENT_H__ */

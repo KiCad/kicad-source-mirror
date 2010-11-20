@@ -10,7 +10,7 @@
 #include "eda_doc.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "get_component_dialog.h"
+#include "dialog_get_component.h"
 #include "appl_wxstruct.h"
 
 #include "pcbnew.h"
@@ -24,11 +24,11 @@ public:
     ModList* Next;
     wxString m_Name, m_Doc, m_KeyWord;
 
-public: ModList()
+public:
+    ModList()
     {
         Next = NULL;
     }
-
 
     ~ModList()
     {
@@ -104,7 +104,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
     bool             AllowWildSeach = TRUE;
 
     /* Ask for a component name or key words */
-    WinEDA_SelectCmp dlg( this, GetComponentDialogPosition(), HistoryList,
+    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
                           _( "Place Module" ), false );
 
     dlg.SetComponentName( lastCommponentName );

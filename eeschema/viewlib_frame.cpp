@@ -24,6 +24,8 @@
  */
 wxString WinEDA_ViewlibFrame::m_libraryName;
 wxString WinEDA_ViewlibFrame::m_entryName;
+wxString WinEDA_ViewlibFrame::m_exportToEeschemaCmpName;  // When the viewer is used to select a component
+                                     // in schematic, the selected component is here
 int WinEDA_ViewlibFrame::m_unit = 1;
 int WinEDA_ViewlibFrame::m_convert = 1;
 wxSize WinEDA_ViewlibFrame::m_clientSize = wxSize( -1, -1 );
@@ -149,6 +151,8 @@ WinEDA_ViewlibFrame::WinEDA_ViewlibFrame( wxWindow*    father,
         m_convert = 1;
         m_LibListSize.x = 0;
     }
+
+    m_exportToEeschemaCmpName.Clear();
 
     // Creates the component window display
     m_CmpListSize.y = size.y;
@@ -486,9 +490,9 @@ void WinEDA_ViewlibFrame::ExportToSchematicLibraryPart( wxCommandEvent& event )
     int ii = m_CmpList->GetSelection();
 
     if( ii >= 0 )
-        m_entryName = m_CmpList->GetString( ii );
+        m_exportToEeschemaCmpName = m_CmpList->GetString( ii );
     else
-        m_entryName.Empty();
+        m_exportToEeschemaCmpName.Empty();
     Close( TRUE );
 }
 
@@ -551,6 +555,10 @@ void WinEDA_ViewlibFrame::SaveSettings()
 void WinEDA_ViewlibFrame::OnActivate( wxActivateEvent& event )
 {
     WinEDA_DrawFrame::OnActivate( event );
+
+    // Ensure we do not have old selection:
+    if( m_FrameIsActive )
+        m_exportToEeschemaCmpName.Empty();
 
     if( m_LibList )
         ReCreateListLib();

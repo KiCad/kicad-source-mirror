@@ -352,8 +352,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                             GetScreen()->GetRedoCommandCount()>0 && active );
     menuBar->Enable( wxID_REDO, GetScreen()->GetRedoCommandCount()>0 && active );
 
-    m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, GetBoard()->m_Modules != NULL );
-    menuBar->Enable( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, GetBoard()->m_Modules != NULL );
+    bool canLoadModuleFromBoard = frame->GetBoard()->m_Modules != NULL;
+    m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, canLoadModuleFromBoard );
+    menuBar->Enable( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, canLoadModuleFromBoard );
     m_HToolBar->Refresh();
 
 
