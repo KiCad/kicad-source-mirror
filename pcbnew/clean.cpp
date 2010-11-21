@@ -1,41 +1,27 @@
-/******************************************************/
-/*			editeur de PCB PCBNEW					  */
-/* Fonctions de Nettoyage et reorganisation de Pistes */
-/******************************************************/
+/**
+ * @file clean.cpp
+ * functions to clean tracks: remove null and redundant segments
+ */
 
-/* Fichier CLEAN.CPP */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "autorout.h"
 #include "protos.h"
 
-/* Position of messages on the bottom display */
-#define AFFICHE         1
-#define POS_AFF_PASSE   40
-#define POS_AFF_VAR     50
-#define POS_AFF_MAX     60
-#define POS_AFF_NUMSEGM 70
-
 /* local functions : */
-static int      clean_segments( WinEDA_PcbFrame* frame );
+static void      clean_segments( WinEDA_PcbFrame* frame );
+static void      clean_vias( BOARD* aPcb );
 static void     DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC );
 static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite );
-static void     Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC );
+static void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
+                              bool aCleanVias, bool aMergeSegments,
+                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
 
-/* Local Variables: */
-static int  a_color;    /* message color */
-static bool s_CleanVias     = true;
-static bool s_MergeSegments = true;
-static bool s_DeleteUnconnectedSegm = true;
-static bool s_ConnectToPads = false;
-
-#include "cleaningoptions_dialog.cpp"
+#include "dialog_cleaning_options.h"
 
 #define CONN2PAD_ENBL
 
@@ -52,17 +38,15 @@ void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
 /* Install the track operation dialog frame
 */
 {
-    s_ConnectToPads = false;
-    WinEDA_CleaningOptionsFrame* frame = new WinEDA_CleaningOptionsFrame( this, DC );
-    frame->ShowModal();
-    frame->Destroy();
+    DIALOG_CLEANING_OPTIONS::connectToPads = false;
+    DIALOG_CLEANING_OPTIONS dlg( this );
+    if( dlg.ShowModal() == wxID_OK )
+        Clean_Pcb_Items( this, DC, dlg.cleanVias, dlg.mergeSegments,
+                        dlg.deleteUnconnectedSegm, dlg.connectToPads );
     DrawPanel->Refresh( true );
 }
 
 
-/************************************************************/
-void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
-/************************************************************/
 /* Main cleaning function.
  *  Delete
  * - Redundant points on tracks (merge aligned segments)
@@ -72,7 +56,12 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
  *  Create segments when track ends are incorrecty connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
+void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
+                      bool aCleanVias, bool aMergeSegments,
+                      bool aDeleteUnconnectedSegm, bool aConnectToPads )
 {
+    wxBusyCursor( dummy );
+
     frame->MsgPanel->EraseMsgBox();
     frame->GetBoard()->GetNumSegmTrack();    // update the count
 
@@ -83,78 +72,92 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC )
     frame->GetBoard()->m_Status_Pcb = 0;
     frame->GetBoard()->m_NetInfo->BuildListOfNets();
 
-    if( s_CleanVias )       // delete redundant vias
+    if( aCleanVias )       // delete redundant vias
     {
-        TRACK* track;
-        TRACK* next_track;
-        for( track = frame->GetBoard()->m_Track;  track;  track = track->Next() )
-        {
-            if( track->Shape() != VIA_THROUGH )
-                continue;
-
-            // Search and delete others vias at same location
-            TRACK* alt_track = track->Next();
-            for( ; alt_track != NULL; alt_track = next_track )
-            {
-                next_track = alt_track->Next();
-                if( alt_track->m_Shape != VIA_THROUGH )
-                    continue;
-
-                if( alt_track->m_Start != track->m_Start )
-                    continue;
-
-                /* delete via */
-                alt_track->UnLink();
-                delete alt_track;
-            }
-        }
-
-        /* Delete Via on pads at same location */
-        for( track = frame->GetBoard()->m_Track; track != NULL; track = next_track )
-        {
-            next_track = track->Next();
-            if( track->m_Shape != VIA_THROUGH )
-                continue;
-
-            D_PAD* pad = Fast_Locate_Pad_Connecte( frame->GetBoard(), track->m_Start, ALL_CU_LAYERS );
-            if( pad && (pad->m_Masque_Layer & EXTERNAL_LAYERS) == EXTERNAL_LAYERS )    // redundant Via
-            {
-                /* delete via */
-                track->UnLink();
-                delete track;
-            }
-        }
+        frame->Affiche_Message( _( "Clean vias" ) );
+        clean_vias( frame->GetBoard() );
     }
 
 #ifdef CONN2PAD_ENBL
     /* Create missing segments when a track end covers a pad or a via,
     but is not on the pad  or the via center */
-    if( s_ConnectToPads )
+    if( aConnectToPads )
     {
+        frame->Affiche_Message( _( "Reconnect pads" ) );
         /* Create missing segments when a track end covers a pad, but is not on the pad center */
-        if( s_ConnectToPads )
-             ConnectDanglingEndToPad( frame, DC );
+        ConnectDanglingEndToPad( frame, DC );
 
         // creation of points of connections at the intersection of tracks
 //		Gen_Raccord_Track(frame, DC);
 
         /* Create missing segments when a track end covers a via, but is not on the via center */
-        if( s_ConnectToPads )
-            ConnectDanglingEndToVia( frame->GetBoard() );
+        ConnectDanglingEndToVia( frame->GetBoard() );
     }
 #endif
 
     /* Remove null segments and intermediate points on aligned segments */
-    if( s_MergeSegments )
+    if( aMergeSegments )
+    {
+        frame->Affiche_Message( _( "Merge track segments" ) );
         clean_segments( frame );
+    }
 
     /* Delete dangling tracks */
-    if( s_DeleteUnconnectedSegm )
+    if( aDeleteUnconnectedSegm )
+    {
+        frame->Affiche_Message( _( "Delete unconnected tracks" ) );
         DeleteUnconnectedTracks( frame, DC );
+    }
 
-    frame->Compile_Ratsnest( DC, AFFICHE );
+    frame->Affiche_Message( _( "Cleanup finished" ) );
+
+    frame->Compile_Ratsnest( DC, true );
 
     frame->OnModify();
+}
+
+void clean_vias( BOARD * aPcb )
+{
+    TRACK* track;
+    TRACK* next_track;
+
+    for( track = aPcb->m_Track; track; track = track->Next() )
+    {
+        if( track->Shape() != VIA_THROUGH )
+            continue;
+
+        // Search and delete others vias at same location
+        TRACK* alt_track = track->Next();
+        for( ; alt_track != NULL; alt_track = next_track )
+        {
+            next_track = alt_track->Next();
+            if( alt_track->m_Shape != VIA_THROUGH )
+                continue;
+
+            if( alt_track->m_Start != track->m_Start )
+                continue;
+
+            /* delete via */
+            alt_track->UnLink();
+            delete alt_track;
+        }
+    }
+
+    /* Delete Via on pads at same location */
+    for( track = aPcb->m_Track; track != NULL; track = next_track )
+    {
+        next_track = track->Next();
+        if( track->m_Shape != VIA_THROUGH )
+            continue;
+
+        D_PAD* pad = Fast_Locate_Pad_Connecte( aPcb, track->m_Start, ALL_CU_LAYERS );
+        if( pad && (pad->m_Masque_Layer & EXTERNAL_LAYERS) == EXTERNAL_LAYERS )    // redundant Via
+        {
+            /* delete via */
+            track->UnLink();
+            delete track;
+        }
+    }
 }
 
 
@@ -173,18 +176,15 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
     TRACK*          startNetcode;
     TRACK*          next;
     ZONE_CONTAINER* zone;
-
-    int             nbpoints_supprimes = 0;
     int             masklayer, oldnetcode;
     int             type_end, flag_erase;
-    int             ii, percent, oldpercent;
-    wxString        msg;
 
-    frame->Affiche_Message( _( "Delete unconnected tracks:" ) );
+    if( frame->GetBoard()->m_Track == NULL )
+        return;
+
     frame->DrawPanel->m_AbortRequest = FALSE;
 
     // correct via m_End defects
-    ii = 0;
     for( segment = frame->GetBoard()->m_Track;  segment;  segment = next )
     {
         next = segment->Next();
@@ -192,40 +192,17 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
         if( segment->Type() == TYPE_VIA )
         {
             if( segment->m_Start != segment->m_End )
-            {
                 segment->m_End = segment->m_Start;
-
-                ii++;
-                msg.Printf( wxT( "%d " ), ii );
-                Affiche_1_Parametre( frame, POS_AFF_PASSE, _( "ViaDef" ), msg, LIGHTRED );
-            }
             continue;
         }
     }
 
     // removal of unconnected tracks
-    percent    = 0;
-    oldpercent = -1;
-    oldnetcode = 0;
-
     segment = startNetcode = frame->GetBoard()->m_Track;
-    for( ii = 0;  segment;   segment = next, ii++ )
+    oldnetcode = segment->GetNet();
+    for( int ii = 0; segment ; segment = next, ii++ )
     {
         next = segment->Next();
-
-        // display activity
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-        if( percent != oldpercent )
-        {
-            oldpercent = percent;
-            frame->DisplayActivity( percent, wxT( "No Conn: " ) );
-
-            msg.Printf( wxT( "%d " ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
-
-            msg.Printf( wxT( "%d " ), ii );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
-        }
 
         if( frame->DrawPanel->m_AbortRequest )
             break;
@@ -363,14 +340,6 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
 
         if( flag_erase )
         {
-            oldpercent = -1;    // force dispay activity
-
-            nbpoints_supprimes++;
-            ii--;
-
-            msg.Printf( wxT( "%d " ), nbpoints_supprimes );
-            Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "NoConn." ), msg, LIGHTRED );
-
             // update the pointer to start of the contiguous netcode group
             if( segment == startNetcode )
             {
@@ -392,32 +361,19 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
 
 
 /************************************************************/
-static int clean_segments( WinEDA_PcbFrame* frame )
+static void clean_segments( WinEDA_PcbFrame* frame )
 /************************************************************/
 /* Delete null lenght segments, and intermediate points .. */
 {
     TRACK*          segment, * nextsegment;
     TRACK*          other;
-    int             ii, nbpoints_supprimes = 0;
-    int             flag, no_inc, percent, oldpercent;
+    int             ii;
+    int             flag, no_inc;
     wxString        msg;
 
     frame->DrawPanel->m_AbortRequest = FALSE;
 
-    /**********************************************/
-    /* Delete null segments */
-    /**********************************************/
-
-    a_color = GREEN;
-    nbpoints_supprimes = 0;
-    percent = 0;
-    oldpercent = -1;
-
-    frame->MsgPanel->EraseMsgBox();
-    frame->Affiche_Message( _( "Clean Null Segments" ) );
-
-    Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "NullSeg" ), wxT( "0" ), a_color );
-
+    // Delete null segments
     for( segment = frame->GetBoard()->m_Track;  segment;  segment = nextsegment )
     {
         nextsegment = segment->Next();
@@ -426,40 +382,11 @@ static int clean_segments( WinEDA_PcbFrame* frame )
 
         /* Length segment = 0; delete it */
         segment->DeleteStructure();
-        nbpoints_supprimes++;
-
-        msg.Printf( wxT( "  %d" ), nbpoints_supprimes );
-        Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
     }
 
-    /**************************************/
     /* Delete redundant segments */
-    /**************************************/
-
-    Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "Ident" ), wxT( "0" ), a_color );
-
-    percent = 0;
-    oldpercent = -1;
-
     for( segment  = frame->GetBoard()->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
     {
-        /* Display activity */
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-        if( percent != oldpercent )
-        {
-            frame->DisplayActivity( percent, wxT( "Id segm: " ) );
-            oldpercent = percent;
-
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
-
-            msg.Printf( wxT( "%d" ), ii );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
-
-            if( frame->DrawPanel->m_AbortRequest )
-                return -1;
-        }
-
         for( other = segment->Next(); other; other = nextsegment )
         {
             nextsegment = other->Next();
@@ -491,25 +418,11 @@ static int clean_segments( WinEDA_PcbFrame* frame )
             {
                 ii--;
                 other->DeleteStructure();
-                nbpoints_supprimes++;
-
-                msg.Printf( wxT( "  %d" ), nbpoints_supprimes );
-                Affiche_1_Parametre( frame, 50, wxEmptyString, msg, a_color );
             }
         }
     }
 
-    /*******************************/
     /* delete intermediate points  */
-    /*******************************/
-
-    nbpoints_supprimes = 0;
-    percent = 0;
-    oldpercent = -1;
-    frame->Affiche_Message( _( "Merging Segments:" ) );
-
-    Affiche_1_Parametre( frame, POS_AFF_VAR, _( "Merge" ), _( "0" ), a_color );
-
     ii = 0;
     for( segment = frame->GetBoard()->m_Track;  segment;  segment = nextsegment )
     {
@@ -518,23 +431,8 @@ static int clean_segments( WinEDA_PcbFrame* frame )
         TRACK*  segDelete;
 
         nextsegment = segment->Next();
-
-        ii++;
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-        if( percent != oldpercent )
-        {
-            frame->DisplayActivity( percent, _( "Merge: " ) );
-            oldpercent = percent;
-
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
-
-            msg.Printf( wxT( "%d" ), ii );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
-
-            if( frame->DrawPanel->m_AbortRequest )
-                return -1;
-        }
+        if( frame->DrawPanel->m_AbortRequest )
+            return;
 
         if( segment->Type() != TYPE_TRACK )
             continue;
@@ -575,7 +473,7 @@ static int clean_segments( WinEDA_PcbFrame* frame )
             segDelete = AlignSegment( frame->GetBoard(), segment, segStart, START );
             if( segDelete )
             {
-                nbpoints_supprimes++; no_inc = 1;
+                no_inc = 1;
                 segDelete->DeleteStructure();
             }
         }
@@ -612,22 +510,16 @@ static int clean_segments( WinEDA_PcbFrame* frame )
             segDelete = AlignSegment( frame->GetBoard(), segment, segEnd, END );
             if( segDelete )
             {
-                nbpoints_supprimes++;
                 no_inc = 1;
                 segDelete->DeleteStructure();
             }
         }
 
         if( no_inc ) /* The current segment was modified, retry to merge it */
-        {
-            msg.Printf( wxT( "%d " ), nbpoints_supprimes );
-            Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
-
             nextsegment = segment->Next();
-        }
     }
 
-   return 0;
+   return;
 }
 
 
@@ -740,51 +632,16 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
  * @param aDisplayActivity = true to display activity on the frame status bar and message panel
  * @return true if any change is made
  */
-bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC, bool aDisplayActivity )
+bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC )
 {
     TRACK*          segment;
     TRACK*          other;
     TRACK*          next;
     int             net_code_s, net_code_e;
-    int             nbpoints_modifies = 0;
-    bool            flag = false;
-    wxString        msg;
-    int             percent = 0;
-    int             oldpercent = -1;
+    bool            isModified = false;
 
-    a_color = RED;
-
-    if( aDisplayActivity )
-        Affiche_Message( _( "DRC Control:" ) );
-
-    DrawPanel->m_AbortRequest = FALSE;
-
-    if( aDisplayActivity )
-        Affiche_1_Parametre( this, POS_AFF_VAR, _( "NetCtr" ), wxT( "0 " ), a_color );
-
-    int ii = 0;
     for( segment = GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
     {
-        ii++;
-        if( aDisplayActivity )  // display activity
-        {
-            percent = (100 * ii) / GetBoard()->m_Track.GetCount();
-            if( percent != oldpercent )
-            {
-                DisplayActivity( percent, wxT( "Drc: " ) );
-                oldpercent = percent;
-
-                msg.Printf( wxT( "%d" ), GetBoard()->m_Track.GetCount() );
-                Affiche_1_Parametre( this, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
-
-                msg.Printf( wxT( "%d" ), GetBoard()->m_Track.GetCount() );
-                Affiche_1_Parametre( this, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
-
-                if( DrawPanel->m_AbortRequest )
-                    return flag;
-            }
-        }
-
         segment->SetState( FLAG0, OFF );
 
         // find the netcode for segment using anything connected to the "start" of "segment"
@@ -822,39 +679,30 @@ bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC, bool aDisplayActivity
         if( net_code_e < 0 )
             continue;           // the "end" of segment is not connected
 
-        // the obtained netcodes do not agree, mark the segment as needing to be removed
+        // Netcodes do not agree, so mark the segment as needed to be removed
         if( net_code_s != net_code_e )
         {
             segment->SetState( FLAG0, ON );
         }
     }
 
-    // Removal of flagged segments
+    // Remove flagged segments
     for( segment = GetBoard()->m_Track;  segment;  segment = next )
     {
         next = (TRACK*) segment->Next();
 
-        if( segment->GetState( FLAG0 ) )    //* if segment is marked as needing to be removed
+        if( segment->GetState( FLAG0 ) )    // Ssegment is flagged to be removed
         {
             segment->SetState( FLAG0, OFF );
-
-            flag = true;
-            oldpercent = -1;
+            isModified = true;
             GetBoard()->m_Status_Pcb = 0;
-
             Remove_One_Track( aDC, segment );
-
-            next = GetBoard()->m_Track;  /* the current segment can be deleted, so restart to the beginning */
-            if( aDisplayActivity )
-            {
-                nbpoints_modifies++;
-                msg.Printf( wxT( "%d " ), nbpoints_modifies );
-                Affiche_1_Parametre( this, POS_AFF_VAR, wxEmptyString, msg, a_color );
-            }
+            // the current segment could be deleted, so restart to the beginning
+            next = GetBoard()->m_Track;
         }
     }
 
-    return flag;
+    return isModified;
 }
 
 
@@ -1100,36 +948,15 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
     TRACK*          segment;
     int             nb_new_piste = 0;
     wxString        msg;
-    int             percent = 0;
-    int             oldpercent = -1;
-
-    a_color = GREEN;
 
     frame->DrawPanel->m_AbortRequest = FALSE;
 
-    Affiche_1_Parametre( frame, POS_AFF_VAR, _( "Centre" ), _( "0 " ), a_color );
-
-    int ii = 0;
     for( segment = frame->GetBoard()->m_Track;  segment;  segment = segment->Next() )
     {
         D_PAD*          pad;
 
-        ii++;
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-        if( percent != oldpercent )
-        {
-            frame->DisplayActivity( percent, _( "Pads: " ) );
-            oldpercent = percent;
-
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, _( "Max" ), msg, GREEN );
-
-            msg.Printf( wxT( "%d" ), ii );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, _( "Segm" ), msg, CYAN );
-
-            if( frame->DrawPanel->m_AbortRequest )
-                return;
-        }
+        if( frame->DrawPanel->m_AbortRequest )
+            return;
 
         pad = Locate_Pad_Connecte( frame->GetBoard(), segment, START );
         if( pad )
@@ -1152,7 +979,6 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
                     nb_new_piste++;
 
                     newTrack->Draw( frame->DrawPanel, DC, GR_OR );
-                    Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
                 }
             }
         }
@@ -1174,11 +1000,7 @@ void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
 
                     newTrack->start = pad;
                     newTrack->end   = segment;
-
                     nb_new_piste++;
-
-                    msg.Printf( wxT( "e %d" ), nb_new_piste );
-                    Affiche_1_Parametre( frame, POS_AFF_VAR, wxEmptyString, msg, a_color );
                 }
             }
         }

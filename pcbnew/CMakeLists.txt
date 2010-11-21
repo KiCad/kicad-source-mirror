@@ -35,7 +35,6 @@ set(PCBNEW_SRCS
     build_BOM_from_board.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
-#   cleaningoptions_dialog.cpp
     connect.cpp
     controle.cpp
     dimension.cpp
@@ -43,6 +42,8 @@ set(PCBNEW_SRCS
     debug_kbool_key_file_fct.cpp
     deltrack.cpp
     dialogs/dialog_block_options_base.cpp
+    dialogs/dialog_cleaning_options_base.cpp
+    dialogs/dialog_cleaning_options.cpp
     dialog_copper_zones.cpp
     dialog_copper_zones_base.cpp
     dialog_design_rules.cpp

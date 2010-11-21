@@ -217,8 +217,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
 }
 
 
-void WinEDA_ModuleEditFrame::Delete_Module_In_Library(
-    const wxString& aLibname )
+void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname )
 {
     wxFileName newFileName;
     wxFileName oldFileName;

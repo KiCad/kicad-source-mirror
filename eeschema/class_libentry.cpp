@@ -318,12 +318,12 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aO
 
             if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
             {
-                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, NULL, aTransform );
+                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
             }
 
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, false, aTransform );
+            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) false, aTransform );
         }
     }
 

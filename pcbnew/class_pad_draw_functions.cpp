@@ -590,8 +590,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             tsize = (int) ( tsize * 0.8 );
             DrawGraphicText( aDrawInfo.m_DrawPanel, aDC, tpos, WHITE, buffer, t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false,
-                             false );
+                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
         }
     }
 

@@ -584,7 +584,7 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      (EDA_Colors) txtcolor, Text, name_orientation,
                      wxSize( m_SheetNameSize, m_SheetNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
-                     false, false, false );
+                     false, false );
 
     /* Draw text : FileName */
     if( aColor >= 0 )
@@ -596,7 +596,7 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      (EDA_Colors) txtcolor, Text, name_orientation,
                      wxSize( m_FileNameSize, m_FileNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth,
-                     false, false, false );
+                     false, false );
 
 
     /* Draw text : SheetLabel */

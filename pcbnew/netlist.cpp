@@ -367,7 +367,7 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     {
         if( aDeleteBadTracks )    // Remove erroneous tracks
         {
-            RemoveMisConnectedTracks( NULL, true );
+            RemoveMisConnectedTracks( NULL );
             Compile_Ratsnest( NULL, true );
         }
     }
