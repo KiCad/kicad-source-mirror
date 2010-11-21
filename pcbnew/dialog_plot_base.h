@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Dec 21 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,6 +43,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 			ID_PRINT_MODULE_TEXTS,
 			ID_FORCE_PRINT_INVISIBLE_TEXT,
 			ID_DRILL_SHAPE_OPT,
+			ID_BROWSE_OUTPUT_DIRECTORY,
 			ID_MIROR_OPT,
 			ID_MASKVIA_OPT,
 			ID_EXEC_PLOT,
@@ -72,6 +73,8 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticText* m_textPenOvr;
 		wxTextCtrl* m_HPGLPenOverlayOpt;
 		wxCheckBox* m_Plot_PS_Negative;
+		wxTextCtrl* m_OutputDirectory;
+		wxButton* m_BrowseButton;
 		wxCheckBox* m_PlotMirorOpt;
 		wxCheckBox* m_PlotNoViaOnMaskOpt;
 		wxStaticText* m_staticText6;
@@ -90,16 +93,18 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxTextCtrl* m_MessagesBox;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
-		virtual void SetPlotFormat( wxCommandEvent& event ){ event.Skip(); }
-		virtual void Plot( wxCommandEvent& event ){ event.Skip(); }
-		virtual void SaveOptPlot( wxCommandEvent& event ){ event.Skip(); }
-		virtual void CreateDrillFile( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnQuit( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
+		virtual void SaveOptPlot( wxCommandEvent& event ) { event.Skip(); }
+		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 575,590 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PLOT_BASE();
 	

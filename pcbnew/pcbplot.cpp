@@ -44,6 +44,7 @@ PCB_Plot_Options::PCB_Plot_Options()
     ScaleAdjX    = 1.0;
     ScaleAdjY    = 1.0;
     PlotScaleOpt = 1;
+    outputDirectory = wxT( "" );
 }
 
 
@@ -111,6 +112,7 @@ private:
     void Plot( wxCommandEvent& event );
     void OnQuit( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
     void SetPlotFormat( wxCommandEvent& event );
     void OnSetScaleOpt( wxCommandEvent& event );
     void SaveOptPlot( wxCommandEvent& event );
@@ -138,6 +140,7 @@ DIALOG_PLOT::DIALOG_PLOT( WinEDA_PcbFrame* parent ) :
 void DIALOG_PLOT::Init_Dialog()
 {
     wxString msg;
+    wxFileName fileName;
 
     BOARD*   board = m_Parent->GetBoard();
 
@@ -283,6 +286,17 @@ void DIALOG_PLOT::Init_Dialog()
     // Put vias on mask layer
     m_PlotNoViaOnMaskOpt->SetValue( g_pcb_plot_options.DrawViaOnMaskLayer );
 
+    // Output directory
+    if( g_pcb_plot_options.GetOutputDirectory().IsEmpty() )
+    {
+        fileName = m_Parent->GetScreen()->m_FileName;
+        m_OutputDirectory->SetValue( fileName.GetPath() );
+    }
+    else
+    {
+        m_OutputDirectory->SetValue( g_pcb_plot_options.GetOutputDirectory() );
+    }
+
     // Update options values:
     wxCommandEvent cmd_event;
     SetPlotFormat( cmd_event );
@@ -322,6 +336,15 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
         m_Plot_Sheet_Ref->SetValue( false );
 }
 
+void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+{
+    wxString currentDir;
+    currentDir = m_OutputDirectory->GetValue();
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ), currentDir );
+    if( dirDialog.ShowModal() == wxID_CANCEL )
+        return;
+    m_OutputDirectory->SetValue( dirDialog.GetPath() );
+}
 
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
@@ -487,6 +510,8 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     }
 
     g_pcb_plot_options.Plot_PS_Negative = m_Plot_PS_Negative->GetValue();
+
+    g_pcb_plot_options.SetOutputDirectory( m_OutputDirectory->GetValue() );
 }
 
 
@@ -499,6 +524,22 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     BOARD*     board = m_Parent->GetBoard();
 
     SaveOptPlot( event );
+
+    // Create output directory if it does not exist
+    if( !wxFileName::DirExists( m_OutputDirectory->GetValue() ) )
+    {
+        if( wxMkdir( m_OutputDirectory->GetValue() ) )
+        {
+            wxString msg;
+            msg.Printf( _( "Directory %s created.\n" ), GetChars( m_OutputDirectory->GetValue() ) );
+            m_MessagesBox->AppendText( msg );
+        }
+        else
+        {
+            wxMessageBox( _( "Cannot create output directory!" ), _( "Plot" ), wxICON_INFORMATION );
+            return;
+        }
+    }
 
     switch( g_pcb_plot_options.PlotScaleOpt )
     {
@@ -574,6 +615,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             s_SelectedLayers |= mask;
 
             fn = m_Parent->GetScreen()->m_FileName;
+            fn.SetPath( m_OutputDirectory->GetValue() );
 
             // Create file name.
             wxString layername = board->GetLayerName( layer );

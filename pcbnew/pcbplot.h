@@ -64,8 +64,12 @@ public:
     double         ScaleAdjX;
     double         ScaleAdjY;
 
+    wxString       outputDirectory;
+
 public:
     PCB_Plot_Options();
+    void SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
+    wxString GetOutputDirectory() { return outputDirectory; };
 };
 
 extern PCB_Plot_Options g_pcb_plot_options;

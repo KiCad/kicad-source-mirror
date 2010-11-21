@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Dec 21 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,43 +36,35 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bLeftSizer->Add( sbLayersSizer, 1, wxEXPAND, 5 );
 	
 	m_Use_Gerber_Extensions = new wxCheckBox( this, ID_USE_GERBER_EXTENSIONS, _("Use Proper Gerber Extensions"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Use_Gerber_Extensions->SetToolTip( _("Use Proper Gerber Extensions - .GBL, .GTL, etc...") );
 	
 	bLeftSizer->Add( m_Use_Gerber_Extensions, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Exclude_Edges_Pcb = new wxCheckBox( this, wxID_ANY, _("Exclude pcb edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Exclude_Edges_Pcb->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
 	
 	bLeftSizer->Add( m_Exclude_Edges_Pcb, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Sheet_Ref = new wxCheckBox( this, wxID_ANY, _("Print sheet reference"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bLeftSizer->Add( m_Plot_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Pads_on_Silkscreen = new wxCheckBox( this, ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Print pads on silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Plot_Pads_on_Silkscreen->SetToolTip( _("Enable/disable print/plot pads on silkscreen layers\nWhen disable, pads are never potted on silkscreen layers\nWhen enable, pads are potted only if they appear on silkscreen layers") );
 	
 	bLeftSizer->Add( m_Plot_Pads_on_Silkscreen, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Text_Value = new wxCheckBox( this, ID_PRINT_VALUE, _("Print module value"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bLeftSizer->Add( m_Plot_Text_Value, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Text_Ref = new wxCheckBox( this, ID_PRINT_REF, _("Print module reference"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bLeftSizer->Add( m_Plot_Text_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Text_Div = new wxCheckBox( this, ID_PRINT_MODULE_TEXTS, _("Print other module texts"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Plot_Text_Div->SetToolTip( _("Enable/disable print/plot module field texts on silkscreen layers") );
 	
 	bLeftSizer->Add( m_Plot_Text_Div, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Invisible_Text = new wxCheckBox( this, ID_FORCE_PRINT_INVISIBLE_TEXT, _("Force print invisible texts"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Plot_Invisible_Text->SetToolTip( _("Force print/plot module invisible texts on silkscreen layers") );
 	
 	bLeftSizer->Add( m_Plot_Invisible_Text, 0, wxALL, 5 );
@@ -151,10 +143,20 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	sbSizerPSOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PS Options:") ), wxVERTICAL );
 	
 	m_Plot_PS_Negative = new wxCheckBox( this, wxID_ANY, _("Plot negative"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	sbSizerPSOpt->Add( m_Plot_PS_Negative, 0, wxALL, 5 );
 	
 	bSizerFmtPlot->Add( sbSizerPSOpt, 0, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizerOutputDir;
+	sbSizerOutputDir = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Directory:") ), wxVERTICAL );
+	
+	m_OutputDirectory = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerOutputDir->Add( m_OutputDirectory, 0, wxALIGN_LEFT|wxEXPAND, 5 );
+	
+	m_BrowseButton = new wxButton( this, ID_BROWSE_OUTPUT_DIRECTORY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerOutputDir->Add( m_BrowseButton, 0, wxALL, 5 );
+	
+	bSizerFmtPlot->Add( sbSizerOutputDir, 0, wxEXPAND, 5 );
 	
 	bUpperSizer->Add( bSizerFmtPlot, 1, wxEXPAND, 5 );
 	
@@ -162,11 +164,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_PlotMirorOpt = new wxCheckBox( this, ID_MIROR_OPT, _("Plot mirror"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bButtonsSizer->Add( m_PlotMirorOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PlotNoViaOnMaskOpt = new wxCheckBox( this, ID_MASKVIA_OPT, _("Vias on mask"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_PlotNoViaOnMaskOpt->SetToolTip( _("Print/plot vias on mask layers. They are in this case not protected") );
 	
 	bButtonsSizer->Add( m_PlotNoViaOnMaskOpt, 0, wxALL, 5 );
@@ -235,6 +235,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnCloseWindow ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
 	m_PlotFormatOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
+	m_BrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_PlotButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	m_buttonSaveOpt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::SaveOptPlot ), NULL, this );
 	m_buttonDrill->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
@@ -247,6 +248,7 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnCloseWindow ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PLOT_BASE::OnInitDialog ) );
 	m_PlotFormatOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::SetPlotFormat ), NULL, this );
+	m_BrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_PlotButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
 	m_buttonSaveOpt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::SaveOptPlot ), NULL, this );
 	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
