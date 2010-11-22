@@ -25,7 +25,6 @@ void WinEDA_PcbFrame::Access_to_External_Tool( wxCommandEvent& event )
  */
 {
     DIALOG_FREEROUTE dialog( this );
-
     dialog.ShowModal();
 }
 
@@ -134,8 +133,7 @@ void DIALOG_FREEROUTE::OnVisitButtonClick( wxCommandEvent& event )
 
 void DIALOG_FREEROUTE::OnCancelButtonClick( wxCommandEvent& event )
 {
-    D(printf("OnCancelClick\n");)
-    Close( true );
+    EndModal(wxID_CANCEL);
 }
 
 
@@ -147,7 +145,7 @@ void DIALOG_FREEROUTE::OnOKButtonClick( wxCommandEvent& event )
                                         m_FreerouteURLName->GetValue() );
     }
 
-    Destroy();
+    EndModal(wxID_OK);
 }
 
 
