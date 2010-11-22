@@ -62,6 +62,11 @@
 #define MAYBE_RESIZE_BORDER 0                 // no resizeable border
 #endif
 
+// wxNullPtr is not defined prior to wxWidget 2.9.0.
+#if !wxCHECK_VERSION( 2, 9, 0 )
+#define wxNullPtr ((void *)NULL)
+#endif
+
 #include "config.h"
 
 #endif /* FCTSYS_H */
