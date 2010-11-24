@@ -25,12 +25,12 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
-    dialog_copper_zones.cpp
-    dialog_copper_zones_base.cpp
+    dialogs/dialog_copper_zones.cpp
+    dialogs/dialog_copper_zones_base.cpp
     dialog_design_rules.cpp
     dialog_design_rules_base.cpp
-    dialog_display_options.cpp
-    dialog_display_options_base.cpp
+    dialogs/dialog_display_options.cpp
+    dialogs/dialog_display_options_base.cpp
     dialog_drc_base.cpp
     dialog_drc.cpp
     dialog_edit_module_for_BoardEditor.cpp
@@ -40,7 +40,7 @@ set(PCBNEW_DIALOGS
     dialog_edit_module_text.cpp
     dialog_edit_module_text_base.cpp
     dialog_exchange_modules_base.cpp
-    dialog_export_3Dfiles_base.cpp
+    dialogs/dialog_export_3Dfiles_base.cpp
     dialog_freeroute_exchange.cpp
     dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
@@ -59,22 +59,22 @@ set(PCBNEW_DIALOGS
     dialog_netlist.cpp
     dialog_netlist_fbp.cpp
     dialog_pcb_text_properties.cpp
-    dialog_non_copper_zones_properties_base.cpp
-    dialog_pad_properties.cpp
-    dialog_pad_properties_base.cpp
-    dialog_pcbnew_config_libs_and_paths.cpp
-    dialog_pcbnew_config_libs_and_paths_fbp.cpp
-    dialog_print_for_modedit.cpp
-    dialog_plot_base.cpp
-    dialog_print_for_modedit_base.cpp
-    dialog_print_using_printer.cpp
-    dialog_print_using_printer_base.cpp
+    dialogs/dialog_non_copper_zones_properties_base.cpp
+    dialogs/dialog_pad_properties.cpp
+    dialogs/dialog_pad_properties_base.cpp
+    dialogs/dialog_pcbnew_config_libs_and_paths.cpp
+    dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp
+    dialogs/dialog_plot_base.cpp
+    dialogs/dialog_print_for_modedit.cpp
+    dialogs/dialog_print_for_modedit_base.cpp
+    dialogs/dialog_print_using_printer.cpp
+    dialogs/dialog_print_using_printer_base.cpp
     dialog_orient_footprints.cpp
     dialog_mask_clearance.cpp
     dialog_mask_clearance_base.cpp
-    dialog_SVG_print.cpp
-    dialog_SVG_print_base.cpp
-    dialog_set_grid_base.cpp
+    dialogs/dialog_SVG_print.cpp
+    dialogs/dialog_SVG_print_base.cpp
+    dialogs/dialog_set_grid_base.cpp
     )
 
 set(PCBNEW_SRCS
