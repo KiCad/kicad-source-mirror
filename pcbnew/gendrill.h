@@ -9,11 +9,10 @@
 class DRILL_TOOL
 {
 public:
-    int m_Diameter;			// the diameter of the used tool (for oblong, the smaller size)
-    int m_TotalCount;		// how many times it is used (round and oblong)
-    int m_OvalCount;		// oblong count
-public:
-    DRILL_TOOL( int diametre )
+    int m_Diameter;         // the diameter of the used tool (for oblong, the smaller size)
+    int m_TotalCount;       // how many times it is used (round and oblong)
+    int m_OvalCount;        // oblong count
+public: DRILL_TOOL( int diametre )
     {
         m_TotalCount = 0;
         m_OvalCount  = 0;
@@ -32,7 +31,7 @@ public:
     int m_Hole_SizeY;               // hole size y for oblong holes
     int m_Hole_Orient;              // Hole rotation (= pad rotation) for oblong holes
     int m_Hole_Shape;               // hole shape: round (0) or oval (1)
-    int m_Hole_Pos_X;				// hole position X
+    int m_Hole_Pos_X;               // hole position X
     int m_Hole_Pos_Y;               // hole position Y
     int m_Hole_Bottom_Layer;        // hole starting layer (usually copper)
     int m_Hole_Top_Layer;           // hole ending layer (usually component): m_Hole_First_Layer < m_Hole_Last_Layer
@@ -40,39 +39,123 @@ public:
 
 
 /* the DRILL_PRECISION helper class to handle drill precision format in excellon files
-*/
+ */
 class DRILL_PRECISION
 {
 public:
     int m_lhs;      // Left digit number (integer value of coordinates)
     int m_rhs;      // Right digit number (deciam value of coordinates)
 
-public:
-    DRILL_PRECISION( int l = 2, int r = 4)
+public: DRILL_PRECISION( int l = 2, int r = 4 )
     {
         m_lhs = l; m_rhs = r;
     }
+
+
     wxString GetPrecisionString()
     {
         wxString text;
-        text << m_lhs << wxT(":") << m_rhs;
+
+        text << m_lhs << wxT( ":" ) << m_rhs;
         return text;
     }
 };
 
-/* zeros format */
-enum zeros_fmt {
-    DECIMAL_FORMAT,
-    SUPPRESS_LEADING,
-    SUPPRESS_TRAILING,
-    KEEP_ZEROS
-};
 
+// A helper class to create Excellon drill files
+class EXCELLON_WRITER
+{
+public:
+    enum zeros_fmt {
+        // Zero format in coordinates
+        DECIMAL_FORMAT,
+        SUPPRESS_LEADING,
+        SUPPRESS_TRAILING,
+        KEEP_ZEROS
+    };
+    wxPoint                  m_Offset;          // offset coordinates
+    bool                     m_ShortHeader;     // true to generate the smallest header (strip comments)
+
+private:
+    FILE*                    m_file;                    // The output file
+    BOARD*                   m_pcb;
+    bool                     m_minimalHeader;           // True to use minimal haeder
+                                                        // in excellon file (strip comments)
+    bool                     m_unitsDecimal;            // true = decimal, false = inches
+    zeros_fmt                m_zeroFormat;              // the zero format option for output file
+    DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimat format)
+    double                   m_conversionUnits;         // scaling factor to convert the board unites to Excellon units
+                                                        // (i.e inches or mm)
+    bool                     m_mirror;
+    wxPoint                  m_offset;                  // Drill offset ooordinates
+    std::vector<HOLE_INFO>*  m_holeListBuffer;          // Buffer containing holes
+    std::vector<DRILL_TOOL>* m_toolListBuffer;          // Buffer containing tools
+
+public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
+                         wxPoint aOffset,
+                         std::vector<HOLE_INFO>* aHoleListBuffer,
+                         std::vector<DRILL_TOOL>* aToolListBuffer )
+    {
+        m_file = aFile;
+        m_pcb  = aPcb;
+        m_zeroFormat      = DECIMAL_FORMAT;
+        m_holeListBuffer  = aHoleListBuffer;
+        m_toolListBuffer  = aToolListBuffer;
+        m_conversionUnits = 0.0001;
+        m_unitsDecimal    = false;
+        m_mirror = false;
+        m_minimalHeader = false;
+    }
+
+
+    ~EXCELLON_WRITER()
+    {
+    }
+
+
+    /**
+     * SetFormat
+     * Initialize internal parameters to match the given format
+     * @param aMetric = true for metric coordinates, false for imperial units
+     * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
+     * @param aLeftDigits = number of digits for integer part of coordinates
+     * @param aRightDigits = number of digits for mantissa part of coordinates
+     */
+    void SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDigits, int aRightDigits );
+
+    /**
+     * SetOptions
+     * Initialize internal parameters to match drill options
+     * @param aMetric = true for metric coordinates, false for imperial units
+     * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
+     * @param aLeftDigits = number of digits for integer part of coordinates
+     * @param aRightDigits = number of digits for mantissa part of coordinates
+     */
+    void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset )
+    {
+        m_mirror = aMirror;
+        m_offset = aOffset;
+        m_minimalHeader = aMinimalHeader;
+    }
+
+
+    /**
+     * CreateDrillFile
+     * Creates an Excellon drill file
+     * @return hole count
+     */
+    int  CreateDrillFile();
+
+private:
+    void WriteHeader();
+    void WriteEndOfFile();
+    void WriteCoordinates( char* aLine, double aCoordX, double aCoordY );
+};
 
 /**
  * Function BuildHolesList
  * Create the list of holes and tools for a given board
- * The list is sorted by incraesin drill values
+ * The list is sorted by increasing drill values
  * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
  * @param Pcb : the given board
  * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
@@ -81,32 +164,32 @@ enum zeros_fmt {
  * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
  * @param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
  */
-void    Build_Holes_List( BOARD* Pcb, std::vector<HOLE_INFO>& aHoleListBuffer,
-                          std::vector<DRILL_TOOL>& aToolListBuffer,
-                          int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles );
+void     Build_Holes_List( BOARD* Pcb, std::vector<HOLE_INFO>& aHoleListBuffer,
+                           std::vector<DRILL_TOOL>& aToolListBuffer,
+                           int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles );
 
 
-void    GenDrillMapFile( BOARD* aPcb,
-                         FILE* aFile,
-                         const wxString& aFullFileName,
-                         Ki_PageDescr *aSheet,
-                         std::vector<HOLE_INFO> aHoleListBuffer,
-                         std::vector<DRILL_TOOL> aToolListBuffer,
-                         bool aUnit_Drill_is_Inch,
-                         int format, const wxPoint& auxoffset );
+void     GenDrillMapFile( BOARD* aPcb,
+                          FILE* aFile,
+                          const wxString& aFullFileName,
+                          Ki_PageDescr* aSheet,
+                          std::vector<HOLE_INFO> aHoleListBuffer,
+                          std::vector<DRILL_TOOL> aToolListBuffer,
+                          bool aUnit_Drill_is_Inch,
+                          int format, const wxPoint& auxoffset );
 
-void    Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
-                          std::vector<HOLE_INFO>& aHoleListBuffer,
-                          std::vector<DRILL_TOOL>& aToolListBuffer);
+void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
+                       std::vector<HOLE_INFO>& aHoleListBuffer,
+                       std::vector<DRILL_TOOL>& aToolListBuffer );
 
 /*
  *  Create a list of drill values and drill count
  *  there is only one report for all drill files even when buried or blinds vias exist
  */
-void GenDrillReportFile( FILE* aFile, BOARD * aPcb, const wxString& aBoardFilename,
+void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilename,
                          bool aUnit_Drill_is_Inch,
-						std::vector<HOLE_INFO> & aHoleListBuffer,
-						std::vector<DRILL_TOOL>& aToolListBuffer
-						);
+                         std::vector<HOLE_INFO>& aHoleListBuffer,
+                         std::vector<DRILL_TOOL>& aToolListBuffer
+                         );
 
 #endif  //	#ifndef _GENDRILL_H_

@@ -4,8 +4,6 @@
 
 #include "fctsys.h"
 
-using namespace std;
-
 #include <algorithm> // sort
 #include <vector>
 
@@ -41,7 +39,6 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
  * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
  * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
  * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored	(used to creates report file)
- * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
  * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
  * @param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
  */

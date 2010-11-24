@@ -1,6 +1,33 @@
+/**
+ *@file gendrill.cpp
+ */
 /*************************************************************/
 /* Functions to create EXCELLON drill files and report files */
 /*************************************************************/
+
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@iut.ujf-grenoble.fr>
+ * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 /**
  * @info for EXCELLON format, see:
@@ -50,12 +77,6 @@ const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );
  * the Dialog box for drill file generation
  */
 
-// Helper functions:
-static void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PRECISION& aPrecision );
-static void WriteEndOfFile_EXCELLON( FILE* aFile );
-
-static double                  s_ConversionUnits;    /* Conversion unite for
-                                                      * drill / pcb */
 static std::vector<DRILL_TOOL> s_ToolListBuffer;
 static std::vector<HOLE_INFO>  s_HoleListBuffer;
 
@@ -72,7 +93,7 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
 
 
 /**
- * Function GenDrillOrReportFiles
+ * Function GenDrillAndReportFiles
  * Calls the functions to create EXCELLON drill files and/or drill map files
  * >When all holes are through, only one excellon file is created.
  * >When there are some partial holes (some blind or buried vias),
@@ -80,14 +101,14 @@ void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
  *  and one file per layer pair, which have one or more holes, excluding
  *  through holes, already in the first file.
  */
-void DIALOG_GENDRILL::GenDrillOrReportFiles( )
+void DIALOG_GENDRILL::GenDrillAndReportFiles( )
 {
     wxFileName fn;
     wxString   layer_extend;              /* added to the  Board FileName to
                                            * create FullFileName (= Board
                                            * FileName + layer pair names) */
     wxString   msg;
-    bool       ExistsBuriedVias = false;  /* If true, drill files are created
+    bool       hasBuriedVias = false;  /* If true, drill files are created
                                            * layer pair by layer pair for
                                            * buried vias */
     int        layer1 = LAYER_N_BACK;
@@ -98,13 +119,8 @@ void DIALOG_GENDRILL::GenDrillOrReportFiles( )
 
     m_Parent->MsgPanel->EraseMsgBox();
 
-    /* Set conversion scale depending on drill file units */
-    s_ConversionUnits = 0.0001;         // EXCELLON units = INCHES
-    if( !m_UnitDrillIsInch )
-        s_ConversionUnits = 0.00254;    // EXCELLON units = mm
-
     if( m_MicroViasCount || m_BlindOrBuriedViasCount )
-        ExistsBuriedVias = true;
+        hasBuriedVias = true;
 
     for( ; ; )
     {
@@ -148,9 +164,14 @@ void DIALOG_GENDRILL::GenDrillOrReportFiles( )
                 EndModal( 0 );
                 return;
             }
-
-            Create_Drill_File_EXCELLON( aFile, m_FileDrillOffset,
-                                        s_HoleListBuffer, s_ToolListBuffer );
+            EXCELLON_WRITER excellonWriter( m_Parent->GetBoard(),
+                                        aFile, m_FileDrillOffset,
+                                        &s_HoleListBuffer, &s_ToolListBuffer );
+            excellonWriter.SetFormat( !m_UnitDrillIsInch,
+                                      (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
+                                      m_Precision.m_lhs, m_Precision.m_rhs );
+            excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset );
+            excellonWriter.CreateDrillFile( );
 
             switch( m_Choice_Drill_Map->GetSelection() )
             {
@@ -178,7 +199,7 @@ void DIALOG_GENDRILL::GenDrillOrReportFiles( )
                 break;
             }
 
-            if( !ExistsBuriedVias )
+            if( !hasBuriedVias )
                 break;
         }
         if(  gen_through_holes )
@@ -202,21 +223,14 @@ void DIALOG_GENDRILL::GenDrillOrReportFiles( )
     {
         GenDrillReport( m_Parent->GetScreen()->m_FileName );
     }
-
-    EndModal( 0 );
 }
 
 
 /**
  * Create the drill file in EXCELLON format
  * @return hole count
- * @param aHoleListBuffer = hole descriptor list
- * @param aToolListBuffer = Drill tools list
  */
-int DIALOG_GENDRILL::Create_Drill_File_EXCELLON( FILE*   aFile,
-                                                 wxPoint aOffset,
-                                                 std::vector<HOLE_INFO>&  aHoleListBuffer,
-                                                 std::vector<DRILL_TOOL>& aToolListBuffer )
+int EXCELLON_WRITER::CreateDrillFile( )
 {
     int   diam, holes_count;
     int   x0, y0, xf, yf, xc, yc;
@@ -225,54 +239,57 @@ int DIALOG_GENDRILL::Create_Drill_File_EXCELLON( FILE*   aFile,
 
     SetLocaleTo_C_standard(); // Use the standard notation for double numbers
 
-    Write_Excellon_Header( aFile, m_MinimalHeader, (zeros_fmt) m_ZerosFormat );
+    WriteHeader( );
 
     holes_count = 0;
- 
+
     /* Write the tool list */
-    for( unsigned ii = 0; ii < aToolListBuffer.size(); ii++ )
+    for( unsigned ii = 0; ii < m_toolListBuffer->size(); ii++ )
     {
-        fprintf( aFile, "T%dC%.3f\n", ii + 1,
-                 double (aToolListBuffer[ii].m_Diameter) * s_ConversionUnits  );
+        DRILL_TOOL& tool_descr = (*m_toolListBuffer)[ii];
+        fprintf( m_file, "T%dC%.3f\n", ii + 1,
+                 tool_descr.m_Diameter * m_conversionUnits  );
     }
 
-    fputs( "%\n", aFile );                      // End of header info
+    fputs( "%\n", m_file );                      // End of header info
 
-    fputs( "G90\n", aFile );                    // Absolute mode
-    fputs( "G05\n", aFile );                    // Drill mode
+    fputs( "G90\n", m_file );                    // Absolute mode
+    fputs( "G05\n", m_file );                    // Drill mode
     /* Units : */
-    if( !m_MinimalHeader )
+    if( !m_minimalHeader )
     {
-        if( m_UnitDrillIsInch  )
-            fputs( "M72\n", aFile );    /* M72 = inch mode */
-        else 
-            fputs( "M71\n", aFile );    /* M71 = metric mode */
+        if( m_unitsDecimal  )
+            fputs( "M71\n", m_file );    /* M71 = metric mode */
+        else
+            fputs( "M72\n", m_file );    /* M72 = inch mode */
     }
 
     /* Read the hole file and generate lines for normal holes (oblong
      * holes will be created later) */
     int tool_reference = -2;
-    for( unsigned ii = 0; ii < aHoleListBuffer.size(); ii++ )
+    for( unsigned ii = 0; ii < m_holeListBuffer->size(); ii++ )
     {
-        if( aHoleListBuffer[ii].m_Hole_Shape )
+        HOLE_INFO& hole_descr = (*m_holeListBuffer)[ii];
+
+        if( hole_descr.m_Hole_Shape )
             continue;  // oblong holes will be created later
-        if( tool_reference != aHoleListBuffer[ii].m_Tool_Reference )
+        if( tool_reference != hole_descr.m_Tool_Reference )
         {
-            tool_reference = aHoleListBuffer[ii].m_Tool_Reference;
-            fprintf( aFile, "T%d\n", tool_reference );
+            tool_reference = hole_descr.m_Tool_Reference;
+            fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        x0 = aHoleListBuffer[ii].m_Hole_Pos_X - aOffset.x;
-        y0 = aHoleListBuffer[ii].m_Hole_Pos_Y - aOffset.y;
+        x0 = hole_descr.m_Hole_Pos_X - m_offset.x;
+        y0 = hole_descr.m_Hole_Pos_Y - m_offset.y;
 
-        if( !m_Mirror )
+        if( !m_mirror )
             y0 *= -1;
 
-        xt = x0 * s_ConversionUnits;
-        yt = y0 * s_ConversionUnits;
-        Gen_Line_EXCELLON( line, xt, yt, m_Precision );
+        xt = x0 * m_conversionUnits;
+        yt = y0 * m_conversionUnits;
+        WriteCoordinates( line, xt, yt );
 
-        fputs( line, aFile );
+        fputs( line, m_file );
         holes_count++;
     }
 
@@ -280,50 +297,49 @@ int DIALOG_GENDRILL::Create_Drill_File_EXCELLON( FILE*   aFile,
      * will be created later) */
     tool_reference = -2;    // set to a value not used for
                             // aHoleListBuffer[ii].m_Tool_Reference
-    for( unsigned ii = 0; ii < aHoleListBuffer.size(); ii++ )
+    for( unsigned ii = 0; ii < m_holeListBuffer->size(); ii++ )
     {
-        if( aHoleListBuffer[ii].m_Hole_Shape == 0 )
+        HOLE_INFO& hole_descr = (*m_holeListBuffer)[ii];
+        if( hole_descr.m_Hole_Shape == 0 )
             continue;  // wait for oblong holes
-        if( tool_reference != aHoleListBuffer[ii].m_Tool_Reference )
+        if( tool_reference != hole_descr.m_Tool_Reference )
         {
-            tool_reference = aHoleListBuffer[ii].m_Tool_Reference;
-            fprintf( aFile, "T%d\n", tool_reference );
+            tool_reference = hole_descr.m_Tool_Reference;
+            fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        diam = MIN( aHoleListBuffer[ii].m_Hole_SizeX,
-                    aHoleListBuffer[ii].m_Hole_SizeY );
+        diam = MIN( hole_descr.m_Hole_SizeX,
+                    hole_descr.m_Hole_SizeY );
         if( diam == 0 )
             continue;
 
         /* Compute the hole coordinates: */
-        xc = x0 = xf = aHoleListBuffer[ii].m_Hole_Pos_X - aOffset.x;
-        yc = y0 = yf = aHoleListBuffer[ii].m_Hole_Pos_Y - aOffset.y;
+        xc = x0 = xf = hole_descr.m_Hole_Pos_X - m_offset.x;
+        yc = y0 = yf = hole_descr.m_Hole_Pos_Y - m_offset.y;
 
         /* Compute the start and end coordinates for the shape */
-        if( aHoleListBuffer[ii].m_Hole_SizeX < aHoleListBuffer[ii].m_Hole_SizeY )
+        if( hole_descr.m_Hole_SizeX < hole_descr.m_Hole_SizeY )
         {
-            int delta = ( aHoleListBuffer[ii].m_Hole_SizeY
-                          - aHoleListBuffer[ii].m_Hole_SizeX ) / 2;
+            int delta = ( hole_descr.m_Hole_SizeY - hole_descr.m_Hole_SizeX ) / 2;
             y0 -= delta; yf += delta;
         }
         else
         {
-            int delta = ( aHoleListBuffer[ii].m_Hole_SizeX
-                          - aHoleListBuffer[ii].m_Hole_SizeY ) / 2;
+            int delta = ( hole_descr.m_Hole_SizeX - hole_descr.m_Hole_SizeY ) / 2;
             x0 -= delta; xf += delta;
         }
-        RotatePoint( &x0, &y0, xc, yc, aHoleListBuffer[ii].m_Hole_Orient );
-        RotatePoint( &xf, &yf, xc, yc, aHoleListBuffer[ii].m_Hole_Orient );
+        RotatePoint( &x0, &y0, xc, yc, hole_descr.m_Hole_Orient );
+        RotatePoint( &xf, &yf, xc, yc, hole_descr.m_Hole_Orient );
 
 
-        if( !m_Mirror )
+        if( !m_mirror )
         {
             y0 *= -1;  yf *= -1;
         }
 
-        xt = x0 * s_ConversionUnits;
-        yt = y0 * s_ConversionUnits;
-        Gen_Line_EXCELLON( line, xt, yt, m_Precision );
+        xt = x0 * m_conversionUnits;
+        yt = y0 * m_conversionUnits;
+        WriteCoordinates( line, xt, yt );
 
         /* remove the '\n' from end of line, because we must add the "G85"
          * command to the line: */
@@ -331,35 +347,57 @@ int DIALOG_GENDRILL::Create_Drill_File_EXCELLON( FILE*   aFile,
             if( line[kk] == '\n' || line[kk] =='\r' )
                 line[kk] = 0;
 
-        fputs( line, aFile );
+        fputs( line, m_file );
 
-        fputs( "G85", aFile );    // add the "G85" command
+        fputs( "G85", m_file );    // add the "G85" command
 
-        xt = xf * s_ConversionUnits;
-        yt = yf * s_ConversionUnits;
-        Gen_Line_EXCELLON( line, xt, yt, m_Precision );
- 
-        fputs( line, aFile );
-        fputs( "G05\n", aFile );
+        xt = xf * m_conversionUnits;
+        yt = yf * m_conversionUnits;
+        WriteCoordinates( line, xt, yt );
+
+        fputs( line, m_file );
+        fputs( "G05\n", m_file );
         holes_count++;
     }
 
-    WriteEndOfFile_EXCELLON( aFile );
+    WriteEndOfFile( );
 
     SetLocaleTo_Default();  // Revert to locale double notation
 
     return holes_count;
 }
 
+/**
+ * SetFormat
+ * Initialize internal parameters to match the given format
+ * @param aMetric = true for metric coordinates, false for imperial units
+ * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
+ * @param aLeftDigits = number of digits for integer part of coordinates
+ * @param aRightDigits = number of digits for mantissa part of coordinates
+ */
+void EXCELLON_WRITER::SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDigits, int aRightDigits )
+{
+    m_unitsDecimal = aMetric;
+    m_zeroFormat = aZerosFmt;
+
+    /* Set conversion scale depending on drill file units */
+    if( m_unitsDecimal )
+        m_conversionUnits = 0.00254;    // EXCELLON units = mm
+    else
+        m_conversionUnits = 0.0001;         // EXCELLON units = INCHES
+
+    m_precision.m_lhs = aLeftDigits;
+    m_precision.m_rhs = aRightDigits;
+}
 
 /* Created a line like:
  * X48000Y19500
  * According to the selected format
  */
-void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PRECISION& aPrecision )
+void EXCELLON_WRITER::WriteCoordinates( char * aLine, double aCoordX, double aCoordY )
 {
     wxString xs, ys;
-    int      xpad = aPrecision.m_lhs + aPrecision.m_rhs;
+    int      xpad = m_precision.m_lhs + m_precision.m_rhs;
     int      ypad = xpad;
 
     /* I need to come up with an algorithm that handles any lhs:rhs format.*/
@@ -373,7 +411,7 @@ void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PREC
         break;
 
     case SUPPRESS_LEADING:             /* that should work now */
-        for( int i = 0; i< aPrecision.m_rhs; i++ )
+        for( int i = 0; i< m_precision.m_rhs; i++ )
         {
             aCoordX *= 10; aCoordY *= 10;
         }
@@ -383,7 +421,7 @@ void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PREC
 
     case SUPPRESS_TRAILING:
     {
-        for( int i = 0; i < aPrecision.m_rhs; i++ )
+        for( int i = 0; i < m_precision.m_rhs; i++ )
         {
             aCoordX *= 10;
             aCoordY *= 10;
@@ -410,7 +448,7 @@ void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PREC
     }
 
     case KEEP_ZEROS:
-        for( int i = 0; i< aPrecision.m_rhs; i++ )
+        for( int i = 0; i< m_precision.m_rhs; i++ )
         {
             aCoordX *= 10; aCoordY *= 10;
         }
@@ -431,37 +469,32 @@ void Gen_Line_EXCELLON( char * aLine, double aCoordX, double aCoordY, DRILL_PREC
  * M48
  * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
  * ;FORMAT={ <precision> / absolute / <units> / <numbers format>}
- * R,T
- * VER,1
  * FMAT,2
  * INCH,TZ
- * TCST,OFF
- * ICI,OFF
- * ATC,ON
  */
-void DIALOG_GENDRILL::Write_Excellon_Header( FILE* aFile, bool aMinimalHeader, zeros_fmt aFormat )
+void EXCELLON_WRITER::WriteHeader( )
 {
     char Line[256];
 
-    fputs( "M48\n", aFile );    // The beginning of a header
+    fputs( "M48\n", m_file );    // The beginning of a header
 
-    if( !aMinimalHeader )
+    if( !m_minimalHeader )
     {
         DateAndTime( Line );
 
         // The next 2 lines in EXCELLON files are comments:
         wxString msg = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
-        fprintf( aFile, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ),
+        fprintf( m_file, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ),
                  Line );
         msg = wxT( ";FORMAT={" );
 
         // Print precision:
-        if( aFormat != DECIMAL_FORMAT )
-            msg << m_Choice_Precision->GetStringSelection();
+        if( m_zeroFormat != DECIMAL_FORMAT )
+            msg << m_precision.GetPrecisionString();
         else
-            msg << wxT( "-.-" );  // in decimal format the precision is irrelevant
+            msg << wxT( "-:-" );  // in decimal format the precision is irrelevant
         msg << wxT( "/ absolute / " );
-        msg << ( m_UnitDrillIsInch ? wxT( "inch" ) : wxT( "metric" ) );
+        msg << ( m_unitsDecimal ? wxT( "metric" ) :  wxT( "inch" ) );
 
         /* Adding numbers notation format.
          * this is same as m_Choice_Zeros_Format strings, but NOT translated
@@ -479,37 +512,37 @@ void DIALOG_GENDRILL::Write_Excellon_Header( FILE* aFile, bool aMinimalHeader, z
             wxT( "keep zeros" )
         };
 
-        msg << zero_fmt[aFormat];
+        msg << zero_fmt[m_zeroFormat];
         msg << wxT( "}\n" );
-        fputs( CONV_TO_UTF8( msg ), aFile );
-        fputs( "FMAT,2\n", aFile );     // Use Format 2 commands (version used since 1979)
+        fputs( CONV_TO_UTF8( msg ), m_file );
+        fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }
 
-    fputs( m_UnitDrillIsInch ? "INCH" : "METRIC", aFile );
+    fputs( m_unitsDecimal ? "METRIC" : "INCH", m_file );
 
-    switch( aFormat )
+    switch( m_zeroFormat )
     {
     case SUPPRESS_LEADING:
     case DECIMAL_FORMAT:
-        fputs( ",TZ\n", aFile );
+        fputs( ",TZ\n", m_file );
         break;
 
     case SUPPRESS_TRAILING:
-        fputs( ",LZ\n", aFile );
+        fputs( ",LZ\n", m_file );
         break;
 
     case KEEP_ZEROS:
-        fputs( ",TZ\n", aFile ); // TZ is acceptable when all zeros are kept
+        fputs( ",TZ\n", m_file ); // TZ is acceptable when all zeros are kept
         break;
     }
 }
 
 
-void WriteEndOfFile_EXCELLON( FILE* aFile )
+void EXCELLON_WRITER::WriteEndOfFile( )
 {
     //add if minimal here
-    fputs( "T0\nM30\n", aFile );
-    fclose( aFile );
+    fputs( "T0\nM30\n", m_file );
+    fclose( m_file );
 }
 
 

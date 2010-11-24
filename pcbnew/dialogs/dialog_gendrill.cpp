@@ -1,5 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_gendrill.cpp
 // Author:      jean-pierre Charras
 // Licence:     GPL
@@ -50,7 +48,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( WinEDA_PcbFrame* parent ) :
 
 // Static members of DIALOG_GENDRILL
 int DIALOG_GENDRILL:: m_UnitDrillIsInch = true;
-int DIALOG_GENDRILL:: m_ZerosFormat     = DECIMAL_FORMAT;
+int DIALOG_GENDRILL:: m_ZerosFormat     = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;
 bool DIALOG_GENDRILL::m_Mirror = true;
 bool DIALOG_GENDRILL::m_DrillOriginIsAuxAxis = false;
@@ -96,7 +94,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Precision->SetSelection( m_PrecisionFormat );
     m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
-    if( m_ZerosFormat == DECIMAL_FORMAT )
+    if( m_ZerosFormat == EXCELLON_WRITER::DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
 
     UpdatePrecisionOptions( );
@@ -209,7 +207,8 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 {
-    GenDrillOrReportFiles( );
+    GenDrillAndReportFiles( );
+    EndModal( wxID_OK);
 }
 
 
@@ -220,7 +219,7 @@ void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
 {
     UpdateConfig();     /* Save drill options: */
-    event.Skip();       // Process the default cancel event (close dialog)
+    EndModal( wxID_CANCEL);       // Process the default cancel event (close dialog)
 }
 
 
@@ -248,7 +247,7 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions( )
         m_Choice_Precision->SetString( 0, precisionListForMetric[0].GetPrecisionString() );
         m_Choice_Precision->SetString( 1, precisionListForMetric[1].GetPrecisionString() );
     }
-    if( m_Choice_Zeros_Format->GetSelection()==DECIMAL_FORMAT )
+    if( m_Choice_Zeros_Format->GetSelection() == EXCELLON_WRITER::DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
     else
         m_Choice_Precision->Enable( true );
