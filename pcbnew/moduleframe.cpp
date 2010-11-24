@@ -160,7 +160,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     m_Draw_Sheet_Ref = false;   // true to show the frame references
     m_Draw_Axis = true;         // true to show X and Y axis on screen
     m_Draw_Grid_Axis = true;    // show the grid origin axis
-    m_HotkeysZoomAndGridList = s_Module_Editor_Hokeys_Descr;
+    m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
 
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );

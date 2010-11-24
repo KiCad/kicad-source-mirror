@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -60,14 +60,15 @@ class DIALOG_GENDRILL_BASE : public wxDialog
 		wxButton* m_CancelButton;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,412 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,385 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GENDRILL_BASE();
 	
 };

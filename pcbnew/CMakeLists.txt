@@ -21,26 +21,7 @@ else( USE_BOOST_POLYGON_LIBRARY )
     set(PCBNEW_SRC_FILL_ZONE zones_convert_brd_items_to_polygons_with_Kbool.cpp)
 endif( USE_BOOST_POLYGON_LIBRARY )
 
-set(PCBNEW_SRCS
-    pcbframe.cpp
-    attribut.cpp
-    automove.cpp
-    autoplac.cpp
-    autorout.cpp
-    board.cpp
-    board_items_to_polygon_shape_transform.cpp
-    board_undo_redo.cpp
-    block.cpp
-    block_module_editor.cpp
-    build_BOM_from_board.cpp
-    class_pcb_layer_widget.cpp
-    clean.cpp
-    connect.cpp
-    controle.cpp
-    dimension.cpp
-    cross-probing.cpp
-    debug_kbool_key_file_fct.cpp
-    deltrack.cpp
+set(PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
@@ -62,8 +43,8 @@ set(PCBNEW_SRCS
     dialog_export_3Dfiles_base.cpp
     dialog_freeroute_exchange.cpp
     dialog_freeroute_exchange_base.cpp
-    dialog_gendrill.cpp
-    dialog_gendrill_base.cpp
+    dialogs/dialog_gendrill.cpp
+    dialogs/dialog_gendrill_base.cpp
     dialog_general_options.cpp
     dialog_general_options_BoardEditor_base.cpp
     dialog_global_edit_tracks_and_vias.cpp
@@ -73,8 +54,6 @@ set(PCBNEW_SRCS
     dialog_graphic_items_options_base.cpp
     dialog_graphic_item_properties.cpp
     dialog_graphic_item_properties_base.cpp
-#   dialog_initpcb.cpp
-
     dialog_layers_setup.cpp
     dialog_layers_setup_base.cpp
     dialog_netlist.cpp
@@ -96,6 +75,29 @@ set(PCBNEW_SRCS
     dialog_SVG_print.cpp
     dialog_SVG_print_base.cpp
     dialog_set_grid_base.cpp
+    )
+
+set(PCBNEW_SRCS
+    pcbframe.cpp
+    attribut.cpp
+    automove.cpp
+    autoplac.cpp
+    autorout.cpp
+    board.cpp
+    board_items_to_polygon_shape_transform.cpp
+    board_undo_redo.cpp
+    block.cpp
+    block_module_editor.cpp
+    build_BOM_from_board.cpp
+    class_pcb_layer_widget.cpp
+    clean.cpp
+    connect.cpp
+    controle.cpp
+    dimension.cpp
+    cross-probing.cpp
+    debug_kbool_key_file_fct.cpp
+    deltrack.cpp
+    ${PCBNEW_DIALOGS}
     dist.cpp
     dragsegm.cpp
     drc.cpp
@@ -123,6 +125,8 @@ set(PCBNEW_SRCS
     gpcb_exchange.cpp
     graphpcb.cpp
     hotkeys.cpp
+    hotkeys_board_editor.cpp
+    hotkeys_module_editor.cpp
     initpcb.cpp
     ioascii.cpp
     layer_widget.cpp

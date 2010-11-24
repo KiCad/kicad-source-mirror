@@ -109,20 +109,20 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
    /* Hotkey IDs */
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_Board_Editor_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_Board_Editor_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, s_Board_Editor_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
-        DisplayHotkeyList( this, s_Board_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
         break;
 
     default:

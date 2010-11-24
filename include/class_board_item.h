@@ -111,6 +111,16 @@ public:
         return m_Layer == aLayer;
     }
 
+    /**
+     * Function IsTrack
+     * tests to see if this object is a track or via (or microvia).
+     * form of testing.
+     * @return bool - true if a track or via, else false.
+     */
+    bool IsTrack( ) const
+    {
+        return (Type() == TYPE_TRACK) || (Type() == TYPE_VIA);
+    }
 
     /**
      * Function IsLocked

@@ -2,8 +2,8 @@
 /* classes and functions declaration used in drill file and report generation */
 /******************************************************************************/
 
-#ifndef GENDRILL_H
-#define GENDRILL_H
+#ifndef _GENDRILL_H_
+#define _GENDRILL_H_
 
 /* the DRILL_TOOL class  handles tools used in the excellon drill file */
 class DRILL_TOOL
@@ -39,15 +39,25 @@ public:
 };
 
 
-/* the DrillPrecision class to handle drill precision format in excellon files*/
-class DrillPrecision
+/* the DRILL_PRECISION helper class to handle drill precision format in excellon files
+*/
+class DRILL_PRECISION
 {
 public:
-    int m_lhs;
-    int m_rhs;
+    int m_lhs;      // Left digit number (integer value of coordinates)
+    int m_rhs;      // Right digit number (deciam value of coordinates)
 
 public:
-    DrillPrecision( int l, int r ) { m_lhs = l; m_rhs = r; }
+    DRILL_PRECISION( int l = 2, int r = 4)
+    {
+        m_lhs = l; m_rhs = r;
+    }
+    wxString GetPrecisionString()
+    {
+        wxString text;
+        text << m_lhs << wxT(":") << m_rhs;
+        return text;
+    }
 };
 
 /* zeros format */
@@ -99,4 +109,4 @@ void GenDrillReportFile( FILE* aFile, BOARD * aPcb, const wxString& aBoardFilena
 						std::vector<DRILL_TOOL>& aToolListBuffer
 						);
 
-#endif  //	#ifndef GENDRILL_H
+#endif  //	#ifndef _GENDRILL_H_

@@ -127,7 +127,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 if( !( (MODULE*) item )->IsLocked() )
                 {
                     msg = AddHotkeyName( _(
-                                             "Lock Module" ), s_Board_Editor_Hokeys_Descr,
+                                             "Lock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
                                   locked_xpm );
@@ -135,7 +135,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 else
                 {
                     msg = AddHotkeyName( _(
-                                             "Unlock Module" ), s_Board_Editor_Hokeys_Descr,
+                                             "Unlock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
                                   unlocked_xpm );
@@ -169,7 +169,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             }
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Move Drawing" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _( "Move Drawing" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_DRAWING_REQUEST,
                               msg, move_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), edit_xpm );
@@ -215,7 +215,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_DIMENSION:
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Edit Dimension" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+                msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION,
                               msg, edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
@@ -226,9 +226,9 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_MIRE:
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Move Target" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _( "Move Target" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST, msg, move_xpm );
-                msg = AddHotkeyName( _( "Edit Target" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+                msg = AddHotkeyName( _( "Edit Target" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_MIRE,
                               msg, edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
@@ -265,7 +265,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     if( !flags )
     {
         msg = AddHotkeyName( _( "Get and Move Footprint" ),
-                             s_Board_Editor_Hokeys_Descr, HK_GET_AND_MOVE_FOOTPRINT );
+                             g_Board_Editor_Hokeys_Descr, HK_GET_AND_MOVE_FOOTPRINT );
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
                       msg, move_module_xpm );
     }
@@ -421,7 +421,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         {
             if( Track->IsPointOnEnds( cursorPosition, -1 ) != 0 )
             {
-                msg = AddHotkeyName( _( "Move Node" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _( "Move Node" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE,
                               msg, move_xpm );
             }
@@ -429,7 +429,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
                               _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
-                msg = AddHotkeyName( _( "Drag Segment" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
+                msg = AddHotkeyName( _( "Drag Segment" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
                               msg, drag_track_segment_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
@@ -447,20 +447,20 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( flags & IS_NEW )
         {
-            msg = AddHotkeyName( _( "End Track" ), s_Board_Editor_Hokeys_Descr, HK_END_TRACK );
+            msg = AddHotkeyName( _( "End Track" ), g_Board_Editor_Hokeys_Descr, HK_END_TRACK );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_END_TRACK, msg, apply_xpm );
         }
-        msg = AddHotkeyName( _( "Place Via" ), s_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
+        msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
 
-        msg = AddHotkeyName( _( "Switch Track Posture" ), s_Board_Editor_Hokeys_Descr, HK_SWITCH_TRACK_POSTURE );
+        msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr, HK_SWITCH_TRACK_POSTURE );
         PopMenu->Append( ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
         if( IsMicroViaAcceptable() )
         {
             msg = AddHotkeyName( _(
-                                     "Place Micro Via" ), s_Board_Editor_Hokeys_Descr,
+                                     "Place Micro Via" ), g_Board_Editor_Hokeys_Descr,
                                  HK_ADD_MICROVIA );
             PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
         }
@@ -476,7 +476,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
         else
         {
-            msg = AddHotkeyName( _( "Change Segment Width" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            msg = AddHotkeyName( _( "Change Segment Width" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG,
                               msg, width_segment_xpm );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACK,
@@ -502,13 +502,13 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     msg = AddHotkeyName( Track->Type()==TYPE_VIA ?
                         _( "Delete Via" ) : _( "Delete Segment" ),
-                         s_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
+                         g_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
     ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
                   msg, delete_line_xpm );
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Delete Track" ), s_Board_Editor_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete Track" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK,
                       msg, delete_track_xpm );
         ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
@@ -588,7 +588,7 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), add_corner_xpm );
-            msg = AddHotkeyName( _( "Drag Outline Segment" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
+            msg = AddHotkeyName( _( "Drag Outline Segment" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT,
                           msg, drag_outline_segment_xpm );
         }
@@ -610,11 +610,11 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
                           _( "Remove Filled Areas in Zone" ), fill_zone_xpm );
         }
 
-        msg = AddHotkeyName( _( "Move Zone" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+        msg = AddHotkeyName( _( "Move Zone" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES,
                       msg, move_xpm );
 
-        msg = AddHotkeyName( _( "Edit Zone Params" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+        msg = AddHotkeyName( _( "Edit Zone Params" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
                       msg, edit_xpm );
 
@@ -646,25 +646,25 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Move" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+        msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
                       msg, move_module_xpm );
-        msg = AddHotkeyName( _( "Drag" ), s_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM  );
+        msg = AddHotkeyName( _( "Drag" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM  );
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
                       msg, drag_module_xpm );
     }
-    msg = AddHotkeyName( _( "Rotate +" ), s_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate +" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
                   msg, rotate_module_pos_xpm );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
                   _( "Rotate -" ), rotate_module_neg_xpm );
-    msg = AddHotkeyName( _( "Flip" ), s_Board_Editor_Hokeys_Descr, HK_FLIP_FOOTPRINT );
+    msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_FOOTPRINT );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
                   msg, invert_module_xpm );
 
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Edit" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+        msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE,
                       msg, edit_module_xpm );
         sub_menu_footprint->AppendSeparator();
@@ -692,17 +692,17 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Move" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+        msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
                       msg, move_field_xpm );
     }
 
-    msg = AddHotkeyName( _( "Rotate" ), s_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
                   msg, rotate_field_xpm );
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Edit" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+        msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
                       msg, edit_text_xpm );
     }
@@ -805,14 +805,14 @@ void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Move" ), s_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+        msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST,
                       msg, move_text_xpm );
     }
-    msg = AddHotkeyName( _( "Rotate" ), s_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB,
                   msg, rotate_pos_xpm );
-    msg = AddHotkeyName( _( "Edit" ), s_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+    msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB,
                   msg, edit_text_xpm );
 

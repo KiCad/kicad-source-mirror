@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -75,17 +75,17 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Speed (cm/s)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	sbHPGOptionsSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbHPGOptionsSizer->Add( m_staticText1, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_PenSpeed = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbHPGOptionsSizer->Add( m_PenSpeed, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Pen Number"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	sbHPGOptionsSizer->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbHPGOptionsSizer->Add( m_staticText2, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_PenNum = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbHPGOptionsSizer->Add( m_PenNum, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	sbHPGOptionsSizer->Add( m_PenNum, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	bMiddleBoxSizer->Add( sbHPGOptionsSizer, 0, wxEXPAND, 5 );
 	
@@ -93,12 +93,10 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
 	m_Check_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	sbOptSizer->Add( m_Check_Mirror, 0, wxALL, 5 );
+	sbOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_Check_Minimal = new wxCheckBox( this, wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
-	
-	sbOptSizer->Add( m_Check_Minimal, 0, wxALL, 5 );
+	sbOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND, 5 );
 	
@@ -178,4 +176,5 @@ DIALOG_GENDRILL_BASE::~DIALOG_GENDRILL_BASE()
 	m_Choice_Zeros_Format->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
 	m_OkButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOkClick ), NULL, this );
 	m_CancelButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnCancelClick ), NULL, this );
+	
 }

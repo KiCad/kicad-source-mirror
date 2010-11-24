@@ -137,7 +137,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
    /* Must be called before creating the main frame in order to
     * display the real hotkeys in menus or tool tips */
-    ReadHotkeyConfig( wxT("PcbFrame"), s_Board_Editor_Hokeys_Descr );
+    ReadHotkeyConfig( wxT("PcbFrame"), g_Board_Editor_Hokeys_Descr );
 
     frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );

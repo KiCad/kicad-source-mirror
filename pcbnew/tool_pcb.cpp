@@ -216,11 +216,11 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 #endif
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_UNDO, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr,
                          HK_UNDO, false );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
                          HELP_UNDO );
-    msg = AddHotkeyName( HELP_REDO, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hokeys_Descr,
                          HK_REDO, false );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
                          HELP_REDO );
@@ -232,29 +232,29 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_ZOOM_IN, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Board_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hokeys_Descr,
                          HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_FIND, // Find components and texts
-                         s_Board_Editor_Hokeys_Descr,
+                         g_Board_Editor_Hokeys_Descr,
                          HK_FIND_ITEM, false );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ),
                          msg );
@@ -699,7 +699,7 @@ WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent 
     if( m_SelLayerBox == NULL )
         return NULL;
 
-    m_SelLayerBox->m_hotkeys = s_Board_Editor_Hokeys_Descr;
+    m_SelLayerBox->m_hotkeys = g_Board_Editor_Hokeys_Descr;
     m_SelLayerBox->Resync();
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 
