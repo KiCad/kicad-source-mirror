@@ -192,6 +192,8 @@ namespace boost { namespace polygon{
             if(pack_.compute_intersection(intersection, he1, he2)) {
               //their intersection point
               pts.push_back(intersection);
+              intersection_points[(*inner).second].insert(intersection);
+              intersection_points[(*outer).second].insert(intersection);
             } 
           }
         }
