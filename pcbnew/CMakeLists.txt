@@ -27,8 +27,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_cleaning_options.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
-    dialog_design_rules.cpp
-    dialog_design_rules_base.cpp
+    dialogs/dialog_design_rules.cpp
+    dialogs/dialog_design_rules_base.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
     dialogs/dialog_drc_base.cpp
@@ -54,8 +54,10 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_graphic_items_options_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
-    dialog_layers_setup.cpp
-    dialog_layers_setup_base.cpp
+    dialogs/dialog_global_deletion.cpp
+    dialogs/dialog_global_deletion_base.cpp
+    dialogs/dialog_layers_setup.cpp
+    dialogs/dialog_layers_setup_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_fbp.cpp
     dialogs/dialog_pcb_text_properties.cpp
