@@ -261,10 +261,8 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/* Routine to change a text type to an other one (GraphicText, label or
- * Glabel).
- * A new test, label or hierarchical or global label is created from the old
- * text.
+/* Routine to change a text type to an other one (GraphicText, label or Glabel).
+ * A new test, label or hierarchical or global label is created from the old text.
  * the old text is deleted
  */
 void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
@@ -323,14 +321,14 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
     }
 
     /* now delete the old text
-     *  If it is a text flagged IS_NEW it will be deleted by
-     * ForceCloseManageCurseur()
+     *  If it is a text flagged IS_NEW it will be deleted by ForceCloseManageCurseur()
      *  If not, we must delete it.
      */
     if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
     {
         DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
     }
+
     if( (flags & IS_NEW) == 0 )    // Remove old text from current list and
                                    // save it in undo list
     {
@@ -343,16 +341,15 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
 
     GetScreen()->SetCurItem( NULL );
 
-    SAFE_DELETE( g_ItemToUndoCopy );
+    delete g_ItemToUndoCopy;
+    g_ItemToUndoCopy = NULL;
 
     DrawPanel->CursorOff( DC );   // Erase schematic cursor
 
-    /* Save the new text in undo list if the old text was not itself a "new
-     * created text"
-     * In this case, the old text is already in undo list as a deleted item
+    /* Save the new text in undo list if the old text was not itself a "new created text"
+     * In this case, the old text is already in undo list as a deleted item.
      * Of course if the old text was a "new created text" the new text will be
-     * put in undo list
-     * later, at the end of the current command (if not aborted)
+     * put in undo list later, at the end of the current command (if not aborted)
      */
     if( (flags & IS_NEW) == 0 )
     {

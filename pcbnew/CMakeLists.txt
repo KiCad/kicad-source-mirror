@@ -33,13 +33,13 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_display_options_base.cpp
     dialog_drc_base.cpp
     dialog_drc.cpp
-    dialog_edit_module_for_BoardEditor.cpp
-    dialog_edit_module_for_BoardEditor_base.cpp
-    dialog_edit_module_for_Modedit_base.cpp
-    dialog_edit_module_for_Modedit.cpp
-    dialog_edit_module_text.cpp
-    dialog_edit_module_text_base.cpp
-    dialog_exchange_modules_base.cpp
+    dialogs/dialog_edit_module_for_BoardEditor.cpp
+    dialogs/dialog_edit_module_for_BoardEditor_base.cpp
+    dialogs/dialog_edit_module_for_Modedit_base.cpp
+    dialogs/dialog_edit_module_for_Modedit.cpp
+    dialogs/dialog_edit_module_text.cpp
+    dialogs/dialog_edit_module_text_base.cpp
+    dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_3Dfiles_base.cpp
     dialog_freeroute_exchange.cpp
     dialog_freeroute_exchange_base.cpp
@@ -50,10 +50,10 @@ set(PCBNEW_DIALOGS
     dialog_global_edit_tracks_and_vias.cpp
     dialog_global_edit_tracks_and_vias_base.cpp
     dialog_global_pads_edition_base.cpp
-    dialog_graphic_items_options.cpp
-    dialog_graphic_items_options_base.cpp
-    dialog_graphic_item_properties.cpp
-    dialog_graphic_item_properties_base.cpp
+    dialogs/dialog_graphic_items_options.cpp
+    dialogs/dialog_graphic_items_options_base.cpp
+    dialogs/dialog_graphic_item_properties.cpp
+    dialogs/dialog_graphic_item_properties_base.cpp
     dialog_layers_setup.cpp
     dialog_layers_setup_base.cpp
     dialog_netlist.cpp
@@ -70,8 +70,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialog_orient_footprints.cpp
-    dialog_mask_clearance.cpp
-    dialog_mask_clearance_base.cpp
+    dialogs/dialog_mask_clearance.cpp
+    dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
     dialogs/dialog_set_grid_base.cpp

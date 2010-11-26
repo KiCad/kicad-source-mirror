@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@iut.ujf-grenoble.fr>
+ * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
  * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -82,13 +82,12 @@ static std::vector<HOLE_INFO>  s_HoleListBuffer;
 
 
 
-/* This function displays and deletes the dialog frame for drill tools
+/* This function displays the dialog frame for drill tools
  */
 void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
 {
-    DIALOG_GENDRILL* frame = new DIALOG_GENDRILL( this );
-    frame->ShowModal();
-    frame->Destroy();
+    DIALOG_GENDRILL dlg( this );
+    dlg.ShowModal();
 }
 
 
