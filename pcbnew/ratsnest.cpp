@@ -9,7 +9,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
-#include "autorout.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 

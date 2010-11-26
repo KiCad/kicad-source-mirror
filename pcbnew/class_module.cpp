@@ -17,7 +17,6 @@
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 
-#include "autorout.h"
 #include "drag.h"
 
 #include "3d_struct.h"

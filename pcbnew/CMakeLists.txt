@@ -31,8 +31,8 @@ set(PCBNEW_DIALOGS
     dialog_design_rules_base.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
-    dialog_drc_base.cpp
-    dialog_drc.cpp
+    dialogs/dialog_drc_base.cpp
+    dialogs/dialog_drc.cpp
     dialogs/dialog_edit_module_for_BoardEditor.cpp
     dialogs/dialog_edit_module_for_BoardEditor_base.cpp
     dialogs/dialog_edit_module_for_Modedit_base.cpp
@@ -45,20 +45,20 @@ set(PCBNEW_DIALOGS
     dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
-    dialog_general_options.cpp
-    dialog_general_options_BoardEditor_base.cpp
-    dialog_global_edit_tracks_and_vias.cpp
-    dialog_global_edit_tracks_and_vias_base.cpp
-    dialog_global_pads_edition_base.cpp
+    dialogs/dialog_general_options.cpp
+    dialogs/dialog_general_options_BoardEditor_base.cpp
+    dialogs/dialog_global_edit_tracks_and_vias.cpp
+    dialogs/dialog_global_edit_tracks_and_vias_base.cpp
+    dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_items_options.cpp
     dialogs/dialog_graphic_items_options_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
     dialog_layers_setup.cpp
     dialog_layers_setup_base.cpp
-    dialog_netlist.cpp
-    dialog_netlist_fbp.cpp
-    dialog_pcb_text_properties.cpp
+    dialogs/dialog_netlist.cpp
+    dialogs/dialog_netlist_fbp.cpp
+    dialogs/dialog_pcb_text_properties.cpp
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
@@ -69,7 +69,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_print_for_modedit_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
-    dialog_orient_footprints.cpp
+    dialogs/dialog_orient_footprints.cpp
+    dialogs/dialog_orient_footprints_base.cpp
     dialogs/dialog_mask_clearance.cpp
     dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_SVG_print.cpp

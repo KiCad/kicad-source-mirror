@@ -8,7 +8,6 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "autorout.h"
 #include "protos.h"
 
 

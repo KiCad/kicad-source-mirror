@@ -14,7 +14,6 @@
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "class_board_design_settings.h"
-#include "autorout.h"
 #include "protos.h"
 
 #include "dialog_drc.h"

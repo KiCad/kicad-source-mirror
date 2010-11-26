@@ -2,6 +2,8 @@
 /* Routines for automatic displacement and rotation of modules. */
 /****************************************************************/
 
+#include <algorithm>
+
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
@@ -25,7 +27,7 @@ typedef enum {
 } SelectFixeFct;
 
 
-static int tri_modules( MODULE** pt_ref, MODULE** pt_compare );
+static bool sortModulesbySize( MODULE* ref, MODULE* compare );
 
 
 wxString ModulesMaskSelection = wxT( "*" );
@@ -132,10 +134,6 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         AutoMoveModulesOnPcb( TRUE );
         break;
 
-    case ID_POPUP_PCB_REORIENT_ALL_MODULES:
-        OnOrientFootprints();
-        break;
-
     case ID_POPUP_PCB_AUTOROUTE_ALL_MODULES:
         Autoroute( &dc, ROUTE_ALL );
         break;
@@ -172,13 +170,12 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
  */
 void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 {
-    MODULE** pt_Dmod, ** BaseListeModules;
-    MODULE*  Module;
+    std::vector <MODULE*> moduleList;
     wxPoint  start, current;
     int      Ymax_size, Xsize_allowed;
     int      pas_grille = (int) GetScreen()->GetGridSize().x;
-    bool     EdgeExists;
-    float    surface;
+    bool     edgesExists;
+    double   surface;
 
     if( GetBoard()->m_Modules == NULL )
     {
@@ -190,28 +187,29 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( !IsOK( this, _( "Move modules?" ) ) )
         return;
 
-    EdgeExists = SetBoardBoundaryBoxFromEdgesOnly();
+    edgesExists = SetBoardBoundaryBoxFromEdgesOnly();
 
-    if( PlaceModulesHorsPcb && !EdgeExists )
+    if( PlaceModulesHorsPcb && !edgesExists )
     {
         DisplayError( this,
                       _( "Could not automatically place modules. No board outlines detected." ) );
         return;
     }
 
-    Module = GetBoard()->m_Modules;
+    // Build sorted footprints list (sort by decreasing size )
+    MODULE* Module = GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
+        moduleList.push_back(Module);
     }
+    sort( moduleList.begin(), moduleList.end(), sortModulesbySize );
 
-    BaseListeModules = GenListeModules( GetBoard(), NULL );
-
-    /* If allocation of modules not PCBs, the cursor is placed below
-     * PCB, to avoid placing components in PCB area.
+    /* to move modules outside the board, the cursor is placed below
+     * the current board, to avoid placing components in board area.
      */
-    if( PlaceModulesHorsPcb && EdgeExists )
+    if( PlaceModulesHorsPcb && edgesExists )
     {
         if( GetScreen()->m_Curseur.y <
            (GetBoard()->m_BoundaryBox.GetBottom() + 2000) )
@@ -219,12 +217,12 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
                                        2000;
     }
 
-    /* calculating the area occupied by the circuits */
+    /* calculate the area needed by footprints */
     surface = 0.0;
-    for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
+    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
-        Module = *pt_Dmod;
-        if( PlaceModulesHorsPcb && EdgeExists )
+        Module = moduleList[ii];
+        if( PlaceModulesHorsPcb && edgesExists )
         {
             if( GetBoard()->m_BoundaryBox.Inside( Module->m_Pos ) )
                 continue;
@@ -237,13 +235,13 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     start     = current = GetScreen()->m_Curseur;
     Ymax_size = 0;
 
-    for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
+    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
-        Module = *pt_Dmod;
+        Module = moduleList[ii];
         if( Module->IsLocked() )
             continue;
 
-        if( PlaceModulesHorsPcb && EdgeExists )
+        if( PlaceModulesHorsPcb && edgesExists )
         {
             if( GetBoard()->m_BoundaryBox.Inside( Module->m_Pos ) )
                 continue;
@@ -269,7 +267,6 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         current.x += Module->m_RealBoundaryBox.GetWidth() + pas_grille;
     }
 
-    MyFree( BaseListeModules );
     DrawPanel->Refresh();
 }
 
@@ -302,58 +299,8 @@ void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
 }
 
 
-/* Create memory allocation by the ordered list of structures D_MODULES
- * Describing the module to move
- * The end of the list is indicated by NULL
- * Also returns the number of modules per NbModules *
- * Deallocates memory after use
- */
-MODULE** GenListeModules( BOARD* Pcb, int* NbModules )
+static bool sortModulesbySize( MODULE* ref, MODULE* compare )
 {
-    MODULE*  Module;
-    MODULE** ListeMod, ** PtList;
-    int      NbMod;
-
-    /* Reserve memory for descriptions of modules that are to be moved. */
-    Module = Pcb->m_Modules;
-    NbMod  = 0;
-    for( ; Module != NULL; Module = Module->Next() )
-        NbMod++;
-
-    ListeMod = (MODULE**) MyZMalloc( (NbMod + 1) * sizeof(MODULE*) );
-    if( ListeMod == NULL )
-    {
-        if( NbModules != NULL )
-            *NbModules = 0;
-        return NULL;
-    }
-
-    PtList = ListeMod;
-    Module = Pcb->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
-    {
-        *PtList = Module; PtList++;
-        Module->SetRectangleExinscrit();
-    }
-
-    /* Sort by surface area module largest to smallest */
-    qsort( ListeMod, NbMod, sizeof(MODULE * *),
-           ( int ( * )( const void*, const void* ) )tri_modules );
-
-    if( NbModules != NULL )
-        *NbModules = NbMod;
-    return ListeMod;
+    return compare->m_Surface < ref->m_Surface;
 }
 
-
-static int tri_modules( MODULE** pt_ref, MODULE** pt_compare )
-{
-    float ff;
-
-    ff = (*pt_ref)->m_Surface - (*pt_compare)->m_Surface;
-    if( ff < 0 )
-        return 1;
-    if( ff > 0 )
-        return -1;
-    return 0;
-}

@@ -7,7 +7,6 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
-#include "autorout.h"
 
 
 // Constructor and destructor

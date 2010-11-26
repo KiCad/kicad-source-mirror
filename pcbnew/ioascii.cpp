@@ -13,7 +13,6 @@
 #include "class_board_design_settings.h"
 
 #ifdef PCBNEW
-#include "autorout.h"
 #include "zones.h"
 #endif
 
