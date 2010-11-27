@@ -59,7 +59,7 @@ LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
     m_FieldId   = field.m_FieldId;
     m_Pos       = field.m_Pos;
     m_Size      = field.m_Size;
-    m_Width     = field.m_Width;
+    m_Thickness     = field.m_Thickness;
     m_Orient    = field.m_Orient;
     m_Attributs = field.m_Attributs;
     m_Text      = field.m_Text;
@@ -283,7 +283,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
  */
 int LIB_FIELD::GetPenSize()
 {
-    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    return ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 }
 
 
@@ -425,7 +425,7 @@ void LIB_FIELD::Copy( LIB_FIELD* Target ) const
     Target->SetParent( m_Parent );
     Target->m_Pos       = m_Pos;
     Target->m_Size      = m_Size;
-    Target->m_Width     = m_Width;
+    Target->m_Thickness     = m_Thickness;
     Target->m_Orient    = m_Orient;
     Target->m_Attributs = m_Attributs;
     Target->m_Text      = m_Text;

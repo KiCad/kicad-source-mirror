@@ -51,7 +51,6 @@ static bool    AutoPlaceShowAll = TRUE;
 float          MinCout;
 
 static int  TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
-static int  Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare );
 
 static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    ux0,
@@ -74,7 +73,6 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module,
 {
     int      ii, activ;
     MODULE*  ThisModule = NULL;
-    MODULE** BaseListeModules;
     wxPoint  PosOK;
     wxPoint  memopos;
     int      error;
@@ -125,18 +123,16 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module,
 
     /* Compute module parmeters used in auto place */
     Module = GetBoard()->m_Modules;
+    NbTotalModules = 0;
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
+        NbTotalModules ++;
     }
 
     if( GenPlaceBoard() == 0 )
         return;
-
-    /* Updating the parameters useful for module placement. */
-    BaseListeModules = GenListeModules( GetBoard(), &NbTotalModules );
-    MyFree( BaseListeModules );
 
     Module = GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
@@ -1003,37 +999,23 @@ static void TracePenaliteRectangle( BOARD* Pcb,
 }
 
 
-/************************************/
-/* Sort routines for use with qsort */
-/************************************/
-
-static int Tri_PlaceModules( MODULE** pt_ref, MODULE** pt_compare )
+/* Sort routines */
+static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
 {
-    float ff, ff1, ff2;
+    double ff1, ff2;
 
-    ff1 = (*pt_ref)->m_Surface * (*pt_ref)->m_PadNum;
-    ff2 = (*pt_compare)->m_Surface * (*pt_compare)->m_PadNum;
-    ff  = ff1 - ff2;
-    if( ff < 0 )
-        return 1;
-    if( ff > 0 )
-        return -1;
-    return 0;
+    ff1 = ref->m_Surface * ref->m_PadNum;
+    ff2 = compare->m_Surface * compare->m_PadNum;
+    return ff2 < ff1;
 }
 
-
-static int Tri_RatsModules( MODULE** pt_ref, MODULE** pt_compare )
+static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
 {
-    float ff, ff1, ff2;
+    double ff1, ff2;
 
-    ff1 = (*pt_ref)->m_Surface * (*pt_ref)->flag;
-    ff2 = (*pt_compare)->m_Surface * (*pt_compare)->flag;
-    ff  = ff1 - ff2;
-    if( ff < 0 )
-        return 1;
-    if( ff > 0 )
-        return -1;
-    return 0;
+    ff1 = ref->m_Surface * ref->flag;
+    ff2 = compare->m_Surface * compare->flag;
+    return ff2 < ff1;
 }
 
 
@@ -1044,28 +1026,28 @@ static int Tri_RatsModules( MODULE** pt_ref, MODULE** pt_compare )
  */
 static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 {
-    MODULE** BaseListeModules, ** pt_Dmod;
-    MODULE*  Module = NULL, * AltModule = NULL;
-    int      NbModules;
+    MODULE*  Module;
+    std::vector <MODULE*> moduleList;
 
-    BaseListeModules = GenListeModules( pcbframe->GetBoard(), &NbModules );
-    if( BaseListeModules == NULL )
-        return NULL;
-
-    /* Sort surface area of modules from greatest to least.  Surface area
-     * weighted by the number of pads
-     */
-    qsort( BaseListeModules, NbModules, sizeof(MODULE * *),
-           ( int (*)( const void*, const void* ) )Tri_PlaceModules );
-
-    for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
+    // Build sorted footprints list (sort by decreasing size )
+    Module = pcbframe->GetBoard()->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        (*pt_Dmod)->flag = 0;
-        if( !( (*pt_Dmod)->m_ModuleStatus & MODULE_to_PLACE ) )
+        Module->Set_Rectangle_Encadrement();
+        Module->SetRectangleExinscrit();
+        moduleList.push_back(Module);
+    }
+    sort( moduleList.begin(), moduleList.end(), Tri_PlaceModules );
+
+    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
+    {
+        Module = moduleList[ii];
+        Module->flag = 0;
+        if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
         pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-        (*pt_Dmod)->DisplayInfo( pcbframe );
-        pcbframe->build_ratsnest_module( DC, *pt_Dmod );
+        Module->DisplayInfo( pcbframe );
+        pcbframe->build_ratsnest_module( DC, Module );
 
         /* Calculate external ratsnet. */
         for( unsigned ii = 0;
@@ -1074,33 +1056,33 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         {
             if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
                   LOCAL_RATSNEST_ITEM ) == 0 )
-                (*pt_Dmod)->flag++;
+                Module->flag++;
         }
     }
 
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
 
-    qsort( BaseListeModules, NbModules, sizeof(MODULE * *),
-           ( int (*)( const void*, const void* ) )Tri_RatsModules );
-
+    sort( moduleList.begin(), moduleList.end(), Tri_RatsModules );
 
     /* Search for "best" module. */
-    Module = NULL;
-    for( pt_Dmod = BaseListeModules; *pt_Dmod != NULL; pt_Dmod++ )
+    MODULE* bestModule = NULL;
+    MODULE* altModule = NULL;
+    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
-        if( !( (*pt_Dmod)->m_ModuleStatus & MODULE_to_PLACE ) )
+        Module = moduleList[ii];
+        if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
-        AltModule = *pt_Dmod;
-        if( (*pt_Dmod)->flag == 0 )
+        altModule = Module;
+        if( Module->flag == 0 )
             continue;
-        Module = *pt_Dmod; break;
+        bestModule = Module;
+        break;
     }
 
-    MyFree( BaseListeModules );
-    if( Module )
-        return Module;
+    if( bestModule )
+        return bestModule;
     else
-        return AltModule;
+        return altModule;
 }
 
 
@@ -1169,3 +1151,145 @@ bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
         ymax - GetBoard()->m_BoundaryBox.m_Pos.y );
     return succes;
 }
+
+
+/********************************************/
+int Propagation( WinEDA_PcbFrame* frame )
+/********************************************/
+
+/**
+ * Function Propagation
+ * Used now only in autoplace calculations
+ * Uses the routing matrix to fill the cells within the zone
+ * Search and mark cells within the zone, and agree with DRC options.
+ * Requirements:
+ * Start from an initial point, to fill zone
+ * The zone must have no "copper island"
+ *  Algorithm:
+ *  If the current cell has a neightbour flagged as "cell in the zone", it
+ *  become a cell in the zone
+ *  The first point in the zone is the starting point
+ *  4 searches within the matrix are made:
+ *          1 - Left to right and top to bottom
+ *          2 - Right to left and top to bottom
+ *          3 - bottom to top and Right to left
+ *          4 - bottom to top and Left to right
+ *  Given the current cell, for each search, we consider the 2 neightbour cells
+ *  the previous cell on the same line and the previous cell on the same column.
+ *
+ *  This funtion can request some iterations
+ *  Iterations are made until no cell is added to the zone.
+ *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
+ */
+{
+    int       row, col, nn;
+    long      current_cell, old_cell_H;
+    int long* pt_cell_V;
+    int       nbpoints = 0;
+
+#define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
+    wxString  msg;
+
+    Affiche_1_Parametre( frame, 57, wxT( "Detect" ), msg, CYAN );
+    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "1" ), CYAN );
+
+    // Alloc memory to handle 1 line or 1 colunmn on the routing matrix
+    nn = MAX( Nrows, Ncols ) * sizeof(*pt_cell_V);
+    pt_cell_V = (long*) MyMalloc( nn );
+
+    /* search 1 : from left to right and top to bottom */
+    memset( pt_cell_V, 0, nn );
+    for( row = 0; row < Nrows; row++ )
+    {
+        old_cell_H = 0;
+        for( col = 0; col < Ncols; col++ )
+        {
+            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            if( current_cell == 0 )  /* a free cell is found */
+            {
+                if( (old_cell_H & CELL_is_ZONE)
+                   || (pt_cell_V[col] & CELL_is_ZONE) )
+                {
+                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    current_cell = CELL_is_ZONE;
+                    nbpoints++;
+                }
+            }
+            pt_cell_V[col] = old_cell_H = current_cell;
+        }
+    }
+
+    /* search 2 : from right to left and top to bottom */
+    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "2" ), CYAN );
+    memset( pt_cell_V, 0, nn );
+    for( row = 0; row < Nrows; row++ )
+    {
+        old_cell_H = 0;
+        for( col = Ncols - 1; col >= 0; col-- )
+        {
+            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            if( current_cell == 0 )  /* a free cell is found */
+            {
+                if( (old_cell_H & CELL_is_ZONE)
+                   || (pt_cell_V[col] & CELL_is_ZONE) )
+                {
+                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    current_cell = CELL_is_ZONE;
+                    nbpoints++;
+                }
+            }
+            pt_cell_V[col] = old_cell_H = current_cell;
+        }
+    }
+
+    /* search 3 : from bottom to top and right to left balayage */
+    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "3" ), CYAN );
+    memset( pt_cell_V, 0, nn );
+    for( col = Ncols - 1; col >= 0; col-- )
+    {
+        old_cell_H = 0;
+        for( row = Nrows - 1; row >= 0; row-- )
+        {
+            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            if( current_cell == 0 )  /* a free cell is found */
+            {
+                if( (old_cell_H & CELL_is_ZONE)
+                   || (pt_cell_V[row] & CELL_is_ZONE) )
+                {
+                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    current_cell = CELL_is_ZONE;
+                    nbpoints++;
+                }
+            }
+            pt_cell_V[row] = old_cell_H = current_cell;
+        }
+    }
+
+    /* search 4 : from bottom to top and left to right */
+    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "4" ), CYAN );
+    memset( pt_cell_V, 0, nn );
+    for( col = 0; col < Ncols; col++ )
+    {
+        old_cell_H = 0;
+        for( row = Nrows - 1; row >= 0; row-- )
+        {
+            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            if( current_cell == 0 )  /* a free cell is found */
+            {
+                if( (old_cell_H & CELL_is_ZONE)
+                   || (pt_cell_V[row] & CELL_is_ZONE) )
+                {
+                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    current_cell = CELL_is_ZONE;
+                    nbpoints++;
+                }
+            }
+            pt_cell_V[row] = old_cell_H = current_cell;
+        }
+    }
+
+    MyFree( pt_cell_V );
+
+    return nbpoints;
+}
+

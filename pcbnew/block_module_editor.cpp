@@ -14,7 +14,6 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-#include "autorout.h"
 #include "pcbplot.h"
 #include "trigo.h"
 

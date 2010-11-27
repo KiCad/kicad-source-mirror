@@ -229,7 +229,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
 
     orient = pt_texte->GetDrawRotation();
 
-    thickness = pt_texte->m_Width;
+    thickness = pt_texte->m_Thickness;
     if( trace_mode == FILAIRE )
         thickness = -1;
 
@@ -486,7 +486,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
     size = pt_texte->m_Size;
     pos  = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
-    thickness = ( trace_mode==FILAIRE ) ? -1 : pt_texte->m_Width;
+    thickness = ( trace_mode==FILAIRE ) ? -1 : pt_texte->m_Thickness;
 
     if( pt_texte->m_Mirror )
         size.x = -size.x;

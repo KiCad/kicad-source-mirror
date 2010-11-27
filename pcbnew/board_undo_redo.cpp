@@ -195,7 +195,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Width, ( (TEXTE_PCB*) aImage )->m_Width );
+        EXCHG( ( (TEXTE_PCB*) aItem )->m_Thickness, ( (TEXTE_PCB*) aImage )->m_Thickness );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Orient, ( (TEXTE_PCB*) aImage )->m_Orient );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Text, ( (TEXTE_PCB*) aImage )->m_Text );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Italic, ( (TEXTE_PCB*) aImage )->m_Italic );
@@ -218,7 +218,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         ( (DIMENSION*) aImage )->SetText( txt );
         EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Size, ( (DIMENSION*) aImage )->m_Text->m_Size );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Width, ( (DIMENSION*) aImage )->m_Text->m_Width );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Thickness, ( (DIMENSION*) aImage )->m_Text->m_Thickness );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror, ( (DIMENSION*) aImage )->m_Text->m_Mirror );
     }
     break;

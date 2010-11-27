@@ -123,7 +123,7 @@ void DialogEditModuleText::Init( )
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_WidthTitle );
-    PutValueInLocalUnits( *m_TxtWidthCtlr, m_CurrentTextMod->m_Width,
+    PutValueInLocalUnits( *m_TxtWidthCtlr, m_CurrentTextMod->m_Thickness,
         m_Parent->m_InternalUnits );
 
     int text_orient = m_CurrentTextMod->m_Orient;

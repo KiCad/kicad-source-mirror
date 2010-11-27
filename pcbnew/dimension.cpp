@@ -171,7 +171,7 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
                       _( "The text thickness is too large for the text size. It will be clamped") );
         width = maxthickness;
     }
-    CurrentDimension->m_Text->m_Width = CurrentDimension->m_Width = width ;
+    CurrentDimension->m_Text->m_Thickness = CurrentDimension->m_Width = width ;
 
     CurrentDimension->m_Text->m_Mirror = ( m_Mirror->GetSelection() == 1 ) ? true : false;
 
@@ -260,7 +260,7 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
         {
             width = maxthickness;
         }
-        Dimension->m_Text->m_Width = Dimension->m_Width = width ;
+        Dimension->m_Text->m_Thickness = Dimension->m_Width = width ;
 
         Dimension->AdjustDimensionDetails( );
 

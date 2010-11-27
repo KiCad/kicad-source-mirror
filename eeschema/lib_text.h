@@ -139,8 +139,8 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Width; }
-    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
+    virtual int DoGetWidth() const { return m_Thickness; }
+    virtual void DoSetWidth( int aWidth ) { m_Thickness = aWidth; }
 };
 
 

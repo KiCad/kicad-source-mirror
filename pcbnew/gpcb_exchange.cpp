@@ -58,10 +58,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
  * displayed on the screen.
  * Name The name of the element, usually the reference designator.
  * Value The value of the element.
- * MX MY The location of the element’s mark. This is the reference point for placing the element and its pins and pads.
+ * MX MY The location of the elementï¿½s mark. This is the reference point for placing the element and its pins and pads.
  * TX TY The upper left corner of the text (one of the three strings).
  * TDir The relative direction of the text. 0 means left to right for an unrotated element, 1 means up, 2 left, 3 down.
- * TScale Size of the text, as a percentage of the “default” size of of the font (the default font is about 40 mils high). Default is 100 (40 mils).
+ * TScale Size of the text, as a percentage of the ï¿½defaultï¿½ size of of the font (the default font is about 40 mils high). Default is 100 (40 mils).
  * TSFlags Symbolic or numeric flags, for the text.
  * TNFlags Numeric flags, for the text.
  *
@@ -227,10 +227,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     // real size is:  default * ibuf[5] / 100 (size in gpcb is given in percent of defalut size
     ibuf[5] *= TEXT_DEFAULT_SIZE; ibuf[5] /= 100;
     m_Reference->m_Size.x = m_Reference->m_Size.y = MAX( 20, ibuf[5] );
-    m_Reference->m_Width  = m_Reference->m_Size.x / 10;
+    m_Reference->m_Thickness  = m_Reference->m_Size.x / 10;
     m_Value->m_Orient = m_Reference->m_Orient;
     m_Value->m_Size   = m_Reference->m_Size;
-    m_Value->m_Width  = m_Reference->m_Width;
+    m_Value->m_Thickness  = m_Reference->m_Thickness;
 
     while( GetLine( cmpfile, Line, &NbLine, sizeof(Line) - 1 ) != NULL )
     {

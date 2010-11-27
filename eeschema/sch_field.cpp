@@ -55,7 +55,7 @@ SCH_FIELD::~SCH_FIELD()
  */
 int SCH_FIELD::GetPenSize()
 {
-    int pensize = m_Width;
+    int pensize = m_Thickness;
 
     if( pensize == 0 )   // Use default values for pen size
     {
@@ -81,7 +81,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     EDA_Colors     color;
     wxPoint        textpos;
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-    int            LineWidth = m_Width;
+    int            LineWidth = m_Thickness;
 
     if( LineWidth == 0 )   // Use default values for pen size
     {
@@ -197,7 +197,7 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
     m_VJustify  = aSource.m_VJustify;
     m_Italic    = aSource.m_Italic;
     m_Bold      = aSource.m_Bold;
-    m_Width     = aSource.m_Width;
+    m_Thickness     = aSource.m_Thickness;
     m_Attributs = aSource.m_Attributs;
     m_Mirror    = aSource.m_Mirror;
 }
@@ -213,7 +213,7 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
     EXCHG( m_Layer, copyitem->m_Layer );
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_Width, copyitem->m_Width );
+    EXCHG( m_Thickness, copyitem->m_Thickness );
     EXCHG( m_Orient, copyitem->m_Orient );
     EXCHG( m_Mirror, copyitem->m_Mirror );
     EXCHG( m_Attributs, copyitem->m_Attributs );
@@ -317,7 +317,7 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
     BoundaryBox.SetSize( size );
 
     // Take thickness in account:
-    int linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
     BoundaryBox.Inflate( linewidth, linewidth );
 
     return BoundaryBox;

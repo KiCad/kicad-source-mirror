@@ -224,12 +224,12 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( ( style & 2 ) )
     {
         m_CurrentText->m_Bold  = true;
-        m_CurrentText->m_Width = GetPenSizeForBold( m_CurrentText->m_Size.x );
+        m_CurrentText->m_Thickness = GetPenSizeForBold( m_CurrentText->m_Size.x );
     }
     else
     {
         m_CurrentText->m_Bold  = false;
-        m_CurrentText->m_Width = 0;
+        m_CurrentText->m_Thickness = 0;
     }
 
     m_Parent->OnModify();

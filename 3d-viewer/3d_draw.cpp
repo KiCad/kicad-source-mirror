@@ -605,7 +605,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
 
     SetGLColor( color );
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
-    s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
+    s_Text3DWidth = text->m_Thickness * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
     wxSize size = text->m_Size;
     if( text->m_Mirror )
@@ -625,7 +625,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
                              txt, text->m_Orient, size,
                              text->m_HJustify, text->m_VJustify,
-                             text->m_Width, text->m_Italic,
+                             text->m_Thickness, text->m_Italic,
                              true, Draw3dTextSegm );
             pos += offset;
         }
@@ -636,7 +636,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
                          text->m_Text, text->m_Orient, size,
                          text->m_HJustify, text->m_VJustify,
-                         text->m_Width, text->m_Italic,
+                         text->m_Thickness, text->m_Italic,
                          true,
                          Draw3dTextSegm );
 }

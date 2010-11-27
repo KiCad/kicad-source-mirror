@@ -43,7 +43,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Orient    = source->m_Orient;
     m_Pos       = source->m_Pos;
     m_Layer     = source->m_Layer;
-    m_Width     = source->m_Width;
+    m_Thickness     = source->m_Thickness;
     m_Attributs = source->m_Attributs;
     m_Italic    = source->m_Italic;
     m_Bold      = source->m_Bold;
@@ -103,7 +103,7 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
         {
             sscanf( Line + 2, " %d %d %d %d %d %d",
                     &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y,
-                    &m_Width, &m_Orient );
+                    &m_Thickness, &m_Orient );
 
             // Ensure the text has minimal size to see this text on screen:
             if( m_Size.x < 5 )
@@ -135,9 +135,9 @@ int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
     }
 
      // Set a reasonable width:
-    if( m_Width < 1 )
-        m_Width = 1;
-    m_Width = Clamp_Text_PenSize( m_Width, m_Size );
+    if( m_Thickness < 1 )
+        m_Thickness = 1;
+    m_Thickness = Clamp_Text_PenSize( m_Thickness, m_Size );
 
     return 1;
 }
@@ -168,7 +168,7 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     delete (list);
 
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
-             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Width, m_Orient );
+             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
     fprintf( aFile, "De %d %d %lX %s\n", m_Layer,
              m_Mirror ? 0 : 1,
              m_TimeStamp, style );
@@ -244,8 +244,8 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orient" ), msg, DARKGREEN );
 
-    valeur_param( m_Width, msg );
-    frame->AppendMsgPanel( _( "Width" ), msg, MAGENTA );
+    valeur_param( m_Thickness, msg );
+    frame->AppendMsgPanel( _( "Thickness" ), msg, MAGENTA );
 
     valeur_param( m_Size.x, msg );
     frame->AppendMsgPanel( _( "H Size" ), msg, RED );

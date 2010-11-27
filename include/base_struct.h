@@ -575,7 +575,7 @@ public:
     wxString m_Text;                    /* text! */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
-    int      m_Width;                   /* pen size used to draw this text */
+    int      m_Thickness;                   /* pen size used to draw this text */
     int      m_Orient;                  /* Orient in 0.1 degrees */
     bool     m_Mirror;                  /* Display Normal / mirror */
     int      m_Attributs;               /* flags (visible...) */
@@ -682,7 +682,7 @@ public:
      */
     int GetInterline()
     {
-        return (( m_Size.y * 14 ) / 10) + m_Width;
+        return (( m_Size.y * 14 ) / 10) + m_Thickness;
     }
 
     /**

@@ -210,7 +210,7 @@ void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
      * bounding box calculation. */
 #if 0
     EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif

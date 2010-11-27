@@ -1100,7 +1100,7 @@ public:
      * Function OnOrientFootprints
      * install the dialog box for the common Orient Footprints
      */
-    void         OnOrientFootprints( void );
+    void         OnOrientFootprints( wxCommandEvent& event );
 
     /**
      * Function ReOrientModules
@@ -1108,8 +1108,9 @@ public:
      * @param ModuleMask = mask (wildcard allowed) selection
      * @param Orient = new orientation
      * @param include_fixe = true to orient locked footprints
+     * @return true if some footprints modified, false if no change
      */
-    void         ReOrientModules( const wxString& ModuleMask, int Orient,
+    bool         ReOrientModules( const wxString& ModuleMask, int Orient,
                                   bool include_fixe );
     void         FixeModule( MODULE* Module, bool Fixe );
     void         AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );

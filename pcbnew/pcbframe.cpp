@@ -233,6 +233,9 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                     ID_POPUP_PCB_AUTOPLACE_END_RANGE,
                     WinEDA_PcbFrame::AutoPlace )
 
+    EVT_MENU( ID_POPUP_PCB_REORIENT_ALL_MODULES,
+             WinEDA_PcbFrame::OnOrientFootprints )
+ 
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     WinEDA_PcbFrame::Process_Special_Functions )
 
@@ -253,11 +256,11 @@ END_EVENT_TABLE()
 ///////****************************///////////:
 
 
-WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* father,
+WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* parent,
                                   const wxString& title,
                                   const wxPoint& pos, const wxSize& size,
                                   long style ) :
-    WinEDA_BasePcbFrame( father, PCB_FRAME, title, pos, size, style )
+    WinEDA_BasePcbFrame( parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "PcbFrame" );
     m_Draw_Sheet_Ref = true;            // true to display sheet references

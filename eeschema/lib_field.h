@@ -138,7 +138,7 @@ public:
         m_Name = field.m_Name;
         m_Pos = field.m_Pos;
         m_Size = field.m_Size;
-        m_Width = field.m_Width;
+        m_Thickness = field.m_Thickness;
         m_Orient = field.m_Orient;
         m_Mirror = field.m_Mirror;
         m_Attributs = field.m_Attributs;
@@ -217,8 +217,8 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth( void ) const { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual int DoGetWidth( void ) const { return m_Thickness; }
+    virtual void DoSetWidth( int width ) { m_Thickness = width; }
 };
 
 typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;

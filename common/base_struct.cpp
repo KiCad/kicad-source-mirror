@@ -182,7 +182,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Mirror    = false;                            // display mirror if true
     m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
-    m_Width     = 0;                                /* thickness */
+    m_Thickness     = 0;                                /* thickness */
     m_Italic    = false;                            /* true = italic shape */
     m_Bold      = false;
     m_MultilineAllowed = false;                     // Set to true only for texts that can use multiline.
@@ -203,7 +203,7 @@ EDA_TextStruct::~EDA_TextStruct()
  */
 int EDA_TextStruct::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Width;
+    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
 }
 
 
@@ -262,7 +262,7 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     delete list;
 
     rect.SetSize( textsize );
-    rect.Inflate( m_Width/2 );      // ensure a small margin
+    rect.Inflate( m_Thickness/2 );      // ensure a small margin
 
     /* Now, calculate the rect origin, according to text justification
      * At this point the rectangle origin is the text origin (m_Pos).
@@ -284,7 +284,7 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
         break;
     }
 
-    dy = m_Size.y + m_Width;
+    dy = m_Size.y + m_Thickness;
     switch( m_VJustify )
     {
     case GR_TEXT_VJUSTIFY_TOP:
@@ -419,7 +419,7 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                         GRTraceMode aFillMode, EDA_Colors aAnchor_color,
                                         wxString& aText, wxPoint aPos )
 {
-    int width = m_Width;
+    int width = m_Thickness;
 
     if( aFillMode == FILAIRE )
         width = 0;

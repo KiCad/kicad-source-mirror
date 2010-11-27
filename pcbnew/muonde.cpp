@@ -532,11 +532,11 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
     Module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
     Module->m_Value->m_Pos0.y     = -DEFAULT_SIZE;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;
-    Module->m_Value->m_Width      = DEFAULT_SIZE / 4;
+    Module->m_Value->m_Thickness      = DEFAULT_SIZE / 4;
     Module->m_Reference->m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
     Module->m_Reference->m_Pos0.y = DEFAULT_SIZE;
     Module->m_Reference->m_Pos.y += Module->m_Reference->m_Pos0.y;
-    Module->m_Reference->m_Width  = DEFAULT_SIZE / 4;
+    Module->m_Reference->m_Thickness  = DEFAULT_SIZE / 4;
 
     /* Create 2 pads used in gaps and stubs.
      *  The gap is between these 2 pads

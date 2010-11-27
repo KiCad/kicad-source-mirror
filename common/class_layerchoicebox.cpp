@@ -5,7 +5,6 @@
 #include "colors_selection.h"
 
 #include "bitmaps.h"
-#include "pcbnew_id.h"
 
 #include "hotkeys.h"
 #include "help_common_strings.h"

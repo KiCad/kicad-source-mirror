@@ -304,7 +304,7 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
     newtext->m_Shape = Text->m_Shape;
     newtext->SetSchematicTextOrientation( Text->GetSchematicTextOrientation() );
     newtext->m_Size   = Text->m_Size;
-    newtext->m_Width  = Text->m_Width;
+    newtext->m_Thickness  = Text->m_Thickness;
     newtext->m_Italic = Text->m_Italic;
     newtext->m_Bold   = Text->m_Bold;
 

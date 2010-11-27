@@ -49,7 +49,7 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
                                           MIN( g_ModuleTextSize.x,
                                                g_ModuleTextSize.y ), true );
     Text->m_Size  = g_ModuleTextSize;
-    Text->m_Width = g_ModuleTextWidth;
+    Text->m_Thickness = g_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->m_Curseur;
     Text->SetLocalCoord();
 

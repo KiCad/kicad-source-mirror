@@ -187,7 +187,7 @@ LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
     newitem->m_Convert   = m_Convert;
     newitem->m_Flags     = m_Flags;
     newitem->m_Text      = m_Text;
-    newitem->m_Width     = m_Width;
+    newitem->m_Thickness     = m_Thickness;
     newitem->m_Italic    = m_Italic;
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
@@ -276,7 +276,7 @@ void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
  */
 int LIB_TEXT::GetPenSize( )
 {
-    int     pensize = m_Width;
+    int     pensize = m_Thickness;
 
     if( pensize == 0 )   // Use default values for pen size
     {
@@ -369,7 +369,7 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Thickness, EESCHEMA_INTERNAL_UNIT, true );
 
     frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
