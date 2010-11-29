@@ -41,8 +41,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_edit_module_text_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_3Dfiles_base.cpp
-    dialog_freeroute_exchange.cpp
-    dialog_freeroute_exchange_base.cpp
+    dialogs/dialog_freeroute_exchange.cpp
+    dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
     dialogs/dialog_general_options.cpp
@@ -232,17 +232,17 @@ endif(APPLE)
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
     COMMAND ${CMAKE_COMMAND}
-        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html
-        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help.html
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
         -P ${CMAKE_MODULE_PATH}/Html2C.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html
-    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
-       from ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help.html"
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help.html
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help.html"
     )
 
-set_source_files_properties( dialog_freeroute_exchange.cpp
+set_source_files_properties( dialogs/dialog_freeroute_exchange.cpp
     PROPERTIES
-        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialog_freeroute_exchange_help_html.h
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
     )
 
 ###

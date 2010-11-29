@@ -31,7 +31,7 @@
 
 /**
  * @info for EXCELLON format, see:
- * http://www.excellon.com/applicationengineering/manuals/program.htm
+ * http://www.excellon.com/manuals/program.htm
  * and the CNC-7 manual.
  */
 

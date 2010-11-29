@@ -140,7 +140,7 @@ found in the default search paths." ),
 
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        m_ListCmp->SetSelection( ii, true );
+        m_ListCmp->SetSelection( ii++, true );
 
         if( !component.m_Module.IsEmpty() )
             continue;
@@ -169,7 +169,5 @@ any of the project footprint libraries." ),
                               this );
             }
         }
-
-        ii += 1;
     }
 }

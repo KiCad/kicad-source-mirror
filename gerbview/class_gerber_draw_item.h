@@ -1,6 +1,6 @@
-/*******************************************************************/
-/*	class_gerber_draw_item.h: definitions relatives to tracks, vias and zones */
-/*******************************************************************/
+/*****************************/
+/*	class_gerber_draw_item.h */
+/*****************************/
 
 #ifndef CLASS_GERBER_DRAW_ITEM_H
 #define CLASS_GERBER_DRAW_ITEM_H

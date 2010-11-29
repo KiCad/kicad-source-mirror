@@ -741,13 +741,13 @@ void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig )
     wxArrayString* libname_list = m_Pt_param;
 
     unsigned       indexlib = 0;
-    wxString       cle_config;
+    wxString       configkey;
     for( ; indexlib < libname_list->GetCount(); indexlib++ )
     {
-        cle_config = m_Ident;
+        configkey = m_Ident;
 
         // We use indexlib+1 because first lib name is LibName1
-        cle_config << (indexlib + 1);
-        aConfig->Write( cle_config, libname_list->Item( indexlib ) );
+        configkey << (indexlib + 1);
+        aConfig->Write( configkey, libname_list->Item( indexlib ) );
     }
 }

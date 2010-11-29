@@ -85,7 +85,7 @@ private:
     wxPoint               m_printDialogPosition;
     wxSize                m_printDialogSize;
     bool                  m_printMonochrome;     ///< Print monochrome instead of grey scale.
-    bool                  m_showSheetReference;
+    bool                  m_printSheetReference;
     DIALOG_SCH_FIND*      m_dlgFindReplace;
     wxPoint               m_findDialogPosition;
     wxSize                m_findDialogSize;
@@ -343,8 +343,8 @@ public:
 
     bool             GetPrintMonochrome() { return m_printMonochrome; }
     void             SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
-    bool             GetShowSheetReference() { return m_showSheetReference; }
-    void             SetShowSheetReference( bool aShow ) { m_showSheetReference = aShow; }
+    bool             GetPrintSheetReference() { return m_printSheetReference; }
+    void             SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
     void             SVG_Print( wxCommandEvent& event );
 
     // Plot functions:

@@ -92,7 +92,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* a
 {
     wxASSERT( aParent != NULL );
 
-    m_checkReference->SetValue( aParent->GetShowSheetReference() );
+    m_checkReference->SetValue( aParent->GetPrintSheetReference() );
     m_checkMonochrome->SetValue( aParent->GetPrintMonochrome() );
 }
 
@@ -138,7 +138,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
     }
 
     parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetShowSheetReference( m_checkReference->IsChecked() );
+    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
 
     EndDialog( wxID_CANCEL );
 }
@@ -165,7 +165,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     WinEDA_SchematicFrame* parent = GetParent();
 
     parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetShowSheetReference( m_checkReference->IsChecked() );
+    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
@@ -194,7 +194,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     WinEDA_SchematicFrame* parent = GetParent();
 
     parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetShowSheetReference( m_checkReference->IsChecked() );
+    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
 
     wxPrintDialogData printDialogData( parent->GetPageSetupData().GetPrintData() );
     printDialogData.SetMaxPage( g_RootSheet->CountSheets() );
@@ -333,7 +333,7 @@ void SCH_PRINTOUT::DrawPage()
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
-    bool printReference = parent->GetShowSheetReference();
+    bool printReference = parent->GetPrintSheetReference();
 
     if( printReference )
     {

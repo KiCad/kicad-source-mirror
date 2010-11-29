@@ -342,10 +342,6 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
                                                       &g_DefaultTextLabelSize,
                                                       DEFAULT_SIZE_TEXT, 0,
                                                       1000 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "PrintMonochrome" ),
-                                                       &m_printMonochrome, true ) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ShowSheetReferenceAndTitleBlock" ),
-                                                       &m_showSheetReference, true ) );
 
     return m_projectFileParams;
 }
@@ -542,6 +538,10 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
                                                         &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
                                                         RED ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
+                                                        &m_printMonochrome, true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintSheetReferenceAndTitleBlock" ),
+                                                        &m_printSheetReference, true ) );
 
     return m_configSettings;
 }

@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
 #include "gestfich.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
@@ -71,30 +72,30 @@ void DIALOG_FREEROUTE::OnHelpButtonClick( wxCommandEvent& event )
     help_Dlg.ShowModal();
 }
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_CREATE_EXPORT_DSN_FILE
+/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_CREATE_EXPORT_DSN_FILE
  */
-
 void DIALOG_FREEROUTE::OnExportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ExportToSpecctra( event );
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_IMPORT_FREEROUTE_DSN_FILE
+/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_IMPORT_FREEROUTE_DSN_FILE
  */
-
 void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ImportSpecctraSession(  event );
+
+    /* Connectivity inf must be rebuild.
+     * because for large board it can take some time, this is made only on demand
+     */
+    if( IsOK( this, _("Do you want to rebuild connectivity data ?" ) ) )
+        m_Parent->Compile_Ratsnest( NULL, true );
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RUN_FREEROUTE
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RUN_FREEROUTE
  */
-
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
     wxString FullFileName = FindKicadFile( wxT( "freeroute.jnlp" ) );
@@ -115,10 +116,8 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
+/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
  */
-
 void DIALOG_FREEROUTE::OnVisitButtonClick( wxCommandEvent& event )
 {
     wxString command = m_FreerouteURLName->GetValue();
@@ -127,10 +126,8 @@ void DIALOG_FREEROUTE::OnVisitButtonClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
+/*  wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
  */
-
 void DIALOG_FREEROUTE::OnCancelButtonClick( wxCommandEvent& event )
 {
     EndModal(wxID_CANCEL);
@@ -149,10 +146,8 @@ void DIALOG_FREEROUTE::OnOKButtonClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXT_EDIT_FR_URL
+/* wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXT_EDIT_FR_URL
  */
-
 void DIALOG_FREEROUTE::OnTextEditFrUrlUpdated( wxCommandEvent& event )
 {
     m_FreeRouteSetupChanged = true;
