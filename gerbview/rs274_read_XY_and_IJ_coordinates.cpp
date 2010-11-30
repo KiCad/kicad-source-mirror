@@ -201,3 +201,48 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
     m_IJPos = pos;
     return pos;
 }
+
+
+// Helper functions:
+
+/**
+ * Function ReadInt
+ * reads an int from an ASCII character buffer.  If there is a comma after the
+ * int, then skip over that.
+ * @param text A reference to a character pointer from which bytes are read
+ *    and the pointer is advanced for each byte read.
+ * @param aSkipSeparator = true (default) to skip comma
+ * @return int - The int read in.
+ */
+int ReadInt( char*& text, bool aSkipSeparator = true )
+{
+    int ret = (int) strtol( text, &text, 10 );
+
+    if( *text == ',' || isspace( *text ) )
+        if( aSkipSeparator )
+            ++text;
+
+    return ret;
+}
+
+
+/**
+ * Function ReadDouble
+ * reads a double from an ASCII character buffer. If there is a comma after
+ * the double, then skip over that.
+ * @param text A reference to a character pointer from which the ASCII double
+ *          is read from and the pointer advanced for each character read.
+ * @param aSkipSeparator = true (default) to skip comma
+ * @return double
+ */
+double ReadDouble( char*& text, bool aSkipSeparator = true )
+{
+    double ret = strtod( text, &text );
+
+    if( *text == ',' || isspace( *text ) )
+        if( aSkipSeparator )
+            ++text;
+
+    return ret;
+}
+

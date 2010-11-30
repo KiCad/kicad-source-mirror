@@ -34,6 +34,7 @@
 #include <set>
 
 #include "base_struct.h"
+#include "class_am_param.h"
 
 
 /**
@@ -68,7 +69,7 @@ class AM_PRIMITIVE
 {
 public:
     AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
-    DCODE_PARAMS    params;             ///< A sequence of parameters used by
+    AM_PARAMS       params;             ///< A sequence of parameters used by
                                         //   the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
