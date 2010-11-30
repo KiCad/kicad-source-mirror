@@ -29,7 +29,7 @@
 
 #include "class_am_param.h"
 
-extern int ReadInt( char*& text, bool aSkipSeparator = true );
+extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 
 /*Class AM_PARAM
@@ -61,6 +61,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
     }
 }
 
+
 /**
  * Function ReadParam
  * Read one aperture macro parameter
@@ -76,6 +77,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
 bool AM_PARAM::ReadParam( char*& aText  )
 {
     bool found = false;
+
     if( *aText == '$' ) // value defined later, in aperture description
     {
         ++aText;
@@ -91,8 +93,9 @@ bool AM_PARAM::ReadParam( char*& aText  )
     // Skip extra characters and separator
     while( *aText && (*aText != ',') && (*aText != '*') )
         aText++;
+
     if( *aText == ',' )
-         aText++;
+        aText++;
 
     return found;
 }

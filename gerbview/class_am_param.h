@@ -31,74 +31,74 @@
 #define _AM_PARAM_H_
 
 /*
-An aperture macro defines a complex shape and is a list of aperture primitives.
-Each aperture primitive defines a simple shape (circle, rect, regular polygon...)
-Inside a given aperture primitive, a fixed list of parameters defines info
-about the shape: size, thickness, number of vertex ...
-
-Each parameter can be an immediate value or a defered value.
-When value is defered, it is defined when the aperture macro is instancied by
-an ADD macro command
-
-Actual values of a parmeter can also be the result of an arithmetic operation.
-
-Here is some examples:
-An immediate value:
-3.5
-A deferend value:
-$2  means: replace me by the second value given in the ADD command
-Actual value as arithmetic calculation:
-$2/2+1
-
-Note also a defered parameter can be defined in aperture macro,
-but outside aperture primitives. Example
-%AMRECTHERM*
-$4=$3/2*    parameter $4 is half value of parameter $3
-21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
-For the aperture primitive, parameters $1 to $3 will be defined in ADD command,
-and $4 is defined inside the macro
-
-Some examples of aperture macro definition
-A simple definition, no parameters:
-%AMMOIRE10*
-6,0,0,0.350000,0.005,0.050,3,0.005,0.400000,0.0*%
-Example of instanciation:
-%ADD19THERM19*%
-
-A simple definition, one parameter:
-%AMCIRCLE*
-1,1,$1,0,0*
-Example of instanciation:
-%ADD11CIRCLE,.5*%
-
-A definition, with parameters and arithmetic operations:
-%AMVECTOR*
-2,1,$1,0,0,$2+1,$3,-135*%
-Example of instanciation:
-%ADD12VECTOR,0.05X0X0*%
-
-A more complicated aperture macro definition, with parameters and arihmetic operations:
-%AMRNDREC*
-0 this is a comment*
-21,1,$1+$1,$2+$2-$3-$3,0,0,0*
-21,1,$1+$1-$3-$3,$2+$2,0,0,0*
-1,1,$3+$3,$1-$3,$2-$3*
-1,1,$3+$3,$3-$1,$2-$3*
-1,1,$3+$3,$1-$3,$3-$2*
-1,1,$3+$3,$3-$1,$3-$2*%
-Example of instanciation:
-
-A more complicated sample of aperture macro definition:
-G04 Rectangular Thermal Macro, params: W/2, H/2, T/2 *
-%AMRECTHERM*
-$4=$3/2*
-21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
-21,1,$1-$3,$2-$3,0-$1/2-$4,$2/2+$4,0*
-21,1,$1-$3,$2-$3,$1/2+$4,0-$2/2-$4,0*
-21,1,$1-$3,$2-$3,$1/2+$4,$2/2+$4,0*%
-Example of instanciation:
-%ADD28RECTHERM,0.035591X0.041496X0.005000*%
-*/
+ *  An aperture macro defines a complex shape and is a list of aperture primitives.
+ *  Each aperture primitive defines a simple shape (circle, rect, regular polygon...)
+ *  Inside a given aperture primitive, a fixed list of parameters defines info
+ *  about the shape: size, thickness, number of vertex ...
+ *
+ *  Each parameter can be an immediate value or a defered value.
+ *  When value is defered, it is defined when the aperture macro is instancied by
+ *  an ADD macro command
+ *
+ *  Actual values of a parameter can also be the result of an arithmetic operation.
+ *
+ *  Here is some examples:
+ *  An immediate value:
+ *  3.5
+ *  A deferend value:
+ *  $2  means: replace me by the second value given in the ADD command
+ *  Actual value as arithmetic calculation:
+ *  $2/2+1
+ *
+ *  Note also a defered parameter can be defined in aperture macro,
+ *  but outside aperture primitives. Example
+ *  %AMRECTHERM*
+ *  $4=$3/2*    parameter $4 is half value of parameter $3
+ *  21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
+ *  For the aperture primitive, parameters $1 to $3 will be defined in ADD command,
+ *  and $4 is defined inside the macro
+ *
+ *  Some examples of aperture macro definition
+ *  A simple definition, no parameters:
+ *  %AMMOIRE10*
+ *  6,0,0,0.350000,0.005,0.050,3,0.005,0.400000,0.0*%
+ *  Example of instanciation:
+ *  %ADD19THERM19*%
+ *
+ *  A simple definition, one parameter:
+ *  %AMCIRCLE*
+ *  1,1,$1,0,0*
+ *  Example of instanciation:
+ *  %ADD11CIRCLE,.5*%
+ *
+ *  A definition, with parameters and arithmetic operations:
+ *  %AMVECTOR*
+ *  2,1,$1,0,0,$2+1,$3,-135*%
+ *  Example of instanciation:
+ *  %ADD12VECTOR,0.05X0X0*%
+ *
+ *  A more complicated aperture macro definition, with parameters and arihmetic operations:
+ *  %AMRNDREC*
+ *  0 this is a comment*
+ *  21,1,$1+$1,$2+$2-$3-$3,0,0,0*
+ *  21,1,$1+$1-$3-$3,$2+$2,0,0,0*
+ *  1,1,$3+$3,$1-$3,$2-$3*
+ *  1,1,$3+$3,$3-$1,$2-$3*
+ *  1,1,$3+$3,$1-$3,$3-$2*
+ *  1,1,$3+$3,$3-$1,$3-$2*%
+ *  Example of instanciation:
+ *
+ *  A more complicated sample of aperture macro definition:
+ *  G04 Rectangular Thermal Macro, params: W/2, H/2, T/2 *
+ *  %AMRECTHERM*
+ *  $4=$3/2*
+ *  21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
+ *  21,1,$1-$3,$2-$3,0-$1/2-$4,$2/2+$4,0*
+ *  21,1,$1-$3,$2-$3,$1/2+$4,0-$2/2-$4,0*
+ *  21,1,$1-$3,$2-$3,$1/2+$4,$2/2+$4,0*%
+ *  Example of instanciation:
+ *  %ADD28RECTHERM,0.035591X0.041496X0.005000*%
+ */
 
 #include <vector>
 
@@ -114,8 +114,7 @@ Example of instanciation:
  */
 class AM_PARAM
 {
-public:
-    AM_PARAM() :
+public: AM_PARAM() :
         index( -1 ),
         value( 0.0 )
     {}
@@ -146,6 +145,7 @@ public:
     {
         index = aIndex;
     }
+
 
     /**
      * Function ReadParam
