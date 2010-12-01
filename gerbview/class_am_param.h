@@ -103,49 +103,150 @@
 #include <vector>
 
 #include "dcode.h"
+/*
+Values of a parameter can be the result of an arithmetic operation,
+between immediate values and defered value.
+From an idea found in Gerbv, here is the way to evaluate a parameter.
+a AM_PARAM_ITEM holds info about operands and operators in a parameter definition
+( a AM_PARAM ) like $2+$2-$3-$3/2
+
+There is no precedence defined in gerber RS274X, so actual value is calculated step to step.
+Parameter definition is described by a very primitive assembler.
+This "program "should describe how to calculate the parameter.
+The assembler consist of 8 instruction intended for a stackbased machine.
+The instructions are:
+NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, EQUATE
+
+The instructions
+----------------
+NOP  : The no operation. This is the default instruction and are
+       added as a security measure.
+PUSHVALUE : Pushes an arithmetical value on the stack. This machine only works with floats
+       on the stack.
+PUSHPARM: Pushes a defered parameter onto the stack. Gerber aperture macros accepts
+       parameters to be set when later declared, so the same macro can
+       be used at several instances. Which parameter to be set is an integer
+       and starts with 1. definition is like $1 or $3
+ADD  : The mathematical operation +. Takes the two uppermost values on the
+       the stack, adds them and pushes the result back onto the stack.
+SUB  : Same as ADD, but with -.
+MUL  : Same as ADD, but with *.
+DIV  : Same as ADD, but with /.
+POPVALUE : used when evaluate the expression: store current calculated value
+*/
+
+enum parm_item_type
+{
+    NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, POPVALUE
+};
 
 /**
  * Class AM_PARAM
- * holds a parameter for an "aperture macro" as defined within
+ * holds an operand for an AM_PARAM as defined within
  * standard RS274X.  The \a value field can be a constant, i.e. "immediate"
  * parameter or it may not be used if this param is going to defer to the
  * referencing aperture macro.  In that case, the \a index field is an index
  * into the aperture macro's parameters.
  */
-class AM_PARAM
+class AM_PARAM_ITEM
 {
-public: AM_PARAM() :
-        index( -1 ),
-        value( 0.0 )
-    {}
+private:
+    parm_item_type m_type;      // the type of item
+    double m_dvalue;            // the value, for PUSHVALUE type item
+    int    m_ivalue;            // the integer value, for PUSHPARM type item
 
-    double GetValue( const D_CODE* aDcode ) const;
+public:
+    AM_PARAM_ITEM( parm_item_type aType = NOP, double aValue = 0.0)
+    {
+        m_type = aType;
+        m_dvalue = aValue;
+        m_ivalue = 0;
+    }
+    AM_PARAM_ITEM( parm_item_type aType = NOP, int aValue = 0)
+    {
+        m_type = aType;
+        m_dvalue = 0.0;
+        m_ivalue = aValue;
+    }
 
     void SetValue( double aValue )
     {
-        value = aValue;
-        index = -1;
+        m_dvalue = aValue;
     }
+    double GetValue( ) const
+    {
+        return m_dvalue;
+    }
+    parm_item_type GetType() const
+    {
+        return m_type;
+    }
+    unsigned GetIndex() const
+    {
+        return (unsigned) m_ivalue;
+    }
+    bool IsOperator() const
+    {
+        return m_type == ADD || m_type == SUB || m_type == MUL || m_type == DIV;
+    }
+    bool IsOperand() const
+    {
+        return m_type == PUSHVALUE || m_type == PUSHPARM;
+    }
+    bool IsDefered() const
+    {
+        return m_type == PUSHPARM;
+    }
+};
 
+/**
+ * Class AM_PARAM
+ * holds a parameter value for an "aperture macro" as defined within
+ * standard RS274X.  The parameter can be a constant, i.e. "immediate" parameter,
+ * or depend on some defered values, defined in a D_CODE, by the ADD command.
+ * Note the actual value could need an evaluation from an arithmetical expression
+ * items in the expression are stored in .
+ * A simple definition is just a value stored in one item in m_paramStack
+ */
+class AM_PARAM
+{
+private:
+    int    m_index;     // has meaning to define parameter local to an aperture macro
+    std::vector<AM_PARAM_ITEM> m_paramStack;    // list of operands/operators to evalutate the actual value
+                                                // if a par def is $3/2, there are 3 items in stack:
+                                                // 3 (type PUSHPARM) , / (type DIV), 2 (type PUSHVALUE)
+
+public:
+    AM_PARAM();
+
+    /**
+     * function PushOperator
+     * add an operator/operand to the current stack
+     * @param aType = the type of item (NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, EQUATE)
+     * @param aValue = the item value, double for PUSHVALUE or int for PUSHPARM type.
+     */
+    void PushOperator( parm_item_type aType, double aValue );
+    void PushOperator( parm_item_type aType, int aValue = 0);
+
+    double GetValue( const D_CODE* aDcode ) const;
 
     /**
      * Function IsImmediate
      * tests if this AM_PARAM holds an immediate parameter or is a pointer
      * into a parameter held by an owning D_CODE.
+     * @return true if the value is immediate, i.e. no defered value in operands used in its definition
      */
-    bool IsImmediate() const { return index == -1; }
+    bool IsImmediate() const;
 
     unsigned GetIndex() const
     {
-        return (unsigned) index;
+        return (unsigned) m_index;
     }
-
 
     void SetIndex( int aIndex )
     {
-        index = aIndex;
+        m_index = aIndex;
     }
-
 
     /**
      * Function ReadParam
@@ -160,13 +261,6 @@ public: AM_PARAM() :
      * @return true if a param is read, or false
      */
     bool ReadParam( char*& aText  );
-
-private:
-    int    index;       ///< if -1, then \a value field is an immediate value,
-                        //   else this is an index into parent's
-                        //   D_CODE.m_am_params.
-    double value;       ///< if IsImmediate()==true then use the value, else
-                        //   not used.
 };
 
 typedef std::vector<AM_PARAM> AM_PARAMS;

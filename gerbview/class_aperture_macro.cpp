@@ -56,7 +56,6 @@ static wxPoint mapPt( double x, double y, bool isMetric )
     return ret;
 }
 
-
 /**
  * Function mapExposure
  * translates the first parameter from an aperture macro into a current
@@ -761,4 +760,34 @@ int APERTURE_MACRO::GetShapeDim( GERBER_DRAW_ITEM* aParent )
     }
 
     return dim;
+}
+
+
+/**
+ * function GetLocalParam
+ * Usually, parameters are defined inside the aperture primitive
+ * using immediate mode or defered mode.
+ * in defered mode the value is defined in a DCODE that want to use the aperture macro.
+ * But some parameters are defined outside the aperture primitive
+ * and are local to the aperture macro
+ * @return the value of a defered parameter defined inside the aperture macro
+ * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
+ */
+double APERTURE_MACRO::GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const
+{
+    // find parameter descr.
+    const AM_PARAM * param = NULL;
+    for( unsigned ii = 0; ii < m_localparamStack.size(); ii ++ )
+    {
+        if( m_localparamStack[ii].GetIndex() == aParamId )
+        {
+            param = &m_localparamStack[ii];
+            break;
+        }
+    }
+    if ( param == NULL )    // not found
+        return 0.0;
+    // Evaluate parameter
+    double value = param->GetValue( aDcode );
+    return value;
 }

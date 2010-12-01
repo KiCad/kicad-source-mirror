@@ -837,12 +837,15 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         // it can be: a parameter declaration like $1=$2/4
         // or a digit (macro primitive selection)
         // all other symbols are illegal.
-        if( *text == '$' )  // parameter declaration, not yet supported
+        if( *text == '$' )  // local parameter declaration, inside the aperture macro
         {
-            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Operator $ not yet supported here, line: \"%s\"" ),
-                        GetChars( am.name ), GetChars( CONV_FROM_UTF8( buff ) ) );
-            ReportMessage( msg );
-            primitive_type = AMP_COMMENT;
+            am.m_localparamStack.push_back( AM_PARAM() );
+            AM_PARAM& param = am.m_localparamStack.back();
+            text = GetNextLine(  buff, text, gerber_file );
+            if( text == NULL)   // End of File
+                return false;
+            param.ReadParam( text );
+            continue;
         }
         else if( !isdigit(*text)  )     // Ill. symbol
         {
