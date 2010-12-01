@@ -193,7 +193,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             nextpad = pad->Next();  // pad pointer can be modified by next code, so calculate the next pad here
             if( !pad->IsOnLayer( GetLayer() ) )
             {
-                /* Test fo pads that are on top or bottom only and have a hole.
+                /* Test for pads that are on top or bottom only and have a hole.
                  * There are curious pads but they can be used for some components that are inside the
                  * board (in fact inside the hole. Some photo diodes and Leds are like this)
                  */
@@ -363,30 +363,28 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 
 // Now we remove all unused thermal stubs.
-#define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
-
-#ifdef REMOVE_UNUSED_THERMAL_STUBS
-
-// Test thermal stubs connections and add polygons to remove unconnected stubs.
-    cornerBufferPolysToSubstract.clear();
-    BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this, s_Correction, s_thermalRot );
-
-    /* remove copper areas */
-    if( cornerBufferPolysToSubstract.size() )
+    if( m_PadOption == THERMAL_PAD )
     {
-        KPolygonSet polyset_holes;
-        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
-        polyset_zone_solid_areas -= polyset_holes;
+        cornerBufferPolysToSubstract.clear();
+        // Test thermal stubs connections and add polygons to remove unconnected stubs.
+        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this, s_Correction, s_thermalRot );
 
-        /* put these areas in m_FilledPolysList */
-        m_FilledPolysList.clear();
-        CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
-        if( GetNet() > 0 )
-            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+        /* remove copper areas */
+        if( cornerBufferPolysToSubstract.size() )
+        {
+            KPolygonSet polyset_holes;
+            AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+            polyset_zone_solid_areas -= polyset_holes;
+
+            /* put these areas in m_FilledPolysList */
+            m_FilledPolysList.clear();
+            CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
+            if( GetNet() > 0 )
+                Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+        }
     }
 
-#endif  // REMOVE_UNUSED_THERMAL_STUBS
-
+    cornerBufferPolysToSubstract.clear();
 }
 
 void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>&

@@ -34,7 +34,18 @@
 #include <set>
 
 #include "base_struct.h"
+#include "class_am_param.h"
 
+/*
+ *  An aperture macro defines a complex shape and is a list of aperture primitives.
+ *  Each aperture primitive defines a simple shape (circle, rect, regular polygon...)
+ *  Inside a given aperture primitive, a fixed list of parameters defines info
+ *  about the shape: size, thickness, number of vertex ...
+ *
+ *  Each parameter can be an immediate value or a defered value.
+ *  When value is defered, it is defined when the aperture macro is instancied by
+ *  an ADD macro command
+ */
 
 /**
  * Enum AM_PRIMITIVE_ID
@@ -68,13 +79,12 @@ class AM_PRIMITIVE
 {
 public:
     AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
-    DCODE_PARAMS    params;             ///< A sequence of parameters used by
+    AM_PARAMS       params;             ///< A sequence of parameters used by
                                         //   the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
 
-public:
-    AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
+public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         primitive_id = aId;
         m_GerbMetric = aGerbMetric;
@@ -88,7 +98,7 @@ public:
      * returns the first parameter in integer form.  Some but not all primitives
      * use the first parameter as an exposure control.
      */
-    int GetExposure( GERBER_DRAW_ITEM* aParent ) const;
+    int  GetExposure( GERBER_DRAW_ITEM* aParent ) const;
 
     /**
      * Function mapExposure
@@ -131,7 +141,7 @@ public:
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
-    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
 private:
 
@@ -183,7 +193,7 @@ struct APERTURE_MACRO
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
-    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
 };
 
 

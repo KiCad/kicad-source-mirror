@@ -23,6 +23,7 @@ set(DIALOGS_SRCS
 
 set(GERBVIEW_SRCS
     block.cpp
+    class_am_param.cpp
     class_aperture_macro.cpp
     class_GERBER.cpp
     class_gerber_draw_item.cpp

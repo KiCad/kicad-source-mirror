@@ -5,14 +5,14 @@
 #include "fctsys.h"
 #include "common.h"
 
-//#include "macros.h"
 #include "gerbview.h"
 #include "class_GERBER.h"
 
-#define CODE( x, y ) ( ( (x) << 8 ) + (y) )
+extern int ReadInt( char*& text, bool aSkipSeparator = true );
+extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 
-// Helper function to read a primitive macro param (TODO: make it DCODE_PARAM function)
-static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  );
+
+#define CODE( x, y ) ( ( (x) << 8 ) + (y) )
 
 // See rs274xrevd_e.pdf, table 1: RS-274X parameters order of entry
 // in gerber files, when a coordinate is given (like X78Y600 or I0J80):
@@ -89,48 +89,6 @@ static int ReadXCommand( char*& text )
         return -1;
 
     return result;
-}
-
-
-/**
- * Function ReadInt
- * reads an int from an ASCII character buffer.  If there is a comma after the
- * int, then skip over that.
- * @param text A reference to a character pointer from which bytes are read
- *    and the pointer is advanced for each byte read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return int - The int read in.
- */
-static int ReadInt( char*& text, bool aSkipSeparator = true )
-{
-    int ret = (int) strtol( text, &text, 10 );
-
-    if( *text == ',' || isspace( *text ) )
-        if( aSkipSeparator )
-            ++text;
-
-    return ret;
-}
-
-
-/**
- * Function ReadDouble
- * reads a double from an ASCII character buffer. If there is a comma after
- * the double, then skip over that.
- * @param text A reference to a character pointer from which the ASCII double
- *          is read from and the pointer advanced for each character read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return double
- */
-static double ReadDouble( char*& text, bool aSkipSeparator = true )
-{
-    double ret = strtod( text, &text );
-
-    if( *text == ',' || isspace( *text ) )
-        if( aSkipSeparator )
-            ++text;
-
-    return ret;
 }
 
 
@@ -952,14 +910,14 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         int i;
         for( i = 0; i < paramCount && *text && *text != '*'; ++i )
         {
-            prim.params.push_back( DCODE_PARAM() );
+            prim.params.push_back( AM_PARAM() );
 
-            DCODE_PARAM& param = prim.params.back();
+            AM_PARAM& param = prim.params.back();
 
             text = GetNextLine(  buff, text, gerber_file );
             if( text == NULL)   // End of File
                 return false;
-            ReadMacroParam( param, text );
+            param.ReadParam( text );
         }
 
         if( i < paramCount )
@@ -984,14 +942,14 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
             for( int i = 0; i < paramCount && *text != '*'; ++i )
             {
-                prim.params.push_back( DCODE_PARAM() );
+                prim.params.push_back( AM_PARAM() );
 
-                DCODE_PARAM& param = prim.params.back();
+                AM_PARAM& param = prim.params.back();
 
                 text = GetNextLine(  buff, text, gerber_file );
                 if( text == NULL )  // End of File
                     return false;
-                ReadMacroParam( param, text );
+                param.ReadParam( text );
             }
         }
 
@@ -1003,37 +961,3 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
     return true;
 }
 
-/**
- * Function ReadMacroParam
- * Read one aperture macro parameter
- * a parameter can be:
- *      a number
- *      a reference to an aperture definition parameter value: $1 ot $3 ...
- * a parameter definition can be complex and have operators between numbers and/or other parameter
- * like $1+3 or $2x2..
- * Parameters are separated by a comma ( of finish by *)
- * Return if a param is read, or false
- */
-static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  )
-{
-    bool found = false;
-    if( *aText == '$' ) // value defined later, in aperture description
-    {
-        ++aText;
-        aParam.SetIndex( ReadInt( aText, false ) );
-        found = true;
-    }
-    else
-    {
-        aParam.SetValue( ReadDouble( aText, false ) );
-        found = true;
-    }
-
-    // Skip extra characters and separator
-    while( *aText && (*aText != ',') && (*aText != '*') )
-        aText++;
-    if( *aText == ',' )
-         aText++;
-
-    return found;
-}
