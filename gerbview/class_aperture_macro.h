@@ -45,6 +45,13 @@
  *  Each parameter can be an immediate value or a defered value.
  *  When value is defered, it is defined when the aperture macro is instancied by
  *  an ADD macro command
+ *  Note also a defered parameter can be defined in aperture macro,
+ *  but outside aperture primitives. Example
+ *  %AMRECTHERM*
+ *  $4=$3/2*    parameter $4 is half value of parameter $3
+ *  21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
+ *  For the aperture primitive, parameters $1 to $3 will be defined in ADD command,
+ *  and $4 is defined inside the macro
  */
 
 /**
@@ -83,7 +90,6 @@ public:
                                         //   the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
-
 public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         primitive_id = aId;
@@ -167,7 +173,27 @@ struct APERTURE_MACRO
     wxString      name;             ///< The name of the aperture macro
     AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
 
+    /*  A defered parameter can be defined in aperture macro,
+     *  but outside aperture primitives. Example
+     *  %AMRECTHERM*
+     *  $4=$3/2*    parameter $4 is half value of parameter $3
+     * m_localparamStack handle a list of local defered parameters
+     */
+    AM_PARAMS m_localparamStack;
+
     /**
+     * function GetLocalParam
+     * Usually, parameters are defined inside the aperture primitive
+     * using immediate mode or defered mode.
+     * in defered mode the value is defined in a DCODE that want to use the aperture macro.
+     * But some parameters are defined outside the aperture primitive
+     * and are local to the aperture macro
+     * @return the value of a defered parameter defined inside the aperture macro
+     * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
+     */
+    double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;
+
+   /**
      * Function DrawApertureMacroShape
      * Draw the primitive shape for flashed items.
      * When an item is flashed, this is the shape of the item

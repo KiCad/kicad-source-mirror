@@ -146,7 +146,7 @@ public:
     }
 
 
-    APERTURE_MACRO* GetMacro() { return m_Macro; }
+    APERTURE_MACRO* GetMacro() const { return m_Macro; }
 
     /**
      * Function ShowApertureType
