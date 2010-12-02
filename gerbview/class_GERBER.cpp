@@ -158,6 +158,7 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
+    m_DecimalFormat = false;                        // true: use floating point notations for coordinates
     m_ImageOffset.x   = m_ImageOffset.y = 0;        // Coord Offset, from IO command
     m_ImageRotation = 0;                            // Allowed 0, 90, 180, 270 (in degree)
     m_LocalRotation = 0.0;                          // Layer totation from RO command (in 0.1 degree)

@@ -11,13 +11,13 @@
 
 
 /* These routines read the text string point from Text.
- * After use, advanced Text the beginning of the sequence unread
+ * On exit, Text points the beginning of the sequence unread
  */
 wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
-    bool    is_float   = false;
+    bool    is_float   = m_DecimalFormat;
     char*   text;
     char    line[256];
 
@@ -41,7 +41,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             nbdigits = 0;
             while( IsNumber( *Text ) )
             {
-                if( *Text == '.' )
+                if( *Text == '.' )  // Force decimat format if reading a floating point number
                     is_float = true;
 
                 // count digits only (sign and decimal point are not counted)

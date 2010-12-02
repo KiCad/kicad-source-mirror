@@ -4,6 +4,12 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-02, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Pcbnew:
+    For zone filling algo, change the default polygon library from Kbool to Boost::polygon.
+
+
 2010-dec-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 Gerbview:

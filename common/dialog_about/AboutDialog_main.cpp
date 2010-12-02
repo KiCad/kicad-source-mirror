@@ -13,10 +13,10 @@
 
 
 /* Used icons:
- *  lang_xx_xpm[];  // Icons of various national flags
- *  show_3d_xpm[];   // 3D icon
+ *  lang_xx_xpm[];      // Icons of various national flags
+ *  show_3d_xpm[];      // 3D icon
  *  edit_module_xpm[];
- *  kicad_icon_xpm[];    // Icon of the application
+ *  kicad_icon_xpm[];   // Icon of the application
  */
 #include "bitmaps.h"
 #include "wxstruct.h"
@@ -73,7 +73,14 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 #else
         << wxT( " Ansi " );
 #endif
+    libVersion << wxT( "and " )
 
+#if USE_BOOST_POLYGON_LIBRARY
+        << wxT( "boost::polygon" );
+#else
+        << wxT( "kbool library" );
+#endif
+    libVersion << wxT( "\n" );
 
     /* Operating System Information */
 
@@ -281,8 +288,8 @@ bool ShowAboutDialog( wxWindow* parent )
  * Wraps the given url with a HTML anchor tag containing a hyperlink text reference
  * to form a HTML hyperlink.
  *
- * @url the url that will be embedded in an anchor tag containing a hyperlink reference
- * @description the optional describing text that will be represented as a hyperlink.
+ * @param url the url that will be embedded in an anchor tag containing a hyperlink reference
+ * @param description the optional describing text that will be represented as a hyperlink.
  *  If not specified the url will be used as hyperlink.
  * @return a HTML conform hyperlink like <a href='url'>description</a>
  */

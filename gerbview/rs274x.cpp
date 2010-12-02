@@ -151,7 +151,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 {
     int      code;
     int      xy_seq_len, xy_seq_char;
-    bool     ok = TRUE;
+    bool     ok = true;
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
@@ -173,22 +173,29 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 break;
 
             case 'L':       // No Leading 0
-                m_NoTrailingZeros = FALSE;
+                m_DecimalFormat = false;
+                m_NoTrailingZeros = false;
                 text++;
                 break;
 
             case 'T':       // No trailing 0
-                m_NoTrailingZeros = TRUE;
+                m_DecimalFormat = false;
+                m_NoTrailingZeros = true;
+                text++;
+                break;
+
+            case 'D':       // Decimal format: sometimes found, but not really documented
+                m_DecimalFormat = true;
                 text++;
                 break;
 
             case 'A':       // Absolute coord
-                m_Relative = FALSE;
+                m_Relative = false;
                 text++;
                 break;
 
-            case 'I':       // Absolute coord
-                m_Relative = TRUE;
+            case 'I':       // Relative coord
+                m_Relative = true;
                 text++;
                 break;
 
@@ -236,7 +243,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
             default:
                 GetEndOfBlock( buff, text, m_Current_File );
-                ok = FALSE;
+                ok = false;
                 break;
             }
         }
@@ -277,9 +284,9 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case MODE_OF_UNITS:
         code = ReadXCommand( text );
         if( code == INCH )
-            m_GerbMetric = FALSE;
+            m_GerbMetric = false;
         else if( code == MILLIMETER )
-            m_GerbMetric = TRUE;
+            m_GerbMetric = true;
         conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
         break;
 
@@ -505,7 +512,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case INCLUDE_FILE:
         if( m_FilesPtr >= INCLUDE_FILES_CNT_MAX )
         {
-            ok = FALSE;
+            ok = false;
             ReportMessage( _( "Too many include files!!" ) );
             break;
         }
@@ -518,7 +525,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         {
             msg.Printf( wxT( "include file <%s> not found." ), line );
             ReportMessage( msg );
-            ok = FALSE;
+            ok = false;
             m_Current_File = m_FilesList[m_FilesPtr];
             break;
         }
@@ -542,11 +549,11 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
          */
         if( *text++ != 'D' )
         {
-            ok = FALSE;
+            ok = false;
             break;
         }
 
-        m_Has_DCode = TRUE;
+        m_Has_DCode = true;
 
         code = ReadInt( text );
 
@@ -593,7 +600,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
 
             case 'O':               // oval
@@ -631,7 +638,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                         wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
 
             case 'P':
@@ -679,7 +686,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                         wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
             }
         }
@@ -722,7 +729,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
 
     default:
-        ok = FALSE;
+        ok = false;
         break;
     }
 
@@ -739,10 +746,10 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
         while( (text < buff + GERBER_BUFZ) && *text )
         {
             if( *text == '*' )
-                return TRUE;
+                return true;
 
             if( *text == '%' )
-                return TRUE;
+                return true;
 
             text++;
         }
@@ -753,7 +760,7 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
         text = buff;
     }
 
-    return FALSE;
+    return false;
 }
 
 /**

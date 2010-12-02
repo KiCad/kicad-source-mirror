@@ -92,6 +92,8 @@ public:
     bool               m_GerbMetric;                            // false = Inches, true = metric
     bool               m_Relative;                              // false = absolute Coord, true = relative Coord
     bool               m_NoTrailingZeros;                       // true: remove tailing zeros.
+    bool               m_DecimalFormat;                         // true: use floating point notations for coordinates
+                                                                // If true, overrides m_NoTrailingZeros parameter.
     wxPoint            m_ImageOffset;                           // Coord Offset, from IO command
     wxSize             m_FmtScale;                              // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
     wxSize             m_FmtLen;                                // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
