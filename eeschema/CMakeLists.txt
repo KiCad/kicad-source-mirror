@@ -27,6 +27,7 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
+    dialogs/dialog_color_config.cpp
     dialogs/dialog_plot_schematic_DXF.cpp
     dialogs/dialog_plot_schematic_DXF_base.cpp
     dialogs/dialog_plot_schematic_HPGL.cpp
@@ -73,7 +74,6 @@ set(EESCHEMA_SRCS
     dialogs/dialog_SVG_print_base.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
-    eelayer.cpp
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp

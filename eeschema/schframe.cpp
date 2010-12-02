@@ -75,7 +75,7 @@ BEGIN_EVENT_TABLE( WinEDA_SchematicFrame, WinEDA_DrawFrame )
                     ID_PREFERENCES_HOTKEY_END,
                     WinEDA_SchematicFrame::Process_Config )
 
-    EVT_TOOL( ID_COLORS_SETUP, WinEDA_SchematicFrame::Process_Config )
+    EVT_MENU( ID_COLORS_SETUP, WinEDA_SchematicFrame::OnColorConfig )
     EVT_TOOL( ID_OPTIONS_SETUP, WinEDA_SchematicFrame::OnSetOptions )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,

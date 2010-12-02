@@ -64,6 +64,7 @@ set(BITMAP_SRCS
     component_select_alternate_shape.xpm
     config.xpm
     CopyBlock.xpm
+    copyComponent.xmp
     copy.xpm
     copper_layers_setup.cpp
     Cursor_Shape.xpm

@@ -119,6 +119,10 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          wxBitmap( import_cmp_from_lib_xpm ),
                          _( "Load component to edit from the current lib" ) );
 
+    m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
+                         wxBitmap( copyComponent_xpm ),
+                         _( "Create a new component from the current one" ) );
+
     m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
                          wxBitmap( save_part_in_mem_xpm ),
                          _( "Update current component in current library" ) );

@@ -1597,6 +1597,14 @@ LIB_ALIAS* LIB_COMPONENT::RemoveAlias( LIB_ALIAS* aAlias )
 }
 
 
+void LIB_COMPONENT::RemoveAllAliases()
+{
+    // Remove all of the aliases except the root alias.
+    while( m_aliases.size() > 1 )
+        m_aliases.pop_back();
+}
+
+
 LIB_ALIAS* LIB_COMPONENT::GetAlias( const wxString& aName )
 {
     wxCHECK2_MSG( !aName.IsEmpty(), return NULL,
@@ -1618,4 +1626,14 @@ LIB_ALIAS* LIB_COMPONENT::GetAlias( size_t aIndex )
                   wxT( "Illegal alias list index, bad programmer." ) );
 
     return m_aliases[aIndex];
+}
+
+
+void LIB_COMPONENT::AddAlias( const wxString& aName )
+{
+    wxCHECK_RET( !HasAlias( aName ),
+                 wxT( "Component <" ) + GetName() + wxT( "> already has an alias <" ) +
+                 aName + wxT( ">.  Bad programmer." ) );
+
+    m_aliases.push_back( new LIB_ALIAS( aName, this ) );
 }

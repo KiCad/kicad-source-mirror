@@ -22,6 +22,7 @@
 
 #include "dialog_hotkeys_editor.h"
 
+#include "dialogs/dialog_color_config.h"
 #include "dialogs/dialog_eeschema_config.h"
 #include "dialogs/dialog_eeschema_options.h"
 
@@ -41,23 +42,22 @@ void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 }
 
 
+void LIB_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
+{
+    DIALOG_COLOR_CONFIG dlg( this );
+
+    dlg.ShowModal();
+}
+
+
 void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxPoint    pos;
     wxFileName fn;
     WinEDA_SchematicFrame * schFrame = ( WinEDA_SchematicFrame * ) GetParent();
 
-    wxGetMousePosition( &pos.x, &pos.y );
-
-    pos.y += 5;
-
     switch( id )
     {
-    case ID_COLORS_SETUP:
-        DisplayColorSetupFrame( this, pos );
-        break;
-
     case ID_CONFIG_SAVE:
         schFrame->SaveProjectFile( this, false );
         break;
@@ -103,6 +103,14 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
+void WinEDA_SchematicFrame::OnColorConfig( wxCommandEvent& aEvent )
+{
+    DIALOG_COLOR_CONFIG dlg( this );
+
+    dlg.ShowModal();
+}
+
+
 void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
 {
     DIALOG_EESCHEMA_CONFIG CfgFrame( this, this );
@@ -114,19 +122,10 @@ void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
 void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxPoint    pos;
     wxFileName fn;
-
-    wxGetMousePosition( &pos.x, &pos.y );
-
-    pos.y += 5;
 
     switch( id )
     {
-    case ID_COLORS_SETUP:
-        DisplayColorSetupFrame( this, pos );
-        break;
-
     case ID_CONFIG_SAVE:
         SaveProjectFile( this, false );
         break;

@@ -60,6 +60,7 @@ extern const char* component_select_unit_xpm[];
 extern const char* config_xpm[];
 extern const char* copper_layers_setup_xpm[];
 extern const char* copyblock_xpm[];
+extern const char* copyComponent_xpm[];
 extern const char* copy_button[];
 extern const char* cursor_shape_xpm[];
 extern const char* cursor_xpm[];

@@ -102,6 +102,7 @@ public:
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
+    void             OnColorConfig( wxCommandEvent& aEvent );
     void             Process_Config( wxCommandEvent& event );
 
     void             GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );

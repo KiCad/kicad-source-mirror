@@ -93,6 +93,7 @@ typedef enum
     LAYER_ERC_WARN,
     LAYER_ERC_ERR,
     LAYER_DEVICE_BACKGROUND,
+    LAYER_GRID,
 
     MAX_LAYER                   /* Maximum layers */
 } LayerNumber;

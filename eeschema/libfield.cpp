@@ -16,78 +16,137 @@
 #include "template_fieldnames.h"
 
 
-void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* Field )
+void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
 {
-    wxString Text;
+    wxString text;
     wxString title;
+    wxString caption;
     wxString oldName;
 
-    if( Field == NULL )
+    if( aField == NULL )
         return;
 
-    title = Field->GetName();
-    Text = Field->m_Text;
+    LIB_COMPONENT* parent = aField->GetParent();
 
-    wxTextEntryDialog dlg( this, title + wxT( ":" ), _( "Edit field" ), Text );
-
-    if( dlg.ShowModal() != wxID_OK || dlg.GetValue() == Text )
-        return;
-
-    Text = dlg.GetValue();
-
-    Text.Replace( wxT( " " ), wxT( "_" ) );
-
-    if( ( Field->m_FieldId == REFERENCE || Field->m_FieldId == VALUE ) && Text.IsEmpty ( ) )
+    // Editing the component value field is equivalent to creating a new component based
+    // on the current component.  Set the dialog message to inform the user.
+    if( aField->m_FieldId == VALUE )
     {
-        DisplayError( this, title + _( " field cannot be empty." ) );
+        caption = _( "Component Name" );
+        title = _( "Enter a name to create a new component based on this one." );
+    }
+    else
+    {
+        caption = _( "Edit Field" );
+        title.Printf( _( "Enter a new value for the %s field." ),
+                      GetChars( aField->GetName().Lower() ) );
+    }
+
+    wxTextEntryDialog dlg( this, title, caption, aField->m_Text );
+
+    if( dlg.ShowModal() != wxID_OK || dlg.GetValue() == aField->m_Text )
+        return;
+
+    text = dlg.GetValue();
+
+    text.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( ( aField->m_FieldId == REFERENCE || aField->m_FieldId == VALUE ) && text.IsEmpty ( ) )
+    {
+        title.Printf( _( "A %s field cannot be empty." ), GetChars(aField->GetName().Lower() ) );
+        DisplayError( this, title );
         return;
     }
 
-    wxString fieldText = Field->GetFullText( m_unit );
-    LIB_COMPONENT* parent = Field->GetParent();
+    wxString fieldText = aField->GetFullText( m_unit );
 
-    /* If the value field is changed, this is equivalent to creating a new
-     * component from the old one.  Check for an existing library entry of
-     * this "new" component and change the value only if there is no existing
-     * entry with the same name.
+    /* If the value field is changed, this is equivalent to creating a new component from
+     * the old one.  Rename the component and remove any conflicting aliases to prevent name
+     * errors when updating the library.
      */
-    if( Field->m_FieldId == VALUE && Text != Field->m_Text )
+    if( aField->m_FieldId == VALUE )
     {
         wxString msg;
 
-        /* Test for an existing name in the current components alias list and in
-         * the current library.
-         */
-        if( ( parent->HasAlias( Text ) && !parent->GetAlias( Text )->IsRoot() )
-            || ( m_library && m_library->FindEntry( Text ) != NULL ) )
+        // Test the current library for name conflicts.
+        if( m_library->FindEntry( text ) != NULL )
         {
-            msg.Printf( _( "The field name <%s> conflicts with an existing \
-entry in the component library <%s>.\nPlease choose another name that does \
-not conflict with any library entries." ),
-                        GetChars( Text ),
+            msg.Printf( _( "The name <%s> conflicts with an existing entry in the component \
+library <%s>.\n\nDo you wish to replace the current component in library with this one?" ),
+                        GetChars( text ),
                         GetChars( m_library->GetName() ) );
-            DisplayError( this, msg );
-            return;
+
+            int rsp = wxMessageBox( msg, _( "Confirm" ),
+                                    wxYES_NO | wxICON_QUESTION | wxNO_DEFAULT, this );
+
+            if( rsp == wxNO )
+                return;
         }
+
+        // Test the current component for name conflicts.
+        if( parent->HasAlias( text ) )
+        {
+            msg.Printf( _( "The current component already has an alias named <%s>.\n\nDo you \
+wish to remove this alias from the component?" ),
+                        GetChars( text ),
+                        GetChars( m_library->GetName() ) );
+
+            int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
+
+            if( rsp == wxNO )
+                return;
+
+            parent->RemoveAlias( text );
+        }
+
+        parent->SetName( text );
+
+        // Test the library for any conflicts with the any aliases in the current component.
+        if( parent->GetAliasCount() > 1 && m_library->Conflicts( parent ) )
+        {
+            msg.Printf( _( "The new component contains alias names that conflict with entries \
+in the component library <%s>.\n\nDo you wish to remove all of the conflicting aliases from \
+this component?" ),
+                        GetChars( m_library->GetName() ) );
+
+            int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
+
+            if( rsp == wxNO )
+            {
+                parent->SetName( fieldText );
+                return;
+            }
+
+            wxArrayString aliases = parent->GetAliasNames( false );
+
+            for( size_t i = 0;  i < aliases.GetCount();  i++ )
+            {
+                if( m_library->FindEntry( aliases[ i ] ) != NULL )
+                    parent->RemoveAlias( aliases[ i ] );
+            }
+        }
+
+        if( !parent->HasAlias( m_aliasName ) )
+            m_aliasName = text;
+    }
+    else
+    {
+        aField->SetText( text );
     }
 
-    if( Field->m_FieldId == VALUE && Field->m_Text == m_aliasName )
-        m_aliasName = Text;
-
-    if( !Field->InEditMode() )
+    if( !aField->InEditMode() )
     {
         SaveCopyInUndoList( parent );
-        ( (LIB_DRAW_ITEM*) Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                          &fieldText, DefaultTransform );
+        ( (LIB_DRAW_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                           &fieldText, DefaultTransform );
     }
 
-    Field->SetText( Text );
 
-    if( !Field->InEditMode() )
+    if( !aField->InEditMode() )
     {
-        fieldText = Field->GetFullText( m_unit );
-        ( (LIB_DRAW_ITEM*) Field )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                          &fieldText, DefaultTransform );
+        fieldText = aField->GetFullText( m_unit );
+        ( (LIB_DRAW_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                           &fieldText, DefaultTransform );
     }
 
     OnModify();

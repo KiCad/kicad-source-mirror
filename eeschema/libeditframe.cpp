@@ -85,6 +85,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_DELETE_PART, LIB_EDIT_FRAME::DeleteOnePart )
     EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::CreateNewLibraryPart )
+    EVT_TOOL( ID_LIBEDIT_NEW_PART_FROM_EXISTING, LIB_EDIT_FRAME::OnCreateNewPartFromExisting )
+
     EVT_TOOL( ID_LIBEDIT_SELECT_PART, LIB_EDIT_FRAME::LoadOneLibraryPart )
     EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
@@ -115,6 +117,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
 
+    EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::OnColorConfig )
     EVT_MENU( ID_CONFIG_REQ, LIB_EDIT_FRAME::InstallConfigFrame )
     EVT_MENU( ID_CONFIG_SAVE, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, LIB_EDIT_FRAME::Process_Config )
@@ -145,6 +148,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_NEW_PART_FROM_EXISTING, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnUpdateSaveCurrentLib )
@@ -1057,4 +1061,17 @@ void LIB_EDIT_FRAME::InstallDimensionsDialog( wxCommandEvent& event )
 {
     DIALOG_LIBEDIT_DIMENSIONS dlg( this );
     dlg.ShowModal();
+}
+
+
+void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
+{
+    wxCHECK_RET( m_component != NULL,
+                 wxT( "Cannot create new part from non-existant current part." ) );
+
+    INSTALL_DC( dc, DrawPanel );
+    DrawPanel->CursorOff( &dc );
+    EditField( &dc, &m_component->GetValueField() );
+    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CursorOn( &dc );
 }

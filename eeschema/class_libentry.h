@@ -202,6 +202,18 @@ public:
     LIB_ALIAS* GetAlias( const wxString& aName );
 
     /**
+     * Function AddAlias
+     *
+     * Add an alias \a aName to the component.
+     *
+     * Duplicate alias names are not added to the alias list.  Debug builds will raise an
+     * assertion.  Release builds will fail silenetly.
+     *
+     * @param aName - Name of alias to add.
+     */
+    void AddAlias( const wxString& aName );
+
+    /**
      * Test if alias \a aName is in component alias list.
      *
      * Alias name comparisons are case insensitive.
@@ -216,6 +228,8 @@ public:
     void RemoveAlias( const wxString& aName );
 
     LIB_ALIAS* RemoveAlias( LIB_ALIAS* aAlias );
+
+    void RemoveAllAliases();
 
     wxArrayString& GetFootPrints() { return m_FootprintList; }
 
