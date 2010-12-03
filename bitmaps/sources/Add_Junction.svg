@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="90.000000"
+   inkscape:export-xdpi="90.000000"
+   inkscape:export-filename="C:\Documents and Settings\inigo\Escritorio\iconos\Add_Junction.png"
+   width="16.000000px"
+   height="16.000000px"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="Add_Junction.svg"
+   version="1.1">
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 8 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="16 : 8 : 1"
+       inkscape:persp3d-origin="8 : 5.3333333 : 1"
+       id="perspective23" />
+    <linearGradient
+       id="linearGradient2606">
+      <stop
+         id="stop2608"
+         offset="0.00000000"
+         style="stop-color:#ff7800;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2610"
+         offset="1.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="4.6406250"
+       x2="6.0964284"
+       y1="8.6835938"
+       x1="8.9892855"
+       id="linearGradient2612"
+       xlink:href="#linearGradient2606"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="25.707317"
+     inkscape:cx="13.915774"
+     inkscape:cy="6.7377915"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:grid-points="true"
+     gridtolerance="0.50000000px"
+     inkscape:guide-points="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1024"
+     inkscape:window-height="708"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       id="GridFromPre046Settings"
+       type="xygrid"
+       originx="0px"
+       originy="0px"
+       spacingx="0.50000000px"
+       spacingy="0.50000000px"
+       color="#0000ff"
+       empcolor="#0000ff"
+       opacity="0.2"
+       empopacity="0.4"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       transform="matrix(1.888888,0.000000,0.000000,1.777777,-7.333328,-3.999997)"
+       d="M 10.500000 6.7500000 A 2.2500000 2.2500000 0 1 1  6.0000000,6.7500000 A 2.2500000 2.2500000 0 1 1  10.500000 6.7500000 z"
+       sodipodi:ry="2.2500000"
+       sodipodi:rx="2.2500000"
+       sodipodi:cy="6.7500000"
+       sodipodi:cx="8.2500000"
+       id="path2624"
+       style="fill:#9b9b9b;fill-opacity:1.0000000;stroke:none;stroke-width:1.8000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
+       sodipodi:type="arc" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path2602"
+       d="M 8.0000000,16.000000 L 7.9999990,1.0000000 L 9.4999988,1.0000000 L 9.4999999,16.000000 L 8.0000000,16.000000 z "
+       style="fill:#9b9b9b;fill-opacity:1.0000000;stroke:none;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0.00000000;stroke-opacity:0.48858449" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path2598"
+       d="M 1.0000000,7.0000013 L 16.000000,7.0000002 L 16.000000,8.5000000 L 0.99999990,8.5000012 L 1.0000000,7.0000013 z "
+       style="fill:#9b9b9b;fill-opacity:1.0000000;stroke:none;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0.00000000;stroke-opacity:0.48858449" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="rect3900"
+       d="M -3.8125001e-008,6.0000013 L 15.000000,6.0000002 L 15.000000,7.5000000 L -1.0000000e-007,7.5000012 L -3.8125001e-008,6.0000013 z "
+       style="fill:#007d00;fill-opacity:1.0000000;stroke:none;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0.00000000;stroke-opacity:0.48858449" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path2600"
+       d="M 7.0000012,15.000000 L 7.0000002,1.9984014e-015 L 8.5000000,1.9984014e-015 L 8.5000011,15.000000 L 7.0000012,15.000000 z "
+       style="fill:#007d00;fill-opacity:1.0000000;stroke:none;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0.00000000;stroke-opacity:0.48858449" />
+    <path
+       transform="matrix(1.888888,0.000000,0.000000,1.777777,-7.833328,-4.999997)"
+       d="M 10.500000 6.7500000 A 2.2500000 2.2500000 0 1 1  6.0000000,6.7500000 A 2.2500000 2.2500000 0 1 1  10.500000 6.7500000 z"
+       sodipodi:ry="2.2500000"
+       sodipodi:rx="2.2500000"
+       sodipodi:cy="6.7500000"
+       sodipodi:cx="8.2500000"
+       id="path2614"
+       style="fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.8000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
+       sodipodi:type="arc" />
+    <path
+       transform="matrix(1.444445,0.000000,0.000000,1.333333,-4.166670,-1.999999)"
+       d="M 10.500000 6.7500000 A 2.2500000 2.2500000 0 1 1  6.0000000,6.7500000 A 2.2500000 2.2500000 0 1 1  10.500000 6.7500000 z"
+       sodipodi:ry="2.2500000"
+       sodipodi:rx="2.2500000"
+       sodipodi:cy="6.7500000"
+       sodipodi:cx="8.2500000"
+       id="path2604"
+       style="fill:url(#linearGradient2612);fill-opacity:1.0000000;stroke:none;stroke-width:1.8000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
+       sodipodi:type="arc" />
+  </g>
+  <g
+     sodipodi:insensitive="true"
+     inkscape:label="fondo"
+     id="layer2"
+     inkscape:groupmode="layer">
+    <rect
+       y="0.00000000"
+       x="0.00000000"
+       height="16.000000"
+       width="16.000000"
+       id="rect2277"
+       style="fill:#ffffff;fill-opacity:0.00000000;stroke:none;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:0.00000000;stroke-opacity:0.48858449" />
+  </g>
+</svg>
