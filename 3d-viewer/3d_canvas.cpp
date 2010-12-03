@@ -623,6 +623,11 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 
         if( FullFileName.IsEmpty() )
             return;
+
+        // Be sure the screen area destroyed by the file dialog is redrawn before making
+        // a screen copy.
+        // Without this call, under Linux the screen refresh is made to late.
+        wxYield();
     }
 
     wxSize image_size = GetClientSize();
