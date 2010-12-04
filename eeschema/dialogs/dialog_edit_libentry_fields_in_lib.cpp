@@ -222,6 +222,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     if( !copyPanelToSelectedField() )
         return;
 
+    /* Note: this code is now (2010-dec-04) not used, because the value field is no more editable
+     * because changing the value is equivalent to create a new component or alias.
+     * This is now handled in libedit main frame, and no more in this dialog
+     * but this code is not removed, just in case
+     */
     /* If a new name entered in the VALUE field, that it not an existing alias name
      * or root alias of the component */
     wxString newvalue = m_FieldsBuf[VALUE].m_Text;
@@ -235,6 +240,7 @@ An alias %s already exists!\nCannot update this component" ),
         DisplayError( this, msg );
         return;
     }
+    /* End unused code */
 
     /* save old cmp in undo list */
     m_Parent->SaveCopyInUndoList( m_LibEntry, IS_CHANGED );
@@ -624,9 +630,17 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // Field names have become more important than field ids, so we cannot
     // mangle the names in the buffer but we can do so in the panel.
     if( field.m_FieldId == VALUE )
+    {   // This field is the lib name and the default value when loading this component in schematic
+        // The value is now not editable here (in this dialog) because changing it is equivalent to create
+        // a new component or alias. This is handles in libedir, not in this dialog.
         fieldNameTextCtrl->SetValue( field.m_Name + wxT( " / " ) + _( "Chip Name" ) );
+        fieldValueTextCtrl->Enable( false );
+    }
     else
+    {
+        fieldValueTextCtrl->Enable( true );
         fieldNameTextCtrl->SetValue( field.m_Name );
+    }
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable field name editing
     fieldNameTextCtrl->Enable(  fieldNdx >= MANDATORY_FIELDS );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2009)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -98,7 +98,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_Choice_Plot_Offset->SetSelection( 0 );
 	bPlotOptionsSizer->Add( m_Choice_Plot_Offset, 0, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bPlotOptionsSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bPlotOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerFmtPlot;
 	bSizerFmtPlot = new wxBoxSizer( wxVERTICAL );
@@ -158,7 +158,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizerFmtPlot->Add( sbSizerOutputDir, 0, wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bSizerFmtPlot, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bSizerFmtPlot, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -253,4 +253,5 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_buttonSaveOpt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::SaveOptPlot ), NULL, this );
 	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
+	
 }
