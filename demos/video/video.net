@@ -1,66 +1,66 @@
-# EESchema Netlist Version 1.1 created  31/7/2008-16:28:18
+# EESchema Netlist Version 1.1 created  04/12/2010 17:30:23
 (
  ( /84DFBB8F $noname  J4 DB9FEM {Lib=DB9}
-  (    1 /RED_OUT )
+  (    1 /modul/BLEU )
   (    2 /ESVIDEO-RVB/GREEN )
-  (    3 /BLUE_OUT )
+  (    3 /ESVIDEO-RVB/BLUE )
   (    4 GND )
   (    5 GND )
   (    6 GND )
   (    7 GND )
-  (    8 /C_OUT )
-  (    9 /Y_OUT )
+  (    8 /modul/COUT )
+  (    9 /modul/YOUT )
  )
  ( /30705D02 $noname  P8 BNC {Lib=BNC}
   (    1 /modul/CVBSOUT )
   (    2 GND )
  )
  ( /32F9F1AD $noname  P3 BNC {Lib=BNC}
-  (    1 /BLUE_IN )
+  (    1 /ESVIDEO-RVB/BLUE_IN )
   (    2 GND )
  )
  ( /32F9F1A3 $noname  P2 BNC {Lib=BNC}
-  (    1 /GREEN_IN )
+  (    1 /ESVIDEO-RVB/GREEN_IN )
   (    2 GND )
  )
  ( /32F9F198 $noname  P1 BNC {Lib=BNC}
   (    1 /pal-ntsc.sch/RED_IN )
   (    2 GND )
  )
- ( /4891E7CD/33A7E303 $noname  U6 74LS245 {Lib=74LS245}
-  (    1 /graphic/WRITE_RAM )
-  (    2 /buspci.sch/DQ24 )
-  (    3 /buspci.sch/DQ25 )
-  (    4 /buspci.sch/DQ26 )
+ ( /4BF0367D/4BF036D5 $noname  U6 74LS245 {Lib=74LS245}
+  (    1 /muxdata/DATA_WR )
+  (    2 /muxdata/DPC24 )
+  (    3 /muxdata/DPC25 )
+  (    4 /muxdata/DPC26 )
   (    5 /muxdata/DPC27 )
-  (    6 /buspci.sch/DQ28 )
-  (    7 /buspci.sch/DQ29 )
+  (    6 /muxdata/DPC28 )
+  (    7 /muxdata/DPC29 )
   (    8 /muxdata/DPC30 )
-  (    9 /buspci.sch/DQ31 )
+  (    9 /muxdata/DPC31 )
   (   10 GND )
   (   11 /RAMS/TVRAM31 )
   (   12 /RAMS/TVRAM30 )
-  (   13 /muxdata/VRAM29 )
+  (   13 /RAMS/TVRAM29 )
   (   14 /RAMS/TVRAM28 )
   (   15 /RAMS/TVRAM27 )
-  (   16 /muxdata/VRAM26 )
+  (   16 /RAMS/TVRAM26 )
   (   17 /RAMS/TVRAM25 )
   (   18 /RAMS/TVRAM24 )
   (   19 /muxdata/ACCES_RAM- )
-  (   20 VCC )
+  (   20 +5V )
  )
- ( /4891E7CD/33A7E303 $noname  U5 74LS245 {Lib=74LS245}
-  (    1 /graphic/WRITE_RAM )
+ ( /4BF0367D/4BF036D6 $noname  U5 74LS245 {Lib=74LS245}
+  (    1 /muxdata/DATA_WR )
   (    2 /muxdata/DPC16 )
   (    3 /muxdata/DPC17 )
   (    4 /muxdata/DPC18 )
   (    5 /muxdata/DPC19 )
-  (    6 /buspci.sch/DQ20 )
+  (    6 /muxdata/DPC20 )
   (    7 /muxdata/DPC21 )
-  (    8 /buspci.sch/DQ22 )
-  (    9 /buspci.sch/DQ23 )
+  (    8 /muxdata/DPC22 )
+  (    9 /muxdata/DPC23 )
   (   10 GND )
-  (   11 /muxdata/VRAM23 )
+  (   11 /RAMS/TVRAM23 )
   (   12 /RAMS/TVRAM22 )
   (   13 /RAMS/TVRAM21 )
   (   14 /RAMS/TVRAM20 )
@@ -69,18 +69,18 @@
   (   17 /RAMS/TVRAM17 )
   (   18 /RAMS/TVRAM16 )
   (   19 /muxdata/ACCES_RAM- )
-  (   20 VCC )
+  (   20 +5V )
  )
- ( /4891E7CD/33A7E303 $noname  U4 74LS245 {Lib=74LS245}
-  (    1 /graphic/WRITE_RAM )
-  (    2 /graphic/DQ8 )
-  (    3 /buspci.sch/DQ9 )
-  (    4 /graphic/DQ10 )
-  (    5 /graphic/DQ11 )
-  (    6 /graphic/DQ12 )
+ ( /4BF0367D/4BF036D7 $noname  U4 74LS245 {Lib=74LS245}
+  (    1 /muxdata/DATA_WR )
+  (    2 /muxdata/DPC8 )
+  (    3 /muxdata/DPC9 )
+  (    4 /muxdata/DPC10 )
+  (    5 /muxdata/DPC11 )
+  (    6 /muxdata/DPC12 )
   (    7 /muxdata/DPC13 )
-  (    8 /graphic/DQ14 )
-  (    9 /graphic/DQ15 )
+  (    8 /muxdata/DPC14 )
+  (    9 /muxdata/DPC15 )
   (   10 GND )
   (   11 /RAMS/TVRAM15 )
   (   12 /RAMS/TVRAM14 )
@@ -89,20 +89,20 @@
   (   15 /RAMS/TVRAM11 )
   (   16 /RAMS/TVRAM10 )
   (   17 /RAMS/TVRAM9 )
-  (   18 /muxdata/VRAM8 )
+  (   18 /RAMS/TVRAM8 )
   (   19 /muxdata/ACCES_RAM- )
-  (   20 VCC )
+  (   20 +5V )
  )
- ( /4891E7CD/33A7E303 $noname  U3 74LS245 {Lib=74LS245}
-  (    1 /graphic/WRITE_RAM )
-  (    2 /pal-ntsc.sch/PC_D0 )
-  (    3 /graphic/DQ1 )
-  (    4 /muxdata/DPC2 )
-  (    5 /ESVIDEO-RVB/DPC3 )
-  (    6 /graphic/DQ4 )
+ ( /4BF0367D/33A7E303 $noname  U3 74LS245 {Lib=74LS245}
+  (    1 /muxdata/DATA_WR )
+  (    2 /ESVIDEO-RVB/DPC0 )
+  (    3 /ESVIDEO-RVB/DPC1 )
+  (    4 /ESVIDEO-RVB/DPC2 )
+  (    5 /muxdata/DPC3 )
+  (    6 /ESVIDEO-RVB/DPC4 )
   (    7 /ESVIDEO-RVB/DPC5 )
   (    8 /muxdata/DPC6 )
-  (    9 /buspci.sch/DQ7 )
+  (    9 /ESVIDEO-RVB/DPC7 )
   (   10 GND )
   (   11 /RAMS/TVRAM7 )
   (   12 /RAMS/TVRAM6 )
@@ -111,48 +111,48 @@
   (   15 /RAMS/TVRAM3 )
   (   16 /RAMS/TVRAM2 )
   (   17 /RAMS/TVRAM1 )
-  (   18 /muxdata/VRAM0 )
+  (   18 /RAMS/TVRAM0 )
   (   19 /muxdata/ACCES_RAM- )
-  (   20 VCC )
+  (   20 +5V )
  )
- ( /4891E7CD/33A567B8 $noname  U22 XC4003-VQ100 {Lib=XC4003-VQ100}
+ ( /4BF0367D/33A567B8 $noname  U22 XC4003-VQ100 {Lib=XC4003-VQ100}
   (    1 GND )
-  (    2 /ESVIDEO-RVB/CLKCAD )
+  (    2 /graphic/CADCLK )
   (    3 ? )
   (    4 ? )
   (    5 ? )
   (    6 ? )
-  (    7 /CLAMP )
-  (    8 /muxdata/BLANK- )
-  (    9 /ESVIDEO-RVB/CSYNCOUT- )
+  (    7 /graphic/CLAMP )
+  (    8 /graphic/BLANK- )
+  (    9 /modul/CSYNC-OUT )
   (   10 ? )
   (   11 GND )
-  (   12 VCC )
+  (   12 +5V )
   (   13 /muxdata/ACQ_ON )
   (   14 ? )
   (   15 ? )
   (   16 ? )
-  (   17 /muxdata/VRAM0 )
+  (   17 /RAMS/TVRAM0 )
   (   18 /RAMS/TVRAM3 )
   (   19 /RAMS/TVRAM1 )
   (   20 /RAMS/TVRAM2 )
   (   21 /muxdata/ACCES_RAM- )
-  (   22 VCC )
+  (   22 +5V )
   (   23 GND )
-  (   24 VCC )
-  (   25 VCC )
-  (   26 VCC )
+  (   24 +5V )
+  (   25 +5V )
+  (   26 +5V )
   (   27 ? )
   (   28 /RAMS/TVRAM4 )
   (   29 /RAMS/TVRAM5 )
   (   30 ? )
   (   31 /RAMS/TVRAM6 )
   (   32 /RAMS/TVRAM7 )
-  (   33 /muxdata/VRAM8 )
+  (   33 /RAMS/TVRAM8 )
   (   34 /RAMS/TVRAM9 )
   (   35 /RAMS/TVRAM10 )
   (   36 /RAMS/TVRAM11 )
-  (   37 VCC )
+  (   37 +5V )
   (   38 GND )
   (   39 /RAMS/TVRAM12 )
   (   40 /RAMS/TVRAM13 )
@@ -165,346 +165,346 @@
   (   47 /RAMS/TVRAM20 )
   (   48 /RAMS/TVRAM21 )
   (   49 GND )
-  (   50 /X_DONE )
-  (   51 VCC )
-  (   52 /X_PROG- )
+  (   50 /muxdata/X_DONE )
+  (   51 +5V )
+  (   52 /graphic/X_PROG- )
   (   53 /RAMS/TVRAM22 )
-  (   54 /muxdata/VRAM23 )
+  (   54 /RAMS/TVRAM23 )
   (   55 /RAMS/TVRAM24 )
   (   56 /RAMS/TVRAM25 )
-  (   57 /muxdata/VRAM26 )
+  (   57 /RAMS/TVRAM26 )
   (   58 /RAMS/TVRAM27 )
   (   59 /RAMS/TVRAM28 )
-  (   60 /muxdata/VRAM29 )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM30 )
   (   62 /RAMS/TVRAM31 )
-  (   63 VCC )
+  (   63 +5V )
   (   64 GND )
   (   65 ? )
   (   66 ? )
-  (   67 /pal-ntsc.sch/TVG0 )
+  (   67 /ESVIDEO-RVB/TVG0 )
   (   68 /ESVIDEO-RVB/TVG1 )
-  (   69 /pal-ntsc.sch/TVG2 )
-  (   70 /muxdata/TVG3 )
-  (   71 /pal-ntsc.sch/TVG4 )
-  (   72 /X_DATA )
+  (   69 /ESVIDEO-RVB/TVG2 )
+  (   70 /ESVIDEO-RVB/TVG3 )
+  (   71 /ESVIDEO-RVB/TVG4 )
+  (   72 /muxdata/X_DIN )
   (   73 ? )
-  (   74 /muxdata/X_CLK )
-  (   75 VCC )
+  (   74 /graphic/X_CLK )
+  (   75 +5V )
   (   76 ? )
   (   77 GND )
   (   78 /ESVIDEO-RVB/TVG5 )
-  (   79 /CLKCDA )
-  (   80 /ESVIDEO-RVB/TVG6 )
+  (   79 /graphic/CDACLK )
+  (   80 /muxdata/TVG6 )
   (   81 /muxdata/TVG7 )
-  (   82 /muxdata/TVR0 )
+  (   82 /ESVIDEO-RVB/TVR0 )
   (   83 /ESVIDEO-RVB/TVR1 )
-  (   84 /muxdata/TVR2 )
+  (   84 /ESVIDEO-RVB/TVR2 )
   (   85 /pal-ntsc.sch/TVR3 )
-  (   86 /ESVIDEO-RVB/TVR4 )
-  (   87 /muxdata/TVR5 )
+  (   86 /pal-ntsc.sch/TVR4 )
+  (   87 /ESVIDEO-RVB/TVR5 )
   (   88 GND )
-  (   89 VCC )
+  (   89 +5V )
   (   90 /ESVIDEO-RVB/TVR6 )
   (   91 /ESVIDEO-RVB/TVR7 )
-  (   92 /ESVIDEO-RVB/TVB0 )
-  (   93 /ESVIDEO-RVB/TVB1 )
+  (   92 /muxdata/TVB0 )
+  (   93 /muxdata/TVB1 )
   (   94 /ESVIDEO-RVB/TVB2 )
-  (   95 /pal-ntsc.sch/TVB3 )
-  (   96 /ESVIDEO-RVB/TVB4 )
-  (   97 /ESVIDEO-RVB/TVB5 )
-  (   98 /ESVIDEO-RVB/TVB6 )
-  (   99 /ESVIDEO-RVB/TVB7 )
-  (  100 VCC )
+  (   95 /ESVIDEO-RVB/TVB3 )
+  (   96 /muxdata/TVB4 )
+  (   97 /pal-ntsc.sch/TVB5 )
+  (   98 /pal-ntsc.sch/TVB6 )
+  (   99 /pal-ntsc.sch/TVB7 )
+  (  100 +5V )
  )
- ( /4891E7CF/349FB562 $noname  L6 470nS {Lib=LIGNE_A_RETARD}
-  (    1 N-000113 )
-  (    2 N-000112 )
-  (    3 GND )
- )
- ( /4891E7CF/33A51A4E $noname  R4 10K {Lib=R}
-  (    1 N-000111 )
-  (    2 VCC )
- )
- ( /4891E7CF/2276109D $noname  POT1 100K {Lib=POT}
-  (    1 N-000101 )
-  (    2 GND )
-  (    3 GND )
- )
- ( /4891E7CF/22761039 $noname  Q1 BC848 {Lib=NPN}
-  (    1 N-000092 )
-  (    2 N-000089 )
-  (    3 +5F )
- )
- ( /4891E7CF/22761066 $noname  Q2 BC848 {Lib=NPN}
-  (    1 N-000097 )
-  (    2 N-000096 )
-  (    3 +5F )
- )
- ( /4891E7CF/2276107F $noname  Q3 BC848 {Lib=NPN}
-  (    1 N-000099 )
-  (    2 N-000098 )
-  (    3 +5F )
- )
- ( /4891E7CF/22760F76 $noname  C54 4,7uF {Lib=CP}
-  (    1 N-000087 )
-  (    2 GND )
- )
- ( /4891E7CF/22761048 $noname  R39 68 {Lib=R}
-  (    1 /C_OUT )
+ ( /4BF0367F/349FB562 $noname  L6 470nS {Lib=LIGNE_A_RETARD}
+  (    1 N-000084 )
   (    2 N-000092 )
+  (    3 GND )
  )
- ( /4891E7CF/2276103E $noname  R16 220 {Lib=R}
-  (    1 N-000089 )
+ ( /4BF0367F/33A51A4E $noname  R4 10K {Lib=R}
+  (    1 N-000104 )
+  (    2 +5V )
+ )
+ ( /4BF0367F/2276109D $noname  POT1 100K {Lib=POT}
+  (    1 N-000088 )
+  (    2 GND )
+  (    3 GND )
+ )
+ ( /4BF0367F/22761039 $noname  Q1 BC848 {Lib=NPN}
+  (    1 N-000083 )
+  (    2 N-000091 )
+  (    3 +5F )
+ )
+ ( /4BF0367F/22761066 $noname  Q2 BC848 {Lib=NPN}
+  (    1 N-000090 )
+  (    2 N-000081 )
+  (    3 +5F )
+ )
+ ( /4BF0367F/2276107F $noname  Q3 BC848 {Lib=NPN}
+  (    1 N-000087 )
+  (    2 N-000082 )
+  (    3 +5F )
+ )
+ ( /4BF0367F/22760F76 $noname  C54 4,7uF {Lib=CP}
+  (    1 N-000079 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22761048 $noname  R39 68 {Lib=R}
+  (    1 /modul/COUT )
+  (    2 N-000083 )
+ )
+ ( /4BF0367F/2276103E $noname  R16 220 {Lib=R}
+  (    1 N-000091 )
   (    2 /modul/CHROM )
  )
- ( /4891E7CF/2276107A $noname  R17 220 {Lib=R}
-  (    1 N-000096 )
+ ( /4BF0367F/2276107A $noname  R17 220 {Lib=R}
+  (    1 N-000081 )
   (    2 /modul/LUM )
  )
- ( /4891E7CF/22761075 $noname  R40 68 {Lib=R}
-  (    1 N-000097 )
-  (    2 /Y_OUT )
+ ( /4BF0367F/22761075 $noname  R40 68 {Lib=R}
+  (    1 N-000090 )
+  (    2 /modul/YOUT )
  )
- ( /4891E7CF/22761093 $noname  R18 220 {Lib=R}
-  (    1 N-000098 )
+ ( /4BF0367F/22761093 $noname  R18 220 {Lib=R}
+  (    1 N-000082 )
   (    2 /modul/CVBS )
  )
- ( /4891E7CF/2276108E $noname  R41 68 {Lib=R}
+ ( /4BF0367F/2276108E $noname  R41 68 {Lib=R}
   (    1 /modul/CVBSOUT )
-  (    2 N-000099 )
- )
- ( /4891E7CF/22760FE4 $noname  R30 3,3K {Lib=R}
-  (    1 N-000085 )
-  (    2 /ESVIDEO-RVB/CSYNCOUT- )
- )
- ( /4891E7CF/22760FDF $noname  R31 470 {Lib=R}
-  (    1 GND )
-  (    2 N-000085 )
- )
- ( /4891E7CF/22760F80 $noname  R10 1K {Lib=R}
-  (    1 N-000113 )
-  (    2 N-000088 )
- )
- ( /4891E7CF/22760FBC $noname  R11 1K {Lib=R}
-  (    1 N-000112 )
-  (    2 N-000086 )
- )
- ( /4891E7CF/22761098 $noname  R9 150K {Lib=R}
-  (    1 N-000101 )
-  (    2 N-000091 )
- )
- ( /4891E7CF/22760F8A $noname  C61 47nF {Lib=C}
-  (    1 N-000085 )
-  (    2 N-000102 )
- )
- ( /4891E7CF/22760F67 $noname  C60 47nF {Lib=C}
-  (    1 N-000103 )
-  (    2 /BLUE_OUT )
- )
- ( /4891E7CF/22760F8F $noname  C43 220nF {Lib=C}
-  (    1 N-000080 )
-  (    2 GND )
- )
- ( /4891E7CF/22760FA8 $noname  CV1 5/30pF {Lib=CTRIM}
-  (    1 N-000110 )
-  (    2 GND )
- )
- ( /4891E7CF/22760FD5 $noname  C45 220nF {Lib=C}
-  (    1 N-000094 )
-  (    2 GND )
- )
- ( /4891E7CF/22760FCB $noname  C48 22nF {Lib=C}
-  (    1 GND )
-  (    2 N-000086 )
- )
- ( /4891E7CF/22760FC1 $noname  C64 6,8uF {Lib=CP}
-  (    1 N-000086 )
-  (    2 GND )
- )
- ( /4891E7CF/22760F99 $noname  C44 220nF {Lib=C}
-  (    1 N-000090 )
-  (    2 GND )
- )
- ( /4891E7CF/22760FF8 $noname  C53 330pF {Lib=C}
-  (    1 N-000100 )
-  (    2 GND )
- )
- ( /4891E7CF/22760FF3 $noname  L1 2,2uH {Lib=INDUCTOR}
-  (    1 N-000093 )
-  (    2 N-000100 )
- )
- ( /4891E7CF/22761052 $noname  L3 22uH {Lib=INDUCTOR}
-  (    1 VCC )
-  (    2 +5F )
- )
- ( /4891E7CF/22760F71 $noname  L2 22uH {Lib=INDUCTOR}
-  (    1 VCC )
   (    2 N-000087 )
  )
- ( /4891E7CF/22760F4E $noname  U20 TDA8501 {Lib=TDA8501}
+ ( /4BF0367F/22760FE4 $noname  R30 3,3K {Lib=R}
+  (    1 N-000086 )
+  (    2 /modul/CSYNC-OUT )
+ )
+ ( /4BF0367F/22760FDF $noname  R31 470 {Lib=R}
+  (    1 GND )
+  (    2 N-000086 )
+ )
+ ( /4BF0367F/22760F80 $noname  R10 1K {Lib=R}
+  (    1 N-000084 )
+  (    2 N-000085 )
+ )
+ ( /4BF0367F/22760FBC $noname  R11 1K {Lib=R}
+  (    1 N-000092 )
+  (    2 N-000089 )
+ )
+ ( /4BF0367F/22761098 $noname  R9 150K {Lib=R}
+  (    1 N-000088 )
+  (    2 N-000093 )
+ )
+ ( /4BF0367F/22760F8A $noname  C61 47nF {Lib=C}
+  (    1 N-000086 )
+  (    2 N-000100 )
+ )
+ ( /4BF0367F/22760F67 $noname  C60 47nF {Lib=C}
+  (    1 N-000109 )
+  (    2 /ESVIDEO-RVB/BLUE )
+ )
+ ( /4BF0367F/22760F8F $noname  C43 220nF {Lib=C}
+  (    1 N-000101 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760FA8 $noname  CV1 5/30pF {Lib=CTRIM}
+  (    1 N-000102 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760FD5 $noname  C45 220nF {Lib=C}
+  (    1 N-000095 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760FCB $noname  C48 22nF {Lib=C}
+  (    1 GND )
+  (    2 N-000089 )
+ )
+ ( /4BF0367F/22760FC1 $noname  C64 6,8uF {Lib=CP}
+  (    1 N-000089 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760F99 $noname  C44 220nF {Lib=C}
+  (    1 N-000108 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760FF8 $noname  C53 330pF {Lib=C}
+  (    1 N-000097 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22760FF3 $noname  L1 2,2uH {Lib=INDUCTOR}
+  (    1 N-000096 )
+  (    2 N-000097 )
+ )
+ ( /4BF0367F/22761052 $noname  L3 22uH {Lib=INDUCTOR}
+  (    1 +5V )
+  (    2 +5F )
+ )
+ ( /4BF0367F/22760F71 $noname  L2 22uH {Lib=INDUCTOR}
+  (    1 +5V )
+  (    2 N-000079 )
+ )
+ ( /4BF0367F/22760F4E $noname  U20 TDA8501 {Lib=TDA8501}
   (    1 ? )
-  (    2 N-000111 )
+  (    2 N-000104 )
   (    3 ? )
   (    4 ? )
   (    5 ? )
-  (    6 N-000090 )
-  (    7 N-000103 )
-  (    8 N-000087 )
-  (    9 N-000108 )
+  (    6 N-000108 )
+  (    7 N-000109 )
+  (    8 N-000079 )
+  (    9 N-000098 )
   (   10 GND )
-  (   11 N-000109 )
-  (   12 N-000080 )
-  (   13 N-000086 )
+  (   11 N-000099 )
+  (   12 N-000101 )
+  (   13 N-000089 )
   (   14 /modul/CHROM )
-  (   15 N-000094 )
+  (   15 N-000095 )
   (   16 /modul/CVBS )
   (   17 GND )
-  (   18 N-000093 )
+  (   18 N-000096 )
   (   19 /modul/LUM )
-  (   20 N-000112 )
-  (   21 N-000091 )
-  (   22 N-000088 )
-  (   23 N-000095 )
-  (   24 N-000102 )
+  (   20 N-000092 )
+  (   21 N-000093 )
+  (   22 N-000085 )
+  (   23 N-000094 )
+  (   24 N-000100 )
  )
- ( /4891E7CF/22760FFD $noname  C46 220pF {Lib=C}
-  (    1 N-000100 )
-  (    2 GND )
- )
- ( /4891E7CF/22761089 $noname  R34 470 {Lib=R}
-  (    1 N-000099 )
-  (    2 GND )
- )
- ( /4891E7CF/22761070 $noname  R33 470 {Lib=R}
+ ( /4BF0367F/22760FFD $noname  C46 220pF {Lib=C}
   (    1 N-000097 )
   (    2 GND )
  )
- ( /4891E7CF/22761043 $noname  R32 470 {Lib=R}
-  (    1 N-000092 )
+ ( /4BF0367F/22761089 $noname  R34 470 {Lib=R}
+  (    1 N-000087 )
   (    2 GND )
  )
- ( /4891E7CF/22761057 $noname  C55 4,7uF {Lib=CP}
+ ( /4BF0367F/22761070 $noname  R33 470 {Lib=R}
+  (    1 N-000090 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22761043 $noname  R32 470 {Lib=R}
+  (    1 N-000083 )
+  (    2 GND )
+ )
+ ( /4BF0367F/22761057 $noname  C55 4,7uF {Lib=CP}
   (    1 +5F )
   (    2 GND )
  )
- ( /4891E7CF/22760F62 $noname  C59 47nF {Lib=C}
-  (    1 N-000108 )
+ ( /4BF0367F/22760F62 $noname  C59 47nF {Lib=C}
+  (    1 N-000098 )
   (    2 /ESVIDEO-RVB/GREEN )
  )
- ( /4891E7CF/22760F53 $noname  C58 47nF {Lib=C}
-  (    1 N-000109 )
-  (    2 /RED_OUT )
+ ( /4BF0367F/22760F53 $noname  C58 47nF {Lib=C}
+  (    1 N-000099 )
+  (    2 /modul/BLEU )
  )
- ( /4891E7CF/22760FA3 $noname  X3 4,433618MH {Lib=CRYSTAL}
-  (    1 N-000110 )
-  (    2 N-000095 )
+ ( /4BF0367F/22760FA3 $noname  X3 4,433618MH {Lib=CRYSTAL}
+  (    1 N-000102 )
+  (    2 N-000094 )
  )
- ( /4891E7D1/811D9080 $noname  L4 22uF {Lib=INDUCTOR}
-  (    1 VCC )
+ ( /4BF03681/811D9080 $noname  L4 22uF {Lib=INDUCTOR}
+  (    1 +5V )
   (    2 /pal-ntsc.sch/VAF )
  )
- ( /4891E7D1/821CDAB8 $noname  R35 470 {Lib=R}
-  (    1 N-000151 )
+ ( /4BF03681/821CDAB8 $noname  R35 470 {Lib=R}
+  (    1 N-000116 )
   (    2 /pal-ntsc.sch/Y_SYNC )
  )
- ( /4891E7D1/821CDAC2 $noname  C1 100nF {Lib=C}
-  (    1 N-000151 )
-  (    2 N-000152 )
+ ( /4BF03681/821CDAC2 $noname  C1 100nF {Lib=C}
+  (    1 N-000116 )
+  (    2 N-000122 )
  )
- ( /4891E7D1/A9CA7F6B $noname  C2 100nF {Lib=C}
+ ( /4BF03681/A9CA7F6B $noname  C2 100nF {Lib=C}
   (    1 /pal-ntsc.sch/VAF )
   (    2 GND )
  )
- ( /4891E7D1/A9CA7F75 $noname  C3 100nF {Lib=C}
-  (    1 N-000133 )
-  (    2 /GREEN_IN )
+ ( /4BF03681/A9CA7F75 $noname  C3 100nF {Lib=C}
+  (    1 N-000126 )
+  (    2 /ESVIDEO-RVB/GREEN_IN )
  )
- ( /4891E7D1/A9CA7F7A $noname  C4 100nF {Lib=C}
-  (    1 N-000134 )
+ ( /4BF03681/A9CA7F7A $noname  C4 100nF {Lib=C}
+  (    1 N-000125 )
   (    2 /pal-ntsc.sch/RED_IN )
  )
- ( /4891E7D1/821CDA9A $noname  R14 1M {Lib=R}
-  (    1 N-000152 )
+ ( /4BF03681/821CDA9A $noname  R14 1M {Lib=R}
+  (    1 N-000122 )
   (    2 GND )
  )
- ( /4891E7D1/8116F4AA $noname  R3 100 {Lib=R}
+ ( /4BF03681/8116F4AA $noname  R3 100 {Lib=R}
   (    1 /pal-ntsc.sch/Y-VIDEO )
-  (    2 N-000133 )
+  (    2 N-000126 )
  )
- ( /4891E7D1/8116F4A5 $noname  R2 100 {Lib=R}
+ ( /4BF03681/8116F4A5 $noname  R2 100 {Lib=R}
   (    1 /pal-ntsc.sch/C-VIDEO )
-  (    2 N-000134 )
+  (    2 N-000125 )
  )
- ( /4891E7D1/A9CA7F7F $noname  D1 BAT46 {Lib=DIODESCH}
+ ( /4BF03681/A9CA7F7F $noname  D1 BAT46 {Lib=DIODESCH}
   (    1 GND )
   (    2 /pal-ntsc.sch/Y-VIDEO )
  )
- ( /4891E7D1/A9CA7F84 $noname  D2 BAT46 {Lib=DIODESCH}
+ ( /4BF03681/A9CA7F84 $noname  D2 BAT46 {Lib=DIODESCH}
   (    1 /pal-ntsc.sch/Y-VIDEO )
-  (    2 VCC )
+  (    2 +5V )
  )
- ( /4891E7D1/A9CA7F8E $noname  D3 BAT46 {Lib=DIODESCH}
+ ( /4BF03681/A9CA7F8E $noname  D3 BAT46 {Lib=DIODESCH}
   (    1 GND )
   (    2 /pal-ntsc.sch/C-VIDEO )
  )
- ( /4891E7D1/A9CA7F93 $noname  D4 BAT46 {Lib=DIODESCH}
+ ( /4BF03681/A9CA7F93 $noname  D4 BAT46 {Lib=DIODESCH}
   (    1 /pal-ntsc.sch/C-VIDEO )
-  (    2 VCC )
+  (    2 +5V )
  )
- ( /4891E7D1/A9CA7FC5 $noname  R27 27K {Lib=R}
-  (    1 N-000144 )
-  (    2 N-000150 )
+ ( /4BF03681/A9CA7FC5 $noname  R27 27K {Lib=R}
+  (    1 N-000130 )
+  (    2 N-000115 )
  )
- ( /4891E7D1/A9CA7FCA $noname  R12 1K {Lib=R}
-  (    1 N-000136 )
+ ( /4BF03681/A9CA7FCA $noname  R12 1K {Lib=R}
+  (    1 N-000117 )
   (    2 /pal-ntsc.sch/VAF )
  )
- ( /4891E7D1/B15DA8C5 $noname  C65 22pF {Lib=C}
+ ( /4BF03681/B15DA8C5 $noname  C65 22pF {Lib=C}
   (    1 GND )
-  (    2 N-000145 )
+  (    2 N-000120 )
  )
- ( /4891E7D1/B15DA8CA $noname  C66 22pF {Lib=C}
+ ( /4BF03681/B15DA8CA $noname  C66 22pF {Lib=C}
   (    1 GND )
-  (    2 N-000146 )
+  (    2 N-000119 )
  )
- ( /4891E7D1/B15DA8C0 $noname  X2 30MHz {Lib=CRYSTAL}
-  (    1 N-000145 )
-  (    2 N-000146 )
+ ( /4BF03681/B15DA8C0 $noname  X2 30MHz {Lib=CRYSTAL}
+  (    1 N-000120 )
+  (    2 N-000119 )
  )
- ( /4891E7D1/A9CA7FA7 $noname  R19 220 {Lib=R}
-  (    1 N-000137 )
-  (    2 N-000143 )
+ ( /4BF03681/A9CA7FA7 $noname  R19 220 {Lib=R}
+  (    1 N-000129 )
+  (    2 N-000128 )
  )
- ( /4891E7D1/A9CA7FAC $noname  C5 100nF {Lib=C}
-  (    1 N-000141 )
-  (    2 N-000137 )
+ ( /4BF03681/A9CA7FAC $noname  C5 100nF {Lib=C}
+  (    1 N-000123 )
+  (    2 N-000129 )
  )
- ( /4891E7D1/B176B9C3 $noname  R20 220 {Lib=R}
-  (    1 N-000138 )
+ ( /4BF03681/B176B9C3 $noname  R20 220 {Lib=R}
+  (    1 N-000127 )
   (    2 /pal-ntsc.sch/Y_SYNC )
  )
- ( /4891E7D1/B176B9C8 $noname  C8 100nF {Lib=C}
-  (    1 N-000142 )
-  (    2 N-000138 )
+ ( /4BF03681/B176B9C8 $noname  C8 100nF {Lib=C}
+  (    1 N-000124 )
+  (    2 N-000127 )
  )
- ( /4891E7D1/A9CA7FB1 $noname  C6 100nF {Lib=C}
-  (    1 N-000136 )
+ ( /4BF03681/A9CA7FB1 $noname  C6 100nF {Lib=C}
+  (    1 N-000117 )
   (    2 GND )
  )
- ( /4891E7D1/A9CA7FB6 $noname  C7 100nF {Lib=C}
-  (    1 N-000150 )
+ ( /4BF03681/A9CA7FB6 $noname  C7 100nF {Lib=C}
+  (    1 N-000115 )
   (    2 GND )
  )
- ( /4891E7D1/821CDABD $noname  C47 220pF {Lib=C}
-  (    1 N-000151 )
+ ( /4BF03681/821CDABD $noname  C47 220pF {Lib=C}
+  (    1 N-000116 )
   (    2 GND )
  )
- ( /4891E7D1/BECCB834 $noname  U10 BT812 {Lib=BT812}
+ ( /4BF03681/BECCB834 $noname  U10 BT812 {Lib=BT812}
   (    1 /pal-ntsc.sch/VAF )
   (    2 /pal-ntsc.sch/VAF )
   (    3 GND )
-  (    4 N-000142 )
+  (    4 N-000124 )
   (    5 GND )
   (    6 /pal-ntsc.sch/Y_SYNC )
   (    7 GND )
@@ -515,12 +515,12 @@
   (   28 ? )
   (   29 ? )
   (   30 GND )
-  (   31 VCC )
+  (   31 +5V )
   (   32 ? )
   (   33 ? )
   (   34 /pal-ntsc.sch/VD_PAL- )
   (   35 ? )
-  (   36 /HD_PAL- )
+  (   36 /pal-ntsc.sch/HD_PAL- )
   (   37 ? )
   (   38 ? )
   (   39 /pal-ntsc.sch/VAF )
@@ -529,78 +529,78 @@
   (   42 /pal-ntsc.sch/VAF )
   (   43 /pal-ntsc.sch/VAF )
   (   44 GND )
-  (   45 VCC )
-  (   46 /OE_PAL- )
-  (   47 /OE_PAL- )
-  (   48 /ESVIDEO-RVB/TVB7 )
-  (   49 /ESVIDEO-RVB/TVB6 )
-  (   50 /ESVIDEO-RVB/TVB5 )
-  (   51 /ESVIDEO-RVB/TVB4 )
-  (   52 /pal-ntsc.sch/TVB3 )
+  (   45 +5V )
+  (   46 /pal-ntsc.sch/OE_PAL- )
+  (   47 /pal-ntsc.sch/OE_PAL- )
+  (   48 /pal-ntsc.sch/TVB7 )
+  (   49 /pal-ntsc.sch/TVB6 )
+  (   50 /pal-ntsc.sch/TVB5 )
+  (   51 /muxdata/TVB4 )
+  (   52 /ESVIDEO-RVB/TVB3 )
   (   53 /ESVIDEO-RVB/TVB2 )
-  (   54 /ESVIDEO-RVB/TVB1 )
-  (   55 /ESVIDEO-RVB/TVB0 )
+  (   54 /muxdata/TVB1 )
+  (   55 /muxdata/TVB0 )
   (   56 GND )
-  (   57 VCC )
+  (   57 +5V )
   (   58 /ESVIDEO-RVB/TVR7 )
   (   59 /ESVIDEO-RVB/TVR6 )
-  (   60 /muxdata/TVR5 )
-  (   61 /ESVIDEO-RVB/TVR4 )
+  (   60 /ESVIDEO-RVB/TVR5 )
+  (   61 /pal-ntsc.sch/TVR4 )
   (   62 /pal-ntsc.sch/TVR3 )
-  (   63 /muxdata/TVR2 )
+  (   63 /ESVIDEO-RVB/TVR2 )
   (   64 /ESVIDEO-RVB/TVR1 )
-  (   65 /muxdata/TVR0 )
+  (   65 /ESVIDEO-RVB/TVR0 )
   (   66 GND )
   (   67 /muxdata/TVG7 )
-  (   68 /ESVIDEO-RVB/TVG6 )
+  (   68 /muxdata/TVG6 )
   (   69 /ESVIDEO-RVB/TVG5 )
-  (   70 /pal-ntsc.sch/TVG4 )
-  (   71 /muxdata/TVG3 )
-  (   72 /pal-ntsc.sch/TVG2 )
+  (   70 /ESVIDEO-RVB/TVG4 )
+  (   71 /ESVIDEO-RVB/TVG3 )
+  (   72 /ESVIDEO-RVB/TVG2 )
   (   73 /ESVIDEO-RVB/TVG1 )
-  (   74 /pal-ntsc.sch/TVG0 )
+  (   74 /ESVIDEO-RVB/TVG0 )
   (   75 GND )
-  (   76 VCC )
+  (   76 +5V )
   (   78 /pal-ntsc.sch/VAF )
   (   79 /pal-ntsc.sch/VAF )
   (   80 /pal-ntsc.sch/VAF )
   (   81 /pal-ntsc.sch/VAF )
   (   82 /pal-ntsc.sch/VAF )
-  (   83 /pal-ntsc.sch/BT812_WR- )
-  (   84 /pal-ntsc.sch/PC_A0 )
+  (   83 /graphic/BT812_WR- )
+  (   84 /ESVIDEO-RVB/PCA0 )
   (   85 /graphic/PCA1 )
   (   86 /graphic/BT812_RD- )
-  (   87 /SYSRST- )
+  (   87 /pal-ntsc.sch/RESET- )
   (   88 GND )
   (   89 GND )
   (   90 GND )
-  (   91 VCC )
-  (   92 /pal-ntsc.sch/PC_D0 )
-  (   93 /graphic/DQ1 )
-  (   94 /muxdata/DPC2 )
-  (   95 /ESVIDEO-RVB/DPC3 )
-  (   96 /graphic/DQ4 )
+  (   91 +5V )
+  (   92 /ESVIDEO-RVB/DPC0 )
+  (   93 /ESVIDEO-RVB/DPC1 )
+  (   94 /ESVIDEO-RVB/DPC2 )
+  (   95 /muxdata/DPC3 )
+  (   96 /ESVIDEO-RVB/DPC4 )
   (   97 /ESVIDEO-RVB/DPC5 )
   (   98 GND )
   (   99 /muxdata/DPC6 )
-  (  100 /buspci.sch/DQ7 )
+  (  100 /ESVIDEO-RVB/DPC7 )
   (  101 ? )
-  (  102 VCC )
+  (  102 +5V )
   (  103 GND )
   (  104 /pal-ntsc.sch/F_PALIN )
   (  105 ? )
   (  106 ? )
   (  107 ? )
-  (  108 N-000146 )
-  (  109 N-000145 )
-  (  110 N-000139 )
+  (  108 N-000119 )
+  (  109 N-000120 )
+  (  110 N-000118 )
   (  111 GND )
-  (  112 VCC )
-  (  113 N-000136 )
-  (  114 N-000150 )
-  (  115 N-000143 )
+  (  112 +5V )
+  (  113 N-000117 )
+  (  114 N-000115 )
+  (  115 N-000128 )
   (  116 GND )
-  (  117 N-000141 )
+  (  117 N-000123 )
   (  118 GND )
   (  119 /pal-ntsc.sch/VAF )
   (  120 /pal-ntsc.sch/VAF )
@@ -617,16 +617,16 @@
   (  131 ? )
   (  132 /pal-ntsc.sch/VAF )
   (  134 GND )
-  (  135 N-000144 )
+  (  135 N-000130 )
   (  136 GND )
-  (  137 N-000136 )
+  (  137 N-000117 )
   (  138 GND )
   (  139 GND )
-  (  140 N-000152 )
+  (  140 N-000122 )
   (  141 /pal-ntsc.sch/VAF )
   (  142 /pal-ntsc.sch/VAF )
   (  143 GND )
-  (  144 N-000136 )
+  (  144 N-000117 )
   (  145 GND )
   (  147 GND )
   (  149 /pal-ntsc.sch/VAF )
@@ -642,88 +642,88 @@
   (  159 /pal-ntsc.sch/VAF )
   (  160 /pal-ntsc.sch/VAF )
  )
- ( /4891E7D1/811D9071 $noname  C62 47uF {Lib=CP}
+ ( /4BF03681/811D9071 $noname  C62 47uF {Lib=CP}
   (    1 /pal-ntsc.sch/VAF )
   (    2 GND )
  )
- ( /4891E7D1/BF69A15D $noname  C9 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03681/BF69A15D $noname  C9 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D1/BF69A162 $noname  C10 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03681/BF69A162 $noname  C10 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D1/BF69A167 $noname  C11 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03681/BF69A167 $noname  C11 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D1/BF69A17B $noname  C14 100nF {Lib=C}
+ ( /4BF03681/BF69A17B $noname  C14 100nF {Lib=C}
   (    1 /pal-ntsc.sch/VAF )
   (    2 GND )
  )
- ( /4891E7D1/BF69A176 $noname  C13 100nF {Lib=C}
+ ( /4BF03681/BF69A176 $noname  C13 100nF {Lib=C}
   (    1 /pal-ntsc.sch/VAF )
   (    2 GND )
  )
- ( /4891E7D1/BF69A171 $noname  C12 100nF {Lib=C}
+ ( /4BF03681/BF69A171 $noname  C12 100nF {Lib=C}
   (    1 /pal-ntsc.sch/VAF )
   (    2 GND )
  )
- ( /4891E7D1/0F47DCB8 $noname  C16 100nF {Lib=C}
-  (    1 N-000139 )
+ ( /4BF03681/0F47DCB8 $noname  C16 100nF {Lib=C}
+  (    1 N-000118 )
   (    2 GND )
  )
- ( /4891E7D1/B1754313 $noname  R25 220K {Lib=R}
-  (    1 N-000146 )
-  (    2 N-000145 )
+ ( /4BF03681/B1754313 $noname  R25 220K {Lib=R}
+  (    1 N-000119 )
+  (    2 N-000120 )
  )
- ( /4891E7D1/0939A342 $noname  C15 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03681/0939A342 $noname  C15 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/34E1751D $noname  P12 CONN_1 {Lib=CONN_1}
+ ( /4BF03683/34E1751D $noname  P12 CONN_1 {Lib=CONN_1}
   (    1 GND )
  )
- ( /4891E7D3/34E1718B $noname  P9 CONN_1 {Lib=CONN_1}
-  (    1 N-000204 )
+ ( /4BF03683/34E1718B $noname  P9 CONN_1 {Lib=CONN_1}
+  (    1 N-000178 )
  )
- ( /4891E7D3/34E1718B $noname  P11 CONN_1 {Lib=CONN_1}
-  (    1 N-000203 )
+ ( /4BF03683/4BF036DA $noname  P11 CONN_1 {Lib=CONN_1}
+  (    1 N-000177 )
  )
- ( /4891E7D3/34E1718B $noname  P10 CONN_1 {Lib=CONN_1}
-  (    1 N-000202 )
+ ( /4BF03683/4BF036D9 $noname  P10 CONN_1 {Lib=CONN_1}
+  (    1 N-000163 )
  )
- ( /4891E7D3/33BA5628 $noname  U23 XC4003/PQ100 {Lib=XC4005-PQ100}
-  (    1 /SYSRST- )
+ ( /4BF03683/33BA5628 $noname  U23 XC4003/PQ100 {Lib=XC4005-PQ100}
+  (    1 /pal-ntsc.sch/RESET- )
   (    2 ? )
-  (    3 VCC )
+  (    3 +5V )
   (    4 GND )
-  (    5 /buspci.sch/DQ7 )
+  (    5 /ESVIDEO-RVB/DPC7 )
   (    6 /muxdata/DPC6 )
-  (    7 /ESVIDEO-RVB/DPC3 )
+  (    7 /muxdata/DPC3 )
   (    8 /ESVIDEO-RVB/DPC5 )
-  (    9 /graphic/DQ4 )
-  (   11 /muxdata/DPC2 )
-  (   12 /graphic/DQ1 )
-  (   13 /pal-ntsc.sch/PC_D0 )
+  (    9 /ESVIDEO-RVB/DPC4 )
+  (   11 /ESVIDEO-RVB/DPC2 )
+  (   12 /ESVIDEO-RVB/DPC1 )
+  (   13 /ESVIDEO-RVB/DPC0 )
   (   14 GND )
-  (   15 VCC )
+  (   15 +5V )
   (   16 /graphic/PTWR )
-  (   17 /PTBURST )
-  (   18 /PTATN- )
-  (   19 /PTRDY- )
-  (   20 /buspci.sch/PTBE-0 )
-  (   21 /graphic/PTBE-1 )
+  (   17 /graphic/PTBURST- )
+  (   18 /buspci.sch/PTATN- )
+  (   19 /buspci.sch/PTRDY- )
+  (   20 /graphic/PTBE-0 )
+  (   21 /buspci.sch/PTBE-1 )
   (   22 /graphic/PTBE-2 )
   (   23 /graphic/PTBE-3 )
-  (   24 /buspci.sch/PTADR- )
-  (   25 N-000187 )
+  (   24 /graphic/PTADR- )
+  (   25 N-000183 )
   (   26 GND )
-  (   27 N-000187 )
-  (   28 VCC )
-  (   29 N-000187 )
-  (   30 /BPCLK )
+  (   27 N-000183 )
+  (   28 +5V )
+  (   29 N-000183 )
+  (   30 /buspci.sch/BPCLK )
   (   31 ? )
   (   32 /graphic/PTNUM1 )
   (   33 ? )
@@ -731,23 +731,23 @@
   (   35 /graphic/BE-3 )
   (   36 /graphic/BE-2 )
   (   37 /graphic/BE-1 )
-  (   38 /buspci.sch/BE-0 )
+  (   38 /graphic/BE-0 )
   (   39 /buspci.sch/ADR6 )
-  (   40 VCC )
+  (   40 +5V )
   (   41 GND )
   (   42 /graphic/ADR5 )
   (   43 /graphic/ADR4 )
   (   44 /graphic/ADR3 )
-  (   45 /buspci.sch/SELECT- )
-  (   46 //PCRD )
-  (   47 /buspci.sch/WR- )
-  (   48 /buspci.sch/ADR2 )
+  (   45 /graphic/SELECT- )
+  (   46 /graphic/RD- )
+  (   47 /graphic/WR- )
+  (   48 /graphic/ADR2 )
   (   49 ? )
   (   50 ? )
-  (   51 N-000204 )
+  (   51 N-000178 )
   (   52 GND )
   (   53 /graphic/DONE )
-  (   54 VCC )
+  (   54 +5V )
   (   55 /graphic/PROG* )
   (   56 /graphic/XTAL_I )
   (   57 /graphic/CLK10MHz )
@@ -758,60 +758,60 @@
   (   62 ? )
   (   63 /ESVIDEO-RVB/PCA2 )
   (   64 /graphic/PCA1 )
-  (   65 /pal-ntsc.sch/PC_A0 )
-  (   66 VCC )
+  (   65 /ESVIDEO-RVB/PCA0 )
+  (   66 +5V )
   (   67 GND )
   (   68 ? )
-  (   69 /ESVIDEO-RVB/WRCAD- )
-  (   70 /pal-ntsc.sch/BT812_WR- )
+  (   69 /graphic/WRCAD- )
+  (   70 /graphic/BT812_WR- )
   (   71 /graphic/BT812_RD- )
-  (   72 /RDCDA- )
-  (   73 /WRCDA- )
+  (   72 /ESVIDEO-RVB/RDCDA- )
+  (   73 /graphic/WRCDA- )
   (   74 /graphic/RDCAD- )
   (   75 /graphic/DIN )
   (   76 ? )
   (   77 /graphic/CCLK )
-  (   78 VCC )
+  (   78 +5V )
   (   79 ? )
   (   80 GND )
   (   81 /graphic/LED )
-  (   82 N-000203 )
-  (   83 /X_DONE )
-  (   84 /X_PROG- )
+  (   82 N-000177 )
+  (   83 /muxdata/X_DONE )
+  (   84 /graphic/X_PROG- )
   (   85 /graphic/X_DIN )
-  (   86 /muxdata/X_CLK )
-  (   87 N-000202 )
-  (   88 /graphic/DQ14 )
-  (   89 /graphic/DQ15 )
+  (   86 /graphic/X_CLK )
+  (   87 N-000163 )
+  (   88 /muxdata/DPC14 )
+  (   89 /muxdata/DPC15 )
   (   90 /muxdata/DPC13 )
   (   91 GND )
-  (   92 VCC )
-  (   93 /graphic/DQ12 )
-  (   94 /graphic/DQ11 )
-  (   95 /graphic/DQ10 )
-  (   96 /buspci.sch/DQ9 )
-  (   97 /graphic/DQ8 )
+  (   92 +5V )
+  (   93 /muxdata/DPC12 )
+  (   94 /muxdata/DPC11 )
+  (   95 /muxdata/DPC10 )
+  (   96 /muxdata/DPC9 )
+  (   97 /muxdata/DPC8 )
   (   98 ? )
   (   99 ? )
   (  100 ? )
  )
- ( /4891E7D3/33AFD8EF $noname  C73 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/33AFD8EF $noname  C73 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/33AFD8ED $noname  C72 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/33AFD8ED $noname  C72 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/33AFD8E9 $noname  C71 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/33AFD8E9 $noname  C71 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/33AFD8AF $noname  C70 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/33AFD8AF $noname  C70 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/33A805F8 $noname  U2 4C4001 {Lib=4C4001}
+ ( /4BF03683/33A805F8 $noname  U2 4C4001 {Lib=4C4001}
   (    1 /graphic/ID0 )
   (    2 /graphic/ID1 )
   (    3 /graphic/IWR- )
@@ -821,7 +821,7 @@
   (    7 /graphic/IA1 )
   (    8 /graphic/IA2 )
   (    9 /graphic/IA3 )
-  (   10 VCC )
+  (   10 +5V )
   (   11 /graphic/IA4 )
   (   12 /graphic/IA5 )
   (   13 /graphic/IA6 )
@@ -833,114 +833,114 @@
   (   19 /graphic/ID3 )
   (   20 GND )
  )
- ( /4891E7D3/33A7E0C8 $noname  P4 CONN_2 {Lib=CONN_2}
-  (    1 N-000187 )
+ ( /4BF03683/33A7E0C8 $noname  P4 CONN_2 {Lib=CONN_2}
+  (    1 N-000183 )
   (    2 GND )
  )
- ( /4891E7D3/33A7E0B2 $noname  R48 10K {Lib=R}
-  (    1 VCC )
-  (    2 N-000187 )
+ ( /4BF03683/33A7E0B2 $noname  R48 10K {Lib=R}
+  (    1 +5V )
+  (    2 N-000183 )
  )
- ( /4891E7D3/33A7DFAB $noname  P5 CONN_5 {Lib=CONN_5}
+ ( /4BF03683/33A7DFAB $noname  P5 CONN_5 {Lib=CONN_5}
   (    1 GND )
   (    2 /graphic/CCLK )
   (    3 /graphic/DIN )
   (    4 /graphic/DONE )
   (    5 /graphic/PROG* )
  )
- ( /4891E7D3/33A7DDDD $noname  U21 XC1736APD8 {Lib=XC1736APD8}
+ ( /4BF03683/33A7DDDD $noname  U21 XC1736APD8 {Lib=XC1736APD8}
   (    1 /graphic/DIN )
   (    2 /graphic/CCLK )
   (    3 /graphic/PROG* )
   (    4 /graphic/PROG* )
   (    5 GND )
   (    6 ? )
-  (    7 VCC )
-  (    8 VCC )
+  (    7 +5V )
+  (    8 +5V )
  )
- ( /4891E7D3/33A7DCE3 $noname  R1 10 {Lib=R}
+ ( /4BF03683/33A7DCE3 $noname  R1 10 {Lib=R}
   (    1 /graphic/VOSC )
-  (    2 VCC )
+  (    2 +5V )
  )
- ( /4891E7D3/33A7DC91 $noname  C23 100nF {Lib=C}
+ ( /4BF03683/33A7DC91 $noname  C23 100nF {Lib=C}
   (    1 /graphic/VOSC )
   (    2 GND )
  )
- ( /4891E7D3/3366016A $noname  U24 XC4005-PQ160 {Lib=XC4005-PQ160}
+ ( /4BF03683/3366016A $noname  U24 XC4005-PQ160 {Lib=XC4005-PQ160}
   (    1 GND )
   (    2 /graphic/CLK10MHz )
-  (    3 /PTRDY- )
-  (    4 /PTATN- )
-  (    5 /PTBURST )
+  (    3 /buspci.sch/PTRDY- )
+  (    4 /buspci.sch/PTATN- )
+  (    5 /graphic/PTBURST- )
   (    6 /graphic/HDREFOUT )
   (    7 /graphic/HDOUT )
   (   10 GND )
-  (   11 /graphic/X_IRQ )
+  (   11 /buspci.sch/X_IRQ )
   (   12 /graphic/PTWR )
-  (   13 /ESVIDEO-RVB/CSYNCOUT- )
-  (   14 /buspci.sch/PTADR- )
-  (   15 /RDEMPTY )
+  (   13 /modul/CSYNC-OUT )
+  (   14 /graphic/PTADR- )
+  (   15 /graphic/RDEMPTY )
   (   16 /buspci.sch/RDFIFO- )
-  (   17 /graphic/WRFULL )
-  (   18 /WRFIFDO- )
+  (   17 /buspci.sch/WRFULL )
+  (   18 /buspci.sch/WRFIFO- )
   (   19 GND )
-  (   20 VCC )
-  (   21 /pal-ntsc.sch/PC_D0 )
-  (   22 /graphic/DQ1 )
-  (   23 /muxdata/DPC2 )
-  (   24 /ESVIDEO-RVB/DPC3 )
-  (   25 /graphic/DQ4 )
+  (   20 +5V )
+  (   21 /ESVIDEO-RVB/DPC0 )
+  (   22 /ESVIDEO-RVB/DPC1 )
+  (   23 /ESVIDEO-RVB/DPC2 )
+  (   24 /muxdata/DPC3 )
+  (   25 /ESVIDEO-RVB/DPC4 )
   (   26 /ESVIDEO-RVB/DPC5 )
   (   27 /muxdata/DPC6 )
-  (   28 /buspci.sch/DQ7 )
+  (   28 /ESVIDEO-RVB/DPC7 )
   (   29 GND )
-  (   32 /graphic/DQ8 )
-  (   33 /buspci.sch/DQ9 )
-  (   34 /graphic/DQ10 )
-  (   35 /graphic/DQ11 )
-  (   36 /graphic/DQ12 )
+  (   32 /muxdata/DPC8 )
+  (   33 /muxdata/DPC9 )
+  (   34 /muxdata/DPC10 )
+  (   35 /muxdata/DPC11 )
+  (   36 /muxdata/DPC12 )
   (   37 /pal-ntsc.sch/VD_PAL- )
-  (   38 VCC )
+  (   38 +5V )
   (   39 GND )
-  (   40 VCC )
-  (   41 VCC )
-  (   42 VCC )
+  (   40 +5V )
+  (   41 +5V )
+  (   42 +5V )
   (   43 /pal-ntsc.sch/F_PALIN )
   (   44 /graphic/RESERV1 )
   (   45 /muxdata/DPC13 )
-  (   46 /graphic/DQ14 )
-  (   47 /graphic/DQ15 )
+  (   46 /muxdata/DPC14 )
+  (   47 /muxdata/DPC15 )
   (   48 /muxdata/ACQ_ON )
   (   51 GND )
-  (   52 /HD_PAL- )
-  (   53 /muxdata/BLANK- )
+  (   52 /pal-ntsc.sch/HD_PAL- )
+  (   53 /graphic/BLANK- )
   (   54 /graphic/CSYNCIN- )
-  (   55 /graphic/WRITE_RAM )
+  (   55 /muxdata/DATA_WR )
   (   56 /muxdata/ACCES_RAM- )
   (   57 /RAMS/CAS0- )
-  (   58 /RAMS/CAS1- )
+  (   58 /graphic/CAS1- )
   (   59 /RAMS/CAS2- )
-  (   60 VCC )
+  (   60 +5V )
   (   61 GND )
-  (   62 /CAS3- )
+  (   62 /RAMS/CAS3- )
   (   63 /RAMS/WRAM- )
-  (   64 /RAS7- )
-  (   65 /RAMS/RAS6- )
-  (   66 /graphic/RAS5- )
-  (   67 /RAMS/RAS4- )
-  (   68 /RAS3- )
-  (   69 /RAMS/RAS2- )
+  (   64 /graphic/RAS7- )
+  (   65 /graphic/RAS6- )
+  (   66 /RAMS/RAS5- )
+  (   67 /graphic/RAS4- )
+  (   68 /RAMS/RAS3- )
+  (   69 /graphic/RAS2- )
   (   70 GND )
-  (   73 /RAS1- )
-  (   74 /RAS0- )
-  (   75 /CLAMP )
-  (   76 /CLKCDA )
-  (   77 /ESVIDEO-RVB/CLKCAD )
+  (   73 /graphic/RAS1- )
+  (   74 /graphic/RAS0- )
+  (   75 /graphic/CLAMP )
+  (   76 /graphic/CDACLK )
+  (   77 /graphic/CADCLK )
   (   78 /graphic/IA7 )
   (   79 GND )
-  (   80 /X_DONE )
-  (   81 VCC )
-  (   82 /X_PROG- )
+  (   80 /muxdata/X_DONE )
+  (   81 +5V )
+  (   82 /graphic/X_PROG- )
   (   83 /graphic/IA6 )
   (   84 ? )
   (   85 /graphic/IA5 )
@@ -956,7 +956,7 @@
   (   97 /graphic/IRAS- )
   (   98 /graphic/IWR- )
   (   99 /graphic/ID1 )
-  (  100 VCC )
+  (  100 +5V )
   (  101 GND )
   (  102 /graphic/ID0 )
   (  103 /graphic/IOE- )
@@ -964,17 +964,17 @@
   (  105 /graphic/ID2 )
   (  106 /graphic/ID3 )
   (  107 /graphic/TVI1 )
-  (  108 /ESVIDEO-RVB/TVI0 )
+  (  108 /graphic/TVI0 )
   (  109 /RAMS/MXA10 )
   (  110 GND )
-  (  113 /graphic/MXA9 )
+  (  113 /RAMS/MXA9 )
   (  114 /RAMS/MXA8 )
   (  115 /RAMS/MXA7 )
   (  116 /RAMS/MXA6 )
   (  117 /graphic/X_DIN )
-  (  118 /X_DATA )
-  (  119 /muxdata/X_CLK )
-  (  120 VCC )
+  (  118 /muxdata/X_DIN )
+  (  119 /graphic/X_CLK )
+  (  120 +5V )
   (  121 ? )
   (  122 GND )
   (  123 /RAMS/MXA5 )
@@ -984,86 +984,86 @@
   (  127 /RAMS/MXA1 )
   (  128 /RAMS/MXA0 )
   (  131 GND )
-  (  132 /buspci.sch/WR- )
-  (  133 //PCRD )
-  (  134 /IRQ_SRL )
-  (  135 /buspci.sch/SELECT- )
-  (  137 /buspci.sch/ADR2 )
+  (  132 /graphic/WR- )
+  (  133 /graphic/RD- )
+  (  134 /graphic/IRQ_SLR )
+  (  135 /graphic/SELECT- )
+  (  137 /graphic/ADR2 )
   (  138 /graphic/ADR3 )
   (  139 /graphic/ADR4 )
   (  140 /graphic/ADR5 )
   (  141 GND )
-  (  142 VCC )
+  (  142 +5V )
   (  143 /buspci.sch/ADR6 )
-  (  144 /buspci.sch/BE-0 )
+  (  144 /graphic/BE-0 )
   (  145 /graphic/BE-1 )
   (  146 /graphic/BE-2 )
   (  147 /graphic/BE-3 )
-  (  148 /SYSRST- )
-  (  149 /buspci.sch/IRQ- )
+  (  148 /pal-ntsc.sch/RESET- )
+  (  149 /graphic/IRQ- )
   (  150 /buspci.sch/PTNUM0 )
   (  151 GND )
   (  154 /graphic/PTNUM1 )
   (  155 /graphic/PTBE-3 )
   (  156 /graphic/PTBE-2 )
-  (  157 /graphic/PTBE-1 )
-  (  158 /buspci.sch/PTBE-0 )
+  (  157 /buspci.sch/PTBE-1 )
+  (  158 /graphic/PTBE-0 )
   (  159 /graphic/CSIO- )
-  (  160 VCC )
+  (  160 +5V )
  )
- ( /4891E7D3/2D5AA03C $noname  R13 1K {Lib=R}
-  (    1 VCC )
-  (    2 N-000194 )
+ ( /4BF03683/2D5AA03C $noname  R13 1K {Lib=R}
+  (    1 +5V )
+  (    2 N-000153 )
  )
- ( /4891E7D3/2D5AA041 $noname  D6 LED {Lib=LED}
-  (    1 N-000194 )
+ ( /4BF03683/2D5AA041 $noname  D6 LED {Lib=LED}
+  (    1 N-000153 )
   (    2 /graphic/LED )
  )
- ( /4891E7D3/B3BF4EDE $noname  C49 22pF {Lib=C}
-  (    1 N-000196 )
+ ( /4BF03683/B3BF4EDE $noname  C49 22pF {Lib=C}
+  (    1 N-000162 )
   (    2 GND )
  )
- ( /4891E7D3/B3BF4EE8 $noname  C50 22pF {Lib=C}
+ ( /4BF03683/B3BF4EE8 $noname  C50 22pF {Lib=C}
   (    1 /graphic/XTAL_I )
   (    2 GND )
  )
- ( /4891E7D3/B3BF4ED4 $noname  X1 10MHz {Lib=CRYSTAL}
-  (    1 N-000196 )
+ ( /4BF03683/B3BF4ED4 $noname  X1 10MHz {Lib=CRYSTAL}
+  (    1 N-000162 )
   (    2 /graphic/XTAL_I )
  )
- ( /4891E7D3/B3BF4ED9 $noname  R26 220K {Lib=R}
+ ( /4BF03683/B3BF4ED9 $noname  R26 220K {Lib=R}
   (    1 /graphic/XTAL_I )
-  (    2 N-000196 )
+  (    2 N-000162 )
  )
- ( /4891E7D3/BF805547 $noname  C17 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/BF805547 $noname  C17 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/BF80554C $noname  C18 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/BF80554C $noname  C18 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/BF805551 $noname  C19 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/BF805551 $noname  C19 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/BF805556 $noname  C20 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/BF805556 $noname  C20 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/B9ED7AB0 $noname  C56 4,7uF {Lib=CP}
-  (    1 VCC )
+ ( /4BF03683/B9ED7AB0 $noname  C56 4,7uF {Lib=CP}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/B9ED7AB5 $noname  C57 4,7uF {Lib=CP}
-  (    1 VCC )
+ ( /4BF03683/B9ED7AB5 $noname  C57 4,7uF {Lib=CP}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/228C4700 $noname  C63 47uF {Lib=CP}
+ ( /4BF03683/228C4700 $noname  C63 47uF {Lib=CP}
   (    1 /graphic/VOSC )
   (    2 GND )
  )
- ( /4891E7D3/2295D392 $noname  U7 AV9173 {Lib=AV9173}
+ ( /4BF03683/2295D392 $noname  U7 AV9173 {Lib=AV9173}
   (    1 /graphic/HDOUT )
   (    2 /graphic/HDREFOUT )
   (    3 GND )
@@ -1073,21 +1073,21 @@
   (    7 /graphic/VOSC )
   (    8 ? )
  )
- ( /4891E7D3/268A4E88 $noname  C22 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/268A4E88 $noname  C22 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/268A4E83 $noname  C21 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03683/268A4E83 $noname  C21 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D3/525FE207 $noname  R21 220 {Lib=R}
-  (    1 N-000196 )
+ ( /4BF03683/525FE207 $noname  R21 220 {Lib=R}
+  (    1 N-000162 )
   (    2 /graphic/CLK10MHz )
  )
- ( /4891E7D5/32FA1E5B $noname  U13 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/32FA1E5B $noname  U13 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1095,7 +1095,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1111,31 +1111,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAS7- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS7- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAS7- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS7- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1147,9 +1147,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U14 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036CF $noname  U14 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1157,7 +1157,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1173,31 +1173,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAMS/RAS6- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS6- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAMS/RAS6- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS6- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1209,9 +1209,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U12 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036CE $noname  U12 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1219,7 +1219,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1235,31 +1235,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /graphic/RAS5- )
+  (   32 /RAMS/MXA9 )
+  (   34 /RAMS/RAS5- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /graphic/RAS5- )
+  (   43 /RAMS/CAS3- )
+  (   44 /RAMS/RAS5- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1271,9 +1271,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U16 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036D0 $noname  U16 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1281,7 +1281,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1297,31 +1297,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAMS/RAS4- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS4- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAMS/RAS4- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS4- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1333,9 +1333,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U15 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036D1 $noname  U15 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1343,7 +1343,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1359,31 +1359,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAS3- )
+  (   32 /RAMS/MXA9 )
+  (   34 /RAMS/RAS3- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAS3- )
+  (   43 /RAMS/CAS3- )
+  (   44 /RAMS/RAS3- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1395,9 +1395,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U17 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036D2 $noname  U17 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1405,7 +1405,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1421,31 +1421,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAMS/RAS2- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS2- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAMS/RAS2- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS2- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1457,9 +1457,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U18 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036D3 $noname  U18 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1467,7 +1467,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1483,31 +1483,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAS1- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS1- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAS1- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS1- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1519,9 +1519,9 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D5/32FA1E5B $noname  U19 SIM4X32 {Lib=SIM4X32}
+ ( /4BF03685/4BF036D4 $noname  U19 SIM4X32 {Lib=SIM4X32}
   (    1 GND )
-  (    2 /muxdata/VRAM0 )
+  (    2 /RAMS/TVRAM0 )
   (    3 /RAMS/TVRAM16 )
   (    4 /RAMS/TVRAM1 )
   (    5 /RAMS/TVRAM17 )
@@ -1529,7 +1529,7 @@
   (    7 /RAMS/TVRAM18 )
   (    8 /RAMS/TVRAM3 )
   (    9 /RAMS/TVRAM19 )
-  (   10 VCC )
+  (   10 +5V )
   (   12 /RAMS/MXA0 )
   (   13 /RAMS/MXA1 )
   (   14 /RAMS/MXA2 )
@@ -1545,31 +1545,31 @@
   (   24 /RAMS/TVRAM6 )
   (   25 /RAMS/TVRAM22 )
   (   26 /RAMS/TVRAM7 )
-  (   27 /muxdata/VRAM23 )
+  (   27 /RAMS/TVRAM23 )
   (   28 /RAMS/MXA7 )
-  (   30 VCC )
+  (   30 +5V )
   (   31 /RAMS/MXA8 )
-  (   32 /graphic/MXA9 )
-  (   34 /RAS0- )
+  (   32 /RAMS/MXA9 )
+  (   34 /graphic/RAS0- )
   (   39 GND )
   (   40 /RAMS/CAS0- )
-  (   41 /RAMS/CAS1- )
+  (   41 /graphic/CAS1- )
   (   42 /RAMS/CAS2- )
-  (   43 /CAS3- )
-  (   44 /RAS0- )
+  (   43 /RAMS/CAS3- )
+  (   44 /graphic/RAS0- )
   (   47 /RAMS/WRAM- )
-  (   49 /muxdata/VRAM8 )
+  (   49 /RAMS/TVRAM8 )
   (   50 /RAMS/TVRAM24 )
   (   51 /RAMS/TVRAM9 )
   (   52 /RAMS/TVRAM25 )
   (   53 /RAMS/TVRAM10 )
-  (   54 /muxdata/VRAM26 )
+  (   54 /RAMS/TVRAM26 )
   (   55 /RAMS/TVRAM11 )
   (   56 /RAMS/TVRAM27 )
   (   57 /RAMS/TVRAM12 )
   (   58 /RAMS/TVRAM28 )
-  (   59 VCC )
-  (   60 /muxdata/VRAM29 )
+  (   59 +5V )
+  (   60 /RAMS/TVRAM29 )
   (   61 /RAMS/TVRAM13 )
   (   62 /RAMS/TVRAM30 )
   (   63 /RAMS/TVRAM14 )
@@ -1581,30 +1581,30 @@
   (   70 ? )
   (   72 GND )
  )
- ( /4891E7D7/33AFD43A $noname  C69 4,7uF {Lib=CP}
+ ( /4BF03687/33AFD43A $noname  C69 4,7uF {Lib=CP}
   (    1 +3.3V )
   (    2 GND )
  )
- ( /4891E7D7/33AFD420 $noname  C68 4,7uF {Lib=CP}
+ ( /4BF03687/4BF036D8 $noname  C68 4,7uF {Lib=CP}
   (    1 +3.3V )
   (    2 GND )
  )
- ( /4891E7D7/33AFD420 $noname  C67 4,7uF {Lib=CP}
-  (    1 VCC )
+ ( /4BF03687/33AFD420 $noname  C67 4,7uF {Lib=CP}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/21FA8347 $noname  U11 S5933_PQ160 {Lib=S5933_PQ160}
+ ( /4BF03687/21FA8347 $noname  U11 S5933_PQ160 {Lib=S5933_PQ160}
   (    1 /buspci.sch/EQ0 )
   (    2 /buspci.sch/P_AD23 )
   (    3 /buspci.sch/P_AD22 )
   (    4 /buspci.sch/P_AD21 )
-  (    5 /buspci.sch/DQ31 )
+  (    5 /muxdata/DPC31 )
   (    6 /buspci.sch/P_AD20 )
   (    7 /buspci.sch/P_AD19 )
   (    8 /buspci.sch/P_AD18 )
   (    9 /buspci.sch/EQ1 )
   (   10 GND )
-  (   11 VCC )
+  (   11 +5V )
   (   12 /buspci.sch/P_AD17 )
   (   13 /muxdata/DPC30 )
   (   14 /buspci.sch/P_AD16 )
@@ -1618,19 +1618,19 @@
   (   22 /buspci.sch/P_STOP# )
   (   23 /buspci.sch/P_LOCK# )
   (   24 /buspci.sch/P_PERR# )
-  (   25 /buspci.sch/DQ29 )
+  (   25 /muxdata/DPC29 )
   (   26 /buspci.sch/P_SERR# )
   (   27 /buspci.sch/P_PAR )
   (   28 /buspci.sch/P_C/BE1# )
   (   29 /buspci.sch/EQ4 )
   (   30 GND )
-  (   31 VCC )
+  (   31 +5V )
   (   32 /buspci.sch/P_AD15 )
   (   33 /buspci.sch/EQ5 )
   (   34 /buspci.sch/P_AD14 )
   (   35 /buspci.sch/P_AD13 )
   (   36 /buspci.sch/P_AD12 )
-  (   37 /buspci.sch/DQ28 )
+  (   37 /muxdata/DPC28 )
   (   38 /buspci.sch/P_AD11 )
   (   39 /buspci.sch/P_AD10 )
   (   40 /buspci.sch/P_AD9 )
@@ -1644,94 +1644,94 @@
   (   48 /buspci.sch/P_AD4 )
   (   49 /buspci.sch/EQ7 )
   (   50 GND )
-  (   51 VCC )
+  (   51 +5V )
   (   52 /buspci.sch/P_AD3 )
-  (   53 /buspci.sch/DQ26 )
+  (   53 /muxdata/DPC26 )
   (   54 /buspci.sch/P_AD2 )
   (   55 /buspci.sch/P_AD1 )
   (   56 /buspci.sch/P_AD0 )
-  (   57 /IRQ_SRL )
+  (   57 /graphic/IRQ_SLR )
   (   58 /buspci.sch/P_INTA# )
-  (   59 N-000269 )
+  (   59 N-000317 )
   (   60 /graphic/BE-3 )
   (   61 /buspci.sch/EA1 )
   (   62 /graphic/BE-2 )
   (   63 /graphic/BE-1 )
   (   64 /graphic/ADR5 )
-  (   65 /buspci.sch/DQ25 )
+  (   65 /muxdata/DPC25 )
   (   66 /graphic/ADR4 )
   (   67 /graphic/ADR3 )
-  (   68 /buspci.sch/ADR2 )
+  (   68 /graphic/ADR2 )
   (   69 /buspci.sch/EA2 )
   (   70 GND )
-  (   71 VCC )
-  (   72 //PCRD )
+  (   71 +5V )
+  (   72 /graphic/RD- )
   (   73 /buspci.sch/EA3 )
-  (   74 /buspci.sch/WR- )
-  (   75 /buspci.sch/SELECT- )
-  (   76 /graphic/DQ15 )
-  (   77 /buspci.sch/DQ24 )
-  (   78 /graphic/DQ14 )
+  (   74 /graphic/WR- )
+  (   75 /graphic/SELECT- )
+  (   76 /muxdata/DPC15 )
+  (   77 /muxdata/DPC24 )
+  (   78 /muxdata/DPC14 )
   (   79 /muxdata/DPC13 )
-  (   80 /graphic/DQ12 )
+  (   80 /muxdata/DPC12 )
   (   81 /buspci.sch/EA4 )
-  (   82 /graphic/DQ11 )
-  (   83 /graphic/DQ10 )
-  (   84 /buspci.sch/DQ9 )
-  (   85 /buspci.sch/DQ23 )
-  (   86 /graphic/DQ8 )
-  (   87 /buspci.sch/BE-0 )
-  (   88 /buspci.sch/DQ7 )
+  (   82 /muxdata/DPC11 )
+  (   83 /muxdata/DPC10 )
+  (   84 /muxdata/DPC9 )
+  (   85 /muxdata/DPC23 )
+  (   86 /muxdata/DPC8 )
+  (   87 /graphic/BE-0 )
+  (   88 /ESVIDEO-RVB/DPC7 )
   (   89 /buspci.sch/EA5 )
   (   90 GND )
-  (   91 VCC )
+  (   91 +5V )
   (   92 /muxdata/DPC6 )
-  (   93 /buspci.sch/DQ22 )
+  (   93 /muxdata/DPC22 )
   (   94 /ESVIDEO-RVB/DPC5 )
-  (   95 /graphic/DQ4 )
-  (   96 /ESVIDEO-RVB/DPC3 )
+  (   95 /ESVIDEO-RVB/DPC4 )
+  (   96 /muxdata/DPC3 )
   (   97 /buspci.sch/EA6 )
-  (   98 /muxdata/DPC2 )
-  (   99 /graphic/DQ1 )
-  (  100 /pal-ntsc.sch/PC_D0 )
+  (   98 /ESVIDEO-RVB/DPC2 )
+  (   99 /ESVIDEO-RVB/DPC1 )
+  (  100 /ESVIDEO-RVB/DPC0 )
   (  101 /buspci.sch/EA7 )
-  (  102 /WRFIFDO- )
-  (  103 /graphic/WRFULL )
+  (  102 /buspci.sch/WRFIFO- )
+  (  103 /buspci.sch/WRFULL )
   (  104 /buspci.sch/RDFIFO- )
   (  105 /muxdata/DPC21 )
-  (  106 /RDEMPTY )
-  (  107 /buspci.sch/PTADR- )
+  (  106 /graphic/RDEMPTY )
+  (  107 /graphic/PTADR- )
   (  108 /graphic/PTWR )
-  (  109 /graphic/X_IRQ )
+  (  109 /buspci.sch/X_IRQ )
   (  110 GND )
-  (  111 VCC )
-  (  112 /PTBURST )
+  (  111 +5V )
+  (  112 /graphic/PTBURST- )
   (  113 /buspci.sch/EA9 )
-  (  114 /PTATN- )
-  (  115 /PTRDY- )
-  (  116 /buspci.sch/PTBE-0 )
-  (  117 /buspci.sch/DQ20 )
-  (  118 /graphic/PTBE-1 )
+  (  114 /buspci.sch/PTATN- )
+  (  115 /buspci.sch/PTRDY- )
+  (  116 /graphic/PTBE-0 )
+  (  117 /muxdata/DPC20 )
+  (  118 /buspci.sch/PTBE-1 )
   (  119 /graphic/PTBE-2 )
   (  120 /graphic/PTBE-3 )
   (  121 /buspci.sch/EA10 )
   (  122 /graphic/PTNUM1 )
   (  123 /buspci.sch/PTNUM0 )
-  (  124 /buspci.sch/IRQ- )
+  (  124 /graphic/IRQ- )
   (  125 /muxdata/DPC19 )
-  (  126 /SYSRST- )
-  (  127 N-000341 )
-  (  128 N-000340 )
+  (  126 /pal-ntsc.sch/RESET- )
+  (  127 N-000318 )
+  (  128 N-000319 )
   (  129 /buspci.sch/EA11 )
   (  130 GND )
-  (  131 VCC )
+  (  131 +5V )
   (  132 /buspci.sch/ADR6 )
   (  133 /muxdata/DPC18 )
-  (  135 N-000339 )
+  (  135 N-000315 )
   (  137 /buspci.sch/EA12 )
-  (  138 N-000338 )
+  (  138 N-000316 )
   (  139 /buspci.sch/P_RST# )
-  (  140 /BPCLK )
+  (  140 /buspci.sch/BPCLK )
   (  141 /buspci.sch/EA13 )
   (  142 /buspci.sch/P_CLK )
   (  143 /buspci.sch/P_GNT# )
@@ -1742,7 +1742,7 @@
   (  148 /buspci.sch/P_AD29 )
   (  149 /buspci.sch/EA14 )
   (  150 GND )
-  (  151 VCC )
+  (  151 +5V )
   (  152 /buspci.sch/P_AD28 )
   (  153 /buspci.sch/EA15 )
   (  154 /buspci.sch/P_AD27 )
@@ -1753,257 +1753,257 @@
   (  159 /buspci.sch/P_C/BE3# )
   (  160 /buspci.sch/P_IDSEL )
  )
- ( /4891E7D7/2691B632 $noname  W4 TEST {Lib=TEST}
+ ( /4BF03687/2691B632 $noname  W4 TEST {Lib=TEST}
   (    1 GND )
-  (    2 N-000284 )
+  (    2 N-000337 )
  )
- ( /4891E7D7/2691B637 $noname  W5 TEST {Lib=TEST}
+ ( /4BF03687/2691B637 $noname  W5 TEST {Lib=TEST}
   (    1 GND )
-  (    2 N-000286 )
+  (    2 N-000338 )
  )
- ( /4891E7D7/26A799E8 $noname  R5 10K {Lib=R}
-  (    1 N-000269 )
-  (    2 VCC )
+ ( /4BF03687/26A799E8 $noname  R5 10K {Lib=R}
+  (    1 N-000317 )
+  (    2 +5V )
  )
- ( /4891E7D7/26A79A01 $noname  R6 10K {Lib=R}
-  (    1 N-000338 )
-  (    2 VCC )
+ ( /4BF03687/26A79A01 $noname  R6 10K {Lib=R}
+  (    1 N-000316 )
+  (    2 +5V )
  )
- ( /4891E7D7/26A79A0B $noname  R7 10K {Lib=R}
-  (    1 N-000339 )
-  (    2 VCC )
+ ( /4BF03687/26A79A0B $noname  R7 10K {Lib=R}
+  (    1 N-000315 )
+  (    2 +5V )
  )
- ( /4891E7D7/26B211C0 $noname  R28 2,2K {Lib=R}
-  (    1 VCC )
-  (    2 N-000340 )
+ ( /4BF03687/26B211C0 $noname  R28 2,2K {Lib=R}
+  (    1 +5V )
+  (    2 N-000319 )
  )
- ( /4891E7D7/26B211CF $noname  R29 2,2K {Lib=R}
-  (    1 VCC )
-  (    2 N-000341 )
+ ( /4BF03687/26B211CF $noname  R29 2,2K {Lib=R}
+  (    1 +5V )
+  (    2 N-000318 )
  )
- ( /4891E7D7/26B211D9 $noname  C24 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B211D9 $noname  C24 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B211E3 $noname  C25 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B211E3 $noname  C25 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B211ED $noname  C26 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B211ED $noname  C26 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B211F7 $noname  C27 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B211F7 $noname  C27 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B21201 $noname  C28 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B21201 $noname  C28 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B2120B $noname  C29 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B2120B $noname  C29 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B21215 $noname  C30 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B21215 $noname  C30 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/26B2121F $noname  C31 100nF {Lib=C}
-  (    1 VCC )
+ ( /4BF03687/26B2121F $noname  C31 100nF {Lib=C}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/2820F08A $noname  C38 4,7uF {Lib=CP}
-  (    1 VCC )
+ ( /4BF03687/2820F08A $noname  C38 4,7uF {Lib=CP}
+  (    1 +5V )
   (    2 GND )
  )
- ( /4891E7D7/269C6109 $noname  BUS1 BUSPCI_5V {Lib=BUSPCI-5V}
-  (  A62 VCC )
-  (  A61 VCC )
-  (  A60 ? )
-  (  A59 VCC )
-  (  A58 /buspci.sch/P_AD0 )
-  (  A57 /buspci.sch/P_AD2 )
-  (  A56 GND )
-  (  A55 /buspci.sch/P_AD4 )
-  (  A54 /buspci.sch/P_AD6 )
-  (  A53 +3.3V )
-  (  A52 /buspci.sch/P_C/BE0# )
-  (  A49 /buspci.sch/P_AD9 )
-  (  A48 GND )
-  (  A47 /buspci.sch/P_AD11 )
-  (  A46 /buspci.sch/P_AD13 )
-  (  A45 +3.3V )
-  (  A44 /buspci.sch/P_AD15 )
-  (  A43 /buspci.sch/P_PAR )
-  (  A42 GND )
-  (  A41 ? )
-  (  A40 ? )
-  (  A39 +3.3V )
-  (  A38 /buspci.sch/P_STOP# )
-  (  A37 GND )
-  (  A36 /buspci.sch/P_TRDY# )
-  (  A35 GND )
-  (  A34 /buspci.sch/P_FRAME# )
-  (  A33 +3.3V )
-  (  A32 /buspci.sch/P_AD16 )
-  (  A31 /buspci.sch/P_AD18 )
-  (  A30 GND )
-  (  A29 /buspci.sch/P_AD20 )
-  (  A28 /buspci.sch/P_AD22 )
-  (  A27 +3.3V )
-  (  A26 /buspci.sch/P_IDSEL )
-  (  A25 /buspci.sch/P_AD24 )
-  (  A24 GND )
-  (  A23 /buspci.sch/P_AD26 )
-  (  A22 /buspci.sch/P_AD28 )
-  (  A21 +3.3V )
-  (  A20 /buspci.sch/P_AD30 )
-  (  A19 ? )
-  (  A18 GND )
-  (  A17 /buspci.sch/P_GNT# )
-  (  A16 VCC )
-  (  A15 /buspci.sch/P_RST# )
-  (  A14 ? )
-  (  A11 ? )
-  (  A10 VCC )
-  (   A9 ? )
-  (   A8 VCC )
-  (   A7 ? )
-  (   A6 /buspci.sch/P_INTA# )
-  (   A5 VCC )
-  (   A4 N-000279 )
-  (   A3 ? )
-  (   A2 +12V )
+ ( /4BF03687/269C6109 $noname  BUS1 BUSPCI_5V {Lib=BUSPCI-5V}
   (   A1 ? )
-  (  B62 VCC )
-  (  B61 VCC )
-  (  B60 ? )
-  (  B59 VCC )
-  (  B58 /buspci.sch/P_AD1 )
-  (  B57 GND )
-  (  B56 /buspci.sch/P_AD3 )
-  (  B55 /buspci.sch/P_AD5 )
-  (  B54 +3.3V )
-  (  B53 /buspci.sch/P_AD7 )
-  (  B52 /buspci.sch/P_AD8 )
-  (  B49 GND )
-  (  B48 /buspci.sch/P_AD10 )
-  (  B47 /buspci.sch/P_AD12 )
-  (  B46 GND )
-  (  B45 /buspci.sch/P_AD14 )
-  (  B44 /buspci.sch/P_C/BE1# )
-  (  B43 +3.3V )
-  (  B42 /buspci.sch/P_SERR# )
-  (  B41 +3.3V )
-  (  B40 /buspci.sch/P_PERR# )
-  (  B39 /buspci.sch/P_LOCK# )
-  (  B38 GND )
-  (  B37 /buspci.sch/P_DEVSEL# )
-  (  B36 +3.3V )
-  (  B35 /buspci.sch/P_IRDY# )
-  (  B34 GND )
-  (  B33 /buspci.sch/P_C/BE2# )
-  (  B32 /buspci.sch/P_AD17 )
-  (  B31 +3.3V )
-  (  B30 /buspci.sch/P_AD19 )
-  (  B29 /buspci.sch/P_AD21 )
-  (  B28 GND )
-  (  B27 /buspci.sch/P_AD23 )
-  (  B26 /buspci.sch/P_C/BE3# )
-  (  B25 +3.3V )
-  (  B24 /buspci.sch/P_AD25 )
-  (  B23 /buspci.sch/P_AD27 )
-  (  B22 GND )
-  (  B21 /buspci.sch/P_AD29 )
-  (  B20 /buspci.sch/P_AD31 )
-  (  B19 VCC )
-  (  B18 /buspci.sch/P_REQ# )
-  (  B17 GND )
-  (  B16 /buspci.sch/P_CLK )
-  (  B15 GND )
-  (  B14 ? )
-  (  B11 N-000284 )
-  (  B10 ? )
-  (   B9 N-000286 )
-  (   B8 ? )
-  (   B7 ? )
-  (   B6 VCC )
-  (   B5 VCC )
-  (   B4 N-000279 )
-  (   B3 GND )
-  (   B2 ? )
+  (   A2 +12V )
+  (   A3 ? )
+  (   A4 N-000320 )
+  (   A5 +5V )
+  (   A6 /buspci.sch/P_INTA# )
+  (   A7 ? )
+  (   A8 +5V )
+  (   A9 ? )
+  (  A10 +5V )
+  (  A11 ? )
+  (  A14 ? )
+  (  A15 /buspci.sch/P_RST# )
+  (  A16 +5V )
+  (  A17 /buspci.sch/P_GNT# )
+  (  A18 GND )
+  (  A19 ? )
+  (  A20 /buspci.sch/P_AD30 )
+  (  A21 +3.3V )
+  (  A22 /buspci.sch/P_AD28 )
+  (  A23 /buspci.sch/P_AD26 )
+  (  A24 GND )
+  (  A25 /buspci.sch/P_AD24 )
+  (  A26 /buspci.sch/P_IDSEL )
+  (  A27 +3.3V )
+  (  A28 /buspci.sch/P_AD22 )
+  (  A29 /buspci.sch/P_AD20 )
+  (  A30 GND )
+  (  A31 /buspci.sch/P_AD18 )
+  (  A32 /buspci.sch/P_AD16 )
+  (  A33 +3.3V )
+  (  A34 /buspci.sch/P_FRAME# )
+  (  A35 GND )
+  (  A36 /buspci.sch/P_TRDY# )
+  (  A37 GND )
+  (  A38 /buspci.sch/P_STOP# )
+  (  A39 +3.3V )
+  (  A40 ? )
+  (  A41 ? )
+  (  A42 GND )
+  (  A43 /buspci.sch/P_PAR )
+  (  A44 /buspci.sch/P_AD15 )
+  (  A45 +3.3V )
+  (  A46 /buspci.sch/P_AD13 )
+  (  A47 /buspci.sch/P_AD11 )
+  (  A48 GND )
+  (  A49 /buspci.sch/P_AD9 )
+  (  A52 /buspci.sch/P_C/BE0# )
+  (  A53 +3.3V )
+  (  A54 /buspci.sch/P_AD6 )
+  (  A55 /buspci.sch/P_AD4 )
+  (  A56 GND )
+  (  A57 /buspci.sch/P_AD2 )
+  (  A58 /buspci.sch/P_AD0 )
+  (  A59 +5V )
+  (  A60 ? )
+  (  A61 +5V )
+  (  A62 +5V )
   (   B1 ? )
+  (   B2 ? )
+  (   B3 GND )
+  (   B4 N-000320 )
+  (   B5 +5V )
+  (   B6 +5V )
+  (   B7 ? )
+  (   B8 ? )
+  (   B9 N-000338 )
+  (  B10 ? )
+  (  B11 N-000337 )
+  (  B14 ? )
+  (  B15 GND )
+  (  B16 /buspci.sch/P_CLK )
+  (  B17 GND )
+  (  B18 /buspci.sch/P_REQ# )
+  (  B19 +5V )
+  (  B20 /buspci.sch/P_AD31 )
+  (  B21 /buspci.sch/P_AD29 )
+  (  B22 GND )
+  (  B23 /buspci.sch/P_AD27 )
+  (  B24 /buspci.sch/P_AD25 )
+  (  B25 +3.3V )
+  (  B26 /buspci.sch/P_C/BE3# )
+  (  B27 /buspci.sch/P_AD23 )
+  (  B28 GND )
+  (  B29 /buspci.sch/P_AD21 )
+  (  B30 /buspci.sch/P_AD19 )
+  (  B31 +3.3V )
+  (  B32 /buspci.sch/P_AD17 )
+  (  B33 /buspci.sch/P_C/BE2# )
+  (  B34 GND )
+  (  B35 /buspci.sch/P_IRDY# )
+  (  B36 +3.3V )
+  (  B37 /buspci.sch/P_DEVSEL# )
+  (  B38 GND )
+  (  B39 /buspci.sch/P_LOCK# )
+  (  B40 /buspci.sch/P_PERR# )
+  (  B41 +3.3V )
+  (  B42 /buspci.sch/P_SERR# )
+  (  B43 +3.3V )
+  (  B44 /buspci.sch/P_C/BE1# )
+  (  B45 /buspci.sch/P_AD14 )
+  (  B46 GND )
+  (  B47 /buspci.sch/P_AD12 )
+  (  B48 /buspci.sch/P_AD10 )
+  (  B49 GND )
+  (  B52 /buspci.sch/P_AD8 )
+  (  B53 /buspci.sch/P_AD7 )
+  (  B54 +3.3V )
+  (  B55 /buspci.sch/P_AD5 )
+  (  B56 /buspci.sch/P_AD3 )
+  (  B57 GND )
+  (  B58 /buspci.sch/P_AD1 )
+  (  B59 +5V )
+  (  B60 ? )
+  (  B61 +5V )
+  (  B62 +5V )
  )
- ( /4891E7D7/2F5F7E5C $noname  U1 24C16 {Lib=24C16}
+ ( /4BF03687/2F5F7E5C $noname  U1 24C16 {Lib=24C16}
   (    1 GND )
   (    2 GND )
   (    3 GND )
   (    4 GND )
-  (    5 N-000341 )
-  (    6 N-000340 )
-  (    7 VCC )
-  (    8 VCC )
+  (    5 N-000318 )
+  (    6 N-000319 )
+  (    7 +5V )
+  (    8 +5V )
  )
- ( /4891E7D7/C8AF8090 $noname  RR1 8x10K {Lib=RR8}
-  (    1 VCC )
+ ( /4BF03687/C8AF8090 $noname  RR1 8x10K {Lib=RR8}
+  (    1 +5V )
   (    2 /buspci.sch/EQ0 )
-  (    3 /buspci.sch/DQ31 )
+  (    3 /muxdata/DPC31 )
   (    4 /buspci.sch/EQ1 )
   (    5 /muxdata/DPC30 )
   (    6 /buspci.sch/EQ2 )
   (    7 /buspci.sch/EQ3 )
-  (    8 /buspci.sch/DQ29 )
+  (    8 /muxdata/DPC29 )
   (    9 /buspci.sch/EQ4 )
  )
- ( /4891E7D7/C8B01EF2 $noname  RR2 8x10K {Lib=RR8}
-  (    1 VCC )
+ ( /4BF03687/C8B01EF2 $noname  RR2 8x10K {Lib=RR8}
+  (    1 +5V )
   (    2 /buspci.sch/EQ6 )
-  (    3 /buspci.sch/DQ28 )
+  (    3 /muxdata/DPC28 )
   (    4 /buspci.sch/EQ5 )
   (    5 /muxdata/DPC27 )
   (    6 /buspci.sch/EA1 )
-  (    7 /IRQ_SRL )
-  (    8 /buspci.sch/DQ26 )
+  (    7 /graphic/IRQ_SLR )
+  (    8 /muxdata/DPC26 )
   (    9 /buspci.sch/EQ7 )
  )
- ( /4891E7D7/C8B23B9F $noname  RR3 8x10K {Lib=RR8}
-  (    1 VCC )
+ ( /4BF03687/C8B23B9F $noname  RR3 8x10K {Lib=RR8}
+  (    1 +5V )
   (    2 /buspci.sch/EA4 )
-  (    3 /buspci.sch/DQ24 )
-  (    4 /buspci.sch/SELECT- )
-  (    5 /buspci.sch/WR- )
+  (    3 /muxdata/DPC24 )
+  (    4 /graphic/SELECT- )
+  (    5 /graphic/WR- )
   (    6 /buspci.sch/EA3 )
-  (    7 //PCRD )
+  (    7 /graphic/RD- )
   (    8 /buspci.sch/EA2 )
-  (    9 /buspci.sch/DQ25 )
+  (    9 /muxdata/DPC25 )
  )
- ( /4891E7D7/C8B2B4CE $noname  RR4 8x10K {Lib=RR8}
-  (    1 VCC )
+ ( /4BF03687/C8B2B4CE $noname  RR4 8x10K {Lib=RR8}
+  (    1 +5V )
   (    2 /buspci.sch/EA6 )
-  (    3 /buspci.sch/DQ22 )
+  (    3 /muxdata/DPC22 )
   (    4 /buspci.sch/EA5 )
-  (    5 /buspci.sch/DQ23 )
+  (    5 /muxdata/DPC23 )
   (    6 /buspci.sch/EA15 )
   (    7 /muxdata/DPC16 )
   (    8 /buspci.sch/EA14 )
   (    9 /muxdata/DPC17 )
  )
- ( /4891E7D7/C8B2B4E3 $noname  RR5 8x10K {Lib=RR8}
-  (    1 VCC )
-  (    2 /PTATN- )
+ ( /4BF03687/C8B2B4E3 $noname  RR5 8x10K {Lib=RR8}
+  (    1 +5V )
+  (    2 /buspci.sch/PTATN- )
   (    3 /buspci.sch/EA9 )
-  (    4 /graphic/X_IRQ )
-  (    5 /buspci.sch/PTADR- )
+  (    4 /buspci.sch/X_IRQ )
+  (    5 /graphic/PTADR- )
   (    6 /muxdata/DPC21 )
   (    7 /buspci.sch/RDFIFO- )
-  (    8 /WRFIFDO- )
+  (    8 /buspci.sch/WRFIFO- )
   (    9 /buspci.sch/EA7 )
  )
- ( /4891E7D7/C93123CE $noname  RR6 8x10K {Lib=RR8}
-  (    1 VCC )
-  (    2 /PTRDY- )
-  (    3 /buspci.sch/DQ20 )
+ ( /4BF03687/C93123CE $noname  RR6 8x10K {Lib=RR8}
+  (    1 +5V )
+  (    2 /buspci.sch/PTRDY- )
+  (    3 /muxdata/DPC20 )
   (    4 /buspci.sch/EA13 )
   (    5 /buspci.sch/EA12 )
   (    6 /muxdata/DPC18 )
@@ -2011,77 +2011,77 @@
   (    8 /muxdata/DPC19 )
   (    9 /buspci.sch/EA10 )
  )
- ( /4891E7D7/C931248E $noname  RR7 8x10K {Lib=RR8}
-  (    1 VCC )
-  (    2 /pal-ntsc.sch/PC_D0 )
-  (    3 /graphic/DQ1 )
-  (    4 /muxdata/DPC2 )
-  (    5 /ESVIDEO-RVB/DPC3 )
-  (    6 /graphic/DQ4 )
+ ( /4BF03687/C931248E $noname  RR7 8x10K {Lib=RR8}
+  (    1 +5V )
+  (    2 /ESVIDEO-RVB/DPC0 )
+  (    3 /ESVIDEO-RVB/DPC1 )
+  (    4 /ESVIDEO-RVB/DPC2 )
+  (    5 /muxdata/DPC3 )
+  (    6 /ESVIDEO-RVB/DPC4 )
   (    7 /ESVIDEO-RVB/DPC5 )
   (    8 /muxdata/DPC6 )
-  (    9 /buspci.sch/DQ7 )
+  (    9 /ESVIDEO-RVB/DPC7 )
  )
- ( /4891E7D7/C9363A3F $noname  RR8 8x10K {Lib=RR8}
-  (    1 VCC )
-  (    2 /graphic/DQ15 )
-  (    3 /graphic/DQ14 )
+ ( /4BF03687/C9363A3F $noname  RR8 8x10K {Lib=RR8}
+  (    1 +5V )
+  (    2 /muxdata/DPC15 )
+  (    3 /muxdata/DPC14 )
   (    4 /muxdata/DPC13 )
-  (    5 /graphic/DQ12 )
-  (    6 /graphic/DQ11 )
-  (    7 /graphic/DQ10 )
-  (    8 /buspci.sch/DQ9 )
-  (    9 /graphic/DQ8 )
+  (    5 /muxdata/DPC12 )
+  (    6 /muxdata/DPC11 )
+  (    7 /muxdata/DPC10 )
+  (    8 /muxdata/DPC9 )
+  (    9 /muxdata/DPC8 )
  )
- ( /4891E7D7/26A799F7 $noname  W2 FLOAT# {Lib=TEST}
+ ( /4BF03687/26A799F7 $noname  W2 FLOAT# {Lib=TEST}
   (    1 GND )
-  (    2 N-000338 )
+  (    2 N-000316 )
  )
- ( /4891E7D7/26A79A10 $noname  W3 SERNV {Lib=TEST}
+ ( /4BF03687/26A79A10 $noname  W3 SERNV {Lib=TEST}
   (    1 GND )
-  (    2 N-000339 )
+  (    2 N-000315 )
  )
- ( /4891E7D7/26A799ED $noname  W1 16/32 {Lib=TEST}
+ ( /4BF03687/26A799ED $noname  W1 16/32 {Lib=TEST}
   (    1 GND )
-  (    2 N-000269 )
+  (    2 N-000317 )
  )
- ( /4891E7D9/335F5DF2 $noname  C32 100nF {Lib=C}
+ ( /4BF03689/335F5DF2 $noname  C32 100nF {Lib=C}
   (    1 GND )
-  (    2 N-000343 )
+  (    2 N-000363 )
  )
- ( /4891E7D9/A4586827 $noname  R8 150 {Lib=R}
-  (    1 N-000368 )
+ ( /4BF03689/A4586827 $noname  R8 150 {Lib=R}
+  (    1 N-000369 )
   (    2 GND )
  )
- ( /4891E7D9/32F9E902 $noname  U9 BT473 {Lib=BT473}
+ ( /4BF03689/32F9E902 $noname  U9 BT473 {Lib=BT473}
   (    1 /ESVIDEO-RVB/VAA )
   (    2 /ESVIDEO-RVB/VAA )
   (    3 GND )
   (    4 GND )
   (    5 ? )
   (    6 ? )
-  (    7 /muxdata/BLANK- )
-  (    8 /ESVIDEO-RVB/CSYNCOUT- )
-  (    9 /CLKCDA )
-  (   10 /ESVIDEO-RVB/TVI0 )
+  (    7 /graphic/BLANK- )
+  (    8 /modul/CSYNC-OUT )
+  (    9 /graphic/CDACLK )
+  (   10 /graphic/TVI0 )
   (   11 /graphic/TVI1 )
   (   12 GND )
   (   13 GND )
-  (   14 /pal-ntsc.sch/PC_D0 )
-  (   15 /graphic/DQ1 )
-  (   16 /muxdata/DPC2 )
-  (   17 /ESVIDEO-RVB/DPC3 )
-  (   18 /graphic/DQ4 )
+  (   14 /ESVIDEO-RVB/DPC0 )
+  (   15 /ESVIDEO-RVB/DPC1 )
+  (   16 /ESVIDEO-RVB/DPC2 )
+  (   17 /muxdata/DPC3 )
+  (   18 /ESVIDEO-RVB/DPC4 )
   (   19 /ESVIDEO-RVB/DPC5 )
   (   20 /muxdata/DPC6 )
-  (   21 /buspci.sch/DQ7 )
-  (   22 /RDCDA- )
-  (   23 /WRCDA- )
-  (   24 /pal-ntsc.sch/PC_A0 )
+  (   21 /ESVIDEO-RVB/DPC7 )
+  (   22 /ESVIDEO-RVB/RDCDA- )
+  (   23 /graphic/WRCDA- )
+  (   24 /ESVIDEO-RVB/PCA0 )
   (   25 /graphic/PCA1 )
   (   26 /ESVIDEO-RVB/PCA2 )
   (   27 ? )
-  (   28 /OE_PAL- )
+  (   28 /pal-ntsc.sch/OE_PAL- )
   (   29 /ESVIDEO-RVB/OE_RVB- )
   (   30 ? )
   (   31 GND )
@@ -2090,222 +2090,222 @@
   (   34 /ESVIDEO-RVB/VAA )
   (   35 /ESVIDEO-RVB/VAA )
   (   36 /ESVIDEO-RVB/VAA )
-  (   37 /RED_OUT )
+  (   37 /modul/BLEU )
   (   38 /ESVIDEO-RVB/GREEN )
-  (   39 /BLUE_OUT )
-  (   40 N-000368 )
-  (   41 N-000344 )
-  (   42 N-000344 )
-  (   43 N-000343 )
-  (   44 N-000343 )
-  (   45 /muxdata/TVR0 )
+  (   39 /ESVIDEO-RVB/BLUE )
+  (   40 N-000369 )
+  (   41 N-000365 )
+  (   42 N-000365 )
+  (   43 N-000363 )
+  (   44 N-000363 )
+  (   45 /ESVIDEO-RVB/TVR0 )
   (   46 /ESVIDEO-RVB/TVR1 )
-  (   47 /muxdata/TVR2 )
+  (   47 /ESVIDEO-RVB/TVR2 )
   (   48 /pal-ntsc.sch/TVR3 )
-  (   49 /ESVIDEO-RVB/TVR4 )
-  (   50 /muxdata/TVR5 )
+  (   49 /pal-ntsc.sch/TVR4 )
+  (   50 /ESVIDEO-RVB/TVR5 )
   (   51 /ESVIDEO-RVB/TVR6 )
   (   52 /ESVIDEO-RVB/TVR7 )
-  (   53 /pal-ntsc.sch/TVG0 )
+  (   53 /ESVIDEO-RVB/TVG0 )
   (   54 /ESVIDEO-RVB/TVG1 )
-  (   55 /pal-ntsc.sch/TVG2 )
-  (   56 /muxdata/TVG3 )
-  (   57 /pal-ntsc.sch/TVG4 )
+  (   55 /ESVIDEO-RVB/TVG2 )
+  (   56 /ESVIDEO-RVB/TVG3 )
+  (   57 /ESVIDEO-RVB/TVG4 )
   (   58 /ESVIDEO-RVB/TVG5 )
-  (   59 /ESVIDEO-RVB/TVG6 )
+  (   59 /muxdata/TVG6 )
   (   60 /muxdata/TVG7 )
-  (   61 /ESVIDEO-RVB/TVB0 )
-  (   62 /ESVIDEO-RVB/TVB1 )
+  (   61 /muxdata/TVB0 )
+  (   62 /muxdata/TVB1 )
   (   63 /ESVIDEO-RVB/TVB2 )
-  (   64 /pal-ntsc.sch/TVB3 )
-  (   65 /ESVIDEO-RVB/TVB4 )
-  (   66 /ESVIDEO-RVB/TVB5 )
-  (   67 /ESVIDEO-RVB/TVB6 )
-  (   68 /ESVIDEO-RVB/TVB7 )
+  (   64 /ESVIDEO-RVB/TVB3 )
+  (   65 /muxdata/TVB4 )
+  (   66 /pal-ntsc.sch/TVB5 )
+  (   67 /pal-ntsc.sch/TVB6 )
+  (   68 /pal-ntsc.sch/TVB7 )
  )
- ( /4891E7D9/32F9E7F1 $noname  U8 BT253 {Lib=BT253}
+ ( /4BF03689/32F9E7F1 $noname  U8 BT253 {Lib=BT253}
   (    1 /ESVIDEO-RVB/VAA )
   (    2 GND )
   (    3 GND )
   (    4 ? )
   (    5 ? )
-  (    6 N-000351 )
-  (    7 N-000349 )
+  (    6 N-000361 )
+  (    7 N-000345 )
   (    8 /graphic/CSYNCIN- )
-  (    9 /buspci.sch/DQ7 )
+  (    9 /ESVIDEO-RVB/DPC7 )
   (   10 /muxdata/DPC6 )
   (   11 /ESVIDEO-RVB/DPC5 )
-  (   12 /graphic/DQ4 )
-  (   13 /ESVIDEO-RVB/DPC3 )
-  (   14 /muxdata/DPC2 )
-  (   15 /graphic/DQ1 )
-  (   16 /pal-ntsc.sch/PC_D0 )
-  (   17 /pal-ntsc.sch/PC_A0 )
+  (   12 /ESVIDEO-RVB/DPC4 )
+  (   13 /muxdata/DPC3 )
+  (   14 /ESVIDEO-RVB/DPC2 )
+  (   15 /ESVIDEO-RVB/DPC1 )
+  (   16 /ESVIDEO-RVB/DPC0 )
+  (   17 /ESVIDEO-RVB/PCA0 )
   (   18 /graphic/PCA1 )
   (   19 /ESVIDEO-RVB/PCA2 )
   (   20 /graphic/RDCAD- )
   (   21 GND )
   (   22 GND )
   (   23 GND )
-  (   24 /ESVIDEO-RVB/WRCAD- )
-  (   25 /ESVIDEO-RVB/TVB7 )
-  (   26 /ESVIDEO-RVB/TVB6 )
-  (   27 /ESVIDEO-RVB/TVB5 )
-  (   28 /ESVIDEO-RVB/TVB4 )
-  (   29 /pal-ntsc.sch/TVB3 )
+  (   24 /graphic/WRCAD- )
+  (   25 /pal-ntsc.sch/TVB7 )
+  (   26 /pal-ntsc.sch/TVB6 )
+  (   27 /pal-ntsc.sch/TVB5 )
+  (   28 /muxdata/TVB4 )
+  (   29 /ESVIDEO-RVB/TVB3 )
   (   30 /ESVIDEO-RVB/TVB2 )
-  (   31 /ESVIDEO-RVB/TVB1 )
-  (   32 /ESVIDEO-RVB/TVB0 )
+  (   31 /muxdata/TVB1 )
+  (   32 /muxdata/TVB0 )
   (   33 /muxdata/TVG7 )
-  (   34 /ESVIDEO-RVB/TVG6 )
+  (   34 /muxdata/TVG6 )
   (   35 /ESVIDEO-RVB/TVG5 )
-  (   36 /pal-ntsc.sch/TVG4 )
-  (   37 /CLAMP )
-  (   38 /ESVIDEO-RVB/CLKCAD )
-  (   39 /ESVIDEO-RVB/CLKCAD )
-  (   40 /ESVIDEO-RVB/CLKCAD )
+  (   36 /ESVIDEO-RVB/TVG4 )
+  (   37 /graphic/CLAMP )
+  (   38 /graphic/CADCLK )
+  (   39 /graphic/CADCLK )
+  (   40 /graphic/CADCLK )
   (   41 GND )
   (   42 GND )
   (   43 /ESVIDEO-RVB/VAA )
   (   44 /ESVIDEO-RVB/VAA )
-  (   45 /muxdata/TVG3 )
-  (   46 /pal-ntsc.sch/TVG2 )
+  (   45 /ESVIDEO-RVB/TVG3 )
+  (   46 /ESVIDEO-RVB/TVG2 )
   (   47 /ESVIDEO-RVB/TVG1 )
-  (   48 /pal-ntsc.sch/TVG0 )
+  (   48 /ESVIDEO-RVB/TVG0 )
   (   49 /ESVIDEO-RVB/TVR7 )
   (   50 /ESVIDEO-RVB/TVR6 )
-  (   51 /muxdata/TVR5 )
-  (   52 /ESVIDEO-RVB/TVR4 )
+  (   51 /ESVIDEO-RVB/TVR5 )
+  (   52 /pal-ntsc.sch/TVR4 )
   (   53 /pal-ntsc.sch/TVR3 )
-  (   54 /muxdata/TVR2 )
+  (   54 /ESVIDEO-RVB/TVR2 )
   (   55 /ESVIDEO-RVB/TVR1 )
-  (   56 /muxdata/TVR0 )
+  (   56 /ESVIDEO-RVB/TVR0 )
   (   57 /ESVIDEO-RVB/OE_RVB- )
-  (   58 N-000352 )
-  (   59 /CLAMP )
-  (   60 N-000353 )
+  (   58 N-000353 )
+  (   59 /graphic/CLAMP )
+  (   60 N-000355 )
   (   61 GND )
-  (   62 N-000354 )
+  (   62 N-000357 )
   (   63 GND )
   (   64 /ESVIDEO-RVB/REF+ )
   (   65 /ESVIDEO-RVB/REF+ )
   (   66 /ESVIDEO-RVB/REF+ )
   (   67 GND )
-  (   68 N-000352 )
-  (   69 N-000350 )
-  (   70 N-000353 )
+  (   68 N-000353 )
+  (   69 N-000360 )
+  (   70 N-000355 )
   (   71 /ESVIDEO-RVB/REF+ )
-  (   72 N-000354 )
+  (   72 N-000357 )
   (   73 /ESVIDEO-RVB/REF+ )
   (   74 ? )
-  (   75 N-000361 )
+  (   75 N-000347 )
   (   76 /ESVIDEO-RVB/REF+ )
   (   77 ? )
   (   78 /ESVIDEO-RVB/REF+ )
-  (   79 N-000362 )
+  (   79 N-000349 )
   (   80 /ESVIDEO-RVB/REF+ )
   (   81 ? )
   (   82 /ESVIDEO-RVB/REF+ )
-  (   83 N-000363 )
+  (   83 N-000343 )
   (   84 /ESVIDEO-RVB/VAA )
  )
- ( /4891E7D9/84DFB9D2 $noname  R42 75 {Lib=R}
+ ( /4BF03689/84DFB9D2 $noname  R42 75 {Lib=R}
   (    1 GND )
-  (    2 /RED_OUT )
+  (    2 /modul/BLEU )
  )
- ( /4891E7D9/84DFB9D7 $noname  R43 75 {Lib=R}
+ ( /4BF03689/84DFB9D7 $noname  R43 75 {Lib=R}
   (    1 GND )
   (    2 /ESVIDEO-RVB/GREEN )
  )
- ( /4891E7D9/84DFB9DC $noname  R44 75 {Lib=R}
+ ( /4BF03689/84DFB9DC $noname  R44 75 {Lib=R}
   (    1 GND )
-  (    2 /BLUE_OUT )
+  (    2 /ESVIDEO-RVB/BLUE )
  )
- ( /4891E7D9/84DFBA31 $noname  C33 100nF {Lib=C}
+ ( /4BF03689/84DFBA31 $noname  C33 100nF {Lib=C}
   (    1 /ESVIDEO-RVB/VAA )
   (    2 GND )
  )
- ( /4891E7D9/84DFBA36 $noname  C34 100nF {Lib=C}
+ ( /4BF03689/84DFBA36 $noname  C34 100nF {Lib=C}
   (    1 /ESVIDEO-RVB/VAA )
-  (    2 N-000368 )
+  (    2 N-000369 )
  )
- ( /4891E7D9/84DFBAEF $noname  C42 2,2uF {Lib=CP}
+ ( /4BF03689/84DFBAEF $noname  C42 2,2uF {Lib=CP}
   (    1 /ESVIDEO-RVB/VAA )
-  (    2 N-000368 )
+  (    2 N-000369 )
  )
- ( /4891E7D9/84DFBB21 $noname  C35 100nF {Lib=C}
+ ( /4BF03689/84DFBB21 $noname  C35 100nF {Lib=C}
   (    1 /ESVIDEO-RVB/VAA )
-  (    2 N-000344 )
+  (    2 N-000365 )
  )
- ( /4891E7D9/A44C0348 $noname  R47 75 {Lib=R}
+ ( /4BF03689/A44C0348 $noname  R47 75 {Lib=R}
   (    1 /pal-ntsc.sch/RED_IN )
   (    2 GND )
  )
- ( /4891E7D9/A44C032F $noname  R45 75 {Lib=R}
-  (    1 /GREEN_IN )
+ ( /4BF03689/A44C032F $noname  R45 75 {Lib=R}
+  (    1 /ESVIDEO-RVB/GREEN_IN )
   (    2 GND )
  )
- ( /4891E7D9/A44C0339 $noname  R46 75 {Lib=R}
-  (    1 /BLUE_IN )
+ ( /4BF03689/A44C0339 $noname  R46 75 {Lib=R}
+  (    1 /ESVIDEO-RVB/BLUE_IN )
   (    2 GND )
  )
- ( /4891E7D9/A44C03AC $noname  R38 510 {Lib=R}
-  (    1 N-000350 )
+ ( /4BF03689/A44C03AC $noname  R38 510 {Lib=R}
+  (    1 N-000360 )
   (    2 GND )
  )
- ( /4891E7D9/A44D982A $noname  R15 1M {Lib=R}
+ ( /4BF03689/A44D982A $noname  R15 1M {Lib=R}
   (    1 GND )
-  (    2 N-000349 )
+  (    2 N-000345 )
  )
- ( /4891E7D9/A44D9848 $noname  C36 100nF {Lib=C}
-  (    1 N-000349 )
-  (    2 N-000364 )
+ ( /4BF03689/A44D9848 $noname  C36 100nF {Lib=C}
+  (    1 N-000345 )
+  (    2 N-000346 )
  )
- ( /4891E7D9/A44D9843 $noname  R36 470 {Lib=R}
-  (    1 N-000364 )
+ ( /4BF03689/A44D9843 $noname  R36 470 {Lib=R}
+  (    1 N-000346 )
+  (    2 N-000361 )
+ )
+ ( /4BF03689/A44D984D $noname  C37 100pF {Lib=C}
+  (    1 GND )
+  (    2 N-000346 )
+ )
+ ( /4BF03689/A44C034D $noname  R24 220 {Lib=R}
+  (    1 /pal-ntsc.sch/RED_IN )
   (    2 N-000351 )
  )
- ( /4891E7D9/A44D984D $noname  C37 100pF {Lib=C}
-  (    1 GND )
-  (    2 N-000364 )
+ ( /4BF03689/A44C0343 $noname  R23 220 {Lib=R}
+  (    1 /ESVIDEO-RVB/GREEN_IN )
+  (    2 N-000350 )
  )
- ( /4891E7D9/A44C034D $noname  R24 220 {Lib=R}
-  (    1 /pal-ntsc.sch/RED_IN )
-  (    2 N-000367 )
+ ( /4BF03689/A44C0334 $noname  R22 220 {Lib=R}
+  (    1 /ESVIDEO-RVB/BLUE_IN )
+  (    2 N-000348 )
  )
- ( /4891E7D9/A44C0343 $noname  R23 220 {Lib=R}
-  (    1 /GREEN_IN )
-  (    2 N-000366 )
+ ( /4BF03689/A44C037F $noname  C39 1uF {Lib=C}
+  (    1 N-000343 )
+  (    2 N-000351 )
  )
- ( /4891E7D9/A44C0334 $noname  R22 220 {Lib=R}
-  (    1 /BLUE_IN )
-  (    2 N-000365 )
+ ( /4BF03689/A44C0384 $noname  C40 1uF {Lib=C}
+  (    1 N-000349 )
+  (    2 N-000350 )
  )
- ( /4891E7D9/A44C037F $noname  C39 1uF {Lib=C}
-  (    1 N-000363 )
-  (    2 N-000367 )
+ ( /4BF03689/A44C0389 $noname  C41 1uF {Lib=C}
+  (    1 N-000347 )
+  (    2 N-000348 )
  )
- ( /4891E7D9/A44C0384 $noname  C40 1uF {Lib=C}
-  (    1 N-000362 )
-  (    2 N-000366 )
- )
- ( /4891E7D9/A44C0389 $noname  C41 1uF {Lib=C}
-  (    1 N-000361 )
-  (    2 N-000365 )
- )
- ( /4891E7D9/84DFB9B9 $noname  C52 22uF {Lib=CP}
+ ( /4BF03689/84DFB9B9 $noname  C52 22uF {Lib=CP}
   (    1 /ESVIDEO-RVB/VAA )
   (    2 GND )
  )
- ( /4891E7D9/28ED6A43 $noname  C51 22uF {Lib=CP}
+ ( /4BF03689/28ED6A43 $noname  C51 22uF {Lib=CP}
   (    1 /ESVIDEO-RVB/VAA )
   (    2 GND )
  )
- ( /4891E7D9/84DFBB99 $noname  L5 22uH {Lib=INDUCTOR}
-  (    1 VCC )
+ ( /4BF03689/84DFBB99 $noname  L5 22uH {Lib=INDUCTOR}
+  (    1 +5V )
   (    2 /ESVIDEO-RVB/VAA )
  )
- ( /4891E7D9/5D7688E4 $noname  R37 510 {Lib=R}
+ ( /4BF03689/5D7688E4 $noname  R37 510 {Lib=R}
   (    1 GND )
   (    2 /ESVIDEO-RVB/REF+ )
  )
@@ -2319,6 +2319,8 @@ $component R4
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C54
  CP*
@@ -2328,56 +2330,78 @@ $component R39
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R16
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R17
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R40
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R18
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R41
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R30
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R31
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R10
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R11
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R9
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C61
  SM*
@@ -2427,16 +2451,22 @@ $component R34
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R33
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R32
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C55
  CP*
@@ -2456,6 +2486,8 @@ $component R35
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C1
  SM*
@@ -2481,16 +2513,22 @@ $component R14
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R3
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R2
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component D1
  D?
@@ -2512,11 +2550,15 @@ $component R27
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R12
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C65
  SM*
@@ -2532,6 +2574,8 @@ $component R19
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C5
  SM*
@@ -2542,6 +2586,8 @@ $component R20
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C8
  SM*
@@ -2606,6 +2652,8 @@ $component R25
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C15
  SM*
@@ -2636,11 +2684,15 @@ $component R48
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R1
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C23
  SM*
@@ -2651,6 +2703,17 @@ $component R13
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
+$endlist
+$component D6
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
 $endlist
 $component C49
  SM*
@@ -2666,6 +2729,8 @@ $component R26
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C17
  SM*
@@ -2713,6 +2778,8 @@ $component R21
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C69
  CP*
@@ -2730,26 +2797,36 @@ $component R5
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R6
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R7
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R28
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R29
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C24
  SM*
@@ -2804,21 +2881,29 @@ $component R8
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R42
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R43
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R44
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C33
  SM*
@@ -2843,26 +2928,36 @@ $component R47
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R45
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R46
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R38
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R15
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C36
  SM*
@@ -2873,6 +2968,8 @@ $component R36
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C37
  SM*
@@ -2883,16 +2980,22 @@ $component R24
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R23
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component R22
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $component C39
  SM*
@@ -2921,2196 +3024,2198 @@ $component R37
  R?
  SM0603
  SM0805
+ R?-*
+ SM1206
 $endlist
 $endfootprintlist
 }
 { Pin List by Nets
-/ESVIDEO-RVB/Net 2 "CLKCAD"
- U24 77
- U8 40
+Net 1 "/graphic/CADCLK" "CADCLK"
  U8 39
- U8 38
  U22 2
-/Net 3 "CLKCDA"
+ U8 40
+ U8 38
+ U24 77
+Net 2 "/graphic/CDACLK" "CDACLK"
  U9 9
- U24 76
  U22 79
-/Net 4 "X_PROG-"
- U24 82
- U22 52
- U23 84
-/Net 5 "X_DONE"
- U22 50
- U23 83
- U24 80
-/muxdata/Net 6 "X_CLK"
- U24 119
- U22 74
- U23 86
-/Net 7 "X_DATA"
- U24 118
- U22 72
-/ESVIDEO-RVB/Net 8 "CSYNCOUT-"
- U24 13
- U9 8
- U22 9
- R30 2
-/Net 9 "BLUE_OUT"
- J4 3
- R44 2
- U9 39
- C60 2
-/ESVIDEO-RVB/Net 10 "GREEN"
- C59 2
- J4 2
- R43 2
- U9 38
-/Net 11 "RED_OUT"
- J4 1
- C58 2
- R42 2
- U9 37
-/modul/Net 12 "CVBSOUT"
- R41 1
- P8 1
-/pal-ntsc.sch/Net 13 "F_PALIN"
- U10 104
- U24 43
-/Net 14 "HD_PAL-"
- U10 36
- U24 52
-/pal-ntsc.sch/Net 15 "VD_PAL-"
- U24 37
- U10 34
-/pal-ntsc.sch/Net 16 "BT812_WR-"
- U23 70
- U10 83
-/graphic/Net 17 "BT812_RD-"
- U23 71
- U10 86
-/Net 18 "OE_PAL-"
- U9 28
- U10 47
- U10 46
-/Net 19 "BLUE_IN"
- R46 1
- P3 1
- R22 1
-/Net 20 "GREEN_IN"
- R23 1
- P2 1
- R45 1
- C3 2
-/pal-ntsc.sch/Net 21 "RED_IN"
- R47 1
- R24 1
- C4 2
- P1 1
-/Net 22 "SYSRST-"
- U23 1
- U10 87
- U11 126
- U24 148
-/buspci.sch/Net 23 "RDFIFO-"
- U24 16
- RR5 7
- U11 104
-/Net 24 "WRFIFDO-"
- U11 102
- RR5 8
- U24 18
-/Net 25 "RDEMPTY"
- U24 15
- U11 106
-/graphic/Net 26 "WRFULL"
- U24 17
- U11 103
-/Net 27 "PTRDY-"
- U24 3
- U23 19
- U11 115
- RR6 2
-/Net 28 "PTBURST"
- U11 112
- U24 5
- U23 17
-/buspci.sch/Net 29 "SELECT-"
- U23 45
- U11 75
- RR3 4
- U24 135
-/graphic/Net 30 "PTWR"
- U23 16
- U11 108
- U24 12
-/Net 31 "PTATN-"
- U11 114
- U23 18
- RR5 2
- U24 4
-/buspci.sch/Net 32 "PTADR-"
- U24 14
- RR5 5
- U23 24
- U11 107
-/Net 33 "BPCLK"
- U11 140
- U23 30
-/buspci.sch/Net 34 "PTNUM0"
- U11 123
- U24 150
- U23 34
-/graphic/Net 35 "PTNUM1"
- U11 122
- U24 154
- U23 32
-/muxdata/Net 36 "BLANK-"
- U9 7
- U24 53
- U22 8
-/graphic/Net 37 "CSYNCIN-"
- U24 54
- U8 8
-/RAMS/Net 38 "WRAM-"
- U15 47
- U16 47
- U18 47
- U17 47
- U24 63
- U12 47
- U14 47
- U19 47
- U13 47
-/ESVIDEO-RVB/Net 39 "WRCAD-"
- U8 24
- U23 69
-/Net 40 "WRCDA-"
- U9 23
- U23 73
-/Net 41 "RDCDA-"
- U23 72
- U9 22
-/graphic/Net 42 "RDCAD-"
- U23 74
- U8 20
-/Net 43 "RAS7-"
- U24 64
- U13 34
- U13 44
-/RAMS/Net 44 "RAS6-"
+ U24 76
+Net 3 "/graphic/RAS6-" "RAS6-"
+ U24 65
  U14 34
  U14 44
- U24 65
-/graphic/Net 45 "RAS5-"
+Net 4 "/RAMS/RAS5-" "RAS5-"
  U24 66
  U12 34
  U12 44
-/RAMS/Net 46 "RAS4-"
+Net 5 "/graphic/RAS4-" "RAS4-"
  U24 67
- U16 44
  U16 34
-/Net 47 "RAS3-"
+ U16 44
+Net 6 "/RAMS/RAS3-" "RAS3-"
  U24 68
- U15 44
  U15 34
-/RAMS/Net 48 "RAS2-"
- U24 69
- U17 44
+ U15 44
+Net 7 "/graphic/RAS2-" "RAS2-"
  U17 34
-/Net 49 "RAS1-"
+ U17 44
+ U24 69
+Net 8 "/graphic/RAS1-" "RAS1-"
  U18 34
- U24 73
  U18 44
-/Net 50 "RAS0-"
+ U24 73
+Net 9 "/graphic/RAS0-" "RAS0-"
  U24 74
- U19 44
  U19 34
-/Net 51 "CAS3-"
- U14 43
+ U19 44
+Net 10 "/RAMS/CAS3-" "CAS3-"
  U19 43
- U12 43
- U15 43
- U16 43
- U24 62
- U17 43
  U18 43
+ U15 43
  U13 43
-/RAMS/Net 52 "CAS2-"
- U18 42
- U19 42
- U14 42
- U17 42
- U16 42
- U12 42
- U24 59
- U13 42
- U15 42
-/RAMS/Net 53 "CAS1-"
- U15 41
- U13 41
- U24 58
- U19 41
- U14 41
- U17 41
- U12 41
- U16 41
- U18 41
-/RAMS/Net 54 "CAS0-"
- U12 40
- U19 40
+ U16 43
+ U12 43
+ U24 62
+ U14 43
+ U17 43
+Net 11 "/graphic/RAS7-" "RAS7-"
+ U13 34
+ U13 44
+ U24 64
+Net 12 "/RAMS/CAS0-" "CAS0-"
  U13 40
  U16 40
- U24 57
- U14 40
- U17 40
- U18 40
  U15 40
-/buspci.sch/Net 55 "WR-"
- U11 74
- U23 47
- RR3 5
- U24 132
-/Net 56 "/PCRD"
- U23 46
- U11 72
- U24 133
- RR3 7
-/Net 57 "CLAMP"
+ U18 40
+ U17 40
+ U24 57
+ U19 40
+ U12 40
+ U14 40
+Net 13 "/graphic/CAS1-" "CAS1-"
+ U17 41
+ U19 41
+ U16 41
+ U15 41
+ U12 41
+ U14 41
+ U24 58
+ U18 41
+ U13 41
+Net 14 "/RAMS/CAS2-" "CAS2-"
+ U15 42
+ U16 42
+ U24 59
+ U13 42
+ U12 42
+ U14 42
+ U18 42
+ U19 42
+ U17 42
+Net 15 "/graphic/BLANK-" "BLANK-"
+ U24 53
+ U9 7
+ U22 8
+Net 16 "/modul/CSYNC-OUT" "CSYNC-OUT"
+ R30 2
+ U22 9
+ U9 8
+ U24 13
+Net 17 "/graphic/CSYNCIN-" "CSYNCIN-"
+ U8 8
+ U24 54
+Net 18 "/RAMS/WRAM-" "WRAM-"
+ U15 47
+ U12 47
+ U18 47
+ U13 47
+ U19 47
+ U17 47
+ U14 47
+ U24 63
+ U16 47
+Net 19 "/ESVIDEO-RVB/RDCDA-" "RDCDA-"
+ U23 72
+ U9 22
+Net 20 "/graphic/WRCDA-" "WRCDA-"
+ U23 73
+ U9 23
+Net 21 "/graphic/RDCAD-" "RDCAD-"
+ U8 20
+ U23 74
+Net 22 "/graphic/WRCAD-" "WRCAD-"
+ U8 24
+ U23 69
+Net 23 "/graphic/CLAMP" "CLAMP"
  U8 37
  U24 75
  U22 7
  U8 59
-/graphic/Net 58 "WRITE_RAM"
- U4 1
- U3 1
- U5 1
- U6 1
- U24 55
-/muxdata/Net 59 "ACCES_RAM-"
+Net 24 "/graphic/WR-" "WR-"
+ U11 74
+ U23 47
+ U24 132
+ RR3 5
+Net 25 "/graphic/RD-" "RD-"
+ RR3 7
+ U24 133
+ U11 72
+ U23 46
+Net 26 "/graphic/X_PROG-" "X_PROG-"
+ U22 52
+ U23 84
+ U24 82
+Net 27 "/muxdata/X_DONE" "X_DONE"
+ U23 83
+ U22 50
+ U24 80
+Net 28 "/graphic/X_CLK" "X_CLK"
+ U24 119
+ U22 74
+ U23 86
+Net 29 "/muxdata/X_DIN" "X_DIN"
+ U22 72
+ U24 118
+Net 30 "/muxdata/ACCES_RAM-" "ACCES_RAM-"
+ U5 19
  U6 19
+ U3 19
+ U4 19
  U24 56
  U22 21
- U4 19
- U3 19
- U5 19
-/Net 60 "IRQ_SRL"
- RR2 7
- U11 57
- U24 134
-/graphic/Net 61 "X_IRQ"
- RR5 4
- U11 109
- U24 11
-/buspci.sch/Net 62 "IRQ-"
- U11 124
- U24 149
-/Net 63 "C_OUT"
- J4 8
- R39 1
-/Net 64 "Y_OUT"
- R40 2
- J4 9
-/muxdata/Net 65 "ACQ_ON"
+Net 31 "/muxdata/DATA_WR" "DATA_WR"
+ U4 1
+ U6 1
+ U5 1
+ U24 55
+ U3 1
+Net 32 "/muxdata/ACQ_ON" "ACQ_ON"
  U22 13
  U24 48
-Net 80 ""
- C43 1
- U20 12
-/modul/Net 81 "CHROM"
- R16 2
- U20 14
-/modul/Net 82 "LUM"
- R17 2
- U20 19
-/modul/Net 83 "CVBS"
- U20 16
- R18 2
-Net 84 "+5F"
- L3 2
- Q1 3
- Q2 3
- Q3 3
- C55 1
-Net 85 ""
- C61 1
- R30 1
- R31 2
-Net 86 ""
- C64 1
- U20 13
- C48 2
- R11 2
-Net 87 ""
+Net 33 "/modul/COUT" "COUT"
+ R39 1
+ J4 8
+Net 34 "/modul/YOUT" "YOUT"
+ R40 2
+ J4 9
+Net 35 "/graphic/IRQ_SLR" "IRQ_SLR"
+ RR2 7
+ U24 134
+ U11 57
+Net 36 "/buspci.sch/X_IRQ" "X_IRQ"
+ U24 11
+ U11 109
+ RR5 4
+Net 37 "/graphic/IRQ-" "IRQ-"
+ U24 149
+ U11 124
+Net 38 "/buspci.sch/WRFULL" "WRFULL"
+ U24 17
+ U11 103
+Net 39 "/graphic/RDEMPTY" "RDEMPTY"
+ U24 15
+ U11 106
+Net 40 "/buspci.sch/WRFIFO-" "WRFIFO-"
+ RR5 8
+ U11 102
+ U24 18
+Net 41 "/buspci.sch/RDFIFO-" "RDFIFO-"
+ U11 104
+ U24 16
+ RR5 7
+Net 42 "/buspci.sch/PTNUM0" "PTNUM0"
+ U11 123
+ U23 34
+ U24 150
+Net 43 "/graphic/PTNUM1" "PTNUM1"
+ U11 122
+ U24 154
+ U23 32
+Net 44 "/pal-ntsc.sch/RESET-" "RESET-"
+ U10 87
+ U11 126
+ U24 148
+ U23 1
+Net 45 "/buspci.sch/PTRDY-" "PTRDY-"
+ U24 3
+ U11 115
+ U23 19
+ RR6 2
+Net 46 "/graphic/PTBURST-" "PTBURST-"
+ U23 17
+ U11 112
+ U24 5
+Net 47 "/graphic/SELECT-" "SELECT-"
+ U11 75
+ U24 135
+ U23 45
+ RR3 4
+Net 48 "/graphic/PTWR" "PTWR"
+ U23 16
+ U24 12
+ U11 108
+Net 49 "/graphic/PTADR-" "PTADR-"
+ U23 24
+ RR5 5
+ U24 14
+ U11 107
+Net 50 "/buspci.sch/PTATN-" "PTATN-"
+ U24 4
+ RR5 2
+ U11 114
+ U23 18
+Net 51 "/buspci.sch/BPCLK" "BPCLK"
+ U23 30
+ U11 140
+Net 52 "/modul/CVBSOUT" "CVBSOUT"
+ P8 1
+ R41 1
+Net 53 "/graphic/BT812_RD-" "BT812_RD-"
+ U10 86
+ U23 71
+Net 54 "/graphic/BT812_WR-" "BT812_WR-"
+ U23 70
+ U10 83
+Net 55 "/pal-ntsc.sch/VD_PAL-" "VD_PAL-"
+ U24 37
+ U10 34
+Net 56 "/pal-ntsc.sch/HD_PAL-" "HD_PAL-"
+ U24 52
+ U10 36
+Net 57 "/pal-ntsc.sch/F_PALIN" "F_PALIN"
+ U24 43
+ U10 104
+Net 58 "/ESVIDEO-RVB/BLUE" "BLUE"
+ R44 2
+ U9 39
+ C60 2
+ J4 3
+Net 59 "/ESVIDEO-RVB/GREEN" "GREEN"
+ R43 2
+ C59 2
+ U9 38
+ J4 2
+Net 60 "/modul/BLEU" "BLEU"
+ U9 37
+ C58 2
+ R42 2
+ J4 1
+Net 61 "/pal-ntsc.sch/OE_PAL-" "OE_PAL-"
+ U10 46
+ U9 28
+ U10 47
+Net 62 "/ESVIDEO-RVB/BLUE_IN" "BLUE_IN"
+ R46 1
+ P3 1
+ R22 1
+Net 63 "/ESVIDEO-RVB/GREEN_IN" "GREEN_IN"
+ R45 1
+ C3 2
+ R23 1
+ P2 1
+Net 64 "/pal-ntsc.sch/RED_IN" "RED_IN"
+ C4 2
+ P1 1
+ R47 1
+ R24 1
+Net 79 "" ""
  L2 2
  U20 8
  C54 1
-Net 88 ""
- R10 2
- U20 22
-Net 89 ""
- Q1 2
- R16 1
-Net 90 ""
- C44 1
- U20 6
-Net 91 ""
- U20 21
- R9 2
-Net 92 ""
- R39 2
- Q1 1
- R32 1
-Net 93 ""
- U20 18
- L1 1
-Net 94 ""
- C45 1
- U20 15
-Net 95 ""
- U20 23
- X3 2
-Net 96 ""
- Q2 2
+Net 80 "+5F" "+5F"
+ Q3 3
+ Q2 3
+ Q1 3
+ C55 1
+ L3 2
+Net 81 "" ""
  R17 1
-Net 97 ""
- R40 1
- Q2 1
- R33 1
-Net 98 ""
- R18 1
+ Q2 2
+Net 82 "" ""
  Q3 2
-Net 99 ""
- R41 2
- R34 1
- Q3 1
-Net 100 ""
- C46 1
- L1 2
- C53 1
-Net 101 ""
- POT1 1
- R9 1
-Net 102 ""
- U20 24
- C61 2
-Net 103 ""
- U20 7
- C60 1
-Net 108 ""
- C59 1
- U20 9
-Net 109 ""
- U20 11
- C58 1
-Net 110 ""
- CV1 1
- X3 1
-Net 111 ""
- U20 2
- R4 1
-Net 112 ""
- L6 2
- U20 20
- R11 1
-Net 113 ""
+ R18 1
+Net 83 "" ""
+ R39 2
+ R32 1
+ Q1 1
+Net 84 "" ""
  L6 1
  R10 1
-Net 133 ""
- C3 1
- R3 2
-Net 134 ""
- C4 1
- R2 2
-/pal-ntsc.sch/Net 135 "C-VIDEO"
- R2 1
- D4 1
- D3 2
- U10 125
-Net 136 ""
- U10 113
- U10 137
- C6 1
- R12 1
- U10 144
-Net 137 ""
- C5 2
- R19 1
-Net 138 ""
- R20 1
- C8 2
-Net 139 ""
- C16 1
- U10 110
-Net 141 ""
- C5 1
- U10 117
-Net 142 ""
- U10 4
- C8 1
-Net 143 ""
- U10 115
- R19 2
-Net 144 ""
- U10 135
- R27 1
-Net 145 ""
- C65 2
- X2 1
- R25 2
- U10 109
-Net 146 ""
- C66 2
- R25 1
- X2 2
- U10 108
-/pal-ntsc.sch/Net 147 "Y-VIDEO"
+Net 85 "" ""
+ U20 22
+ R10 2
+Net 86 "" ""
+ C61 1
+ R30 1
+ R31 2
+Net 87 "" ""
+ R41 2
+ Q3 1
+ R34 1
+Net 88 "" ""
+ R9 1
+ POT1 1
+Net 89 "" ""
+ R11 2
+ U20 13
+ C48 2
+ C64 1
+Net 90 "" ""
+ Q2 1
+ R40 1
+ R33 1
+Net 91 "" ""
+ Q1 2
+ R16 1
+Net 92 "" ""
+ U20 20
+ R11 1
+ L6 2
+Net 93 "" ""
+ R9 2
+ U20 21
+Net 94 "" ""
+ X3 2
+ U20 23
+Net 95 "" ""
+ U20 15
+ C45 1
+Net 96 "" ""
+ U20 18
+ L1 1
+Net 97 "" ""
+ L1 2
+ C46 1
+ C53 1
+Net 98 "" ""
+ U20 9
+ C59 1
+Net 99 "" ""
+ C58 1
+ U20 11
+Net 100 "" ""
+ C61 2
+ U20 24
+Net 101 "" ""
+ U20 12
+ C43 1
+Net 102 "" ""
+ CV1 1
+ X3 1
+Net 104 "" ""
+ U20 2
+ R4 1
+Net 108 "" ""
+ U20 6
+ C44 1
+Net 109 "" ""
+ U20 7
+ C60 1
+Net 110 "/modul/CVBS" "CVBS"
+ U20 16
+ R18 2
+Net 111 "/modul/CHROM" "CHROM"
+ R16 2
+ U20 14
+Net 112 "/modul/LUM" "LUM"
+ U20 19
+ R17 2
+Net 113 "/pal-ntsc.sch/Y-VIDEO" "Y-VIDEO"
  R3 1
  D1 2
  D2 1
  U10 156
-/pal-ntsc.sch/Net 148 "Y_SYNC"
- U10 6
+Net 114 "/pal-ntsc.sch/C-VIDEO" "C-VIDEO"
+ D4 1
+ D3 2
+ U10 125
+ R2 1
+Net 115 "" ""
+ R27 2
+ C7 1
+ U10 114
+Net 116 "" ""
+ C47 1
+ R35 1
+ C1 1
+Net 117 "" ""
+ R12 1
+ C6 1
+ U10 144
+ U10 113
+ U10 137
+Net 118 "" ""
+ C16 1
+ U10 110
+Net 119 "" ""
+ U10 108
+ X2 2
+ C66 2
+ R25 1
+Net 120 "" ""
+ C65 2
+ R25 2
+ U10 109
+ X2 1
+Net 121 "/pal-ntsc.sch/Y_SYNC" "Y_SYNC"
  R20 2
+ U10 6
  R35 2
-/pal-ntsc.sch/Net 149 "VAF"
+Net 122 "" ""
+ U10 140
+ C1 2
+ R14 1
+Net 123 "" ""
+ C5 1
+ U10 117
+Net 124 "" ""
+ U10 4
+ C8 1
+Net 125 "" ""
+ C4 1
+ R2 2
+Net 126 "" ""
+ C3 1
+ R3 2
+Net 127 "" ""
+ C8 2
+ R20 1
+Net 128 "" ""
+ R19 2
+ U10 115
+Net 129 "" ""
+ C5 2
+ R19 1
+Net 130 "" ""
+ R27 1
+ U10 135
+Net 150 "/pal-ntsc.sch/VAF" "VAF"
+ U10 149
+ U10 159
  C62 1
  C14 1
  C13 1
  C12 1
- U10 160
- U10 159
- U10 158
- U10 149
- U10 142
- U10 141
- U10 132
- U10 123
- U10 122
- U10 121
- U10 120
- U10 119
- U10 82
- U10 81
- U10 80
- U10 79
- U10 78
  U10 43
+ L4 2
+ U10 82
  U10 42
- U10 41
+ U10 81
+ U10 78
  U10 39
+ U10 160
+ U10 158
+ U10 119
+ U10 122
+ U10 132
+ U10 142
+ U10 120
+ U10 123
+ R12 2
+ U10 141
+ C2 1
+ U10 79
+ U10 41
+ U10 80
+ U10 40
  U10 2
  U10 1
- R12 2
- C2 1
- U10 40
- L4 2
-Net 150 ""
- C7 1
- U10 114
- R27 2
-Net 151 ""
- R35 1
- C1 1
- C47 1
-Net 152 ""
- C1 2
- R14 1
- U10 140
-/graphic/Net 167 "CLK10MHz"
- U23 57
- R21 2
+ U10 121
+Net 152 "/graphic/X_DIN" "X_DIN"
+ U23 85
+ U24 117
+Net 153 "" ""
+ D6 1
+ R13 2
+Net 157 "/graphic/CLK10MHz" "CLK10MHz"
  U24 2
-/graphic/Net 168 "IOE-"
- U2 16
- U24 103
-/graphic/Net 169 "IWR-"
- U2 3
- U24 98
-/graphic/Net 170 "ICAS-"
- U2 17
- U24 104
-/graphic/Net 171 "IRAS-"
- U24 97
- U2 4
-/graphic/Net 172 "IA9"
- U2 5
- U24 96
-/graphic/Net 173 "IA8"
- U2 15
- U24 93
-/graphic/Net 174 "IA7"
- U24 78
- U2 14
-/graphic/Net 175 "IA6"
- U2 13
- U24 83
-/graphic/Net 176 "IA5"
- U24 85
- U2 12
-/graphic/Net 177 "IA4"
- U24 86
- U2 11
-/graphic/Net 178 "IA3"
- U24 87
- U2 9
-/graphic/Net 179 "IA2"
- U2 8
- U24 88
-/graphic/Net 180 "IA1"
- U2 7
- U24 92
-/graphic/Net 181 "IA0"
- U24 94
- U2 6
-/graphic/Net 182 "ID3"
- U2 19
- U24 106
-/graphic/Net 183 "ID2"
- U24 105
- U2 18
-/graphic/Net 184 "ID1"
- U2 2
- U24 99
-/graphic/Net 185 "ID0"
- U24 102
- U2 1
-/graphic/Net 186 "CSIO-"
- U23 61
- U24 159
-Net 187 ""
+ R21 2
+ U23 57
+Net 158 "/graphic/HDOUT" "HDOUT"
+ U7 1
+ U24 7
+Net 159 "/graphic/HDREFOUT" "HDREFOUT"
+ U24 6
+ U7 2
+Net 160 "/graphic/14MHZOUT" "14MHZOUT"
+ U24 95
+ U7 6
+Net 161 "/graphic/VOSC" "VOSC"
+ C63 1
+ U7 4
+ U7 5
+ R1 1
+ U7 7
+ C23 1
+Net 162 "" ""
+ C49 1
+ X1 1
+ R26 2
+ R21 1
+Net 163 "" ""
+ P10 1
+ U23 87
+Net 176 "/graphic/RESERV1" "RESERV1"
+ U24 44
+ U23 59
+Net 177 "" ""
+ P11 1
+ U23 82
+Net 178 "" ""
+ P9 1
+ U23 51
+Net 179 "/graphic/LED" "LED"
+ D6 2
+ U23 81
+Net 183 "" ""
  U23 29
  R48 2
  P4 1
  U23 27
  U23 25
-/graphic/Net 188 "DONE"
- U23 53
- P5 4
-/graphic/Net 192 "X_DIN"
- U24 117
- U23 85
-/graphic/Net 193 "LED"
- U23 81
- D6 2
-Net 194 ""
- R13 2
- D6 1
-/graphic/Net 195 "XTAL_I"
- R26 1
- X1 2
- C50 1
- U23 56
-Net 196 ""
- R26 2
- C49 1
- X1 1
- R21 1
-/graphic/Net 198 "HDOUT"
- U24 7
- U7 1
-/graphic/Net 199 "HDREFOUT"
- U7 2
- U24 6
-/graphic/Net 200 "14MHZOUT"
- U7 6
- U24 95
-/graphic/Net 201 "VOSC"
- C63 1
- U7 7
- U7 5
- U7 4
- C23 1
- R1 1
-Net 202 ""
- U23 87
- P10 1
-Net 203 ""
- U23 82
- P11 1
-Net 204 ""
- U23 51
- P9 1
-/graphic/Net 205 "RESERV1"
- U23 59
- U24 44
-/graphic/Net 206 "CCLK"
- P5 2
- U21 2
+Net 184 "/graphic/CCLK" "CCLK"
  U23 77
-/graphic/Net 207 "DIN"
- P5 3
- U21 1
+ U21 2
+ P5 2
+Net 185 "/graphic/DIN" "DIN"
  U23 75
-/graphic/Net 208 "PROG*"
+ U21 1
+ P5 3
+Net 186 "/graphic/DONE" "DONE"
+ P5 4
+ U23 53
+Net 187 "/graphic/PROG*" "PROG*"
  P5 5
- U21 4
- U21 3
  U23 55
-Net 241 "+3.3V"
+ U21 3
+ U21 4
+Net 188 "/graphic/XTAL_I" "XTAL_I"
+ U23 56
+ C50 1
+ X1 2
+ R26 1
+Net 189 "/graphic/ID3" "ID3"
+ U24 106
+ U2 19
+Net 190 "/graphic/ID2" "ID2"
+ U24 105
+ U2 18
+Net 191 "/graphic/ID1" "ID1"
+ U2 2
+ U24 99
+Net 192 "/graphic/ID0" "ID0"
+ U2 1
+ U24 102
+Net 193 "/graphic/IOE-" "IOE-"
+ U24 103
+ U2 16
+Net 194 "/graphic/IWR-" "IWR-"
+ U2 3
+ U24 98
+Net 195 "/graphic/ICAS-" "ICAS-"
+ U24 104
+ U2 17
+Net 196 "/graphic/IRAS-" "IRAS-"
+ U2 4
+ U24 97
+Net 197 "/graphic/IA9" "IA9"
+ U24 96
+ U2 5
+Net 198 "/graphic/IA8" "IA8"
+ U24 93
+ U2 15
+Net 199 "/graphic/IA7" "IA7"
+ U2 14
+ U24 78
+Net 200 "/graphic/IA6" "IA6"
+ U2 13
+ U24 83
+Net 201 "/graphic/IA5" "IA5"
+ U2 12
+ U24 85
+Net 202 "/graphic/IA4" "IA4"
+ U2 11
+ U24 86
+Net 203 "/graphic/IA3" "IA3"
+ U2 9
+ U24 87
+Net 204 "/graphic/IA2" "IA2"
+ U2 8
+ U24 88
+Net 205 "/graphic/IA1" "IA1"
+ U2 7
+ U24 92
+Net 206 "/graphic/IA0" "IA0"
+ U2 6
+ U24 94
+Net 207 "/graphic/CSIO-" "CSIO-"
+ U23 61
+ U24 159
+Net 240 "/buspci.sch/EA11" "EA11"
+ U11 129
+ RR6 7
+Net 241 "/buspci.sch/EA10" "EA10"
+ U11 121
+ RR6 9
+Net 242 "/buspci.sch/EA9" "EA9"
+ U11 113
+ RR5 3
+Net 243 "/buspci.sch/EA7" "EA7"
+ U11 101
+ RR5 9
+Net 244 "/buspci.sch/EA6" "EA6"
+ RR4 2
+ U11 97
+Net 245 "/buspci.sch/EA5" "EA5"
+ RR4 4
+ U11 89
+Net 246 "/buspci.sch/EA4" "EA4"
+ U11 81
+ RR3 2
+Net 247 "/buspci.sch/EA3" "EA3"
+ U11 73
+ RR3 6
+Net 248 "/buspci.sch/EA2" "EA2"
+ U11 69
+ RR3 8
+Net 249 "/buspci.sch/EA1" "EA1"
+ RR2 6
+ U11 61
+Net 250 "/buspci.sch/EA15" "EA15"
+ U11 153
+ RR4 6
+Net 251 "/buspci.sch/EA14" "EA14"
+ U11 149
+ RR4 8
+Net 252 "/buspci.sch/EA13" "EA13"
+ RR6 4
+ U11 141
+Net 253 "/buspci.sch/EA12" "EA12"
+ RR6 5
+ U11 137
+Net 254 "/buspci.sch/EQ3" "EQ3"
+ RR1 7
+ U11 21
+Net 255 "/buspci.sch/EQ2" "EQ2"
+ RR1 6
+ U11 17
+Net 256 "/buspci.sch/EQ1" "EQ1"
+ U11 9
+ RR1 4
+Net 257 "/buspci.sch/EQ0" "EQ0"
+ RR1 2
+ U11 1
+Net 258 "/buspci.sch/EQ7" "EQ7"
+ U11 49
+ RR2 9
+Net 259 "/buspci.sch/EQ6" "EQ6"
+ U11 41
+ RR2 2
+Net 260 "/buspci.sch/EQ5" "EQ5"
+ RR2 4
+ U11 33
+Net 261 "/buspci.sch/EQ4" "EQ4"
+ RR1 9
+ U11 29
+Net 262 "+3.3V" "+3.3V"
  C69 1
+ BUS1 B54
+ BUS1 B43
+ BUS1 A33
  C68 1
  BUS1 B36
- BUS1 B41
- BUS1 B31
- BUS1 B43
- BUS1 B25
- BUS1 B54
- BUS1 A21
  BUS1 A27
- BUS1 A33
- BUS1 A53
  BUS1 A45
+ BUS1 B41
+ BUS1 A21
+ BUS1 B31
+ BUS1 B25
+ BUS1 A53
  BUS1 A39
-/buspci.sch/Net 243 "P_AD1"
- BUS1 B58
- U11 55
-/buspci.sch/Net 244 "P_AD3"
- U11 52
- BUS1 B56
-/buspci.sch/Net 245 "P_AD5"
- BUS1 B55
+Net 263 "+5V" "+5V"
+ U17 30
+ R13 1
+ L4 1
+ D4 2
+ U22 26
+ U23 3
+ RR2 1
+ U11 111
+ D2 2
+ U16 59
+ U16 10
+ U10 31
+ C31 1
+ C30 1
+ C29 1
+ BUS1 A59
+ U22 89
+ C28 1
+ U23 15
+ U22 12
+ U22 37
+ U10 91
+ U10 76
+ U22 100
+ U10 45
+ BUS1 B19
+ U2 10
+ U13 59
+ U16 30
+ BUS1 B61
+ BUS1 A61
+ U22 24
+ BUS1 B5
+ C21 1
+ C22 1
+ U23 66
+ BUS1 A5
+ U22 63
+ U1 8
+ U23 40
+ U15 30
+ BUS1 B59
+ U15 10
+ U22 22
+ U23 54
+ C27 1
+ U12 59
+ U10 57
+ U11 131
+ U10 112
+ U10 102
+ R7 2
+ BUS1 A8
+ U22 51
+ RR1 1
+ U1 7
+ BUS1 B6
+ C11 1
+ C10 1
+ C9 1
+ U18 30
+ U18 10
+ C19 1
+ BUS1 A10
+ RR7 1
+ U24 100
+ U11 51
+ U11 31
+ R48 1
+ C17 1
+ C18 1
+ U24 142
+ U15 59
+ U5 20
+ R29 1
+ C56 1
+ U18 59
+ U6 20
+ R28 1
+ U24 38
+ C20 1
+ BUS1 A16
+ U23 28
+ R1 2
+ C67 1
+ U23 78
+ U21 7
+ RR8 1
+ U21 8
+ R4 2
+ U19 10
+ U19 30
+ U23 92
+ U24 120
+ U11 71
+ U11 91
+ U24 160
+ C70 1
+ U17 10
+ L2 1
+ L3 1
+ RR4 1
+ C73 1
+ U19 59
+ C57 1
+ C72 1
+ C71 1
+ R6 2
+ RR3 1
+ BUS1 A62
+ U3 20
+ R5 2
+ BUS1 B62
+ U11 11
+ L5 1
+ U17 59
+ U24 81
+ RR6 1
+ U22 75
+ C38 1
+ U11 151
+ U22 25
+ U14 59
+ RR5 1
+ U4 20
+ U14 10
+ U14 30
+ C25 1
+ U24 40
+ U13 30
+ U13 10
+ C24 1
+ U12 30
+ U24 20
+ U12 10
+ U24 41
+ C15 1
+ U24 42
+ U24 60
+ C26 1
+Net 264 "/buspci.sch/P_AD6" "P_AD6"
+ BUS1 A54
+ U11 46
+Net 265 "/buspci.sch/P_AD5" "P_AD5"
  U11 47
-/buspci.sch/Net 246 "P_AD7"
- BUS1 B53
- U11 44
-/buspci.sch/Net 247 "P_AD8"
- U11 42
- BUS1 B52
-/buspci.sch/Net 248 "P_AD10"
- BUS1 B48
- U11 39
-/buspci.sch/Net 249 "P_AD12"
- BUS1 B47
- U11 36
-/buspci.sch/Net 250 "P_AD14"
- BUS1 B45
- U11 34
-/buspci.sch/Net 251 "P_AD17"
- U11 12
- BUS1 B32
-/buspci.sch/Net 252 "P_AD19"
- BUS1 B30
- U11 7
-/buspci.sch/Net 253 "P_AD21"
+ BUS1 B55
+Net 266 "/buspci.sch/P_AD4" "P_AD4"
+ BUS1 A55
+ U11 48
+Net 267 "/buspci.sch/P_AD3" "P_AD3"
+ BUS1 B56
+ U11 52
+Net 268 "/buspci.sch/P_AD2" "P_AD2"
+ BUS1 A57
+ U11 54
+Net 269 "/buspci.sch/P_AD1" "P_AD1"
+ U11 55
+ BUS1 B58
+Net 270 "/buspci.sch/P_AD0" "P_AD0"
+ U11 56
+ BUS1 A58
+Net 271 "/buspci.sch/P_AD26" "P_AD26"
+ BUS1 A23
+ U11 155
+Net 272 "/buspci.sch/P_AD25" "P_AD25"
+ U11 156
+ BUS1 B24
+Net 273 "/buspci.sch/P_AD24" "P_AD24"
+ U11 158
+ BUS1 A25
+Net 274 "/buspci.sch/P_AD23" "P_AD23"
+ BUS1 B27
+ U11 2
+Net 275 "/buspci.sch/P_AD22" "P_AD22"
+ U11 3
+ BUS1 A28
+Net 276 "/buspci.sch/P_AD21" "P_AD21"
  U11 4
  BUS1 B29
-/buspci.sch/Net 254 "P_AD23"
- U11 2
- BUS1 B27
-/buspci.sch/Net 255 "P_AD25"
- BUS1 B24
- U11 156
-/buspci.sch/Net 256 "P_AD27"
- BUS1 B23
- U11 154
-/buspci.sch/Net 257 "P_AD29"
- BUS1 B21
- U11 148
-/buspci.sch/Net 258 "P_AD31"
- U11 146
- BUS1 B20
-/buspci.sch/Net 259 "P_C/BE1#"
- BUS1 B44
- U11 28
-/buspci.sch/Net 260 "P_C/BE2#"
- BUS1 B33
- U11 15
-/buspci.sch/Net 261 "P_C/BE3#"
- BUS1 B26
- U11 159
-/buspci.sch/Net 262 "P_CLK"
- U11 142
- BUS1 B16
-/buspci.sch/Net 263 "P_IRDY#"
- BUS1 B35
- U11 18
-/buspci.sch/Net 264 "P_LOCK#"
- U11 23
- BUS1 B39
-/buspci.sch/Net 265 "P_DEVSEL#"
- BUS1 B37
- U11 20
-/buspci.sch/Net 266 "P_REQ#"
- BUS1 B18
- U11 144
-/buspci.sch/Net 267 "P_PERR#"
- U11 24
- BUS1 B40
-/buspci.sch/Net 268 "P_SERR#"
+Net 277 "/buspci.sch/P_AD20" "P_AD20"
+ BUS1 A29
+ U11 6
+Net 278 "/buspci.sch/P_AD19" "P_AD19"
+ BUS1 B30
+ U11 7
+Net 279 "/buspci.sch/P_AD18" "P_AD18"
+ U11 8
+ BUS1 A31
+Net 280 "/buspci.sch/P_AD17" "P_AD17"
+ BUS1 B32
+ U11 12
+Net 281 "/buspci.sch/P_AD16" "P_AD16"
+ U11 14
+ BUS1 A32
+Net 282 "/buspci.sch/P_AD15" "P_AD15"
+ U11 32
+ BUS1 A44
+Net 283 "/buspci.sch/P_AD14" "P_AD14"
+ U11 34
+ BUS1 B45
+Net 284 "/buspci.sch/P_AD13" "P_AD13"
+ BUS1 A46
+ U11 35
+Net 285 "/buspci.sch/P_AD12" "P_AD12"
+ U11 36
+ BUS1 B47
+Net 286 "/buspci.sch/P_AD11" "P_AD11"
+ U11 38
+ BUS1 A47
+Net 287 "/buspci.sch/P_AD10" "P_AD10"
+ BUS1 B48
+ U11 39
+Net 288 "/buspci.sch/P_AD9" "P_AD9"
+ BUS1 A49
+ U11 40
+Net 289 "/buspci.sch/P_AD8" "P_AD8"
+ BUS1 B52
+ U11 42
+Net 290 "/buspci.sch/P_AD7" "P_AD7"
+ BUS1 B53
+ U11 44
+Net 291 "/buspci.sch/P_INTA#" "P_INTA#"
+ BUS1 A6
+ U11 58
+Net 292 "/buspci.sch/P_GNT#" "P_GNT#"
+ BUS1 A17
+ U11 143
+Net 293 "/buspci.sch/P_IDSEL" "P_IDSEL"
+ U11 160
+ BUS1 A26
+Net 294 "/buspci.sch/P_SERR#" "P_SERR#"
  U11 26
  BUS1 B42
-Net 269 ""
- U11 59
- R5 1
+Net 295 "/buspci.sch/P_PERR#" "P_PERR#"
+ BUS1 B40
+ U11 24
+Net 296 "/buspci.sch/P_REQ#" "P_REQ#"
+ BUS1 B18
+ U11 144
+Net 297 "/buspci.sch/P_DEVSEL#" "P_DEVSEL#"
+ BUS1 B37
+ U11 20
+Net 298 "/buspci.sch/P_AD28" "P_AD28"
+ BUS1 A22
+ U11 152
+Net 299 "/buspci.sch/P_AD31" "P_AD31"
+ U11 146
+ BUS1 B20
+Net 300 "/buspci.sch/P_AD30" "P_AD30"
+ U11 147
+ BUS1 A20
+Net 301 "/buspci.sch/P_AD29" "P_AD29"
+ BUS1 B21
+ U11 148
+Net 302 "/buspci.sch/P_AD27" "P_AD27"
+ BUS1 B23
+ U11 154
+Net 303 "/buspci.sch/P_STOP#" "P_STOP#"
+ BUS1 A38
+ U11 22
+Net 304 "/buspci.sch/P_TRDY#" "P_TRDY#"
+ BUS1 A36
+ U11 19
+Net 305 "/buspci.sch/P_FRAME#" "P_FRAME#"
+ BUS1 A34
+ U11 16
+Net 306 "/buspci.sch/P_LOCK#" "P_LOCK#"
+ BUS1 B39
+ U11 23
+Net 307 "/buspci.sch/P_IRDY#" "P_IRDY#"
+ U11 18
+ BUS1 B35
+Net 308 "/buspci.sch/P_RST#" "P_RST#"
+ BUS1 A15
+ U11 139
+Net 309 "/buspci.sch/P_PAR" "P_PAR"
+ U11 27
+ BUS1 A43
+Net 310 "/buspci.sch/P_CLK" "P_CLK"
+ BUS1 B16
+ U11 142
+Net 311 "/buspci.sch/P_C/BE0#" "P_C/BE0#"
+ U11 43
+ BUS1 A52
+Net 312 "/buspci.sch/P_C/BE3#" "P_C/BE3#"
+ U11 159
+ BUS1 B26
+Net 313 "/buspci.sch/P_C/BE2#" "P_C/BE2#"
+ BUS1 B33
+ U11 15
+Net 314 "/buspci.sch/P_C/BE1#" "P_C/BE1#"
+ BUS1 B44
+ U11 28
+Net 315 "" ""
+ R7 1
+ W3 2
+ U11 135
+Net 316 "" ""
+ U11 138
+ R6 1
+ W2 2
+Net 317 "" ""
  W1 2
-Net 270 "GND"
- BUS1 B57
- W2 1
- BUS1 A18
- W3 1
- BUS1 A24
- U1 4
- BUS1 A30
- W1 1
- BUS1 A35
- BUS1 A37
- C47 2
- BUS1 A42
- C7 2
- BUS1 A48
- U10 118
- C6 2
- BUS1 A56
- U10 3
- C38 2
- U10 7
- C31 2
- C30 2
- U10 88
- U10 89
- U10 90
- C29 2
- C28 2
- U10 16
- U10 30
- U10 44
- U10 56
- U10 66
- U10 75
- U10 98
- U10 103
- U10 111
- U10 5
- U10 116
- U10 124
- U10 126
- U10 128
- U10 130
- U10 134
- U10 136
- U10 138
- U10 139
- U10 143
- U10 145
- U10 147
- U10 151
- U10 153
- U10 155
- U10 157
- C27 2
- C62 2
- C9 2
- C10 2
- C26 2
- C11 2
- C14 2
- C13 2
- C25 2
- C12 2
- C16 2
- C24 2
- U1 1
- W5 1
- W4 1
- U1 2
- U11 130
- U11 110
- U22 88
- U11 90
- U11 50
- U11 70
- U11 30
- U11 10
- U11 150
- U1 3
- C66 1
- C65 1
- D3 1
- D1 1
- BUS1 B49
- R14 2
- C2 2
- BUS1 B3
- J4 6
- J4 7
- J4 4
- J4 5
- BUS1 B15
+ R5 1
+ U11 59
+Net 318 "" ""
+ U1 5
+ U11 127
+ R29 2
+Net 319 "" ""
+ R28 2
+ U11 128
+ U1 6
+Net 320 "" ""
+ BUS1 A4
+ BUS1 B4
+Net 337 "" ""
+ BUS1 B11
+ W4 2
+Net 338 "" ""
+ W5 2
+ BUS1 B9
+Net 339 "GND" "GND"
  BUS1 B46
+ BUS1 A56
  BUS1 B17
- U3 10
- BUS1 B22
- BUS1 B28
- BUS1 B34
- U4 10
- P8 2
- C67 2
- C68 2
- C69 2
- C32 1
- U19 72
- U19 39
- U5 10
- U19 1
- P3 2
- P2 2
- P1 2
- R8 2
- U18 72
- U18 39
- U6 10
- U18 1
- L6 3
- C15 2
+ BUS1 A37
  U17 72
+ U12 39
+ U14 1
+ W3 1
+ BUS1 B57
+ BUS1 A24
+ U14 72
+ C38 2
+ U14 39
  U17 39
+ BUS1 B34
+ U12 72
+ C70 2
+ U19 72
+ C71 2
+ C72 2
+ C73 2
  U17 1
- U15 72
+ U19 39
+ U19 1
+ U11 10
+ U12 1
+ U18 39
  U15 39
- U15 1
- U9 13
+ U8 63
+ U8 23
+ U15 72
+ U18 1
+ U18 72
+ BUS1 B3
+ U24 70
+ U23 41
+ BUS1 A42
+ U9 31
  U9 12
+ U9 32
+ U9 13
+ BUS1 B22
  U9 3
  U9 4
- U9 31
- U16 72
- U16 39
- U16 1
- U9 32
- U8 61
- U8 63
- U8 67
- U8 23
- C55 2
- U8 22
- R32 2
- U12 72
- U12 39
- U12 1
- U8 21
- R33 2
- U8 2
- R34 2
- U8 3
- C46 2
- U8 41
- C53 2
- U20 10
- U14 72
- U14 39
- U14 1
- U8 42
- R42 1
- R43 1
- R44 1
- C33 2
- U13 72
- U13 39
- U13 1
- C44 2
- U22 1
- U22 11
- U22 23
- C64 2
- C48 1
- C45 2
- P12 1
- R47 2
- CV1 2
- R45 2
- C43 2
- R46 2
- C21 2
- C22 2
- R38 2
- R31 1
- R15 1
- C37 1
- U22 38
- U23 4
- U23 14
+ R8 2
+ BUS1 B49
+ U2 20
+ BUS1 A48
+ BUS1 B38
  U23 26
- U23 41
+ U21 5
+ U23 14
+ C23 2
+ P4 2
  U23 52
- U23 67
- U23 80
+ P5 1
  U23 91
- U7 3
+ U24 1
+ U24 10
+ P12 1
+ U15 1
+ W1 1
+ U23 80
+ U1 3
+ U1 2
+ R44 1
+ U1 1
+ R43 1
+ U1 4
+ U16 39
+ R42 1
+ U23 4
+ BUS1 A35
+ BUS1 B15
+ C32 1
+ BUS1 A30
+ C31 2
+ C30 2
+ C29 2
+ U8 67
+ C28 2
+ BUS1 B28
+ U16 72
+ BUS1 A18
+ C27 2
+ U16 1
+ D3 1
+ D1 1
+ R14 2
+ C2 2
+ C66 1
+ C65 1
+ U22 23
+ R45 2
+ R47 2
+ U22 11
+ U10 151
+ U10 111
+ U10 130
+ U10 89
+ U8 21
+ U8 41
+ U8 61
+ U8 22
+ U8 42
+ U8 2
+ U8 3
+ U4 10
+ U3 10
+ W5 1
+ W4 1
+ U13 39
+ U10 44
+ U10 66
+ U10 56
+ U22 77
+ U10 16
+ U10 75
+ C7 2
+ C6 2
+ U22 38
+ C33 2
+ U22 64
+ U22 88
+ U22 49
+ U10 143
+ U10 103
+ U10 138
+ U10 128
+ U10 118
+ U10 157
+ U10 147
+ U10 136
+ U10 126
+ U10 116
+ U10 155
+ R46 2
+ U10 98
+ U10 88
+ R38 2
+ U10 90
+ U10 30
+ U10 7
+ U22 1
+ U10 5
+ U10 3
+ C47 2
+ U10 145
+ U10 134
+ U10 124
+ U10 153
+ CV1 2
+ C45 2
+ C48 1
+ C64 2
+ C44 2
+ C53 2
+ U20 17
+ C46 2
+ R34 2
+ R33 2
+ R32 2
+ C55 2
+ C43 2
+ L6 3
+ C25 2
+ C24 2
+ C15 2
+ C26 2
+ C62 2
+ R31 1
+ POT1 2
+ U10 139
+ POT1 3
+ U13 72
+ C16 2
+ U20 10
+ C12 2
+ U5 10
+ U6 10
+ C13 2
+ C14 2
  C54 2
- C63 2
- C57 2
- C56 2
+ C11 2
+ C10 2
+ C9 2
+ R15 1
+ U24 131
  C20 2
  C19 2
  C18 2
  C17 2
- C50 2
- C49 2
- C52 2
- C51 2
- U24 151
  U24 141
- U24 131
+ U24 151
  U24 122
- U24 110
- U24 101
- C73 2
  U24 91
- C72 2
- C71 2
- U24 79
- C70 2
- U24 70
- U24 61
- U24 51
- U24 39
- U24 29
- U24 19
- U24 10
- U24 1
- C23 2
- U21 5
- U22 49
- P5 1
- POT1 3
- POT1 2
- U20 17
  R37 1
- U22 64
- U22 77
- P4 2
- BUS1 B38
- U2 20
-Net 279 ""
- BUS1 B4
- BUS1 A4
-Net 284 ""
- W4 2
- BUS1 B11
-Net 286 ""
- BUS1 B9
- W5 2
-Net 290 "VCC"
- U2 10
- U14 59
- U13 30
- U13 10
- U18 59
- RR4 1
- C38 1
- U18 30
- BUS1 A62
- BUS1 A61
- RR3 1
- C27 1
- U18 10
- RR2 1
- RR1 1
- C9 1
- RR6 1
- R48 1
- U14 30
- RR7 1
- BUS1 A59
- RR8 1
- U22 100
- U22 89
- U12 10
- R6 2
- U21 8
- U12 30
- L5 1
- U21 7
- U12 59
- R1 2
- U1 7
- U22 75
- U23 92
- U23 78
- U14 10
- U22 63
- C10 1
- C21 1
- C22 1
- U1 8
- R7 2
- U19 10
- C11 1
- C26 1
- U19 30
- BUS1 B5
- BUS1 B6
- U13 59
- U19 59
- L3 1
- L2 1
- U22 24
- U22 22
- U22 26
- C31 1
- U22 51
- U17 59
- U24 41
- U24 60
- U24 20
- U24 81
- U24 100
- U24 120
- U24 142
- U24 160
- RR5 1
- U17 30
- U17 10
- U23 66
- U23 54
- U10 112
- U10 102
- U23 40
- R28 1
- R29 1
- C24 1
- U10 91
- U22 37
- L4 1
- BUS1 B19
- U23 28
- U23 15
- U11 11
- U22 25
- U11 31
- U11 51
- U11 71
- C57 1
- U10 76
- C56 1
- C20 1
- C19 1
- U10 57
- D4 2
- D2 2
- C18 1
- C17 1
- U22 12
- U10 45
- U16 10
- U10 31
- U11 91
- U16 30
- U24 42
- U24 38
- U24 40
- R4 2
- U11 111
- U3 20
- U16 59
- U11 131
- U11 151
- C70 1
- C71 1
- C72 1
- C73 1
- BUS1 A16
- C67 1
- U4 20
- U23 3
- BUS1 A10
- BUS1 A8
- C25 1
- C15 1
- R13 1
- U15 59
- U15 30
- BUS1 A5
- R5 2
- U15 10
- U5 20
- C30 1
- BUS1 B62
- BUS1 B61
- C29 1
- BUS1 B59
- C28 1
- U6 20
-/buspci.sch/Net 291 "P_AD0"
- U11 56
- BUS1 A58
-/buspci.sch/Net 292 "P_AD2"
- U11 54
- BUS1 A57
-/buspci.sch/Net 293 "P_AD4"
- U11 48
- BUS1 A55
-/buspci.sch/Net 294 "P_AD6"
- BUS1 A54
- U11 46
-/buspci.sch/Net 295 "P_AD9"
- U11 40
- BUS1 A49
-/buspci.sch/Net 296 "P_AD11"
- BUS1 A47
- U11 38
-/buspci.sch/Net 297 "P_AD13"
- U11 35
- BUS1 A46
-/buspci.sch/Net 298 "P_AD15"
- U11 32
- BUS1 A44
-/buspci.sch/Net 299 "P_AD16"
- BUS1 A32
- U11 14
-/buspci.sch/Net 300 "P_AD18"
- U11 8
- BUS1 A31
-/buspci.sch/Net 301 "P_AD20"
- BUS1 A29
- U11 6
-/buspci.sch/Net 302 "P_AD22"
- BUS1 A28
- U11 3
-/buspci.sch/Net 303 "P_AD24"
- U11 158
- BUS1 A25
-/buspci.sch/Net 304 "P_AD26"
- BUS1 A23
- U11 155
-/buspci.sch/Net 305 "P_AD28"
- BUS1 A22
- U11 152
-/buspci.sch/Net 306 "P_AD30"
- BUS1 A20
- U11 147
-/buspci.sch/Net 307 "P_C/BE0#"
- U11 43
- BUS1 A52
-/buspci.sch/Net 308 "P_PAR"
- U11 27
- BUS1 A43
-/buspci.sch/Net 309 "P_RST#"
- U11 139
- BUS1 A15
-/buspci.sch/Net 310 "P_FRAME#"
- BUS1 A34
- U11 16
-/buspci.sch/Net 311 "P_TRDY#"
- U11 19
- BUS1 A36
-/buspci.sch/Net 312 "P_STOP#"
- U11 22
- BUS1 A38
-/buspci.sch/Net 313 "P_IDSEL"
- U11 160
- BUS1 A26
-/buspci.sch/Net 314 "P_GNT#"
- U11 143
- BUS1 A17
-/buspci.sch/Net 315 "P_INTA#"
- BUS1 A6
- U11 58
-/buspci.sch/Net 316 "EA1"
- RR2 6
- U11 61
-/buspci.sch/Net 317 "EA2"
- U11 69
- RR3 8
-/buspci.sch/Net 318 "EA3"
- U11 73
- RR3 6
-/buspci.sch/Net 319 "EA4"
- U11 81
- RR3 2
-/buspci.sch/Net 320 "EA5"
- U11 89
- RR4 4
-/buspci.sch/Net 321 "EA6"
- RR4 2
- U11 97
-/buspci.sch/Net 322 "EA7"
- RR5 9
- U11 101
-/buspci.sch/Net 323 "EA9"
- U11 113
- RR5 3
-/buspci.sch/Net 324 "EA10"
- U11 121
- RR6 9
-/buspci.sch/Net 325 "EA11"
- RR6 7
- U11 129
-/buspci.sch/Net 326 "EA12"
- RR6 5
- U11 137
-/buspci.sch/Net 327 "EA13"
- RR6 4
- U11 141
-/buspci.sch/Net 328 "EA14"
- U11 149
- RR4 8
-/buspci.sch/Net 329 "EA15"
- RR4 6
- U11 153
-/buspci.sch/Net 330 "EQ0"
- U11 1
- RR1 2
-/buspci.sch/Net 331 "EQ1"
- RR1 4
- U11 9
-/buspci.sch/Net 332 "EQ2"
- RR1 6
- U11 17
-/buspci.sch/Net 333 "EQ3"
- RR1 7
- U11 21
-/buspci.sch/Net 334 "EQ4"
- RR1 9
- U11 29
-/buspci.sch/Net 335 "EQ5"
- RR2 4
- U11 33
-/buspci.sch/Net 336 "EQ6"
- U11 41
- RR2 2
-/buspci.sch/Net 337 "EQ7"
- U11 49
- RR2 9
-Net 338 ""
- W2 2
- U11 138
- R6 1
-Net 339 ""
- R7 1
- W3 2
- U11 135
-Net 340 ""
- R28 2
- U1 6
- U11 128
-Net 341 ""
- R29 2
- U1 5
- U11 127
-Net 343 ""
- U9 43
- U9 44
- C32 2
-Net 344 ""
- U9 42
- C35 2
- U9 41
-Net 349 ""
- R15 2
- U8 7
- C36 1
-Net 350 ""
- R38 1
- U8 69
-Net 351 ""
- U8 6
- R36 2
-Net 352 ""
- U8 58
- U8 68
-Net 353 ""
- U8 70
- U8 60
-Net 354 ""
- U8 62
- U8 72
-/ESVIDEO-RVB/Net 359 "VAA"
- U8 84
- C35 1
- L5 2
- U8 43
- C52 1
- C51 1
- U9 35
- U9 34
- U9 33
- U9 2
- U9 1
- U8 1
- C34 1
- U8 44
- C33 1
- U9 36
- C42 1
-Net 361 ""
- U8 75
- C41 1
-Net 362 ""
- U8 79
- C40 1
-Net 363 ""
+ C21 2
+ C22 2
+ U13 1
+ C67 2
+ U24 39
+ U24 79
+ U7 3
+ U24 110
+ C63 2
+ C57 2
+ C56 2
+ U24 101
+ W2 1
+ C37 1
+ C50 2
+ U24 19
+ C49 2
+ C69 2
+ C68 2
+ U24 29
+ C52 2
+ J4 5
+ C51 2
+ J4 4
+ P1 2
+ P8 2
+ J4 7
+ J4 6
+ U11 110
+ U11 130
+ U11 50
+ P2 2
+ P3 2
+ U24 61
+ U11 30
+ U23 67
+ U11 90
+ U24 51
+ U11 70
+ U11 150
+Net 342 "/ESVIDEO-RVB/REF+" "REF+"
+ U8 80
+ U8 71
+ U8 78
+ U8 64
+ U8 73
+ R37 2
+ U8 66
+ U8 76
+ U8 82
+ U8 65
+Net 343 "" ""
  U8 83
  C39 1
-Net 364 ""
- C36 2
+Net 345 "" ""
+ C36 1
+ U8 7
+ R15 2
+Net 346 "" ""
  C37 2
+ C36 2
  R36 1
-Net 365 ""
+Net 347 "" ""
+ U8 75
+ C41 1
+Net 348 "" ""
  C41 2
  R22 2
-Net 366 ""
- R23 2
+Net 349 "" ""
+ C40 1
+ U8 79
+Net 350 "" ""
  C40 2
-Net 367 ""
+ R23 2
+Net 351 "" ""
  C39 2
  R24 2
-Net 368 ""
+Net 353 "" ""
+ U8 68
+ U8 58
+Net 355 "" ""
+ U8 60
+ U8 70
+Net 357 "" ""
+ U8 62
+ U8 72
+Net 360 "" ""
+ U8 69
+ R38 1
+Net 361 "" ""
+ R36 2
+ U8 6
+Net 362 "/ESVIDEO-RVB/OE_RVB-" "OE_RVB-"
+ U9 29
+ U8 57
+Net 363 "" ""
+ C32 2
+ U9 43
+ U9 44
+Net 365 "" ""
+ U9 41
+ C35 2
+ U9 42
+Net 366 "/ESVIDEO-RVB/VAA" "VAA"
+ U9 34
+ C35 1
+ U8 44
+ C42 1
+ C33 1
+ C34 1
+ U8 1
+ U8 84
+ U9 35
+ U9 33
+ C51 1
+ L5 2
+ U9 36
+ U8 43
+ U9 2
+ C52 1
+ U9 1
+Net 369 "" ""
  U9 40
  R8 1
  C34 2
  C42 2
-/ESVIDEO-RVB/Net 369 "REF+"
- U8 76
- U8 73
- U8 71
- U8 66
- U8 65
- U8 64
- U8 80
- U8 82
- U8 78
- R37 2
-/ESVIDEO-RVB/Net 370 "OE_RVB-"
- U9 29
- U8 57
-/RAMS/Net 371 "TVRAM10"
- U15 53
- U22 35
- U16 53
- U17 53
- U12 53
- U13 53
- U18 53
- U14 53
- U19 53
- U4 16
-/RAMS/Net 372 "TVRAM11"
- U18 55
- U19 55
- U22 36
- U13 55
- U12 55
- U16 55
- U15 55
- U14 55
- U4 15
- U17 55
-/RAMS/Net 373 "TVRAM12"
- U4 14
- U15 57
- U17 57
- U13 57
- U16 57
- U14 57
- U22 39
- U12 57
- U18 57
- U19 57
-/RAMS/Net 374 "TVRAM13"
- U22 40
- U15 61
- U17 61
- U16 61
- U19 61
- U12 61
- U18 61
- U14 61
- U13 61
- U4 13
-/RAMS/Net 375 "TVRAM14"
- U12 63
- U18 63
- U14 63
- U4 12
- U17 63
- U13 63
- U19 63
- U15 63
- U22 41
- U16 63
-/RAMS/Net 376 "TVRAM15"
- U22 42
- U15 65
- U19 65
- U18 65
- U12 65
- U13 65
- U17 65
- U14 65
- U16 65
- U4 11
-/RAMS/Net 377 "TVRAM16"
- U16 3
- U14 3
- U22 43
- U5 18
- U19 3
- U15 3
- U18 3
- U13 3
- U17 3
- U12 3
-/RAMS/Net 378 "TVRAM17"
- U12 5
- U15 5
- U14 5
- U19 5
- U5 17
- U22 44
- U13 5
- U18 5
- U17 5
- U16 5
-/RAMS/Net 379 "TVRAM18"
- U17 7
- U16 7
- U18 7
- U22 45
- U13 7
- U5 16
- U19 7
- U14 7
- U12 7
- U15 7
-/RAMS/Net 380 "TVRAM19"
- U15 9
- U18 9
- U17 9
- U22 46
- U5 15
- U13 9
- U16 9
- U19 9
- U12 9
- U14 9
-/RAMS/Net 381 "TVRAM20"
- U16 21
- U5 14
- U12 21
- U22 47
- U15 21
- U19 21
- U13 21
- U14 21
- U17 21
- U18 21
-/RAMS/Net 382 "TVRAM21"
- U17 23
- U14 23
- U13 23
- U19 23
- U15 23
- U22 48
- U16 23
- U12 23
- U5 13
- U18 23
-/RAMS/Net 383 "TVRAM22"
- U13 25
- U5 12
- U16 25
- U19 25
- U15 25
- U18 25
- U17 25
- U22 53
- U12 25
- U14 25
-/muxdata/Net 384 "VRAM23"
- U12 27
- U22 54
- U18 27
- U15 27
- U19 27
- U17 27
- U16 27
- U5 11
- U13 27
- U14 27
-/RAMS/Net 385 "TVRAM24"
- U14 50
- U13 50
- U19 50
- U16 50
- U17 50
- U6 18
- U18 50
- U15 50
- U22 55
- U12 50
-/RAMS/Net 386 "TVRAM25"
- U18 52
- U12 52
- U19 52
- U6 17
- U15 52
- U22 56
- U17 52
- U13 52
- U16 52
- U14 52
-/muxdata/Net 387 "VRAM26"
- U19 54
- U13 54
- U17 54
- U14 54
- U16 54
- U22 57
- U15 54
- U12 54
- U18 54
- U6 16
-/RAMS/Net 388 "TVRAM27"
- U6 15
- U18 56
- U12 56
- U15 56
- U17 56
- U14 56
- U16 56
- U22 58
- U13 56
- U19 56
-/RAMS/Net 389 "TVRAM28"
- U18 58
- U6 14
- U19 58
- U17 58
- U16 58
- U13 58
- U22 59
- U15 58
- U14 58
- U12 58
-/muxdata/Net 390 "VRAM29"
- U12 60
- U14 60
- U18 60
- U15 60
- U13 60
- U22 60
- U16 60
- U17 60
- U19 60
- U6 13
-/RAMS/Net 391 "TVRAM30"
- U19 62
- U17 62
- U22 61
- U16 62
- U18 62
- U12 62
- U15 62
- U13 62
- U14 62
- U6 12
-/RAMS/Net 392 "TVRAM31"
- U14 64
- U13 64
- U12 64
- U18 64
- U16 64
- U22 62
- U17 64
- U19 64
- U15 64
- U6 11
-/RAMS/Net 393 "TVRAM9"
- U14 51
- U18 51
- U16 51
- U13 51
- U4 17
- U19 51
- U12 51
- U17 51
- U15 51
- U22 34
-/ESVIDEO-RVB/Net 394 "TVB0"
- U9 61
- U10 55
- U22 92
- U8 32
-/ESVIDEO-RVB/Net 395 "TVB1"
- U10 54
- U9 62
- U8 31
- U22 93
-/ESVIDEO-RVB/Net 396 "TVB2"
- U8 30
- U22 94
- U9 63
- U10 53
-/pal-ntsc.sch/Net 397 "TVB3"
- U22 95
- U9 64
- U8 29
- U10 52
-/ESVIDEO-RVB/Net 398 "TVB4"
- U8 28
- U9 65
- U22 96
- U10 51
-/ESVIDEO-RVB/Net 399 "TVB5"
- U10 50
- U9 66
- U22 97
- U8 27
-/ESVIDEO-RVB/Net 400 "TVB6"
- U8 26
- U22 98
- U9 67
- U10 49
-/ESVIDEO-RVB/Net 401 "TVB7"
- U10 48
- U22 99
- U9 68
- U8 25
-/muxdata/Net 402 "VRAM8"
- U18 49
- U16 49
- U15 49
- U22 33
- U12 49
- U13 49
- U19 49
- U17 49
- U14 49
- U4 18
-/pal-ntsc.sch/Net 403 "TVG0"
- U22 67
- U10 74
- U9 53
- U8 48
-/ESVIDEO-RVB/Net 404 "TVG1"
- U22 68
- U10 73
- U9 54
- U8 47
-/pal-ntsc.sch/Net 405 "TVG2"
- U22 69
- U8 46
- U9 55
- U10 72
-/muxdata/Net 406 "TVG3"
- U9 56
- U10 71
- U8 45
- U22 70
-/pal-ntsc.sch/Net 407 "TVG4"
- U22 71
- U9 57
- U10 70
- U8 36
-/ESVIDEO-RVB/Net 408 "TVG5"
- U22 78
- U9 58
- U8 35
- U10 69
-/ESVIDEO-RVB/Net 409 "TVG6"
- U8 34
- U9 59
- U22 80
- U10 68
-/muxdata/Net 410 "TVG7"
- U8 33
- U9 60
- U22 81
- U10 67
-/RAMS/Net 411 "TVRAM7"
- U14 26
- U19 26
- U3 11
- U17 26
- U12 26
- U13 26
- U22 32
- U15 26
- U16 26
- U18 26
-/muxdata/Net 412 "TVR0"
- U8 56
- U9 45
- U10 65
- U22 82
-/ESVIDEO-RVB/Net 413 "TVR1"
- U22 83
- U9 46
- U10 64
- U8 55
-/muxdata/Net 414 "TVR2"
- U22 84
- U10 63
- U9 47
- U8 54
-/pal-ntsc.sch/Net 415 "TVR3"
- U10 62
- U9 48
- U22 85
- U8 53
-/ESVIDEO-RVB/Net 416 "TVR4"
- U8 52
- U9 49
- U10 61
- U22 86
-/muxdata/Net 417 "TVR5"
- U8 51
- U9 50
- U10 60
- U22 87
-/ESVIDEO-RVB/Net 418 "TVR6"
- U22 90
- U10 59
- U9 51
- U8 50
-/ESVIDEO-RVB/Net 419 "TVR7"
- U22 91
- U10 58
- U9 52
- U8 49
-/RAMS/Net 420 "TVRAM6"
- U13 24
- U19 24
- U14 24
- U3 12
- U12 24
- U18 24
- U16 24
- U22 31
- U15 24
- U17 24
-/RAMS/Net 421 "TVRAM5"
- U22 29
- U3 13
- U15 22
- U17 22
- U19 22
- U13 22
- U16 22
- U14 22
- U18 22
- U12 22
-/RAMS/Net 422 "TVRAM4"
- U12 20
- U18 20
- U22 28
- U3 14
- U15 20
- U17 20
- U14 20
- U16 20
- U13 20
- U19 20
-/RAMS/Net 423 "TVRAM3"
- U13 8
- U16 8
- U19 8
- U17 8
- U3 15
- U15 8
- U18 8
- U12 8
- U14 8
- U22 18
-/RAMS/Net 424 "TVRAM2"
- U22 20
- U3 16
- U19 6
- U13 6
- U18 6
- U17 6
- U14 6
- U15 6
- U16 6
- U12 6
-/muxdata/Net 425 "DPC16"
- U11 157
- RR4 7
- U5 2
-/muxdata/Net 426 "DPC17"
- U5 3
- RR4 9
- U11 145
-/muxdata/Net 427 "DPC18"
- U11 133
- RR6 6
- U5 4
-/muxdata/Net 428 "DPC19"
- U11 125
- RR6 8
- U5 5
-/buspci.sch/Net 429 "DQ20"
- U5 6
- RR6 3
- U11 117
-/muxdata/Net 430 "DPC21"
- U11 105
- RR5 6
- U5 7
-/buspci.sch/Net 431 "DQ22"
- U11 93
- RR4 3
- U5 8
-/buspci.sch/Net 432 "DQ23"
- RR4 5
- U11 85
- U5 9
-/buspci.sch/Net 433 "DQ24"
- U6 2
- U11 77
- RR3 3
-/buspci.sch/Net 434 "DQ25"
- RR3 9
- U11 65
- U6 3
-/buspci.sch/Net 435 "DQ26"
- RR2 8
- U6 4
- U11 53
-/muxdata/Net 436 "DPC27"
- RR2 5
- U6 5
- U11 45
-/buspci.sch/Net 437 "DQ28"
- U6 6
- RR2 3
- U11 37
-/buspci.sch/Net 438 "DQ29"
- U11 25
- U6 7
- RR1 8
-/muxdata/Net 439 "DPC30"
- RR1 5
- U11 13
- U6 8
-/buspci.sch/Net 440 "DQ31"
- U6 9
- U11 5
- RR1 3
-/RAMS/Net 441 "TVRAM1"
- U18 4
- U12 4
- U3 17
- U16 4
- U17 4
- U14 4
- U13 4
- U22 19
- U15 4
- U19 4
-/pal-ntsc.sch/Net 442 "PC_D0"
- U9 14
+Net 370 "/RAMS/MXA8" "MXA8"
+ U16 31
+ U14 31
+ U18 31
+ U12 31
+ U13 31
+ U19 31
+ U15 31
+ U17 31
+ U24 114
+Net 371 "/RAMS/MXA9" "MXA9"
+ U19 32
+ U12 32
+ U18 32
+ U16 32
+ U13 32
+ U15 32
+ U24 113
+ U17 32
+ U14 32
+Net 372 "/RAMS/MXA10" "MXA10"
+ U18 19
+ U13 19
+ U12 19
+ U19 19
+ U14 19
+ U17 19
+ U24 109
+ U15 19
+ U16 19
+Net 373 "/ESVIDEO-RVB/DPC0" "DPC0"
  RR7 2
+ U9 14
  U8 16
- U11 100
  U23 13
+ U24 21
+ U11 100
  U3 2
  U10 92
- U24 21
-/graphic/Net 443 "DQ1"
- U24 22
- U8 15
- RR7 3
- U3 3
- U10 93
- U23 12
+Net 374 "/ESVIDEO-RVB/DPC1" "DPC1"
  U9 15
  U11 99
-/muxdata/Net 444 "DPC2"
- U10 94
- U11 98
- U9 16
- U3 4
- RR7 4
+ U3 3
+ U23 12
+ U8 15
+ RR7 3
+ U24 22
+ U10 93
+Net 375 "/ESVIDEO-RVB/DPC2" "DPC2"
  U23 11
- U8 14
+ U3 4
+ U10 94
  U24 23
-/ESVIDEO-RVB/Net 445 "DPC3"
- U23 7
- U24 24
+ U8 14
+ U9 16
+ RR7 4
+ U11 98
+Net 376 "/muxdata/DPC3" "DPC3"
  U3 5
- U9 17
+ U24 24
  RR7 5
- U11 96
+ U9 17
  U10 95
  U8 13
-/graphic/Net 446 "DQ4"
- U8 12
- RR7 6
- U3 6
- U10 96
- U9 18
+ U11 96
+ U23 7
+Net 377 "/ESVIDEO-RVB/DPC4" "DPC4"
  U11 95
+ U10 96
+ RR7 6
+ U8 12
+ U9 18
  U23 9
  U24 25
-/ESVIDEO-RVB/Net 447 "DPC5"
+ U3 6
+Net 378 "/ESVIDEO-RVB/DPC5" "DPC5"
  U8 11
- U9 19
+ U11 94
+ U10 97
  U23 8
  U24 26
- U10 97
- U11 94
- U3 7
+ U9 19
  RR7 7
-/muxdata/Net 448 "DPC6"
- RR7 8
+ U3 7
+Net 379 "/muxdata/DPC6" "DPC6"
  U3 8
- U11 92
+ U8 10
  U10 99
  U24 27
- U8 10
  U23 6
+ U11 92
  U9 20
-/buspci.sch/Net 449 "DQ7"
- U9 21
- U10 100
- RR7 9
- U24 28
+ RR7 8
+Net 380 "/ESVIDEO-RVB/DPC7" "DPC7"
  U8 9
- U3 9
- U11 88
+ U10 100
+ U24 28
  U23 5
-/muxdata/Net 450 "VRAM0"
- U12 2
- U15 2
- U22 17
- U14 2
- U17 2
- U18 2
- U19 2
- U13 2
- U3 18
- U16 2
-/pal-ntsc.sch/Net 451 "PC_A0"
- U23 65
- U9 24
- U10 84
- U8 17
-/graphic/Net 452 "PCA1"
- U9 25
- U23 64
- U8 18
- U10 85
-/ESVIDEO-RVB/Net 453 "PCA2"
- U23 63
- U9 26
- U8 19
-/buspci.sch/Net 454 "BE-0"
- U11 87
- U24 144
- U23 38
-/graphic/Net 455 "BE-1"
- U11 63
- U23 37
- U24 145
-/graphic/Net 456 "BE-2"
- U24 146
- U23 36
- U11 62
-/graphic/Net 457 "BE-3"
- U23 35
- U24 147
- U11 60
-/buspci.sch/Net 458 "PTBE-0"
- U23 20
- U11 116
- U24 158
-/graphic/Net 459 "PTBE-1"
- U24 157
- U11 118
- U23 21
-/graphic/Net 460 "PTBE-2"
- U11 119
- U24 156
- U23 22
-/graphic/Net 461 "PTBE-3"
- U24 155
- U23 23
- U11 120
-/buspci.sch/Net 462 "ADR2"
- U23 48
- U24 137
- U11 68
-/graphic/Net 463 "ADR3"
- U11 67
- U23 44
- U24 138
-/graphic/Net 464 "ADR4"
- U23 43
- U11 66
- U24 139
-/graphic/Net 465 "ADR5"
- U24 140
- U11 64
- U23 42
-/buspci.sch/Net 466 "ADR6"
- U24 143
- U11 132
- U23 39
-/graphic/Net 467 "DQ8"
- U4 2
+ RR7 9
+ U11 88
+ U9 21
+ U3 9
+Net 381 "/muxdata/DPC8" "DPC8"
  RR8 9
+ U4 2
+ U24 32
  U23 97
  U11 86
- U24 32
-/buspci.sch/Net 468 "DQ9"
- U11 84
- RR8 8
- U24 33
- U23 96
- U4 3
-/graphic/Net 469 "DQ10"
- U11 83
- U24 34
- U4 4
- U23 95
- RR8 7
-/graphic/Net 470 "DQ11"
- RR8 6
- U11 82
- U24 35
- U23 94
- U4 5
-/graphic/Net 471 "DQ12"
- U23 93
- RR8 5
- U11 80
- U24 36
- U4 6
-/muxdata/Net 472 "DPC13"
- U23 90
- U4 7
- RR8 4
- U24 45
- U11 79
-/graphic/Net 473 "DQ14"
+Net 382 "/buspci.sch/ADR6" "ADR6"
+ U24 143
+ U23 39
+ U11 132
+Net 383 "/graphic/ADR5" "ADR5"
+ U24 140
+ U23 42
+ U11 64
+Net 384 "/muxdata/DPC15" "DPC15"
+ U11 76
+ U4 9
+ U24 47
+ U23 89
+ RR8 2
+Net 385 "/muxdata/DPC14" "DPC14"
  U11 78
  U24 46
  RR8 3
  U23 88
  U4 8
-/graphic/Net 474 "DQ15"
- RR8 2
- U11 76
- U23 89
- U24 47
- U4 9
-/RAMS/Net 475 "MXA0"
- U12 12
- U19 12
- U16 12
- U17 12
- U14 12
- U15 12
- U18 12
- U13 12
- U24 128
-/RAMS/Net 476 "MXA1"
- U24 127
- U16 13
- U13 13
- U15 13
- U14 13
- U17 13
- U19 13
- U12 13
- U18 13
-/RAMS/Net 477 "MXA2"
- U24 126
- U18 14
- U13 14
- U16 14
- U17 14
- U19 14
- U14 14
- U15 14
- U12 14
-/RAMS/Net 478 "MXA3"
- U12 15
- U15 15
- U14 15
- U19 15
- U17 15
- U16 15
- U13 15
- U24 125
- U18 15
-/RAMS/Net 479 "MXA4"
- U16 16
- U24 124
- U19 16
- U17 16
- U14 16
- U12 16
- U15 16
- U18 16
- U13 16
-/RAMS/Net 480 "MXA5"
- U13 17
- U18 17
- U15 17
- U14 17
- U17 17
- U12 17
- U19 17
- U24 123
- U16 17
-/RAMS/Net 481 "MXA6"
- U16 18
- U19 18
- U24 116
- U13 18
- U18 18
- U14 18
- U17 18
- U12 18
- U15 18
-/RAMS/Net 482 "MXA7"
- U15 28
- U12 28
- U18 28
- U16 28
- U24 115
- U19 28
- U13 28
- U14 28
- U17 28
-/RAMS/Net 483 "MXA8"
- U13 31
- U15 31
- U17 31
- U16 31
- U12 31
- U14 31
- U18 31
- U24 114
- U19 31
-/graphic/Net 484 "MXA9"
- U19 32
- U16 32
- U24 113
- U18 32
- U14 32
- U17 32
- U13 32
- U15 32
- U12 32
-/RAMS/Net 485 "MXA10"
- U15 19
- U13 19
- U24 109
- U18 19
- U16 19
- U19 19
- U14 19
- U17 19
- U12 19
-/ESVIDEO-RVB/Net 486 "TVI0"
- U24 108
+Net 386 "/muxdata/DPC13" "DPC13"
+ RR8 4
+ U24 45
+ U23 90
+ U4 7
+ U11 79
+Net 387 "/muxdata/DPC12" "DPC12"
+ RR8 5
+ U23 93
+ U24 36
+ U11 80
+ U4 6
+Net 388 "/muxdata/DPC11" "DPC11"
+ U4 5
+ RR8 6
+ U11 82
+ U23 94
+ U24 35
+Net 389 "/muxdata/DPC10" "DPC10"
+ U23 95
+ RR8 7
+ U11 83
+ U4 4
+ U24 34
+Net 390 "/muxdata/DPC9" "DPC9"
+ U23 96
+ U11 84
+ RR8 8
+ U24 33
+ U4 3
+Net 391 "/graphic/PCA1" "PCA1"
+ U23 64
+ U10 85
+ U9 25
+ U8 18
+Net 392 "/ESVIDEO-RVB/PCA2" "PCA2"
+ U8 19
+ U9 26
+ U23 63
+Net 393 "/graphic/TVI0" "TVI0"
  U9 10
-/graphic/Net 487 "TVI1"
+ U24 108
+Net 394 "/graphic/TVI1" "TVI1"
  U9 11
  U24 107
+Net 395 "/RAMS/TVRAM0" "TVRAM0"
+ U15 2
+ U14 2
+ U12 2
+ U19 2
+ U18 2
+ U3 18
+ U22 17
+ U13 2
+ U17 2
+ U16 2
+Net 396 "/RAMS/TVRAM1" "TVRAM1"
+ U13 4
+ U19 4
+ U18 4
+ U3 17
+ U17 4
+ U22 19
+ U16 4
+ U15 4
+ U12 4
+ U14 4
+Net 397 "/RAMS/TVRAM2" "TVRAM2"
+ U22 20
+ U13 6
+ U18 6
+ U3 16
+ U12 6
+ U14 6
+ U19 6
+ U17 6
+ U15 6
+ U16 6
+Net 398 "/RAMS/TVRAM3" "TVRAM3"
+ U13 8
+ U12 8
+ U16 8
+ U18 8
+ U19 8
+ U14 8
+ U22 18
+ U3 15
+ U17 8
+ U15 8
+Net 399 "/RAMS/TVRAM4" "TVRAM4"
+ U12 20
+ U13 20
+ U14 20
+ U16 20
+ U15 20
+ U3 14
+ U22 28
+ U17 20
+ U19 20
+ U18 20
+Net 400 "/RAMS/TVRAM5" "TVRAM5"
+ U12 22
+ U19 22
+ U14 22
+ U13 22
+ U22 29
+ U18 22
+ U16 22
+ U3 13
+ U17 22
+ U15 22
+Net 401 "/RAMS/TVRAM22" "TVRAM22"
+ U13 25
+ U14 25
+ U15 25
+ U22 53
+ U5 12
+ U19 25
+ U16 25
+ U12 25
+ U17 25
+ U18 25
+Net 402 "/RAMS/TVRAM21" "TVRAM21"
+ U16 23
+ U22 48
+ U15 23
+ U14 23
+ U17 23
+ U5 13
+ U19 23
+ U13 23
+ U12 23
+ U18 23
+Net 403 "/RAMS/TVRAM20" "TVRAM20"
+ U16 21
+ U13 21
+ U18 21
+ U19 21
+ U12 21
+ U15 21
+ U5 14
+ U14 21
+ U22 47
+ U17 21
+Net 404 "/RAMS/TVRAM19" "TVRAM19"
+ U5 15
+ U12 9
+ U13 9
+ U22 46
+ U18 9
+ U19 9
+ U15 9
+ U17 9
+ U14 9
+ U16 9
+Net 405 "/RAMS/TVRAM18" "TVRAM18"
+ U5 16
+ U13 7
+ U16 7
+ U17 7
+ U15 7
+ U22 45
+ U18 7
+ U14 7
+ U19 7
+ U12 7
+Net 406 "/RAMS/TVRAM17" "TVRAM17"
+ U17 5
+ U15 5
+ U16 5
+ U22 44
+ U5 17
+ U19 5
+ U13 5
+ U12 5
+ U14 5
+ U18 5
+Net 407 "/RAMS/TVRAM16" "TVRAM16"
+ U16 3
+ U14 3
+ U13 3
+ U15 3
+ U12 3
+ U18 3
+ U5 18
+ U22 43
+ U17 3
+ U19 3
+Net 408 "/RAMS/TVRAM15" "TVRAM15"
+ U22 42
+ U17 65
+ U16 65
+ U13 65
+ U19 65
+ U4 11
+ U18 65
+ U12 65
+ U14 65
+ U15 65
+Net 409 "/RAMS/TVRAM14" "TVRAM14"
+ U15 63
+ U22 41
+ U14 63
+ U19 63
+ U18 63
+ U17 63
+ U12 63
+ U13 63
+ U16 63
+ U4 12
+Net 410 "/RAMS/TVRAM13" "TVRAM13"
+ U15 61
+ U22 40
+ U12 61
+ U14 61
+ U13 61
+ U16 61
+ U18 61
+ U19 61
+ U4 13
+ U17 61
+Net 411 "/RAMS/TVRAM12" "TVRAM12"
+ U14 57
+ U13 57
+ U22 39
+ U18 57
+ U16 57
+ U12 57
+ U17 57
+ U4 14
+ U15 57
+ U19 57
+Net 412 "/RAMS/TVRAM11" "TVRAM11"
+ U16 55
+ U4 15
+ U14 55
+ U19 55
+ U18 55
+ U22 36
+ U17 55
+ U12 55
+ U15 55
+ U13 55
+Net 413 "/RAMS/TVRAM10" "TVRAM10"
+ U17 53
+ U15 53
+ U18 53
+ U19 53
+ U22 35
+ U14 53
+ U4 16
+ U12 53
+ U16 53
+ U13 53
+Net 414 "/RAMS/TVRAM9" "TVRAM9"
+ U4 17
+ U12 51
+ U16 51
+ U13 51
+ U22 34
+ U14 51
+ U19 51
+ U15 51
+ U17 51
+ U18 51
+Net 415 "/RAMS/TVRAM8" "TVRAM8"
+ U19 49
+ U13 49
+ U22 33
+ U16 49
+ U17 49
+ U15 49
+ U14 49
+ U18 49
+ U4 18
+ U12 49
+Net 416 "/RAMS/TVRAM7" "TVRAM7"
+ U19 26
+ U12 26
+ U16 26
+ U17 26
+ U14 26
+ U15 26
+ U18 26
+ U3 11
+ U13 26
+ U22 32
+Net 417 "/RAMS/TVRAM6" "TVRAM6"
+ U22 31
+ U19 24
+ U15 24
+ U18 24
+ U13 24
+ U3 12
+ U14 24
+ U12 24
+ U16 24
+ U17 24
+Net 418 "/graphic/BE-0" "BE-0"
+ U24 144
+ U11 87
+ U23 38
+Net 419 "/graphic/BE-1" "BE-1"
+ U24 145
+ U11 63
+ U23 37
+Net 420 "/graphic/BE-2" "BE-2"
+ U23 36
+ U24 146
+ U11 62
+Net 421 "/graphic/BE-3" "BE-3"
+ U24 147
+ U23 35
+ U11 60
+Net 422 "/ESVIDEO-RVB/PCA0" "PCA0"
+ U23 65
+ U10 84
+ U9 24
+ U8 17
+Net 423 "/RAMS/MXA0" "MXA0"
+ U15 12
+ U13 12
+ U14 12
+ U16 12
+ U18 12
+ U24 128
+ U17 12
+ U12 12
+ U19 12
+Net 424 "/RAMS/MXA1" "MXA1"
+ U15 13
+ U13 13
+ U14 13
+ U16 13
+ U12 13
+ U17 13
+ U24 127
+ U19 13
+ U18 13
+Net 425 "/RAMS/MXA2" "MXA2"
+ U13 14
+ U19 14
+ U16 14
+ U12 14
+ U18 14
+ U17 14
+ U14 14
+ U24 126
+ U15 14
+Net 426 "/RAMS/MXA3" "MXA3"
+ U17 15
+ U18 15
+ U19 15
+ U15 15
+ U24 125
+ U14 15
+ U13 15
+ U16 15
+ U12 15
+Net 427 "/RAMS/MXA4" "MXA4"
+ U17 16
+ U12 16
+ U14 16
+ U24 124
+ U19 16
+ U16 16
+ U18 16
+ U13 16
+ U15 16
+Net 428 "/RAMS/MXA5" "MXA5"
+ U16 17
+ U18 17
+ U14 17
+ U12 17
+ U24 123
+ U13 17
+ U17 17
+ U15 17
+ U19 17
+Net 429 "/RAMS/MXA6" "MXA6"
+ U14 18
+ U16 18
+ U24 116
+ U19 18
+ U18 18
+ U17 18
+ U15 18
+ U12 18
+ U13 18
+Net 430 "/RAMS/MXA7" "MXA7"
+ U24 115
+ U16 28
+ U13 28
+ U17 28
+ U15 28
+ U14 28
+ U12 28
+ U19 28
+ U18 28
+Net 431 "/ESVIDEO-RVB/TVR1" "TVR1"
+ U10 64
+ U9 46
+ U8 55
+ U22 83
+Net 432 "/ESVIDEO-RVB/TVR2" "TVR2"
+ U9 47
+ U8 54
+ U10 63
+ U22 84
+Net 433 "/pal-ntsc.sch/TVR3" "TVR3"
+ U10 62
+ U22 85
+ U9 48
+ U8 53
+Net 434 "/pal-ntsc.sch/TVR4" "TVR4"
+ U9 49
+ U8 52
+ U22 86
+ U10 61
+Net 435 "/ESVIDEO-RVB/TVR5" "TVR5"
+ U22 87
+ U9 50
+ U10 60
+ U8 51
+Net 436 "/ESVIDEO-RVB/TVR6" "TVR6"
+ U9 51
+ U22 90
+ U10 59
+ U8 50
+Net 437 "/ESVIDEO-RVB/TVR7" "TVR7"
+ U22 91
+ U10 58
+ U9 52
+ U8 49
+Net 438 "/muxdata/DPC25" "DPC25"
+ U6 3
+ RR3 9
+ U11 65
+Net 439 "/muxdata/DPC24" "DPC24"
+ U11 77
+ U6 2
+ RR3 3
+Net 440 "/muxdata/DPC23" "DPC23"
+ U11 85
+ U5 9
+ RR4 5
+Net 441 "/muxdata/DPC22" "DPC22"
+ RR4 3
+ U5 8
+ U11 93
+Net 442 "/muxdata/DPC21" "DPC21"
+ RR5 6
+ U11 105
+ U5 7
+Net 443 "/muxdata/DPC20" "DPC20"
+ RR6 3
+ U5 6
+ U11 117
+Net 444 "/muxdata/DPC19" "DPC19"
+ U11 125
+ U5 5
+ RR6 8
+Net 445 "/muxdata/DPC18" "DPC18"
+ RR6 6
+ U5 4
+ U11 133
+Net 446 "/muxdata/DPC17" "DPC17"
+ U5 3
+ U11 145
+ RR4 9
+Net 447 "/muxdata/DPC16" "DPC16"
+ U5 2
+ RR4 7
+ U11 157
+Net 448 "/graphic/PTBE-0" "PTBE-0"
+ U23 20
+ U24 158
+ U11 116
+Net 449 "/buspci.sch/PTBE-1" "PTBE-1"
+ U23 21
+ U24 157
+ U11 118
+Net 450 "/graphic/PTBE-2" "PTBE-2"
+ U11 119
+ U24 156
+ U23 22
+Net 451 "/graphic/PTBE-3" "PTBE-3"
+ U23 23
+ U24 155
+ U11 120
+Net 452 "/ESVIDEO-RVB/TVR0" "TVR0"
+ U8 56
+ U22 82
+ U9 45
+ U10 65
+Net 453 "/graphic/ADR4" "ADR4"
+ U23 43
+ U24 139
+ U11 66
+Net 454 "/graphic/ADR3" "ADR3"
+ U24 138
+ U11 67
+ U23 44
+Net 455 "/graphic/ADR2" "ADR2"
+ U23 48
+ U24 137
+ U11 68
+Net 456 "/ESVIDEO-RVB/TVG4" "TVG4"
+ U8 36
+ U22 71
+ U10 70
+ U9 57
+Net 457 "/ESVIDEO-RVB/TVG5" "TVG5"
+ U10 69
+ U22 78
+ U9 58
+ U8 35
+Net 458 "/muxdata/TVG6" "TVG6"
+ U9 59
+ U22 80
+ U8 34
+ U10 68
+Net 459 "/muxdata/TVG7" "TVG7"
+ U22 81
+ U8 33
+ U10 67
+ U9 60
+Net 460 "/muxdata/TVB0" "TVB0"
+ U22 92
+ U9 61
+ U10 55
+ U8 32
+Net 461 "/muxdata/TVB1" "TVB1"
+ U9 62
+ U8 31
+ U10 54
+ U22 93
+Net 462 "/ESVIDEO-RVB/TVB2" "TVB2"
+ U22 94
+ U10 53
+ U8 30
+ U9 63
+Net 463 "/ESVIDEO-RVB/TVB3" "TVB3"
+ U8 29
+ U10 52
+ U22 95
+ U9 64
+Net 464 "/muxdata/TVB4" "TVB4"
+ U9 65
+ U22 96
+ U10 51
+ U8 28
+Net 465 "/pal-ntsc.sch/TVB5" "TVB5"
+ U8 27
+ U22 97
+ U9 66
+ U10 50
+Net 466 "/pal-ntsc.sch/TVB6" "TVB6"
+ U9 67
+ U10 49
+ U8 26
+ U22 98
+Net 467 "/pal-ntsc.sch/TVB7" "TVB7"
+ U10 48
+ U9 68
+ U8 25
+ U22 99
+Net 468 "/muxdata/DPC26" "DPC26"
+ U11 53
+ RR2 8
+ U6 4
+Net 469 "/muxdata/DPC27" "DPC27"
+ RR2 5
+ U6 5
+ U11 45
+Net 470 "/muxdata/DPC28" "DPC28"
+ RR2 3
+ U6 6
+ U11 37
+Net 471 "/muxdata/DPC29" "DPC29"
+ RR1 8
+ U6 7
+ U11 25
+Net 472 "/muxdata/DPC30" "DPC30"
+ U6 8
+ U11 13
+ RR1 5
+Net 473 "/muxdata/DPC31" "DPC31"
+ U6 9
+ RR1 3
+ U11 5
+Net 474 "/ESVIDEO-RVB/TVG3" "TVG3"
+ U22 70
+ U8 45
+ U9 56
+ U10 71
+Net 475 "/ESVIDEO-RVB/TVG2" "TVG2"
+ U10 72
+ U22 69
+ U8 46
+ U9 55
+Net 476 "/ESVIDEO-RVB/TVG1" "TVG1"
+ U22 68
+ U8 47
+ U10 73
+ U9 54
+Net 477 "/ESVIDEO-RVB/TVG0" "TVG0"
+ U22 67
+ U10 74
+ U9 53
+ U8 48
+Net 478 "/RAMS/TVRAM23" "TVRAM23"
+ U15 27
+ U13 27
+ U19 27
+ U17 27
+ U5 11
+ U14 27
+ U12 27
+ U22 54
+ U16 27
+ U18 27
+Net 479 "/RAMS/TVRAM24" "TVRAM24"
+ U15 50
+ U18 50
+ U17 50
+ U16 50
+ U12 50
+ U13 50
+ U19 50
+ U22 55
+ U6 18
+ U14 50
+Net 480 "/RAMS/TVRAM25" "TVRAM25"
+ U13 52
+ U16 52
+ U6 17
+ U15 52
+ U22 56
+ U18 52
+ U12 52
+ U14 52
+ U17 52
+ U19 52
+Net 481 "/RAMS/TVRAM26" "TVRAM26"
+ U17 54
+ U19 54
+ U6 16
+ U13 54
+ U15 54
+ U22 57
+ U16 54
+ U18 54
+ U12 54
+ U14 54
+Net 482 "/RAMS/TVRAM27" "TVRAM27"
+ U12 56
+ U6 15
+ U15 56
+ U14 56
+ U13 56
+ U19 56
+ U18 56
+ U17 56
+ U22 58
+ U16 56
+Net 483 "/RAMS/TVRAM28" "TVRAM28"
+ U16 58
+ U13 58
+ U22 59
+ U12 58
+ U19 58
+ U6 14
+ U18 58
+ U17 58
+ U15 58
+ U14 58
+Net 484 "/RAMS/TVRAM29" "TVRAM29"
+ U16 60
+ U18 60
+ U17 60
+ U14 60
+ U15 60
+ U12 60
+ U13 60
+ U22 60
+ U19 60
+ U6 13
+Net 485 "/RAMS/TVRAM30" "TVRAM30"
+ U12 62
+ U6 12
+ U18 62
+ U14 62
+ U17 62
+ U19 62
+ U16 62
+ U15 62
+ U13 62
+ U22 61
+Net 486 "/RAMS/TVRAM31" "TVRAM31"
+ U16 64
+ U12 64
+ U22 62
+ U15 64
+ U6 11
+ U13 64
+ U17 64
+ U19 64
+ U14 64
+ U18 64
 }
 #End

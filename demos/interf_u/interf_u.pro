@@ -1,8 +1,4 @@
-<<<<<<< TREE
-update=31/08/2010 17:56:15
-=======
-update=22/07/2010 13:46:39
->>>>>>> MERGE-SOURCE
+update=ven. 03 déc. 2010 20:28:58 CET
 version=1
 last_client=pcbnew
 [common]
@@ -13,15 +9,12 @@ RootSch=interf_u.sch
 BoardNm=interf_u.brd
 [cvpcb]
 version=1
-NetITyp=0
-NetIExt=.net
-PkgIExt=.pkg
-NetType=0
+NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
 [eeschema]
 version=1
-LibDir=
+LibDir=F:\\kicad\\share\\library
 NetFmt=1
 HPGLSpd=20
 HPGLDm=15
@@ -49,11 +42,7 @@ offY_E=0
 RptD_X=0
 RptD_Y=100
 RptLab=1
-SimCmd=
-UseNetN=0
 LabSize=60
-PrintMonochrome=1
-ShowSheetReferenceAndTitleBlock=1
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -66,12 +55,11 @@ LibName8=adc-dac
 LibName9=memory
 LibName10=xilinx
 LibName11=special
-LibName12=image
 [pcbnew]
 version=1
-PadDrlX=430
-PadDimH=550
-PadDimV=550
+PadDrlX=0
+PadDimH=1500
+PadDimV=2500
 BoardThickness=630
 SgPcb45=1
 TxtPcbV=800
@@ -83,14 +71,15 @@ VEgarde=100
 DrawLar=150
 EdgeLar=50
 TxtLar=170
-MSegLar=150
+MSegLar=400
 LastNetListRead=interf_u.net
 [pcbnew/libraries]
-LibDir=
+LibDir=F:\\kicad\\share\\modules\\packages3d
 LibName1=connect
-LibName2=discret
-LibName3=pin_array
-LibName4=sockets
-LibName5=divers
-LibName6=libcms
-LibName7=display
+LibName2=image
+LibName3=discret
+LibName4=pin_array
+LibName5=sockets
+LibName6=divers
+LibName7=libcms
+LibName8=display

@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 30/06/2010 12:55:05
+EESchema Schematic File Version 2  date 19/08/2010 20:44:23
 LIBS:power
 LIBS:device
 LIBS:conn
@@ -17,7 +17,7 @@ EELAYER END
 $Descr A3 16535 11700
 Sheet 1 1
 Title "INTERFACE UNIVERSEL"
-Date "30 jun 2010"
+Date "19 aug 2010"
 Rev "2B"
 Comp "KICAD"
 Comment1 "Comment 1"
@@ -25,15 +25,6 @@ Comment2 "Comment 2"
 Comment3 "Comment 3"
 Comment4 "Comment 4"
 $EndDescr
-$Comp
-L LOGO #G?
-U 1 1 4C2B218C
-P 11350 10550
-F 0 "#G?" H 11350 10130 60  0001 C CNN
-F 1 "LOGO" H 11350 10970 60  0001 C CNN
-	1    11350 10550
-	1    0    0    -1  
-$EndComp
 Wire Bus Line
 	3900 2450 3850 2450
 Wire Wire Line
@@ -1104,9 +1095,9 @@ Text Label 9700 4700 0    60   ~ 0
 MA4
 Text Label 9700 4600 0    60   ~ 0
 MA15
-Text Label 13050 1050 0    60   ~ 0
+Text Label 13000 1050 0    60   ~ 0
 LED1
-Text Label 13050 1500 0    60   ~ 0
+Text Label 13000 1500 0    60   ~ 0
 LED2
 Text Label 9700 4200 0    60   ~ 0
 MA5

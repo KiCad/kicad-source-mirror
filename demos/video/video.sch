@@ -1,8 +1,8 @@
-EESchema Schematic File Version 2  date 16/05/2010 20:17:13
+EESchema Schematic File Version 2  date 18/11/2010 18:50:34
 LIBS:power
 LIBS:device
+LIBS:transistors
 LIBS:conn
-LIBS:brooktre
 LIBS:linear
 LIBS:regul
 LIBS:74xx
@@ -11,15 +11,31 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
 LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
 LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
 LIBS:video-cache
-EELAYER 20  0
+EELAYER 24  0
 EELAYER END
 $Descr A3 16535 11700
 Sheet 1 8
 Title "Video"
-Date "16 may 2010"
+Date "18 nov 2010"
 Rev "2.0B"
 Comp "Kicad EDA"
 Comment1 "Feuille Principale"
@@ -62,7 +78,13 @@ Wire Wire Line
 Wire Wire Line
 	14900 3150 14800 3150
 Wire Wire Line
-	14800 3150 14800 4050
+	14800 3150 14800 3350
+Wire Wire Line
+	14800 3350 14800 3650
+Wire Wire Line
+	14800 3650 14800 3850
+Wire Wire Line
+	14800 3850 14800 4050
 Text Label 14800 1700 0    60   ~ 0
 Y_OUT
 Text Label 14800 1300 0    60   ~ 0
@@ -482,9 +504,9 @@ Text Label 6150 1200 0    60   ~ 0
 PCA[0..2]
 Wire Bus Line
 	6050 1200 6850 1200
-Text Label 1450 5350 0    60   ~ 0
+Text Label 1400 5350 0    60   ~ 0
 RDFIFO-
-Text Label 1450 5250 0    60   ~ 0
+Text Label 1400 5250 0    60   ~ 0
 WRFIFDO-
 Wire Wire Line
 	2000 5350 1400 5350
@@ -514,7 +536,7 @@ Text Label 1500 7100 0    60   ~ 0
 RDEMPTY
 Text Label 1500 7000 0    60   ~ 0
 WRFULL
-Text Label 1550 5750 0    60   ~ 0
+Text Label 1400 5750 0    60   ~ 0
 PTRDY-
 Wire Wire Line
 	1400 5750 2000 5750
@@ -549,8 +571,8 @@ SELECT-
 Wire Wire Line
 	1500 6100 2000 6100
 Wire Wire Line
-	1500 5650 2000 5650
-Text Label 1550 5650 0    60   ~ 0
+	1400 5650 2000 5650
+Text Label 1400 5650 0    60   ~ 0
 PTATN-
 Text Label 1550 6100 0    60   ~ 0
 PTADR-
@@ -616,10 +638,10 @@ Wire Wire Line
 	3800 5050 4350 5050
 Text Label 3850 4750 0    60   ~ 0
 CSYNC-OUT
-Text Label 1250 5500 0    60   ~ 0
+Text Label 1400 5500 0    60   ~ 0
 CSYNCIN-
 Wire Wire Line
-	1150 5500 2000 5500
+	1400 5500 2000 5500
 Text Label 8950 1800 0    60   ~ 0
 CSYNCIN-
 Wire Wire Line
@@ -630,7 +652,7 @@ Wire Wire Line
 	3800 4750 4500 4750
 Text Label 6200 2850 0    60   ~ 0
 CSYNC-OUT
-Text Label 6550 5950 0    60   ~ 0
+Text Label 6450 5950 0    60   ~ 0
 WRAM-
 Wire Wire Line
 	6450 5950 6950 5950
@@ -670,21 +692,21 @@ Text Label 3850 7000 0    60   ~ 0
 WRCDA-
 Text Label 3850 6900 0    60   ~ 0
 RDCDA-
-Text Label 6550 7300 0    60   ~ 0
+Text Label 6450 7300 0    60   ~ 0
 RAS7-
-Text Label 6550 7200 0    60   ~ 0
+Text Label 6450 7200 0    60   ~ 0
 RAS6-
-Text Label 6550 7100 0    60   ~ 0
+Text Label 6450 7100 0    60   ~ 0
 RAS5-
-Text Label 6550 7000 0    60   ~ 0
+Text Label 6450 7000 0    60   ~ 0
 RAS4-
-Text Label 6550 6900 0    60   ~ 0
+Text Label 6450 6900 0    60   ~ 0
 RAS3-
-Text Label 6550 6800 0    60   ~ 0
+Text Label 6450 6800 0    60   ~ 0
 RAS2-
-Text Label 6550 6700 0    60   ~ 0
+Text Label 6450 6700 0    60   ~ 0
 RAS1-
-Text Label 6550 6600 0    60   ~ 0
+Text Label 6450 6600 0    60   ~ 0
 RAS0-
 Wire Wire Line
 	6450 7300 6950 7300
@@ -702,13 +724,13 @@ Wire Wire Line
 	6450 6700 6950 6700
 Wire Wire Line
 	6450 6600 6950 6600
-Text Label 6550 6400 0    60   ~ 0
+Text Label 6450 6400 0    60   ~ 0
 CAS3-
-Text Label 6550 6300 0    60   ~ 0
+Text Label 6450 6300 0    60   ~ 0
 CAS2-
-Text Label 6550 6200 0    60   ~ 0
+Text Label 6450 6200 0    60   ~ 0
 CAS1-
-Text Label 6550 6100 0    60   ~ 0
+Text Label 6450 6100 0    60   ~ 0
 CAS0-
 Wire Wire Line
 	6450 6400 6950 6400
@@ -766,14 +788,14 @@ Wire Wire Line
 	3800 5550 4300 5550
 Wire Wire Line
 	3800 5450 4300 5450
-Text Label 1500 4950 0    60   ~ 0
+Text Label 1400 4950 0    60   ~ 0
 /PCWR
-Text Label 1500 5050 0    60   ~ 0
+Text Label 1400 5050 0    60   ~ 0
 /PCRD
 Wire Wire Line
-	1300 4950 2000 4950
+	1400 4950 2000 4950
 Wire Wire Line
-	1300 5050 2000 5050
+	1400 5050 2000 5050
 Wire Bus Line
 	1200 4750 2000 4750
 Text Label 1300 4650 0    60   ~ 0

@@ -1,8 +1,8 @@
-EESchema Schematic File Version 2  date 16/05/2010 20:17:13
+EESchema Schematic File Version 2  date 18/11/2010 18:50:34
 LIBS:power
 LIBS:device
+LIBS:transistors
 LIBS:conn
-LIBS:brooktre
 LIBS:linear
 LIBS:regul
 LIBS:74xx
@@ -11,15 +11,31 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
 LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
 LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
 LIBS:video-cache
-EELAYER 20  0
+EELAYER 24  0
 EELAYER END
 $Descr A4 11700 8267
 Sheet 2 8
 Title "Video"
-Date "16 may 2010"
+Date "18 nov 2010"
 Rev "2.0B"
 Comp "Kicad EDA"
 Comment1 ""
