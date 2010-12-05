@@ -1,27 +1,300 @@
 
 
-
-// Designer and copyright holder: Dick Hollenbeck <dick@softplc.com>
-
-
 /** @mainpage
 
-This file describes the design of new C++ classes which may
-be used to implement a distributed library system for EESCHEMA, and with
-some modification, PCBNEW also.
+This file describes the design of a new Distributed Library System for Kicad's
+EESCHEMA. Many of the concepts can be adapted with modest modification to PCBNEW
+also, in the future.
 
 @author Dick Hollenbeck <dick@softplc.com>
 
-@date   October 2010
+@date   October-December 2010
 
 @section intr_sec Introduction
 
-This is the introduction.
+Schematic <b>parts</b> are frequently needed to complete a circuit design
+schematic. Computer data entry of parts can be a rate limiting step in the
+design of an overall PCB. Having ready made access to all needed parts in a
+design significantly improves the productivity of a circuit designer. Sharing
+parts within an organization is one step in the right direction, but there is
+opportunity to share across organizational boundaries to improve productivity
+even more. Using a part that someone else in another organization has already
+entered into the computer can eliminate the first data input process for that
+part. The more complicated the part and the board, the larger the positive
+impact on productivity because the larger the time savings.
+
+<p> Sharing parts within an organization is best done by directly accessing a
+known internal source for those parts, say on a company network. Sharing parts
+across organizational boundaries is best done using the Internet in real-time.
+Having the ability to search for a part based on arbitrary search criteria can
+speed up the pace at which new parts are found and used.
+
+<p> Electronic component manufacturers need and look for ways to differentiate
+their products from their competitors. With this Distributed Library System
+facility in Kicad, one way for manufacturers to differentiate themselves and
+their parts is to publish a part library on the Internet and save their
+customers the work of doing the data entry of the part into the Kicad design
+system.
+
+<p> Maintaining a comprehensive part library is a fairly labor intensive
+activity. New parts come into the market everyday. By being able to publish a
+superior library on the Internet, it may be possible to make a for profit
+business out of doing this.  The Kicad eco-system would benefit should this
+happen, and there could even be competition between such businesses.  Or there
+can be library specializations or niches.
+
+<p> Often a found part is close to what is needed but not exactly what is
+needed. This Distributed Library System design incorporates the concept of part
+inheritance using a part description language called <b>(Sweet)</b>. Sweet is
+based on s-expression syntax. Inheritance is the ability to incrementally change
+an existing part without completely re-designing it. It is sometimes easier to
+modify an existing part than it is to create the new part entirely from scratch.
+
+<p> This Distributed Library System design will have the capability to
+significantly benefit the Kicad eco-system, and that should mean expanding the
+numbers of users and contributors to the project, and hopefully making for a
+better Kicad tool-set for all.
 
 
-@section summary Summary
+@section definitions Definitions
 
-This is the summary.
+Only new terms or changes in the definition of terms are given here.
+
+<dl>
+
+<dt>S-Expression</dt><dd>This is a syntactical textual envelop in the same vain as
+XML. It may be used to express any number of domain specific grammars. It uses
+parentheses to indicate the start and end of an element. A domain specific
+grammar is a set of rules that dictate what keywords may be used, and in what
+context. A grammar also establishes the allowed places and types of constants.
+There can be any number of grammars which all use s-expressions to hold the
+individual elements within the grammar. A grammar is at a higher level than
+s-expressions, in the same way that a sentence will have grammatical rules which
+are at a higher level than the rules used to spell words. Technically, grammars
+nest within grammars. So once you are inside a grammatical element, it will have
+its own set of rules as to which nested elements it may hold, and once you enter
+one of those nested elements, then that nested element's grammar pertains,
+etc.<p> In the case of the grammar for a part, the grammar itself is being given
+the name "Sweet". The name does not extend to the grammar for the schematic,
+only the part grammar.</dd>
+
+<dt>Schematic</dt><dd>This consists of one or more sheets and will be different
+in three ways from existing schematics. <ul> <li>All sheets will be in one file,
+thus the entire schematic is in one file. <li>The schematic file will have its
+own s-expression grammar. <li> There will be a (parts_list) within the
+schematic, and within the parts_list will be all the parts for the schematic,
+yes <b>all</b> of them, every last one of them.</ul> Within the sheets of the
+schematic will be components.</dd>
+
+<dt>Component</dt><dd>A component is an instantiated part. The keyword for
+component is (comp). A component does not have any of its own properties other
+than: <ul> <li>rerence designator <li>part pointer or reference into the parts
+list <li>location <li>rotation <li>stuff i.e. DNS or do stuff the part
+<li>visual textual effect overrides </ul> Note that the (comp) may not have any
+properties or fields of its own, and that it may not exist without a
+corresponding part in the parts_list. A reason for this is to ensure that a
+BOM can be made simply from the parts_list.</dd>
+
+<dt>Component, again for good measure.</dt><dd>A component is an instantiation
+of a part. A component exists within a schematic which has a parts list
+containing the part from which the component is instantiated. A component has a
+unique reference designator, component ref, its own location, orientation,
+stuff/DNS, and text attributes but <b>not</b> its own text fields/strings (other
+than reference designator). The part which is instantiated must exist in the
+parts list of the same schematic.</dd>
+
+<dt>Inheritance</dt><dd>Is the ability to mimic form and function from another
+entity. In our case we use it only for parts. One part may "inherit from" or
+"extend" another single part.</dd>
+
+<dt>Part</dt><dd>A part is a symbolic schematic circuit element found within an
+EESCHEMA library (or within a parts list). It is re-usable and may be
+instantiated more than once within a schematic. For it to be instantiated, it
+must be copied or inherited into the parts list of the instantiating schematic.
+If inherited into the parts list, then only a concise reference is needed into
+the originating library. If instead it is copied into the parts list, then the
+part is fully autonomous and need have no reference to its original copy.</dd>
+
+<dt>Parts List</dt><dd>A parts list, keyword (parts_list), is an entirely new
+construct. It exists within a schematic and is the complete set of parts used
+within a particular schematic.  Each schematic has exactly one parts list
+contained within it. A parts list is also a library source and a library sink
+for the current schematic. A parts list in any schematic may also be a library
+source for any other schematic, but not a library sink. The parts list construct
+makes it almost wholly unnecessary to write to other types of library
+sinks.</dd>
+
+<dt>Library</dt><dd>A library is no longer a file. It is a memory cache of
+parts, consistent with the normal definition of memory cache. Each library is
+backed up with a <b>library source</b>. In rare cases, some libraries may also
+have a <b>library sink</b>.</dd>
+
+<dt>Library Source</dt><dd>A library source is an abstract read only repository
+of parts. The repository itself might exist on the moon. The difference between
+a library source and a library sink is that a source is a readable entity.</dd>
+
+<dt>Library Sink</dt><dd>A library sink is an abstract place that parts can be
+written to for future reading. The difference between a library source and a
+library sink is that a library sink is a writable entity.</dd>
+
+</dl>
+
+
+
+@section changes Required Changes
+
+In order fulfill the vision embodied by this Distributed Library System design,
+it will be necessary to change many APIs and file formats within EESCHEMA. In
+fact, the entire schematic file format will be new, based on s-expressions,
+the schematic grammar, and the Sweet language for parts.
+
+Here are some of the changes required: <ul>
+
+<li> All sheets which make up a schematic will go into a single s-expression
+file. The multiple sheet support will still exist, but all the sheets for a
+single schematic are all in a single file.
+
+<li> A "library" is a collection of "parts". The term "symbol" is not used. The
+unit of retrieval from a library is a part as a textual string in the Sweet
+language. Sweet is a particular "grammar" expressed in s-expression form, and
+can be used to fully describe parts. Because EESCHEMA does not actually see a
+"library file", (remember, EESCHEMA can only ask for a part), the actual file
+format for a library is no longer pertinent nor visible to the core of EESCHEMA.
+The unit of retrieval from the API is the part, so EESCHEMA gets an entire part
+s-expression and must then parse it as a RAM resident Sweet string.
+
+<li>EESCHEMA knows of no library files, instead there is a library API which
+abstracts the actual part storage strategy used within any library
+implementation. The API can be implemented by anyone wanting to provide a
+library under a given storage strategy. The API provides a storage strategy
+abstraction in classes LIB_SOURCE and LIB_SINK. The actual storage strategy used
+in any particular library implementation is not technically part of the
+conceptual core of EESCHEMA. This is an important concept to grasp. Eventually
+the library implementations may be jetisoned into a plug-in structure, but
+initially they are statically linked into EESCHEMA. Should the plug-in strategy
+ever get done, the boundary of the plug-in interface will remain the C++ library
+API as given here (mostly in class LIB_SOURCE). The only reason to introduce a
+plug-in design is to allow proprietary closed source library implementations,
+and this could eventually come about if a part vendor wanted to provide one for
+the Kicad project. If a Texas Instruments type of company wants to maintain a
+Kicad library, we will be positioned to accommodate them. Until then, the
+LIB_SOURCE implementations can be statically linked into EESCHEMA and there is
+no conceptual disruption either way.
+
+<li> Most library implementations are read only. There are only two library
+types that are writable, the "dir" type, and the "parts list". All other types
+are read only from the perspective of the API. Stuffing those read only
+libraries and maintaining them will be done using the normal update mechanisms
+pertinent to the library's respective type of repository. The most common place
+to do incremental enhancements to a part before using it is not in the external
+library, but now in the parts list with this new design.
+
+<li> The design will support classical clipboard usage. The part in the Sweet
+language can be placed onto the clipboard for use by other applications and
+instances of EESCHEMA. Eventually larger blocks of components may also be
+supported on the clipboard, since the Sweet language allows these blocks to be
+descributed textually in a very readable fashion. (Clipboard support beyond part
+manipulation is not currently in this revision of the design however, it can be
+a future separate enhancement. Perhaps someday complete sheets may be passed
+through the clipboard.)
+
+<li> The cumulative set of required changes are significant, and are tantamount
+to saying that EESCHEMA will need its part handling foundations re-written. A
+conversion program will convert everything over to the new architecture. The
+conversion program can simplify things by simply putting all schematic parts
+into a parts list within each schematic.
+
+<li> An Internet connection is required to use some of the library sources. It
+will be possible to omit these library sources and run Kicad by doing a
+configuration change. Eventually, some library sources will spring up and will
+not technically be part of the Kicad project, so they will remain remote, but
+fully usable to those with an internet connection and permission from the
+library source's owner.
+
+<li>By far, even as radical as the distributed library concept is, complete with
+remote access, the most significant conceptual change is the introduction of the
+<b>parts list</b>. This is a special library that exists in a schematic, and is
+the complete record of all parts used within that same schematic. It is
+impossible to put a component into a schematic without that component's part
+first existing within the parts list of that schematic.
+
+<li> Because of inheritance, multi-body-form parts, alternate body styles, see
+also references, and other needs, it is necessary to have a <b>part reference
+mechanism</b>. A component has to reference a part, the one it "is". A part has
+to be able to reference another part, either in the same library or elsewhere.
+Enter the Logical Part ID, or LPID to serve this need. An LPID consists of a
+logical library name, a part name, and an optional revision. It is used to
+reference parts, from anywhere. If the reference is from a sheet's component,
+then the logical library name of the LPID is not needed. Why? Well if you've
+been paying attention you know. A comp can only be based on a part that exists
+within the parts_list of the same schematic in which it resides. Likewise, a
+part within any library that references another part in that <b>same</b> library
+will also omit the logical library name from the LPID, and it must omit it. Why?
+Well because it makes renaming the library easier, for one. Two, the logical
+library name is only a lookup key into a "library table". The library table maps
+the logical library name into an actual library source [and sink, iff writable].
+
+<p> In the case of the component referencing the part that it "is", there is no
+revision number allowed in the LPID. This is because that reference is to the
+part in the parts list, and the parts list only holds a single revision of any
+part (where "revision" is what you understand from version control systems).
+
+
+</ul>
+
+
+@section philosophy Design Philosophies
+
+<p> Class names are chosen to be as concise as possible. Separate namespaces can be
+used should these same class names be needed in both EESCHEMA and PCBNEW (later).
+However, this design does not yet address PCBNEW.  Suggested namespaces are
+SCH for EESCHEMA, and PCB for PCBNEW.
+
+<p> Since most if not all the APIs deal with file or non-volatile storage, only
+8 bit string types are used. For international strings, UTF-8 is used, and
+that is what is currently in use within the Kicad file storage formats.
+
+<p> The typedef <b>STRINGS</b> is used frequently as a holder for multiple
+std::strings. After some research, I chose std::dequeue<STRING> to hold a list of
+STRINGs. I thought it best when considering overall speed, memory
+fragmentation, memory efficiency, and speed of insertion and expansion.
+
+<p> A part description language is introduced called <b>(Sweet)</b>. It supports
+inheritance and its syntax is based on s-expressions.
+
+<p> Since a part can be based on another part using inheritance, it is important
+to understand the idea of library dependencies. A part in one library can be
+dependent on another part in another library, or on another part in the same
+library as itself. There are several library sources, some far away and some
+very close to the schematic. The closest library to the schematic is the
+<b>(parts list)</b> class PARTS_LIST. Circular dependencies are not allowed. All
+dependencies must be resolvable in a straight forward way. This means that a
+part in a remote library cannot be dependent on any part which is not always
+resolvable.
+
+<p> NRVO described:
+    http://msdn.microsoft.com/en-us/library/ms364057%28VS.80%29.aspx
+
+Even with NRVO provided by most C++ compilers, I don't see it being as lean as
+having class LIB keep expanded members STRING fetch and STRINGS vfetched for the
+aResults values. But at the topmost API, client convenience is worth a minor
+sacrifice in speed, so the topmost API does return these complex string objects
+for convenience. So there is a different strategy underneath the hood than what
+is used on the hood ornament. When aResults pointer is passed as an argument, I
+won't refer to this as 'returning' a value, but rather 'fetching' a result to
+distinguish between the two strategies.
+
+
+@section architecture Architecture
+
+This document set later shows some <b>library sources</b> derived from class
+LIB_SOURCE. A library source is the backing to a library. The class name for a
+library in the new design is LIB.
+
+<p>
+Show architecture here.
+
+<a href="../drawing.svg" > Click here to see an architectural drawing.</a>
 
 */
 
@@ -37,7 +310,7 @@ typedef std::string STRING;
 
 /**
  * Type STRING_TOKS
- * documents a STRING which holds a sequence of s-expressions suitable for parsing
+ * documents a container which holds a sequence of s-expressions suitable for parsing
  * with DSNLEXER.  This can either be a sequence of DSN_SYMBOLs or a sequence of
  * fully parenthesis delimited s-expressions.  There are 2 types: <ol>
  * <li> R C R33 "quoted-name" J2
@@ -47,10 +320,9 @@ typedef std::string STRING;
  * 2nd example there are two top most s-expressions in sequence.  So the counts
  * in these are 5 and 2 respectively.
  */
-typedef STRING      STRING_TOKS;
+typedef std::dequeue<STRING>    STRING_TOKS;
 
-
-typedef std::vector< STRING >  STRINGS;
+typedef std::dequeue<STRING>    STRINGS;
 
 
 const STRING StrEmpty = "";
@@ -61,6 +333,7 @@ const STRING StrEmpty = "";
 /**
  * Class PART
  * will have to be unified with what Wayne is doing.  I want a separate copy
+
  * here until I can get the state management correct.  Since a PART only lives
  * within a cache called a LIB, its constructor is private (only a LIB
  * can instantiate one), and it exists in various states of freshness and
@@ -81,7 +354,7 @@ class PART
 
 protected:      // not likely to have descendants, but protected none-the-less.
 
-    LIB*    owner;      ///< which LIB am I a part of (pun if you want)
+    LIB*        owner;      ///< which LIB am I a part of (pun if you want)
     STRING      extends;    ///< LPID of base part
 
     STRING      name;       ///< example "passives/R", immutable.
@@ -101,6 +374,12 @@ public:
      * to fulfill the requirements of the sweet s-expression language.
      */
     void Inherit( const PART& aBasePart );
+
+    /**
+     * Function Owner
+     * returns the LIB* owner of this part.
+     */
+    LIB Owner()  { return owner; }
 
 };
 
@@ -150,7 +429,7 @@ public:
  * <li> "http://kicad.org/partlib"
  * </ul>
  * <p>
- * The library table is built up from several sources, and is a contatonation
+ * The library table is built up from several sources, and is a concatenation
  * of those sources.
  */
 class LPID  // aka GUID
@@ -249,17 +528,6 @@ class LIB_SOURCE
 
 protected:                  ///< derived classes must implement
 
-    /*
-        NRVO described:
-        http://msdn.microsoft.com/en-us/library/ms364057%28VS.80%29.aspx
-
-        Even with NRVO provided by the compilers, I don't see it being as lean as
-        having the LIBARY keep an expanded member STRING for the aResult value. So I
-        am heading towards passing STRING* aResult and STRINGS* aResults. Rather
-        than returning a STRING.  When the pointer to a results buffer is passeed,
-        I won't refer to this as returning a value, but rather 'fetching' a result.
-    */
-
     /**
      * Function GetSourceType
      * retuns type library table entry's type for library source.
@@ -276,7 +544,7 @@ protected:                  ///< derived classes must implement
      * Function ReadParts
      * fetches the s-expressions for each part given in @a aPartNames, into @a aResults,
      * honoring the array indices respectfully.
-     * @param aPartNames is a list of part names, one name per vector element.
+     * @param aPartNames is a list of part names, one name per list element.
      * @param aResults receives the s-expressions
      */
     virtual void ReadParts( STRING_TOKS* aResults, const STRINGS& aPartNames ) throw( IO_ERROR ) = 0;
@@ -291,19 +559,21 @@ protected:                  ///< derived classes must implement
      * Function GetCategoricalPartNames
      * fetches all the part names for @a aCategory, which was returned by GetCategories().
      *
-     * @param aCategory is a subdividing navigator within the library source, but may default to empty
-     *  which will be taken to mean all categories.
+     * @param aCategory is a subdividing navigator within the library source,
+     *  but may default to empty which will be taken to mean all categories.
      *
      * @param aResults is a place to put the fetched result, one category per STRING.
      */
-    virtual void GetCategoricalPartNames( STRING_TOKS* aResults, const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
+    virtual void GetCategoricalPartNames( STRING_TOKS* aResults,
+                    const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
 
     /**
      * Function GetRevisions
      * fetches all revisions for @a aPartName into @a aResults.  Revisions are strings
      * like "rev12", "rev279", and are library source agnostic.  These
      */
-    virtual void GetRevisions( STRING_TOKS* aResults, const STRING& aPartName ) throw( IO_ERROR ) = 0;
+    virtual void GetRevisions( STRING_TOKS* aResults,
+                    const STRING& aPartName ) throw( IO_ERROR ) = 0;
 
     /**
      * Function FindParts
@@ -320,7 +590,8 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched part names, one part per STRING.
      */
-    virtual void FindParts( STRING_TOKS* aResults, const STRING& aQuery ) throw( IO_ERROR ) = 0;
+    virtual void FindParts( STRING_TOKS* aResults,
+                    const STRING& aQuery ) throw( IO_ERROR ) = 0;
 
 protected:
     STRING      sourceType;
@@ -353,7 +624,7 @@ protected:
 
 /**
  * Class SVN_LIB_SOURCE
- * implements a LIB_SOURCE in a file system directory.
+ * implements a LIB_SOURCE in a subversion repository.
  */
 class SVN_LIB_SOURCE : public LIB_SOURCE
 {
@@ -376,7 +647,7 @@ protected:
 
 /**
  * Class PARTS_LIST_LIB_SOURCE
- * implements a LIB_SOURCE in on a schematic file.
+ * implements a LIB_SOURCE in a schematic file.
  */
 class PARTS_LIST_LIB_SOURCE : public LIB_SOURCE
 {
@@ -418,7 +689,8 @@ protected:                  ///< derived classes must implement
      * part is done, then LIB::ReloadPart() must be called on this same part
      * and all parts that inherit it must be reparsed.
      */
-    virtual void WritePart( const STRING& aPartName, const STRING& aSExpression ) throw( IO_ERROR ) = 0;
+    virtual void WritePart( const STRING& aPartName,
+                    const STRING& aSExpression ) throw( IO_ERROR ) = 0;
 
 
 protected:
@@ -525,6 +797,11 @@ public:
      */
     bool HasSave()  { return sink != NULL; }
 
+    /**
+     * Function LogicalName
+     * returns the logical name of this LIB.
+     */
+    STRING LogicalName();
 
     //-----<use delegates: source and sink>---------------------------------
 
@@ -546,9 +823,9 @@ public:
 
     /**
      * Function GetCategories
-     * fetches all categories of parts within this LIB into @a aResults.
+     * returns all categories of parts within this LIB into @a aResults.
      */
-    STRINGS GetCategories() throw( IO_ERROR ) = 0;
+    STRINGS GetCategories() throw( IO_ERROR );
 
     /**
      * Function GetCategoricalPartNames
@@ -556,7 +833,9 @@ public:
      * creates cache entries for the very same parts if they do not already exist
      * in this LIB (i.e. cache).
      */
-    STRINGS GetCategoricalPartNames( const STRING& aCategory=StrEmpty ) throw( IO_ERROR ) = 0;
+    STRINGS GetCategoricalPartNames( const STRING& aCategory=StrEmpty ) throw( IO_ERROR );
+
+
 
     //-----<.use delegates: source and sink>--------------------------------
 
@@ -564,15 +843,15 @@ public:
      * Function WritePart
      * saves the part to non-volatile storage. @a aPartName may have the revision
      * portion present.  If it is not present, and a overwrite of an existing
-     * part is done, then all parts that inherit it must be reparsed.
+     * part is done, then all parts that inherit it must be re-parsed.
      * This is why most library sources are read only.  An exception is the PARTS_LIST,
      * not to be confused with a LIB based on a parts list in another schematic.
      * The PARTS_LIST is in the the schematic being edited and is by definition the
      * last to inherit, so editing in the current schematic's PARTS_LIST should be harmless.
      * There can be some self referential issues that mean all the parts in the PARTS_LIST
-     * have to reparsed.
+     * have to re-parsed.
      */
-    virtual void WritePart( PART* aPart ) throw( IO_ERROR ) = 0;
+    virtual void WritePart( PART* aPart ) throw( IO_ERROR );
 
     virtual void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
 
@@ -581,7 +860,7 @@ public:
      * returns the revisions of @a aPartName that are present in this LIB.
      * The returned STRINGS will look like "rev1", "rev2", etc.
      */
-    STRINGS GetRevisions( const STRING& aPartName ) throw( IO_ERROR ) = 0;
+    STRINGS GetRevisions( const STRING& aPartName ) throw( IO_ERROR );
 
     /**
      * Function FindParts
@@ -596,7 +875,7 @@ public:
      *  here is an RPN s-expression that uses (and ..) and (or ..) operators. For example
      *  "(and (footprint 0805)(value 33ohm)(category passives))"
      */
-    STRINGS FindParts( const STRING& aQuery ) throw( IO_ERROR ) = 0
+    STRINGS FindParts( const STRING& aQuery ) throw( IO_ERROR );
     {
         // run the query on the cached data first for any PARTS which are fully
         // parsed (i.e. cached), then on the LIB_SOURCE to find any that
@@ -606,6 +885,7 @@ public:
 private:
 
     STRING              fetch;      ///< scratch, used to fetch things, grows to worst case size.
+    STRINGS             vfetch;     ///< scratch, used to fetch things.
 
     LIB_SOURCE*         source;
     LIB_SINK*           sink;
