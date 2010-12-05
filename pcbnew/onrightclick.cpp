@@ -471,28 +471,22 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == TYPE_VIA )
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, _(
-                              "Change Via Size and Drill" ), width_segment_xpm );
+            msg = AddHotkeyName( _( "Change Via Size and Drill" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
         }
         else
         {
             msg = AddHotkeyName( _( "Change Segment Width" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG,
-                              msg, width_segment_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACK,
                           _( "Change Track Width" ), width_track_xpm );
         }
-        ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
-                                   ID_POPUP_PCB_SELECT_WIDTH,
-                                   _( "Select Track Width" ), width_track_xpm );
     }
 
-    else    // Allows switching to an other track/via size when routing
-    {
-        ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
-                                   ID_POPUP_PCB_SELECT_WIDTH,
-                                   _( "Select Track Width" ), width_track_xpm );
-    }
+    // Allows switching to an other track/via size when routing
+    ADD_MENUITEM_WITH_SUBMENU( PopMenu, Append_Track_Width_List( GetBoard() ),
+                               ID_POPUP_PCB_SELECT_WIDTH,
+                               _( "Select Track Width" ), width_track_xpm );
 
     // Delete control:
     PopMenu->AppendSeparator();
