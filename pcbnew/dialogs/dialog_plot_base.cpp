@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct 18 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -74,7 +74,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( m_Plot_Invisible_Text, 0, wxALL, 5 );
 	
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 2, wxEXPAND, 5 );
 	
 	wxBoxSizer* bPlotOptionsSizer;
 	bPlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
@@ -103,7 +103,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_Choice_Plot_Offset->SetSelection( 0 );
 	bPlotOptionsSizer->Add( m_Choice_Plot_Offset, 0, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bPlotOptionsSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bPlotOptionsSizer, 1, 0, 5 );
 	
 	wxBoxSizer* bSizerFmtPlot;
 	bSizerFmtPlot = new wxBoxSizer( wxVERTICAL );
@@ -142,7 +142,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_HPGL_OptionsBox->Add( m_HPGLPenOverlayOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	bSizerFmtPlot->Add( m_HPGL_OptionsBox, 0, wxEXPAND, 5 );
+	bSizerFmtPlot->Add( m_HPGL_OptionsBox, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerPSOpt;
 	sbSizerPSOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PS Options:") ), wxVERTICAL );
@@ -150,7 +150,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_Plot_PS_Negative = new wxCheckBox( this, wxID_ANY, _("Plot negative"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPSOpt->Add( m_Plot_PS_Negative, 0, wxALL, 5 );
 	
-	bSizerFmtPlot->Add( sbSizerPSOpt, 0, wxEXPAND, 5 );
+	bSizerFmtPlot->Add( sbSizerPSOpt, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerOutputDir;
 	sbSizerOutputDir = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Directory:") ), wxVERTICAL );
@@ -161,9 +161,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_BrowseButton = new wxButton( this, ID_BROWSE_OUTPUT_DIRECTORY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerOutputDir->Add( m_BrowseButton, 0, wxALL, 5 );
 	
-	bSizerFmtPlot->Add( sbSizerOutputDir, 0, wxEXPAND, 5 );
+	bSizerFmtPlot->Add( sbSizerOutputDir, 1, wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bSizerFmtPlot, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bSizerFmtPlot, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -220,7 +220,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Quit"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bUpperSizer->Add( bButtonsSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
@@ -235,6 +235,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnCloseWindow ) );

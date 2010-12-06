@@ -37,7 +37,7 @@
             <property name="minimum_size">-1,350</property>
             <property name="name">DIALOG_PLOT_BASE</property>
             <property name="pos"></property>
-            <property name="size">575,590</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Plot</property>
@@ -96,7 +96,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">2</property>
                             <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bLeftSizer</property>
@@ -661,8 +661,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="flag"></property>
+                            <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bPlotOptionsSizer</property>
@@ -909,8 +909,8 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <property name="proportion">1</property>
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerFmtPlot</property>
                                 <property name="orient">wxVERTICAL</property>
@@ -977,7 +977,7 @@
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">HPGL Options:</property>
@@ -1339,7 +1339,7 @@
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">PS Options:</property>
@@ -1410,7 +1410,7 @@
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Output Directory:</property>
@@ -1543,7 +1543,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="0">
                                 <property name="minimum_size"></property>
                                 <property name="name">bButtonsSizer</property>

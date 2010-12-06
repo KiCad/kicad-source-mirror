@@ -746,6 +746,7 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
 
     default:
         Plot_Serigraphie( plotter, layer_mask, trace_mode );
+
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER
             && g_pcb_plot_options.GetSubtractMaskFromSilk() )
@@ -758,6 +759,7 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
             {
                 layer_mask = g_TabOneLayerMask[SOLDERMASK_N_BACK];
             }
+
             // Set layer polarity to negative
             plotter->SetLayerPolarity( false );
             Plot_Standard_Layer( plotter, layer_mask,

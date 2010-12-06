@@ -169,7 +169,8 @@ public:
                bool                        aBold );
     void           marker( const wxPoint& position, int diametre, int aShapeId );
 
-    /** Function SetLayerPolarity
+    /**
+     * Function SetLayerPolarity
      * sets current Gerber layer polarity to positive or negative
      * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
      * param @aPositive = layer polarity, true for positive
