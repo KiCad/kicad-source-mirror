@@ -504,3 +504,11 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
     set_current_line_width( -1 );
     poly( 5, &polygon[0].x, aTrace_Mode==FILLED ? FILLED_SHAPE : NO_FILL );
 }
+
+void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
+{
+    if( aPositive )
+        fprintf( output_file, "%%LPD*%%\n" );
+    else
+        fprintf( output_file, "%%LPC*%%\n" );
+}

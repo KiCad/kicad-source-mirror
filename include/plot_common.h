@@ -169,6 +169,13 @@ public:
                bool                        aBold );
     void           marker( const wxPoint& position, int diametre, int aShapeId );
 
+    /** Function SetLayerPolarity
+     * sets current Gerber layer polarity to positive or negative
+     * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
+     * param @aPositive = layer polarity, true for positive
+     */
+    virtual void SetLayerPolarity( bool aPositive ) = 0;
+
 protected:
     /* These are marker subcomponents */
     void           center_square( const wxPoint& position, int diametre, FILL_T fill );
@@ -272,6 +279,8 @@ public:
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
+    virtual void SetLayerPolarity( bool aPositive ) {};
+
 protected:
     void         pen_control( int plume );
 
@@ -320,6 +329,8 @@ public:
                                  int orient, GRTraceMode trace_mode );
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
+
+    virtual void SetLayerPolarity( bool aPositive ) {};
 
 protected:
     double plot_scale_adjX, plot_scale_adjY;
@@ -378,6 +389,8 @@ public:
                                                     int orient, GRTraceMode trace_mode );
     virtual void                    flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                                       int aPadOrient, GRTraceMode aTrace_Mode );
+
+    virtual void                    SetLayerPolarity( bool aPositive );
 
 protected:
     void                            select_aperture( const wxSize&           size,
@@ -438,6 +451,8 @@ public:
                                  int orient, GRTraceMode trace_mode );
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
+
+    virtual void SetLayerPolarity( bool aPositive ) {};
 
 protected:
     int current_color;

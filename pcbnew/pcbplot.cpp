@@ -35,6 +35,7 @@
 // PCB_Plot_Options constructor: set the default values for plot options:
 PCB_Plot_Options::PCB_Plot_Options()
 {
+    subtractMaskFromSilk = true;
     Sel_Texte_Reference = true;
     Sel_Texte_Valeur    = true;
     Sel_Texte_Divers    = true;
@@ -248,6 +249,8 @@ void DIALOG_PLOT::Init_Dialog()
     // Option for excluding contents of "Edges Pcb" layer
     m_Exclude_Edges_Pcb->SetValue( g_pcb_plot_options.Exclude_Edges_Pcb );
 
+    m_SubtractMaskFromSilk->SetValue( g_pcb_plot_options.GetSubtractMaskFromSilk() );
+
     // Option to plot page references:
     if( m_Parent->m_Print_Sheet_Ref )
     {
@@ -364,6 +367,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_HPGLPenOverlayOpt->Enable( false );
         m_Exclude_Edges_Pcb->SetValue( false );
         m_Exclude_Edges_Pcb->Enable( false );
+        m_SubtractMaskFromSilk->Enable( false );
         m_Use_Gerber_Extensions->Enable( false );
         m_Scale_Opt->Enable( true );
         m_FineAdjustXscaleOpt->Enable( true );
@@ -383,6 +387,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_Exclude_Edges_Pcb->Enable( true );
+        m_SubtractMaskFromSilk->Enable( true );
         m_Use_Gerber_Extensions->Enable( true );
         m_Scale_Opt->SetSelection( 1 );
         m_Scale_Opt->Enable( false );
@@ -403,6 +408,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_HPGLPenOverlayOpt->Enable( true );
         m_Exclude_Edges_Pcb->SetValue( false );
         m_Exclude_Edges_Pcb->Enable( false );
+        m_SubtractMaskFromSilk->Enable( false );
         m_Use_Gerber_Extensions->Enable( false );
         m_Scale_Opt->Enable( true );
         m_FineAdjustXscaleOpt->Enable( false );
@@ -423,6 +429,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_HPGLPenOverlayOpt->Enable( false );
         m_Exclude_Edges_Pcb->SetValue( false );
         m_Exclude_Edges_Pcb->Enable( false );
+        m_SubtractMaskFromSilk->Enable( false );
         m_Use_Gerber_Extensions->Enable( false );
         m_Scale_Opt->Enable( false );
         m_Scale_Opt->SetSelection( 1 );
@@ -440,6 +447,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
 {
     g_pcb_plot_options.Exclude_Edges_Pcb = m_Exclude_Edges_Pcb->GetValue();
+
+    g_pcb_plot_options.SetSubtractMaskFromSilk( m_SubtractMaskFromSilk->GetValue() );
 
     if( m_Plot_Sheet_Ref )
         g_pcb_plot_options.Plot_Frame_Ref = m_Plot_Sheet_Ref->GetValue();

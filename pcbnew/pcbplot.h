@@ -64,12 +64,16 @@ public:
     double         ScaleAdjX;
     double         ScaleAdjY;
 
+private:
     wxString       outputDirectory;
+    bool           subtractMaskFromSilk;
 
 public:
     PCB_Plot_Options();
     void SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
     wxString GetOutputDirectory() { return outputDirectory; };
+    void SetSubtractMaskFromSilk( bool aSubtract ) { subtractMaskFromSilk = aSubtract; };
+    bool GetSubtractMaskFromSilk() { return subtractMaskFromSilk; };
 };
 
 extern PCB_Plot_Options g_pcb_plot_options;

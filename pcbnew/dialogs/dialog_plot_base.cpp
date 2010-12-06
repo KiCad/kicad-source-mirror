@@ -45,6 +45,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( m_Exclude_Edges_Pcb, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
+	m_SubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract Mask from Silk"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SubtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
+	
+	bLeftSizer->Add( m_SubtractMaskFromSilk, 0, wxALL, 5 );
+	
 	m_Plot_Sheet_Ref = new wxCheckBox( this, wxID_ANY, _("Print sheet reference"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_Plot_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	

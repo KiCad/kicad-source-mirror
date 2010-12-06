@@ -55,6 +55,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
 		wxCheckBox* m_Use_Gerber_Extensions;
 		wxCheckBox* m_Exclude_Edges_Pcb;
+		wxCheckBox* m_SubtractMaskFromSilk;
 		wxCheckBox* m_Plot_Sheet_Ref;
 		wxCheckBox* m_Plot_Pads_on_Silkscreen;
 		wxCheckBox* m_Plot_Text_Value;
