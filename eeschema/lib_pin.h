@@ -80,6 +80,18 @@ enum DrawPinOrient {
 
 class LIB_PIN : public LIB_DRAW_ITEM
 {
+    wxPoint  m_position;     ///< Position of the pin.
+    int      m_length;       ///< Length of the pin.
+    int      m_orientation;  ///< Pin orientation (Up, Down, Left, Right)
+    int      m_shape;        ///< Bitwise ORed of pin shapes (see enum DrawPinShape)
+    int      m_width;        ///< Line width of the pin.
+    int      m_type;         ///< Electrical type of the pin.  See enum ElectricPinType.
+    int      m_attributes;   ///< Set bit 0 to indicate pin is invisible.
+    wxString m_name;
+    long     m_number;       ///< Pin number defined as 4 ASCII characters like "12", "anod",
+                             ///< "G6", or "12".  It is stored as "12\0\0" and does not
+                             ///< depend on endian type.
+
     /**
      * Draw the pin.
      */
@@ -87,15 +99,6 @@ class LIB_PIN : public LIB_DRAW_ITEM
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
 public:
-    int      m_PinLen;      /* Pin length */
-    int      m_Orient;      /* Pin orientation (Up, Down, Left, Right) */
-    int      m_PinShape;    /* Bitwise ORed: Pin shape (see enum DrawPinShape) */
-    int      m_PinType;     /* Electrical pin properties */
-    int      m_Attributs;   /* bit 0 != 0: pin invisible */
-    long     m_PinNum;      /* Pin number: 4 ASCII code like "12" or "anod"
-                             * or "G6" "12" is stored as "12\0\0" ans does not
-                             * depend on endian type*/
-    wxString m_PinName;
     int      m_PinNumSize;
     int      m_PinNameSize; /* Pin num and Pin name sizes */
 
@@ -106,10 +109,6 @@ public:
     // (Currently Unused) Pin num and Pin name text opt position, 0 = default:
     char     m_PinNumPositionOpt;
     char     m_PinNamePositionOpt;
-
-    wxPoint  m_Pos;         /* Position or centre (Arc and Circle) or start
-                             * point (segments) */
-    int      m_Width;       /* Line width */
 
 public:
     LIB_PIN( LIB_COMPONENT * aParent );
@@ -165,17 +164,13 @@ public:
      * Pin numbers are coded as a long or 4 ASCII characters.  Used to print
      * or draw the pin number.
      *
-     * @param aStringBuffer - the wxString to store the pin num as an unicode
-     *                        string
+     * @param aStringBuffer - the wxString to store the pin num as an unicode string
      */
-    void         ReturnPinStringNum( wxString& aStringBuffer ) const;
+    void ReturnPinStringNum( wxString& aStringBuffer ) const;
 
+    long GetNumber() const { return m_number; }
 
-    wxString GetNumber()
-    {
-        return ReturnPinStringNum( m_PinNum );
-    }
-
+    wxString GetNumberString() const { return ReturnPinStringNum( m_number ); }
 
     /**
      * Function ReturnPinStringNum (static function)
@@ -187,6 +182,8 @@ public:
     static wxString ReturnPinStringNum( long aPinNum );
 
     void         SetPinNumFromString( wxString& aBuffer );
+
+    wxString GetName() const { return m_name; }
 
     /**
      * Set the pin name.
@@ -227,25 +224,29 @@ public:
      */
     void SetNumberTextSize( int aSize );
 
+    int GetOrientation() const { return m_orientation; }
+
     /**
      * Set orientation on the pin.
      *
-     * This will also update the orientation of the pins marked by
-     * EnableEditMode().
+     * This will also update the orientation of the pins marked by EnableEditMode().
      *
      * @param aOrientation - The orientation of the pin.
      */
     void SetOrientation( int aOrientation );
 
+    int GetShape() const { return m_shape; }
+
     /**
-     * Set the draw style of the pin.
+     * Set the shape of the pin to \a aShape.
      *
-     * This will also update the draw style of the pins marked by
-     * EnableEditMode().
+     * This will also update the draw style of the pins marked by EnableEditMode().
      *
-     * @param aStyle - The draw style of the pin.
+     * @param aShape - The draw shape of the pin.  See enum DrawPinShape.
      */
-    void SetDrawStyle( int aStyle );
+    void SetShape( int aShape );
+
+    int GetType() const { return m_type; }
 
     /**
      * Set the electrical type of the pin.
@@ -255,7 +256,7 @@ public:
      *
      * @param aType - The electrical type of the pin.
      */
-    void SetElectricalType( int aType );
+    void SetType( int aType );
 
     /**
      * Set the pin length.
@@ -265,6 +266,8 @@ public:
      * @param aLength - The length of the pin in mils.
      */
     void SetLength( int aLength );
+
+    int GetLength() { return m_length; }
 
     /**
      * Set the pin part number.
@@ -320,7 +323,7 @@ public:
      *
      * @return True if draw object is visible otherwise false.
      */
-    bool IsVisible() { return ( m_Attributs & PINNOTDRAW ) == 0; }
+    bool IsVisible() { return ( m_attributes & PINNOTDRAW ) == 0; }
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item.
@@ -436,12 +439,12 @@ protected:
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_Rect& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() const { return m_Pos; }
+    virtual wxPoint DoGetPosition() const { return m_position; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Width; }
-    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
+    virtual int DoGetWidth() const { return m_width; }
+    virtual void DoSetWidth( int aWidth );
 };
 
 

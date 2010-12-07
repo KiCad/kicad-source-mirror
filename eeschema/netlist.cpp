@@ -641,7 +641,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                 if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->m_Convert ) )
                     continue;
 
-                wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->m_Pos ) +
+                wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->GetPosition() ) +
                     DrawLibItem->m_Pos;
 
                 new_item = new NETLIST_OBJECT();
@@ -650,15 +650,14 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                 new_item->m_SheetList = *sheetlist;
                 new_item->m_Type = NET_PIN;
                 new_item->m_Link = DrawLibItem;
-                new_item->m_ElectricalType = pin->m_PinType;
-                new_item->m_PinNum = pin->m_PinNum;
-                new_item->m_Label  = pin->m_PinName;
+                new_item->m_ElectricalType = pin->GetType();
+                new_item->m_PinNum = pin->GetNumber();
+                new_item->m_Label  = pin->GetName();
                 new_item->m_Start  = new_item->m_End = pos2;
 
                 aNetItemBuffer.push_back( new_item );
 
-                if( ( (int) pin->m_PinType == (int) PIN_POWER_IN )
-                   && ( pin->m_Attributs & PINNOTDRAW ) )
+                if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
                 {
                     /* There is an associated PIN_LABEL. */
                     new_item = new NETLIST_OBJECT();
@@ -666,7 +665,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                     new_item->m_Comp = NULL;
                     new_item->m_SheetList = *sheetlist;
                     new_item->m_Type  = NET_PINLABEL;
-                    new_item->m_Label = pin->m_PinName;
+                    new_item->m_Label = pin->GetName();
                     new_item->m_Start = pos2;
                     new_item->m_End   = new_item->m_Start;
 

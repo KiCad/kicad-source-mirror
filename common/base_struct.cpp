@@ -20,9 +20,7 @@ enum textbox {
 };
 
 
-/******************************************************************************/
 EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
-/******************************************************************************/
 {
     InitVars();
     m_StructType = idType;
@@ -30,9 +28,7 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 }
 
 
-/********************************************/
 EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
-/********************************************/
 {
     InitVars();
     m_StructType = idType;
@@ -51,9 +47,7 @@ EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
 }
 
 
-/********************************************/
 void EDA_BaseStruct::InitVars()
-/********************************************/
 {
     m_StructType = TYPE_NOT_INIT;
     Pnext       = NULL;     // Linked list: Link (next struct)
@@ -66,6 +60,16 @@ void EDA_BaseStruct::InitVars()
     m_TimeStamp = 0;        // Time stamp used for logical links
     m_Status    = 0;
     m_Selected  = 0;        // Used by block commands, and selective editing
+}
+
+
+void EDA_BaseStruct::SetModified()
+{
+    m_Flags |= IS_CHANGED;
+
+    // If this a child object, then the parent modification state also needs to be set.
+    if( m_Parent )
+        m_Parent->SetModified();
 }
 
 

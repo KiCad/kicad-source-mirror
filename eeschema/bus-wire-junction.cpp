@@ -756,7 +756,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         {
             // Calculate the exact position of the connection point of the pin,
             // depending on orientation of the component.
-            itempos    = LibItem->GetScreenCoord( pin->m_Pos );
+            itempos    = LibItem->GetScreenCoord( pin->GetPosition() );
             itempos.x += LibItem->m_Pos.x;
             itempos.y += LibItem->m_Pos.y;
             if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )

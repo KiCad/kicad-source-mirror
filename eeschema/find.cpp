@@ -147,10 +147,12 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
                         pos = pSch->m_Pos;  /* temporary: will be changed if
                                              * the pin is found */
                         pin = pSch->GetPin( text_to_find );
+
                         if( pin == NULL )
                             break;
+
                         NotFound = FALSE;
-                        pos += pin->m_Pos;
+                        pos += pin->GetPosition();
                         break;
 
                     case 2:     // find reference

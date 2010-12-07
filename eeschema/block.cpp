@@ -898,7 +898,7 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
 
         /* Calculate the pin position (according to the component orientation)
          */
-        aPosition = DefaultTransform.TransformCoordinate( Pin->m_Pos ) + CmpPosition;
+        aPosition = DefaultTransform.TransformCoordinate( Pin->GetPosition() ) + CmpPosition;
         return Pin;
     }
 

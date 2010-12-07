@@ -30,7 +30,7 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
 
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
-    if( aField->m_FieldId == VALUE )
+    if( aField->GetId() == VALUE )
     {
         caption = _( "Component Name" );
         title = _( "Enter a name to create a new component based on this one." );
@@ -51,7 +51,7 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
 
     text.Replace( wxT( " " ), wxT( "_" ) );
 
-    if( ( aField->m_FieldId == REFERENCE || aField->m_FieldId == VALUE ) && text.IsEmpty ( ) )
+    if( ( aField->GetId() == REFERENCE || aField->GetId() == VALUE ) && text.IsEmpty ( ) )
     {
         title.Printf( _( "A %s field cannot be empty." ), GetChars(aField->GetName().Lower() ) );
         DisplayError( this, title );
@@ -64,7 +64,7 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( aField->m_FieldId == VALUE )
+    if( aField->GetId() == VALUE )
     {
         wxString msg;
 

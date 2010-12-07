@@ -64,10 +64,11 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint&
     wxPoint pinpos;
 
     Pin = LocateAnyPin( DrawList, pos, &DrawLibItem );
+
     if( !Pin )
         return NULL;
 
-    pinpos = Pin->m_Pos;
+    pinpos = Pin->GetPosition();
 
     if( DrawLibItem == NULL )
         NEGATE( pinpos.y );     // In libraries Y axis is bottom to top
@@ -78,5 +79,6 @@ LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint&
 
     if( pos == pinpos )
         return Pin;
+
     return NULL;
 }

@@ -94,15 +94,15 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     {
         // Can no longer insert an empty name, since names are now keys.  The
         // field index is not used beyond the first MANDATORY_FIELDS
-        if( it->m_Name.IsEmpty() )
+        if( it->GetName().IsEmpty() )
             continue;
 
         // See if field by same name already exists.
-        SCH_FIELD* schField = FindField( it->m_Name );
+        SCH_FIELD* schField = FindField( it->GetName() );
 
         if( !schField )
         {
-            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->m_Name );
+            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->GetName() );
             schField = AddField( fld );
         }
 
@@ -1586,21 +1586,24 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxP
     {
         LIB_PIN_LIST pinList;
         Entry->GetPins( pinList, m_Multi, m_Convert );
+
         // Search for a match in pinList
         for( unsigned ii = 0; ii < pinList.size(); ii ++ )
         {
             LIB_PIN* pin = pinList[ii];
             wxString pinNum;
             pin->ReturnPinStringNum( pinNum );
-            if( SCH_ITEM::Matches(pin->m_PinName, aSearchData ) ||
-                SCH_ITEM::Matches(pinNum, aSearchData ) )
+
+            if( SCH_ITEM::Matches( pin->GetName(), aSearchData ) ||
+                SCH_ITEM::Matches( pinNum, aSearchData ) )
             {
                 if( aFindLocation )
                 {
-                    wxPoint pinpos = pin->m_Pos;
+                    wxPoint pinpos = pin->GetPosition();
                     pinpos = m_Transform.TransformCoordinate( pinpos );
                     *aFindLocation = pinpos + m_Pos;
                 }
+
                 return true;
             }
 
@@ -1640,7 +1643,7 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
     wxCHECK_MSG( Pin != NULL && Pin->Type() == COMPONENT_PIN_DRAW_TYPE, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
-    return m_Transform.TransformCoordinate( Pin->m_Pos ) + m_Pos;
+    return m_Transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
 }
 
 
@@ -1680,6 +1683,6 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
             continue;
 
         // Calculate the pin position relative to the component position and orientation.
-        aPoints.push_back( m_Transform.TransformCoordinate( pin->m_Pos ) + m_Pos );
+        aPoints.push_back( m_Transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
     }
 }

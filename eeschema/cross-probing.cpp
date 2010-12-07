@@ -130,7 +130,8 @@ void WinEDA_SchematicFrame::SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
             break;
 
         Pin = (LIB_PIN*) objectToSync;
-        if( Pin->m_PinNum )
+
+        if( Pin->GetNumber() )
         {
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );

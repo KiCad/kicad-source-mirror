@@ -100,6 +100,7 @@ void WinEDA_SchematicFrame::EditCmpFieldText( SCH_FIELD* Field, wxDC* DC )
     SCH_COMPONENT* Cmp = (SCH_COMPONENT*) Field->GetParent();
 
     fieldNdx = Field->m_FieldId;
+
     if( fieldNdx == VALUE )
     {
         Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );

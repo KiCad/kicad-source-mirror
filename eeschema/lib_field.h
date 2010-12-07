@@ -5,7 +5,6 @@
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
 
-//#include "general.h"
 #include "lib_draw_item.h"
 
 
@@ -18,9 +17,12 @@
  */
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
-    wxString m_savedText;         ///< Temporary storage for the string when edition.
-    bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
-    bool m_updateText;            ///< Flag to indicate text change occurred while editing.
+    int      m_id;           ///< @see enum NumFieldType
+    wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
+
+    wxString m_savedText;    ///< Temporary storage for the string when edition.
+    bool     m_rotate;       ///< Flag to indicate a rotation occurred while editing.
+    bool     m_updateText;   ///< Flag to indicate text change occurred while editing.
 
     /**
      * Draw the field.
@@ -34,11 +36,6 @@ class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
      * @param aPosition - The position to edit the circle in drawing coordinates.
      */
     void calcEdit( const wxPoint& aPosition );
-
-public:
-    int         m_FieldId;  ///< @see enum NumFieldType
-
-    wxString    m_Name;     ///< Name (not the field text value itself, that is .m_Text)
 
 public:
 
@@ -62,11 +59,28 @@ public:
      *
      * The first four field IDs are reserved and therefore always return their respective
      * names.  The user definable fields will return FieldN where N is the ID of the field
-     * when the m_Name member is empty.
+     * when the m_name member is empty.
      *
      * @return Name of the field.
      */
-    wxString GetName();
+    wxString GetName() const;
+
+    /**
+     * Function SetName
+     *
+     * Sets a user definable field name to \a aName.
+     *
+     * Reserved fields such as value and reference are not renamed.  If the field name is
+     * changed, the field modified flag is set.  If the field is the child of a component,
+     * the parent component's modified flag is also set.
+     *
+     * @param aName - User defined field name.
+     */
+    void SetName( const wxString& aName );
+
+    int GetId() { return m_id; }
+
+    void SetId( int aId ) { m_id = aId; }
 
     /**
      * Function GetPenSize virtual pure
@@ -133,9 +147,9 @@ public:
 
     void operator=( const LIB_FIELD& field )
     {
-        m_FieldId = field.m_FieldId;
+        m_id = field.m_id;
         m_Text = field.m_Text;
-        m_Name = field.m_Name;
+        m_name = field.m_name;
         m_Pos = field.m_Pos;
         m_Size = field.m_Size;
         m_Thickness = field.m_Thickness;

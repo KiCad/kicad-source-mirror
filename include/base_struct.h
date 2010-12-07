@@ -359,6 +359,8 @@ public:
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
 
+    void SetModified();
+
     int GetState( int type ) const
     {
         return m_Status & type;

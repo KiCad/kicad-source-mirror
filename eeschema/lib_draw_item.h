@@ -301,6 +301,8 @@ public:
      */
     wxPoint GetPosition() const { return DoGetPosition(); }
 
+    void SetPosition( const wxPoint& aPosition ) { DoMove( aPosition ); }
+
     /**
      * Mirror the draw object along the horizontal (X) axis about a point.
      *

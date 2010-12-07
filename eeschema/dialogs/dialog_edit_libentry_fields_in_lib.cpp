@@ -249,7 +249,7 @@ An alias %s already exists!\nCannot update this component" ),
     // back into the component
     for( unsigned i = MANDATORY_FIELDS; i < m_FieldsBuf.size(); )
     {
-        if( m_FieldsBuf[i].m_Name.IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
+        if( m_FieldsBuf[i].GetName().IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
         {
             m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
             continue;
@@ -262,7 +262,7 @@ An alias %s already exists!\nCannot update this component" ),
     for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
         printf( "save[%d].name:'%s' value:'%s'\n", i,
-                CONV_TO_UTF8( m_FieldsBuf[i].m_Name ),
+                CONV_TO_UTF8( m_FieldsBuf[i].GetName() ),
                 CONV_TO_UTF8( m_FieldsBuf[i].m_Text ) );
     }
 #endif
@@ -296,7 +296,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& 
     LIB_FIELD blank( fieldNdx );
 
     m_FieldsBuf.push_back( blank );
-    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName(fieldNdx);
+    m_FieldsBuf[fieldNdx].SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx ) );
 
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
 
@@ -423,7 +423,7 @@ static LIB_FIELD* findfield( const LIB_FIELD_LIST& aList, const wxString& aField
 
     for( unsigned i=0;  i<aList.size();  ++i )
     {
-        if( aFieldName == aList[i].m_Name )
+        if( aFieldName == aList[i].GetName() )
         {
             field = &aList[i];  // best to avoid casting here.
             break;
@@ -437,7 +437,7 @@ LIB_FIELD* DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::findField( const wxString& aField
 {
     for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
-        if( aFieldName == m_FieldsBuf[i].m_Name )
+        if( aFieldName == m_FieldsBuf[i].GetName() )
             return &m_FieldsBuf[i];
     }
     return NULL;
@@ -455,7 +455,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
 #if defined(DEBUG)
     for( unsigned i=0; i<cmpFields.size();  ++i )
     {
-        printf( "cmpFields[%d].name:%s\n", i, CONV_TO_UTF8( cmpFields[i].m_Name ) );
+        printf( "cmpFields[%d].name:%s\n", i, CONV_TO_UTF8( cmpFields[i].GetName() ) );
     }
 #endif
 
@@ -483,7 +483,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
     // fixed fields:
     for( int i=0; i<MANDATORY_FIELDS; ++i )
     {
-        D( printf( "add fixed:%s\n", CONV_TO_UTF8( cmpFields[i].m_Name ) ); )
+        D( printf( "add fixed:%s\n", CONV_TO_UTF8( cmpFields[i].GetName() ) ); )
         m_FieldsBuf.push_back( cmpFields[i] );
     }
 
@@ -510,7 +510,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
         {
             D( printf( "add template:%s\n", CONV_TO_UTF8( it->m_Name ) ); )
 
-            fld.m_Name = it->m_Name;
+                fld.SetName( it->m_Name );
             fld.m_Text = it->m_Value;   // empty? ok too.
 
             if( !it->m_Visible )
@@ -520,7 +520,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
         }
         else
         {
-            D( printf( "match template:%s\n", CONV_TO_UTF8( libField->m_Name )); )
+            D( printf( "match template:%s\n", CONV_TO_UTF8( libField->GetName() ) ); )
             fld = *libField;    // copy values from component, m_Name too
         }
 
@@ -532,11 +532,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
     for( unsigned i=MANDATORY_FIELDS;  i<cmpFields.size();  ++i )
     {
         LIB_FIELD*  cmp = &cmpFields[i];
-        LIB_FIELD*  buf = findField( cmp->m_Name );
+        LIB_FIELD*  buf = findField( cmp->GetName() );
 
         if( !buf )
         {
-            D( printf( "add cmp:%s\n", CONV_TO_UTF8( cmp->m_Name )); )
+            D( printf( "add cmp:%s\n", CONV_TO_UTF8( cmp->GetName() ) ); )
             m_FieldsBuf.push_back( *cmp );
         }
     }
@@ -578,7 +578,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FI
         fieldListCtrl->SetItem( ndx, COLUMN_TEXT, wxEmptyString );
     }
 
-    fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aField.m_Name );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aField.GetName() );
     fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aField.m_Text );
 
     // recompute the column widths here, after setting texts
@@ -629,17 +629,19 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     // Field names have become more important than field ids, so we cannot
     // mangle the names in the buffer but we can do so in the panel.
-    if( field.m_FieldId == VALUE )
-    {   // This field is the lib name and the default value when loading this component in schematic
-        // The value is now not editable here (in this dialog) because changing it is equivalent to create
-        // a new component or alias. This is handles in libedir, not in this dialog.
-        fieldNameTextCtrl->SetValue( field.m_Name + wxT( " / " ) + _( "Chip Name" ) );
+    if( field.GetId() == VALUE )
+    {
+        // This field is the lib name and the default value when loading this component in
+        // schematic.  The value is now not editable here (in this dialog) because changing
+        // it is equivalent to create a new component or alias. This is handles in libedir,
+        // not in this dialog.
+        fieldNameTextCtrl->SetValue( field.GetName() + wxT( " / " ) + _( "Chip Name" ) );
         fieldValueTextCtrl->Enable( false );
     }
     else
     {
         fieldValueTextCtrl->Enable( true );
-        fieldNameTextCtrl->SetValue( field.m_Name );
+        fieldNameTextCtrl->SetValue( field.GetName() );
     }
 
     // if fieldNdx == REFERENCE, VALUE, FOOTPRINT, or DATASHEET, then disable field name editing
@@ -731,8 +733,8 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     // FieldNameTextCtrl has a tricked value in it for VALUE index, do not copy it back.
     // It has the "Chip Name" appended.
-    if( field.m_FieldId >= MANDATORY_FIELDS )
-        field.m_Name = fieldNameTextCtrl->GetValue();
+    if( field.GetId() >= MANDATORY_FIELDS )
+        field.SetName( fieldNameTextCtrl->GetValue() );
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 

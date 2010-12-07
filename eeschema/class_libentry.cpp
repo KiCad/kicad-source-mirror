@@ -417,11 +417,11 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem, WinEDA_DrawPanel* aPan
     {
         LIB_FIELD* field = (LIB_FIELD*) aItem;
 
-        if( field->m_FieldId < MANDATORY_FIELDS )
+        if( field->GetId() < MANDATORY_FIELDS )
         {
             wxLogWarning( _( "An attempt was made to remove the %s field \
 from component %s in library %s." ),
-                          GetChars( field->m_Name ), GetChars( GetName() ),
+                          GetChars( field->GetName() ), GetChars( GetName() ),
                           GetChars( GetLibraryName() ) );
             return;
         }
@@ -609,7 +609,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         // fieldnames.
         if( !fields[i].m_Text.IsEmpty() )
         {
-            fields[i].m_FieldId = fieldId++;
+            fields[i].SetId( fieldId++ );
             if( !fields[i].Save( aFile ) )
                 return false;
         }
@@ -916,9 +916,9 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
         return false;
     }
 
-    if( field->m_FieldId < MANDATORY_FIELDS )
+    if( field->GetId() < MANDATORY_FIELDS )
     {
-        LIB_FIELD* fixedField = GetField( field->m_FieldId );
+        LIB_FIELD* fixedField = GetField( field->GetId() );
 
         // this will fire only if somebody broke a constructor or editor.
         // MANDATORY_FIELDS are always present in ram resident components, no
@@ -927,7 +927,7 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
 
         *fixedField = *field;
 
-        if( field->m_FieldId == VALUE )
+        if( field->GetId() == VALUE )
             m_name = field->m_Text;
 
         SAFE_DELETE( field );
@@ -1055,7 +1055,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
             continue;
 
         field = ( LIB_FIELD* ) &item;
-        if( (unsigned) field->m_FieldId < MANDATORY_FIELDS )
+        if( (unsigned) field->GetId() < MANDATORY_FIELDS )
             continue;  // was added above
 
         aList.push_back( *field );
@@ -1072,7 +1072,7 @@ LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
-        if( field->m_FieldId == aId )
+        if( field->GetId() == aId )
             return field;
     }
 
@@ -1089,7 +1089,7 @@ LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
-        if( field->m_Name == aFieldName )
+        if( field->GetName() == aFieldName )
             return field;
     }
 
@@ -1262,7 +1262,7 @@ void LIB_COMPONENT::DeleteSelectedItems()
         {
 #if 0   // Set to 1 to allows fields deletion on block delete or other global command
             LIB_FIELD& field = ( LIB_FIELD& ) *item;
-            if( (field.m_FieldId == REFERENCE) || (field.m_FieldId == VALUE) ||
+            if( (field.GetId() == REFERENCE) || (field.m_FieldId == VALUE) ||
                 (field.m_Attributs & TEXT_NO_VISIBLE) )
 #endif
                 item->m_Selected = 0;

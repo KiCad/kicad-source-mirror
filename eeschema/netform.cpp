@@ -445,12 +445,12 @@ static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 {
     // return "lhs < rhs"
-    return RefDesStringCompare( aPin1->GetNumber(), aPin2->GetNumber() ) < 0;
+    return RefDesStringCompare( aPin1->GetNumberString(), aPin2->GetNumberString() ) < 0;
 }
 
 
 void EXPORT_HELP::sprintPinNetName( wxString* aResult,
-                        const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
+                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
 {
     int netcode = aPin->GetNet();
 
@@ -758,7 +758,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
             {
                 XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
-                xfield->AddAttribute( sName, fieldList[i].m_Name );
+                xfield->AddAttribute( sName, fieldList[i].GetName() );
             }
         }
 
@@ -778,7 +778,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
-                pin->AddAttribute( sNum, pinList[i]->GetNumber() );
+                pin->AddAttribute( sNum, pinList[i]->GetNumberString() );
 
                 // caution: construction work site here, drive slowly
             }
@@ -1489,7 +1489,7 @@ bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
         if( pin->m_Link != aComponent )
             continue;
 
-        if( pin->m_PinNum != aPin->m_PinNum )
+        if( pin->m_PinNum != aPin->GetNumber() )
             continue;
 
         // most expensive test at the end.
