@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 18 2009)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,7 +48,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract Mask from Silk"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SubtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
-	bLeftSizer->Add( m_SubtractMaskFromSilk, 0, wxALL, 5 );
+	bLeftSizer->Add( m_SubtractMaskFromSilk, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Plot_Sheet_Ref = new wxCheckBox( this, wxID_ANY, _("Print sheet reference"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizer->Add( m_Plot_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -150,7 +150,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_Plot_PS_Negative = new wxCheckBox( this, wxID_ANY, _("Plot negative"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPSOpt->Add( m_Plot_PS_Negative, 0, wxALL, 5 );
 	
-	bSizerFmtPlot->Add( sbSizerPSOpt, 1, wxEXPAND, 5 );
+	bSizerFmtPlot->Add( sbSizerPSOpt, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerOutputDir;
 	sbSizerOutputDir = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Directory:") ), wxVERTICAL );
@@ -161,7 +161,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_BrowseButton = new wxButton( this, ID_BROWSE_OUTPUT_DIRECTORY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerOutputDir->Add( m_BrowseButton, 0, wxALL, 5 );
 	
-	bSizerFmtPlot->Add( sbSizerOutputDir, 1, wxEXPAND, 5 );
+	bSizerFmtPlot->Add( sbSizerOutputDir, 0, wxEXPAND, 5 );
 	
 	bUpperSizer->Add( bSizerFmtPlot, 1, wxEXPAND, 5 );
 	

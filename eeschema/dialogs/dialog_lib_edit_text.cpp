@@ -1,5 +1,5 @@
 /**********************************/
-/* edit_graphic_bodyitem_text.cpp */
+/* dialog_lib_edit_text.cpp */
 /**********************************/
 
 /* Code for editing component library text items, not fields. */
@@ -113,7 +113,7 @@ void DIALOG_LIB_EDIT_TEXT::InitDialog( )
 
 void DIALOG_LIB_EDIT_TEXT::OnCancelClick( wxCommandEvent& event )
 {
-    event.Skip();
+    EndModal(wxID_CANCEL);
 }
 
 
@@ -193,5 +193,5 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     if( m_Parent->GetDrawItem() )
         m_Parent->GetDrawItem()->DisplayInfo( m_Parent );
 
-    Close();
+    EndModal(wxID_OK);
 }
