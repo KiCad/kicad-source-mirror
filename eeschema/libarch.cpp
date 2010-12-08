@@ -38,8 +38,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL;
          screen = ScreenList.GetNext() )
     {
-        for( SCH_ITEM* SchItem = screen->EEDrawList; SchItem;
-             SchItem = SchItem->Next() )
+        for( SCH_ITEM* SchItem = screen->GetDrawItems(); SchItem; SchItem = SchItem->Next() )
         {
             if( SchItem->Type() != TYPE_SCH_COMPONENT )
                 continue;

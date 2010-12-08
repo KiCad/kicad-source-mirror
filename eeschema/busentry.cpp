@@ -66,21 +66,18 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-SCH_BUS_ENTRY* WinEDA_SchematicFrame::CreateBusEntry( wxDC* DC,
-                                                      int   entry_type )
+SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
 {
     // Create and place a new bus entry at cursor position
-    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->m_Curseur,
-                                                 s_LastShape, entry_type );
+    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->m_Curseur, s_LastShape, entry_type );
     BusEntry->m_Flags = IS_NEW;
     BusEntry->Place( this, DC );;
-    OnModify( );
+    OnModify();
     return BusEntry;
 }
 
 
-void WinEDA_SchematicFrame::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry,
-                                               wxDC*          DC )
+void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
 {
     if( BusEntry == NULL )
         return;
@@ -109,9 +106,7 @@ void WinEDA_SchematicFrame::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry,
 
 /* set the shape of BusEntry (shape = / or \ )
  */
-void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*          DC,
-                                              SCH_BUS_ENTRY* BusEntry,
-                                              int            entry_shape )
+void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_shape )
 {
     if( BusEntry == NULL )
         return;
@@ -141,13 +136,13 @@ void WinEDA_SchematicFrame::SetBusEntryShape( wxDC*          DC,
         break;
     }
 
-    TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
     RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
     OnModify( );
 }
 
 
-int WinEDA_SchematicFrame::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
+int SCH_EDIT_FRAME::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
 {
     int entry_shape = '\\';
 

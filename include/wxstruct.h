@@ -33,7 +33,7 @@
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 class EDA_Rect;
 class WinEDA_DrawPanel;
 class WinEDA_MsgPanel;
@@ -269,8 +269,7 @@ public:
 
     void             OnMenuOpen( wxMenuEvent& event );
     void             OnMouseEvent( wxMouseEvent& event );
-    virtual void     OnHotKey( wxDC* DC, int hotkey,
-                               EDA_BaseStruct* DrawStruct );
+    virtual void     OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     /**
      * Function AddMenuZoomAndGrid (virtual)

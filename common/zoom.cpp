@@ -228,19 +228,18 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     }
 
     /* Create grid submenu as required. */
-    if( !screen->m_GridList.IsEmpty() )
+    if( screen->GetGridCount() )
     {
         wxMenu* gridMenu = new wxMenu;
-        ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu,
-                                   ID_POPUP_GRID_SELECT, _( "Grid Select" ),
-                                   grid_select_xpm );
+        ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
+                                   _( "Grid Select" ), grid_select_xpm );
 
         GRID_TYPE   tmp;
         wxRealPoint grid = screen->GetGridSize();
 
-        for( unsigned i = 0; i < screen->m_GridList.GetCount(); i++ )
+        for( size_t i = 0; i < screen->GetGridCount(); i++ )
         {
-            tmp = screen->m_GridList[i];
+            tmp = screen->GetGrid( i );
             double gridValueInch = To_User_Unit( INCHES, tmp.m_Size.x, m_InternalUnits );
             double gridValue_mm = To_User_Unit( MILLIMETRES, tmp.m_Size.x, m_InternalUnits );
 
@@ -267,7 +266,9 @@ void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
                     break;
                 }
             }
+
             gridMenu->Append( tmp.m_Id, msg, wxEmptyString, true );
+
             if( grid == tmp.m_Size )
                 gridMenu->Check( tmp.m_Id, true );
         }

@@ -32,10 +32,9 @@
  * the search is not stopped when a reference is found (all instances must be
  * found).
  */
-bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
-    const wxString& aReference,
-    const wxString& aFootPrint,
-    bool            aSetVisible )
+bool SCH_EDIT_FRAME::FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
+                                                                   const wxString& aFootPrint,
+                                                                   bool            aSetVisible )
 {
     SCH_SHEET_PATH* sheet;
     SCH_ITEM*       DrawList = NULL;
@@ -101,8 +100,7 @@ bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
  * visible
  * @return true if OK.
  */
-bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
-                                              aSetFielsAttributeToVisible  )
+bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aStuffFile, bool aSetFielsAttributeToVisible  )
 {
     int   LineNum = 0;
     char* cp, Ref[256], FootPrint[256], Line[1024];
@@ -134,7 +132,7 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
 
 /* Backann footprint info to schematic.
  */
-bool WinEDA_SchematicFrame::ReadInputStuffFile()
+bool SCH_EDIT_FRAME::ReadInputStuffFile()
 {
     wxString Line, filename;
     FILE*    StuffFile;

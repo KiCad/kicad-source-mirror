@@ -53,7 +53,7 @@ typedef enum {
 } CmdBlockType;
 
 
-class BLOCK_SELECTOR : public EDA_BaseStruct, public EDA_Rect
+class BLOCK_SELECTOR : public EDA_ITEM, public EDA_Rect
 {
 public:
     BlockState        m_State;                    /* State (enum BlockState)
@@ -103,7 +103,7 @@ public:
 
     /**
      * Function ClearListAndDeleteItems
-     * deletes only the list of EDA_BaseStruct * pointers, AND the data printed
+     * deletes only the list of EDA_ITEM * pointers, AND the data printed
      * by m_Item
      */
     void ClearListAndDeleteItems();

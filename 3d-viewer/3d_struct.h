@@ -34,7 +34,7 @@ public:
 public: S3D_Vertex();
 };
 
-class S3D_MATERIAL : public EDA_BaseStruct       /* openGL "material" data*/
+class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
 {
 public:
     wxString   m_Name;
@@ -55,7 +55,7 @@ public: S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
 
 
 /* Master structure for a 3D item description */
-class S3D_MASTER : public EDA_BaseStruct
+class S3D_MASTER : public EDA_ITEM
 {
 public:
     wxString        m_Shape3DName; /* 3D shape name in 3D library */
@@ -65,7 +65,7 @@ public:
     Struct3D_Shape* m_3D_Drawings;
     S3D_MATERIAL*   m_Materials;
 
-public: S3D_MASTER( EDA_BaseStruct* aParent );
+public: S3D_MASTER( EDA_ITEM* aParent );
     ~S3D_MASTER();
 
     S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
@@ -90,14 +90,14 @@ public: S3D_MASTER( EDA_BaseStruct* aParent );
 
 
 /* Describes a complex 3D */
-class Struct3D_Shape : public EDA_BaseStruct
+class Struct3D_Shape : public EDA_ITEM
 {
 public:
     S3D_Vertex* m_3D_Coord;
     int*        m_3D_CoordIndex;
     int         m_3D_Points;
 
-public: Struct3D_Shape( EDA_BaseStruct* aParent );
+public: Struct3D_Shape( EDA_ITEM* aParent );
     ~Struct3D_Shape();
 
     Struct3D_Shape* Next() const { return (Struct3D_Shape*) Pnext; }

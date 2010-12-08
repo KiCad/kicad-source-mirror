@@ -320,10 +320,10 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
-    D_PAD*          pt_pad;
-    EDA_BaseStruct* PtStruct;
-    TEXTE_MODULE*   TextMod;
-    int             mlayer;
+    D_PAD*        pt_pad;
+    EDA_ITEM*     PtStruct;
+    TEXTE_MODULE* TextMod;
+    int           mlayer;
 
     /* Print pads */
     pt_pad = aModule->m_Pads;

@@ -40,7 +40,7 @@ public:
     void         ReCreateMenuBar();
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
     bool         OnHotkeyEditItem( int aIdCommand );
     bool         OnHotkeyDeleteItem( int aIdCommand );
     bool         OnHotkeyMoveItem( int aIdCommand );
@@ -138,7 +138,7 @@ public:
 
     // Footprint edition
     void         Place_Ancre( MODULE* module );
-    void         RemoveStruct( EDA_BaseStruct* Item );
+    void         RemoveStruct( EDA_ITEM* Item );
     void         Transform( MODULE* module, int transform );
 
     // importing / exporting Footprint

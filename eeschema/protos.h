@@ -9,16 +9,15 @@
 #include <wx/wx.h>
 
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 class WinEDA_DrawPanel;
 class WinEDA_DrawFrame;
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
 class SCH_COMPONENT;
-class BASE_SCREEN;
 class SCH_SCREEN;
 class SCH_ITEM;
 class SCH_SHEET_PIN;
@@ -51,7 +50,7 @@ void IncrementLabelMember( wxString& name );
 /****************/
 /* EDITPART.CPP */
 /****************/
-void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
+void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
 
 void           SnapLibItemPoint( int            OrigX,
                                  int            OrigY,
@@ -118,7 +117,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
 /* Find the item within block selection. */
-int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
+int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* screen );
 
 /* function PickStruct:
  *   Search at location pos
@@ -150,7 +149,7 @@ int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
  *     Pointer to the structure if only 1 item is selected.
  *     NULL if no items are selects.
  */
-SCH_ITEM*          PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask );
+SCH_ITEM*          PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
 
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
@@ -212,7 +211,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
 void DeleteSubHierarchy( SCH_SHEET* Sheet, bool confirm_deletion );
 bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 
-/* free the draw list screen->EEDrawList and the subhierarchies
+/* free the draw list screen->GetDrawItems() and the subhierarchies
  *   clear the screen datas (filenames ..)
  */
 
@@ -220,7 +219,7 @@ bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 /* DELETE.CPP */
 /*************/
 
-bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC );
+bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC );
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Window );
 void DeleteAllMarkers( int type );
 
@@ -301,12 +300,12 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 /* EECLASS.CPP */
 /**************/
 
-void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen );
+void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
 
 /***************/
 /* OPTIONS.CPP */
 /***************/
-void DisplayOptionFrame( WinEDA_SchematicFrame* parent, const wxPoint& framepos );
+void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
 
 /****************/
 /* CONTROLE.CPP */

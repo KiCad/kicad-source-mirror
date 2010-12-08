@@ -337,10 +337,10 @@ void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
 
 void WinEDA_PcbFrame::Swap_Layers( wxCommandEvent& event )
 {
-    int             ii, jj;
-    TRACK*          pt_segm;
-    DRAWSEGMENT*    pt_drawsegm;
-    EDA_BaseStruct* PtStruct;
+    int          ii, jj;
+    TRACK*       pt_segm;
+    DRAWSEGMENT* pt_drawsegm;
+    EDA_ITEM*    PtStruct;
 
     /* Init default values */
     for( ii = 0; ii < NB_LAYERS; ii++ )

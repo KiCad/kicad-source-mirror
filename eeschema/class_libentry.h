@@ -48,7 +48,7 @@ enum  LibrEntryOptions
  * Component aliases are not really components.  They are references
  * to an actual component object.
  */
-class LIB_ALIAS : public EDA_BaseStruct
+class LIB_ALIAS : public EDA_ITEM
 {
     /**
      * The actual component of the alias.
@@ -149,7 +149,7 @@ extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2
  * A library component object is typically saved and loaded in a component library file (.lib).
  * Library components are different from schematic components.
  */
-class LIB_COMPONENT : public EDA_BaseStruct
+class LIB_COMPONENT : public EDA_ITEM
 {
     wxString           m_name;
     int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0

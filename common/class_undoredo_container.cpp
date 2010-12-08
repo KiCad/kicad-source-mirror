@@ -31,7 +31,7 @@
 #include "class_undoredo_container.h"
 
 
-ITEM_PICKER::ITEM_PICKER( EDA_BaseStruct* aItem, UndoRedoOpType aUndoRedoStatus )
+ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UndoRedoOpType aUndoRedoStatus )
 {
     m_UndoRedoStatus = aUndoRedoStatus;
     m_PickedItem     = aItem;
@@ -115,11 +115,12 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         {
             // Specific to eeschema: a linked list of wires is stored.
             // the wrapper picks only the first item (head of list), and is owner of all picked items
-            EDA_BaseStruct* item = wrapper.m_PickedItem;
+            EDA_ITEM* item = wrapper.m_PickedItem;
+
             while( item )
             {
                 // Delete old copy of wires
-                EDA_BaseStruct* nextitem = item->Next();
+                EDA_ITEM* nextitem = item->Next();
                 delete item;
                 item = nextitem;
             }
@@ -186,7 +187,7 @@ ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
  * @return a pointer to the picked item, or null if does not exist
  * @param aIdx = index of the picked item in the picked list
  */
-EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
+EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_PickedItem;
@@ -200,7 +201,7 @@ EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
  * @return link of the picked item, or null if does not exist
  * @param aIdx = index of the picked item in the picked list
  */
-EDA_BaseStruct* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
+EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_Link;
@@ -243,7 +244,7 @@ int PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
  */
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -262,7 +263,7 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx )
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
  */
-bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -281,9 +282,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx 
  * @param aIdx = index of the picker in the picked list
  * @return true if the picker exists, or false if does not exist
  */
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_BaseStruct* aItem,
-                                       UndoRedoOpType  aStatus,
-                                       unsigned        aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UndoRedoOpType aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

@@ -114,7 +114,7 @@ public:
     }
     void     SwapData( SCH_TEXT* copyitem );
 
-    void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void     Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     /**
      * Function HitTest

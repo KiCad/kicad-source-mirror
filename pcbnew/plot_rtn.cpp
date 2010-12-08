@@ -26,9 +26,9 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
                                             int         masque_layer,
                                             GRTraceMode trace_mode )
 {
-    bool            trace_val, trace_ref;
-    TEXTE_MODULE*   pt_texte;
-    EDA_BaseStruct* PtStruct;
+    bool          trace_val, trace_ref;
+    TEXTE_MODULE* pt_texte;
+    EDA_ITEM*     PtStruct;
 
     /* Plot edge layer and graphic items */
 

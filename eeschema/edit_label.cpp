@@ -31,7 +31,7 @@ static bool    lastTextBold = false;
 static bool    lastTextItalic = false;
 
 
-void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
+void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         return;
@@ -75,7 +75,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 }
 
 
-void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
+void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
@@ -116,7 +116,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
 /* Routine to create new text struct (GraphicText, label or Glabel).
  */
-SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
+SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
 {
     SCH_TEXT* NewText = NULL;
 
@@ -143,8 +143,7 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_SchematicFrame::CreateNewText() Internal error" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::CreateNewText() Internal error" ) );
         return NULL;
     }
 
@@ -265,7 +264,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
  * A new test, label or hierarchical or global label is created from the old text.
  * the old text is deleted
  */
-void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
+void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
 {
     if( Text == NULL )
         return;
@@ -315,9 +314,9 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
     /* add the new text in linked list if old text is in list */
     if( (flags & IS_NEW) == 0 )
     {
-        newtext->SetNext( GetScreen()->EEDrawList );
-        GetScreen()->EEDrawList = newtext;
-        OnModify( );
+        newtext->SetNext( GetScreen()->GetDrawItems() );
+        GetScreen()->SetDrawItems( newtext );
+        OnModify();
     }
 
     /* now delete the old text

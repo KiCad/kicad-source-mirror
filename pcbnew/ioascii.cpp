@@ -702,8 +702,8 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
 bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 {
-    EDA_BaseStruct* PtStruct = GetBoard()->m_Modules;
-    int             NbModules, NbDrawItem, NbLayers;
+    EDA_ITEM* PtStruct = GetBoard()->m_Modules;
+    int       NbModules, NbDrawItem, NbLayers;
 
     /* Write copper layer count */
     NbLayers = GetBoard()->GetCopperLayerCount();

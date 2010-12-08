@@ -635,7 +635,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 }
 
 
-void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy
@@ -1458,8 +1458,7 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->ClearMsgPanel();
 
-    frame->AppendMsgPanel( _( "Reference" ),
-                           GetRef( ( (WinEDA_SchematicFrame*) frame )->GetSheet() ),
+    frame->AppendMsgPanel( _( "Reference" ), GetRef( ( (SCH_EDIT_FRAME*) frame )->GetSheet() ),
                            DARKCYAN );
 
     if( root_component->IsPower() )

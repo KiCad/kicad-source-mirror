@@ -28,7 +28,8 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         return;
     }
 
-    DrawList = Screen->EEDrawList;
+    DrawList = Screen->GetDrawItems();
+
     while( DrawList )
     {
         switch( DrawList->Type() )
@@ -76,8 +77,7 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
 {
     SCH_LINE* segment, * NewSegment;
 
-    for( SCH_ITEM* DrawList = aScreen->EEDrawList; DrawList;
-         DrawList = DrawList->Next() )
+    for( SCH_ITEM* DrawList = aScreen->GetDrawItems(); DrawList; DrawList = DrawList->Next() )
     {
         if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
             continue;

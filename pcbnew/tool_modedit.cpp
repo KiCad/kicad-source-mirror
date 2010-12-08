@@ -266,9 +266,11 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
                                             wxSize( LISTBOX_WIDTH, -1 ) );
         msg = _( "Auto" );
         m_SelZoomBox->Append( msg );
+
         for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
             msg = _( "Zoom " );
+
             if ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar == 0 )
                 msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
             else
@@ -279,24 +281,26 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
                               GetScreen()->m_ZoomScalar );
                 msg += value;
             }
+
             m_SelZoomBox->Append( msg );
         }
 
         m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
-        // after adding the buttons to the toolbar, must call Realize() to
-        // reflect the changes
+        // after adding the buttons to the toolbar, must call Realize() to reflect the changes
         m_AuxiliaryToolBar->Realize();
     }
 
     // Update tool bar to reflect setting.
     m_SelGridBox->Clear();
-    for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
+
+    for( i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         double value = To_User_Unit( g_UserUnit,
-                                     GetScreen()->m_GridList[i].m_Size.x,
+                                     GetScreen()->GetGrid( i ).m_Size.x,
                                      PCB_INTERNAL_UNIT );
-        if( GetScreen()->m_GridList[i].m_Id != ID_POPUP_GRID_USER )
+
+        if( GetScreen()->GetGrid( i ).m_Id != ID_POPUP_GRID_USER )
         {
             switch( g_UserUnit )
             {
@@ -318,9 +322,9 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
             msg = _( "User Grid" );
         }
 
-        m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
+        m_SelGridBox->Append( msg, (void*) &GetScreen()->GetGrid( i ).m_Id );
 
-        if( m_LastGridSizeId == GetScreen()->m_GridList[i].m_Id )
+        if( m_LastGridSizeId == GetScreen()->GetGrid( i ).m_Id )
             m_SelGridBox->SetSelection( i );
     }
 }

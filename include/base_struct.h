@@ -104,7 +104,7 @@ enum SEARCH_RESULT {
 };
 
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 class WinEDA_DrawFrame;
 class BOARD;
 class EDA_Rect;
@@ -133,14 +133,13 @@ public:
      *to
      * that.  It can also collect or modify the scanned objects.
      *
-     * @param testItem An EDA_BaseStruct to examine.
+     * @param testItem An EDA_ITEM to examine.
      * @param testData is arbitrary data needed by the inspector to determine
      *   if the BOARD_ITEM under test meets its match criteria.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem,
-                                   const void*     testData ) = 0;
+    SEARCH_RESULT virtual Inspect( EDA_ITEM* testItem, const void* testData ) = 0;
 };
 
 
@@ -261,13 +260,13 @@ public:
 class DHEAD;
 
 /**
- * Class EDA_BaseStruct
+ * Class EDA_ITEM
  * is a base class for most all the kicad significant classes, used in
  * schematics and boards.
  */
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
-// class EDA_BaseStruct
+// class EDA_ITEM
 #define IS_CHANGED     (1 << 0)
 #define IS_LINKED      (1 << 1)
 #define IN_EDIT        (1 << 2)
@@ -288,49 +287,44 @@ class DHEAD;
 #define IS_CANCELLED   (1 << 17)   ///< flag set when edit dialogs are canceled when editing a
                                    ///< new object
 
-class EDA_BaseStruct
+class EDA_ITEM
 {
 private:
 
     /**
      * Run time identification, _keep private_ so it can never be changed after
      * a constructor sets it.  See comment near SetType() regarding virtual
-     *functions.
+     * functions.
      */
-    KICAD_T         m_StructType;
+    KICAD_T       m_StructType;
+    int           m_Status;
 
 protected:
-    EDA_BaseStruct* Pnext;          /* Linked list: Link (next struct) */
-    EDA_BaseStruct* Pback;          /* Linked list: Link (previous struct) */
-    EDA_BaseStruct* m_Parent;       /* Linked list: Link (parent struct) */
-    EDA_BaseStruct* m_Son;          /* Linked list: Link (son struct) */
-    DHEAD*          m_List;         ///< which DLIST I am on.
-
+    EDA_ITEM*     Pnext;          /* Linked list: Link (next struct) */
+    EDA_ITEM*     Pback;          /* Linked list: Link (previous struct) */
+    EDA_ITEM*     m_Parent;       /* Linked list: Link (parent struct) */
+    EDA_ITEM*     m_Son;          /* Linked list: Link (son struct) */
+    DHEAD*        m_List;         ///< which DLIST I am on.
 
 public:
-    int             m_Flags;        // flags for editing and other uses.
+    int           m_Flags;        // flags for editing and other uses.
 
-    unsigned long   m_TimeStamp;    // Time stamp used for logical links
-    int             m_Selected;     /* Used by block commands, and selective
+    unsigned long m_TimeStamp;    // Time stamp used for logical links
+    int           m_Selected;     /* Used by block commands, and selective
                                      * editing */
 
     // member used in undo/redo function
-    EDA_BaseStruct* m_Image;       // Link to an image copy to save a copy of
+    EDA_ITEM*     m_Image;       // Link to an image copy to save a copy of
                                    // old parameters values
-
-private:
-    int             m_Status;
-
 private:
     void InitVars();
 
-
 public:
 
-    EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType );
-    EDA_BaseStruct( KICAD_T idType );
-    EDA_BaseStruct( const EDA_BaseStruct& base );
-    virtual ~EDA_BaseStruct() { };
+    EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
+    EDA_ITEM( KICAD_T idType );
+    EDA_ITEM( const EDA_ITEM& base );
+    virtual ~EDA_ITEM() { };
 
     /**
      * Function Type
@@ -341,17 +335,17 @@ public:
     KICAD_T Type()  const { return m_StructType; }
 
 
-    EDA_BaseStruct* Next() const { return (EDA_BaseStruct*) Pnext; }
-    EDA_BaseStruct* Back() const { return (EDA_BaseStruct*) Pback; }
-    EDA_BaseStruct* GetParent() const { return m_Parent; }
-    EDA_BaseStruct* GetSon() const { return m_Son; }
+    EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
+    EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }
+    EDA_ITEM* GetParent() const { return m_Parent; }
+    EDA_ITEM* GetSon() const { return m_Son; }
     DHEAD* GetList() const { return m_List; }
 
-    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
-    void SetParent( EDA_BaseStruct* aParent )   { m_Parent = aParent; }
-    void SetSon( EDA_BaseStruct* aSon )         { m_Son = aSon; }
-    void SetList( DHEAD* aList )                { m_List = aList; }
+    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
+    void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
+    void SetSon( EDA_ITEM* aSon )         { m_Son = aSon; }
+    void SetList( DHEAD* aList )          { m_List = aList; }
 
     inline bool IsNew() const { return m_Flags & IS_NEW; }
     inline bool IsModified() const { return m_Flags & IS_CHANGED; }
@@ -452,7 +446,7 @@ public:
      * walks through the object tree calling the inspector() on each object
      * type requested in scanTypes.
      *
-     * @param listStart The first in a list of EDA_BaseStructs to iterate over.
+     * @param listStart The first in a list of EDA_ITEMs to iterate over.
      * @param inspector Is an INSPECTOR to call on each object that is one of
      *  the requested scanTypes.
      * @param testData Is an aid to testFunc, and should be sufficient to
@@ -464,10 +458,10 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the called INSPECTOR returned
      *  SEARCH_QUIT, else SCAN_CONTINUE;
      */
-    static SEARCH_RESULT IterateForward( EDA_BaseStruct* listStart,
-                                         INSPECTOR*      inspector,
-                                         const void*     testData,
-                                         const KICAD_T   scanTypes[] );
+    static SEARCH_RESULT IterateForward( EDA_ITEM*     listStart,
+                                         INSPECTOR*    inspector,
+                                         const void*   testData,
+                                         const KICAD_T scanTypes[] );
 
 
     /**
@@ -495,7 +489,7 @@ public:
      */
     virtual wxString GetClass() const
     {
-        return wxT( "EDA_BaseStruct" );
+        return wxT( "EDA_ITEM" );
     }
 
 
@@ -569,7 +563,7 @@ enum FILL_T {
  * Class EDA_TextStruct
  * is a basic class to handle texts (labels, texts on components or footprints
  * ..) not used directly.
- * The text classes are derived from EDA_BaseStruct and EDA_TextStruct
+ * The text classes are derived from EDA_ITEM and EDA_TextStruct
  */
 class EDA_TextStruct
 {

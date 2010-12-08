@@ -24,6 +24,15 @@ public:
     ~SCH_SCREEN();
 
     /**
+     * Function GetDrawItems().
+     *
+     * @return - A pointer to the first item in the linked list of draw items.
+     */
+    virtual SCH_ITEM* GetDrawItems() const { return (SCH_ITEM*) BASE_SCREEN::GetDrawItems(); }
+
+    virtual void SetDrawItems( SCH_ITEM* aItem ) { BASE_SCREEN::SetDrawItems( aItem ); }
+
+    /**
      * Function GetCurItem
      * returns the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
      * @return SCH_ITEM* - the one selected, or NULL.
@@ -53,7 +62,7 @@ public:
      */
     void         FreeDrawList();
 
-    void         Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
+    void         Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
      * Remove \a aItem from the schematic associated with this screen.
@@ -62,7 +71,7 @@ public:
      */
     void         RemoveFromDrawList( SCH_ITEM* DrawStruct );
     bool         CheckIfOnDrawList( SCH_ITEM* st );
-    void         AddToDrawList( SCH_ITEM* DrawStruct );
+    void         AddToDrawList( SCH_ITEM* st );
 
     bool         SchematicCleanUp( wxDC* DC = NULL );
     SCH_ITEM*    ExtractWires( bool CreateCopy );
@@ -98,10 +107,10 @@ public:
      */
     void ClearDrawingState();
 
-    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_BaseStruct*) aItem ); }
+    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
     {
-        BASE_SCREEN::InsertItem( aIter, (EDA_BaseStruct*) aItem );
+        BASE_SCREEN::InsertItem( aIter, (EDA_ITEM*) aItem );
     }
 };
 
@@ -127,7 +136,7 @@ public:
 
 private:
     void        AddScreenToList( SCH_SCREEN* aScreen );
-    void        BuildScreenList( EDA_BaseStruct* aItem );
+    void        BuildScreenList( EDA_ITEM* aItem );
 };
 
 #endif /* CLASS_SCREEN_H */

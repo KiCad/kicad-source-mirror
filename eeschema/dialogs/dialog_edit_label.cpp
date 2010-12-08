@@ -23,7 +23,7 @@
 /* Edit the properties of the text (Label, Global label, graphic text).. )
  *  pointed by "aTextStruct"
  */
-void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* aTextItem )
+void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 {
     if( aTextItem == NULL )
         return;
@@ -34,7 +34,7 @@ void WinEDA_SchematicFrame::EditSchematicText( SCH_TEXT* aTextItem )
 }
 
 
-DialogLabelEditor::DialogLabelEditor( WinEDA_SchematicFrame* aParent, SCH_TEXT* aTextItem ) :
+DialogLabelEditor::DialogLabelEditor( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DialogLabelEditor_Base( aParent )
 {
     m_Parent = aParent;

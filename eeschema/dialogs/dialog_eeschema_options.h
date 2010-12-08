@@ -21,7 +21,7 @@ public:
         m_choiceGridSize->SetSelection( select );
     }
     int GetGridSelection( void ) { return m_choiceGridSize->GetSelection(); }
-    void SetGridSizes( const GridArray& grid_sizes, int grid_id );
+    void SetGridSizes( const GRIDS& grid_sizes, int grid_id );
 
     void SetLineWidth( int line_width )
     {

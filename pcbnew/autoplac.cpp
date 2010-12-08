@@ -375,10 +375,10 @@ void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
  */
 int WinEDA_PcbFrame::GenPlaceBoard()
 {
-    int             jj, ii;
-    int             NbCells;
-    EDA_BaseStruct* PtStruct;
-    wxString        msg;
+    int       jj, ii;
+    int       NbCells;
+    EDA_ITEM* PtStruct;
+    wxString  msg;
 
     Board.UnInitBoard();
 

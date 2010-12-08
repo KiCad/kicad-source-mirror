@@ -50,7 +50,7 @@ typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
  * Base class for drawable items used in library components.
  *  (graphic shapes, texts, fields, pins)
  */
-class LIB_DRAW_ITEM : public EDA_BaseStruct
+class LIB_DRAW_ITEM : public EDA_ITEM
 {
     /**
      * Draws the item.
@@ -229,7 +229,7 @@ public:
      */
     virtual EDA_Rect GetBoundingBox()
     {
-        return EDA_BaseStruct::GetBoundingBox();
+        return EDA_ITEM::GetBoundingBox();
     }
 
     /**

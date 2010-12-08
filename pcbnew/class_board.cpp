@@ -22,7 +22,7 @@ BOARD_DESIGN_SETTINGS boardDesignSettings;
 /* Class BOARD: */
 /*****************/
 
-BOARD::BOARD( EDA_BaseStruct* parent, WinEDA_BasePcbFrame* frame ) :
+BOARD::BOARD( EDA_ITEM* parent, WinEDA_BasePcbFrame* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
     m_NetClasses( this )
 {
@@ -751,10 +751,10 @@ unsigned BOARD::GetNodesCount()
  */
 bool BOARD::ComputeBoundaryBox()
 {
-    int             rayon, cx, cy, d, xmin, ymin, xmax, ymax;
-    bool            hasItems = FALSE;
-    EDA_BaseStruct* PtStruct;
-    DRAWSEGMENT*    ptr;
+    int          rayon, cx, cy, d, xmin, ymin, xmax, ymax;
+    bool         hasItems = FALSE;
+    EDA_ITEM*    PtStruct;
+    DRAWSEGMENT* ptr;
 
     xmin = ymin = 0x7FFFFFFFl;
     xmax = ymax = -0x7FFFFFFFl;
@@ -1113,7 +1113,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *           found(0), layer(alayer), layer_mask( g_TabOneLayerMask[alayer] )
  *       {}
  *
- *       SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData
+ *       SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData
  * )
  *       {
  *           BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
@@ -1287,7 +1287,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
         FindModule() : found( 0 )  {}
 
         // implement interface INSPECTOR
-        SEARCH_RESULT Inspect( EDA_BaseStruct* item, const void* data )
+        SEARCH_RESULT Inspect( EDA_ITEM* item, const void* data )
         {
             MODULE*         module = (MODULE*) item;
             const wxString& ref    = *(const wxString*) data;

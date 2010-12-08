@@ -21,7 +21,7 @@ class SCH_NO_CONNECT;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
-class EDA_BaseStruct;
+class EDA_ITEM;
 class SCH_BUS_ENTRY;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
@@ -54,7 +54,7 @@ enum fl_rot_cmp {
 /**
  * Schematic editor (EESchema) main window.
  */
-class WinEDA_SchematicFrame : public WinEDA_DrawFrame
+class SCH_EDIT_FRAME : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox*      m_SelPartBox;
@@ -93,12 +93,12 @@ private:
     wxArrayString         m_replaceStringHistoryList;
 
 public:
-    WinEDA_SchematicFrame( wxWindow* father,
-                           const wxString& title,
-                           const wxPoint& pos, const wxSize& size,
-                           long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    SCH_EDIT_FRAME( wxWindow* father,
+                    const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_SchematicFrame();
+    ~SCH_EDIT_FRAME();
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
@@ -168,9 +168,7 @@ public:
     void             ReCreateVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
-    void             OnHotKey( wxDC*           DC,
-                               int             hotkey,
-                               EDA_BaseStruct* DrawStruct );
+    void             OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     SCH_FIELD* GetCurrentField() { return m_CurrentField; }
 
@@ -234,8 +232,7 @@ public:
                                            bool            mouseWarp );
 
     /* Cross probing with pcbnew */
-    void         SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
-                                      SCH_COMPONENT*  LibItem );
+    void         SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
     void         BuildNetListBase();
@@ -580,7 +577,7 @@ private:
 
 
 public:
-    void     Key( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void     Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     /* Block operations. */
     void     InitBlockPasteInfos();

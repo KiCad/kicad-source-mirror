@@ -785,7 +785,7 @@ EDA_Rect MODULE::GetBoundingBox()
 }
 
 
-/* Virtual function, from EDA_BaseStruct.
+/* Virtual function, from EDA_ITEM.
  * display module info on MsgPanel
  */
 void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
@@ -823,8 +823,9 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
 
-    EDA_BaseStruct* PtStruct = m_Pads;
+    EDA_ITEM* PtStruct = m_Pads;
     nbpad = 0;
+
     while( PtStruct )
     {
         nbpad++;
@@ -835,10 +836,13 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "Pads" ), msg, BLUE );
 
     msg = wxT( ".." );
+
     if( IsLocked() )
         msg[0] = 'L';
+
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
+
     frame->AppendMsgPanel( _( "Stat" ), msg, MAGENTA );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
@@ -850,6 +854,7 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = m_3D_Drawings->m_Shape3DName;
     else
         msg = _( "No 3D shape" );
+
     frame->AppendMsgPanel( _( "3D-Shape" ), msg, RED );
 
     wxString doc     = _( "Doc:  " ) + m_Doc;
@@ -1027,7 +1032,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel + 1, os ) << "<orientation tenths=\"" << m_Orient
                                      << "\"/>\n";
 
-    EDA_BaseStruct* p;
+    EDA_ITEM* p;
 
     NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
     p = m_Pads;

@@ -61,7 +61,7 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
@@ -93,7 +93,7 @@ void SCH_SHEET_PIN::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-void WinEDA_SchematicFrame::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
+void SCH_EDIT_FRAME::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
 {
     NetSheetTextSize     = SheetLabel->m_Size;
     s_CurrentTypeLabel   = SheetLabel->m_Shape;
@@ -123,7 +123,7 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
+int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
 {
     if( aLabel == NULL )
         return wxID_CANCEL;
@@ -166,7 +166,7 @@ int WinEDA_SchematicFrame::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
 
 /* Add a new sheet pin to the sheet at the current cursor position.
  */
-SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 {
     wxString       Line, Text;
     SCH_SHEET_PIN* NewSheetLabel;
@@ -199,16 +199,16 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Create_PinSheet( SCH_SHEET* Sheet, wxDC* D
 /* Automatically create a sheet labels from global labels for each node in
  * the corresponding hierarchy.
  */
-SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 {
-    EDA_BaseStruct* DrawStruct;
-    SCH_SHEET_PIN*  NewSheetLabel;
-    SCH_HIERLABEL*  HLabel = NULL;
+    EDA_ITEM*      DrawStruct;
+    SCH_SHEET_PIN* NewSheetLabel;
+    SCH_HIERLABEL* HLabel = NULL;
 
     if( !Sheet->m_AssociatedScreen )
         return NULL;
 
-    DrawStruct = Sheet->m_AssociatedScreen->EEDrawList;
+    DrawStruct = Sheet->m_AssociatedScreen->GetDrawItems();
     HLabel     = NULL;
 
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
@@ -255,7 +255,7 @@ SCH_SHEET_PIN* WinEDA_SchematicFrame::Import_PinSheet( SCH_SHEET* Sheet, wxDC* D
  * This sheet label can not be put in a pile "undelete" because it would not
  * Possible to link it back it's 'SCH_SHEET' parent.
  */
-void WinEDA_SchematicFrame::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelToDel )
+void SCH_EDIT_FRAME::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelToDel )
 {
     SCH_SHEET* parent = (SCH_SHEET*) aSheetLabelToDel->GetParent();
 

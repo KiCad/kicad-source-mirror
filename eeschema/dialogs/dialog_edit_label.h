@@ -11,19 +11,19 @@
 #include "dialog_edit_label_base.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
 
 class DialogLabelEditor : public DialogLabelEditor_Base
 {
 private:
-    WinEDA_SchematicFrame* m_Parent;
-    SCH_TEXT*              m_CurrentText;
-    wxTextCtrl *           m_textLabel;
+    SCH_EDIT_FRAME* m_Parent;
+    SCH_TEXT*       m_CurrentText;
+    wxTextCtrl*     m_textLabel;
 
 public:
-    DialogLabelEditor( WinEDA_SchematicFrame* parent, SCH_TEXT* aTextItem );
+    DialogLabelEditor( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
     ~DialogLabelEditor(){};
 
 

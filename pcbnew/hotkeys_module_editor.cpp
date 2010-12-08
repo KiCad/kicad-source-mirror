@@ -21,7 +21,7 @@
 
 
 /*****************************************************************************************/
-void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_BaseStruct* DrawStruct )
+void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStruct )
 /*****************************************************************************************/
 
 /* Hot keys. Some commands are relative to the item under the mouse cursor

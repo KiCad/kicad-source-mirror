@@ -286,7 +286,7 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
  * The net edge pad with mouse or module locates the mouse.
  * Delete if the ratsnest if no module or pad is selected.
  */
-void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC )
+void WinEDA_PcbFrame::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 {
     D_PAD*   pt_pad = NULL;
     MODULE*  Module = NULL;

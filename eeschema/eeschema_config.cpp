@@ -36,7 +36,7 @@
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
-    DIALOG_EESCHEMA_CONFIG CfgFrame( (WinEDA_SchematicFrame *)GetParent(), this );
+    DIALOG_EESCHEMA_CONFIG CfgFrame( (SCH_EDIT_FRAME *)GetParent(), this );
 
     CfgFrame.ShowModal();
 }
@@ -54,7 +54,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxFileName fn;
-    WinEDA_SchematicFrame * schFrame = ( WinEDA_SchematicFrame * ) GetParent();
+    SCH_EDIT_FRAME* schFrame = ( SCH_EDIT_FRAME* ) GetParent();
 
     switch( id )
     {
@@ -103,7 +103,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
-void WinEDA_SchematicFrame::OnColorConfig( wxCommandEvent& aEvent )
+void SCH_EDIT_FRAME::OnColorConfig( wxCommandEvent& aEvent )
 {
     DIALOG_COLOR_CONFIG dlg( this );
 
@@ -111,7 +111,7 @@ void WinEDA_SchematicFrame::OnColorConfig( wxCommandEvent& aEvent )
 }
 
 
-void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
+void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
     DIALOG_EESCHEMA_CONFIG CfgFrame( this, this );
 
@@ -119,7 +119,7 @@ void WinEDA_SchematicFrame::InstallConfigFrame( wxCommandEvent& event )
 }
 
 
-void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxFileName fn;
@@ -166,20 +166,19 @@ void WinEDA_SchematicFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_SchematicFrame::Process_Config error" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Config error" ) );
     }
 }
 
 
-void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 {
     wxArrayString units;
-    GridArray& grid_list = GetBaseScreen()->m_GridList;
+    GRIDS grid_list;
+
+    GetBaseScreen()->GetGrids( grid_list );
 
     DIALOG_EESCHEMA_OPTIONS dlg( this );
-
-    wxLogDebug( wxT( "Current grid array index %d." ),
-                grid_list.Index( GetBaseScreen()->GetGrid() ) );
 
     units.Add( GetUnitsLabel( INCHES ) );
     units.Add( GetUnitsLabel( MILLIMETRES ) );
@@ -204,8 +203,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
 
     for( unsigned i=0; i<tfnames.size(); ++i )
     {
-        D(printf("dlg.SetFieldName(%d, '%s')\n",
-            i, CONV_TO_UTF8( tfnames[i].m_Name) );)
+        D(printf("dlg.SetFieldName(%d, '%s')\n", i, CONV_TO_UTF8( tfnames[i].m_Name) );)
 
         dlg.SetFieldName( i, tfnames[i].m_Name );
     }
@@ -215,8 +213,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
 
     g_UserUnit = (UserUnitType)dlg.GetUnitsSelection();
 
-    GetBaseScreen()->SetGrid(
-        grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
+    GetBaseScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 
     g_DrawDefaultLineThickness = dlg.GetLineWidth();
     g_DefaultTextLabelSize = dlg.GetTextSize();
@@ -235,6 +232,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
     // look like the component field property editor, showing visibility and value also
 
     DeleteAllTemplateFieldNames();
+
     for( int i=0; i<8; ++i )    // no. fields in this dialog window
     {
         templateFieldName = dlg.GetFieldName( i );
@@ -262,7 +260,7 @@ void WinEDA_SchematicFrame::OnSetOptions( wxCommandEvent& event )
  * to define local variables.  The old method of statically building the array
  * at compile time requiring global variable definitions.
  */
-PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters( void )
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
@@ -349,8 +347,7 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetProjectFileParameters( void )
 /*
  * Load the Kicad project file (*.pro) settings specific to EESchema.
  */
-bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
-                                             bool ForceRereadConfig )
+bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig )
 {
     wxFileName              fn;
     bool                    IsRead = TRUE;
@@ -396,7 +393,7 @@ bool WinEDA_SchematicFrame::LoadProjectFile( const wxString& CfgFileName,
 /*
  * Save the Kicad project file (*.pro) settings specific to EESchema.
  */
-void WinEDA_SchematicFrame::SaveProjectFile( wxWindow* displayframe, bool askoverwrite )
+void SCH_EDIT_FRAME::SaveProjectFile( wxWindow* displayframe, bool askoverwrite )
 {
     wxFileName fn;
 
@@ -457,7 +454,7 @@ static const wxString SimulatorCommandEntry( wxT( "SimCmdLine" ) );
  *       global variables or move them to the object class where they are
  *       used.
  */
-PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
 {
     if( !m_configSettings.empty() )
         return m_configSettings;
@@ -549,7 +546,7 @@ PARAM_CFG_ARRAY& WinEDA_SchematicFrame::GetConfigurationSettings( void )
 /*
  * Load the EESchema configuration parameters.
  */
-void WinEDA_SchematicFrame::LoadSettings()
+void SCH_EDIT_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
@@ -647,7 +644,7 @@ void WinEDA_SchematicFrame::LoadSettings()
 /*
  * Save the EESchema configuration parameters.
  */
-void WinEDA_SchematicFrame::SaveSettings()
+void SCH_EDIT_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 

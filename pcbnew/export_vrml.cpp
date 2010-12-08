@@ -688,9 +688,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text ) /*{{{*/
 static void export_vrml_drawings( BOARD* pcb ) /*{{{*/
 {
     /* draw graphic items */
-    for( EDA_BaseStruct* drawing = pcb->m_Drawings;
-        drawing != 0;
-        drawing = drawing->Next() )
+    for( EDA_ITEM* drawing = pcb->m_Drawings;  drawing != 0;  drawing = drawing->Next() )
     {
         switch( drawing->Type() )
         {
@@ -995,10 +993,9 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     /* Reference and value */
     export_vrml_text_module( aModule->m_Reference );
     export_vrml_text_module( aModule->m_Value );
+
     /* Export module edges */
-    for( EDA_BaseStruct* item = aModule->m_Drawings;
-        item != NULL;
-        item = item->Next() )
+    for( EDA_ITEM* item = aModule->m_Drawings;  item != NULL;  item = item->Next() )
     {
         switch( item->Type() )
         {

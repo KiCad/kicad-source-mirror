@@ -52,7 +52,7 @@
  *
  *  Redo command
  *  - delete item(s) old command:
- *      => deleted items are moved in EEDrawList list, and in
+ *      => deleted items are moved in GetDrawItems() list, and in
  *
  *  - change item(s) command
  *      => the copy of item(s) is moved in Undo list
@@ -78,7 +78,7 @@
  *  swap data between Item and its copy, pointed by its .m_Image member
  * swapped data is data modified by edition, so not all values are swapped
  */
-void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
+void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
 {
     if( aItem == NULL || aImage == NULL )
     {
@@ -195,8 +195,8 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
  *      UR_MOVED
  *
  * If it is a delete command, items are put on list with the .Flags member
- * set to UR_DELETED.  When it will be really deleted, the EEDrawList and the
- * sub-hierarchy will be deleted.  If it is only a copy, the EEDrawList and the
+ * set to UR_DELETED.  When it will be really deleted, the GetDrawItems() and the
+ * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
  * sub-hierarchy must NOT be deleted.
  *
  * Note:
@@ -207,9 +207,9 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
  * wires saved in Undo List (for Undo or Redo commands, saved wires will be
  * exchanged with current wire list
  */
-void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
-                                                UndoRedoOpType aCommandType,
-                                                const wxPoint& aTransformPoint )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
+                                         UndoRedoOpType aCommandType,
+                                         const wxPoint& aTransformPoint )
 {
     /* Does not save a null item.
      * but if aCommandType == UR_WIRE_IMAGE, we must save null item.
@@ -225,6 +225,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER        itemWrapper( aItem, aCommandType );
+
     if( aItem )
     {
         itemWrapper.m_PickedItemType = aItem->Type();
@@ -275,9 +276,9 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
  * @param aItemsList = a PICKED_ITEMS_LIST of items to save
  * @param aTypeCommand = type of command ( UR_CHANGED, UR_NEW, UR_DELETED ...
  */
-void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                                UndoRedoOpType     aTypeCommand,
-                                                const wxPoint&     aTransformPoint )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+                                         UndoRedoOpType     aTypeCommand,
+                                         const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
@@ -323,8 +324,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ),
-                        command );
+            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
             wxMessageBox( msg );
         }
         break;
@@ -352,8 +352,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
  * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
  * @param aRedoCommand = a bool: true for redo, false for undo
  */
-void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
-                                                    bool               aRedoCommand )
+void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
@@ -381,8 +380,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
 
         case UR_DELETED: /* deleted items are put in EEdrawList, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
-            item->SetNext( GetScreen()->EEDrawList );
-            GetScreen()->EEDrawList = item;
+            item->SetNext( GetScreen()->GetDrawItems() );
+            GetScreen()->SetDrawItems( item );
             break;
 
         case UR_MOVED:
@@ -422,8 +421,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
             while( item )
             {
                 SCH_ITEM* nextitem = item->Next();
-                item->SetNext( GetScreen()->EEDrawList );
-                GetScreen()->EEDrawList = item;
+                item->SetNext( GetScreen()->GetDrawItems() );
+                GetScreen()->SetDrawItems( item );
                 item->m_Flags = 0;
                 item = nextitem;
             }
@@ -450,7 +449,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
  *  - Get the previous version of the schematic from undo list
  *  @return none
  */
-void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
+void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -471,7 +470,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
     DrawPanel->Refresh();
 }
 
@@ -483,7 +482,7 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
  *  - Get the previous version from Redo list
  *  @return none
  */
-void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
+void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
@@ -505,6 +504,6 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
     DrawPanel->Refresh();
 }

@@ -623,7 +623,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
     // Print list of items
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        EDA_BaseStruct* item = aList[ii].m_RootCmp;
+        EDA_ITEM* item = aList[ii].m_RootCmp;
+
         if( item == NULL )
             continue;
 
@@ -860,11 +861,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
     std::vector <OBJ_CMP_TO_LIST>& aList,
     bool                           aIncludeSubComponents )
 {
-    EDA_BaseStruct* schItem;
-    SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  entry;
-    std::string     CmpName;
-    wxString        msg;
+    EDA_ITEM*      schItem;
+    SCH_COMPONENT* DrawLibItem;
+    LIB_COMPONENT* entry;
+    std::string    CmpName;
+    wxString       msg;
 
     msg = _( "\n#Cmp ( order = Value )" );
 

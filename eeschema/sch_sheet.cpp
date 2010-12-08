@@ -111,7 +111,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     m_TimeStamp = GetTimeStamp();
 
-    // sheets are added to the EEDrawList like other schematic components.
+    // sheets are added to the GetDrawItems() like other schematic components.
     // however, in order to preserve the hierarchy (through m_Parent pointers),
     // a duplicate of the sheet is added to m_SubSheet array.
     // must be a duplicate, references just work for a two-layer structure.
@@ -249,7 +249,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 /* creates a copy of a sheet
- *  The linked data itself (EEDrawList) is not duplicated
+ *  The linked data itself (GetDrawItems()) is not duplicated
  */
 SCH_SHEET* SCH_SHEET::GenCopy()
 {
@@ -372,8 +372,8 @@ bool SCH_SHEET::HasUndefinedLabels()
     BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
-        EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
-        SCH_HIERLABEL*  HLabel     = NULL;
+        EDA_ITEM* DrawStruct  = m_AssociatedScreen->GetDrawItems();
+        SCH_HIERLABEL* HLabel = NULL;
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
@@ -396,7 +396,7 @@ bool SCH_SHEET::HasUndefinedLabels()
 }
 
 
-void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* Place list structures for new sheet. */
     bool isnew = ( m_Flags & IS_NEW ) ? true : false;
@@ -430,7 +430,8 @@ void SCH_SHEET::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
         }
     }
 
-    SCH_ITEM::Place( frame, DC ); //puts it on the EEDrawList.
+    SCH_ITEM::Place( frame, DC ); //puts it on the GetDrawItems().
+
     if( isnew )
     {
         frame->SetSheetNumberAndCount();
@@ -448,8 +449,8 @@ void SCH_SHEET::CleanupSheet()
     while( i != m_labels.end() )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
-        EDA_BaseStruct* DrawStruct = m_AssociatedScreen->EEDrawList;
-        SCH_HIERLABEL*  HLabel     = NULL;
+        EDA_ITEM* DrawStruct = m_AssociatedScreen->GetDrawItems();
+        SCH_HIERLABEL* HLabel = NULL;
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
@@ -656,12 +657,14 @@ int SCH_SHEET::ComponentCount()
 
     if( m_AssociatedScreen )
     {
-        EDA_BaseStruct* bs;
-        for( bs = m_AssociatedScreen->EEDrawList; bs != NULL; bs = bs->Next() )
+        EDA_ITEM* bs;
+
+        for( bs = m_AssociatedScreen->GetDrawItems(); bs != NULL; bs = bs->Next() )
         {
             if( bs->Type() == TYPE_SCH_COMPONENT )
             {
                 SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
+
                 if( Cmp->GetField( VALUE )->m_Text.GetChar( 0 ) != '#' )
                     n++;
             }
@@ -688,7 +691,8 @@ bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
 {
     if( m_AssociatedScreen )
     {
-        EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
+        EDA_ITEM* strct = m_AssociatedScreen->GetDrawItems();
+
         while( strct )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
@@ -728,17 +732,22 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
     if( m_AssociatedScreen )
     {
         aList->Push( this );
+
         if( m_AssociatedScreen == aScreen )
             return true;
-        EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
+
+        EDA_ITEM* strct = m_AssociatedScreen->GetDrawItems();
+
         while( strct )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
             {
                 SCH_SHEET* ss = (SCH_SHEET*) strct;
+
                 if( ss->LocatePathOfScreen( aScreen, aList ) )
                     return true;
             }
+
             strct = strct->Next();
         }
 
@@ -754,10 +763,10 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
  *  if a screen already exists, the file is already read.
  *  m_AssociatedScreen point on the screen, and its m_RefCount is incremented
  *  else creates a new associated screen and load the data file.
- *  @param aFrame = a WinEDA_SchematicFrame pointer to the maim schematic frame
+ *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic frame
  *  @return true if OK
  */
-bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
+bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 {
     bool success = true;
 
@@ -777,17 +786,21 @@ bool SCH_SHEET::Load( WinEDA_SchematicFrame* aFrame )
             m_AssociatedScreen = new SCH_SCREEN();
             m_AssociatedScreen->m_RefCount++;
             success = aFrame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
+
             if( success )
             {
-                EDA_BaseStruct* bs = m_AssociatedScreen->EEDrawList;
+                EDA_ITEM* bs = m_AssociatedScreen->GetDrawItems();
+
                 while( bs )
                 {
                     if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
                     {
                         SCH_SHEET* sheetstruct = (SCH_SHEET*) bs;
+
                         if( !sheetstruct->Load( aFrame ) )
                             success = false;
                     }
+
                     bs = bs->Next();
                 }
             }
@@ -810,7 +823,8 @@ int SCH_SHEET::CountSheets()
 
     if( m_AssociatedScreen )
     {
-        EDA_BaseStruct* strct = m_AssociatedScreen->EEDrawList;
+        EDA_ITEM* strct = m_AssociatedScreen->GetDrawItems();
+
         for( ; strct; strct = strct->Next() )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
@@ -841,8 +855,7 @@ wxString SCH_SHEET::GetFileName( void )
  * @param aFileName = the new filename
  * @param aFrame = the schematic frame
  */
-bool SCH_SHEET::ChangeFileName( WinEDA_SchematicFrame* aFrame,
-                                const wxString&        aFileName )
+bool SCH_SHEET::ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName )
 {
     if( ( GetFileName() == aFileName ) && m_AssociatedScreen )
         return true;

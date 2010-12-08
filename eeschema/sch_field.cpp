@@ -371,7 +371,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 }
 
 
-void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     int            fieldNdx;
     LIB_COMPONENT* Entry;

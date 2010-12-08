@@ -35,7 +35,7 @@ static int  ReplaceDuplicatedTimeStamps();
 /* Set a sheet number, the sheet count for sheets in the whole schematic
  * and update the date in all screens
  */
-void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
+void SCH_EDIT_FRAME::UpdateSheetNumberAndDate()
 {
     wxString    date = GenDate();
     SCH_SCREENS s_list;
@@ -69,11 +69,13 @@ void ReAnnotatePowerSymbolsOnly( void )
     for( sheet = SheetList.GetFirst(); sheet != NULL;
          sheet = SheetList.GetNext() )
     {
-        EDA_BaseStruct* DrawList = sheet->LastDrawList();
+        EDA_ITEM* DrawList = sheet->LastDrawList();
+
         for( ; DrawList != NULL; DrawList = DrawList->Next() )
         {
             if( DrawList->Type() != TYPE_SCH_COMPONENT )
                 continue;
+
             SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
             LIB_COMPONENT* Entry =
                 CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
@@ -204,8 +206,7 @@ static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
  *                             annotation relative to the current sheet only
  * @param aRedraw : true to refresh display
  */
-void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
-                                              bool aRedraw )
+void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 {
     SCH_ITEM*   strct;
     SCH_SCREEN* screen;
@@ -218,9 +219,11 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
 
     if( screen == NULL )
         return;
+
     while( screen )
     {
-        strct = screen->EEDrawList;
+        strct = screen->GetDrawItems();
+
         for( ; strct; strct = strct->Next() )
         {
             if( strct->Type() == TYPE_SCH_COMPONENT )
@@ -267,11 +270,11 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
  *              stamps are used to handle annotation mainly in complex
  *              hierarchies.
  */
-void AnnotateComponents( WinEDA_SchematicFrame* parent,
-                         bool                   annotateSchematic,
-                         int                    sortOption,
-                         bool                   resetAnnotation,
-                         bool                   repairsTimestamps )
+void AnnotateComponents( SCH_EDIT_FRAME* parent,
+                         bool            annotateSchematic,
+                         int             sortOption,
+                         bool            resetAnnotation,
+                         bool            repairsTimestamps )
 {
     std::vector <OBJ_CMP_TO_LIST> ComponentsList;
 
@@ -358,18 +361,18 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
                                  SCH_SHEET_PATH*                aSheet )
 {
-    int             NbrCmp   = 0;
-    EDA_BaseStruct* DrawList = aSheet->LastDrawList();
-    SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  Entry;
+    int            NbrCmp   = 0;
+    EDA_ITEM*      DrawList = aSheet->LastDrawList();
+    SCH_COMPONENT* DrawLibItem;
+    LIB_COMPONENT* Entry;
 
     for( ; DrawList != NULL;   DrawList = DrawList->Next() )
     {
         if( DrawList->Type() == TYPE_SCH_COMPONENT )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+
             if( Entry == NULL )
                 continue;
 
@@ -707,8 +710,7 @@ static int ExistUnit( int aObjet, int Unit,
  *                        false = search in whole hierarchy (usual search).
  * @return errors count
  */
-int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
-                                          bool           aOneSheetOnly )
+int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     int            error;
     wxString       Buff;
@@ -1005,10 +1007,11 @@ int ReplaceDuplicatedTimeStamps()
     std::vector <SCH_ITEM*> itemlist;
     SCH_SCREEN*             screen;
     SCH_ITEM* item;
-    for( screen = ScreenList.GetFirst(); screen != NULL;
-         screen = ScreenList.GetNext() )
+
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        item = screen->EEDrawList;
+        item = screen->GetDrawItems();
+
         while( item )
         {
             if( ( item->Type() == DRAW_SHEET_STRUCT_TYPE )

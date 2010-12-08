@@ -87,7 +87,7 @@ BEGIN_EVENT_TABLE( SCH_PREVIEW_FRAME, wxPreviewFrame )
 END_EVENT_TABLE()
 
 
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent ) :
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent ) :
     DIALOG_PRINT_USING_PRINTER_BASE( aParent )
 {
     wxASSERT( aParent != NULL );
@@ -97,15 +97,15 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* a
 }
 
 
-WinEDA_SchematicFrame* DIALOG_PRINT_USING_PRINTER::GetParent() const
+SCH_EDIT_FRAME* DIALOG_PRINT_USING_PRINTER::GetParent() const
 {
-    return ( WinEDA_SchematicFrame* ) wxWindow::GetParent();
+    return ( SCH_EDIT_FRAME* ) wxWindow::GetParent();
 }
 
 
 void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 {
-    WinEDA_SchematicFrame* parent = GetParent();
+    SCH_EDIT_FRAME* parent = GetParent();
 
     if ( GetSizer() )
         GetSizer()->SetSizeHints( this );
@@ -129,7 +129,7 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 {
-    WinEDA_SchematicFrame* parent = GetParent();
+    SCH_EDIT_FRAME* parent = GetParent();
 
     if( !IsIconized() )
     {
@@ -148,7 +148,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
  */
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 {
-    WinEDA_SchematicFrame* parent = GetParent();
+    SCH_EDIT_FRAME* parent = GetParent();
 
     wxPageSetupDialog pageSetupDialog( this, &parent->GetPageSetupData() );
 
@@ -162,7 +162,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
  */
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
-    WinEDA_SchematicFrame* parent = GetParent();
+    SCH_EDIT_FRAME* parent = GetParent();
 
     parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
     parent->SetPrintSheetReference( m_checkReference->IsChecked() );
@@ -191,7 +191,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 {
-    WinEDA_SchematicFrame* parent = GetParent();
+    SCH_EDIT_FRAME* parent = GetParent();
 
     parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
     parent->SetPrintSheetReference( m_checkReference->IsChecked() );
@@ -221,7 +221,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
     wxString msg;
-    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_Parent->GetParent();
     msg.Printf( _( "Print page %d" ), page );
     parent->ClearMsgPanel();
     parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
@@ -285,7 +285,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
         return false;
 
 #ifdef __WXDEBUG__
-    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_Parent->GetParent();
     wxLogDebug( wxT( "Printer name: " ) +
                 parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),
@@ -315,7 +315,7 @@ void SCH_PRINTOUT::DrawPage()
     EDA_Rect oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    WinEDA_SchematicFrame* parent = m_Parent->GetParent();
+    SCH_EDIT_FRAME* parent = m_Parent->GetParent();
     WinEDA_DrawPanel* panel = parent->DrawPanel;
 
     wxBusyCursor dummy;

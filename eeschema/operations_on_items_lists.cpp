@@ -81,22 +81,22 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
  */
 void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 {
-    SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->GetParent();
-    PICKED_ITEMS_LIST      itemsList;
-    ITEM_PICKER            itemWrapper;
+    SCH_SCREEN*        screen = (SCH_SCREEN*) panel->GetScreen();
+    SCH_EDIT_FRAME*    frame  = (SCH_EDIT_FRAME*) panel->GetParent();
+    PICKED_ITEMS_LIST  itemsList;
+    ITEM_PICKER        itemWrapper;
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         itemWrapper.m_PickedItem     = item;
         itemWrapper.m_UndoRedoStatus = UR_DELETED;
+
         if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
         {
             /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT(
-                             "DeleteItemsInList() err: unexpected \
-DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE"                                                                     ) );
+            wxMessageBox( wxT("DeleteItemsInList() err: unexpected \
+DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
         }
         else
         {
@@ -118,8 +118,8 @@ DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE"                                        
  */
 void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 {
-    SCH_SCREEN*            screen = (SCH_SCREEN*) panel->GetScreen();
-    WinEDA_SchematicFrame* frame  = (WinEDA_SchematicFrame*) panel->GetParent();
+    SCH_SCREEN*     screen = (SCH_SCREEN*) panel->GetScreen();
+    SCH_EDIT_FRAME* frame  = (SCH_EDIT_FRAME*) panel->GetParent();
 
     if( !DrawStruct )
         return;
@@ -128,11 +128,9 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
     {
         /* This structure is attached to a node, and is not accessible by
          * the global list directly. */
-        frame->SaveCopyInUndoList(
-            (SCH_ITEM*)( (SCH_SHEET_PIN*) DrawStruct )->GetParent(),
-            UR_CHANGED );
-        frame->DeleteSheetLabel( DC ? true : false,
-                                 (SCH_SHEET_PIN*) DrawStruct );
+        frame->SaveCopyInUndoList( (SCH_ITEM*)( (SCH_SHEET_PIN*) DrawStruct )->GetParent(),
+                                   UR_CHANGED );
+        frame->DeleteSheetLabel( DC ? true : false, (SCH_SHEET_PIN*) DrawStruct );
         return;
     }
     else
@@ -199,8 +197,8 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             }
 
             SetaParent( newitem, screen );
-            newitem->SetNext( screen->EEDrawList );
-            screen->EEDrawList = newitem;
+            newitem->SetNext( screen->GetDrawItems() );
+            screen->SetDrawItems( newitem );
         }
     }
 

@@ -44,12 +44,12 @@
 class DIALOG_PLOT_SCHEMATIC_DXF : public DIALOG_PLOT_SCHEMATIC_DXF_BASE
 {
 private:
-    WinEDA_SchematicFrame* m_Parent;
+    SCH_EDIT_FRAME* m_Parent;
 
 public:
 
     /// Constructors
-    DIALOG_PLOT_SCHEMATIC_DXF( WinEDA_SchematicFrame* parent );
+    DIALOG_PLOT_SCHEMATIC_DXF( SCH_EDIT_FRAME* parent );
 
 private:
     static bool m_plotColorOpt;
@@ -74,14 +74,14 @@ bool DIALOG_PLOT_SCHEMATIC_DXF::m_plot_Sheet_Ref = true;
 
 
 
-void WinEDA_SchematicFrame::ToPlot_DXF( wxCommandEvent& event )
+void SCH_EDIT_FRAME::ToPlot_DXF( wxCommandEvent& event )
 {
     DIALOG_PLOT_SCHEMATIC_DXF DXF_frame( this );
     DXF_frame.ShowModal();
 }
 
 
-DIALOG_PLOT_SCHEMATIC_DXF::DIALOG_PLOT_SCHEMATIC_DXF( WinEDA_SchematicFrame* parent )
+DIALOG_PLOT_SCHEMATIC_DXF::DIALOG_PLOT_SCHEMATIC_DXF( SCH_EDIT_FRAME* parent )
     : DIALOG_PLOT_SCHEMATIC_DXF_BASE( parent )
 {
     m_Parent = parent;
@@ -143,13 +143,13 @@ void DIALOG_PLOT_SCHEMATIC_DXF::initOptVars()
 
 void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 {
-    WinEDA_SchematicFrame* schframe  = (WinEDA_SchematicFrame*) m_Parent;
-    SCH_SCREEN*            screen    = schframe->GetScreen();
-    SCH_SCREEN*            oldscreen = screen;
-    SCH_SHEET_PATH*        sheetpath, * oldsheetpath = schframe->GetSheet();
-    wxString               PlotFileName;
-    Ki_PageDescr*          PlotSheet;
-    wxPoint                plot_offset;
+    SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_Parent;
+    SCH_SCREEN*     screen    = schframe->GetScreen();
+    SCH_SCREEN*     oldscreen = screen;
+    SCH_SHEET_PATH* sheetpath, * oldsheetpath = schframe->GetSheet();
+    wxString        PlotFileName;
+    Ki_PageDescr*   PlotSheet;
+    wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters
@@ -241,7 +241,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
-    PlotDrawlist( plotter, screen->EEDrawList );
+    PlotDrawlist( plotter, screen->GetDrawItems() );
 
     /* fin */
     plotter->end_plot();

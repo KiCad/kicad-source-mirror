@@ -14,10 +14,10 @@
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_SchematicFrame* aParent );
+    DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent );
     ~DIALOG_PRINT_USING_PRINTER() {};
 
-    WinEDA_SchematicFrame* GetParent() const;
+    SCH_EDIT_FRAME* GetParent() const;
 
 private:
     void OnCloseWindow( wxCloseEvent& event );

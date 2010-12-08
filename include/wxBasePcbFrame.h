@@ -121,7 +121,7 @@ public:
 public:
 
     // Read/write functions:
-    EDA_BaseStruct* ReadDrawSegmentDescr( FILE* File, int* LineNum );
+    EDA_ITEM* ReadDrawSegmentDescr( FILE* File, int* LineNum );
     int             ReadListeSegmentDescr( FILE*  File,
                                            TRACK* PtSegm,
                                            int    StructType,

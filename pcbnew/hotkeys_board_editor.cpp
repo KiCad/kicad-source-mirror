@@ -25,9 +25,9 @@
  *  Some commands are relatives to the item under the mouse cursor
  *  @param aDC = current device context
  *  @param hotkey = hotkey code (ascii or wxWidget code for special keys)
- *  @param aItem = NULL or pointer on a EDA_BaseStruct under the mouse cursor
+ *  @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
  */
-void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_BaseStruct* aItem )
+void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem )
 {
     if( aHotkeyCode == 0 )
         return;

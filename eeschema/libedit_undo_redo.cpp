@@ -12,7 +12,7 @@
 #include "class_libentry.h"
 
 
-void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int unused_flag )
+void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int unused_flag )
 {
     LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;

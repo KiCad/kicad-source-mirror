@@ -34,12 +34,12 @@
  *  - label
  *  - pin
  *  - component
- * @return  an EDA_BaseStruct pointer on the item or NULL if no item found
+ * @return  an EDA_ITEM pointer on the item or NULL if no item found
  * @param IncludePin = true to search for pins, false to ignore them
  *
  *  For some items, characteristics are displayed on the screen.
  */
-SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool IncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
 {
     SCH_ITEM*      DrawStruct;
     wxString       msg;
@@ -66,8 +66,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         break;
 
     case TYPE_SCH_COMPONENT:
-        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur,
-                            &LibItem );
+        Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break;  // Priority is probing a pin first
         LibItem = (SCH_COMPONENT*) DrawStruct;
@@ -75,8 +74,7 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
         break;
 
     default:
-        Pin = LocateAnyPin( GetScreen()->EEDrawList, GetScreen()->m_Curseur,
-                            &LibItem );
+        Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
         break;
 
     case COMPONENT_PIN_DRAW_TYPE:
@@ -113,14 +111,14 @@ SCH_ITEM* WinEDA_SchematicFrame:: SchematicGeneralLocateAndDisplay( bool Include
  *  - label
  *  - pin
  *  - component
- * @return  an EDA_BaseStruct pointer on the item or NULL if no item found
+ * @return  an EDA_ITEM pointer on the item or NULL if no item found
  * @param refpoint = the wxPoint location where to search
  * @param IncludePin = true to search for pins, false to ignore them
  *
  *  For some items, characteristics are displayed on the screen.
  */
-SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
-                                                                   bool           IncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
+                                                            bool           IncludePin )
 {
     SCH_ITEM*      DrawStruct;
     LIB_PIN*       Pin;
@@ -227,7 +225,7 @@ SCH_ITEM* WinEDA_SchematicFrame::SchematicGeneralLocateAndDisplay( const wxPoint
 }
 
 
-void WinEDA_SchematicFrame::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 {
     wxRealPoint delta;
     SCH_SCREEN* screen = GetScreen();

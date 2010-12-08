@@ -25,8 +25,8 @@
 #include "dialog_eeschema_config.h"
 
 
-DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* aSchFrame,
-                                                WinEDA_DrawFrame*      aParent )
+DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME*   aSchFrame,
+                                                WinEDA_DrawFrame* aParent )
     : DIALOG_EESCHEMA_CONFIG_FBP( aParent )
 {
     wxString msg;

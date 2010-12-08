@@ -256,8 +256,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[] =
  * Hot keys. Some commands are relative to the item under the mouse cursor
  * Commands are case insensitive
  */
-void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
-                                      EDA_BaseStruct* DrawStruct )
+void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
@@ -346,7 +345,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             RefreshToolBar = LocateAndDeleteItem( this, DC );
             OnModify();
             GetScreen()->SetCurItem( NULL );
-            TestDanglingEnds( GetScreen()->EEDrawList, DC );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         }
         break;
 
@@ -659,7 +658,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
-            TestDanglingEnds( GetScreen()->EEDrawList, DC );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         }
         break;
 
@@ -837,7 +836,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  * under the mouse cursor
  * Commands are case insensitive
  */
-void LIB_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
+void LIB_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );

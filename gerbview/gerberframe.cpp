@@ -158,8 +158,10 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     int pointSize = font.GetPointSize();
     int screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
+
     m_LayersManager = new GERBER_LAYER_WIDGET( this, DrawPanel, pointSize );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
@@ -202,7 +204,8 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
         m_auimgr.AddPane( m_VToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
 
-    m_auimgr.AddPane( m_LayersManager, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
+    m_auimgr.AddPane( m_LayersManager,
+                      lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
 
     if( m_OptionsToolBar )
         m_auimgr.AddPane( m_OptionsToolBar,
@@ -249,12 +252,15 @@ int WinEDA_GerberFrame::BestZoom()
     EDA_Rect bbox;
 
     BOARD_ITEM* item = GetBoard()->m_Drawings;
+
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
         bbox.Merge( gerb_item->GetBoundingBox() );
     }
-    bbox.Inflate( GetScreen()->GetGridSize().x * 2, GetScreen()->GetGridSize().y * 2);
+
+    bbox.Inflate( wxRound( GetScreen()->GetGridSize().x * 2 ),
+                  wxRound( GetScreen()->GetGridSize().y * 2 ) );
     wxSize size = DrawPanel->GetClientSize();
     x = bbox.GetWidth() / (double) size.x;
     y = bbox.GetHeight() / (double) size.y;
@@ -264,9 +270,8 @@ int WinEDA_GerberFrame::BestZoom()
     return  best_zoom;
 }
 
-/**************************************/
+
 void WinEDA_GerberFrame::LoadSettings()
-/**************************************/
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -277,10 +282,14 @@ void WinEDA_GerberFrame::LoadSettings()
     long pageSize_opt;
     config->Read( GerbviewShowPageSizeOption, &pageSize_opt, 0l );
     int imax = 0;
+
     for( ; g_GerberPageSizeList[imax] != NULL; imax++ );
+
     if( pageSize_opt < 0 || pageSize_opt >= imax )
         pageSize_opt = 0;
+
     GetScreen()->m_CurrentSheetDesc = g_GerberPageSizeList[pageSize_opt];
+
     if ( pageSize_opt > 0 )
     {
         m_Draw_Sheet_Ref = true;
@@ -291,9 +300,8 @@ void WinEDA_GerberFrame::LoadSettings()
     SetElementVisibility( DCODES_VISIBLE, tmp );
 }
 
-/**************************************/
+
 void WinEDA_GerberFrame::SaveSettings()
-/**************************************/
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -305,6 +313,7 @@ void WinEDA_GerberFrame::SaveSettings()
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 
     long pageSize_opt = 0;
+
     if( m_Draw_Sheet_Ref )
     {
         for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
@@ -341,6 +350,7 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
     syncLayerWidget();
 }
 
+
 /**
  * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
@@ -350,16 +360,18 @@ bool WinEDA_GerberFrame::IsGridVisible()
     return IsElementVisible( GERBER_GRID_VISIBLE );
 }
 
+
 /**
  * Function SetGridVisibility() , virtual
  * It may be overloaded by derived classes
  * if you want to store/retrieve the grid visiblity in configuration.
  * @param aVisible = true if the grid must be shown
  */
-void WinEDA_GerberFrame::SetGridVisibility(bool aVisible)
+void WinEDA_GerberFrame::SetGridVisibility( bool aVisible )
 {
-    SetElementVisibility(GERBER_GRID_VISIBLE, aVisible);
+    SetElementVisibility( GERBER_GRID_VISIBLE, aVisible );
 }
+
 
 /**
  * Function GetGridColor() , virtual
@@ -369,6 +381,7 @@ int WinEDA_GerberFrame::GetGridColor()
 {
     return GetBoard()->GetVisibleElementColor( GERBER_GRID_VISIBLE );
 }
+
 
 /**
  * Function SetGridColor() , virtual
@@ -412,6 +425,7 @@ void WinEDA_GerberFrame::syncLayerBox()
     UpdateTitleAndInfo();
 }
 
+
 /**
  * Function SetLanguage
  * called on a language menu selection
@@ -443,6 +457,7 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
     for( int layer = 0; layer < 32; layer++ )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
+
         if( gerber == NULL )
             continue;
 
@@ -453,19 +468,20 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
             Line.Printf( wxT( "*** Active layer (%2.2d) ***" ), layer + 1 );
         else
             Line.Printf( wxT( "*** layer %2.2d  ***" ), layer + 1 );
+
         List->Append( Line );
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
             pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
+
             if( pt_D_code == NULL )
                 continue;
 
             if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
                 continue;
 
-            Line.Printf( wxT(
-                             "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
+            Line.Printf( wxT( "tool %2.2d:   D%2.2d  V %2.4f  H %2.4f  %s" ),
                          jj,
                          pt_D_code->m_Num_Dcode,
                          (float) pt_D_code->m_Size.y / scale,
@@ -486,9 +502,11 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
 
     ii = List->ShowModal();
     List->Destroy();
+
     if( ii < 0 )
         return;
 }
+
 
 /**
  * Function UpdateTitleAndInfo
@@ -501,8 +519,9 @@ void WinEDA_GerberFrame::Liste_D_Codes( )
  */
 void WinEDA_GerberFrame::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE* gerber = g_GERBER_List[GetScreen()->m_Active_Layer];
+    GERBER_IMAGE* gerber = g_GERBER_List[ GetScreen()->m_Active_Layer ];
     wxString text;
+
     // Display the gerber filename
     if( gerber == NULL )
     {
@@ -518,19 +537,20 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
     text << wxT( " " ) << gerber->m_FileName;
     SetTitle( text );
 
-    gerber->DisplayImageInfo( );
+    gerber->DisplayImageInfo();
 
     // Display Image Name and Layer Name (from the current gerber data):
-    text.Printf( _("Image name: \"%s\"  Layer name: \"%s\""),
-        GetChars(gerber->m_ImageName), GetChars(gerber->GetLayerParams( ).m_LayerName) );
+    text.Printf( _( "Image name: \"%s\"  Layer name: \"%s\"" ),
+                 GetChars( gerber->m_ImageName ),
+                 GetChars( gerber->GetLayerParams().m_LayerName ) );
     SetStatusText( text, 0 );
 
     // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar
-    text.Printf(wxT("fmt: %s X%d.%d Y%d.%d no %cZ"),
-        gerber->m_GerbMetric ? wxT("mm") : wxT("in"),
-        gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
-        gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
-        gerber->m_NoTrailingZeros ? 'T' : 'L');
+    text.Printf( wxT("fmt: %s X%d.%d Y%d.%d no %cZ"),
+                 gerber->m_GerbMetric ? wxT( "mm" ) : wxT( "in" ),
+                 gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
+                 gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
+                 gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
     m_TextInfo->SetValue( text );
 }

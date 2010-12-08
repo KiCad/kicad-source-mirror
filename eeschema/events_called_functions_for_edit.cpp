@@ -17,10 +17,10 @@
 #include "sch_text.h"
 
 
-/** Event function WinEDA_SchematicFrame::OnCopySchematicItemRequest
+/** Event function SCH_EDIT_FRAME::OnCopySchematicItemRequest
  * duplicate the current located item
  */
-void WinEDA_SchematicFrame::OnCopySchematicItemRequest( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
 {
     SCH_ITEM * curr_item = GetScreen()->GetCurItem();
 

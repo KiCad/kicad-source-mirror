@@ -50,12 +50,12 @@ enum PageFormatReq {
 class DIALOG_PLOT_SCHEMATIC_PS : public DIALOG_PLOT_SCHEMATIC_PS_BASE
 {
 private:
-    WinEDA_SchematicFrame* m_Parent;
+    SCH_EDIT_FRAME* m_Parent;
 
 public:
 
     /// Constructors
-    DIALOG_PLOT_SCHEMATIC_PS( WinEDA_SchematicFrame* parent );
+    DIALOG_PLOT_SCHEMATIC_PS( SCH_EDIT_FRAME* parent );
 
 private:
     static bool m_plotColorOpt;
@@ -80,7 +80,7 @@ int DIALOG_PLOT_SCHEMATIC_PS:: m_pageSizeSelect = PAGE_SIZE_AUTO;
 bool DIALOG_PLOT_SCHEMATIC_PS::m_plot_Sheet_Ref = true;
 
 
-void WinEDA_SchematicFrame::ToPlot_PS( wxCommandEvent& event )
+void SCH_EDIT_FRAME::ToPlot_PS( wxCommandEvent& event )
 {
     DIALOG_PLOT_SCHEMATIC_PS dlg( this );
 
@@ -88,7 +88,7 @@ void WinEDA_SchematicFrame::ToPlot_PS( wxCommandEvent& event )
 }
 
 
-DIALOG_PLOT_SCHEMATIC_PS::DIALOG_PLOT_SCHEMATIC_PS( WinEDA_SchematicFrame* parent ) :
+DIALOG_PLOT_SCHEMATIC_PS::DIALOG_PLOT_SCHEMATIC_PS( SCH_EDIT_FRAME* parent ) :
     DIALOG_PLOT_SCHEMATIC_PS_BASE( parent )
 {
     m_Parent = parent;
@@ -290,7 +290,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
-    PlotDrawlist( plotter, screen->EEDrawList );
+    PlotDrawlist( plotter, screen->GetDrawItems() );
 
     plotter->end_plot();
     delete plotter;

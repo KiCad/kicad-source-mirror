@@ -240,7 +240,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
-    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
     frame->m_ViewlibFrame = NULL;
 }
 

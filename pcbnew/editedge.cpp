@@ -85,8 +85,8 @@ static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
-    EDA_BaseStruct* PtStruct;
-    int             track_fill_copy = DisplayOpt.DisplayDrawItems;
+    EDA_ITEM* PtStruct;
+    int       track_fill_copy = DisplayOpt.DisplayDrawItems;
 
     if( Segment == NULL )
         return;

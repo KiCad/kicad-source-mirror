@@ -13,7 +13,7 @@ using namespace std;
 
 class SCH_ITEM;
 class LINE_READER;
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 
 
@@ -53,14 +53,14 @@ public:
  * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.
  * The corresponding class in PCBNEW is BOARD_ITEM.
  */
-class SCH_ITEM : public EDA_BaseStruct
+class SCH_ITEM : public EDA_ITEM
 {
 protected:
     int            m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
 
 public:
-    SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType );
+    SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
 
     ~SCH_ITEM();
 
@@ -102,7 +102,7 @@ public:
 
 
     /* Place function */
-    virtual void    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    virtual void    Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     // Geometric transforms (used in block operations):
     /** virtual function Move
@@ -144,9 +144,9 @@ public:
      * The base class returns false since many of the objects derived from
      * SCH_ITEM do not have any text to search.
      *
-     * @todo - This should probably be pushed down to EDA_BaseStruct so that
+     * @todo - This should probably be pushed down to EDA_ITEM so that
      *         searches can be done on all of the Kicad applications that use
-     *         objects derived from EDA_BaseStruct.
+     *         objects derived from EDA_ITEM.
      *
      * @param aSearchData - The search criteria.
      * @param aAuxData - a pointer on auxiliary data, if needed (NULL if not used).

@@ -40,8 +40,8 @@ DHEAD::~DHEAD()
 
 void DHEAD::DeleteAll()
 {
-    EDA_BaseStruct* next;
-    EDA_BaseStruct* item = first;
+    EDA_ITEM* next;
+    EDA_ITEM* item = first;
 
     while( item )
     {
@@ -56,7 +56,7 @@ void DHEAD::DeleteAll()
 }
 
 
-void DHEAD::append( EDA_BaseStruct* aNewElement )
+void DHEAD::append( EDA_ITEM* aNewElement )
 {
     wxASSERT( aNewElement != NULL );
 
@@ -85,7 +85,7 @@ void DHEAD::append( EDA_BaseStruct* aNewElement )
 }
 
 
-void DHEAD::insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
+void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
 {
     wxASSERT( aNewElement != NULL );
 
@@ -109,7 +109,7 @@ void DHEAD::insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
         }
         else
         {
-            EDA_BaseStruct* oldBack = aAfterMe->Back();
+            EDA_ITEM* oldBack = aAfterMe->Back();
 
             aAfterMe->SetBack( aNewElement );
 
@@ -126,7 +126,7 @@ void DHEAD::insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aAfterMe )
 }
 
 
-void DHEAD::remove( EDA_BaseStruct* aElement )
+void DHEAD::remove( EDA_ITEM* aElement )
 {
     wxASSERT( aElement );
     wxASSERT( aElement->GetList() == this );
@@ -162,7 +162,7 @@ void DHEAD::remove( EDA_BaseStruct* aElement )
 
 void DHEAD::VerifyListIntegrity()
 {
-    EDA_BaseStruct* item;
+    EDA_ITEM* item;
     unsigned i = 0;
 
     for( item = first;  item && i<count;  ++i, item = item->Next() )

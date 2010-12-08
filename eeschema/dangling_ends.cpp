@@ -32,7 +32,7 @@ bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint )
 }
 
 
-void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
+void SCH_EDIT_FRAME::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
 {
     SCH_ITEM* item;
     std::vector< DANGLING_END_ITEM > endPoints;
@@ -57,7 +57,7 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
  * @param DrawList = List of SCH_ITEMs to check.
  * @return a LIB_PIN pointer to the located pin or NULL if no pin was found.
  */
-LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )
+LIB_PIN* SCH_EDIT_FRAME::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )
 {
     SCH_COMPONENT* DrawLibItem;
     LIB_PIN* Pin;

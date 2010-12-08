@@ -16,7 +16,7 @@
 
 
 BLOCK_SELECTOR::BLOCK_SELECTOR() :
-    EDA_BaseStruct( BLOCK_LOCATE_STRUCT_TYPE ),
+    EDA_ITEM( BLOCK_LOCATE_STRUCT_TYPE ),
     EDA_Rect()
 {
     m_State   = STATE_NO_BLOCK; /* State (enum BlockState) of block. */
@@ -133,7 +133,7 @@ void BLOCK_SELECTOR::InitData( WinEDA_DrawPanel* aPanel,
 
 /**
  * Function ClearItemsList
- * delete only the list of EDA_BaseStruct * pointers, NOT the pointed data
+ * delete only the list of EDA_ITEM * pointers, NOT the pointed data
  * itself
  */
 void BLOCK_SELECTOR::ClearItemsList()
@@ -143,7 +143,7 @@ void BLOCK_SELECTOR::ClearItemsList()
 
 /**
  * Function ClearListAndDeleteItems
- * delete only the list of EDA_BaseStruct * pointers, AND the data pinted
+ * delete only the list of EDA_ITEM * pointers, AND the data pinted
  * by m_Item
  */
 void BLOCK_SELECTOR::ClearListAndDeleteItems()

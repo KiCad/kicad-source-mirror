@@ -234,7 +234,7 @@ public:
     bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int          BestZoom();
     void         OnSelectOptionToolbar( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     GERBER_DRAW_ITEM*  GerberGeneralLocateAndDisplay();
     GERBER_DRAW_ITEM*  Locate( int typeloc );

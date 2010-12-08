@@ -29,7 +29,7 @@ static TRANSFORM OldTransform;
 static wxPoint   OldPos;
 
 
-wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
+wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
 
@@ -61,10 +61,10 @@ wxString WinEDA_SchematicFrame::SelectFromLibBrowser( void )
  *  if libname != "", search in lib "libname"
  *  else search in all loaded libs
  */
-SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
-                                                      const wxString& libname,
-                                                      wxArrayString&  HistoryList,
-                                                      bool            UseLibBrowser )
+SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
+                                               const wxString& libname,
+                                               wxArrayString&  HistoryList,
+                                               bool            UseLibBrowser )
 {
     int             CmpCount  = 0;
     int             unit      = 1;
@@ -98,7 +98,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
 
     DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
-                          msg, UseLibBrowser );
+                              msg, UseLibBrowser );
     dlg.SetComponentName( lastCommponentName );
 
     if ( dlg.ShowModal() == wxID_CANCEL )
@@ -135,6 +135,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
         AllowWildSeach = FALSE;
         keys = Name.AfterFirst( '=' );
         Name = DataBaseGetName( this, keys, Name );
+
         if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -145,6 +146,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
     else if( Name == wxT( "*" ) )
     {
         AllowWildSeach = FALSE;
+
         if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
@@ -186,6 +188,7 @@ SCH_COMPONENT* WinEDA_SchematicFrame::Load_Component( wxDC*           DC,
 
     DrawPanel->m_IgnoreMouseEvents = FALSE;
     DrawPanel->MouseToCursorSchema();
+
     if( Entry == NULL )
     {
         msg = _( "Failed to find part " ) + Name + _( " in library" );
@@ -244,8 +247,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  *
  ** If DC == NULL: no repaint
  */
-void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
-                                               wxDC* DC, int type_rotate )
+void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, int type_rotate )
 {
     if( DrawComponent == NULL )
         return;
@@ -254,6 +256,7 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
     if( DC )
     {
         DrawPanel->CursorOff( DC );
+
         if( DrawComponent->m_Flags )
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
         else
@@ -270,12 +273,11 @@ void WinEDA_SchematicFrame::CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
         if( DrawComponent->m_Flags )
             DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
         else
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                                 GR_DEFAULT_DRAWMODE );
+            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         DrawPanel->CursorOn( DC );
     }
 
-    TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
     OnModify( );
 }
 
@@ -312,8 +314,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
 /*
  * Handle select part in multi-part component.
  */
-void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
-                                         int unit, wxDC* DC )
+void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* DC )
 {
     int m_UnitCount;
     LIB_COMPONENT* LibEntry;
@@ -333,8 +334,10 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
 
     if( DrawComponent->m_Multi == unit )
         return;
+
     if( unit < 1 )
         unit = 1;
+
     if( unit > m_UnitCount )
         unit = m_UnitCount;
 
@@ -351,16 +354,14 @@ void WinEDA_SchematicFrame::SelPartUnit( SCH_COMPONENT* DrawComponent,
     if( DrawComponent->m_Flags )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                             GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
     OnModify( );
 }
 
 
-void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
-                                         wxDC*          DC )
+void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
 {
     LIB_COMPONENT* LibEntry;
 
@@ -400,15 +401,16 @@ void WinEDA_SchematicFrame::ConvertPart( SCH_COMPONENT* DrawComponent,
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
                              GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
     OnModify( );
 }
 
 
-void WinEDA_SchematicFrame::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
+void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
 {
     if( Component == NULL )
         return;
+
     if( Component->Type() != TYPE_SCH_COMPONENT )
         return;
 

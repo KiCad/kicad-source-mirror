@@ -22,11 +22,10 @@
 #include "build_version.h"
 
 
-static EDA_BaseStruct* HighLightStruct = NULL;
+static EDA_ITEM* HighLightStruct = NULL;
 
 
-void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& pos, int Color )
+void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color )
 {
     BASE_SCREEN* screen = panel->GetScreen();
 
@@ -40,7 +39,7 @@ void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-void SetHighLightStruct( EDA_BaseStruct* HighLight )
+void SetHighLightStruct( EDA_ITEM* HighLight )
 {
     HighLightStruct = HighLight;
 }
@@ -49,7 +48,7 @@ void SetHighLightStruct( EDA_BaseStruct* HighLight )
 /*
  * Redraws only the active window which is assumed to be whole visible.
  */
-void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     wxString title;
 
@@ -60,8 +59,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList,
-                      GR_DEFAULT_DRAWMODE );
+    RedrawStructList( DrawPanel, DC, GetScreen()->GetDrawItems(), GR_DEFAULT_DRAWMODE );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
@@ -118,13 +116,12 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void WinEDA_SchematicFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                                  int aPrintMask, bool aPrintMirrorMode,
-                                    void * aData)
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
+                                bool aPrintMirrorMode, void* aData)
 {
     wxBeginBusyCursor();
 
-    RedrawStructList( DrawPanel, aDC, ActiveScreen->EEDrawList, GR_COPY );
+    RedrawStructList( DrawPanel, aDC, (SCH_ITEM*) ActiveScreen->GetDrawItems(), GR_COPY );
 
     if( aPrint_Sheet_Ref )
         TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
@@ -145,7 +142,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
         if( !(Structlist->m_Flags & IS_MOVED) )
         {
 // uncomment line below when there is a virtual
-// EDA_BaseStruct::GetBoundingBox()
+// EDA_ITEM::GetBoundingBox()
             //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
             // ) )
             RedrawOneStruct( panel, DC, Structlist, DrawMode, Color );

@@ -818,10 +818,10 @@ void CreateTracksInfoData( FILE* file, BOARD* pcb )
  */
 void FootprintWriteShape( FILE* file, MODULE* module )
 {
-    EDGE_MODULE*    edge;
-    EDA_BaseStruct* item;
-    int             y_axis_sign = -1; // Control Y axis change sign (as normal
-                                     // module / mirror axis and conventions)
+    EDGE_MODULE* edge;
+    EDA_ITEM*    item;
+    int          y_axis_sign = -1; // Control Y axis change sign (as normal
+                                   // module / mirror axis and conventions)
 
     /* creates header: */
     fprintf( file, "SHAPE %s\n", CONV_TO_UTF8( module->m_Reference->m_Text ) );

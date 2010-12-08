@@ -13,18 +13,15 @@
 #include "class_base_screen.h"
 #include "id.h"
 
-/* Implement wxSize array for grid list implementation. */
-#include <wx/arrimpl.cpp>
-WX_DEFINE_OBJARRAY( GridArray )
 
 BASE_SCREEN* ActiveScreen = NULL;
 
 #define CURSOR_SIZE 12  /* size of the cross cursor. */
 
 
-BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_BaseStruct( aType )
+BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
 {
-    EEDrawList         = NULL;   /* Schematic items list */
+    m_drawList         = NULL;   /* Draw items list */
     m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a
                                   * reasonable value */
     m_FirstRedraw      = TRUE;
@@ -341,34 +338,41 @@ bool BASE_SCREEN::SetLastZoom()
 }
 
 
-void BASE_SCREEN::SetGridList( GridArray& gridlist )
+void BASE_SCREEN::SetGridList( GRIDS& gridlist )
 {
-    if( !m_GridList.IsEmpty() )
-        m_GridList.Clear();
+    if( !m_grids.empty() )
+        m_grids.clear();
 
-    m_GridList = gridlist;
+    m_grids = gridlist;
+}
+
+
+void BASE_SCREEN::GetGrids( GRIDS& aList )
+{
+    for( size_t i = 0;  i < m_grids.size();  i++ )
+        aList.push_back( m_grids[ i ] );
 }
 
 
 void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 {
-    wxASSERT( !m_GridList.IsEmpty() );
+    wxASSERT( !m_grids.empty() );
 
     size_t i;
 
-    GRID_TYPE nearest_grid = m_GridList[0];
+    GRID_TYPE nearest_grid = m_grids[0];
 
-    for( i = 0; i < m_GridList.GetCount(); i++ )
+    for( i = 0; i < m_grids.size(); i++ )
     {
-        if( m_GridList[i].m_Size == size )
+        if( m_grids[i].m_Size == size )
         {
-            m_Grid = m_GridList[i];
+            m_Grid = m_grids[i];
             return;
         }
 
         // keep trace of the nearest grill size, if the exact size is not found
-        if ( size.x < m_GridList[i].m_Size.x )
-            nearest_grid = m_GridList[i];
+        if ( size.x < m_grids[i].m_Size.x )
+            nearest_grid = m_grids[i];
     }
 
     m_Grid = nearest_grid;
@@ -382,20 +386,20 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 /* Set grid size from command ID. */
 void BASE_SCREEN::SetGrid( int id  )
 {
-    wxASSERT( !m_GridList.IsEmpty() );
+    wxASSERT( !m_grids.empty() );
 
     size_t i;
 
-    for( i = 0; i < m_GridList.GetCount(); i++ )
+    for( i = 0; i < m_grids.size(); i++ )
     {
-        if( m_GridList[i].m_Id == id )
+        if( m_grids[i].m_Id == id )
         {
-            m_Grid = m_GridList[i];
+            m_Grid = m_grids[i];
             return;
         }
     }
 
-    m_Grid = m_GridList[0];
+    m_Grid = m_grids[0];
 
     wxLogWarning( wxT( "Grid ID %d not in grid list, falling back to " ) \
                   wxT( "grid size( %g, %g )." ), id, m_Grid.m_Size.x,
@@ -407,29 +411,27 @@ void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 {
     size_t i;
 
-    for( i = 0; i < m_GridList.GetCount(); i++ )
+    for( i = 0; i < m_grids.size(); i++ )
     {
-        if( m_GridList[i].m_Size == grid.m_Size
-            && grid.m_Id != ID_POPUP_GRID_USER )
+        if( m_grids[i].m_Size == grid.m_Size && grid.m_Id != ID_POPUP_GRID_USER )
         {
             wxLogDebug( wxT( "Discarding duplicate grid size( %g, %g )." ),
                         grid.m_Size.x, grid.m_Size.y );
             return;
         }
-        if( m_GridList[i].m_Id == grid.m_Id )
+
+        if( m_grids[i].m_Id == grid.m_Id )
         {
             wxLogDebug( wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
                         wxT( "size( %g, %g )." ),
-                        grid.m_Id, m_GridList[i].m_Size.x,
-                        m_GridList[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
-            m_GridList[i].m_Size = grid.m_Size;
+                        grid.m_Id, m_grids[i].m_Size.x,
+                        m_grids[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
+            m_grids[i].m_Size = grid.m_Size;
             return;
         }
     }
 
-    // wxLogDebug( wxT( "Adding grid ID %d size( %d, %d ) to grid list." ), grid.m_Id, grid.m_Size.x, grid.m_Size.y );
-
-    m_GridList.Add( grid );
+    m_grids.push_back( grid );
 }
 
 
@@ -473,17 +475,26 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id )
 }
 
 
+GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
+{
+    wxCHECK_MSG( !m_grids.empty() && aIndex < m_grids.size(), m_Grid,
+                 wxT( "Cannot get grid object outside the bounds of the grid list." ) );
+
+    return m_grids[ aIndex ];
+}
+
+
 GRID_TYPE BASE_SCREEN::GetGrid()
 {
     return m_Grid;
 }
 
-/*********************************/
+
 const wxPoint& BASE_SCREEN::GetGridOrigin()
-/*********************************/
 {
     return m_GridOrigin;
 }
+
 
 wxRealPoint BASE_SCREEN::GetGridSize()
 {
@@ -515,6 +526,7 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 
     /* Delete the extra items, if count max reached */
     int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+
     if( extraitems > 0 ) // Delete the extra items
         ClearUndoORRedoList( m_UndoList, extraitems );
 }
@@ -526,6 +538,7 @@ void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 
     /* Delete the extra items, if count max reached */
     int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+
     if( extraitems > 0 ) // Delete the extra items
         ClearUndoORRedoList( m_RedoList, extraitems );
 }
@@ -543,7 +556,7 @@ PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 }
 
 
-void BASE_SCREEN::AddItem( EDA_BaseStruct* aItem )
+void BASE_SCREEN::AddItem( EDA_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Attempt to add NULL item pointer to " ) + GetClass() +
                  wxT( "item list" ) );
@@ -551,7 +564,7 @@ void BASE_SCREEN::AddItem( EDA_BaseStruct* aItem )
 }
 
 
-void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_BaseStruct* aItem )
+void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Attempt to insert NULL item pointer to " ) + GetClass() +
                  wxT( "item list" ) );
@@ -569,11 +582,10 @@ void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_BaseStruct* aItem )
  */
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 {
-    SCH_ITEM* item = EEDrawList;
+    EDA_ITEM* item = m_drawList;
 
     // for now, make it look like XML, expand on this later.
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-        ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     for(  ; item;  item = item->Next() )
     {

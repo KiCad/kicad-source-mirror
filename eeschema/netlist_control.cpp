@@ -173,7 +173,7 @@ EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
 
 
 /*************************************************************************************/
-WinEDA_NetlistFrame::WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent ) :
+WinEDA_NetlistFrame::WinEDA_NetlistFrame( SCH_EDIT_FRAME* parent ) :
     wxDialog( parent, -1, _( "Netlist" ), wxDefaultPosition,
               wxDefaultSize, DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 /*************************************************************************************/
@@ -525,8 +525,8 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
  *   bool aUse_netnames is used only for Spice netlist
  * @return true if success.
  */
-bool WinEDA_SchematicFrame::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                             bool aUse_netnames )
+bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
+                                    bool aUse_netnames )
 {
     ReAnnotatePowerSymbolsOnly();
 

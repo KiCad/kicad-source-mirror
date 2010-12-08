@@ -153,10 +153,10 @@ void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
  */
 void MODULE::Flip(const wxPoint& aCentre )
 {
-    D_PAD*          pt_pad;
-    TEXTE_MODULE*   pt_texte;
-    EDGE_MODULE*    pt_edgmod;
-    EDA_BaseStruct* PtStruct;
+    D_PAD*        pt_pad;
+    TEXTE_MODULE* pt_texte;
+    EDGE_MODULE*  pt_edgmod;
+    EDA_ITEM*     PtStruct;
 
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
@@ -309,7 +309,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
         pad->m_Pos.y += deltaY;
     }
 
-    EDA_BaseStruct* PtStruct = m_Drawings;
+    EDA_ITEM* PtStruct = m_Drawings;
+
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )

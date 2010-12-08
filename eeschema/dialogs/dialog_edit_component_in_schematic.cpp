@@ -26,8 +26,7 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
-void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
-                          SCH_COMPONENT* aComponent )
+void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* aComponent )
 {
     if( aComponent == NULL )    // Null component not accepted
         return;
@@ -77,7 +76,7 @@ void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos,
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* parent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( parent )
 {
-    m_Parent = (WinEDA_SchematicFrame*) parent;
+    m_Parent = (SCH_EDIT_FRAME*) parent;
 
     m_LibEntry = NULL;
     m_skipCopyFromPanel = false;
@@ -268,7 +267,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     m_Parent->OnModify();
 
-    m_Parent->TestDanglingEnds( m_Parent->GetScreen()->EEDrawList, NULL );
+    m_Parent->TestDanglingEnds( m_Parent->GetScreen()->GetDrawItems(), NULL );
 
     m_Parent->DrawPanel->Refresh( TRUE );
 

@@ -806,7 +806,7 @@ void LIB_PIN::drawGraphic( WinEDA_DrawPanel* aPanel,
 {
     // Invisible pins are only drawn on request.  In libedit they are drawn
     // in g_InvisibleItemColor because we must see them.
-    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
 
     if( m_attributes & PINNOTDRAW )
     {

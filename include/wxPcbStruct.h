@@ -269,11 +269,9 @@ public:
      *  Some commands are relatives to the item under the mouse cursor
      *  @param aDC = current device context
      *  @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
-     *  @param aItem = NULL or pointer on a EDA_BaseStruct under the mouse cursor
+     *  @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    void             OnHotKey( wxDC*           aDC,
-                               int             aHotkeyCode,
-                               EDA_BaseStruct* aItem );
+    void             OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem );
 
     /**
      * Function OnHotkeyDeleteItem
@@ -1129,7 +1127,7 @@ public:
     void         ReadAutoroutedTracks( wxDC* DC );
     void         GlobalRoute( wxDC* DC );
 
-    void         Show_1_Ratsnest( EDA_BaseStruct* item, wxDC* DC );
+    void         Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
     void         Clean_Pcb( wxDC* DC );
 
     void         InstallFindFrame( const wxPoint& pos, wxDC* DC );

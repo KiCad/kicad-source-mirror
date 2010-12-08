@@ -26,7 +26,7 @@ static wxArrayString s_PowerNameList;
 /* Process the command triggers by the left button of the mouse when a tool
  * is already selected.
  */
-void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     SCH_ITEM* DrawStruct = GetScreen()->GetCurItem();
 
@@ -51,7 +51,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case DRAW_PART_TEXT_STRUCT_TYPE:
                 DrawStruct->Place( this, DC );
                 GetScreen()->SetCurItem( NULL );
-                TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+                TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
                 DrawPanel->Refresh( TRUE );
                 return;
 
@@ -67,7 +67,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             default:
             {
                 wxString msg;
-                msg.Printf(wxT( "WinEDA_SchematicFrame::OnLeftClick err: m_Flags != 0, itmetype %d" ),
+                msg.Printf( wxT( "SCH_EDIT_FRAME::OnLeftClick err: m_Flags != 0, itmetype %d" ),
                             DrawStruct->Type());
                 DisplayError( this, msg );
                 DrawStruct->m_Flags = 0;
@@ -113,7 +113,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -131,7 +131,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -150,7 +150,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             GetScreen()->SetCurItem( NULL );
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
@@ -160,7 +160,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         LocateAndDeleteItem( this, DC );
         OnModify( );
         GetScreen()->SetCurItem( NULL );
-        TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -202,7 +202,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -221,7 +221,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -236,7 +236,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -263,7 +263,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 && (DrawStruct->m_Flags != 0) )
         {
             DrawStruct->Place( this, DC );
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -279,7 +279,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -295,7 +295,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -303,7 +303,7 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     default:
     {
         SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        wxString msg( wxT( "WinEDA_SchematicFrame::OnLeftClick error state " ) );
+        wxString msg( wxT( "SCH_EDIT_FRAME::OnLeftClick error state " ) );
 
         msg << m_ID_current_state;
         DisplayError( this, msg );
@@ -321,11 +321,11 @@ void WinEDA_SchematicFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  Id a create command is in progress:
  *      validate and finish the command
  */
-void WinEDA_SchematicFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void SCH_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
 {
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
-    wxPoint         pos = GetPosition();
+    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    wxPoint   pos = GetPosition();
 
     switch( m_ID_current_state )
     {

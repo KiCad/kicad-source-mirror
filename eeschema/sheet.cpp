@@ -34,7 +34,7 @@ static wxPoint s_OldPos;  /* Former position for cancellation or move ReSize */
 
 
 /* Routine to edit the SheetName and the FileName for the sheet "Sheet" */
-bool WinEDA_SchematicFrame::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
+bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
     bool edit = true;
 
@@ -211,7 +211,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
 
 
 /* Create hierarchy sheet.  */
-SCH_SHEET* WinEDA_SchematicFrame::CreateSheet( wxDC* aDC )
+SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 {
     g_ItemToRepeat = NULL;
     SAFE_DELETE( g_ItemToUndoCopy );
@@ -225,7 +225,7 @@ SCH_SHEET* WinEDA_SchematicFrame::CreateSheet( wxDC* aDC )
     s_PreviousSheetWidth = SHEET_MIN_WIDTH;
     s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
 
-    // need to check if this is being added to the EEDrawList.
+    // need to check if this is being added to the GetDrawItems().
     // also need to update the hierarchy, if we are adding
     // a sheet to a screen that already has multiple instances (!)
     GetScreen()->SetCurItem( sheet );
@@ -239,15 +239,14 @@ SCH_SHEET* WinEDA_SchematicFrame::CreateSheet( wxDC* aDC )
 }
 
 
-void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
+void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
     if( aSheet == NULL || aSheet->m_Flags & IS_NEW )
         return;
 
     if( aSheet->Type() != DRAW_SHEET_STRUCT_TYPE )
     {
-        DisplayError( this,
-                      wxT( "WinEDA_SchematicFrame::ReSizeSheet: Bad SructType" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::ReSizeSheet: Bad SructType" ) );
         return;
     }
 
@@ -279,7 +278,7 @@ void WinEDA_SchematicFrame::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 }
 
 
-void WinEDA_SchematicFrame::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
+void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
     if( ( aSheet == NULL ) || ( aSheet->Type() != DRAW_SHEET_STRUCT_TYPE ) )
         return;

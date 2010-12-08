@@ -451,11 +451,13 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     }
 
     /* Write board Edges */
-    EDA_BaseStruct* PtStruct;
+    EDA_ITEM* PtStruct;
+
     for( PtStruct = GetBoard()->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() != TYPE_DRAWSEGMENT )
             continue;
+
         if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )
             continue;
         WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile );

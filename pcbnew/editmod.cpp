@@ -59,9 +59,9 @@ void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
  */
 void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 {
-    wxPoint         moveVector;
-    EDA_BaseStruct* PtStruct;
-    D_PAD*          pt_pad;
+    wxPoint   moveVector;
+    EDA_ITEM* PtStruct;
+    D_PAD*    pt_pad;
 
     if( pt_mod == NULL )
         return;
@@ -77,6 +77,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 
     /* Update the pad coordinates. */
     pt_pad = (D_PAD*) pt_mod->m_Pads;
+
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Pos0 += moveVector;
@@ -84,6 +85,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 
     /* Update the draw element coordinates. */
     PtStruct = pt_mod->m_Drawings;
+
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
@@ -110,7 +112,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 }
 
 
-void WinEDA_ModuleEditFrame::RemoveStruct( EDA_BaseStruct* Item )
+void WinEDA_ModuleEditFrame::RemoveStruct( EDA_ITEM* Item )
 {
     if( Item == NULL )
         return;

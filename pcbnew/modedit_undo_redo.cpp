@@ -25,7 +25,7 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
                                                  UndoRedoOpType aTypeCommand,
                                                  const wxPoint& aTransformPoint )
 {
-    EDA_BaseStruct*    item;
+    EDA_ITEM*          item;
     MODULE*            CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 

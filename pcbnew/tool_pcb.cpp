@@ -652,11 +652,11 @@ an existing track use its width\notherwise, use current width setting" ),
         break;
     }
 
-    for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
+    for( i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
-        GRID_TYPE grid = GetScreen()->m_GridList[i];
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x,
-                                     m_InternalUnits );
+        GRID_TYPE& grid = GetScreen()->GetGrid( i );
+        double value = To_User_Unit( g_UserUnit, grid.m_Size.x, m_InternalUnits );
+
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
             switch( g_UserUnit )
@@ -674,13 +674,13 @@ an existing track use its width\notherwise, use current width setting" ),
         else
             msg = _( "User Grid" );
 
-        m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
+        m_SelGridBox->Append( msg, (void*) &grid.m_Id );
 
-        if( m_LastGridSizeId == GetScreen()->m_GridList[i].m_Id )
+        if( m_LastGridSizeId == GetScreen()->GetGrid( i ).m_Id )
             m_SelGridBox->SetSelection( i );
     }
 
-    m_TrackAndViasSizesList_Changed    = true;
+    m_TrackAndViasSizesList_Changed = true;
     m_AuxiliaryToolBar->AddSeparator();
 }
 

@@ -22,13 +22,13 @@ void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GridArray& grid_sizes, int grid_id )
+void DIALOG_EESCHEMA_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )
 {
-    wxASSERT( grid_sizes.GetCount() > 0 );
+    wxASSERT( grid_sizes.size() > 0 );
 
     int select = wxNOT_FOUND;
 
-    for( size_t i = 0; i < grid_sizes.GetCount(); i++ )
+    for( size_t i = 0; i < grid_sizes.size(); i++ )
     {
         wxString tmp;
         tmp.Printf( wxT( "%0.1f" ), grid_sizes[i].m_Size.x );

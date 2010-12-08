@@ -32,15 +32,15 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
     DECLARE_EVENT_TABLE()
 
 private:
-    WinEDA_SchematicFrame* m_Parent;
-    wxBitmapButton*        m_ButtonList[PIN_NMAX][PIN_NMAX];
-    bool                   m_Initialized;
-    static bool            m_writeErcFile;
+    SCH_EDIT_FRAME* m_Parent;
+    wxBitmapButton* m_ButtonList[PIN_NMAX][PIN_NMAX];
+    bool            m_Initialized;
+    static bool     m_writeErcFile;
 
 public:
 
     /// Constructors
-    DIALOG_ERC( WinEDA_SchematicFrame* parent );
+    DIALOG_ERC( SCH_EDIT_FRAME* parent );
 
     void Init();
 

@@ -29,18 +29,17 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                       bool aUnit_Drill_is_Inch, int format,
                       const wxPoint& auxoffset )
 {
-    int             x, y;
-    int             plotX, plotY, TextWidth;
-    double          scale = 1.0;
-    int             intervalle = 0, CharSize = 0;
-    EDA_BaseStruct* PtStruct;
-    char            line[1024];
-    int             dX, dY;
-    wxPoint         BoardCentre;
-    wxPoint         offset;
-    wxString        msg;
-    PLOTTER*        plotter = NULL;
-
+    int       x, y;
+    int       plotX, plotY, TextWidth;
+    double    scale = 1.0;
+    int       intervalle = 0, CharSize = 0;
+    EDA_ITEM* PtStruct;
+    char      line[1024];
+    int       dX, dY;
+    wxPoint   BoardCentre;
+    wxPoint   offset;
+    wxString  msg;
+    PLOTTER*  plotter = NULL;
 
     SetLocaleTo_C_standard();  // Use the standard notation for float numbers
     /* Calculate dimensions and center of PCB */

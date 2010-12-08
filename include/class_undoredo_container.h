@@ -69,14 +69,14 @@ enum UndoRedoOpType {
 class ITEM_PICKER
 {
 public:
-    UndoRedoOpType  m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
-    EDA_BaseStruct* m_PickedItem;       /* Pointer on the schematic or board item that is concerned (picked),
+    UndoRedoOpType m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
+    EDA_ITEM*      m_PickedItem;       /* Pointer on the schematic or board item that is concerned (picked),
                                          *  or in undo redo commands, the copy of an edited item.
                                          */
-    KICAD_T         m_PickedItemType;   /* type of schematic or board item that is concerned
+    KICAD_T        m_PickedItemType;   /* type of schematic or board item that is concerned
                                          */
-    int             m_PickerFlags;      /* a copy of m_Flags member. usefull in mode/drag undo/redo commands */
-    EDA_BaseStruct* m_Link;             /* Pointer on an other item. Used in undo redo command
+    int            m_PickerFlags;      /* a copy of m_Flags member. usefull in mode/drag undo/redo commands */
+    EDA_ITEM*      m_Link;             /* Pointer on an other item. Used in undo redo command
                                          * used when a duplicate exists i.e. when an item is modified,
                                          * and the copy of initial item exists (the duplicate)
                                          * m_Item points the duplicate (i.e the old copy of an active item)
@@ -84,8 +84,7 @@ public:
                                          */
 
 public:
-    ITEM_PICKER( EDA_BaseStruct* aItem = NULL,
-        UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED );
+    ITEM_PICKER( EDA_ITEM* aItem = NULL, UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED );
 };
 
 /* Class PICKED_ITEMS_LIST
@@ -166,14 +165,14 @@ public:
      * @return a pointer to the picked item
      * @param aIdx = index of the picked item in the picked list
      */
-    EDA_BaseStruct* GetPickedItem( unsigned int aIdx );
+    EDA_ITEM* GetPickedItem( unsigned int aIdx );
 
     /**
      * Function GetPickedItemLink
      * @return link of the picked item, or null if does not exist
      * @param aIdx = index of the picked item in the picked list
      */
-    EDA_BaseStruct* GetPickedItemLink( unsigned int aIdx );
+    EDA_ITEM* GetPickedItemLink( unsigned int aIdx );
 
     /**
      * Function GetPickedItemStatus
@@ -197,7 +196,7 @@ public:
      * @param aIdx = index of the picker in the picked list
      * @return true if the pixker exists, or false if does not exist
      */
-    bool            SetPickedItem( EDA_BaseStruct* aItem, unsigned aIdx );
+    bool            SetPickedItem( EDA_ITEM* aItem, unsigned aIdx );
 
     /**
      * Function SetPickedItem
@@ -206,7 +205,7 @@ public:
      * @param aIdx = index of the picker in the picked list
      * @return true if the pixker exists, or false if does not exist
      */
-    bool            SetPickedItem( EDA_BaseStruct* aItem, UndoRedoOpType aStatus, unsigned aIdx );
+    bool            SetPickedItem( EDA_ITEM* aItem, UndoRedoOpType aStatus, unsigned aIdx );
 
     /**
      * Function SetPickedItemLink
@@ -215,7 +214,7 @@ public:
      * @param aIdx = index of the picker in the picked list
      * @return true if the pixker exists, or false if does not exist
      */
-    bool            SetPickedItemLink( EDA_BaseStruct* aLink, unsigned aIdx );
+    bool            SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx );
 
     /**
      * Function SetPickedItemStatus

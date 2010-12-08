@@ -105,8 +105,8 @@ IMPLEMENT_APP( WinEDA_App )
  */
 void WinEDA_App::MacOpenFile( const wxString &fileName )
 {
-    wxFileName    filename = fileName;
-    WinEDA_SchematicFrame * frame = ((WinEDA_SchematicFrame*) GetTopWindow());
+    wxFileName      filename = fileName;
+    SCH_EDIT_FRAME* frame = ((SCH_EDIT_FRAME*) GetTopWindow());
 
     if( !frame )
         return;
@@ -127,8 +127,8 @@ bool WinEDA_App::OnInit()
     wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
 #endif /* __WXMAC__ */
 
-    wxFileName             filename;
-    WinEDA_SchematicFrame* frame = NULL;
+    wxFileName      filename;
+    SCH_EDIT_FRAME* frame = NULL;
 
     InitEDA_Appl( wxT( "EESchema" ), APP_TYPE_EESCHEMA );
 
@@ -154,8 +154,7 @@ bool WinEDA_App::OnInit()
     ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
 
     // Create main frame (schematic frame) :
-    frame = new WinEDA_SchematicFrame( NULL, wxT( "EESchema" ),
-                                       wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame = new SCH_EDIT_FRAME( NULL, wxT( "EESchema" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     SetTopWindow( frame );
     frame->Show( TRUE );

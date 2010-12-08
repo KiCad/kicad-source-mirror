@@ -82,7 +82,7 @@ void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
  * Updates:
  *   g_NetObjectslist
  */
-void WinEDA_SchematicFrame::BuildNetListBase()
+void SCH_EDIT_FRAME::BuildNetListBase()
 {
     int             NetNumber;
     int             NetCode;
@@ -509,7 +509,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
     LIB_COMPONENT*  Entry;
     SCH_SHEET_PATH  list;
 
-    DrawList = sheetlist->LastScreen()->EEDrawList;
+    DrawList = sheetlist->LastScreen()->GetDrawItems();
     for( ; DrawList; DrawList = DrawList->Next() )
     {
         switch( DrawList->Type() )

@@ -293,7 +293,7 @@ public:
 
     void           SwapData( SCH_COMPONENT* copyitem );
 
-    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void           Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     // returns a unique ID, in the form of a path.
     wxString       GetPath( SCH_SHEET_PATH* sheet );

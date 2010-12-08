@@ -283,8 +283,8 @@ An alias %s already exists!\nCannot update this component" ),
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::addFieldButtonHandler( wxCommandEvent& event )
 /**************************************************************************************/
 {
-    WinEDA_SchematicFrame* frame;
-    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    SCH_EDIT_FRAME* frame;
+    frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
 
     // in case m_FieldsBuf[REFERENCE].m_Orient has changed on screen only, grab
     // screen contents.
@@ -491,7 +491,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
     const TEMPLATE_FIELDNAMES& tfnames =
-        ((WinEDA_SchematicFrame*)m_Parent->GetParent())->GetTemplateFieldNames();
+        ((SCH_EDIT_FRAME*)m_Parent->GetParent())->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {

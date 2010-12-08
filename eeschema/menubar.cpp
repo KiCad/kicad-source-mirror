@@ -22,7 +22,7 @@
 /**
  * @brief Create or update the menubar for the schematic frame
  */
-void WinEDA_SchematicFrame::ReCreateMenuBar()
+void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
     wxMenuItem* item;

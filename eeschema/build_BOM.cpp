@@ -41,7 +41,7 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             if( schItem->Type() != TYPE_SCH_COMPONENT )
                 continue;

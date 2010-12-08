@@ -19,7 +19,7 @@
 #include "wx/treectrl.h"
 
 
-static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame );
+static bool UpdateScreenFromSheet( SCH_EDIT_FRAME* frame );
 
 enum
 {
@@ -79,17 +79,17 @@ WinEDA_Tree::WinEDA_Tree( WinEDA_HierFrame* parent ) :
 class WinEDA_HierFrame : public wxDialog
 {
 public:
-    WinEDA_SchematicFrame* m_Parent;
-    WinEDA_Tree*           m_Tree;
-    int    m_nbsheets;
-    wxDC*  m_DC;
+    SCH_EDIT_FRAME* m_Parent;
+    WinEDA_Tree*    m_Tree;
+    int             m_nbsheets;
+    wxDC*           m_DC;
 
 private:
     wxSize m_TreeSize;
     int    maxposx;
 
 public:
-    WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC, const wxPoint& pos );
+    WinEDA_HierFrame( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
     void BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId* previousmenu );
 
     ~WinEDA_HierFrame();
@@ -108,7 +108,7 @@ BEGIN_EVENT_TABLE( WinEDA_HierFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-void WinEDA_SchematicFrame::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
+void SCH_EDIT_FRAME::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
 {
     WinEDA_HierFrame* treeframe = new WinEDA_HierFrame( this, DC, pos );
 
@@ -117,10 +117,8 @@ void WinEDA_SchematicFrame::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
 }
 
 
-WinEDA_HierFrame::WinEDA_HierFrame( WinEDA_SchematicFrame* parent, wxDC* DC,
-                                    const wxPoint& pos ) :
-    wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ),
-              DIALOG_STYLE )
+WinEDA_HierFrame::WinEDA_HierFrame( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos ) :
+    wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ), DIALOG_STYLE )
 {
     wxTreeItemId cellule;
 
@@ -253,7 +251,7 @@ void WinEDA_HierFrame::OnSelect( wxTreeEvent& event )
 /* Set the current screen to display the parent sheet of the current
  * displayed sheet
  */
-void WinEDA_SchematicFrame::InstallPreviousSheet()
+void SCH_EDIT_FRAME::InstallPreviousSheet()
 {
     if( m_CurrentSheet->Last() == g_RootSheet )
         return;
@@ -264,24 +262,25 @@ void WinEDA_SchematicFrame::InstallPreviousSheet()
     //make a copy for testing purposes.
     SCH_SHEET_PATH listtemp = *m_CurrentSheet;
     listtemp.Pop();
+
     if( listtemp.LastScreen() == NULL )
     {
-        DisplayError( this,
-                      wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
+        DisplayError( this, wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
         return;
     }
+
     m_CurrentSheet->Pop();
     UpdateScreenFromSheet( this );
 }
 
 
 /* Routine installation of the screen corresponding to the symbol edge Sheet
- * Be careful here because the SCH_SHEETs within the EEDrawList
+ * Be careful here because the SCH_SHEETs within the GetDrawItems()
  * don't actually have a valid m_AssociatedScreen (on purpose -- you need the
  * m_SubSheet hierarchy to maintain path info (well, this is but one way to
  * maintain path info..)
  */
-void WinEDA_SchematicFrame::InstallNextScreen( SCH_SHEET* Sheet )
+void SCH_EDIT_FRAME::InstallNextScreen( SCH_SHEET* Sheet )
 {
     if( Sheet == NULL )
     {
@@ -297,7 +296,7 @@ void WinEDA_SchematicFrame::InstallNextScreen( SCH_SHEET* Sheet )
 /* Find and install the screen on the sheet symbol Sheet.
  * If Sheet == NULL installation of the screen base (Root).
  */
-static bool UpdateScreenFromSheet( WinEDA_SchematicFrame* frame )
+static bool UpdateScreenFromSheet( SCH_EDIT_FRAME* frame )
 {
     SCH_SCREEN* NewScreen;
 

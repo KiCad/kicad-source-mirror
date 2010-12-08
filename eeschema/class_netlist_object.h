@@ -60,7 +60,7 @@ class NETLIST_OBJECT
 public:
     NetObjetType    m_Type;             /* Type of item (see NetObjetType
                                          * enum) */
-    EDA_BaseStruct* m_Comp;             /* Pointer on the library item that
+    EDA_ITEM      * m_Comp;             /* Pointer on the library item that
                                          * created this net object (the parent)
                                          */
     SCH_ITEM*       m_Link;             /* For SCH_SHEET_PIN:

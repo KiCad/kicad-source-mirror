@@ -28,13 +28,13 @@ enum Track_Shapes {
  * found in PCBNEW or other programs that use class BOARD and its contents.
  * The corresponding class in EESCHEMA is SCH_ITEM.
  */
-class BOARD_ITEM : public EDA_BaseStruct
+class BOARD_ITEM : public EDA_ITEM
 {
     // These are made private here so they may not be used.
     // Instead everything derived from BOARD_ITEM is handled via DLIST<>'s
     // use of DHEAD's member functions.
-    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 
 protected:
@@ -43,14 +43,14 @@ protected:
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
-        EDA_BaseStruct( aParent, idtype )
+        EDA_ITEM( aParent, idtype )
         , m_Layer( 0 )
     {
     }
 
 
     BOARD_ITEM( const BOARD_ITEM& src ) :
-        EDA_BaseStruct( src.m_Parent, src.Type() )
+        EDA_ITEM( src.m_Parent, src.Type() )
         , m_Layer( src.m_Layer )
     {
         m_Flags = src.m_Flags;

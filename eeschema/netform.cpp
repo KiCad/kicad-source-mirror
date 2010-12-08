@@ -137,9 +137,9 @@ class EXPORT_HELP
      * A suitable component is a "new" real component (power symbols are not
      * considered).
      */
-    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
-    SCH_COMPONENT* findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function eraseDuplicatePins
@@ -242,7 +242,7 @@ public:
      * creates a generic netlist, now in XML.
      * @return bool - true if there were no errors, else false.
      */
-    bool WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
+    bool WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName );
 
     /**
      * Function WriteNetListPCBNEW
@@ -251,8 +251,7 @@ public:
      * @param with_pcbnew if true, then format Pcbnew (OrcadPcb2 + reviews and lists of net),<p>
      *                    else output ORCADPCB2 strict format.
      */
-    bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
-                                    bool with_pcbnew );
+    bool WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew );
 
     /**
      * Function WriteNetListCADSTAR
@@ -282,7 +281,7 @@ public:
      * .. B * T3 1
      *U1 * 14
      */
-    void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
+    void WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f );
 
     /**
      * Function WriteNetListPspice
@@ -295,8 +294,7 @@ public:
      * @param use_netnames if true, then nodes are identified by the netname,
      *          else by net number.
      */
-    bool WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
-                                    bool use_netnames );
+    bool WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames );
 
     /**
      * Function MakeCommandLine
@@ -357,8 +355,8 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
  *   bool aUse_netnames is used only for Spice netlist
  * @return true if success.
  */
-bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
-                                              bool aUse_netnames )
+bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
+                                       bool aUse_netnames )
 {
     bool        ret = true;
     FILE*       f = NULL;
@@ -489,7 +487,7 @@ void EXPORT_HELP::sprintPinNetName( wxString* aResult,
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
@@ -536,8 +534,8 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
-        EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aItem,
+                                                              SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
@@ -555,6 +553,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
         ref = comp->GetRef( aSheetPath );
+
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -565,6 +564,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
         // toggled.
 
         LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+
         if( !entry )
             continue;
 
@@ -942,7 +942,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
@@ -1036,7 +1036,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 #include <wx/wfstream.h>        // wxFFileOutputStream
 
-bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName )
 {
 #if 0
 
@@ -1106,7 +1106,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
@@ -1174,7 +1174,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
 }
 
 
-bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
+bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames )
 {
     int             ret = 0;
     char            Line[1024];
@@ -1190,8 +1190,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     DateAndTime( Line );
 
-    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
-                    NETLIST_HEAD_STRING, Line );
+    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n", NETLIST_HEAD_STRING, Line );
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
@@ -1201,7 +1200,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst(); sheet; sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList(); item; item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList(); item; item = item->Next() )
         {
             wxChar ident;
             if( item->Type() != TYPE_SCH_TEXT )
@@ -1265,7 +1264,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, sheet );
             if( !comp )
@@ -1328,7 +1327,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 }
 
 
-bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
+bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
@@ -1353,7 +1352,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = path->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = path->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, path );
             if( !comp )
@@ -1569,7 +1568,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
             if( item->Type() != TYPE_SCH_COMPONENT )
                 continue;
@@ -1690,14 +1689,14 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
 static wxString StartLine( wxT( "." ) );
 
 
-void EXPORT_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
+void EXPORT_HELP::WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
     char Line[1024];
     SCH_SHEET_PATH* sheet;
-    EDA_BaseStruct* DrawList;
+    EDA_ITEM* DrawList;
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 

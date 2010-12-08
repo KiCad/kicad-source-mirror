@@ -26,8 +26,8 @@
   BOOST_TYPEOF_REGISTER_TYPE(wxString) ;
   class DrawSheetLabelStruct;
   BOOST_TYPEOF_REGISTER_TYPE(DrawSheetLabelStruct *);
-  class EDA_BaseStruct;
-  BOOST_TYPEOF_REGISTER_TYPE(EDA_BaseStruct *);
+  class EDA_ITEM;
+  BOOST_TYPEOF_REGISTER_TYPE(EDA_ITEM *);
   class D_PAD;
   BOOST_TYPEOF_REGISTER_TYPE(D_PAD *);
   BOOST_TYPEOF_REGISTER_TYPE(const D_PAD *);

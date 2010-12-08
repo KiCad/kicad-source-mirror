@@ -6,14 +6,14 @@
 #include "dialog_eeschema_config_fbp.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class WinEDA_DrawFrame;
 
 
 class DIALOG_EESCHEMA_CONFIG : public DIALOG_EESCHEMA_CONFIG_FBP
 {
 private:
-    WinEDA_SchematicFrame* m_Parent;
+    SCH_EDIT_FRAME* m_Parent;
     bool m_LibListChanged;
     bool m_LibPathChanged;
     wxString m_UserLibDirBufferImg;      // Copy of original g_UserLibDirBuffer
@@ -34,7 +34,7 @@ private:
 
 
 public:
-    DIALOG_EESCHEMA_CONFIG( WinEDA_SchematicFrame* parent, WinEDA_DrawFrame* activeWindow );
+    DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* parent, WinEDA_DrawFrame* activeWindow );
     ~DIALOG_EESCHEMA_CONFIG() {};
 };
 

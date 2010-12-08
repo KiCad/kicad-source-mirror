@@ -378,7 +378,7 @@ void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
 }
 
 
-void SCH_TEXT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy && ( (m_Flags & IS_NEW) == 0 ) )

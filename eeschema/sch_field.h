@@ -19,7 +19,7 @@
 #include "general.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class SCH_COMPONENT;
 class LIB_FIELD;
 
@@ -54,7 +54,7 @@ public:
     }
 
 
-    void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void     Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     EDA_Rect GetBoundaryBox() const;
 

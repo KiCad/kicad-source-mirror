@@ -51,7 +51,7 @@
  */
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
-    EDA_BaseStruct( LIB_ALIAS_T )
+    EDA_ITEM( LIB_ALIAS_T )
 {
     root = aRootComponent;
     name = aName;
@@ -59,7 +59,7 @@ LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
 
 
 LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) :
-    EDA_BaseStruct( aAlias )
+    EDA_ITEM( aAlias )
 {
     name = aAlias.name;
     root = aRootComponent;
@@ -158,7 +158,7 @@ int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
  * Library components are different from schematic components.
  */
 LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
-    EDA_BaseStruct( LIB_COMPONENT_T )
+    EDA_ITEM( LIB_COMPONENT_T )
 {
     m_name                = aName;
     m_library             = aLibrary;
@@ -187,7 +187,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
 
 
 LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary ) :
-    EDA_BaseStruct( aComponent )
+    EDA_ITEM( aComponent )
 {
     LIB_DRAW_ITEM* newItem;
 

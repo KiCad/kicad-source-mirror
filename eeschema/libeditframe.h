@@ -12,7 +12,7 @@
 #include "lib_draw_item.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_ALIAS;
@@ -32,7 +32,7 @@ public:
     WinEDAChoiceBox* m_SelAliasBox;      // a box to select the alias to edit (if any)
 
 public:
-    LIB_EDIT_FRAME( WinEDA_SchematicFrame* aParent, const wxString& title,
+    LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
@@ -100,7 +100,7 @@ public:
     void        OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
-    void        OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void        OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     void        GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
 
@@ -223,7 +223,7 @@ private:
 
     // General editing
 public:
-    void           SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int flag_type_command = 0 );
+    void           SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int flag_type_command = 0 );
 
 private:
     void           GetComponentFromUndoList( wxCommandEvent& event );

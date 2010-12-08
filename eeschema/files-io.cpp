@@ -23,7 +23,7 @@
 * FileSave controls how the file is to be saved - under what name.           *
 * Returns TRUE if the file has been saved.                                   *
 *****************************************************************************/
-bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 {
     wxString msg;
     wxFileName schematicFileName, backupFileName;
@@ -100,7 +100,7 @@ bool WinEDA_SchematicFrame::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 
 /* Commands to save project or the current page.
  */
-void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -119,7 +119,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_SchematicFrame::Save_File Internal Error" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::Save_File Internal Error" ) );
         break;
     }
 }
@@ -131,7 +131,7 @@ void WinEDA_SchematicFrame::Save_File( wxCommandEvent& event )
  *  Schematic root file and its subhierarchies, the configuration and the libs
  *  which are not already loaded)
  */
-bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsNew )
+bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 {
     SCH_SCREEN* screen;
     wxString    FullFileName, msg;
@@ -308,14 +308,13 @@ bool WinEDA_SchematicFrame::LoadOneEEProject( const wxString& FileName, bool IsN
  *
  *  The library archive name is <root_name>-cache.lib
  */
-void WinEDA_SchematicFrame::SaveProject()
+void SCH_EDIT_FRAME::SaveProject()
 {
     SCH_SCREEN* screen;
     wxFileName  fn;
     SCH_SCREENS ScreenList;
 
-    for( screen = ScreenList.GetFirst(); screen != NULL;
-        screen = ScreenList.GetNext() )
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         D( printf( "SaveEEFile, %s\n", CONV_TO_UTF8( screen->m_FileName ) ); )
         SaveEEFile( screen, FILE_SAVE_AS );

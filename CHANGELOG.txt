@@ -4,6 +4,19 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-08 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++All
+  * Coding policy object naming and formating fixes.
+++GerbView
+  * Fix compiler warnings.
+++Common
+  * Change item list type from SCH_ITEM to EDA_BaseStruct in BASE_SCREEN
+    object.
+  * Encapsulate BASE_SCREEN drawing item list member.
+  * Change grid container from wxWidgets to standard C++ container.
+
+
 2010-dec-07 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++EESchema

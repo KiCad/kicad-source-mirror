@@ -16,7 +16,7 @@ class SCH_SHEET;
 class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 
 
 /**
@@ -110,7 +110,7 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void        Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
 /*the functions Draw, CreateGraphicShape and Plot are no removed as
  *  as this shape is already handled as HIERLABEL ...
@@ -259,7 +259,7 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void           Place( SCH_EDIT_FRAME* frame, wxDC* DC );
     SCH_SHEET*     GenCopy();
     void           DisplayInfo( WinEDA_DrawFrame* frame );
 
@@ -379,11 +379,11 @@ public:
      *  m_AssociatedScreen point on the screen, and its m_RefCount is
      * incremented
      *  else creates a new associated screen and load the data file.
-     *  @param aFrame = a WinEDA_SchematicFrame pointer to the maim schematic
+     *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic
      * frame
      *  @return true if OK
      */
-    bool     Load( WinEDA_SchematicFrame* aFrame );
+    bool     Load( SCH_EDIT_FRAME* aFrame );
 
     /**
      * Function SearchHierarchy
@@ -442,8 +442,7 @@ public:
      * @param aFileName = the new filename
      * @param aFrame = the schematic frame
      */
-    bool ChangeFileName( WinEDA_SchematicFrame* aFrame,
-                         const wxString&        aFileName );
+    bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
 
     //void      RemoveSheet(SCH_SHEET* sheet);
     //to remove a sheet, just delete it

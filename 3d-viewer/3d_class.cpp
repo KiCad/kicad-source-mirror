@@ -20,7 +20,7 @@ S3D_Vertex::S3D_Vertex()
 
 
 S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
-    EDA_BaseStruct( father, NOT_USED )
+    EDA_ITEM( father, NOT_USED )
 {
     m_DiffuseColor.x   = m_DiffuseColor.y = m_DiffuseColor.z = 1.0;
     m_SpecularColor.x  = m_SpecularColor.y = m_SpecularColor.z = 1.0;
@@ -57,8 +57,8 @@ void S3D_MASTER::Copy( S3D_MASTER* pattern )
 }
 
 
-S3D_MASTER::S3D_MASTER( EDA_BaseStruct* aParent ) :
-    EDA_BaseStruct( aParent, NOT_USED )
+S3D_MASTER::S3D_MASTER( EDA_ITEM* aParent ) :
+    EDA_ITEM( aParent, NOT_USED )
 {
     m_MatScale.x  = m_MatScale.y = m_MatScale.z = 1.0;
     m_3D_Drawings = NULL;
@@ -85,8 +85,8 @@ S3D_MASTER:: ~S3D_MASTER()
 }
 
 
-Struct3D_Shape::Struct3D_Shape( EDA_BaseStruct* aParent ) :
-    EDA_BaseStruct( aParent, NOT_USED )
+Struct3D_Shape::Struct3D_Shape( EDA_ITEM* aParent ) :
+    EDA_ITEM( aParent, NOT_USED )
 {
     m_3D_Coord = NULL;
     m_3D_CoordIndex = NULL;

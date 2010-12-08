@@ -24,11 +24,8 @@
 #define IS_SELECTED 1
 
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                     wxDC*             DC,
-                                     bool              erase );
-static int  MarkItemsInBloc( MODULE*   module,
-                             EDA_Rect& Rect );
+static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static int  MarkItemsInBloc( MODULE* module, EDA_Rect& Rect );
 
 static void ClearMarkItems( MODULE* module );
 static void CopyMarkedItems( MODULE* module, wxPoint offset );
@@ -439,7 +436,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
  */
 void MoveMarkedItems( MODULE* module, wxPoint offset )
 {
-    EDA_BaseStruct* item;
+    EDA_ITEM* item;
 
     if( module == NULL )
         return;
@@ -520,7 +517,7 @@ void DeleteMarkedItems( MODULE* module )
 void MirrorMarkedItems( MODULE* module, wxPoint offset )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
-    EDA_BaseStruct* item;
+    EDA_ITEM* item;
 
     if( module == NULL )
         return;
@@ -577,7 +574,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 void RotateMarkedItems( MODULE* module, wxPoint offset )
 {
 #define ROTATE( z ) RotatePoint( (&z), offset, 900 )
-    EDA_BaseStruct* item;
+    EDA_ITEM* item;
 
     if( module == NULL )
         return;
@@ -627,7 +624,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
 void ClearMarkItems( MODULE* module )
 {
-    EDA_BaseStruct* item;
+    EDA_ITEM* item;
 
     if( module == NULL )
         return;
@@ -647,10 +644,10 @@ void ClearMarkItems( MODULE* module )
  */
 int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
 {
-    EDA_BaseStruct* item;
-    int             ItemsCount = 0;
-    wxPoint         pos;
-    D_PAD*          pad;
+    EDA_ITEM* item;
+    int       ItemsCount = 0;
+    wxPoint   pos;
+    D_PAD*    pad;
 
     if( module == NULL )
         return 0;

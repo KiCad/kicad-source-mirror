@@ -27,7 +27,7 @@
 #include "dialog_annotate_base.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class wxConfig;
 
 
@@ -38,11 +38,11 @@ class wxConfig;
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
 private:
-    WinEDA_SchematicFrame * m_Parent;
+    SCH_EDIT_FRAME * m_Parent;
     wxConfig* m_Config;
 
 public:
-    DIALOG_ANNOTATE( WinEDA_SchematicFrame* parent );
+    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent );
     ~DIALOG_ANNOTATE(){};
 
     /// Initialises member variables

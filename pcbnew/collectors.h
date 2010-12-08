@@ -294,7 +294,7 @@ public:
     /**
      * Function operator[int]
      * overloads COLLECTOR::operator[](int) to return a BOARD_ITEM* instead of
-     * an EDA_BaseStruct* type.
+     * an EDA_ITEM* type.
      * @param ndx The index into the list.
      * @return BOARD_ITEM* - or something derived from it, or NULL.
      */
@@ -318,12 +318,12 @@ public:
      * is the examining function within the INSPECTOR which is passed to the
      * Iterate function.
      *
-     * @param testItem An EDA_BaseStruct to examine.
+     * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData );
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
 
 
     /**
@@ -553,7 +553,7 @@ public:
     /**
      * Function operator[int]
      * overloads COLLECTOR::operator[](int) to return a BOARD_ITEM* instead of
-     * an EDA_BaseStruct* type.
+     * an EDA_ITEM* type.
      * @param ndx The index into the list.
      * @return BOARD_ITEM* - or something derived from it, or NULL.
      */
@@ -570,12 +570,12 @@ public:
      * is the examining function within the INSPECTOR which is passed to the
      * Iterate function.
      *
-     * @param testItem An EDA_BaseStruct to examine.
+     * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_BaseStruct* testItem, const void* testData );
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
 
 
     /**

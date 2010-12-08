@@ -1,6 +1,6 @@
 /****************************************/
 /* Basic classes for Kicad:				*/
-/*		EDA_BaseStruct                  */
+/*		EDA_ITEM                        */
 /*		EDA_TextStruct                  */
 /****************************************/
 
@@ -20,7 +20,7 @@ enum textbox {
 };
 
 
-EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
+EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
@@ -28,14 +28,14 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 }
 
 
-EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
+EDA_ITEM::EDA_ITEM( KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
 }
 
 
-EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
+EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
     m_StructType = base.m_StructType;
     m_Parent     = base.m_Parent;
@@ -47,7 +47,7 @@ EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
 }
 
 
-void EDA_BaseStruct::InitVars()
+void EDA_ITEM::InitVars()
 {
     m_StructType = TYPE_NOT_INIT;
     Pnext       = NULL;     // Linked list: Link (next struct)
@@ -63,7 +63,7 @@ void EDA_BaseStruct::InitVars()
 }
 
 
-void EDA_BaseStruct::SetModified()
+void EDA_ITEM::SetModified()
 {
     m_Flags |= IS_CHANGED;
 
@@ -74,12 +74,12 @@ void EDA_BaseStruct::SetModified()
 
 
 // see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
-                                              INSPECTOR*      inspector,
-                                              const void*     testData,
-                                              const KICAD_T   scanTypes[] )
+SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*     listStart,
+                                        INSPECTOR*    inspector,
+                                        const void*   testData,
+                                        const KICAD_T scanTypes[] )
 {
-    EDA_BaseStruct* p = listStart;
+    EDA_ITEM* p = listStart;
 
     for( ; p; p = p->Pnext )
     {
@@ -93,8 +93,8 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 // see base_struct.h
 // many classes inherit this method, be careful:
-SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
-                                     const KICAD_T scanTypes[] )
+SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
+                               const KICAD_T scanTypes[] )
 {
     KICAD_T stype;
 
@@ -143,7 +143,7 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
+void EDA_ITEM::Show( int nestLevel, std::ostream& os )
 {
     // XML output:
     wxString s = GetClass();
@@ -161,7 +161,7 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
  * @param os The ostream&, where to output
  * @return std::ostream& - for continuation.
  **/
-std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
+std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 {
     for( int i = 0; i<nestLevel; ++i )
         os << "  ";

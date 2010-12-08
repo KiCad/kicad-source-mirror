@@ -54,8 +54,8 @@ class GERBER_DRAW_ITEM : public BOARD_ITEM
     // make SetNext() and SetBack() private so that they may not be called from anywhere.
     // list management is done on GERBER_DRAW_ITEMs using DLIST<GERBER_DRAW_ITEM> only.
 private:
-    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 
 public:
@@ -218,7 +218,7 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
+     * Is virtual from EDA_ITEM.
      * Display info about this GERBER item
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */

@@ -320,10 +320,9 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     }
 
     /* draw graphic items */
-    EDA_BaseStruct* PtStruct;
-    for( PtStruct = pcb->m_Drawings;
-        PtStruct != NULL;
-        PtStruct = PtStruct->Next() )
+    EDA_ITEM* PtStruct;
+
+    for( PtStruct = pcb->m_Drawings;  PtStruct != NULL;  PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -691,8 +690,9 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( !As3dShape )
     {
         // The footprint does not have a 3D shape, draw its 2D shape instead
-        EDA_BaseStruct* Struct = m_Drawings;
+        EDA_ITEM* Struct = m_Drawings;
         glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
+
         for( ; Struct != NULL; Struct = Struct->Next() )
         {
             switch( Struct->Type() )

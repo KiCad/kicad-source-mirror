@@ -107,13 +107,13 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 
     if( aPrintAll && m_Parent->m_Ident == SCHEMATIC_FRAME )
     {
-        WinEDA_SchematicFrame*  schframe = (WinEDA_SchematicFrame*) m_Parent;
-        SCH_SHEET_PATH*         sheetpath, * oldsheetpath = schframe->GetSheet();
-        SCH_SCREEN*             schscreen = schframe->GetScreen();
+        SCH_EDIT_FRAME*  schframe = (SCH_EDIT_FRAME*) m_Parent;
+        SCH_SHEET_PATH*  sheetpath, * oldsheetpath = schframe->GetSheet();
+        SCH_SCREEN*      schscreen = schframe->GetScreen();
         oldscreen = schscreen;
-        SCH_SHEET_LIST          SheetList( NULL );
+        SCH_SHEET_LIST   SheetList( NULL );
         sheetpath = SheetList.GetFirst();
-        SCH_SHEET_PATH          list;
+        SCH_SHEET_PATH   list;
 
         for( ; ; )
         {

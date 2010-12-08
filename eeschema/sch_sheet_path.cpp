@@ -136,8 +136,10 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
 SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 {
     SCH_SHEET* lastSheet = Last();
+
     if( lastSheet && lastSheet->m_AssociatedScreen )
-        return lastSheet->m_AssociatedScreen->EEDrawList;
+        return lastSheet->m_AssociatedScreen->GetDrawItems();
+
     return NULL;
 }
 
@@ -147,10 +149,10 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
     SCH_ITEM* item = NULL;
 
     if( m_numSheets && m_sheets[0]->m_AssociatedScreen )
-        item = m_sheets[0]->m_AssociatedScreen->EEDrawList;
+        item = m_sheets[0]->m_AssociatedScreen->GetDrawItems();
 
     /* @fixme - These lists really should be one of the boost pointer containers.  This
-     *          is a brain dead hack to allow reverse iteration of EDA_BaseStruct linked
+     *          is a brain dead hack to allow reverse iteration of EDA_ITEM linked
      *          list.
      */
     SCH_ITEM* lastItem = NULL;
@@ -253,7 +255,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences()
 {
-    EDA_BaseStruct* t = LastDrawList();
+    EDA_ITEM* t = LastDrawList();
 
     while( t )
     {
@@ -530,7 +532,8 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
     if( aSheet->m_AssociatedScreen != NULL )
     {
-        EDA_BaseStruct* strct = m_currList.LastDrawList();
+        EDA_ITEM* strct = m_currList.LastDrawList();
+
         while( strct )
         {
             if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )

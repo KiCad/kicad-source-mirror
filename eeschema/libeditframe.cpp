@@ -163,7 +163,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
 END_EVENT_TABLE()
 
 
-LIB_EDIT_FRAME::LIB_EDIT_FRAME( WinEDA_SchematicFrame* aParent,
+LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                                 const wxString& title,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
@@ -247,7 +247,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( WinEDA_SchematicFrame* aParent,
 
 LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
-    WinEDA_SchematicFrame* frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
 
     frame->m_LibeditFrame = NULL;
     m_drawItem = m_lastDrawItem = NULL;
@@ -958,7 +958,7 @@ void LIB_EDIT_FRAME::EnsureActiveLibExists()
 void LIB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     WinEDA_BasicFrame::SetLanguage( event );
-    WinEDA_SchematicFrame *parent = (WinEDA_SchematicFrame *)GetParent();
+    SCH_EDIT_FRAME *parent = (SCH_EDIT_FRAME *)GetParent();
     parent->WinEDA_BasicFrame::SetLanguage( event );
 }
 

@@ -47,7 +47,7 @@ static void     SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList );
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
  */
-int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
+int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
 {
     int cmd;
 
@@ -85,7 +85,7 @@ int WinEDA_SchematicFrame::ReturnBlockCommand( int key )
 
 /* Init the parameters used by the block paste command
  */
-void WinEDA_SchematicFrame::InitBlockPasteInfos()
+void SCH_EDIT_FRAME::InitBlockPasteInfos()
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -99,7 +99,7 @@ void WinEDA_SchematicFrame::InitBlockPasteInfos()
  *  - block move & drag
  *  - block copy & paste
  */
-void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
+void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     bool            err   = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
@@ -181,7 +181,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
     block->m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
 
-    TestDanglingEnds( GetScreen()->EEDrawList, DC );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
 
     if( block->GetCount() )
     {
@@ -204,7 +204,7 @@ void WinEDA_SchematicFrame::HandleBlockPlace( wxDC* DC )
  * @return false if no item selected, or command finished,
  * true if some items found and HandleBlockPlace must be called later
  */
-bool WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
+bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool            nextcmd = false;
     bool            zoom_command = false;
@@ -269,7 +269,7 @@ bool WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
                 OnModify();
             }
             block->ClearItemsList();
-            TestDanglingEnds( GetScreen()->EEDrawList, DC );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
             DrawPanel->Refresh();
             break;
 
@@ -334,7 +334,7 @@ bool WinEDA_SchematicFrame::HandleBlockEnd( wxDC* DC )
  * a mirror/rotate command is immediatly executed and multible block commands
  * are not allowed (multiple commands are tricky to undo/redo in one time)
  */
-void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
+void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 {
     bool blockCmdFinished = true;   /* set to false for block command which
                                      * have a next step
@@ -386,7 +386,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             DeleteItemsInList( DrawPanel, block->m_ItemsSelection );
             OnModify();
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, DC );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         DrawPanel->Refresh();
         break;
 
@@ -421,7 +421,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
             RotateListOfItems( block->m_ItemsSelection, rotationPoint );
             OnModify();
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, DC );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         DrawPanel->Refresh();
 //        block->m_State   = STATE_BLOCK_MOVE;
 //        block->m_Command = BLOCK_MOVE; //allows multiple rotate
@@ -442,7 +442,7 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 //            block->m_State   = STATE_BLOCK_MOVE;
 //            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, DC );
+        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         DrawPanel->Refresh();
         break;
 
@@ -461,7 +461,8 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 //            block->m_State   = STATE_BLOCK_MOVE;
 //            block->m_Command = BLOCK_MOVE; //allows multiple mirrors
         }
-        TestDanglingEnds( GetScreen()->EEDrawList, DC );
+
+        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         DrawPanel->Refresh();
         break;
 
@@ -489,7 +490,6 @@ void WinEDA_SchematicFrame::HandleBlockEndByPopUp( int Command, wxDC* DC )
 static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR* block = &panel->GetScreen()->m_BlockLocate;;
-
     BASE_SCREEN*    screen = panel->GetScreen();
     SCH_ITEM*       schitem;
 
@@ -497,6 +497,7 @@ static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     if( erase )
     {
         block->Draw( panel, DC, block->m_MoveVector, g_XorMode, block->m_Color );
+
         for( unsigned ii = 0; ii < block->GetCount(); ii++ )
         {
             schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
@@ -548,7 +549,7 @@ void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
 * Routine to paste a structure from the g_BlockSaveDataList stack.
 *   This routine is the same as undelete but original list is NOT removed.
 *****************************************************************************/
-void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
+void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 {
     SCH_ITEM* Struct;
 
@@ -577,8 +578,8 @@ void WinEDA_SchematicFrame::PasteListOfItems( wxDC* DC )
         }
         SetaParent( Struct, GetScreen() );
         RedrawOneStruct( DrawPanel, DC, Struct, GR_DEFAULT_DRAWMODE );
-        Struct->SetNext( GetScreen()->EEDrawList );
-        GetScreen()->EEDrawList = Struct;
+        Struct->SetNext( GetScreen()->GetDrawItems() );
+        GetScreen()->SetDrawItems( Struct );
     }
 
     SaveCopyInUndoList( picklist, UR_NEW );
@@ -738,7 +739,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
     /* Review the list of elements not selected. */
 
     ITEM_PICKER picker;
-    Struct = screen->EEDrawList;
+    Struct = (SCH_ITEM*) screen->GetDrawItems();
+
     while( Struct )
     {
         picker.m_PickedItem     = Struct;
