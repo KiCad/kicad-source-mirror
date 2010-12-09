@@ -49,6 +49,7 @@ public:
     bool        Sel_Texte_Divers;
     bool        Sel_Texte_Invisible;
     bool        PlotPadsOnSilkLayer; /* allows pads on silkscreen */
+    bool        m_SubtractMaskFromSilk;
 
     /* id for plot format (see enum PlotFormat in plot_common.h) */
     int PlotFormat;
@@ -66,14 +67,13 @@ public:
 
 private:
     wxString       outputDirectory;
-    bool           subtractMaskFromSilk;
 
 public:
     PCB_Plot_Options();
     void SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
     wxString GetOutputDirectory() { return outputDirectory; };
-    void SetSubtractMaskFromSilk( bool aSubtract ) { subtractMaskFromSilk = aSubtract; };
-    bool GetSubtractMaskFromSilk() { return subtractMaskFromSilk; };
+    void SetSubtractMaskFromSilk( bool aSubtract ) { m_SubtractMaskFromSilk = aSubtract; };
+    bool GetSubtractMaskFromSilk() { return m_SubtractMaskFromSilk; };
 };
 
 extern PCB_Plot_Options g_pcb_plot_options;

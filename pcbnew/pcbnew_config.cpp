@@ -12,6 +12,7 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
+#include "plot_common.h"
 #include "worksheet.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
@@ -409,6 +410,15 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetConfigurationSettings()
                                                     &g_Show_Module_Ratsnest, TRUE ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                     &g_TwoSegmentTrackBuild, TRUE ) );
+    // Plot options:
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PlotOutputFormat" ),
+                                                    &g_pcb_plot_options.PlotFormat, PLOT_FORMAT_GERBER ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "EdgeLayerGerberOpt" ),
+                                                    &g_pcb_plot_options.Exclude_Edges_Pcb, true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SubstractMasktoSilk" ),
+                                                    &g_pcb_plot_options.m_SubtractMaskFromSilk, false ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PlotPadsOnSilkscreen" ),
+                                                    &g_pcb_plot_options.PlotPadsOnSilkLayer, false ) );
 
     return m_configSettings;
 }

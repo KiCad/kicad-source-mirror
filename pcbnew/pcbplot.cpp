@@ -21,12 +21,9 @@
 #define PLOT_DEFAULT_MARGE 300      // mils
 
 /* Keywords to r/w options in m_Config */
-#define OPTKEY_EDGELAYER_GERBER   wxT( "EdgeLayerGerberOpt" )
 #define OPTKEY_GERBER_EXTENSIONS  wxT( "GerberOptUseLayersExt" )
 #define OPTKEY_XFINESCALE_ADJ     wxT( "PlotXFineScaleAdj" )
 #define OPTKEY_YFINESCALE_ADJ     wxT( "PlotYFineScaleAdj" )
-#define OPTKEY_PADS_ON_SILKSCREEN wxT( "PlotPadsOnSilkscreen" )
-#define OPTKEY_OUTPUT_FORMAT      wxT( "PlotOutputFormat" )
 
 // Define min and max reasonable values for print scale
 #define MIN_SCALE 0.01
@@ -35,7 +32,7 @@
 // PCB_Plot_Options constructor: set the default values for plot options:
 PCB_Plot_Options::PCB_Plot_Options()
 {
-    subtractMaskFromSilk = true;
+    m_SubtractMaskFromSilk = false;
     Sel_Texte_Reference = true;
     Sel_Texte_Valeur    = true;
     Sel_Texte_Divers    = true;
@@ -145,8 +142,6 @@ void DIALOG_PLOT::Init_Dialog()
 
     BOARD*   board = m_Parent->GetBoard();
 
-    m_Config->Read( OPTKEY_OUTPUT_FORMAT, &g_pcb_plot_options.PlotFormat );
-    m_Config->Read( OPTKEY_EDGELAYER_GERBER, &g_pcb_plot_options.Exclude_Edges_Pcb );
     m_Config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
 
@@ -263,9 +258,6 @@ void DIALOG_PLOT::Init_Dialog()
     }
 
     // Option to plot pads on silkscreen layers or all layers
-    m_Config->Read( OPTKEY_PADS_ON_SILKSCREEN,
-                    &g_pcb_plot_options.PlotPadsOnSilkLayer );
-
     m_Plot_Pads_on_Silkscreen->SetValue( g_pcb_plot_options.PlotPadsOnSilkLayer );
 
     // Options to plot texts on footprints
@@ -497,17 +489,12 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     msg = m_FineAdjustYscaleOpt->GetValue();
     msg.ToDouble( &m_YScaleAdjust );
 
-    m_Config->Write( OPTKEY_EDGELAYER_GERBER,
-                     g_pcb_plot_options.Exclude_Edges_Pcb );
     m_Config->Write( OPTKEY_GERBER_EXTENSIONS,
                     m_Use_Gerber_Extensions->GetValue() );
     m_Config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
     m_Config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
-    m_Config->Write( OPTKEY_PADS_ON_SILKSCREEN,
-                     g_pcb_plot_options.PlotPadsOnSilkLayer );
 
-    int formatNdx = m_PlotFormatOpt->GetSelection();
-    m_Config->Write( OPTKEY_OUTPUT_FORMAT, formatNdx );
+    g_pcb_plot_options.PlotFormat = m_PlotFormatOpt->GetSelection();
 
     wxString layerKey;
     for( int layer = 0;  layer<NB_LAYERS;  ++layer )

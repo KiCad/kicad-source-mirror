@@ -804,6 +804,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
                 /* Invert local coordinates */
                 NEGATE( edgemod->m_Start0.y );
                 NEGATE( edgemod->m_End0.y );
+                NEGATE( edgemod->m_Angle );
                 break;
 
             case TYPE_TEXTE_MODULE:
