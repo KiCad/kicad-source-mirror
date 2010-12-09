@@ -189,7 +189,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->m_Thickness, m_SelectedPCBText->m_Size  );
     if( m_SelectedPCBText->m_Thickness > maxthickness )
     {
-        DisplayError(this, _("The text thickness is too large for the text size. It will be clamped"));
+        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
         m_SelectedPCBText->m_Thickness = maxthickness;
     }
 
