@@ -57,7 +57,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
     SCH_ITEM* schitem = LastDrawList();
     while( schitem && GetSheetsCount() < NB_MAX_SHEET )
     {
-        if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( schitem->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             Push( sheet );
@@ -259,7 +259,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 
     while( t )
     {
-        if( t->Type() == TYPE_SCH_COMPONENT )
+        if( t->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
             component->GetField( REFERENCE )->m_Text = component->GetRef( this );
@@ -536,7 +536,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) strct;
                 BuildSheetList( sheet );

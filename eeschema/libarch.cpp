@@ -40,7 +40,7 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     {
         for( SCH_ITEM* SchItem = screen->GetDrawItems(); SchItem; SchItem = SchItem->Next() )
         {
-            if( SchItem->Type() != TYPE_SCH_COMPONENT )
+            if( SchItem->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) SchItem;

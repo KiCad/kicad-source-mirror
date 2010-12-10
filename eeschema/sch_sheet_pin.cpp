@@ -36,7 +36,7 @@
  */
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
-    SCH_HIERLABEL( pos, text, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    SCH_HIERLABEL( pos, text, SCH_SHEET_LABEL_T )
 {
     SetParent( parent );
     wxASSERT( parent );
@@ -103,7 +103,7 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_SHEET_PIN::GetPenSize()
+int SCH_SHEET_PIN::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
 }

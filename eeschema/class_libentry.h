@@ -233,7 +233,7 @@ public:
 
     wxArrayString& GetFootPrints() { return m_FootprintList; }
 
-    EDA_Rect GetBoundaryBox( int aUnit, int aConvert );
+    EDA_Rect GetBoundingBox( int aUnit, int aConvert ) const;
 
     bool SaveDateAndTime( FILE* aFile );
     bool LoadDateAndTime( char* aLine );
@@ -385,7 +385,7 @@ public:
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
     {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, COMPONENT_PIN_DRAW_TYPE );
+        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, LIB_PIN_T );
     }
 
 

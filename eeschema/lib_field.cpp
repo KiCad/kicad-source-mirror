@@ -41,13 +41,13 @@
  *  others = free fields
  */
 LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
-    LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_FIELD_T, aParent )
 {
     Init( idfield );
 }
 
 
-LIB_FIELD::LIB_FIELD( int idfield ) : LIB_DRAW_ITEM( COMPONENT_FIELD_DRAW_TYPE, NULL )
+LIB_FIELD::LIB_FIELD( int idfield ) : LIB_DRAW_ITEM( LIB_FIELD_T, NULL )
 {
     Init( idfield );
 }
@@ -444,7 +444,7 @@ void LIB_FIELD::Copy( LIB_FIELD* Target ) const
 
 int LIB_FIELD::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
-    wxASSERT( other.Type() == COMPONENT_FIELD_DRAW_TYPE );
+    wxASSERT( other.Type() == LIB_FIELD_T );
 
     const LIB_FIELD* tmp = ( LIB_FIELD* ) &other;
 
@@ -529,7 +529,7 @@ wxString LIB_FIELD::GetFullText( int unit )
 }
 
 
-EDA_Rect LIB_FIELD::GetBoundingBox()
+EDA_Rect LIB_FIELD::GetBoundingBox() const
 {
     EDA_Rect rect = GetTextBox();
     rect.m_Pos.y *= -1;

@@ -46,12 +46,12 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( TYPE_SCH_MARKER,
+        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T,
                                                                  lastMarker, wrap );
     }
     else
     {
-        lastMarker = (SCH_MARKER*) schematic.FindNextItem( TYPE_SCH_MARKER, &sheetFoundIn,
+        lastMarker = (SCH_MARKER*) schematic.FindNextItem( SCH_MARKER_T, &sheetFoundIn,
                                                            lastMarker, wrap );
     }
 
@@ -126,7 +126,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         for( ; ( DrawList != NULL ) && ( NotFound == true );
              DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() == TYPE_SCH_COMPONENT )
+            if( DrawList->Type() == SCH_COMPONENT_T )
             {
                 SCH_COMPONENT* pSch;
                 pSch = (SCH_COMPONENT*) DrawList;

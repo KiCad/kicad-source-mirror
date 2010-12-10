@@ -201,7 +201,7 @@ void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
     SCH_ITEM* schitem = list->LastDrawList();
     while( schitem && m_nbsheets < NB_MAX_SHEET )
     {
-        if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( schitem->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             m_nbsheets++;

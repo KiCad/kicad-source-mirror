@@ -113,7 +113,7 @@ GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
  * @return const wxPoint& - The position in A,B axis.
  * Because draw axis is top to bottom, the final y coordinates is negated
  */
-wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
+wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 {
     /* Note: RS274Xrevd_e is obscure about the order of transforms:
      * For instance: Rotation must be made after or before mirroring ?
@@ -255,7 +255,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 }
 
 
-EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
+EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
     EDA_Rect bbox( m_Start, wxSize( 1, 1 ) );

@@ -32,7 +32,8 @@ void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* a
         return;
 
     parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    if( aComponent->Type() != TYPE_SCH_COMPONENT )
+
+    if( aComponent->Type() != SCH_COMPONENT_T )
     {
         DisplayError( parent,
                       wxT( "InstallCmpeditFrame() error: This item is not a component" ) );

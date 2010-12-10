@@ -714,6 +714,31 @@ void MODULE::Set_Rectangle_Encadrement()
 }
 
 
+EDA_Rect MODULE::GetFootPrintRect() const
+{
+    EDA_Rect area;
+
+    area.m_Pos = m_Pos;
+    area.SetEnd( m_Pos );
+    area.Inflate( 500 );       // Give a min size
+
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
+    {
+        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
+            continue;
+
+        area.Merge( edge->GetBoundingBox() );
+    }
+
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    {
+        area.Merge( pad->GetBoundingBox() );
+    }
+
+    return area;
+}
+
+
 /* Equivalent to Module::Set_Rectangle_Encadrement() but in board coordinates:
  * Updates the module bounding box on the board
  * The rectangle is the rectangle with outlines and pads, but not the fields
@@ -721,29 +746,9 @@ void MODULE::Set_Rectangle_Encadrement()
  */
 void MODULE::SetRectangleExinscrit()
 {
-    m_RealBoundaryBox.m_Pos = m_Pos;
-    m_RealBoundaryBox.SetEnd( m_Pos );
-    m_RealBoundaryBox.Inflate( 500 );       // Give a min size
+    m_RealBoundaryBox = GetFootPrintRect();
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
-        edge; edge = edge->Next() )
-    {
-        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
-            continue;
-
-        EDA_Rect rect = edge->GetBoundingBox();
-        m_RealBoundaryBox.Merge( rect );
-    }
-
-
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        EDA_Rect rect = pad->GetBoundingBox();
-        m_RealBoundaryBox.Merge( rect );
-    }
-
-    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth()
-                    * m_RealBoundaryBox.GetHeight() );
+    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth() * m_RealBoundaryBox.GetHeight() );
 }
 
 
@@ -752,11 +757,9 @@ void MODULE::SetRectangleExinscrit()
  * returns the full bounding box of this Footprint, including fields
  * Mainly used to redraw the screen area occupied by the footprint
  */
-EDA_Rect MODULE::GetBoundingBox()
+EDA_Rect MODULE::GetBoundingBox() const
 {
-    // Calculate area without text fields:
-    SetRectangleExinscrit();
-    EDA_Rect area = m_RealBoundaryBox;
+    EDA_Rect area = GetFootPrintRect();;
 
     // Calculate extended area including text field:
     EDA_Rect text_area;
@@ -766,11 +769,11 @@ EDA_Rect MODULE::GetBoundingBox()
     text_area = m_Value->GetBoundingBox();
     area.Merge( text_area );
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;
-        edge = edge->Next() )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;  edge = edge->Next() )
     {
         if( edge->Type() != TYPE_TEXTE_MODULE )
             continue;
+
         text_area = ( (TEXTE_MODULE*) edge )->GetBoundingBox();
         area.Merge( text_area );
     }
@@ -797,11 +800,11 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     BOARD*   board = GetBoard();
 
     frame->EraseMsgBox();
+
     if( frame->m_Ident != PCB_FRAME )
         flag = TRUE;
 
-    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text,
-                           DARKCYAN );
+    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
 
     if( flag ) // Display last date the component was edited( useful in Module Editor)
     {

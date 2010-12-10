@@ -168,7 +168,7 @@ public:
      * @param aXYPosition = position in X,Y gerber axis
      * @return const wxPoint - The given position in plotter A,B axis.
      */
-    wxPoint GetABPosition(const wxPoint& aXYPosition );
+    wxPoint GetABPosition( const wxPoint& aXYPosition ) const;
 
     /**
      * Function GetXYPosition
@@ -178,7 +178,7 @@ public:
      * @param aABPosition = position in A,B plotter axis
      * @return const wxPoint - The given position in X,Y axis.
      */
-    wxPoint GetXYPosition(const wxPoint& aABPosition );
+    wxPoint GetXYPosition( const wxPoint& aABPosition );
 
     /**
      * Function GetDcodeDescr
@@ -187,7 +187,7 @@ public:
      */
     D_CODE*  GetDcodeDescr();
 
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /* Display on screen: */
     void     Draw( WinEDA_DrawPanel* aPanel,

@@ -23,22 +23,22 @@ void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 {
     switch( Struct->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
-    case DRAW_JUNCTION_STRUCT_TYPE:
-    case TYPE_SCH_TEXT:
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_COMPONENT:
-    case DRAW_SEGMENT_STRUCT_TYPE:
-    case DRAW_BUSENTRY_STRUCT_TYPE:
-    case DRAW_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_MARKER:
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
+    case SCH_JUNCTION_T:
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_COMPONENT_T:
+    case SCH_LINE_T:
+    case SCH_BUS_ENTRY_T:
+    case SCH_SHEET_T:
+    case SCH_MARKER_T:
+    case SCH_NO_CONNECT_T:
         Struct->SetParent( Screen );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         break;
 
     default:
@@ -194,15 +194,15 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
 
         switch( item->Type() )
         {
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
             RemoveFromDrawList( item );
             item->SetNext( List );
             List = item;
 
             if( CreateCopy )
             {
-                if( item->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+                if( item->Type() == SCH_JUNCTION_T )
                     new_item = ( (SCH_JUNCTION*) item )->GenCopy();
                 else
                     new_item = ( (SCH_LINE*) item )->GenCopy();
@@ -234,13 +234,13 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
 
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
-        if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+        if( DrawList->Type() == SCH_LINE_T )
         {
             TstDrawList = DrawList->Next();
 
             while( TstDrawList )
             {
-                if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+                if( TstDrawList->Type() == SCH_LINE_T )
                 {
                     SCH_LINE* line = (SCH_LINE*) DrawList;
 
@@ -438,13 +438,13 @@ void SCH_SCREENS::AddScreenToList( SCH_SCREEN* aScreen )
 
 void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
 {
-    if( aItem && aItem->Type() == DRAW_SHEET_STRUCT_TYPE )
+    if( aItem && aItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* ds = (SCH_SHEET*) aItem;
         aItem = ds->m_AssociatedScreen;
     }
 
-    if( aItem && aItem->Type() == SCREEN_STRUCT_TYPE )
+    if( aItem && aItem->Type() == SCH_SCREEN_T )
     {
         SCH_SCREEN*     screen = (SCH_SCREEN*) aItem;
         AddScreenToList( screen );
@@ -452,7 +452,7 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
 
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 BuildScreenList( strct );
             }

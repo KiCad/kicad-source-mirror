@@ -124,11 +124,17 @@ public:
     void     SetRectangleExinscrit();
 
     /**
+     * Function GetFootPrintRect()
+     * Returns the area of the module footprint excluding any text.
+     */
+    EDA_Rect GetFootPrintRect() const;
+
+    /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
      * Mainly used to redraw the screen area occupied by the footprint
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function GetPosition

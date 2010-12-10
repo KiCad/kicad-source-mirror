@@ -30,7 +30,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
     FILE*    f;
 
     if( screen == NULL )
-        screen = (SCH_SCREEN*) GetScreen();
+        screen = GetScreen();
 
     /* If no name exists in the window yet - save as new. */
     if( screen->m_FileName.IsEmpty() )
@@ -169,10 +169,12 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     {
         SAFE_DELETE( g_RootSheet );
     }
+
     CreateScreens();
-    screen = (SCH_SCREEN*) GetScreen();
+    screen = GetScreen();
 
     wxFileName fn = FullFileName;
+
     if( fn.IsRelative() )
     {
         fn.MakeAbsolute();

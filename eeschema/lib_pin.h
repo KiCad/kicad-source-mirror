@@ -153,7 +153,9 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
-    virtual EDA_Rect GetBoundingBox();
+
+    virtual EDA_Rect GetBoundingBox() const;
+
     wxPoint ReturnPinEndPoint() const;
 
     int ReturnPinDrawOrient( const TRANSFORM& aTransform );

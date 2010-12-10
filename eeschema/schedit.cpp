@@ -277,22 +277,22 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, TYPE_SCH_LABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, TYPE_SCH_GLOBALLABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_GLOBAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, TYPE_SCH_HIERLABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_HIERARCHICAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, TYPE_SCH_TEXT );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_TEXT_T );
         break;
 
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
@@ -338,7 +338,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
     case ID_POPUP_SCH_DELETE:
@@ -378,12 +378,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
             GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) screen->GetCurItem();
 
@@ -420,11 +420,11 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..) or a hierachical sheet
         // or a label
-        if( (screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_LABEL)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_GLOBALLABEL)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_HIERLABEL)
-           && (screen->GetCurItem()->Type() != DRAW_SHEET_STRUCT_TYPE) )
+        if( (screen->GetCurItem()->Type() != SCH_COMPONENT_T)
+           && (screen->GetCurItem()->Type() != SCH_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_GLOBAL_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_HIERARCHICAL_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_SHEET_T) )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -487,7 +487,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -504,7 +504,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -548,7 +548,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -561,7 +561,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -574,7 +574,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -588,7 +588,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -627,7 +627,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -642,7 +642,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a piece of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
         if( screen->GetCurItem() == NULL )
@@ -664,7 +664,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         EDA_ITEM* DrawStruct = screen->GetCurItem();
 
-        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
+        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
             InstallNextScreen( (SCH_SHEET*) DrawStruct );
         }
@@ -744,7 +744,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == TYPE_SCH_MARKER )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_MARKER_T )
             ( (SCH_MARKER*) screen->GetCurItem() )->DisplayMarkerInfo( this );
 
         break;
@@ -772,40 +772,40 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
 
     switch( DrawStruct->Type() )
     {
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         StartMoveBusEntry( (SCH_BUS_ENTRY*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         StartMoveTexte( (SCH_TEXT*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         StartMovePart( (SCH_COMPONENT*) DrawStruct, DC );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         StartMoveSheet( (SCH_SHEET*) DrawStruct, DC );
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
         StartMoveCmpField( (SCH_FIELD*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_MARKER:
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_MARKER_T:
+    case SCH_SHEET_LABEL_T:
     default:
         wxString msg;
         msg.Printf( wxT( "SCH_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),

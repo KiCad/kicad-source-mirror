@@ -49,7 +49,7 @@ bool SCH_EDIT_FRAME::FillFootprintFieldForAllInstancesofComponent( const wxStrin
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
         for( ; (DrawList != NULL); DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() != TYPE_SCH_COMPONENT )
+            if( DrawList->Type() != SCH_COMPONENT_T )
                 continue;
 
             Cmp = (SCH_COMPONENT*) DrawList;

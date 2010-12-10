@@ -344,7 +344,7 @@ int LIB_EDIT_FRAME::BestZoom()
 
     if( m_component )
     {
-        BoundaryBox = m_component->GetBoundaryBox( m_unit, m_convert );
+        BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
         GetScreen()->m_Curseur = BoundaryBox.Centre();
@@ -729,15 +729,14 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             switch( m_drawItem->Type() )
             {
-            case COMPONENT_ARC_DRAW_TYPE:
-            case COMPONENT_CIRCLE_DRAW_TYPE:
-            case COMPONENT_RECT_DRAW_TYPE:
-            case COMPONENT_POLYLINE_DRAW_TYPE:
-            case COMPONENT_LINE_DRAW_TYPE:
+            case LIB_ARC_T:
+            case LIB_CIRCLE_T:
+            case LIB_RECTANGLE_T:
+            case LIB_POLYLINE_T:
                 EditGraphicSymbol( &dc, m_drawItem );
                 break;
 
-            case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+            case LIB_TEXT_T:
                 EditSymbolText( &dc, m_drawItem );
                 break;
 
@@ -782,7 +781,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         DrawPanel->CursorOff( &dc );
         SaveCopyInUndoList( m_component );
-        if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+        if( m_drawItem->Type() == LIB_PIN_T )
         {
             DeletePin( &dc, m_component, (LIB_PIN*) m_drawItem );
         }
@@ -803,7 +802,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem == NULL )
             break;
         DrawPanel->MouseToCursorSchema();
-        if( m_drawItem->Type() == COMPONENT_PIN_DRAW_TYPE )
+        if( m_drawItem->Type() == LIB_PIN_T )
             StartMovePin( &dc );
         else
             StartMoveDrawSymbol( &dc );
@@ -815,10 +814,10 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         DrawPanel->MouseToCursorSchema();
-        if( m_drawItem->Type() == COMPONENT_RECT_DRAW_TYPE
-            || m_drawItem->Type() == COMPONENT_CIRCLE_DRAW_TYPE
-            || m_drawItem->Type() == COMPONENT_POLYLINE_DRAW_TYPE
-            || m_drawItem->Type() == COMPONENT_ARC_DRAW_TYPE
+        if( m_drawItem->Type() == LIB_RECTANGLE_T
+            || m_drawItem->Type() == LIB_CIRCLE_T
+            || m_drawItem->Type() == LIB_POLYLINE_T
+            || m_drawItem->Type() == LIB_ARC_T
             )
         {
             StartModifyDrawSymbol( &dc );
@@ -827,7 +826,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
-        if( m_drawItem == NULL && m_drawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE )
+        if( m_drawItem == NULL && m_drawItem->Type() != LIB_TEXT_T )
             break;
         DrawPanel->MouseToCursorSchema();
         if( !m_drawItem->InEditMode() )
@@ -842,7 +841,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
     {
-        if( m_drawItem == NULL || ( m_drawItem->Type() != COMPONENT_FIELD_DRAW_TYPE ) )
+        if( m_drawItem == NULL || ( m_drawItem->Type() != LIB_FIELD_T ) )
             break;
         DrawPanel->MouseToCursorSchema();
 
@@ -861,7 +860,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem == NULL )
             break;
         DrawPanel->CursorOff( &dc );
-        if( m_drawItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( m_drawItem->Type() == LIB_FIELD_T )
         {
             EditField( &dc, (LIB_FIELD*) m_drawItem );
         }
@@ -873,7 +872,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
         if( (m_drawItem == NULL )
-           || (m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE) )
+           || (m_drawItem->Type() != LIB_PIN_T) )
             break;
         SaveCopyInUndoList( m_component );
         GlobalSetPins( &dc, (LIB_PIN*) m_drawItem, id );
@@ -986,8 +985,10 @@ void LIB_EDIT_FRAME::RestoreComponent()
 {
     if( m_tempCopyComponent == NULL )
         return;
+
     if( m_component )
         delete m_component;
+
     m_component = m_tempCopyComponent;
     m_tempCopyComponent = NULL;
 }
@@ -1013,13 +1014,12 @@ void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
 
 void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 {
-    if ( ( DrawItem == NULL ) || ( DrawItem->Type() != COMPONENT_GRAPHIC_TEXT_DRAW_TYPE ) )
+    if ( ( DrawItem == NULL ) || ( DrawItem->Type() != LIB_TEXT_T ) )
         return;
 
     /* Deleting old text. */
     if( DC && !DrawItem->InEditMode() )
         DrawItem->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
-
 
     DIALOG_LIB_EDIT_TEXT* frame = new DIALOG_LIB_EDIT_TEXT( this, (LIB_TEXT*) DrawItem );
     frame->ShowModal();

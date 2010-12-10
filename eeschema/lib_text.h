@@ -98,7 +98,7 @@ public:
 
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
 
     void Rotate();
 

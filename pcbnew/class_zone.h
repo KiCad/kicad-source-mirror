@@ -124,7 +124,7 @@ public:
     /* Function GetBoundingBox
      * @return an EDA_Rect that is the bounding box of the zone outline
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
@@ -324,7 +324,7 @@ public:
     /** Acces to m_Poly parameters
      */
 
-    int GetNumCorners( void )
+    int GetNumCorners( void ) const
     {
         return m_Poly->GetNumCorners();
     }
@@ -336,7 +336,7 @@ public:
     }
 
 
-    wxPoint GetCornerPosition( int aCornerIndex )
+    wxPoint GetCornerPosition( int aCornerIndex ) const
     {
         return wxPoint( m_Poly->GetX( aCornerIndex ), m_Poly->GetY( aCornerIndex ) );
     }

@@ -44,7 +44,7 @@ static int CountConnectedItems( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, wxP
             continue;
 
 
-        if( TstJunction && ( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE ) )
+        if( TstJunction && ( Struct->Type() == SCH_JUNCTION_T ) )
         {
             #define JUNCTION ( (SCH_JUNCTION*) Struct )
             if( JUNCTION->m_Pos == pos )
@@ -52,11 +52,11 @@ static int CountConnectedItems( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, wxP
             #undef JUNCTION
         }
 
-        if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+        if( Struct->Type() != SCH_LINE_T )
             continue;
 
         #define SEGM ( (SCH_LINE*) Struct )
-        if( SEGM->IsOneEndPointAt( pos ) )
+        if( SEGM->IsEndPoint( pos ) )
             count++;
         #undef SEGM
     }
@@ -81,20 +81,20 @@ static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE
     {
         if( Struct->m_Flags )
             continue;
-        if( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+        if( Struct->Type() == SCH_JUNCTION_T )
         {
         #define JUNCTION ( (SCH_JUNCTION*) Struct )
-            if( segment->IsOneEndPointAt( JUNCTION->m_Pos ) )
+            if( segment->IsEndPoint( JUNCTION->m_Pos ) )
                 Struct->m_Flags |= CANDIDATE;
             continue;
         #undef JUNCTION
         }
 
-        if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+        if( Struct->Type() != SCH_LINE_T )
             continue;
 
         #define SEGM ( (SCH_LINE*) Struct )
-        if( segment->IsOneEndPointAt( SEGM->m_Start ) )
+        if( segment->IsEndPoint( SEGM->m_Start ) )
         {
             if( !frame->LocatePinEnd( ListStruct, SEGM->m_Start ) )
             {
@@ -102,7 +102,7 @@ static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE
                 MarkConnected( frame, ListStruct, SEGM );
             }
         }
-        if( segment->IsOneEndPointAt( SEGM->m_End ) )
+        if( segment->IsEndPoint( SEGM->m_End ) )
         {
             if( !frame->LocatePinEnd( ListStruct, SEGM->m_End ) )
             {
@@ -131,13 +131,13 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
     for( DelStruct = GetScreen()->GetDrawItems(); DelStruct != NULL; DelStruct = DelStruct->Next() )
         DelStruct->m_Flags = 0;
 
-    BreakSegmentOnJunction( (SCH_SCREEN*) GetScreen() );
+    BreakSegmentOnJunction( GetScreen() );
 
     /* Locate all the wires, bus or junction under the mouse cursor, and put
      * them in a list of items to delete
      */
     ITEM_PICKER picker(NULL, UR_DELETED);
-    SCH_SCREEN* screen = (SCH_SCREEN*) GetScreen();
+    SCH_SCREEN* screen = GetScreen();
     // Save the list entry point of this screen
     SCH_ITEM* savedItems = screen->GetDrawItems();
     DelStruct = GetScreen()->GetDrawItems();
@@ -171,7 +171,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 
             #define SEGM ( (SCH_LINE*) DelStruct )
 
-            if( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+            if( DelStruct->Type() != SCH_LINE_T )
                 continue;
 
             MarkConnected( this, GetScreen()->GetDrawItems(), SEGM );
@@ -190,7 +190,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             if( !(DelStruct->m_Flags & CANDIDATE) )
                 continue;                                   // Already seen
 
-            if( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+            if( DelStruct->Type() != SCH_LINE_T )
                 continue;
 
             DelStruct->m_Flags |= SKIP_STRUCT;
@@ -207,11 +207,11 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
                 if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
 
-                if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+                if( removed_struct->Type() != SCH_LINE_T )
                     continue;
 
                 #define WIRE ( (SCH_LINE*) removed_struct )
-                if( WIRE->IsOneEndPointAt( SEGM->m_Start ) )
+                if( WIRE->IsEndPoint( SEGM->m_Start ) )
                     break;
             }
 
@@ -228,9 +228,9 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             {
                 if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
-                if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+                if( removed_struct->Type() != SCH_LINE_T )
                     continue;
-                if( WIRE->IsOneEndPointAt( SEGM->m_End ) )
+                if( WIRE->IsEndPoint( SEGM->m_End ) )
                     break;
             }
 
@@ -265,7 +265,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             if( !(DelStruct->m_Flags & CANDIDATE) )
                 continue;
 
-            if( DelStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+            if( DelStruct->Type() == SCH_JUNCTION_T )
             {
                 #define JUNCTION ( (SCH_JUNCTION*) DelStruct )
                 count = CountConnectedItems( this, GetScreen()->GetDrawItems(),
@@ -291,7 +291,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             if( DelStruct->m_Flags & STRUCT_DELETED )
                 continue;
 
-            if( DelStruct->Type() != TYPE_SCH_LABEL )
+            if( DelStruct->Type() != SCH_LABEL_T )
                 continue;
 
             GetScreen()->m_Curseur = ( (SCH_TEXT*) DelStruct )->m_Pos;
@@ -383,7 +383,7 @@ bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
  *   Screen = pointer on the screen of belonging
  *
  * Note:
- * DRAW_SHEET_STRUCT_TYPE structures for the screen and structures
+ * SCH_SHEET_T structures for the screen and structures
  * Corresponding keys are not.
  * They must be treated separately
  */
@@ -399,7 +399,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 
     Screen->SetModify();
 
-    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    if( DrawStruct->Type() == SCH_SHEET_LABEL_T )
     {
         // This structure is attached to a sheet, get the parent sheet object.
         SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) DrawStruct;
@@ -448,7 +448,7 @@ void DeleteAllMarkers( int type )
         {
             NextStruct = DrawStruct->Next();
 
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             Marker = (SCH_MARKER*) DrawStruct;

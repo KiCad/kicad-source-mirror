@@ -90,7 +90,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
-        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() == LIB_FIELD_T )
             continue;
         if( item.GetUnit() )
             item.SetUnit( m_unit );
@@ -200,11 +200,13 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
     {
-        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() == LIB_FIELD_T )
             continue;
+
         /* Don't save unused parts or alternate body styles. */
         if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
             continue;
+
         if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
             continue;
 
@@ -212,8 +214,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
             return;
     }
 
-    if( !file.Write( wxT( "ENDDRAW\n" ) )
-        || !file.Write( wxT( "ENDDEF\n" ) ) )
+    if( !file.Write( wxT( "ENDDRAW\n" ) ) || !file.Write( wxT( "ENDDEF\n" ) ) )
         return;
 }
 

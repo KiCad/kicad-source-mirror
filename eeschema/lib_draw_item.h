@@ -227,10 +227,7 @@ public:
    /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_Rect GetBoundingBox()
-    {
-        return EDA_ITEM::GetBoundingBox();
-    }
+    virtual EDA_Rect GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
     /**
      * Displays basic info (type, part and convert) about item

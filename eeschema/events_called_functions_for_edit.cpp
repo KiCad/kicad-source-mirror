@@ -31,7 +31,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
 
     switch( curr_item->Type() )
     {
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* newitem;
         newitem = ((SCH_COMPONENT*) curr_item)->GenCopy();
@@ -46,10 +46,10 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     }
     break;
 
-    case TYPE_SCH_TEXT:
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
     {
         SCH_TEXT* newitem = ((SCH_TEXT*) curr_item)->GenCopy();
         newitem->m_Flags = IS_NEW;

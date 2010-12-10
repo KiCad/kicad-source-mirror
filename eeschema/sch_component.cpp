@@ -64,7 +64,7 @@ void CreateDummyCmp()
 
 
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
-    SCH_ITEM( aParent, TYPE_SCH_COMPONENT )
+    SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
 }
@@ -73,7 +73,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
                               SCH_SHEET_PATH* sheet, int unit, int convert,
                               const wxPoint& pos, bool setNewItemFlag ) :
-    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+    SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
 
@@ -132,7 +132,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
 
 
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
-    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+    SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     /* assignment of all fields, including field vector elements, and linked
      * list pointers */
@@ -237,18 +237,18 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Draw the component boundary box */
     {
         EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundaryBox();
+        BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
-            BoundaryBox = GetField( REFERENCE )->GetBoundaryBox();
+            BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
             GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
-            BoundaryBox = GetField( VALUE )->GetBoundaryBox();
+            BoundaryBox = GetField( VALUE )->GetBoundingBox();
             GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
         }
 #endif
@@ -546,60 +546,6 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
         return NULL;
 
     return Entry->GetPin( number, m_Multi, m_Convert );
-}
-
-
-/**
- * Function GetBoundaryBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for graphic items and pins.
- * this include only fields defined in library
- * use GetBoundingBox() to include fields in schematic
- */
-EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
-{
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-    EDA_Rect       BoundaryBox;
-    int            x0, xm, y0, ym;
-
-    /* Get the basic Boundary box */
-    if( Entry )
-    {
-        BoundaryBox = Entry->GetBoundaryBox( m_Multi, m_Convert );
-        x0 = BoundaryBox.GetX();
-        xm = BoundaryBox.GetRight();
-
-        // We must reverse Y values, because matrix orientation
-        // suppose Y axis normal for the library items coordinates,
-        // m_Transform reverse Y values, but BoundaryBox is already reversed!
-        y0 = -BoundaryBox.GetY();
-        ym = -BoundaryBox.GetBottom();
-    }
-    else    /* if lib Entry not found, give a reasonable size */
-    {
-        x0 = y0 = -50;
-        xm = ym = 50;
-    }
-
-    /* Compute the real Boundary box (rotated, mirrored ...)*/
-    int x1 = m_Transform.x1 * x0 + m_Transform.y1 * y0;
-    int y1 = m_Transform.x2 * x0 + m_Transform.y2 * y0;
-    int x2 = m_Transform.x1 * xm + m_Transform.y1 * ym;
-    int y2 = m_Transform.x2 * xm + m_Transform.y2 * ym;
-
-    // H and W must be > 0:
-    if( x2 < x1 )
-        EXCHG( x2, x1 );
-    if( y2 < y1 )
-        EXCHG( y2, y1 );
-
-    BoundaryBox.SetX( x1 );
-    BoundaryBox.SetY( y1 );
-    BoundaryBox.SetWidth( x2 - x1 );
-    BoundaryBox.SetHeight( y2 - y1 );
-
-    BoundaryBox.Offset( m_Pos );
-    return BoundaryBox;
 }
 
 
@@ -1416,31 +1362,61 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 /**
- * Function GetBoundingBox
+ * Function GetBoundaryBox
  * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for visible components of this
- * object, and the units should be in the pcb or schematic coordinate system.
- * It is OK to overestimate the size by a few counts.
+ * This box should be an enclosing perimeter for graphic items and pins.
+ * this include only fields defined in library
+ * use GetBoundingBox() to include fields in schematic
  */
-EDA_Rect SCH_COMPONENT::GetBoundingBox()
+EDA_Rect SCH_COMPONENT::GetBoundingBox() const
 {
-    const int PADDING = 40;
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    EDA_Rect       bBox;
+    int            x0, xm, y0, ym;
 
-    // This gives a reasonable approximation (but some things are missing so...)
-    EDA_Rect  bbox = GetBoundaryBox();
+    if( Entry == NULL )
+        return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+
+    /* Get the basic Boundary box */
+    bBox = Entry->GetBoundingBox( m_Multi, m_Convert );
+    x0 = bBox.GetX();
+    xm = bBox.GetRight();
+
+    // We must reverse Y values, because matrix orientation
+    // suppose Y axis normal for the library items coordinates,
+    // m_Transform reverse Y values, but bBox is already reversed!
+    y0 = -bBox.GetY();
+    ym = -bBox.GetBottom();
+
+    /* Compute the real Boundary box (rotated, mirrored ...)*/
+    int x1 = m_Transform.x1 * x0 + m_Transform.y1 * y0;
+    int y1 = m_Transform.x2 * x0 + m_Transform.y2 * y0;
+    int x2 = m_Transform.x1 * xm + m_Transform.y1 * ym;
+    int y2 = m_Transform.x2 * xm + m_Transform.y2 * ym;
+
+    // H and W must be > 0:
+    if( x2 < x1 )
+        EXCHG( x2, x1 );
+    if( y2 < y1 )
+        EXCHG( y2, y1 );
+
+    bBox.SetX( x1 );
+    bBox.SetY( y1 );
+    bBox.SetWidth( x2 - x1 );
+    bBox.SetHeight( y2 - y1 );
+
+    bBox.Offset( m_Pos );
 
     // Include BoundingBoxes of fields
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         if( !GetField( ii )->IsVisible() )
             continue;
-        bbox.Merge( GetField( ii )->GetBoundaryBox() );
+
+        bBox.Merge( GetField( ii )->GetBoundingBox() );
     }
 
-    // ... add padding
-    bbox.Inflate( PADDING );
-
-    return bbox;
+    return bBox;
 }
 
 
@@ -1546,7 +1522,8 @@ void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
+                             wxPoint* aFindLocation )
 {
     // Search reference.
     // reference is a special field because a part identifier is added
@@ -1622,7 +1599,7 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
     for( LIB_PIN* Pin = Entry->GetNextPin(); Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
     {
-        wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+        wxASSERT( Pin->Type() == LIB_PIN_T );
 
         if( Pin->GetUnit() && m_Multi && ( m_Multi != Pin->GetUnit() ) )
             continue;
@@ -1639,7 +1616,7 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
 {
-    wxCHECK_MSG( Pin != NULL && Pin->Type() == COMPONENT_PIN_DRAW_TYPE, wxPoint( 0, 0 ),
+    wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
     return m_Transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
@@ -1672,7 +1649,7 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 
     for( pin = component->GetNextPin(); pin != NULL; pin = component->GetNextPin( pin ) )
     {
-        wxCHECK_RET( pin->Type() == COMPONENT_PIN_DRAW_TYPE,
+        wxCHECK_RET( pin->Type() == LIB_PIN_T,
                      wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
 
         // Skip items not used for this part.
@@ -1684,4 +1661,27 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
         // Calculate the pin position relative to the component position and orientation.
         aPoints.push_back( m_Transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
     }
+}
+
+
+bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    EDA_Rect rect = GetBoundingBox();
+
+    rect.Inflate( aAccuracy );
+
+    return rect.Inside( aPoint );
+}
+
+
+bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
 }

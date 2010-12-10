@@ -73,7 +73,7 @@ void ReAnnotatePowerSymbolsOnly( void )
 
         for( ; DrawList != NULL; DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() != TYPE_SCH_COMPONENT )
+            if( DrawList->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
@@ -226,7 +226,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 
         for( ; strct; strct = strct->Next() )
         {
-            if( strct->Type() == TYPE_SCH_COMPONENT )
+            if( strct->Type() == SCH_COMPONENT_T )
             {
                 if( aCurrentSheetOnly )
                     ( (SCH_COMPONENT*) strct )->ClearAnnotation( m_CurrentSheet );
@@ -368,7 +368,7 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
 
     for( ; DrawList != NULL;   DrawList = DrawList->Next() )
     {
-        if( DrawList->Type() == TYPE_SCH_COMPONENT )
+        if( DrawList->Type() == SCH_COMPONENT_T )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
             Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
@@ -981,7 +981,7 @@ static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
      */
 
     if( ii == 0 && ( item1->Type() != item2->Type() ) )
-        if( item1->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( item1->Type() == SCH_SHEET_T )
             ii = -1;
 
     return ii < 0;
@@ -1014,8 +1014,8 @@ int ReplaceDuplicatedTimeStamps()
 
         while( item )
         {
-            if( ( item->Type() == DRAW_SHEET_STRUCT_TYPE )
-               || ( item->Type() == TYPE_SCH_COMPONENT ) )
+            if( ( item->Type() == SCH_SHEET_T )
+               || ( item->Type() == SCH_COMPONENT_T ) )
                 itemlist.push_back( item );
 
             item = item->Next();
@@ -1036,7 +1036,7 @@ int ReplaceDuplicatedTimeStamps()
 
             // for a component, update its Time stamp and its paths
             // (m_PathsAndReferences field)
-            if( item->Type() == TYPE_SCH_COMPONENT )
+            if( item->Type() == SCH_COMPONENT_T )
                 ( (SCH_COMPONENT*) item )->SetTimeStamp( GetTimeStamp() );
 
             // for a sheet, update only its time stamp (annotation of its

@@ -31,7 +31,6 @@ extern const char* SheetLabelType[];    /* names of types of labels */
 class SCH_TEXT : public SCH_ITEM, public EDA_TextStruct
 {
 public:
-    int  m_Layer;
     int  m_Shape;
     bool m_IsDangling;          // true if not connected (used to draw the "not
                                 // connected" symbol
@@ -56,7 +55,7 @@ protected:
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
               const wxString& text = wxEmptyString,
-              KICAD_T aType = TYPE_SCH_TEXT );
+              KICAD_T aType = SCH_TEXT_T );
     ~SCH_TEXT() { }
 
     virtual wxString GetClass() const
@@ -78,9 +77,9 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
+    virtual void SetSchematicTextOrientation( int aSchematicOrientation );
 
-    int          GetSchematicTextOrientation() { return m_SchematicOrientation; }
+    int GetSchematicTextOrientation() { return m_SchematicOrientation; }
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -92,12 +91,13 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset();
 
-    SCH_TEXT*       GenCopy();
-    virtual void    Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               draw_mode,
-                          int               Color = -1 );
+    SCH_TEXT* GenCopy();
+
+    virtual void Draw( WinEDA_DrawPanel* panel,
+                       wxDC*             DC,
+                       const wxPoint&    offset,
+                       int               draw_mode,
+                       int               Color = -1 );
 
     /**
      * Function CreateGraphicShape
@@ -107,21 +107,14 @@ public:
      * for texts and labels: do nothing
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos )
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos )
     {
         aCorner_list.clear();
     }
-    void     SwapData( SCH_TEXT* copyitem );
 
-    void     Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+    void SwapData( SCH_TEXT* copyitem );
 
-    /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool     HitTest( const wxPoint& aPosRef );
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     /**
      * Function GetBoundingBox
@@ -130,7 +123,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Save
@@ -139,7 +132,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool     Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic text entry from \a aLine in a .sch file.
@@ -155,7 +148,7 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    int      GetPenSize();
+    int GetPenSize() const;
 
     // Geometric transforms (used in block operations):
 
@@ -200,17 +193,20 @@ public:
 
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
-
 #endif
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 
 class SCH_LABEL : public SCH_TEXT
 {
 public:
-    SCH_LABEL( const wxPoint& pos = wxPoint( 0, 0 ),
-               const wxString& text = wxEmptyString );
+    SCH_LABEL( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
     ~SCH_LABEL() { }
+
     virtual void Draw( WinEDA_DrawPanel* panel,
                        wxDC*             DC,
                        const wxPoint&    offset,
@@ -257,7 +253,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox();
+    EDA_Rect        GetBoundingBox() const;
 
     /**
      * Function Save
@@ -283,9 +279,9 @@ public:
 class SCH_GLOBALLABEL : public SCH_TEXT
 {
 public:
-    SCH_GLOBALLABEL( const wxPoint& pos = wxPoint( 0, 0 ),
-                     const wxString& text = wxEmptyString );
+    SCH_GLOBALLABEL( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
     ~SCH_GLOBALLABEL() { }
+
     virtual void Draw( WinEDA_DrawPanel* panel,
                        wxDC*             DC,
                        const wxPoint&    offset,
@@ -343,20 +339,13 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool            HitTest( const wxPoint& aPosRef );
-
-    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display purposes.
      * This box should be an enclosing perimeter for visible components of this
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox();
+    EDA_Rect        GetBoundingBox() const;
 
     /**
      * Function CreateGraphicShape (virual)
@@ -381,7 +370,9 @@ class SCH_HIERLABEL : public SCH_TEXT
 {
 public:
     SCH_HIERLABEL( const wxPoint& pos = wxPoint( 0, 0 ),
-                   const wxString& text = wxEmptyString, KICAD_T aType = TYPE_SCH_HIERLABEL );
+                   const wxString& text = wxEmptyString,
+                   KICAD_T aType = SCH_HIERARCHICAL_LABEL_T );
+
     ~SCH_HIERLABEL() { }
     virtual void Draw( WinEDA_DrawPanel* panel,
                        wxDC*             DC,
@@ -449,20 +440,13 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool            HitTest( const wxPoint& aPosRef );
-
-    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display purposes.
      * This box should be an enclosing perimeter for visible components of this
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox();
+    EDA_Rect        GetBoundingBox() const;
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis

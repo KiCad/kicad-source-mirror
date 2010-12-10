@@ -31,7 +31,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             switch( DrawEntry->Type() )
             {
-            case COMPONENT_PIN_DRAW_TYPE:
+            case LIB_PIN_T:
                 PlacePin( DC );
                 DrawEntry = NULL;
                 break;
@@ -113,7 +113,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             SaveCopyInUndoList( m_component );
 
-            if( DrawEntry->Type() == COMPONENT_PIN_DRAW_TYPE )
+            if( DrawEntry->Type() == LIB_PIN_T )
                 DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );
             else
                 m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
@@ -175,7 +175,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     switch( m_drawItem->Type() )
     {
-    case COMPONENT_PIN_DRAW_TYPE:
+    case LIB_PIN_T:
         if( m_drawItem->m_Flags == 0 )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -184,17 +184,16 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-    case COMPONENT_ARC_DRAW_TYPE:
-    case COMPONENT_CIRCLE_DRAW_TYPE:
-    case COMPONENT_RECT_DRAW_TYPE:
+    case LIB_ARC_T:
+    case LIB_CIRCLE_T:
+    case LIB_RECTANGLE_T:
         if( m_drawItem->m_Flags == 0 )
         {
             EditGraphicSymbol( DC, m_drawItem );
         }
         break;
 
-    case COMPONENT_LINE_DRAW_TYPE:
-    case COMPONENT_POLYLINE_DRAW_TYPE:
+    case LIB_POLYLINE_T:
         if( m_drawItem->m_Flags == 0 )
         {
             EditGraphicSymbol( DC, m_drawItem );
@@ -205,14 +204,14 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-    case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+    case LIB_TEXT_T:
         if( m_drawItem->m_Flags == 0 )
         {
             EditSymbolText( DC, m_drawItem );
         }
         break;
 
-    case COMPONENT_FIELD_DRAW_TYPE:
+    case LIB_FIELD_T:
         if( m_drawItem->m_Flags == 0 )
         {
             EditField( DC, (LIB_FIELD*) m_drawItem );

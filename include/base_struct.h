@@ -44,23 +44,23 @@ enum KICAD_T {
     TYPE_BOARD_ITEM_LIST,   // a list of board items
 
     // Draw Items in schematic
-    DRAW_POLYLINE_STRUCT_TYPE,
-    DRAW_JUNCTION_STRUCT_TYPE,
-    TYPE_SCH_TEXT,
-    TYPE_SCH_LABEL,
-    TYPE_SCH_GLOBALLABEL,
-    TYPE_SCH_HIERLABEL,
-    TYPE_SCH_COMPONENT,
-    DRAW_SEGMENT_STRUCT_TYPE,
-    DRAW_BUSENTRY_STRUCT_TYPE,
-    DRAW_SHEET_STRUCT_TYPE,
-    DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE,
-    TYPE_SCH_MARKER,
-    DRAW_NOCONNECT_STRUCT_TYPE,
-    DRAW_PART_TEXT_STRUCT_TYPE,
+    SCH_POLYLINE_T,
+    SCH_JUNCTION_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIERARCHICAL_LABEL_T,
+    SCH_COMPONENT_T,
+    SCH_LINE_T,
+    SCH_BUS_ENTRY_T,
+    SCH_SHEET_T,
+    SCH_SHEET_LABEL_T,
+    SCH_MARKER_T,
+    SCH_NO_CONNECT_T,
+    SCH_FIELD_T,
 
     // General
-    SCREEN_STRUCT_TYPE,
+    SCH_SCREEN_T,
     BLOCK_LOCATE_STRUCT_TYPE,
 
     /*
@@ -73,20 +73,19 @@ enum KICAD_T {
      */
     LIB_COMPONENT_T,
     LIB_ALIAS_T,
-    COMPONENT_ARC_DRAW_TYPE,
-    COMPONENT_CIRCLE_DRAW_TYPE,
-    COMPONENT_GRAPHIC_TEXT_DRAW_TYPE,
-    COMPONENT_RECT_DRAW_TYPE,
-    COMPONENT_POLYLINE_DRAW_TYPE,
-    COMPONENT_LINE_DRAW_TYPE,
-    COMPONENT_BEZIER_DRAW_TYPE,
-    COMPONENT_PIN_DRAW_TYPE,
+    LIB_ARC_T,
+    LIB_CIRCLE_T,
+    LIB_TEXT_T,
+    LIB_RECTANGLE_T,
+    LIB_POLYLINE_T,
+    LIB_BEZIER_T,
+    LIB_PIN_T,
 
     /*
      * Fields are not saved inside the "DRAW/ENDDRAW".  Add new draw item
      * types before this line.
      */
-    COMPONENT_FIELD_DRAW_TYPE,
+    LIB_FIELD_T,
 
     /*
      * For Gerbview: items type:
@@ -175,14 +174,15 @@ public:
     void Move( const wxPoint& aMoveVector );
 
     void    Normalize();                    // Ensure the height and width are >= 0
-    bool    Inside( const wxPoint& point ); // Return TRUE if point is in Rect
+    bool    Inside( const wxPoint& point ) const; // Return TRUE if point is in Rect
 
-    bool Inside( int x, int y ) { return Inside( wxPoint( x, y ) ); }
-    wxSize GetSize() { return m_Size; }
+    bool Inside( int x, int y ) const { return Inside( wxPoint( x, y ) ); }
+    bool Inside( const EDA_Rect& aRect ) const;
+    wxSize GetSize() const { return m_Size; }
     int GetX() const { return m_Pos.x; }
     int GetY() const { return m_Pos.y; }
-    wxPoint GetOrigin() { return m_Pos; }
-    wxPoint GetPosition() { return m_Pos; }
+    wxPoint GetOrigin() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_Pos; }
     wxPoint GetEnd() const { return wxPoint( GetRight(), GetBottom() ); }
     int GetWidth() const { return m_Size.x; }
     int GetHeight() const { return m_Size.y; }
@@ -427,12 +427,11 @@ public:
      * system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_Rect GetBoundingBox()
+    virtual EDA_Rect GetBoundingBox() const
     {
 #if defined(DEBUG)
         printf( "Missing GetBoundingBox()\n" );
-        Show( 0, std::cout ); // tell me which classes still need
-                              // GetBoundingBox support
+        Show( 0, std::cout ); // tell me which classes still need GetBoundingBox support
 #endif
 
         // return a zero-sized box per default. derived classes should override
@@ -502,7 +501,7 @@ public:
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    virtual void         Show( int nestLevel, std::ostream& os );
+    virtual void Show( int nestLevel, std::ostream& os ) const;
 
 
     /**
@@ -589,7 +588,7 @@ public:
     EDA_TextStruct( const wxString& text = wxEmptyString );
     virtual ~EDA_TextStruct();
 
-    int     GetLength() const { return m_Text.Length(); };
+    int GetLength() const { return m_Text.Length(); };
 
     /**
      * Function Draw
@@ -634,20 +633,23 @@ public:
 
     /**
      * Function TextHitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
+     * Test if \a aPoint is within the bounds of this object.
+     * @param aPoint- A wxPoint to test
+     * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    bool     TextHitTest( const wxPoint& ref_pos );
+    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
 
     /**
      * Function TextHitTest (overloaded)
-     * tests if the given EDA_Rect intersect this object.
-     * For now, the anchor must be inside this rect.
-     * @param refArea : the given EDA_Rect
+     * Tests if object bounding box is contained within or intersects \a aRect.
+     *
+     * @param aRect - Rect to test against.
+     * @param aContains - Test for containment instead of intersection if true.
+     * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    bool     TextHitTest( EDA_Rect& refArea );
+    bool TextHitTest( const EDA_Rect& aRect, bool aContains = false, int aAccuracy = 0 ) const;
 
     /**
      * Function LenSize
@@ -655,7 +657,7 @@ public:
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
      */
-    int      LenSize( const wxString& aLine ) const;
+    int LenSize( const wxString& aLine ) const;
 
     /**
      * Function GetTextBox
@@ -668,15 +670,17 @@ public:
      * @param aLine : the line of text to consider.
      * for single line text, aLine is unused
      * If aLine == -1, the full area (considering all lines) is returned
+     * @param aThickness - Overrides the current thickness when greater than 0.
+     * @param aInvertY - Invert the Y axis when calculating bounding box.
      */
-    EDA_Rect GetTextBox( int aLine = -1 );
+    EDA_Rect GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
 
     /**
      * Function GetInterline
      * return the distance between 2 text lines
      * has meaning only for multiline texts
      */
-    int GetInterline()
+    int GetInterline() const
     {
         return (( m_Size.y * 14 ) / 10) + m_Thickness;
     }

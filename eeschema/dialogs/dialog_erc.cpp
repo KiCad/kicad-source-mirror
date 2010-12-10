@@ -319,7 +319,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;

@@ -30,7 +30,7 @@ void            MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aM
 void            RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
 void            Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
 void            MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-void            DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
+void            DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
 void            DuplicateItemsInList( SCH_SCREEN*        screen,
                                       PICKED_ITEMS_LIST& aItemsList,
                                       const wxPoint      aMoveVector  );
@@ -233,7 +233,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DRAG:    /* Drag */
-            BreakSegmentOnJunction( (SCH_SCREEN*) GetScreen() );
+            BreakSegmentOnJunction( GetScreen() );
 
         case BLOCK_ROTATE:
         case BLOCK_MIRROR_X:
@@ -371,7 +371,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         if( block->GetCount() )
         {
             blockCmdFinished = false;
-            CollectStructsToDrag( (SCH_SCREEN*) GetScreen() );
+            CollectStructsToDrag( GetScreen() );
             if( DrawPanel->ManageCurseur )
                 DrawPanel->ManageCurseur( DrawPanel, DC, false );
             block->m_State = STATE_BLOCK_MOVE;
@@ -571,7 +571,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         picklist.PushItem( picker );
 
         // Clear annotation and init new time stamp for the new components:
-        if( Struct->Type() == TYPE_SCH_COMPONENT )
+        if( Struct->Type() == SCH_COMPONENT_T )
         {
             ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
             ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
@@ -625,7 +625,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
         Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
-        if( Struct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+        if( Struct->Type() == SCH_LINE_T )
         {
             SegmStruct = (SCH_LINE*) Struct;
             if( !screen->m_BlockLocate.Inside( SegmStruct->m_Start ) )
@@ -646,9 +646,9 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
         Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
-        if( ( Struct->Type() == TYPE_SCH_LABEL )
-           || ( Struct->Type() == TYPE_SCH_GLOBALLABEL )
-           || ( Struct->Type() == TYPE_SCH_HIERLABEL ) )
+        if( ( Struct->Type() == SCH_LABEL_T )
+           || ( Struct->Type() == SCH_GLOBAL_LABEL_T )
+           || ( Struct->Type() == SCH_HIERARCHICAL_LABEL_T ) )
         {
             #undef STRUCT
             #define STRUCT ( (SCH_TEXT*) Struct )
@@ -658,7 +658,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             }
         }
 
-        if( Struct->Type() == TYPE_SCH_COMPONENT )
+        if( Struct->Type() == SCH_COMPONENT_T )
         {
             // Add all pins of the selected component to list
             LIB_PIN* pin;
@@ -678,7 +678,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             }
         }
 
-        if( Struct->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( Struct->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) Struct;
 
@@ -689,7 +689,7 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
             }
         }
 
-        if( Struct->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
+        if( Struct->Type() == SCH_BUS_ENTRY_T )
         {
             SCH_BUS_ENTRY* item = (SCH_BUS_ENTRY*) Struct;
             AddPickedItem( screen, item->m_Pos );
@@ -718,7 +718,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
         switch( Struct->Type() )
         {
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_LINE_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_LINE*) Struct )
             if( STRUCT->m_Start == position )
@@ -750,12 +750,12 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
         case TYPE_NOT_INIT:
             break;
 
-        case DRAW_POLYLINE_STRUCT_TYPE:
+        case SCH_POLYLINE_T:
             if( Struct->m_Flags & SELECTED )
                 break;
             break;
 
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_JUNCTION*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -765,7 +765,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             pickedlist->PushItem( picker );
             break;
 
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_LINE_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_LINE*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -790,13 +790,13 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             }
             break;
 
-        case DRAW_BUSENTRY_STRUCT_TYPE:
+        case SCH_BUS_ENTRY_T:
             break;
 
-        case TYPE_SCH_TEXT:
+        case SCH_TEXT_T:
             break;
 
-        case TYPE_SCH_LABEL:
+        case SCH_LABEL_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_LABEL*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -807,8 +807,8 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             pickedlist->PushItem( picker );
             break;
 
-        case TYPE_SCH_HIERLABEL:
-        case TYPE_SCH_GLOBALLABEL:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_LABEL*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -819,12 +819,12 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             pickedlist->PushItem( picker );
             break;
 
-        case TYPE_SCH_COMPONENT:
-        case DRAW_SHEET_STRUCT_TYPE:
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_COMPONENT_T:
+        case SCH_SHEET_T:
+        case SCH_SHEET_LABEL_T:
             break;
 
-        case TYPE_SCH_MARKER:
+        case SCH_MARKER_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_MARKER*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -835,7 +835,7 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             pickedlist->PushItem( picker );
             break;
 
-        case DRAW_NOCONNECT_STRUCT_TYPE:
+        case SCH_NO_CONNECT_T:
                 #undef STRUCT
                 #define STRUCT ( (SCH_NO_CONNECT*) Struct )
             if( Struct->m_Flags & SELECTED )
@@ -890,11 +890,12 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
 
     for( ; Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
     {
-        wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+        wxASSERT( Pin->Type() == LIB_PIN_T );
 
         /* Skip items not used for this part */
         if( Multi && Pin->GetUnit() && ( Pin->GetUnit() != Multi ) )
             continue;
+
         if( convert && Pin->GetConvert() && ( Pin->GetConvert() != convert ) )
             continue;
 

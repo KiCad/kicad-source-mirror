@@ -146,7 +146,7 @@ public:
     bool       m_IsPrinting;
 
 public:
-    BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
+    BASE_SCREEN( KICAD_T aType = TYPE_SCREEN );
     ~BASE_SCREEN();
 
     /**

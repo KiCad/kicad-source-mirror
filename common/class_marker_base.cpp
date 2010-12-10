@@ -130,7 +130,7 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
  * object, and the units should be in the pcb or schematic coordinate system.
  * It is OK to overestimate the size by a few counts.
  */
-EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
+EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
 {
     wxSize realsize = m_ShapeBoundingBox.GetSize();
     wxPoint realposition = m_ShapeBoundingBox.GetPosition();
@@ -139,7 +139,7 @@ EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
     realposition.x *= m_ScalingFactor;
     realposition.y *= m_ScalingFactor;
     realposition += m_Pos;
-    return EDA_Rect( m_Pos,realsize );
+    return EDA_Rect( m_Pos, realsize );
 }
 
 /**********************************************************************/

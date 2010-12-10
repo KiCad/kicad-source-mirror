@@ -119,7 +119,7 @@ public:
      * Return the bounding rectangle of the field text.
      * @return Bounding rectangle.
      */
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
 
     /**
      * Displays info (type, part  convert filed name and value)

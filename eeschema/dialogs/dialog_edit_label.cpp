@@ -72,15 +72,15 @@ void DialogLabelEditor::InitDialog()
 
     switch( m_CurrentText->Type() )
     {
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         SetTitle( _( "Global Label Properties" ) );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         SetTitle( _( "Hierarchal Label Properties" ) );
         break;
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         SetTitle( _( "Label Properties" ) );
         break;
 
@@ -150,8 +150,8 @@ void DialogLabelEditor::InitDialog()
                                  m_Parent->m_InternalUnits );
     m_TextSize->SetValue( msg );
 
-    if( m_CurrentText->Type() != TYPE_SCH_GLOBALLABEL
-     && m_CurrentText->Type() != TYPE_SCH_HIERLABEL )
+    if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T
+     && m_CurrentText->Type() != SCH_HIERARCHICAL_LABEL_T )
     {
         m_TextShape->Show( false );
     }

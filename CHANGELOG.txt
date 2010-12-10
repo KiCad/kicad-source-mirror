@@ -4,6 +4,26 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-10 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++All
+  * Make a whole bunch of object methods const in order to make HitTest() const.
+  * Lots of coding policy fixes.
+++common
+  * Add Inside override to EDA_Rect to test if another EDA_Rect is inside.
+  * Add additional parameter to EDA_TextStruct GetTextBox method to support
+    Y axis inversion and non-default thickness.
+  * Add accuracy parameter to EDA_TextStruct TextHitTest method.
+++EESchema
+  * Refactor schematic object hit testing to provide coherent object interface.
+  * Remove redundant GetBoundaryBox from schematic component object.
+  * Remove redundant layer member from schematic text object.
+  * Create hit test override to check for rectangle intersection and
+    containment.
+  * Simplify schematic block selection hit testing.
+  * Make schematic and component library object enum naming consistent.
+
+
 2010-dec-08 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++All

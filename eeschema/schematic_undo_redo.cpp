@@ -88,14 +88,14 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
 
     switch( aItem->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_POLYLINE*) aItem )
         #define DEST   ( (SCH_POLYLINE*) aImage )
         break;
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_JUNCTION*) aItem )
@@ -103,10 +103,10 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_TEXT*) aItem )
@@ -114,7 +114,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_COMPONENT*) aItem )
@@ -122,7 +122,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_LINE*) aItem )
@@ -131,7 +131,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_End, DEST->m_End );
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_BUS_ENTRY*) aItem )
@@ -140,7 +140,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Size, DEST->m_Size );
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_SHEET*) aItem )
@@ -148,7 +148,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case TYPE_SCH_MARKER:
+    case SCH_MARKER_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_MARKER*) aItem )
@@ -156,7 +156,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_SHEET_PIN*) aItem )
@@ -164,7 +164,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_NO_CONNECT*) aItem )
@@ -172,7 +172,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
         break;
 
     // not directly used in schematic:

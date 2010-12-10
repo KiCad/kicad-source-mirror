@@ -9,7 +9,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "base_struct.h"
-#include "sch_item_struct.h"
 #include "class_base_screen.h"
 #include "id.h"
 

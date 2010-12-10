@@ -160,7 +160,7 @@ extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
 
 
 LIB_PIN::LIB_PIN( LIB_COMPONENT * aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_PIN_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_PIN_T, aParent )
 {
     m_length             = 300;              /* default Pin len */
     m_orientation        = PIN_RIGHT;        /* Pin orient: Up, Down, Left, Right */
@@ -1640,7 +1640,7 @@ LIB_DRAW_ITEM* LIB_PIN::DoGenCopy()
 
 int LIB_PIN::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
-    wxASSERT( other.Type() == COMPONENT_PIN_DRAW_TYPE );
+    wxASSERT( other.Type() == LIB_PIN_T );
 
     const LIB_PIN* tmp = ( LIB_PIN* ) &other;
 
@@ -1771,7 +1771,7 @@ void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
  * Function GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LIB_PIN::GetBoundingBox()
+EDA_Rect LIB_PIN::GetBoundingBox() const
 {
     wxPoint pt = m_position;
 

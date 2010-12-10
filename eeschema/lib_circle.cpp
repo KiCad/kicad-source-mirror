@@ -17,7 +17,7 @@
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Radius     = 0;
     m_Fill       = NO_FILL;
@@ -124,7 +124,7 @@ LIB_DRAW_ITEM* LIB_CIRCLE::DoGenCopy()
 
 int LIB_CIRCLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_CIRCLE_T );
 
     const LIB_CIRCLE* tmp = ( LIB_CIRCLE* ) &aOther;
 
@@ -239,7 +239,7 @@ void LIB_CIRCLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint
 }
 
 
-EDA_Rect LIB_CIRCLE::GetBoundingBox()
+EDA_Rect LIB_CIRCLE::GetBoundingBox() const
 {
     EDA_Rect rect;
 

@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     if( BusEntry == NULL )
         return;
 
-    if( BusEntry->Type() != DRAW_BUSENTRY_STRUCT_TYPE )
+    if( BusEntry->Type() != SCH_BUS_ENTRY_T )
     {
         DisplayError( this, wxT( "SetBusEntryType: Bad StructType" ) );
         return;

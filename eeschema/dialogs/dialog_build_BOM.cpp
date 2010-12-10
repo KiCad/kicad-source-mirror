@@ -628,7 +628,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
         if( item == NULL )
             continue;
 
-        if( item->Type() != TYPE_SCH_COMPONENT )
+        if( item->Type() != SCH_COMPONENT_T )
             continue;
 
         SCH_COMPONENT*  comp = (SCH_COMPONENT*) item;
@@ -882,7 +882,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         if( schItem == NULL )
             continue;
 
-        if( schItem->Type() != TYPE_SCH_COMPONENT )
+        if( schItem->Type() != SCH_COMPONENT_T )
             continue;
 
         DrawLibItem = (SCH_COMPONENT*) schItem;

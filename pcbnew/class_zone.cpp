@@ -641,18 +641,19 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         {
             wxPoint start =  m_FillSegmList[ic].m_Start + offset;
             wxPoint end =  m_FillSegmList[ic].m_End + offset;
+
             if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
+                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                         m_ZoneMinThickness, color );
             else
-                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
+                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                             m_ZoneMinThickness, color );
         }
     }
 }
 
 
-/****************************************/
-EDA_Rect ZONE_CONTAINER::GetBoundingBox()
-/****************************************/
+EDA_Rect ZONE_CONTAINER::GetBoundingBox() const
 {
     const int PRELOAD = 0x7FFFFFFF;     // Biggest integer (32 bits)
 

@@ -20,7 +20,7 @@ public:
     int       m_RefCount;     ///< Number of sheets referencing this screen.
                               ///< Delete when it goes to zero.
 
-    SCH_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
+    SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
     ~SCH_SCREEN();
 
     /**

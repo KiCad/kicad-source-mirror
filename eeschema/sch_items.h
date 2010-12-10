@@ -43,15 +43,14 @@ public:
         return wxT( "SCH_LINE" );
     }
 
-
-    bool      IsOneEndPointAt( const wxPoint& pos );
-    SCH_LINE* GenCopy();
-
-    bool IsNull()
+    bool IsEndPoint( const wxPoint& aPoint ) const
     {
-        return m_Start == m_End;
+        return aPoint == m_Start || aPoint == m_End;
     }
 
+    SCH_LINE* GenCopy();
+
+    bool IsNull() const { return m_Start == m_End; }
 
     /**
      * Function GetBoundingBox
@@ -60,19 +59,18 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect     GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
-    virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
-                       int draw_mode, int Color = -1 );
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                       int aDrawMode, int aColor = -1 );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
+     * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool         Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic line from \a aLine in a .sch file.
@@ -88,7 +86,7 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int  GetPenSize();
+    virtual int GetPenSize() const;
 
     // Geometric transforms (used in block operations):
 
@@ -96,14 +94,7 @@ public:
      * move item to a new position.
      * @param aMoveVector = the displacement vector
      */
-    virtual void Move( const wxPoint& aMoveVector )
-    {
-        if( (m_Flags & STARTPOINT) == 0 )
-            m_Start += aMoveVector;
-        if( (m_Flags & ENDPOINT) == 0 )
-            m_End += aMoveVector;
-    }
-
+    virtual void Move( const wxPoint& aMoveVector );
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
@@ -136,9 +127,12 @@ public:
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)
-    void         Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;
 #endif
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 
@@ -151,11 +145,11 @@ public:
 public:
     SCH_NO_CONNECT( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~SCH_NO_CONNECT() { }
+
     virtual wxString GetClass() const
     {
         return wxT( "SCH_NO_CONNECT" );
     }
-
 
     SCH_NO_CONNECT* GenCopy();
 
@@ -163,11 +157,10 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int     GetPenSize();
+    virtual int GetPenSize() const;
 
-    virtual void    Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                          const wxPoint& offset, int draw_mode,
-                          int Color = -1 );
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& affset,
+                       int aDrawMode, int aColor = -1 );
 
     /**
      * Function Save
@@ -176,7 +169,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool            Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic no connect entry from \a aLine in a .sch file.
@@ -189,13 +182,6 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool            HitTest( const wxPoint& aPosRef );
-
-    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display
      * purposes.  This box should be an enclosing perimeter for visible
@@ -203,7 +189,7 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect        GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     // Geometric transforms (used in block operations):
 
@@ -216,7 +202,6 @@ public:
         m_Pos += aMoveVector;
     }
 
-
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
@@ -228,6 +213,10 @@ public:
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 
@@ -254,10 +243,11 @@ public:
 
 
     SCH_BUS_ENTRY* GenCopy();
-    wxPoint        m_End() const;
-    virtual void   Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& offset, int draw_mode,
-                         int Color = -1 );
+
+    wxPoint m_End() const;
+
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                       int aDrawMode, int aColor = -1 );
 
     /**
      * Function Save
@@ -266,7 +256,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool           Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic bus entry from \a aLine in a .sch file.
@@ -286,13 +276,13 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect       GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int    GetPenSize();
+    virtual int GetPenSize() const;
 
     // Geometric transforms (used in block operations):
 
@@ -319,6 +309,10 @@ public:
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 class SCH_POLYLINE : public SCH_ITEM
@@ -338,9 +332,9 @@ public:
 
 
     SCH_POLYLINE* GenCopy();
-    virtual void  Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        const wxPoint& offset, int draw_mode,
-                        int Color = -1 );
+
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                       int aDrawMode, int aColor = -1 );
 
     /**
      * Function Save
@@ -349,7 +343,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool          Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic poly line entry from \a aLine in a .sch file.
@@ -365,7 +359,7 @@ public:
      * Function AddPoint
      * add a corner to m_PolyPoints
      */
-    void           AddPoint( const wxPoint& point )
+    void AddPoint( const wxPoint& point )
     {
         m_PolyPoints.push_back( point );
     }
@@ -382,7 +376,7 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize();
+    virtual int GetPenSize() const;
 
     // Geometric transforms (used in block operations):
 
@@ -404,6 +398,10 @@ public:
     virtual void Mirror_Y( int aYaxis_position );
     virtual void Mirror_X( int aXaxis_position );
     virtual void Rotate( wxPoint rotationPoint );
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 
@@ -422,14 +420,6 @@ public:
         return wxT( "SCH_JUNCTION" );
     }
 
-
-    /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool          HitTest( const wxPoint& aPosRef );
-
     /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display
@@ -438,18 +428,12 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect      GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     SCH_JUNCTION* GenCopy();
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int   GetPenSize();
-
-    virtual void  Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        const wxPoint& offset, int draw_mode, int Color = -1 );
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                       int aDrawMode, int aColor = -1 );
 
     /**
      * Function Save
@@ -458,7 +442,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool          Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic junction entry from \a aLine in a .sch file.
@@ -500,6 +484,10 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 

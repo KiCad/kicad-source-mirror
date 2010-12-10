@@ -31,7 +31,7 @@
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,
                       SCH_COMPONENT* aParent, wxString aName ) :
-    SCH_ITEM( aParent, DRAW_PART_TEXT_STRUCT_TYPE ),
+    SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TextStruct()
 {
     m_Pos     = aPos;
@@ -53,7 +53,7 @@ SCH_FIELD::~SCH_FIELD()
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_FIELD::GetPenSize()
+int SCH_FIELD::GetPenSize() const
 {
     int pensize = m_Thickness;
 
@@ -122,7 +122,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_Rect BoundaryBox = GetBoundaryBox();
+    EDA_Rect BoundaryBox = GetBoundingBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
     textpos = BoundaryBox.Centre();
@@ -226,11 +226,10 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
 
 /**
  * Function GetBoundaryBox
- * @return an EDA_Rect contains the real (user coordinates) boundary box for
- *         a text field,
+ * @return an EDA_Rect contains the real (user coordinates) boundary box for a text field.
  *  according to the component position, rotation, mirror ...
  */
-EDA_Rect SCH_FIELD::GetBoundaryBox() const
+EDA_Rect SCH_FIELD::GetBoundingBox() const
 {
     EDA_Rect       BoundaryBox;
     int            hjustify, vjustify;
@@ -251,8 +250,7 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
 
     pos2 = pos + parentComponent->m_Transform.TransformCoordinate( pos1 );
 
-    /* Calculate the text orientation, according to the component
-     * orientation/mirror */
+    // Calculate the text orientation, according to the component orientation/mirror.
     if( parentComponent->m_Transform.y1 )
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -261,14 +259,15 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
             orient = TEXT_ORIENT_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror */
+    // Calculate the text justification, according to the component orientation/mirror.
     if( parentComponent->m_Transform.y1 )
     {
         /* is it mirrored (for text justify)*/
         EXCHG( hjustify, vjustify );
+
         if( parentComponent->m_Transform.x2 < 0 )
             NEGATE( vjustify );
+
         if( parentComponent->m_Transform.y1 > 0 )
             NEGATE( hjustify );
     }
@@ -276,6 +275,7 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
     {
         if( parentComponent->m_Transform.x1 < 0 )
             NEGATE( hjustify );
+
         if( parentComponent->m_Transform.y2 > 0 )
             NEGATE( vjustify );
     }
@@ -334,6 +334,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
         hjustify = 'R';
 
     char vjustify = 'C';
+
     if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
@@ -391,9 +392,11 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
     fieldNdx = m_FieldId;
     m_AddExtraText = 0;
+
     if( fieldNdx == REFERENCE )
     {
         Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
+
         if( Entry != NULL )
         {
             if( Entry->GetPartCount() > 1 )
@@ -412,6 +415,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
     bool match;
+
     if( aAuxData && m_FieldId == REFERENCE )
     {
         // reference is a special field because:
@@ -421,6 +425,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         SCH_COMPONENT*  pSch     = (SCH_COMPONENT*) m_Parent;
         SCH_SHEET_PATH* sheet    = (SCH_SHEET_PATH*) aAuxData;
         wxString        fulltext = pSch->GetRef( sheet );
+
         if( m_AddExtraText )
         {
             /* For more than one part per package, we must add the part selection
@@ -428,18 +433,22 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
             int part_id = pSch->GetUnitSelection( sheet );
             fulltext << LIB_COMPONENT::ReturnSubReference( part_id );
         }
+
         match = SCH_ITEM::Matches( fulltext, aSearchData );
     }
-
     else
         match = SCH_ITEM::Matches( m_Text, aSearchData );
+
     if( match )
     {
-        EDA_Rect BoundaryBox = GetBoundaryBox();
+        EDA_Rect BoundaryBox = GetBoundingBox();
+
         if( aFindLocation )
-            *aFindLocation = GetBoundaryBox().Centre();
+            *aFindLocation = GetBoundingBox().Centre();
+
         return true;
     }
+
     return false;
 }
 
@@ -447,4 +456,35 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 void SCH_FIELD::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
+}
+
+
+bool SCH_FIELD::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    // Do not hit test hidden fields.
+    if( !IsVisible() )
+        return false;
+
+    EDA_Rect rect = GetBoundingBox();
+
+    rect.Inflate( aAccuracy );
+
+    return rect.Inside( aPoint );
+}
+
+
+bool SCH_FIELD::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    // Do not hit test hidden fields.
+    if( !IsVisible() )
+        return false;
+
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
 }

@@ -187,7 +187,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBoxMarker();
+    EDA_Rect GetBoundingBoxMarker() const;
 };
 
 

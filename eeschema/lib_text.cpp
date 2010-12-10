@@ -25,7 +25,7 @@
 
 
 LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
-    LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
+    LIB_DRAW_ITEM( LIB_TEXT_T, aParent ),
     EDA_TextStruct()
 {
     m_Size       = wxSize( 50, 50 );
@@ -198,7 +198,7 @@ LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
 
 int LIB_TEXT::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
-    wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
+    wxASSERT( other.Type() == LIB_TEXT_T );
 
     const LIB_TEXT* tmp = ( LIB_TEXT* ) &other;
 
@@ -378,15 +378,12 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 /**
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LIB_TEXT::GetBoundingBox()
+EDA_Rect LIB_TEXT::GetBoundingBox() const
 {
-    /* remenber Y coordinates in lib are bottom to top, so we must
-     * negate the Y position befire calling GetTextBox() that works using top to bottom
-     * Y axis orientation
+    /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
+     * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    NEGATE(m_Pos.y );
-    EDA_Rect rect = GetTextBox();
-    NEGATE(m_Pos.y );   // restore Y cooordinate for the graphic text
+    EDA_Rect rect = GetTextBox( -1, -1, true );
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();

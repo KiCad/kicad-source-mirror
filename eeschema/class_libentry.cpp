@@ -313,10 +313,10 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aO
             if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
                 continue;
 
-            if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            if( drawItem.Type() == LIB_FIELD_T )
                 continue;
 
-            if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            if( drawItem.Type() == LIB_FIELD_T )
             {
                 drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
             }
@@ -343,15 +343,15 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aO
         if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
             continue;
 
-        if( !aDrawFields && drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( !aDrawFields && drawItem.Type() == LIB_FIELD_T )
             continue;
 
-        if( drawItem.Type() == COMPONENT_PIN_DRAW_TYPE )
+        if( drawItem.Type() == LIB_PIN_T )
         {
             drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) aShowPinText,
                            aTransform );
         }
-        else if( drawItem.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        else if( drawItem.Type() == LIB_FIELD_T )
         {
             drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
         }
@@ -380,7 +380,7 @@ void LIB_COMPONENT::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aO
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */
 #if 0
-    EDA_Rect bBox = GetBoundaryBox( aMulti, aConvert );
+    EDA_Rect bBox = GetBoundingBox( aMulti, aConvert );
     GRRect( &aPanel->m_ClipBox, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
@@ -413,7 +413,7 @@ void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem, WinEDA_DrawPanel* aPan
 
     // none of the MANDATOR_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
-    if( aItem->Type() == COMPONENT_FIELD_DRAW_TYPE )
+    if( aItem->Type() == LIB_FIELD_T )
     {
         LIB_FIELD* field = (LIB_FIELD*) aItem;
 
@@ -498,7 +498,7 @@ void LIB_COMPONENT::GetPins( LIB_PIN_LIST& aList, int aUnit, int aConvert )
      */
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( item.Type() != COMPONENT_PIN_DRAW_TYPE )    // we search pins only
+        if( item.Type() != LIB_PIN_T )    // we search pins only
             continue;
 
         // Unit filtering:
@@ -523,7 +523,7 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        wxASSERT( pinList[i]->Type() == COMPONENT_PIN_DRAW_TYPE );
+        wxASSERT( pinList[i]->Type() == LIB_PIN_T );
 
         pinList[i]->ReturnPinStringNum( pNumber );
 
@@ -661,7 +661,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
         BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         {
-            if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+            if( item.Type() == LIB_FIELD_T )
                 continue;
 
             if( !item.Save( aFile ) )
@@ -970,11 +970,11 @@ bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
  *  Invisible fields are not take in account
  **/
 /**********************************************************************/
-EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
+EDA_Rect LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
     {
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
@@ -983,7 +983,7 @@ EDA_Rect LIB_COMPONENT::GetBoundaryBox( int aUnit, int aConvert )
         if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
             continue;
 
-        if ( ( item.Type() == COMPONENT_FIELD_DRAW_TYPE ) && !( ( LIB_FIELD& ) item ).IsVisible() )
+        if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
             continue;
 
         bBox.Merge( item.GetBoundingBox() );
@@ -999,7 +999,7 @@ void LIB_COMPONENT::deleteAllFields()
 
     for( it = drawings.begin();  it!=drawings.end();  /* deleting */  )
     {
-        if( it->Type() != COMPONENT_FIELD_DRAW_TYPE  )
+        if( it->Type() != LIB_FIELD_T  )
         {
             ++it;
             continue;
@@ -1051,7 +1051,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
     // Now grab all the rest of fields.
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() != LIB_FIELD_T )
             continue;
 
         field = ( LIB_FIELD* ) &item;
@@ -1067,7 +1067,7 @@ LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 {
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() != LIB_FIELD_T )
             continue;
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
@@ -1084,7 +1084,7 @@ LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
 {
     BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
     {
-        if( item.Type() != COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() != LIB_FIELD_T )
             continue;
 
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
@@ -1205,7 +1205,7 @@ int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert, bool a
         if( ( item.m_Unit && item.m_Unit != aUnit )
             || ( item.m_Convert && item.m_Convert != aConvert ) )
         {
-            if( item.Type() != COMPONENT_PIN_DRAW_TYPE )
+            if( item.Type() != LIB_PIN_T )
                 continue;
 
              // Specific rules for pins.
@@ -1258,7 +1258,7 @@ void LIB_COMPONENT::DeleteSelectedItems()
     // because they are not really graphic items
     while( item != drawings.end() )
     {
-        if( item->Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( item->Type() == LIB_FIELD_T )
         {
 #if 0   // Set to 1 to allows fields deletion on block delete or other global command
             LIB_FIELD& field = ( LIB_FIELD& ) *item;
@@ -1289,7 +1289,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
         LIB_DRAW_ITEM& item = drawings[ii];
         // We *do not* copy fields because they are unique for the whole component
         // so skip them (do not duplicate) if they are flagged selected.
-        if( item.Type() == COMPONENT_FIELD_DRAW_TYPE )
+        if( item.Type() == LIB_FIELD_T )
             item.m_Selected = 0;
 
         if( item.m_Selected == 0 )
@@ -1455,7 +1455,7 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
         BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
         {
             /* Only pins are duplicated. */
-            if( item.Type() != COMPONENT_PIN_DRAW_TYPE )
+            if( item.Type() != LIB_PIN_T )
                 continue;
             if( item.m_Convert == 1 )
             {

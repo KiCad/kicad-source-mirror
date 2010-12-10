@@ -46,8 +46,8 @@ static void RestoreOldWires( SCH_SCREEN* screen )
 
         switch( item->Type() )
         {
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
             screen->RemoveFromDrawList( item );
             delete item;
             break;
@@ -133,8 +133,8 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         switch( GetScreen()->GetCurItem()->Type() )
         {
-        case DRAW_SEGMENT_STRUCT_TYPE:
-        case DRAW_POLYLINE_STRUCT_TYPE:
+        case SCH_LINE_T:
+        case SCH_POLYLINE_T:
             break;
 
         default:
@@ -147,8 +147,8 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     if( !newsegment )  /* first point : Create first wire or bus */
     {
         s_ConnexionStartPoint = cursorpos;
-        s_OldWiresList = ( (SCH_SCREEN*) GetScreen() )->ExtractWires( TRUE );
-        ( (SCH_SCREEN*) GetScreen() )->SchematicCleanUp( NULL );
+        s_OldWiresList = GetScreen()->ExtractWires( TRUE );
+        GetScreen()->SchematicCleanUp( NULL );
 
         switch( type )
         {
@@ -320,7 +320,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         alt_end_point = lastsegment->m_Start;
     }
 
-    ( (SCH_SCREEN*) GetScreen() )->SchematicCleanUp( NULL );
+    GetScreen()->SchematicCleanUp( NULL );
 
     /* clear flags and find last segment entered, for repeat function */
     segment = (SCH_LINE*) GetScreen()->GetDrawItems();
@@ -360,8 +360,8 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     {
         switch( item->Type() )
         {
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
             DrawPanel->PostDirtyRect( item->GetBoundingBox() );
             break;
 
@@ -474,7 +474,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
     }
 
     /* Cancel trace in progress */
-    if( GetScreen()->GetCurItem()->Type() == DRAW_POLYLINE_STRUCT_TYPE )
+    if( GetScreen()->GetCurItem()->Type() == SCH_POLYLINE_T )
     {
         Show_Polyline_in_Ghost( DrawPanel, DC, FALSE );
     }
@@ -483,7 +483,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
         DrawSegment( DrawPanel, DC, FALSE );
     }
 
-    EraseStruct( (SCH_ITEM*) GetScreen()->GetCurItem(), (SCH_SCREEN*) GetScreen() );
+    EraseStruct( (SCH_ITEM*) GetScreen()->GetCurItem(), GetScreen() );
     DrawPanel->ManageCurseur = NULL;
     GetScreen()->SetCurItem( NULL );
 }
@@ -578,7 +578,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 
     switch( g_ItemToRepeat->Type() )
     {
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         #undef STRUCT
         #define STRUCT ( (SCH_JUNCTION*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -586,7 +586,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         new_pos = STRUCT->m_Pos;
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         #undef STRUCT
         #define STRUCT ( (SCH_NO_CONNECT*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -594,7 +594,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         new_pos = STRUCT->m_Pos;
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         #undef STRUCT
         #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -604,7 +604,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         break;
 
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         #undef STRUCT
         #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -614,7 +614,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         break;
 
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         #undef STRUCT
         #define STRUCT ( (SCH_HIERLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -623,7 +623,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         IncrementLabelMember( STRUCT->m_Text );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         #undef STRUCT
         #define STRUCT ( (SCH_GLOBALLABEL*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -632,7 +632,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         IncrementLabelMember( STRUCT->m_Text );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         #undef STRUCT
         #define STRUCT ( (SCH_LINE*) g_ItemToRepeat )
         g_ItemToRepeat   = STRUCT->GenCopy();
@@ -641,7 +641,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         STRUCT->m_End += g_RepeatStep;
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
             #undef STRUCT
             #define STRUCT ( (SCH_BUS_ENTRY*) g_ItemToRepeat )
         g_ItemToRepeat = STRUCT->GenCopy();
@@ -649,7 +649,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         new_pos = STRUCT->m_Pos;
         break;
 
-    case TYPE_SCH_COMPONENT:     // In repeat command the new component is put
+    case SCH_COMPONENT_T:     // In repeat command the new component is put
                                  // in move mode
         #undef STRUCT
         #define STRUCT ( (SCH_COMPONENT*) g_ItemToRepeat )
@@ -787,7 +787,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             return TRUE;
 
         item = PickStruct( pos, screen, LABELITEM );
-        if( item && (item->Type() != TYPE_SCH_TEXT)
+        if( item && (item->Type() != SCH_TEXT_T)
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
             return TRUE;

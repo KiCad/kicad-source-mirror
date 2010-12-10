@@ -81,7 +81,7 @@ public:
     /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item

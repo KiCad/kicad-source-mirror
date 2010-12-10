@@ -53,7 +53,7 @@ static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C 
 }
 
 
-LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
+LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
     m_t1            = 0;
@@ -246,7 +246,7 @@ LIB_DRAW_ITEM* LIB_ARC::DoGenCopy()
 
 int LIB_ARC::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_ARC_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_ARC_T );
 
     const LIB_ARC* tmp = ( LIB_ARC* ) &aOther;
 
@@ -427,7 +427,7 @@ void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-EDA_Rect LIB_ARC::GetBoundingBox()
+EDA_Rect LIB_ARC::GetBoundingBox() const
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
     EDA_Rect rect;

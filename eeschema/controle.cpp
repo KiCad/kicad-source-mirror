@@ -59,13 +59,13 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( DrawStruct->Type() )
     {
-    case DRAW_PART_TEXT_STRUCT_TYPE:
-    case COMPONENT_FIELD_DRAW_TYPE:
+    case SCH_FIELD_T:
+    case LIB_FIELD_T:
         LibItem = (SCH_COMPONENT*) DrawStruct->GetParent();
         SendMessageToPCBNEW( DrawStruct, LibItem );
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break;  // Priority is probing a pin first
@@ -77,7 +77,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
         Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
         break;
 
-    case COMPONENT_PIN_DRAW_TYPE:
+    case LIB_PIN_T:
         Pin = (LIB_PIN*) DrawStruct;
         break;
     }
@@ -87,6 +87,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
         /* Force display pin information (the previous display could be a
          * component info) */
         Pin->DisplayInfo( this );
+
         if( LibItem )
             AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
@@ -127,6 +128,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     wxString       msg;
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
+
     if( DrawStruct )
     {
         DrawStruct->DisplayInfo( this );
@@ -134,6 +136,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NOCONNECTITEM );
+
     if( DrawStruct )
     {
         ClearMsgPanel();
@@ -141,23 +144,24 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTIONITEM );
+
     if( DrawStruct )
     {
         ClearMsgPanel();
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint,
-                                         GetScreen(), WIREITEM | BUSITEM |
-                                         RACCORDITEM );
-    if( DrawStruct )    // We have found a wire: Search for a connected pin at
-                        // the same location
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(),
+                                         WIREITEM | BUSITEM | RACCORDITEM );
+
+    if( DrawStruct )  // We have found a wire: Search for a connected pin at the same location
     {
-        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(),
-                            refpoint, &LibItem );
+        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+
         if( Pin )
         {
             Pin->DisplayInfo( this );
+
             if( LibItem )
                 AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                                 LibItem->GetField( VALUE )->m_Text, DARKCYAN );
@@ -169,6 +173,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
+
     if( DrawStruct )
     {
         SCH_FIELD* Field = (SCH_FIELD*) DrawStruct;
@@ -179,6 +184,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABELITEM | TEXTITEM );
+
     if( DrawStruct )
     {
         ClearMsgPanel();
@@ -186,11 +192,12 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     /* search for a pin */
-    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint,
-                        &LibItem );
+    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+
     if( Pin )
     {
         Pin->DisplayInfo( this );
+
         if( LibItem )
             AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
@@ -199,15 +206,17 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LIBITEM );
+
     if( DrawStruct )
     {
-        DrawStruct = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
+        DrawStruct = LocateSmallestComponent( GetScreen() );
         LibItem    = (SCH_COMPONENT*) DrawStruct;
         LibItem->DisplayInfo( this );
         return DrawStruct;
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEETITEM );
+
     if( DrawStruct )
     {
         ( (SCH_SHEET*) DrawStruct )->DisplayInfo( this );
@@ -215,6 +224,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SEARCHALL );
+
     if( DrawStruct )
     {
         return DrawStruct;

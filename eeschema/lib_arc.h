@@ -96,7 +96,7 @@ public:
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**

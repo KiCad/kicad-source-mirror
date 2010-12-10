@@ -83,26 +83,26 @@ public:
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void  SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( ) = 0;
+    virtual int GetPenSize() const { return 0; }
 
     /**
      * Function Draw
      */
-    virtual void    Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               draw_mode,
-                          int               Color = -1 ) = 0;
+    virtual void Draw( WinEDA_DrawPanel* aPanel,
+                       wxDC*             aDC,
+                       const wxPoint&    aOffset,
+                       int               aDrawMode,
+                       int               aColor = -1 ) = 0;
 
 
     /* Place function */
-    virtual void    Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+    virtual void Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC );
 
     // Geometric transforms (used in block operations):
     /** virtual function Move
@@ -127,7 +127,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const = 0;
+    virtual bool Save( FILE* aFile ) const = 0;
 
     /**
      * Load schematic item from \a aLine in a .sch file.
@@ -222,6 +222,46 @@ public:
      * Do not use the vector erase method on the connection list.
      */
     void ClearConnections() { m_connections.release(); }
+
+    /**
+     * Function HitTest().
+     * Test if \a aPoint is contained within the bounding box or on an item.
+     *
+     * @param aPoint - Point to test.
+     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @return True if \aPoint is within the item.
+     */
+    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const
+    {
+        return DoHitTest( aPoint, aAccuracy );
+    }
+
+    /**
+     * Function HitTest().
+     * Test if \a aRect intersects or is contained within the bounding box of an item.
+     *
+     * @param aRect - Rectangle to test.
+     * @param aContained - Set to true to test for containment instead of an intersection.
+     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @return True if \aRect contains or intersects the item bounding box.
+     */
+    bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const
+    {
+        return DoHitTest( aRect, aContained, aAccuracy );
+    }
+
+    /**
+     * @note - The DoXXX() functions below are used to enforce the interface while retaining
+     *         the ability of change the implementation behavior of derived classes.  See
+     *         Herb Sutters explanation of virtuality as to why you might want to do this at:
+     *         http://www.gotw.ca/publications/mill18.htm.
+     */
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const { return false; }
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+    {
+        return false;
+    }
 };
 
 #endif /* SCH_ITEM_STRUCT_H */

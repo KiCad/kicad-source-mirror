@@ -43,7 +43,7 @@ void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
     {
         for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            if( schItem->Type() != TYPE_SCH_COMPONENT )
+            if( schItem->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT* comp = (SCH_COMPONENT*) schItem;
@@ -87,21 +87,21 @@ void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
         {
             switch( schItem->Type() )
             {
-            case TYPE_SCH_HIERLABEL:
-            case TYPE_SCH_GLOBALLABEL:
+            case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
                 lable.m_LabelType = schItem->Type();
                 lable.m_SheetPath = *path;
                 lable.m_Label     = schItem;
                 aList.push_back( lable );
                 break;
 
-            case DRAW_SHEET_STRUCT_TYPE:
+            case SCH_SHEET_T:
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) schItem;
 
                 BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, sheet->GetSheetPins() )
                 {
-                    lable.m_LabelType = DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE;
+                    lable.m_LabelType = SCH_SHEET_LABEL_T;
                     lable.m_SheetPath = *path;
                     lable.m_Label     = &sheetLabel;
                     aList.push_back( lable );
@@ -187,12 +187,12 @@ bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     int       ii;
     wxString* Text1, * Text2;
 
-    if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    if( obj1.m_LabelType == SCH_SHEET_LABEL_T )
         Text1 = &( (SCH_SHEET_PIN*)(obj1.m_Label) )->m_Text;
     else
         Text1 = &( (SCH_TEXT*)(obj1.m_Label) )->m_Text;
 
-    if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    if( obj2.m_LabelType == SCH_SHEET_LABEL_T )
         Text2 = &( (SCH_SHEET_PIN*)(obj2.m_Label) )->m_Text;
     else
         Text2 = &( (SCH_TEXT*)(obj2.m_Label) )->m_Text;
@@ -221,12 +221,12 @@ bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
 
     if( ii == 0 )
     {
-        if( obj1.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        if( obj1.m_LabelType == SCH_SHEET_LABEL_T )
             Text1 = ( (SCH_SHEET_PIN*) obj1.m_Label )->m_Text;
         else
             Text1 = ( (SCH_TEXT*) obj1.m_Label )->m_Text;
 
-        if( obj2.m_LabelType == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        if( obj2.m_LabelType == SCH_SHEET_LABEL_T )
             Text2 = ( (SCH_SHEET_PIN*) obj2.m_Label )->m_Text;
         else
             Text2 = ( (SCH_TEXT*) obj2.m_Label )->m_Text;
@@ -282,11 +282,11 @@ int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
     {
         switch( aList[ii].m_LabelType )
         {
-        case TYPE_SCH_HIERLABEL:
-        case TYPE_SCH_GLOBALLABEL:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
             DrawTextItem = (SCH_LABEL*)(aList[ii].m_Label);
 
-            if( aList[ii].m_LabelType == TYPE_SCH_HIERLABEL )
+            if( aList[ii].m_LabelType == SCH_HIERARCHICAL_LABEL_T )
                 labeltype = wxT( "Hierarchical" );
             else
                 labeltype = wxT( "Global      " );
@@ -302,7 +302,7 @@ int PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList )
             fputs( CONV_TO_UTF8( msg ), f );
             break;
 
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_LABEL_T:
         {
             DrawSheetLabel = (SCH_SHEET_PIN*) aList[ii].m_Label;
             int jj = DrawSheetLabel->m_Shape;

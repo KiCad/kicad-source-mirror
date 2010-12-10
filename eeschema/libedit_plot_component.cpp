@@ -47,8 +47,8 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
         fn.SetExt( file_ext );
 
         FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
-                              fn.GetFullName(), file_ext, mask, this,
-                              wxFD_SAVE, TRUE );
+                                         fn.GetFullName(), file_ext, mask, this,
+                                         wxFD_SAVE, TRUE );
 
         if( FullFileName.IsEmpty() )
             return;
@@ -67,8 +67,8 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
         wxFileName fn( cmp->GetName() );
         fn.SetExt( file_ext );
         FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
-                              fn.GetFullName(), file_ext, mask, this,
-                              wxFD_SAVE, TRUE );
+                                         fn.GetFullName(), file_ext, mask, this,
+                                         wxFD_SAVE, TRUE );
 
         if( FullFileName.IsEmpty() )
             return;
@@ -77,8 +77,8 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
          * the margin is 10% the size of the component size
          */
         wxSize pagesize = GetScreen()->ReturnPageSize( );
-        wxSize componentSize =
-            m_component->GetBoundaryBox(m_unit, m_convert).m_Size;
+        wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).m_Size;
+
         // Add a small margin to the plot bounding box
         componentSize.x = (int)(componentSize.x * 1.2);
         componentSize.y = (int)(componentSize.y * 1.2);

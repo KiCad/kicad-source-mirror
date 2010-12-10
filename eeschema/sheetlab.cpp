@@ -65,7 +65,7 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
-    wxASSERT( Sheet != NULL && Sheet->Type() == DRAW_SHEET_STRUCT_TYPE );
+    wxASSERT( Sheet != NULL && Sheet->Type() == SCH_SHEET_T );
     SAFE_DELETE( g_ItemToUndoCopy );
 
     int flags = m_Flags;
@@ -213,7 +213,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
-        if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
+        if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
             continue;
 
         HLabel = (SCH_HIERLABEL*) DrawStruct;
@@ -260,7 +260,7 @@ void SCH_EDIT_FRAME::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelT
     SCH_SHEET* parent = (SCH_SHEET*) aSheetLabelToDel->GetParent();
 
     wxASSERT( parent );
-    wxASSERT( parent->Type() == DRAW_SHEET_STRUCT_TYPE );
+    wxASSERT( parent->Type() == SCH_SHEET_T );
 
 #if 0 && defined(DEBUG)
     std::cout << "\n\nbefore deleting:\n" << std::flush;

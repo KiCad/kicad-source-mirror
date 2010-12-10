@@ -494,7 +494,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* 
     // continue searching from the middle of a linked list (the draw list)
     for(  ; aItem;  aItem = aItem->Next() )
     {
-        if( aItem->Type() != TYPE_SCH_COMPONENT )
+        if( aItem->Type() != SCH_COMPONENT_T )
             continue;
 
         // found next component
@@ -544,7 +544,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
     // continue searching from the middle of a linked list (the draw list)
     for(  ; aItem;  aItem = aItem->Next() )
     {
-        if( aItem->Type() != TYPE_SCH_COMPONENT )
+        if( aItem->Type() != SCH_COMPONENT_T )
             continue;
 
         // found next component
@@ -591,7 +591,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
             {
                 LIB_PIN* pin = pins[i];
 
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 addPinToComponentPinList( comp, aSheetPath, pin );
             }
@@ -1203,7 +1203,7 @@ bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_n
         for( EDA_ITEM* item = sheet->LastDrawList(); item; item = item->Next() )
         {
             wxChar ident;
-            if( item->Type() != TYPE_SCH_TEXT )
+            if( item->Type() != SCH_TEXT_T )
                 continue;
 
             SCH_TEXT*   drawText = (SCH_TEXT*) item;
@@ -1570,7 +1570,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
     {
         for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
-            if( item->Type() != TYPE_SCH_COMPONENT )
+            if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
@@ -1583,7 +1583,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 
             for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 if( pin->GetUnit() && pin->GetUnit() != unit2 )
                     continue;

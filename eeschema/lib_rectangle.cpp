@@ -17,7 +17,7 @@
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width                = 0;
     m_Fill                 = NO_FILL;
@@ -90,7 +90,7 @@ LIB_DRAW_ITEM* LIB_RECTANGLE::DoGenCopy()
 
 int LIB_RECTANGLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_RECT_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_RECTANGLE_T );
 
     const LIB_RECTANGLE* tmp = ( LIB_RECTANGLE* ) &aOther;
 
@@ -229,7 +229,7 @@ void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 }
 
 
-EDA_Rect LIB_RECTANGLE::GetBoundingBox()
+EDA_Rect LIB_RECTANGLE::GetBoundingBox() const
 {
     EDA_Rect rect;
 

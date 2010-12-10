@@ -46,6 +46,7 @@ void RemoteCommand( const char* cmdline )
 
     idcmd = strtok( line, " \n\r" );
     text  = strtok( NULL, "\"\n\r" );
+
     if( (idcmd == NULL) || (text == NULL) )
         return;
 
@@ -56,6 +57,7 @@ void RemoteCommand( const char* cmdline )
 
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
+
     if( idcmd == NULL )    // component only
     {
         frame->FindComponentAndItem( part_ref, true, 0, wxEmptyString, false );
@@ -63,6 +65,7 @@ void RemoteCommand( const char* cmdline )
     }
 
     text = strtok( NULL, "\"\n\r" );
+
     if( text == NULL )
         return;
 
@@ -103,8 +106,8 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( objectToSync->Type() )
     {
-    case DRAW_PART_TEXT_STRUCT_TYPE:
-    case COMPONENT_FIELD_DRAW_TYPE:
+    case SCH_FIELD_T:
+    case LIB_FIELD_T:
     {
         if( LibItem == NULL )
             break;
@@ -114,13 +117,13 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
     }
     break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         LibItem = (SCH_COMPONENT*) objectToSync;
         sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
 
-    case COMPONENT_PIN_DRAW_TYPE:
+    case LIB_PIN_T:
         if( LibItem == NULL )
             break;
 

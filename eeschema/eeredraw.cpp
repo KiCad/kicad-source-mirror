@@ -182,7 +182,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     switch( aItem->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
     {
         SCH_POLYLINE* Struct = (SCH_POLYLINE*) aItem;
         GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
@@ -198,7 +198,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
     {
         SCH_LINE* Struct;
         Struct = (SCH_LINE*) aItem;
@@ -224,7 +224,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
     {
         SCH_BUS_ENTRY* Struct = (SCH_BUS_ENTRY*) aItem;
         wxPoint        start  = Struct->m_Pos + aOffset;
@@ -234,7 +234,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
     {
         SCH_JUNCTION* Struct;
         Struct = (SCH_JUNCTION*) aItem;
@@ -242,7 +242,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
     {
         SCH_TEXT* Struct;
         Struct = (SCH_TEXT*) aItem;
@@ -250,9 +250,9 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
     {
         SCH_LABEL* Struct;
         Struct = (SCH_LABEL*) aItem;
@@ -260,7 +260,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
     {
         SCH_NO_CONNECT* Struct;
         Struct = (SCH_NO_CONNECT*) aItem;
@@ -268,7 +268,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* Component = (SCH_COMPONENT*) aItem;
 
@@ -279,7 +279,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
     {
         SCH_SHEET* Struct = (SCH_SHEET*) aItem;
         GRRect( &aPanel->m_ClipBox,
@@ -293,8 +293,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_MARKER:
+    case SCH_SHEET_LABEL_T:
+    case SCH_MARKER_T:
         break;
 
     default:

@@ -174,13 +174,13 @@ int TestDuplicateSheetNames( bool aCreateMarker )
              ref_item = ref_item->Next() )
         {
             // search for a sheet;
-            if( ref_item->Type() != DRAW_SHEET_STRUCT_TYPE )
+            if( ref_item->Type() != SCH_SHEET_T )
                 continue;
             for( SCH_ITEM* item_to_test = ref_item->Next();
                  item_to_test != NULL;
                  item_to_test = item_to_test->Next() )
             {
-                if( item_to_test->Type() != DRAW_SHEET_STRUCT_TYPE )
+                if( item_to_test->Type() != SCH_SHEET_T )
                     continue;
 
                 // We have found a second sheet: compare names
@@ -532,7 +532,7 @@ bool WriteDiagnosticERC( const wxString& FullFileName )
         DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             Marker = (SCH_MARKER*) DrawStruct;

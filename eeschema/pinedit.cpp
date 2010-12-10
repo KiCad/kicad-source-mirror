@@ -43,7 +43,7 @@ void LIB_EDIT_FRAME::OnRotatePin( wxCommandEvent& event )
 {
 
 	// Check, if the item is a pin, else return
-	if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
+	if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
 		return;
 
 	// save flags to restore them after rotating
@@ -77,7 +77,7 @@ void LIB_EDIT_FRAME::OnRotatePin( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 {
-    if( m_drawItem == NULL || m_drawItem->Type() != COMPONENT_PIN_DRAW_TYPE )
+    if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
         return;
 
     int item_flags = m_drawItem->m_Flags;       // save flags to restore them after editing
@@ -186,7 +186,7 @@ static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
 
-    if( CurrentPin == NULL || CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE )
+    if( CurrentPin == NULL || CurrentPin->Type() != LIB_PIN_T )
         return;
 
     if( CurrentPin->m_Flags & IS_NEW )
@@ -215,7 +215,7 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
     bool     status;
 
     // Some tests
-    if( (CurrentPin == NULL) || (CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE) )
+    if( (CurrentPin == NULL) || (CurrentPin->Type() != LIB_PIN_T) )
     {
         wxMessageBox( wxT("LIB_EDIT_FRAME::PlacePin() error") );
         return;
@@ -346,7 +346,7 @@ static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
 
-    if( CurrentPin == NULL || CurrentPin->Type() != COMPONENT_PIN_DRAW_TYPE )
+    if( CurrentPin == NULL || CurrentPin->Type() != LIB_PIN_T )
         return;
 
     wxPoint pinpos = CurrentPin->GetPosition();
@@ -543,7 +543,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
     if( ( m_component == NULL ) || ( MasterPin == NULL ) )
         return;
 
-    if( MasterPin->Type() != COMPONENT_PIN_DRAW_TYPE )
+    if( MasterPin->Type() != LIB_PIN_T )
         return;
 
     OnModify( );
@@ -588,7 +588,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     LIB_PIN* Pin;
     wxString msg;
 
-    if( m_component == NULL || SourcePin == NULL || SourcePin->Type() != COMPONENT_PIN_DRAW_TYPE )
+    if( m_component == NULL || SourcePin == NULL || SourcePin->Type() != LIB_PIN_T )
         return;
 
     Pin = (LIB_PIN*) SourcePin->GenCopy();

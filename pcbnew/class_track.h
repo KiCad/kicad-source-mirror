@@ -97,9 +97,7 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
-
-    EDA_Rect GetBoundingBox();
-
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Save

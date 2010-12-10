@@ -92,11 +92,11 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
         itemWrapper.m_PickedItem     = item;
         itemWrapper.m_UndoRedoStatus = UR_DELETED;
 
-        if( item->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+        if( item->Type() == SCH_SHEET_LABEL_T )
         {
             /* this item is depending on a sheet, and is not in global list */
             wxMessageBox( wxT("DeleteItemsInList() err: unexpected \
-DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE" ) );
+SCH_SHEET_LABEL_T" ) );
         }
         else
         {
@@ -124,7 +124,7 @@ void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
     if( !DrawStruct )
         return;
 
-    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    if( DrawStruct->Type() == SCH_SHEET_LABEL_T )
     {
         /* This structure is attached to a node, and is not accessible by
          * the global list directly. */
@@ -168,21 +168,21 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
         {
             switch( newitem->Type() )
             {
-            case DRAW_POLYLINE_STRUCT_TYPE:
-            case DRAW_JUNCTION_STRUCT_TYPE:
-            case DRAW_SEGMENT_STRUCT_TYPE:
-            case DRAW_BUSENTRY_STRUCT_TYPE:
-            case TYPE_SCH_TEXT:
-            case TYPE_SCH_LABEL:
-            case TYPE_SCH_GLOBALLABEL:
-            case TYPE_SCH_HIERLABEL:
-            case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-            case TYPE_SCH_MARKER:
-            case DRAW_NOCONNECT_STRUCT_TYPE:
+            case SCH_POLYLINE_T:
+            case SCH_JUNCTION_T:
+            case SCH_LINE_T:
+            case SCH_BUS_ENTRY_T:
+            case SCH_TEXT_T:
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_SHEET_LABEL_T:
+            case SCH_MARKER_T:
+            case SCH_NO_CONNECT_T:
             default:
                 break;
 
-            case DRAW_SHEET_STRUCT_TYPE:
+            case SCH_SHEET_T:
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) newitem;
                 sheet->m_TimeStamp = GetTimeStamp();
@@ -190,7 +190,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                 break;
             }
 
-            case TYPE_SCH_COMPONENT:
+            case SCH_COMPONENT_T:
                 ( (SCH_COMPONENT*) newitem )->m_TimeStamp = GetTimeStamp();
                 ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
                 break;
@@ -228,51 +228,51 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 
     switch( aDrawStruct->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
         NewDrawStruct = ( (SCH_POLYLINE*) aDrawStruct )->GenCopy();
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         NewDrawStruct = ( (SCH_LINE*) aDrawStruct )->GenCopy();
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         NewDrawStruct = ( (SCH_BUS_ENTRY*) aDrawStruct )->GenCopy();
         break;
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         NewDrawStruct = ( (SCH_JUNCTION*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_MARKER:
+    case SCH_MARKER_T:
         NewDrawStruct = ( (SCH_MARKER*) aDrawStruct )->GenCopy();
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         NewDrawStruct = ( (SCH_NO_CONNECT*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         NewDrawStruct = ( (SCH_TEXT*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         NewDrawStruct = ( (SCH_LABEL*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         NewDrawStruct = ( (SCH_HIERLABEL*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         NewDrawStruct = ( (SCH_GLOBALLABEL*) aDrawStruct )->GenCopy();
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         NewDrawStruct = ( (SCH_COMPONENT*) aDrawStruct )->GenCopy();
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         NewDrawStruct = ( (SCH_SHEET*) aDrawStruct )->GenCopy();
         if( aClone )
         {

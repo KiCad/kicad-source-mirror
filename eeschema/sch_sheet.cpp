@@ -29,7 +29,7 @@
 #include "sch_component.h"
 
 
-SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_SHEET_STRUCT_TYPE )
+SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, SCH_SHEET_T )
 {
     m_Layer = LAYER_SHEET;
     m_Pos = pos;
@@ -280,6 +280,7 @@ SCH_SHEET* SCH_SHEET::GenCopy()
 
     /* don't copy screen data - just reference it. */
     newitem->m_AssociatedScreen = m_AssociatedScreen;
+
     if( m_AssociatedScreen )
         m_AssociatedScreen->m_RefCount++;
 
@@ -316,7 +317,7 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
 void SCH_SHEET::AddLabel( SCH_SHEET_PIN* aLabel )
 {
     wxASSERT( aLabel != NULL );
-    wxASSERT( aLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+    wxASSERT( aLabel->Type() == SCH_SHEET_LABEL_T );
 
     m_labels.push_back( aLabel );
     renumberLabels();
@@ -326,7 +327,7 @@ void SCH_SHEET::AddLabel( SCH_SHEET_PIN* aLabel )
 void SCH_SHEET::RemoveLabel( SCH_SHEET_PIN* aLabel )
 {
     wxASSERT( aLabel != NULL );
-    wxASSERT( aLabel->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE );
+    wxASSERT( aLabel->Type() == SCH_SHEET_LABEL_T );
 
     SCH_SHEET_PIN_LIST::iterator i;
 
@@ -356,6 +357,7 @@ bool SCH_SHEET::HasLabel( const wxString& aName )
     return false;
 }
 
+
 bool SCH_SHEET::IsVerticalOrientation()
 {
     BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
@@ -377,7 +379,7 @@ bool SCH_SHEET::HasUndefinedLabels()
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
+            if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
                 continue;
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
@@ -454,7 +456,7 @@ void SCH_SHEET::CleanupSheet()
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_HIERLABEL )
+            if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
                 continue;
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
@@ -489,7 +491,7 @@ SCH_SHEET_PIN* SCH_SHEET::GetLabel( const wxPoint& aPosition )
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_SHEET::GetPenSize()
+int SCH_SHEET::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
 }
@@ -561,6 +563,7 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         color = aColor;
     else
         color = ReturnLayerColor( m_Layer );
+
     GRSetDrawMode( aDC, aDrawMode );
 
     GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
@@ -592,6 +595,7 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         txtcolor = aColor;
     else
         txtcolor = ReturnLayerColor( LAYER_SHEETFILENAME );
+
     Text = wxT( "File: " ) + m_FileName;
     DrawGraphicText( aPanel, aDC, pos_filename,
                      (EDA_Colors) txtcolor, Text, name_orientation,
@@ -613,7 +617,7 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * Function GetBoundingBox
  *  @return an EDA_Rect giving the bounding box of the sheet
  */
-EDA_Rect SCH_SHEET::GetBoundingBox()
+EDA_Rect SCH_SHEET::GetBoundingBox() const
 {
     int      dx, dy;
 
@@ -634,19 +638,6 @@ EDA_Rect SCH_SHEET::GetBoundingBox()
 
 
 /**
- * Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_SHEET::HitTest( const wxPoint& aPosRef )
-{
-    EDA_Rect rect = GetBoundingBox();
-
-    return rect.Inside( aPosRef );
-}
-
-
-/**
  * Function ComponentCount
  *  count our own components, without the power components.
  *  @return the component count.
@@ -661,14 +652,15 @@ int SCH_SHEET::ComponentCount()
 
         for( bs = m_AssociatedScreen->GetDrawItems(); bs != NULL; bs = bs->Next() )
         {
-            if( bs->Type() == TYPE_SCH_COMPONENT )
+            if( bs->Type() == SCH_COMPONENT_T )
             {
                 SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
 
                 if( Cmp->GetField( VALUE )->m_Text.GetChar( 0 ) != '#' )
                     n++;
             }
-            if( bs->Type() == DRAW_SHEET_STRUCT_TYPE )
+
+            if( bs->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) bs;
                 n += sheet->ComponentCount();
@@ -695,7 +687,7 @@ bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
 
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* ss = (SCH_SHEET*) strct;
                 if( ss->m_AssociatedScreen
@@ -740,7 +732,7 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* ss = (SCH_SHEET*) strct;
 
@@ -774,6 +766,7 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
     {
         SCH_SCREEN* screen = NULL;
         g_RootSheet->SearchHierarchy( m_FileName, &screen );
+
         if( screen )
         {
             m_AssociatedScreen = screen;
@@ -793,7 +786,7 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 
                 while( bs )
                 {
-                    if( bs->Type() ==  DRAW_SHEET_STRUCT_TYPE )
+                    if( bs->Type() ==  SCH_SHEET_T )
                     {
                         SCH_SHEET* sheetstruct = (SCH_SHEET*) bs;
 
@@ -827,7 +820,7 @@ int SCH_SHEET::CountSheets()
 
         for( ; strct; strct = strct->Next() )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* subsheet = (SCH_SHEET*) strct;
                 count += subsheet->CountSheets();
@@ -864,7 +857,6 @@ bool SCH_SHEET::ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileNam
     wxString    msg;
     bool        LoadFromFile = false;
 
-
     // do we reload the data from the existing hierarchy
     if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) )
     {
@@ -875,18 +867,17 @@ data in this sheet will be replaced)?" ),
                         GetChars( aFileName ) );
             if( !IsOK( NULL, msg ) )
             {
-                DisplayInfoMessage( (wxWindow*) NULL,
-                                    _( "Sheet Filename Renaming Aborted" ) );
+                DisplayInfoMessage( (wxWindow*) NULL, _( "Sheet Filename Renaming Aborted" ) );
                 return false;
             }
         }
     }
-    else if( wxFileExists( aFileName ) )         // do we reload the data from
-                                                 // an existing file
+    else if( wxFileExists( aFileName ) ) // do we reload the data from an existing file
     {
         msg.Printf( _( "A file named %s exists, load it (otherwise keep \
 current sheet data if possible)?" ),
                     GetChars( aFileName ) );
+
         if( IsOK( NULL, msg ) )
         {
             LoadFromFile = true;
@@ -895,9 +886,11 @@ current sheet data if possible)?" ),
             if( m_AssociatedScreen )
             {
                 m_AssociatedScreen->m_RefCount--;  // be careful with these
+
                 if( m_AssociatedScreen->m_RefCount == 0 )
                     SAFE_DELETE( m_AssociatedScreen );
-                m_AssociatedScreen = NULL;         // will be created later
+
+               m_AssociatedScreen = NULL;         // will be created later
             }
         }
     }
@@ -923,7 +916,6 @@ otherwise delete current sheet data)" );
         m_AssociatedScreen = NULL;          //will be created later
     }
 
-
     SetFileName( aFileName );
 
     // if we use new data (from file or from internal hierarchy), delete the
@@ -931,8 +923,10 @@ otherwise delete current sheet data)" );
     if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
     {
         m_AssociatedScreen->m_RefCount--;
+
         if( m_AssociatedScreen->m_RefCount == 0 )
             SAFE_DELETE( m_AssociatedScreen );
+
         m_AssociatedScreen = NULL;         // so that we reload..
     }
 
@@ -944,13 +938,13 @@ otherwise delete current sheet data)" );
         m_AssociatedScreen->m_RefCount++;
     }
 
-
     //just make a new screen if needed.
     if( !m_AssociatedScreen )
     {
         m_AssociatedScreen = new SCH_SCREEN();
         m_AssociatedScreen->m_RefCount++;         // be careful with these
     }
+
     m_AssociatedScreen->m_FileName = aFileName;
 
     return true;
@@ -995,6 +989,7 @@ void SCH_SHEET::Mirror_X( int aXaxis_position )
     NEGATE( m_Pos.y );
     m_Pos.y += aXaxis_position;
     m_Pos.y -= m_Size.y;
+
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
     {
         sheetPin.Mirror_X( aXaxis_position );
@@ -1012,7 +1007,6 @@ void SCH_SHEET::Mirror_Y( int aYaxis_position )
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;
-
     m_Pos.x -= m_Size.x;
 
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
@@ -1050,6 +1044,7 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData,
     {
         if( aFindLocation )
             *aFindLocation = GetFileNamePosition();
+
         return true;
     }
 
@@ -1057,6 +1052,7 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData,
     {
         if( aFindLocation )
             *aFindLocation = GetSheetNamePosition();
+
         return true;
     }
 
@@ -1084,7 +1080,7 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     {
         SCH_SHEET_PIN &pinsheet = GetSheetPins()[ii];
 
-        wxCHECK2_MSG( pinsheet.Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE, continue,
+        wxCHECK2_MSG( pinsheet.Type() == SCH_SHEET_LABEL_T, continue,
                       wxT( "Invalid item in schematic sheet pin list.  Bad programmer!" ) );
 
         pinsheet.GetEndPoints( aItemList );
@@ -1137,6 +1133,29 @@ void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
     for( size_t i = 0; i < GetSheetPins().size(); i++ )
         aPoints.push_back( GetSheetPins()[i].m_Pos );
+}
+
+
+bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    EDA_Rect rect = GetBoundingBox();
+
+    rect.Inflate( aAccuracy );
+
+    return rect.Inside( aPoint );
+}
+
+
+bool SCH_SHEET::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
 }
 
 

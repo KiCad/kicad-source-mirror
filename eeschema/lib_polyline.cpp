@@ -20,7 +20,7 @@
 
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_Fill       = NO_FILL;
     m_Width      = 0;
@@ -132,7 +132,7 @@ LIB_DRAW_ITEM* LIB_POLYLINE::DoGenCopy()
 
 int LIB_POLYLINE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_POLYLINE_T );
 
     const LIB_POLYLINE* tmp = ( LIB_POLYLINE* ) &aOther;
 
@@ -358,7 +358,7 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aT
  * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LIB_POLYLINE::GetBoundingBox()
+EDA_Rect LIB_POLYLINE::GetBoundingBox() const
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;

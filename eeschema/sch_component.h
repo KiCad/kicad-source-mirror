@@ -159,13 +159,12 @@ public:
      * set to NULL.
      * @return SCH_COMPONENT* - a copy of me.
      */
-    SCH_COMPONENT* GenCopy()
+    SCH_COMPONENT* GenCopy() const
     {
         return new SCH_COMPONENT( *this );
     }
 
-
-    void       SetOrientation( int aOrientation );
+    void SetOrientation( int aOrientation );
 
     /**
      * Function GetOrientation
@@ -217,7 +216,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect   GetBoundingBox();
+    EDA_Rect   GetBoundingBox() const;
 
     //-----<Fields>-----------------------------------------------------------
 
@@ -274,15 +273,14 @@ public:
      */
     LIB_PIN* GetPin( const wxString& number );
 
-    virtual void            Draw( WinEDA_DrawPanel* panel,
-                                  wxDC*             DC,
-                                  const wxPoint&    offset,
-                                  int               draw_mode,
-                                  int               Color = -1 )
+    virtual void Draw( WinEDA_DrawPanel* panel,
+                       wxDC*             DC,
+                       const wxPoint&    offset,
+                       int               draw_mode,
+                       int               Color = -1 )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
-
 
     void Draw( WinEDA_DrawPanel* panel,
                wxDC*             DC,
@@ -325,14 +323,6 @@ public:
 
     // Set the unit selection, for the given sheet path.
     void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
-
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     * for a component, has no meaning, but it is necessary to satisfy the
-     * SCH_ITEM class requirements.
-     */
-    virtual int GetPenSize() { return 0; }
 
     // Geometric transforms (used in block operations):
 
@@ -377,7 +367,7 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    #if defined(DEBUG)
+#if defined(DEBUG)
 
     /**
      * Function Show
@@ -389,6 +379,10 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 

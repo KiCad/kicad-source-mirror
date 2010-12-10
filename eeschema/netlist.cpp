@@ -514,7 +514,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
     {
         switch( DrawList->Type() )
         {
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_LINE_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LINE*) DrawList )
             if( (STRUCT->GetLayer() != LAYER_BUS)
@@ -539,7 +539,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
             #undef STRUCT
             #define STRUCT ( (SCH_JUNCTION*) DrawList )
             new_item = new NETLIST_OBJECT();
@@ -553,7 +553,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case DRAW_NOCONNECT_STRUCT_TYPE:
+        case SCH_NO_CONNECT_T:
             #undef STRUCT
             #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
             new_item = new NETLIST_OBJECT();
@@ -567,7 +567,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case TYPE_SCH_LABEL:
+        case SCH_LABEL_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LABEL*) DrawList )
             ii = IsBusLabel( STRUCT->m_Text );
@@ -578,9 +578,9 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             new_item->m_Comp = STRUCT;
             new_item->m_Type = NET_LABEL;
 
-            if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
                 new_item->m_Type = NET_GLOBLABEL;
-            if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
                 new_item->m_Type = NET_HIERLABEL;
 
             new_item->m_Label = STRUCT->m_Text;
@@ -594,8 +594,8 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             break;
 
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LABEL*) DrawList )
             ii = IsBusLabel( STRUCT->m_Text );
@@ -607,9 +607,9 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             // this is not the simplest way of doing it
             // (look at the case statement above).
-            if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
                 new_item->m_Type = NET_GLOBLABEL;
-            if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
                 new_item->m_Type = NET_HIERLABEL;
 
             new_item->m_Label = STRUCT->m_Text;
@@ -623,7 +623,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             break;
 
-        case TYPE_SCH_COMPONENT:
+        case SCH_COMPONENT_T:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
             Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
@@ -632,7 +632,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             for( LIB_PIN* pin = Entry->GetNextPin();  pin;  pin = Entry->GetNextPin( pin ) )
             {
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 if( pin->GetUnit() &&
                     ( pin->GetUnit() != DrawLibItem->GetUnitSelection( sheetlist ) ) )
@@ -674,13 +674,13 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             }
             break;
 
-        case DRAW_POLYLINE_STRUCT_TYPE:
-        case DRAW_BUSENTRY_STRUCT_TYPE:
-        case TYPE_SCH_MARKER:
-        case TYPE_SCH_TEXT:
+        case SCH_POLYLINE_T:
+        case SCH_BUS_ENTRY_T:
+        case SCH_MARKER_T:
+        case SCH_TEXT_T:
             break;
 
-        case DRAW_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_T:
         {
             #undef STRUCT
             #define STRUCT ( (SCH_SHEET*) DrawList )
@@ -710,7 +710,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             break;
         }
 
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_LABEL_T:
         default:
         {
             wxString msg;

@@ -19,8 +19,6 @@
 #include "template_fieldnames.h"
 
 
-static bool IsItemInBox(EDA_Rect& aBox, SCH_ITEM* DrawStruct );
-
 static SCH_ITEM* LastSnappedStruct = NULL;
 static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
                         SCH_ITEM* DrawList, double aScaleFactor );
@@ -56,12 +54,12 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
         if( lastcomponent == NULL )  // First time a component is located
         {
             lastcomponent = component;
-            BoundaryBox   = lastcomponent->GetBoundaryBox();
+            BoundaryBox   = lastcomponent->GetBoundingBox();
             sizeref = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
         }
         else
         {
-            BoundaryBox = component->GetBoundaryBox();
+            BoundaryBox = component->GetBoundingBox();
             sizecurr    = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
 
             if( sizeref > sizecurr )   // a smallest component is found
@@ -134,19 +132,18 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* aScreen )
     EDA_Rect area;
     area.SetOrigin( aBlock.GetOrigin());
     area.SetSize( aBlock.GetSize() );
-
     area.Normalize();
 
     ITEM_PICKER picker;
-    SCH_ITEM*   DrawStruct = aScreen->GetDrawItems();
+    SCH_ITEM*   item = aScreen->GetDrawItems();
 
-    for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    for( ; item != NULL; item = item->Next() )
     {
-        if( IsItemInBox( area, DrawStruct ) )
+        if( item->HitTest( area ) )
         {
             /* Put this structure in the picked list: */
-            picker.m_PickedItem     = DrawStruct;
-            picker.m_PickedItemType = DrawStruct->Type();
+            picker.m_PickedItem     = item;
+            picker.m_PickedItemType = item->Type();
             aBlock.PushItem( picker );
             itemcount++;
         }
@@ -172,7 +169,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
 
         switch( DrawList->Type() )
         {
-        case DRAW_POLYLINE_STRUCT_TYPE:
+        case SCH_POLYLINE_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_POLYLINE*) DrawList )
             if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
@@ -190,7 +187,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
 
             break;
 
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_LINE_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_LINE*) DrawList )
             if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
@@ -198,26 +195,15 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
 
             if( TestSegmentHit( aPosRef, STRUCT->m_Start, STRUCT->m_End, 0 ) )
             {
-                if( ( ( SearchMask & DRAWITEM )
-                     && ( STRUCT->GetLayer() == LAYER_NOTES ) )
-                   || ( ( SearchMask & WIREITEM )
-                       && ( STRUCT->GetLayer() == LAYER_WIRE ) )
-                   || ( ( SearchMask & BUSITEM )
-                       && ( STRUCT->GetLayer() == LAYER_BUS ) )
-                    )
+                if( ( ( SearchMask & DRAWITEM ) && ( STRUCT->GetLayer() == LAYER_NOTES ) )
+                   || ( ( SearchMask & WIREITEM ) && ( STRUCT->GetLayer() == LAYER_WIRE ) )
+                   || ( ( SearchMask & BUSITEM ) && ( STRUCT->GetLayer() == LAYER_BUS ) ) )
                 {
-                    if( SearchMask & EXCLUDE_WIRE_BUS_ENDPOINTS )
-                    {
-                        if( aPosRef == STRUCT->m_Start
-                            || aPosRef == STRUCT->m_End )
-                            break;
-                    }
+                    if( SearchMask & EXCLUDE_WIRE_BUS_ENDPOINTS && STRUCT->IsEndPoint( aPosRef ) )
+                        break;
 
-                    if( SearchMask & WIRE_BUS_ENDPOINTS_ONLY )
-                    {
-                        if( !STRUCT->IsOneEndPointAt( aPosRef ) )
-                            break;
-                    }
+                    if( SearchMask & WIRE_BUS_ENDPOINTS_ONLY && !STRUCT->IsEndPoint( aPosRef ) )
+                        break;
 
                     LastSnappedStruct = DrawList;
                     return true;
@@ -226,21 +212,20 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             break;
 
 
-        case DRAW_BUSENTRY_STRUCT_TYPE:
+        case SCH_BUS_ENTRY_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_BUS_ENTRY*) DrawList )
             if( !( SearchMask & (RACCORDITEM) ) )
                 break;
 
-            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(),
-                                hitminDist ) )
+            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(), hitminDist ) )
             {
                 LastSnappedStruct = DrawList;
                 return true;
             }
             break;
 
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_JUNCTION*) DrawList )
             if( !(SearchMask & JUNCTIONITEM) )
@@ -252,7 +237,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             }
             break;
 
-        case DRAW_NOCONNECT_STRUCT_TYPE:
+        case SCH_NO_CONNECT_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
             if( !(SearchMask & NOCONNECTITEM) )
@@ -264,7 +249,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             }
             break;
 
-        case TYPE_SCH_MARKER:
+        case SCH_MARKER_T:
         {
             #undef  STRUCT
             #define STRUCT ( (SCH_MARKER*) DrawList )
@@ -278,7 +263,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             break;
         }
 
-        case TYPE_SCH_TEXT:
+        case SCH_TEXT_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_TEXT*) DrawList )
             if( !( SearchMask & TEXTITEM) )
@@ -291,9 +276,9 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             break;
 
 
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_TEXT*) DrawList ) // SCH_TEXT is the base
                                                     // class of these labels
@@ -306,7 +291,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             }
             break;
 
-        case TYPE_SCH_COMPONENT:
+        case SCH_COMPONENT_T:
             if( !( SearchMask & (LIBITEM | FIELDCMPITEM) ) )
                 break;
 
@@ -323,7 +308,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
                     if( field->IsVoid() )
                         continue;
 
-                    EDA_Rect BoundaryBox = field->GetBoundaryBox();
+                    EDA_Rect BoundaryBox = field->GetBoundingBox();
+
                     if( BoundaryBox.Inside( aPosRef ) )
                     {
                         LastSnappedStruct = field;
@@ -335,7 +321,8 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             {
                 #undef  STRUCT
                 #define STRUCT ( (SCH_COMPONENT*) DrawList )
-                EDA_Rect BoundaryBox = STRUCT->GetBoundaryBox();
+                EDA_Rect BoundaryBox = STRUCT->GetBoundingBox();
+
                 if( BoundaryBox.Inside( aPosRef ) )
                 {
                     LastSnappedStruct = DrawList;
@@ -344,7 +331,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
             }
             break;
 
-        case DRAW_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_T:
             #undef STRUCT
             #define STRUCT ( (SCH_SHEET*) DrawList )
             if( !(SearchMask & SHEETITEM) )
@@ -372,92 +359,6 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, dou
 }
 
 
-/*****************************************************************************
-* Routine to test if an object has non empty intersection with the box       *
-* defined by x1/y1 and x2/y2 (x1 < x2, y1 < y2), and return true if so. This *
-* routine is used to pick all points in a given box.                         *
-*****************************************************************************/
-bool IsItemInBox( EDA_Rect& aBox, SCH_ITEM* DrawStruct )
-{
-    EDA_Rect BoundaryBox;
-
-    switch( DrawStruct->Type() )
-    {
-    case DRAW_POLYLINE_STRUCT_TYPE:
-        #undef  STRUCT
-        #define STRUCT ( (SCH_POLYLINE*) DrawStruct )
-        for( unsigned i = 0; i < STRUCT->GetCornerCount(); i++ )
-        {
-            if( aBox.Inside(STRUCT->m_PolyPoints[i]) )
-                return true;
-        }
-
-        break;
-
-    case DRAW_SEGMENT_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (SCH_LINE*) DrawStruct )
-        if( aBox.Inside(STRUCT->m_Start) )
-            return true;
-        if( aBox.Inside(STRUCT->m_End) )
-            return true;
-        break;
-
-    case DRAW_BUSENTRY_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (SCH_BUS_ENTRY*) DrawStruct )
-        if( aBox.Inside(STRUCT->m_Pos) )
-            return true;
-        if( aBox.Inside(STRUCT->m_End() ) )
-            return true;
-        break;
-
-    case DRAW_JUNCTION_STRUCT_TYPE:
-        #undef STRUCT
-        #define STRUCT ( (SCH_JUNCTION*) DrawStruct )
-        if( aBox.Inside(STRUCT->m_Pos) )
-            return true;
-        break;
-
-    case DRAW_NOCONNECT_STRUCT_TYPE:
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_TEXT:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case DRAW_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_MARKER:
-        BoundaryBox = DrawStruct->GetBoundingBox();
-        if( aBox.Intersects( BoundaryBox ) )
-            return true;
-        break;
-
-    case TYPE_SCH_COMPONENT:
-        // Use a more restrictive area than GetBoundingBox()
-        // Area is restricted to the body area, excludint fields outside this area
-        BoundaryBox = ((SCH_COMPONENT*)DrawStruct)->GetBoundaryBox();
-        if( aBox.Intersects( BoundaryBox ) )
-            return true;
-        break;
-
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-        break;
-
-    default:
-    {
-        wxString msg;
-
-        msg.Printf( wxT( "IsItemInBox() Err: unexpected StructType %d (" ),
-                    DrawStruct->Type() );
-        msg << DrawStruct->GetClass() << wxT( ")" );
-        wxMessageBox( msg );
-        break;
-    }
-    }
-
-    return FALSE;
-}
-
-
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos )
 {
     return Sheet->GetLabel( pos );
@@ -473,7 +374,7 @@ LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos, SCH_COMPONENT*
 
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
-        if( DrawStruct->Type() != TYPE_SCH_COMPONENT )
+        if( DrawStruct->Type() != SCH_COMPONENT_T )
             continue;
 
         schItem = (SCH_COMPONENT*) DrawStruct;
@@ -490,7 +391,7 @@ LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos, SCH_COMPONENT*
         wxPoint libPos = RefPos - schItem->m_Pos;
         Pin = (LIB_PIN*) Entry->LocateDrawItem( schItem->m_Multi,
                                                 schItem->m_Convert,
-                                                COMPONENT_PIN_DRAW_TYPE,
+                                                LIB_PIN_T,
                                                 libPos, schItem->m_Transform );
         if( Pin )
             break;
@@ -510,7 +411,7 @@ SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList )
 
     for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
     {
-        if( DrawStruct->Type() != DRAW_SHEET_STRUCT_TYPE )
+        if( DrawStruct->Type() != SCH_SHEET_T )
             continue;
 
         PinSheet = LocateSheetLabel( (SCH_SHEET*) DrawStruct, RefPos );

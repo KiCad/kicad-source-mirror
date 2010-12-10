@@ -30,7 +30,7 @@ void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
     if( FirstSheet == NULL )
         return;
 
-    if( FirstSheet->Type() != DRAW_SHEET_STRUCT_TYPE )
+    if( FirstSheet->Type() != SCH_SHEET_T )
     {
         DisplayError( NULL, wxT( "DeleteSubHierarchy error(): NOT a Sheet" ) );
         return;
@@ -58,7 +58,7 @@ void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
             DrawStruct = EEDrawList;
             EEDrawList = EEDrawList->Next();
 
-            if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( DrawStruct->Type() == SCH_SHEET_T )
             {
                 DeleteSubHierarchy( (SCH_SHEET*) DrawStruct, confirm_deletion );
             }

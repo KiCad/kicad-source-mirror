@@ -19,7 +19,7 @@
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_BEZIER_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_BEZIER_T, aParent )
 {
     m_Fill       = NO_FILL;
     m_Width      = 0;
@@ -129,7 +129,7 @@ LIB_DRAW_ITEM* LIB_BEZIER::DoGenCopy()
 
 int LIB_BEZIER::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_BEZIER_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_BEZIER_T );
 
     const LIB_BEZIER* tmp = ( LIB_BEZIER* ) &aOther;
 
@@ -340,7 +340,7 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
  * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LIB_BEZIER::GetBoundingBox()
+EDA_Rect LIB_BEZIER::GetBoundingBox() const
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;

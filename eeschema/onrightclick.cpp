@@ -65,7 +65,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( false );
 
-        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
+        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
             SCH_SHEET_PIN* slabel;
             slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct, GetScreen()->m_Curseur );
@@ -113,16 +113,16 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 
     switch( DrawStruct->Type() )
     {
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
 
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Noconn" ), delete_xpm );
         break;
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         AddMenusForJunction( PopMenu, (SCH_JUNCTION*) DrawStruct, this );
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         if( !flags )
         {
             wxString msg = AddHotkeyName( _( "Move Bus Entry" ), s_Schematic_Hokeys_Descr,
@@ -137,36 +137,36 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Bus Entry" ), delete_bus_xpm );
         break;
 
-    case TYPE_SCH_MARKER:
+    case SCH_MARKER_T:
         AddMenusForMarkers( PopMenu, (SCH_MARKER*) DrawStruct, this );
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         AddMenusForText( PopMenu, (SCH_TEXT*) DrawStruct );
         break;
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         AddMenusForLabel( PopMenu, (SCH_LABEL*) DrawStruct );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) DrawStruct );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) DrawStruct );
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
     {
         AddMenusForComponentField( PopMenu, (SCH_FIELD*) DrawStruct );
+
         if( flags )
             break;
 
         // Many fields are inside a component. If this is the case, add the
         // component menu
-        SCH_COMPONENT* Component =
-            LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
+        SCH_COMPONENT* Component = LocateSmallestComponent( GetScreen() );
 
         if( Component )
         {
@@ -176,11 +176,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     }
     break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
 
 //      if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move");
         switch( DrawStruct->GetLayer() )
@@ -202,11 +202,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) DrawStruct );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         AddMenusForPinSheet( PopMenu, (SCH_SHEET_PIN*) DrawStruct );
         break;
 
@@ -243,7 +243,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 
 void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 {
-    if( Component->Type() != TYPE_SCH_COMPONENT )
+    if( Component->Type() != SCH_COMPONENT_T )
     {
         wxASSERT( 0 );
         return;

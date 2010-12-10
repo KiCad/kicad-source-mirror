@@ -244,7 +244,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( aSheet == NULL || aSheet->m_Flags & IS_NEW )
         return;
 
-    if( aSheet->Type() != DRAW_SHEET_STRUCT_TYPE )
+    if( aSheet->Type() != SCH_SHEET_T )
     {
         DisplayError( this, wxT( "SCH_EDIT_FRAME::ReSizeSheet: Bad SructType" ) );
         return;
@@ -280,7 +280,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
 void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    if( ( aSheet == NULL ) || ( aSheet->Type() != DRAW_SHEET_STRUCT_TYPE ) )
+    if( ( aSheet == NULL ) || ( aSheet->Type() != SCH_SHEET_T ) )
         return;
 
     DrawPanel->CursorOff( aDC );

@@ -212,7 +212,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 }
 
 
-EDA_Rect TRACK::GetBoundingBox()
+EDA_Rect TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width + 1 ) / 2;

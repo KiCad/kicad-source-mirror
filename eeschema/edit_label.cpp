@@ -48,10 +48,10 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         ItemInitialPosition = TextStruct->m_Pos;
         OldSize   = TextStruct->m_Size;
         OldOrient = TextStruct->GetSchematicTextOrientation();
@@ -95,10 +95,10 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         orient  = TextStruct->GetSchematicTextOrientation() + 1;
         orient &= 3;
         TextStruct->SetSchematicTextOrientation( orient );
@@ -195,10 +195,10 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* redraw the text */
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         ( (SCH_TEXT*) TextStruct )->m_Pos = panel->GetScreen()->m_Curseur;
         break;
 
@@ -238,10 +238,10 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         switch( Struct->Type() )
         {
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-        case TYPE_SCH_TEXT:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_TEXT_T:
         {
             SCH_TEXT* Text = (SCH_TEXT*) Struct;
             Text->m_Pos  = ItemInitialPosition;
@@ -273,19 +273,19 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
 
     switch( newtype )
     {
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         newtext = new SCH_LABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         newtext = new SCH_GLOBALLABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         newtext = new SCH_HIERLABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         newtext = new SCH_TEXT( Text->m_Pos, Text->m_Text );
         break;
 

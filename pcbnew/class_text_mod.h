@@ -47,23 +47,24 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
     /* Gestion du texte */
     void     SetWidth( int new_width );
-    int      GetLength();           /* text length */
-    int      GetDrawRotation();     // Return text rotation for drawings and
-                                    // plotting
+
+    int      GetLength() const;        /* text length */
+
+    int      GetDrawRotation() const;  // Return text rotation for drawings and plotting
 
     /**
      * Function GetTextRect
      * @return an EDA_Rect which gives the position and size of the text area
      * (for the 0 orient text and footprint)
      */
-    EDA_Rect GetTextRect( void );
+    EDA_Rect GetTextRect( void ) const;
 
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Text (according to text and footprint
      * orientation)
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     void     SetDrawCoord();        // Set absolute coordinates.
 

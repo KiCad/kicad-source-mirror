@@ -411,7 +411,7 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
     if( Component == NULL )
         return;
 
-    if( Component->Type() != TYPE_SCH_COMPONENT )
+    if( Component->Type() != SCH_COMPONENT_T )
         return;
 
     if( Component->m_Flags == 0 )

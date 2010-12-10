@@ -194,7 +194,7 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 }
 
 
-int TEXTE_MODULE:: GetLength()
+int TEXTE_MODULE:: GetLength() const
 {
     return m_Text.Len();
 }
@@ -250,7 +250,7 @@ void TEXTE_MODULE:: SetLocalCoord()
  * @return an EDA_Rect which gives the position and size of the text area
  *         (for the footprint orientation)
  */
-EDA_Rect TEXTE_MODULE::GetTextRect( void )
+EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
 {
     EDA_Rect area;
 
@@ -303,7 +303,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
  * returns the bounding box of this Text (according to text and footprint
  * orientation)
  */
-EDA_Rect TEXTE_MODULE::GetBoundingBox()
+EDA_Rect TEXTE_MODULE::GetBoundingBox() const
 {
     // Calculate area without text fields:
     EDA_Rect text_area;
@@ -438,18 +438,19 @@ void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
 
 /* Return text rotation for drawings and plotting
  */
-int TEXTE_MODULE::GetDrawRotation()
+int TEXTE_MODULE::GetDrawRotation() const
 {
     int     rotation;
     MODULE* Module = (MODULE*) m_Parent;
 
     rotation = m_Orient;
+
     if( Module )
         rotation += Module->m_Orient;
 
     NORMALIZE_ANGLE_POS( rotation );
 
-//  For angle = 0 .. 180 deg
+    // For angle = 0 .. 180 deg
     while( rotation > 900 )
         rotation -= 1800;
 

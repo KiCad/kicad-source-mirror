@@ -347,10 +347,11 @@ int LIB_VIEW_FRAME::BestZoom()
     {
         if( m_clientSize == wxSize( -1, -1 ) )
             m_clientSize = DrawPanel->GetClientSize();
+
         size = m_clientSize;
     }
 
-    EDA_Rect BoundaryBox = component->GetBoundaryBox( m_unit, m_convert );
+    EDA_Rect BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
 
     // Reserve a 25 mils margin around component bounding box.
     size -= wxSize( 25, 25 );
