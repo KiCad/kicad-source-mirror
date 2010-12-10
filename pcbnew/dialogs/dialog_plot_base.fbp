@@ -158,7 +158,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">ID_USE_GERBER_EXTENSIONS</property>
-                                        <property name="label">Use Proper Gerber Extensions</property>
+                                        <property name="label">Use proper Gerber extensions</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_Use_Gerber_Extensions</property>
@@ -272,7 +272,7 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Subtract Mask from Silk</property>
+                                        <property name="label">Subtract mask from silk</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_SubtractMaskFromSilk</property>

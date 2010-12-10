@@ -35,7 +35,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( sbLayersSizer, 1, wxEXPAND, 5 );
 	
-	m_Use_Gerber_Extensions = new wxCheckBox( this, ID_USE_GERBER_EXTENSIONS, _("Use Proper Gerber Extensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Use_Gerber_Extensions = new wxCheckBox( this, ID_USE_GERBER_EXTENSIONS, _("Use proper Gerber extensions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Use_Gerber_Extensions->SetToolTip( _("Use Proper Gerber Extensions - .GBL, .GTL, etc...") );
 	
 	bLeftSizer->Add( m_Use_Gerber_Extensions, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -45,7 +45,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( m_Exclude_Edges_Pcb, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_SubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract Mask from Silk"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract mask from silk"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SubtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
 	bLeftSizer->Add( m_SubtractMaskFromSilk, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
