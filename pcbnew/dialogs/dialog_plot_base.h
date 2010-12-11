@@ -36,37 +36,29 @@ class DIALOG_PLOT_BASE : public wxDialog
 	protected:
 		enum
 		{
-			ID_USE_GERBER_EXTENSIONS = 1000,
-			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
-			ID_PRINT_VALUE,
+			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN = 1000,
 			ID_PRINT_REF,
-			ID_PRINT_MODULE_TEXTS,
-			ID_FORCE_PRINT_INVISIBLE_TEXT,
-			ID_DRILL_SHAPE_OPT,
-			ID_BROWSE_OUTPUT_DIRECTORY,
 			ID_MIROR_OPT,
-			ID_MASKVIA_OPT,
-			ID_EXEC_PLOT,
 			ID_SAVE_OPT_PLOT,
 			ID_CREATE_DRILL_FILE,
 		};
 		
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
 		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
-		wxCheckBox* m_Use_Gerber_Extensions;
+		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_excludeEdgeLayerOpt;
-		wxCheckBox* m_SubtractMaskFromSilk;
-		wxCheckBox* m_Plot_Sheet_Ref;
-		wxCheckBox* m_Plot_Pads_on_Silkscreen;
-		wxCheckBox* m_Plot_Text_Value;
-		wxCheckBox* m_Plot_Text_Ref;
-		wxCheckBox* m_Plot_Text_Div;
-		wxCheckBox* m_Plot_Invisible_Text;
-		wxRadioBox* m_Drill_Shape_Opt;
-		wxRadioBox* m_Scale_Opt;
-		wxRadioBox* m_PlotModeOpt;
-		wxRadioBox* m_Choice_Plot_Offset;
-		wxRadioBox* m_PlotFormatOpt;
+		wxCheckBox* m_subtractMaskFromSilk;
+		wxCheckBox* m_plotSheetRef;
+		wxCheckBox* m_plotPads_on_Silkscreen;
+		wxCheckBox* m_plotModuleValueOpt;
+		wxCheckBox* m_plotModuleRefOpt;
+		wxCheckBox* m_plotTextOther;
+		wxCheckBox* m_plotInvisibleText;
+		wxRadioBox* m_drillShapeOpt;
+		wxRadioBox* m_scaleOpt;
+		wxRadioBox* m_plotModeOpt;
+		wxRadioBox* m_choicePlotOffset;
+		wxRadioBox* m_plotFormatOpt;
 		wxStaticText* m_textPenSize;
 		wxTextCtrl* m_HPGLPenSizeOpt;
 		wxStaticText* m_staticText3;
@@ -74,34 +66,35 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticText* m_textPenOvr;
 		wxTextCtrl* m_HPGLPenOverlayOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxTextCtrl* m_OutputDirectory;
-		wxButton* m_BrowseButton;
-		wxCheckBox* m_PlotMirorOpt;
-		wxCheckBox* m_PlotNoViaOnMaskOpt;
+		wxCheckBox* m_plotMirrorOpt;
+		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxStaticText* m_staticText6;
-		wxTextCtrl* m_LinesWidth;
+		wxTextCtrl* m_linesWidth;
 		
 		wxStaticText* m_staticText7;
-		wxTextCtrl* m_FineAdjustXscaleOpt;
+		wxTextCtrl* m_fineAdjustXscaleOpt;
 		wxStaticText* m_staticText8;
-		wxTextCtrl* m_FineAdjustYscaleOpt;
+		wxTextCtrl* m_fineAdjustYscaleOpt;
 		
-		wxButton* m_PlotButton;
+		wxButton* m_plotButton;
 		wxButton* m_buttonSaveOpt;
 		wxButton* m_buttonDrill;
 		wxButton* m_buttonQuit;
+		wxStaticText* m_staticTextDir;
+		wxTextCtrl* m_outputDirectoryName;
+		wxButton* m_browseButton;
 		wxStaticText* m_staticText2;
-		wxTextCtrl* m_MessagesBox;
+		wxTextCtrl* m_messagesBox;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void SaveOptPlot( wxCommandEvent& event ) { event.Skip(); }
+		virtual void savePlotOptions( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

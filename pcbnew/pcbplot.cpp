@@ -37,7 +37,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_PlotValue     = true;
     m_PlotTextOther = true;
     m_DrillShapeOpt = PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE;
-    Trace_Mode  = FILLED;
+    m_PlotMode  = FILLED;
     m_PlotScale = 1.0;
     m_AutoScale = false;
     m_FineScaleAdjustX = 1.0;
@@ -74,7 +74,7 @@ public:
 
     bool useA4()
     {
-        return m_PlotFormatOpt->GetSelection() == 3;
+        return m_plotFormatOpt->GetSelection() == 3;
     }
 
 
@@ -85,7 +85,7 @@ public:
      */
     PlotFormat getFormat()
     {
-        int radioNdx = m_PlotFormatOpt->GetSelection();
+        int radioNdx = m_plotFormatOpt->GetSelection();
 
         // change the A4 to the simple postscript, according to the
         // m_PlotFormat enum
@@ -113,7 +113,7 @@ private:
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
     void SetPlotFormat( wxCommandEvent& event );
     void OnSetScaleOpt( wxCommandEvent& event );
-    void SaveOptPlot( wxCommandEvent& event );
+    void savePlotOptions( wxCommandEvent& event );
     void CreateDrillFile( wxCommandEvent& event );
 };
 
@@ -146,7 +146,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_Config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
 
-    m_PlotFormatOpt->SetSelection( g_PcbPlotOptions.m_PlotFormat );
+    m_plotFormatOpt->SetSelection( g_PcbPlotOptions.m_PlotFormat );
     g_PcbPlotOptions.m_PlotLineWidth = g_DrawDefaultLineThickness;
 
 
@@ -169,10 +169,10 @@ void DIALOG_PLOT::Init_Dialog()
     msg = ReturnStringFromValue( g_UserUnit,
                                  g_PcbPlotOptions.m_PlotLineWidth,
                                  PCB_INTERNAL_UNIT );
-    m_LinesWidth->AppendText( msg );
+    m_linesWidth->AppendText( msg );
 
     if( s_PlotOriginIsAuxAxis )
-        m_Choice_Plot_Offset->SetSelection( 1 );
+        m_choicePlotOffset->SetSelection( 1 );
 
     // Create scale adjust option
     m_XScaleAdjust = m_YScaleAdjust = 1.0;
@@ -183,10 +183,10 @@ void DIALOG_PLOT::Init_Dialog()
         m_XScaleAdjust = m_YScaleAdjust = 1.0;
 
     msg.Printf( wxT( "%f" ), m_XScaleAdjust );
-    m_FineAdjustXscaleOpt->AppendText( msg );
+    m_fineAdjustXscaleOpt->AppendText( msg );
 
     msg.Printf( wxT( "%f" ), m_YScaleAdjust );
-    m_FineAdjustYscaleOpt->AppendText( msg );
+    m_fineAdjustYscaleOpt->AppendText( msg );
 
     m_plotPSNegativeOpt->SetValue( g_PcbPlotOptions.m_PlotPSNegative );
 
@@ -240,57 +240,57 @@ void DIALOG_PLOT::Init_Dialog()
     // Option for using proper Gerber extensions
     long ltmp;
     m_Config->Read( OPTKEY_GERBER_EXTENSIONS, &ltmp );
-    m_Use_Gerber_Extensions->SetValue( ltmp );
+    m_useGerberExtensions->SetValue( ltmp );
 
     // Option for excluding contents of "Edges Pcb" layer
     m_excludeEdgeLayerOpt->SetValue( g_PcbPlotOptions.m_ExcludeEdgeLayer );
 
-    m_SubtractMaskFromSilk->SetValue( g_PcbPlotOptions.GetSubtractMaskFromSilk() );
+    m_subtractMaskFromSilk->SetValue( g_PcbPlotOptions.GetSubtractMaskFromSilk() );
 
     // Option to plot page references:
     if( m_Parent->m_Print_Sheet_Ref )
     {
-        m_Plot_Sheet_Ref->SetValue( g_PcbPlotOptions.m_PlotFrameRef );
+        m_plotSheetRef->SetValue( g_PcbPlotOptions.m_PlotFrameRef );
     }
     else
     {
-        m_Plot_Sheet_Ref->Enable( false );
+        m_plotSheetRef->Enable( false );
         g_PcbPlotOptions.m_PlotFrameRef = false;
     }
 
     // Option to plot pads on silkscreen layers or all layers
-    m_Plot_Pads_on_Silkscreen->SetValue( g_PcbPlotOptions.m_PlotPadsOnSilkLayer );
+    m_plotPads_on_Silkscreen->SetValue( g_PcbPlotOptions.m_PlotPadsOnSilkLayer );
 
     // Options to plot texts on footprints
-    m_Plot_Text_Value->SetValue( g_PcbPlotOptions.m_PlotValue );
-    m_Plot_Text_Ref->SetValue( g_PcbPlotOptions.m_PlotReference );
-    m_Plot_Text_Div->SetValue( g_PcbPlotOptions.m_PlotTextOther );
-    m_Plot_Invisible_Text->SetValue( g_PcbPlotOptions.m_PlotInvisibleTexts );
+    m_plotModuleValueOpt->SetValue( g_PcbPlotOptions.m_PlotValue );
+    m_plotModuleRefOpt->SetValue( g_PcbPlotOptions.m_PlotReference );
+    m_plotTextOther->SetValue( g_PcbPlotOptions.m_PlotTextOther );
+    m_plotInvisibleText->SetValue( g_PcbPlotOptions.m_PlotInvisibleTexts );
 
     // Options to plot pads and vias holes
-    m_Drill_Shape_Opt->SetSelection( g_PcbPlotOptions.m_DrillShapeOpt );
+    m_drillShapeOpt->SetSelection( g_PcbPlotOptions.m_DrillShapeOpt );
 
     // Scale option
-    m_Scale_Opt->SetSelection( m_dlgPlotScaleOpt );
+    m_scaleOpt->SetSelection( m_dlgPlotScaleOpt );
 
     // Plot mode
-    m_PlotModeOpt->SetSelection( g_PcbPlotOptions.Trace_Mode );
+    m_plotModeOpt->SetSelection( g_PcbPlotOptions.m_PlotMode );
 
     // Plot mirror option
-    m_PlotMirorOpt->SetValue( g_PcbPlotOptions.m_PlotMirror );
+    m_plotMirrorOpt->SetValue( g_PcbPlotOptions.m_PlotMirror );
 
     // Put vias on mask layer
-    m_PlotNoViaOnMaskOpt->SetValue( g_PcbPlotOptions.m_PlotViaOnMaskLayer );
+    m_plotNoViaOnMaskOpt->SetValue( g_PcbPlotOptions.m_PlotViaOnMaskLayer );
 
     // Output directory
     if( g_PcbPlotOptions.GetOutputDirectory().IsEmpty() )
     {
         fileName = m_Parent->GetScreen()->m_FileName;
-        m_OutputDirectory->SetValue( fileName.GetPath() );
+        m_outputDirectoryName->SetValue( fileName.GetPath() );
     }
     else
     {
-        m_OutputDirectory->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
+        m_outputDirectoryName->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
     }
 
     // Update options values:
@@ -324,12 +324,12 @@ void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 {
     /* Disable sheet reference for scale != 1:1 */
-    bool scale1 = ( m_Scale_Opt->GetSelection() == 1 );
+    bool scale1 = ( m_scaleOpt->GetSelection() == 1 );
 
-    m_Plot_Sheet_Ref->Enable( scale1 );
+    m_plotSheetRef->Enable( scale1 );
 
     if( !scale1 )
-        m_Plot_Sheet_Ref->SetValue( false );
+        m_plotSheetRef->SetValue( false );
 }
 
 
@@ -337,11 +337,11 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     wxString    currentDir;
 
-    currentDir = m_OutputDirectory->GetValue();
+    currentDir = m_outputDirectoryName->GetValue();
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), currentDir );
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
-    m_OutputDirectory->SetValue( dirDialog.GetPath() );
+    m_outputDirectoryName->SetValue( dirDialog.GetPath() );
 }
 
 
@@ -353,84 +353,84 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     {
     case PLOT_FORMAT_POST:
     default:
-        m_Drill_Shape_Opt->Enable( true );
-        m_PlotModeOpt->Enable( true );
-        m_PlotMirorOpt->Enable( true );
-        m_Choice_Plot_Offset->Enable( false );
-        m_LinesWidth->Enable( true );
+        m_drillShapeOpt->Enable( true );
+        m_plotModeOpt->Enable( true );
+        m_plotMirrorOpt->Enable( true );
+        m_choicePlotOffset->Enable( false );
+        m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->SetValue( false );
         m_excludeEdgeLayerOpt->Enable( false );
-        m_SubtractMaskFromSilk->Enable( false );
-        m_Use_Gerber_Extensions->Enable( false );
-        m_Scale_Opt->Enable( true );
-        m_FineAdjustXscaleOpt->Enable( true );
-        m_FineAdjustYscaleOpt->Enable( true );
+        m_subtractMaskFromSilk->Enable( false );
+        m_useGerberExtensions->Enable( false );
+        m_scaleOpt->Enable( true );
+        m_fineAdjustXscaleOpt->Enable( true );
+        m_fineAdjustYscaleOpt->Enable( true );
         m_plotPSNegativeOpt->Enable( true );
         break;
 
     case PLOT_FORMAT_GERBER:
-        m_Drill_Shape_Opt->Enable( false );
-        m_PlotModeOpt->SetSelection( 1 );
-        m_PlotModeOpt->Enable( false );
-        m_PlotMirorOpt->SetValue( false );
-        m_PlotMirorOpt->Enable( false );
-        m_Choice_Plot_Offset->Enable( true );
-        m_LinesWidth->Enable( true );
+        m_drillShapeOpt->Enable( false );
+        m_plotModeOpt->SetSelection( 1 );
+        m_plotModeOpt->Enable( false );
+        m_plotMirrorOpt->SetValue( false );
+        m_plotMirrorOpt->Enable( false );
+        m_choicePlotOffset->Enable( true );
+        m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_SubtractMaskFromSilk->Enable( true );
-        m_Use_Gerber_Extensions->Enable( true );
-        m_Scale_Opt->SetSelection( 1 );
-        m_Scale_Opt->Enable( false );
-        m_FineAdjustXscaleOpt->Enable( false );
-        m_FineAdjustYscaleOpt->Enable( false );
+        m_subtractMaskFromSilk->Enable( true );
+        m_useGerberExtensions->Enable( true );
+        m_scaleOpt->SetSelection( 1 );
+        m_scaleOpt->Enable( false );
+        m_fineAdjustXscaleOpt->Enable( false );
+        m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         break;
 
     case PLOT_FORMAT_HPGL:
-        m_PlotMirorOpt->Enable( true );
-        m_Drill_Shape_Opt->Enable( false );
-        m_PlotModeOpt->Enable( true );
-        m_Choice_Plot_Offset->Enable( false );
-        m_LinesWidth->Enable( false );
+        m_plotMirrorOpt->Enable( true );
+        m_drillShapeOpt->Enable( false );
+        m_plotModeOpt->Enable( true );
+        m_choicePlotOffset->Enable( false );
+        m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
         m_HPGLPenSpeedOpt->Enable( true );
         m_HPGLPenOverlayOpt->Enable( true );
         m_excludeEdgeLayerOpt->SetValue( false );
         m_excludeEdgeLayerOpt->Enable( false );
-        m_SubtractMaskFromSilk->Enable( false );
-        m_Use_Gerber_Extensions->Enable( false );
-        m_Scale_Opt->Enable( true );
-        m_FineAdjustXscaleOpt->Enable( false );
-        m_FineAdjustYscaleOpt->Enable( false );
+        m_subtractMaskFromSilk->Enable( false );
+        m_useGerberExtensions->Enable( false );
+        m_scaleOpt->Enable( true );
+        m_fineAdjustXscaleOpt->Enable( false );
+        m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         break;
 
     case PLOT_FORMAT_DXF:
-        m_PlotMirorOpt->Enable( false );
-        m_PlotMirorOpt->SetValue( false );
-        m_Drill_Shape_Opt->Enable( false );
-        m_PlotModeOpt->Enable( true );
-        m_Choice_Plot_Offset->Enable( false );
-        m_LinesWidth->Enable( false );
+        m_plotMirrorOpt->Enable( false );
+        m_plotMirrorOpt->SetValue( false );
+        m_drillShapeOpt->Enable( false );
+        m_plotModeOpt->Enable( true );
+        m_choicePlotOffset->Enable( false );
+        m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->SetValue( false );
         m_excludeEdgeLayerOpt->Enable( false );
-        m_SubtractMaskFromSilk->Enable( false );
-        m_Use_Gerber_Extensions->Enable( false );
-        m_Scale_Opt->Enable( false );
-        m_Scale_Opt->SetSelection( 1 );
-        m_FineAdjustXscaleOpt->Enable( false );
-        m_FineAdjustYscaleOpt->Enable( false );
+        m_subtractMaskFromSilk->Enable( false );
+        m_useGerberExtensions->Enable( false );
+        m_scaleOpt->Enable( false );
+        m_scaleOpt->SetSelection( 1 );
+        m_fineAdjustXscaleOpt->Enable( false );
+        m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         break;
@@ -440,31 +440,31 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
+void DIALOG_PLOT::savePlotOptions( wxCommandEvent& event )
 {
     g_PcbPlotOptions.m_ExcludeEdgeLayer = m_excludeEdgeLayerOpt->GetValue();
 
-    g_PcbPlotOptions.SetSubtractMaskFromSilk( m_SubtractMaskFromSilk->GetValue() );
+    g_PcbPlotOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
 
-    if( m_Plot_Sheet_Ref )
-        g_PcbPlotOptions.m_PlotFrameRef = m_Plot_Sheet_Ref->GetValue();
+    if( m_plotSheetRef )
+        g_PcbPlotOptions.m_PlotFrameRef = m_plotSheetRef->GetValue();
 
-    g_PcbPlotOptions.m_PlotPadsOnSilkLayer = m_Plot_Pads_on_Silkscreen->GetValue();
+    g_PcbPlotOptions.m_PlotPadsOnSilkLayer = m_plotPads_on_Silkscreen->GetValue();
 
     s_PlotOriginIsAuxAxis =
-        (m_Choice_Plot_Offset->GetSelection() == 0) ? FALSE : TRUE;
+        (m_choicePlotOffset->GetSelection() == 0) ? FALSE : TRUE;
 
-    g_PcbPlotOptions.m_PlotValue     = m_Plot_Text_Value->GetValue();
-    g_PcbPlotOptions.m_PlotReference = m_Plot_Text_Ref->GetValue();
-    g_PcbPlotOptions.m_PlotTextOther = m_Plot_Text_Div->GetValue();
-    g_PcbPlotOptions.m_PlotInvisibleTexts = m_Plot_Invisible_Text->GetValue();
+    g_PcbPlotOptions.m_PlotValue     = m_plotModuleValueOpt->GetValue();
+    g_PcbPlotOptions.m_PlotReference = m_plotModuleRefOpt->GetValue();
+    g_PcbPlotOptions.m_PlotTextOther = m_plotTextOther->GetValue();
+    g_PcbPlotOptions.m_PlotInvisibleTexts = m_plotInvisibleText->GetValue();
 
-    m_dlgPlotScaleOpt  = m_Scale_Opt->GetSelection();
+    m_dlgPlotScaleOpt  = m_scaleOpt->GetSelection();
     g_PcbPlotOptions.m_DrillShapeOpt =
-        (PCB_PLOT_PARAMS::DrillShapeOptT) m_Drill_Shape_Opt->GetSelection();
-    g_PcbPlotOptions.m_PlotMirror = m_PlotMirorOpt->GetValue();
-    g_PcbPlotOptions.Trace_Mode   = (GRTraceMode) m_PlotModeOpt->GetSelection();
-    g_PcbPlotOptions.m_PlotViaOnMaskLayer = m_PlotNoViaOnMaskOpt->GetValue();
+        (PCB_PLOT_PARAMS::DrillShapeOptT) m_drillShapeOpt->GetSelection();
+    g_PcbPlotOptions.m_PlotMirror = m_plotMirrorOpt->GetValue();
+    g_PcbPlotOptions.m_PlotMode   = (GRTraceMode) m_plotModeOpt->GetSelection();
+    g_PcbPlotOptions.m_PlotViaOnMaskLayer = m_plotNoViaOnMaskOpt->GetValue();
 
     wxString msg = m_HPGLPenSizeOpt->GetValue();
     int      tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
@@ -478,22 +478,22 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
     tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
     g_PcbPlotOptions.m_HPGLPenOvr = tmp;
 
-    msg = m_LinesWidth->GetValue();
+    msg = m_linesWidth->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
     g_PcbPlotOptions.m_PlotLineWidth = tmp;
     g_DrawDefaultLineThickness = g_PcbPlotOptions.m_PlotLineWidth;
 
-    msg = m_FineAdjustXscaleOpt->GetValue();
+    msg = m_fineAdjustXscaleOpt->GetValue();
     msg.ToDouble( &m_XScaleAdjust );
-    msg = m_FineAdjustYscaleOpt->GetValue();
+    msg = m_fineAdjustYscaleOpt->GetValue();
     msg.ToDouble( &m_YScaleAdjust );
 
     m_Config->Write( OPTKEY_GERBER_EXTENSIONS,
-                    m_Use_Gerber_Extensions->GetValue() );
+                    m_useGerberExtensions->GetValue() );
     m_Config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
     m_Config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
 
-    g_PcbPlotOptions.m_PlotFormat = m_PlotFormatOpt->GetSelection();
+    g_PcbPlotOptions.m_PlotFormat = m_plotFormatOpt->GetSelection();
 
     wxString layerKey;
     for( int layer = 0; layer<NB_LAYERS; ++layer )
@@ -506,7 +506,7 @@ void DIALOG_PLOT::SaveOptPlot( wxCommandEvent& event )
 
     g_PcbPlotOptions.m_PlotPSNegative = m_plotPSNegativeOpt->GetValue();
 
-    g_PcbPlotOptions.SetOutputDirectory( m_OutputDirectory->GetValue() );
+    g_PcbPlotOptions.SetOutputDirectory( m_outputDirectoryName->GetValue() );
 }
 
 
@@ -518,16 +518,16 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     BOARD*     board = m_Parent->GetBoard();
 
-    SaveOptPlot( event );
+    savePlotOptions( event );
 
     // Create output directory if it does not exist
-    if( !wxFileName::DirExists( m_OutputDirectory->GetValue() ) )
+    if( !wxFileName::DirExists( m_outputDirectoryName->GetValue() ) )
     {
-        if( wxMkdir( m_OutputDirectory->GetValue() ) )
+        if( wxMkdir( m_outputDirectoryName->GetValue() ) )
         {
             wxString msg;
-            msg.Printf( _( "Directory %s created.\n" ), GetChars( m_OutputDirectory->GetValue() ) );
-            m_MessagesBox->AppendText( msg );
+            msg.Printf( _( "Directory %s created.\n" ), GetChars( m_outputDirectoryName->GetValue() ) );
+            m_messagesBox->AppendText( msg );
         }
         else
         {
@@ -565,9 +565,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
      * the default scale adjust is initialized to 0 and saved in program
      * settings resulting in a divide by zero fault.
      */
-    if( m_FineAdjustXscaleOpt->IsEnabled()  && m_XScaleAdjust != 0.0 )
+    if( m_fineAdjustXscaleOpt->IsEnabled()  && m_XScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustX = m_XScaleAdjust;
-    if( m_FineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
+    if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustY = m_YScaleAdjust;
 
     int format = getFormat();
@@ -613,7 +613,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             s_SelectedLayers |= mask;
 
             fn = m_Parent->GetScreen()->m_FileName;
-            fn.SetPath( m_OutputDirectory->GetValue() );
+            fn.SetPath( m_outputDirectoryName->GetValue() );
 
             // Create file name.
             wxString layername = board->GetLayerName( layer );
@@ -622,7 +622,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
             // Use Gerber Extensions based on layer number
             // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( (format == PLOT_FORMAT_GERBER) && m_Use_Gerber_Extensions->GetValue() )
+            if( (format == PLOT_FORMAT_GERBER) && m_useGerberExtensions->GetValue() )
             {
                 switch( layer )
                 {
@@ -706,23 +706,23 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             {
             case PLOT_FORMAT_POST:
                 success = m_Parent->Genere_PS( fn.GetFullPath(), layer, useA4(),
-                                               g_PcbPlotOptions.Trace_Mode );
+                                               g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_GERBER:
                 success = m_Parent->Genere_GERBER( fn.GetFullPath(), layer,
                                                    s_PlotOriginIsAuxAxis,
-                                                   g_PcbPlotOptions.Trace_Mode );
+                                                   g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_HPGL:
                 success = m_Parent->Genere_HPGL( fn.GetFullPath(), layer,
-                                                 g_PcbPlotOptions.Trace_Mode );
+                                                 g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_DXF:
                 success = m_Parent->Genere_DXF( fn.GetFullPath(), layer,
-                                                g_PcbPlotOptions.Trace_Mode );
+                                                g_PcbPlotOptions.m_PlotMode );
                 break;
             }
 
@@ -733,7 +733,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             else
                 msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
             msg << wxT( "\n" );
-            m_MessagesBox->AppendText( msg );
+            m_messagesBox->AppendText( msg );
         }
     }
 

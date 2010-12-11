@@ -36,7 +36,8 @@ public:
     bool        m_PlotFrameRef;         // True to plot/print frame references
     bool        m_PlotViaOnMaskLayer;   // True if vias are drawn on Mask layer
                                         // (ie protected by mask)
-    GRTraceMode Trace_Mode;
+    GRTraceMode m_PlotMode;             // = FILAIRE, FILLED or SKETCH: select how to plot filled objects.
+                                        // depending on plot format or layers, all options are not always allowed
     int         m_HPGLPenNum;
     int         m_HPGLPenSpeed;
     int         m_HPGLPenDiam;
