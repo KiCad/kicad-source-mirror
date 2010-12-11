@@ -32,7 +32,7 @@ bool WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
     plotter->set_filename( FullFileName );
     plotter->start_plot( output_file );
 
-    if( g_pcb_plot_options.Plot_Frame_Ref )
+    if( g_PcbPlotOptions.m_PlotFrameRef )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, Layer, trace_mode );

@@ -218,7 +218,7 @@
                                         <property name="label">Exclude pcb edge layer</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">m_Exclude_Edges_Pcb</property>
+                                        <property name="name">m_excludeEdgeLayerOpt</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
                                         <property name="size"></property>
@@ -1365,7 +1365,7 @@
                                                 <property name="label">Plot negative</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="minimum_size"></property>
-                                                <property name="name">m_Plot_PS_Negative</property>
+                                                <property name="name">m_plotPSNegativeOpt</property>
                                                 <property name="permission">protected</property>
                                                 <property name="pos"></property>
                                                 <property name="size"></property>

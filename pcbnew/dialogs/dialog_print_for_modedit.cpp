@@ -194,9 +194,9 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
 
-    g_pcb_plot_options.ScaleAdjX = s_Parameters.m_XScaleAdjust;
-    g_pcb_plot_options.ScaleAdjX = s_Parameters.m_YScaleAdjust;
-    g_pcb_plot_options.Scale = s_Parameters.m_PrintScale;
+    g_PcbPlotOptions.m_FineScaleAdjustX = s_Parameters.m_XScaleAdjust;
+    g_PcbPlotOptions.m_FineScaleAdjustY = s_Parameters.m_YScaleAdjust;
+    g_PcbPlotOptions.m_PlotScale = s_Parameters.m_PrintScale;
 
     wxPrintDialogData printDialogData( *g_PrintData );
     wxPrinter         printer( &printDialogData );

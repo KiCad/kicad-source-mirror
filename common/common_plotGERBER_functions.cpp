@@ -21,13 +21,12 @@
  * @param aOffset = plot offset
  * @param aScale = coordinate scale (scale coefficient for coordinates)
  */
-void GERBER_PLOTTER::set_viewport( wxPoint offset,
-                                   double aScale, int orient )
+void GERBER_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    wxASSERT( orient == 0 );
-    plot_orient_options = 0;
-    plot_offset = offset;
+    wxASSERT( aMirror == false );
+    plotMirror = false;
+    plot_offset = aOffset;
     wxASSERT( aScale == 1 );
     plot_scale   = 1;
     device_scale = 1;

@@ -13,11 +13,11 @@
 
 
 /* Set the plot offset for the current plotting */
-void PS_PLOTTER::set_viewport( wxPoint offset, double aScale, int orient )
+void PS_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    plot_orient_options = orient;
-    plot_offset  = offset;
+    plotMirror = aMirror;
+    plot_offset  = aOffset;
     plot_scale   = aScale;
     device_scale = 1;               /* PS references in decimals */
     set_default_line_width( 100 );  /* default line width in 1/1000 inch */
@@ -157,7 +157,7 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
     // Calculate start point.
     user_to_device_coordinates( centre );
     radius = wxRound( user_to_device_size( radius ) );
-    if( plot_orient_options == PLOT_MIROIR )
+    if( plotMirror )
         fprintf( output_file, "%d %d %d %g %g arc%d\n", centre.x, centre.y,
                  radius, (double) -EndAngle / 10, (double) -StAngle / 10,
                  fill );

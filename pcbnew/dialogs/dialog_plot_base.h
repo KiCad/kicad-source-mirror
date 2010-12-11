@@ -54,7 +54,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
 		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
 		wxCheckBox* m_Use_Gerber_Extensions;
-		wxCheckBox* m_Exclude_Edges_Pcb;
+		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_SubtractMaskFromSilk;
 		wxCheckBox* m_Plot_Sheet_Ref;
 		wxCheckBox* m_Plot_Pads_on_Silkscreen;
@@ -73,7 +73,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxTextCtrl* m_HPGLPenSpeedOpt;
 		wxStaticText* m_textPenOvr;
 		wxTextCtrl* m_HPGLPenOverlayOpt;
-		wxCheckBox* m_Plot_PS_Negative;
+		wxCheckBox* m_plotPSNegativeOpt;
 		wxTextCtrl* m_OutputDirectory;
 		wxButton* m_BrowseButton;
 		wxCheckBox* m_PlotMirorOpt;

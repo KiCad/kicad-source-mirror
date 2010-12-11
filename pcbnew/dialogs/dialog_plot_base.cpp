@@ -40,10 +40,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bLeftSizer->Add( m_Use_Gerber_Extensions, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Exclude_Edges_Pcb = new wxCheckBox( this, wxID_ANY, _("Exclude pcb edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Exclude_Edges_Pcb->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
+	m_excludeEdgeLayerOpt = new wxCheckBox( this, wxID_ANY, _("Exclude pcb edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_excludeEdgeLayerOpt->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
 	
-	bLeftSizer->Add( m_Exclude_Edges_Pcb, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_excludeEdgeLayerOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract mask from silk"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SubtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
@@ -147,8 +147,8 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxStaticBoxSizer* sbSizerPSOpt;
 	sbSizerPSOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PS Options:") ), wxVERTICAL );
 	
-	m_Plot_PS_Negative = new wxCheckBox( this, wxID_ANY, _("Plot negative"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPSOpt->Add( m_Plot_PS_Negative, 0, wxALL, 5 );
+	m_plotPSNegativeOpt = new wxCheckBox( this, wxID_ANY, _("Plot negative"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerPSOpt->Add( m_plotPSNegativeOpt, 0, wxALL, 5 );
 	
 	bSizerFmtPlot->Add( sbSizerPSOpt, 0, wxEXPAND, 5 );
 	

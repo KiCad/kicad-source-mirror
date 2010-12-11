@@ -29,26 +29,26 @@ bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     {
         return false;
     }
-    // Compute pen_dim (from g_HPGL_Pen_Diam in mils) in pcb units,
-    // with plot scale (if Scale is 2, pen diameter is always g_HPGL_Pen_Diam
+    // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
+    // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = wxRound( (g_pcb_plot_options.HPGL_Pen_Diam * U_PCB) / g_pcb_plot_options.Scale );
+    int pen_diam = wxRound( (g_PcbPlotOptions.m_HPGLPenDiam * U_PCB) / g_PcbPlotOptions.m_PlotScale );
 
-    // compute pen_recouvrement (from g_HPGL_Pen_Recouvrement in mils)
+    // compute pen_overlay (from g_m_HPGLPenOvr in mils)
     // with plot scale
-    if( g_pcb_plot_options.HPGL_Pen_Recouvrement < 0 )
-        g_pcb_plot_options.HPGL_Pen_Recouvrement = 0;
-    if( g_pcb_plot_options.HPGL_Pen_Recouvrement >= g_pcb_plot_options.HPGL_Pen_Diam )
-        g_pcb_plot_options.HPGL_Pen_Recouvrement = g_pcb_plot_options.HPGL_Pen_Diam - 1;
-    int   pen_recouvrement = wxRound(
-        g_pcb_plot_options.HPGL_Pen_Recouvrement * 10.0 / g_pcb_plot_options.Scale );
+    if( g_PcbPlotOptions.m_HPGLPenOvr < 0 )
+        g_PcbPlotOptions.m_HPGLPenOvr = 0;
+    if( g_PcbPlotOptions.m_HPGLPenOvr >= g_PcbPlotOptions.m_HPGLPenDiam )
+        g_PcbPlotOptions.m_HPGLPenOvr = g_PcbPlotOptions.m_HPGLPenDiam - 1;
+    int   pen_overlay = wxRound(
+        g_PcbPlotOptions.m_HPGLPenOvr * 10.0 / g_PcbPlotOptions.m_PlotScale );
 
 
     SetLocaleTo_C_standard();
 
-    if( g_pcb_plot_options.PlotScaleOpt != 1 )
-        Center = TRUE; // Scale != 1 so center PCB plot.
-
+    if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
+        Center = true;  // when scale != 1.0 we must calculate the position in page
+                        // because actual position has no meaning
 
     // Scale units from 0.0001" to HPGL plot units.
     SheetSize.x = currentsheet->m_Size.x * U_PCB;
@@ -59,7 +59,7 @@ bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
 
-    if( g_pcb_plot_options.PlotScaleOpt == 0 )       // Optimum scale
+    if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {
         double Xscale, Yscale;
 
@@ -69,7 +69,7 @@ bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
         scale  = MIN( Xscale, Yscale );
     }
     else
-        scale = g_pcb_plot_options.Scale;
+        scale = g_PcbPlotOptions.m_PlotScale;
 
     // Calculate the page size offset.
     if( Center )
@@ -87,20 +87,19 @@ bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
 
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
     plotter->set_paper_size( currentsheet );
-    plotter->set_viewport( offset, scale,
-                           g_pcb_plot_options.PlotOrient );
-    plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
+    plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
+    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
     plotter->set_filename( FullFileName );
-    plotter->set_pen_speed( g_pcb_plot_options.HPGL_Pen_Speed );
-    plotter->set_pen_number( g_pcb_plot_options.HPGL_Pen_Num );
-    plotter->set_pen_overlap( pen_recouvrement );
+    plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
+    plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
+    plotter->set_pen_overlap( pen_overlay );
     plotter->set_pen_diameter( pen_diam );
     plotter->start_plot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with
      * paperscale!=1, anyway */
-    if( g_pcb_plot_options.Plot_Frame_Ref && !Center )
+    if( g_PcbPlotOptions.m_PlotFrameRef && !Center )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, Layer, trace_mode );

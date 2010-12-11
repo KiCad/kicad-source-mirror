@@ -14,15 +14,14 @@
 
 /* Set the plot offset for the current plotting
  */
-void DXF_PLOTTER::set_viewport( wxPoint offset,
-                                double aScale, int orient )
+void DXF_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    plot_offset  = offset;
+    plot_offset  = aOffset;
     plot_scale   = aScale;
     device_scale = 1;
     set_default_line_width( 0 );    /* No line width on DXF */
-    plot_orient_options = 0;        /* No mirroring on DXF */
+    plotMirror = false;             /* No mirroring on DXF */
     current_color = BLACK;
 }
 

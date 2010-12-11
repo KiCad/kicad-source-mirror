@@ -383,7 +383,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
 
     int idx = m_ScaleOption->GetSelection();
     s_Parameters.m_PrintScale =  s_ScaleList[idx];
-    g_pcb_plot_options.Scale =  s_Parameters.m_PrintScale;
+    g_PcbPlotOptions.m_PlotScale =  s_Parameters.m_PrintScale;
 
     if( m_FineAdjustXscaleOpt )
     {
@@ -400,8 +400,8 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
             DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very small value" ) );
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &s_Parameters.m_YScaleAdjust );
     }
-    g_pcb_plot_options.ScaleAdjX = s_Parameters.m_XScaleAdjust;
-    g_pcb_plot_options.ScaleAdjX = s_Parameters.m_YScaleAdjust;
+    g_PcbPlotOptions.m_FineScaleAdjustX = s_Parameters.m_XScaleAdjust;
+    g_PcbPlotOptions.m_FineScaleAdjustY = s_Parameters.m_YScaleAdjust;
     SetPenWidth();
 }
 
