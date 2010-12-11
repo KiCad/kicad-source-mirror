@@ -37,7 +37,7 @@
             <property name="minimum_size">-1,350</property>
             <property name="name">DIALOG_PLOT_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">571,616</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Plot</property>
@@ -661,8 +661,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag"></property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bPlotOptionsSizer</property>
@@ -670,11 +670,11 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxALL</property>
+                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxRadioBox" expanded="0">
                                         <property name="bg"></property>
-                                        <property name="choices">&quot;No drill mark&quot; &quot;Small mark&quot; &quot;Real drill&quot;</property>
+                                        <property name="choices">&quot;No drill mark&quot; &quot;Small mark&quot; &quot;Actual hole&quot;</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="enabled">1</property>
@@ -682,14 +682,14 @@
                                         <property name="font"></property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Pads Drill Opt</property>
+                                        <property name="label">Holes Options</property>
                                         <property name="majorDimension">1</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_drillShapeOpt</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
-                                        <property name="selection">1</property>
+                                        <property name="selection">2</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
@@ -908,8 +908,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag"></property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerFmtPlot</property>
@@ -917,11 +917,11 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
+                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxRadioBox" expanded="0">
                                         <property name="bg"></property>
-                                        <property name="choices">&quot;HPGL&quot; &quot;Gerber&quot; &quot;Postscript&quot; &quot;Postscript A4&quot; &quot;DXF Export&quot;</property>
+                                        <property name="choices">&quot;HPGL&quot; &quot;Gerber&quot; &quot;Postscript&quot; &quot;Postscript A4&quot; &quot;DXF export&quot;</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="enabled">1</property>
@@ -936,7 +936,7 @@
                                         <property name="name">m_plotFormatOpt</property>
                                         <property name="permission">protected</property>
                                         <property name="pos"></property>
-                                        <property name="selection">1</property>
+                                        <property name="selection">4</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
@@ -1338,18 +1338,18 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
-                            <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <property name="proportion">0</property>
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bButtonsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxALL</property>
+                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
@@ -2199,8 +2199,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxRIGHT</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxRIGHT|wxEXPAND</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerDirNmae</property>

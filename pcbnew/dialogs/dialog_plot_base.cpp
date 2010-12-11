@@ -79,11 +79,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bPlotOptionsSizer;
 	bPlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_drillShapeOptChoices[] = { _("No drill mark"), _("Small mark"), _("Real drill") };
+	wxString m_drillShapeOptChoices[] = { _("No drill mark"), _("Small mark"), _("Actual hole") };
 	int m_drillShapeOptNChoices = sizeof( m_drillShapeOptChoices ) / sizeof( wxString );
-	m_drillShapeOpt = new wxRadioBox( this, wxID_ANY, _("Pads Drill Opt"), wxDefaultPosition, wxDefaultSize, m_drillShapeOptNChoices, m_drillShapeOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_drillShapeOpt->SetSelection( 1 );
-	bPlotOptionsSizer->Add( m_drillShapeOpt, 0, wxEXPAND|wxALL, 5 );
+	m_drillShapeOpt = new wxRadioBox( this, wxID_ANY, _("Holes Options"), wxDefaultPosition, wxDefaultSize, m_drillShapeOptNChoices, m_drillShapeOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_drillShapeOpt->SetSelection( 2 );
+	bPlotOptionsSizer->Add( m_drillShapeOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_scaleOptChoices[] = { _("Auto scale"), _("Scale 1"), _("Scale 1.5"), _("Scale 2"), _("Scale 3") };
 	int m_scaleOptNChoices = sizeof( m_scaleOptChoices ) / sizeof( wxString );
@@ -103,16 +103,16 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_choicePlotOffset->SetSelection( 0 );
 	bPlotOptionsSizer->Add( m_choicePlotOffset, 0, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bPlotOptionsSizer, 1, 0, 5 );
+	bUpperSizer->Add( bPlotOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerFmtPlot;
 	bSizerFmtPlot = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_plotFormatOptChoices[] = { _("HPGL"), _("Gerber"), _("Postscript"), _("Postscript A4"), _("DXF Export") };
+	wxString m_plotFormatOptChoices[] = { _("HPGL"), _("Gerber"), _("Postscript"), _("Postscript A4"), _("DXF export") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Plot Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
-	m_plotFormatOpt->SetSelection( 1 );
-	bSizerFmtPlot->Add( m_plotFormatOpt, 0, wxALL|wxEXPAND, 5 );
+	m_plotFormatOpt->SetSelection( 4 );
+	bSizerFmtPlot->Add( m_plotFormatOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* m_HPGL_OptionsBox;
 	m_HPGL_OptionsBox = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options:") ), wxVERTICAL );
@@ -144,7 +144,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizerFmtPlot->Add( m_HPGL_OptionsBox, 0, wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bSizerFmtPlot, 1, 0, 5 );
+	bUpperSizer->Add( bSizerFmtPlot, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
@@ -163,7 +163,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	sbSizerPlotOpt->Add( m_plotNoViaOnMaskOpt, 0, wxALL, 5 );
 	
-	bButtonsSizer->Add( sbSizerPlotOpt, 0, wxEXPAND|wxALL, 5 );
+	bButtonsSizer->Add( sbSizerPlotOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
@@ -209,7 +209,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Quit"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( bButtonsSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bUpperSizer->Add( bButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
@@ -229,7 +229,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_browseButton = new wxButton( this, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerDirNmae->Add( m_browseButton, 0, wxRIGHT|wxLEFT, 5 );
 	
-	bSizerDirChoice->Add( bSizerDirNmae, 1, wxEXPAND|wxRIGHT, 5 );
+	bSizerDirChoice->Add( bSizerDirNmae, 0, wxRIGHT|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bSizerDirChoice, 0, wxEXPAND, 5 );
 	
@@ -244,7 +244,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnCloseWindow ) );
