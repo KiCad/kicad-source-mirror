@@ -42,7 +42,7 @@ bool WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     wxPoint offset;
 
     /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
-    double scale = g_pcb_plot_options.Scale;
+    double scale = g_PcbPlotOptions.m_PlotScale;
 
     if( PlotOriginIsAuxAxis )
         offset = m_Auxiliary_Axis_Position;
@@ -56,17 +56,17 @@ bool WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer
     PLOTTER* plotter = new GERBER_PLOTTER();
     /* No mirror and scaling for gerbers! */
     plotter->set_viewport( offset, scale, 0 );
-    plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
+    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
     plotter->set_filename( FullFileName );
 
     if( plotter->start_plot( output_file ) )
     {
         // Sheet refs on gerber CAN be useful... and they're always 1:1
-        if( g_pcb_plot_options.Plot_Frame_Ref )
+        if( g_PcbPlotOptions.m_PlotFrameRef )
             PlotWorkSheet( plotter, GetScreen() );
-        Plot_Layer( plotter, Layer, trace_mode );
 
+        Plot_Layer( plotter, Layer, trace_mode );
         plotter->end_plot();
     }
 

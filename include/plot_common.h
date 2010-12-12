@@ -27,14 +27,11 @@ enum PlotFormat {
     PLOT_FORMAT_DXF
 };
 
-const int PLOT_MIROIR = 1;
-
 class PLOTTER
 {
 public:
     PlotFormat m_PlotType;          // type of plot
-public:
-    PLOTTER( PlotFormat aPlotType );
+public: PLOTTER( PlotFormat aPlotType );
 
     virtual ~PLOTTER()
     {
@@ -92,8 +89,7 @@ public:
     }
 
 
-    virtual void set_viewport( wxPoint offset,
-                               double scale, int orient ) = 0;
+    virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror ) = 0;
 
     // Standard primitives
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill,
@@ -121,6 +117,7 @@ public:
                                  GRTraceMode trace_mode ) = 0;
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode ) = 0;
+
     /** virtual function flash_pad_trapez
      * flash a trapezoidal pad
      * @param aPadPos = the position of the shape
@@ -176,7 +173,7 @@ public:
      * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
      * @param aPositive is the layer polarity and true for positive.
      */
-    virtual void SetLayerPolarity( bool aPositive ) = 0;
+    virtual void   SetLayerPolarity( bool aPositive ) = 0;
 
 protected:
     // These are marker subcomponents
@@ -206,8 +203,7 @@ protected:
     int           current_pen_width;
     char          pen_state;
     wxPoint       pen_lastpos;
-    // Other stuff
-    int           plot_orient_options; // For now, mirror plot
+    bool          plotMirror;
     wxString      creator;
     wxString      filename;
     Ki_PageDescr* sheet;
@@ -216,10 +212,10 @@ protected:
 
 class HPGL_PLOTTER : public PLOTTER
 {
-public:
-    HPGL_PLOTTER() : PLOTTER(PLOT_FORMAT_HPGL)
+public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
     {
     }
+
 
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
@@ -262,8 +258,7 @@ public:
     }
 
 
-    virtual void set_viewport( wxPoint offset,
-                               double scale, int orient );
+    virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
     virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
@@ -278,13 +273,14 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
+
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive ) {}
 
 protected:
-    void         pen_control( int plume );
+    void pen_control( int plume );
 
     int    pen_speed;
     int    pen_number;
@@ -295,12 +291,12 @@ protected:
 
 class PS_PLOTTER : public PLOTTER
 {
-public:
-    PS_PLOTTER() : PLOTTER(PLOT_FORMAT_POST)
+public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
     {
         plot_scale_adjX = 1;
         plot_scale_adjY = 1;
     }
+
 
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
@@ -316,8 +312,7 @@ public:
     }
 
 
-    virtual void set_viewport( wxPoint offset,
-                               double scale, int orient );
+    virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
@@ -330,6 +325,7 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
+
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
@@ -362,39 +358,37 @@ struct APERTURE
 
 class GERBER_PLOTTER : public PLOTTER
 {
-public:
-    GERBER_PLOTTER() : PLOTTER(PLOT_FORMAT_GERBER)
+public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
     {
         work_file  = 0;
         final_file = 0;
         current_aperture = apertures.end();
     }
 
+    virtual bool start_plot( FILE* fout );
+    virtual bool end_plot();
+    virtual void set_current_line_width( int width );
+    virtual void set_default_line_width( int width );
 
-    virtual bool        start_plot( FILE* fout );
-    virtual bool        end_plot();
-    virtual void        set_current_line_width( int width );
-    virtual void        set_default_line_width( int width );
+/* RS274X has no dashing, nor colours */
+    virtual void set_dash( bool dashed ) {};
+    virtual void set_color( int color ) {};
+    virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
+    virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void pen_to( wxPoint pos, char plume );
+    virtual void flash_pad_circle( wxPoint pos, int diametre,
+                                   GRTraceMode trace_mode );
+    virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                 GRTraceMode trace_mode );
+    virtual void flash_pad_rect( wxPoint pos, wxSize size,
+                                 int orient, GRTraceMode trace_mode );
 
-    // RS274X has no dashing, nor colours
-    virtual void        set_dash( bool dashed ) {}
-    virtual void        set_color( int color ) {}
-    virtual void        set_viewport( wxPoint offset,
-                                      double scale, int orient );
-    virtual void        rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
-    virtual void        circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void        poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
-    virtual void        pen_to( wxPoint pos, char plume );
-    virtual void        flash_pad_circle( wxPoint pos, int diametre,
-                                          GRTraceMode trace_mode );
-    virtual void        flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                        GRTraceMode trace_mode );
-    virtual void        flash_pad_rect( wxPoint pos, wxSize size,
-                                        int orient, GRTraceMode trace_mode );
-    virtual void        flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                          int aPadOrient, GRTraceMode aTrace_Mode );
+    virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                   int aPadOrient, GRTraceMode aTrace_Mode );
 
-    virtual void        SetLayerPolarity( bool aPositive );
+    virtual void                    SetLayerPolarity( bool aPositive );
 
 protected:
     void                select_aperture( const wxSize&           size,
@@ -403,10 +397,10 @@ protected:
     std::vector<APERTURE>::iterator
                         get_aperture( const wxSize& size, APERTURE::Aperture_Type type );
 
-    FILE* work_file, * final_file;
-    wxString    m_workFilename;
+    FILE*    work_file, * final_file;
+    wxString m_workFilename;
 
-    void                            write_aperture_list();
+    void write_aperture_list();
 
     std::vector<APERTURE>           apertures;
     std::vector<APERTURE>::iterator current_aperture;
@@ -414,10 +408,10 @@ protected:
 
 class DXF_PLOTTER : public PLOTTER
 {
-public:
-    DXF_PLOTTER() : PLOTTER(PLOT_FORMAT_DXF)
+public: DXF_PLOTTER() : PLOTTER( PLOT_FORMAT_DXF )
     {
     }
+
 
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
@@ -439,8 +433,7 @@ public:
 
     virtual void set_color( int color );
 
-    virtual void set_viewport( wxPoint offset,
-                               double scale, int orient );
+    virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
     virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
@@ -455,6 +448,7 @@ public:
                                  GRTraceMode trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode );
+
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 

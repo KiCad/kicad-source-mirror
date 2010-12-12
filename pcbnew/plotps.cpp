@@ -37,12 +37,13 @@ bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
 
     SetLocaleTo_C_standard();
 
-    if( g_pcb_plot_options.PlotScaleOpt != 1 )
-        Center = TRUE;        // Scale != 1 so center plot.
+    if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
+        Center = true;  // when scale != 1.0 we must calculate the position in page
+                        // because actual position has no meaning
 
     // Set default line width
-    if( g_pcb_plot_options.PlotLine_Width < 1 )
-        g_pcb_plot_options.PlotLine_Width = 1;
+    if( g_PcbPlotOptions.m_PlotLineWidth < 1 )
+        g_PcbPlotOptions.m_PlotLineWidth = 1;
 
     SheetSize.x = currentsheet->m_Size.x * U_PCB;
     SheetSize.y = currentsheet->m_Size.y * U_PCB;
@@ -65,7 +66,7 @@ bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
 
-    if( g_pcb_plot_options.PlotScaleOpt == 0 )       // Optimum scale
+    if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {
         double Xscale, Yscale;
 
@@ -75,7 +76,7 @@ bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
         scale  = MIN( Xscale, Yscale );
     }
     else
-        scale = g_pcb_plot_options.Scale * paperscale;
+        scale = g_PcbPlotOptions.m_PlotScale * paperscale;
 
     if( Center )
     {
@@ -92,24 +93,23 @@ bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->set_paper_size( SheetPS );
-    plotter->set_scale_adjust( g_pcb_plot_options.ScaleAdjX,
-                               g_pcb_plot_options.ScaleAdjY );
-    plotter->set_viewport( offset, scale,
-                           g_pcb_plot_options.PlotOrient );
-    plotter->set_default_line_width( g_pcb_plot_options.PlotLine_Width );
+    plotter->set_scale_adjust( g_PcbPlotOptions.m_FineScaleAdjustX,
+                               g_PcbPlotOptions.m_FineScaleAdjustX );
+    plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
+    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-PS" ) );
     plotter->set_filename( FullFileName );
     plotter->start_plot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with
      * paperscale!=1, anyway */
-    if( g_pcb_plot_options.Plot_Frame_Ref && !Center )
+    if( g_PcbPlotOptions.m_PlotFrameRef && !Center )
         PlotWorkSheet( plotter, GetScreen() );
 
     // If plot a negative board:
     // Draw a black rectangle (background for plot board in white)
     // and switch the current color to WHITE
-    if( g_pcb_plot_options.Plot_PS_Negative )
+    if( g_PcbPlotOptions.m_PlotPSNegative )
     {
         int margin = 500;              // Add a 0.5 inch margin around the board
         plotter->set_negative( true );

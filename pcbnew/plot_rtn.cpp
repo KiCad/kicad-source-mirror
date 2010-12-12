@@ -67,7 +67,7 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
     /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
     int layersmask_plotpads = masque_layer;
     // Calculate the mask layers of allowed layers for pads
-    if( !g_pcb_plot_options.PlotPadsOnSilkLayer )       // Do not plot pads on silk screen layers
+    if( !g_PcbPlotOptions.m_PlotPadsOnSilkLayer )       // Do not plot pads on silk screen layers
         layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT );
     if( layersmask_plotpads )
     {
@@ -112,8 +112,8 @@ void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
     for( MODULE* Module = m_Pcb->m_Modules; Module; Module = Module->Next() )
     {
         /* see if we want to plot VALUE and REF fields */
-        trace_val = g_pcb_plot_options.Sel_Texte_Valeur;
-        trace_ref = g_pcb_plot_options.Sel_Texte_Reference;
+        trace_val = g_PcbPlotOptions.m_PlotValue;
+        trace_ref = g_PcbPlotOptions.m_PlotReference;
 
         TEXTE_MODULE* text = Module->m_Reference;
         unsigned      textLayer = text->GetLayer();
@@ -132,7 +132,7 @@ module\n %s's \"reference\" text." ),
         if( ( ( 1 << textLayer ) & masque_layer ) == 0 )
             trace_ref = FALSE;
 
-        if( text->m_NoShow && !g_pcb_plot_options.Sel_Texte_Invisible )
+        if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
             trace_ref = FALSE;
 
         text = Module->m_Value;
@@ -152,7 +152,7 @@ module\n %s's \"value\" text." ),
         if( ( (1 << textLayer) & masque_layer ) == 0 )
             trace_val = FALSE;
 
-        if( text->m_NoShow && !g_pcb_plot_options.Sel_Texte_Invisible )
+        if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
             trace_val = FALSE;
 
         /* Plot text fields, if allowed */
@@ -169,10 +169,10 @@ module\n %s's \"value\" text." ),
             if( pt_texte->Type() != TYPE_TEXTE_MODULE )
                 continue;
 
-            if( !g_pcb_plot_options.Sel_Texte_Divers )
+            if( !g_PcbPlotOptions.m_PlotTextOther )
                 continue;
             if( (pt_texte->m_NoShow)
-               && !g_pcb_plot_options.Sel_Texte_Invisible )
+               && !g_PcbPlotOptions.m_PlotInvisibleTexts )
                 continue;
 
             textLayer = pt_texte->GetLayer();
@@ -644,7 +644,7 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
         return;
 
     if( trace_mode == FILAIRE )
-        thickness = g_pcb_plot_options.PlotLine_Width;
+        thickness = g_PcbPlotOptions.m_PlotLineWidth;
     else
         thickness = pt_segm->m_Width;
 
@@ -697,7 +697,7 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
     // in addition to the contents of the currently specified layer.
     int layer_mask = g_TabOneLayerMask[Layer];
 
-    if( !g_pcb_plot_options.Exclude_Edges_Pcb )
+    if( !g_PcbPlotOptions.m_ExcludeEdgeLayer )
         layer_mask |= EDGE_LAYER;
 
     switch( Layer )
@@ -722,21 +722,19 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
 
         // Adding drill marks, if required and if the plotter is able to plot
         // them:
-        if( g_pcb_plot_options.DrillShapeOpt !=
-            PCB_Plot_Options::NO_DRILL_SHAPE )
+        if( g_PcbPlotOptions.m_DrillShapeOpt != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             if( plotter->GetPlotterType() == PLOT_FORMAT_POST )
-                PlotDrillMark( plotter,
-                               trace_mode,
-                               g_pcb_plot_options.DrillShapeOpt ==
-                               PCB_Plot_Options::SMALL_DRILL_SHAPE );
+                PlotDrillMark( plotter, trace_mode,
+                               g_PcbPlotOptions.m_DrillShapeOpt ==
+                               PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE );
         }
         break;
 
     case SOLDERMASK_N_BACK:
     case SOLDERMASK_N_FRONT:
         Plot_Standard_Layer( plotter, layer_mask,
-                             g_pcb_plot_options.DrawViaOnMaskLayer, trace_mode );
+                             g_PcbPlotOptions.m_PlotViaOnMaskLayer, trace_mode );
         break;
 
     case SOLDERPASTE_N_BACK:
@@ -749,7 +747,7 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
 
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER
-            && g_pcb_plot_options.GetSubtractMaskFromSilk() )
+            && g_PcbPlotOptions.GetSubtractMaskFromSilk() )
         {
             if( Layer == SILKSCREEN_N_FRONT )
             {
@@ -763,7 +761,7 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
             // Set layer polarity to negative
             plotter->SetLayerPolarity( false );
             Plot_Standard_Layer( plotter, layer_mask,
-                                 g_pcb_plot_options.DrawViaOnMaskLayer,
+                                 g_PcbPlotOptions.m_PlotViaOnMaskLayer,
                                  trace_mode );
         }
         break;
@@ -1013,8 +1011,7 @@ void WinEDA_BasePcbFrame::PlotDrillMark( PLOTTER*    aPlotter,
         if( pts->Type() != TYPE_VIA )
             continue;
         pos = pts->m_Start;
-        if( g_pcb_plot_options.DrillShapeOpt ==
-            PCB_Plot_Options::SMALL_DRILL_SHAPE )
+        if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = SMALL_DRILL;
         else
             diam.x = diam.y = pts->GetDrillValue();
