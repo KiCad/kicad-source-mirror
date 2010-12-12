@@ -17,7 +17,8 @@ class Ki_PageDescr;
 
 /**
  * Enum PlotFormat
- * must be kept in order of the radio buttons in the plot panel/window.
+ * is the set of supported output plot formats.  They should be kept in order
+ * of the radio buttons in the plot panel/windows.
  */
 enum PlotFormat {
     PLOT_FORMAT_HPGL,
@@ -37,7 +38,7 @@ public:
 
     virtual ~PLOTTER()
     {
-        /* Emergency cleanup */
+        // Emergency cleanup
         if( output_file )
         {
             fclose( output_file );
@@ -94,7 +95,7 @@ public:
     virtual void set_viewport( wxPoint offset,
                                double scale, int orient ) = 0;
 
-    /* Standard primitives */
+    // Standard primitives
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill,
                        int width = -1 ) = 0;
     virtual void circle( wxPoint pos, int diametre, FILL_T fill,
@@ -113,7 +114,7 @@ public:
                                GRTraceMode tracemode );
     virtual void pen_to( wxPoint pos, char plume ) = 0;
 
-    /* Flash primitives */
+    // Flash primitives
     virtual void flash_pad_circle( wxPoint pos, int diametre,
                                    GRTraceMode trace_mode ) = 0;
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
@@ -130,7 +131,7 @@ public:
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode ) = 0;
 
-    /* Convenience functions */
+    // Convenience functions
     void move_to( wxPoint pos )
     {
         pen_to( pos, 'U' );
@@ -152,7 +153,7 @@ public:
 
     void pen_finish()
     {
-        /* Shortcut */
+        // Shortcut
         pen_to( wxPoint( 0, 0 ), 'Z' );
     }
 
@@ -173,16 +174,16 @@ public:
      * Function SetLayerPolarity
      * sets current Gerber layer polarity to positive or negative
      * by writing \%LPD*\% or \%LPC*\% to the Gerber file, respectively.
-     * param @aPositive = layer polarity, true for positive
+     * @param aPositive is the layer polarity and true for positive.
      */
     virtual void SetLayerPolarity( bool aPositive ) = 0;
 
 protected:
-    /* These are marker subcomponents */
+    // These are marker subcomponents
     void           center_square( const wxPoint& position, int diametre, FILL_T fill );
     void           center_lozenge( const wxPoint& position, int diametre, FILL_T fill );
 
-    /* Helper function for sketched filler segment */
+    // Helper function for sketched filler segment
     void           segment_as_oval( wxPoint start, wxPoint end, int width,
                                     GRTraceMode tracemode );
     void           sketch_oval( wxPoint pos, wxSize size, int orient, int width );
@@ -191,22 +192,22 @@ protected:
     virtual void   user_to_device_size( wxSize& size );
     virtual double user_to_device_size( double size );
 
-    /* Plot scale */
+    // Plot scale
     double        plot_scale;
-    /* Device scale (from decimils to device units) */
+    // Device scale (from decimils to device units)
     double        device_scale;
-    /* Plot offset (in decimils) */
+    // Plot offset (in decimils)
     wxPoint       plot_offset;
-    /* Output file */
+    // Output file
     FILE*         output_file;
-    /* Pen handling */
+    // Pen handling
     bool          color_mode, negative_mode;
     int           default_pen_width;
     int           current_pen_width;
     char          pen_state;
     wxPoint       pen_lastpos;
-    /* Other stuff */
-    int           plot_orient_options; /* For now, mirror plot */
+    // Other stuff
+    int           plot_orient_options; // For now, mirror plot
     wxString      creator;
     wxString      filename;
     Ki_PageDescr* sheet;
@@ -223,10 +224,10 @@ public:
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
 
-/* HPGL doesn't handle line thickness or color */
+    // HPGL doesn't handle line thickness or color
     virtual void set_current_line_width( int width )
     {
-        /* Handy override */
+        // Handy override
         current_pen_width = wxRound( pen_diameter );
     };
     virtual void set_default_line_width( int width ) {};
@@ -280,7 +281,7 @@ public:
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
-    virtual void SetLayerPolarity( bool aPositive ) {};
+    virtual void SetLayerPolarity( bool aPositive ) {}
 
 protected:
     void         pen_control( int plume );
@@ -290,6 +291,7 @@ protected:
     double pen_diameter;
     double pen_overlap;
 };
+
 
 class PS_PLOTTER : public PLOTTER
 {
@@ -331,7 +333,7 @@ public:
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
-    virtual void SetLayerPolarity( bool aPositive ) {};
+    virtual void SetLayerPolarity( bool aPositive ) {}
 
 protected:
     double plot_scale_adjX, plot_scale_adjY;
@@ -349,13 +351,14 @@ struct APERTURE
         Oval     = 4
     };
 
-    wxSize        size;     /* horiz and Vert size*/
-    Aperture_Type type;     /* Type ( Line, rect , circulaire , ovale .. ) */
-    int           D_code;   /* code number ( >= 10 ); */
+    wxSize        size;     // horiz and Vert size
+    Aperture_Type type;     // Type ( Line, rect , circulaire , ovale .. )
+    int           D_code;   // code number ( >= 10 );
 
     /* Trivia question: WHY Gerber decided to use D instead of the usual T for
      *  tool change? */
 };
+
 
 class GERBER_PLOTTER : public PLOTTER
 {
@@ -368,37 +371,37 @@ public:
     }
 
 
-    virtual bool                    start_plot( FILE* fout );
-    virtual bool                    end_plot();
-    virtual void                    set_current_line_width( int width );
-    virtual void                    set_default_line_width( int width );
+    virtual bool        start_plot( FILE* fout );
+    virtual bool        end_plot();
+    virtual void        set_current_line_width( int width );
+    virtual void        set_default_line_width( int width );
 
-/* RS274X has no dashing, nor colours */
-    virtual void set_dash( bool dashed ) {};
-    virtual void set_color( int color ) {};
-    virtual void                    set_viewport( wxPoint offset,
-                                                  double scale, int orient );
-    virtual void                    rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
-    virtual void                    circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void                    poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
-    virtual void                    pen_to( wxPoint pos, char plume );
-    virtual void                    flash_pad_circle( wxPoint pos, int diametre,
-                                                      GRTraceMode trace_mode );
-    virtual void                    flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                                    GRTraceMode trace_mode );
-    virtual void                    flash_pad_rect( wxPoint pos, wxSize size,
-                                                    int orient, GRTraceMode trace_mode );
-    virtual void                    flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                                      int aPadOrient, GRTraceMode aTrace_Mode );
+    // RS274X has no dashing, nor colours
+    virtual void        set_dash( bool dashed ) {}
+    virtual void        set_color( int color ) {}
+    virtual void        set_viewport( wxPoint offset,
+                                      double scale, int orient );
+    virtual void        rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
+    virtual void        circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+    virtual void        poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    virtual void        pen_to( wxPoint pos, char plume );
+    virtual void        flash_pad_circle( wxPoint pos, int diametre,
+                                          GRTraceMode trace_mode );
+    virtual void        flash_pad_oval( wxPoint pos, wxSize size, int orient,
+                                        GRTraceMode trace_mode );
+    virtual void        flash_pad_rect( wxPoint pos, wxSize size,
+                                        int orient, GRTraceMode trace_mode );
+    virtual void        flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
+                                          int aPadOrient, GRTraceMode aTrace_Mode );
 
-    virtual void                    SetLayerPolarity( bool aPositive );
+    virtual void        SetLayerPolarity( bool aPositive );
 
 protected:
-    void                            select_aperture( const wxSize&           size,
+    void                select_aperture( const wxSize&           size,
                                                      APERTURE::Aperture_Type type );
 
-    std::vector<APERTURE>::iterator get_aperture( const wxSize&           size,
-                                                  APERTURE::Aperture_Type type );
+    std::vector<APERTURE>::iterator
+                        get_aperture( const wxSize& size, APERTURE::Aperture_Type type );
 
     FILE* work_file, * final_file;
     wxString    m_workFilename;
@@ -419,17 +422,19 @@ public:
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
 
-/* For now we don't use 'thick' primitives, so no line width */
+    // For now we don't use 'thick' primitives, so no line width
     virtual void set_current_line_width( int width )
     {
-        /* Handy override */
+        // Handy override
         current_pen_width = 0;
-    };
+    }
+
     virtual void set_default_line_width( int width )
     {
-        /* DXF lines are infinitesimal */
+        // DXF lines are infinitesimal
         default_pen_width = 0;
-    };
+    }
+
     virtual void set_dash( bool dashed );
 
     virtual void set_color( int color );
@@ -453,10 +458,10 @@ public:
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                    int aPadOrient, GRTraceMode aTrace_Mode );
 
-    virtual void SetLayerPolarity( bool aPositive ) {};
+    virtual void SetLayerPolarity( bool aPositive ) {}
 
 protected:
     int current_color;
 };
 
-#endif  /* __INCLUDE__PLOT_COMMON_H__ */
+#endif  // __INCLUDE__PLOT_COMMON_H__

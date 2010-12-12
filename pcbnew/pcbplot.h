@@ -43,23 +43,26 @@ public:
     int         PlotPSColorOpt;     // True for color Postscript output
     bool        Plot_PS_Negative;   // True to create a  negative board ps plot
 
-    /* Flags to enable or disable ploting of various PCB elements. */
+    /// Flags to enable or disable ploting of various PCB elements.
     bool        Sel_Texte_Reference;
     bool        Sel_Texte_Valeur;
     bool        Sel_Texte_Divers;
     bool        Sel_Texte_Invisible;
-    bool        PlotPadsOnSilkLayer; /* allows pads on silkscreen */
+    bool        PlotPadsOnSilkLayer;        ///< allows pads on silkscreen
     bool        m_SubtractMaskFromSilk;
 
-    /* id for plot format (see enum PlotFormat in plot_common.h) */
-    int PlotFormat;
-    int PlotOrient;
-    int PlotScaleOpt;
-    enum DrillShapeOptT {
+    /// id for plot format (see enum PlotFormat in plot_common.h)
+    int         PlotFormat;
+    int         PlotOrient;
+    int         PlotScaleOpt;
+
+    enum DrillShapeOptT
+    {
         NO_DRILL_SHAPE    = 0,
         SMALL_DRILL_SHAPE = 1,
         FULL_DRILL_SHAPE  = 2
     };
+
     DrillShapeOptT DrillShapeOpt;
     double         Scale;
     double         ScaleAdjX;
@@ -70,10 +73,10 @@ private:
 
 public:
     PCB_Plot_Options();
-    void SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
-    wxString GetOutputDirectory() { return outputDirectory; };
-    void SetSubtractMaskFromSilk( bool aSubtract ) { m_SubtractMaskFromSilk = aSubtract; };
-    bool GetSubtractMaskFromSilk() { return m_SubtractMaskFromSilk; };
+    void        SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
+    wxString    GetOutputDirectory() { return outputDirectory; };
+    void        SetSubtractMaskFromSilk( bool aSubtract ) { m_SubtractMaskFromSilk = aSubtract; };
+    bool        GetSubtractMaskFromSilk() { return m_SubtractMaskFromSilk; };
 };
 
 extern PCB_Plot_Options g_pcb_plot_options;

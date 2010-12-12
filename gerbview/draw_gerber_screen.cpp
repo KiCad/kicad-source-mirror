@@ -103,45 +103,84 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPo
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
+    int        bitmapWidth, bitmapHeight;
+
+    aPanel->GetClientSize( &bitmapWidth, &bitmapHeight );
+
+    wxBitmap   layerBitmap( bitmapWidth, bitmapHeight );
+
+    wxMemoryDC memoryDC;
+    memoryDC.SelectObject( layerBitmap );
+
+    wxColour   bgColor = MakeColour( g_DrawBgColor );
+    wxBrush    bgBrush( bgColor, wxSOLID );
+
     for( int layer = 0; layer < 32; layer++ )
     {
         if( !GetBoard()->IsLayerVisible( layer ) )
             continue;
+
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        /* Draw background negative (i.e. in graphic layer color) for negative images:
-         *  Background is drawn here in GR_OR mode because in COPY mode
-         *  all previous graphics will be erased
-         *  Note: items in background color ("Erased" items) are always drawn in COPY mode
-         *  Some artifacts can happen when more than one gerber file is loaded
-         */
+        // Draw each layer into a bitmap first. Negative Gerber
+        // layers are drawn in background color.
+        memoryDC.SetBackground( bgBrush );
+        memoryDC.Clear();
+
         if( gerber->m_ImageNegative )
         {
-            int       color = GetBoard()->GetLayerColor( layer );
-            GRSetDrawMode( aDC, GR_OR );
+            // Draw background negative (i.e. in graphic layer color) for negative images.
+
+            int color = GetBoard()->GetLayerColor( layer );
+
+            GRSetDrawMode( (wxDC*)&memoryDC, GR_COPY ); // GR_COPY is faster than GR_OR
+
             EDA_Rect* cbox = &aPanel->m_ClipBox;
-            GRSFilledRect( cbox, aDC, cbox->GetX(), cbox->GetY(),
+
+            GRSFilledRect( cbox, (wxDC*)&memoryDC, cbox->GetX(), cbox->GetY(),
                            cbox->GetRight(), cbox->GetBottom(),
                            0, color, color );
-            GRSetDrawMode( aDC, aDrawMode );
+
+            GRSetDrawMode( (wxDC*)&memoryDC, aDrawMode );
         }
 
-        int         dcode_hightlight = 0;
+        int dcode_highlight = 0;
         if( layer == m_PcbFrame->GetScreen()->m_Active_Layer )
-            dcode_hightlight = gerber->m_Selected_Tool;
-        BOARD_ITEM* item = GetBoard()->m_Drawings;
-        for( ; item; item = item->Next() )
+            dcode_highlight = gerber->m_Selected_Tool;
+
+        for( BOARD_ITEM* item = GetBoard()->m_Drawings;  item;  item = item->Next() )
         {
             GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-            if( gerb_item->GetLayer()!= layer )
+            if( gerb_item->GetLayer() != layer )
                 continue;
+
             int drawMode = aDrawMode;
-            if( dcode_hightlight == gerb_item->m_DCode )
+            if( dcode_highlight == gerb_item->m_DCode )
                 drawMode |= GR_SURBRILL;
-            gerb_item->Draw( aPanel, aDC, drawMode );
+
+            gerb_item->Draw( aPanel, (wxDC*)&memoryDC, drawMode );
         }
+
+#if 0
+        // Use the layer bitmap itself as a mask when blitting.
+        // The bitmap cannot be referenced by a device context
+        // when setting the mask.
+        memoryDC.SelectObject( wxNullBitmap );
+        layerBitmap.SetMask( new wxMask( layerBitmap, bgColor ) );
+
+        memoryDC.SelectObject( layerBitmap );
+
+        aDC->Blit( 0, 0, bitmapWidth, bitmapHeight,
+                   (wxDC*)&memoryDC, 0, 0, wxCOPY, true );
+
+#else   // Dick: seems a little faster, crisper
+        aDC->Blit( 0, 0, bitmapWidth, bitmapHeight,
+                   (wxDC*)&memoryDC, 0, 0, wxOR, false );
+
+#endif
+
     }
 
     m_PcbFrame->GetScreen()->ClrRefreshReq();

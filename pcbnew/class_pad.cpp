@@ -57,7 +57,8 @@ D_PAD::~D_PAD()
  */
 int D_PAD::GetMaxRadius() const
 {
-    int x, y, radius;
+    int x, y;
+    int radius;
 
     switch( m_PadShape & 0x7F )
     {
@@ -79,6 +80,9 @@ int D_PAD::GetMaxRadius() const
         y = m_Size.y + ABS( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
         radius = 1 + (int) ( sqrt( (double) y * y + (double) x * x ) / 2 );
         break;
+
+    default:
+        radius = 0;     // quiet compiler
     }
 
     return radius;
