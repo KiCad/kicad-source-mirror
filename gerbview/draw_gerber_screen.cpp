@@ -105,6 +105,19 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPo
     // graphic layer per graphic layer, after the background is filled
     int        bitmapWidth, bitmapHeight;
 
+    // Store device context scale and origins:
+    double dc_scalex, dc_scaley;
+    wxPoint dev_org;
+    wxPoint logical_org;
+    aDC->GetDeviceOrigin( &dev_org.x, &dev_org.y );
+    aDC->GetLogicalOrigin( &logical_org.x, &logical_org.y );
+    aDC->GetUserScale( &dc_scalex, &dc_scaley);
+
+    // Blit function used below seems work OK only with scale = 1 and no offsets
+    aDC->SetUserScale( 1.0, 1.0 );
+    aDC->SetDeviceOrigin( 0,0 );
+    aDC->SetLogicalOrigin( 0,0 );
+
     aPanel->GetClientSize( &bitmapWidth, &bitmapHeight );
 
     wxBitmap   layerBitmap( bitmapWidth, bitmapHeight );
@@ -114,7 +127,6 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPo
 
     wxColour   bgColor = MakeColour( g_DrawBgColor );
     wxBrush    bgBrush( bgColor, wxSOLID );
-
     for( int layer = 0; layer < 32; layer++ )
     {
         if( !GetBoard()->IsLayerVisible( layer ) )
@@ -124,6 +136,9 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPo
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
+        memoryDC.SetUserScale( dc_scalex, dc_scaley );
+        memoryDC.SetDeviceOrigin( dev_org.x, dev_org.y );
+        memoryDC.SetLogicalOrigin( logical_org.x, logical_org.y );
         // Draw each layer into a bitmap first. Negative Gerber
         // layers are drawn in background color.
         memoryDC.SetBackground( bgBrush );
@@ -176,12 +191,22 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPo
                    (wxDC*)&memoryDC, 0, 0, wxCOPY, true );
 
 #else   // Dick: seems a little faster, crisper
+
+        // Blit function seems work OK only with scale = 1 and no offsets
+        memoryDC.SetUserScale( 1.0, 1.0 );
+        memoryDC.SetDeviceOrigin( 0,0 );
+        memoryDC.SetLogicalOrigin( 0,0 );
         aDC->Blit( 0, 0, bitmapWidth, bitmapHeight,
-                   (wxDC*)&memoryDC, 0, 0, wxOR, false );
+                   &memoryDC, 0, 0, wxOR, false );
 
 #endif
 
     }
+
+    // Restore scale and offsets values:
+    aDC->SetUserScale( dc_scalex, dc_scaley );
+    aDC->SetDeviceOrigin( dev_org.x, dev_org.y );
+    aDC->SetLogicalOrigin( logical_org.x, logical_org.y );
 
     m_PcbFrame->GetScreen()->ClrRefreshReq();
 }
