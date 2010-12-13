@@ -1,4 +1,5 @@
 
+namespace SCH {
 
 /** @mainpage
 
@@ -392,8 +393,6 @@ struct PARSE_ERROR : public IO_ERROR
 
 /** @} exception_types Exception Types */
 
-namespace SCH {
-
 
 /**
  * Class PART
@@ -433,12 +432,16 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     // 3 separate lists for speed:
 
     /// A property list.
+    PROPERTIES  properties;
 
     /// A drawing list for graphics
+    DRAWINGS    drawings;
 
     /// A pin list
+    PINS        pins;
 
     /// Alternate body forms.
+    ALTERNATES  alternates;
 
     // lots of other stuff, like the mandatory properties.
 
@@ -692,7 +695,7 @@ protected:                  ///< derived classes must implement
      * to honor this portion of the API contract.
      *
      * @param aQuery is a string holding a domain specific query language expression.  One candidate
-     *  here is an s-expression that uses (and ..) and (or ..) operators and used them as RPN. For example
+     *  here is an s-expression that uses (and ..) and (or ..) operators and uses them as RPN. For example
      *  "(and (footprint 0805)(value 33ohm)(category passives))".
      *  The UI can shield the user from this if it wants.
      *
@@ -1026,8 +1029,8 @@ public:
     /**
      * Function GetModel
      * returns a spreadsheet table model that allows both reading and writing to
-     * rows in a spreadsheet.  The UI hold the actual screen widgets, but
-     * the table model is this.
+     * rows in a spreadsheet.  The UI holds the actual screen widgets, but
+     * this is the table model, i.e. the PARTS_LIST is.
      */
     SPREADSHEET_TABLE_MODEL*    GetModel();
 };
@@ -1104,6 +1107,21 @@ public:
  */
 class LIB_TABLE
 {
+public:
+
+    /**
+     * Constructor LIB_TABLE
+     * builds a library table from an s-expression form of the library table.
+     * @param aLibraryTable is an s-expression form of all the rows in a library
+     *   table fragment.  These rows take presedence over rows in @a aFallBackTable.
+     * @param aFallBackTable is another LIB_TABLE which is searched only when
+     *   a record is not found in this table.
+     */
+    LIB_TABLE( const STRING& aLibraryTable, LIB_TABLE* aFallBackTable = NULL )
+    {
+        // s-expression is chosen so we can read a table fragment from either
+        // a schematic or a disk file.
+    }
 };
 
 } // namespace SCH

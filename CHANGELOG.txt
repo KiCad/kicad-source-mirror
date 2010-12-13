@@ -7,7 +7,7 @@ email address.
 2010-Dec-13 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++eeschema:
-    Committed a new design for a "Distributed Library Managment System".
+    Committed a new design for a "Distributed Library System".
     To make the html docs, run doxygen in <kicad_base>/new with that as your
     current working directory, or run the shell script in there.  You need
     Doxygen installed.
