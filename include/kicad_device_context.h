@@ -27,6 +27,7 @@
 
 // Macro used to declare a device context in kicad:
 #if USE_WX_GRAPHICS_CONTEXT && USE_WX_ZOOM
+//#pragma message( "INSTALL_DC is wxClientDC with wxGCDC" )
 #define INSTALL_DC(name,parent)                          \
     wxClientDC _cDC( parent );                           \
     wxGCDC name(_cDC);                                   \
@@ -34,11 +35,13 @@
     name.GetGraphicsContext()->Translate( 0.5, 0.5 );
 #else
 #ifdef KICAD_USE_BUFFERED_DC
+//#pragma message( "INSTALL_DC is wxClientDC with wxBufferedDC" )
 #define INSTALL_DC(name,parent)                          \
     wxClientDC _cDC( parent );                           \
     wxBufferedDC name(&_cDC, _cDC.GetSize() );           \
     parent->DoPrepareDC( name );
 #else
+//#pragma message( "INSTALL_DC is wxClientDC" )
 #define INSTALL_DC(name,parent)                          \
     wxClientDC name( parent );                           \
     parent->DoPrepareDC( name );
@@ -46,16 +49,19 @@
 #endif
 
 #if USE_WX_GRAPHICS_CONTEXT
+//#pragma message( "INSTALL_PAINTDC is wxPaintDC with wxGCDC" )
 #define INSTALL_PAINTDC(name,parent)                     \
     wxPaintDC _pDC(parent);                              \
     wxGCDC    name(_pDC);                                \
     parent->DoPrepareDC( name );                         \
-    name.GetGraphicsContext()->Translate( 0.5, 0.5);
+    name.GetGraphicsContext()->Translate( 0.5, 0.5 );
 #elif !defined( USE_WX_ZOOM ) && defined( KICAD_USE_BUFFERED_PAINTDC )
+//#pragma message( "INSTALL_PAINTDC is wxAutoBufferedPaintDC" )
 #define INSTALL_PAINTDC(name,parent)                     \
     wxAutoBufferedPaintDC name(parent );                 \
     parent->DoPrepareDC( name );
 #else
+//#pragma message( "INSTALL_PAINTDC is wxPaintDC" )
 #define INSTALL_PAINTDC(name,parent)                     \
     wxPaintDC name( parent );                            \
     parent->DoPrepareDC( name );
