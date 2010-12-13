@@ -53,16 +53,6 @@ public:
     bool Save( FILE* aFile ) const;
 
     /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool HitTest( const wxPoint& aPosRef )
-    {
-        return HitTestMarker( aPosRef );
-    }
-
-    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display purposes.
      * This box should be an enclosing perimeter for visible components of this
@@ -113,6 +103,8 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
 };
 
 #endif /* _TYPE_SCH_MARKER_H_ */

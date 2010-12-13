@@ -112,16 +112,15 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
 }
 
 
-/******************************************************/
-bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
-/******************************************************/
+bool MARKER_BASE::HitTestMarker( const wxPoint& refPos ) const
 {
     wxPoint rel_pos = refPos - m_Pos;
     rel_pos.x /= m_ScalingFactor;
     rel_pos.y /= m_ScalingFactor;
 
-    return m_ShapeBoundingBox.Inside(rel_pos);
+    return m_ShapeBoundingBox.Inside( rel_pos );
 }
+
 
 /**
  * Function GetBoundingBoxMarker

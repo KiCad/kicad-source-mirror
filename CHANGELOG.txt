@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++common
+  * Make base marker hit test method const.
+++EESchema
+  * Improve hit testing for schematic components.
+  * Add initial support for hit test filtering.
+  * Moved static function CountConnectedItems() into SCH_SCREEN object.
+  * Add IsConnected() method to SCH_ITEM object.
+
+
 2010-dec-10 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++All

@@ -66,7 +66,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
         break;
 
     case SCH_COMPONENT_T:
-        Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
+        Pin = GetScreen()->GetPin( GetScreen()->m_Curseur, &LibItem );
         if( Pin )
             break;  // Priority is probing a pin first
         LibItem = (SCH_COMPONENT*) DrawStruct;
@@ -74,7 +74,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
         break;
 
     default:
-        Pin = LocateAnyPin( GetScreen()->GetDrawItems(), GetScreen()->m_Curseur, &LibItem );
+        Pin = GetScreen()->GetPin( GetScreen()->m_Curseur, &LibItem );
         break;
 
     case LIB_PIN_T:

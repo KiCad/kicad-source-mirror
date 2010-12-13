@@ -15,6 +15,7 @@
 #include "class_library.h"
 #include "sch_items.h"
 #include "sch_sheet.h"
+#include "sch_component.h"
 
 #include <boost/foreach.hpp>
 
@@ -373,6 +374,50 @@ void SCH_SCREEN::ClearDrawingState()
 {
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
         item->m_Flags = 0;
+}
+
+
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent )
+{
+    SCH_ITEM* item;
+    SCH_COMPONENT* component = NULL;
+    LIB_PIN* pin = NULL;
+
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        component = (SCH_COMPONENT*) item;
+
+        pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
+
+        if( pin )
+            break;
+    }
+
+    if( aComponent )
+        *aComponent = component;
+
+    return pin;
+}
+
+
+int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const
+{
+    SCH_ITEM* item;
+    int       count = 0;
+
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_JUNCTION_T  && !aTestJunctions )
+            continue;
+
+        if( item->IsConnected( aPos ) )
+            count++;
+    }
+
+    return count;
 }
 
 

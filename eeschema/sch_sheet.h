@@ -524,7 +524,7 @@ protected:
     void renumberLabels();
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 

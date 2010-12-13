@@ -20,8 +20,7 @@
 
 
 static SCH_ITEM* LastSnappedStruct = NULL;
-static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask,
-                        SCH_ITEM* DrawList, double aScaleFactor );
+static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList );
 
 
 /**
@@ -42,9 +41,9 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 
     while( DrawList )
     {
-        if( !SnapPoint2( Screen->m_MousePosition, LIBITEM, DrawList, Screen->GetZoom() ) )
+        if( !SnapPoint2( Screen->m_MousePosition, LIBITEM, DrawList ) )
         {
-            if( !SnapPoint2( Screen->m_Curseur, LIBITEM, DrawList, Screen->GetScalingFactor() ) )
+            if( !SnapPoint2( Screen->m_Curseur, LIBITEM, DrawList ) )
                 break;
         }
 
@@ -106,7 +105,7 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask 
     if( screen == NULL || screen->GetDrawItems() == NULL )
         return NULL;
 
-    if( SnapPoint2( refpos, SearchMask, screen->GetDrawItems(), screen->GetScalingFactor() ) )
+    if( SnapPoint2( refpos, SearchMask, screen->GetDrawItems() ) )
     {
         return LastSnappedStruct;
     }
@@ -161,7 +160,7 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* aScreen )
 * a point. This variable is global to this module only (see above).          *
 * The routine returns true if point was snapped.                             *
 *****************************************************************************/
-bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList, double aScaleFactor )
+bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
 {
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
@@ -367,40 +366,27 @@ SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos )
 
 LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos, SCH_COMPONENT** libpart )
 {
-    SCH_ITEM* DrawStruct;
-    LIB_COMPONENT* Entry;
-    SCH_COMPONENT* schItem = NULL;
-    LIB_PIN* Pin = NULL;
+    SCH_ITEM* item;
+    SCH_COMPONENT* component = NULL;
+    LIB_PIN* pin = NULL;
 
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    for( item = DrawList; item != NULL; item = item->Next() )
     {
-        if( DrawStruct->Type() != SCH_COMPONENT_T )
+        if( item->Type() != SCH_COMPONENT_T )
             continue;
 
-        schItem = (SCH_COMPONENT*) DrawStruct;
-        Entry   = CMP_LIBRARY::FindLibraryComponent( schItem->m_ChipName );
+        component = (SCH_COMPONENT*) item;
 
-        if( Entry == NULL )
-            continue;
+        pin = (LIB_PIN*) component->GetDrawItem( RefPos, LIB_PIN_T );
 
-        /* we use LocateDrawItem to locate pins. but this function suppose a
-         * component.
-         * at 0,0 location
-         * So we must calculate the ref position relative to the component
-         */
-        wxPoint libPos = RefPos - schItem->m_Pos;
-        Pin = (LIB_PIN*) Entry->LocateDrawItem( schItem->m_Multi,
-                                                schItem->m_Convert,
-                                                LIB_PIN_T,
-                                                libPos, schItem->m_Transform );
-        if( Pin )
+        if( pin )
             break;
     }
 
     if( libpart )
-        *libpart = schItem;
+        *libpart = component;
 
-    return Pin;
+    return pin;
 }
 
 

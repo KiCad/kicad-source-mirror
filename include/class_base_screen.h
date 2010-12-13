@@ -66,7 +66,7 @@ class BASE_SCREEN : public EDA_ITEM
 {
     EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
     GRIDS     m_grids;          ///< List of valid grid sizes.
-    EDA_ITEM* m_drawList; ///< Object list for the screen.
+    EDA_ITEM* m_drawList;       ///< Object list for the screen.
 
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */

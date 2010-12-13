@@ -131,8 +131,9 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const;
 };
 
 
@@ -215,7 +216,7 @@ public:
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
@@ -311,7 +312,7 @@ public:
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
@@ -400,7 +401,7 @@ public:
     virtual void Rotate( wxPoint rotationPoint );
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
@@ -486,8 +487,9 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const;
 };
 
 

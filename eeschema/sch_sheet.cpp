@@ -1136,8 +1136,11 @@ void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & SHEET_T ) )
+        return false;
+
     EDA_Rect rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );

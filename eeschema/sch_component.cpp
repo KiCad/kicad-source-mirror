@@ -1361,14 +1361,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function GetBoundaryBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for graphic items and pins.
- * this include only fields defined in library
- * use GetBoundingBox() to include fields in schematic
- */
-EDA_Rect SCH_COMPONENT::GetBoundingBox() const
+EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 {
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
     EDA_Rect       bBox;
@@ -1406,11 +1399,25 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox() const
     bBox.SetHeight( y2 - y1 );
 
     bBox.Offset( m_Pos );
+    return bBox;
+}
 
-    // Include BoundingBoxes of fields
+
+/**
+ * Function GetBoundaryBox
+ * returns the orthogonal, bounding box of this object for display purposes.
+ * This box should be an enclosing perimeter for graphic items and pins.
+ * this include only fields defined in library
+ * use GetBoundingBox() to include fields in schematic
+ */
+EDA_Rect SCH_COMPONENT::GetBoundingBox() const
+{
+    EDA_Rect bBox = GetBodyBoundingBox();
+
+    // Include BoundingBoxes of fields if they are visible and not empty.
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        if( !GetField( ii )->IsVisible() )
+        if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
             continue;
 
         bBox.Merge( GetField( ii )->GetBoundingBox() );
@@ -1441,12 +1448,15 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );
+
     frame->AppendMsgPanel( msg, GetField( VALUE )->m_Text, DARKCYAN );
 
     // Display component reference in library and library
     frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
+
     if( alias->GetName() != root_component->GetName() )
         frame->AppendMsgPanel( _( "Alias of" ), root_component->GetName(), BROWN );
+
     frame->AppendMsgPanel( _( "Library" ), alias->GetLibraryName(), BROWN );
 
     // Display description of the component, and keywords found in lib
@@ -1664,13 +1674,50 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
-    EDA_Rect rect = GetBoundingBox();
+    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
-    rect.Inflate( aAccuracy );
+    if( component == NULL )
+        return NULL;
 
-    return rect.Inside( aPoint );
+    // Calculate the position relative to the component.
+    wxPoint libPosition = aPosition - m_Pos;
+
+    return component->LocateDrawItem( m_Multi, m_Convert, aType, libPosition, m_Transform );
+}
+
+
+bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    EDA_Rect bBox;
+
+    if( aFilter & FIELD_T )
+    {
+        // Test the bounding boxes of fields if they are visible and not empty.
+        for( int ii = 0; ii < GetFieldCount(); ii++ )
+        {
+            if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
+                continue;
+
+            bBox = GetField( ii )->GetBoundingBox();
+            bBox.Inflate( aAccuracy );
+
+            if( bBox.Inside( aPoint ) )
+                return true;
+        }
+    }
+
+    if( aFilter & COMPONENT_T )
+    {
+        bBox = GetBodyBoundingBox();
+        bBox.Inflate( aAccuracy );
+
+        if( bBox.Inside( aPoint ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -1684,4 +1731,20 @@ bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccu
         return rect.Inside( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_COMPONENT::DoIsConnected( const wxPoint& aPosition ) const
+{
+    vector< wxPoint > pts;
+
+    GetConnectionPoints( pts );
+
+    for( size_t i = 0;  i < pts.size();  i++ )
+    {
+        if( pts[i] == aPosition )
+            return true;
+    }
+
+    return false;
 }

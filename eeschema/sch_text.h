@@ -196,7 +196,7 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
@@ -273,6 +273,9 @@ public:
      * @return True if the schematic label loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
 };
 
 
@@ -363,6 +366,9 @@ public:
     virtual void    Mirror_Y( int aYaxis_position );
     virtual void    Mirror_X( int aXaxis_position );
     virtual void    Rotate( wxPoint rotationPoint );
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
 };
 
 
@@ -455,6 +461,9 @@ public:
     virtual void    Mirror_Y( int aYaxis_position );
     virtual void    Mirror_X( int aXaxis_position );
     virtual void    Rotate( wxPoint rotationPoint );
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

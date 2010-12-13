@@ -94,3 +94,12 @@ bool SCH_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
 
     return text.MakeUpper().Find( searchText.MakeUpper() ) != wxNOT_FOUND;
 }
+
+
+bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
+{
+    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+        return false;
+
+    return DoIsConnected( aPosition );
+}

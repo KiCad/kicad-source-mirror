@@ -192,3 +192,13 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
 
     return previousState != IsSelected();
 }
+
+
+bool SCH_MARKER::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & MARKER_T ) )
+        return false;
+
+    return HitTestMarker( aPoint );
+}
+

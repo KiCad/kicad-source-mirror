@@ -246,8 +246,11 @@ void SCH_BUS_ENTRY::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_BUS_ENTRY::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_BUS_ENTRY::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & BUS_ENTRY_T ) )
+        return false;
+
     return TestSegmentHit( aPoint, m_Pos, m_End(), aAccuracy );
 }
 
@@ -421,8 +424,11 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-bool SCH_JUNCTION::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_JUNCTION::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & JUNCTION_T ) )
+        return false;
+
     EDA_Rect rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
@@ -441,6 +447,12 @@ bool SCH_JUNCTION::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccur
         return rect.Inside( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_JUNCTION::DoIsConnected( const wxPoint& aPosition ) const
+{
+    return m_Pos == aPosition;
 }
 
 
@@ -593,8 +605,11 @@ void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_NO_CONNECT::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_NO_CONNECT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & NO_CONNECT_T ) )
+        return false;
+
     int delta = ( ( m_Size.x + g_DrawDefaultLineThickness ) / 2 ) + aAccuracy;
 
     wxPoint dist = aPoint - m_Pos;
@@ -1007,9 +1022,22 @@ void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_LINE::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_LINE::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
-    return TestSegmentHit( aPoint, m_Start, m_End, aAccuracy );
+    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
+        return false;
+
+    if( ( ( aFilter & DRAW_ITEM_T ) && ( m_Layer == LAYER_NOTES ) )
+        || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
+        || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) ) )
+    {
+        if( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS && IsEndPoint( aPoint )
+            || aFilter & WIRE_BUS_ENDPOINTS_ONLY && !IsEndPoint( aPoint )
+            || TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -1023,6 +1051,15 @@ bool SCH_LINE::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy 
         return rect.Inside( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_LINE::DoIsConnected( const wxPoint& aPosition ) const
+{
+    if( m_Layer != LAYER_WIRE && m_Layer != LAYER_BUS )
+        return false;
+
+    return IsEndPoint( aPosition );
 }
 
 
@@ -1219,8 +1256,11 @@ void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_POLYLINE::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_POLYLINE::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
+        return false;
+
     for( size_t i = 0;  i < m_PolyPoints.size() - 1;  i++ )
     {
         if( TestSegmentHit( aPoint, m_PolyPoints[i], m_PolyPoints[i + 1], aAccuracy ) )

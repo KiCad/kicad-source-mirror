@@ -10,6 +10,10 @@
 #include "class_base_screen.h"
 
 
+class LIB_PIN;
+class SCH_COMPONENT;
+
+
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500
 
@@ -106,6 +110,10 @@ public:
      * Clear the state flags of all the items in the screen.
      */
     void ClearDrawingState();
+
+    int CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
+
+    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL );
 
     virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )

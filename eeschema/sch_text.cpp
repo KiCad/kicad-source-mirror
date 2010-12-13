@@ -671,8 +671,11 @@ EDA_Rect SCH_TEXT::GetBoundingBox() const
 }
 
 
-bool SCH_TEXT::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_TEXT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
+    if( !( aFilter & TEXT_T ) )
+        return false;
+
     return TextHitTest( aPoint, aAccuracy );
 }
 
@@ -915,6 +918,15 @@ EDA_Rect SCH_LABEL::GetBoundingBox() const
     EDA_Rect box( wxPoint( x, y ), wxSize( dx, dy ) );
     box.Normalize();
     return box;
+}
+
+
+bool SCH_LABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
 }
 
 
@@ -1358,6 +1370,15 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
 }
 
 
+bool SCH_GLOBALLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
+}
+
+
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_TEXT( pos, text, aType )
 {
@@ -1718,4 +1739,13 @@ void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
     SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
+}
+
+
+bool SCH_HIERLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
 }

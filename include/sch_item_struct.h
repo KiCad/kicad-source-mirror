@@ -17,6 +17,27 @@ class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 
 
+// Schematic item filter mask for hit test objects in schematic editor.
+enum SCH_FILTER_T {
+    COMPONENT_T         = 0x0001,
+    WIRE_T              = 0X0002,
+    BUS_T               = 0x0004,
+    BUS_ENTRY_T         = 0x0008,
+    JUNCTION_T          = 0x0010,
+    DRAW_ITEM_T         = 0x0020,
+    TEXT_T              = 0x0040,
+    LABEL_T             = 0x0080,
+    SHEET_T             = 0x0100,
+    MARKER_T            = 0x0200,
+    NO_CONNECT_T        = 0x0400,
+    SHEET_LABEL_T       = 0x0800,
+    FIELD_T             = 0x1000,
+    EXCLUDE_ENDPOINTS_T = 0x2000,
+    ENDPOINTS_ONLY_T    = 0x4000,
+    NO_FILTER_T         = 0xFFFF
+};
+
+
 enum DANGLING_END_T {
     UNKNOWN = 0,
     WIRE_START_END,
@@ -224,16 +245,27 @@ public:
     void ClearConnections() { m_connections.release(); }
 
     /**
+     * Function IsConnected().
+     * Test \a aPosition to see if it is connected to this schematic object.
+     *
+     * @param aPosition - Position to test for connection.
+     * @return True if connection to \a aPosition exists.
+     */
+    bool IsConnected( const wxPoint& aPoint ) const;
+
+    /**
      * Function HitTest().
      * Test if \a aPoint is contained within the bounding box or on an item.
      *
      * @param aPoint - Point to test.
      * @param aAccuracy - Increase the item bounding box by this amount.
-     * @return True if \aPoint is within the item.
+     * @param aFilter - Mask to provide more granular hit testing.  See enum SCH_FILTER_T.
+     * @return True if \aPoint is within the item and meets the filter criteria.
      */
-    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const
+    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0,
+                  SCH_FILTER_T aFilter = NO_FILTER_T ) const
     {
-        return DoHitTest( aPoint, aAccuracy );
+        return DoHitTest( aPoint, aAccuracy, aFilter );
     }
 
     /**
@@ -257,11 +289,17 @@ public:
      *         http://www.gotw.ca/publications/mill18.htm.
      */
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const { return false; }
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+    {
+        return false;
+    }
+
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
     {
         return false;
     }
+
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const { return false; }
 };
 
 #endif /* SCH_ITEM_STRUCT_H */

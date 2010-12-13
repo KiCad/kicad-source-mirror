@@ -178,7 +178,7 @@ public:
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTestMarker( const wxPoint& ref_pos );
+    bool     HitTestMarker( const wxPoint& ref_pos ) const;
 
     /**
      * Function GetBoundingBoxMarker

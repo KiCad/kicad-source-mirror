@@ -769,7 +769,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         if( item )
             return TRUE;
 
-        pin = LocateAnyPin( screen->GetDrawItems(), pos, &LibItem );
+        pin = screen->GetPin( pos, &LibItem );
 
         if( pin && LibItem )
         {

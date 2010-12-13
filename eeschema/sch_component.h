@@ -12,6 +12,7 @@
 
 
 class SCH_SHEET_PATH;
+class LIB_DRAW_ITEM;
 class LIB_PIN;
 class LIB_COMPONENT;
 
@@ -85,6 +86,8 @@ private:
     wxArrayString m_PathsAndReferences;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
+
+    EDA_Rect GetBodyBoundingBox() const;
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
@@ -367,6 +370,17 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    /**
+     * Function GetDrawItem().
+     * Return the component library item at \a aPosition that is part of this component.
+     *
+     * @param aPosition - Schematic position of the component library object.
+     * @param aType - Type of component library object to find or any if set to TYPE_NOT_INIT.
+     * @return A pointer to the component library object if found, otherwise NULL.
+     */
+    LIB_DRAW_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+
+
 #if defined(DEBUG)
 
     /**
@@ -381,8 +395,9 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const;
 };
 
 
