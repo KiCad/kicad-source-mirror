@@ -1,5 +1,5 @@
 /**
- * @file hotkeys.h
+ * @file pcbnew/hotkeys.h
  * PCBNew hotkeys
  */
 #ifndef _PCBNEW_KOTKEYS_H

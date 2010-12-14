@@ -52,14 +52,14 @@ class TYPE_COLLECTOR;           // outside the DSN namespace
     Since there are so many classes in here, it may be helpful to generate
     the Doxygen directory:
 
-    $ cd <kicadSourceRoot>
+    $ cd &ltkicadSourceRoot&gt
     $ doxygen
 
-    Then you can view the html documentation in the <kicadSourceRoot>/doxygen
+    Then you can view the html documentation in the &ltkicadSourceRoot&gt/doxygen
     directory.  The main class in this file is SPECCTRA_DB and its main
     functions are LoadPCB(), LoadSESSION(), and ExportPCB().
 
-    Wide use is made of boost::ptr_vector<> and std::vector<> template classes.
+    Wide use is made of boost::ptr_vector&lt&gt and std::vector&lt&gt template classes.
     If the contained object is small, then std::vector tends to be used.
     If the contained object is large, variable size, or would require writing
     an assignment operator() or copy constructore, then boost::ptr_vector
@@ -1472,6 +1472,7 @@ public:
 
     /**
      * Constructor CLASS_CLASS
+     * @param aParent - Parent element of the object.
      * @param aType May be either T_class_class or T_region_class_class
      */
     CLASS_CLASS( ELEM* aParent, DSN_T aType ) :

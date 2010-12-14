@@ -96,12 +96,14 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector );
 
+    virtual void Mirror_X( int aXaxis_position );
+
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void Mirror_X( int aXaxis_position );
     virtual void Mirror_Y( int aYaxis_position );
+
     virtual void Rotate( wxPoint rotationPoint );
 
     /**
@@ -112,7 +114,7 @@ public:
      * line.
      *
      * @param aLine - Line to compare.
-     * @retuen True if lines overlap and the line was merged with \a aLine.
+     * @return True if lines overlap and the line was merged with \a aLine.
      */
     bool MergeOverlap( SCH_LINE* aLine );
 

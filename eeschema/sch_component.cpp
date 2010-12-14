@@ -77,8 +77,8 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
 {
     Init( pos );
 
-    m_Multi     = unit;
-    m_Convert   = convert;
+    m_unit      = unit;
+    m_convert   = convert;
     m_ChipName  = libComponent.GetName();
     m_TimeStamp = GetTimeStamp();
 
@@ -118,7 +118,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     if( msg.IsEmpty() )
         msg = wxT( "U" );
 
-    m_PrefixString = msg;
+    m_prefix = msg;
 
     // update the reference -- just the prefix for now.
     msg += wxT( "?" );
@@ -155,8 +155,8 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
 void SCH_COMPONENT::Init( const wxPoint& pos )
 {
     m_Pos     = pos;
-    m_Multi   = 0;  // In multi unit chip - which unit to draw.
-    m_Convert = 0;  // De Morgan Handling
+    m_unit    = 0;  // In multi unit chip - which unit to draw.
+    m_convert = 0;  // De Morgan Handling
 
     // The rotation/mirror transformation matrix. pos normal
     m_Transform = TRANSFORM();
@@ -177,7 +177,37 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
         AddField( field );
     }
 
-    m_PrefixString = wxString( _( "U" ) );
+    m_prefix = wxString( _( "U" ) );
+}
+
+
+void SCH_COMPONENT::SetLibName( const wxString& aName )
+{
+    if( m_ChipName != aName )
+    {
+        m_ChipName = aName;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::SetUnit( int aUnit )
+{
+    if( m_unit != aUnit )
+    {
+        m_unit = aUnit;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::SetConvert( int aConvert )
+{
+    if( m_convert != aConvert )
+    {
+        m_convert = aConvert;
+        SetModified();
+    }
 }
 
 
@@ -185,9 +215,8 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 * Routine to draw the given part at given position, transformed/mirror as    *
 * specified, and in the given drawing mode. Only this one is visible...      *
 *****************************************************************************/
-void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                          const wxPoint& offset, int DrawMode, int Color,
-                          bool DrawPinText )
+void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                          int DrawMode, int Color, bool DrawPinText )
 {
     bool           dummy = FALSE;
 
@@ -197,14 +226,15 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         /* Create a dummy component if the actual component can not be found. */
         dummy = TRUE;
+
         if( DummyCmp == NULL )
             CreateDummyCmp();
+
         Entry = DummyCmp;
     }
 
-    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_Multi,
-                 dummy ? 0 : m_Convert, DrawMode, Color, m_Transform,
-                 DrawPinText, false );
+    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_unit, dummy ? 0 : m_convert,
+                 DrawMode, Color, m_Transform, DrawPinText, false );
 
     SCH_FIELD* field = GetField( REFERENCE );
 
@@ -350,7 +380,7 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
         SetRef( sheet, GetField( REFERENCE )->m_Text );
         return GetField( REFERENCE )->m_Text;
     }
-    return m_PrefixString;
+    return m_prefix;
 }
 
 
@@ -369,6 +399,7 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
     {
         tokenizer.SetString( m_PathsAndReferences[ii], separators );
         h_path = tokenizer.GetNextToken();
+
         if( h_path.Cmp( path ) == 0 )
         {
             // just update the reference text, not the timestamp.
@@ -383,7 +414,7 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
     }
 
     if( notInArray )
-        AddHierarchicalReference( path, ref, m_Multi );
+        AddHierarchicalReference( path, ref, m_unit );
 
     SCH_FIELD* rf = GetField( REFERENCE );
 
@@ -399,13 +430,14 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 
     rf->m_Text = ref;  // for drawing.
 
-    // Reinit the m_PrefixString member if needed
+    // Reinit the m_prefix member if needed
     wxString prefix = ref;
+
     while( prefix.Last() == '?' or isdigit( prefix.Last() ) )
         prefix.RemoveLast();
 
-    if( m_PrefixString != prefix )
-        m_PrefixString = prefix;
+    if( m_prefix != prefix )
+        m_prefix = prefix;
 }
 
 
@@ -422,10 +454,11 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
     string_timestamp.Printf( wxT( "%8.8X" ), aNewTimeStamp );
     string_oldtimestamp.Printf( wxT( "%8.8X" ), m_TimeStamp );
     m_TimeStamp = aNewTimeStamp;
+
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
         m_PathsAndReferences[ii].Replace( string_oldtimestamp.GetData(),
-                                         string_timestamp.GetData() );
+                                          string_timestamp.GetData() );
     }
 }
 
@@ -456,18 +489,16 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
         }
     }
 
-    // if it was not found in m_Paths array, then use m_Multi.
+    // if it was not found in m_Paths array, then use m_unit.
     // this will happen if we load a version 1 schematic file.
-    return m_Multi;
+    return m_unit;
 }
 
 
 /****************************************************************************/
-
 //Set the unit selection, for the given sheet path.
 /****************************************************************************/
-void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet,
-                                      int             aUnitSelection )
+void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     wxString          path = GetPath( aSheet );
 
@@ -497,7 +528,7 @@ void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet,
     }
 
     if( notInArray )
-        AddHierarchicalReference( path, m_PrefixString, aUnitSelection );
+        AddHierarchicalReference( path, m_prefix, aUnitSelection );
 }
 
 
@@ -545,7 +576,7 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
     if( Entry == NULL )
         return NULL;
 
-    return Entry->GetPin( number, m_Multi, m_Convert );
+    return Entry->GetPin( number, m_unit, m_convert );
 }
 
 
@@ -556,8 +587,8 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 {
     EXCHG( m_ChipName, copyitem->m_ChipName );
     EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_Multi, copyitem->m_Multi );
-    EXCHG( m_Convert, copyitem->m_Convert );
+    EXCHG( m_unit, copyitem->m_unit );
+    EXCHG( m_convert, copyitem->m_convert );
 
     TRANSFORM tmp = m_Transform;
     m_Transform = copyitem->m_Transform;
@@ -611,7 +642,7 @@ void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
  */
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 {
-    wxString       defRef    = m_PrefixString;
+    wxString       defRef    = m_prefix;
     bool           KeepMulti = false;
     LIB_COMPONENT* Entry;
     wxString       separators( wxT( " " ) );
@@ -634,17 +665,20 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
     {
         wxString NewHref;
         wxString path;
+
         if( aSheet )
             path = GetPath( aSheet );
+
         for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
         {
             // Break hierarchical reference in path, ref and multi selection:
-            reference_fields = wxStringTokenize( m_PathsAndReferences[ii],
-                                                 separators );
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
+
             if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
             {
                 if( KeepMulti )  // Get and keep part selection
                     multi = reference_fields[2];
+
                 NewHref = reference_fields[0];
                 NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
                 m_PathsAndReferences[ii] = NewHref;
@@ -656,9 +690,8 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
         // Empty strings, but does not free memory because a new annotation
         // will reuse it
         m_PathsAndReferences.Empty();
-        m_Multi = 1;
+        m_unit = 1;
     }
-
 
     // These 2 changes do not work in complex hierarchy.
     // When a clear annotation is made, the calling function must call a
@@ -899,8 +932,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
         }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() )
-                                 << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() ) << ">\n";
 }
 
 
@@ -926,7 +958,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     else
     {
         if( GetField( REFERENCE )->m_Text.IsEmpty() )
-            strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof( Name1 ) );
+            strncpy( Name1, CONV_TO_UTF8( m_prefix ), sizeof( Name1 ) );
         else
             strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
     }
@@ -966,8 +998,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         return false;
 
     /* Generate unit number, convert and time stamp*/
-    if( fprintf( f, "U %d %d %8.8lX\n", m_Multi, m_Convert,
-                 m_TimeStamp ) == EOF )
+    if( fprintf( f, "U %d %d %8.8lX\n", m_unit, m_convert, m_TimeStamp ) == EOF )
         return false;
 
     /* Save the position */
@@ -991,12 +1022,12 @@ bool SCH_COMPONENT::Save( FILE* f ) const
              * Ref is the conventional component reference for this 'path'
              * Part is the conventional component part selection for this 'path'
              */
-            reference_fields = wxStringTokenize( m_PathsAndReferences[ii],
-                                                 delimiters );
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], delimiters );
+
             if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
-                        CONV_TO_UTF8( reference_fields[0] ),
-                        CONV_TO_UTF8( reference_fields[1] ),
-                        CONV_TO_UTF8( reference_fields[2] ) ) == EOF )
+                         CONV_TO_UTF8( reference_fields[0] ),
+                         CONV_TO_UTF8( reference_fields[1] ),
+                         CONV_TO_UTF8( reference_fields[2] ) ) == EOF )
                 return false;
         }
     }
@@ -1013,6 +1044,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     for( unsigned i = 0;  i<MANDATORY_FIELDS;  ++i )
     {
         SCH_FIELD* fld = GetField( i );
+
         if( !fld->m_Text.IsEmpty() )
         {
             if( !fld->Save( f ) )
@@ -1028,12 +1060,13 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     for( unsigned i = MANDATORY_FIELDS;  i<m_Fields.size();  ++i )
     {
         SCH_FIELD* fld = GetField( i );
+
         if( !fld->Save( f ) )
             return false;
     }
 
     /* Unit number, position, box ( old standard ) */
-    if( fprintf( f, "\t%-4d %-4d %-4d\n", m_Multi, m_Pos.x, m_Pos.y ) == EOF )
+    if( fprintf( f, "\t%-4d %-4d %-4d\n", m_unit, m_Pos.x, m_Pos.y ) == EOF )
         return false;
 
     if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
@@ -1056,7 +1089,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     char*          ptcar;
     wxString       fieldName;
 
-    m_Convert = 1;
+    m_convert = 1;
 
     if( ((char*)aLine)[0] == '$' )
     {
@@ -1081,6 +1114,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 Name1[ii] = ' ';
 
         m_ChipName = CONV_FROM_UTF8( Name1 );
+
         if( !newfmt )
             GetField( VALUE )->m_Text = CONV_FROM_UTF8( Name1 );
     }
@@ -1095,6 +1129,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( strcmp( Name2, NULL_STRING ) != 0 )
     {
         bool isDigit = false;
+
         for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
         {
             if( Name2[ii] == '~' )
@@ -1114,19 +1149,20 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         Name1[ii] = 0; //just in case
         int  jj;
+
         for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
             ;
 
         if( jj == ii )
         {
             // blank string.
-            m_PrefixString = wxT( "U" );
+            m_prefix = wxT( "U" );
         }
         else
         {
-            m_PrefixString = CONV_FROM_UTF8( &Name1[jj] );
+            m_prefix = CONV_FROM_UTF8( &Name1[jj] );
 
-            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_PrefixString));
+            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_prefix));
         }
 
         if( !newfmt )
@@ -1152,7 +1188,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( ((char*)aLine)[0] == 'U' )
         {
-            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_Multi, &m_Convert, &m_TimeStamp );
+            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_unit, &m_convert, &m_TimeStamp );
         }
         else if( ((char*)aLine)[0] == 'P' )
         {
@@ -1191,7 +1227,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             // copy the multi, if exists
             ii = ReadDelimitedText( Name1, ptcar, 255 );
             if( Name1[0] == 0 )  // Nothing read, put a default value
-                sprintf( Name1, "%d", m_Multi );
+                sprintf( Name1, "%d", m_unit );
             int multi = atoi( Name1 );
             if( multi < 0 || multi > 25 )
                 multi = 1;
@@ -1325,7 +1361,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             break;
     }
 
-    if( sscanf( ((char*)aLine), "%d %d %d", &m_Multi, &m_Pos.x, &m_Pos.y ) != 3 )
+    if( sscanf( ((char*)aLine), "%d %d %d", &m_unit, &m_Pos.x, &m_Pos.y ) != 3 )
     {
         aErrorMsg.Printf( wxT( "Component unit & pos error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1371,7 +1407,7 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
         return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
     /* Get the basic Boundary box */
-    bBox = Entry->GetBoundingBox( m_Multi, m_Convert );
+    bBox = Entry->GetBoundingBox( m_unit, m_convert );
     x0 = bBox.GetX();
     xm = bBox.GetRight();
 
@@ -1571,7 +1607,7 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
     if( Entry )
     {
         LIB_PIN_LIST pinList;
-        Entry->GetPins( pinList, m_Multi, m_Convert );
+        Entry->GetPins( pinList, m_unit, m_convert );
 
         // Search for a match in pinList
         for( unsigned ii = 0; ii < pinList.size(); ii ++ )
@@ -1611,10 +1647,10 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     {
         wxASSERT( Pin->Type() == LIB_PIN_T );
 
-        if( Pin->GetUnit() && m_Multi && ( m_Multi != Pin->GetUnit() ) )
+        if( Pin->GetUnit() && m_unit && ( m_unit != Pin->GetUnit() ) )
             continue;
 
-        if( Pin->GetConvert() && m_Convert && ( m_Convert != Pin->GetConvert() ) )
+        if( Pin->GetConvert() && m_convert && ( m_convert != Pin->GetConvert() ) )
             continue;
 
         DANGLING_END_ITEM item( PIN_END, Pin );
@@ -1663,9 +1699,10 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
                      wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
 
         // Skip items not used for this part.
-        if( m_Multi && pin->GetUnit() && ( pin->GetUnit() != m_Multi ) )
+        if( m_unit && pin->GetUnit() && ( pin->GetUnit() != m_unit ) )
             continue;
-        if( m_Convert && pin->GetConvert() && ( pin->GetConvert() != m_Convert ) )
+
+        if( m_convert && pin->GetConvert() && ( pin->GetConvert() != m_convert ) )
             continue;
 
         // Calculate the pin position relative to the component position and orientation.
@@ -1684,7 +1721,7 @@ LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aTy
     // Calculate the position relative to the component.
     wxPoint libPosition = aPosition - m_Pos;
 
-    return component->LocateDrawItem( m_Multi, m_Convert, aType, libPosition, m_Transform );
+    return component->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_Transform );
 }
 
 

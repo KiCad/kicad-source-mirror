@@ -167,11 +167,6 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
 }
 
 
-/**
- * Function Push
- * store (push) aSheet in list
- * @param aSheet = pointer to the SCH_SHEET to store in list
- */
 void SCH_SHEET_PATH::Push( SCH_SHEET* aSheet )
 {
     if( m_numSheets > DSLSZ )
@@ -263,8 +258,9 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
             component->GetField( REFERENCE )->m_Text = component->GetRef( this );
-            component->m_Multi = component->GetUnitSelection( this );
+            component->SetUnit( component->GetUnitSelection( this ) );
         }
+
         t = t->Next();
     }
 }

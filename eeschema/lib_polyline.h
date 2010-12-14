@@ -65,18 +65,18 @@ public:
      /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param aRefPos - A wxPoint to test
+     * @param aPosition - A wxPoint to test
      * @return - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aRefPos );
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
-     * @param aPosRef = a wxPoint to test
+     * @param aPosition = a wxPoint to test
      * @param aThreshold = max distance to a segment
      * @param aTransform = the transform matrix
-     * @return true if the point aPosRef is near a segment
+     * @return true if the point \a aPosition is near a segment
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * @return the boundary box for this, in library coordinates

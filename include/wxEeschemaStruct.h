@@ -362,13 +362,21 @@ public:
     /**
      * Function ProcessStuffFile
      * gets footprint info from each line in the Stuff File by Ref Desg
+     *
+     * Read a "stuff" file created by cvpcb.
+     * That file has lines like:
+     * comp = "C1" module = "CP6"
+     * comp = "C2" module = "C1"
+     * comp = "C3" module = "C1"
+     * "comp =" gives the component reference
+     * "module =" gives the footprint name
+     *
      * @param aFilename The file to read from.
-     * @param aSetFielsAttributeToVisible = true to set the footprint field
-     *                                       flag to visible
+     * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
      * @return bool - true if success, else true.
      */
     bool            ProcessStuffFile( FILE* aFilename,
-                                      bool  aSetFielsAttributeToVisible );
+                                      bool  aSetFieldsAttributeToVisible );
 
     bool            SaveEEFile( SCH_SCREEN* screen, int FileSave );
 
@@ -591,7 +599,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int  ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace( )

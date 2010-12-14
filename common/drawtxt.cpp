@@ -500,7 +500,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 /**
  * Function PlotGraphicText
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
- *  @param aFormat_plot = plot format (PLOT_FORMAT_POST, PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER)
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (enum EDA_Colors) = text color
  *  @param aText = text to draw
@@ -514,7 +513,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
-/******************************************************************************************/
 void PLOTTER::text( const wxPoint&              aPos,
                     enum EDA_Colors             aColor,
                     const wxString&             aText,
@@ -525,7 +523,6 @@ void PLOTTER::text( const wxPoint&              aPos,
                     int                         aWidth,
                     bool                        aItalic,
                     bool                        aBold )
-/******************************************************************************************/
 {
     if( aWidth == 0 && aBold )      // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );

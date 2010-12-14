@@ -88,8 +88,8 @@ public:
      * Draws the zone outline.
      * @param panel = current Draw Panel
      * @param DC = current Device Context
-     * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
+     * @param offset = Draw offset (usually wxPoint(0,0))
      */
     void     Draw( WinEDA_DrawPanel* panel,
                    wxDC*             DC,
@@ -224,7 +224,7 @@ public:
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none, corner index in .corner <vector>
+     * @return -1 if none, corner index in .corner &ltvector&gt
      * @param refPos : A wxPoint to test
      */
     int  HitTestForCorner( const wxPoint& refPos );
@@ -232,7 +232,7 @@ public:
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none,  or index of the starting corner in .corner <vector>
+     * @return -1 if none,  or index of the starting corner in .corner &ltvector&gt
      * @param refPos : A wxPoint to test
      */
     int  HitTestForEdge( const wxPoint& refPos );
@@ -264,10 +264,9 @@ public:
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
      * a list of SEGZONE items is built, line per line
-     * @param aFrame = reference to the main frame
      * @return number of segments created
      */
-    int  Fill_Zone_Areas_With_Segments( );
+    int  Fill_Zone_Areas_With_Segments();
 
 
     /* Geometric transformations: */
@@ -298,7 +297,7 @@ public:
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * (like Mirror() but changes layer)
-     * @param const wxPoint& aCentre - the rotation point.
+     * @param aCentre - the rotation point.
      */
     virtual void Flip( const wxPoint& aCentre );
 

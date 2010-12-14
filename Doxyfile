@@ -83,7 +83,6 @@ INPUT                  = kicad \
                          3d-viewer \
                          common \
                          gerbview \
-                         share \
                          include \
                          polygon \
                          potrace

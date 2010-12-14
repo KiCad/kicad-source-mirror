@@ -84,19 +84,15 @@ static bool SortByXValues( const int& a, const int &b)
     return a < b;
 }
 
-/***********************************************************************************/
-int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments( )
-/***********************************************************************************/
-
 /**
  * Function Fill_Zone_Areas_With_Segments
- *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
+ * Fill sub areas in a zone with segments with m_ZoneMinThickness width
  * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
  * all intersecting points with the horizontal infinite line and polygons to fill are calculated
  * a list of SEGZONE items is built, line per line
- * @param aFrame = reference to the main frame
  * @return number of segments created
  */
+int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
 {
     int      ics, ice;
     int count = 0;

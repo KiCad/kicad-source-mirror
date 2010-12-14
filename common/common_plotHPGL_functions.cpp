@@ -170,11 +170,10 @@ void HPGL_PLOTTER::set_dash( bool dashed )
  * Function Plot a filled segment (track)
  * @param start = starting point
  * @param end = ending point
- * @param aWidth = segment width (thickness)
- * @param aPlotMode = FILLED, SKETCH ..
+ * @param width = segment width (thickness)
+ * @param tracemode = FILLED, SKETCH ..
  */
-void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
-                                  GRTraceMode tracemode )
+void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width, GRTraceMode tracemode )
 {
     wxASSERT( output_file );
     wxPoint center;

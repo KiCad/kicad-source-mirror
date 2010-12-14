@@ -209,7 +209,7 @@ public:
      * Checks \a aComponent for name conflict in the library.
      *
      * @param aComponent - The component to check.
-     * @erturn True if a conflict exists.  Otherwise false.
+     * @return True if a conflict exists.  Otherwise false.
      */
     bool Conflicts( LIB_COMPONENT* aComponent );
 
@@ -413,8 +413,8 @@ public:
      * inserts a component library into the library list.
      *
      * @param aFileName - File name object of component library.
-     * @param aErrerMsg - Error message if the component library failed to load.
-     * @param aIteratir - Iterator to insert library in front of.
+     * @param aErrorMsg - Error message if the component library failed to load.
+     * @param aIterator - Iterator to insert library in front of.
      * @return True if library loaded properly otherwise false.
      */
     static bool AddLibrary( const wxFileName& aFileName, wxString& aErrorMsg,
@@ -456,7 +456,7 @@ public:
      * A component object will always be returned.  If the entry found
      * is an alias.  The root component will be found and returned.
      *
-     * @param aCompoentName - Name of component to search for.
+     * @param aComponentName - Name of component to search for.
      * @param aLibraryName - Name of the library to search for component.
      * @return The component object if found, otherwise NULL.
      */

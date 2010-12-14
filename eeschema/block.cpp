@@ -874,14 +874,14 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
 
     if( aSearchFirst )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->GetLibName() );
 
         if( Entry == NULL )
             return NULL;
 
         Pin         = Entry->GetNextPin();
-        Multi       = aDrawLibItem->m_Multi;
-        convert     = aDrawLibItem->m_Convert;
+        Multi       = aDrawLibItem->GetUnit();
+        convert     = aDrawLibItem->GetConvert();
         CmpPosition = aDrawLibItem->m_Pos;
         transform   = aDrawLibItem->m_Transform;
     }

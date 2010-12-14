@@ -742,8 +742,9 @@ void WinEDA_BasePcbFrame::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 
 /**
  * Function Test_1_Net_Ratsnest
- *  Compute the ratsnest relative to the net "net_code"
- *  @param ref_netcode = netcode used to compute the ratsnest.
+ * Compute the ratsnest relative to the net "net_code"
+ * @param DC - Device context to draw on.
+ * @param ref_netcode = netcode used to compute the ratsnest.
  */
 int WinEDA_BasePcbFrame::Test_1_Net_Ratsnest( wxDC* DC, int ref_netcode )
 {

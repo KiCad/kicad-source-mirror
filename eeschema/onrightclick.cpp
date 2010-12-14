@@ -253,7 +253,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     LIB_ALIAS*     libEntry;
     LIB_COMPONENT* libComponent = NULL;
 
-    libEntry = CMP_LIBRARY::FindLibraryEntry( Component->m_ChipName );
+    libEntry = CMP_LIBRARY::FindLibraryEntry( Component->GetLibName() );
 
     if( libEntry )
         libComponent = libEntry->GetComponent();

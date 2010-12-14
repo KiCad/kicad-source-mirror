@@ -512,7 +512,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* 
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
         if( !entry )
             continue;
 
@@ -563,7 +563,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
         if( !entry )
             continue;
@@ -585,7 +585,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
         {
             LIB_PIN_LIST pins;      // constructed once here
 
-            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->m_Convert );
+            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
@@ -617,7 +617,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
  * It also provides some insulation from a possible change in XML library.
  *
  * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
- * @param aContent is optional, and if given is the text to include in a child
+ * @param aTextualContent is optional, and if given is the text to include in a child
  *   of the returned node, and has type wxXML_TEXT_NODE.
  */
 static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
@@ -996,10 +996,10 @@ XNODE* EXPORT_HELP::makeGenericComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
             if( entry )
                 xlibsource->AddAttribute( sLib, entry->GetLibrary()->GetLogicalName() );
-            xlibsource->AddAttribute( sPart, comp->m_ChipName );
+            xlibsource->AddAttribute( sPart, comp->GetLibName() );
 
             XNODE* xsheetpath;
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
@@ -1133,7 +1133,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( out, "Value=%s\n", CONV_TO_UTF8( field ) );
 
-            field = comp->m_ChipName;
+            field = comp->GetLibName();
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( out, "Libref=%s\n", CONV_TO_UTF8( field ) );
 
@@ -1363,7 +1363,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
             // Get the Component FootprintFilter and put the component in
             // cmpList if filter is present
             LIB_COMPONENT* entry =
-                CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+                CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
             if( entry )
             {
@@ -1398,7 +1398,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
 
             if( with_pcbnew )  // Add the lib name for this component
             {
-                field = comp->m_ChipName;
+                field = comp->GetLibName();
                 field.Replace( wxT( " " ), wxT( "_" ) );
                 ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( field ) );
             }
@@ -1439,7 +1439,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
         {
             SCH_COMPONENT* comp = cmpList[ii].m_RootCmp;
 
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
             ref = cmpList[ii].GetRef();
 
@@ -1588,7 +1588,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
                 if( pin->GetUnit() && pin->GetUnit() != unit2 )
                     continue;
 
-                if( pin->GetConvert() && pin->GetConvert() != comp2->m_Convert )
+                if( pin->GetConvert() && pin->GetConvert() != comp2->GetConvert() )
                     continue;
 
                 // A suitable pin is found: add it to the current list

@@ -626,7 +626,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
         case SCH_COMPONENT_T:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
             if( Entry == NULL )
                 break;
 
@@ -638,7 +638,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                     ( pin->GetUnit() != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
-                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->m_Convert ) )
+                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->GetConvert() ) )
                     continue;
 
                 wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->GetPosition() ) +

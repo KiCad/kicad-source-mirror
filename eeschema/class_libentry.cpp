@@ -1351,17 +1351,7 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
     return NULL;
 }
 
-/**
- * Function HitTest (overlaid)
- * @return true if the point aPosRef is near this object
- * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half
- *                     thickness of a line)
- * @param aTransform = the transform matrix
- *
- * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
- *                         Otherwise NULL.
- */
+
 LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
                                               const wxPoint& aPoint, const TRANSFORM& aTransform )
 {

@@ -134,6 +134,11 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
  * Update Reference, value and "TIME STAMP"
  * @param aNetlistFullFilename = netlist file name (*.net)
  * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+ * @param aMessageWindow  - Please document me.
+ * @param aChangeFootprint - Please document me.
+ * @param aDeleteBadTracks - Please document me.
+ * @param aDeleteExtraFootprints - Please document me.
+ * @param aSelect_By_Timestamp - Please document me.
  * @return true if Ok
  * only the netlist will be used
  *

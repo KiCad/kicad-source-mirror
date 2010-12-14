@@ -22,10 +22,11 @@
  * returns a wxChar* to the actual character data within a wxString, and is
  * helpful for passing strings to wxString::Printf(wxT("%s"), GetChars(wxString) )
  * <p>
- * wxChar is defined to be <ul>
+ * wxChar is defined to be
+ * <ul>
  * <li> standard C style char when wxUSE_UNICODE==0 </li>
  * <li> wchar_t when wxUSE_UNICODE==1 (the default). </li>
- * <ul>
+ * </ul>
  * i.e. it depends on how the wxWidgets library was compiled.  There was a period
  * during the development of wxWidgets 2.9 when GetData() was missing, so this
  * function was used to provide insulation from that design change.  It may

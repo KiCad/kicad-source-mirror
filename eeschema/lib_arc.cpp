@@ -157,12 +157,6 @@ bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPoint A wxPoint to test in eeschema space
- * @return bool - true if a hit, else false
- */
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
@@ -174,19 +168,12 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
     return HitTest( aRefPoint, mindist, DefaultTransform );
 }
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near this object
- * @param aRefPoint = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness
- *                     of a line)
- * @param aTransMat = the transform matrix
- */
-bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM& aTransform )
+
+bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
 
     // TODO: use aTransMat to calculates parameters
-    wxPoint relativePosition = aReferencePoint;
+    wxPoint relativePosition = aPosition;
 
     NEGATE( relativePosition.y );       // reverse Y axis
 

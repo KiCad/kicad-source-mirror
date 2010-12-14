@@ -190,7 +190,7 @@ public:
     /**
      * Function Move
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     virtual void Move(const wxPoint& aMoveVector)
     {

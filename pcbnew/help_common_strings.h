@@ -1,5 +1,5 @@
 /**
- * @file help_common_strings.h
+ * @file pcbnew/help_common_strings.h
  * strings common to toolbars and menubar
  */
 

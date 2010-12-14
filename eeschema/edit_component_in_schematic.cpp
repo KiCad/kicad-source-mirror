@@ -66,7 +66,7 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
     m_Multiflag = 0;
     if( aField->m_FieldId == REFERENCE )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
         if( Entry  != NULL )
         {
@@ -103,7 +103,7 @@ void SCH_EDIT_FRAME::EditCmpFieldText( SCH_FIELD* Field, wxDC* DC )
 
     if( fieldNdx == VALUE )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
         if( Entry && Entry->IsPower() )
         {
@@ -116,7 +116,7 @@ modified!\nYou must create a new power"  ) );
     flag = 0;
     if( fieldNdx == REFERENCE )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
         if( Entry != NULL )
         {
@@ -255,7 +255,7 @@ void SCH_EDIT_FRAME::RotateCmpField( SCH_FIELD* Field, wxDC* DC )
     if( fieldNdx == REFERENCE )
     {
         Entry = CMP_LIBRARY::FindLibraryComponent(
-            ( (SCH_COMPONENT*) Field->GetParent() )->m_ChipName );
+            ( (SCH_COMPONENT*) Field->GetParent() )->GetLibName() );
 
         if( Entry != NULL )
         {
@@ -292,7 +292,7 @@ void SCH_EDIT_FRAME::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Cmp == NULL )
         return;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
     if( Entry == NULL )
         return;
@@ -339,7 +339,7 @@ void SCH_EDIT_FRAME::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Cmp == NULL )
         return;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
     if( Entry == NULL )
         return;
@@ -381,7 +381,7 @@ void SCH_EDIT_FRAME::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC )
     if( Cmp == NULL )
         return;
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
     if( Entry == NULL )
         return;

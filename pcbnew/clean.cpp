@@ -629,7 +629,6 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
  * When such a bad segment is found, mark it as needing to be removed.
  * and remove all tracks having at least one flagged segment.
  * @param aDC = the current device context (can be NULL)
- * @param aDisplayActivity = true to display activity on the frame status bar and message panel
  * @return true if any change is made
  */
 bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC )

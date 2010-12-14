@@ -89,9 +89,8 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
  * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half
- *                     thickness of a line)
- * @param aTransMat = the transform matrix
+ * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aTransform = the transform matrix
  */
 bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {

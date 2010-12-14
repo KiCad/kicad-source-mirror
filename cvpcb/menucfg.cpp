@@ -1,5 +1,5 @@
 /**
- * @file menubar.cpp
+ * @file ./menucfg.cpp
  * (Re)Create the CvPCB main MenuBar
  */
 #include "fctsys.h"

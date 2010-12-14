@@ -205,7 +205,7 @@ public:
 
     /**
      * Function DrawGbrPoly
-     * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
+     * a helper function used to draw the polygon stored in m_PolyCorners
      */
     void DrawGbrPoly( EDA_Rect* aClipBox,
                       wxDC* aDC, int aColor,

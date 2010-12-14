@@ -297,6 +297,7 @@ public:
     /**
      * Function SetZoom
      * adjusts the current zoom factor
+     * @param coeff - Zoom coefficient.
      */
     bool        SetZoom( int coeff );
 
@@ -305,7 +306,7 @@ public:
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void        SetZoomList( const wxArrayInt& zoomlist );
+    void        SetZoomList( const wxArrayInt& aZoomList );
 
     int         Scale( int coord );
     double      Scale( double coord );

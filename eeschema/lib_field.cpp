@@ -348,26 +348,13 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test, in Field coordinate system
- * @return bool - true if a hit, else false
- */
-bool LIB_FIELD::HitTest( const wxPoint& refPos )
+bool LIB_FIELD::HitTest( const wxPoint& aPosition )
 {
-    return HitTest( refPos, 0, DefaultTransform );
+    return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near this object
- * @param aPosRef = a wxPoint to test
- * @param aThreshold =  unused here (TextHitTest calculates its threshold )
- * @param aTransMat = the transform matrix
- */
-bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_FIELD::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     int extraCharCount = 0;
 
@@ -398,7 +385,7 @@ bool LIB_FIELD::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTran
     int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
     EXCHG( m_Orient, orient );
 
-    bool hit = TextHitTest(aPosRef);
+    bool hit = TextHitTest( aPosition );
 
     EXCHG( m_Orient, orient );
     m_Pos = tmp;
@@ -420,25 +407,20 @@ LIB_DRAW_ITEM* LIB_FIELD::DoGenCopy()
 }
 
 
-/**
- * Function Copy
- * copy parameters of this to Target. Pointers are not copied
- * @param Target = the LIB_FIELD to set with "this" values
- */
-void LIB_FIELD::Copy( LIB_FIELD* Target ) const
+void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 {
-    Target->SetParent( m_Parent );
-    Target->m_Pos       = m_Pos;
-    Target->m_Size      = m_Size;
-    Target->m_Thickness     = m_Thickness;
-    Target->m_Orient    = m_Orient;
-    Target->m_Attributs = m_Attributs;
-    Target->m_Text      = m_Text;
-    Target->m_name      = m_name;
-    Target->m_HJustify  = m_HJustify;
-    Target->m_VJustify  = m_VJustify;
-    Target->m_Italic    = m_Italic;
-    Target->m_Bold      = m_Bold;
+    aTarget->SetParent( m_Parent );
+    aTarget->m_Pos       = m_Pos;
+    aTarget->m_Size      = m_Size;
+    aTarget->m_Thickness = m_Thickness;
+    aTarget->m_Orient    = m_Orient;
+    aTarget->m_Attributs = m_Attributs;
+    aTarget->m_Text      = m_Text;
+    aTarget->m_name      = m_name;
+    aTarget->m_HJustify  = m_HJustify;
+    aTarget->m_VJustify  = m_VJustify;
+    aTarget->m_Italic    = m_Italic;
+    aTarget->m_Bold      = m_Bold;
 }
 
 

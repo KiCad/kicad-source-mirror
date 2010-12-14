@@ -41,7 +41,7 @@ class PCB_LAYER_WIDGET;
 
 
 /**
- * @info see also class WinEDA_BasePcbFrame: Basic class for pcbnew and gerbview.
+ * See also class WinEDA_BasePcbFrame(): Basic class for pcbnew and gerbview.
  */
 
 
@@ -184,7 +184,7 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void     SetGridVisibility(bool aVisible);
+    virtual void     SetGridVisibility( bool aVisible );
 
     /**
      * Function GetGridColor() , virtual
@@ -419,9 +419,8 @@ public:
      *commands like move
      */
     virtual void     SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                        UndoRedoOpType aTypeCommand,
-                                        const wxPoint& aTransformPoint =
-                                            wxPoint( 0, 0 ) );
+                                         UndoRedoOpType aTypeCommand,
+                                         const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -433,9 +432,8 @@ public:
      *commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                    UndoRedoOpType aTypeCommand,
-                                    const wxPoint& aTransformPoint =
-                                        wxPoint( 0, 0 ) );
+                                     UndoRedoOpType aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function PutDataInPreviousState
@@ -510,14 +508,12 @@ public:
      * Uses  GetScreen()->m_BlockLocate
      * select items within the selected block.
      * selected items are put in the pick list
-     * @param none
      */
     void Block_SelectItems();
 
     /**
      * Function Block_Delete
      * deletes all items within the selected block.
-     * @param none
      */
     void Block_Delete();
 
@@ -525,7 +521,6 @@ public:
      * Function Block_Rotate
      * Rotate all items within the selected block.
      * The rotation center is the center of the block
-     * @param none
      */
     void Block_Rotate();
 
@@ -533,7 +528,6 @@ public:
      * Function Block_Flip
      * Flip items within the selected block.
      * The flip center is the center of the block
-     * @param none
      */
     void Block_Flip();
 
@@ -541,15 +535,13 @@ public:
      * Function Block_Move
      * move all items within the selected block.
      * New location is determined by the current offset from the selected
-     *block's original location.
-     * @param none
+     * block's original location.
      */
     void Block_Move();
 
     /**
      * Function Block_Mirror_X
      * mirrors all items within the currently selected block in the X axis.
-     * @param none
      */
     void Block_Mirror_X();
 
@@ -558,7 +550,6 @@ public:
      * Duplicate all items within the selected block.
      * New location is determined by the current offset from the selected
      * block's original location.
-     * @param none
      */
     void Block_Duplicate();
 
@@ -595,10 +586,10 @@ public:
     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
 
-
     /**
      * Function ReadPcbFile
-     * reads a board file  <file>.brd
+     * reads a board file  &ltfile&gt.brd
+     * @param File - The file to read from.
      * @param Append if 0: a previously loaded board is deleted before loading
      *               the file else all items of the board file are added to the
      *               existing board
@@ -659,7 +650,7 @@ public:
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString & aFullFileName, double aScale,
-                    bool aExport3DFiles, const wxString & a3D_Subdir );
+                          bool aExport3DFiles, const wxString & a3D_Subdir );
 
     /**
      * Function ExporttoSPECCTRA
@@ -717,15 +708,12 @@ public:
     // Graphic Segments type DRAWSEGMENT
     void       Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
     void       Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
-    void       InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem,
-                                                   wxDC*        aDC );
+    void       InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
 
     // Footprint edition (see also WinEDA_BasePcbFrame)
     void       InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
     void       StartMove_Module( MODULE* module, wxDC* DC );
-    bool       Delete_Module( MODULE* module,
-                              wxDC*   DC,
-                              bool    aAskBeforeDeleting );
+    bool       Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting );
     void       Change_Side_Module( MODULE* Module, wxDC* DC );
 
     void       InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
@@ -800,8 +788,7 @@ public:
      * @param aTrack : bool true to modify tracks
      * @param aVia : bool true to modify vias
      */
-    bool   Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack,
-                                                         bool aVia );
+    bool   Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia );
 
     /**
      * Function Change_Net_Tracks_And_Vias_Sizes
@@ -811,8 +798,7 @@ public:
      * @param aUseNetclassValue : bool. True to use netclass values, false to
      *                            use current values
      */
-    bool   Change_Net_Tracks_And_Vias_Sizes( int  aNetcode,
-                                             bool aUseNetclassValue );
+    bool   Change_Net_Tracks_And_Vias_Sizes( int  aNetcode, bool aUseNetclassValue );
 
     /**
      * Function Edit_Track_Width
@@ -976,11 +962,9 @@ public:
      * Function Start_Move_Zone_Corner
      * Prepares a drag edge in an existing zone outline,
      */
-    void Start_Move_Zone_Drag_Outline_Edge(
-        wxDC* DC,
-        ZONE_CONTAINER*
-              zone_container,
-        int   corner_id );
+    void Start_Move_Zone_Drag_Outline_Edge( wxDC*            DC,
+                                            ZONE_CONTAINER* zone_container,
+                                            int             corner_id );
 
     /**
      * Function End_Move_Zone_Corner_Or_Outlines
@@ -988,10 +972,7 @@ public:
      * @param DC = current Device Context (can be NULL)
      * @param zone_container: the given zone
      */
-    void End_Move_Zone_Corner_Or_Outlines(
-        wxDC* DC,
-        ZONE_CONTAINER*
-              zone_container );
+    void End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     /**
      * Function End_Move_Zone_Corner_Or_Outlines
@@ -1019,16 +1000,14 @@ public:
      * @param DC = current Device Context (can be NULL)
      * @param zone_container: the given zone to move
      */
-    void         Start_Move_Zone_Outlines( wxDC*           DC,
-                                           ZONE_CONTAINER* zone_container );
+    void         Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Target handling
     MIREPCB*     Create_Mire( wxDC* DC );
     void         Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
     void         StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );
     void         Place_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         InstallMireOptionsFrame( MIREPCB*       MirePcb,
-                                          wxDC*          DC );
+    void         InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
@@ -1037,9 +1016,8 @@ public:
     void         Delete_Drawings_All_Layer( int aLayer );
 
     // Dimension handling:
-    void         Install_Edit_Dimension( DIMENSION*      Dimension,
-                                        wxDC*          DC );
-    DIMENSION*    Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
+    void         Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC );
+    DIMENSION*   Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
     void         Delete_Dimension( DIMENSION* Dimension, wxDC* DC );
 
 
@@ -1071,8 +1049,7 @@ public:
      *  }
      * #End
      */
-    bool ReadPcbNetlist(
-                         const wxString&  aNetlistFullFilename,
+    bool ReadPcbNetlist( const wxString&  aNetlistFullFilename,
                          const wxString&  aCmpFullFileName,
                          wxTextCtrl*      aMessageWindow,
                          bool             aChangeFootprint,

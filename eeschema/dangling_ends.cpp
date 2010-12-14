@@ -55,6 +55,7 @@ void SCH_EDIT_FRAME::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
  * Test if point pos is on a pin end.
  *
  * @param DrawList = List of SCH_ITEMs to check.
+ * @param pos - Position of pin end to locate.
  * @return a LIB_PIN pointer to the located pin or NULL if no pin was found.
  */
 LIB_PIN* SCH_EDIT_FRAME::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )

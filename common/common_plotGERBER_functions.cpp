@@ -20,6 +20,7 @@
  * Set the plot offset for the current plotting
  * @param aOffset = plot offset
  * @param aScale = coordinate scale (scale coefficient for coordinates)
+ * @param aMirror - Mirror plot if true.
  */
 void GERBER_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
@@ -298,10 +299,9 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill,
  * @param aCornersCount = number of corners
  * @param aCoord = buffer of corners coordinates
  * @param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
- * @param aCoord = buffer of corners coordinates
+ * @param aWidth = Width of the line to plot.
  */
-void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill,
-                           int aWidth )
+void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWidth )
 {
     wxASSERT( output_file );
     wxPoint pos, startpos;

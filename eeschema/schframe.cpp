@@ -432,9 +432,9 @@ int SCH_EDIT_FRAME::BestZoom()
  * heierarchy.
  * because in complex hierarchies a sheet and a SCH_SCREEN is used more than
  * once
- * Name is <root sheet filename>-<sheet path>
+ * Name is &ltroot sheet filename&gt-&ltsheet path&gt
  * and has no extension.
- * However if filename is too long name is <sheet filename>-<sheet number>
+ * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
  */
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {

@@ -517,13 +517,7 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool LIB_PIN::HitTest( const wxPoint& aRefPos )
+bool LIB_PIN::HitTest( const wxPoint& aPosition )
 {
     int mindist = m_width ? m_width / 2 : g_DrawDefaultLineThickness / 2;
 
@@ -531,23 +525,16 @@ bool LIB_PIN::HitTest( const wxPoint& aRefPos )
     if( mindist < 3 )
         mindist = 3;        // = 3 mils
 
-    return HitTest( aRefPos, mindist, DefaultTransform );
+    return HitTest( aPosition, mindist, DefaultTransform );
 }
 
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near a pin
- * @param aRefPos = a wxPoint to test
- * @param aThreshold = max distance to a segment
- * @param aTransMat = the transform matrix
- */
-bool LIB_PIN::HitTest( wxPoint aRefPos, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint pinPos = aTransform.TransformCoordinate( m_position );
     wxPoint pinEnd = aTransform.TransformCoordinate( ReturnPinEndPoint() );
 
-    return TestSegmentHit( aRefPos, pinPos, pinEnd, aThreshold );
+    return TestSegmentHit( aPosition, pinPos, pinEnd, aThreshold );
 }
 
 
@@ -1502,12 +1489,6 @@ wxPoint LIB_PIN::ReturnPinEndPoint() const
 }
 
 
-/**
- * Function ReturnPinDrawOrient
- * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
- *  according to its orientation and the matrix transform (rot, mirror) TransMat
- * @param  TransMat = transform matrix
- */
 int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform )
 {
     int     orient;

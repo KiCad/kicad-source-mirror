@@ -29,7 +29,7 @@
 #include "base_struct.h"
 
 /**
- * @info Undo Redo considerations:
+ * Undo Redo considerations:
  * Basically we have 3 cases
  *      New item
  *      Deleted item

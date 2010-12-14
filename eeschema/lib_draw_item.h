@@ -191,7 +191,6 @@ public:
      * Write draw item object to \a aFile in "*.lib" format.
      *
      * @param aFile - The file to write to.
-     * @param aErrorMsg - Error message if write fails.
      * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) = 0;
@@ -216,13 +215,13 @@ public:
     }
 
     /**
-     * @param aPosRef - a wxPoint to test
+     * @param aPosition - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransform - the transform matrix
-     * @return - true if the point aPosRef is near this object
+     * @return - true if the point \a aPosition is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform ) = 0;
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform ) = 0;
 
    /**
      * @return the boundary box for this, in library coordinates

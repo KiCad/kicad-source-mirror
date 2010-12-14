@@ -650,7 +650,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             LIB_ALIAS* LibEntry;
             LibEntry = CMP_LIBRARY::FindLibraryEntry(
-                ( (SCH_COMPONENT*) screen->GetCurItem() )->m_ChipName );
+                ( (SCH_COMPONENT*) screen->GetCurItem() )->GetLibName() );
 
             if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
             {

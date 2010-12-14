@@ -121,9 +121,9 @@ wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
 /**
  * Function SetScalingFactor
  * calculates the .m_Zoom member to have a given scaling factor
- * @param the the current scale used to draw items on screen
- * draw coordinates are user coordinates * GetScalingFactor( )
-*/
+ * @param aScale - the the current scale used to draw items on screen
+ * draw coordinates are user coordinates * GetScalingFactor()
+ */
 void BASE_SCREEN::SetScalingFactor(double aScale )
 {
     int zoom = static_cast<int>( ceil(aScale * m_ZoomScalar) );

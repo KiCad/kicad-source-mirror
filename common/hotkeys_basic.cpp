@@ -447,7 +447,7 @@ int WinEDA_BasicFrame::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor*
 
 /**
  * Function ReadHotkeyConfigFile
- * Read an old configuration file (<file>.key) and fill the current hotkey list
+ * Read an old configuration file (&ltfile&gt.key) and fill the current hotkey list
  * with hotkeys
  * @param aFilename = file name to read.
  * @param aDescList = current hotkey list descr. to initialise.

@@ -30,7 +30,7 @@
  */
 
 /**
- * @info for EXCELLON format, see:
+ * @see for EXCELLON format, see:
  * http://www.excellon.com/manuals/program.htm
  * and the CNC-7 manual.
  */

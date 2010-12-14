@@ -152,7 +152,7 @@ public:
 
     /**
      * Function ReadHotkeyConfigFile
-     * Read an old configuration file (<file>.key) and fill the current hotkey list
+     * Read an old configuration file (&ltfile&gt.key) and fill the current hotkey list
      * with hotkeys
      * @param aFilename = file name to read.
      * @param aDescList = current hotkey list descr. to initialise.
@@ -328,7 +328,7 @@ public:
      * It may be overloaded by derived classes
      * @param aVisible = true if the grid must be shown
      */
-    virtual void     SetGridVisibility(bool aVisible)
+    virtual void     SetGridVisibility( bool aVisible )
     {
         m_DrawGrid = aVisible;
     }
@@ -346,7 +346,7 @@ public:
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void     SetGridColor(int aColor)
+    virtual void     SetGridColor( int aColor )
     {
         m_GridColor = aColor;
     }
@@ -402,8 +402,7 @@ public:
      * @return a wxString containing the message locator like A3 or B6
      *         (or ?? if out of page limits)
      */
-    wxString         GetXYSheetReferences( BASE_SCREEN* aScreen,
-                                           const wxPoint& aPosition );
+    wxString         GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
 
     void             DisplayToolMsg( const wxString& msg );
     void             Process_Zoom( wxCommandEvent& event );
@@ -411,8 +410,7 @@ public:
     virtual void     RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void     OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual void     OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    virtual bool     OnRightClick( const wxPoint& MousePos,
-                                   wxMenu* PopMenu ) = 0;
+    virtual bool     OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void     ToolOnRightClick( wxCommandEvent& event );
     void             AdjustScrollBars();
 
@@ -453,7 +451,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int  ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace( )
@@ -637,8 +635,7 @@ public:
     bool            m_Horizontal;       // some auxiliary TB are horizontal, others vertical
 
 public:
-    WinEDA_Toolbar( id_toolbar type, wxWindow* parent,
-                    wxWindowID id, bool horizontal );
+    WinEDA_Toolbar( id_toolbar type, wxWindow* parent, wxWindowID id, bool horizontal );
 
     bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
 

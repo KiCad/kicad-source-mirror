@@ -1,5 +1,5 @@
 /**
- * @file menubarpcb.cpp
+ * @file menubar_pcbframe.cpp
  * PCBNew editor menu bar
  */
 #include "fctsys.h"

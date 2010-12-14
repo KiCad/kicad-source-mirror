@@ -321,7 +321,7 @@ public:
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aDrawMode - Device context drawing mode, see wxDC.
      * @param aColor - Color to draw component.
-     * @param aTransformMatrix - Coordinate adjustment settings.
+     * @param aTransform - Coordinate adjustment settings.
      * @param aShowPinText - Show pin text if true.
      * @param aDrawFields - Draw field text if true otherwise just draw
      *                      body items (useful to draw a body in schematic,
@@ -342,6 +342,7 @@ public:
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Component part to plot.
      * @param aConvert - Component alternate body style to plot.
+     * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
@@ -350,7 +351,7 @@ public:
     /**
      * Add a new draw \a aItem to the draw object list.
      *
-     * @param item - New draw object to add to component.
+     * @param aItem - New draw object to add to component.
      */
     void AddDrawItem( LIB_DRAW_ITEM* aItem );
 
@@ -379,8 +380,8 @@ public:
      *
      * This is just a pin object specific version of GetNextDrawItem().
      *
-     * @param item - Pointer to the previous pin item, or NULL to get the
-     *               first pin in the draw object list.
+     * @param aItem - Pointer to the previous pin item, or NULL to get the
+     *                first pin in the draw object list.
      * @return - The next pin object in the list if found, otherwise NULL.
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )

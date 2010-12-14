@@ -1,5 +1,5 @@
 /**
- * @file menubar.cpp
+ * @file kicad/menubar.cpp
  * @brief Project manager menubars and toolbars
  */
 #include "fctsys.h"

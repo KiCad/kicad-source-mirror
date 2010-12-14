@@ -189,8 +189,8 @@ public:
      * displays the short filename (if exists) of the selected layer
      * on the caption of the main gerbview window
      * and some other parameters
-     *    Name of the layer (found in the gerber file: LN <name> command) in the status bar
-     *    Name of the Image (found in the gerber file: IN <name> command) in the status bar
+     *    Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
+     *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
      *    and other data in toolbar
      */
     void UpdateTitleAndInfo();

@@ -326,12 +326,6 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 }
 
 
-/***********************************************************************/
-void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                          UndoRedoOpType aCommandType,
-                                          const wxPoint& aTransformPoint )
-/***********************************************************************/
-
 /**
  * Function SaveCopyInUndoList
  * Create a copy of the current schematic item, and put it in the undo list.
@@ -349,6 +343,9 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  *  If it is only a copy, the EEDrawList and the subhierarchy must NOT be deleted.
  *
  */
+void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
+                                          UndoRedoOpType aCommandType,
+                                          const wxPoint& aTransformPoint )
 {
     if( aItem == NULL )     // Nothing to save
         return;
@@ -404,6 +401,7 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  * Function SaveCopyInUndoList
  * @param aItemsList = a PICKED_ITEMS_LIST of items to save
  * @param aTypeCommand = type of comand ( UR_CHANGED, UR_NEW, UR_DELETED ...
+ * @param aTransformPoint - Transform items around this point.
  */
 void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                           UndoRedoOpType     aTypeCommand,

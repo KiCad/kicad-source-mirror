@@ -74,10 +74,11 @@ public:
      * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
-     * @param Pos = Position of the shape
+     * @param aPos = Position of the shape
      */
     virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos );
+                                        const wxPoint&         aPos );
+
     SCH_SHEET_PIN* Next()
     {
         return (SCH_SHEET_PIN*) Pnext;
@@ -112,10 +113,6 @@ public:
 
     void        Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-/*the functions Draw, CreateGraphicShape and Plot are no removed as
- *  as this shape is already handled as HIERLABEL ...
- */
-
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
@@ -148,13 +145,6 @@ public:
      */
     virtual int GetPenSize() const;
 
-    /**
-     * Function CreateGraphicShape
-     * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = list to fill with polygon corners coordinates
-     * @param Pos = Position of the shape
-     */
-
     // Geometric transforms (used in block operations):
 
     /** virtual function Move
@@ -166,16 +156,15 @@ public:
         m_Pos += aMoveVector;
     }
 
-
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-
     virtual void Mirror_Y( int aYaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
-    virtual void Mirror_X( int aXaxis_position );
 
+    virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void Mirror_X( int aXaxis_position );
 
     /**
      * Function Matches
@@ -340,7 +329,7 @@ public:
      * Function Draw
      *  Draw the hierarchical sheet shape
      *  @param aPanel = the current DrawPanel
-     *  @param aDc = the current Device Context
+     *  @param aDC = the current Device Context
      *  @param aOffset = draw offset (usually wxPoint(0,0))
      *  @param aDrawMode = draw mode
      *  @param aColor = color used to draw sheet. Usually -1 to use the normal
@@ -383,7 +372,7 @@ public:
      * Function SearchHierarchy
      *  search the existing hierarchy for an instance of screen "FileName".
      *  @param aFilename = the filename to find
-     *  @param aFilename = a location to return a pointer to the screen (if found)
+     *  @param aScreen = a location to return a pointer to the screen (if found)
      *  @return bool if found, and a pointer to the screen
      */
     bool SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen );

@@ -119,6 +119,7 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask 
  * Search items in a block
  * @return items count
  * @param aBlock a BLOCK_SELECTOR that gives the search area boundary
+ * @param aScreen - The screen to pick items from.
  * list of items is stored in aBlock
  */
 int PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* aScreen )

@@ -85,27 +85,12 @@ bool SCH_EDIT_FRAME::FillFootprintFieldForAllInstancesofComponent( const wxStrin
 }
 
 
-/**
- * Function ProcessStuffFile
- * Read a "stuff" file created by cvpcb.
- * That file has lines like:
- * comp = "C1" module = "CP6"
- * comp = "C2" module = "C1"
- * comp = "C3" module = "C1"
- * "comp =" gives the component reference
- * "module =" gives the footprint name
- *
- * @param aStuffFile = file (*.stf) to Read.
- * @param aSetFielsAttributeToVisible = true to set the footprint field flag to
- * visible
- * @return true if OK.
- */
-bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aStuffFile, bool aSetFielsAttributeToVisible  )
+bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeToVisible  )
 {
     int   LineNum = 0;
     char* cp, Ref[256], FootPrint[256], Line[1024];
 
-    while( GetLine( aStuffFile, Line, &LineNum, sizeof(Line) ) )
+    while( GetLine( aFilename, Line, &LineNum, sizeof(Line) ) )
     {
         if( sscanf( Line, "comp = \"%s module = \"%s", Ref, FootPrint ) == 2 )
         {
@@ -119,10 +104,9 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aStuffFile, bool aSetFielsAttribute
 
             wxString reference = CONV_FROM_UTF8( Ref );
             wxString Footprint = CONV_FROM_UTF8( FootPrint );
-            FillFootprintFieldForAllInstancesofComponent(
-                reference,
-                Footprint,
-                aSetFielsAttributeToVisible );
+            FillFootprintFieldForAllInstancesofComponent( reference,
+                                                          Footprint,
+                                                          aSetFieldAttributeToVisible );
         }
     }
 

@@ -158,6 +158,12 @@ public:
 
     wxPoint ReturnPinEndPoint() const;
 
+/**
+ * Function ReturnPinDrawOrient
+ * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
+ *  according to its orientation and the matrix transform (rot, mirror) \a aTransform
+ * @param aTransform = transform matrix
+ */
     int ReturnPinDrawOrient( const TRANSFORM& aTransform );
 
     /**
@@ -192,7 +198,7 @@ public:
      *
      * This will also all of the pin names marked by EnableEditMode().
      *
-     * @param name - New pin name.
+     * @param aName - New pin name.
      */
     void SetName( const wxString& aName );
 
@@ -288,8 +294,8 @@ public:
      * If the pin is changed from not common to common to all body styles, any
      * linked pins will be removed from the parent component.
      *
-     * @param conversion - Body style of the pin.  Set to zero to make pin
-     *                     common to all body styles.
+     * @param aConversion - Body style of the pin.  Set to zero to make pin
+     *                      common to all body styles.
      */
     void SetConversion( int aConversion );
 
@@ -314,9 +320,9 @@ public:
      * parts or body styles in the component.  See SetCommonToAllParts()
      * and SetCommonToAllBodyStyles() for more information.
      *
-     * @params aEnable - True marks all common pins for editing mode.  False
-     *                   clears the editing mode.
-     * @params aEditpinByPin - Enables the edit pin by pin mode.
+     * @param aEnable - True marks all common pins for editing mode.  False
+     *                  clears the editing mode.
+     * @param aEditPinByPin - Enables the edit pin by pin mode.
      */
     void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
 

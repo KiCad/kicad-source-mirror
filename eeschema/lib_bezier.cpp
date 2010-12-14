@@ -317,7 +317,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
  * @return if the point aPosRef is near a segment
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to a segment
- * @param aTransMat = the transform matrix
+ * @param aTransform = the transform matrix
  */
 bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {

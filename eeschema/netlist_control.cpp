@@ -35,18 +35,16 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
 #define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
 
-/****************************************************/
-wxString ReturnUserNetlistTypeName( bool first_item )
-/****************************************************/
 
 /**
  * Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
- * @param first = true: return first name of the list, false = return next
+ * @param first_item = true: return first name of the list, false = return next
  * @return a wxString : name of the type netlist or empty string
  * this function must be called first with "first_item" = true
  * and after with "first_item" = false to get all the other existing netlist names
  */
+wxString ReturnUserNetlistTypeName( bool first_item )
 {
     static int index;
     wxString   name, msg;
@@ -67,14 +65,14 @@ wxString ReturnUserNetlistTypeName( bool first_item )
 
 
 BEGIN_EVENT_TABLE( WinEDA_NetlistFrame, wxDialog )
-EVT_BUTTON( wxID_CANCEL, WinEDA_NetlistFrame::OnCancelClick )
-EVT_BUTTON( ID_CREATE_NETLIST, WinEDA_NetlistFrame::GenNetlist )
-EVT_BUTTON( ID_SETUP_PLUGIN, WinEDA_NetlistFrame::SetupPluginData )
-EVT_BUTTON( ID_DELETE_PLUGIN, WinEDA_NetlistFrame::DeletePluginPanel )
-EVT_BUTTON( ID_VALIDATE_PLUGIN, WinEDA_NetlistFrame::ValidatePluginPanel )
-EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT,
-              WinEDA_NetlistFrame::SelectNetlistType )
-EVT_BUTTON( ID_RUN_SIMULATOR, WinEDA_NetlistFrame::RunSimulator )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_NetlistFrame::OnCancelClick )
+    EVT_BUTTON( ID_CREATE_NETLIST, WinEDA_NetlistFrame::GenNetlist )
+    EVT_BUTTON( ID_SETUP_PLUGIN, WinEDA_NetlistFrame::SetupPluginData )
+    EVT_BUTTON( ID_DELETE_PLUGIN, WinEDA_NetlistFrame::DeletePluginPanel )
+    EVT_BUTTON( ID_VALIDATE_PLUGIN, WinEDA_NetlistFrame::ValidatePluginPanel )
+    EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT,
+                  WinEDA_NetlistFrame::SelectNetlistType )
+    EVT_BUTTON( ID_RUN_SIMULATOR, WinEDA_NetlistFrame::RunSimulator )
 END_EVENT_TABLE()
 
 
@@ -83,17 +81,6 @@ END_EVENT_TABLE()
 /*******************************/
 
 
-/*****************************************************************************/
-EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
-                                    const wxString& title,
-                                    int             id_NetType,
-                                    int             idCheckBox,
-                                    int             idCreateFile,
-                                    bool            selected ) :
-    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL |
-             wxBORDER_SUNKEN )
-/*****************************************************************************/
-
 /** Contructor to create a setup page for one netlist format.
  * Used in Netlist format Dialog box creation
  * @param parent = wxNotebook * parent
@@ -101,7 +88,15 @@ EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
  * @param id_NetType = netlist type id
  * @param idCheckBox = event ID attached to the "format is default" check box
  * @param idCreateFile = event ID attached to the "create netlist" button
+ * @param selected - Please document me.
  */
+EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
+                                    const wxString& title,
+                                    int             id_NetType,
+                                    int             idCheckBox,
+                                    int             idCreateFile,
+                                    bool            selected ) :
+    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
 {
     m_IdNetType = id_NetType;
     m_CommandStringCtrl = NULL;

@@ -48,24 +48,19 @@ class SCH_COMPONENT : public SCH_ITEM
 {
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
-public:
-    int      m_Multi;            // In multi unit chip - which unit to draw.
+    wxString m_ChipName;  ///< Name to look for in the library, i.e. "74LS00".
+    int      m_unit;      ///< The unit for multiple part per package components.
+    int      m_convert;   ///< The alternate body style for components that have more than
+                          ///< one body style defined.  Primarily used for components that
+                          ///< have a De Morgan conversion.
+    wxString m_prefix;    ///< C, R, U, Q etc - the first character which typically indicates
+                          ///< what the component is. Determined, upon placement, from the
+                          ///< library component.  Created upon file load, by the first
+                          ///<  non-digits in the reference fields.
 
+public:
     wxPoint  m_Pos;
 
-    wxString m_ChipName;         /* Key to look for in the library,
-                                  * i.e. "74LS00". */
-
-    wxString m_PrefixString;          /* C, R, U, Q etc - the first character
-                                       * which typically indicates what the
-                                       * component is. Determined, upon
-                                       * placement, from the library component.
-                                       * determined, upon file load, by the
-                                       * first non-digits in the reference
-                                       * fields. */
-
-    int m_Convert;                    /* Handle multiple shape (for instance
-                                       * De Morgan conversion) */
     TRANSFORM m_Transform;            /* The rotation/mirror transformation
                                        * matrix. */
 
@@ -126,6 +121,20 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
+    wxString GetLibName() const { return m_ChipName; }
+
+    void SetLibName( const wxString& aName );
+
+    int GetUnit() const { return m_unit; }
+
+    void SetUnit( int aUnit );
+
+    int GetConvert() const { return m_convert; }
+
+    void SetConvert( int aConvert );
+
+    wxString GetPrefix() const { return m_prefix; }
+
     TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_Transform ); }
 
     /**
@@ -145,16 +154,6 @@ public:
      * @return True if the component loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
-
-    /**
-     * Function Load
-     * reads a component in from a file.  The file stream must be positioned at
-     * the first field of the file, not at the component tag.
-     * @param aFile The FILE to read from.
-     * @throw Error containing the error message text if there is a file format
-     *   error or if the disk read has failed.
-     *  void            Load( FILE* aFile ) throw( Error );
-     */
 
     /**
      * Function GenCopy
@@ -226,8 +225,7 @@ public:
     /**
      * Function ReturnFieldName
      * returns the Field name given a field index like (REFERENCE, VALUE ..)
-     * @reeturn wxString - the field name or wxEmptyString if invalid field
-     *                     index.
+     * @return wxString - the field name or wxEmptyString if invalid field index.
      */
     wxString   ReturnFieldName( int aFieldNdx ) const;
 
@@ -311,11 +309,10 @@ public:
     /**
      * Function AddHierarchicalReference
      * adds a full hierarchical reference (path + local reference)
-     * @param aPath = hierarchical path (/<sheet timestamp>/component
-     *                timestamp> like /05678E50/A23EF560)
-     * @param aRef = local reference like C45, R56
-     * @param aMulti = part selection, used in multi part per package (0 or 1
-     *                 for non multi)
+     * @param aPath Hierarchical path (/&ltsheet timestamp&gt/&ltcomponent
+     *              timestamp&gt like /05678E50/A23EF560)
+     * @param aRef :ocal reference like C45, R56
+     * @param aMulti Part selection, used in multi part per package (0 or 1 for non multi)
      */
     void           AddHierarchicalReference( const wxString& aPath,
                                              const wxString& aRef,

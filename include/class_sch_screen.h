@@ -46,7 +46,7 @@ public:
     /**
      * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.
-     * @param current Any object derived from SCH_ITEM
+     * @param aItem Any object derived from SCH_ITEM
      */
     void SetCurItem( SCH_ITEM* aItem )
     {
@@ -73,11 +73,14 @@ public:
      *
      * @param aItem - Item to be removed from schematic.
      */
-    void         RemoveFromDrawList( SCH_ITEM* DrawStruct );
+    void         RemoveFromDrawList( SCH_ITEM* aItem );
+
     bool         CheckIfOnDrawList( SCH_ITEM* st );
+
     void         AddToDrawList( SCH_ITEM* st );
 
     bool         SchematicCleanUp( wxDC* DC = NULL );
+
     SCH_ITEM*    ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */

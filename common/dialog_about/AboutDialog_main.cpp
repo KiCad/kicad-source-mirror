@@ -36,7 +36,7 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
 /**
  * Initializes the <code>AboutAppInfo</code> object with applicaion specific information.
  *
- * @info is the object which holds all information about the application
+ * This the object which holds all information about the application
  */
 static void InitKiCadAboutNew( AboutAppInfo& info )
 {
@@ -309,7 +309,8 @@ static wxString HtmlHyperlink( const wxString& url, const wxString& description 
 /**
  * Creates a HTML newline character sequence.
  *
- * @amount the amount of HTML newline tags to concatenate, default is to return just one <br> tag
+ * @param amount - the amount of HTML newline tags to concatenate, default is to return just
+ *                  one <br> tag
  * @return the concatenated amount of HTML newline tag(s) <br>
  */
 static wxString HtmlNewline( const unsigned int amount )

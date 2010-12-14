@@ -364,7 +364,9 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void    Mirror_Y( int aYaxis_position );
+
     virtual void    Mirror_X( int aXaxis_position );
+
     virtual void    Rotate( wxPoint rotationPoint );
 
 private:
@@ -459,7 +461,9 @@ public:
      * @param aYaxis_position = the y axis position
      */
     virtual void    Mirror_Y( int aYaxis_position );
+
     virtual void    Mirror_X( int aXaxis_position );
+
     virtual void    Rotate( wxPoint rotationPoint );
 
 private:

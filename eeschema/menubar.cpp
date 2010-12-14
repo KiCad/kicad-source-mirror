@@ -1,5 +1,5 @@
 /**
- * @file menubar.cpp
+ * @file eeschema/menubar.cpp
  * @brief Create the main menubar for the schematic frame
  */
 #ifdef __GNUG__

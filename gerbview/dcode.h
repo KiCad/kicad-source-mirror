@@ -173,7 +173,7 @@ public:
 
     /**
      * Function DrawFlashedPolygon
-     * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
+     * a helper function used to draw the polygon stored ion m_PolyCorners
      * Draw some Apertures shapes when they are defined as filled polygons.
      * APT_POLYGON is always a polygon, but some complex shapes are also converted to
      * polygons (shapes with holes, some rotated shapes)

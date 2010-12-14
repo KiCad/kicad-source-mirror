@@ -136,26 +136,14 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
     return true;
 }
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool LIB_TEXT::HitTest( const wxPoint& refPos )
+
+bool LIB_TEXT::HitTest( const wxPoint& aPosition )
 {
-    return HitTest( refPos, 0, DefaultTransform );
+    return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near this item
- * @param aPosRef = a wxPoint to test, in eeschema space
- * @param aThreshold = unused here (TextHitTest calculates its threshold )
- * @param aTransMat = the transform matrix
- */
-bool LIB_TEXT::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint physicalpos = aTransform.TransformCoordinate( m_Pos );
     wxPoint tmp = m_Pos;
@@ -168,7 +156,7 @@ bool LIB_TEXT::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTrans
     int t1 = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
     EXCHG( m_Orient, orient );
-    bool hit = TextHitTest( aPosRef );
+    bool hit = TextHitTest( aPosition );
     EXCHG( m_Orient, orient );
     m_Pos = tmp;
     return hit;

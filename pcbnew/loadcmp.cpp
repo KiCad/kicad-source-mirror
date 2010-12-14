@@ -341,21 +341,22 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
 
 /**
  * Function Select_1_Module_From_List
- *  Display a list of modules found in active libraries or a given library
- *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
+ * Display a list of modules found in active libraries or a given library
+ *
+ * @param aWindow - The active window.
+ * @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
  *                                void, list all modules)
- *  @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used
- * )
- *  @param aKeyWord = keyword list, to display a filtered list of module having
+ * @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used )
+ * @param aKeyWord = keyword list, to display a filtered list of module having
  *                    one (or more) of these keyworks in their keywork list
  *                    ( aKeyWord = wxEmptyString if not used )
  *
  *  @return wxEmptyString if abort or fails, or the selected module name if Ok
  */
-wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
-    WinEDA_DrawFrame* active_window,
-    const wxString& aLibraryFullFilename,
-    const wxString& aMask, const wxString& aKeyWord )
+wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWindow,
+                                                         const wxString&   aLibraryFullFilename,
+                                                         const wxString&   aMask,
+                                                         const wxString&   aKeyWord )
 {
     int             LineNum;
     unsigned        ii;
@@ -475,8 +476,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
     wxEndBusyCursor();
 
     msg.Printf( _( "Modules [%d items]" ), itemslist.GetCount() );
-    WinEDAListBox dlg( active_window, msg, itemslist, OldName,
-                        DisplayCmpDoc, GetComponentDialogPosition() );
+    WinEDAListBox dlg( aWindow, msg, itemslist, OldName,
+                       DisplayCmpDoc, GetComponentDialogPosition() );
 
     dlg.SortList();
 

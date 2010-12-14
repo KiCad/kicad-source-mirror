@@ -34,6 +34,7 @@ enum SCH_FILTER_T {
     FIELD_T             = 0x1000,
     EXCLUDE_ENDPOINTS_T = 0x2000,
     ENDPOINTS_ONLY_T    = 0x4000,
+    PIN_T               = 0x8000,
     NO_FILTER_T         = 0xFFFF
 };
 
@@ -246,10 +247,10 @@ public:
 
     /**
      * Function IsConnected().
-     * Test \a aPosition to see if it is connected to this schematic object.
+     * Test \a aPoint to see if it is connected to this schematic object.
      *
-     * @param aPosition - Position to test for connection.
-     * @return True if connection to \a aPosition exists.
+     * @param aPoint - Position to test for connection.
+     * @return True if connection to \a aPoint exists.
      */
     bool IsConnected( const wxPoint& aPoint ) const;
 
@@ -260,7 +261,7 @@ public:
      * @param aPoint - Point to test.
      * @param aAccuracy - Increase the item bounding box by this amount.
      * @param aFilter - Mask to provide more granular hit testing.  See enum SCH_FILTER_T.
-     * @return True if \aPoint is within the item and meets the filter criteria.
+     * @return True if \a aPoint is within the item and meets the filter criteria.
      */
     bool HitTest( const wxPoint& aPoint, int aAccuracy = 0,
                   SCH_FILTER_T aFilter = NO_FILTER_T ) const
@@ -275,7 +276,7 @@ public:
      * @param aRect - Rectangle to test.
      * @param aContained - Set to true to test for containment instead of an intersection.
      * @param aAccuracy - Increase the item bounding box by this amount.
-     * @return True if \aRect contains or intersects the item bounding box.
+     * @return True if \a aRect contains or intersects the item bounding box.
      */
     bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const
     {

@@ -635,7 +635,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
 
         bool isMulti = false;
 
-        LIB_COMPONENT*  entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        LIB_COMPONENT*  entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
         if( entry )
             isMulti = entry->IsMulti();
 
@@ -772,7 +772,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         if( aIncludeSubComponents )
         {
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( currCmp->m_ChipName );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( currCmp->GetLibName() );
 
             if( entry )
                 multi = entry->GetPartCount();
@@ -888,7 +888,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
         DrawLibItem = (SCH_COMPONENT*) schItem;
 
         bool isMulti = false;
-        entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+        entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
+
         if( entry )
             isMulti = entry->IsMulti();
 

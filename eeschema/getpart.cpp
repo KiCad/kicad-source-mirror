@@ -207,7 +207,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if Entry is found, and if Name is an alias of a component,
     // alias exists because its root component was found
-    Component->m_ChipName = Name;
+    Component->SetLibName( Name );
 
     // Set the component value that can differ from component name in lib, for aliases
     Component->GetField( VALUE )->m_Text = Name;
@@ -322,7 +322,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->m_ChipName );
+    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->GetLibName() );
 
     if( LibEntry == NULL )
         return;
@@ -332,7 +332,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
     if( m_UnitCount <= 1 )
         return;
 
-    if( DrawComponent->m_Multi == unit )
+    if( DrawComponent->GetUnit() == unit )
         return;
 
     if( unit < 1 )
@@ -348,7 +348,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
 
     /* Update the unit number. */
     DrawComponent->SetUnitSelection( GetSheet(), unit );
-    DrawComponent->m_Multi = unit;
+    DrawComponent->SetUnit( unit );
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags )
@@ -368,7 +368,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     if( DrawComponent == NULL )
         return;
 
-    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->m_ChipName );
+    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->GetLibName() );
 
     if( LibEntry == NULL )
         return;
@@ -384,22 +384,22 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-    DrawComponent->m_Convert++;
+    DrawComponent->SetConvert( DrawComponent->GetConvert() + 1 );
+
     // ensure m_Convert = 0, 1 or 2
     // 0 and 1 = shape 1 = not converted
     // 2 = shape 2 = first converted shape
     // > 2 is not used but could be used for more shapes
     // like multiple shapes for a programmable component
     // When m_Convert = val max, return to the first shape
-    if( DrawComponent->m_Convert > 2 )
-        DrawComponent->m_Convert = 1;
+    if( DrawComponent->GetConvert() > 2 )
+        DrawComponent->SetConvert( 1 );
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags & IS_MOVED )
         DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                             GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
     OnModify( );

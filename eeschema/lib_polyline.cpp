@@ -313,31 +313,18 @@ void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoi
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return true if a hit, else false
- */
-bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
+bool LIB_POLYLINE::HitTest( const wxPoint& aPosition )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
-    return HitTest( aRefPos, mindist, DefaultTransform );
+    return HitTest( aPosition, mindist, DefaultTransform );
 }
 
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near a segment
- * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to a segment
- * @param aTransMat = the transform matrix
- */
-bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_POLYLINE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
 
@@ -346,7 +333,7 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aT
         start = aTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
         end   = aTransform.TransformCoordinate( m_PolyPoints[ii] );
 
-        if( TestSegmentHit( aPosRef, start, end, aThreshold ) )
+        if( TestSegmentHit( aPosition, start, end, aThreshold ) )
             return true;
     }
 

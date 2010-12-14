@@ -146,7 +146,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         /* For more than one part per package, we must add the part selection
          * A, B, ... or 1, 2, .. to the reference. */
         wxString fulltext = m_Text;
-        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->m_Multi );
+        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->GetUnit() );
 
         DrawGraphicText( panel, DC, textpos, color, fulltext,
                          orient,
@@ -395,7 +395,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
     if( fieldNdx == REFERENCE )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
 
         if( Entry != NULL )
         {

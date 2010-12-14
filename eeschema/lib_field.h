@@ -1,6 +1,6 @@
-/**************************************************************/
-/*  Lib component definitions (libentry) definition of fields */
-/**************************************************************/
+/*************************************************************/
+/* Lib component definitions (libentry) definition of fields */
+/*************************************************************/
 
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
@@ -131,19 +131,19 @@ public:
     /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param refPos A point to test in field coordinate system
+     * @param aPoition A point to test in field coordinate system
      * @return True if a hit, else false
      */
-    bool HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& aPosition );
 
      /**
-      * @param aPosRef = a wxPoint to test
+      * @param aPosition = a wxPoint to test
       * @param aThreshold = max distance to this object (usually the half
       *                     thickness of a line)
       * @param aTransform = the transform matrix
-      * @return True if the point aPosRef is near this object
+      * @return True if the point \a aPosition is near this object
       */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     void operator=( const LIB_FIELD& field )
     {

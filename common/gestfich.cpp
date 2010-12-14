@@ -291,12 +291,12 @@ wxString EDA_FileSelector( const wxString& Title,
 
 /**
  * Function FindKicadHelpPath
- * Find an absolute path for KiCad "help" (or "help/<language>")
+ * Find an absolute path for KiCad "help" (or "help/&ltlanguage&gt")
  *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
  *  from BinDir
  *  else from environment variable KICAD
  *  else from one of s_HelpPathList
- *  typically c:\kicad\doc\help or /usr/share/kicad/help
+ *  typically c:/kicad/doc/help or /usr/share/kicad/help
  *            or /usr/local/share/kicad/help
  *  (must have kicad in path name)
  *

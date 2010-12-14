@@ -175,15 +175,15 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     // selected shape:
     if( convertCheckBox->IsEnabled() )
     {
-        m_Cmp->m_Convert = convertCheckBox->GetValue() ? 2 : 1;
+        m_Cmp->SetConvert( convertCheckBox->GetValue() ? 2 : 1 );
     }
 
     //Set the part selection in multiple part per pakcage
-    if( m_Cmp->m_Multi )
+    if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
         m_Cmp->SetUnitSelection( m_Parent->GetSheet(), unit_selection );
-        m_Cmp->m_Multi = unit_selection;
+        m_Cmp->SetUnit( unit_selection );
     }
 
     switch( orientationRadioBox->GetSelection() )
@@ -715,8 +715,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
     // For components with multiple parts per package, set the unit selection
     choiceCount = unitChoice->GetCount();
 
-    if( m_Cmp->m_Multi <= choiceCount )
-        unitChoice->SetSelection( m_Cmp->m_Multi - 1 );
+    if( m_Cmp->GetUnit() <= choiceCount )
+        unitChoice->SetSelection( m_Cmp->GetUnit() - 1 );
 
     // Disable unit selection if only one unit exists:
     if( choiceCount <= 1 )
@@ -751,7 +751,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 
     // Activate/Desactivate the normal/convert option ? (activated only if
     // the component has more than one shape)
-    if( m_Cmp->m_Convert > 1 )
+    if( m_Cmp->GetConvert() > 1 )
     {
         convertCheckBox->SetValue( true );
     }

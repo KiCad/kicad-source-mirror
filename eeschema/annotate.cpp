@@ -78,13 +78,13 @@ void ReAnnotatePowerSymbolsOnly( void )
 
             SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
             LIB_COMPONENT* Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
             if( ( Entry == NULL ) || !Entry->IsPower() )
                 continue;
 
             //DrawLibItem->ClearAnnotation(sheet); this clears all annotation :(
-            wxString refstr = DrawLibItem->m_PrefixString;
+            wxString refstr = DrawLibItem->GetPrefix();
 
             //str will be "C?" or so after the ClearAnnotation call.
             while( refstr.Last() == '?' )
@@ -356,7 +356,7 @@ void AnnotateComponents( SCH_EDIT_FRAME* parent,
  * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
  * in sheet
  * @param aComponentsList = a std::vector list to fill
- * @param the SCH_SHEET_PATH sheet to analyze
+ * @param aSheet - The SCH_SHEET_PATH sheet to analyze
  */
 int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
                                  SCH_SHEET_PATH*                aSheet )
@@ -371,7 +371,7 @@ int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
         if( DrawList->Type() == SCH_COMPONENT_T )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
             if( Entry == NULL )
                 continue;
@@ -424,8 +424,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
         else
             sprintf( Text + strlen( Text ), "%d", aComponentsList[ii].m_NumRef );
 
-        component->SetRef( &(aComponentsList[ii].m_SheetPath),
-                           CONV_FROM_UTF8( Text ) );
+        component->SetRef( &(aComponentsList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
 #else
 
         wxString        ref = aComponentsList[ii].GetRef();
@@ -441,7 +440,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
         component->SetRef( &aComponentsList[ii].m_SheetPath, ref );
 #endif
 
-        component->m_Multi = aComponentsList[ii].m_Unit;
+        component->SetUnit( aComponentsList[ii].m_Unit );
         component->SetUnitSelection( &aComponentsList[ii].m_SheetPath,
                                      aComponentsList[ii].m_Unit );
     }
@@ -455,7 +454,6 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
  * to a max value (0x7FFFFFFF).
  *
  * @param aComponentsList = list of component
- * @param NbOfCmp   = item count in the list
  */
 void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
 {

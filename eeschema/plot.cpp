@@ -46,14 +46,15 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     LIB_COMPONENT* Entry;
     TRANSFORM temp = TRANSFORM();
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
     if( Entry == NULL )
         return;;
 
     temp = DrawLibItem->m_Transform;
 
-    Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert, DrawLibItem->m_Pos, temp );
+    Entry->Plot( plotter, DrawLibItem->GetUnit(), DrawLibItem->GetConvert(),
+                 DrawLibItem->m_Pos, temp );
     bool isMulti = Entry->GetPartCount() > 1;
 
     for( int fieldId = 0; fieldId < DrawLibItem->GetFieldCount(); fieldId++ )
@@ -127,7 +128,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     {
         /* Adding A, B ... to the reference */
         wxString Text;
-        Text = field->m_Text + LIB_COMPONENT::ReturnSubReference( DrawLibItem->m_Multi );
+        Text = field->m_Text + LIB_COMPONENT::ReturnSubReference( DrawLibItem->GetUnit() );
         plotter->text( textpos, color, Text,
                        orient,
                        field->m_Size, hjustify, vjustify,

@@ -370,7 +370,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
  * (Or tool ID_NO_SELECT_BUTT default if no new selection)
  * @param aId = new m_ID_current_state value (if aId >= 0)
  * @param aCursor = the new cursor shape (0 = default cursor)
- * @param aTitle = tool message in status bar
+ * @param aToolMsg = tool message in status bar
  * if (aId >= 0)
  * Updates all variables related:
  *      m_ID_current_state, cursor shape and message in status bar
@@ -378,8 +378,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
  *      Only updates the cursor shape and message in status bar
  *      (does not the current m_ID_current_state value
  */
-void WinEDA_DrawFrame::SetToolID( int aId, int aCursor,
-                                  const wxString& aToolMsg )
+void WinEDA_DrawFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );

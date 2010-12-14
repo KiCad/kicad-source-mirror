@@ -315,8 +315,8 @@ const wxString& valeur_param( int valeur, wxString& buf_texte );
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
-wxString        ReturnUnitSymbol( UserUnitType aUnit = g_UserUnit,
-                                 const wxString& aFormatString = _( " (%s):" ) );
+wxString        ReturnUnitSymbol( UserUnitType aUnits = g_UserUnit,
+                                  const wxString& aFormatString = _( " (%s):" ) );
 
 /**
  * Get a human readable units string.
@@ -327,7 +327,7 @@ wxString        ReturnUnitSymbol( UserUnitType aUnit = g_UserUnit,
  * @param aUnits - The units text to return.
  * @return The human readable units string.
  */
-wxString        GetUnitsLabel( UserUnitType aUnit );
+wxString        GetUnitsLabel( UserUnitType aUnits );
 wxString        GetAbbreviatedUnitsLabel( UserUnitType aUnit = g_UserUnit );
 
 int             ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,

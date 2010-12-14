@@ -96,8 +96,8 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname );
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfo list of commands
  * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
- *                    = false to add <spaces><(keyname)>
+ * @param aIsShortCut = true to add &lttab&gt&ltkeyname&gt (active shortcuts in menus)
+ *                    = false to add &ltspaces&gt&lt(keyname)&gt
  * @return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
@@ -110,8 +110,8 @@ wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
  * @param aText = a wxString. returns aText + key name
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
  * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
- *                    = false to add <spaces><(keyname)>
+ * @param aIsShortCut = true to add &lttab&gt&ltkeyname&gt (active shortcuts in menus)
+ *                    = false to add &ltspaces&gt&lt(keyname)&gt
  * @return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString        AddHotkeyName( const wxString&                        aText,
@@ -123,9 +123,7 @@ wxString        AddHotkeyName( const wxString&                        aText,
  * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
- * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
- *(Null terminated)
- * @return none
+ * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list (Null terminated)
  */
 void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
                                    struct Ki_HotkeyInfoSectionDescriptor* aList );
