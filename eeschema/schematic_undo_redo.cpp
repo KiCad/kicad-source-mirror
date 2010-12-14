@@ -183,30 +183,6 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
 }
 
 
-/**
- * Function SaveCopyInUndoList
- * Create a copy of the current schematic item, and put it in the undo list.
- *
- *  flag_type_command =
- *      UR_CHANGED
- *      UR_NEW
- *      UR_DELETED
- *      UR_WIRE_IMAGE
- *      UR_MOVED
- *
- * If it is a delete command, items are put on list with the .Flags member
- * set to UR_DELETED.  When it will be really deleted, the GetDrawItems() and the
- * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
- * sub-hierarchy must NOT be deleted.
- *
- * Note:
- * Edit wires and buses is a bit complex.
- * because when a new wire is added, modifications in wire list
- * (wire concatenation) there are modified items, deleted items and new items
- * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
- * wires saved in Undo List (for Undo or Redo commands, saved wires will be
- * exchanged with current wire list
- */
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                          UndoRedoOpType aCommandType,
                                          const wxPoint& aTransformPoint )
@@ -271,11 +247,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
 }
 
 
-/**
- * Function SaveCopyInUndoList
- * @param aItemsList = a PICKED_ITEMS_LIST of items to save
- * @param aTypeCommand = type of command ( UR_CHANGED, UR_NEW, UR_DELETED ...
- */
 void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                          UndoRedoOpType     aTypeCommand,
                                          const wxPoint&     aTransformPoint )
@@ -344,14 +315,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/**
- * Function PutDataInPreviousState
- * Used in undo or redo command.
- * Put data pointed by List in the previous state, i.e. the state memorized
- * by List
- * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
- * @param aRedoCommand = a bool: true for redo, false for undo
- */
 void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     SCH_ITEM* item;
@@ -442,13 +405,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 }
 
 
-/**
- * Function GetSchematicFromUndoList
- *  Undo the last edition:
- *  - Save the current schematic in Redo list
- *  - Get the previous version of the schematic from undo list
- *  @return none
- */
 void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
@@ -464,7 +420,6 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
-//    m_drawItem = NULL;
     OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
@@ -475,13 +430,6 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 }
 
 
-/**
- * Function GetSchematicFromRedoList
- * Redo the last edition:
- *  - Save the current schematic in undo list
- *  - Get the previous version from Redo list
- *  @return none
- */
 void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
@@ -498,7 +446,6 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
 
-//    m_drawItem = NULL;
     OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();

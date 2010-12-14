@@ -300,7 +300,7 @@ static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         wxPoint move_vector = OldPos - Component->m_Pos;
         Component->Move( move_vector );
-        Component->m_Transform = OldTransform;
+        Component->SetTransform( OldTransform );
         Component->m_Flags = 0;
     }
 
@@ -431,7 +431,7 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
     DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
     GetScreen()->SetCurItem( Component );
     OldPos = Component->m_Pos;
-    OldTransform = Component->m_Transform;
+    OldTransform = Component->GetTransform();
 
 #if 1
 

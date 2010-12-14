@@ -53,10 +53,10 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
     // under some circumstances, but that inversion is not preserved by all
     // combinations of mirroring and rotation.  The following clause is true
     // when the number of rotations and the number of mirrorings are both odd.
-    if( comp->m_Transform.x2 * comp->m_Transform.y1 < 0 )
+    if( comp->GetTransform().x2 * comp->GetTransform().y1 < 0 )
         NEGATE( newpos.y );
 
-    newpos = comp->m_Transform.TransformCoordinate( newpos ) + pos;
+    newpos = comp->GetTransform().TransformCoordinate( newpos ) + pos;
 
     DrawPanel->CursorOff( DC );
     GetScreen()->m_Curseur = newpos;
@@ -209,7 +209,7 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* Positions are calculated by the transpose matrix,  Rotating mirror. */
     wxPoint pt( panel->GetScreen()->m_Curseur - pos );
 
-    currentField->m_Pos = pos + component->m_Transform.TransformCoordinate( pt );
+    currentField->m_Pos = pos + component->GetTransform().TransformCoordinate( pt );
 
     currentField->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }

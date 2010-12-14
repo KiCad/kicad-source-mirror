@@ -51,7 +51,7 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     if( Entry == NULL )
         return;;
 
-    temp = DrawLibItem->m_Transform;
+    temp = DrawLibItem->GetTransform();
 
     Entry->Plot( plotter, DrawLibItem->GetUnit(), DrawLibItem->GetConvert(),
                  DrawLibItem->m_Pos, temp );
@@ -90,7 +90,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     int orient = field->m_Orient;
-    if( DrawLibItem->m_Transform.y1 )  // Rotate component 90 deg.
+    if( DrawLibItem->GetTransform().y1 )  // Rotate component 90 deg.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;

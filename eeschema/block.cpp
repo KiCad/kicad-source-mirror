@@ -883,7 +883,7 @@ static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
         Multi       = aDrawLibItem->GetUnit();
         convert     = aDrawLibItem->GetConvert();
         CmpPosition = aDrawLibItem->m_Pos;
-        transform   = aDrawLibItem->m_Transform;
+        transform   = aDrawLibItem->GetTransform();
     }
     else
         Pin = Entry->GetNextPin( Pin );

@@ -641,7 +641,9 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                 if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->GetConvert() ) )
                     continue;
 
-                wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->GetPosition() ) +
+                wxPoint pos2;
+
+                pos2 = DrawLibItem->GetTransform().TransformCoordinate( pin->GetPosition() ) +
                     DrawLibItem->m_Pos;
 
                 new_item = new NETLIST_OBJECT();

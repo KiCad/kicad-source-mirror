@@ -423,19 +423,6 @@ int SCH_EDIT_FRAME::BestZoom()
 }
 
 
-/**
- * Function GetUniqueFilenameForCurrentSheet
- * @return a filename that can be used in plot and print functions
- * for the current screen and sheet path.
- * This filename is unique and must be used insteed of the screen filename
- * (or sheet filename) when one must creates file for each sheet in the
- * heierarchy.
- * because in complex hierarchies a sheet and a SCH_SCREEN is used more than
- * once
- * Name is &ltroot sheet filename&gt-&ltsheet path&gt
- * and has no extension.
- * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
- */
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = g_RootSheet->GetFileName();

@@ -70,9 +70,8 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
-                              SCH_SHEET_PATH* sheet, int unit, int convert,
-                              const wxPoint& pos, bool setNewItemFlag ) :
+SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet, int unit,
+                              int convert, const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
@@ -159,7 +158,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     m_convert = 0;  // De Morgan Handling
 
     // The rotation/mirror transformation matrix. pos normal
-    m_Transform = TRANSFORM();
+    m_transform = TRANSFORM();
 
     // construct only the mandatory fields, which are the first 4 only.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
@@ -211,10 +210,16 @@ void SCH_COMPONENT::SetConvert( int aConvert )
 }
 
 
-/*****************************************************************************
-* Routine to draw the given part at given position, transformed/mirror as    *
-* specified, and in the given drawing mode. Only this one is visible...      *
-*****************************************************************************/
+void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
+{
+    if( m_transform != aTransform )
+    {
+        m_transform = aTransform;
+        SetModified();
+    }
+}
+
+
 void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                           int DrawMode, int Color, bool DrawPinText )
 {
@@ -234,7 +239,7 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
     }
 
     Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_unit, dummy ? 0 : m_convert,
-                 DrawMode, Color, m_Transform, DrawPinText, false );
+                 DrawMode, Color, m_transform, DrawPinText, false );
 
     SCH_FIELD* field = GetField( REFERENCE );
 
@@ -287,15 +292,6 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
 }
 
 
-/**
- * Function AddHierarchicalReference
- * adds a full hierarchical reference (path + local reference)
- * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp>
- * like /05678E50/A23EF560)
- * @param aRef = local reference like C45, R56
- * @param aMulti = part selection, used in multi part per package (0 or 1 for
- * non multi)
- */
 void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
                                               const wxString& aRef,
                                               int             aMulti )
@@ -441,12 +437,6 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
-/**
- * Function SetTimeStamp
- * Change the old time stamp to the new time stamp.
- * the time stamp is also modified in paths
- * @param aNewTimeStamp = new time stamp
- */
 void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;
@@ -463,10 +453,6 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 }
 
 
-/***********************************************************/
-
-//returns the unit selection, for the given sheet path.
-/***********************************************************/
 int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 {
     wxString          path = GetPath( aSheet );
@@ -495,9 +481,6 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 }
 
 
-/****************************************************************************/
-//Set the unit selection, for the given sheet path.
-/****************************************************************************/
 void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     wxString          path = GetPath( aSheet );
@@ -580,9 +563,6 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 }
 
 
-/* Used in undo / redo command:
- *  swap data between this and copyitem
- */
 void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 {
     EXCHG( m_ChipName, copyitem->m_ChipName );
@@ -590,9 +570,9 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
     EXCHG( m_unit, copyitem->m_unit );
     EXCHG( m_convert, copyitem->m_convert );
 
-    TRANSFORM tmp = m_Transform;
-    m_Transform = copyitem->m_Transform;
-    copyitem->m_Transform = tmp;
+    TRANSFORM tmp = m_transform;
+    m_transform = copyitem->m_transform;
+    copyitem->m_transform = tmp;
 
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 
@@ -635,11 +615,6 @@ void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-/**
- * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
- * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
- *                else remove annotation relative to this sheetpath
- */
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 {
     wxString       defRef    = m_prefix;
@@ -701,13 +676,6 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 }
 
 
-/******************************************************************/
-
-/* Compute the new matrix transform for a schematic component
- *  in order to have the requested transform (type_rotate = rot, mirror..)
- *  which is applied to the initial transform.
- */
-/*****************************************************************/
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();
@@ -717,9 +685,9 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
     {
     case CMP_ORIENT_0:
     case CMP_NORMAL:            /* Position Initiale */
-        m_Transform.x1 = 1;
-        m_Transform.y2 = -1;
-        m_Transform.x2 = m_Transform.y1 = 0;
+        m_transform.x1 = 1;
+        m_transform.y2 = -1;
+        m_transform.x2 = m_transform.y1 = 0;
         break;
 
     case CMP_ROTATE_CLOCKWISE:            /* Rotate + */
@@ -817,38 +785,24 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         /* The new matrix transform is the old matrix transform modified by the
          *  requested transformation, which is the TempMat transform (rot,
          *  mirror ..) in order to have (in term of matrix transform):
-         *     transform coord = new_m_Transform * coord
-         *  where transform coord is the coord modified by new_m_Transform from
+         *     transform coord = new_m_transform * coord
+         *  where transform coord is the coord modified by new_m_transform from
          *  the initial value coord.
-         *  new_m_Transform is computed (from old_m_Transform and TempMat) to
+         *  new_m_transform is computed (from old_m_transform and TempMat) to
          *  have:
-         *     transform coord = old_m_Transform * coord * TempMat
+         *     transform coord = old_m_transform * coord * TempMat
          */
         TRANSFORM newTransform;
 
-        newTransform.x1 = m_Transform.x1 * temp.x1 + m_Transform.x2 * temp.y1;
-        newTransform.y1 = m_Transform.y1 * temp.x1 + m_Transform.y2 * temp.y1;
-        newTransform.x2 = m_Transform.x1 * temp.x2 + m_Transform.x2 * temp.y2;
-        newTransform.y2 = m_Transform.y1 * temp.x2 + m_Transform.y2 * temp.y2;
-        m_Transform = newTransform;
+        newTransform.x1 = m_transform.x1 * temp.x1 + m_transform.x2 * temp.y1;
+        newTransform.y1 = m_transform.y1 * temp.x1 + m_transform.y2 * temp.y1;
+        newTransform.x2 = m_transform.x1 * temp.x2 + m_transform.x2 * temp.y2;
+        newTransform.y2 = m_transform.y1 * temp.x2 + m_transform.y2 * temp.y2;
+        m_transform = newTransform;
     }
 }
 
 
-/**
- * Function GetOrientation
- * Used to display component orientation (in dialog editor or info)
- * @return the orientation and mirror
- * Note: Because there are different ways to have a given orientation/mirror,
- * the orientation/mirror is not necessary what the used does
- * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
- * So this function find a rotation and a mirror value
- * ( CMP_MIRROR_X because this is the first mirror option tested)
- *  but can differs from the orientation made by an user
- * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because they
- * are equivalent)
- *
- */
 int SCH_COMPONENT::GetOrientation()
 {
     int type_rotate = CMP_ORIENT_0;
@@ -869,45 +823,33 @@ int SCH_COMPONENT::GetOrientation()
     };
 
     // Try to find the current transform option:
-    transform = m_Transform;
+    transform = m_transform;
 
     for( ii = 0; ii < ROTATE_VALUES_COUNT; ii++ )
     {
         type_rotate = rotate_value[ii];
         SetOrientation( type_rotate );
 
-        if( transform == m_Transform )
+        if( transform == m_transform )
             return type_rotate;
     }
 
     // Error: orientation not found in list (should not happen)
     wxMessageBox( wxT( "Component orientation matrix internal error" ) );
-    m_Transform = transform;
+    m_transform = transform;
 
     return CMP_NORMAL;
 }
 
 
-/**
- * Returns the coordinated point, depending on the orientation of the
- * component (rotation, mirror).
- * The coordinates are always relative to the anchor position of the component.
- */
-wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
+wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& aPoint )
 {
-    return m_Transform.TransformCoordinate( coord );
+    return m_transform.TransformCoordinate( aPoint );
 }
 
 
 #if defined(DEBUG)
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
@@ -934,7 +876,6 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() ) << ">\n";
 }
-
 
 #endif
 
@@ -1070,7 +1011,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         return false;
 
     if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
-                 m_Transform.x1, m_Transform.y1, m_Transform.x2, m_Transform.y2 ) == EOF )
+                 m_transform.x1, m_transform.y1, m_transform.x2, m_transform.y2 ) == EOF )
         return false;
 
     if( fprintf( f, "$EndComp\n" ) == EOF )
@@ -1370,10 +1311,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( !aLine.ReadLine() ||
         sscanf( ((char*)aLine), "%d %d %d %d",
-                &m_Transform.x1,
-                &m_Transform.y1,
-                &m_Transform.x2,
-                &m_Transform.y2 ) != 4 )
+                &m_transform.x1,
+                &m_transform.y1,
+                &m_transform.x2,
+                &m_transform.y2 ) != 4 )
     {
         aErrorMsg.Printf( wxT( "Component orient error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1413,15 +1354,15 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 
     // We must reverse Y values, because matrix orientation
     // suppose Y axis normal for the library items coordinates,
-    // m_Transform reverse Y values, but bBox is already reversed!
+    // m_transform reverse Y values, but bBox is already reversed!
     y0 = -bBox.GetY();
     ym = -bBox.GetBottom();
 
     /* Compute the real Boundary box (rotated, mirrored ...)*/
-    int x1 = m_Transform.x1 * x0 + m_Transform.y1 * y0;
-    int y1 = m_Transform.x2 * x0 + m_Transform.y2 * y0;
-    int x2 = m_Transform.x1 * xm + m_Transform.y1 * ym;
-    int y2 = m_Transform.x2 * xm + m_Transform.y2 * ym;
+    int x1 = m_transform.x1 * x0 + m_transform.y1 * y0;
+    int y1 = m_transform.x2 * x0 + m_transform.y2 * y0;
+    int x2 = m_transform.x1 * xm + m_transform.y1 * ym;
+    int y2 = m_transform.x2 * xm + m_transform.y2 * ym;
 
     // H and W must be > 0:
     if( x2 < x1 )
@@ -1439,13 +1380,6 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 }
 
 
-/**
- * Function GetBoundaryBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for graphic items and pins.
- * this include only fields defined in library
- * use GetBoundingBox() to include fields in schematic
- */
 EDA_Rect SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_Rect bBox = GetBodyBoundingBox();
@@ -1501,11 +1435,6 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-/**
- * Function Mirror_Y (virtual)
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 {
     int dx = m_Pos.x;
@@ -1525,11 +1454,6 @@ void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 }
 
 
-/**
- * Function Mirror_X (virtual)
- * mirror item relative to an X axis
- * @param aXaxis_position = the x axis position
- */
 void SCH_COMPONENT::Mirror_X( int aXaxis_position )
 {
     int dy = m_Pos.y;
@@ -1622,7 +1546,7 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
                 if( aFindLocation )
                 {
                     wxPoint pinpos = pin->GetPosition();
-                    pinpos = m_Transform.TransformCoordinate( pinpos );
+                    pinpos = m_transform.TransformCoordinate( pinpos );
                     *aFindLocation = pinpos + m_Pos;
                 }
 
@@ -1665,7 +1589,7 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
     wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
-    return m_Transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
+    return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
 }
 
 
@@ -1706,7 +1630,7 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
             continue;
 
         // Calculate the pin position relative to the component position and orientation.
-        aPoints.push_back( m_Transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
+        aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
     }
 }
 
@@ -1721,7 +1645,7 @@ LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aTy
     // Calculate the position relative to the component.
     wxPoint libPosition = aPosition - m_Pos;
 
-    return component->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_Transform );
+    return component->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
 }
 
 

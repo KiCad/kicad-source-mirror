@@ -290,9 +290,8 @@ public:
      * (or screen filename) when one must creates file for each sheet in the
      * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
      * used more than once
-     * Name is <root sheet filename>-<sheet path>
-     * and has no extension.
-     * However if filename is too long name is <sheet filename>-<sheet number>
+     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
+     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
      */
     wxString     GetUniqueFilenameForCurrentSheet();
 
@@ -304,8 +303,9 @@ public:
      */
     void         SetSheetNumberAndCount();
 
-    /** Virtual function PrintPage
-     * used to print a page
+    /**
+     * Function PrintPage
+     * is used to print a schematic page.
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrint_Sheet_Ref = true to print page references
@@ -355,8 +355,7 @@ public:
     void            Save_File( wxCommandEvent& event );
     void            SaveProject();
     bool            LoadOneEEProject( const wxString& FileName, bool IsNew );
-    bool            LoadOneEEFile( SCH_SCREEN*     screen,
-                                   const wxString& FullFileName );
+    bool            LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
     bool            ReadInputStuffFile();
 
     /**
@@ -375,8 +374,7 @@ public:
      * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
      * @return bool - true if success, else true.
      */
-    bool            ProcessStuffFile( FILE* aFilename,
-                                      bool  aSetFieldsAttributeToVisible );
+    bool            ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
 
     bool            SaveEEFile( SCH_SCREEN* screen, int FileSave );
 
@@ -528,16 +526,35 @@ public:
 
     /**
      * Function SaveCopyInUndoList.
-     * Creates a new entry in undo list of commands.
-     * add a picker to handle aItemToCopy
+     * Create a copy of the current schematic item, and put it in the undo list.
+     *
+     *  flag_type_command =
+     *      UR_CHANGED
+     *      UR_NEW
+     *      UR_DELETED
+     *      UR_WIRE_IMAGE
+     *      UR_MOVED
+     *
+     * If it is a delete command, items are put on list with the .Flags member
+     * set to UR_DELETED.  When it will be really deleted, the GetDrawItems() and the
+     * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
+     * sub-hierarchy must NOT be deleted.
+     *
+     * @Note
+     * Edit wires and buses is a bit complex.
+     * because when a new wire is added, modifications in wire list
+     * (wire concatenation) there are modified items, deleted items and new items
+     * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
+     * wires saved in Undo List (for Undo or Redo commands, saved wires will be
+     * exchanged with current wire list
      * @param aItemToCopy = the schematic item modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
-                            UndoRedoOpType aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+                             UndoRedoOpType aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -549,21 +566,19 @@ public:
      *                          for commands like move
      */
     void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                            UndoRedoOpType aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+                             UndoRedoOpType aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
 
     /**
      * Function PutDataInPreviousState
-     * Used in undo or redo command.
-     * Put data pointed by List in the previous state, i.e. the state
-     * memorized by List
-     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to
-     *                undo/redo
-     * @param aRedoCommand = a bool: true for redo, false for undo
+     * is used in undo or redo command to put data pointed by List in the previous state, i.e.
+     * the state stored in \a aList
+     * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+     * @param aRedoCommand  a bool: true for redo, false for undo
      */
-    void     PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
     /**
      * Function GetSchematicFromRedoList
@@ -576,10 +591,9 @@ private:
 
     /**
      * Function GetSchematicFromUndoList
-     *  Undo the last edition:
+     * performs an undo the last edition:
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list
-     *  @return none
      */
     void     GetSchematicFromUndoList( wxCommandEvent& event );
 
@@ -602,7 +616,7 @@ public:
     virtual int  ReturnBlockCommand( int aKey );
 
     /**
-     * Function HandleBlockPlace( )
+     * Function HandleBlockPlace
      * Called after HandleBlockEnd, when a block command needs to be
      * executed after the block is moved to its new place
      * (bloc move, drag, copy .. )
@@ -611,7 +625,7 @@ public:
     virtual void HandleBlockPlace( wxDC* DC );
 
     /**
-     * Function HandleBlockEnd( )
+     * Function HandleBlockEnd
      * Handle the "end"  of a block command,
      * i.e. is called at the end of the definition of the area of a block.
      * depending on the current block command, this command is executed

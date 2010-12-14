@@ -114,7 +114,7 @@ public:
      * <p>
      * EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
      */
-    void CloseWindow( wxCommandEvent& WXUNUSED(event) )
+    void CloseWindow( wxCommandEvent& event )
     {
         // Generate a wxCloseEvent
         Close( false );

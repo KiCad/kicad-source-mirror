@@ -76,7 +76,7 @@ LIB_PIN* SCH_EDIT_FRAME::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )
                                 // and in schematic Y axis is top to bottom
 
     else                        // calculate the pin position in schematic
-        pinpos = DrawLibItem->m_Transform.TransformCoordinate( pinpos ) + DrawLibItem->m_Pos;
+        pinpos = DrawLibItem->GetTransform().TransformCoordinate( pinpos ) + DrawLibItem->m_Pos;
 
     if( pos == pinpos )
         return Pin;

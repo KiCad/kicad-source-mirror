@@ -168,7 +168,7 @@ WinEDA_HierFrame::~WinEDA_HierFrame()
 }
 
 
-void WinEDA_HierFrame::OnQuit( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_HierFrame::OnQuit( wxCommandEvent& event )
 {
     // true is to force the frame to close
     Close( true );

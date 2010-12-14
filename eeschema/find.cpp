@@ -190,7 +190,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         }
         wxPoint delta;
         pos  -= Component->m_Pos;
-        delta = Component->m_Transform.TransformCoordinate( pos );
+        delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->m_Pos;
 
         wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;
