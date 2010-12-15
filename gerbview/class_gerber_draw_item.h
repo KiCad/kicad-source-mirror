@@ -119,6 +119,15 @@ public:
     {
         return m_LayerNegative;
     }
+    
+    /**
+     * Function HasNegativeItems
+     * @return true if this item or at least one shape (when using aperture macros
+     *    must be drawn in background color
+     * used to optimize screen refresh (when no items are in background color
+     * refresh can be faster)
+     */
+    bool HasNegativeItems();
 
     /**
      * Function SetLayerParameters

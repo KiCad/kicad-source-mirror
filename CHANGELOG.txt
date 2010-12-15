@@ -4,6 +4,27 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-15, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Gerbview:
+    Added: in file dialog, multiple file selection.
+    Added: Draw mode selector (in left toolbar):
+        Raw mode:
+            a Gerber image is drawn on screen without buffering.
+            Artifacts happen if there are negative items drawn, if more than one
+            Gerber file is shown.
+        Stacked mode:
+            each Geber image is drawn in a buffer and after drawn on screen
+            No artifact with negative items.
+            Each Gerber image covers previous images.
+        OR mode (transparency mode):
+            each Geber image is drawn in a buffer and after drawn on screen
+            No artifact with negative items.
+            Each Gerber image is "ORed" with previous images, like in Pcbnew.
+    Try to optimize Draw function in buffered modes.
+        (Useful for PC that have problems with "blit" graphic function)
+    Fix minor issues.
+
 2010-dec-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
   * Remove deprecated options and quoted project name option in Doxygen file.

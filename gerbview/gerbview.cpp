@@ -39,8 +39,9 @@ const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
 const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.cnf" ) );
 
 // Config keywords
+const wxString GerbviewDrawModeOption( wxT( "DrawModeOption" ) );
 const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
-extern const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
+const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 
 GERBER_IMAGE*  g_GERBER_List[32];
 
@@ -68,7 +69,7 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
     if( !filename.FileExists() )
         return;
 
-    frame->LoadOneGerberFile( fileName );
+    frame->LoadGerberFiles( fileName );
 }
 
 
@@ -140,7 +141,7 @@ bool WinEDA_App::OnInit()
             if( fn.FileExists() )
             {
                 ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = ii - 1;
-                frame->LoadOneGerberFile( fn.GetFullPath() );
+                frame->LoadGerberFiles( fn.GetFullPath() );
             }
         }
     }

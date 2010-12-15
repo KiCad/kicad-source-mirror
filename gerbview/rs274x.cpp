@@ -503,6 +503,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case LAYER_POLARITY:
         if( *text == 'C' )
             GetLayerParams().m_LayerNegative = true;
+
         else
             GetLayerParams().m_LayerNegative = false;
         D( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
