@@ -14,7 +14,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname="drawing.svg"
+   inkscape:export-filename="/svn/kicad/new_design/new/drawing.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <marker
@@ -109,7 +112,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
      inkscape:cx="575.26689"
-     inkscape:cy="412.44757"
+     inkscape:cy="1269.5904"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      showgrid="false"
@@ -142,7 +145,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -505,7 +508,7 @@
        sodipodi:role="line"
        id="tspan4342"
        x="520.22858"
-       y="330.28006">inherits</tspan></text>
+       y="330.28006">extends</tspan></text>
   <g
      id="g3828-4"
      transform="translate(133.32018,329.60589)">
@@ -602,7 +605,7 @@
        y="354.28006"
        x="184.22858"
        id="tspan4776"
-       sodipodi:role="line">inherits</tspan></text>
+       sodipodi:role="line">extends</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
@@ -613,7 +616,7 @@
        sodipodi:role="line"
        id="tspan4780"
        x="316.22858"
-       y="354.28006">inherits</tspan></text>
+       y="354.28006">extends</tspan></text>
   <path
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend-9)"
      d="m 313.9049,598.53648 0,48.73986 137.63329,0.25254 0.25254,-48.73986"
@@ -628,7 +631,7 @@
        y="664.28003"
        x="348.22858"
        id="tspan4972"
-       sodipodi:role="line">inherits</tspan></text>
+       sodipodi:role="line">extends</tspan></text>
   <rect
      style="fill:#00bad5;fill-opacity:0.9605735;stroke:#000000;stroke-width:1.10099995;stroke-linecap:square;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      id="rect4974"
@@ -876,7 +879,7 @@
          height="148.57143"
          x="740"
          y="508.38568" /></flowRegion><flowPara
-       id="flowPara3954"></flowPara></flowRoot>  <text
+       id="flowPara3954" /></flowRoot>  <text
      xml:space="preserve"
      style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
      x="953.57141"
@@ -946,14 +949,14 @@
   <text
      xml:space="preserve"
      style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-     x="756.89563"
+     x="840.89563"
      y="219.6189"
      id="text4168"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan4170"
-       x="756.89563"
-       y="219.6189">PARTS_LIST_LIB_SOURCE</tspan></text>
+       x="840.89563"
+       y="219.6189">LIB</tspan></text>
   <path
      style="fill:none;stroke:#000000;stroke-width:1.26530874px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend-9)"
      d="M 851.17116,365.3959 850.285,225.65964"

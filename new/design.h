@@ -104,7 +104,7 @@ BOM can be made simply from the parts_list.</dd>
 <dt>Component, again for good measure.</dt><dd>A component is an instantiation
 of a part. A component exists within a schematic which has a parts list
 containing the part from which the component is instantiated. A component has a
-unique reference designator, component ref, its own location, orientation,
+unique reference designator, part ref, its own location, orientation,
 stuff/DNS, and text attributes but <b>not</b> its own text fields/strings (other
 than reference designator). The part which is instantiated must exist in the
 parts list of the same schematic.</dd>
@@ -166,7 +166,7 @@ An applicable library table consists of rows from (at least) two sources:<ol>
 These rows from the two sources are conceptually concatonated (although they may
 not be physically concatonated in the implementation, TBD). The schematic
 resident rows take presedence over the personal library table if there are
-logicl library names duplicately defined. (Or we will simply ask that any remote
+logical library names duplicately defined. (Or we will simply ask that any remote
 (i.e. public) libraries use uppercase first letters in logical names, TBD.)
 
 <p> Eventually there will be an external publicly available internet based
@@ -800,8 +800,10 @@ protected:                  ///< derived classes must implement
      * portion present.  If it is not present, and a overwrite of an existhing
      * part is done, then LIB::ReloadPart() must be called on this same part
      * and all parts that inherit it must be reparsed.
+     * @return STRING - if the LIB_SINK support revision numbering, then return a
+     *   evision name that was next in the sequence, e.g. "rev22", else StrEmpty.
      */
-    virtual void WritePart( const STRING& aPartName,
+    virtual STRING WritePart( const STRING& aPartName,
                     const STRING& aSExpression ) throw( IO_ERROR ) = 0;
 
 
@@ -953,17 +955,10 @@ public:
 
     /**
      * Function WritePart
-     * saves the part to non-volatile storage. @a aPartName may have the revision
-     * portion present.  If it is not present, and a overwrite of an existing
-     * part is done, then all parts that inherit it must be re-parsed.
-     * This is why most library sources are read only.  An exception is the PARTS_LIST,
-     * not to be confused with a LIB based on a parts list in another schematic.
-     * The PARTS_LIST is in the the schematic being edited and is by definition the
-     * last to inherit, so editing in the current schematic's PARTS_LIST should be harmless.
-     * There can be some self referential issues that mean all the parts in the PARTS_LIST
-     * have to re-parsed.
+     * saves the part to non-volatile storage and returns the next new revision
+     * name in the sequence established by the LIB_SINK.
      */
-    virtual void WritePart( PART* aPart ) throw( IO_ERROR );
+    virtual STRING WritePart( PART* aPart ) throw( IO_ERROR );
 
     virtual void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
 
@@ -1008,11 +1003,7 @@ private:
 
     STRINGS             categories;
 
-    typedef boost::ptr_vector<PART>     PARTS;
-
     PARTS               parts;
-
-    std::vector<PART*>  orderByName;
 };
 
 
@@ -1120,7 +1111,8 @@ public:
     LIB_TABLE( const STRING& aLibraryTable, LIB_TABLE* aFallBackTable = NULL )
     {
         // s-expression is chosen so we can read a table fragment from either
-        // a schematic or a disk file.
+        // a schematic or a disk file, for schematic resident or
+        // personal table, respectively.
     }
 };
 
