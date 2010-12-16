@@ -208,7 +208,8 @@ struct APERTURE_MACRO
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
                                  int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
-    /** GetShapeDim
+    /**
+     * Function GetShapeDim
      * Calculate a value that can be used to evaluate the size of text
      * when displaying the D-Code of an item
      * due to the complexity of a shape using many primitives
@@ -220,6 +221,16 @@ struct APERTURE_MACRO
      * @return a dimension, or -1 if no dim to calculate
      */
     int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
+
+    /**
+     * Function HasNegativeItems
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return true if this macro has at least one shape (using aperture primitives)
+     *    must be drawn in background color
+     * used to optimize screen refresh (when no items are in background color
+     * refresh can be faster)
+     */
+    bool HasNegativeItems( GERBER_DRAW_ITEM* aParent );
 };
 
 

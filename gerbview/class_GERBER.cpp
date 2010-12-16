@@ -95,7 +95,7 @@ GERBER_IMAGE::GERBER_IMAGE( WinEDA_GerberFrame* aParent, int aLayer )
     for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
         m_Aperture_List[ii] = 0;
 
-    m_Pcb = 0;
+    m_Pcb = aParent->GetBoard();
 }
 
 
@@ -151,6 +151,7 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_FileName.Empty();
     m_ImageName     = wxT( "no name" );             // Image name from the IN command
     m_ImageNegative = false;                        // true = Negative image
+    m_hasNegativeItems    = -1;                     // set to uninitialized
     m_ImageJustifyOffset  = wxPoint(0,0);           // Image justify Offset
     m_ImageJustifyXCenter = false;                  // Image Justify Center on X axis (default = false)
     m_ImageJustifyYCenter = false;                  // Image Justify Center on Y axis (default = false)
@@ -190,6 +191,35 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_Selected_Tool = FIRST_DCODE;
 }
 
+/* Function HasNegativeItems
+ * return true if at least one item must be drawn in background color
+ * used to optimize screen refresh
+ */
+bool GERBER_IMAGE::HasNegativeItems()
+{
+    if( m_hasNegativeItems < 0 )    // negative items are not yet searched: find them if any
+    {
+        if( m_ImageNegative )       // A negative layer is expected having always negative objects.
+            m_hasNegativeItems = 1;
+        else
+        {
+            m_hasNegativeItems = 0;
+            for( BOARD_ITEM* item = m_Pcb->m_Drawings; item; item = item->Next() )
+            {
+                GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+                if( gerb_item->GetLayer() != m_GraphicLayer )
+                    continue;
+                if( gerb_item->HasNegativeItems() )
+                {
+                    m_hasNegativeItems = 1;
+                    break;
+                }
+            }
+             // TODO search for items in list
+        }
+    }
+    return m_hasNegativeItems == 1;
+}
 
 int GERBER_IMAGE::ReturnUsedDcodeNumber()
 {

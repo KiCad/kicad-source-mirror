@@ -738,6 +738,24 @@ void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
     }
 }
 
+/* Function HasNegativeItems
+ * return true if this macro has at least one aperture primitives
+ * that must be drawn in background color
+ * used to optimize screen refresh
+ */
+bool APERTURE_MACRO::HasNegativeItems( GERBER_DRAW_ITEM* aParent )
+{
+    for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();
+         prim_macro != primitives.end(); ++prim_macro )
+    {
+        if( prim_macro->mapExposure( aParent ) == false )   // = is negative
+            return true;
+    }
+    
+    return false;
+}
+
+
 /** GetShapeDim
  * Calculate a value that can be used to evaluate the size of text
  * when displaying the D-Code of an item

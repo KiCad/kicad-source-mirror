@@ -128,6 +128,15 @@ public:
 
     APERTURE_MACRO_SET m_aperture_macros;                       ///< a collection of APERTURE_MACROS, sorted by name
 
+private:
+    int                m_hasNegativeItems;                      // true if the image is negative or has some negative items
+                                                                // Used to optimize drawing, because when there are no
+                                                                // negative items screen refresh does not need
+                                                                // to build an intermediate bitmap specfic to this image
+                                                                // -1 = negative items are
+                                                                // 0 = no negative items found
+                                                                // 1 = have negative items found
+
 public:
     GERBER_IMAGE( WinEDA_GerberFrame* aParent, int layer );
     ~GERBER_IMAGE();
@@ -144,6 +153,13 @@ public:
         return m_GBRLayerParams;
     }
 
+    /**
+     * Function HasNegativeItems
+     * @return true if at least one item must be drawn in background color
+     * used to optimize screen refresh (when no items are in background color
+     * refresh can be faster)
+     */
+    bool HasNegativeItems();
 
     /**
      * Function ReportMessage

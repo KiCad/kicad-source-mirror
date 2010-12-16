@@ -310,6 +310,34 @@ bool GERBER_DRAW_ITEM::Save( FILE* aFile ) const
     return true;
 }
 
+/* Function HasNegativeItems
+ * return true if this item or at least one shape (when using aperture macros)
+ *    must be drawn in background color
+ * useful to optimize screen refresh
+ */
+bool GERBER_DRAW_ITEM::HasNegativeItems()
+{
+    bool isClear = m_LayerNegative ^ m_imageParams->m_ImageNegative;
+    // if isClear is true, this item has negative shape
+    // but if isClear is true, and if this item use an aperture macro definition,
+    // we must see if this aperture macro uses a negative shape.
+    if( isClear )
+        return true;
+    
+    // see for a macro def
+    D_CODE* dcodeDescr = GetDcodeDescr();
+    if( dcodeDescr == NULL )
+        return false;
+    if( m_Shape ==  GBR_SPOT_MACRO )
+    {
+        APERTURE_MACRO* macro = dcodeDescr->GetMacro();
+        if( macro )     // macro == NULL should not occurs
+            return macro->HasNegativeItems( this );
+    }
+    
+    return false;
+}
+
 
 /*********************************************************************/
 void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,

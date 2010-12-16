@@ -62,6 +62,7 @@ extern const wxString GerbviewProjectFileWildcard;
 extern Ki_PageDescr* g_GerberPageSizeList[];
 
 // Config keywords
+extern const wxString GerbviewDrawModeOption;
 extern const wxString GerbviewShowPageSizeOption;
 extern const wxString GerbviewShowDCodes;
 

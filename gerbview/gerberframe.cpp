@@ -119,6 +119,12 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_0,
+                    WinEDA_GerberFrame::OnSelectDisplayMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_1,
+                    WinEDA_GerberFrame::OnSelectDisplayMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_2,
+                    WinEDA_GerberFrame::OnSelectDisplayMode )
 
 END_EVENT_TABLE()
 
@@ -137,6 +143,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
     m_HotkeysZoomAndGridList = s_Gerbview_Hokeys_Descr;
     m_SelLayerBox = NULL;
     m_SelLayerTool = NULL;
+    m_displayMode = 0;
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
@@ -279,6 +286,7 @@ void WinEDA_GerberFrame::LoadSettings()
         return;
 
     WinEDA_BasePcbFrame::LoadSettings();
+    config->Read( GerbviewDrawModeOption, &m_displayMode, 0l );
     long pageSize_opt;
     config->Read( GerbviewShowPageSizeOption, &pageSize_opt, 0l );
     int imax = 0;
@@ -325,6 +333,8 @@ void WinEDA_GerberFrame::SaveSettings()
             }
         }
     }
+
+    config->Write( GerbviewDrawModeOption, m_displayMode );
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
     config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
 }
@@ -528,7 +538,8 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
         text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
-        m_TextInfo->Clear();
+        text.Printf( _("Layer %d not used"), GetScreen()->m_Active_Layer+1 );
+        m_TextInfo->SetValue( text );
         ClearMsgPanel();
         return;
     }
@@ -553,6 +564,33 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
                  gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
     m_TextInfo->SetValue( text );
+}
+
+
+/* Function OnSelectDisplayMode: called to select display mode
+ * (fast display, or exact mode with stacked images or with transparency
+ */
+void WinEDA_GerberFrame::OnSelectDisplayMode( wxCommandEvent& event )
+{
+    int oldMode = GetDisplayMode();
+    switch( event.GetId() )
+    {
+        case ID_TB_OPTIONS_SHOW_GBR_MODE_0:
+            SetDisplayMode( 0 );
+            break;
+
+        case ID_TB_OPTIONS_SHOW_GBR_MODE_1:
+            SetDisplayMode( 1 );
+            break;
+
+        case ID_TB_OPTIONS_SHOW_GBR_MODE_2:
+            SetDisplayMode( 2 );
+            break;
+    }
+
+    SetToolbars();
+    if( GetDisplayMode() != oldMode )
+       DrawPanel->Refresh();
 }
 
 

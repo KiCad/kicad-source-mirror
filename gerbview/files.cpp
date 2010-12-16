@@ -28,7 +28,7 @@ void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
     if( fn != wxEmptyString )
     {
         Erase_Current_Layer( false );
-        LoadOneGerberFile( fn, false );
+        LoadGerberFiles( fn );
     }
 }
 
@@ -42,9 +42,8 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     {
     case wxID_FILE:
     {
-        wxString fileName = GetScreen()->m_FileName;
         Erase_Current_Layer( false );
-        LoadOneGerberFile( fileName, true );
+        LoadGerberFiles( wxEmptyString );
         break;
     }
 
@@ -56,7 +55,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         {
             setActiveLayer(origLayer+1);
             Erase_Current_Layer( false );
-            if( !LoadOneGerberFile( wxEmptyString ) )
+            if( !LoadGerberFiles( wxEmptyString ) )
                 setActiveLayer(origLayer);
             SetToolbars();
         }
@@ -92,14 +91,16 @@ delete an existing layer to load any new layers." ), NB_LAYERS );
 }
 
 
-bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& aFullFileName, bool aOpenFileDialog )
+bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
 {
     wxString   filetypes;
+    wxArrayString filenamesList;
     wxFileName filename = aFullFileName;
+    wxString currentPath;
 
     ActiveScreen = GetScreen();
 
-    if( !filename.IsOk() || aOpenFileDialog )
+    if( ! filename.IsOk() )
     {
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
@@ -132,30 +133,57 @@ bool WinEDA_GerberFrame::LoadOneGerberFile( const wxString& aFullFileName, bool 
         filetypes += AllFilesWildcard;
 
         /* Use the current working directory if the file name path does not exist. */
-        wxString current_path = wxGetCwd();
-
         if( filename.DirExists() )
-            current_path = filename.GetPath();
+            currentPath = filename.GetPath();
+        else
+            currentPath = wxGetCwd();
 
         wxFileDialog dlg( this,
                           _( "Open Gerber File" ),
-                          current_path,
+                          currentPath,
                           filename.GetFullName(),
                           filetypes,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        filename = dlg.GetPath();
+        dlg.GetFilenames( filenamesList );
+        currentPath = wxGetCwd();
+    }
+    else
+    {
+        wxFileName filename = aFullFileName;
+        filenamesList.Add( aFullFileName );
+        currentPath = filename.GetPath();
     }
 
-    GetScreen()->m_FileName = filename.GetFullPath();
-    wxSetWorkingDirectory( filename.GetPath() );
-    filename.SetExt( g_PenFilenameExt );
+    // Read gerber files: each file is loaded on a new gerbview layer
+    int layer = getActiveLayer() - 1;
+    for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
+    {
+        wxFileName filename = filenamesList[ii];
+        filename.SetPath( currentPath );
+        GetScreen()->m_FileName = filename.GetFullPath();
+        filename.SetExt( g_PenFilenameExt );
 
-    if( Read_GERBER_File( GetScreen()->m_FileName, filename.GetFullPath() ) )
-        SetLastProject( GetScreen()->m_FileName );
+        layer++;
+        if( layer >= NB_LAYERS )
+            layer = 0;
+        setActiveLayer(layer);
+        if( Read_GERBER_File( GetScreen()->m_FileName, filename.GetFullPath() ) )
+        {
+            SetLastProject( GetScreen()->m_FileName );
+        }
+        else
+        {
+            layer--;
+            if( layer >= 0 )
+                setActiveLayer(layer);
+            else
+                setActiveLayer(0);
+        }
+    }
 
     Zoom_Automatique( false );
     GetScreen()->SetRefreshReq();
@@ -202,37 +230,4 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame,
     frame->Read_D_Code_File( fn.GetFullPath() );
     frame->CopyDCodesSizeToItems();
     frame->GetScreen()->SetRefreshReq();
-}
-
-
-/* Save the file in ASCII PCB.
- */
-bool WinEDA_GerberFrame::SaveGerberFile( const wxString& FullFileName )
-{
-    wxString   wildcard;
-    wxFileName fn = FullFileName;
-
-    if( !fn.IsOk() )
-    {
-        fn = GetScreen()->m_FileName;
-
-        wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         GetChars( g_PenFilenameExt ),
-                         GetChars( g_PenFilenameExt ) );
-
-        wxFileDialog dlg( this, _( "Save Gerber File" ), fn.GetPath(),
-                          fn.GetFullName(), wildcard,
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return false;
-
-        fn = dlg.GetPath();
-    }
-
-    GetScreen()->m_FileName = fn.GetFullPath();
-
-// TODO
-
-    return true;
 }
