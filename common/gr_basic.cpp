@@ -689,6 +689,10 @@ void GRSetDrawMode( wxDC* DC, int draw_mode )
 #endif
     else
         DC->SetLogicalFunction( wxCOPY );
+
+#ifdef USE_WX_OVERLAY
+    DC->SetLogicalFunction( wxCOPY );
+#endif
 }
 
 

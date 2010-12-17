@@ -363,7 +363,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         if( DrawPanel->ManageCurseur )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( DrawPanel->m_overlay, DC ); 
+            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
             oDC.Clear(); 
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 #else
