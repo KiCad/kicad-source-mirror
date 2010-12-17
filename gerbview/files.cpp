@@ -9,8 +9,6 @@
 #include "gestfich.h"
 
 #include "gerbview.h"
-#include "pcbplot.h"
-
 
 static void LoadDCodeFile( WinEDA_GerberFrame* frame,
                            const wxString&     FullFileName );
@@ -159,7 +157,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new gerbview layer
-    int layer = getActiveLayer() - 1;
+    int layer = getActiveLayer();
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
         wxFileName filename = filenamesList[ii];
@@ -167,27 +165,23 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
         GetScreen()->m_FileName = filename.GetFullPath();
         filename.SetExt( g_PenFilenameExt );
 
-        layer++;
-        if( layer >= NB_LAYERS )
-            layer = 0;
-        setActiveLayer(layer);
+        setActiveLayer( layer, false );
         if( Read_GERBER_File( GetScreen()->m_FileName, filename.GetFullPath() ) )
         {
             SetLastProject( GetScreen()->m_FileName );
-        }
-        else
-        {
-            layer--;
-            if( layer >= 0 )
-                setActiveLayer(layer);
-            else
-                setActiveLayer(0);
+            layer++;
+            if( layer >= NB_LAYERS )
+                layer = 0;
         }
     }
 
     Zoom_Automatique( false );
     GetScreen()->SetRefreshReq();
     g_SaveTime = time( NULL );
+
+    // Synchronize layers tools with actual active layer:
+    setActiveLayer(getActiveLayer());
+    syncLayerBox();
 
     return true;
 }

@@ -79,6 +79,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     m_AbortEnable       = m_AbortRequest = false;
     m_AutoPAN_Enable    = TRUE;
     m_IgnoreMouseEvents = 0;
+    m_DisableEraseBG    = false;
 
     ManageCurseur = NULL;
     ForceCloseManageCurseur = NULL;
@@ -673,7 +674,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     // call ~wxDCClipper() before ~wxPaintDC()
     {
         wxDCClipper dcclip( paintDC, PaintClipBox );
-        ReDraw( &paintDC, true );
+        ReDraw( &paintDC, m_DisableEraseBG ? false : true );
     }
 
     m_ClipBox = tmp;

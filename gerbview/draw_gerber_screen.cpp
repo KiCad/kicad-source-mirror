@@ -80,6 +80,8 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !GetBoard() )
         return;
 
+    wxBusyCursor dummy;
+
     ActiveScreen = screen;
 
     GRSetDrawMode( DC, GR_COPY );

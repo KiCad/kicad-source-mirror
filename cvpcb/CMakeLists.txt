@@ -36,7 +36,7 @@ set(CVPCB_SRCS
     listboxes.cpp
     listlib.cpp
     loadcmp.cpp
-    menucfg.cpp
+    menubar.cpp
     readschematicnetlist.cpp
     savecmp.cpp
     setvisu.cpp
