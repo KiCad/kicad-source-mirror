@@ -94,7 +94,7 @@ public:
     // General
     virtual void    OnCloseWindow( wxCloseEvent& Event ) = 0;
 
-    virtual void             RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
+    virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
     virtual void    ReCreateHToolbar() = 0;
     virtual void    ReCreateVToolbar() = 0;
     virtual void    OnLeftClick( wxDC*          DC,
@@ -121,7 +121,7 @@ public:
 public:
 
     // Read/write functions:
-    EDA_BaseStruct* ReadDrawSegmentDescr( FILE* File, int* LineNum );
+    EDA_ITEM* ReadDrawSegmentDescr( FILE* File, int* LineNum );
     int             ReadListeSegmentDescr( FILE*  File,
                                            TRACK* PtSegm,
                                            int    StructType,
@@ -216,7 +216,7 @@ public:
     MODULE* GetModuleByName();
 
     /**
-     * Function OnModify()
+     * Function OnModify
      * Virtual
      * Must be called after a change
      * in order to set the "modify" flag of the current screen
@@ -285,7 +285,7 @@ public:
      *
      *  Read active libraries or one library to find and load a given module
      *  If found the module is linked to the tail of linked list of modules
-     *  @param aLibrary: the full filename of the library to read. If empty,
+     *  @param aLibraryFullFileName - the full filename of the library to read. If empty,
      *                   all active libraries are read
      *  @param aModuleName = module name to load
      *  @param aDisplayMessageError = true to display an error message if any.

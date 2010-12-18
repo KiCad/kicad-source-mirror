@@ -14,14 +14,14 @@
 
 #define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
 
-extern void AnnotateComponents( WinEDA_SchematicFrame* parent,
+extern void AnnotateComponents( SCH_EDIT_FRAME* parent,
                                 bool annotateSchematic,
                                 int sortOption,
                                 bool resetAnnotation,
                                 bool repairsTimestamps );
 
 
-DIALOG_ANNOTATE::DIALOG_ANNOTATE( WinEDA_SchematicFrame* parent )
+DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
     : DIALOG_ANNOTATE_BASE( parent )
 {
     m_Parent = parent;

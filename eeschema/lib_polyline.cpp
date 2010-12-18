@@ -20,7 +20,7 @@
 
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_POLYLINE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_Fill       = NO_FILL;
     m_Width      = 0;
@@ -132,7 +132,7 @@ LIB_DRAW_ITEM* LIB_POLYLINE::DoGenCopy()
 
 int LIB_POLYLINE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_POLYLINE_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_POLYLINE_T );
 
     const LIB_POLYLINE* tmp = ( LIB_POLYLINE* ) &aOther;
 
@@ -230,7 +230,8 @@ void LIB_POLYLINE::AddPoint( const wxPoint& point )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_POLYLINE::GetPenSize()
@@ -305,37 +306,25 @@ void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoi
      * bounding box calculation. */
 #if 0
     EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return true if a hit, else false
- */
-bool LIB_POLYLINE::HitTest( const wxPoint& aRefPos )
+bool LIB_POLYLINE::HitTest( const wxPoint& aPosition )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
 
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
-    return HitTest( aRefPos, mindist, DefaultTransform );
+    return HitTest( aPosition, mindist, DefaultTransform );
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is near a segment
- * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to a segment
- * @param aTransMat = the transform matrix
- */
-bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_POLYLINE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
 
@@ -344,7 +333,7 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aT
         start = aTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
         end   = aTransform.TransformCoordinate( m_PolyPoints[ii] );
 
-        if( TestSegmentHit( aPosRef, start, end, aThreshold ) )
+        if( TestSegmentHit( aPosition, start, end, aThreshold ) )
             return true;
     }
 
@@ -352,10 +341,11 @@ bool LIB_POLYLINE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aT
 }
 
 
-/** Function GetBoundingBox
+/**
+ * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LIB_POLYLINE::GetBoundingBox()
+EDA_Rect LIB_POLYLINE::GetBoundingBox() const
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;

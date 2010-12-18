@@ -15,7 +15,7 @@
 /// Flag bit display (seen / not seen) items: (defined in the color values
 //IMB: Not used anymore   #define ITEM_NOT_SHOW       (1<<18)      // 0x40000
 
-#define HIGHT_LIGHT_FLAG    ( 1<<19 )         // 0x80000
+#define HIGHLIGHT_FLAG      ( 1<<19 )         // 0x80000
 
 
 /**

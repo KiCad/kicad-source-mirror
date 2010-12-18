@@ -27,7 +27,7 @@ static void LoadLayers( LINE_READER* aLine );
  * Routine to load an EESchema file.
  *  Returns true if file has been loaded (at least partially.)
  */
-bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
+bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
 {
     char            Name1[256];
     bool            itemLoaded = false;
@@ -71,10 +71,14 @@ bool WinEDA_SchematicFrame::LoadOneEEFile( SCH_SCREEN* screen, const wxString& F
         return FALSE;
     }
 
-    // get the file version here. TODO: Support version numbers > 9
-    char version = line[9 + sizeof(SCHEMATIC_HEAD_STRING)];
-    int  ver     = version - '0';
-    if( ver > EESCHEMA_VERSION )
+    // get the file version here.
+    char *strversion = line + 9 + sizeof(SCHEMATIC_HEAD_STRING);
+    // Skip blanks
+    while( *strversion && *strversion < '0' )
+        strversion++;
+    int  version = atoi(strversion);
+
+    if( version > EESCHEMA_VERSION )
     {
         MsgDiag = FullFileName + _( " was created by a more recent \
 version of EESchema and may not load correctly. Please consider updating!" );
@@ -83,7 +87,7 @@ version of EESchema and may not load correctly. Please consider updating!" );
 
 #if 0
     // Compile it if the new version is unreadable by previous eeschema versions
-    else if( ver < EESCHEMA_VERSION )
+    else if( version < EESCHEMA_VERSION )
     {
         MsgDiag = FullFileName + _( " was created by an older version of \
 EESchema. It will be stored in the new file format when you save this file \
@@ -159,9 +163,9 @@ again." );
             }
             else if( Name1[0] == 'L' )
                 item = new SCH_LABEL();
-            else if( Name1[0] == 'G' && ver > '1' )
+            else if( Name1[0] == 'G' && version > 1 )
                 item = new SCH_GLOBALLABEL();
-            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && ver == '1') )
+            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == 1) )
                 item = new SCH_HIERLABEL();
             else
                 item = new SCH_TEXT();
@@ -184,8 +188,8 @@ again." );
             }
             else
             {
-                item->SetNext( screen->EEDrawList );
-                screen->EEDrawList = item;
+                item->SetNext( screen->GetDrawItems() );
+                screen->SetDrawItems( item );
             }
         }
 
@@ -196,23 +200,24 @@ again." );
         }
     }
 
-    /* EEDrawList was constructed in reverse order - reverse it back: */
+    /* GetDrawItems() was constructed in reverse order - reverse it back: */
     Phead = NULL;
-    while( screen->EEDrawList )
+
+    while( screen->GetDrawItems() )
     {
-        Pnext = screen->EEDrawList;
-        screen->EEDrawList = screen->EEDrawList->Next();
+        Pnext = screen->GetDrawItems();
+        screen->SetDrawItems( screen->GetDrawItems()->Next() );
         Pnext->SetNext( Phead );
         Phead = Pnext;
     }
 
-    screen->EEDrawList = Phead;
+    screen->SetDrawItems( Phead );
 
 #if 0 && defined (DEBUG)
     screen->Show( 0, std::cout );
 #endif
 
-    TestDanglingEnds( screen->EEDrawList, NULL );
+    TestDanglingEnds( screen->GetDrawItems(), NULL );
 
     MsgDiag = _( "Done Loading " ) + screen->m_FileName;
     PrintMsg( MsgDiag );
@@ -253,7 +258,7 @@ static void LoadLayers( LINE_READER* aLine )
 
 
 /* Read the schematic header. */
-bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window )
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScreen )
 {
     char Text[256], buf[1024];
     int  ii;
@@ -269,9 +274,11 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Windo
     sscanf( ((char*)(*aLine)), "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
 
     wxString pagename = CONV_FROM_UTF8( Text );
+
     for( ii = 0; SheetFormatList[ii] != NULL; ii++ )
     {
         wsheet = SheetFormatList[ii];
+
         if( wsheet->m_Name.CmpNoCase( pagename ) == 0 ) /* Descr found ! */
         {
             // Get the user page size and make it the default
@@ -279,6 +286,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Windo
             {
                 g_Sheet_user.m_Size = PageSize;
             }
+
             break;
         }
     }
@@ -291,7 +299,7 @@ line %d, \aAbort reading file.\n" ),
         aMsgDiag << CONV_FROM_UTF8( ((char*)(*aLine)) );
     }
 
-    Window->m_CurrentSheetDesc = wsheet;
+    aScreen->m_CurrentSheetDesc = wsheet;
 
     for( ; ; )
     {
@@ -303,61 +311,61 @@ line %d, \aAbort reading file.\n" ),
 
         if( strnicmp( ((char*)(*aLine)), "Sheet", 2 ) == 0 )
             sscanf( ((char*)(*aLine)) + 5, " %d %d",
-                    &Window->m_ScreenNumber, &Window->m_NumberOfScreen );
+                    &aScreen->m_ScreenNumber, &aScreen->m_NumberOfScreen );
 
         if( strnicmp( ((char*)(*aLine)), "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Title = CONV_FROM_UTF8( buf );
+            aScreen->m_Title = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Date = CONV_FROM_UTF8( buf );
+            aScreen->m_Date = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Revision = CONV_FROM_UTF8( buf );
+            aScreen->m_Revision = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Company = CONV_FROM_UTF8( buf );
+            aScreen->m_Company = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Commentaire1 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire1 = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Commentaire2 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire2 = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Commentaire3 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire3 = CONV_FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( ((char*)(*aLine)), "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
-            Window->m_Commentaire4 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire4 = CONV_FROM_UTF8( buf );
             continue;
         }
     }

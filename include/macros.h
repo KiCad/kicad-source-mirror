@@ -22,10 +22,11 @@
  * returns a wxChar* to the actual character data within a wxString, and is
  * helpful for passing strings to wxString::Printf(wxT("%s"), GetChars(wxString) )
  * <p>
- * wxChar is defined to be <ul>
+ * wxChar is defined to be
+ * <ul>
  * <li> standard C style char when wxUSE_UNICODE==0 </li>
  * <li> wchar_t when wxUSE_UNICODE==1 (the default). </li>
- * <ul>
+ * </ul>
  * i.e. it depends on how the wxWidgets library was compiled.  There was a period
  * during the development of wxWidgets 2.9 when GetData() was missing, so this
  * function was used to provide insulation from that design change.  It may
@@ -110,8 +111,8 @@ BOOST_TYPEOF_REGISTER_TYPE( wxSize )
 BOOST_TYPEOF_REGISTER_TYPE( wxString )
 class DrawSheetLabelStruct;
 BOOST_TYPEOF_REGISTER_TYPE( DrawSheetLabelStruct* )
-class EDA_BaseStruct;
-BOOST_TYPEOF_REGISTER_TYPE( EDA_BaseStruct* )
+class EDA_ITEM;
+BOOST_TYPEOF_REGISTER_TYPE( EDA_ITEM* )
 class D_PAD;
 BOOST_TYPEOF_REGISTER_TYPE( D_PAD* )
 BOOST_TYPEOF_REGISTER_TYPE( const D_PAD* )

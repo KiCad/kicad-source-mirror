@@ -27,7 +27,8 @@ static void RebuildTrackChain( BOARD* pcb );
 static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_val, int new_val )
 /**************************************************************************************************/
 
-/** Function Merge_Two_SubNets()
+/**
+ * Function Merge_Two_SubNets
  * Used by Propagate_SubNet()
  * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
  * for pads and tracks, this is the .m_Subnet member that is tested and modified
@@ -89,7 +90,8 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
 static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 /******************************************************************/
 
-/** Function Propagate_SubNet
+/**
+ * Function Propagate_SubNet
  * Test a list of track segment, to create or propagate a sub netcode to pads and segments connected together
  * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the same net
  * When 2 items are connected (a track to a pad, or a track to an other track) they are grouped in a cluster.
@@ -267,7 +269,8 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 /***************************************************/
 
-/** Function testing the connections relative to all nets
+/**
+ * Function testing the connections relative to all nets
  *  This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection is found, = 1 else)
  * track segments are assumed to be sorted by net codes.
  * This is the case because when a new track is added, it is inserted in the linked list according to its net code.
@@ -310,7 +313,8 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
 /*************************************************************************/
 
-/** Function testing the connections relative to a given net
+/**
+ * Function testing the connections relative to a given net
  * track segments are assumed to be sorted by net codes
  * @param DC = current Device Context
  * @param net_code = net code to test

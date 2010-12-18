@@ -118,7 +118,8 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 }
 
 
-/** Function WinEDA_PcbFrame::LoadOnePcbFile
+/**
+ * Function LoadOnePcbFile
  *  Load a Kicad board (.brd) file.
  *
  *  @param aFileName - File name including path. If empty, a file dialog will

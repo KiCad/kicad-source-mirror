@@ -15,11 +15,10 @@
 
 
 #include "sch_item_struct.h"
-
 #include "general.h"
 
 
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class SCH_COMPONENT;
 class LIB_FIELD;
 
@@ -35,7 +34,6 @@ class SCH_FIELD : public SCH_ITEM, public EDA_TextStruct
 {
 public:
     int      m_FieldId;         ///< Field index, @see enum NumFieldType
-
 
     wxString m_Name;
 
@@ -53,16 +51,15 @@ public:
         return wxT( "SCH_FIELD" );
     }
 
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-    void     Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-
-    EDA_Rect GetBoundaryBox() const;
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function IsVoid
      * returns true if the field is either empty or holds "~".
      */
-    bool     IsVoid()
+    bool IsVoid() const
     {
         size_t len = m_Text.Len();
 
@@ -84,13 +81,13 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    int  GetPenSize();
+    int GetPenSize() const;
 
     /**
      * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */
-    bool IsVisible()
+    bool IsVisible() const
     {
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
@@ -99,11 +96,11 @@ public:
     /**
      * Function Draw
      */
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
-               const wxPoint&    offset,
-               int               draw_mode,
-               int               Color = -1 );
+    void Draw( WinEDA_DrawPanel* aPanel,
+               wxDC*             aDC,
+               const wxPoint&    aOffset,
+               int               aDrawMode,
+               int               aColor = -1 );
 
     /**
      * Function Save
@@ -136,7 +133,6 @@ public:
          * master class */
     }
 
-
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
@@ -148,7 +144,6 @@ public:
          * this function is only needed by the virtual pure function of the
          * master class */
     }
-
 
     /**
      * Compare schematic field text against search string.
@@ -163,6 +158,10 @@ public:
      */
     virtual bool Matches( wxFindReplaceData& aSearchData,
                           void* aAuxData, wxPoint * aFindLocation );
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 

@@ -34,10 +34,10 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_BoxUnits->SetSelection( 0 );
 	bLeftSizer->Add( m_BoxUnits, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_CursorShapeChoices[] = { _("Small"), _("Big") };
+	wxString m_CursorShapeChoices[] = { _("Small"), _("Large") };
 	int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
 	m_CursorShape = new wxRadioBox( this, wxID_ANY, _("Cursor"), wxDefaultPosition, wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_CursorShape->SetSelection( 0 );
+	m_CursorShape->SetSelection( 1 );
 	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
 	
 	bUpperSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );

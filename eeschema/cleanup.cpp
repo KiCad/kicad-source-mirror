@@ -28,35 +28,36 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen )
         return;
     }
 
-    DrawList = Screen->EEDrawList;
+    DrawList = Screen->GetDrawItems();
+
     while( DrawList )
     {
         switch( DrawList->Type() )
         {
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
             #undef STRUCT
             #define STRUCT ( (SCH_JUNCTION*) DrawList )
             BreakSegment( Screen, STRUCT->m_Pos );
             break;
 
-        case DRAW_BUSENTRY_STRUCT_TYPE:
+        case SCH_BUS_ENTRY_T:
             #undef STRUCT
             #define STRUCT ( (SCH_BUS_ENTRY*) DrawList )
             BreakSegment( Screen, STRUCT->m_Pos );
             BreakSegment( Screen, STRUCT->m_End() );
             break;
 
-        case DRAW_SEGMENT_STRUCT_TYPE:
-        case DRAW_NOCONNECT_STRUCT_TYPE:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-        case TYPE_SCH_COMPONENT:
-        case DRAW_POLYLINE_STRUCT_TYPE:
-        case TYPE_SCH_MARKER:
-        case TYPE_SCH_TEXT:
-        case DRAW_SHEET_STRUCT_TYPE:
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_LINE_T:
+        case SCH_NO_CONNECT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_COMPONENT_T:
+        case SCH_POLYLINE_T:
+        case SCH_MARKER_T:
+        case SCH_TEXT_T:
+        case SCH_SHEET_T:
+        case SCH_SHEET_LABEL_T:
             break;
 
         default:
@@ -76,10 +77,9 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
 {
     SCH_LINE* segment, * NewSegment;
 
-    for( SCH_ITEM* DrawList = aScreen->EEDrawList; DrawList;
-         DrawList = DrawList->Next() )
+    for( SCH_ITEM* DrawList = aScreen->GetDrawItems(); DrawList; DrawList = DrawList->Next() )
     {
-        if( DrawList->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+        if( DrawList->Type() != SCH_LINE_T )
             continue;
 
         segment = (SCH_LINE*) DrawList;

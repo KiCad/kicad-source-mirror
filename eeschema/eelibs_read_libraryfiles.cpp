@@ -19,7 +19,7 @@
  *
  * Clear all already loaded libraries and load all of the project libraries.
  */
-void WinEDA_SchematicFrame::LoadLibraries( void )
+void SCH_EDIT_FRAME::LoadLibraries( void )
 {
     size_t         ii;
     wxFileName     fn;

@@ -64,7 +64,8 @@ END_EVENT_TABLE()
 void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 /*************************************************/
 
-/** Function CreateCommandToolbar
+/**
+ * Function CreateCommandToolbar
  * create the buttons to call eescheman cvpcb, pcbnew and gerbview
  */
 {
@@ -88,7 +89,8 @@ Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W 
 }
 
 
-/** Function AddBitmapButton
+/**
+ * Function AddBitmapButton
  * add a  Bitmap Button (fast launch button) to the buttons panel
  * @param aId = the button id
  * @param aBitmap = the wxBitmap used to create the button

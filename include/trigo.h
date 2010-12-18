@@ -53,7 +53,8 @@ bool HitTestPoints(wxPoint pointA, wxPoint pointB, double threshold);
 int CrossProduct(wxPoint vectorA, wxPoint vectorB);
 
 
-/** Function TestSegmentHit
+/**
+ * Function TestSegmentHit
  * test for hit on line segment
  * i.e. cursor within a given distance from segment
  * @param aRefPoint = cursor (point to test) coords

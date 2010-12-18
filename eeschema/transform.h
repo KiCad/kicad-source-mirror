@@ -56,6 +56,8 @@ public:
 
     bool operator==( const TRANSFORM& aTransform ) const;
 
+    bool operator!=( const TRANSFORM& aTransform ) const { return !( *this == aTransform ); }
+
    /**
     * Calculate new coordinate according to the transform.
     *

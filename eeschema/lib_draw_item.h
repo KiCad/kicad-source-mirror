@@ -50,7 +50,7 @@ typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
  * Base class for drawable items used in library components.
  *  (graphic shapes, texts, fields, pins)
  */
-class LIB_DRAW_ITEM : public EDA_BaseStruct
+class LIB_DRAW_ITEM : public EDA_ITEM
 {
     /**
      * Draws the item.
@@ -191,7 +191,6 @@ public:
      * Write draw item object to \a aFile in "*.lib" format.
      *
      * @param aFile - The file to write to.
-     * @param aErrorMsg - Error message if write fails.
      * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) = 0;
@@ -216,22 +215,24 @@ public:
     }
 
     /**
-     * @param aPosRef - a wxPoint to test
+     * @param aPosition - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransform - the transform matrix
-     * @return - true if the point aPosRef is near this object
+     * @return - true if the point \a aPosition is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform ) = 0;
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform ) = 0;
 
    /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_Rect GetBoundingBox()
-    {
-        return EDA_BaseStruct::GetBoundingBox();
-    }
+    virtual EDA_Rect GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
+    /**
+     * Displays basic info (type, part and convert) about item
+     * in msg panel
+     * @param aFrame = main frame where the message manel info is.
+     */
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     /**
@@ -295,6 +296,8 @@ public:
      * Return the current draw object start position.
      */
     wxPoint GetPosition() const { return DoGetPosition(); }
+
+    void SetPosition( const wxPoint& aPosition ) { DoMove( aPosition ); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about a point.

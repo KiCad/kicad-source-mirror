@@ -31,7 +31,8 @@ enum
 
 
 
-/** Function ArmBoolEng
+/**
+ * Function ArmBoolEng
  * Initialise parameters used in kbool
  * @param aBooleng = pointer to the Bool_Engine to initialise
  * @param aConvertHoles = mode for holes when a boolean operation is made

@@ -17,7 +17,7 @@
 /**
  * @brief Create or update the menubar for the Component Editor frame
  */
-void WinEDA_LibeditFrame::ReCreateMenuBar()
+void LIB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString   text;
     wxMenuItem *item;
@@ -72,8 +72,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     */
 #if !defined(__WXMAC__)
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ),
-                           _( "Quit Library Editor" ) );
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Library Editor" ) );
     item->SetBitmap( exit_xpm );
     filesMenu->Append( item );
 #endif
@@ -86,8 +85,7 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
     /* Undo */
     text  = AddHotkeyName( _( "Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO);
 
-    item = new wxMenuItem( editMenu, wxID_UNDO, text,
-                           _( "Undo last edition" ), wxITEM_NORMAL );
+    item = new wxMenuItem( editMenu, wxID_UNDO, text, _( "Undo last edition" ), wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
@@ -126,35 +124,29 @@ void WinEDA_LibeditFrame::ReCreateMenuBar()
      */
     /* Zoom in */
     text  =_( "Zoom In" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN,
-                           wxITEM_NORMAL );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
     text = _( "Zoom Out" );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT,
-                           wxITEM_NORMAL );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
 
     /* Fit on screen */
-    text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr,
-                          HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
-                           HELP_ZOOM_FIT, wxITEM_NORMAL );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
     item->SetBitmap( zoom_auto_xpm );
     viewMenu->Append( item );
 
     viewMenu->AppendSeparator();
 
     /* Redraw view */
-    text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr,
-                          HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           HELP_ZOOM_REDRAW, wxITEM_NORMAL );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, wxITEM_NORMAL );
     item->SetBitmap( zoom_redraw_xpm );
     viewMenu->Append( item );
 

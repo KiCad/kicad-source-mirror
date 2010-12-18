@@ -94,7 +94,8 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow*
     // using installRightLayerClickHandler
 }
 
-/** Function SetLayersManagerTabsText
+/**
+ * Function SetLayersManagerTabsText
  * Update the layer manager tabs labels
  * Useful when changing Language or to set labels to a non default value
  */

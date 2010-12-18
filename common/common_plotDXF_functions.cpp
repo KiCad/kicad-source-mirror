@@ -14,15 +14,14 @@
 
 /* Set the plot offset for the current plotting
  */
-void DXF_PLOTTER::set_viewport( wxPoint offset,
-                                double aScale, int orient )
+void DXF_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    plot_offset  = offset;
+    plot_offset  = aOffset;
     plot_scale   = aScale;
     device_scale = 1;
     set_default_line_width( 0 );    /* No line width on DXF */
-    plot_orient_options = 0;        /* No mirroring on DXF */
+    plotMirror = false;             /* No mirroring on DXF */
     current_color = BLACK;
 }
 
@@ -111,7 +110,7 @@ void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
             fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
             fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x+r,centre.y);
             fprintf( output_file, "0\nSEQEND\n");
-	}
+    }
      }
 }
 
@@ -175,7 +174,8 @@ void DXF_PLOTTER::set_dash( bool dashed )
 }
 
 
-/** Function Plot a filled segment (track)
+/**
+ * Function Plot a filled segment (track)
  * @param start = starting point
  * @param end = ending point
  * @param aWidth = segment width (thickness)

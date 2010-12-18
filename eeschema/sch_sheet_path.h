@@ -134,7 +134,7 @@ public:
      * store (push) aSheet in list
      * @param aSheet = pointer to the SCH_SHEET to store in list
      * Push is used when entered a sheet to select or analyze it
-     * This is like cd <directory> in directories navigation
+     * This is like cd &ltdirectory&gt in directories navigation
      */
     void             Push( SCH_SHEET* aSheet );
 
@@ -166,9 +166,9 @@ public:
 
     /**
      * Function BuildSheetPathInfoFromSheetPathValue
-     * Fill this with data to access to the hierarchical sheet known by its
-     * path aPath
+     * Fill this with data to access to the hierarchical sheet known by its path \a aPath
      * @param aPath = path of the sheet to reach (in non human readable format)
+     * @param aFound - Please document me.
      * @return true if success else false
      */
     bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath,
@@ -200,7 +200,7 @@ public:
     /**
      * Find the previous schematic item in this sheet path object.
      *
-     * @param aItemType - The type of schematic item object to search for.
+     * @param aType - The type of schematic item object to search for.
      * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
      *                    the end of the list.
      * @param aWrap - Wrap around the beginning of the list to find the next item if aLastItem
@@ -272,7 +272,7 @@ public:
     }
 
     /**
-     * Function GetCount()
+     * Function GetCount
      * @return the number of sheets in list:
      * usually the number of sheets found in the whole hierarchy
      */

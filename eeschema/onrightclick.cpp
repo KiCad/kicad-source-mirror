@@ -26,9 +26,9 @@
 using namespace std;
 
 
-static void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame );
-static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* frame );
-static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, WinEDA_SchematicFrame* frame );
+static void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame );
+static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
+static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
 static void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet );
 static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
@@ -37,17 +37,15 @@ static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
 static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
-static void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction,
-                                 WinEDA_SchematicFrame* frame );
-static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker,
-                                WinEDA_SchematicFrame* aFrame );
+static void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAME* frame );
+static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
 
 
 /* Prepare context menu when a click on the right mouse button occurs.
  *
  * This menu is then added to the list of zoom commands.
  */
-bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
     bool      BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
@@ -67,7 +65,7 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
     {
         DrawStruct = SchematicGeneralLocateAndDisplay( false );
 
-        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
+        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
             SCH_SHEET_PIN* slabel;
             slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct, GetScreen()->m_Curseur );
@@ -115,16 +113,16 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
 
     switch( DrawStruct->Type() )
     {
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
 
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Noconn" ), delete_xpm );
         break;
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         AddMenusForJunction( PopMenu, (SCH_JUNCTION*) DrawStruct, this );
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         if( !flags )
         {
             wxString msg = AddHotkeyName( _( "Move Bus Entry" ), s_Schematic_Hokeys_Descr,
@@ -139,36 +137,36 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Bus Entry" ), delete_bus_xpm );
         break;
 
-    case TYPE_SCH_MARKER:
+    case SCH_MARKER_T:
         AddMenusForMarkers( PopMenu, (SCH_MARKER*) DrawStruct, this );
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         AddMenusForText( PopMenu, (SCH_TEXT*) DrawStruct );
         break;
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         AddMenusForLabel( PopMenu, (SCH_LABEL*) DrawStruct );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) DrawStruct );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) DrawStruct );
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
     {
         AddMenusForComponentField( PopMenu, (SCH_FIELD*) DrawStruct );
+
         if( flags )
             break;
 
         // Many fields are inside a component. If this is the case, add the
         // component menu
-        SCH_COMPONENT* Component =
-            LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
+        SCH_COMPONENT* Component = LocateSmallestComponent( GetScreen() );
 
         if( Component )
         {
@@ -178,11 +176,11 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
     }
     break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
 
 //      if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move");
         switch( DrawStruct->GetLayer() )
@@ -204,18 +202,18 @@ bool WinEDA_SchematicFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMe
 
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) DrawStruct );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         AddMenusForPinSheet( PopMenu, (SCH_SHEET_PIN*) DrawStruct );
         break;
 
     default:
         wxString msg;
-        msg.Printf( wxT( "WinEDA_SchematicFrame::OnRightClick Error: unknown DrawType %d" ),
-                   DrawStruct->Type() );
+        msg.Printf( wxT( "SCH_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
+                    DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -245,7 +243,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 
 void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 {
-    if( Component->Type() != TYPE_SCH_COMPONENT )
+    if( Component->Type() != SCH_COMPONENT_T )
     {
         wxASSERT( 0 );
         return;
@@ -255,7 +253,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     LIB_ALIAS*     libEntry;
     LIB_COMPONENT* libComponent = NULL;
 
-    libEntry = CMP_LIBRARY::FindLibraryEntry( Component->m_ChipName );
+    libEntry = CMP_LIBRARY::FindLibraryEntry( Component->GetLibName() );
 
     if( libEntry )
         libComponent = libEntry->GetComponent();
@@ -483,7 +481,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 }
 
 
-void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, WinEDA_SchematicFrame* frame )
+void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAME* frame )
 {
     bool     is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
     wxString msg;
@@ -507,7 +505,7 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, WinEDA_Schema
 }
 
 
-void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* frame )
+void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
     bool     is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
     wxPoint  pos    = frame->GetScreen()->m_Curseur;
@@ -545,7 +543,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, WinEDA_SchematicFrame* fr
 }
 
 
-void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, WinEDA_SchematicFrame* frame )
+void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
     bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
     wxPoint pos    = frame->GetScreen()->m_Curseur;
@@ -632,7 +630,7 @@ void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 }
 
 
-void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
+void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
 {
     wxString msg;
 
@@ -669,7 +667,7 @@ void AddMenusForBlock( wxMenu* PopMenu, WinEDA_SchematicFrame* frame )
 }
 
 
-void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, WinEDA_SchematicFrame* aFrame )
+void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame )
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );

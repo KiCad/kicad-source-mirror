@@ -127,12 +127,12 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
  * function PcbGeneralLocateAndDisplay() would find, except that it keeps all
  * that it finds and does not do any displaying.
  *
- * @param testItem An EDA_BaseStruct to examine.
+ * @param testItem An EDA_ITEM to examine.
  * @param notUsed The const void* testData.
  * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
  *   else SCAN_CONTINUE;
  */
-SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* notUsed )
+SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* notUsed )
 {
     BOARD_ITEM* item   = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;
@@ -390,7 +390,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
 
 // see collectors.h
-SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_BaseStruct* testItem, const void* testData )
+SEARCH_RESULT TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.

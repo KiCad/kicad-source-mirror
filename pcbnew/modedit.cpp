@@ -31,6 +31,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 
     if( GetBoard()->m_Modules == NULL )
         return NULL;
+
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
     // Assign to scanList the proper item types desired based on tool type
@@ -132,7 +133,8 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
     return item;
 }
 
-/** function LoadModuleFromBoard
+/**
+ * Function LoadModuleFromBoard
  * called from the main toolbar
  * to load a footprint from board mainly to edit it
  */
@@ -703,6 +705,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     SetToolbars();
+
     if( redraw )
         DrawPanel->Refresh();
 }
@@ -716,11 +719,11 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
  */
 void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 {
-    D_PAD*          pad = module->m_Pads;
-    EDA_BaseStruct* PtStruct = module->m_Drawings;
-    TEXTE_MODULE*   textmod;
-    EDGE_MODULE*    edgemod;
-    int             angle = 900; // Necessary +- 900 (+- 90 degrees) )
+    D_PAD*        pad = module->m_Pads;
+    EDA_ITEM*     PtStruct = module->m_Drawings;
+    TEXTE_MODULE* textmod;
+    EDGE_MODULE*  edgemod;
+    int           angle = 900; // Necessary +- 900 (+- 90 degrees) )
 
     switch( transform )
     {
@@ -801,6 +804,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
                 /* Invert local coordinates */
                 NEGATE( edgemod->m_Start0.y );
                 NEGATE( edgemod->m_End0.y );
+                NEGATE( edgemod->m_Angle );
                 break;
 
             case TYPE_TEXTE_MODULE:

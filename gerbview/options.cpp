@@ -16,7 +16,8 @@
 #include "gerbview_id.h"
 
 
-/** Function OnSelectOptionToolbar
+/**
+ * Function OnSelectOptionToolbar
  *  called to validate current choices
  */
 void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )

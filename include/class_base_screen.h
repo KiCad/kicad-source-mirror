@@ -18,7 +18,6 @@
 
 
 // Forward declarations:
-class SCH_ITEM;
 class Ki_PageDescr;
 
 
@@ -28,7 +27,7 @@ class Ki_PageDescr;
  * The Boost containter was choosen over the statand C++ contain because you can detach
  * the pointer from a list with the release method.
  */
-typedef boost::ptr_vector< EDA_BaseStruct > EDA_ITEMS;
+typedef boost::ptr_vector< EDA_ITEM > EDA_ITEMS;
 
 
 /* Simple class for handling grid arrays. */
@@ -57,17 +56,17 @@ public:
 };
 
 
-/* Declare array of wxSize for grid list implementation. */
-#include <wx/dynarray.h>
-WX_DECLARE_OBJARRAY( GRID_TYPE, GridArray );
+typedef std::vector< GRID_TYPE > GRIDS;
 
 
 /*******************************************************************/
 /* Class to handle how to draw a screen (a board, a schematic ...) */
 /*******************************************************************/
-class BASE_SCREEN : public EDA_BaseStruct
+class BASE_SCREEN : public EDA_ITEM
 {
     EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
+    GRIDS     m_grids;          ///< List of valid grid sizes.
+    EDA_ITEM* m_drawList;       ///< Object list for the screen.
 
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
@@ -101,8 +100,6 @@ public:
                                 * Schematic */
     bool m_FirstRedraw;
 
-    SCH_ITEM*           EEDrawList; /* Object list (main data) for schematic */
-
     // Undo/redo list of commands
     UNDO_REDO_CONTAINER m_UndoList;             /* Objects list for the undo
                                                  * command (old data) */
@@ -135,13 +132,12 @@ private:
     char            m_FlagModified;         // indicates current drawing has
                                             // been modified
     char            m_FlagSave;             // Perform automatica file save.
-    EDA_BaseStruct* m_CurrentItem;          ///< Currently selected object
+    EDA_ITEM* m_CurrentItem;          ///< Currently selected object
     GRID_TYPE       m_Grid;                 ///< Current grid selection.
 
     /* Grid and zoom values. */
 public:
     wxPoint	m_GridOrigin;
-    GridArray  m_GridList;
 
     wxArrayInt m_ZoomList;          /* Array of standard zoom coefficients. */
     int        m_Zoom;              /* Current zoom coefficient. */
@@ -150,16 +146,25 @@ public:
     bool       m_IsPrinting;
 
 public:
-    BASE_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
+    BASE_SCREEN( KICAD_T aType = TYPE_SCREEN );
     ~BASE_SCREEN();
 
     /**
      * Function setCurItem
      * sets the currently selected object, m_CurrentItem.
-     * @param current Any object derived from EDA_BaseStruct
+     * @param current Any object derived from EDA_ITEM
      */
-    void SetCurItem( EDA_BaseStruct* current ) {  m_CurrentItem = current; }
-    EDA_BaseStruct* GetCurItem() const { return m_CurrentItem; }
+    void SetCurItem( EDA_ITEM* current ) {  m_CurrentItem = current; }
+    EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
+
+    /**
+     * Function GetDrawItems().
+     *
+     * @return - A pointer to the first item in the linked list of draw items.
+     */
+    virtual EDA_ITEM* GetDrawItems() const { return m_drawList; }
+
+    virtual void SetDrawItems( EDA_ITEM* aItem ) { m_drawList = aItem; }
 
     void         InitDatas();
 
@@ -292,6 +297,7 @@ public:
     /**
      * Function SetZoom
      * adjusts the current zoom factor
+     * @param coeff - Zoom coefficient.
      */
     bool        SetZoom( int coeff );
 
@@ -300,7 +306,7 @@ public:
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void        SetZoomList( const wxArrayInt& zoomlist );
+    void        SetZoomList( const wxArrayInt& aZoomList );
 
     int         Scale( int coord );
     double      Scale( double coord );
@@ -340,14 +346,38 @@ public:
      */
     GRID_TYPE   GetGrid();
 
-    const wxPoint &GetGridOrigin();
+    const wxPoint& GetGridOrigin();
     void        SetGrid( const wxRealPoint& size );
     void        SetGrid( int id );
-    void        SetGridList( GridArray& sizelist );
+    void        SetGridList( GRIDS& sizelist );
     void        AddGrid( const GRID_TYPE& grid );
     void        AddGrid( const wxRealPoint& size, int id );
     void        AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id );
 
+    /**
+     * Function GetGridCount().
+     * Return the size of the grid list.
+     *
+     * @returns - The size of the grid list.
+     */
+    size_t      GetGridCount() const { return m_grids.size(); }
+
+    /**
+     * Function GetGrid()
+     * Returns the grid object at \a aIndex.
+     *
+     * @param aIndex - The grid list index.
+     * @return - The grid object at \a aIndex or the current grid if the grid list is empty.
+     */
+    GRID_TYPE&  GetGrid( size_t aIndex );
+
+    /**
+     * Function GetGrids().
+     * Copy the grid list to \a aList.
+     *
+     * @param aList - List to copy to.
+     */
+    void         GetGrids( GRIDS& aList );
 
     /**
      * Function RefPos
@@ -380,8 +410,8 @@ public:
      */
     EDA_ITEMS::iterator Begin() { return m_items.begin(); }
     EDA_ITEMS::iterator End() { return m_items.end(); }
-    virtual void AddItem( EDA_BaseStruct* aItem );
-    virtual void InsertItem(  EDA_ITEMS::iterator aIter, EDA_BaseStruct* aItem );
+    virtual void AddItem( EDA_ITEM* aItem );
+    virtual void InsertItem(  EDA_ITEMS::iterator aIter, EDA_ITEM* aItem );
 
 #if defined(DEBUG)
 

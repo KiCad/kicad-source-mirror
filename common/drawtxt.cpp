@@ -29,7 +29,8 @@
 double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
 
 
-/** Function GetPensizeForBold
+/**
+ * Function GetPensizeForBold
  * @return the "best" value for a pen size to draw/plot a bold text
  * @param aTextSize = the char size (height or width)
  */
@@ -39,7 +40,8 @@ int GetPenSizeForBold( int aTextSize )
 }
 
 
-/** Function  Clamp_Text_PenSize
+/**
+ * Function  Clamp_Text_PenSize
  *As a rule, pen width should not be >1/4em, otherwise the character
  * will be cluttered up in its own fatness
  * so pen width max is aSize/4 for bold text, and aSize/6 for normal text
@@ -78,7 +80,8 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
  *  substrings between ~ markers can be "negated" (i.e. with an over bar
  */
 
-/** Function NegableTextLength
+/**
+ * Function NegableTextLength
  * Return the text length of a negable string, excluding the ~ markers */
 int NegableTextLength( const wxString& aText )
 {
@@ -97,7 +100,7 @@ int NegableTextLength( const wxString& aText )
 }
 
 
-/* Function GetHersheyShapeDescription()
+/* Function GetHersheyShapeDescription
  * return a pointer to the shape corresponding to unicode value AsciiCode
  * Note we use the same font for Bold and Normal texts
  * because kicad handles a variable pen size to do that
@@ -198,7 +201,8 @@ static int overbar_position( int size_v, int thickness )
 }
 
 
-/** Function DrawGraphicText
+/**
+ * Function DrawGraphicText
  * Draw a graphic text (like module texts)
  *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
@@ -493,9 +497,9 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
 }
 
 
-/** Function PlotGraphicText
+/**
+ * Function PlotGraphicText
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
- *  @param aFormat_plot = plot format (PLOT_FORMAT_POST, PLOT_FORMAT_HPGL, PLOT_FORMAT_GERBER)
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (enum EDA_Colors) = text color
  *  @param aText = text to draw
@@ -509,7 +513,6 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
-/******************************************************************************************/
 void PLOTTER::text( const wxPoint&              aPos,
                     enum EDA_Colors             aColor,
                     const wxString&             aText,
@@ -520,7 +523,6 @@ void PLOTTER::text( const wxPoint&              aPos,
                     int                         aWidth,
                     bool                        aItalic,
                     bool                        aBold )
-/******************************************************************************************/
 {
     if( aWidth == 0 && aBold )      // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );

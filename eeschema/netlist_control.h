@@ -61,16 +61,15 @@ public:
 class WinEDA_NetlistFrame : public wxDialog
 {
 public:
-    WinEDA_SchematicFrame* m_Parent;
-    wxNotebook*            m_NoteBook;
-    EDA_NoteBookPage*      m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
-
-    wxRadioBox*            m_UseNetNamesInNetlist;
+    SCH_EDIT_FRAME*   m_Parent;
+    wxNotebook*       m_NoteBook;
+    EDA_NoteBookPage* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
+    wxRadioBox*       m_UseNetNamesInNetlist;
 
 public:
 
     // Constructor and destructor
-    WinEDA_NetlistFrame( WinEDA_SchematicFrame* parent );
+    WinEDA_NetlistFrame( SCH_EDIT_FRAME* parent );
     ~WinEDA_NetlistFrame() { };
 
 private:

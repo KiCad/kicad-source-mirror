@@ -113,7 +113,7 @@ GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
  * @return const wxPoint& - The position in A,B axis.
  * Because draw axis is top to bottom, the final y coordinates is negated
  */
-wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition )
+wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 {
     /* Note: RS274Xrevd_e is obscure about the order of transforms:
      * For instance: Rotation must be made after or before mirroring ?
@@ -170,7 +170,8 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
 }
 
 
-/** function SetLayerParameters
+/**
+ * Function SetLayerParameters
  * Initialize draw parameters from Image and Layer parameters
  * found in the gerber file:
  *   m_UnitsMetric,
@@ -254,7 +255,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 }
 
 
-EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox()
+EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
     EDA_Rect bbox( m_Start, wxSize( 1, 1 ) );
@@ -299,13 +300,42 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
 }
 
 
-/** function Save.
+/**
+ * Function Save.
  * currently: no nothing, but must be defined to meet requirements
  * of the basic class
  */
 bool GERBER_DRAW_ITEM::Save( FILE* aFile ) const
 {
     return true;
+}
+
+/* Function HasNegativeItems
+ * return true if this item or at least one shape (when using aperture macros)
+ *    must be drawn in background color
+ * useful to optimize screen refresh
+ */
+bool GERBER_DRAW_ITEM::HasNegativeItems()
+{
+    bool isClear = m_LayerNegative ^ m_imageParams->m_ImageNegative;
+    // if isClear is true, this item has negative shape
+    // but if isClear is true, and if this item use an aperture macro definition,
+    // we must see if this aperture macro uses a negative shape.
+    if( isClear )
+        return true;
+    
+    // see for a macro def
+    D_CODE* dcodeDescr = GetDcodeDescr();
+    if( dcodeDescr == NULL )
+        return false;
+    if( m_Shape ==  GBR_SPOT_MACRO )
+    {
+        APERTURE_MACRO* macro = dcodeDescr->GetMacro();
+        if( macro )     // macro == NULL should not occurs
+            return macro->HasNegativeItems( this );
+    }
+    
+    return false;
 }
 
 
@@ -334,11 +364,11 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     if( aDrawMode & GR_SURBRILL )
     {
         if( aDrawMode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     alt_color = g_DrawBgColor;
@@ -458,7 +488,8 @@ void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
     }
 }
 
-/** function ConvertSegmentToPolygon
+/**
+ * Function ConvertSegmentToPolygon
  * convert a line to an equivalent polygon.
  * Useful when a line is plotted using a rectangular pen.
  * In this case, the usual segment plot cannot be used
@@ -521,7 +552,8 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 }
 
 
-/** function DrawGbrPoly
+/**
+ * Function DrawGbrPoly
  * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
  * Draw filled polygons
  */
@@ -544,7 +576,8 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
 }
 
 
-/** Function DisplayInfo
+/**
+ * Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about this GERBER item

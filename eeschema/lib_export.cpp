@@ -31,7 +31,7 @@ extern int ExportPartId;
  * Or 1 component if there are several.
  * If the first component is an alias, it will load the corresponding root.
  */
-void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
     wxString     errMsg;
     wxFileName   fn;
@@ -90,7 +90,7 @@ void WinEDA_LibeditFrame::OnImportPart( wxCommandEvent& event )
  *
  * The file format is created in all cases the same.
  */
-void WinEDA_LibeditFrame::OnExportPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 {
     wxFileName   fn;
     wxString     msg, title;

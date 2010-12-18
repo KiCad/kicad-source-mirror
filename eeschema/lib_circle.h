@@ -69,7 +69,7 @@ public:
      */
     virtual int GetPenSize( );
 
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     /**

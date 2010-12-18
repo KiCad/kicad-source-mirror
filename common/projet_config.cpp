@@ -225,7 +225,8 @@ void WinEDA_App::WriteProjectConfig( const wxString&  fileName,
 }
 
 
-/** Function SaveCurrentSetupValues()
+/**
+ * Function SaveCurrentSetupValues
  * Save the current setup values in m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
@@ -275,7 +276,8 @@ void WinEDA_App::SaveCurrentSetupValues( PARAM_CFG_ARRAY& List )
 }
 
 
-/** Function ReadProjectConfig
+/**
+ * Function ReadProjectConfig
  *  Read the current "projet" parameters
  *  Parameters are parameters that have the .m_Setup member set to false
  *  read file is the .pro file project
@@ -390,7 +392,8 @@ bool WinEDA_App::ReadProjectConfig( const wxString&  local_config_filename,
 }
 
 
-/** Function ReadCurrentSetupValues()
+/**
+ * Function ReadCurrentSetupValues
  * Raed the current setup values previously saved, from m_EDA_Config
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
@@ -738,13 +741,13 @@ void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig )
     wxArrayString* libname_list = m_Pt_param;
 
     unsigned       indexlib = 0;
-    wxString       cle_config;
+    wxString       configkey;
     for( ; indexlib < libname_list->GetCount(); indexlib++ )
     {
-        cle_config = m_Ident;
+        configkey = m_Ident;
 
         // We use indexlib+1 because first lib name is LibName1
-        cle_config << (indexlib + 1);
-        aConfig->Write( cle_config, libname_list->Item( indexlib ) );
+        configkey << (indexlib + 1);
+        aConfig->Write( configkey, libname_list->Item( indexlib ) );
     }
 }

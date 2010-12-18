@@ -140,7 +140,8 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
         return board->m_NetClasses.GetDefault();
 }
 
-/** function GetNetClassName
+/**
+ * Function GetNetClassName
  * @return the Net Class name of this item
  */
 wxString BOARD_CONNECTED_ITEM::GetNetClassName( ) const

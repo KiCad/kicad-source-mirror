@@ -32,7 +32,7 @@
 #include "common.h"         // GetTimeStamp()
 
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 
 
 /**
@@ -54,7 +54,7 @@ protected:
     const KICAD_T*  m_ScanTypes;
 
     /// A place to hold collected objects without taking ownership of their memory.
-    std::vector<EDA_BaseStruct*>    m_List;
+    std::vector<EDA_ITEM*>    m_List;
 
     /// A point to test against, andt that was used to make the collection.
     wxPoint         m_RefPos;
@@ -101,9 +101,9 @@ public:
     /**
      * Function Append
      * adds an item to the end of the list.
-     * @param item An EDA_BaseStruct* to add.
+     * @param item An EDA_ITEM* to add.
      */
-    void Append( EDA_BaseStruct* item )
+    void Append( EDA_ITEM* item )
     {
         m_List.push_back( item );
     }
@@ -122,9 +122,9 @@ public:
      * Function operator[int]
      * is used for read only access and returns the object at index ndx.
      * @param ndx The index into the list.
-     * @return EDA_BaseStruct* - or something derived from it, or NULL.
+     * @return EDA_ITEM* - or something derived from it, or NULL.
      */
-    EDA_BaseStruct* operator[]( int ndx ) const
+    EDA_ITEM* operator[]( int ndx ) const
     {
         if( (unsigned)ndx < (unsigned)GetCount() )  // (unsigned) excludes ndx<0 also
             return m_List[ ndx ];
@@ -137,7 +137,7 @@ public:
      * if there is at least one element in the vector m_List, otherwise a
      * C++ exception should get thrown.
      */
-    EDA_BaseStruct* const* BasePtr() const
+    EDA_ITEM* const* BasePtr() const
     {
         return &m_List[0];
     }
@@ -202,28 +202,28 @@ public:
      * Iterate function.  It is used primarily for searching, but not limited to
      * that.  It can also collect or modify the scanned objects.
      *
-     * @param testItem An EDA_BaseStruct to examine.
+     * @param testItem An EDA_ITEM to examine.
      * @param testData is arbitrary data needed by the inspector to determine
-     *   if the EDA_BaseStruct under test meets its match criteria.
+     *   if the EDA_ITEM under test meets its match criteria.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      *
      * implement in derived class:
-    SEARCH_RESULT virtual Inspect( EDA_BaseStruct* testItem,
+    SEARCH_RESULT virtual Inspect( EDA_ITEM* testItem,
         const void* testData ) = 0;
      */
 
 
     /**
      * Function Collect
-     * scans an EDA_BaseStruct using this class's Inspector method, which does
+     * scans an EDA_ITEM using this class's Inspector method, which does
      * the collection.
-     * @param container An EDA_BaseStruct to scan, including those items it contains.
+     * @param container An EDA_ITEM to scan, including those items it contains.
      * @param aRefPos A wxPoint to use in hit-testing.
      *
      * example implementation, in derived class:
      *
-    virtual void Collect( EDA_BaseStruct* container, const wxPoint& aRefPos )
+    virtual void Collect( EDA_ITEM* container, const wxPoint& aRefPos )
     {
         example implementation:
 

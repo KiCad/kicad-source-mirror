@@ -17,13 +17,15 @@
 
 #define KEYFILE_FILENAME "pcbnew_dbgfile.key"
 
-/** function CreateKeyFile
+/**
+ * Function CreateKeyFile
  * open KEYFILE_FILENAME file
  * and create header
  */
 void CreateKeyFile();
 
-/** function CloseKeyFile
+/**
+ * Function CloseKeyFile
  * close KEYFILE_FILENAME file
  */
 void CloseKeyFile();

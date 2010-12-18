@@ -12,15 +12,17 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "autorout.h"
 #include "pcbplot.h"
 #include "trigo.h"
+
+#include "dialog_block_options_base.h"
 
 #include "protos.h"
 
 #define BLOCK_OUTLINE_COLOR YELLOW
 
-/** Function drawPickedItems
+/**
+ * Function drawPickedItems
  * draws items currently selected in a block
  * @param aPanel = Current draw panel
  * @param aDC = Current device context
@@ -28,7 +30,9 @@
  **/
 static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              wxPoint aOffset );
-/** Function drawMovingBlock
+
+/**
+ * Function drawMovingBlock
  * handles drawing of a moving block
  * @param aPanel = Current draw panel
  * @param aDC = Current device context
@@ -38,217 +42,119 @@ static void drawMovingBlock( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              bool aErase );
 
 
-static bool Block_Include_Modules     = TRUE;
-static bool BlockIncludeLockedModules = TRUE;
-static bool Block_Include_Tracks      = TRUE;
-static bool Block_Include_Zones       = TRUE;
-static bool Block_Include_Draw_Items  = TRUE;
-static bool Block_Include_Edges_Items = TRUE;
-static bool Block_Include_PcbTextes   = TRUE;
-static bool BlockDrawItems            = TRUE;
+static bool blockIncludeModules     = true;
+static bool blockIncludeLockedModules = true;
+static bool blockIncludeTracks      = true;
+static bool blockIncludeZones       = true;
+static bool blockIncludeItemsOnTechLayers  = true;
+static bool blockIncludeBoardOutlineLayer = true;
+static bool blockIncludePcbTexts   = true;
+static bool blockDrawItems = true;
 
 /************************************/
-/* class WinEDA_ExecBlockCmdFrame */
+/* class DIALOG_BLOCK_OPTIONS */
 /************************************/
 
-class WinEDA_ExecBlockCmdFrame : public wxDialog
+class DIALOG_BLOCK_OPTIONS : public DIALOG_BLOCK_OPTIONS_BASE
 {
 private:
-
     WinEDA_BasePcbFrame* m_Parent;
-    wxCheckBox*          m_Include_Modules;
-    wxCheckBox*          m_IncludeLockedModules;
-    wxCheckBox*          m_Include_Tracks;
-    wxCheckBox*          m_Include_Zones;
-    wxCheckBox*          m_Include_Draw_Items;
-    wxCheckBox*          m_Include_Edges_Items;
-    wxCheckBox*          m_Include_PcbTextes;
-    wxCheckBox*          m_DrawBlockItems;
 
 public:
 
-    WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
-                              const wxString&      title );
-    ~WinEDA_ExecBlockCmdFrame()
+    DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* parent,
+                          const wxString&      title );
+    ~DIALOG_BLOCK_OPTIONS()
     {
     }
 
 
 private:
     void ExecuteCommand( wxCommandEvent& event );
-    void Cancel( wxCommandEvent& event );
-    void checkBoxClicked( wxCommandEvent& aEvent );
-
-    DECLARE_EVENT_TABLE()
+    void OnCancel( wxCommandEvent& event ) { EndModal( -1 ); }
+    void checkBoxClicked( wxCommandEvent& aEvent )
+    {
+        if( m_Include_Modules->GetValue() )
+            m_IncludeLockedModules->Enable();
+        else
+            m_IncludeLockedModules->Disable();
+    }
 };
 
 
-BEGIN_EVENT_TABLE( WinEDA_ExecBlockCmdFrame, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDA_ExecBlockCmdFrame::ExecuteCommand )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_ExecBlockCmdFrame::Cancel )
-    EVT_CHECKBOX( wxID_ANY, WinEDA_ExecBlockCmdFrame::checkBoxClicked )
-END_EVENT_TABLE()
-
-
-static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent,
-                                  const wxString&      title )
+static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent, const wxString& title )
 {
     int     nocmd;
     wxPoint oldpos = parent->GetScreen()->m_Curseur;
 
-    parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
-    WinEDA_ExecBlockCmdFrame* frame =
-        new WinEDA_ExecBlockCmdFrame( parent, title );
+    parent->DrawPanel->m_IgnoreMouseEvents = true;
+    DIALOG_BLOCK_OPTIONS dlg( parent, title );
 
-    nocmd = frame->ShowModal();
-    frame->Destroy();
+    nocmd = dlg.ShowModal();
 
     parent->GetScreen()->m_Curseur = oldpos;
 
     parent->DrawPanel->MouseToCursorSchema();
-    parent->DrawPanel->m_IgnoreMouseEvents = FALSE;
+    parent->DrawPanel->m_IgnoreMouseEvents = false;
 
     parent->DrawPanel->SetCursor( parent->DrawPanel->m_PanelCursor =
-                                  parent->DrawPanel->m_PanelDefaultCursor );
+                                      parent->DrawPanel->m_PanelDefaultCursor );
 
-    return nocmd ? FALSE : TRUE;
+    return nocmd ? false : true;
 }
 
 
-WinEDA_ExecBlockCmdFrame::WinEDA_ExecBlockCmdFrame( WinEDA_BasePcbFrame* parent,
-                                                    const wxString&      title ) :
-    wxDialog( parent, -1, title, wxPoint( -1, -1 ), wxDefaultSize,
-              DIALOG_STYLE )
+DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* aParent,
+                                            const wxString&      aTitle ) :
+    DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle )
 {
-    wxPoint   pos;
-    wxButton* m_button1;
-    wxButton* m_button2;
+    m_Parent = aParent;
 
-    m_Parent = parent;
+    m_Include_Modules->SetValue( blockIncludeModules );
+    m_IncludeLockedModules->SetValue( blockIncludeLockedModules );
+    m_Include_Tracks->SetValue( blockIncludeTracks );
+    m_Include_Zones->SetValue( blockIncludeZones );
+    m_Include_Draw_Items->SetValue( blockIncludeItemsOnTechLayers );
+    m_Include_Edges_Items->SetValue( blockIncludeBoardOutlineLayer );
+    m_Include_PcbTextes->SetValue( blockIncludePcbTexts );
+    m_DrawBlockItems->SetValue( blockDrawItems );
+    SetFocus();
+    GetSizer()->SetSizeHints( this );
     Centre();
-    this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-    this->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90,
-                           false, wxEmptyString ) );
-
-    /* Sizer 1 creation */
-    wxFlexGridSizer* fgSizer1;
-    fgSizer1 = new wxFlexGridSizer( 7, 1, 0, 0 );
-    fgSizer1->SetFlexibleDirection( wxBOTH );
-    fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-    m_Include_Modules = new wxCheckBox( this, -1, _( "Include Modules" ),
-                                        wxDefaultPosition, wxDefaultSize,
-                                        0 );
-    m_Include_Modules->SetValue( Block_Include_Modules );
-    fgSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
-
-    m_IncludeLockedModules = new wxCheckBox( this, -1, _( "Include Locked Modules" ),
-                                            wxDefaultPosition, wxDefaultSize,
-                                            0 );
-    m_IncludeLockedModules->SetValue( BlockIncludeLockedModules );
-    if( m_Include_Modules->GetValue() )
-        m_IncludeLockedModules->Enable();
-    else
-        m_IncludeLockedModules->Disable();
-    fgSizer1->Add( m_IncludeLockedModules, 0, wxALL, 5 );
-
-    m_Include_Tracks = new wxCheckBox( this, -1, _( "Include Tracks" ),
-                                       wxDefaultPosition, wxDefaultSize, 0 );
-    m_Include_Tracks->SetValue( Block_Include_Tracks );
-    fgSizer1->Add( m_Include_Tracks, 0, wxALL, 5 );
-
-    m_Include_Zones = new wxCheckBox( this, -1, _( "Include Zones" ),
-                                      wxDefaultPosition, wxDefaultSize, 0 );
-    m_Include_Zones->SetValue( Block_Include_Zones );
-    fgSizer1->Add( m_Include_Zones, 0, wxALL, 5 );
-
-    m_Include_PcbTextes = new wxCheckBox( this, -1,
-                                          _( "Include Text Items" ),
-                                          wxDefaultPosition,
-                                          wxDefaultSize, 0 );
-    m_Include_PcbTextes->SetValue( Block_Include_PcbTextes );
-    fgSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
-
-    m_Include_Draw_Items = new wxCheckBox( this, -1, _( "Include Drawings" ),
-                                           wxDefaultPosition,
-                                           wxDefaultSize, 0 );
-    m_Include_Draw_Items->SetValue( Block_Include_Draw_Items );
-    fgSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
-
-    m_Include_Edges_Items = new wxCheckBox( this, -1,
-                                            _( "Include Board Outline Layer" ),
-                                            wxDefaultPosition,
-                                            wxDefaultSize, 0 );
-    m_Include_Edges_Items->SetValue( Block_Include_Edges_Items );
-    fgSizer1->Add( m_Include_Edges_Items, 0, wxALL, 5 );
-
-    m_DrawBlockItems = new wxCheckBox( this, -1,
-                                       _( "Draw Block Items" ),
-                                       wxDefaultPosition,
-                                       wxDefaultSize, 0 );
-    m_DrawBlockItems->SetValue( BlockDrawItems );
-    fgSizer1->Add( m_DrawBlockItems, 0, wxALL, 5 );
-
-    /* Sizer 2 creation */
-    wxFlexGridSizer* fgSizer2;
-    fgSizer2 = new wxFlexGridSizer( 1, 2, 0, 0 );
-    fgSizer2->SetFlexibleDirection( wxBOTH );
-    fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-    m_button2 = new wxButton( this, wxID_CANCEL, _( "Cancel" ),
-                              wxDefaultPosition, wxDefaultSize, 0 );
-    fgSizer2->Add( m_button2, 0, wxALL, 5 );
-    m_button1 = new wxButton( this, wxID_OK, _( "OK" ), wxDefaultPosition,
-                              wxDefaultSize, 0 );
-    m_button1->SetDefault();
-    fgSizer2->Add( m_button1, 0, wxALL, 5 );
-
-    fgSizer1->Add( fgSizer2, 1, wxALIGN_RIGHT, 5 );
-    this->SetSizer( fgSizer1 );
-    this->Layout();
-    fgSizer1->Fit( this );
 }
 
 
-void WinEDA_ExecBlockCmdFrame::Cancel( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 {
-    EndModal( -1 );
-}
-
-void WinEDA_ExecBlockCmdFrame::checkBoxClicked( wxCommandEvent& WXUNUSED (aEvent) )
-{
-    if( m_Include_Modules->GetValue() )
-        m_IncludeLockedModules->Enable();
-    else
-        m_IncludeLockedModules->Disable();
-}
-
-void WinEDA_ExecBlockCmdFrame::ExecuteCommand( wxCommandEvent& event )
-{
-    Block_Include_Modules     = m_Include_Modules->GetValue();
-    BlockIncludeLockedModules = m_IncludeLockedModules->GetValue();
-    Block_Include_Tracks      = m_Include_Tracks->GetValue();
-    Block_Include_Zones       = m_Include_Zones->GetValue();
-    Block_Include_Draw_Items  = m_Include_Draw_Items->GetValue();
-    Block_Include_Edges_Items = m_Include_Edges_Items->GetValue();
-    Block_Include_PcbTextes   = m_Include_PcbTextes->GetValue();
-    BlockDrawItems            = m_DrawBlockItems->GetValue();
+    blockIncludeModules     = m_Include_Modules->GetValue();
+    blockIncludeLockedModules = m_IncludeLockedModules->GetValue();
+    blockIncludeTracks      = m_Include_Tracks->GetValue();
+    blockIncludeZones       = m_Include_Zones->GetValue();
+    blockIncludeItemsOnTechLayers  = m_Include_Draw_Items->GetValue();
+    blockIncludeBoardOutlineLayer = m_Include_Edges_Items->GetValue();
+    blockIncludePcbTexts   = m_Include_PcbTextes->GetValue();
+    blockDrawItems = m_DrawBlockItems->GetValue();
 
     EndModal( 0 );
 }
 
 
-/* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
- *  the key (ALT, SHIFT ALT ..)
+/**
+ * Function ReturnBlockCommand
+ * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
+ * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
+ * block command is started by dragging the mouse.
+ * @param aKey = the key modifiers (Alt, Shift ...)
+ * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
  */
-int WinEDA_PcbFrame::ReturnBlockCommand( int key )
+int WinEDA_PcbFrame::ReturnBlockCommand( int aKey )
 {
     int cmd = 0;
 
-    switch( key )
+    switch( aKey )
     {
     default:
-        cmd = key & 0x255;
+        cmd = aKey & 0x255;
         break;
 
     case 0:
@@ -280,14 +186,20 @@ int WinEDA_PcbFrame::ReturnBlockCommand( int key )
 }
 
 
-/* Routine to handle the BLOCK PLACE command */
+/**
+ * Function HandleBlockPlace( )
+ * Called after HandleBlockEnd, when a block command needs to be
+ * executed after the block is moved to its new place
+ * (bloc move, drag, copy .. )
+ * Parameters must be initialized in GetScreen()->m_BlockLocate
+ */
 void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 {
-    bool err = FALSE;
+    bool err = false;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
-        err = TRUE;
+        err = true;
         DisplayError( this, wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
     }
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
@@ -295,21 +207,21 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case BLOCK_IDLE:
-        err = TRUE;
+        err = true;
         break;
 
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
         Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -339,96 +251,58 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-/* Handle END BLOCK command.
- * Returns:
- * 0 if no features selected
- * 1 otherwise
- * -1 If order is completed and components found (block delete, block save)
+/**
+ * Function HandleBlockEnd( )
+ * Handle the "end"  of a block command,
+ * i.e. is called at the end of the definition of the area of a block.
+ * depending on the current block command, this command is executed
+ * or parameters are initialized to prepare a call to HandleBlockPlace
+ * in GetScreen()->m_BlockLocate
+ * @return false if no item selected, or command finished,
+ * true if some items found and HandleBlockPlace must be called later
  */
-int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 {
-    int endcommande = TRUE;
+    bool nextcmd = false;
+    bool cancelCmd = false;
 
     // If coming here after cancel block, clean up and exit
     if( GetScreen()->m_BlockLocate.m_State == STATE_NO_BLOCK )
     {
         DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        DrawPanel->ForceCloseManageCurseur   = NULL;
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         GetScreen()->m_BlockLocate.ClearItemsList();
         DisplayToolMsg( wxEmptyString );
-        return 0;
+        return false;
     }
 
     // Show dialog if there are no selected items and
     // we're not zooming
-    if ( !GetScreen()->m_BlockLocate.GetCount() &&
-         GetScreen()->m_BlockLocate.m_Command != BLOCK_ZOOM )
+    if( !GetScreen()->m_BlockLocate.GetCount()
+        && GetScreen()->m_BlockLocate.m_Command != BLOCK_ZOOM )
     {
         if( !InstallBlockCmdFrame( this, _( "Block Operation" ) ) )
         {
-            DrawPanel->ManageCurseur = NULL;
-            DrawPanel->ForceCloseManageCurseur = NULL;
-            GetScreen()->m_BlockLocate.m_Flags   = 0;
-            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->m_BlockLocate.ClearItemsList();
-            DisplayToolMsg( wxEmptyString );
-            DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
-            return 0;
+            cancelCmd = true;
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );   // undraw block outline
         }
-        DrawAndSizingBlockOutlines( DrawPanel, DC, FALSE );
-        Block_SelectItems();
-        // Exit if no items found
-        if( !GetScreen()->m_BlockLocate.GetCount() ) {
-            DrawPanel->ManageCurseur = NULL;
-            DrawPanel->ForceCloseManageCurseur = NULL;
-            GetScreen()->m_BlockLocate.m_Flags   = 0;
-            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->m_BlockLocate.ClearItemsList();
-            DisplayToolMsg( wxEmptyString );
-            return 0;
-        }
-        // Move cursor to the center of the smallest rectangle
-        // containing the centers of all selected items.
-        // Also set m_BlockLocate to the size of the rectangle.
-        PICKED_ITEMS_LIST* itemsList = &DrawPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
-        wxPoint blockCenter;
-        int minX, minY, maxX, maxY;
-        int tempX, tempY;
-        BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( 0 );
-        minX = item->GetPosition().x;
-        minY = item->GetPosition().y;
-        maxX = minX;
-        maxY = minY;
-        for( unsigned ii = 1; ii < itemsList->GetCount(); ii++ )
+        else
         {
-            item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
-            tempX = item->GetPosition().x;
-            tempY = item->GetPosition().y;
-            if( tempX > maxX )
-                maxX = tempX;
-            if( tempX < minX )
-                minX = tempX;
-            if( tempY > maxY )
-                maxY = tempY;
-            if( tempY < minY )
-                minY = tempY;
+            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
+            Block_SelectItems();
+
+            // Exit if no items found
+            if( !GetScreen()->m_BlockLocate.GetCount() )
+                cancelCmd = true;
+            else
+                nextcmd = true;
         }
-        blockCenter.x = ( minX + maxX ) / 2;
-        blockCenter.y = ( minY + maxY ) / 2;
-        DrawPanel->CursorOff( DC );
-        GetScreen()->m_Curseur = blockCenter;
-        GetScreen()->m_BlockLocate.SetLastCursorPosition( blockCenter );
-        GetScreen()->m_BlockLocate.SetOrigin( minX, minY );
-        GetScreen()->m_BlockLocate.SetEnd( maxX, maxY );
-        DrawPanel->MouseToCursorSchema();
-        DrawPanel->CursorOn( DC );
     }
 
-    if( DrawPanel->ManageCurseur )
+    if( !cancelCmd && DrawPanel->ManageCurseur )
+    {
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
         case BLOCK_IDLE:
@@ -440,9 +314,9 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_COPY:            /* Copy */
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            endcommande = FALSE;
+            nextcmd = true;
             DrawPanel->ManageCurseur = drawMovingBlock;
-            DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, DC, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
@@ -467,7 +341,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             if( GetScreen()->m_BlockLocate.GetCount() )
             {
-// TODO (if useful)         Save_Block( );
+                // @todo (if useful)         Save_Block( );
             }
             break;
 
@@ -485,8 +359,9 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         default:
             break;
         }
+    }
 
-    if( endcommande == TRUE )
+    if( ! nextcmd )
     {
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
@@ -497,7 +372,7 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         DisplayToolMsg( wxEmptyString );
     }
 
-    return endcommande;
+    return nextcmd;
 }
 
 
@@ -505,27 +380,27 @@ int WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
 /**
  * Function Block_SelectItems
- * Uses  GetScreen()->m_BlockLocate
+ * Uses GetScreen()->m_BlockLocate
  * select items within the selected block.
  * selected items are put in the pick list
  * @param none
  */
 void WinEDA_PcbFrame::Block_SelectItems()
 {
-    int         masque_layer;
+    int masque_layer;
 
     GetScreen()->m_BlockLocate.Normalize();
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
 
-    if( Block_Include_Modules )
+    if( blockIncludeModules )
     {
         for( MODULE* module = m_Pcb->m_Modules; module != NULL;
-             module = module->Next() )
+            module = module->Next() )
         {
-            if( module->HitTest( GetScreen()->m_BlockLocate ) &&
-                ( !module->IsLocked() || BlockIncludeLockedModules ) )
+            if( module->HitTest( GetScreen()->m_BlockLocate )
+               && ( !module->IsLocked() || blockIncludeLockedModules ) )
             {
                 picker.m_PickedItem     = module;
                 picker.m_PickedItemType = module->Type();
@@ -535,10 +410,10 @@ void WinEDA_PcbFrame::Block_SelectItems()
     }
 
     /* Remove tracks and vias */
-    if( Block_Include_Tracks )
+    if( blockIncludeTracks )
     {
         for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL;
-             pt_segm = pt_segm->Next() )
+            pt_segm = pt_segm->Next() )
         {
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
@@ -552,14 +427,14 @@ void WinEDA_PcbFrame::Block_SelectItems()
 
     /* Select graphic items */
     masque_layer = EDGE_LAYER;
-    if( Block_Include_Draw_Items )
+    if( blockIncludeItemsOnTechLayers )
         masque_layer = ALL_LAYERS;
 
-    if( !Block_Include_Edges_Items )
+    if( !blockIncludeBoardOutlineLayer )
         masque_layer &= ~EDGE_LAYER;
 
     for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL;
-         PtStruct = PtStruct->Next() )
+        PtStruct = PtStruct->Next() )
     {
         bool select_me = false;
         switch( PtStruct->Type() )
@@ -573,7 +448,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
             break;
 
         case TYPE_TEXTE:
-            if( !Block_Include_PcbTextes )
+            if( !blockIncludePcbTexts )
                 break;
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
@@ -609,16 +484,18 @@ void WinEDA_PcbFrame::Block_SelectItems()
     }
 
     /* Zone selection */
-    if( Block_Include_Zones )
+    if( blockIncludeZones )
     {
 #if 0
+
         /* This section can creates problems if selected:
          * m_Pcb->m_Zone can have a *lot* of items (100 000 is easily possible)
          * so it is not selected (and TODO: will be removed, one day)
          */
         for( SEGZONE* pt_segm = m_Pcb->m_Zone; pt_segm != NULL;
-             pt_segm = pt_segm->Next() )
-        {    /* Segments used in Zone filling selection */
+            pt_segm = pt_segm->Next() )
+        {
+            /* Segments used in Zone filling selection */
 
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
@@ -627,6 +504,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
                 itemsList->PushItem( picker );
             }
         }
+
 #endif
         for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
@@ -639,13 +517,15 @@ void WinEDA_PcbFrame::Block_SelectItems()
             }
         }
     }
- }
+}
+
 
 static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              wxPoint aOffset )
 {
-    PICKED_ITEMS_LIST* itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+    PICKED_ITEMS_LIST*   itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
+    WinEDA_BasePcbFrame* frame     = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+
     g_Offset_Module = -aOffset;
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
@@ -653,61 +533,33 @@ static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         switch( item->Type() )
         {
         case TYPE_MODULE:
-        {
-            MODULE* module = (MODULE*) item;
             frame->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-            DrawModuleOutlines( aPanel, aDC, module );
+            DrawModuleOutlines( aPanel, aDC, (MODULE*) item );
             break;
-        }
+
         case TYPE_DRAWSEGMENT:
-        {
-            DRAWSEGMENT* segment = (DRAWSEGMENT*) item;
-            segment->Draw( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
         case TYPE_TEXTE:
-        {
-            TEXTE_PCB* text = (TEXTE_PCB*) item;
-            text->Draw( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
         case TYPE_TRACK:
         case TYPE_VIA:
-        {
-            TRACK* track = (TRACK*) item;
-            track->Draw( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
         case TYPE_MIRE:
-        {
-            MIREPCB* mire = (MIREPCB*) item;
-            mire->Draw( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
-        case TYPE_DIMENSION:
-        {
-            DIMENSION* dimension = (DIMENSION*) item;
-            dimension->Draw( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
-        case TYPE_ZONE_CONTAINER:
-        {
-            ZONE_CONTAINER* zoneContainer = (ZONE_CONTAINER*) item;
-            zoneContainer->Draw( aPanel, aDC, GR_XOR, aOffset );
-            zoneContainer->DrawFilledArea( aPanel, aDC, GR_XOR, aOffset );
-            break;
-        }
-        // Currently markers are not affected by block commands
+        case TYPE_DIMENSION:    // Currently markers are not affected by block commands
         case TYPE_MARKER_PCB:
-        {
-            MARKER_PCB* pcbMarker = (MARKER_PCB*) item;
-            pcbMarker->Draw( aPanel, aDC, GR_XOR, aOffset );
+            item->Draw( aPanel, aDC, GR_XOR, aOffset );
             break;
-        }
+
+        case TYPE_ZONE_CONTAINER:
+            item->Draw( aPanel, aDC, GR_XOR, aOffset );
+            ((ZONE_CONTAINER*) item)->DrawFilledArea( aPanel, aDC, GR_XOR, aOffset );
+            break;
+
+        default:
+            break;
         }
     }
+
     g_Offset_Module = wxPoint( 0, 0 );
 }
+
 
 static void drawMovingBlock( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                              bool aErase )
@@ -719,30 +571,26 @@ static void drawMovingBlock( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         if( screen->m_BlockLocate.m_MoveVector.x
             || screen->m_BlockLocate.m_MoveVector.y )
         {
-            if( !BlockDrawItems )
-                screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
-                                            GR_XOR, BLOCK_OUTLINE_COLOR );
-            else
+            screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
+                                        GR_XOR, BLOCK_OUTLINE_COLOR );
+            if( blockDrawItems )
                 drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
         }
     }
 
     if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x -
-                                               screen->m_BlockLocate.m_BlockLastCursorPosition.x;
-        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y -
-                                               screen->m_BlockLocate.m_BlockLastCursorPosition.y;
+        screen->m_BlockLocate.m_MoveVector = screen->m_Curseur -
+                                             screen->m_BlockLocate.m_BlockLastCursorPosition;
     }
 
     if( screen->m_BlockLocate.m_MoveVector.x
         || screen->m_BlockLocate.m_MoveVector.y )
     {
-            if( !BlockDrawItems )
-                screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
-                                            GR_XOR, BLOCK_OUTLINE_COLOR );
-            else
-                drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
+        screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
+                                    GR_XOR, BLOCK_OUTLINE_COLOR );
+        if( blockDrawItems )
+            drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
     }
 }
 
@@ -778,18 +626,18 @@ void WinEDA_PcbFrame::Block_Delete()
             m_Pcb->Remove( item );
             break;
 
-        case TYPE_DRAWSEGMENT:  // a segment not on copper layers
-        case TYPE_TEXTE:        // a text on a layer
-        case TYPE_TRACK:        // a track segment (segment on a copper layer)
-        case TYPE_VIA:          // a via (like atrack segment on a copper layer)
-        case TYPE_DIMENSION:     // a dimension (graphic item)
-        case TYPE_MIRE:         // a target (graphic item)
+        case TYPE_DRAWSEGMENT:      // a segment not on copper layers
+        case TYPE_TEXTE:            // a text on a layer
+        case TYPE_TRACK:            // a track segment (segment on a copper layer)
+        case TYPE_VIA:              // a via (like atrack segment on a copper layer)
+        case TYPE_DIMENSION:        // a dimension (graphic item)
+        case TYPE_MIRE:             // a target (graphic item)
             item->UnLink();
             break;
 
         // These items are deleted, but not put in undo list
-        case TYPE_MARKER_PCB:            // a marker used to show something
-        case TYPE_ZONE:                  // SEG_ZONE items are now deprecated
+        case TYPE_MARKER_PCB:               // a marker used to show something
+        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
             item->UnLink();
             itemsList->RemovePicker( ii );
             ii--;
@@ -804,8 +652,8 @@ void WinEDA_PcbFrame::Block_Delete()
 
     SaveCopyInUndoList( *itemsList, UR_DELETED );
 
-    Compile_Ratsnest( NULL, TRUE );
-    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( NULL, true );
+    DrawPanel->Refresh( true );
 }
 
 
@@ -819,7 +667,7 @@ void WinEDA_PcbFrame::Block_Rotate()
 {
     wxPoint oldpos;
     wxPoint centre;         // rotation cent-re for the rotation transform
-    int rotAngle = 900;     // rotation angle in 0.1 deg.
+    int     rotAngle = 900; // rotation angle in 0.1 deg.
 
     oldpos = GetScreen()->m_Curseur;
     centre = GetScreen()->m_BlockLocate.Centre();
@@ -832,21 +680,21 @@ void WinEDA_PcbFrame::Block_Rotate()
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
-        wxASSERT(item);
+        wxASSERT( item );
         itemsList->SetPickedItemStatus( UR_ROTATED, ii );
-        item->Rotate(centre, rotAngle);
+        item->Rotate( centre, rotAngle );
         switch( item->Type() )
         {
         case TYPE_MODULE:
-            ((MODULE*) item)->m_Flags     = 0;
+            ( (MODULE*) item )->m_Flags = 0;
             m_Pcb->m_Status_Pcb = 0;
-        break;
+            break;
 
         /* Move and rotate the track segments */
-        case TYPE_TRACK:       // a track segment (segment on a copper layer)
-        case TYPE_VIA:         // a via (like atrack segment on a copper layer)
+        case TYPE_TRACK:        // a track segment (segment on a copper layer)
+        case TYPE_VIA:          // a via (like atrack segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
-        break;
+            break;
 
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
@@ -869,14 +717,14 @@ void WinEDA_PcbFrame::Block_Rotate()
 
     SaveCopyInUndoList( *itemsList, UR_ROTATED, centre );
 
-    Compile_Ratsnest( NULL, TRUE );
-    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( NULL, true );
+    DrawPanel->Refresh( true );
 }
 
 
 /**
  * Function Block_Flip
- * Flip items within the selected block.
+ * flips items within the selected block.
  * The flip center is the center of the block
  * @param none
  */
@@ -898,15 +746,15 @@ void WinEDA_PcbFrame::Block_Flip()
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
-        wxASSERT(item);
+        wxASSERT( item );
         itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
-        item->Flip(center);
+        item->Flip( center );
         switch( item->Type() )
         {
         case TYPE_MODULE:
-            ((MODULE*) item)->m_Flags     = 0;
+            item->m_Flags = 0;
             m_Pcb->m_Status_Pcb = 0;
-        break;
+            break;
 
         /* Move and rotate the track segments */
         case TYPE_TRACK:        // a track segment (segment on a copper layer)
@@ -935,8 +783,8 @@ void WinEDA_PcbFrame::Block_Flip()
     }
 
     SaveCopyInUndoList( *itemsList, UR_FLIPPED, center );
-    Compile_Ratsnest( NULL, TRUE );
-    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( NULL, true );
+    DrawPanel->Refresh( true );
 }
 
 
@@ -951,7 +799,7 @@ void WinEDA_PcbFrame::Block_Move()
 {
     OnModify();
 
-    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
+    wxPoint            MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     itemsList->m_Status = UR_MOVED;
@@ -965,15 +813,15 @@ void WinEDA_PcbFrame::Block_Move()
         switch( item->Type() )
         {
         case TYPE_MODULE:
-            m_Pcb->m_Status_Pcb    = 0;
-            ((MODULE*) item)->m_Flags        = 0;
-        break;
+            m_Pcb->m_Status_Pcb = 0;
+            item->m_Flags = 0;
+            break;
 
         /* Move track segments */
-        case TYPE_TRACK:       // a track segment (segment on a copper layer)
-        case TYPE_VIA:         // a via (like a track segment on a copper layer)
+        case TYPE_TRACK:        // a track segment (segment on a copper layer)
+        case TYPE_VIA:          // a via (like a track segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
-        break;
+            break;
 
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
@@ -996,14 +844,14 @@ void WinEDA_PcbFrame::Block_Move()
 
     SaveCopyInUndoList( *itemsList, UR_MOVED, MoveVector );
 
-    Compile_Ratsnest( NULL, TRUE );
-    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( NULL, true );
+    DrawPanel->Refresh( true );
 }
 
 
 /**
  * Function Block_Duplicate
- * Duplicate all items within the selected block.
+ * duplicates all items within the selected block.
  * New location is determined by the current offset from the selected block's
  * original location.
  * @param none
@@ -1016,11 +864,11 @@ void WinEDA_PcbFrame::Block_Duplicate()
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
 
-    PICKED_ITEMS_LIST newList;
+    PICKED_ITEMS_LIST  newList;
     newList.m_Status = UR_NEW;
 
-    ITEM_PICKER picker(NULL, UR_NEW);
-    BOARD_ITEM * newitem;
+    ITEM_PICKER        picker( NULL, UR_NEW );
+    BOARD_ITEM*        newitem;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
@@ -1029,51 +877,51 @@ void WinEDA_PcbFrame::Block_Duplicate()
         switch( item->Type() )
         {
         case TYPE_MODULE:
-        {
-            MODULE* module = (MODULE*) item;
-            MODULE* new_module;
-            m_Pcb->m_Status_Pcb = 0;
-            module->m_Flags     = 0;
-            newitem = new_module = new MODULE( m_Pcb );
-            new_module->Copy( module );
-            new_module->m_TimeStamp = GetTimeStamp();
-            m_Pcb->m_Modules.PushFront( new_module );
-        }
-        break;
+            {
+                MODULE* module = (MODULE*) item;
+                MODULE* new_module;
+                m_Pcb->m_Status_Pcb = 0;
+                module->m_Flags     = 0;
+                newitem = new_module = new MODULE( m_Pcb );
+                new_module->Copy( module );
+                new_module->m_TimeStamp = GetTimeStamp();
+                m_Pcb->m_Modules.PushFront( new_module );
+            }
+            break;
 
         case TYPE_TRACK:
         case TYPE_VIA:
-        {
-            TRACK* track = (TRACK*) item;
-            m_Pcb->m_Status_Pcb = 0;
-            TRACK* new_track = track->Copy();
-            newitem = new_track;
-            m_Pcb->m_Track.PushFront( new_track );
-        }
-        break;
+            {
+                TRACK* track = (TRACK*) item;
+                m_Pcb->m_Status_Pcb = 0;
+                TRACK* new_track = track->Copy();
+                newitem = new_track;
+                m_Pcb->m_Track.PushFront( new_track );
+            }
+            break;
 
         case TYPE_ZONE:                  // SEG_ZONE items are now deprecated
             break;
 
         case TYPE_ZONE_CONTAINER:
-        {
-            ZONE_CONTAINER* new_zone =
-                new ZONE_CONTAINER( (BOARD*) item->GetParent() );
-            new_zone->Copy( (ZONE_CONTAINER*) item );
-            new_zone->m_TimeStamp = GetTimeStamp();
-            newitem = new_zone;
-            m_Pcb->Add( new_zone );
-        }
-        break;
+            {
+                ZONE_CONTAINER* new_zone =
+                    new ZONE_CONTAINER( (BOARD*) item->GetParent() );
+                new_zone->Copy( (ZONE_CONTAINER*) item );
+                new_zone->m_TimeStamp = GetTimeStamp();
+                newitem = new_zone;
+                m_Pcb->Add( new_zone );
+            }
+            break;
 
         case TYPE_DRAWSEGMENT:
-        {
-            DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
-            new_drawsegment->Copy( (DRAWSEGMENT*) item );
-            m_Pcb->Add( new_drawsegment );
-            newitem = new_drawsegment;
-        }
-        break;
+            {
+                DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
+                new_drawsegment->Copy( (DRAWSEGMENT*) item );
+                m_Pcb->Add( new_drawsegment );
+                newitem = new_drawsegment;
+            }
+            break;
 
         case TYPE_TEXTE:
         {
@@ -1085,40 +933,40 @@ void WinEDA_PcbFrame::Block_Duplicate()
         break;
 
         case TYPE_MIRE:
-        {
-            MIREPCB* new_mire = new MIREPCB( m_Pcb );
-            new_mire->Copy( (MIREPCB*) item );
-            m_Pcb->Add( new_mire );
-            newitem = new_mire;
-        }
-        break;
+            {
+                MIREPCB* new_mire = new MIREPCB( m_Pcb );
+                new_mire->Copy( (MIREPCB*) item );
+                m_Pcb->Add( new_mire );
+                newitem = new_mire;
+            }
+            break;
 
         case TYPE_DIMENSION:
-        {
-            DIMENSION* new_cotation = new DIMENSION( m_Pcb );
-            new_cotation->Copy( (DIMENSION*) item );
-            m_Pcb->Add( new_cotation );
-            newitem = new_cotation;
-        }
-        break;
+            {
+                DIMENSION* new_cotation = new DIMENSION( m_Pcb );
+                new_cotation->Copy( (DIMENSION*) item );
+                m_Pcb->Add( new_cotation );
+                newitem = new_cotation;
+            }
+            break;
 
         default:
             wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Duplicate( ) error: unexpected type" ) );
             break;
         }
 
-        if ( newitem )
-        {
-            newitem->Move( MoveVector );
-            picker.m_PickedItem = newitem;
-            picker.m_PickedItemType = newitem->Type();
-            newList.PushItem(picker);
-        }
+        if( newitem )
+            {
+                newitem->Move( MoveVector );
+                picker.m_PickedItem     = newitem;
+                picker.m_PickedItemType = newitem->Type();
+                newList.PushItem( picker );
+            }
     }
 
     if( newList.GetCount() )
         SaveCopyInUndoList( newList, UR_NEW );
 
-    Compile_Ratsnest( NULL, TRUE );
-    DrawPanel->Refresh( TRUE );
+    Compile_Ratsnest( NULL, true );
+    DrawPanel->Refresh( true );
 }

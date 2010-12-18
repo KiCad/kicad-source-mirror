@@ -10,7 +10,8 @@
 
 #include "protos.h"
 
-/** function EraseRedundantTrack
+/**
+ * Function EraseRedundantTrack
  * Called after creating a track
  * Remove (if exists) the old track that have the same starting and the same
  * ending point as the new created track (this is the redunding track)

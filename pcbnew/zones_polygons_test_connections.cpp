@@ -180,7 +180,8 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb )
 /**************************************************************************************************/
 
-/** Function Merge_SubNets_Connected_By_CopperAreas(BOARD* aPcb)
+/**
+ * Function Merge_SubNets_Connected_By_CopperAreas(BOARD* aPcb)
  * Calls Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode ) for each netcode found in zone list
  * @param aPcb = the current board
  */
@@ -201,7 +202,8 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb )
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 /**************************************************************************************************/
 
-/** Function Merge_SubNets_Connected_By_CopperAreas(BOARD* aPcb, int aNetcode)
+/**
+ * Function Merge_SubNets_Connected_By_CopperAreas(BOARD* aPcb, int aNetcode)
  * Used after connections by tracks calculations
  * Merge subnets, in tracks ans pads when they are connected by a filled copper area
  * for pads, this is the .m_physical_connexion member which is tested and modified

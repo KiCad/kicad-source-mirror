@@ -182,7 +182,7 @@ void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
             continue;                       // already put in list
 
         int flag = 0;
-        
+
         if( (track->m_Start == aRefPos) && ((track->m_Flags & STARTPOINT) == 0) )
             flag |= STARTPOINT;
 
@@ -205,7 +205,8 @@ void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/** function EraseDragList
+/**
+ * Function EraseDragList
  * clear the .m_Flags of all track segments found in g_DragSegmentList
  * and clear the list.
  * the memory is not freed and will be reused when creating a new list

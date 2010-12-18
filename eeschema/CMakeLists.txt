@@ -27,6 +27,7 @@ set(EESCHEMA_SRCS
     database.cpp
     delete.cpp
     delsheet.cpp
+    dialogs/dialog_color_config.cpp
     dialogs/dialog_plot_schematic_DXF.cpp
     dialogs/dialog_plot_schematic_DXF_base.cpp
     dialogs/dialog_plot_schematic_HPGL.cpp
@@ -35,43 +36,44 @@ set(EESCHEMA_SRCS
     dialogs/dialog_plot_schematic_PS_base.cpp
     dialogs/annotate_dialog.cpp
     dialogs/dialog_annotate_base.cpp
-    dialog_bodygraphictext_properties_base.cpp
-    dialog_build_BOM.cpp
-    dialog_build_BOM_base.cpp
-    dialog_edit_component_in_lib.cpp
-    dialog_edit_component_in_lib_base.cpp
-    dialog_edit_component_in_schematic_fbp.cpp
-    dialog_edit_component_in_schematic.cpp
-    dialog_edit_label.cpp
-    dialog_edit_label_base.cpp
-    dialog_edit_libentry_fields_in_lib.cpp
-    dialog_edit_libentry_fields_in_lib_base.cpp
-    dialog_eeschema_config.cpp
-    dialog_eeschema_config_fbp.cpp
-    dialog_eeschema_options_base.cpp
-    dialog_eeschema_options.cpp
+    dialogs/dialog_lib_edit_text.cpp
+    dialogs/dialog_lib_edit_text_base.cpp
+    dialogs/dialog_build_BOM.cpp
+    dialogs/dialog_build_BOM_base.cpp
+    dialogs/dialog_edit_component_in_lib.cpp
+    dialogs/dialog_edit_component_in_lib_base.cpp
+    dialogs/dialog_edit_component_in_schematic_fbp.cpp
+    dialogs/dialog_edit_component_in_schematic.cpp
+    dialogs/dialog_edit_label.cpp
+    dialogs/dialog_edit_label_base.cpp
+    dialogs/dialog_edit_libentry_fields_in_lib.cpp
+    dialogs/dialog_edit_libentry_fields_in_lib_base.cpp
+    dialogs/dialog_eeschema_config.cpp
+    dialogs/dialog_eeschema_config_fbp.cpp
+    dialogs/dialog_eeschema_options_base.cpp
+    dialogs/dialog_eeschema_options.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
-    dialog_libedit_dimensions.cpp
-    dialog_libedit_dimensions_base.cpp
-    dialog_lib_edit_draw_item.cpp
-    dialog_lib_edit_draw_item_base.cpp
-    dialog_lib_edit_pin.cpp
-    dialog_lib_edit_pin_base.cpp
-    dialog_lib_new_component.cpp
-    dialog_lib_new_component_base.cpp
+    dialogs/dialog_libedit_dimensions.cpp
+    dialogs/dialog_libedit_dimensions_base.cpp
+    dialogs/dialog_lib_edit_draw_item.cpp
+    dialogs/dialog_lib_edit_draw_item_base.cpp
+    dialogs/dialog_lib_edit_pin.cpp
+    dialogs/dialog_lib_edit_pin_base.cpp
+    dialogs/dialog_lib_new_component.cpp
+    dialogs/dialog_lib_new_component_base.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_print_using_printer.cpp
-    dialog_sch_sheet_props.cpp
-    dialog_sch_sheet_props_base.cpp
+    dialogs/dialog_sch_edit_sheet_pin.cpp
+    dialogs/dialog_sch_edit_sheet_pin_base.cpp
+    dialogs/dialog_sch_sheet_props.cpp
+    dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
-    dialog_SVG_print.cpp
-    dialog_SVG_print_base.cpp
-    edit_component_in_lib.cpp
+    dialogs/dialog_SVG_print.cpp
+    dialogs/dialog_SVG_print_base.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
-    eelayer.cpp
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
     eeschema.cpp
@@ -130,7 +132,6 @@ set(EESCHEMA_SRCS
     sheetlab.cpp
     symbdraw.cpp
     symbedit.cpp
-    edit_graphic_bodyitem_text.cpp
     template_fieldnames_keywords.cpp
     template_fieldnames.cpp
     tool_lib.cpp
@@ -141,7 +142,7 @@ set(EESCHEMA_SRCS
     viewlibs.cpp)
 
 set(EESCHEMA_EXTRA_SRCS
-    ../common/dialog_page_settings.cpp
+    ../common/dialogs/dialog_page_settings.cpp
     ../common/sch_item_struct.cpp
 )
 

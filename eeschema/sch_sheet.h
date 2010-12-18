@@ -16,7 +16,7 @@ class SCH_SHEET;
 class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class DANGLING_END_ITEM;
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 
 
 /**
@@ -74,10 +74,11 @@ public:
      * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
-     * @param Pos = Position of the shape
+     * @param aPos = Position of the shape
      */
     virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos );
+                                        const wxPoint&         aPos );
+
     SCH_SHEET_PIN* Next()
     {
         return (SCH_SHEET_PIN*) Pnext;
@@ -110,11 +111,7 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    void        Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-
-/*the functions Draw, CreateGraphicShape and Plot are no removed as
- *  as this shape is already handled as HIERLABEL ...
- */
+    void        Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     /**
      * Function Save
@@ -146,14 +143,7 @@ public:
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize();
-
-    /**
-     * Function CreateGraphicShape
-     * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = list to fill with polygon corners coordinates
-     * @param Pos = Position of the shape
-     */
+    virtual int GetPenSize() const;
 
     // Geometric transforms (used in block operations):
 
@@ -166,16 +156,15 @@ public:
         m_Pos += aMoveVector;
     }
 
-
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-
     virtual void Mirror_Y( int aYaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
-    virtual void Mirror_X( int aXaxis_position );
 
+    virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void Mirror_X( int aXaxis_position );
 
     /**
      * Function Matches
@@ -235,11 +224,11 @@ public:
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
     ~SCH_SHEET();
+
     virtual wxString GetClass() const
     {
         return wxT( "SCH_SHEET" );
     }
-
 
     /**
      * Function Save
@@ -248,7 +237,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool           Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic sheet from \a aLine in a .sch file.
@@ -259,14 +248,16 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
-    SCH_SHEET*     GenCopy();
-    void           DisplayInfo( WinEDA_DrawFrame* frame );
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+
+    SCH_SHEET* GenCopy();
+
+    void DisplayInfo( WinEDA_DrawFrame* frame );
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges
      */
-    bool           IsVerticalOrientation();
+    bool IsVerticalOrientation();
 
     /**
      * Add aLabel to this sheet.
@@ -277,7 +268,7 @@ public:
      *
      * @param aLabel - The label to add to the sheet.
      */
-    void           AddLabel( SCH_SHEET_PIN* aLabel );
+    void AddLabel( SCH_SHEET_PIN* aLabel );
 
     SCH_SHEET_PIN_LIST& GetSheetPins() { return m_labels; }
 
@@ -291,7 +282,7 @@ public:
      *
      * @param aSheetLabel - The sheet label to remove from the list.
      */
-    void           RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
+    void RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
 
     /**
      * Delete sheet label which do not have a corresponding hierarchical label.
@@ -299,7 +290,7 @@ public:
      * Note: Make sure you save a copy of the sheet in the undo list before calling
      *       CleanupSheet() otherwise any unrefernced sheet labels will be lost.
      */
-    void           CleanupSheet();
+    void CleanupSheet();
 
     /**
      * Return the label found at aPosition in this sheet.
@@ -317,7 +308,7 @@ public:
      *
      * @return - True if label found, otherwise false.
      */
-    bool           HasLabel( const wxString& aName );
+    bool HasLabel( const wxString& aName );
 
     bool HasLabels() { return !m_labels.empty(); }
 
@@ -326,51 +317,44 @@ public:
      *
      * @return True if there are any undefined labels.
      */
-    bool           HasUndefinedLabels();
+    bool HasUndefinedLabels();
 
     /**
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int    GetPenSize();
+    virtual int GetPenSize() const;
 
     /**
      * Function Draw
      *  Draw the hierarchical sheet shape
      *  @param aPanel = the current DrawPanel
-     *  @param aDc = the current Device Context
+     *  @param aDC = the current Device Context
      *  @param aOffset = draw offset (usually wxPoint(0,0))
      *  @param aDrawMode = draw mode
      *  @param aColor = color used to draw sheet. Usually -1 to use the normal
      * color for sheet items
      */
-    void           Draw( WinEDA_DrawPanel* aPanel,
-                         wxDC*             aDC,
-                         const wxPoint&    aOffset,
-                         int               aDrawMode,
-                         int               aColor = -1 );
-
-    /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool     HitTest( const wxPoint& aPosRef );
+    void Draw( WinEDA_DrawPanel* aPanel,
+               wxDC*             aDC,
+               const wxPoint&    aOffset,
+               int               aDrawMode,
+               int               aColor = -1 );
 
     /**
      * Function GetBoundingBox
      *  @return an EDA_Rect giving the bounding box of the sheet
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
-    void     SwapData( SCH_SHEET* copyitem );
+    void SwapData( SCH_SHEET* copyitem );
 
     /**
      * Function ComponentCount
      *  count our own components, without the power components.
      *  @return the component count.
      */
-    int      ComponentCount();
+    int ComponentCount();
 
     /**
      * Function Load.
@@ -379,21 +363,19 @@ public:
      *  m_AssociatedScreen point on the screen, and its m_RefCount is
      * incremented
      *  else creates a new associated screen and load the data file.
-     *  @param aFrame = a WinEDA_SchematicFrame pointer to the maim schematic
-     * frame
+     *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic frame
      *  @return true if OK
      */
-    bool     Load( WinEDA_SchematicFrame* aFrame );
+    bool Load( SCH_EDIT_FRAME* aFrame );
 
     /**
      * Function SearchHierarchy
      *  search the existing hierarchy for an instance of screen "FileName".
      *  @param aFilename = the filename to find
-     *  @param aFilename = a location to return a pointer to the screen (if
-     * found)
+     *  @param aScreen = a location to return a pointer to the screen (if found)
      *  @return bool if found, and a pointer to the screen
      */
-    bool     SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen );
+    bool SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen );
 
     /**
      * Function LocatePathOfScreen
@@ -406,8 +388,7 @@ public:
      *  @param aList = the SCH_SHEET_PATH*  that must be used
      *  @return true if found
      */
-    bool     LocatePathOfScreen( SCH_SCREEN*     aScreen,
-                                 SCH_SHEET_PATH* aList );
+    bool LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList );
 
     /**
      * Function CountSheets
@@ -415,7 +396,7 @@ public:
      * this number includes the full subsheets count
      * @return the full count of sheets+subsheets contained by "this"
      */
-    int      CountSheets();
+    int CountSheets();
 
     /**
      * Function GetFileName
@@ -430,7 +411,6 @@ public:
         m_FileName = aFilename;
     }
 
-
     /**
      * Function ChangeFileName
      * Set a new filename and manage data and associated screen
@@ -442,8 +422,7 @@ public:
      * @param aFileName = the new filename
      * @param aFrame = the schematic frame
      */
-    bool ChangeFileName( WinEDA_SchematicFrame* aFrame,
-                         const wxString&        aFileName );
+    bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
 
     //void      RemoveSheet(SCH_SHEET* sheet);
     //to remove a sheet, just delete it
@@ -464,7 +443,6 @@ public:
             label.Move( aMoveVector );
         }
     }
-
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
@@ -492,7 +470,7 @@ public:
      *
      * @param aSize - The new size for this sheet.
      */
-    void         Resize( const wxSize& aSize );
+    void Resize( const wxSize& aSize );
 
     /**
      * Function GetSheetNamePosition
@@ -533,6 +511,10 @@ protected:
      * label is added or removed.
      */
     void renumberLabels();
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
 };
 
 #endif /* CLASS_DRAWSHEET_H */

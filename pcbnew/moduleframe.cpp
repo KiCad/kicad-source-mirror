@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
+#include "dialog_helpers.h"
 
 #include "3d_viewer.h"
 
@@ -159,7 +160,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     m_Draw_Sheet_Ref = false;   // true to show the frame references
     m_Draw_Axis = true;         // true to show X and Y axis on screen
     m_Draw_Grid_Axis = true;    // show the grid origin axis
-    m_HotkeysZoomAndGridList = s_Module_Editor_Hokeys_Descr;
+    m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
 
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );
@@ -272,7 +273,8 @@ void WinEDA_ModuleEditFrame::CloseModuleEditor( wxCommandEvent& Event )
     Close();
 }
 
-/** function WinEDA_ModuleEditFrame::SetToolbars()
+/**
+ * Function SetToolbars
  * Enable or disable some tools and menus, according to
  * the current state of the footprint editor:
  *  >> a footprint is loaded or not
@@ -350,8 +352,9 @@ void WinEDA_ModuleEditFrame::SetToolbars()
                             GetScreen()->GetRedoCommandCount()>0 && active );
     menuBar->Enable( wxID_REDO, GetScreen()->GetRedoCommandCount()>0 && active );
 
-    m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, GetBoard()->m_Modules != NULL );
-    menuBar->Enable( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, GetBoard()->m_Modules != NULL );
+    bool canLoadModuleFromBoard = frame->GetBoard()->m_Modules != NULL;
+    m_HToolBar->EnableTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, canLoadModuleFromBoard );
+    menuBar->Enable( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, canLoadModuleFromBoard );
     m_HToolBar->Refresh();
 
 
@@ -553,7 +556,8 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 }
 
 
-/** Virtual Function OnModify()
+/**
+ * Function OnModify() (virtual)
  * Must be called after a change
  * in order to set the "modify" flag of the current screen
  * and prepare, if needed the refresh of the 3D frame showing the footprint

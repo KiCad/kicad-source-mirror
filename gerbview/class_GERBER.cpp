@@ -95,7 +95,7 @@ GERBER_IMAGE::GERBER_IMAGE( WinEDA_GerberFrame* aParent, int aLayer )
     for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
         m_Aperture_List[ii] = 0;
 
-    m_Pcb = 0;
+    m_Pcb = aParent->GetBoard();
 }
 
 
@@ -151,6 +151,7 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_FileName.Empty();
     m_ImageName     = wxT( "no name" );             // Image name from the IN command
     m_ImageNegative = false;                        // true = Negative image
+    m_hasNegativeItems    = -1;                     // set to uninitialized
     m_ImageJustifyOffset  = wxPoint(0,0);           // Image justify Offset
     m_ImageJustifyXCenter = false;                  // Image Justify Center on X axis (default = false)
     m_ImageJustifyYCenter = false;                  // Image Justify Center on Y axis (default = false)
@@ -158,6 +159,7 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_Relative = false;                             // false = absolute Coord,
                                                     // true = relative Coord
     m_NoTrailingZeros = false;                      // true: trailing zeros deleted
+    m_DecimalFormat = false;                        // true: use floating point notations for coordinates
     m_ImageOffset.x   = m_ImageOffset.y = 0;        // Coord Offset, from IO command
     m_ImageRotation = 0;                            // Allowed 0, 90, 180, 270 (in degree)
     m_LocalRotation = 0.0;                          // Layer totation from RO command (in 0.1 degree)
@@ -189,6 +191,35 @@ void GERBER_IMAGE::ResetDefaultValues()
     m_Selected_Tool = FIRST_DCODE;
 }
 
+/* Function HasNegativeItems
+ * return true if at least one item must be drawn in background color
+ * used to optimize screen refresh
+ */
+bool GERBER_IMAGE::HasNegativeItems()
+{
+    if( m_hasNegativeItems < 0 )    // negative items are not yet searched: find them if any
+    {
+        if( m_ImageNegative )       // A negative layer is expected having always negative objects.
+            m_hasNegativeItems = 1;
+        else
+        {
+            m_hasNegativeItems = 0;
+            for( BOARD_ITEM* item = m_Pcb->m_Drawings; item; item = item->Next() )
+            {
+                GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+                if( gerb_item->GetLayer() != m_GraphicLayer )
+                    continue;
+                if( gerb_item->HasNegativeItems() )
+                {
+                    m_hasNegativeItems = 1;
+                    break;
+                }
+            }
+             // TODO search for items in list
+        }
+    }
+    return m_hasNegativeItems == 1;
+}
 
 int GERBER_IMAGE::ReturnUsedDcodeNumber()
 {
@@ -220,7 +251,8 @@ void GERBER_IMAGE::InitToolTable()
 }
 
 
-/** function ReportMessage
+/**
+ * Function ReportMessage
  * Add a message (a string) in message list
  * for instance when reading a Gerber file
  * @param aMessage = the straing to add in list
@@ -231,7 +263,8 @@ void GERBER_IMAGE::ReportMessage( const wxString aMessage )
 }
 
 
-/** function ClearMessageList
+/**
+ * Function ClearMessageList
  * Clear the message list
  * Call it before reading a Gerber file
  */
@@ -241,7 +274,8 @@ void GERBER_IMAGE::ClearMessageList()
 }
 
 
-/** Function StepAndRepeatItem
+/**
+ * Function StepAndRepeatItem
  * Gerber format has a command Step an Repeat
  * This function must be called when reading a gerber file and
  * after creating a new gerber item that must be repeated
@@ -276,7 +310,8 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 }
 
 
-/** Function DisplayImageInfo
+/**
+ * Function DisplayImageInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about Image Parameters.

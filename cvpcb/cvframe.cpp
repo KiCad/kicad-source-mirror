@@ -355,8 +355,6 @@ void WinEDA_CvpcbFrame::ToFirstNA( wxCommandEvent& event )
 
         ii++;
     }
-
-    wxBell();
     m_ListCmp->SetSelection( selection );
 }
 
@@ -384,8 +382,6 @@ void WinEDA_CvpcbFrame::ToPreviousNA( wxCommandEvent& event )
         }
         ii--;
     }
-
-    wxBell();
     m_ListCmp->SetSelection( selection );
 }
 

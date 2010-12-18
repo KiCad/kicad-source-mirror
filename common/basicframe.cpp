@@ -83,7 +83,8 @@ void WinEDA_BasicFrame::ReCreateMenuBar()
 
 }
 
-/** Virtual function SetLanguage
+/**
+ * Function SetLanguage (virtual)
  * called on a language menu selection
  * when using a derived function, do not forget to call this one
  */

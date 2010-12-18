@@ -13,8 +13,30 @@ using namespace std;
 
 class SCH_ITEM;
 class LINE_READER;
-class WinEDA_SchematicFrame;
+class SCH_EDIT_FRAME;
 class wxFindReplaceData;
+
+
+// Schematic item filter mask for hit test objects in schematic editor.
+enum SCH_FILTER_T {
+    COMPONENT_T         = 0x0001,
+    WIRE_T              = 0X0002,
+    BUS_T               = 0x0004,
+    BUS_ENTRY_T         = 0x0008,
+    JUNCTION_T          = 0x0010,
+    DRAW_ITEM_T         = 0x0020,
+    TEXT_T              = 0x0040,
+    LABEL_T             = 0x0080,
+    SHEET_T             = 0x0100,
+    MARKER_T            = 0x0200,
+    NO_CONNECT_T        = 0x0400,
+    SHEET_LABEL_T       = 0x0800,
+    FIELD_T             = 0x1000,
+    EXCLUDE_ENDPOINTS_T = 0x2000,
+    ENDPOINTS_ONLY_T    = 0x4000,
+    PIN_T               = 0x8000,
+    NO_FILTER_T         = 0xFFFF
+};
 
 
 enum DANGLING_END_T {
@@ -53,14 +75,14 @@ public:
  * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.
  * The corresponding class in PCBNEW is BOARD_ITEM.
  */
-class SCH_ITEM : public EDA_BaseStruct
+class SCH_ITEM : public EDA_ITEM
 {
 protected:
     int            m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
 
 public:
-    SCH_ITEM( EDA_BaseStruct* aParent,  KICAD_T aType );
+    SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
 
     ~SCH_ITEM();
 
@@ -83,26 +105,26 @@ public:
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void  SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( ) = 0;
+    virtual int GetPenSize() const { return 0; }
 
     /**
      * Function Draw
      */
-    virtual void    Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               draw_mode,
-                          int               Color = -1 ) = 0;
+    virtual void Draw( WinEDA_DrawPanel* aPanel,
+                       wxDC*             aDC,
+                       const wxPoint&    aOffset,
+                       int               aDrawMode,
+                       int               aColor = -1 ) = 0;
 
 
     /* Place function */
-    virtual void    Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    virtual void Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC );
 
     // Geometric transforms (used in block operations):
     /** virtual function Move
@@ -127,7 +149,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const = 0;
+    virtual bool Save( FILE* aFile ) const = 0;
 
     /**
      * Load schematic item from \a aLine in a .sch file.
@@ -144,9 +166,9 @@ public:
      * The base class returns false since many of the objects derived from
      * SCH_ITEM do not have any text to search.
      *
-     * @todo - This should probably be pushed down to EDA_BaseStruct so that
+     * @todo - This should probably be pushed down to EDA_ITEM so that
      *         searches can be done on all of the Kicad applications that use
-     *         objects derived from EDA_BaseStruct.
+     *         objects derived from EDA_ITEM.
      *
      * @param aSearchData - The search criteria.
      * @param aAuxData - a pointer on auxiliary data, if needed (NULL if not used).
@@ -222,6 +244,63 @@ public:
      * Do not use the vector erase method on the connection list.
      */
     void ClearConnections() { m_connections.release(); }
+
+    /**
+     * Function IsConnected().
+     * Test \a aPoint to see if it is connected to this schematic object.
+     *
+     * @param aPoint - Position to test for connection.
+     * @return True if connection to \a aPoint exists.
+     */
+    bool IsConnected( const wxPoint& aPoint ) const;
+
+    /**
+     * Function HitTest().
+     * Test if \a aPoint is contained within the bounding box or on an item.
+     *
+     * @param aPoint - Point to test.
+     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @param aFilter - Mask to provide more granular hit testing.  See enum SCH_FILTER_T.
+     * @return True if \a aPoint is within the item and meets the filter criteria.
+     */
+    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0,
+                  SCH_FILTER_T aFilter = NO_FILTER_T ) const
+    {
+        return DoHitTest( aPoint, aAccuracy, aFilter );
+    }
+
+    /**
+     * Function HitTest().
+     * Test if \a aRect intersects or is contained within the bounding box of an item.
+     *
+     * @param aRect - Rectangle to test.
+     * @param aContained - Set to true to test for containment instead of an intersection.
+     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @return True if \a aRect contains or intersects the item bounding box.
+     */
+    bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const
+    {
+        return DoHitTest( aRect, aContained, aAccuracy );
+    }
+
+    /**
+     * @note - The DoXXX() functions below are used to enforce the interface while retaining
+     *         the ability of change the implementation behavior of derived classes.  See
+     *         Herb Sutters explanation of virtuality as to why you might want to do this at:
+     *         http://www.gotw.ca/publications/mill18.htm.
+     */
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+    {
+        return false;
+    }
+
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+    {
+        return false;
+    }
+
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const { return false; }
 };
 
 #endif /* SCH_ITEM_STRUCT_H */

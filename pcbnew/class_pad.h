@@ -271,6 +271,9 @@ public:
     wxString      ReturnStringPadName();                    // Return pad name as string in a wxString
     void          ReturnStringPadName( wxString& text );    // Return pad name as string in a buffer
     void          ComputeShapeMaxRadius();                           // compute radius
+
+    int           GetMaxRadius() const;
+
     const wxPoint ReturnShapePos();
 
 
@@ -286,7 +289,7 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
+     * Is virtual from EDA_ITEM.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
     void DisplayInfo( WinEDA_DrawFrame* frame );
@@ -321,13 +324,12 @@ public:
         return wxT( "PAD" );
     }
 
-
     /**
      * Function GetBoundingBox
      * returns the bounding box of this pad
      * Mainly used to redraw the screen area occupied by the pad
      */
-    EDA_Rect   GetBoundingBox();
+    EDA_Rect   GetBoundingBox() const;
 
     /**
      * Function Compare

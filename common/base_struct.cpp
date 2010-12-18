@@ -1,7 +1,7 @@
 /****************************************/
-/* Basic classes for Kicad:				*/
-/*		EDA_BaseStruct                  */
-/*		EDA_TextStruct                  */
+/* Basic classes for Kicad:             */
+/*      EDA_ITEM                        */
+/*      EDA_TextStruct                  */
 /****************************************/
 
 #include "fctsys.h"
@@ -20,9 +20,7 @@ enum textbox {
 };
 
 
-/******************************************************************************/
-EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
-/******************************************************************************/
+EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
@@ -30,16 +28,14 @@ EDA_BaseStruct::EDA_BaseStruct( EDA_BaseStruct* parent, KICAD_T idType )
 }
 
 
-/********************************************/
-EDA_BaseStruct::EDA_BaseStruct( KICAD_T idType )
-/********************************************/
+EDA_ITEM::EDA_ITEM( KICAD_T idType )
 {
     InitVars();
     m_StructType = idType;
 }
 
 
-EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
+EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
     m_StructType = base.m_StructType;
     m_Parent     = base.m_Parent;
@@ -51,9 +47,7 @@ EDA_BaseStruct::EDA_BaseStruct( const EDA_BaseStruct& base )
 }
 
 
-/********************************************/
-void EDA_BaseStruct::InitVars()
-/********************************************/
+void EDA_ITEM::InitVars()
 {
     m_StructType = TYPE_NOT_INIT;
     Pnext       = NULL;     // Linked list: Link (next struct)
@@ -69,13 +63,23 @@ void EDA_BaseStruct::InitVars()
 }
 
 
-// see base_struct.h
-SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
-                                              INSPECTOR*      inspector,
-                                              const void*     testData,
-                                              const KICAD_T   scanTypes[] )
+void EDA_ITEM::SetModified()
 {
-    EDA_BaseStruct* p = listStart;
+    m_Flags |= IS_CHANGED;
+
+    // If this a child object, then the parent modification state also needs to be set.
+    if( m_Parent )
+        m_Parent->SetModified();
+}
+
+
+// see base_struct.h
+SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*     listStart,
+                                        INSPECTOR*    inspector,
+                                        const void*   testData,
+                                        const KICAD_T scanTypes[] )
+{
+    EDA_ITEM* p = listStart;
 
     for( ; p; p = p->Pnext )
     {
@@ -89,8 +93,8 @@ SEARCH_RESULT EDA_BaseStruct::IterateForward( EDA_BaseStruct* listStart,
 
 // see base_struct.h
 // many classes inherit this method, be careful:
-SEARCH_RESULT EDA_BaseStruct::Visit( INSPECTOR* inspector, const void* testData,
-                                     const KICAD_T scanTypes[] )
+SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
+                               const KICAD_T scanTypes[] )
 {
     KICAD_T stype;
 
@@ -139,7 +143,7 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
+void EDA_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();
@@ -157,7 +161,7 @@ void EDA_BaseStruct::Show( int nestLevel, std::ostream& os )
  * @param os The ostream&, where to output
  * @return std::ostream& - for continuation.
  **/
-std::ostream& EDA_BaseStruct::NestedSpace( int nestLevel, std::ostream& os )
+std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 {
     for( int i = 0; i<nestLevel; ++i )
         os << "  ";
@@ -182,7 +186,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
     m_Mirror    = false;                            // display mirror if true
     m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
     m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
-    m_Width     = 0;                                /* thickness */
+    m_Thickness     = 0;                                /* thickness */
     m_Italic    = false;                            /* true = italic shape */
     m_Bold      = false;
     m_MultilineAllowed = false;                     // Set to true only for texts that can use multiline.
@@ -203,70 +207,68 @@ EDA_TextStruct::~EDA_TextStruct()
  */
 int EDA_TextStruct::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Width;
+    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
 }
 
 
-/** Function GetTextBox
- * useful in multiline texts to calculate the full text or a line area (for zones filling, locate functions....)
- * @return the rect containing the line of text (i.e. the position and the size of one line)
- * this rectangle is calculated for 0 orient text. if orient is not 0 the rect must be rotated to match the physical area
- * @param aLine : the line of text to consider.
- * for single line text, aLine is unused
- * If aLine == -1, the full area (considering all lines) is returned
- */
-EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
+EDA_Rect EDA_TextStruct::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 {
     EDA_Rect       rect;
     wxPoint        pos;
     wxArrayString* list = NULL;
-
-    wxString*      text = &m_Text;
+    wxString       text = m_Text;
+    int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
 
     if( m_MultilineAllowed )
     {
         list = wxStringSplit( m_Text, '\n' );
+
         if ( list->GetCount() )     // GetCount() == 0 for void strings
         {
             if( aLine >= 0 && (aLine < (int)list->GetCount()) )
-                text = &list->Item( aLine );
+                text = list->Item( aLine );
             else
-                text = &list->Item( 0 );
+                text = list->Item( 0 );
         }
     }
 
-
     // calculate the H and V size
-    int    dx = LenSize( *text );
+    int    dx = LenSize( text );
     int    dy = GetInterline();
 
     /* Creates bounding box (rectangle) for an horizontal text */
     wxSize textsize = wxSize( dx, dy );
-    rect.SetOrigin( m_Pos );
+
+    if( aInvertY )
+        rect.SetOrigin( m_Pos.x, -m_Pos.y );
+    else
+        rect.SetOrigin( m_Pos );
+
     // extra dy interval for letters like j and y and ]
     int extra_dy = dy - m_Size.y;
-    rect.Move(wxPoint(0, -extra_dy/2 ) ); // move origin by the half extra interval
+    rect.Move( wxPoint( 0, -extra_dy / 2 ) ); // move origin by the half extra interval
 
     // for multiline texts and aLine < 0, merge all rectangles
     if( m_MultilineAllowed && list && aLine < 0 )
     {
         for( unsigned ii = 1; ii < list->GetCount(); ii++ )
         {
-            text = &list->Item( ii );
-            dx   = LenSize( *text );
+            text = list->Item( ii );
+            dx   = LenSize( text );
             textsize.x  = MAX( textsize.x, dx );
             textsize.y += dy;
         }
     }
+
     delete list;
 
     rect.SetSize( textsize );
-    rect.Inflate( m_Width/2 );      // ensure a small margin
+    rect.Inflate( thickness / 2 );      // ensure a small margin
 
     /* Now, calculate the rect origin, according to text justification
      * At this point the rectangle origin is the text origin (m_Pos).
-     * This is true only for left and top text justified texts (using top to bottom Y axis orientation).
-     * and must be recalculated for others justifications
+     * This is true only for left and top text justified texts (using top to bottom Y axis
+     * orientation). and must be recalculated for others justifications
      * also, note the V justification is relative to the first line
      */
     switch( m_HJustify )
@@ -283,7 +285,8 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
         break;
     }
 
-    dy = m_Size.y + m_Width;
+    dy = m_Size.y + thickness;
+
     switch( m_VJustify )
     {
     case GR_TEXT_VJUSTIFY_TOP:
@@ -299,45 +302,35 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine )
     }
 
     rect.Normalize();       // Make h and v sizes always >= 0
+
     return rect;
 }
 
 
-/*************************************************/
-bool EDA_TextStruct::TextHitTest( const wxPoint& posref )
-/*************************************************/
-
-/**
- * Function TextHitTest (overlayed)
- * tests if the given point is inside this object.
- * @param posref point to test
- * @return bool - true if a hit, else false
- */
+bool EDA_TextStruct::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     EDA_Rect rect = GetTextBox( -1 );   // Get the full text area.
+    wxPoint location = aPoint;
 
-    /* Is the ref point inside the text area ?  */
-    wxPoint location = posref;
+    rect.Inflate( aAccuracy );
     RotatePoint( &location, m_Pos, -m_Orient );
 
-    return rect.Inside ( location);
+    return rect.Inside( location );
 }
 
 
-/**
- * Function TextHitTest (overlayed)
- * tests if the given EDA_Rect intersect this object.
- * @param refArea the given EDA_Rect to test
- * @return bool - true if a hit, else false
- */
-/*********************************************************/
-bool EDA_TextStruct::TextHitTest( EDA_Rect& refArea )
-/*********************************************************/
+bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAccuracy ) const
 {
-    if( refArea.Inside( m_Pos ) )
-        return true;
-    return false;
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContains )
+        return rect.Inside( GetTextBox( -1 ) );
+
+    return rect.Intersects( GetTextBox( -1 ) );
 }
+
 
 /***************************************************************/
 void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
@@ -346,7 +339,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                            GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 /***************************************************************/
 
-/** Function Draw
+/**
+ * Function Draw
  * Draws this, that can be a multiline text
  *  @param aPanel = the current DrawPanel
  *  @param aDC = the current Device Context
@@ -397,7 +391,8 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/** Function DrawOneLineOfText
+/**
+ * Function DrawOneLineOfText
  * Draw a single text line.
  * Used to draw each line of this EDA_TextStruct, that can be multiline
  *  @param aPanel = the current DrawPanel
@@ -416,7 +411,7 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                         GRTraceMode aFillMode, EDA_Colors aAnchor_color,
                                         wxString& aText, wxPoint aPos )
 {
-    int width = m_Width;
+    int width = m_Thickness;
 
     if( aFillMode == FILAIRE )
         width = 0;
@@ -460,6 +455,27 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
+/**
+ * Function GetStyleName
+ * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
+ */
+wxString EDA_TextStruct::GetTextStyleName()
+{
+    int style = 0;
+    if( m_Italic )
+        style = 1;
+    if( m_Bold )
+        style += 2;
+    wxString stylemsg[4] = {
+        _("Normal"),
+        _("Italic"),
+        _("Bold"),
+        _("Bold+Italic")
+    };
+
+    return stylemsg[style];
+}
+
 
 /******************/
 /* Class EDA_Rect */
@@ -485,7 +501,8 @@ void EDA_Rect::Normalize()
 
 
 
-/** Function Move
+/**
+ * Function Move
  * Move this rectangle by the aMoveVector value (this is a relative move)
  * @param aMoveVector = a wxPoint that is the value to move this rectangle
  */
@@ -494,13 +511,11 @@ void EDA_Rect::Move( const wxPoint& aMoveVector )
     m_Pos += aMoveVector;
 }
 
-/*******************************************/
-bool EDA_Rect::Inside( const wxPoint& point )
-/*******************************************/
 
 /* Return TRUE if point is in Rect
  *  Accept rect size < 0
  */
+bool EDA_Rect::Inside( const wxPoint& point ) const
 {
     int    rel_posx = point.x - m_Pos.x;
     int    rel_posy = point.y - m_Pos.y;
@@ -518,10 +533,16 @@ bool EDA_Rect::Inside( const wxPoint& point )
         rel_posy += size.y;
     }
 
-    return (rel_posx >= 0) && (rel_posy >= 0)
-           && ( rel_posy <= size.y)
-           && ( rel_posx <= size.x)
-    ;
+    return (rel_posx >= 0) && (rel_posy >= 0) && ( rel_posy <= size.y) && ( rel_posx <= size.x);
+}
+
+
+bool EDA_Rect::Inside( const EDA_Rect& aRect ) const
+{
+    wxRect rect = aRect;
+    wxRect me = wxRect();
+
+    return me.Contains( rect );
 }
 
 
@@ -548,7 +569,8 @@ bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
 EDA_Rect& EDA_Rect::Inflate( int aDelta )
 /**************************************************/
 
-/** Function Inflate
+/**
+ * Function Inflate
  * Inflate "this": move each horizontal edgeand each vertical edge by aDelta
  * toward rect outside
  * if aDelta is negative, move toward rect inside (deflate)
@@ -564,7 +586,8 @@ EDA_Rect& EDA_Rect::Inflate( int aDelta )
 EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 /**************************************************/
 
-/** Function Inflate
+/**
+ * Function Inflate
  * Inflate "this": move each horizontal edge by dx and each vertical edge by dy
  * toward rect outside
  * if dx and/or dy is negative, move toward rect inside (deflate)
@@ -658,5 +681,24 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     m_Pos.y = MIN( m_Pos.y, rect.m_Pos.y );
     end.x   = MAX( end.x, rect_end.x );
     end.y   = MAX( end.y, rect_end.y );
+    SetEnd( end );
+}
+
+/**
+ * Function Merge
+ * modifies Position and Size of this in order to contain the given point
+ * mainly used to calculate bounding boxes
+ * @param aPoint = given point to merge with this
+ */
+void EDA_Rect::Merge( const wxPoint& aPoint )
+{
+    Normalize();        // ensure width and height >= 0
+
+    wxPoint  end = GetEnd();
+    // Change origin and size in order to contain the given rect
+    m_Pos.x = MIN( m_Pos.x, aPoint.x );
+    m_Pos.y = MIN( m_Pos.y, aPoint.y );
+    end.x   = MAX( end.x, aPoint.x );
+    end.y   = MAX( end.y, aPoint.y );
     SetEnd( end );
 }

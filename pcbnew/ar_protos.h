@@ -2,13 +2,6 @@
 /* ar-proto.h */
 /**************/
 
-MODULE ** GenListeModules( BOARD * Pcb, int * NbModules );
-
-/****************/
-/* GRAPHPCB.CPP */
-/****************/
-
-
 /* Initialize a value type, the cells included in the board surface of the
  * pad edge by pt_pad, with the margin reserved for isolation. */
 void Place_1_Pad_Board( BOARD * Pcb, D_PAD * pt_pad, int type, int marge,
@@ -44,15 +37,12 @@ void TraceFilledRectangle( BOARD * Pcb, int ux0, int uy0, int ux1, int uy1,
 void TraceArc( int ux0,int uy0, int ux1, int uy1, int ArcAngle, int lg,
                int layer, int color, int op_logique);
 
-/* SOLVE.CPP */
-
 /* QUEUE.CPP */
 void FreeQueue();
 void InitQueue();
 void GetQueue( int *, int *, int *, int *, int * );
 int  SetQueue( int, int, int, int, int, int, int );
 void ReSetQueue( int, int, int, int, int, int, int );
-
 
 /* WORK.CPP */
 void InitWork();

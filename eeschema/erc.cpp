@@ -152,7 +152,8 @@ static int MinimalReq[PIN_NMAX][PIN_NMAX] =
 };
 
 
-/** Function TestDuplicateSheetNames( )
+/**
+ * Function TestDuplicateSheetNames( )
  * inside a given sheet, one cannot have sheets with duplicate names (file
  * names can be duplicated).
  * @return the error count
@@ -168,18 +169,18 @@ int TestDuplicateSheetNames( bool aCreateMarker )
          Screen != NULL;
          Screen = ScreenList.GetNext() )
     {
-        for( SCH_ITEM* ref_item = Screen->EEDrawList;
+        for( SCH_ITEM* ref_item = Screen->GetDrawItems();
              ref_item != NULL;
              ref_item = ref_item->Next() )
         {
             // search for a sheet;
-            if( ref_item->Type() != DRAW_SHEET_STRUCT_TYPE )
+            if( ref_item->Type() != SCH_SHEET_T )
                 continue;
             for( SCH_ITEM* item_to_test = ref_item->Next();
                  item_to_test != NULL;
                  item_to_test = item_to_test->Next() )
             {
-                if( item_to_test->Type() != DRAW_SHEET_STRUCT_TYPE )
+                if( item_to_test->Type() != SCH_SHEET_T )
                     continue;
 
                 // We have found a second sheet: compare names
@@ -198,9 +199,10 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                                          ( (SCH_SHEET*) item_to_test )->m_Pos );
                         Marker->SetMarkerType( MARK_ERC );
                         Marker->SetErrorLevel( ERR );
-                        Marker->SetNext( Screen->EEDrawList );
-                        Screen->EEDrawList = Marker;
+                        Marker->SetNext( Screen->GetDrawItems() );
+                        Screen->SetDrawItems( Marker );
                     }
+
                     err_count++;
                 }
             }
@@ -234,12 +236,13 @@ void Diagnose( WinEDA_DrawPanel* aPanel,
     Marker->SetMarkerType( MARK_ERC );
     Marker->SetErrorLevel( WAR );
     screen = aNetItemRef->m_SheetList.LastScreen();
-    Marker->SetNext( screen->EEDrawList );
-    screen->EEDrawList = Marker;
+    Marker->SetNext( screen->GetDrawItems() );
+    screen->SetDrawItems( Marker );
     g_EESchemaVar.NbErrorErc++;
     g_EESchemaVar.NbWarningErc++;
 
     wxString msg;
+
     if( aMinConn < 0 )
     {
         if( (aNetItemRef->m_Type == NET_HIERLABEL)
@@ -270,6 +273,7 @@ void Diagnose( WinEDA_DrawPanel* aPanel,
     memcpy( ascii_buf, &aNetItemRef->m_PinNum, 4 );
     string_pinnum = CONV_FROM_UTF8( ascii_buf );
     cmp_ref = wxT( "?" );
+
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
         cmp_ref = ( (SCH_COMPONENT*) aNetItemRef->m_Link )->GetRef( &aNetItemRef->m_SheetList );
 
@@ -528,7 +532,7 @@ bool WriteDiagnosticERC( const wxString& FullFileName )
         DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             Marker = (SCH_MARKER*) DrawStruct;

@@ -26,6 +26,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
     wxString   filename;
     wxFileName newProjectName = PrjFullFileName;
 
+    ClearMsg();
     /* Init default config filename */
     filename = wxGetApp().FindLibraryPath( wxT( "kicad" ) + g_KicadPrjFilenameExtension);
 
@@ -63,6 +64,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
     int style;
     wxString title;
 
+    ClearMsg();
     if( event.GetId() != wxID_ANY )
     {
         if( event.GetId() == ID_NEW_PROJECT )

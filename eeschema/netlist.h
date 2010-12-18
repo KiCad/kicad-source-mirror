@@ -140,9 +140,10 @@ extern bool g_OptNetListUseNames;   /* TRUE to use names rather than
 /* Prototypes: */
 void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
 
-/** Function ReturnUserNetlistTypeName
+/**
+ * Function ReturnUserNetlistTypeName
  * to retrieve user netlist type names
- * @param first = true: return first name of the list, false = return next
+ * @param first_item = true: return first name of the list, false = return next
  * @return a wxString : name of the type netlist or empty string
  * this function must be called first with "first_item" = true
  * and after with "first_item" = false to get all the other existing netlist

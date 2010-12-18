@@ -112,16 +112,15 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
 }
 
 
-/******************************************************/
-bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
-/******************************************************/
+bool MARKER_BASE::HitTestMarker( const wxPoint& refPos ) const
 {
     wxPoint rel_pos = refPos - m_Pos;
     rel_pos.x /= m_ScalingFactor;
     rel_pos.y /= m_ScalingFactor;
 
-    return m_ShapeBoundingBox.Inside(rel_pos);
+    return m_ShapeBoundingBox.Inside( rel_pos );
 }
+
 
 /**
  * Function GetBoundingBoxMarker
@@ -130,7 +129,7 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos )
  * object, and the units should be in the pcb or schematic coordinate system.
  * It is OK to overestimate the size by a few counts.
  */
-EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
+EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
 {
     wxSize realsize = m_ShapeBoundingBox.GetSize();
     wxPoint realposition = m_ShapeBoundingBox.GetPosition();
@@ -139,7 +138,7 @@ EDA_Rect MARKER_BASE::GetBoundingBoxMarker()
     realposition.x *= m_ScalingFactor;
     realposition.y *= m_ScalingFactor;
     realposition += m_Pos;
-    return EDA_Rect( m_Pos,realsize );
+    return EDA_Rect( m_Pos, realsize );
 }
 
 /**********************************************************************/
@@ -147,7 +146,8 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
                               const wxPoint& aOffset )
 /**********************************************************************/
 
-/**  Function DrawMarker
+/**
+ * Function DrawMarker
  *  The shape is the polygon defined in m_Corners (array of wxPoints)
  */
 {
@@ -172,7 +172,8 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
 }
 
 
-/** Function DisplayMarkerInfo()
+/**
+ * Function DisplayMarkerInfo
  * Displays the full info of this marker, within an HTML window
  */
 void MARKER_BASE::DisplayMarkerInfo( WinEDA_DrawFrame* aFrame )

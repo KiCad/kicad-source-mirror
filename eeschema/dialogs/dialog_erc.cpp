@@ -37,7 +37,7 @@ BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
                        DIALOG_ERC::ChangeErrorLevel )
 END_EVENT_TABLE()
 
-DIALOG_ERC::DIALOG_ERC( WinEDA_SchematicFrame* parent ) :
+DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     DIALOG_ERC_BASE( parent )
 {
     m_Parent = parent;
@@ -53,6 +53,7 @@ void DIALOG_ERC::Init()
     SetFocus();
 
     m_Initialized = FALSE;
+
     for( int ii = 0; ii < PIN_NMAX; ii++ )
         for( int jj = 0; jj < PIN_NMAX; jj++ )
             m_ButtonList[ii][jj] = NULL;
@@ -301,7 +302,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 }
 
 
-/** Function DisplayERC_MarkersList
+/**
+ * Function DisplayERC_MarkersList
  * read the schematic and display the list of ERC markers
  */
 void DIALOG_ERC::DisplayERC_MarkersList()
@@ -317,7 +319,7 @@ void DIALOG_ERC::DisplayERC_MarkersList()
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;

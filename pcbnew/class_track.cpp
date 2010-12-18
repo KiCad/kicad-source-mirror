@@ -106,7 +106,8 @@ TRACK* TRACK::Copy() const
     return NULL;    // should never happen
 }
 
-/** Virtual function GetClearance
+/**
+ * Function GetClearance (virtual)
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
  * aItem's clearance.  If \a aItem is NULL, then this objects
@@ -211,7 +212,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 }
 
 
-EDA_Rect TRACK::GetBoundingBox()
+EDA_Rect TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width + 1 ) / 2;
@@ -569,8 +570,8 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     BOARD * brd =  GetBoard( );
     color = brd->GetLayerColor(m_Layer);
 
-    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) !=
-        HIGHT_LIGHT_FLAG )
+    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) !=
+        HIGHLIGHT_FLAG )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )
@@ -585,12 +586,12 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     if( draw_mode & GR_SURBRILL )
     {
         if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
 
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     SetAlpha( &color, 150 );
@@ -771,7 +772,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     color = brd->GetVisibleElementColor(VIAS_VISIBLE + m_Shape);
 
     if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
-        && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+        && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )
@@ -786,12 +787,12 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
     if( draw_mode & GR_SURBRILL )
     {
         if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
 
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     SetAlpha( &color, 150 );

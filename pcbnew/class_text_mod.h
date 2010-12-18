@@ -11,6 +11,7 @@
 #define TEXT_is_VALUE     1
 #define TEXT_is_DIVERS    2
 
+#define UMBILICAL_COLOR   LIGHTBLUE
 
 class TEXTE_MODULE : public BOARD_ITEM, public EDA_TextStruct
 {
@@ -46,23 +47,24 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
     /* Gestion du texte */
     void     SetWidth( int new_width );
-    int      GetLength();           /* text length */
-    int      GetDrawRotation();     // Return text rotation for drawings and
-                                    // plotting
+
+    int      GetLength() const;        /* text length */
+
+    int      GetDrawRotation() const;  // Return text rotation for drawings and plotting
 
     /**
      * Function GetTextRect
      * @return an EDA_Rect which gives the position and size of the text area
      * (for the 0 orient text and footprint)
      */
-    EDA_Rect GetTextRect( void );
+    EDA_Rect GetTextRect( void ) const;
 
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Text (according to text and footprint
      * orientation)
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     void     SetDrawCoord();        // Set absolute coordinates.
 
@@ -94,12 +96,25 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
                    int               aDrawMode,
                    const wxPoint&    offset = ZeroOffset );
 
+    /**
+     * Function DrawUmbilical
+     * draws a line from the TEXTE_MODULE origin
+     * to parent MODULE origin.
+     * @param aPanel = the current DrawPanel
+     * @param aDC = the current device context
+     * @param aDrawMode = drawing mode, typically GR_XOR
+     * @param aOffset = offset for TEXTE_MODULE
+     */
+    void     DrawUmbilical( WinEDA_DrawPanel* aPanel,
+                            wxDC*             aDC,
+                            int               aDrawMode,
+                            const wxPoint&    aOffset = ZeroOffset );
 
     /**
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status
      * information about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
+     * Is virtual from EDA_ITEM.
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
     void DisplayInfo( WinEDA_DrawFrame* frame );

@@ -41,7 +41,7 @@ public:
     int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
-    int                   m_FillMode;                       // How to fillingareas: 0 = use polygonal areas , != 0 fill with segments
+    int                   m_FillMode;                       // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     int                   m_ArcToSegmentsCount;             // number of segments to convert a circle to a polygon
                                                             // (uses ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
     int                   m_PadOption;                      //
@@ -88,8 +88,8 @@ public:
      * Draws the zone outline.
      * @param panel = current Draw Panel
      * @param DC = current Device Context
-     * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
+     * @param offset = Draw offset (usually wxPoint(0,0))
      */
     void     Draw( WinEDA_DrawPanel* panel,
                    wxDC*             DC,
@@ -124,7 +124,7 @@ public:
     /* Function GetBoundingBox
      * @return an EDA_Rect that is the bounding box of the zone outline
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
@@ -224,7 +224,7 @@ public:
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none, corner index in .corner <vector>
+     * @return -1 if none, corner index in .corner &ltvector&gt
      * @param refPos : A wxPoint to test
      */
     int  HitTestForCorner( const wxPoint& refPos );
@@ -232,7 +232,7 @@ public:
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none,  or index of the starting corner in .corner <vector>
+     * @return -1 if none,  or index of the starting corner in .corner &ltvector&gt
      * @param refPos : A wxPoint to test
      */
     int  HitTestForEdge( const wxPoint& refPos );
@@ -246,7 +246,7 @@ public:
     bool HitTest( EDA_Rect& refArea );
 
     /**
-     * Function Fill_Zone()
+     * Function Fill_Zone
      * Calculate the zone filling
      * The zone outline is a frontier, and can be complex (with holes)
      * The filling starts from starting points like pads, tracks.
@@ -259,15 +259,14 @@ public:
     int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
 
     /**
-     * Function Fill_Zone_Areas_With_Segments()
+     * Function Fill_Zone_Areas_With_Segments
      *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
      * a list of SEGZONE items is built, line per line
-     * @param aFrame = reference to the main frame
      * @return number of segments created
      */
-    int  Fill_Zone_Areas_With_Segments( );
+    int  Fill_Zone_Areas_With_Segments();
 
 
     /* Geometric transformations: */
@@ -298,7 +297,7 @@ public:
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * (like Mirror() but changes layer)
-     * @param const wxPoint& aCentre - the rotation point.
+     * @param aCentre - the rotation point.
      */
     virtual void Flip( const wxPoint& aCentre );
 
@@ -324,7 +323,7 @@ public:
     /** Acces to m_Poly parameters
      */
 
-    int GetNumCorners( void )
+    int GetNumCorners( void ) const
     {
         return m_Poly->GetNumCorners();
     }
@@ -336,7 +335,7 @@ public:
     }
 
 
-    wxPoint GetCornerPosition( int aCornerIndex )
+    wxPoint GetCornerPosition( int aCornerIndex ) const
     {
         return wxPoint( m_Poly->GetX( aCornerIndex ), m_Poly->GetY( aCornerIndex ) );
     }
@@ -360,7 +359,7 @@ public:
         return m_Poly->GetHatchStyle();
     }
     /**
-     * Function IsSame()
+     * Function IsSame
      * test is 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines
      * info relative to filling is not take in account

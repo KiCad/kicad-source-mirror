@@ -38,7 +38,6 @@
 #include "pcbstruct.h"          // HISTORY_NUMBER
 #include "confirm.h"            // DisplayError()
 #include "gestfich.h"           // EDA_FileSelector()
-#include "autorout.h"           // NET_CODES_OK
 #include "class_board_design_settings.h"
 
 #include "trigo.h"              // RotatePoint()
@@ -193,6 +192,7 @@ static POINT mapPt( const wxPoint& pt )
  * searches for a DRAWSEGMENT with an end point or start point of aPoint, and
  * if found, removes it from the TYPE_COLLECTOR and returns it, else returns NULL.
  * @param aPoint The starting or ending point to search for.
+ * @param items The list to remove from.
  * @return DRAWSEGMENT* - The first DRAWSEGMENT that has a start or end point matching
  *   aPoint, otherwise NULL if none.
  */

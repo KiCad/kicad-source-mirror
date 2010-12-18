@@ -102,7 +102,8 @@ void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
 }
 
 
-/** Function Global_Import_Pad_Settings
+/**
+ * Function Global_Import_Pad_Settings
  * Function to change pad caracteristics for the given footprint
  * or alls footprints which look like the given footprint
  * @param aPad pad to use as pattern. The given footprint is the parent of

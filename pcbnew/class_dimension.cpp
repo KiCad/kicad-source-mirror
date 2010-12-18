@@ -144,7 +144,7 @@ bool DIMENSION::ReadDimensionDescr( FILE* File, int* LineNum )
             sscanf( Line + 2, " %d %d %d %d %d %d %d",
                     &m_Text->m_Pos.x, &m_Text->m_Pos.y,
                     &m_Text->m_Size.x, &m_Text->m_Size.y,
-                    &m_Text->m_Width, &m_Text->m_Orient,
+                    &m_Text->m_Thickness, &m_Text->m_Orient,
                     &normal_display );
 
             m_Text->m_Mirror = normal_display ? false : true;
@@ -369,7 +369,7 @@ bool DIMENSION::Save( FILE* aFile ) const
     fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
              m_Text->m_Pos.x, m_Text->m_Pos.y,
              m_Text->m_Size.x, m_Text->m_Size.y,
-             m_Text->m_Width, m_Text->m_Orient,
+             m_Text->m_Thickness, m_Text->m_Orient,
              m_Text->m_Mirror ? 0 : 1 );
 
     fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
@@ -411,7 +411,8 @@ out:
 }
 
 
-/** function AdjustDimensionDetails
+/**
+ * Function AdjustDimensionDetails
  * Calculate coordinates of segments used to draw the dimension.
  * @param aDoNotChangeText (bool) if false, the dimension text is initialized
  */
@@ -432,7 +433,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     /* calculate the size of the cdimension
      * (text + line above the text) */
     ii = m_Text->m_Size.y +
-         m_Text->m_Width + (m_Width * 3);
+         m_Text->m_Thickness + (m_Width * 3);
 
     deltax = TraitD_ox - TraitG_ox;
     deltay = TraitD_oy - TraitG_oy;

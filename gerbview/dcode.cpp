@@ -136,7 +136,8 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-/** Function Read_D_Code_File
+/**
+ * Function Read_D_Code_File
  * Can be useful only with old RS274D Gerber file format.
  * Is not needed with RS274X files format.
  * These files need an auxiliary DCode file description. There is no defined file format for this.
@@ -325,7 +326,8 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 }
 
 
-/** function DrawFlashedShape
+/**
+ * Function DrawFlashedShape
  * Draw the dcode shape for flashed items.
  * When an item is flashed, the DCode shape is the shape of the item
  */
@@ -440,7 +442,8 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
 }
 
 
-/** function DrawFlashedPolygon
+/**
+ * Function DrawFlashedPolygon
  * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
  * Draw some Apertures shapes when they are defined as filled polygons.
  * APT_POLYGON is always a polygon, but some complex shapes are also converted to
@@ -475,7 +478,8 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
                               wxSize                aSize,
                               wxPoint               aAnchorPos );
 
-/** function ConvertShapeToPolygon
+/**
+ * Function ConvertShapeToPolygon
  * convert a shape to an equivalent polygon.
  * Arcs and circles are approximated by segments
  * Useful when a shape is not a graphic primitive (shape with hole,

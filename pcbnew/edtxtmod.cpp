@@ -49,7 +49,7 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
                                           MIN( g_ModuleTextSize.x,
                                                g_ModuleTextSize.y ), true );
     Text->m_Size  = g_ModuleTextSize;
-    Text->m_Width = g_ModuleTextWidth;
+    Text->m_Thickness = g_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->m_Curseur;
     Text->SetLocalCoord();
 
@@ -139,6 +139,7 @@ static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     Module = (MODULE*) Text->GetParent();
 
+    Text->DrawUmbilical( Panel, DC, GR_XOR, -MoveVector );
     Text->Draw( Panel, DC, GR_XOR, MoveVector );
 
     // If the text was moved (the move does not change internal data)
@@ -175,8 +176,15 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
+    DrawPanel->CursorOff( DC );
+
     TextInitialPosition    = Text->m_Pos;
     TextInitialOrientation = Text->m_Orient;
+
+    // Center cursor on initial position of text
+    GetScreen()->m_Curseur = TextInitialPosition;
+    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CursorOn( DC );
 
     Text->DisplayInfo( this );
 
@@ -195,6 +203,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     if( Text != NULL )
     {
         DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
+        Text->DrawUmbilical( DrawPanel, DC, GR_XOR, -MoveVector );
 
         /* Update the coordinates for anchor. */
         MODULE* Module = (MODULE*) Text->GetParent();
@@ -242,12 +251,18 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     if( Text == NULL )
         return;
 
-    /* Undraw the text */
+    // Erase umbilical and text if necessary
     if( erase )
+    {
+        Text->DrawUmbilical( panel, DC, GR_XOR, -MoveVector );
         Text->Draw( panel, DC, GR_XOR, MoveVector );
+    }
 
     MoveVector = TextInitialPosition - screen->m_Curseur;
 
-    /* Redraw the text */
+    // Draw umbilical if text moved
+    if( MoveVector.x || MoveVector.y )
+        Text->DrawUmbilical( panel, DC, GR_XOR, -MoveVector );
+    // Redraw text
     Text->Draw( panel, DC, GR_XOR, MoveVector );
 }

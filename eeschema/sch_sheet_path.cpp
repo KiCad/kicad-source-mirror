@@ -36,7 +36,8 @@ SCH_SHEET_PATH::SCH_SHEET_PATH()
 }
 
 
-/** Function BuildSheetPathInfoFromSheetPathValue
+/**
+ * Function BuildSheetPathInfoFromSheetPathValue
  * Fill this with data to access to the hierarchical sheet known by its path
  * aPath
  * @param aPath = path of the sheet to reach (in non human readable format)
@@ -56,7 +57,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
     SCH_ITEM* schitem = LastDrawList();
     while( schitem && GetSheetsCount() < NB_MAX_SHEET )
     {
-        if( schitem->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( schitem->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             Push( sheet );
@@ -73,7 +74,8 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
 }
 
 
-/** Function Cmp
+/**
+ * Function Cmp
  * Compare if this is the same sheet path as aSheetPathToTest
  * @param aSheetPathToTest = sheet path to compare
  * @return -1 if different, 0 if same
@@ -100,7 +102,8 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 }
 
 
-/** Function Last
+/**
+ * Function Last
  * returns a pointer to the last sheet of the list
  * One can see the others sheet as the "path" to reach this last sheet
  */
@@ -112,7 +115,8 @@ SCH_SHEET* SCH_SHEET_PATH::Last()
 }
 
 
-/** Function LastScreen
+/**
+ * Function LastScreen
  * @return the SCH_SCREEN relative to the last sheet in list
  */
 SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
@@ -124,15 +128,18 @@ SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
 }
 
 
-/** Function LastScreen
+/**
+ * Function LastScreen
  * @return a pointer to the first schematic item handled by the
  * SCH_SCREEN relative to the last sheet in list
  */
 SCH_ITEM* SCH_SHEET_PATH::LastDrawList()
 {
     SCH_SHEET* lastSheet = Last();
+
     if( lastSheet && lastSheet->m_AssociatedScreen )
-        return lastSheet->m_AssociatedScreen->EEDrawList;
+        return lastSheet->m_AssociatedScreen->GetDrawItems();
+
     return NULL;
 }
 
@@ -142,10 +149,10 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
     SCH_ITEM* item = NULL;
 
     if( m_numSheets && m_sheets[0]->m_AssociatedScreen )
-        item = m_sheets[0]->m_AssociatedScreen->EEDrawList;
+        item = m_sheets[0]->m_AssociatedScreen->GetDrawItems();
 
     /* @fixme - These lists really should be one of the boost pointer containers.  This
-     *          is a brain dead hack to allow reverse iteration of EDA_BaseStruct linked
+     *          is a brain dead hack to allow reverse iteration of EDA_ITEM linked
      *          list.
      */
     SCH_ITEM* lastItem = NULL;
@@ -160,10 +167,6 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList()
 }
 
 
-/** Function Push
- * store (push) aSheet in list
- * @param aSheet = pointer to the SCH_SHEET to store in list
- */
 void SCH_SHEET_PATH::Push( SCH_SHEET* aSheet )
 {
     if( m_numSheets > DSLSZ )
@@ -181,7 +184,8 @@ void SCH_SHEET_PATH::Push( SCH_SHEET* aSheet )
 }
 
 
-/** Function Pop
+/**
+ * Function Pop
  * retrieves (pop) the last entered sheet and remove it from list
  * @return a SCH_SHEET* pointer to the removed sheet in list
  */
@@ -196,7 +200,8 @@ SCH_SHEET* SCH_SHEET_PATH::Pop()
 }
 
 
-/** Function Path
+/**
+ * Function Path
  * the path uses the time stamps which do not changes even when editing sheet
  * parameters
  * a path is something like / (root) or /34005677 or /34005677/00AE4523
@@ -220,7 +225,8 @@ wxString SCH_SHEET_PATH::Path()
 }
 
 
-/** Function PathHumanReadable
+/**
+ * Function PathHumanReadable
  * Return the sheet path in a readable form, i.e.
  * as a path made from sheet names.
  * (the "normal" path uses the time stamps which do not changes even when
@@ -244,16 +250,17 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences()
 {
-    EDA_BaseStruct* t = LastDrawList();
+    EDA_ITEM* t = LastDrawList();
 
     while( t )
     {
-        if( t->Type() == TYPE_SCH_COMPONENT )
+        if( t->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
             component->GetField( REFERENCE )->m_Text = component->GetRef( this );
-            component->m_Multi = component->GetUnitSelection( this );
+            component->SetUnit( component->GetUnitSelection( this ) );
         }
+
         t = t->Next();
     }
 }
@@ -436,7 +443,8 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 }
 
 
-/** Function GetFirst
+/**
+ * Function GetFirst
  *  @return the first item (sheet) in m_List and prepare calls to GetNext()
  */
 SCH_SHEET_PATH* SCH_SHEET_LIST::GetFirst()
@@ -448,7 +456,8 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetFirst()
 }
 
 
-/** Function GetNext
+/**
+ * Function GetNext
  *  @return the next item (sheet) in m_List or NULL if no more item in sheet
  * list
  */
@@ -482,7 +491,8 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetPrevious()
 }
 
 
-/** Function GetSheet
+/**
+ * Function GetSheet
  *  @return the item (sheet) in aIndex position in m_List or NULL if less than
  * index items
  * @param aIndex = index in sheet list to get the sheet
@@ -518,10 +528,11 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 
     if( aSheet->m_AssociatedScreen != NULL )
     {
-        EDA_BaseStruct* strct = m_currList.LastDrawList();
+        EDA_ITEM* strct = m_currList.LastDrawList();
+
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) strct;
                 BuildSheetList( sheet );

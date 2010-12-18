@@ -52,7 +52,7 @@
  *
  *  Redo command
  *  - delete item(s) old command:
- *      => deleted items are moved in EEDrawList list, and in
+ *      => deleted items are moved in GetDrawItems() list, and in
  *
  *  - change item(s) command
  *      => the copy of item(s) is moved in Undo list
@@ -78,7 +78,7 @@
  *  swap data between Item and its copy, pointed by its .m_Image member
  * swapped data is data modified by edition, so not all values are swapped
  */
-void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
+void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
 {
     if( aItem == NULL || aImage == NULL )
     {
@@ -88,14 +88,14 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 
     switch( aItem->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_POLYLINE*) aItem )
         #define DEST   ( (SCH_POLYLINE*) aImage )
         break;
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_JUNCTION*) aItem )
@@ -103,10 +103,10 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_TEXT*) aItem )
@@ -114,7 +114,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_COMPONENT*) aItem )
@@ -122,7 +122,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_LINE*) aItem )
@@ -131,7 +131,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         EXCHG( SOURCE->m_End, DEST->m_End );
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_BUS_ENTRY*) aItem )
@@ -140,7 +140,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         EXCHG( SOURCE->m_Size, DEST->m_Size );
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_SHEET*) aItem )
@@ -148,7 +148,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case TYPE_SCH_MARKER:
+    case SCH_MARKER_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_MARKER*) aItem )
@@ -156,7 +156,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_SHEET_PIN*) aItem )
@@ -164,7 +164,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         DEST->SwapData( SOURCE );
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_NO_CONNECT*) aItem )
@@ -172,7 +172,7 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
         break;
 
     // not directly used in schematic:
@@ -183,32 +183,9 @@ void SwapData( EDA_BaseStruct* aItem, EDA_BaseStruct* aImage )
 }
 
 
-/** function SaveCopyInUndoList
- * Create a copy of the current schematic item, and put it in the undo list.
- *
- *  flag_type_command =
- *      UR_CHANGED
- *      UR_NEW
- *      UR_DELETED
- *      UR_WIRE_IMAGE
- *      UR_MOVED
- *
- * If it is a delete command, items are put on list with the .Flags member
- * set to UR_DELETED.  When it will be really deleted, the EEDrawList and the
- * sub-hierarchy will be deleted.  If it is only a copy, the EEDrawList and the
- * sub-hierarchy must NOT be deleted.
- *
- * Note:
- * Edit wires and buses is a bit complex.
- * because when a new wire is added, modifications in wire list
- * (wire concatenation) there are modified items, deleted items and new items
- * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
- * wires saved in Undo List (for Undo or Redo commands, saved wires will be
- * exchanged with current wire list
- */
-void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
-                                                UndoRedoOpType aCommandType,
-                                                const wxPoint& aTransformPoint )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
+                                         UndoRedoOpType aCommandType,
+                                         const wxPoint& aTransformPoint )
 {
     /* Does not save a null item.
      * but if aCommandType == UR_WIRE_IMAGE, we must save null item.
@@ -224,6 +201,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER        itemWrapper( aItem, aCommandType );
+
     if( aItem )
     {
         itemWrapper.m_PickedItemType = aItem->Type();
@@ -269,13 +247,9 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( SCH_ITEM*      aItem,
 }
 
 
-/** function SaveCopyInUndoList
- * @param aItemsList = a PICKED_ITEMS_LIST of items to save
- * @param aTypeCommand = type of command ( UR_CHANGED, UR_NEW, UR_DELETED ...
- */
-void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                                UndoRedoOpType     aTypeCommand,
-                                                const wxPoint&     aTransformPoint )
+void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+                                         UndoRedoOpType     aTypeCommand,
+                                         const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
@@ -321,8 +295,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ),
-                        command );
+            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
             wxMessageBox( msg );
         }
         break;
@@ -342,15 +315,7 @@ void WinEDA_SchematicFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/** Function PutDataInPreviousState()
- * Used in undo or redo command.
- * Put data pointed by List in the previous state, i.e. the state memorized
- * by List
- * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
- * @param aRedoCommand = a bool: true for redo, false for undo
- */
-void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
-                                                    bool               aRedoCommand )
+void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     SCH_ITEM* item;
     SCH_ITEM* alt_item;
@@ -378,8 +343,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
 
         case UR_DELETED: /* deleted items are put in EEdrawList, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
-            item->SetNext( GetScreen()->EEDrawList );
-            GetScreen()->EEDrawList = item;
+            item->SetNext( GetScreen()->GetDrawItems() );
+            GetScreen()->SetDrawItems( item );
             break;
 
         case UR_MOVED:
@@ -419,8 +384,8 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
             while( item )
             {
                 SCH_ITEM* nextitem = item->Next();
-                item->SetNext( GetScreen()->EEDrawList );
-                GetScreen()->EEDrawList = item;
+                item->SetNext( GetScreen()->GetDrawItems() );
+                GetScreen()->SetDrawItems( item );
                 item->m_Flags = 0;
                 item = nextitem;
             }
@@ -440,13 +405,7 @@ void WinEDA_SchematicFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
 }
 
 
-/** Function GetSchematicFromUndoList
- *  Undo the last edition:
- *  - Save the current schematic in Redo list
- *  - Get the previous version of the schematic from undo list
- *  @return none
- */
-void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
+void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -461,24 +420,17 @@ void WinEDA_SchematicFrame::GetSchematicFromUndoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
-//    m_drawItem = NULL;
     OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
     DrawPanel->Refresh();
 }
 
 
-/** Function GetSchematicFromRedoList
- * Redo the last edition:
- *  - Save the current schematic in undo list
- *  - Get the previous version from Redo list
- *  @return none
- */
-void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
+void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
@@ -494,12 +446,11 @@ void WinEDA_SchematicFrame::GetSchematicFromRedoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
 
-//    m_drawItem = NULL;
     OnModify();
     SetSheetNumberAndCount();
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->EEDrawList, NULL );
+    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
     DrawPanel->Refresh();
 }

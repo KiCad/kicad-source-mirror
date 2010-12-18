@@ -11,8 +11,8 @@
 #include "template_fieldnames.h"
 
 
-class WinEDA_LibeditFrame;
-class WinEDA_ViewlibFrame;
+class LIB_EDIT_FRAME;
+class LIB_VIEW_FRAME;
 class SCH_SCREEN;
 class DRAWSEGMENT;
 class DrawPickedStruct;
@@ -21,7 +21,7 @@ class SCH_NO_CONNECT;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
-class EDA_BaseStruct;
+class EDA_ITEM;
 class SCH_BUS_ENTRY;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
@@ -54,7 +54,7 @@ enum fl_rot_cmp {
 /**
  * Schematic editor (EESchema) main window.
  */
-class WinEDA_SchematicFrame : public WinEDA_DrawFrame
+class SCH_EDIT_FRAME : public WinEDA_DrawFrame
 {
 public:
     WinEDAChoiceBox*      m_SelPartBox;
@@ -63,8 +63,8 @@ public:
     int m_NetlistFormat;
     bool                  m_ShowAllPins;
     wxPoint               m_OldPos;
-    WinEDA_LibeditFrame*  m_LibeditFrame;
-    WinEDA_ViewlibFrame*  m_ViewlibFrame;
+    LIB_EDIT_FRAME*       m_LibeditFrame;
+    LIB_VIEW_FRAME*       m_ViewlibFrame;
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;
 
@@ -85,7 +85,7 @@ private:
     wxPoint               m_printDialogPosition;
     wxSize                m_printDialogSize;
     bool                  m_printMonochrome;     ///< Print monochrome instead of grey scale.
-    bool                  m_showSheetReference;
+    bool                  m_printSheetReference;
     DIALOG_SCH_FIND*      m_dlgFindReplace;
     wxPoint               m_findDialogPosition;
     wxSize                m_findDialogSize;
@@ -93,15 +93,16 @@ private:
     wxArrayString         m_replaceStringHistoryList;
 
 public:
-    WinEDA_SchematicFrame( wxWindow* father,
-                           const wxString& title,
-                           const wxPoint& pos, const wxSize& size,
-                           long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    SCH_EDIT_FRAME( wxWindow* father,
+                    const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_SchematicFrame();
+    ~SCH_EDIT_FRAME();
 
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
+    void             OnColorConfig( wxCommandEvent& aEvent );
     void             Process_Config( wxCommandEvent& event );
 
     void             GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
@@ -167,9 +168,7 @@ public:
     void             ReCreateVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
-    void             OnHotKey( wxDC*           DC,
-                               int             hotkey,
-                               EDA_BaseStruct* DrawStruct );
+    void             OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     SCH_FIELD* GetCurrentField() { return m_CurrentField; }
 
@@ -180,7 +179,7 @@ public:
 
 
     /**
-     * Function OnModify()
+     * Function OnModify
      * Must be called after a schematic change
      * in order to set the "modify" flag of the current screen
      * and update the date in frame reference
@@ -233,8 +232,7 @@ public:
                                            bool            mouseWarp );
 
     /* Cross probing with pcbnew */
-    void         SendMessageToPCBNEW( EDA_BaseStruct* objectToSync,
-                                      SCH_COMPONENT*  LibItem );
+    void         SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
     void         BuildNetListBase();
@@ -292,9 +290,8 @@ public:
      * (or screen filename) when one must creates file for each sheet in the
      * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
      * used more than once
-     * Name is <root sheet filename>-<sheet path>
-     * and has no extension.
-     * However if filename is too long name is <sheet filename>-<sheet number>
+     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
+     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
      */
     wxString     GetUniqueFilenameForCurrentSheet();
 
@@ -306,8 +303,9 @@ public:
      */
     void         SetSheetNumberAndCount();
 
-    /** Virtual function PrintPage
-     * used to print a page
+    /**
+     * Function PrintPage
+     * is used to print a schematic page.
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrint_Sheet_Ref = true to print page references
@@ -343,8 +341,9 @@ public:
 
     bool             GetPrintMonochrome() { return m_printMonochrome; }
     void             SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
-    bool             GetShowSheetReference() { return m_showSheetReference; }
-    void             SetShowSheetReference( bool aShow ) { m_showSheetReference = aShow; }
+    bool             GetPrintSheetReference() { return m_printSheetReference; }
+    void             SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
+    void             SVG_Print( wxCommandEvent& event );
 
     // Plot functions:
     void            ToPlot_PS( wxCommandEvent& event );
@@ -356,20 +355,26 @@ public:
     void            Save_File( wxCommandEvent& event );
     void            SaveProject();
     bool            LoadOneEEProject( const wxString& FileName, bool IsNew );
-    bool            LoadOneEEFile( SCH_SCREEN*     screen,
-                                   const wxString& FullFileName );
+    bool            LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
     bool            ReadInputStuffFile();
 
     /**
      * Function ProcessStuffFile
      * gets footprint info from each line in the Stuff File by Ref Desg
+     *
+     * Read a "stuff" file created by cvpcb.
+     * That file has lines like:
+     * comp = "C1" module = "CP6"
+     * comp = "C2" module = "C1"
+     * comp = "C3" module = "C1"
+     * "comp =" gives the component reference
+     * "module =" gives the footprint name
+     *
      * @param aFilename The file to read from.
-     * @param aSetFielsAttributeToVisible = true to set the footprint field
-     *                                       flag to visible
+     * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
      * @return bool - true if success, else true.
      */
-    bool            ProcessStuffFile( FILE* aFilename,
-                                      bool  aSetFielsAttributeToVisible );
+    bool            ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
 
     bool            SaveEEFile( SCH_SCREEN* screen, int FileSave );
 
@@ -521,16 +526,35 @@ public:
 
     /**
      * Function SaveCopyInUndoList.
-     * Creates a new entry in undo list of commands.
-     * add a picker to handle aItemToCopy
+     * Create a copy of the current schematic item, and put it in the undo list.
+     *
+     *  flag_type_command =
+     *      UR_CHANGED
+     *      UR_NEW
+     *      UR_DELETED
+     *      UR_WIRE_IMAGE
+     *      UR_MOVED
+     *
+     * If it is a delete command, items are put on list with the .Flags member
+     * set to UR_DELETED.  When it will be really deleted, the GetDrawItems() and the
+     * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
+     * sub-hierarchy must NOT be deleted.
+     *
+     * @Note
+     * Edit wires and buses is a bit complex.
+     * because when a new wire is added, modifications in wire list
+     * (wire concatenation) there are modified items, deleted items and new items
+     * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
+     * wires saved in Undo List (for Undo or Redo commands, saved wires will be
+     * exchanged with current wire list
      * @param aItemToCopy = the schematic item modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
-                            UndoRedoOpType aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+                             UndoRedoOpType aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -542,21 +566,19 @@ public:
      *                          for commands like move
      */
     void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                            UndoRedoOpType aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+                             UndoRedoOpType aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
 
     /**
-     * Function PutDataInPreviousState()
-     * Used in undo or redo command.
-     * Put data pointed by List in the previous state, i.e. the state
-     * memorized by List
-     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to
-     *                undo/redo
-     * @param aRedoCommand = a bool: true for redo, false for undo
+     * Function PutDataInPreviousState
+     * is used in undo or redo command to put data pointed by List in the previous state, i.e.
+     * the state stored in \a aList
+     * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+     * @param aRedoCommand  a bool: true for redo, false for undo
      */
-    void     PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
     /**
      * Function GetSchematicFromRedoList
@@ -569,23 +591,50 @@ private:
 
     /**
      * Function GetSchematicFromUndoList
-     *  Undo the last edition:
+     * performs an undo the last edition:
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list
-     *  @return none
      */
     void     GetSchematicFromUndoList( wxCommandEvent& event );
 
 
 public:
-    void     Key( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void     Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     /* Block operations. */
-    int      ReturnBlockCommand( int key );
     void     InitBlockPasteInfos();
-    void     HandleBlockPlace( wxDC* DC );
-    int      HandleBlockEnd( wxDC* DC );
     void     HandleBlockEndByPopUp( int Command, wxDC* DC );
+
+    /**
+     * Function ReturnBlockCommand
+     * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
+     * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
+     * block command is started by dragging the mouse.
+     * @param aKey = the key modifiers (Alt, Shift ...)
+     * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
+     */
+    virtual int  ReturnBlockCommand( int aKey );
+
+    /**
+     * Function HandleBlockPlace
+     * Called after HandleBlockEnd, when a block command needs to be
+     * executed after the block is moved to its new place
+     * (bloc move, drag, copy .. )
+     * Parameters must be initialized in GetScreen()->m_BlockLocate
+     */
+    virtual void HandleBlockPlace( wxDC* DC );
+
+    /**
+     * Function HandleBlockEnd
+     * Handle the "end"  of a block command,
+     * i.e. is called at the end of the definition of the area of a block.
+     * depending on the current block command, this command is executed
+     * or parameters are initialized to prepare a call to HandleBlockPlace
+     * in GetScreen()->m_BlockLocate
+     * @return false if no item selected, or command finished,
+     * true if some items found and HandleBlockPlace must be called later
+     */
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     void     RepeatDrawItem( wxDC* DC );
 

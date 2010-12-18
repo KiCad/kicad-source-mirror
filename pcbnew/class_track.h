@@ -22,8 +22,8 @@ class TRACK : public BOARD_CONNECTED_ITEM
     // make SetNext() and SetBack() private so that they may not be called from anywhere.
     // list management is done on TRACKs using DLIST<TRACK> only.
 private:
-    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 
 public:
@@ -97,9 +97,7 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
-
-    EDA_Rect GetBoundingBox();
-
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Save
@@ -211,7 +209,7 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
+     * Is virtual from EDA_ITEM.
      * Display info about the track segment and the full track length
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */
@@ -236,7 +234,7 @@ public:
      * Function Visit
      * is re-implemented here because TRACKs and SEGVIAs are in the same list
      * within BOARD.  If that were not true, then we could inherit the
-     * version from EDA_BaseStruct.  This one does not iterate through scanTypes
+     * version from EDA_ITEM.  This one does not iterate through scanTypes
      * but only looks at the first item in the list.
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.

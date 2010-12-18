@@ -36,6 +36,7 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "richio.h"
+#include "dialog_helpers.h"
 
 #include "dialog_netlist.h"
 
@@ -104,7 +105,8 @@ static MODULEtoLOAD* s_ModuleToLoad_List;
 
 #define BUFFER_CHAR_SIZE 2048
 
-/** function OpenNetlistFile
+/**
+ * Function OpenNetlistFile
  *  used to open a netlist file
  */
 FILE * OpenNetlistFile( const wxString& aFullFileName )
@@ -124,13 +126,19 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
 }
 
 
-/** Function ReadPcbNetlist
+/**
+ * Function ReadPcbNetlist
  * Update footprints (load missing footprints and delete on request extra
  * footprints)
  * Update connectivity info ( Net Name list )
  * Update Reference, value and "TIME STAMP"
  * @param aNetlistFullFilename = netlist file name (*.net)
  * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+ * @param aMessageWindow  - Please document me.
+ * @param aChangeFootprint - Please document me.
+ * @param aDeleteBadTracks - Please document me.
+ * @param aDeleteExtraFootprints - Please document me.
+ * @param aSelect_By_Timestamp - Please document me.
  * @return true if Ok
  * only the netlist will be used
  *
@@ -364,7 +372,7 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     {
         if( aDeleteBadTracks )    // Remove erroneous tracks
         {
-            RemoveMisConnectedTracks( NULL, true );
+            RemoveMisConnectedTracks( NULL );
             Compile_Ratsnest( NULL, true );
         }
     }
@@ -563,7 +571,8 @@ is [%s] and netlist said [%s]\n" ),
 }
 
 
-/** Function SetPadNetName
+/**
+ * Function SetPadNetName
  *  Update a pad netname in a given footprint
  *  @param Text = Text from netlist (format: (pad = net) )
  *  @param Module = the given footprint
@@ -630,43 +639,38 @@ int SetPadNetName( wxWindow*   frame,
  */
 MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
 {
-    int     ii, jj;
     MODULE* Module;
 
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayError( this, _( "No Modules" ) ); return 0;
+        DisplayError( this, _( "No Modules" ) );
+        return 0;
     }
 
-    WinEDAListBox listbox( this, _( "Components" ), NULL, wxEmptyString );
+    wxArrayString listnames;
     Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-    {
-        listbox.Append( Module->m_Reference->m_Text );
-    }
+        listnames.Add( Module->m_Reference->m_Text );
 
-    ii = listbox.ShowModal();
+    WinEDAListBox dlg( this, _( "Components" ), listnames, wxEmptyString );
 
-    if( ii < 0 )
+    if( dlg.ShowModal() != wxID_OK )
+        return NULL;
+
+    wxString ref = dlg.GetTextSelection();
+    Module = (MODULE*) GetBoard()->m_Modules;
+    for( ; Module != NULL; Module = Module->Next() )
     {
-        Module = NULL;
-    }
-    else /* Search for the selected footprint */
-    {
-        wxString ref = listbox.GetTextSelection();
-        Module = (MODULE*) GetBoard()->m_Modules;
-        for( jj = 0; Module != NULL; Module = (MODULE*) Module->Next(), jj++ )
-        {
-            if( Module->m_Reference->m_Text.Cmp( ref ) == 0 )
-                break;
-        }
+        if( Module->m_Reference->m_Text == ref )
+            break;
     }
 
     return Module;
 }
 
 
-/** Function TestFor_Duplicate_Missing_And_Extra_Footprints
+/**
+ * Function TestFor_Duplicate_Missing_And_Extra_Footprints
  * Build a list from the given board and netlist :
  *  1 - for duplicate footprints on board
  *  2 - for missing footprints
@@ -776,7 +780,8 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 }
 
 
-/** Function BuildFootprintsListFromNetlistFile
+/**
+ * Function BuildFootprintsListFromNetlistFile
  *  Fill BufName with footprints names read from the netlist.
  * @param aNetlistFullFilename = netlist file name
  * @param BufName = wxArrayString to fill with footprint names

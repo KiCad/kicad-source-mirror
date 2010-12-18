@@ -320,10 +320,9 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     }
 
     /* draw graphic items */
-    EDA_BaseStruct* PtStruct;
-    for( PtStruct = pcb->m_Drawings;
-        PtStruct != NULL;
-        PtStruct = PtStruct->Next() )
+    EDA_ITEM* PtStruct;
+
+    for( PtStruct = pcb->m_Drawings;  PtStruct != NULL;  PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
@@ -384,7 +383,8 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
 }
 
 
-/** Function Draw3D_SolidPolygonsInZones
+/**
+ * Function Draw3D_SolidPolygonsInZones
  * draw all solid polygons used as filles areas in a zone
  * @param aZone_c = the zone to draw
  */
@@ -604,7 +604,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
 
     SetGLColor( color );
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
-    s_Text3DWidth = text->m_Width * g_Parm_3D_Visu.m_BoardScale;
+    s_Text3DWidth = text->m_Thickness * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
     wxSize size = text->m_Size;
     if( text->m_Mirror )
@@ -624,7 +624,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
                              txt, text->m_Orient, size,
                              text->m_HJustify, text->m_VJustify,
-                             text->m_Width, text->m_Italic,
+                             text->m_Thickness, text->m_Italic,
                              true, Draw3dTextSegm );
             pos += offset;
         }
@@ -635,7 +635,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
                          text->m_Text, text->m_Orient, size,
                          text->m_HJustify, text->m_VJustify,
-                         text->m_Width, text->m_Italic,
+                         text->m_Thickness, text->m_Italic,
                          true,
                          Draw3dTextSegm );
 }
@@ -690,8 +690,9 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     if( !As3dShape )
     {
         // The footprint does not have a 3D shape, draw its 2D shape instead
-        EDA_BaseStruct* Struct = m_Drawings;
+        EDA_ITEM* Struct = m_Drawings;
         glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
+
         for( ; Struct != NULL; Struct = Struct->Next() )
         {
             switch( Struct->Type() )
@@ -1252,7 +1253,8 @@ static void Draw3D_CircleSegment( double startx, double starty, double endx,
 }
 
 
-/** Function Pcb3D_GLCanvas::Draw3D_Polygon
+/**
+ * Function Draw3D_Polygon
  * draw one solid polygon
  * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
  * @param aZpos = the z position in 3D units

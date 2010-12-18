@@ -22,11 +22,10 @@
 #include "build_version.h"
 
 
-static EDA_BaseStruct* HighLightStruct = NULL;
+static EDA_ITEM* HighLightStruct = NULL;
 
 
-void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& pos, int Color )
+void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color )
 {
     BASE_SCREEN* screen = panel->GetScreen();
 
@@ -40,7 +39,7 @@ void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-void SetHighLightStruct( EDA_BaseStruct* HighLight )
+void SetHighLightStruct( EDA_ITEM* HighLight )
 {
     HighLightStruct = HighLight;
 }
@@ -49,7 +48,7 @@ void SetHighLightStruct( EDA_BaseStruct* HighLight )
 /*
  * Redraws only the active window which is assumed to be whole visible.
  */
-void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     wxString title;
 
@@ -60,8 +59,7 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    RedrawStructList( DrawPanel, DC, GetScreen()->EEDrawList,
-                      GR_DEFAULT_DRAWMODE );
+    RedrawStructList( DrawPanel, DC, GetScreen()->GetDrawItems(), GR_DEFAULT_DRAWMODE );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
@@ -118,13 +116,12 @@ void WinEDA_SchematicFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void WinEDA_SchematicFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                                  int aPrintMask, bool aPrintMirrorMode,
-                                    void * aData)
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
+                                bool aPrintMirrorMode, void* aData)
 {
     wxBeginBusyCursor();
 
-    RedrawStructList( DrawPanel, aDC, ActiveScreen->EEDrawList, GR_COPY );
+    RedrawStructList( DrawPanel, aDC, (SCH_ITEM*) ActiveScreen->GetDrawItems(), GR_COPY );
 
     if( aPrint_Sheet_Ref )
         TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
@@ -145,7 +142,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
         if( !(Structlist->m_Flags & IS_MOVED) )
         {
 // uncomment line below when there is a virtual
-// EDA_BaseStruct::GetBoundingBox()
+// EDA_ITEM::GetBoundingBox()
             //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
             // ) )
             RedrawOneStruct( panel, DC, Structlist, DrawMode, Color );
@@ -185,7 +182,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
 
     switch( aItem->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
     {
         SCH_POLYLINE* Struct = (SCH_POLYLINE*) aItem;
         GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
@@ -201,7 +198,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
     {
         SCH_LINE* Struct;
         Struct = (SCH_LINE*) aItem;
@@ -227,7 +224,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
     {
         SCH_BUS_ENTRY* Struct = (SCH_BUS_ENTRY*) aItem;
         wxPoint        start  = Struct->m_Pos + aOffset;
@@ -237,7 +234,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
     {
         SCH_JUNCTION* Struct;
         Struct = (SCH_JUNCTION*) aItem;
@@ -245,7 +242,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
     {
         SCH_TEXT* Struct;
         Struct = (SCH_TEXT*) aItem;
@@ -253,9 +250,9 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
     {
         SCH_LABEL* Struct;
         Struct = (SCH_LABEL*) aItem;
@@ -263,7 +260,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
     {
         SCH_NO_CONNECT* Struct;
         Struct = (SCH_NO_CONNECT*) aItem;
@@ -271,7 +268,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* Component = (SCH_COMPONENT*) aItem;
 
@@ -282,7 +279,7 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
     {
         SCH_SHEET* Struct = (SCH_SHEET*) aItem;
         GRRect( &aPanel->m_ClipBox,
@@ -296,8 +293,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
         break;
     }
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_MARKER:
+    case SCH_SHEET_LABEL_T:
+    case SCH_MARKER_T:
         break;
 
     default:

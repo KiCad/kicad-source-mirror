@@ -48,7 +48,7 @@ enum  LibrEntryOptions
  * Component aliases are not really components.  They are references
  * to an actual component object.
  */
-class LIB_ALIAS : public EDA_BaseStruct
+class LIB_ALIAS : public EDA_ITEM
 {
     /**
      * The actual component of the alias.
@@ -149,7 +149,7 @@ extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2
  * A library component object is typically saved and loaded in a component library file (.lib).
  * Library components are different from schematic components.
  */
-class LIB_COMPONENT : public EDA_BaseStruct
+class LIB_COMPONENT : public EDA_ITEM
 {
     wxString           m_name;
     int                m_pinNameOffset;  ///< The offset in mils to draw the pin name.  Set to 0
@@ -202,6 +202,18 @@ public:
     LIB_ALIAS* GetAlias( const wxString& aName );
 
     /**
+     * Function AddAlias
+     *
+     * Add an alias \a aName to the component.
+     *
+     * Duplicate alias names are not added to the alias list.  Debug builds will raise an
+     * assertion.  Release builds will fail silenetly.
+     *
+     * @param aName - Name of alias to add.
+     */
+    void AddAlias( const wxString& aName );
+
+    /**
      * Test if alias \a aName is in component alias list.
      *
      * Alias name comparisons are case insensitive.
@@ -217,9 +229,11 @@ public:
 
     LIB_ALIAS* RemoveAlias( LIB_ALIAS* aAlias );
 
+    void RemoveAllAliases();
+
     wxArrayString& GetFootPrints() { return m_FootprintList; }
 
-    EDA_Rect GetBoundaryBox( int aUnit, int aConvert );
+    EDA_Rect GetBoundingBox( int aUnit, int aConvert ) const;
 
     bool SaveDateAndTime( FILE* aFile );
     bool LoadDateAndTime( char* aLine );
@@ -307,7 +321,7 @@ public:
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aDrawMode - Device context drawing mode, see wxDC.
      * @param aColor - Color to draw component.
-     * @param aTransformMatrix - Coordinate adjustment settings.
+     * @param aTransform - Coordinate adjustment settings.
      * @param aShowPinText - Show pin text if true.
      * @param aDrawFields - Draw field text if true otherwise just draw
      *                      body items (useful to draw a body in schematic,
@@ -328,6 +342,7 @@ public:
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Component part to plot.
      * @param aConvert - Component alternate body style to plot.
+     * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
@@ -336,7 +351,7 @@ public:
     /**
      * Add a new draw \a aItem to the draw object list.
      *
-     * @param item - New draw object to add to component.
+     * @param aItem - New draw object to add to component.
      */
     void AddDrawItem( LIB_DRAW_ITEM* aItem );
 
@@ -365,13 +380,13 @@ public:
      *
      * This is just a pin object specific version of GetNextDrawItem().
      *
-     * @param item - Pointer to the previous pin item, or NULL to get the
-     *               first pin in the draw object list.
+     * @param aItem - Pointer to the previous pin item, or NULL to get the
+     *                first pin in the draw object list.
      * @return - The next pin object in the list if found, otherwise NULL.
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
     {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, COMPONENT_PIN_DRAW_TYPE );
+        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, LIB_PIN_T );
     }
 
 

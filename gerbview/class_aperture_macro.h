@@ -34,7 +34,25 @@
 #include <set>
 
 #include "base_struct.h"
+#include "class_am_param.h"
 
+/*
+ *  An aperture macro defines a complex shape and is a list of aperture primitives.
+ *  Each aperture primitive defines a simple shape (circle, rect, regular polygon...)
+ *  Inside a given aperture primitive, a fixed list of parameters defines info
+ *  about the shape: size, thickness, number of vertex ...
+ *
+ *  Each parameter can be an immediate value or a defered value.
+ *  When value is defered, it is defined when the aperture macro is instancied by
+ *  an ADD macro command
+ *  Note also a defered parameter can be defined in aperture macro,
+ *  but outside aperture primitives. Example
+ *  %AMRECTHERM*
+ *  $4=$3/2*    parameter $4 is half value of parameter $3
+ *  21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
+ *  For the aperture primitive, parameters $1 to $3 will be defined in ADD command,
+ *  and $4 is defined inside the macro
+ */
 
 /**
  * Enum AM_PRIMITIVE_ID
@@ -68,13 +86,11 @@ class AM_PRIMITIVE
 {
 public:
     AM_PRIMITIVE_ID primitive_id;       ///< The primitive type
-    DCODE_PARAMS    params;             ///< A sequence of parameters used by
+    AM_PARAMS       params;             ///< A sequence of parameters used by
                                         //   the primitive
     bool            m_GerbMetric;       // units for this primitive:
                                         // false = Inches, true = metric
-
-public:
-    AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
+public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     {
         primitive_id = aId;
         m_GerbMetric = aGerbMetric;
@@ -88,7 +104,7 @@ public:
      * returns the first parameter in integer form.  Some but not all primitives
      * use the first parameter as an exposure control.
      */
-    int GetExposure( GERBER_DRAW_ITEM* aParent ) const;
+    int  GetExposure( GERBER_DRAW_ITEM* aParent ) const;
 
     /**
      * Function mapExposure
@@ -131,7 +147,7 @@ public:
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
-    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
 private:
 
@@ -157,7 +173,27 @@ struct APERTURE_MACRO
     wxString      name;             ///< The name of the aperture macro
     AM_PRIMITIVES primitives;       ///< A sequence of AM_PRIMITIVEs
 
+    /*  A defered parameter can be defined in aperture macro,
+     *  but outside aperture primitives. Example
+     *  %AMRECTHERM*
+     *  $4=$3/2*    parameter $4 is half value of parameter $3
+     * m_localparamStack handle a list of local defered parameters
+     */
+    AM_PARAMS m_localparamStack;
+
     /**
+     * function GetLocalParam
+     * Usually, parameters are defined inside the aperture primitive
+     * using immediate mode or defered mode.
+     * in defered mode the value is defined in a DCODE that want to use the aperture macro.
+     * But some parameters are defined outside the aperture primitive
+     * and are local to the aperture macro
+     * @return the value of a defered parameter defined inside the aperture macro
+     * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
+     */
+    double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;
+
+   /**
      * Function DrawApertureMacroShape
      * Draw the primitive shape for flashed items.
      * When an item is flashed, this is the shape of the item
@@ -172,7 +208,8 @@ struct APERTURE_MACRO
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
                                  int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
-    /** GetShapeDim
+    /**
+     * Function GetShapeDim
      * Calculate a value that can be used to evaluate the size of text
      * when displaying the D-Code of an item
      * due to the complexity of a shape using many primitives
@@ -183,7 +220,17 @@ struct APERTURE_MACRO
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
-    int GetShapeDim( GERBER_DRAW_ITEM* aParent );
+    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
+
+    /**
+     * Function HasNegativeItems
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return true if this macro has at least one shape (using aperture primitives)
+     *    must be drawn in background color
+     * used to optimize screen refresh (when no items are in background color
+     * refresh can be faster)
+     */
+    bool HasNegativeItems( GERBER_DRAW_ITEM* aParent );
 };
 
 

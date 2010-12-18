@@ -25,7 +25,7 @@
 
 
 LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
-    LIB_DRAW_ITEM( COMPONENT_GRAPHIC_TEXT_DRAW_TYPE, aParent ),
+    LIB_DRAW_ITEM( LIB_TEXT_T, aParent ),
     EDA_TextStruct()
 {
     m_Size       = wxSize( 50, 50 );
@@ -136,25 +136,14 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
     return true;
 }
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool LIB_TEXT::HitTest( const wxPoint& refPos )
+
+bool LIB_TEXT::HitTest( const wxPoint& aPosition )
 {
-    return HitTest( refPos, 0, DefaultTransform );
+    return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is near this item
- * @param aPosRef = a wxPoint to test, in eeschema space
- * @param aThreshold = unused here (TextHitTest calculates its threshold )
- * @param aTransMat = the transform matrix
- */
-bool LIB_TEXT::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint physicalpos = aTransform.TransformCoordinate( m_Pos );
     wxPoint tmp = m_Pos;
@@ -167,7 +156,7 @@ bool LIB_TEXT::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTrans
     int t1 = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     int orient = t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
     EXCHG( m_Orient, orient );
-    bool hit = TextHitTest( aPosRef );
+    bool hit = TextHitTest( aPosition );
     EXCHG( m_Orient, orient );
     m_Pos = tmp;
     return hit;
@@ -186,7 +175,7 @@ LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
     newitem->m_Convert   = m_Convert;
     newitem->m_Flags     = m_Flags;
     newitem->m_Text      = m_Text;
-    newitem->m_Width     = m_Width;
+    newitem->m_Thickness     = m_Thickness;
     newitem->m_Italic    = m_Italic;
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
@@ -197,7 +186,7 @@ LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
 
 int LIB_TEXT::DoCompare( const LIB_DRAW_ITEM& other ) const
 {
-    wxASSERT( other.Type() == COMPONENT_GRAPHIC_TEXT_DRAW_TYPE );
+    wxASSERT( other.Type() == LIB_TEXT_T );
 
     const LIB_TEXT* tmp = ( LIB_TEXT* ) &other;
 
@@ -269,12 +258,13 @@ void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_TEXT::GetPenSize( )
 {
-    int     pensize = m_Width;
+    int     pensize = m_Thickness;
 
     if( pensize == 0 )   // Use default values for pen size
     {
@@ -367,7 +357,7 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     LIB_DRAW_ITEM::DisplayInfo( frame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Thickness, EESCHEMA_INTERNAL_UNIT, true );
 
     frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
@@ -376,15 +366,12 @@ void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
 /**
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LIB_TEXT::GetBoundingBox()
+EDA_Rect LIB_TEXT::GetBoundingBox() const
 {
-    /* remenber Y coordinates in lib are bottom to top, so we must
-     * negate the Y position befire calling GetTextBox() that works using top to bottom
-     * Y axis orientation
+    /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
+     * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    NEGATE(m_Pos.y );
-    EDA_Rect rect = GetTextBox();
-    NEGATE(m_Pos.y );   // restore Y cooordinate for the graphic text
+    EDA_Rect rect = GetTextBox( -1, -1, true );
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();

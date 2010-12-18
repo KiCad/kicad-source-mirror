@@ -4,8 +4,6 @@
 
 #include "fctsys.h"
 
-using namespace std;
-
 #include <vector>
 
 #include "common.h"
@@ -29,18 +27,17 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                       bool aUnit_Drill_is_Inch, int format,
                       const wxPoint& auxoffset )
 {
-    int             x, y;
-    int             plotX, plotY, TextWidth;
-    double          scale = 1.0;
-    int             intervalle = 0, CharSize = 0;
-    EDA_BaseStruct* PtStruct;
-    char            line[1024];
-    int             dX, dY;
-    wxPoint         BoardCentre;
-    wxPoint         offset;
-    wxString        msg;
-    PLOTTER*        plotter = NULL;
-
+    int       x, y;
+    int       plotX, plotY, TextWidth;
+    double    scale = 1.0;
+    int       intervalle = 0, CharSize = 0;
+    EDA_ITEM* PtStruct;
+    char      line[1024];
+    int       dX, dY;
+    wxPoint   BoardCentre;
+    wxPoint   offset;
+    wxString  msg;
+    PLOTTER*  plotter = NULL;
 
     SetLocaleTo_C_standard();  // Use the standard notation for float numbers
     /* Calculate dimensions and center of PCB */
@@ -68,8 +65,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         scale    = 1;
         HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
         plotter = hpgl_plotter;
-        hpgl_plotter->set_pen_number( g_pcb_plot_options.HPGL_Pen_Num );
-        hpgl_plotter->set_pen_speed( g_pcb_plot_options.HPGL_Pen_Speed );
+        hpgl_plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
+        hpgl_plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
         hpgl_plotter->set_pen_overlap( 0 );
         plotter->set_paper_size( aSheet );
         plotter->set_viewport( offset, scale, 0 );

@@ -31,13 +31,11 @@ wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
 }
 
 
-/********************************************************/
-wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
-/********************************************************/
-
-/** return a specific comment for "this". Used in pop up menus
+/**
+ * return a specific comment for "this". Used in pop up menus
  * @param aPcb = the parent board
  */
+wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 {
     wxString            text;
     wxString            msg;
@@ -55,15 +53,17 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
 
     case TYPE_PAD:
         pad = (D_PAD *) this;
-        text << _( "Pad" ) << wxT( " \"" ) << pad->ReturnStringPadName()
-                << wxT( "\" (" );
+        text << _( "Pad" ) << wxT( " \"" ) << pad->ReturnStringPadName() << wxT( "\" (" );
+
         if ( (pad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
             text << _("all copper layers");
         else if( (pad->m_Masque_Layer & LAYER_BACK) == LAYER_BACK )
             text << aPcb->GetLayerName( LAYER_N_BACK ).Trim();
         else if( (pad->m_Masque_Layer & LAYER_FRONT) == LAYER_FRONT )
             text << aPcb->GetLayerName( LAYER_N_FRONT );
-        else text << _("???");
+        else
+            text << _("???");
+
         text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
         break;
 

@@ -38,7 +38,8 @@
 void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 /**********************************************************************************/
 
-/** Function Delete_Zone_Fill
+/**
+ * Function Delete_Zone_Fill
  * Remove the zone fillig which include the segment aZone, or the zone which have the given time stamp.
  *  A zone is a group of segments which have the same TimeStamp
  * @param DC = current Device Context (can be NULL)
@@ -91,7 +92,8 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 /***************************************************************************************/
 
-/** Function Fill_Zone()
+/**
+ * Function Fill_Zone
  *  Calculate the zone filling for the outline zone_container
  *  The zone outline is a frontier, and can be complex (with holes)
  *  The filling starts from starting points like pads, tracks.
@@ -146,7 +148,8 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
 /************************************************************/
 
-/** Function Fill_All_Zones()
+/**
+ * Function Fill_All_Zones
  *  Fill all zones on the board
  * The old fillings are removed
  * @param verbose = true to show error messages

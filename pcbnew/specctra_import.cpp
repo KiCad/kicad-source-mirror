@@ -182,6 +182,7 @@ static int scale( double distance, UNIT_RES* aResolution )
  * translates a point from the Specctra Session format coordinate system
  * to the Kicad coordinate system.
  * @param aPoint The session point to translate
+ * @param aResolution - The amount to scale the point.
  * @return wxPoint - The Kicad coordinate system point.
  */
 static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )

@@ -134,7 +134,7 @@ public: WinEDA_App();
                                   PARAM_CFG_ARRAY& params );
 
     /**
-     * Function SaveCurrentSetupValues()
+     * Function SaveCurrentSetupValues
      * Save the current setup values in m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to
      * true
@@ -144,7 +144,7 @@ public: WinEDA_App();
     void      SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
     /**
-     * Function ReadCurrentSetupValues()
+     * Function ReadCurrentSetupValues
      * Raed the current setup values previously saved, from m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to
      * true

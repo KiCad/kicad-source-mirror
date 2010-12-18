@@ -31,7 +31,7 @@
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,
                       SCH_COMPONENT* aParent, wxString aName ) :
-    SCH_ITEM( aParent, DRAW_PART_TEXT_STRUCT_TYPE ),
+    SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TextStruct()
 {
     m_Pos     = aPos;
@@ -49,12 +49,13 @@ SCH_FIELD::~SCH_FIELD()
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_FIELD::GetPenSize()
+int SCH_FIELD::GetPenSize() const
 {
-    int pensize = m_Width;
+    int pensize = m_Thickness;
 
     if( pensize == 0 )   // Use default values for pen size
     {
@@ -80,7 +81,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     EDA_Colors     color;
     wxPoint        textpos;
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-    int            LineWidth = m_Width;
+    int            LineWidth = m_Thickness;
 
     if( LineWidth == 0 )   // Use default values for pen size
     {
@@ -102,7 +103,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     orient = m_Orient;
-    if( parentComponent->m_Transform.y1 )  // Rotate component 90 degrees.
+    if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -121,7 +122,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_Rect BoundaryBox = GetBoundaryBox();
+    EDA_Rect BoundaryBox = GetBoundingBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
     textpos = BoundaryBox.Centre();
@@ -145,13 +146,12 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         /* For more than one part per package, we must add the part selection
          * A, B, ... or 1, 2, .. to the reference. */
         wxString fulltext = m_Text;
-        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->m_Multi );
+        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->GetUnit() );
 
         DrawGraphicText( panel, DC, textpos, color, fulltext,
                          orient,
                          m_Size, hjustify, vjustify,
-                         LineWidth, m_Italic,
-                         m_Bold, false );
+                         LineWidth, m_Italic, m_Bold );
     }
 
     /* Enable this to draw the bounding box around the text field to validate
@@ -197,7 +197,7 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
     m_VJustify  = aSource.m_VJustify;
     m_Italic    = aSource.m_Italic;
     m_Bold      = aSource.m_Bold;
-    m_Width     = aSource.m_Width;
+    m_Thickness     = aSource.m_Thickness;
     m_Attributs = aSource.m_Attributs;
     m_Mirror    = aSource.m_Mirror;
 }
@@ -213,7 +213,7 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
     EXCHG( m_Layer, copyitem->m_Layer );
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_Width, copyitem->m_Width );
+    EXCHG( m_Thickness, copyitem->m_Thickness );
     EXCHG( m_Orient, copyitem->m_Orient );
     EXCHG( m_Mirror, copyitem->m_Mirror );
     EXCHG( m_Attributs, copyitem->m_Attributs );
@@ -225,12 +225,11 @@ void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
 
 
 /**
- * Function GetBoundaryBox()
- * @return an EDA_Rect contains the real (user coordinates) boundary box for
- *         a text field,
+ * Function GetBoundaryBox
+ * @return an EDA_Rect contains the real (user coordinates) boundary box for a text field.
  *  according to the component position, rotation, mirror ...
  */
-EDA_Rect SCH_FIELD::GetBoundaryBox() const
+EDA_Rect SCH_FIELD::GetBoundingBox() const
 {
     EDA_Rect       BoundaryBox;
     int            hjustify, vjustify;
@@ -249,11 +248,10 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
     hjustify = m_HJustify;
     vjustify = m_VJustify;
 
-    pos2 = pos + parentComponent->m_Transform.TransformCoordinate( pos1 );
+    pos2 = pos + parentComponent->GetTransform().TransformCoordinate( pos1 );
 
-    /* Calculate the text orientation, according to the component
-     * orientation/mirror */
-    if( parentComponent->m_Transform.y1 )
+    // Calculate the text orientation, according to the component orientation/mirror.
+    if( parentComponent->GetTransform().y1 )
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -261,22 +259,24 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
             orient = TEXT_ORIENT_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror */
-    if( parentComponent->m_Transform.y1 )
+    // Calculate the text justification, according to the component orientation/mirror.
+    if( parentComponent->GetTransform().y1 )
     {
         /* is it mirrored (for text justify)*/
         EXCHG( hjustify, vjustify );
-        if( parentComponent->m_Transform.x2 < 0 )
+
+        if( parentComponent->GetTransform().x2 < 0 )
             NEGATE( vjustify );
-        if( parentComponent->m_Transform.y1 > 0 )
+
+        if( parentComponent->GetTransform().y1 > 0 )
             NEGATE( hjustify );
     }
     else    /* component horizontal: is it mirrored (for text justify)*/
     {
-        if( parentComponent->m_Transform.x1 < 0 )
+        if( parentComponent->GetTransform().x1 < 0 )
             NEGATE( hjustify );
-        if( parentComponent->m_Transform.y2 > 0 )
+
+        if( parentComponent->GetTransform().y2 > 0 )
             NEGATE( vjustify );
     }
 
@@ -317,7 +317,7 @@ EDA_Rect SCH_FIELD::GetBoundaryBox() const
     BoundaryBox.SetSize( size );
 
     // Take thickness in account:
-    int linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
     BoundaryBox.Inflate( linewidth, linewidth );
 
     return BoundaryBox;
@@ -334,6 +334,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
         hjustify = 'R';
 
     char vjustify = 'C';
+
     if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
@@ -371,7 +372,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 }
 
 
-void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     int            fieldNdx;
     LIB_COMPONENT* Entry;
@@ -391,9 +392,11 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 
     fieldNdx = m_FieldId;
     m_AddExtraText = 0;
+
     if( fieldNdx == REFERENCE )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
+        Entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
         if( Entry != NULL )
         {
             if( Entry->GetPartCount() > 1 )
@@ -412,6 +415,7 @@ void SCH_FIELD::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
     bool match;
+
     if( aAuxData && m_FieldId == REFERENCE )
     {
         // reference is a special field because:
@@ -421,6 +425,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
         SCH_COMPONENT*  pSch     = (SCH_COMPONENT*) m_Parent;
         SCH_SHEET_PATH* sheet    = (SCH_SHEET_PATH*) aAuxData;
         wxString        fulltext = pSch->GetRef( sheet );
+
         if( m_AddExtraText )
         {
             /* For more than one part per package, we must add the part selection
@@ -428,18 +433,22 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
             int part_id = pSch->GetUnitSelection( sheet );
             fulltext << LIB_COMPONENT::ReturnSubReference( part_id );
         }
+
         match = SCH_ITEM::Matches( fulltext, aSearchData );
     }
-
     else
         match = SCH_ITEM::Matches( m_Text, aSearchData );
+
     if( match )
     {
-        EDA_Rect BoundaryBox = GetBoundaryBox();
+        EDA_Rect BoundaryBox = GetBoundingBox();
+
         if( aFindLocation )
-            *aFindLocation = GetBoundaryBox().Centre();
+            *aFindLocation = GetBoundingBox().Centre();
+
         return true;
     }
+
     return false;
 }
 
@@ -447,4 +456,35 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 void SCH_FIELD::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
+}
+
+
+bool SCH_FIELD::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    // Do not hit test hidden fields.
+    if( !IsVisible() )
+        return false;
+
+    EDA_Rect rect = GetBoundingBox();
+
+    rect.Inflate( aAccuracy );
+
+    return rect.Inside( aPoint );
+}
+
+
+bool SCH_FIELD::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    // Do not hit test hidden fields.
+    if( !IsVisible() )
+        return false;
+
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
 }

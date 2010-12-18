@@ -53,7 +53,7 @@ static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C 
 }
 
 
-LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( COMPONENT_ARC_DRAW_TYPE, aParent )
+LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
     m_t1            = 0;
@@ -157,12 +157,6 @@ bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPoint A wxPoint to test in eeschema space
- * @return bool - true if a hit, else false
- */
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 {
     int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
@@ -174,18 +168,12 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
     return HitTest( aRefPoint, mindist, DefaultTransform );
 }
 
-/** Function HitTest
- * @return true if the point aPosRef is near this object
- * @param aRefPoint = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness
- *                     of a line)
- * @param aTransMat = the transform matrix
- */
-bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM& aTransform )
+
+bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
 
     // TODO: use aTransMat to calculates parameters
-    wxPoint relativePosition = aReferencePoint;
+    wxPoint relativePosition = aPosition;
 
     NEGATE( relativePosition.y );       // reverse Y axis
 
@@ -212,14 +200,14 @@ bool LIB_ARC::HitTest( wxPoint aReferencePoint, int aThreshold, const TRANSFORM&
     // relative to the start point to end point vector lies
     if( CrossProduct( startEndVector, startRelativePositionVector ) < 0 )
     {
-    	EXCHG( crossProductStart, crossProductEnd );
+        EXCHG( crossProductStart, crossProductEnd );
     }
 
     // When the cross products have a different sign, the point lies in sector
     // also check, if the reference is near start or end point
     return 	HitTestPoints( m_ArcStart, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-    		HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-    		( crossProductStart <= 0 && crossProductEnd >= 0 );
+            HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
+            ( crossProductStart <= 0 && crossProductEnd >= 0 );
 }
 
 
@@ -245,7 +233,7 @@ LIB_DRAW_ITEM* LIB_ARC::DoGenCopy()
 
 int LIB_ARC::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_ARC_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_ARC_T );
 
     const LIB_ARC* tmp = ( LIB_ARC* ) &aOther;
 
@@ -327,7 +315,8 @@ void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_ARC::GetPenSize()
@@ -425,7 +414,7 @@ void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-EDA_Rect LIB_ARC::GetBoundingBox()
+EDA_Rect LIB_ARC::GetBoundingBox() const
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
     EDA_Rect rect;

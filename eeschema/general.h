@@ -32,7 +32,7 @@ class TRANSFORM;
 
 #define HIGHLIGHT_COLOR WHITE
 
-/* Used for EDA_BaseStruct, .m_Select member */
+/* Used for EDA_ITEM, .m_Select member */
 #define IS_SELECTED 1
 
 #define TEXT_NO_VISIBLE 1
@@ -93,6 +93,7 @@ typedef enum
     LAYER_ERC_WARN,
     LAYER_ERC_ERR,
     LAYER_DEVICE_BACKGROUND,
+    LAYER_GRID,
 
     MAX_LAYER                   /* Maximum layers */
 } LayerNumber;

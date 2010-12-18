@@ -27,7 +27,7 @@
 #define DLIST_H_
 
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 
 
 /**
@@ -37,10 +37,10 @@ class EDA_BaseStruct;
 class DHEAD
 {
 protected:
-    EDA_BaseStruct*     first;          ///< first element in list, or NULL if list empty
-    EDA_BaseStruct*     last;           ///< last elment in list, or NULL if empty
-    unsigned            count;          ///< how many elements are in the list, automatically maintained.
-    bool                meOwner;        ///< I must delete the objects I hold in my destructor
+    EDA_ITEM*     first;          ///< first element in list, or NULL if list empty
+    EDA_ITEM*     last;           ///< last elment in list, or NULL if empty
+    unsigned      count;          ///< how many elements are in the list, automatically maintained.
+    bool          meOwner;        ///< I must delete the objects I hold in my destructor
 
     /**
      * Constructor DHEAD
@@ -61,7 +61,7 @@ protected:
      * Function append
      * adds \a aNewElement to the end of the list.
      */
-    void append( EDA_BaseStruct* aNewElement );
+    void append( EDA_ITEM* aNewElement );
 
     /**
      * Function insert
@@ -71,13 +71,13 @@ protected:
      * @param aElementAfterMe The element to insert \a aNewElement before,
      *  if NULL then append aNewElement onto end of list.
      */
-    void insert( EDA_BaseStruct* aNewElement, EDA_BaseStruct* aElementAfterMe );
+    void insert( EDA_ITEM* aNewElement, EDA_ITEM* aElementAfterMe );
 
     /**
      * Function insert
      * puts aNewElement in front of list sequence.
      */
-    void insert( EDA_BaseStruct* aNewElement )
+    void insert( EDA_ITEM* aNewElement )
     {
         insert( aNewElement, first );
     }
@@ -86,7 +86,7 @@ protected:
      * Function remove
      * removes \a aElement from the list, but does not delete it.
      */
-    void remove( EDA_BaseStruct* aElement );
+    void remove( EDA_ITEM* aElement );
 
 
 public:
@@ -122,7 +122,7 @@ public:
  * Class DLIST
  * is the head of a doubly linked list.  It contains pointers to the first
  * and last elements in a doubly linked list.  The elements in the list must
- * be of class T or derived from T, and T must be derived from EDA_BaseStruct.
+ * be of class T or derived from T, and T must be derived from EDA_ITEM.
  * @see DHEAD for additional public functions.
  */
 template <class T>

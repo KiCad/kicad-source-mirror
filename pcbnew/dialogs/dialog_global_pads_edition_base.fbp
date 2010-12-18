@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<wxFormBuilder_Project>
+    <FileVersion major="1" minor="10" />
+    <object class="Project" expanded="1">
+        <property name="class_decoration" />
+        <property name="code_generation">C++</property>
+        <property name="disconnect_events">1</property>
+        <property name="encoding">UTF-8</property>
+        <property name="event_generation">connect</property>
+        <property name="file">dialog_global_pads_edition_base</property>
+        <property name="first_id">1000</property>
+        <property name="help_provider">none</property>
+        <property name="internationalize">0</property>
+        <property name="name">dialog_global_pads_edition</property>
+        <property name="namespace" />
+        <property name="path">.</property>
+        <property name="precompiled_header" />
+        <property name="relative_path">1</property>
+        <property name="use_enum">0</property>
+        <property name="use_microsoft_bom">0</property>
+        <object class="Dialog" expanded="1">
+            <property name="bg" />
+            <property name="center" />
+            <property name="context_help" />
+            <property name="enabled">1</property>
+            <property name="extra_style" />
+            <property name="fg" />
+            <property name="font" />
+            <property name="hidden">0</property>
+            <property name="id">wxID_ANY</property>
+            <property name="maximum_size" />
+            <property name="minimum_size" />
+            <property name="name">DIALOG_GLOBAL_PADS_EDITION_BASE</property>
+            <property name="pos" />
+            <property name="size">482,165</property>
+            <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
+            <property name="subclass" />
+            <property name="title">Global Pads Edition</property>
+            <property name="tooltip" />
+            <property name="window_extra_style" />
+            <property name="window_name" />
+            <property name="window_style" />
+            <event name="OnActivate" />
+            <event name="OnActivateApp" />
+            <event name="OnChar" />
+            <event name="OnClose" />
+            <event name="OnEnterWindow" />
+            <event name="OnEraseBackground" />
+            <event name="OnHibernate" />
+            <event name="OnIconize" />
+            <event name="OnIdle" />
+            <event name="OnInitDialog" />
+            <event name="OnKeyDown" />
+            <event name="OnKeyUp" />
+            <event name="OnKillFocus" />
+            <event name="OnLeaveWindow" />
+            <event name="OnLeftDClick" />
+            <event name="OnLeftDown" />
+            <event name="OnLeftUp" />
+            <event name="OnMiddleDClick" />
+            <event name="OnMiddleDown" />
+            <event name="OnMiddleUp" />
+            <event name="OnMotion" />
+            <event name="OnMouseEvents" />
+            <event name="OnMouseWheel" />
+            <event name="OnPaint" />
+            <event name="OnRightDClick" />
+            <event name="OnRightDown" />
+            <event name="OnRightUp" />
+            <event name="OnSetFocus" />
+            <event name="OnSize" />
+            <event name="OnUpdateUI" />
+            <object class="wxBoxSizer" expanded="1">
+                <property name="minimum_size" />
+                <property name="name">bMainSizer</property>
+                <property name="orient">wxHORIZONTAL</property>
+                <property name="permission">none</property>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="wxBoxSizer" expanded="1">
+                        <property name="minimum_size" />
+                        <property name="name">bLeftSizer</property>
+                        <property name="orient">wxVERTICAL</property>
+                        <property name="permission">none</property>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">1</property>
+                            <object class="wxStaticBoxSizer" expanded="1">
+                                <property name="id">wxID_ANY</property>
+                                <property name="label">Pad Filter :</property>
+                                <property name="minimum_size" />
+                                <property name="name">sbSizer1</property>
+                                <property name="orient">wxVERTICAL</property>
+                                <property name="permission">none</property>
+                                <event name="OnUpdateUI" />
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxALL</property>
+                                    <property name="proportion">0</property>
+                                    <object class="wxCheckBox" expanded="1">
+                                        <property name="bg" />
+                                        <property name="checked">0</property>
+                                        <property name="context_help" />
+                                        <property name="enabled">1</property>
+                                        <property name="fg" />
+                                        <property name="font" />
+                                        <property name="hidden">0</property>
+                                        <property name="id">wxID_ANY</property>
+                                        <property name="label">Do not modify pads having a different shape</property>
+                                        <property name="maximum_size" />
+                                        <property name="minimum_size" />
+                                        <property name="name">m_Pad_Shape_Filter_CB</property>
+                                        <property name="permission">protected</property>
+                                        <property name="pos" />
+                                        <property name="size" />
+                                        <property name="style" />
+                                        <property name="subclass" />
+                                        <property name="tooltip" />
+                                        <property name="window_extra_style" />
+                                        <property name="window_name" />
+                                        <property name="window_style" />
+                                        <event name="OnChar" />
+                                        <event name="OnCheckBox" />
+                                        <event name="OnEnterWindow" />
+                                        <event name="OnEraseBackground" />
+                                        <event name="OnKeyDown" />
+                                        <event name="OnKeyUp" />
+                                        <event name="OnKillFocus" />
+                                        <event name="OnLeaveWindow" />
+                                        <event name="OnLeftDClick" />
+                                        <event name="OnLeftDown" />
+                                        <event name="OnLeftUp" />
+                                        <event name="OnMiddleDClick" />
+                                        <event name="OnMiddleDown" />
+                                        <event name="OnMiddleUp" />
+                                        <event name="OnMotion" />
+                                        <event name="OnMouseEvents" />
+                                        <event name="OnMouseWheel" />
+                                        <event name="OnPaint" />
+                                        <event name="OnRightDClick" />
+                                        <event name="OnRightDown" />
+                                        <event name="OnRightUp" />
+                                        <event name="OnSetFocus" />
+                                        <event name="OnSize" />
+                                        <event name="OnUpdateUI" />
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxALL</property>
+                                    <property name="proportion">0</property>
+                                    <object class="wxCheckBox" expanded="1">
+                                        <property name="bg" />
+                                        <property name="checked">0</property>
+                                        <property name="context_help" />
+                                        <property name="enabled">1</property>
+                                        <property name="fg" />
+                                        <property name="font" />
+                                        <property name="hidden">0</property>
+                                        <property name="id">wxID_ANY</property>
+                                        <property name="label">Do not modify pads having different layers</property>
+                                        <property name="maximum_size" />
+                                        <property name="minimum_size" />
+                                        <property name="name">m_Pad_Layer_Filter_CB</property>
+                                        <property name="permission">protected</property>
+                                        <property name="pos" />
+                                        <property name="size" />
+                                        <property name="style" />
+                                        <property name="subclass" />
+                                        <property name="tooltip" />
+                                        <property name="window_extra_style" />
+                                        <property name="window_name" />
+                                        <property name="window_style" />
+                                        <event name="OnChar" />
+                                        <event name="OnCheckBox" />
+                                        <event name="OnEnterWindow" />
+                                        <event name="OnEraseBackground" />
+                                        <event name="OnKeyDown" />
+                                        <event name="OnKeyUp" />
+                                        <event name="OnKillFocus" />
+                                        <event name="OnLeaveWindow" />
+                                        <event name="OnLeftDClick" />
+                                        <event name="OnLeftDown" />
+                                        <event name="OnLeftUp" />
+                                        <event name="OnMiddleDClick" />
+                                        <event name="OnMiddleDown" />
+                                        <event name="OnMiddleUp" />
+                                        <event name="OnMotion" />
+                                        <event name="OnMouseEvents" />
+                                        <event name="OnMouseWheel" />
+                                        <event name="OnPaint" />
+                                        <event name="OnRightDClick" />
+                                        <event name="OnRightDown" />
+                                        <event name="OnRightUp" />
+                                        <event name="OnSetFocus" />
+                                        <event name="OnSize" />
+                                        <event name="OnUpdateUI" />
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxALL</property>
+                                    <property name="proportion">0</property>
+                                    <object class="wxCheckBox" expanded="1">
+                                        <property name="bg" />
+                                        <property name="checked">0</property>
+                                        <property name="context_help" />
+                                        <property name="enabled">1</property>
+                                        <property name="fg" />
+                                        <property name="font" />
+                                        <property name="hidden">0</property>
+                                        <property name="id">wxID_ANY</property>
+                                        <property name="label">Do not modify pads having a different orientation</property>
+                                        <property name="maximum_size" />
+                                        <property name="minimum_size" />
+                                        <property name="name">m_Pad_Orient_Filter_CB</property>
+                                        <property name="permission">protected</property>
+                                        <property name="pos" />
+                                        <property name="size" />
+                                        <property name="style" />
+                                        <property name="subclass" />
+                                        <property name="tooltip" />
+                                        <property name="window_extra_style" />
+                                        <property name="window_name" />
+                                        <property name="window_style" />
+                                        <event name="OnChar" />
+                                        <event name="OnCheckBox" />
+                                        <event name="OnEnterWindow" />
+                                        <event name="OnEraseBackground" />
+                                        <event name="OnKeyDown" />
+                                        <event name="OnKeyUp" />
+                                        <event name="OnKillFocus" />
+                                        <event name="OnLeaveWindow" />
+                                        <event name="OnLeftDClick" />
+                                        <event name="OnLeftDown" />
+                                        <event name="OnLeftUp" />
+                                        <event name="OnMiddleDClick" />
+                                        <event name="OnMiddleDown" />
+                                        <event name="OnMiddleUp" />
+                                        <event name="OnMotion" />
+                                        <event name="OnMouseEvents" />
+                                        <event name="OnMouseWheel" />
+                                        <event name="OnPaint" />
+                                        <event name="OnRightDClick" />
+                                        <event name="OnRightDown" />
+                                        <event name="OnRightUp" />
+                                        <event name="OnSetFocus" />
+                                        <event name="OnSize" />
+                                        <event name="OnUpdateUI" />
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">0</property>
+                    <object class="wxBoxSizer" expanded="1">
+                        <property name="minimum_size" />
+                        <property name="name">bRightSizer</property>
+                        <property name="orient">wxVERTICAL</property>
+                        <property name="permission">none</property>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="1">
+                                <property name="bg" />
+                                <property name="context_help" />
+                                <property name="default">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_CHANGE_GET_PAD_SETTINGS</property>
+                                <property name="label">Pad Editor</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_buttonPadEditor</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style" />
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_name" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick">InstallPadEditor</event>
+                                <event name="OnChar" />
+                                <event name="OnEnterWindow" />
+                                <event name="OnEraseBackground" />
+                                <event name="OnKeyDown" />
+                                <event name="OnKeyUp" />
+                                <event name="OnKillFocus" />
+                                <event name="OnLeaveWindow" />
+                                <event name="OnLeftDClick" />
+                                <event name="OnLeftDown" />
+                                <event name="OnLeftUp" />
+                                <event name="OnMiddleDClick" />
+                                <event name="OnMiddleDown" />
+                                <event name="OnMiddleUp" />
+                                <event name="OnMotion" />
+                                <event name="OnMouseEvents" />
+                                <event name="OnMouseWheel" />
+                                <event name="OnPaint" />
+                                <event name="OnRightDClick" />
+                                <event name="OnRightDown" />
+                                <event name="OnRightUp" />
+                                <event name="OnSetFocus" />
+                                <event name="OnSize" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag" />
+                            <property name="proportion">0</property>
+                            <object class="spacer" expanded="1">
+                                <property name="height">10</property>
+                                <property name="permission">protected</property>
+                                <property name="width">10</property>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="1">
+                                <property name="bg" />
+                                <property name="context_help" />
+                                <property name="default">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_CHANGE_CURRENT_MODULE</property>
+                                <property name="label">Change Pads on Module</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_button2</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style" />
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_name" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick">PadPropertiesAccept</event>
+                                <event name="OnChar" />
+                                <event name="OnEnterWindow" />
+                                <event name="OnEraseBackground" />
+                                <event name="OnKeyDown" />
+                                <event name="OnKeyUp" />
+                                <event name="OnKillFocus" />
+                                <event name="OnLeaveWindow" />
+                                <event name="OnLeftDClick" />
+                                <event name="OnLeftDown" />
+                                <event name="OnLeftUp" />
+                                <event name="OnMiddleDClick" />
+                                <event name="OnMiddleDown" />
+                                <event name="OnMiddleUp" />
+                                <event name="OnMotion" />
+                                <event name="OnMouseEvents" />
+                                <event name="OnMouseWheel" />
+                                <event name="OnPaint" />
+                                <event name="OnRightDClick" />
+                                <event name="OnRightDown" />
+                                <event name="OnRightUp" />
+                                <event name="OnSetFocus" />
+                                <event name="OnSize" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="1">
+                                <property name="bg" />
+                                <property name="context_help" />
+                                <property name="default">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">ID_CHANGE_ID_MODULES</property>
+                                <property name="label">Change Pads on Same Modules</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_button3</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style" />
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_name" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick">PadPropertiesAccept</event>
+                                <event name="OnChar" />
+                                <event name="OnEnterWindow" />
+                                <event name="OnEraseBackground" />
+                                <event name="OnKeyDown" />
+                                <event name="OnKeyUp" />
+                                <event name="OnKillFocus" />
+                                <event name="OnLeaveWindow" />
+                                <event name="OnLeftDClick" />
+                                <event name="OnLeftDown" />
+                                <event name="OnLeftUp" />
+                                <event name="OnMiddleDClick" />
+                                <event name="OnMiddleDown" />
+                                <event name="OnMiddleUp" />
+                                <event name="OnMotion" />
+                                <event name="OnMouseEvents" />
+                                <event name="OnMouseWheel" />
+                                <event name="OnPaint" />
+                                <event name="OnRightDClick" />
+                                <event name="OnRightDown" />
+                                <event name="OnRightUp" />
+                                <event name="OnSetFocus" />
+                                <event name="OnSize" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">0</property>
+                            <object class="wxButton" expanded="1">
+                                <property name="bg" />
+                                <property name="context_help" />
+                                <property name="default">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg" />
+                                <property name="font" />
+                                <property name="hidden">0</property>
+                                <property name="id">wxID_CANCEL</property>
+                                <property name="label">Cancel</property>
+                                <property name="maximum_size" />
+                                <property name="minimum_size" />
+                                <property name="name">m_button4</property>
+                                <property name="permission">protected</property>
+                                <property name="pos" />
+                                <property name="size" />
+                                <property name="style" />
+                                <property name="subclass" />
+                                <property name="tooltip" />
+                                <property name="window_extra_style" />
+                                <property name="window_name" />
+                                <property name="window_style" />
+                                <event name="OnButtonClick">OnCancelClick</event>
+                                <event name="OnChar" />
+                                <event name="OnEnterWindow" />
+                                <event name="OnEraseBackground" />
+                                <event name="OnKeyDown" />
+                                <event name="OnKeyUp" />
+                                <event name="OnKillFocus" />
+                                <event name="OnLeaveWindow" />
+                                <event name="OnLeftDClick" />
+                                <event name="OnLeftDown" />
+                                <event name="OnLeftUp" />
+                                <event name="OnMiddleDClick" />
+                                <event name="OnMiddleDown" />
+                                <event name="OnMiddleUp" />
+                                <event name="OnMotion" />
+                                <event name="OnMouseEvents" />
+                                <event name="OnMouseWheel" />
+                                <event name="OnPaint" />
+                                <event name="OnRightDClick" />
+                                <event name="OnRightDown" />
+                                <event name="OnRightUp" />
+                                <event name="OnSetFocus" />
+                                <event name="OnSize" />
+                                <event name="OnUpdateUI" />
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</wxFormBuilder_Project>

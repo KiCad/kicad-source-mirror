@@ -23,7 +23,7 @@
 #include "sch_sheet.h"
 
 
-void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
     wxPoint     pos;
@@ -43,6 +43,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
+    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
     case ID_POPUP_SCH_ROTATE_TEXT:
     case ID_POPUP_SCH_EDIT_SHEET:
@@ -124,8 +125,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
-                                                DrawPanel->
-                                                m_PanelDefaultCursor ) );
+                                            DrawPanel->m_PanelDefaultCursor ) );
 
         // Stop the current command (if any) but keep the current tool
         DrawPanel->UnManageCursor();
@@ -149,8 +149,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     default:
 
         // Stop the current command and deselect the current tool
-        DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor =
-                                       wxCURSOR_ARROW;
+        DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor = wxCURSOR_ARROW;
         DrawPanel->UnManageCursor( 0, DrawPanel->m_PanelCursor );
         break;
     }
@@ -278,26 +277,22 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(),
-                        &dc, TYPE_SCH_LABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(),
-                        &dc, TYPE_SCH_GLOBALLABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_GLOBAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(),
-                        &dc, TYPE_SCH_HIERLABEL );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_HIERARCHICAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
         DrawPanel->MouseToCursorSchema();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(),
-                        &dc, TYPE_SCH_TEXT );
+        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_TEXT_T );
         break;
 
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
@@ -320,7 +315,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
         screen->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
-        TestDanglingEnds( screen->EEDrawList, &dc );
+        TestDanglingEnds( screen->GetDrawItems(), &dc );
         DrawPanel->Refresh();
         break;
 
@@ -329,9 +324,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         SCH_ITEM* oldWiresList = screen->ExtractWires( true );
         BreakSegment( screen, screen->m_Curseur );
+
         if( oldWiresList )
             SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
-        TestDanglingEnds( screen->EEDrawList, &dc );
+
+        TestDanglingEnds( screen->GetDrawItems(), &dc );
     }
     break;
 
@@ -341,19 +338,20 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
     case ID_POPUP_SCH_DELETE:
     {
         SCH_ITEM* item = screen->GetCurItem();
+
         if( item == NULL )
             break;
 
         DeleteStruct( DrawPanel, &dc, item );
         screen->SetCurItem( NULL );
         g_ItemToRepeat = NULL;
-        TestDanglingEnds( screen->EEDrawList, &dc );
+        TestDanglingEnds( screen->GetDrawItems(), &dc );
         SetSheetNumberAndCount();
         OnModify();
     }
@@ -371,7 +369,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
         DrawPanel->MouseToCursorSchema();
         ReSizeSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
-        TestDanglingEnds( screen->EEDrawList, &dc );
+        TestDanglingEnds( screen->GetDrawItems(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
@@ -380,19 +378,19 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
             GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) screen->GetCurItem();
 
             if( !sheet->HasUndefinedLabels() )
             {
                 DisplayInfoMessage( this,
-                                   _( "There are no undefined labels in this sheet to clean up." ) );
+                                    _( "There are no undefined labels in this sheet to clean up." ) );
                 return;
             }
 
@@ -422,26 +420,27 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..) or a hierachical sheet
         // or a label
-        if( (screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_LABEL)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_GLOBALLABEL)
-           && (screen->GetCurItem()->Type() != TYPE_SCH_HIERLABEL)
-           && (screen->GetCurItem()->Type() != DRAW_SHEET_STRUCT_TYPE) )
+        if( (screen->GetCurItem()->Type() != SCH_COMPONENT_T)
+           && (screen->GetCurItem()->Type() != SCH_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_GLOBAL_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_HIERARCHICAL_LABEL_T)
+           && (screen->GetCurItem()->Type() != SCH_SHEET_T) )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
 
     // fall through
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
         DrawPanel->MouseToCursorSchema();
+
         if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
         {
             // The easiest way to handle a drag component or sheet command
             // is to simulate a block drag command
             if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {
-                if( !HandleBlockBegin( &dc, BLOCK_DRAG,
-                                       screen->m_Curseur ) )
+                if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->m_Curseur ) )
                     break;
 
                 // Give a non null size to the search block:
@@ -460,8 +459,7 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
         // block drag command
         if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
-            if( !HandleBlockBegin( &dc, BLOCK_DRAG,
-                                   screen->m_Curseur ) )
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->m_Curseur ) )
                 break;
 
             // Ensure the block selection contains the segment, or one end of
@@ -473,12 +471,14 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             // only if they do not cross a component
             // TODO: a better way to drag only wires
             SCH_LINE* segm = (SCH_LINE*) screen->GetCurItem();
+
             if( !screen->m_BlockLocate.Inside( segm->m_Start )
                && !screen->m_BlockLocate.Inside( segm->m_End ) )
             {
                 screen->m_BlockLocate.SetOrigin( segm->m_Start );
                 screen->m_BlockLocate.SetEnd( segm->m_End );
             }
+
             HandleBlockEnd( &dc );
         }
         break;
@@ -487,12 +487,13 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
-        InstallCmpeditFrame( this, pos,
-                            (SCH_COMPONENT*) screen->GetCurItem() );
+
+        InstallCmpeditFrame( this, pos, (SCH_COMPONENT*) screen->GetCurItem() );
         break;
 
     case ID_POPUP_SCH_MIROR_X_CMP:
@@ -503,8 +504,9 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
         {
@@ -530,12 +532,11 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
             }
 
             DrawPanel->MouseToCursorSchema();
-            if( screen->GetCurItem()->m_Flags == 0 )
-                SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(),
-                                   UR_CHANGED );
 
-            CmpRotationMiroir( (SCH_COMPONENT*) screen->GetCurItem(),
-                              &dc, option );
+            if( screen->GetCurItem()->m_Flags == 0 )
+                SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(), UR_CHANGED );
+
+            CmpRotationMiroir( (SCH_COMPONENT*) screen->GetCurItem(), &dc, option );
             break;
         }
 
@@ -547,21 +548,22 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
 
-        EditComponentValue(
-            (SCH_COMPONENT*) screen->GetCurItem(), &dc );
+        EditComponentValue( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_REF_CMP:
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
 
@@ -572,10 +574,12 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
+
         EditComponentFootprint( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
@@ -584,14 +588,14 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
+
         DrawPanel->MouseToCursorSchema();
-        ConvertPart(
-            (SCH_COMPONENT*) screen->GetCurItem(),
-            &dc );
+        ConvertPart( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_SELECT_UNIT1:
@@ -623,27 +627,30 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
+
         DrawPanel->MouseToCursorSchema();
         SelPartUnit( (SCH_COMPONENT*) screen->GetCurItem(),
-                    id + 1 - ID_POPUP_SCH_SELECT_UNIT1, &dc );
+                     id + 1 - ID_POPUP_SCH_SELECT_UNIT1, &dc );
         break;
 
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
 
         // Ensure the struct is a component (could be a piece of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != TYPE_SCH_COMPONENT )
+        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
+
         if( screen->GetCurItem() == NULL )
             break;
         {
             LIB_ALIAS* LibEntry;
             LibEntry = CMP_LIBRARY::FindLibraryEntry(
-                ( (SCH_COMPONENT*) screen->GetCurItem() )->m_ChipName );
+                ( (SCH_COMPONENT*) screen->GetCurItem() )->GetLibName() );
 
             if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
             {
@@ -655,8 +662,9 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ENTER_SHEET:
     {
-        EDA_BaseStruct* DrawStruct = screen->GetCurItem();
-        if( DrawStruct && (DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE) )
+        EDA_ITEM* DrawStruct = screen->GetCurItem();
+
+        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
             InstallNextScreen( (SCH_SHEET*) DrawStruct );
         }
@@ -718,35 +726,31 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ADD_JUNCTION:
         DrawPanel->MouseToCursorSchema();
-        screen->SetCurItem( CreateNewJunctionStruct( &dc, screen->m_Curseur,
-                                                     true ) );
-        TestDanglingEnds( screen->EEDrawList, &dc );
+        screen->SetCurItem( CreateNewJunctionStruct( &dc, screen->m_Curseur, true ) );
+        TestDanglingEnds( screen->GetDrawItems(), &dc );
         screen->SetCurItem( NULL );
         break;
 
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_ADD_GLABEL:
-        screen->SetCurItem(
-            CreateNewText( &dc,
-                           id == ID_POPUP_SCH_ADD_LABEL ?
-                           LAYER_LOCLABEL : LAYER_GLOBLABEL ) );
+        screen->SetCurItem( CreateNewText( &dc, id == ID_POPUP_SCH_ADD_LABEL ?
+                                           LAYER_LOCLABEL : LAYER_GLOBLABEL ) );
         if( screen->GetCurItem() )
         {
             ( (SCH_ITEM*) screen->GetCurItem() )->Place( this, &dc );
-            TestDanglingEnds( screen->EEDrawList, &dc );
+            TestDanglingEnds( screen->GetDrawItems(), &dc );
             screen->SetCurItem( NULL );
         }
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
-        if( screen->GetCurItem()
-            && screen->GetCurItem()->Type() == TYPE_SCH_MARKER )
+        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_MARKER_T )
             ( (SCH_MARKER*) screen->GetCurItem() )->DisplayMarkerInfo( this );
+
         break;
 
     default:        // Log error:
-        DisplayError( this,
-                     wxT( "WinEDA_SchematicFrame::Process_Special_Functions error" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
     }
 
@@ -754,11 +758,12 @@ void WinEDA_SchematicFrame::Process_Special_Functions( wxCommandEvent& event )
 
     if( m_ID_current_state == 0 )
         g_ItemToRepeat = NULL;
+
     SetToolbars();
 }
 
 
-void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
+void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
 {
     if( DrawStruct == NULL )
         return;
@@ -767,45 +772,44 @@ void WinEDA_SchematicFrame::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
 
     switch( DrawStruct->Type() )
     {
-    case DRAW_JUNCTION_STRUCT_TYPE:
+    case SCH_JUNCTION_T:
         break;
 
-    case DRAW_BUSENTRY_STRUCT_TYPE:
+    case SCH_BUS_ENTRY_T:
         StartMoveBusEntry( (SCH_BUS_ENTRY*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         StartMoveTexte( (SCH_TEXT*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_COMPONENT:
+    case SCH_COMPONENT_T:
         StartMovePart( (SCH_COMPONENT*) DrawStruct, DC );
         break;
 
-    case DRAW_SEGMENT_STRUCT_TYPE:
+    case SCH_LINE_T:
         break;
 
-    case DRAW_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_T:
         StartMoveSheet( (SCH_SHEET*) DrawStruct, DC );
         break;
 
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_NO_CONNECT_T:
         break;
 
-    case DRAW_PART_TEXT_STRUCT_TYPE:
+    case SCH_FIELD_T:
         StartMoveCmpField( (SCH_FIELD*) DrawStruct, DC );
         break;
 
-    case TYPE_SCH_MARKER:
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_MARKER_T:
+    case SCH_SHEET_LABEL_T:
     default:
         wxString msg;
-        msg.Printf(
-            wxT( "WinEDA_SchematicFrame::Move_Item Error: Bad DrawType %d" ),
-            DrawStruct->Type() );
+        msg.Printf( wxT( "SCH_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),
+                    DrawStruct->Type() );
         DisplayError( this, msg );
         break;
     }

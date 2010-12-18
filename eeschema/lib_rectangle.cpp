@@ -17,7 +17,7 @@
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_RECT_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width                = 0;
     m_Fill                 = NO_FILL;
@@ -90,7 +90,7 @@ LIB_DRAW_ITEM* LIB_RECTANGLE::DoGenCopy()
 
 int LIB_RECTANGLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_RECT_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_RECTANGLE_T );
 
     const LIB_RECTANGLE* tmp = ( LIB_RECTANGLE* ) &aOther;
 
@@ -162,7 +162,8 @@ void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFil
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_RECTANGLE::GetPenSize()
@@ -209,7 +210,7 @@ void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
      * bounding box calculation. */
 #if 0
     EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
@@ -228,7 +229,7 @@ void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
 }
 
 
-EDA_Rect LIB_RECTANGLE::GetBoundingBox()
+EDA_Rect LIB_RECTANGLE::GetBoundingBox() const
 {
     EDA_Rect rect;
 
@@ -239,13 +240,7 @@ EDA_Rect LIB_RECTANGLE::GetBoundingBox()
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPoint A wxPoint to test in eeschema space
- * @return true if a hit, else false
- */
-bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
+bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
 {
     int mindist = ( m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2 ) + 1;
 
@@ -253,18 +248,11 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aRefPoint )
     if( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
 
-    return HitTest( aRefPoint, mindist, DefaultTransform );
+    return HitTest( aPosition, mindist, DefaultTransform );
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is near this object
- * @param aRefPoint = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness
- *                     of a line)
- * @param aTransMat = the transform matrix
- */
-bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const TRANSFORM& aTransform )
+bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint actualStart = aTransform.TransformCoordinate( m_Pos );
     wxPoint actualEnd   = aTransform.TransformCoordinate( m_End );
@@ -275,26 +263,26 @@ bool LIB_RECTANGLE::HitTest( wxPoint aRefPoint, int aThreshold, const TRANSFORM&
     start = actualStart;
     end.x = actualEnd.x;
     end.y = actualStart.y;
-    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     // locate right segment
     start.x = actualEnd.x;
     end.y   = actualEnd.y;
-    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     // locate upper segment
     start.y = actualEnd.y;
     end.x   = actualStart.x;
-    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     // locate left segment
     start = actualStart;
     end.x = actualStart.x;
     end.y = actualEnd.y;
-    if( TestSegmentHit( aRefPoint, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     return false;

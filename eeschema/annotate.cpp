@@ -35,7 +35,7 @@ static int  ReplaceDuplicatedTimeStamps();
 /* Set a sheet number, the sheet count for sheets in the whole schematic
  * and update the date in all screens
  */
-void WinEDA_SchematicFrame::UpdateSheetNumberAndDate()
+void SCH_EDIT_FRAME::UpdateSheetNumberAndDate()
 {
     wxString    date = GenDate();
     SCH_SCREENS s_list;
@@ -69,20 +69,22 @@ void ReAnnotatePowerSymbolsOnly( void )
     for( sheet = SheetList.GetFirst(); sheet != NULL;
          sheet = SheetList.GetNext() )
     {
-        EDA_BaseStruct* DrawList = sheet->LastDrawList();
+        EDA_ITEM* DrawList = sheet->LastDrawList();
+
         for( ; DrawList != NULL; DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() != TYPE_SCH_COMPONENT )
+            if( DrawList->Type() != SCH_COMPONENT_T )
                 continue;
+
             SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
             LIB_COMPONENT* Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
             if( ( Entry == NULL ) || !Entry->IsPower() )
                 continue;
 
             //DrawLibItem->ClearAnnotation(sheet); this clears all annotation :(
-            wxString refstr = DrawLibItem->m_PrefixString;
+            wxString refstr = DrawLibItem->GetPrefix();
 
             //str will be "C?" or so after the ClearAnnotation call.
             while( refstr.Last() == '?' )
@@ -197,14 +199,14 @@ static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
 }
 
 
-/** Function DeleteAnnotation
+/**
+ * Function DeleteAnnotation
  * Remove current component annotations
  * @param aCurrentSheetOnly : if false: remove all annotations, else remove
  *                             annotation relative to the current sheet only
  * @param aRedraw : true to refresh display
  */
-void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
-                                              bool aRedraw )
+void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 {
     SCH_ITEM*   strct;
     SCH_SCREEN* screen;
@@ -217,12 +219,14 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
 
     if( screen == NULL )
         return;
+
     while( screen )
     {
-        strct = screen->EEDrawList;
+        strct = screen->GetDrawItems();
+
         for( ; strct; strct = strct->Next() )
         {
-            if( strct->Type() == TYPE_SCH_COMPONENT )
+            if( strct->Type() == SCH_COMPONENT_T )
             {
                 if( aCurrentSheetOnly )
                     ( (SCH_COMPONENT*) strct )->ClearAnnotation( m_CurrentSheet );
@@ -266,11 +270,11 @@ void WinEDA_SchematicFrame::DeleteAnnotation( bool aCurrentSheetOnly,
  *              stamps are used to handle annotation mainly in complex
  *              hierarchies.
  */
-void AnnotateComponents( WinEDA_SchematicFrame* parent,
-                         bool                   annotateSchematic,
-                         int                    sortOption,
-                         bool                   resetAnnotation,
-                         bool                   repairsTimestamps )
+void AnnotateComponents( SCH_EDIT_FRAME* parent,
+                         bool            annotateSchematic,
+                         int             sortOption,
+                         bool            resetAnnotation,
+                         bool            repairsTimestamps )
 {
     std::vector <OBJ_CMP_TO_LIST> ComponentsList;
 
@@ -347,27 +351,28 @@ void AnnotateComponents( WinEDA_SchematicFrame* parent,
 }
 
 
-/** function AddComponentsInSheetToList()
+/**
+ * Function AddComponentsInSheetToList
  * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
  * in sheet
  * @param aComponentsList = a std::vector list to fill
- * @param the SCH_SHEET_PATH sheet to analyze
+ * @param aSheet - The SCH_SHEET_PATH sheet to analyze
  */
 int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
                                  SCH_SHEET_PATH*                aSheet )
 {
-    int             NbrCmp   = 0;
-    EDA_BaseStruct* DrawList = aSheet->LastDrawList();
-    SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  Entry;
+    int            NbrCmp   = 0;
+    EDA_ITEM*      DrawList = aSheet->LastDrawList();
+    SCH_COMPONENT* DrawLibItem;
+    LIB_COMPONENT* Entry;
 
     for( ; DrawList != NULL;   DrawList = DrawList->Next() )
     {
-        if( DrawList->Type() == TYPE_SCH_COMPONENT )
+        if( DrawList->Type() == SCH_COMPONENT_T )
         {
             DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
+
             if( Entry == NULL )
                 continue;
 
@@ -419,8 +424,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
         else
             sprintf( Text + strlen( Text ), "%d", aComponentsList[ii].m_NumRef );
 
-        component->SetRef( &(aComponentsList[ii].m_SheetPath),
-                           CONV_FROM_UTF8( Text ) );
+        component->SetRef( &(aComponentsList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
 #else
 
         wxString        ref = aComponentsList[ii].GetRef();
@@ -436,7 +440,7 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
         component->SetRef( &aComponentsList[ii].m_SheetPath, ref );
 #endif
 
-        component->m_Multi = aComponentsList[ii].m_Unit;
+        component->SetUnit( aComponentsList[ii].m_Unit );
         component->SetUnitSelection( &aComponentsList[ii].m_SheetPath,
                                      aComponentsList[ii].m_Unit );
     }
@@ -450,7 +454,6 @@ static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList
  * to a max value (0x7FFFFFFF).
  *
  * @param aComponentsList = list of component
- * @param NbOfCmp   = item count in the list
  */
 void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
 {
@@ -705,8 +708,7 @@ static int ExistUnit( int aObjet, int Unit,
  *                        false = search in whole hierarchy (usual search).
  * @return errors count
  */
-int WinEDA_SchematicFrame::CheckAnnotate( wxArrayString* aMessageList,
-                                          bool           aOneSheetOnly )
+int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     int            error;
     wxString       Buff;
@@ -977,14 +979,15 @@ static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
      */
 
     if( ii == 0 && ( item1->Type() != item2->Type() ) )
-        if( item1->Type() == DRAW_SHEET_STRUCT_TYPE )
+        if( item1->Type() == SCH_SHEET_T )
             ii = -1;
 
     return ii < 0;
 }
 
 
-/** Function ReplaceDuplicatedTimeStamps
+/**
+ * Function ReplaceDuplicatedTimeStamps
  * Search for duplicate time stamps in the whole hierarchy, and replace
  * duplicate by new time stamps
  */
@@ -1002,14 +1005,15 @@ int ReplaceDuplicatedTimeStamps()
     std::vector <SCH_ITEM*> itemlist;
     SCH_SCREEN*             screen;
     SCH_ITEM* item;
-    for( screen = ScreenList.GetFirst(); screen != NULL;
-         screen = ScreenList.GetNext() )
+
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        item = screen->EEDrawList;
+        item = screen->GetDrawItems();
+
         while( item )
         {
-            if( ( item->Type() == DRAW_SHEET_STRUCT_TYPE )
-               || ( item->Type() == TYPE_SCH_COMPONENT ) )
+            if( ( item->Type() == SCH_SHEET_T )
+               || ( item->Type() == SCH_COMPONENT_T ) )
                 itemlist.push_back( item );
 
             item = item->Next();
@@ -1030,7 +1034,7 @@ int ReplaceDuplicatedTimeStamps()
 
             // for a component, update its Time stamp and its paths
             // (m_PathsAndReferences field)
-            if( item->Type() == TYPE_SCH_COMPONENT )
+            if( item->Type() == SCH_COMPONENT_T )
                 ( (SCH_COMPONENT*) item )->SetTimeStamp( GetTimeStamp() );
 
             // for a sheet, update only its time stamp (annotation of its

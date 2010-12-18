@@ -31,7 +31,7 @@
 #define _DCODE_H_
 
 #include <vector>
-#include <set>
+//#include <set>
 
 #include "base_struct.h"
 class GERBER_DRAW_ITEM;
@@ -67,62 +67,6 @@ enum APERTURE_DEF_HOLETYPE {
 #define TOOLS_MAX_COUNT (LAST_DCODE + 1)
 
 class APERTURE_MACRO;
-class D_CODE;
-
-
-/**
- * Class DCODE_PARAM
- * holds a parameter for a DCODE or an "aperture macro" as defined within
- * standard RS274X.  The \a value field can be a constant, i.e. "immediate"
- * parameter or it may not be used if this param is going to defer to the
- * referencing aperture macro.  In that case, the \a index field is an index
- * into the aperture macro's parameters.
- */
-class DCODE_PARAM
-{
-public:
-    DCODE_PARAM() :
-        index( -1 ),
-        value( 0.0 )
-    {}
-
-    double GetValue( const D_CODE* aDcode ) const;
-
-    void SetValue( double aValue )
-    {
-        value = aValue;
-        index = -1;
-    }
-
-
-    /**
-     * Function IsImmediate
-     * tests if this DCODE_PARAM holds an immediate parameter or is a pointer
-     * into a parameter held by an owning D_CODE.
-     */
-    bool IsImmediate() const { return index == -1; }
-
-    unsigned GetIndex() const
-    {
-        return (unsigned) index;
-    }
-
-
-    void SetIndex( int aIndex )
-    {
-        index = aIndex;
-    }
-
-
-private:
-    int    index;       ///< if -1, then \a value field is an immediate value,
-                        //   else this is an index into parent's
-                        //   D_CODE.m_am_params.
-    double value;       ///< if IsImmediate()==true then use the value, else
-                        //   not used.
-};
-
-typedef std::vector<DCODE_PARAM> DCODE_PARAMS;
 
 
 /**
@@ -131,16 +75,14 @@ typedef std::vector<DCODE_PARAM> DCODE_PARAMS;
  */
 class D_CODE
 {
-    friend class DCODE_PARAM;
-
+private:
     APERTURE_MACRO* m_Macro;    ///< no ownership, points to
                                 //   GERBER.m_aperture_macros element
-
     /**
      * parameters used only when this D_CODE holds a reference to an aperture
      * macro, and these parameters would customize the macro.
      */
-    DCODE_PARAMS          m_am_params;
+    std::vector<double>   m_am_params;
 
     std::vector <wxPoint> m_PolyCorners;    /* Polygon used to draw APT_POLYGON shape and some other
                                              * complex shapes which are converted to polygon
@@ -164,13 +106,37 @@ public:
     ~D_CODE();
     void Clear_D_CODE_Data();
 
+    /**
+     * AppendParam()
+     * Add a parameter to the D_CODE parameter list.
+     * used to customize the corresponding aperture macro
+     */
     void AppendParam( double aValue )
     {
-        DCODE_PARAM param;
+        m_am_params.push_back( aValue );
+    }
 
-        param.SetValue( aValue );
+    /**
+     * GetParamCount()
+     * Returns the number of parameters stored in parameter list.
+     */
+    unsigned GetParamCount() const
+    {
+       return  m_am_params.size();
+    }
 
-        m_am_params.push_back( param );
+    /**
+     * GetParam()
+     * Returns a parameter stored in parameter list.
+     * @param aIdx = index of parameter
+     */
+    double GetParam( unsigned aIdx ) const
+    {
+        wxASSERT( aIdx <= m_am_params.size() );
+        if( aIdx <= m_am_params.size() )
+            return  m_am_params[aIdx - 1];
+        else
+            return 0;
     }
 
 
@@ -180,7 +146,7 @@ public:
     }
 
 
-    APERTURE_MACRO* GetMacro() { return m_Macro; }
+    APERTURE_MACRO* GetMacro() const { return m_Macro; }
 
     /**
      * Function ShowApertureType
@@ -207,7 +173,7 @@ public:
 
     /**
      * Function DrawFlashedPolygon
-     * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
+     * a helper function used to draw the polygon stored ion m_PolyCorners
      * Draw some Apertures shapes when they are defined as filled polygons.
      * APT_POLYGON is always a polygon, but some complex shapes are also converted to
      * polygons (shapes with holes, some rotated shapes)
@@ -243,28 +209,6 @@ public:
      */
     int GetShapeDim( GERBER_DRAW_ITEM* aParent );
 };
-
-
-inline double DCODE_PARAM::GetValue( const D_CODE* aDcode ) const
-{
-    if( IsImmediate() )
-        return value;
-    else
-    {
-        // the first one was numbered 1, not zero, as in $1, see page 19 of spec.
-        unsigned ndx = GetIndex() - 1;
-        wxASSERT( aDcode );
-
-        // get the parameter from the aDcode
-        if( ndx < aDcode->m_am_params.size() )
-            return aDcode->m_am_params[ndx].GetValue( NULL );
-        else
-        {
-            wxASSERT( GetIndex() - 1 < aDcode->m_am_params.size() );
-            return 0.0;
-        }
-    }
-}
 
 
 #endif  // ifndef _DCODE_H_

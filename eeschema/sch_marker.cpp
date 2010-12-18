@@ -32,13 +32,13 @@ const wxChar* NameMarqueurType[] =
 /* class SCH_MARKER */
 /**************************/
 
-SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, TYPE_SCH_MARKER ), MARKER_BASE()
+SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE()
 {
 }
 
 
 SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
-    SCH_ITEM( NULL, TYPE_SCH_MARKER ),
+    SCH_ITEM( NULL, SCH_MARKER_T ),
     MARKER_BASE( 0, pos, text, pos )
 {
 }
@@ -140,7 +140,7 @@ bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, wxPoint * aFindLocatio
  * object, and the units should be in the pcb or schematic coordinate system.
  * It is OK to overestimate the size by a few counts.
  */
-EDA_Rect SCH_MARKER::GetBoundingBox()
+EDA_Rect SCH_MARKER::GetBoundingBox() const
 {
     return GetBoundingBoxMarker();
 }
@@ -192,3 +192,13 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
 
     return previousState != IsSelected();
 }
+
+
+bool SCH_MARKER::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & MARKER_T ) )
+        return false;
+
+    return HitTestMarker( aPoint );
+}
+

@@ -167,7 +167,7 @@ public:
 
 
     /**
-     * Function DisplayMarkerInfo()
+     * Function DisplayMarkerInfo
      * Displays the full info of this marker, in a HTML window
      */
     void DisplayMarkerInfo(WinEDA_DrawFrame * aFrame);
@@ -178,7 +178,7 @@ public:
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTestMarker( const wxPoint& ref_pos );
+    bool     HitTestMarker( const wxPoint& ref_pos ) const;
 
     /**
      * Function GetBoundingBoxMarker
@@ -187,7 +187,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBoxMarker();
+    EDA_Rect GetBoundingBoxMarker() const;
 };
 
 

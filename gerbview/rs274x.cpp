@@ -5,14 +5,14 @@
 #include "fctsys.h"
 #include "common.h"
 
-//#include "macros.h"
 #include "gerbview.h"
 #include "class_GERBER.h"
 
-#define CODE( x, y ) ( ( (x) << 8 ) + (y) )
+extern int ReadInt( char*& text, bool aSkipSeparator = true );
+extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 
-// Helper function to read a primitive macro param (TODO: make it DCODE_PARAM function)
-static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  );
+
+#define CODE( x, y ) ( ( (x) << 8 ) + (y) )
 
 // See rs274xrevd_e.pdf, table 1: RS-274X parameters order of entry
 // in gerber files, when a coordinate is given (like X78Y600 or I0J80):
@@ -92,48 +92,6 @@ static int ReadXCommand( char*& text )
 }
 
 
-/**
- * Function ReadInt
- * reads an int from an ASCII character buffer.  If there is a comma after the
- * int, then skip over that.
- * @param text A reference to a character pointer from which bytes are read
- *    and the pointer is advanced for each byte read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return int - The int read in.
- */
-static int ReadInt( char*& text, bool aSkipSeparator = true )
-{
-    int ret = (int) strtol( text, &text, 10 );
-
-    if( *text == ',' || isspace( *text ) )
-        if( aSkipSeparator )
-            ++text;
-
-    return ret;
-}
-
-
-/**
- * Function ReadDouble
- * reads a double from an ASCII character buffer. If there is a comma after
- * the double, then skip over that.
- * @param text A reference to a character pointer from which the ASCII double
- *          is read from and the pointer advanced for each character read.
- * @param aSkipSeparator = true (default) to skip comma
- * @return double
- */
-static double ReadDouble( char*& text, bool aSkipSeparator = true )
-{
-    double ret = strtod( text, &text );
-
-    if( *text == ',' || isspace( *text ) )
-        if( aSkipSeparator )
-            ++text;
-
-    return ret;
-}
-
-
 bool GERBER_IMAGE::ReadRS274XCommand( char buff[GERBER_BUFZ], char*& text )
 {
     bool ok = true;
@@ -193,7 +151,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 {
     int      code;
     int      xy_seq_len, xy_seq_char;
-    bool     ok = TRUE;
+    bool     ok = true;
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
@@ -215,22 +173,29 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 break;
 
             case 'L':       // No Leading 0
-                m_NoTrailingZeros = FALSE;
+                m_DecimalFormat = false;
+                m_NoTrailingZeros = false;
                 text++;
                 break;
 
             case 'T':       // No trailing 0
-                m_NoTrailingZeros = TRUE;
+                m_DecimalFormat = false;
+                m_NoTrailingZeros = true;
+                text++;
+                break;
+
+            case 'D':       // Decimal format: sometimes found, but not really documented
+                m_DecimalFormat = true;
                 text++;
                 break;
 
             case 'A':       // Absolute coord
-                m_Relative = FALSE;
+                m_Relative = false;
                 text++;
                 break;
 
-            case 'I':       // Absolute coord
-                m_Relative = TRUE;
+            case 'I':       // Relative coord
+                m_Relative = true;
                 text++;
                 break;
 
@@ -278,7 +243,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
             default:
                 GetEndOfBlock( buff, text, m_Current_File );
-                ok = FALSE;
+                ok = false;
                 break;
             }
         }
@@ -319,9 +284,9 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case MODE_OF_UNITS:
         code = ReadXCommand( text );
         if( code == INCH )
-            m_GerbMetric = FALSE;
+            m_GerbMetric = false;
         else if( code == MILLIMETER )
-            m_GerbMetric = TRUE;
+            m_GerbMetric = true;
         conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
         break;
 
@@ -538,6 +503,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case LAYER_POLARITY:
         if( *text == 'C' )
             GetLayerParams().m_LayerNegative = true;
+
         else
             GetLayerParams().m_LayerNegative = false;
         D( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
@@ -547,7 +513,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     case INCLUDE_FILE:
         if( m_FilesPtr >= INCLUDE_FILES_CNT_MAX )
         {
-            ok = FALSE;
+            ok = false;
             ReportMessage( _( "Too many include files!!" ) );
             break;
         }
@@ -560,7 +526,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         {
             msg.Printf( wxT( "include file <%s> not found." ), line );
             ReportMessage( msg );
-            ok = FALSE;
+            ok = false;
             m_Current_File = m_FilesList[m_FilesPtr];
             break;
         }
@@ -584,11 +550,11 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
          */
         if( *text++ != 'D' )
         {
-            ok = FALSE;
+            ok = false;
             break;
         }
 
-        m_Has_DCode = TRUE;
+        m_Has_DCode = true;
 
         code = ReadInt( text );
 
@@ -635,7 +601,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
 
             case 'O':               // oval
@@ -673,7 +639,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                         wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
 
             case 'P':
@@ -721,7 +687,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                         wxRound( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
-                dcode->m_Defined = TRUE;
+                dcode->m_Defined = true;
                 break;
             }
         }
@@ -764,7 +730,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
         break;
 
     default:
-        ok = FALSE;
+        ok = false;
         break;
     }
 
@@ -781,10 +747,10 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
         while( (text < buff + GERBER_BUFZ) && *text )
         {
             if( *text == '*' )
-                return TRUE;
+                return true;
 
             if( *text == '%' )
-                return TRUE;
+                return true;
 
             text++;
         }
@@ -795,10 +761,11 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
         text = buff;
     }
 
-    return FALSE;
+    return false;
 }
 
-/** function GetNextLine
+/**
+ * Function GetNextLine
  * test for an end of line
  * if an end of line is found:
  *   read a new line
@@ -878,12 +845,15 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         // it can be: a parameter declaration like $1=$2/4
         // or a digit (macro primitive selection)
         // all other symbols are illegal.
-        if( *text == '$' )  // parameter declaration, not yet supported
+        if( *text == '$' )  // local parameter declaration, inside the aperture macro
         {
-            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Operator $ not yet supported here, line: \"%s\"" ),
-                        GetChars( am.name ), GetChars( CONV_FROM_UTF8( buff ) ) );
-            ReportMessage( msg );
-            primitive_type = AMP_COMMENT;
+            am.m_localparamStack.push_back( AM_PARAM() );
+            AM_PARAM& param = am.m_localparamStack.back();
+            text = GetNextLine(  buff, text, gerber_file );
+            if( text == NULL)   // End of File
+                return false;
+            param.ReadParam( text );
+            continue;
         }
         else if( !isdigit(*text)  )     // Ill. symbol
         {
@@ -951,14 +921,14 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         int i;
         for( i = 0; i < paramCount && *text && *text != '*'; ++i )
         {
-            prim.params.push_back( DCODE_PARAM() );
+            prim.params.push_back( AM_PARAM() );
 
-            DCODE_PARAM& param = prim.params.back();
+            AM_PARAM& param = prim.params.back();
 
             text = GetNextLine(  buff, text, gerber_file );
             if( text == NULL)   // End of File
                 return false;
-            ReadMacroParam( param, text );
+            param.ReadParam( text );
         }
 
         if( i < paramCount )
@@ -983,14 +953,14 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
             for( int i = 0; i < paramCount && *text != '*'; ++i )
             {
-                prim.params.push_back( DCODE_PARAM() );
+                prim.params.push_back( AM_PARAM() );
 
-                DCODE_PARAM& param = prim.params.back();
+                AM_PARAM& param = prim.params.back();
 
                 text = GetNextLine(  buff, text, gerber_file );
                 if( text == NULL )  // End of File
                     return false;
-                ReadMacroParam( param, text );
+                param.ReadParam( text );
             }
         }
 
@@ -1002,36 +972,3 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
     return true;
 }
 
-/** Function ReadMacroParam
- * Read one aperture macro parameter
- * a parameter can be:
- *      a number
- *      a reference to an aperture definition parameter value: $1 ot $3 ...
- * a parameter definition can be complex and have operators between numbers and/or other parameter
- * like $1+3 or $2x2..
- * Parameters are separated by a comma ( of finish by *)
- * Return if a param is read, or false
- */
-static bool ReadMacroParam( DCODE_PARAM& aParam, char*& aText  )
-{
-    bool found = false;
-    if( *aText == '$' ) // value defined later, in aperture description
-    {
-        ++aText;
-        aParam.SetIndex( ReadInt( aText, false ) );
-        found = true;
-    }
-    else
-    {
-        aParam.SetValue( ReadDouble( aText, false ) );
-        found = true;
-    }
-
-    // Skip extra characters and separator
-    while( *aText && (*aText != ',') && (*aText != '*') )
-        aText++;
-    if( *aText == ',' )
-         aText++;
-
-    return found;
-}

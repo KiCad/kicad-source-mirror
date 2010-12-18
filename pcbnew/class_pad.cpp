@@ -55,32 +55,45 @@ D_PAD::~D_PAD()
 
 /* Calculate the radius of the circle containing the pad.
  */
-void D_PAD::ComputeShapeMaxRadius()
+int D_PAD::GetMaxRadius() const
 {
+    int x, y;
+    int radius;
+
     switch( m_PadShape & 0x7F )
     {
     case PAD_CIRCLE:
-        m_ShapeMaxRadius = m_Size.x / 2;
+        radius = m_Size.x / 2;
         break;
 
     case PAD_OVAL:
-        m_ShapeMaxRadius = MAX( m_Size.x, m_Size.y ) / 2;
+        radius = MAX( m_Size.x, m_Size.y ) / 2;
         break;
 
     case PAD_RECT:
-        m_ShapeMaxRadius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                               + (double) m_Size.x * m_Size.x ) / 2 );
+        radius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
+                                   + (double) m_Size.x * m_Size.x ) / 2 );
         break;
 
     case PAD_TRAPEZOID:
-    {   wxSize fullsize = m_Size;
-        fullsize.x += ABS(m_DeltaSize.y);   // Remember: m_DeltaSize.y is the m_Size.x change
-        fullsize.y += ABS(m_DeltaSize.x);   // Remember: m_DeltaSize.x is the m_Size.y change
-        m_ShapeMaxRadius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                               + (double) m_Size.x * m_Size.x ) / 2 );
-    }
+        x = m_Size.x + ABS( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
+        y = m_Size.y + ABS( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
+        radius = 1 + (int) ( sqrt( (double) y * y + (double) x * x ) / 2 );
         break;
+
+    default:
+        radius = 0;     // quiet compiler
     }
+
+    return radius;
+}
+
+
+/* Calculate the radius of the circle containing the pad.
+ */
+void D_PAD::ComputeShapeMaxRadius()
+{
+    m_ShapeMaxRadius = GetMaxRadius();
 }
 
 
@@ -89,14 +102,13 @@ void D_PAD::ComputeShapeMaxRadius()
  * returns the bounding box of this pad
  * Mainly used to redraw the screen area occupied by the pad
  */
-EDA_Rect D_PAD::GetBoundingBox()
+EDA_Rect D_PAD::GetBoundingBox() const
 {
-    // Calculate area:
-    ComputeShapeMaxRadius();     // calculate the radius of the area, considered as a
-                        // circle
     EDA_Rect area;
+    int radius = GetMaxRadius();     // Calculate the radius of the area, considered as a circle
+
     area.SetOrigin( m_Pos );
-    area.Inflate( m_ShapeMaxRadius, m_ShapeMaxRadius );
+    area.Inflate( radius );
 
     return area;
 }
@@ -209,7 +221,8 @@ void D_PAD::Copy( D_PAD* source )
 }
 
 
-/** Virtual function GetClearance
+/**
+ * Function GetClearance (virtual)
  * returns the clearance in internal units.  If \a aItem is not NULL then the
  * returned clearance is the greater of this object's clearance and
  * aItem's clearance.  If \a aItem is NULL, then this object clearance is returned.
@@ -246,7 +259,8 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 // Mask margins handling:
 
-/** Function GetSolderMaskMargin
+/**
+ * Function GetSolderMaskMargin
  * @return the margin for the solder mask layer
  * usually > 0 (mask shape bigger than pad
  * value is
@@ -283,7 +297,8 @@ int D_PAD::GetSolderMaskMargin()
 }
 
 
-/** Function GetSolderPasteMargin
+/**
+ * Function GetSolderPasteMargin
  * @return the margin for the solder mask layer
  * usually < 0 (mask shape smaller than pad
  * value is

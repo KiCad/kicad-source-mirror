@@ -1,4 +1,5 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${Boost_INCLUDE_DIR}
                     ../3d-viewer
                     ../pcbnew
@@ -9,6 +10,13 @@ set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
+    dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_get_component.cpp
+    dialogs/dialog_get_component_base.cpp
+    dialogs/dialog_hotkeys_editor.cpp
+    dialogs/dialog_hotkeys_editor_base.cpp
+    dialogs/dialog_load_error.cpp
+    dialogs/dialog_page_settings_base.cpp
 )
 
 set(COMMON_SRCS
@@ -32,12 +40,7 @@ set(COMMON_SRCS
     common_plotDXF_functions.cpp
     confirm.cpp
     copy_to_clipboard.cpp
-    dialog_display_info_HTML_base.cpp
-    dialog_hotkeys_editor.cpp
-    dialog_hotkeys_editor_base.cpp
-    dialog_load_error.cpp
     dcsvg.cpp
-    dialog_page_settings_base.cpp
     displlst.cpp
     dlist.cpp
     drawframe.cpp
@@ -48,7 +51,6 @@ set(COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     gestfich.cpp
-    get_component_dialog.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
     hotkey_grid_table.cpp

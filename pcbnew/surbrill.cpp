@@ -18,7 +18,8 @@
 #define Pad_fill (Pad_Fill_Item.State == RUN)
 
 
-/** Function ListNetsAndSelect
+/**
+ * Function ListNetsAndSelect
  * called by a command event
  * displays the sorted list of nets in a dialog frame
  * If a net is selected, it is highlighted

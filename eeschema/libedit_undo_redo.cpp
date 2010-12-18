@@ -12,7 +12,7 @@
 #include "class_libentry.h"
 
 
-void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int unused_flag )
+void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int unused_flag )
 {
     LIB_COMPONENT*     CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
@@ -39,7 +39,7 @@ void WinEDA_LibeditFrame::SaveCopyInUndoList( EDA_BaseStruct* ItemToCopy, int un
  * - Place the current edited library component in undo list
  * - Get old version of the current edited library component
  */
-void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
+void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
 {
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
@@ -75,7 +75,7 @@ void WinEDA_LibeditFrame::GetComponentFromRedoList(wxCommandEvent& event)
  * - Place the current edited library component in Redo list
  * - Get old version of the current edited library component
  */
-void WinEDA_LibeditFrame::GetComponentFromUndoList(wxCommandEvent& event)
+void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;

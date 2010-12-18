@@ -75,10 +75,10 @@ static Ki_PageDescr* Plot_sheet_list[] =
 class DIALOG_PLOT_SCHEMATIC_HPGL : public DIALOG_PLOT_SCHEMATIC_HPGL_BASE
 {
 private:
-    WinEDA_SchematicFrame* m_Parent;
+    SCH_EDIT_FRAME* m_Parent;
 
 public:
-   DIALOG_PLOT_SCHEMATIC_HPGL( WinEDA_SchematicFrame* parent );
+   DIALOG_PLOT_SCHEMATIC_HPGL( SCH_EDIT_FRAME* parent );
 
 private:
     static PageFormatReq  m_pageSizeSelect;
@@ -110,14 +110,14 @@ PageFormatReq DIALOG_PLOT_SCHEMATIC_HPGL:: m_pageSizeSelect = PAGE_DEFAULT;
 bool DIALOG_PLOT_SCHEMATIC_HPGL::m_plot_Sheet_Ref = true;
 
 
-void WinEDA_SchematicFrame::ToPlot_HPGL( wxCommandEvent& event )
+void SCH_EDIT_FRAME::ToPlot_HPGL( wxCommandEvent& event )
 {
     DIALOG_PLOT_SCHEMATIC_HPGL dlg( this );
     dlg.ShowModal();
 }
 
 
-DIALOG_PLOT_SCHEMATIC_HPGL::DIALOG_PLOT_SCHEMATIC_HPGL( WinEDA_SchematicFrame* parent )
+DIALOG_PLOT_SCHEMATIC_HPGL::DIALOG_PLOT_SCHEMATIC_HPGL( SCH_EDIT_FRAME* parent )
     :DIALOG_PLOT_SCHEMATIC_HPGL_BASE(parent)
 {
     m_Parent = parent;
@@ -386,7 +386,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
     if( m_plot_Sheet_Ref )
         m_Parent->PlotWorkSheet( plotter, screen );
 
-    PlotDrawlist( plotter, screen->EEDrawList );
+    PlotDrawlist( plotter, screen->GetDrawItems() );
 
     plotter->end_plot();
     delete plotter;

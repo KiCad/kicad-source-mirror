@@ -17,7 +17,7 @@
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_CIRCLE_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Radius     = 0;
     m_Fill       = NO_FILL;
@@ -85,12 +85,12 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 }
 
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return true if the point aPosRef is near this object
  * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half
- *                     thickness of a line)
- * @param aTransMat = the transform matrix
+ * @param aThreshold = max distance to this object (usually the half thickness of a line)
+ * @param aTransform = the transform matrix
  */
 bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
@@ -123,7 +123,7 @@ LIB_DRAW_ITEM* LIB_CIRCLE::DoGenCopy()
 
 int LIB_CIRCLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_CIRCLE_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_CIRCLE_T );
 
     const LIB_CIRCLE* tmp = ( LIB_CIRCLE* ) &aOther;
 
@@ -187,7 +187,8 @@ void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_CIRCLE::GetPenSize()
@@ -237,7 +238,7 @@ void LIB_CIRCLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint
 }
 
 
-EDA_Rect LIB_CIRCLE::GetBoundingBox()
+EDA_Rect LIB_CIRCLE::GetBoundingBox() const
 {
     EDA_Rect rect;
 

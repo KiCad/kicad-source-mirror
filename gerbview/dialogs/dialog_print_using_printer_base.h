@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -58,15 +58,16 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		wxButton* m_buttonQuit;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnScaleSelectionClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPageSetup( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPrintPreview( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPrintButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnScaleSelectionClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PRINT_USING_PRINTER_base();
 	

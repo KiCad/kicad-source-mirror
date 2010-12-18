@@ -58,7 +58,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if(IsShown())
     {
         DrawPanel->m_overlay.Reset(); 
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
         overlaydc.Clear();
     }
 #endif
@@ -97,7 +97,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if(IsShown())
     {
         DrawPanel->m_overlay.Reset(); 
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, DC ); 
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
         overlaydc.Clear();
     }
 #endif

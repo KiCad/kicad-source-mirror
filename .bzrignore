@@ -5,7 +5,8 @@ eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
-pcbnew/dialog_freeroute_exchange_help_html.h
+new/html
+pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
 Makefile
 CMakeFiles
 CMakeCache.txt

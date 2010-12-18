@@ -15,7 +15,8 @@
 
 /* Exported functions */
 
-/** Function TransformRoundedEndsSegmentToPolygon
+/**
+ * Function TransformRoundedEndsSegmentToPolygon
  * convert a segment with rounded ends to a polygon
  * Convert arcs to multiple straight lines
  * @param aCornerBuffer = a buffer to store the polygon
@@ -30,7 +31,8 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                                            int aWidth );
 
 
-/** Function TransformArcToPolygon
+/**
+ * Function TransformArcToPolygon
  * Creates a polygon from an Arc
  * Convert arcs to multiple straight segments
  * @param aCornerBuffer = a buffer to store the polygon
@@ -77,7 +79,8 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
 }
 
 
-/** Function TEXTE_PCB::TransformShapeWithClearanceToPolygon
+/**
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -123,7 +126,8 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
 }
 
 
-/** Function DRAWSEGMENT::TransformShapeWithClearanceToPolygon
+/**
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -164,7 +168,8 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon(
     }
 }
 
-/** Function EDGE_MODULE::TransformShapeWithClearanceToPolygon
+/**
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -209,7 +214,8 @@ void EDGE_MODULE::TransformShapeWithClearanceToPolygon(
 }
 
 
-/** Function TRACK::TransformShapeWithClearanceToPolygon
+/**
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the track shape to a closed polygon
  * Used in filling zones calculations
  * Circles (vias) and arcs (ends of tracks) are approximated by segments
@@ -344,7 +350,8 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
 }
 
 
-/** function D_PAD::TransformShapeWithClearanceToPolygon
+/**
+ * Function TransformShapeWithClearanceToPolygon
  * Convert the pad shape to a closed polygon
  * Used in filling zones calculations
  * Circles and arcs are approximated by segments
@@ -544,7 +551,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 }
 
 
-/** function CreateThermalReliefPadPolygon
+/**
+ * Function CreateThermalReliefPadPolygon
  * Add holes around a pad to create a thermal relief
  * copper thickness is min (dx/2, aCopperWitdh) or min (dy/2, aCopperWitdh)
  * @param aCornerBuffer = a buffer to store the polygon

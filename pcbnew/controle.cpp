@@ -320,7 +320,8 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
     if( GetScreen()->m_BlockLocate.m_State != STATE_NO_BLOCK )
         keep_on_grid = TRUE;
 
-    EDA_BaseStruct* DrawStruct = GetScreen()->GetCurItem();
+    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
+
     if( DrawStruct && DrawStruct->m_Flags )
         keep_on_grid = TRUE;
 
@@ -362,7 +363,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         if( DrawPanel->ManageCurseur )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( DrawPanel->m_overlay, DC ); 
+            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
             oDC.Clear(); 
             DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
 #else

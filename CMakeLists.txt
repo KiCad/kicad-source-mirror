@@ -31,7 +31,8 @@ option(USE_WX_OVERLAY
        "Use wxOverlay: Always ON for MAC (default OFF). Warning, this is experimental")
 
 option(USE_BOOST_POLYGON_LIBRARY
-       "Use boost polygon library instead of Kbool to calculate filled areas in zones (default OFF). Warning, this is experimental")
+       "Use boost polygon library instead of Kbool to calculate filled areas in zones (default ON)."
+       ON )
 
 #================================================
 # Set flags for GCC.
@@ -39,9 +40,9 @@ option(USE_BOOST_POLYGON_LIBRARY
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Release build.
-    set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+    set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG ")
     set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libgcc")
 
     # Set default flags for Debug build.
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")

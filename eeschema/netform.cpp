@@ -137,9 +137,9 @@ class EXPORT_HELP
      * A suitable component is a "new" real component (power symbols are not
      * considered).
      */
-    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
-    SCH_COMPONENT* findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function eraseDuplicatePins
@@ -242,7 +242,7 @@ public:
      * creates a generic netlist, now in XML.
      * @return bool - true if there were no errors, else false.
      */
-    bool WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName );
+    bool WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName );
 
     /**
      * Function WriteNetListPCBNEW
@@ -251,8 +251,7 @@ public:
      * @param with_pcbnew if true, then format Pcbnew (OrcadPcb2 + reviews and lists of net),<p>
      *                    else output ORCADPCB2 strict format.
      */
-    bool WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f,
-                                    bool with_pcbnew );
+    bool WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew );
 
     /**
      * Function WriteNetListCADSTAR
@@ -282,7 +281,7 @@ public:
      * .. B * T3 1
      *U1 * 14
      */
-    void WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f );
+    void WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f );
 
     /**
      * Function WriteNetListPspice
@@ -295,8 +294,7 @@ public:
      * @param use_netnames if true, then nodes are identified by the netname,
      *          else by net number.
      */
-    bool WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f,
-                                    bool use_netnames );
+    bool WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames );
 
     /**
      * Function MakeCommandLine
@@ -357,8 +355,8 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
  *   bool aUse_netnames is used only for Spice netlist
  * @return true if success.
  */
-bool WinEDA_SchematicFrame::WriteNetListFile( int aFormat, const wxString& aFullFileName,
-                                              bool aUse_netnames )
+bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
+                                       bool aUse_netnames )
 {
     bool        ret = true;
     FILE*       f = NULL;
@@ -445,12 +443,12 @@ static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 {
     // return "lhs < rhs"
-    return RefDesStringCompare( aPin1->GetNumber(), aPin2->GetNumber() ) < 0;
+    return RefDesStringCompare( aPin1->GetNumberString(), aPin2->GetNumberString() ) < 0;
 }
 
 
 void EXPORT_HELP::sprintPinNetName( wxString* aResult,
-                        const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
+                                    const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
 {
     int netcode = aPin->GetNet();
 
@@ -489,14 +487,14 @@ void EXPORT_HELP::sprintPinNetName( wxString* aResult,
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
     // continue searching from the middle of a linked list (the draw list)
     for(  ; aItem;  aItem = aItem->Next() )
     {
-        if( aItem->Type() != TYPE_SCH_COMPONENT )
+        if( aItem->Type() != SCH_COMPONENT_T )
             continue;
 
         // found next component
@@ -514,7 +512,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
         if( !entry )
             continue;
 
@@ -536,8 +534,8 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_BaseStruct* aItem, SCH_SHEET_
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
-        EDA_BaseStruct* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aItem,
+                                                              SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
@@ -546,7 +544,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
     // continue searching from the middle of a linked list (the draw list)
     for(  ; aItem;  aItem = aItem->Next() )
     {
-        if( aItem->Type() != TYPE_SCH_COMPONENT )
+        if( aItem->Type() != SCH_COMPONENT_T )
             continue;
 
         // found next component
@@ -555,6 +553,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
         ref = comp->GetRef( aSheetPath );
+
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -564,7 +563,8 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+
         if( !entry )
             continue;
 
@@ -585,13 +585,13 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
         {
             LIB_PIN_LIST pins;      // constructed once here
 
-            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->m_Convert );
+            entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
                 LIB_PIN* pin = pins[i];
 
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 addPinToComponentPinList( comp, aSheetPath, pin );
             }
@@ -617,7 +617,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList(
  * It also provides some insulation from a possible change in XML library.
  *
  * @param aName is the name to associate with a new node of type wxXML_ELEMENT_NODE.
- * @param aContent is optional, and if given is the text to include in a child
+ * @param aTextualContent is optional, and if given is the text to include in a child
  *   of the returned node, and has type wxXML_TEXT_NODE.
  */
 static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString )
@@ -758,7 +758,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
             {
                 XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
-                xfield->AddAttribute( sName, fieldList[i].m_Name );
+                xfield->AddAttribute( sName, fieldList[i].GetName() );
             }
         }
 
@@ -778,7 +778,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
-                pin->AddAttribute( sNum, pinList[i]->GetNumber() );
+                pin->AddAttribute( sNum, pinList[i]->GetNumberString() );
 
                 // caution: construction work site here, drive slowly
             }
@@ -942,7 +942,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
@@ -996,10 +996,10 @@ XNODE* EXPORT_HELP::makeGenericComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
             if( entry )
                 xlibsource->AddAttribute( sLib, entry->GetLibrary()->GetLogicalName() );
-            xlibsource->AddAttribute( sPart, comp->m_ChipName );
+            xlibsource->AddAttribute( sPart, comp->GetLibName() );
 
             XNODE* xsheetpath;
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
@@ -1036,7 +1036,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 #include <wx/wfstream.h>        // wxFFileOutputStream
 
-bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxString& aOutFileName )
+bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName )
 {
 #if 0
 
@@ -1106,7 +1106,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
             if( !comp )
@@ -1133,7 +1133,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( out, "Value=%s\n", CONV_TO_UTF8( field ) );
 
-            field = comp->m_ChipName;
+            field = comp->GetLibName();
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( out, "Libref=%s\n", CONV_TO_UTF8( field ) );
 
@@ -1174,7 +1174,7 @@ bool EXPORT_HELP::WriteGENERICNetList( WinEDA_SchematicFrame* frame, const wxStr
 }
 
 
-bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, bool use_netnames )
+bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames )
 {
     int             ret = 0;
     char            Line[1024];
@@ -1190,8 +1190,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     DateAndTime( Line );
 
-    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
-                    NETLIST_HEAD_STRING, Line );
+    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n", NETLIST_HEAD_STRING, Line );
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
@@ -1201,10 +1200,10 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst(); sheet; sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList(); item; item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList(); item; item = item->Next() )
         {
             wxChar ident;
-            if( item->Type() != TYPE_SCH_TEXT )
+            if( item->Type() != SCH_TEXT_T )
                 continue;
 
             SCH_TEXT*   drawText = (SCH_TEXT*) item;
@@ -1265,7 +1264,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, sheet );
             if( !comp )
@@ -1328,7 +1327,7 @@ bool EXPORT_HELP::WriteNetListPspice( WinEDA_SchematicFrame* frame, FILE* f, boo
 }
 
 
-bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, bool with_pcbnew )
+bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
@@ -1353,7 +1352,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = path->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = path->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, path );
             if( !comp )
@@ -1364,7 +1363,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
             // Get the Component FootprintFilter and put the component in
             // cmpList if filter is present
             LIB_COMPONENT* entry =
-                CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+                CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
             if( entry )
             {
@@ -1399,7 +1398,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
 
             if( with_pcbnew )  // Add the lib name for this component
             {
-                field = comp->m_ChipName;
+                field = comp->GetLibName();
                 field.Replace( wxT( " " ), wxT( "_" ) );
                 ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( field ) );
             }
@@ -1440,7 +1439,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( WinEDA_SchematicFrame* frame, FILE* f, boo
         {
             SCH_COMPONENT* comp = cmpList[ii].m_RootCmp;
 
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->m_ChipName );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
             ref = cmpList[ii].GetRef();
 
@@ -1489,7 +1488,7 @@ bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
         if( pin->m_Link != aComponent )
             continue;
 
-        if( pin->m_PinNum != aPin->m_PinNum )
+        if( pin->m_PinNum != aPin->GetNumber() )
             continue;
 
         // most expensive test at the end.
@@ -1569,9 +1568,9 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        for( EDA_BaseStruct* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
-            if( item->Type() != TYPE_SCH_COMPONENT )
+            if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
@@ -1584,12 +1583,12 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 
             for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 if( pin->GetUnit() && pin->GetUnit() != unit2 )
                     continue;
 
-                if( pin->GetConvert() && pin->GetConvert() != comp2->m_Convert )
+                if( pin->GetConvert() && pin->GetConvert() != comp2->GetConvert() )
                     continue;
 
                 // A suitable pin is found: add it to the current list
@@ -1690,14 +1689,14 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
 static wxString StartLine( wxT( "." ) );
 
 
-void EXPORT_HELP::WriteNetListCADSTAR( WinEDA_SchematicFrame* frame, FILE* f )
+void EXPORT_HELP::WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
     char Line[1024];
     SCH_SHEET_PATH* sheet;
-    EDA_BaseStruct* DrawList;
+    EDA_ITEM* DrawList;
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 

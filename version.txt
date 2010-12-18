@@ -1,4 +1,4 @@
 release version:
-2010 may 05 (BZR R2365)
+2010 dec 10 (BZR testing 26xx)
 files (.zip,.tgz):
-kicad-2010-05-05-testing
+kicad-2010-12-10-testing

@@ -1,5 +1,5 @@
 /**
- * @file treeprj_frame.cpp
+ * @file tree_project_frame.cpp
  * @brief TODO
  */
 
@@ -494,7 +494,8 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 }
 
 
-/** function AddFile
+/**
+ * Function AddFile
  * @brief  Add filename "name" to the tree \n
  *         if name is a directory, add the sub directory file names
  * @param aName = the filename or the dirctory name to add
@@ -659,7 +660,6 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
 
 /**
  * @brief  Create or modify the tree showing project file names
- * @return TODO
  */
 /*****************************************************************************/
 void TREE_PROJECT_FRAME::ReCreateTreePrj()
@@ -964,7 +964,8 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     }
 }
 
-/** function GetSelectedData
+/**
+ * Function GetSelectedData
  * return the item data from item currently selected (highlighted)
  * Note this is not necessary the "clicked" item,
  * because when expanding, collapsing an item this item is not selected
@@ -974,7 +975,8 @@ TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetSelectedData()
     return dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( m_TreeProject->GetSelection() ) );
 }
 
-/** function GetItemIdData
+/**
+ * Function GetItemIdData
  * return the item data corresponding to a wxTreeItemId identifier
  * @param  aId = the wxTreeItemId identifier.
  * @return a TREEPROJECT_ITEM pointer correspondinfg to item id aId

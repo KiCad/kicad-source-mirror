@@ -31,7 +31,7 @@
 /***********************/
 
 SCH_BUS_ENTRY::SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id ) :
-    SCH_ITEM( NULL, DRAW_BUSENTRY_STRUCT_TYPE )
+    SCH_ITEM( NULL, SCH_BUS_ENTRY_T )
 {
     m_Pos    = pos;
     m_Size.x = 100;
@@ -138,7 +138,7 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
+EDA_Rect SCH_BUS_ENTRY::GetBoundingBox() const
 {
     EDA_Rect box;
 
@@ -153,10 +153,11 @@ EDA_Rect SCH_BUS_ENTRY::GetBoundingBox()
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_BUS_ENTRY::GetPenSize()
+int SCH_BUS_ENTRY::GetPenSize() const
 {
     int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
@@ -245,11 +246,33 @@ void SCH_BUS_ENTRY::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
+bool SCH_BUS_ENTRY::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & BUS_ENTRY_T ) )
+        return false;
+
+    return TestSegmentHit( aPoint, m_Pos, m_End(), aAccuracy );
+}
+
+
+bool SCH_BUS_ENTRY::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
 /**********************/
 /* class SCH_JUNCTION */
 /**********************/
 
-SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_JUNCTION_STRUCT_TYPE )
+SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) : SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
 #define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
     m_Pos    = pos;
@@ -310,7 +333,7 @@ bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_Rect SCH_JUNCTION::GetBoundingBox()
+EDA_Rect SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_Rect rect;
 
@@ -318,29 +341,6 @@ EDA_Rect SCH_JUNCTION::GetBoundingBox()
     rect.Inflate( ( GetPenSize() + m_Size.x ) / 2 );
 
     return rect;
-}
-
-
-/** Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_JUNCTION::HitTest( const wxPoint& aPosRef )
-{
-    wxPoint dist = aPosRef - m_Pos;
-
-    return sqrt( ( (double) ( dist.x * dist.x ) ) +
-                 ( (double) ( dist.y * dist.y ) ) ) < ( m_Size.x / 2 );
-}
-
-
-/** Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- * has no meaning for SCH_JUNCTION
- */
-int SCH_JUNCTION::GetPenSize()
-{
-    return 0;
 }
 
 
@@ -367,7 +367,7 @@ void SCH_JUNCTION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 void SCH_JUNCTION::Mirror_X( int aXaxis_position )
 {
     m_Pos.y -= aXaxis_position;
-    NEGATE(  m_Pos.y );
+    NEGATE( m_Pos.y );
     m_Pos.y += aXaxis_position;
 }
 
@@ -375,7 +375,7 @@ void SCH_JUNCTION::Mirror_X( int aXaxis_position )
 void SCH_JUNCTION::Mirror_Y( int aYaxis_position )
 {
     m_Pos.x -= aYaxis_position;
-    NEGATE(  m_Pos.x );
+    NEGATE( m_Pos.x );
     m_Pos.x += aYaxis_position;
 }
 
@@ -421,16 +421,46 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_Pos << "/>\n";
 }
-
-
 #endif
+
+
+bool SCH_JUNCTION::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & JUNCTION_T ) )
+        return false;
+
+    EDA_Rect rect = GetBoundingBox();
+
+    rect.Inflate( aAccuracy );
+
+    return rect.Inside( aPoint );
+}
+
+
+bool SCH_JUNCTION::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_JUNCTION::DoIsConnected( const wxPoint& aPosition ) const
+{
+    return m_Pos == aPosition;
+}
 
 
 /************************/
 /* class SCH_NO_CONNECT */
 /************************/
 
-SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) : SCH_ITEM( NULL, DRAW_NOCONNECT_STRUCT_TYPE )
+SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) : SCH_ITEM( NULL, SCH_NO_CONNECT_T )
 {
 #define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
     m_Pos    = pos;
@@ -450,7 +480,7 @@ SCH_NO_CONNECT* SCH_NO_CONNECT::GenCopy()
 }
 
 
-EDA_Rect SCH_NO_CONNECT::GetBoundingBox()
+EDA_Rect SCH_NO_CONNECT::GetBoundingBox() const
 {
     int      delta = ( GetPenSize() + m_Size.x ) / 2;
     EDA_Rect box;
@@ -459,24 +489,6 @@ EDA_Rect SCH_NO_CONNECT::GetBoundingBox()
     box.Inflate( delta );
 
     return box;
-}
-
-
-/**
- * Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosRef )
-{
-    int     width = g_DrawDefaultLineThickness;
-    int     delta = ( m_Size.x + width ) / 2;
-
-    wxPoint dist = aPosRef - m_Pos;
-
-    if( ( ABS( dist.x ) <= delta ) && ( ABS( dist.y ) <= delta ) )
-        return true;
-    return false;
 }
 
 
@@ -519,10 +531,11 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_NO_CONNECT::GetPenSize()
+int SCH_NO_CONNECT::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
 }
@@ -592,12 +605,41 @@ void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
+bool SCH_NO_CONNECT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & NO_CONNECT_T ) )
+        return false;
+
+    int delta = ( ( m_Size.x + g_DrawDefaultLineThickness ) / 2 ) + aAccuracy;
+
+    wxPoint dist = aPoint - m_Pos;
+
+    if( ( ABS( dist.x ) <= delta ) && ( ABS( dist.y ) <= delta ) )
+        return true;
+
+    return false;
+}
+
+
+bool SCH_NO_CONNECT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
 /******************/
 /* Class SCH_LINE */
 /******************/
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
-    SCH_ITEM( NULL, DRAW_SEGMENT_STRUCT_TYPE )
+    SCH_ITEM( NULL, SCH_LINE_T )
 {
     m_Start = pos;
     m_End   = pos;
@@ -631,13 +673,19 @@ SCH_LINE* SCH_LINE::GenCopy()
 }
 
 
-bool SCH_LINE::IsOneEndPointAt( const wxPoint& pos )
+void SCH_LINE::Move( const wxPoint& aOffset )
 {
-    if( ( pos.x == m_Start.x ) && ( pos.y == m_Start.y ) )
-        return TRUE;
-    if( ( pos.x == m_End.x ) && ( pos.y == m_End.y ) )
-        return TRUE;
-    return FALSE;
+    if( (m_Flags & STARTPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
+    {
+        m_Start += aOffset;
+        SetModified();
+    }
+
+    if( (m_Flags & ENDPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
+    {
+        m_End += aOffset;
+        SetModified();
+    }
 }
 
 
@@ -650,7 +698,7 @@ bool SCH_LINE::IsOneEndPointAt( const wxPoint& pos )
  *          of nesting of this object within the overall tree.
  * @param os The ostream& to output to.
  */
-void SCH_LINE::Show( int nestLevel, std::ostream& os )
+void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
@@ -667,7 +715,7 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-EDA_Rect SCH_LINE::GetBoundingBox()
+EDA_Rect SCH_LINE::GetBoundingBox() const
 {
     int      width = 25;
 
@@ -699,12 +747,15 @@ bool SCH_LINE::Save( FILE* aFile ) const
 
     if( GetLayer() == LAYER_WIRE )
         layer = "Wire";
+
     if( GetLayer() == LAYER_BUS )
         layer = "Bus";
+
     if( fprintf( aFile, "Wire %s %s\n", layer, width ) == EOF )
     {
         success = false;
     }
+
     if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_Start.x, m_Start.y,
                  m_End.x, m_End.y ) == EOF )
     {
@@ -736,6 +787,7 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( Name1[0] == 'W' )
         m_Layer = LAYER_WIRE;
+
     if( Name1[0] == 'B' )
         m_Layer = LAYER_BUS;
 
@@ -752,10 +804,11 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_LINE::GetPenSize()
+int SCH_LINE::GetPenSize() const
 {
     int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
@@ -830,7 +883,7 @@ void SCH_LINE::Rotate( wxPoint rotationPoint )
 
 bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 {
-    wxCHECK_MSG( aLine != NULL && aLine->Type() == DRAW_SEGMENT_STRUCT_TYPE, false,
+    wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, false,
                  wxT( "Cannot test line segment for overlap." ) );
 
     if( this == aLine || GetLayer() != aLine->GetLayer() )
@@ -915,6 +968,8 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
     bool previousStartState = m_StartIsDangling;
     bool previousEndState = m_EndIsDangling;
 
+    m_StartIsDangling = m_EndIsDangling = true;
+
     if( GetLayer() == LAYER_WIRE )
     {
         BOOST_FOREACH( DANGLING_END_ITEM item, aItemList )
@@ -967,11 +1022,52 @@ void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
+bool SCH_LINE::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
+        return false;
+
+    if( ( ( aFilter & DRAW_ITEM_T ) && ( m_Layer == LAYER_NOTES ) )
+        || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
+        || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) ) )
+    {
+        if( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS && IsEndPoint( aPoint )
+            || aFilter & WIRE_BUS_ENDPOINTS_ONLY && !IsEndPoint( aPoint )
+            || TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_LINE::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_LINE::DoIsConnected( const wxPoint& aPosition ) const
+{
+    if( m_Layer != LAYER_WIRE && m_Layer != LAYER_BUS )
+        return false;
+
+    return IsEndPoint( aPosition );
+}
+
+
 /**********************/
 /* Class SCH_POLYLINE */
 /**********************/
 
-SCH_POLYLINE::SCH_POLYLINE( int layer ) : SCH_ITEM( NULL, DRAW_POLYLINE_STRUCT_TYPE )
+SCH_POLYLINE::SCH_POLYLINE( int layer ) : SCH_ITEM( NULL, SCH_POLYLINE_T )
 {
     m_Width = 0;
 
@@ -1082,10 +1178,11 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_POLYLINE::GetPenSize()
+int SCH_POLYLINE::GetPenSize() const
 {
     int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 
@@ -1093,18 +1190,18 @@ int SCH_POLYLINE::GetPenSize()
 }
 
 
-void SCH_POLYLINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                         const wxPoint& offset, int DrawMode, int Color )
+void SCH_POLYLINE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                         int aDrawMode, int aColor )
 {
     int color;
     int width = GetPenSize();
 
-    if( Color >= 0 )
-        color = Color;
+    if( aColor >= 0 )
+        color = aColor;
     else
         color = ReturnLayerColor( m_Layer );
 
-    GRSetDrawMode( DC, DrawMode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     if( m_Layer == LAYER_BUS )
     {
@@ -1116,14 +1213,14 @@ void SCH_POLYLINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     if( m_Layer == LAYER_NOTES )
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRDashedLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
-                            m_PolyPoints[i].y + offset.y, width, color );
+            GRDashedLineTo( &aPanel->m_ClipBox, aDC, m_PolyPoints[i].x + aOffset.x,
+                            m_PolyPoints[i].y + aOffset.y, width, color );
     }
     else
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRLineTo( &panel->m_ClipBox, DC, m_PolyPoints[i].x + offset.x,
-                      m_PolyPoints[i].y + offset.y, width, color );
+            GRLineTo( &aPanel->m_ClipBox, aDC, m_PolyPoints[i].x + aOffset.x,
+                      m_PolyPoints[i].y + aOffset.y, width, color );
     }
 }
 
@@ -1156,4 +1253,32 @@ void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
     {
         RotatePoint( &m_PolyPoints[ii], rotationPoint, 900 );
     }
+}
+
+
+bool SCH_POLYLINE::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
+        return false;
+
+    for( size_t i = 0;  i < m_PolyPoints.size() - 1;  i++ )
+    {
+        if( TestSegmentHit( aPoint, m_PolyPoints[i], m_PolyPoints[i + 1], aAccuracy ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_POLYLINE::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
 }

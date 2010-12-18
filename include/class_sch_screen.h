@@ -10,6 +10,10 @@
 #include "class_base_screen.h"
 
 
+class LIB_PIN;
+class SCH_COMPONENT;
+
+
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500
 
@@ -20,8 +24,17 @@ public:
     int       m_RefCount;     ///< Number of sheets referencing this screen.
                               ///< Delete when it goes to zero.
 
-    SCH_SCREEN( KICAD_T aType = SCREEN_STRUCT_TYPE );
+    SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
     ~SCH_SCREEN();
+
+    /**
+     * Function GetDrawItems().
+     *
+     * @return - A pointer to the first item in the linked list of draw items.
+     */
+    virtual SCH_ITEM* GetDrawItems() const { return (SCH_ITEM*) BASE_SCREEN::GetDrawItems(); }
+
+    virtual void SetDrawItems( SCH_ITEM* aItem ) { BASE_SCREEN::SetDrawItems( aItem ); }
 
     /**
      * Function GetCurItem
@@ -33,7 +46,7 @@ public:
     /**
      * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.
-     * @param current Any object derived from SCH_ITEM
+     * @param aItem Any object derived from SCH_ITEM
      */
     void SetCurItem( SCH_ITEM* aItem )
     {
@@ -53,18 +66,21 @@ public:
      */
     void         FreeDrawList();
 
-    void         Place( WinEDA_SchematicFrame* frame, wxDC* DC ) { };
+    void         Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
      * Remove \a aItem from the schematic associated with this screen.
      *
      * @param aItem - Item to be removed from schematic.
      */
-    void         RemoveFromDrawList( SCH_ITEM* DrawStruct );
+    void         RemoveFromDrawList( SCH_ITEM* aItem );
+
     bool         CheckIfOnDrawList( SCH_ITEM* st );
-    void         AddToDrawList( SCH_ITEM* DrawStruct );
+
+    void         AddToDrawList( SCH_ITEM* st );
 
     bool         SchematicCleanUp( wxDC* DC = NULL );
+
     SCH_ITEM*    ExtractWires( bool CreateCopy );
 
     /* full undo redo management : */
@@ -98,10 +114,14 @@ public:
      */
     void ClearDrawingState();
 
-    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_BaseStruct*) aItem ); }
+    int CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
+
+    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL );
+
+    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
     {
-        BASE_SCREEN::InsertItem( aIter, (EDA_BaseStruct*) aItem );
+        BASE_SCREEN::InsertItem( aIter, (EDA_ITEM*) aItem );
     }
 };
 
@@ -127,7 +147,7 @@ public:
 
 private:
     void        AddScreenToList( SCH_SCREEN* aScreen );
-    void        BuildScreenList( EDA_BaseStruct* aItem );
+    void        BuildScreenList( EDA_ITEM* aItem );
 };
 
 #endif /* CLASS_SCREEN_H */

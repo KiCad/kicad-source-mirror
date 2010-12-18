@@ -220,7 +220,8 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& aPosition )
 }
 
 
-/** Function IsPointOnDisplay
+/**
+ * Function IsPointOnDisplay
  * @param ref_pos is the position to test in pixels, relative to the panel.
  * @return TRUE if ref_pos is a point currently visible on screen
  *         false if ref_pos is out of screen
@@ -320,7 +321,8 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 }
 
 
-/** Function CursorScreenPosition
+/**
+ * Function CursorScreenPosition
  * @return the cursor current position in pixels in the screen draw area
  */
 wxPoint WinEDA_DrawPanel::CursorScreenPosition()
@@ -335,7 +337,8 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
 }
 
 
-/** Function GetScreenCenterRealPosition()
+/**
+ * Function GetScreenCenterRealPosition
  * @return position (in internal units) of the current area center showed
  *         on screen
  */
@@ -509,7 +512,8 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
 }
 
 
-/** Function SetBoundaryBox()
+/**
+ * Function SetBoundaryBox
  * Set the clip box to the current displayed rectangle dimensions.
  *
  * When using wxDC for scaling, the clip box coordinates are in drawing (logical)
@@ -713,7 +717,8 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
 }
 
 
-/**  Function DrawBackGround
+/**
+ * Function DrawBackGround
  * @param DC = current Device Context
  * Draws (if allowed) :
  * the grid
@@ -750,7 +755,8 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
 }
 
 
-/**  Function DrawGrid
+/**
+ * Function DrawGrid
  * @param DC = current Device Context
  * draws the grid
  *  - the grid is drawn only if the zoom level allows a good visibility
@@ -926,7 +932,8 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
 }
 
 
-/** function DrawAuxiliaryAxis
+/**
+ * Function DrawAuxiliaryAxis
  * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
  * for gerber and excellon files
  * @param DC = current Device Context

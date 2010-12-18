@@ -256,8 +256,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[] =
  * Hot keys. Some commands are relative to the item under the mouse cursor
  * Commands are case insensitive
  */
-void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
-                                      EDA_BaseStruct* DrawStruct )
+void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
@@ -346,7 +345,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             RefreshToolBar = LocateAndDeleteItem( this, DC );
             OnModify();
             GetScreen()->SetCurItem( NULL );
-            TestDanglingEnds( GetScreen()->EEDrawList, DC );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         }
         break;
 
@@ -508,7 +507,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         if( DrawStruct && DrawStruct->IsNew() && ( m_ID_current_state == ID_BUS_BUTT ) )
         {
-            if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+            if( DrawStruct->Type() == SCH_LINE_T )
             {
                 SCH_LINE* segment = (SCH_LINE*) DrawStruct;
                 if( segment->GetLayer() != LAYER_BUS )
@@ -531,7 +530,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
         }
         if( DrawStruct && DrawStruct->IsNew() && ( m_ID_current_state == ID_WIRE_BUTT ) )
         {
-            if( DrawStruct->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+            if( DrawStruct->Type() == SCH_LINE_T )
             {
                 SCH_LINE* segment = (SCH_LINE*) DrawStruct;
                 if( segment->GetLayer() != LAYER_WIRE )
@@ -565,7 +564,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             if( DrawStruct == NULL )
                 break;
 
-            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
+            if( DrawStruct->Type() == SCH_COMPONENT_T )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
 
             if( DrawStruct == NULL )
@@ -586,21 +585,21 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
             switch( DrawStruct->Type() )
             {
-            case DRAW_SHEET_STRUCT_TYPE: //TODO allow sheet rotate on hotkey
+            case SCH_SHEET_T: //TODO allow sheet rotate on hotkey
                 //wxPostEvent( this, eventRotateSheet );
                 break;
-            case TYPE_SCH_COMPONENT:
+            case SCH_COMPONENT_T:
                 wxPostEvent( this, eventRotateComponent );
                 break;
 
-            case TYPE_SCH_TEXT:
-            case TYPE_SCH_LABEL:
-            case TYPE_SCH_GLOBALLABEL:
-            case TYPE_SCH_HIERLABEL:
+            case SCH_TEXT_T:
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
                 wxPostEvent( this, eventRotateText );
                 break;
 
-            case DRAW_PART_TEXT_STRUCT_TYPE:
+            case SCH_FIELD_T:
                 wxPostEvent( this, eventRotateField );
 
             default:
@@ -617,7 +616,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             break;
         }
         if( DrawStruct == NULL )
-            DrawStruct = LocateSmallestComponent( (SCH_SCREEN*) GetScreen() );
+            DrawStruct = LocateSmallestComponent( GetScreen() );
         if( DrawStruct )
         {
             if( DrawStruct->m_Flags == 0 )
@@ -659,7 +658,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
-            TestDanglingEnds( GetScreen()->EEDrawList, DC );
+            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
         }
         break;
 
@@ -676,11 +675,11 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
             if( DrawStruct == NULL )
                 break;
-            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
+            if( DrawStruct->Type() == SCH_COMPONENT_T )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
             if( DrawStruct == NULL )
                 break;
-            if( DrawStruct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( DrawStruct->Type() == SCH_SHEET_T )
             {
                 // If it's a sheet, then check if a pinsheet is under the cursor
                 SCH_SHEET_PIN* slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct,
@@ -688,7 +687,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                 if( slabel )
                     DrawStruct = slabel;
             }
-            if( DrawStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+            if( DrawStruct->Type() == SCH_JUNCTION_T )
             {
                 // If it's a junction, pick the underlying wire instead
                 DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(), WIREITEM );
@@ -724,30 +723,30 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
             {
             // select the correct event for moving an schematic object
             // and add it to the event queue
-            case DRAW_SHEET_STRUCT_TYPE:
-            case TYPE_SCH_COMPONENT:
+            case SCH_SHEET_T:
+            case SCH_COMPONENT_T:
                 wxPostEvent( this, eventMoveOrDragComponent );
                 break;
 
-            case TYPE_SCH_LABEL:
-            case TYPE_SCH_GLOBALLABEL:
-            case TYPE_SCH_HIERLABEL:
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
                 wxPostEvent( this, eventMoveOrDragComponent );
                 break;
 
-            case TYPE_SCH_TEXT:
-            case DRAW_PART_TEXT_STRUCT_TYPE:
-            case DRAW_BUSENTRY_STRUCT_TYPE:
+            case SCH_TEXT_T:
+            case SCH_FIELD_T:
+            case SCH_BUS_ENTRY_T:
                 if( HK_Descr->m_Idcommand != HK_DRAG )
                     wxPostEvent( this, eventMoveItem );
                 break;
 
-            case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+            case SCH_SHEET_LABEL_T:
                 if( HK_Descr->m_Idcommand != HK_DRAG )
                     wxPostEvent( this, eventMovePinsheet );
                 break;
 
-            case DRAW_SEGMENT_STRUCT_TYPE:
+            case SCH_LINE_T:
                 if( ( (SCH_ITEM*) DrawStruct )->GetLayer() == LAYER_WIRE )
                     wxPostEvent( this, eventDragWire );
                 break;
@@ -769,7 +768,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
                                      LIBITEM | TEXTITEM | LABELITEM | SHEETITEM );
             if( DrawStruct == NULL )
                 break;
-            if( DrawStruct->Type() == TYPE_SCH_COMPONENT )
+            if( DrawStruct->Type() == SCH_COMPONENT_T )
                 DrawStruct = LocateSmallestComponent( GetScreen() );
             if( DrawStruct == NULL )
                 break;
@@ -782,19 +781,19 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
 
             switch( DrawStruct->Type() )
             {
-            case TYPE_SCH_COMPONENT:
+            case SCH_COMPONENT_T:
                 InstallCmpeditFrame( this, MousePos, (SCH_COMPONENT*) DrawStruct );
                 break;
 
-            case DRAW_SHEET_STRUCT_TYPE:
+            case SCH_SHEET_T:
                 GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
                 wxPostEvent( this, eventEditPinsheet );
                 break;
 
-            case TYPE_SCH_TEXT:
-            case TYPE_SCH_LABEL:
-            case TYPE_SCH_GLOBALLABEL:
-            case TYPE_SCH_HIERLABEL:
+            case SCH_TEXT_T:
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
                 EditSchematicText( (SCH_TEXT*) DrawStruct );
                 break;
 
@@ -837,7 +836,7 @@ void WinEDA_SchematicFrame::OnHotKey( wxDC* DC, int hotkey,
  * under the mouse cursor
  * Commands are case insensitive
  */
-void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct )
+void LIB_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );
@@ -918,7 +917,7 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
 
     case HK_REPEAT_LAST:
         if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
-           && ( m_lastDrawItem->Type() == COMPONENT_PIN_DRAW_TYPE ) )
+           && ( m_lastDrawItem->Type() == LIB_PIN_T ) )
             RepeatPinItem( DC, (LIB_PIN*) m_lastDrawItem );
          break;
 
@@ -929,21 +928,21 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
         {
             switch( m_drawItem->Type() )
             {
-            case COMPONENT_PIN_DRAW_TYPE:
+            case LIB_PIN_T:
                 cmd.SetId( ID_LIBEDIT_EDIT_PIN );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 
-            case COMPONENT_ARC_DRAW_TYPE:
-            case COMPONENT_CIRCLE_DRAW_TYPE:
-            case COMPONENT_RECT_DRAW_TYPE:
-            case COMPONENT_POLYLINE_DRAW_TYPE:
-            case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+            case LIB_ARC_T:
+            case LIB_CIRCLE_T:
+            case LIB_RECTANGLE_T:
+            case LIB_POLYLINE_T:
+            case LIB_TEXT_T:
                 cmd.SetId( ID_POPUP_LIBEDIT_BODY_EDIT_ITEM );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 
-            case COMPONENT_FIELD_DRAW_TYPE:
+            case LIB_FIELD_T:
                 cmd.SetId( ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
@@ -961,17 +960,17 @@ void WinEDA_LibeditFrame::OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawSt
         {
             switch( m_drawItem->Type() )
             {
-            case COMPONENT_PIN_DRAW_TYPE:
+            case LIB_PIN_T:
                 cmd.SetId( ID_LIBEDIT_ROTATE_PIN );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 
-            case COMPONENT_GRAPHIC_TEXT_DRAW_TYPE:
+            case LIB_TEXT_T:
                 cmd.SetId( ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;
 
-            case COMPONENT_FIELD_DRAW_TYPE:
+            case LIB_FIELD_T:
                 cmd.SetId( ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM );
                 GetEventHandler()->ProcessEvent( cmd );
                 break;

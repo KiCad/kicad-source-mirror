@@ -15,30 +15,31 @@
 #include "class_library.h"
 #include "sch_items.h"
 #include "sch_sheet.h"
+#include "sch_component.h"
 
 #include <boost/foreach.hpp>
 
 
-void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen )
+void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 {
     switch( Struct->Type() )
     {
-    case DRAW_POLYLINE_STRUCT_TYPE:
-    case DRAW_JUNCTION_STRUCT_TYPE:
-    case TYPE_SCH_TEXT:
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_COMPONENT:
-    case DRAW_SEGMENT_STRUCT_TYPE:
-    case DRAW_BUSENTRY_STRUCT_TYPE:
-    case DRAW_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_MARKER:
-    case DRAW_NOCONNECT_STRUCT_TYPE:
+    case SCH_POLYLINE_T:
+    case SCH_JUNCTION_T:
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_COMPONENT_T:
+    case SCH_LINE_T:
+    case SCH_BUS_ENTRY_T:
+    case SCH_SHEET_T:
+    case SCH_MARKER_T:
+    case SCH_NO_CONNECT_T:
         Struct->SetParent( Screen );
         break;
 
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+    case SCH_SHEET_LABEL_T:
         break;
 
     default:
@@ -85,7 +86,7 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
 {
     size_t i;
 
-    EEDrawList = NULL;                  /* Schematic items list */
+    SetDrawItems( NULL );                  /* Schematic items list */
     m_Zoom = 32;
 
     for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
@@ -114,27 +115,30 @@ void SCH_SCREEN::FreeDrawList()
 {
     SCH_ITEM* DrawStruct;
 
-    while( EEDrawList != NULL )
+    while( GetDrawItems() != NULL )
     {
-        DrawStruct = EEDrawList;
-        EEDrawList = EEDrawList->Next();
+        DrawStruct = GetDrawItems();
+        SetDrawItems( GetDrawItems()->Next() );
         SAFE_DELETE( DrawStruct );
     }
 
-    EEDrawList = NULL;
+    SetDrawItems( NULL );
 }
 
 
-/* If found in EEDrawList, remove DrawStruct from EEDrawList.
+/* If found in GetDrawItems(), remove DrawStruct from GetDrawItems().
  *  DrawStruct is not deleted or modified
  */
 void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 {
-    if( DrawStruct == EEDrawList )
-        EEDrawList = EEDrawList->Next();
+    if( DrawStruct == GetDrawItems() )
+    {
+        SetDrawItems( GetDrawItems()->Next() );
+    }
     else
     {
-        EDA_BaseStruct* DrawList = EEDrawList;
+        EDA_ITEM* DrawList = GetDrawItems();
+
         while( DrawList && DrawList->Next() )
         {
             if( DrawList->Next() == DrawStruct )
@@ -150,7 +154,7 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 
 bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 {
-    SCH_ITEM * DrawList = EEDrawList;
+    SCH_ITEM * DrawList = GetDrawItems();
 
     while( DrawList )
     {
@@ -165,15 +169,15 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 
 void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 {
-    st->SetNext( EEDrawList );
-    EEDrawList = st;
+    st->SetNext( GetDrawItems() );
+    SetDrawItems( st );
 }
 
 
 /* Extract the old wires, junctions and buses, an if CreateCopy replace them
  * by a copy.  Old ones must be put in undo list, and the new ones can be
  * modified by clean up safely.
- * If an abort command is made, old wires must be put in EEDrawList, and
+ * If an abort command is made, old wires must be put in GetDrawItems(), and
  * copies must be deleted.  This is because previously stored undo commands
  * can handle pointers on wires or bus, and we do not delete wires or bus,
  * we must put they in undo list.
@@ -185,25 +189,27 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
 {
     SCH_ITEM* item, * next_item, * new_item, * List = NULL;
 
-    for( item = EEDrawList; item != NULL; item = next_item )
+    for( item = GetDrawItems(); item != NULL; item = next_item )
     {
         next_item = item->Next();
 
         switch( item->Type() )
         {
-        case DRAW_JUNCTION_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
             RemoveFromDrawList( item );
             item->SetNext( List );
             List = item;
+
             if( CreateCopy )
             {
-                if( item->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+                if( item->Type() == SCH_JUNCTION_T )
                     new_item = ( (SCH_JUNCTION*) item )->GenCopy();
                 else
                     new_item = ( (SCH_LINE*) item )->GenCopy();
-                new_item->SetNext( EEDrawList );
-                EEDrawList = new_item;
+
+                new_item->SetNext( GetDrawItems() );
+                SetDrawItems( new_item );
             }
             break;
 
@@ -225,15 +231,17 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
     SCH_ITEM* DrawList, * TstDrawList;
     bool      Modify = FALSE;
 
-    DrawList = EEDrawList;
+    DrawList = GetDrawItems();
+
     for( ; DrawList != NULL; DrawList = DrawList->Next() )
     {
-        if( DrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+        if( DrawList->Type() == SCH_LINE_T )
         {
             TstDrawList = DrawList->Next();
+
             while( TstDrawList )
             {
-                if( TstDrawList->Type() == DRAW_SEGMENT_STRUCT_TYPE )
+                if( TstDrawList->Type() == SCH_LINE_T )
                 {
                     SCH_LINE* line = (SCH_LINE*) DrawList;
 
@@ -244,7 +252,7 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
                         DrawList->m_Flags |= TstDrawList->m_Flags;
                         EraseStruct( TstDrawList, this );
                         SetRefreshReq();
-                        TstDrawList = EEDrawList;
+                        TstDrawList = GetDrawItems();
                         Modify = TRUE;
                     }
                     else
@@ -260,9 +268,9 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
         }
     }
 
-    WinEDA_SchematicFrame* frame;
-    frame = (WinEDA_SchematicFrame*) wxGetApp().GetTopWindow();
-    frame->TestDanglingEnds( EEDrawList, DC );
+    SCH_EDIT_FRAME* frame;
+    frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
+    frame->TestDanglingEnds( GetDrawItems(), DC );
 
     return Modify;
 }
@@ -313,7 +321,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
         return FALSE;
 
-    for( SCH_ITEM* item = EEDrawList; item; item = item->Next() )
+    for( SCH_ITEM* item = GetDrawItems(); item; item = item->Next() )
     {
         if( !item->Save( aFile ) )
             return FALSE;
@@ -326,7 +334,8 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
-/** Function ClearUndoORRedoList
+/**
+ * Function ClearUndoORRedoList
  * free the undo or redo list from List element
  *  Wrappers are deleted.
  *  datas pointed by wrappers are deleted if not in use in schematic
@@ -343,8 +352,10 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         return;
 
     unsigned icnt = aList.m_CommandsList.size();
+
     if( aItemCount > 0 )
         icnt = aItemCount;
+
     for( unsigned ii = 0; ii < icnt; ii++ )
     {
         if( aList.m_CommandsList.size() == 0 )
@@ -361,8 +372,52 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void SCH_SCREEN::ClearDrawingState()
 {
-    for( SCH_ITEM* item = EEDrawList; item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
         item->m_Flags = 0;
+}
+
+
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent )
+{
+    SCH_ITEM* item;
+    SCH_COMPONENT* component = NULL;
+    LIB_PIN* pin = NULL;
+
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        component = (SCH_COMPONENT*) item;
+
+        pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
+
+        if( pin )
+            break;
+    }
+
+    if( aComponent )
+        *aComponent = component;
+
+    return pin;
+}
+
+
+int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const
+{
+    SCH_ITEM* item;
+    int       count = 0;
+
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_JUNCTION_T  && !aTestJunctions )
+            continue;
+
+        if( item->IsConnected( aPos ) )
+            count++;
+    }
+
+    return count;
 }
 
 
@@ -426,24 +481,27 @@ void SCH_SCREENS::AddScreenToList( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_SCREENS::BuildScreenList( EDA_BaseStruct* aItem )
+void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
 {
-    if( aItem && aItem->Type() == DRAW_SHEET_STRUCT_TYPE )
+    if( aItem && aItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* ds = (SCH_SHEET*) aItem;
         aItem = ds->m_AssociatedScreen;
     }
-    if( aItem && aItem->Type() == SCREEN_STRUCT_TYPE )
+
+    if( aItem && aItem->Type() == SCH_SCREEN_T )
     {
         SCH_SCREEN*     screen = (SCH_SCREEN*) aItem;
         AddScreenToList( screen );
-        EDA_BaseStruct* strct = screen->EEDrawList;
+        EDA_ITEM* strct = screen->GetDrawItems();
+
         while( strct )
         {
-            if( strct->Type() == DRAW_SHEET_STRUCT_TYPE )
+            if( strct->Type() == SCH_SHEET_T )
             {
                 BuildScreenList( strct );
             }
+
             strct = strct->Next();
         }
     }

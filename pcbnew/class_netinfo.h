@@ -370,7 +370,7 @@ public:
  * Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
- * Is virtual from EDA_BaseStruct.
+ * Is virtual from EDA_ITEM.
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
     void DisplayInfo( WinEDA_DrawFrame* frame );

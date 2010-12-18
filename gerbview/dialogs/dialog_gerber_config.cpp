@@ -11,6 +11,7 @@
 #include "appl_wxstruct.h"
 #include "common.h"
 #include "gerbview.h"
+#include "dialog_helpers.h"
 
 
 enum
@@ -51,7 +52,8 @@ BEGIN_EVENT_TABLE( WinEDA_ConfigFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-/** Function InstallConfigFrame
+/**
+ * Function InstallConfigFrame
  * install the dialog box to configure some gerbview options
  * mainly the default file extensions
  */

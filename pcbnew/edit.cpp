@@ -14,7 +14,6 @@
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "class_board_design_settings.h"
-#include "autorout.h"
 #include "protos.h"
 
 #include "dialog_drc.h"
@@ -26,9 +25,7 @@
 // Uncomment following line to enable wxBell() command (which beeps speaker)
 // #include <wx/utils.h>
 
-static void Process_Move_Item( WinEDA_PcbFrame* frame,
-                               EDA_BaseStruct* DrawStruct, wxDC* DC );
-
+static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxDC* DC );
 
 
 /* Handles the selection of command events. */
@@ -1051,8 +1048,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-static void Process_Move_Item( WinEDA_PcbFrame* frame,
-                               EDA_BaseStruct* DrawStruct, wxDC* DC )
+static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxDC* DC )
 {
     if( DrawStruct == NULL )
         return;
@@ -1203,7 +1199,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
             }
         }
 
-        EDA_BaseStruct* current = GetScreen()->GetCurItem();
+        EDA_ITEM* current = GetScreen()->GetCurItem();
 
         // See if we are drawing a segment; if so, add a via?
         if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )

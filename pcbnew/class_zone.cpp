@@ -29,6 +29,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     m_NetCode = -1;                           // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                       // fill status : true when the zone is filled
+    m_FillMode = 0;                           // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     utility  = 0;                             // flags used in polygon calculations
     utility2 = 0;                             // flags used in polygon calculations
     m_Poly   = new CPolyLine();               // Outlines
@@ -44,9 +45,10 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 
 
 
-/** virtual function GetPosition
-* @return a wxPoint, position of the first point of the outline
-*/
+/**
+ * Function GetPosition (virtual)
+ * @return a wxPoint, position of the first point of the outline
+ */
 wxPoint& ZONE_CONTAINER::GetPosition()
 {
     static wxPoint pos;
@@ -216,7 +218,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 /**********************************************************/
 
-/** Function ReadDescr
+/**
+ * Function ReadDescr
  * @param aFile = opened file
  * @param aLineNum = pointer on a line number counter (can be NULL or missing)
  * @return 1 if ok or 0
@@ -427,16 +430,7 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 }
 
 
-/****************************************************************************************************/
-void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
-/****************************************************************************************************/
-
-/** Function Draw
- * @param panel = current Draw Panel
- * @param DC = current Device Context
- * @param offset = Draw offset (usually wxPoint(0,0))
- * @param draw_mode = draw mode: OR, XOR ..
- */
+void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
     if( DC == NULL )
         return;
@@ -448,10 +442,10 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
     int     color = brd->GetLayerColor(m_Layer);
 
     if( brd->IsLayerVisible( m_Layer ) == false &&
-        ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+        ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
         return;
 
-    GRSetDrawMode( DC, draw_mode );
+    GRSetDrawMode( DC, aDrawMode );
 
     if( DisplayOpt.ContrastModeDisplay )
     {
@@ -462,14 +456,14 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
         }
     }
 
-    if( draw_mode & GR_SURBRILL )
+    if( aDrawMode & GR_SURBRILL )
     {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+        if( aDrawMode & GR_AND )
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     SetAlpha( &color, 150 );
@@ -477,10 +471,12 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
     // draw the lines
     int i_start_contour = 0;
     std::vector<wxPoint> lines;
-    lines.reserve( (GetNumCorners()*2)+2);
+    lines.reserve( (GetNumCorners()*2)+2 );
+
     for( int ic = 0; ic < GetNumCorners(); ic++ )
     {
         seg_start = GetCornerPosition( ic ) + offset;
+
         if( m_Poly->corner[ic].end_contour == FALSE && ic < GetNumCorners() - 1 )
         {
             seg_end = GetCornerPosition( ic + 1 ) + offset;
@@ -493,11 +489,12 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
         lines.push_back( seg_start );
         lines.push_back( seg_end );
     }
-   GRLineArray(&panel->m_ClipBox, DC, lines, 0, color);
+   GRLineArray( &panel->m_ClipBox, DC, lines, 0, color );
 
     // draw hatches
     lines.clear();
     lines.reserve( (m_Poly->m_HatchLines.size() *2) +2 );
+
     for( unsigned ic = 0; ic < m_Poly->m_HatchLines.size(); ic++ )
     {
         seg_start.x =  m_Poly->m_HatchLines[ic].xi + offset.x;
@@ -507,7 +504,8 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode, con
         lines.push_back( seg_start );
         lines.push_back( seg_end );
     }
-    GRLineArray(&panel->m_ClipBox, DC, lines, 0, color );
+
+    GRLineArray( &panel->m_ClipBox, DC, lines, 0, color );
 }
 
 
@@ -545,7 +543,7 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     int color = brd->GetLayerColor(m_Layer);
 
-    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHT_LIGHT_FLAG ) != HIGHT_LIGHT_FLAG )
+    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
         return;
 
     GRSetDrawMode( DC, aDrawMode );
@@ -562,11 +560,11 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
     if( aDrawMode & GR_SURBRILL )
     {
         if( aDrawMode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     SetAlpha( &color, 150 );
@@ -637,18 +635,19 @@ void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
         {
             wxPoint start =  m_FillSegmList[ic].m_Start + offset;
             wxPoint end =  m_FillSegmList[ic].m_End + offset;
+
             if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
+                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                         m_ZoneMinThickness, color );
             else
-                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, m_ZoneMinThickness, color );
+                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                             m_ZoneMinThickness, color );
         }
     }
 }
 
 
-/****************************************/
-EDA_Rect ZONE_CONTAINER::GetBoundingBox()
-/****************************************/
+EDA_Rect ZONE_CONTAINER::GetBoundingBox() const
 {
     const int PRELOAD = 0x7FFFFFFF;     // Biggest integer (32 bits)
 
@@ -771,7 +770,7 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
  * Choose the nearest corner
  * "near" means CORNER_MIN_DIST_IN_PIXELS pixels
- * @return -1 if none, corner index in .corner <vector>
+ * @return -1 if none, corner index in .corner &ltvector&gt
  * @param refPos : A wxPoint to test
  */
 int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
@@ -806,7 +805,7 @@ int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
  * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
  * choose the nearest segment
  * "near" means EDGE_MIN_DIST_IN_PIXELS pixels
- * @return -1 if none,  or index of the starting corner in .corner <vector>
+ * @return -1 if none,  or index of the starting corner in .corner &ltvector&gt
  * @param refPos : A wxPoint to test
  */
 int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
@@ -900,6 +899,8 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
                 inside = true;
                 break;
             }
+        // Prepare test of next area which starts after the current indexend (if exists)
+        indexstart = indexend+1;
         }
     }
     return inside;
@@ -1077,7 +1078,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
  * Function Flip
  * Flip this object, i.e. change the board side for this object
  * (like Mirror() but changes layer)
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void ZONE_CONTAINER::Flip(const wxPoint& aCentre )
 {
@@ -1121,7 +1122,8 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 }
 
 
-/** Function copy
+/**
+ * Function copy
  * copy usefull data from the source.
  * flags and linked list pointers are NOT copied
  */
@@ -1151,7 +1153,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 /**
  * Function SetNetNameFromNetCode
  * Find the net name corresponding to the net code.
- * @param aPcb: the current board
  * @return bool - true if net found, else false
  */
 bool ZONE_CONTAINER::SetNetNameFromNetCode( void )

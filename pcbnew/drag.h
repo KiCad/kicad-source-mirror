@@ -45,7 +45,8 @@ void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
                                   wxPoint& point, int MasqueLayer, int net_code );
 
 
-/** function EraseDragList
+/**
+ * Function EraseDragList
  * clear the .m_Flags of all track segments managed by in g_DragSegmentList
  * and clear the list.
  * In order to avoid useless memory allocation, the memory is not freed

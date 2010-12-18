@@ -1,8 +1,8 @@
-EESchema Schematic File Version 2  date 16/05/2010 20:17:13
+EESchema Schematic File Version 2  date 18/11/2010 18:50:34
 LIBS:power
 LIBS:device
+LIBS:transistors
 LIBS:conn
-LIBS:brooktre
 LIBS:linear
 LIBS:regul
 LIBS:74xx
@@ -11,15 +11,31 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
 LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
 LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
 LIBS:video-cache
-EELAYER 20  0
+EELAYER 24  0
 EELAYER END
 $Descr A3 16535 11700
 Sheet 5 8
 Title "Video"
-Date "16 may 2010"
+Date "18 nov 2010"
 Rev "2.0B"
 Comp "Kicad EDA"
 Comment1 "Xilinxs"
@@ -557,7 +573,7 @@ U 1 1 33A7E0B2
 P 3750 1250
 F 0 "R48" V 3830 1250 50  0000 C CNN
 F 1 "10K" V 3750 1250 50  0000 C CNN
-F 10 "~" V 3750 1170 50  0001 C CNN "Champ7"
+F 4 "~" V 3750 1170 50  0001 C CNN "Champ7"
 	1    3750 1250
 	0    1    1    0   
 $EndComp
@@ -630,7 +646,7 @@ U 1 1 33A7DCE3
 P 2400 7300
 F 0 "R1" V 2480 7300 50  0000 C CNN
 F 1 "10" V 2400 7300 50  0000 C CNN
-F 10 "~" V 2400 7220 50  0001 C CNN "Champ7"
+F 4 "~" V 2400 7220 50  0001 C CNN "Champ7"
 	1    2400 7300
 	0    1    1    0   
 $EndComp

@@ -64,21 +64,20 @@ void CreateDummyCmp()
 
 
 SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
-    SCH_ITEM( aParent, TYPE_SCH_COMPONENT )
+    SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
-                              SCH_SHEET_PATH* sheet, int unit, int convert,
-                              const wxPoint& pos, bool setNewItemFlag ) :
-    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet, int unit,
+                              int convert, const wxPoint& pos, bool setNewItemFlag ) :
+    SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
 
-    m_Multi     = unit;
-    m_Convert   = convert;
+    m_unit      = unit;
+    m_convert   = convert;
     m_ChipName  = libComponent.GetName();
     m_TimeStamp = GetTimeStamp();
 
@@ -94,15 +93,15 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     {
         // Can no longer insert an empty name, since names are now keys.  The
         // field index is not used beyond the first MANDATORY_FIELDS
-        if( it->m_Name.IsEmpty() )
+        if( it->GetName().IsEmpty() )
             continue;
 
         // See if field by same name already exists.
-        SCH_FIELD* schField = FindField( it->m_Name );
+        SCH_FIELD* schField = FindField( it->GetName() );
 
         if( !schField )
         {
-            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->m_Name );
+            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->GetName() );
             schField = AddField( fld );
         }
 
@@ -118,7 +117,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
     if( msg.IsEmpty() )
         msg = wxT( "U" );
 
-    m_PrefixString = msg;
+    m_prefix = msg;
 
     // update the reference -- just the prefix for now.
     msg += wxT( "?" );
@@ -132,7 +131,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent,
 
 
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
-    SCH_ITEM( NULL, TYPE_SCH_COMPONENT )
+    SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     /* assignment of all fields, including field vector elements, and linked
      * list pointers */
@@ -155,11 +154,11 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
 void SCH_COMPONENT::Init( const wxPoint& pos )
 {
     m_Pos     = pos;
-    m_Multi   = 0;  // In multi unit chip - which unit to draw.
-    m_Convert = 0;  // De Morgan Handling
+    m_unit    = 0;  // In multi unit chip - which unit to draw.
+    m_convert = 0;  // De Morgan Handling
 
     // The rotation/mirror transformation matrix. pos normal
-    m_Transform = TRANSFORM();
+    m_transform = TRANSFORM();
 
     // construct only the mandatory fields, which are the first 4 only.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
@@ -177,17 +176,52 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
         AddField( field );
     }
 
-    m_PrefixString = wxString( _( "U" ) );
+    m_prefix = wxString( _( "U" ) );
 }
 
 
-/*****************************************************************************
-* Routine to draw the given part at given position, transformed/mirror as    *
-* specified, and in the given drawing mode. Only this one is visible...      *
-*****************************************************************************/
-void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                          const wxPoint& offset, int DrawMode, int Color,
-                          bool DrawPinText )
+void SCH_COMPONENT::SetLibName( const wxString& aName )
+{
+    if( m_ChipName != aName )
+    {
+        m_ChipName = aName;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::SetUnit( int aUnit )
+{
+    if( m_unit != aUnit )
+    {
+        m_unit = aUnit;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::SetConvert( int aConvert )
+{
+    if( m_convert != aConvert )
+    {
+        m_convert = aConvert;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
+{
+    if( m_transform != aTransform )
+    {
+        m_transform = aTransform;
+        SetModified();
+    }
+}
+
+
+void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+                          int DrawMode, int Color, bool DrawPinText )
 {
     bool           dummy = FALSE;
 
@@ -197,14 +231,15 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     {
         /* Create a dummy component if the actual component can not be found. */
         dummy = TRUE;
+
         if( DummyCmp == NULL )
             CreateDummyCmp();
+
         Entry = DummyCmp;
     }
 
-    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_Multi,
-                 dummy ? 0 : m_Convert, DrawMode, Color, m_Transform,
-                 DrawPinText, false );
+    Entry->Draw( panel, DC, m_Pos + offset, dummy ? 0 : m_unit, dummy ? 0 : m_convert,
+                 DrawMode, Color, m_transform, DrawPinText, false );
 
     SCH_FIELD* field = GetField( REFERENCE );
 
@@ -237,18 +272,18 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Draw the component boundary box */
     {
         EDA_Rect BoundaryBox;
-        BoundaryBox = GetBoundaryBox();
+        BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
-            BoundaryBox = GetField( REFERENCE )->GetBoundaryBox();
+            BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
             GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
-            BoundaryBox = GetField( VALUE )->GetBoundaryBox();
+            BoundaryBox = GetField( VALUE )->GetBoundingBox();
             GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
         }
 #endif
@@ -257,15 +292,6 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/**
- * Function AddHierarchicalReference
- * adds a full hierarchical reference (path + local reference)
- * @param aPath = hierarchical path (/<sheet timestamp>/component timestamp>
- * like /05678E50/A23EF560)
- * @param aRef = local reference like C45, R56
- * @param aMulti = part selection, used in multi part per package (0 or 1 for
- * non multi)
- */
 void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
                                               const wxString& aRef,
                                               int             aMulti )
@@ -350,7 +376,7 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
         SetRef( sheet, GetField( REFERENCE )->m_Text );
         return GetField( REFERENCE )->m_Text;
     }
-    return m_PrefixString;
+    return m_prefix;
 }
 
 
@@ -369,6 +395,7 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
     {
         tokenizer.SetString( m_PathsAndReferences[ii], separators );
         h_path = tokenizer.GetNextToken();
+
         if( h_path.Cmp( path ) == 0 )
         {
             // just update the reference text, not the timestamp.
@@ -383,7 +410,7 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
     }
 
     if( notInArray )
-        AddHierarchicalReference( path, ref, m_Multi );
+        AddHierarchicalReference( path, ref, m_unit );
 
     SCH_FIELD* rf = GetField( REFERENCE );
 
@@ -399,21 +426,17 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 
     rf->m_Text = ref;  // for drawing.
 
-    // Reinit the m_PrefixString member if needed
+    // Reinit the m_prefix member if needed
     wxString prefix = ref;
+
     while( prefix.Last() == '?' or isdigit( prefix.Last() ) )
         prefix.RemoveLast();
 
-    if( m_PrefixString != prefix )
-        m_PrefixString = prefix;
+    if( m_prefix != prefix )
+        m_prefix = prefix;
 }
 
 
-/** function SetTimeStamp
- * Change the old time stamp to the new time stamp.
- * the time stamp is also modified in paths
- * @param aNewTimeStamp = new time stamp
- */
 void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;
@@ -421,18 +444,15 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
     string_timestamp.Printf( wxT( "%8.8X" ), aNewTimeStamp );
     string_oldtimestamp.Printf( wxT( "%8.8X" ), m_TimeStamp );
     m_TimeStamp = aNewTimeStamp;
+
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
         m_PathsAndReferences[ii].Replace( string_oldtimestamp.GetData(),
-                                         string_timestamp.GetData() );
+                                          string_timestamp.GetData() );
     }
 }
 
 
-/***********************************************************/
-
-//returns the unit selection, for the given sheet path.
-/***********************************************************/
 int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
 {
     wxString          path = GetPath( aSheet );
@@ -455,18 +475,13 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
         }
     }
 
-    // if it was not found in m_Paths array, then use m_Multi.
+    // if it was not found in m_Paths array, then use m_unit.
     // this will happen if we load a version 1 schematic file.
-    return m_Multi;
+    return m_unit;
 }
 
 
-/****************************************************************************/
-
-//Set the unit selection, for the given sheet path.
-/****************************************************************************/
-void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet,
-                                      int             aUnitSelection )
+void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection )
 {
     wxString          path = GetPath( aSheet );
 
@@ -496,7 +511,7 @@ void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet,
     }
 
     if( notInArray )
-        AddHierarchicalReference( path, m_PrefixString, aUnitSelection );
+        AddHierarchicalReference( path, m_prefix, aUnitSelection );
 }
 
 
@@ -544,77 +559,20 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
     if( Entry == NULL )
         return NULL;
 
-    return Entry->GetPin( number, m_Multi, m_Convert );
+    return Entry->GetPin( number, m_unit, m_convert );
 }
 
 
-/**
- * Function GetBoundaryBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for graphic items and pins.
- * this include only fields defined in library
- * use GetBoundingBox() to include fields in schematic
- */
-EDA_Rect SCH_COMPONENT::GetBoundaryBox() const
-{
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-    EDA_Rect       BoundaryBox;
-    int            x0, xm, y0, ym;
-
-    /* Get the basic Boundary box */
-    if( Entry )
-    {
-        BoundaryBox = Entry->GetBoundaryBox( m_Multi, m_Convert );
-        x0 = BoundaryBox.GetX();
-        xm = BoundaryBox.GetRight();
-
-        // We must reverse Y values, because matrix orientation
-        // suppose Y axis normal for the library items coordinates,
-        // m_Transform reverse Y values, but BoundaryBox is already reversed!
-        y0 = -BoundaryBox.GetY();
-        ym = -BoundaryBox.GetBottom();
-    }
-    else    /* if lib Entry not found, give a reasonable size */
-    {
-        x0 = y0 = -50;
-        xm = ym = 50;
-    }
-
-    /* Compute the real Boundary box (rotated, mirrored ...)*/
-    int x1 = m_Transform.x1 * x0 + m_Transform.y1 * y0;
-    int y1 = m_Transform.x2 * x0 + m_Transform.y2 * y0;
-    int x2 = m_Transform.x1 * xm + m_Transform.y1 * ym;
-    int y2 = m_Transform.x2 * xm + m_Transform.y2 * ym;
-
-    // H and W must be > 0:
-    if( x2 < x1 )
-        EXCHG( x2, x1 );
-    if( y2 < y1 )
-        EXCHG( y2, y1 );
-
-    BoundaryBox.SetX( x1 );
-    BoundaryBox.SetY( y1 );
-    BoundaryBox.SetWidth( x2 - x1 );
-    BoundaryBox.SetHeight( y2 - y1 );
-
-    BoundaryBox.Offset( m_Pos );
-    return BoundaryBox;
-}
-
-
-/* Used in undo / redo command:
- *  swap data between this and copyitem
- */
 void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 {
     EXCHG( m_ChipName, copyitem->m_ChipName );
     EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_Multi, copyitem->m_Multi );
-    EXCHG( m_Convert, copyitem->m_Convert );
+    EXCHG( m_unit, copyitem->m_unit );
+    EXCHG( m_convert, copyitem->m_convert );
 
-    TRANSFORM tmp = m_Transform;
-    m_Transform = copyitem->m_Transform;
-    copyitem->m_Transform = tmp;
+    TRANSFORM tmp = m_transform;
+    m_transform = copyitem->m_transform;
+    copyitem->m_transform = tmp;
 
     m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
 
@@ -634,7 +592,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 }
 
 
-void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy
@@ -657,14 +615,9 @@ void SCH_COMPONENT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/**
- * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
- * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
- *                else remove annotation relative to this sheetpath
- */
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 {
-    wxString       defRef    = m_PrefixString;
+    wxString       defRef    = m_prefix;
     bool           KeepMulti = false;
     LIB_COMPONENT* Entry;
     wxString       separators( wxT( " " ) );
@@ -687,17 +640,20 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
     {
         wxString NewHref;
         wxString path;
+
         if( aSheet )
             path = GetPath( aSheet );
+
         for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
         {
             // Break hierarchical reference in path, ref and multi selection:
-            reference_fields = wxStringTokenize( m_PathsAndReferences[ii],
-                                                 separators );
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
+
             if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
             {
                 if( KeepMulti )  // Get and keep part selection
                     multi = reference_fields[2];
+
                 NewHref = reference_fields[0];
                 NewHref << wxT( " " ) << defRef << wxT( " " ) << multi;
                 m_PathsAndReferences[ii] = NewHref;
@@ -709,9 +665,8 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
         // Empty strings, but does not free memory because a new annotation
         // will reuse it
         m_PathsAndReferences.Empty();
-        m_Multi = 1;
+        m_unit = 1;
     }
-
 
     // These 2 changes do not work in complex hierarchy.
     // When a clear annotation is made, the calling function must call a
@@ -721,13 +676,6 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 }
 
 
-/******************************************************************/
-
-/* Compute the new matrix transform for a schematic component
- *  in order to have the requested transform (type_rotate = rot, mirror..)
- *  which is applied to the initial transform.
- */
-/*****************************************************************/
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();
@@ -737,9 +685,9 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
     {
     case CMP_ORIENT_0:
     case CMP_NORMAL:            /* Position Initiale */
-        m_Transform.x1 = 1;
-        m_Transform.y2 = -1;
-        m_Transform.x2 = m_Transform.y1 = 0;
+        m_transform.x1 = 1;
+        m_transform.y2 = -1;
+        m_transform.x2 = m_transform.y1 = 0;
         break;
 
     case CMP_ROTATE_CLOCKWISE:            /* Rotate + */
@@ -837,37 +785,24 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         /* The new matrix transform is the old matrix transform modified by the
          *  requested transformation, which is the TempMat transform (rot,
          *  mirror ..) in order to have (in term of matrix transform):
-         *     transform coord = new_m_Transform * coord
-         *  where transform coord is the coord modified by new_m_Transform from
+         *     transform coord = new_m_transform * coord
+         *  where transform coord is the coord modified by new_m_transform from
          *  the initial value coord.
-         *  new_m_Transform is computed (from old_m_Transform and TempMat) to
+         *  new_m_transform is computed (from old_m_transform and TempMat) to
          *  have:
-         *     transform coord = old_m_Transform * coord * TempMat
+         *     transform coord = old_m_transform * coord * TempMat
          */
         TRANSFORM newTransform;
 
-        newTransform.x1 = m_Transform.x1 * temp.x1 + m_Transform.x2 * temp.y1;
-        newTransform.y1 = m_Transform.y1 * temp.x1 + m_Transform.y2 * temp.y1;
-        newTransform.x2 = m_Transform.x1 * temp.x2 + m_Transform.x2 * temp.y2;
-        newTransform.y2 = m_Transform.y1 * temp.x2 + m_Transform.y2 * temp.y2;
-        m_Transform = newTransform;
+        newTransform.x1 = m_transform.x1 * temp.x1 + m_transform.x2 * temp.y1;
+        newTransform.y1 = m_transform.y1 * temp.x1 + m_transform.y2 * temp.y1;
+        newTransform.x2 = m_transform.x1 * temp.x2 + m_transform.x2 * temp.y2;
+        newTransform.y2 = m_transform.y1 * temp.x2 + m_transform.y2 * temp.y2;
+        m_transform = newTransform;
     }
 }
 
 
-/** function GetOrientation()
- * Used to display component orientation (in dialog editor or info)
- * @return the orientation and mirror
- * Note: Because there are different ways to have a given orientation/mirror,
- * the orientation/mirror is not necessary what the used does
- * (example : a mirrorX then a mirrorY give no mirror but rotate the component).
- * So this function find a rotation and a mirror value
- * ( CMP_MIRROR_X because this is the first mirror option tested)
- *  but can differs from the orientation made by an user
- * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because they
- * are equivalent)
- *
- */
 int SCH_COMPONENT::GetOrientation()
 {
     int type_rotate = CMP_ORIENT_0;
@@ -888,45 +823,33 @@ int SCH_COMPONENT::GetOrientation()
     };
 
     // Try to find the current transform option:
-    transform = m_Transform;
+    transform = m_transform;
 
     for( ii = 0; ii < ROTATE_VALUES_COUNT; ii++ )
     {
         type_rotate = rotate_value[ii];
         SetOrientation( type_rotate );
 
-        if( transform == m_Transform )
+        if( transform == m_transform )
             return type_rotate;
     }
 
     // Error: orientation not found in list (should not happen)
     wxMessageBox( wxT( "Component orientation matrix internal error" ) );
-    m_Transform = transform;
+    m_transform = transform;
 
     return CMP_NORMAL;
 }
 
 
-/**
- * Returns the coordinated point, depending on the orientation of the
- * component (rotation, mirror).
- * The coordinates are always relative to the anchor position of the component.
- */
-wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& coord )
+wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& aPoint )
 {
-    return m_Transform.TransformCoordinate( coord );
+    return m_transform.TransformCoordinate( aPoint );
 }
 
 
 #if defined(DEBUG)
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
@@ -951,10 +874,8 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
         }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() )
-                                 << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() ) << ">\n";
 }
-
 
 #endif
 
@@ -978,7 +899,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     else
     {
         if( GetField( REFERENCE )->m_Text.IsEmpty() )
-            strncpy( Name1, CONV_TO_UTF8( m_PrefixString ), sizeof( Name1 ) );
+            strncpy( Name1, CONV_TO_UTF8( m_prefix ), sizeof( Name1 ) );
         else
             strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
     }
@@ -1018,8 +939,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         return false;
 
     /* Generate unit number, convert and time stamp*/
-    if( fprintf( f, "U %d %d %8.8lX\n", m_Multi, m_Convert,
-                 m_TimeStamp ) == EOF )
+    if( fprintf( f, "U %d %d %8.8lX\n", m_unit, m_convert, m_TimeStamp ) == EOF )
         return false;
 
     /* Save the position */
@@ -1043,12 +963,12 @@ bool SCH_COMPONENT::Save( FILE* f ) const
              * Ref is the conventional component reference for this 'path'
              * Part is the conventional component part selection for this 'path'
              */
-            reference_fields = wxStringTokenize( m_PathsAndReferences[ii],
-                                                 delimiters );
+            reference_fields = wxStringTokenize( m_PathsAndReferences[ii], delimiters );
+
             if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
-                        CONV_TO_UTF8( reference_fields[0] ),
-                        CONV_TO_UTF8( reference_fields[1] ),
-                        CONV_TO_UTF8( reference_fields[2] ) ) == EOF )
+                         CONV_TO_UTF8( reference_fields[0] ),
+                         CONV_TO_UTF8( reference_fields[1] ),
+                         CONV_TO_UTF8( reference_fields[2] ) ) == EOF )
                 return false;
         }
     }
@@ -1065,6 +985,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     for( unsigned i = 0;  i<MANDATORY_FIELDS;  ++i )
     {
         SCH_FIELD* fld = GetField( i );
+
         if( !fld->m_Text.IsEmpty() )
         {
             if( !fld->Save( f ) )
@@ -1080,16 +1001,17 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     for( unsigned i = MANDATORY_FIELDS;  i<m_Fields.size();  ++i )
     {
         SCH_FIELD* fld = GetField( i );
+
         if( !fld->Save( f ) )
             return false;
     }
 
     /* Unit number, position, box ( old standard ) */
-    if( fprintf( f, "\t%-4d %-4d %-4d\n", m_Multi, m_Pos.x, m_Pos.y ) == EOF )
+    if( fprintf( f, "\t%-4d %-4d %-4d\n", m_unit, m_Pos.x, m_Pos.y ) == EOF )
         return false;
 
     if( fprintf( f, "\t%-4d %-4d %-4d %-4d\n",
-                 m_Transform.x1, m_Transform.y1, m_Transform.x2, m_Transform.y2 ) == EOF )
+                 m_transform.x1, m_transform.y1, m_transform.x2, m_transform.y2 ) == EOF )
         return false;
 
     if( fprintf( f, "$EndComp\n" ) == EOF )
@@ -1108,7 +1030,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     char*          ptcar;
     wxString       fieldName;
 
-    m_Convert = 1;
+    m_convert = 1;
 
     if( ((char*)aLine)[0] == '$' )
     {
@@ -1133,6 +1055,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 Name1[ii] = ' ';
 
         m_ChipName = CONV_FROM_UTF8( Name1 );
+
         if( !newfmt )
             GetField( VALUE )->m_Text = CONV_FROM_UTF8( Name1 );
     }
@@ -1147,6 +1070,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( strcmp( Name2, NULL_STRING ) != 0 )
     {
         bool isDigit = false;
+
         for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
         {
             if( Name2[ii] == '~' )
@@ -1166,19 +1090,20 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         Name1[ii] = 0; //just in case
         int  jj;
+
         for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
             ;
 
         if( jj == ii )
         {
             // blank string.
-            m_PrefixString = wxT( "U" );
+            m_prefix = wxT( "U" );
         }
         else
         {
-            m_PrefixString = CONV_FROM_UTF8( &Name1[jj] );
+            m_prefix = CONV_FROM_UTF8( &Name1[jj] );
 
-            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_PrefixString));
+            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_prefix));
         }
 
         if( !newfmt )
@@ -1204,7 +1129,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( ((char*)aLine)[0] == 'U' )
         {
-            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_Multi, &m_Convert, &m_TimeStamp );
+            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_unit, &m_convert, &m_TimeStamp );
         }
         else if( ((char*)aLine)[0] == 'P' )
         {
@@ -1243,7 +1168,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             // copy the multi, if exists
             ii = ReadDelimitedText( Name1, ptcar, 255 );
             if( Name1[0] == 0 )  // Nothing read, put a default value
-                sprintf( Name1, "%d", m_Multi );
+                sprintf( Name1, "%d", m_unit );
             int multi = atoi( Name1 );
             if( multi < 0 || multi > 25 )
                 multi = 1;
@@ -1377,7 +1302,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             break;
     }
 
-    if( sscanf( ((char*)aLine), "%d %d %d", &m_Multi, &m_Pos.x, &m_Pos.y ) != 3 )
+    if( sscanf( ((char*)aLine), "%d %d %d", &m_unit, &m_Pos.x, &m_Pos.y ) != 3 )
     {
         aErrorMsg.Printf( wxT( "Component unit & pos error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1386,10 +1311,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( !aLine.ReadLine() ||
         sscanf( ((char*)aLine), "%d %d %d %d",
-                &m_Transform.x1,
-                &m_Transform.y1,
-                &m_Transform.x2,
-                &m_Transform.y2 ) != 4 )
+                &m_transform.x1,
+                &m_transform.y1,
+                &m_transform.x2,
+                &m_transform.y2 ) != 4 )
     {
         aErrorMsg.Printf( wxT( "Component orient error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1413,32 +1338,62 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function GetBoundingBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for visible components of this
- * object, and the units should be in the pcb or schematic coordinate system.
- * It is OK to overestimate the size by a few counts.
- */
-EDA_Rect SCH_COMPONENT::GetBoundingBox()
+EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 {
-    const int PADDING = 40;
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    EDA_Rect       bBox;
+    int            x0, xm, y0, ym;
 
-    // This gives a reasonable approximation (but some things are missing so...)
-    EDA_Rect  bbox = GetBoundaryBox();
+    if( Entry == NULL )
+        return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    // Include BoundingBoxes of fields
+    /* Get the basic Boundary box */
+    bBox = Entry->GetBoundingBox( m_unit, m_convert );
+    x0 = bBox.GetX();
+    xm = bBox.GetRight();
+
+    // We must reverse Y values, because matrix orientation
+    // suppose Y axis normal for the library items coordinates,
+    // m_transform reverse Y values, but bBox is already reversed!
+    y0 = -bBox.GetY();
+    ym = -bBox.GetBottom();
+
+    /* Compute the real Boundary box (rotated, mirrored ...)*/
+    int x1 = m_transform.x1 * x0 + m_transform.y1 * y0;
+    int y1 = m_transform.x2 * x0 + m_transform.y2 * y0;
+    int x2 = m_transform.x1 * xm + m_transform.y1 * ym;
+    int y2 = m_transform.x2 * xm + m_transform.y2 * ym;
+
+    // H and W must be > 0:
+    if( x2 < x1 )
+        EXCHG( x2, x1 );
+    if( y2 < y1 )
+        EXCHG( y2, y1 );
+
+    bBox.SetX( x1 );
+    bBox.SetY( y1 );
+    bBox.SetWidth( x2 - x1 );
+    bBox.SetHeight( y2 - y1 );
+
+    bBox.Offset( m_Pos );
+    return bBox;
+}
+
+
+EDA_Rect SCH_COMPONENT::GetBoundingBox() const
+{
+    EDA_Rect bBox = GetBodyBoundingBox();
+
+    // Include BoundingBoxes of fields if they are visible and not empty.
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        if( !GetField( ii )->IsVisible() )
+        if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
             continue;
-        bbox.Merge( GetField( ii )->GetBoundaryBox() );
+
+        bBox.Merge( GetField( ii )->GetBoundingBox() );
     }
 
-    // ... add padding
-    bbox.Inflate( PADDING );
-
-    return bbox;
+    return bBox;
 }
 
 
@@ -1456,20 +1411,22 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->ClearMsgPanel();
 
-    frame->AppendMsgPanel( _( "Reference" ),
-                           GetRef( ( (WinEDA_SchematicFrame*) frame )->GetSheet() ),
+    frame->AppendMsgPanel( _( "Reference" ), GetRef( ( (SCH_EDIT_FRAME*) frame )->GetSheet() ),
                            DARKCYAN );
 
     if( root_component->IsPower() )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );
+
     frame->AppendMsgPanel( msg, GetField( VALUE )->m_Text, DARKCYAN );
 
     // Display component reference in library and library
     frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
+
     if( alias->GetName() != root_component->GetName() )
         frame->AppendMsgPanel( _( "Alias of" ), root_component->GetName(), BROWN );
+
     frame->AppendMsgPanel( _( "Library" ), alias->GetLibraryName(), BROWN );
 
     // Display description of the component, and keywords found in lib
@@ -1478,10 +1435,6 @@ void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
 }
 
 
-/** virtual function Mirror_Y
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 {
     int dx = m_Pos.x;
@@ -1501,10 +1454,6 @@ void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 }
 
 
-/** virtual function Mirror_X
- * mirror item relative to an X axis
- * @param aXaxis_position = the x axis position
- */
 void SCH_COMPONENT::Mirror_X( int aXaxis_position )
 {
     int dy = m_Pos.y;
@@ -1543,7 +1492,8 @@ void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
+                             wxPoint* aFindLocation )
 {
     // Search reference.
     // reference is a special field because a part identifier is added
@@ -1581,22 +1531,25 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxP
     if( Entry )
     {
         LIB_PIN_LIST pinList;
-        Entry->GetPins( pinList, m_Multi, m_Convert );
+        Entry->GetPins( pinList, m_unit, m_convert );
+
         // Search for a match in pinList
         for( unsigned ii = 0; ii < pinList.size(); ii ++ )
         {
             LIB_PIN* pin = pinList[ii];
             wxString pinNum;
             pin->ReturnPinStringNum( pinNum );
-            if( SCH_ITEM::Matches(pin->m_PinName, aSearchData ) ||
-                SCH_ITEM::Matches(pinNum, aSearchData ) )
+
+            if( SCH_ITEM::Matches( pin->GetName(), aSearchData ) ||
+                SCH_ITEM::Matches( pinNum, aSearchData ) )
             {
                 if( aFindLocation )
                 {
-                    wxPoint pinpos = pin->m_Pos;
-                    pinpos = m_Transform.TransformCoordinate( pinpos );
+                    wxPoint pinpos = pin->GetPosition();
+                    pinpos = m_transform.TransformCoordinate( pinpos );
                     *aFindLocation = pinpos + m_Pos;
                 }
+
                 return true;
             }
 
@@ -1616,12 +1569,12 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
     for( LIB_PIN* Pin = Entry->GetNextPin(); Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
     {
-        wxASSERT( Pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+        wxASSERT( Pin->Type() == LIB_PIN_T );
 
-        if( Pin->GetUnit() && m_Multi && ( m_Multi != Pin->GetUnit() ) )
+        if( Pin->GetUnit() && m_unit && ( m_unit != Pin->GetUnit() ) )
             continue;
 
-        if( Pin->GetConvert() && m_Convert && ( m_Convert != Pin->GetConvert() ) )
+        if( Pin->GetConvert() && m_convert && ( m_convert != Pin->GetConvert() ) )
             continue;
 
         DANGLING_END_ITEM item( PIN_END, Pin );
@@ -1633,10 +1586,10 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 wxPoint SCH_COMPONENT::GetPinPhysicalPosition( LIB_PIN* Pin )
 {
-    wxCHECK_MSG( Pin != NULL && Pin->Type() == COMPONENT_PIN_DRAW_TYPE, wxPoint( 0, 0 ),
+    wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
-    return m_Transform.TransformCoordinate( Pin->m_Pos ) + m_Pos;
+    return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
 }
 
 
@@ -1664,18 +1617,95 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
                  wxT( "Cannot add connection points to list.  Cannot find component <" ) +
                  m_ChipName + wxT( "> in any of the loaded libraries." ) );
 
-    for( pin = component->GetNextPin( pin ); pin != NULL; pin = component->GetNextPin( pin ) )
+    for( pin = component->GetNextPin(); pin != NULL; pin = component->GetNextPin( pin ) )
     {
-        wxCHECK_RET( pin->Type() == COMPONENT_PIN_DRAW_TYPE,
+        wxCHECK_RET( pin->Type() == LIB_PIN_T,
                      wxT( "GetNextPin() did not return a pin object.  Bad programmer!" ) );
 
         // Skip items not used for this part.
-        if( m_Multi && pin->GetUnit() && ( pin->GetUnit() != m_Multi ) )
+        if( m_unit && pin->GetUnit() && ( pin->GetUnit() != m_unit ) )
             continue;
-        if( m_Convert && pin->GetConvert() && ( pin->GetConvert() != m_Convert ) )
+
+        if( m_convert && pin->GetConvert() && ( pin->GetConvert() != m_convert ) )
             continue;
 
         // Calculate the pin position relative to the component position and orientation.
-        aPoints.push_back( m_Transform.TransformCoordinate( pin->m_Pos ) + m_Pos );
+        aPoints.push_back( m_transform.TransformCoordinate( pin->GetPosition() ) + m_Pos );
     }
+}
+
+
+LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
+{
+    LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+
+    if( component == NULL )
+        return NULL;
+
+    // Calculate the position relative to the component.
+    wxPoint libPosition = aPosition - m_Pos;
+
+    return component->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
+}
+
+
+bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    EDA_Rect bBox;
+
+    if( aFilter & FIELD_T )
+    {
+        // Test the bounding boxes of fields if they are visible and not empty.
+        for( int ii = 0; ii < GetFieldCount(); ii++ )
+        {
+            if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
+                continue;
+
+            bBox = GetField( ii )->GetBoundingBox();
+            bBox.Inflate( aAccuracy );
+
+            if( bBox.Inside( aPoint ) )
+                return true;
+        }
+    }
+
+    if( aFilter & COMPONENT_T )
+    {
+        bBox = GetBodyBoundingBox();
+        bBox.Inflate( aAccuracy );
+
+        if( bBox.Inside( aPoint ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_Rect rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Inside( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
+bool SCH_COMPONENT::DoIsConnected( const wxPoint& aPosition ) const
+{
+    vector< wxPoint > pts;
+
+    GetConnectionPoints( pts );
+
+    for( size_t i = 0;  i < pts.size();  i++ )
+    {
+        if( pts[i] == aPosition )
+            return true;
+    }
+
+    return false;
 }

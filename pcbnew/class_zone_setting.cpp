@@ -24,7 +24,7 @@
 
 ZONE_SETTING::ZONE_SETTING( void )
 {
-    m_FillMode = 1;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
+    m_FillMode = 0;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
     m_ZoneClearance      = 200;                                     // Clearance value
     m_ZoneMinThickness   = 100;                                     // Min thickness value in filled areas
     m_NetcodeSelection   = 0;                                       // Net code selection for the current zone
@@ -40,7 +40,8 @@ ZONE_SETTING::ZONE_SETTING( void )
 }
 
 
-/** function ImportSetting
+/**
+ * Function ImportSetting
  * copy settings from a given zone
  * @param aSource: the given zone
  */
@@ -59,7 +60,8 @@ void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 }
 
 
-/** function ExportSetting
+/**
+ * Function ExportSetting
  * copy settings to a given zone
  * @param aTarget: the given zone
  * @param aFullExport: if false: some parameters are NOT exported

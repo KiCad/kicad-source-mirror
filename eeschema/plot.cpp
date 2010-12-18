@@ -46,14 +46,15 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     LIB_COMPONENT* Entry;
     TRANSFORM temp = TRANSFORM();
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+    Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
     if( Entry == NULL )
         return;;
 
-    temp = DrawLibItem->m_Transform;
+    temp = DrawLibItem->GetTransform();
 
-    Entry->Plot( plotter, DrawLibItem->m_Multi, DrawLibItem->m_Convert, DrawLibItem->m_Pos, temp );
+    Entry->Plot( plotter, DrawLibItem->GetUnit(), DrawLibItem->GetConvert(),
+                 DrawLibItem->m_Pos, temp );
     bool isMulti = Entry->GetPartCount() > 1;
 
     for( int fieldId = 0; fieldId < DrawLibItem->GetFieldCount(); fieldId++ )
@@ -89,7 +90,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     int orient = field->m_Orient;
-    if( DrawLibItem->m_Transform.y1 )  // Rotate component 90 deg.
+    if( DrawLibItem->GetTransform().y1 )  // Rotate component 90 deg.
     {
         if( orient == TEXT_ORIENT_HORIZ )
             orient = TEXT_ORIENT_VERT;
@@ -108,7 +109,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_Rect BoundaryBox = field->GetBoundaryBox();
+    EDA_Rect BoundaryBox = field->GetBoundingBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint  textpos = BoundaryBox.Centre();
@@ -127,7 +128,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
     {
         /* Adding A, B ... to the reference */
         wxString Text;
-        Text = field->m_Text + LIB_COMPONENT::ReturnSubReference( DrawLibItem->m_Multi );
+        Text = field->m_Text + LIB_COMPONENT::ReturnSubReference( DrawLibItem->GetUnit() );
         plotter->text( textpos, color, Text,
                        orient,
                        field->m_Size, hjustify, vjustify,
@@ -246,11 +247,11 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
 
     switch( aSchText->Type() )
     {
-    case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_SHEET_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_LABEL_T:
+    case SCH_TEXT_T:
         break;
 
     default:
@@ -258,7 +259,7 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
     }
 
     EDA_Colors color = UNSPECIFIED_COLOR;
-    color = ReturnLayerColor( aSchText->m_Layer );
+    color = ReturnLayerColor( aSchText->GetLayer() );
     wxPoint    textpos   = aSchText->m_Pos + aSchText->GetSchematicTextOffset();
     int        thickness = aSchText->GetPenSize();
 
@@ -387,9 +388,9 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
         plotter->set_current_line_width( aDrawlist->GetPenSize() );
         switch( aDrawlist->Type() )
         {
-        case DRAW_BUSENTRY_STRUCT_TYPE:
-        case DRAW_SEGMENT_STRUCT_TYPE:
-            if( aDrawlist->Type() == DRAW_BUSENTRY_STRUCT_TYPE )
+        case SCH_BUS_ENTRY_T:
+        case SCH_LINE_T:
+            if( aDrawlist->Type() == SCH_BUS_ENTRY_T )
             {
             #undef STRUCT
             #define STRUCT ( (SCH_BUS_ENTRY*) aDrawlist )
@@ -417,39 +418,39 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
 
             break;
 
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
             #undef STRUCT
             #define STRUCT ( (SCH_JUNCTION*) aDrawlist )
             plotter->set_color( ReturnLayerColor( STRUCT->GetLayer() ) );
             plotter->circle( STRUCT->m_Pos, STRUCT->m_Size.x, FILLED_SHAPE );
             break;
 
-        case TYPE_SCH_TEXT:
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
             PlotTextStruct( plotter, (SCH_TEXT*) aDrawlist );
             break;
 
-        case TYPE_SCH_COMPONENT:
+        case SCH_COMPONENT_T:
             DrawLibItem = (SCH_COMPONENT*) aDrawlist;
             PlotLibPart( plotter, DrawLibItem );
             break;
 
-        case DRAW_POLYLINE_STRUCT_TYPE:
+        case SCH_POLYLINE_T:
             break;
 
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_LABEL_T:
             break;
 
-        case TYPE_SCH_MARKER:
+        case SCH_MARKER_T:
             break;
 
-        case DRAW_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_T:
             PlotSheetStruct( plotter, (SCH_SHEET*) aDrawlist );
             break;
 
-        case DRAW_NOCONNECT_STRUCT_TYPE:
+        case SCH_NO_CONNECT_T:
             plotter->set_color( ReturnLayerColor( LAYER_NOCONNECT ) );
             PlotNoConnectStruct( plotter, (SCH_NO_CONNECT*) aDrawlist );
             break;

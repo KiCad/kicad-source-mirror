@@ -38,17 +38,16 @@ bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
     for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL;
          screen = ScreenList.GetNext() )
     {
-        for( SCH_ITEM* SchItem = screen->EEDrawList; SchItem;
-             SchItem = SchItem->Next() )
+        for( SCH_ITEM* SchItem = screen->GetDrawItems(); SchItem; SchItem = SchItem->Next() )
         {
-            if( SchItem->Type() != TYPE_SCH_COMPONENT )
+            if( SchItem->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) SchItem;
             // If not already saved in the new cache, put it:
-            if( libCache->FindEntry( component->m_ChipName) == NULL )
+            if( libCache->FindEntry( component->GetLibName()) == NULL )
             {
-                Entry = CMP_LIBRARY::FindLibraryComponent( component->m_ChipName );
+                Entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
 
                 if( Entry )    // if NULL : component not found, cannot be stored
                     libCache->AddComponent( Entry );

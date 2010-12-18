@@ -87,16 +87,6 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_TEXT::HitTest( const wxPoint& aPosRef )
-{
-    return TextHitTest( aPosRef );
-}
-
-
 SCH_TEXT* SCH_TEXT::GenCopy()
 {
     SCH_TEXT* newitem;
@@ -104,19 +94,19 @@ SCH_TEXT* SCH_TEXT::GenCopy()
     switch( Type() )
     {
     default:
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         newitem = new SCH_TEXT( m_Pos, m_Text );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         newitem = new SCH_GLOBALLABEL( m_Pos, m_Text );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         newitem = new SCH_HIERLABEL( m_Pos, m_Text );
         break;
 
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         newitem = new SCH_LABEL( m_Pos, m_Text );
         break;
     }
@@ -125,7 +115,7 @@ SCH_TEXT* SCH_TEXT::GenCopy()
     newitem->m_Shape      = m_Shape;
     newitem->m_Orient     = m_Orient;
     newitem->m_Size       = m_Size;
-    newitem->m_Width      = m_Width;
+    newitem->m_Thickness      = m_Thickness;
     newitem->m_HJustify   = m_HJustify;
     newitem->m_VJustify   = m_VJustify;
     newitem->m_IsDangling = m_IsDangling;
@@ -137,7 +127,8 @@ SCH_TEXT* SCH_TEXT::GenCopy()
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -187,7 +178,8 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -232,7 +224,8 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
 }
 
 
-/** virtual function Mirror_X
+/**
+ * Function Mirror_X (virtual)
  * mirror item relative to an X axis
  * @param aXaxis_position = the x axis position
  */
@@ -310,7 +303,8 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
 }
 
 
-/** function SetTextOrientAndJustifyParmeters (virtual)
+/**
+ * Function SetTextOrientAndJustifyParmeters (virtual)
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -361,7 +355,7 @@ void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
     EXCHG( m_Text, copyitem->m_Text );
     EXCHG( m_Pos, copyitem->m_Pos );
     EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_Width, copyitem->m_Width );
+    EXCHG( m_Thickness, copyitem->m_Thickness );
     EXCHG( m_Shape, copyitem->m_Shape );
     EXCHG( m_Orient, copyitem->m_Orient );
 
@@ -373,7 +367,7 @@ void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
 }
 
 
-void SCH_TEXT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
+void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
     if( g_ItemToUndoCopy && ( (m_Flags & IS_NEW) == 0 ) )
@@ -394,12 +388,13 @@ void SCH_TEXT::Place( WinEDA_SchematicFrame* frame, wxDC* DC )
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_TEXT::GetPenSize()
+int SCH_TEXT::GetPenSize() const
 {
-    int pensize = m_Width;
+    int pensize = m_Thickness;
 
     if( pensize == 0 )   // Use default values for pen size
     {
@@ -422,7 +417,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )
 {
     EDA_Colors color;
-    int        linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int        linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -434,9 +429,10 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
 
-    EXCHG( linewidth, m_Width );            // Set the minimum width
+    EXCHG( linewidth, m_Thickness );            // Set the minimum width
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( linewidth, m_Width );            // set initial value
+    EXCHG( linewidth, m_Thickness );            // set initial value
+
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
@@ -469,6 +465,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     for( ; ; )
     {
         int i = text.find( '\n' );
+
         if( i == wxNOT_FOUND )
             break;
 
@@ -478,7 +475,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 shape, m_Width, CONV_TO_UTF8( text ) ) == EOF )
+                 shape, m_Thickness, CONV_TO_UTF8( text ) ) == EOF )
     {
         success = false;
     }
@@ -539,6 +536,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( i == wxNOT_FOUND )
             break;
+
         val.erase( i, 2 );
         val.insert( i, wxT( "\n" ) );
     }
@@ -551,7 +549,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         thickness = atol( Name3 );
         m_Bold = ( thickness != 0 );
-        m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+        m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
     }
 
     if( strnicmp( Name2, "Italic", 6 ) == 0 )
@@ -564,7 +562,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
     // Normal text labels cannot be tested for dangling ends.
-    if( Type() == TYPE_SCH_TEXT )
+    if( Type() == SCH_TEXT_T )
         return;
 
     DANGLING_END_ITEM item( LABEL_END, this );
@@ -576,10 +574,11 @@ void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
 {
     // Normal text labels cannot be tested for dangling ends.
-    if( Type() == TYPE_SCH_TEXT )
+    if( Type() == SCH_TEXT_T )
         return false;
 
     bool previousState = m_IsDangling;
+    m_IsDangling = true;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
@@ -640,23 +639,22 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
 void SCH_TEXT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
     // Normal text labels do not have connection points.  All others do.
-    if( Type() == TYPE_SCH_TEXT )
+    if( Type() == SCH_TEXT_T )
         return;
 
     aPoints.push_back( m_Pos );
 }
 
 
-EDA_Rect SCH_TEXT::GetBoundingBox()
+EDA_Rect SCH_TEXT::GetBoundingBox() const
 {
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
-    int linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
-    EXCHG( linewidth, m_Width );            // Set the real width
-    EDA_Rect rect = GetTextBox( -1 );
-    EXCHG( linewidth, m_Width );            // set initial value
+
+    EDA_Rect rect = GetTextBox( -1, linewidth );
 
     if( m_Orient )                          // Rotate rect
     {
@@ -670,6 +668,21 @@ EDA_Rect SCH_TEXT::GetBoundingBox()
 
     rect.Normalize();
     return rect;
+}
+
+
+bool SCH_TEXT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & TEXT_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
+}
+
+
+bool SCH_TEXT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+{
+    return TextHitTest( aRect, aContained, aAccuracy );
 }
 
 
@@ -693,7 +706,8 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -705,7 +719,8 @@ wxPoint SCH_LABEL::GetSchematicTextOffset()
 }
 
 
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation (for a label)
@@ -724,7 +739,7 @@ void SCH_LABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 
 
 SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_LABEL )
+    SCH_TEXT( pos, text, SCH_LABEL_T )
 {
     m_Layer = LAYER_LOCLABEL;
     m_Shape = NET_INPUT;
@@ -733,7 +748,8 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-/** virtual function Mirror_X
+/**
+ * Function Mirror_X (virtual)
  * mirror item relative to an X axis
  * @param aXaxis_position = the x axis position
  */
@@ -775,7 +791,7 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x, shape,
-                 m_Width, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -836,7 +852,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         thickness = atol( Name3 );
         m_Bold = ( thickness != 0 );
-        m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+        m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
     }
 
     if( stricmp( Name2, "Italic" ) == 0 )
@@ -846,7 +862,8 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function SCH_LABEL::Draw
+/**
+ * Function Draw
  * a label is drawn like a text. So just call SCH_TEXT::Draw
  */
 void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
@@ -856,13 +873,13 @@ void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-EDA_Rect SCH_LABEL::GetBoundingBox()
+EDA_Rect SCH_LABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
     x = m_Pos.x;
     y = m_Pos.y;
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     length = LenSize( m_Text );
     height = m_Size.y + width;
     dx     = dy = 0;
@@ -904,8 +921,17 @@ EDA_Rect SCH_LABEL::GetBoundingBox()
 }
 
 
+bool SCH_LABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
+}
+
+
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
-    SCH_TEXT( pos, text, TYPE_SCH_GLOBALLABEL )
+    SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer = LAYER_GLOBLABEL;
     m_Shape = NET_BIDI;
@@ -929,7 +955,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
         shape = "Italic";
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Width, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -986,7 +1012,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     SetSchematicTextOrientation( orient );
     m_Shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
-    m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+    m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_Shape = NET_OUTPUT;
@@ -1003,19 +1029,8 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosRef )
-{
-    EDA_Rect rect = GetBoundingBox();
-
-    return rect.Inside( aPosRef );
-}
-
-
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -1069,7 +1084,8 @@ void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -1078,7 +1094,7 @@ void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
-    int     width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int     width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
 
     width = Clamp_Text_PenSize( width, m_Size, m_Bold );
     int     HalfSize = m_Size.x / 2;
@@ -1124,7 +1140,8 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 }
 
 
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -1190,11 +1207,11 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
 
     GRSetDrawMode( DC, DrawMode );
 
-    int linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
-    EXCHG( linewidth, m_Width );            // Set the minimum width
+    EXCHG( linewidth, m_Thickness );            // Set the minimum width
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( linewidth, m_Width );            // set initial value
+    EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
@@ -1212,7 +1229,8 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/** function CreateGraphicShape
+/**
+ * Function CreateGraphicShape
  * Calculates the graphic shape (a polygon) associated to the text
  * @param aCorner_list = a buffer to fill with polygon corners coordinates
  * @param Pos = Position of the shape
@@ -1221,7 +1239,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                           const wxPoint&         Pos )
 {
     int HalfSize  = m_Size.y / 2;
-    int linewidth = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -1301,7 +1319,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
 }
 
 
-EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
+EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1309,7 +1327,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
 
     // text X size add height for triangular shapes(bidirectional)
@@ -1352,6 +1370,15 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox()
 }
 
 
+bool SCH_GLOBALLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
+}
+
+
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_TEXT( pos, text, aType )
 {
@@ -1377,7 +1404,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
         shape = "Italic";
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Width, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1434,7 +1461,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     SetSchematicTextOrientation( orient );
     m_Shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
-    m_Width = m_Bold ? GetPenSizeForBold( size ) : 0;
+    m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_Shape = NET_OUTPUT;
@@ -1451,19 +1478,8 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** Function HitTest
- * @return true if the point aPosRef is within item area
- * @param aPosRef = a wxPoint to test
- */
-bool SCH_HIERLABEL::HitTest( const wxPoint& aPosRef )
-{
-    EDA_Rect rect = GetBoundingBox();
-
-    return rect.Inside( aPosRef );
-}
-
-
-/** function SetTextOrientAndJustifyParmeters
+/**
+ * Function SetTextOrientAndJustifyParmeters
  * Set m_SchematicOrientation, and initialize
  * m_orient,m_HJustified and m_VJustified, according to the value of
  * m_SchematicOrientation
@@ -1520,7 +1536,7 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 {
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
-    int        linewidth = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int        linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -1531,10 +1547,10 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 
     GRSetDrawMode( DC, DrawMode );
 
-    EXCHG( linewidth, m_Width );            // Set the minimum width
+    EXCHG( linewidth, m_Thickness );            // Set the minimum width
     wxPoint text_offset = offset + GetSchematicTextOffset();
     EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    EXCHG( linewidth, m_Width );            // set initial value
+    EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
@@ -1552,7 +1568,8 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/** Function CreateGraphicShape
+/**
+ * Function CreateGraphicShape
  * calculates the graphic shape (a polygon) associated to the text
  * @param aCorner_list = a buffer to fill with polygon corners coordinates
  * @param Pos = Postion of the shape
@@ -1579,7 +1596,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     }
 }
 
-EDA_Rect SCH_HIERLABEL::GetBoundingBox()
+EDA_Rect SCH_HIERLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1587,7 +1604,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = (m_Width == 0) ? g_DrawDefaultLineThickness : m_Width;
+    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     height = m_Size.y + width + 2 * TXTMARGE;
     length = LenSize( m_Text )
              + height                 // add height for triangular shapes
@@ -1631,7 +1648,8 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox()
 }
 
 
-/** function GetSchematicTextOffset (virtual)
+/**
+ * Function GetSchematicTextOffset (virtual)
  * @return the offset between the SCH_TEXT position and the text itself
  * position
  * This offset depend on orientation, and the type of text
@@ -1641,7 +1659,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
 
-    int     width = MAX( m_Width, g_DrawDefaultLineThickness );
+    int     width = MAX( m_Thickness, g_DrawDefaultLineThickness );
 
     int     ii = m_Size.x + TXTMARGE + width;
 
@@ -1668,7 +1686,8 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 }
 
 
-/** virtual function Mirror_Y
+/**
+ * Function Mirror_Y (virtual)
  * mirror item relative to an Y axis
  * @param aYaxis_position = the y axis position
  */
@@ -1720,4 +1739,13 @@ void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
     SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
+}
+
+
+bool SCH_HIERLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+{
+    if( !( aFilter & LABEL_T ) )
+        return false;
+
+    return TextHitTest( aPoint, aAccuracy );
 }

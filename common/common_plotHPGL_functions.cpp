@@ -17,14 +17,14 @@ const double SCALE_HPGL = 0.102041;
 
 /* Set the plot offset for the current plotting
  */
-void HPGL_PLOTTER::set_viewport( wxPoint offset, double aScale, int orient )
+void HPGL_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    plot_offset  = offset;
+    plot_offset  = aOffset;
     plot_scale   = aScale;
     device_scale = SCALE_HPGL;
     set_default_line_width( 100 ); /* default line width in 1 / 1000 inch */
-    plot_orient_options = orient;
+    plotMirror = aMirror;
 }
 
 
@@ -166,14 +166,14 @@ void HPGL_PLOTTER::set_dash( bool dashed )
 }
 
 
-/** Function Plot a filled segment (track)
+/**
+ * Function Plot a filled segment (track)
  * @param start = starting point
  * @param end = ending point
- * @param aWidth = segment width (thickness)
- * @param aPlotMode = FILLED, SKETCH ..
+ * @param width = segment width (thickness)
+ * @param tracemode = FILLED, SKETCH ..
  */
-void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
-                                  GRTraceMode tracemode )
+void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width, GRTraceMode tracemode )
 {
     wxASSERT( output_file );
     wxPoint center;
@@ -212,7 +212,7 @@ void HPGL_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
     cpos = centre;
     user_to_device_coordinates( cpos );
 
-    if( plot_orient_options == PLOT_MIROIR )
+    if( plotMirror )
         angle = (StAngle - EndAngle) / 10.0;
     else
         angle = (EndAngle - StAngle) / 10.0;

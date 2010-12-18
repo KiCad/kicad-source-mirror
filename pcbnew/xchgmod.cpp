@@ -446,7 +446,8 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 }
 
 
-/** function Exchange_Module
+/**
+ * Function Exchange_Module
  * Replaces OldModule by NewModule, using OldModule settings:
  * position, orientation, pad netnames ...)
  * OldModule is deleted or put in undo list.

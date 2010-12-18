@@ -13,6 +13,7 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "protos.h"
+#include "dialog_helpers.h"
 
 
 #define COEFF_COUNT 6
@@ -338,7 +339,8 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
 }
 
 
-/** Function BuildCornersList_S_Shape
+/**
+ * Function BuildCornersList_S_Shape
  * Create a path like a S-shaped coil
  * @param  aBuffer =  a vector <wxPoint>& buffer where to put points
  * @param  aEndPoint = ending point of the path
@@ -530,11 +532,11 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
     Module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
     Module->m_Value->m_Pos0.y     = -DEFAULT_SIZE;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;
-    Module->m_Value->m_Width      = DEFAULT_SIZE / 4;
+    Module->m_Value->m_Thickness      = DEFAULT_SIZE / 4;
     Module->m_Reference->m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
     Module->m_Reference->m_Pos0.y = DEFAULT_SIZE;
     Module->m_Reference->m_Pos.y += Module->m_Reference->m_Pos0.y;
-    Module->m_Reference->m_Width  = DEFAULT_SIZE / 4;
+    Module->m_Reference->m_Thickness  = DEFAULT_SIZE / 4;
 
     /* Create 2 pads used in gaps and stubs.
      *  The gap is between these 2 pads

@@ -686,6 +686,9 @@ void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
     DisplayOpt.DisplayPcbTrackFill = true;
     int       showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
 
+    if (g_FirstTrackSegment == NULL)
+        return;
+
     NETCLASS* netclass = g_FirstTrackSegment->GetNetClass();
 
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )

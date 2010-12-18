@@ -1,6 +1,6 @@
-/*******************************************************************/
-/*	class_gerber_draw_item.h: definitions relatives to tracks, vias and zones */
-/*******************************************************************/
+/*****************************/
+/*	class_gerber_draw_item.h */
+/*****************************/
 
 #ifndef CLASS_GERBER_DRAW_ITEM_H
 #define CLASS_GERBER_DRAW_ITEM_H
@@ -54,8 +54,8 @@ class GERBER_DRAW_ITEM : public BOARD_ITEM
     // make SetNext() and SetBack() private so that they may not be called from anywhere.
     // list management is done on GERBER_DRAW_ITEMs using DLIST<GERBER_DRAW_ITEM> only.
 private:
-    void SetNext( EDA_BaseStruct* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_BaseStruct* aBack )       { Pback = aBack; }
+    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
+    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 
 public:
@@ -119,6 +119,15 @@ public:
     {
         return m_LayerNegative;
     }
+    
+    /**
+     * Function HasNegativeItems
+     * @return true if this item or at least one shape (when using aperture macros
+     *    must be drawn in background color
+     * used to optimize screen refresh (when no items are in background color
+     * refresh can be faster)
+     */
+    bool HasNegativeItems();
 
     /**
      * Function SetLayerParameters
@@ -168,7 +177,7 @@ public:
      * @param aXYPosition = position in X,Y gerber axis
      * @return const wxPoint - The given position in plotter A,B axis.
      */
-    wxPoint GetABPosition(const wxPoint& aXYPosition );
+    wxPoint GetABPosition( const wxPoint& aXYPosition ) const;
 
     /**
      * Function GetXYPosition
@@ -178,7 +187,7 @@ public:
      * @param aABPosition = position in A,B plotter axis
      * @return const wxPoint - The given position in X,Y axis.
      */
-    wxPoint GetXYPosition(const wxPoint& aABPosition );
+    wxPoint GetXYPosition( const wxPoint& aABPosition );
 
     /**
      * Function GetDcodeDescr
@@ -187,7 +196,7 @@ public:
      */
     D_CODE*  GetDcodeDescr();
 
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /* Display on screen: */
     void     Draw( WinEDA_DrawPanel* aPanel,
@@ -205,7 +214,7 @@ public:
 
     /**
      * Function DrawGbrPoly
-     * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
+     * a helper function used to draw the polygon stored in m_PolyCorners
      */
     void DrawGbrPoly( EDA_Rect* aClipBox,
                       wxDC* aDC, int aColor,
@@ -218,7 +227,7 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * Is virtual from EDA_BaseStruct.
+     * Is virtual from EDA_ITEM.
      * Display info about this GERBER item
      * @param frame A WinEDA_DrawFrame in which to print status information.
      */

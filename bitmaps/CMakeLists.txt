@@ -64,6 +64,7 @@ set(BITMAP_SRCS
     component_select_alternate_shape.xpm
     config.xpm
     CopyBlock.xpm
+    copyComponent.xmp
     copy.xpm
     copper_layers_setup.cpp
     Cursor_Shape.xpm
@@ -134,6 +135,9 @@ set(BITMAP_SRCS
     Flag.xpm
     Fonts.xpm
     Footprint_Text.xpm
+    gbr_select_mode0.xpm
+    gbr_select_mode1.xpm
+    gbr_select_mode2.xpm
     general_deletions.xpm
     general_ratsnet.xpm
     GLabel2Label.xpm

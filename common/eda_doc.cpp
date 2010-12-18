@@ -54,21 +54,22 @@ static const wxFileTypeInfo EDAfallbacks[] =
                     wxT( "wxhtml %s" ),
                     wxT( "html document (from Kicad)" ),
                     wxT( "htm" ),
-                    wxT( "html" ),NULL ),
+                    wxT( "html" ),wxNullPtr ),
 
     wxFileTypeInfo( wxT( "application/sch" ),
                     wxT( "eeschema %s" ),
                     wxT( "eeschema -p %s" ),
                     wxT( "sch document (from Kicad)" ),
                     wxT( "sch" ),
-                    wxT( "SCH" ), NULL ),
+                    wxT( "SCH" ), wxNullPtr ),
 
     // must terminate the table with this!
     wxFileTypeInfo()
 };
 
 
-/** Function GetAssociatedDocument
+/**
+ * Function GetAssociatedDocument
  * open a document (file) with the suitable browser
  * @param aFrame = main frame
  * if DocName is starting by http: or ftp: or www. the default internet

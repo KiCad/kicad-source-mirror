@@ -36,7 +36,7 @@
  */
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
-    SCH_HIERLABEL( pos, text, DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    SCH_HIERLABEL( pos, text, SCH_SHEET_LABEL_T )
 {
     SetParent( parent );
     wxASSERT( parent );
@@ -58,6 +58,7 @@ SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
 
     newitem->SetEdge( GetEdge() );
     newitem->m_Shape = m_Shape;
+    newitem->m_Size = m_Size;
     newitem->SetNumber( GetNumber() );
     return newitem;
 }
@@ -98,10 +99,11 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int SCH_SHEET_PIN::GetPenSize()
+int SCH_SHEET_PIN::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
 }
@@ -329,7 +331,8 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/** function Matches
+/**
+ * Function Matches
  * Compare hierarchical pin name against search string.
  * @param aSearchData - Criteria to search against.
  * @param aAuxData - a pointer on auxiliary data, not used here
@@ -410,11 +413,6 @@ void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
 }
 
 
-/** Virtual Function SCH_SHEET_PIN::CreateGraphicShape
- * calculates the graphic shape (a polygon) associated to the text
- * @param aCorner_list = a buffer to fill with polygon corners coordinates
- * @param aPos = Position of the shape
- */
 void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                         const wxPoint&         aPos )
 {
@@ -424,6 +422,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
      * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
      */
     int tmp = m_Shape;
+
     switch( m_Shape )
     {
     case NET_INPUT:
@@ -437,6 +436,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     default:
         break;
     }
+
     SCH_HIERLABEL::CreateGraphicShape( aCorner_list, aPos );
     m_Shape = tmp;
 }

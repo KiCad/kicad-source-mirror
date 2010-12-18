@@ -18,10 +18,17 @@
 #include "class_gerber_draw_item.h"
 #include "class_GERBER.h"
 
-static void Show_Items_DCode_Value( WinEDA_DrawPanel* panel, wxDC* DC,
-                                    BOARD* Pcb, int drawmode );
+#ifdef __WINDOWS__
+// Blit function seems have problems when scale != 1 and/or offsets
+#define AVOID_BLIT_SCALE_BUG    true
+#else
+#define AVOID_BLIT_SCALE_BUG    false   // not needed on Linux
+#endif
 
-/** virtual Function PrintPage
+
+
+/**
+ * Function PrintPage (virtual)
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
@@ -72,15 +79,37 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( !GetBoard() )
         return;
+
     ActiveScreen = screen;
 
     GRSetDrawMode( DC, GR_COPY );
+
+    int drawMode = -1;
+    switch ( GetDisplayMode() )
+    {
+        default:
+        case 0:
+            break;
+
+        case 1:
+            drawMode = GR_COPY;
+            break;
+
+        case 2:
+            drawMode = GR_OR;
+            break;
+    }
+    GetBoard()->Draw( DrawPanel, DC,
+                drawMode,                  // this needs to be GR_COPY or GR_OR, set from a toggle button.
+                wxPoint( 0, 0 ) );
+
+    // Draw the "background" now, i.e. grid and axis after gerber layers
+    // because most of time the actual background is erased by succesive drawings of each gerber layer
+    // mainly in COPY mode
     DrawPanel->DrawBackGround( DC );
 
-    GetBoard()->Draw( DrawPanel, DC, GR_COPY, wxPoint( 0, 0 ) );
-
     if( IsElementVisible( DCODES_VISIBLE ) )
-        Show_Items_DCode_Value( DrawPanel, DC, GetBoard(), GR_COPY );
+        DrawItemsDCodeID( DC, GR_COPY );
 
     TraceWorkSheet( DC, screen, 0 );
 
@@ -98,69 +127,213 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /********************************************************************/
 void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 /********************************************************************/
-/* Redraw the BOARD items but not cursors, axis or grid */
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
+
+    wxColour    bgColor = MakeColour( g_DrawBgColor );
+    wxBrush     bgBrush( bgColor, wxSOLID );
+
+    int         bitmapWidth, bitmapHeight;
+    wxDC*       plotDC = aDC;
+
+#if AVOID_BLIT_SCALE_BUG
+    // Blit function used below seems to work OK only with scale = 1 and no offsets
+    // at least under Windows
+    // Store device context scale and origins:
+    double      dc_scalex, dc_scaley;
+    wxPoint     dev_org;
+    wxPoint     logical_org;
+
+    aDC->GetDeviceOrigin( &dev_org.x, &dev_org.y );
+    aDC->GetLogicalOrigin( &logical_org.x, &logical_org.y );
+    aDC->GetUserScale( &dc_scalex, &dc_scaley );
+
+    if( aDrawMode != -1 )
+    {
+        aDC->SetUserScale( 1.0, 1.0 );
+        aDC->SetDeviceOrigin( 0, 0 );
+        aDC->SetLogicalOrigin( 0, 0 );
+    }
+#endif
+
+    aPanel->GetClientSize( &bitmapWidth, &bitmapHeight );
+
+    wxBitmap*   layerBitmap = NULL;
+    wxBitmap*   screenBitmap = NULL;
+
+    wxMemoryDC  layerDC;        // used sequentially for each gerber layer
+    wxMemoryDC  screenDC;
+
+    if( aDrawMode != -1 )
+    {
+        layerBitmap = new wxBitmap( bitmapWidth, bitmapHeight );
+        screenBitmap = new wxBitmap( bitmapWidth, bitmapHeight );
+        layerDC.SelectObject( *layerBitmap );
+        layerDC.SetBackground( bgBrush );
+        layerDC.Clear();
+        screenDC.SelectObject( *screenBitmap );
+        screenDC.SetBackground( bgBrush );
+        screenDC.Clear();
+
+        aPanel->DoPrepareDC(layerDC);
+        aPanel->DrawBackGround( &layerDC );
+        plotDC = &layerDC;
+    }
+
+    bool doBlit = false; // this flag requests an image transfert to actual screen when true.
     for( int layer = 0; layer < 32; layer++ )
     {
         if( !GetBoard()->IsLayerVisible( layer ) )
             continue;
+
         GERBER_IMAGE* gerber = g_GERBER_List[layer];
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        /* Draw background negative (i.e. in graphic layer color) for negative images:
-         *  Background is drawn here in GR_OR mode because in COPY mode
-         *  all previous graphics will be erased
-         *  Note: items in background color ("Erased" items) are always drawn in COPY mode
-         *  Some artifacts can happen when more than one gerber file is loaded
-         */
-        if( gerber->m_ImageNegative )
+        if( aDrawMode != -1 )
         {
-            int       color = GetBoard()->GetLayerColor( layer );
-            GRSetDrawMode( aDC, GR_OR );
-            EDA_Rect* cbox = &aPanel->m_ClipBox;
-            GRSFilledRect( cbox, aDC, cbox->GetX(), cbox->GetY(),
-                           cbox->GetRight(), cbox->GetBottom(),
-                           0, color, color );
-            GRSetDrawMode( aDC, aDrawMode );
+            // Draw each layer into a bitmap first. Negative Gerber
+            // layers are drawn in background color.
+            if( gerber->HasNegativeItems() )
+            {
+                if( doBlit )
+                {
+#if AVOID_BLIT_SCALE_BUG
+                    layerDC.SetUserScale( 1.0, 1.0 );
+                    layerDC.SetDeviceOrigin( 0, 0 );
+                    layerDC.SetLogicalOrigin( 0, 0 );
+#endif
+                    if( aDrawMode == GR_COPY )
+                    {
+                        // Use the layer bitmap itself as a mask when blitting.
+                        // The bitmap cannot be referenced by a device context
+                        // when setting the mask.
+                        layerDC.SelectObject( wxNullBitmap );
+                        layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
+                        layerDC.SelectObject( *layerBitmap );
+                        screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
+                    }
+
+                    else if( aDrawMode == GR_OR )
+                    {
+                        // On Linux with a large screen, this version is much faster and without flicker,
+                        // but gives a PCBNEW look where layer colors blend together.  Plus it works
+                        // only because the background color is black.  But it may be more useable for some.
+                        // The difference is due in part because of the cpu cycles needed to create the
+                        // monochromatic bitmap above, and the extra time needed to do bit indexing
+                        // into the monochromatic bitmap on the blit above.
+                        screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR );
+                    }
+                }
+                doBlit = false;
+                layerDC.Clear();
+            }
         }
 
-        int         dcode_hightlight = 0;
+#if AVOID_BLIT_SCALE_BUG
+        layerDC.SetUserScale( dc_scalex, dc_scaley );
+        layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
+        layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
+#endif
+        if( gerber->m_ImageNegative )
+        {
+            // Draw background negative (i.e. in graphic layer color) for negative images.
+            int color = GetBoard()->GetLayerColor( layer );
+
+            GRSetDrawMode( &layerDC, GR_COPY );
+
+            EDA_Rect* cbox = &aPanel->m_ClipBox;
+
+            GRSFilledRect( cbox, plotDC, cbox->GetX(), cbox->GetY(),
+                           cbox->GetRight(), cbox->GetBottom(),
+                           0, color, color );
+
+            GRSetDrawMode( plotDC, GR_COPY );
+            doBlit = true;
+        }
+
+        int dcode_highlight = 0;
         if( layer == m_PcbFrame->GetScreen()->m_Active_Layer )
-            dcode_hightlight = gerber->m_Selected_Tool;
-        BOARD_ITEM* item = GetBoard()->m_Drawings;
-        for( ; item; item = item->Next() )
+            dcode_highlight = gerber->m_Selected_Tool;
+
+        int layerdrawMode = GR_COPY;
+        if( aDrawMode == GR_OR && !gerber->HasNegativeItems() )
+            layerdrawMode = GR_OR;
+        for( BOARD_ITEM* item = GetBoard()->m_Drawings; item; item = item->Next() )
         {
             GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-            if( gerb_item->GetLayer()!= layer )
+            if( gerb_item->GetLayer() != layer )
                 continue;
-            int drawMode = aDrawMode;
-            if( dcode_hightlight == gerb_item->m_DCode )
+
+            int drawMode = layerdrawMode;
+            if( dcode_highlight && dcode_highlight == gerb_item->m_DCode )
                 drawMode |= GR_SURBRILL;
-            gerb_item->Draw( aPanel, aDC, drawMode );
+
+            gerb_item->Draw( aPanel, plotDC, drawMode );
+            doBlit = true;
         }
+
+    }
+
+    if( doBlit && aDrawMode != -1 )     // Blit is used only if aDrawMode >= 0
+    {
+    // this is the last transfert to screenDC
+    // If there are no negative items, this is the only one
+    #if AVOID_BLIT_SCALE_BUG
+        if( aDrawMode != -1 )
+        {
+            layerDC.SetUserScale( 1.0, 1.0 );
+            layerDC.SetDeviceOrigin( 0, 0 );
+            layerDC.SetLogicalOrigin( 0, 0 );
+        }
+#endif
+        if( aDrawMode == GR_COPY )
+        {
+            layerDC.SelectObject( wxNullBitmap );
+            layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
+
+            layerDC.SelectObject( *layerBitmap );
+
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
+        }
+
+        else if( aDrawMode == GR_OR )
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR, false );
+    }
+
+    if( aDrawMode != -1 )
+    {
+        aDC->Blit( 0, 0, bitmapWidth, bitmapHeight, &screenDC, 0, 0, wxCOPY );
+#if AVOID_BLIT_SCALE_BUG
+        // Restore scale and offsets values:
+        aDC->SetUserScale( dc_scalex, dc_scaley );
+        aDC->SetDeviceOrigin( dev_org.x, dev_org.y );
+        aDC->SetLogicalOrigin( logical_org.x, logical_org.y );
+#endif
+        delete layerBitmap;
+        delete screenBitmap;
     }
 
     m_PcbFrame->GetScreen()->ClrRefreshReq();
 }
 
-
-/*****************************************************************************************/
-void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, int aDrawMode )
-/*****************************************************************************************/
+/* Function DrawItemsDCodeID
+ * Draw the DCode value (if exists) corresponding to gerber item
+ * Polygons do not have a DCode
+ */
+void WinEDA_GerberFrame::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 {
     wxPoint     pos;
     int         width, orient;
     wxString    Line;
 
     GRSetDrawMode( aDC, aDrawMode );
-    BOARD_ITEM* item = aPcb->m_Drawings;
+    BOARD_ITEM* item = GetBoard()->m_Drawings;
     for( ; item != NULL; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        if( aPcb->IsLayerVisible( gerb_item->GetLayer() ) == false )
+        if( GetBoard()->IsLayerVisible( gerb_item->GetLayer() ) == false )
             continue;
         if( gerb_item->m_DCode <= 0 )
             continue;
@@ -185,7 +358,7 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
         orient = TEXT_ORIENT_HORIZ;
         if( gerb_item->m_Flashed )
         {
-            // A reasonnable size for text is width/3 because most ot time this text has 3 chars.
+            // A reasonnable size for text is width/3 because most of time this text has 3 chars.
             width /= 3;
         }
         else        // this item is a line
@@ -200,11 +373,11 @@ void Show_Items_DCode_Value( WinEDA_DrawPanel* aPanel, wxDC* aDC, BOARD* aPcb, i
 
         int color = g_ColorsSettings.GetItemColor( DCODES_VISIBLE );
 
-        DrawGraphicText( aPanel, aDC,
+        DrawGraphicText( DrawPanel, aDC,
                          pos, (EDA_Colors) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         0, false, false, false );
+                         0, false, false );
     }
 }
 

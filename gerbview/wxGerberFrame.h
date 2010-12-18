@@ -46,10 +46,19 @@ protected:
 public:
     WinEDALayerChoiceBox* m_SelLayerBox;
     WinEDAChoiceBox* m_SelLayerTool;
-    wxTextCtrl*      m_TextInfo;        // a wxTextCtrl used to display some info about
-                                        // gerber data (format..)
+    wxTextCtrl*      m_TextInfo;    // a wxTextCtrl used to display some info about
+                                    // gerber data (format..)
 
 private:
+    int  m_displayMode;             // Gerber images ("layers" in Gerbview) can be drawn:
+                                    //  - in fast mode (write mode) but if there are negative items
+                                    // only the last image is correctly drawn
+                                    // (no problem to see only one image or when no negative items)
+                                    //  - in "exact" mode (but slower) in write mode:
+                                    //                last image covers previous images
+                                    //  - in "exact" mode (also slower) in OR mode
+                                    //                (transparency mode)
+                                    // m_displayMode = 0, 1 or 2
     bool m_show_layer_manager_tools;
     wxArrayString m_Messages;           // An array sting to store warning messages when reaging a gerber file
 
@@ -82,6 +91,22 @@ public:
     {
         m_Messages.Clear( );
     }
+
+    /**
+     * Function GetDisplayMode
+     *  @return 0 for fast mode (not fully compatible with negative objects)
+     *          1 for exact mode, write mode
+     *          2 for exact mode, OR mode (transparency mode)
+     */
+    int GetDisplayMode() { return m_displayMode;}
+
+    /**
+     * Function SetDisplayMode
+     *  @param aMode =  0 for fast mode
+     *                  1 for exact mode, write mode
+     *                  2 for exact mode, OR mode (transparency mode)
+     */
+    void SetDisplayMode( int aMode ) { m_displayMode = aMode;}
 
     /**
      * Function IsGridVisible() , virtual
@@ -189,8 +214,8 @@ public:
      * displays the short filename (if exists) of the selected layer
      * on the caption of the main gerbview window
      * and some other parameters
-     *    Name of the layer (found in the gerber file: LN <name> command) in the status bar
-     *    Name of the Image (found in the gerber file: IN <name> command) in the status bar
+     *    Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
+     *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
      *    and other data in toolbar
      */
     void UpdateTitleAndInfo();
@@ -234,7 +259,14 @@ public:
     bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int          BestZoom();
     void         OnSelectOptionToolbar( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    /**
+     * Function OnSelectDisplayMode
+     * called on a display mode selection
+     * Mode selection can be fast display,
+     * or exact mode with stacked images or with transparency
+     */
+    void         OnSelectDisplayMode( wxCommandEvent& event );
+    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     GERBER_DRAW_ITEM*  GerberGeneralLocateAndDisplay();
     GERBER_DRAW_ITEM*  Locate( int typeloc );
@@ -248,9 +280,9 @@ public:
     void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */
-    int          ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int key );
     virtual void HandleBlockPlace( wxDC* DC );
-    virtual int  HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     /* Block operations: */
     /**
@@ -284,7 +316,6 @@ public:
      */
     void         Block_Duplicate( wxDC* DC );
 
-    void         InstallDrillFrame( wxCommandEvent& event );
     void         ToPostProcess( wxCommandEvent& event );
 
     /**
@@ -318,20 +349,17 @@ public:
     void         OnFileHistory( wxCommandEvent& event );
 
     /**
-     * Load a photoplot (Gerber) file.
-     *
-     * @param aFileName - File name with full path to open or empty string to open a new
-     *                    file.
-     * @param aOpenFileDialog - Set to true to display the open file dialog even if
-     *                          aFileName is valid.
-     *
-     * @return - True if file was opened successfully.
+     * function LoadGerberFiles
+     * Load a photoplot (Gerber) file or many files.
+     * @param aFileName - void string or file name with full path to open or empty string to open a new
+     *                    file. In this case one one file is loaded
+     *                    if void string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
      */
-    bool         LoadOneGerberFile( const wxString& aFileName, bool aOpenFileDialog = false );
+    bool         LoadGerberFiles( const wxString& aFileName );
     int          ReadGerberFile( FILE* File, bool Append );
     bool         Read_GERBER_File( const wxString& GERBER_FullFileName,
                                    const wxString& D_Code_FullFileName );
-    bool         SaveGerberFile( const wxString& FileName );
 
     void         GeneralControle( wxDC* DC, wxPoint Mouse );
 
@@ -409,13 +437,22 @@ public:
                     int aPrintMasklayer, bool aPrintMirrorMode,
                     void * aData = NULL);
 
-    /** InstallDialogLayerPairChoice
+    /**
+     * Function InstallDialogLayerPairChoice
      * Install a dialog frame to choose the equivalence
      * between gerber layers and pcbnew layers
      * @return the "lookup table" if ok, or NULL
      */
     int* InstallDialogLayerPairChoice( );
 
+    /**
+     * Function DrawItemsDCodeID
+     * Draw the DCode value (if exists) corresponding to gerber item
+     * (polygons do not have a DCode)
+     * @param aDC = the current device contect
+     * @param aDrawMode = GR_COPY, GR_OR ...
+     */
+    void DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
 
     DECLARE_EVENT_TABLE()
 };

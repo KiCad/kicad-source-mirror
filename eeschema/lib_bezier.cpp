@@ -19,7 +19,7 @@
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( COMPONENT_BEZIER_DRAW_TYPE, aParent )
+    LIB_DRAW_ITEM( LIB_BEZIER_T, aParent )
 {
     m_Fill       = NO_FILL;
     m_Width      = 0;
@@ -129,7 +129,7 @@ LIB_DRAW_ITEM* LIB_BEZIER::DoGenCopy()
 
 int LIB_BEZIER::DoCompare( const LIB_DRAW_ITEM& aOther ) const
 {
-    wxASSERT( aOther.Type() == COMPONENT_BEZIER_DRAW_TYPE );
+    wxASSERT( aOther.Type() == LIB_BEZIER_T );
 
     const LIB_BEZIER* tmp = ( LIB_BEZIER* ) &aOther;
 
@@ -232,7 +232,8 @@ void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/** Function GetPenSize
+/**
+ * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
 int LIB_BEZIER::GetPenSize()
@@ -289,7 +290,7 @@ void LIB_BEZIER::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint
      * bounding box calculation. */
 #if 0
     EDA_Rect bBox = GetBoundingBox();
-    bBox.Inflate( m_Width + 1, m_Width + 1 );
+    bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
@@ -311,11 +312,12 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
     return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
-/** Function HitTest
+/**
+ * Function HitTest
  * @return if the point aPosRef is near a segment
  * @param aPosRef = a wxPoint to test
  * @param aThreshold = max distance to a segment
- * @param aTransMat = the transform matrix
+ * @param aTransform = the transform matrix
  */
 bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
@@ -334,10 +336,11 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-/** Function GetBoundingBox
+/**
+ * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LIB_BEZIER::GetBoundingBox()
+EDA_Rect LIB_BEZIER::GetBoundingBox() const
 {
     EDA_Rect rect;
     int      xmin, xmax, ymin, ymax;

@@ -1,5 +1,5 @@
 /**
- * @file menubarpcb.cpp
+ * @file menubar_pcbframe.cpp
  * PCBNew editor menu bar
  */
 #include "fctsys.h"
@@ -240,14 +240,14 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
-    text  = AddHotkeyName( _( "Undo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_UNDO );
+    text  = AddHotkeyName( _( "Undo" ), g_Pcbnew_Editor_Hokeys_Descr, HK_UNDO );
     item = new wxMenuItem( editMenu, wxID_UNDO, text,
                            HELP_UNDO, wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
     // Redo
-    text  = AddHotkeyName( _( "Redo" ), s_Pcbnew_Editor_Hokeys_Descr, HK_REDO );
+    text  = AddHotkeyName( _( "Redo" ), g_Pcbnew_Editor_Hokeys_Descr, HK_REDO );
     item = new wxMenuItem( editMenu, wxID_REDO, text,
                            HELP_REDO, wxITEM_NORMAL );
     item->SetBitmap( redo_xpm );
@@ -262,7 +262,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     editMenu->AppendSeparator();
 
     // Find
-    text = AddHotkeyName( _( "&Find" ), s_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find" ), g_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
     item = new wxMenuItem( editMenu, ID_FIND_ITEMS,
                            text, HELP_FIND );
     item->SetBitmap( find_xpm );
@@ -306,7 +306,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
      * for Zoom in and Zoom out sub menus
      */
     // Zoom In
-    text = AddHotkeyName( _( "Zoom In" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_IN, false );
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text,
                            HELP_ZOOM_IN, wxITEM_NORMAL );
@@ -314,7 +314,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->Append( item );
 
     // Zoom Out
-    text = AddHotkeyName( _( "Zoom Out" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_OUT, false );
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text,
                            HELP_ZOOM_OUT, wxITEM_NORMAL );
@@ -323,7 +323,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->Append( item );
 
     // Fit on Screen
-    text = AddHotkeyName( _( "Fit on Screen" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
@@ -334,7 +334,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     // Redraw
-    text = AddHotkeyName( _( "Redraw" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Redraw" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
@@ -364,7 +364,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* placeMenu = new wxMenu;
 
     // Module
-    text = AddHotkeyName( _( "Module" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_MODULE, false );
     item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
                            _( "Add modules" ), wxITEM_NORMAL );
@@ -373,7 +373,7 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     placeMenu->Append( item );
 
     // Track
-    text = AddHotkeyName( _( "Track" ), s_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ADD_NEW_TRACK, false );
     item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
                            _( "Add tracks and vias" ), wxITEM_NORMAL );

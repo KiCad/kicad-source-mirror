@@ -33,7 +33,7 @@
 #include "dialogs/dialog_schematic_find.h"
 
 
-void WinEDA_SchematicFrame::OnFindDrcMarker( wxFindDialogEvent& event )
+void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 {
     static SCH_MARKER* lastMarker = NULL;
 
@@ -46,12 +46,12 @@ void WinEDA_SchematicFrame::OnFindDrcMarker( wxFindDialogEvent& event )
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( TYPE_SCH_MARKER,
+        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T,
                                                                  lastMarker, wrap );
     }
     else
     {
-        lastMarker = (SCH_MARKER*) schematic.FindNextItem( TYPE_SCH_MARKER, &sheetFoundIn,
+        lastMarker = (SCH_MARKER*) schematic.FindNextItem( SCH_MARKER_T, &sheetFoundIn,
                                                            lastMarker, wrap );
     }
 
@@ -99,11 +99,11 @@ void WinEDA_SchematicFrame::OnFindDrcMarker( wxFindDialogEvent& event )
  *                     >= 4 => unused (same as 0)
  * @param mouseWarp If true, then move the mouse cursor to the item.
  */
-SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component_reference,
-                                                       bool Find_in_hierarchy,
-                                                       int SearchType,
-                                                       const wxString& text_to_find,
-                                                       bool mouseWarp )
+SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_reference,
+                                                bool Find_in_hierarchy,
+                                                int SearchType,
+                                                const wxString& text_to_find,
+                                                bool mouseWarp )
 {
     SCH_SHEET_PATH* sheet, * SheetWithComponentFound = NULL;
     SCH_ITEM*       DrawList     = NULL;
@@ -126,7 +126,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
         for( ; ( DrawList != NULL ) && ( NotFound == true );
              DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() == TYPE_SCH_COMPONENT )
+            if( DrawList->Type() == SCH_COMPONENT_T )
             {
                 SCH_COMPONENT* pSch;
                 pSch = (SCH_COMPONENT*) DrawList;
@@ -147,10 +147,12 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
                         pos = pSch->m_Pos;  /* temporary: will be changed if
                                              * the pin is found */
                         pin = pSch->GetPin( text_to_find );
+
                         if( pin == NULL )
                             break;
+
                         NotFound = FALSE;
-                        pos += pin->m_Pos;
+                        pos += pin->GetPosition();
                         break;
 
                     case 2:     // find reference
@@ -177,6 +179,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
     if( Component )
     {
         sheet = SheetWithComponentFound;
+
         if( sheet != GetSheet() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
@@ -187,7 +190,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
         }
         wxPoint delta;
         pos  -= Component->m_Pos;
-        delta = Component->m_Transform.TransformCoordinate( pos );
+        delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->m_Pos;
 
         wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;
@@ -292,7 +295,7 @@ SCH_ITEM* WinEDA_SchematicFrame::FindComponentAndItem( const wxString& component
  *
  * @param event - Find dialog event containing the find parameters.
  */
-void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
+void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
 {
     static SCH_ITEM*  lastItem = NULL;  /* last item found when searching a match
                                          * note: the actual matched item can be a
@@ -316,7 +319,8 @@ void WinEDA_SchematicFrame::OnFindSchematicItem( wxFindDialogEvent& event )
     }
     else
     {
-        lastItem = schematic.MatchNextItem( searchCriteria, &sheetFoundIn, lastItem, &lastItemPosition );
+        lastItem = schematic.MatchNextItem( searchCriteria, &sheetFoundIn, lastItem,
+                                            &lastItemPosition );
     }
 
     if( lastItem != NULL )

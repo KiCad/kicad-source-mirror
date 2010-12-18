@@ -1,11 +1,10 @@
-/**************************************************************/
-/*  Lib component definitions (libentry) definition of fields */
-/**************************************************************/
+/*************************************************************/
+/* Lib component definitions (libentry) definition of fields */
+/*************************************************************/
 
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
 
-//#include "general.h"
 #include "lib_draw_item.h"
 
 
@@ -18,9 +17,12 @@
  */
 class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
 {
-    wxString m_savedText;         ///< Temporary storage for the string when edition.
-    bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
-    bool m_updateText;            ///< Flag to indicate text change occurred while editing.
+    int      m_id;           ///< @see enum NumFieldType
+    wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
+
+    wxString m_savedText;    ///< Temporary storage for the string when edition.
+    bool     m_rotate;       ///< Flag to indicate a rotation occurred while editing.
+    bool     m_updateText;   ///< Flag to indicate text change occurred while editing.
 
     /**
      * Draw the field.
@@ -34,11 +36,6 @@ class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
      * @param aPosition - The position to edit the circle in drawing coordinates.
      */
     void calcEdit( const wxPoint& aPosition );
-
-public:
-    int         m_FieldId;  ///< @see enum NumFieldType
-
-    wxString    m_Name;     ///< Name (not the field text value itself, that is .m_Text)
 
 public:
 
@@ -62,11 +59,28 @@ public:
      *
      * The first four field IDs are reserved and therefore always return their respective
      * names.  The user definable fields will return FieldN where N is the ID of the field
-     * when the m_Name member is empty.
+     * when the m_name member is empty.
      *
      * @return Name of the field.
      */
-    wxString GetName();
+    wxString GetName() const;
+
+    /**
+     * Function SetName
+     *
+     * Sets a user definable field name to \a aName.
+     *
+     * Reserved fields such as value and reference are not renamed.  If the field name is
+     * changed, the field modified flag is set.  If the field is the child of a component,
+     * the parent component's modified flag is also set.
+     *
+     * @param aName - User defined field name.
+     */
+    void SetName( const wxString& aName );
+
+    int GetId() { return m_id; }
+
+    void SetId( int aId ) { m_id = aId; }
 
     /**
      * Function GetPenSize virtual pure
@@ -105,33 +119,40 @@ public:
      * Return the bounding rectangle of the field text.
      * @return Bounding rectangle.
      */
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
+
+    /**
+     * Displays info (type, part  convert filed name and value)
+     * in msg panel
+     * @param aFrame = main frame where the message manel info is.
+     */
+    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
     /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param refPos A point to test in field coordinate system
+     * @param aPoition A point to test in field coordinate system
      * @return True if a hit, else false
      */
-    bool HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& aPosition );
 
      /**
-      * @param aPosRef = a wxPoint to test
+      * @param aPosition = a wxPoint to test
       * @param aThreshold = max distance to this object (usually the half
       *                     thickness of a line)
       * @param aTransform = the transform matrix
-      * @return True if the point aPosRef is near this object
+      * @return True if the point \a aPosition is near this object
       */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     void operator=( const LIB_FIELD& field )
     {
-        m_FieldId = field.m_FieldId;
+        m_id = field.m_id;
         m_Text = field.m_Text;
-        m_Name = field.m_Name;
+        m_name = field.m_name;
         m_Pos = field.m_Pos;
         m_Size = field.m_Size;
-        m_Width = field.m_Width;
+        m_Thickness = field.m_Thickness;
         m_Orient = field.m_Orient;
         m_Mirror = field.m_Mirror;
         m_Attributs = field.m_Attributs;
@@ -210,8 +231,8 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth( void ) const { return m_Width; }
-    virtual void DoSetWidth( int width ) { m_Width = width; }
+    virtual int DoGetWidth( void ) const { return m_Thickness; }
+    virtual void DoSetWidth( int width ) { m_Thickness = width; }
 };
 
 typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;

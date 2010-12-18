@@ -17,7 +17,6 @@
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 
-#include "autorout.h"
 #include "drag.h"
 
 #include "3d_struct.h"
@@ -176,7 +175,8 @@ void MODULE::Copy( MODULE* aModule )
 }
 
 
-/** Function Draw
+/**
+ * Function Draw
  *  Draws the footprint to the current Device Context
  *  @param panel = The active Draw Panel (used to know the clip box)
  *  @param DC = current Device Context
@@ -234,7 +234,8 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/** Function DrawEdgesOnly
+/**
+ * Function DrawEdgesOnly
  *  Draws the footprint edges only to the current Device Context
  *  @param panel = The active Draw Panel (used to know the clip box)
  *  @param DC = current Device Context
@@ -713,6 +714,31 @@ void MODULE::Set_Rectangle_Encadrement()
 }
 
 
+EDA_Rect MODULE::GetFootPrintRect() const
+{
+    EDA_Rect area;
+
+    area.m_Pos = m_Pos;
+    area.SetEnd( m_Pos );
+    area.Inflate( 500 );       // Give a min size
+
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
+    {
+        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
+            continue;
+
+        area.Merge( edge->GetBoundingBox() );
+    }
+
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    {
+        area.Merge( pad->GetBoundingBox() );
+    }
+
+    return area;
+}
+
+
 /* Equivalent to Module::Set_Rectangle_Encadrement() but in board coordinates:
  * Updates the module bounding box on the board
  * The rectangle is the rectangle with outlines and pads, but not the fields
@@ -720,29 +746,9 @@ void MODULE::Set_Rectangle_Encadrement()
  */
 void MODULE::SetRectangleExinscrit()
 {
-    m_RealBoundaryBox.m_Pos = m_Pos;
-    m_RealBoundaryBox.SetEnd( m_Pos );
-    m_RealBoundaryBox.Inflate( 500 );       // Give a min size
+    m_RealBoundaryBox = GetFootPrintRect();
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
-        edge; edge = edge->Next() )
-    {
-        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
-            continue;
-
-        EDA_Rect rect = edge->GetBoundingBox();
-        m_RealBoundaryBox.Merge( rect );
-    }
-
-
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        EDA_Rect rect = pad->GetBoundingBox();
-        m_RealBoundaryBox.Merge( rect );
-    }
-
-    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth()
-                    * m_RealBoundaryBox.GetHeight() );
+    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth() * m_RealBoundaryBox.GetHeight() );
 }
 
 
@@ -751,11 +757,9 @@ void MODULE::SetRectangleExinscrit()
  * returns the full bounding box of this Footprint, including fields
  * Mainly used to redraw the screen area occupied by the footprint
  */
-EDA_Rect MODULE::GetBoundingBox()
+EDA_Rect MODULE::GetBoundingBox() const
 {
-    // Calculate area without text fields:
-    SetRectangleExinscrit();
-    EDA_Rect area = m_RealBoundaryBox;
+    EDA_Rect area = GetFootPrintRect();;
 
     // Calculate extended area including text field:
     EDA_Rect text_area;
@@ -765,11 +769,11 @@ EDA_Rect MODULE::GetBoundingBox()
     text_area = m_Value->GetBoundingBox();
     area.Merge( text_area );
 
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;
-        edge = edge->Next() )
+    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;  edge = edge->Next() )
     {
         if( edge->Type() != TYPE_TEXTE_MODULE )
             continue;
+
         text_area = ( (TEXTE_MODULE*) edge )->GetBoundingBox();
         area.Merge( text_area );
     }
@@ -784,7 +788,7 @@ EDA_Rect MODULE::GetBoundingBox()
 }
 
 
-/* Virtual function, from EDA_BaseStruct.
+/* Virtual function, from EDA_ITEM.
  * display module info on MsgPanel
  */
 void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
@@ -796,11 +800,11 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     BOARD*   board = GetBoard();
 
     frame->EraseMsgBox();
+
     if( frame->m_Ident != PCB_FRAME )
         flag = TRUE;
 
-    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text,
-                           DARKCYAN );
+    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
 
     if( flag ) // Display last date the component was edited( useful in Module Editor)
     {
@@ -822,8 +826,9 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 
     frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
 
-    EDA_BaseStruct* PtStruct = m_Pads;
+    EDA_ITEM* PtStruct = m_Pads;
     nbpad = 0;
+
     while( PtStruct )
     {
         nbpad++;
@@ -834,10 +839,13 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->AppendMsgPanel( _( "Pads" ), msg, BLUE );
 
     msg = wxT( ".." );
+
     if( IsLocked() )
         msg[0] = 'L';
+
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
+
     frame->AppendMsgPanel( _( "Stat" ), msg, MAGENTA );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
@@ -849,6 +857,7 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
         msg = m_3D_Drawings->m_Shape3DName;
     else
         msg = _( "No 3D shape" );
+
     frame->AppendMsgPanel( _( "3D-Shape" ), msg, RED );
 
     wxString doc     = _( "Doc:  " ) + m_Doc;
@@ -1026,7 +1035,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel + 1, os ) << "<orientation tenths=\"" << m_Orient
                                      << "\"/>\n";
 
-    EDA_BaseStruct* p;
+    EDA_ITEM* p;
 
     NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
     p = m_Pads;

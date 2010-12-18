@@ -65,18 +65,18 @@ public:
     /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param refPos - A wxPoint to test
+     * @param aPosition - A wxPoint to test
      * @return - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& refPos );
+    virtual bool HitTest( const wxPoint& aPosition );
 
      /**
-      * @param aPosRef = a wxPoint to test, in eeschema coordinates
+      * @param aPosition = a wxPoint to test, in eeschema coordinates
       * @param aThreshold = max distance to a segment
       * @param aTransform = the transform matrix
-      * @return true if the point aPosRef is near a segment
+      * @return true if the point \a aPosition is near a segment
       */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     /**
      * Test if the given rectangle intersects this object.
@@ -98,7 +98,7 @@ public:
 
     virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
 
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
 
     void Rotate();
 
@@ -139,8 +139,8 @@ protected:
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Width; }
-    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
+    virtual int DoGetWidth() const { return m_Thickness; }
+    virtual void DoSetWidth( int aWidth ) { m_Thickness = aWidth; }
 };
 
 

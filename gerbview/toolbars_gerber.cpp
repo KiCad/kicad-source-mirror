@@ -14,6 +14,7 @@
 #include "hotkeys.h"
 #include "class_GERBER.h"
 #include "class_layerchoicebox.h"
+#include "dialog_helpers.h"
 
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
 {
@@ -199,6 +200,24 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
                                wxBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
+    // tools to select draw mode in gerbview
+    m_OptionsToolBar->AddSeparator();
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
+                               wxBitmap( gbr_select_mode0_xpm ),
+                               _( "Show layers in raw mode\
+(could have problems with negative items when more than one gerber file is shown)" ),
+                               wxITEM_CHECK );
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
+                               wxBitmap( gbr_select_mode1_xpm ),
+                               _( "Show layers in stacked mode\
+(show negative items without artefact, sometimes slow)" ),
+                               wxITEM_CHECK );
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
+                               wxBitmap( gbr_select_mode2_xpm ),
+                               _( "Show layers in tranparency mode\
+(show negative items without artefact, sometimes slow)" ),
+                               wxITEM_CHECK );
+
     // Tools to show/hide toolbars:
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
@@ -212,7 +231,8 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 }
 
 
-/** Function SetToolbars()
+/**
+ * Function SetToolbars
  * Set the tools state for the toolbars, according to display options
  */
 void WinEDA_GerberFrame::SetToolbars()
@@ -256,8 +276,7 @@ void WinEDA_GerberFrame::SetToolbars()
     {
         m_OptionsToolBar->ToggleTool(
             ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UserUnit ==
-            MILLIMETRES ? true : false );
+            g_UserUnit == MILLIMETRES ? true : false );
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
                                       g_UserUnit == INCHES ? true : false );
 
@@ -281,6 +300,10 @@ void WinEDA_GerberFrame::SetToolbars()
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_DCODES,
                                       IsElementVisible( DCODES_VISIBLE ) );
+
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, GetDisplayMode() == 0 );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, GetDisplayMode() == 1 );
+        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, GetDisplayMode() == 2 );
 
         m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                                       m_show_layer_manager_tools );

@@ -4,26 +4,28 @@
 
 #include "block_commande.h"
 #include "colors.h"
+#include "sch_sheet_path.h"
 
 #include <wx/wx.h>
 
 
-class EDA_BaseStruct;
+class EDA_ITEM;
 class WinEDA_DrawPanel;
 class WinEDA_DrawFrame;
-class WinEDA_SchematicFrame;
-class WinEDA_LibeditFrame;
+class SCH_EDIT_FRAME;
+class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
 class LIB_COMPONENT;
 class LIB_DRAW_ITEM;
 class SCH_COMPONENT;
-class BASE_SCREEN;
 class SCH_SCREEN;
 class SCH_ITEM;
 class SCH_SHEET_PIN;
 class PLOTTER;
 class SCH_SHEET;
 class LIB_PIN;
+class LABEL_OBJECT;
+class OBJ_CMP_TO_LIST;
 
 
 wxString ReturnDefaultFieldName( int aFieldNdx );
@@ -48,7 +50,7 @@ void IncrementLabelMember( wxString& name );
 /****************/
 /* EDITPART.CPP */
 /****************/
-void InstallCmpeditFrame( WinEDA_SchematicFrame* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
+void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
 
 void           SnapLibItemPoint( int            OrigX,
                                  int            OrigY,
@@ -62,8 +64,43 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* Draw
 /************/
 void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
+
+// build_BOM.cpp
+/**
+ * Class LABEL_OBJECT
+ * is used in build BOM to handle the list of labels in schematic
+ * because in a complex hierarchy, a label is used more than once,
+ * and had more than one sheet path, so we must create a flat list of labels
+ */
+class LABEL_OBJECT
+{
+public:
+    int            m_LabelType;
+    SCH_ITEM*      m_Label;
+
+    //have to store it here since the object references will be duplicated.
+    SCH_SHEET_PATH m_SheetPath;  //composed of UIDs
+
+public: LABEL_OBJECT()
+    {
+        m_Label     = NULL;
+        m_LabelType = 0;
+    }
+};
+
+void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList );
+void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
+bool SortComponentsByReference(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
+bool SortComponentsByValue(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
+bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList );
+int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
+
+
 // operations_on_item_lists.cpp
-/** function DuplicateStruct
+/**
+ * Function DuplicateStruct
  *  Routine to create a new copy of given struct.
  * @param aDrawStruct = the SCH_ITEM to duplicate
  * @param aClone (defualt = true)
@@ -80,7 +117,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
 /* Find the item within block selection. */
-int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
+int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* screen );
 
 /* function PickStruct:
  *   Search at location pos
@@ -112,7 +149,7 @@ int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, BASE_SCREEN* screen );
  *     Pointer to the structure if only 1 item is selected.
  *     NULL if no items are selects.
  */
-SCH_ITEM*          PickStruct( const wxPoint& refpos, BASE_SCREEN* screen, int SearchMask );
+SCH_ITEM*          PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
 
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
@@ -150,7 +187,6 @@ void RedrawOneStruct( WinEDA_DrawPanel* panel,
 /**************/
 void       SeedLayers();
 EDA_Colors ReturnLayerColor( int Layer );
-void       DisplayColorSetupFrame( WinEDA_DrawFrame* parent, const wxPoint& pos );
 
 
 /**************/
@@ -175,7 +211,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
 void DeleteSubHierarchy( SCH_SHEET* Sheet, bool confirm_deletion );
 bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 
-/* free the draw list screen->EEDrawList and the subhierarchies
+/* free the draw list screen->GetDrawItems() and the subhierarchies
  *   clear the screen datas (filenames ..)
  */
 
@@ -183,7 +219,7 @@ bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 /* DELETE.CPP */
 /*************/
 
-bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC );
+bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC );
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Window );
 void DeleteAllMarkers( int type );
 
@@ -191,7 +227,7 @@ void DeleteAllMarkers( int type );
 /**************/
 /* PINEDIT.CPP */
 /**************/
-void InstallPineditFrame( WinEDA_LibeditFrame* parent, wxDC* DC, const wxPoint& pos );
+void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
 
 
 /**************/
@@ -264,12 +300,12 @@ void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 /* EECLASS.CPP */
 /**************/
 
-void SetaParent( EDA_BaseStruct* Struct, BASE_SCREEN* Screen );
+void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
 
 /***************/
 /* OPTIONS.CPP */
 /***************/
-void DisplayOptionFrame( WinEDA_SchematicFrame* parent, const wxPoint& framepos );
+void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
 
 /****************/
 /* CONTROLE.CPP */

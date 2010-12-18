@@ -15,18 +15,19 @@
 #include "build_version.h"
 
 
-/** function set_viewport
+/**
+ * Function set_viewport
  * Set the plot offset for the current plotting
  * @param aOffset = plot offset
  * @param aScale = coordinate scale (scale coefficient for coordinates)
+ * @param aMirror - Mirror plot if true.
  */
-void GERBER_PLOTTER::set_viewport( wxPoint offset,
-                                   double aScale, int orient )
+void GERBER_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
-    wxASSERT( orient == 0 );
-    plot_orient_options = 0;
-    plot_offset = offset;
+    wxASSERT( aMirror == false );
+    plotMirror = false;
+    plot_offset = aOffset;
     wxASSERT( aScale == 1 );
     plot_scale   = 1;
     device_scale = 1;
@@ -34,7 +35,8 @@ void GERBER_PLOTTER::set_viewport( wxPoint offset,
 }
 
 
-/** Function start_plot
+/**
+ * Function start_plot
  * Write GERBER header to file
  * initialize global variable g_Plot_PlotOutputFile
  * @param aFile: an opened file to write to
@@ -259,7 +261,8 @@ void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
 }
 
 
-/** Function circle
+/**
+ * Function circle
  * writes a non filled circle to output file
  * Plot one circle as segments (6 to 16 depending on its radius
  * @param aCentre = center coordinates
@@ -290,15 +293,15 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill,
 }
 
 
-/** Function PlotFilledPolygon_GERBER
+/**
+ * Function PlotFilledPolygon_GERBER
  * writes a filled polyline to output file
  * @param aCornersCount = number of corners
  * @param aCoord = buffer of corners coordinates
  * @param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
- * @param aCoord = buffer of corners coordinates
+ * @param aWidth = Width of the line to plot.
  */
-void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill,
-                           int aWidth )
+void GERBER_PLOTTER::poly( int aCornersCount, int* aCoord, FILL_T aFill, int aWidth )
 {
     wxASSERT( output_file );
     wxPoint pos, startpos;
@@ -499,4 +502,12 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
 
     set_current_line_width( -1 );
     poly( 5, &polygon[0].x, aTrace_Mode==FILLED ? FILLED_SHAPE : NO_FILL );
+}
+
+void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
+{
+    if( aPositive )
+        fprintf( output_file, "%%LPD*%%\n" );
+    else
+        fprintf( output_file, "%%LPC*%%\n" );
 }

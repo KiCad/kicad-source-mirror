@@ -82,21 +82,21 @@ public:
     /**
      * Tests if the given wxPoint is within the bounds of this object.
      *
-     * @param aRefPos - Coordinates to test
+     * @param aPosition - Coordinates to test
      * @return - True if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aRefPos );
+    virtual bool HitTest( const wxPoint& aPosition );
 
      /**
-     * @param aPosRef - a wxPoint to test
+     * @param aPosition - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
      * @param aTransform - the transform matrix
-     * @return - True if the point aPosRef is near this object
+     * @return - True if the point \a aPosition is near this object
      */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
-    virtual EDA_Rect GetBoundingBox();
+    virtual EDA_Rect GetBoundingBox() const;
     virtual void DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**

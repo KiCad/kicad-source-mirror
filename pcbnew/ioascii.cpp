@@ -13,7 +13,6 @@
 #include "class_board_design_settings.h"
 
 #ifdef PCBNEW
-#include "autorout.h"
 #include "zones.h"
 #endif
 
@@ -703,8 +702,8 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
 bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 {
-    EDA_BaseStruct* PtStruct = GetBoard()->m_Modules;
-    int             NbModules, NbDrawItem, NbLayers;
+    EDA_ITEM* PtStruct = GetBoard()->m_Modules;
+    int       NbModules, NbDrawItem, NbLayers;
 
     /* Write copper layer count */
     NbLayers = GetBoard()->GetCopperLayerCount();
@@ -751,7 +750,8 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
 }
 
 
-/** Function WriteSheetDescr
+/**
+ * Function WriteSheetDescr
  * Save the page information (size, texts, date ..)
  * @param screen BASE_SCREEN to save
  * @param File = an open FILE to write info

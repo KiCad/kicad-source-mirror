@@ -82,7 +82,7 @@ void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
  * Updates:
  *   g_NetObjectslist
  */
-void WinEDA_SchematicFrame::BuildNetListBase()
+void SCH_EDIT_FRAME::BuildNetListBase()
 {
     int             NetNumber;
     int             NetCode;
@@ -307,7 +307,8 @@ void WinEDA_SchematicFrame::BuildNetListBase()
 }
 
 
-/** function FindBestNetNameForEachNet
+/**
+ * Function FindBestNetNameForEachNet
  * fill the .m_NetNameCandidate member of each item of aNetItemBuffer
  * with a reference to the "best" NETLIST_OBJECT usable to give a name to the net
  * If no suitable object found, .m_NetNameCandidate is filled with 0.
@@ -359,7 +360,8 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
     }
 }
 
-/** Function FindBestNetName
+/**
+ * Function FindBestNetName
  * @return a reference to the "best" label that can be used to give a name
  *  to a net.
  * @param aLabelItemBuffer = list of NETLIST_OBJECT type labels candidates.
@@ -378,17 +380,17 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
 
     // Define a priority (from low to high) to sort labels:
     // NET_PINLABEL and NET_GLOBLABEL are global labels
-    // and priority >= PRIO_MAX-1 is for global connections
+    // and priority >= NET_PRIO_MAX-1 is for global connections
     // ( i.e. for labels that are not prefixed by a sheetpath)
-    #define PRIO_MAX 4
-    int priority_order[PRIO_MAX+1] =
+    #define NET_PRIO_MAX 4
+    int priority_order[NET_PRIO_MAX+1] =
     { NET_ITEM_UNSPECIFIED, NET_LABEL, NET_HIERLABEL, NET_PINLABEL, NET_GLOBLABEL };
 
     NETLIST_OBJECT*item = aLabelItemBuffer[0];
 
     // Calculate item priority (initial priority)
     int item_priority = 0;
-    for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
+    for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
     {
         if ( item->m_Type == priority_order[ii]  )
         {
@@ -402,7 +404,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
         NETLIST_OBJECT* candidate = aLabelItemBuffer[ii];
         // Calculate candidate priority
         int candidate_priority = 0;
-        for( unsigned ii = 0; ii <= PRIO_MAX; ii++ )
+        for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
         {
             if ( candidate->m_Type == priority_order[ii]  )
             {
@@ -422,8 +424,8 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             // for other labels, we select them before by sheet deep order
             // because the actual name is /sheetpath/label
             // and for a given path length, by alphabetic order
-            
-            if( item_priority >= PRIO_MAX-1 )     // global label or pin label
+
+            if( item_priority >= NET_PRIO_MAX-1 )     // global label or pin label
             {   // selection by alphabetic order:
                 if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
                     item = candidate;
@@ -488,7 +490,8 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 }
 
 
-/** Function AddConnectedObjects
+/**
+ * Function AddConnectedObjects
  * Creates the list of objects related to connections (pins of components,
  * wires, labels, junctions ...)
  *
@@ -506,12 +509,12 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
     LIB_COMPONENT*  Entry;
     SCH_SHEET_PATH  list;
 
-    DrawList = sheetlist->LastScreen()->EEDrawList;
+    DrawList = sheetlist->LastScreen()->GetDrawItems();
     for( ; DrawList; DrawList = DrawList->Next() )
     {
         switch( DrawList->Type() )
         {
-        case DRAW_SEGMENT_STRUCT_TYPE:
+        case SCH_LINE_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LINE*) DrawList )
             if( (STRUCT->GetLayer() != LAYER_BUS)
@@ -536,7 +539,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case DRAW_JUNCTION_STRUCT_TYPE:
+        case SCH_JUNCTION_T:
             #undef STRUCT
             #define STRUCT ( (SCH_JUNCTION*) DrawList )
             new_item = new NETLIST_OBJECT();
@@ -550,7 +553,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case DRAW_NOCONNECT_STRUCT_TYPE:
+        case SCH_NO_CONNECT_T:
             #undef STRUCT
             #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
             new_item = new NETLIST_OBJECT();
@@ -564,7 +567,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
             break;
 
-        case TYPE_SCH_LABEL:
+        case SCH_LABEL_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LABEL*) DrawList )
             ii = IsBusLabel( STRUCT->m_Text );
@@ -575,9 +578,9 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             new_item->m_Comp = STRUCT;
             new_item->m_Type = NET_LABEL;
 
-            if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
                 new_item->m_Type = NET_GLOBLABEL;
-            if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
                 new_item->m_Type = NET_HIERLABEL;
 
             new_item->m_Label = STRUCT->m_Text;
@@ -591,8 +594,8 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             break;
 
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LABEL*) DrawList )
             ii = IsBusLabel( STRUCT->m_Text );
@@ -604,9 +607,9 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             // this is not the simplest way of doing it
             // (look at the case statement above).
-            if( STRUCT->m_Layer ==  LAYER_GLOBLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
                 new_item->m_Type = NET_GLOBLABEL;
-            if( STRUCT->m_Layer ==  LAYER_HIERLABEL )
+            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
                 new_item->m_Type = NET_HIERLABEL;
 
             new_item->m_Label = STRUCT->m_Text;
@@ -620,25 +623,27 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             break;
 
-        case TYPE_SCH_COMPONENT:
+        case SCH_COMPONENT_T:
             DrawLibItem = (SCH_COMPONENT*) DrawList;
 
-            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->m_ChipName );
+            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
             if( Entry == NULL )
                 break;
 
             for( LIB_PIN* pin = Entry->GetNextPin();  pin;  pin = Entry->GetNextPin( pin ) )
             {
-                wxASSERT( pin->Type() == COMPONENT_PIN_DRAW_TYPE );
+                wxASSERT( pin->Type() == LIB_PIN_T );
 
                 if( pin->GetUnit() &&
                     ( pin->GetUnit() != DrawLibItem->GetUnitSelection( sheetlist ) ) )
                     continue;
 
-                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->m_Convert ) )
+                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->GetConvert() ) )
                     continue;
 
-                wxPoint pos2 = DrawLibItem->m_Transform.TransformCoordinate( pin->m_Pos ) +
+                wxPoint pos2;
+
+                pos2 = DrawLibItem->GetTransform().TransformCoordinate( pin->GetPosition() ) +
                     DrawLibItem->m_Pos;
 
                 new_item = new NETLIST_OBJECT();
@@ -647,15 +652,14 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                 new_item->m_SheetList = *sheetlist;
                 new_item->m_Type = NET_PIN;
                 new_item->m_Link = DrawLibItem;
-                new_item->m_ElectricalType = pin->m_PinType;
-                new_item->m_PinNum = pin->m_PinNum;
-                new_item->m_Label  = pin->m_PinName;
+                new_item->m_ElectricalType = pin->GetType();
+                new_item->m_PinNum = pin->GetNumber();
+                new_item->m_Label  = pin->GetName();
                 new_item->m_Start  = new_item->m_End = pos2;
 
                 aNetItemBuffer.push_back( new_item );
 
-                if( ( (int) pin->m_PinType == (int) PIN_POWER_IN )
-                   && ( pin->m_Attributs & PINNOTDRAW ) )
+                if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
                 {
                     /* There is an associated PIN_LABEL. */
                     new_item = new NETLIST_OBJECT();
@@ -663,7 +667,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                     new_item->m_Comp = NULL;
                     new_item->m_SheetList = *sheetlist;
                     new_item->m_Type  = NET_PINLABEL;
-                    new_item->m_Label = pin->m_PinName;
+                    new_item->m_Label = pin->GetName();
                     new_item->m_Start = pos2;
                     new_item->m_End   = new_item->m_Start;
 
@@ -672,13 +676,13 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             }
             break;
 
-        case DRAW_POLYLINE_STRUCT_TYPE:
-        case DRAW_BUSENTRY_STRUCT_TYPE:
-        case TYPE_SCH_MARKER:
-        case TYPE_SCH_TEXT:
+        case SCH_POLYLINE_T:
+        case SCH_BUS_ENTRY_T:
+        case SCH_MARKER_T:
+        case SCH_TEXT_T:
             break;
 
-        case DRAW_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_T:
         {
             #undef STRUCT
             #define STRUCT ( (SCH_SHEET*) DrawList )
@@ -708,7 +712,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             break;
         }
 
-        case DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE:
+        case SCH_SHEET_LABEL_T:
         default:
         {
             wxString msg;

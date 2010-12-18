@@ -124,7 +124,8 @@ static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-/** Function Edit_Edge_Width
+/**
+ * Function Edit_Edge_Width
  * changes the width of module perimeter lines, EDGE_MODULEs.
  * param ModuleSegmentWidth (global) = new width
  * @param aEdge = edge to edit, or NULL.  If aEdge == NULL change
@@ -207,7 +208,8 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
 }
 
 
-/** function Enter_Edge_Width
+/**
+ * Function Enter_Edge_Width
  * Edition of the edge items width
  * Ask for a new width.
  * Change the width of EDGE_MODULE Edge if aEdge != NULL
@@ -236,7 +238,8 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* aEdge )
 }
 
 
-/** Function Delete_Edge_Module
+/**
+ * Function Delete_Edge_Module
  *  delete EDGE_MODULE Edge
  * @param Edge = edge to delete
  */

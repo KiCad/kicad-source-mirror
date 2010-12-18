@@ -102,7 +102,8 @@ void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 }
 
 
-/** function Draw (TODO)
+/**
+ * Function Draw (TODO)
  */
 void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
                          wxDC*             DC,
@@ -116,17 +117,17 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
  * Function DisplayInfo
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
- * Is virtual from EDA_BaseStruct.
+ * Is virtual from EDA_ITEM.
  * @param frame A WinEDA_DrawFrame in which to print status information.
  */
 void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
 {
-    int             count;
-    EDA_BaseStruct* Struct;
-    wxString        txt;
-    MODULE*         module;
-    D_PAD*          pad;
-    double          lengthnet = 0;
+    int       count;
+    EDA_ITEM* Struct;
+    wxString  txt;
+    MODULE*   module;
+    D_PAD*    pad;
+    double    lengthnet = 0;
 
     frame->ClearMsgPanel();
 
@@ -185,7 +186,8 @@ RATSNEST_ITEM::RATSNEST_ITEM()
 }
 
 
-/** function Draw
+/**
+ * Function Draw
  * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
 void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,

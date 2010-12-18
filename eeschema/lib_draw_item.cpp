@@ -22,12 +22,12 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T        aType,
                               int            aUnit,
                               int            aConvert,
                               FILL_T         aFillType ) :
-    EDA_BaseStruct( aType )
+    EDA_ITEM( aType )
 {
     m_Unit              = aUnit;
     m_Convert           = aConvert;
     m_Fill              = aFillType;
-    m_Parent            = (EDA_BaseStruct*) aComponent;
+    m_Parent            = (EDA_ITEM*) aComponent;
     m_typeName          = _( "Undefined" );
     m_isFillable        = false;
     m_eraseLastDrawItem = false;
@@ -35,7 +35,7 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T        aType,
 
 
 LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem ) :
-    EDA_BaseStruct( aItem )
+    EDA_ITEM( aItem )
 {
     m_Unit = aItem.m_Unit;
     m_Convert = aItem.m_Convert;

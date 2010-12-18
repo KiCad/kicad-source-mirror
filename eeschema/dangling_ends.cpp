@@ -32,7 +32,7 @@ bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint )
 }
 
 
-void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
+void SCH_EDIT_FRAME::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
 {
     SCH_ITEM* item;
     std::vector< DANGLING_END_ITEM > endPoints;
@@ -55,28 +55,31 @@ void WinEDA_SchematicFrame::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
  * Test if point pos is on a pin end.
  *
  * @param DrawList = List of SCH_ITEMs to check.
+ * @param pos - Position of pin end to locate.
  * @return a LIB_PIN pointer to the located pin or NULL if no pin was found.
  */
-LIB_PIN* WinEDA_SchematicFrame::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )
+LIB_PIN* SCH_EDIT_FRAME::LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos )
 {
     SCH_COMPONENT* DrawLibItem;
     LIB_PIN* Pin;
     wxPoint pinpos;
 
     Pin = LocateAnyPin( DrawList, pos, &DrawLibItem );
+
     if( !Pin )
         return NULL;
 
-    pinpos = Pin->m_Pos;
+    pinpos = Pin->GetPosition();
 
     if( DrawLibItem == NULL )
         NEGATE( pinpos.y );     // In libraries Y axis is bottom to top
                                 // and in schematic Y axis is top to bottom
 
     else                        // calculate the pin position in schematic
-        pinpos = DrawLibItem->m_Transform.TransformCoordinate( pinpos ) + DrawLibItem->m_Pos;
+        pinpos = DrawLibItem->GetTransform().TransformCoordinate( pinpos ) + DrawLibItem->m_Pos;
 
     if( pos == pinpos )
         return Pin;
+
     return NULL;
 }

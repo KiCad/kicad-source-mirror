@@ -35,6 +35,10 @@
 #include "PolyLine.h"
 
 
+extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
+                                                     BOARD* aPcb, ZONE_CONTAINER* aZone,
+                                                      double aArcCorrection,
+                                                      int aRoundPadThermalRotation);
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );
 extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
@@ -54,8 +58,6 @@ static int  CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone
                                                            KPolygonSet&    aKPolyList );
 static int  CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
                                                             KPolygonSet&    aKPolyList );
-static void AddUnconnectedThermalStubsToKPolygonList( std::vector<CPolyPt>& aCornerBuffer,
-                                                      BOARD* aPcb, ZONE_CONTAINER* aZone );
 
 
 // Local Variables:
@@ -71,7 +73,8 @@ double s_Correction;     /* mult coeff used to enlarge rounded and oval pads (an
                           * create a smaller gap than a true circle
                           */
 
-/** function AddClearanceAreasPolygonsToPolysList
+/**
+ * Function AddClearanceAreasPolygonsToPolysList
  * Supports a min thickness area constraint.
  * Add non copper areas polygons (pads and tracks with clearence)
  * to the filled copper area found
@@ -161,7 +164,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     EDA_Rect zone_boundingbox  = GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
     biggest_clearance = MAX( biggest_clearance, zone_clearance );
-    zone_boundingbox.Inflate( biggest_clearance, biggest_clearance );
+    zone_boundingbox.Inflate( biggest_clearance );
 
     /*
      * First : Add pads. Note: pads having the same net as zone are left in zone.
@@ -190,7 +193,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             nextpad = pad->Next();  // pad pointer can be modified by next code, so calculate the next pad here
             if( !pad->IsOnLayer( GetLayer() ) )
             {
-                /* Test fo pads that are on top or bottom only and have a hole.
+                /* Test for pads that are on top or bottom only and have a hole.
                  * There are curious pads but they can be used for some components that are inside the
                  * board (in fact inside the hole. Some photo diodes and Leds are like this)
                  */
@@ -360,153 +363,29 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 
 // Now we remove all unused thermal stubs.
-#define REMOVE_UNUSED_THERMAL_STUBS // Can be commented to skip unused thermal stubs calculations
-
-#ifdef REMOVE_UNUSED_THERMAL_STUBS
-
-// Test thermal stubs connections and add polygons to remove unconnected stubs.
-    cornerBufferPolysToSubstract.clear();
-    AddUnconnectedThermalStubsToKPolygonList( cornerBufferPolysToSubstract, aPcb, this );
-
-    /* remove copper areas */
-    if( cornerBufferPolysToSubstract.size() )
+    if( m_PadOption == THERMAL_PAD )
     {
-        KPolygonSet polyset_holes;
-        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
-        polyset_zone_solid_areas -= polyset_holes;
+        cornerBufferPolysToSubstract.clear();
+        // Test thermal stubs connections and add polygons to remove unconnected stubs.
+        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this, s_Correction, s_thermalRot );
 
-        /* put these areas in m_FilledPolysList */
-        m_FilledPolysList.clear();
-        CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
-        if( GetNet() > 0 )
-            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
-    }
-
-#endif  // REMOVE_UNUSED_THERMAL_STUBS
-
-}
-
-
-void AddUnconnectedThermalStubsToKPolygonList( std::vector<CPolyPt>& aCornerBuffer,
-                                               BOARD*                aPcb,
-                                               ZONE_CONTAINER*       aZone )
-{
-    // polygon buffer
-    std::vector<wxPoint> corners_buffer;
-    corners_buffer.reserve( 4 );
-    wxPoint  ptTest[4];
-
-    int      margin = aZone->m_ZoneMinThickness / 2;
-    int      zone_clearance = max( aZone->m_ZoneClearance, aZone->GetClearance() );
-    zone_clearance += margin;
-
-    EDA_Rect item_boundingbox;
-    EDA_Rect zone_boundingbox  = aZone->GetBoundingBox();
-    int      biggest_clearance = aPcb->GetBiggestClearanceValue();
-    biggest_clearance = MAX( biggest_clearance, zone_clearance );
-    zone_boundingbox.Inflate( biggest_clearance );
-
-    int iDTRC = ( aZone->m_ThermalReliefCopperBridgeValue - aZone->m_ZoneMinThickness ) / 2;
-
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
-    {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        /* remove copper areas */
+        if( cornerBufferPolysToSubstract.size() )
         {
-            // check
-            if( !pad->IsOnLayer( aZone->GetLayer() ) )
-                continue;
-            if( pad->GetNet() != aZone->GetNet() )
-                continue;
+            KPolygonSet polyset_holes;
+            AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+            polyset_zone_solid_areas -= polyset_holes;
 
-            item_boundingbox = pad->GetBoundingBox();
-            item_boundingbox.Inflate( aZone->m_ThermalReliefGapValue );
-            if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
-                continue;
-
-            // test point
-            int dx = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGapValue;
-            int dy = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGapValue;
-
-            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-            int fAngle = pad->m_Orient;
-            if( pad->m_PadShape == PAD_CIRCLE )
-            {
-                dx     = (int) ( dx * s_Correction );
-                dy     = dx;
-                fAngle = s_thermalRot;
-            }
-
-            // compute north, south, west and east points for zone connection.
-            // Add a small value to ensure point is inside (or outside) zone, not on an edge
-            ptTest[0] = wxPoint( 0, 3 + dy + margin );
-            ptTest[1] = wxPoint( 0, -(3 + dy + margin) );
-            ptTest[2] = wxPoint( 3 + dx + margin, 0 );
-            ptTest[3] = wxPoint( -(3 + dx + margin), 0 );
-
-            // Test all sides
-            for( int i = 0; i<4; i++ )
-            {
-                // rotate point
-                RotatePoint( &ptTest[i], fAngle );
-
-                // translate point
-                ptTest[i] += pad->ReturnShapePos();
-                if( aZone->HitTestFilledArea( ptTest[i] ) )
-                    continue;
-
-                corners_buffer.clear();
-
-                // polygons are rectangles with width of copper bridge value
-                // contour line width has to be taken into calculation to avoid "thermal stub bleed"
-                switch( i )
-                {
-                case 0:
-                    corners_buffer.push_back( wxPoint( -iDTRC, dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                    break;
-
-                case 1:
-                    corners_buffer.push_back( wxPoint( -iDTRC, -dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -dy ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                    break;
-
-                case 2:
-                    corners_buffer.push_back( wxPoint( dx, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( dx, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( +iDTRC, -iDTRC ) );
-                    break;
-
-                case 3:
-                    corners_buffer.push_back( wxPoint( -dx, -iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -dx, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, iDTRC ) );
-                    corners_buffer.push_back( wxPoint( -iDTRC, -iDTRC ) );
-                    break;
-                }
-
-
-                // add computed polygon to list
-                for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
-                {
-                    wxPoint cpos = corners_buffer[ic];
-                    RotatePoint( &cpos, fAngle );                               // Rotate according to module orientation
-                    cpos += pad->ReturnShapePos();                              // Shift origin to position
-                    CPolyPt corner;
-                    corner.x = cpos.x;
-                    corner.y = cpos.y;
-                    corner.end_contour = ( ic < (corners_buffer.size() - 1) ) ? 0 : 1;
-                    aCornerBuffer.push_back( corner );
-                }
-            }
+            /* put these areas in m_FilledPolysList */
+            m_FilledPolysList.clear();
+            CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
+            if( GetNet() > 0 )
+                Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
         }
     }
-}
 
+    cornerBufferPolysToSubstract.clear();
+}
 
 void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>&
                                                    aCornersBuffer,

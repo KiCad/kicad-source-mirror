@@ -18,6 +18,7 @@
 #include "wxstruct.h"
 #include "confirm.h"
 #include "kicad_device_context.h"
+#include "dialog_helpers.h"
 
 #include <wx/fontdlg.h>
 
@@ -173,8 +174,7 @@ void WinEDA_DrawFrame::ReCreateMenuBar()
 
 
 // Virtual function
-void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey,
-                                 EDA_BaseStruct* DrawStruct )
+void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
 }
 
@@ -184,15 +184,15 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
-/** Virtual function PrintPage
+/**
+ * Function PrintPage (virtual)
  * used to print a page
  * this basic function must be derived to be used for printing
  * because WinEDA_DrawFrame does not know how to print a page
  * This is the reason it is a virtual function
  */
-void WinEDA_DrawFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                int aPrintMask, bool aPrintMirrorMode,
-                void * aData)
+void WinEDA_DrawFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,int aPrintMask,
+                                  bool aPrintMirrorMode, void* aData )
 {
     wxMessageBox( wxT("WinEDA_DrawFrame::PrintPage() error"));
 }
@@ -364,12 +364,13 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/** Function SetToolID
+/**
+ * Function SetToolID
  * Enables the icon of the selected tool in the vertical toolbar.
  * (Or tool ID_NO_SELECT_BUTT default if no new selection)
  * @param aId = new m_ID_current_state value (if aId >= 0)
  * @param aCursor = the new cursor shape (0 = default cursor)
- * @param aTitle = tool message in status bar
+ * @param aToolMsg = tool message in status bar
  * if (aId >= 0)
  * Updates all variables related:
  *      m_ID_current_state, cursor shape and message in status bar
@@ -377,8 +378,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
  *      Only updates the cursor shape and message in status bar
  *      (does not the current m_ID_current_state value
  */
-void WinEDA_DrawFrame::SetToolID( int aId, int aCursor,
-                                  const wxString& aToolMsg )
+void WinEDA_DrawFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
@@ -460,9 +460,9 @@ void WinEDA_DrawFrame::HandleBlockPlace( wxDC* DC )
 }
 
 
-int WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
+bool WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
 {
-    return 0;
+    return false;
 }
 
 
@@ -552,7 +552,8 @@ void WinEDA_DrawFrame::AdjustScrollBars()
 }
 
 
-/** function SetLanguage
+/**
+ * Function SetLanguage
  * called on a language menu selection
  * when using a derived function, do not forget to call this one
  */
@@ -591,7 +592,7 @@ double RoundTo0( double x, double precision )
 }
 
 /**
- * Function UpdateStatusBar()
+ * Function UpdateStatusBar
  * Displays in the bottom of the main window a stust:
  *  - Absolute Cursor coordinates
  *  - Relative Cursor coordinates (relative to the last coordinate stored

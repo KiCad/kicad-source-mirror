@@ -110,13 +110,13 @@ public:
 
 
     /**
-     * Function Set_Rectangle_Encadrement()
+     * Function Set_Rectangle_Encadrement
      * calculates the bounding box for orient 0 at origin = module anchor)
      */
     void     Set_Rectangle_Encadrement();
 
     /**
-     * Function SetRectangleExinscrit()
+     * Function SetRectangleExinscrit
      * Calculates the real bounding box according to the board position,
      * and real orientation and also calculates the area value (used in
      * automatic placement)
@@ -124,11 +124,17 @@ public:
     void     SetRectangleExinscrit();
 
     /**
+     * Function GetFootPrintRect()
+     * Returns the area of the module footprint excluding any text.
+     */
+    EDA_Rect GetFootPrintRect() const;
+
+    /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
      * Mainly used to redraw the screen area occupied by the footprint
      */
-    EDA_Rect GetBoundingBox();
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function GetPosition

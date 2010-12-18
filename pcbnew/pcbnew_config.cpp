@@ -12,6 +12,7 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "pcbplot.h"
+#include "plot_common.h"
 #include "worksheet.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
@@ -54,7 +55,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PCB_LAYERS_SETUP:
-        DisplayDialogLayerSetup( this );
+        InstallDialogLayerSetup();
         break;
 
     case ID_CONFIG_REQ:
@@ -109,20 +110,20 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
    /* Hotkey IDs */
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( s_Board_Editor_Hokeys_Descr );
+        ExportHotkeyConfigToFile( g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( s_Board_Editor_Hokeys_Descr );
+        ImportHotkeyConfigFromFile( g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
-        InstallHotkeyFrame( this, s_Board_Editor_Hokeys_Descr );
+        InstallHotkeyFrame( this, g_Board_Editor_Hokeys_Descr );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
-        DisplayHotkeyList( this, s_Board_Editor_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
         break;
 
     default:
@@ -387,18 +388,6 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoRatsN" ),
                                                         ITEM_COLOR( RATSNEST_VISIBLE ),
                                                         WHITE ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLnum" ),
-                                                   &g_pcb_plot_options.HPGL_Pen_Num,
-                                                   1, 1, 16 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGdiam" ),
-                                                   &g_pcb_plot_options.HPGL_Pen_Diam,
-                                                   15, 0, 100 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLSpd" ),
-                                                   &g_pcb_plot_options.HPGL_Pen_Speed,
-                                                   20, 0, 1000 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLrec" ),
-                                                   &g_pcb_plot_options.HPGL_Pen_Recouvrement,
-                                                   2, 0, 0x100 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TimeOut" ), &g_TimeOut,
                                                    600, 0, 60000 ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DPolair" ),
@@ -409,6 +398,34 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetConfigurationSettings()
                                                     &g_Show_Module_Ratsnest, TRUE ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                     &g_TwoSegmentTrackBuild, TRUE ) );
+    // Plot options:
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLnum" ),
+                                                   &g_PcbPlotOptions.m_HPGLPenNum,
+                                                   1, 1, 16 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGdiam" ),
+                                                   &g_PcbPlotOptions.m_HPGLPenDiam,
+                                                   15, 0, 100 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLSpd" ),
+                                                   &g_PcbPlotOptions.m_HPGLPenSpeed,
+                                                   20, 0, 1000 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "HPGLrec" ),
+                                                   &g_PcbPlotOptions.m_HPGLPenOvr,
+                                                   2, 0, 0x100 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PlotOutputFormat" ),
+                                                    &g_PcbPlotOptions.m_PlotFormat, PLOT_FORMAT_GERBER ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "EdgeLayerGerberOpt" ),
+                                                    &g_PcbPlotOptions.m_ExcludeEdgeLayer, true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SubstractMasktoSilk" ),
+                                                    &g_PcbPlotOptions.m_SubtractMaskFromSilk, false ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PlotPadsOnSilkscreen" ),
+                                                    &g_PcbPlotOptions.m_PlotPadsOnSilkLayer, false ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PlotFrameRef" ),
+                                                    &g_PcbPlotOptions.m_PlotFrameRef, false ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PlotViasOnMask" ),
+                                                    &g_PcbPlotOptions.m_PlotViaOnMaskLayer, false ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PlotHolesOpt" ),
+                                                    (int*)&g_PcbPlotOptions.m_DrillShapeOpt,
+                                                    PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE ) );
 
     return m_configSettings;
 }

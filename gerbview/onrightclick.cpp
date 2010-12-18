@@ -61,14 +61,10 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
     if( BlockActive )
         return true;
 
-    PopMenu->Append( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS,
-                     _( "Delete Dcode items" ) );
-
     if( DrawStruct == NULL )
         return true;
 
     GetScreen()->SetCurItem( DrawStruct );
 
-    PopMenu->AppendSeparator();
     return true;
 }

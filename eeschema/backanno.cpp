@@ -17,7 +17,8 @@
 #include "sch_component.h"
 
 
-/** function FillFootprintFieldForAllInstancesofComponent
+/**
+ * Function FillFootprintFieldForAllInstancesofComponent
  * Search for component "aReference", and place a Footprint in Footprint field
  * @param aReference = reference of the component to initialize
  * @param aFootPrint = new value for the filed Footprint component
@@ -31,10 +32,9 @@
  * the search is not stopped when a reference is found (all instances must be
  * found).
  */
-bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
-    const wxString& aReference,
-    const wxString& aFootPrint,
-    bool            aSetVisible )
+bool SCH_EDIT_FRAME::FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
+                                                                   const wxString& aFootPrint,
+                                                                   bool            aSetVisible )
 {
     SCH_SHEET_PATH* sheet;
     SCH_ITEM*       DrawList = NULL;
@@ -49,7 +49,7 @@ bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
         for( ; (DrawList != NULL); DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() != TYPE_SCH_COMPONENT )
+            if( DrawList->Type() != SCH_COMPONENT_T )
                 continue;
 
             Cmp = (SCH_COMPONENT*) DrawList;
@@ -85,27 +85,12 @@ bool WinEDA_SchematicFrame::FillFootprintFieldForAllInstancesofComponent(
 }
 
 
-/** Function ProcessStuffFile
- * Read a "stuff" file created by cvpcb.
- * That file has lines like:
- * comp = "C1" module = "CP6"
- * comp = "C2" module = "C1"
- * comp = "C3" module = "C1"
- * "comp =" gives the component reference
- * "module =" gives the footprint name
- *
- * @param aStuffFile = file (*.stf) to Read.
- * @param aSetFielsAttributeToVisible = true to set the footprint field flag to
- * visible
- * @return true if OK.
- */
-bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
-                                              aSetFielsAttributeToVisible  )
+bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeToVisible  )
 {
     int   LineNum = 0;
     char* cp, Ref[256], FootPrint[256], Line[1024];
 
-    while( GetLine( aStuffFile, Line, &LineNum, sizeof(Line) ) )
+    while( GetLine( aFilename, Line, &LineNum, sizeof(Line) ) )
     {
         if( sscanf( Line, "comp = \"%s module = \"%s", Ref, FootPrint ) == 2 )
         {
@@ -119,10 +104,9 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
 
             wxString reference = CONV_FROM_UTF8( Ref );
             wxString Footprint = CONV_FROM_UTF8( FootPrint );
-            FillFootprintFieldForAllInstancesofComponent(
-                reference,
-                Footprint,
-                aSetFielsAttributeToVisible );
+            FillFootprintFieldForAllInstancesofComponent( reference,
+                                                          Footprint,
+                                                          aSetFieldAttributeToVisible );
         }
     }
 
@@ -132,7 +116,7 @@ bool WinEDA_SchematicFrame::ProcessStuffFile( FILE* aStuffFile, bool
 
 /* Backann footprint info to schematic.
  */
-bool WinEDA_SchematicFrame::ReadInputStuffFile()
+bool SCH_EDIT_FRAME::ReadInputStuffFile()
 {
     wxString Line, filename;
     FILE*    StuffFile;

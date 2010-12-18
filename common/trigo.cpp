@@ -5,7 +5,8 @@
 #include "fctsys.h"
 #include "trigo.h"
 
-/** Function TestSegmentHit
+/**
+ * Function TestSegmentHit
  * test for hit on line segment
  * i.e. cursor within a given distance from segment
  * @param aRefPoint = cursor (point to test) coords
@@ -22,7 +23,8 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
 }
 
 
-/** Function DistanceTest
+/**
+ * Function DistanceTest
  * Calculate the distance from mouse cursor to a line segment.
  * Returns:
  * False if distance > threshold

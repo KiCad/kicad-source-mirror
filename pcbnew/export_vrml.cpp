@@ -646,7 +646,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text ) /*{{{*/
 {
     /* Coupling by globals! Ewwww... */
     s_text_layer = text->GetLayer();
-    s_text_width = text->m_Width;
+    s_text_width = text->m_Thickness;
     wxSize size = text->m_Size;
     if( text->m_Mirror )
         NEGATE( size.x );
@@ -665,7 +665,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text ) /*{{{*/
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) 0,
                              txt, text->m_Orient, size,
                              text->m_HJustify, text->m_VJustify,
-                             text->m_Width, text->m_Italic,
+                             text->m_Thickness, text->m_Italic,
                              true,
                              vrml_text_callback );
             pos += offset;
@@ -678,7 +678,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text ) /*{{{*/
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) 0,
                          text->m_Text, text->m_Orient, size,
                          text->m_HJustify, text->m_VJustify,
-                         text->m_Width, text->m_Italic,
+                         text->m_Thickness, text->m_Italic,
                          true,
                          vrml_text_callback );
     }
@@ -688,9 +688,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text ) /*{{{*/
 static void export_vrml_drawings( BOARD* pcb ) /*{{{*/
 {
     /* draw graphic items */
-    for( EDA_BaseStruct* drawing = pcb->m_Drawings;
-        drawing != 0;
-        drawing = drawing->Next() )
+    for( EDA_ITEM* drawing = pcb->m_Drawings;  drawing != 0;  drawing = drawing->Next() )
     {
         switch( drawing->Type() )
         {
@@ -819,11 +817,11 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
             NEGATE( size.x ); // Text is mirrored
 
         s_text_layer = module->GetLayer();
-        s_text_width = module->m_Width;
+        s_text_width = module->m_Thickness;
         DrawGraphicText( NULL, NULL, module->m_Pos, (EDA_Colors) 0,
                          module->m_Text, module->GetDrawRotation(), size,
                          module->m_HJustify, module->m_VJustify,
-                         module->m_Width, module->m_Italic,
+                         module->m_Thickness, module->m_Italic,
                          true,
                          vrml_text_callback );
     }
@@ -995,10 +993,9 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     /* Reference and value */
     export_vrml_text_module( aModule->m_Reference );
     export_vrml_text_module( aModule->m_Value );
+
     /* Export module edges */
-    for( EDA_BaseStruct* item = aModule->m_Drawings;
-        item != NULL;
-        item = item->Next() )
+    for( EDA_ITEM* item = aModule->m_Drawings;  item != NULL;  item = item->Next() )
     {
         switch( item->Type() )
         {

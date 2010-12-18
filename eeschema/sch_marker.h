@@ -31,18 +31,17 @@ public:
     SCH_MARKER();
     SCH_MARKER( const wxPoint& aPos, const wxString& aText );
     ~SCH_MARKER();
+
     virtual wxString GetClass() const
     {
         return wxT( "SCH_MARKER" );
     }
 
-
-    SCH_MARKER*  GenCopy();
+    SCH_MARKER* GenCopy();
 
     virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                        const wxPoint& aOffset, int aDraw_mode,
                        int aColor = -1 );
-
 
     /**
      * Function Save
@@ -54,33 +53,13 @@ public:
     bool Save( FILE* aFile ) const;
 
     /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     * for a marker, has no meaning, but it is necessary to satisfy the
-     * SCH_ITEM class requirements
-     */
-    virtual int GetPenSize() { return 0; };
-
-    /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool HitTest( const wxPoint& aPosRef )
-    {
-        return HitTestMarker( aPosRef );
-    }
-
-
-    /**
      * Function GetBoundingBox
      * returns the orthogonal, bounding box of this object for display purposes.
      * This box should be an enclosing perimeter for visible components of this
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_Rect GetBoundingBox();
-
+    virtual EDA_Rect GetBoundingBox() const;
 
     // Geometric transforms (used in block operations):
 
@@ -124,6 +103,8 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
 };
 
 #endif /* _TYPE_SCH_MARKER_H_ */

@@ -12,6 +12,7 @@
 
 
 class SCH_SHEET_PATH;
+class LIB_DRAW_ITEM;
 class LIB_PIN;
 class LIB_COMPONENT;
 
@@ -47,31 +48,17 @@ class SCH_COMPONENT : public SCH_ITEM
 {
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
-public:
-    int      m_Multi;            // In multi unit chip - which unit to draw.
-
-    wxPoint  m_Pos;
-
-    wxString m_ChipName;         /* Key to look for in the library,
-                                  * i.e. "74LS00". */
-
-    wxString m_PrefixString;          /* C, R, U, Q etc - the first character
-                                       * which typically indicates what the
-                                       * component is. Determined, upon
-                                       * placement, from the library component.
-                                       * determined, upon file load, by the
-                                       * first non-digits in the reference
-                                       * fields. */
-
-    int m_Convert;                    /* Handle multiple shape (for instance
-                                       * De Morgan conversion) */
-    TRANSFORM m_Transform;            /* The rotation/mirror transformation
-                                       * matrix. */
-
-private:
-
-    SCH_FIELDS m_Fields;              ///< variable length list of fields
-
+    wxString m_ChipName;    ///< Name to look for in the library, i.e. "74LS00".
+    int      m_unit;        ///< The unit for multiple part per package components.
+    int      m_convert;     ///< The alternate body style for components that have more than
+                            ///< one body style defined.  Primarily used for components that
+                            ///< have a De Morgan conversion.
+    wxString m_prefix;      ///< C, R, U, Q etc - the first character which typically indicates
+                            ///< what the component is. Determined, upon placement, from the
+                            ///< library component.  Created upon file load, by the first
+                            ///<  non-digits in the reference fields.
+    TRANSFORM m_transform;  ///< The rotation/mirror transformation matrix.
+    SCH_FIELDS m_Fields;    ///< Variable length list of fields.
 
     /* Hierarchical references.
      * format is
@@ -84,7 +71,14 @@ private:
      */
     wxArrayString m_PathsAndReferences;
 
+public:
+    wxPoint  m_Pos;
+
+private:
+
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
+
+    EDA_Rect GetBodyBoundingBox() const;
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
@@ -123,12 +117,27 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
-    TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_Transform ); }
+    wxString GetLibName() const { return m_ChipName; }
+
+    void SetLibName( const wxString& aName );
+
+    int GetUnit() const { return m_unit; }
+
+    void SetUnit( int aUnit );
+
+    int GetConvert() const { return m_convert; }
+
+    void SetConvert( int aConvert );
+
+    wxString GetPrefix() const { return m_prefix; }
+
+    TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_transform ); }
+
+    void SetTransform( const TRANSFORM& aTransform );
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
+     * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -137,38 +146,32 @@ public:
     /**
      * Load schematic component from \a aLine in a .sch file.
      *
-     * @param aLine - Essentially this is file to read the component from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the component.
+     * @param aLine Essentially this is file to read the component from.
+     * @param aErrorMsg Description of the error if an error occurs while loading the component.
      * @return True if the component loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
-     * Function Load
-     * reads a component in from a file.  The file stream must be positioned at
-     * the first field of the file, not at the component tag.
-     * @param aFile The FILE to read from.
-     * @throw Error containing the error message text if there is a file format
-     *   error or if the disk read has failed.
-     *  void            Load( FILE* aFile ) throw( Error );
-     */
-
-    /**
      * Function GenCopy
-     * returns a copy of this object but with the linked list pointers
-     * set to NULL.
+     * returns a copy of this object but with the linked list pointers set to NULL.
      * @return SCH_COMPONENT* - a copy of me.
      */
-    SCH_COMPONENT* GenCopy()
+    SCH_COMPONENT* GenCopy() const
     {
         return new SCH_COMPONENT( *this );
     }
 
-
-    void       SetOrientation( int aOrientation );
+    /**
+     * Function SetOrientation
+     * computes the new transform matrix based on \a aOrientation for the component which is
+     * applied to the current transform.
+     * @param aOrientation The orientation to apply to the transform.
+     */
+    void SetOrientation( int aOrientation );
 
     /**
-     * Function GetOrientation()
+     * Function GetOrientation
      * Used to display component orientation (in dialog editor or info)
      * @return the orientation and mirror
      * Note: Because there are different ways to have a given orientation/mirror,
@@ -183,11 +186,20 @@ public:
      */
     int        GetOrientation();
 
-    wxPoint    GetScreenCoord( const wxPoint& coord );
+    /**
+     * Function GetScreenCoord
+     * Returns the coordinated point relative to the orientation of the component of \a aPoint.
+     * The coordinates are always relative to the anchor position of the component.
+     * @param aPoint The coordinates to transform.
+     * @return The transformed point.
+     */
+    wxPoint    GetScreenCoord( const wxPoint& aPoint );
+
     void       DisplayInfo( WinEDA_DrawFrame* frame );
 
     /**
-     * Suppress annotation ( i.i IC23 changed to IC? and part reset to 1)
+     * Function ClearAnnotation
+     * clears exiting component annotation ( i.i IC23 changed to IC? and part reset to 1)
      * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
      *             else remove annotation relative to this sheetpath
      */
@@ -195,37 +207,28 @@ public:
 
     /**
      * Function SetTimeStamp
-     * Change the old time stamp to the new time stamp.
-     * the time stamp is also modified in paths
+     * changes the time stamp to \a aNewTimeStamp updates the reference path.
+     * @see m_PathsAndReferences
      * @param aNewTimeStamp = new time stamp
      */
     void       SetTimeStamp( long aNewTimeStamp );
 
     /**
-     * Function GetBoundaryBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for graphic items and pins.
-     * this include only fields defined in library
-     * use GetBoundingBox() to include fields in schematic
-     */
-    EDA_Rect   GetBoundaryBox() const;
-
-    /**
      * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
+     * returns the bounding box of this object for display purposes. This box should be an
+     * enclosing perimeter for visible components of this object, and the units should be
+     * in the pcb or schematic coordinate system.  It is OK to overestimate the size by a
+     * few counts.
+     * @return The bounding rectangle of the component.
      */
-    EDA_Rect   GetBoundingBox();
+    EDA_Rect   GetBoundingBox() const;
 
     //-----<Fields>-----------------------------------------------------------
 
     /**
      * Function ReturnFieldName
      * returns the Field name given a field index like (REFERENCE, VALUE ..)
-     * @reeturn wxString - the field name or wxEmptyString if invalid field
-     *                     index.
+     * @return wxString - the field name or wxEmptyString if invalid field index.
      */
     wxString   ReturnFieldName( int aFieldNdx ) const;
 
@@ -267,22 +270,22 @@ public:
     int GetFieldCount() const { return (int) m_Fields.size(); }
 
     /**
-     * Find a component pin by number.
+     * Function GetPin
+     * finds a component pin by number.
      *
      * @param number - The number of the pin to find.
      * @return Pin object if found, otherwise NULL.
      */
     LIB_PIN* GetPin( const wxString& number );
 
-    virtual void            Draw( WinEDA_DrawPanel* panel,
-                                  wxDC*             DC,
-                                  const wxPoint&    offset,
-                                  int               draw_mode,
-                                  int               Color = -1 )
+    virtual void Draw( WinEDA_DrawPanel* panel,
+                       wxDC*             DC,
+                       const wxPoint&    offset,
+                       int               draw_mode,
+                       int               Color = -1 )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
-
 
     void Draw( WinEDA_DrawPanel* panel,
                wxDC*             DC,
@@ -293,7 +296,7 @@ public:
 
     void           SwapData( SCH_COMPONENT* copyitem );
 
-    void           Place( WinEDA_SchematicFrame* frame, wxDC* DC );
+    void           Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     // returns a unique ID, in the form of a path.
     wxString       GetPath( SCH_SHEET_PATH* sheet );
@@ -310,11 +313,10 @@ public:
     /**
      * Function AddHierarchicalReference
      * adds a full hierarchical reference (path + local reference)
-     * @param aPath = hierarchical path (/<sheet timestamp>/component
-     *                timestamp> like /05678E50/A23EF560)
-     * @param aRef = local reference like C45, R56
-     * @param aMulti = part selection, used in multi part per package (0 or 1
-     *                 for non multi)
+     * @param aPath Hierarchical path (/&ltsheet timestamp&gt/&ltcomponent
+     *              timestamp&gt like /05678E50/A23EF560)
+     * @param aRef :ocal reference like C45, R56
+     * @param aMulti Part selection, used in multi part per package (0 or 1 for non multi)
      */
     void           AddHierarchicalReference( const wxString& aPath,
                                              const wxString& aRef,
@@ -326,44 +328,49 @@ public:
     // Set the unit selection, for the given sheet path.
     void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     * for a component, has no meaning, but it is necessary to satisfy the
-     * SCH_ITEM class requirements.
-     */
-    virtual int GetPenSize() { return 0; }
-
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
+    /**
+     * Function Move
+     * moves item to a new position by \a aMoveVector.
+     * @param aMoveVector The displacement to move the component
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
+        if( aMoveVector == wxPoint( 0, 0 ) )
+            return;
+
         m_Pos += aMoveVector;
+
         for( int ii = 0; ii < GetFieldCount(); ii++ )
             GetField( ii )->Move( aMoveVector );
+
+        SetModified();
     }
 
-
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
+    /**
+     * Function Mirror_Y
+     * mirrors the component relative to an Y axis about the \a aYaxis_position.
+     * @param aYaxis_position The y axis position
      */
     virtual void Mirror_Y( int aYaxis_position );
-    virtual void Mirror_X( int aXaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
-
 
     /**
-     * Compare schematic component reference and value fields against search string.
+     * Function Mirror_X (virtual)
+     * mirrors item relative to an X axis about the \a aXaxis_position.
+     * @param aXaxis_position The x axis position
+     */
+    virtual void Mirror_X( int aXaxis_position );
+
+    virtual void Rotate( wxPoint rotationPoint );
+
+    /**
+     * Function Matches
+     * compares component reference and value fields against \a aSearchData.
      *
-     * @param aSearchData - Criteria to search against.
-     * @param aAuxData - a pointer on auxiliary data, if needed.
-     *        When searching string in REFERENCE field we must know the sheet path
-     *          This param is used in this case
+     * @param aSearchData Criteria to search against.
+     * @param aAuxData  Pointer to auxiliary data, if needed.
+     *        Used when searching string in REFERENCE field we must know the sheet path
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this component reference or value field matches the search criteria.
      */
@@ -377,7 +384,18 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    #if defined(DEBUG)
+    /**
+     * Function GetDrawItem().
+     * Return the component library item at \a aPosition that is part of this component.
+     *
+     * @param aPosition - Schematic position of the component library object.
+     * @param aType - Type of component library object to find or any if set to TYPE_NOT_INIT.
+     * @return A pointer to the component library object if found, otherwise NULL.
+     */
+    LIB_DRAW_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+
+
+#if defined(DEBUG)
 
     /**
      * Function Show
@@ -389,6 +407,11 @@ public:
     void         Show( int nestLevel, std::ostream& os );
 
 #endif
+
+private:
+    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool DoIsConnected( const wxPoint& aPosition ) const;
 };
 
 

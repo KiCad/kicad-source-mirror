@@ -301,12 +301,12 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
     if( aDraw_mode & GR_SURBRILL )
     {
         if( aDraw_mode & GR_AND )
-            color &= ~HIGHT_LIGHT_FLAG;
+            color &= ~HIGHLIGHT_FLAG;
         else
-            color |= HIGHT_LIGHT_FLAG;
+            color |= HIGHLIGHT_FLAG;
     }
 
-    if( color & HIGHT_LIGHT_FLAG )
+    if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
@@ -348,7 +348,8 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
 }
 
 
-/** function DrawShape
+/**
+ * Function DrawShape
  * basic function to draw a pad.
  * used by D_PAD::Draw after calculation of parameters (color, final orientation ...)
  * this function can be called to draw a pad on a panel
@@ -589,8 +590,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             tsize = (int) ( tsize * 0.8 );
             DrawGraphicText( aDrawInfo.m_DrawPanel, aDC, tpos, WHITE, buffer, t_angle,
                              wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false,
-                             false );
+                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
         }
     }
 
@@ -620,7 +620,8 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
 }
 
-/** function BuildSegmentFromOvalShape
+/**
+ * Function BuildSegmentFromOvalShape
  * Has meaning only for OVAL (and ROUND) pads.
  * Build an equivalent segment having the same shape as the OVAL shape,
  * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
@@ -657,7 +658,8 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
     return width;
 }
 
-/** function BuildPadPolygon
+/**
+ * Function BuildPadPolygon
  * Has meaning only for polygonal pads (trapeziod and rectangular)
  * Build the Corner list of the polygonal shape,
  * depending on shape, extra size (clearance ...) and orientation

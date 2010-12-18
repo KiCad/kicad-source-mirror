@@ -8,14 +8,12 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-
-#include "protos.h"
-
+#include "dialog_helpers.h"
 #include "bitmaps.h"
-
 #include "pcbnew_id.h"
-
 #include "hotkeys.h"
+
+//#include "protos.h"
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
@@ -101,22 +99,22 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          _( "Print Module" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), s_Module_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                          wxBitmap( zoom_in_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), s_Module_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_OUT, false );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                          wxBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), s_Module_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_REDRAW, false );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                          wxBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Zoom auto" ), s_Module_Editor_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hokeys_Descr,
                          HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                          wxBitmap( zoom_auto_xpm ), msg );
@@ -268,9 +266,11 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
                                             wxSize( LISTBOX_WIDTH, -1 ) );
         msg = _( "Auto" );
         m_SelZoomBox->Append( msg );
+
         for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
         {
             msg = _( "Zoom " );
+
             if ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar == 0 )
                 msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
             else
@@ -281,24 +281,26 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
                               GetScreen()->m_ZoomScalar );
                 msg += value;
             }
+
             m_SelZoomBox->Append( msg );
         }
 
         m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
-        // after adding the buttons to the toolbar, must call Realize() to
-        // reflect the changes
+        // after adding the buttons to the toolbar, must call Realize() to reflect the changes
         m_AuxiliaryToolBar->Realize();
     }
 
     // Update tool bar to reflect setting.
     m_SelGridBox->Clear();
-    for( i = 0; i < GetScreen()->m_GridList.GetCount(); i++ )
+
+    for( i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         double value = To_User_Unit( g_UserUnit,
-                                     GetScreen()->m_GridList[i].m_Size.x,
+                                     GetScreen()->GetGrid( i ).m_Size.x,
                                      PCB_INTERNAL_UNIT );
-        if( GetScreen()->m_GridList[i].m_Id != ID_POPUP_GRID_USER )
+
+        if( GetScreen()->GetGrid( i ).m_Id != ID_POPUP_GRID_USER )
         {
             switch( g_UserUnit )
             {
@@ -320,9 +322,9 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
             msg = _( "User Grid" );
         }
 
-        m_SelGridBox->Append( msg, (void*) &GetScreen()->m_GridList[i].m_Id );
+        m_SelGridBox->Append( msg, (void*) &GetScreen()->GetGrid( i ).m_Id );
 
-        if( m_LastGridSizeId == GetScreen()->m_GridList[i].m_Id )
+        if( m_LastGridSizeId == GetScreen()->GetGrid( i ).m_Id )
             m_SelGridBox->SetSelection( i );
     }
 }

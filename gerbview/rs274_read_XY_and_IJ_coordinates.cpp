@@ -11,13 +11,13 @@
 
 
 /* These routines read the text string point from Text.
- * After use, advanced Text the beginning of the sequence unread
+ * On exit, Text points the beginning of the sequence unread
  */
 wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
-    bool    is_float   = false;
+    bool    is_float   = m_DecimalFormat;
     char*   text;
     char    line[256];
 
@@ -41,7 +41,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             nbdigits = 0;
             while( IsNumber( *Text ) )
             {
-                if( *Text == '.' )
+                if( *Text == '.' )  // Force decimat format if reading a floating point number
                     is_float = true;
 
                 // count digits only (sign and decimal point are not counted)
@@ -201,3 +201,48 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
     m_IJPos = pos;
     return pos;
 }
+
+
+// Helper functions:
+
+/**
+ * Function ReadInt
+ * reads an int from an ASCII character buffer.  If there is a comma after the
+ * int, then skip over that.
+ * @param text A reference to a character pointer from which bytes are read
+ *    and the pointer is advanced for each byte read.
+ * @param aSkipSeparator = true (default) to skip comma
+ * @return int - The int read in.
+ */
+int ReadInt( char*& text, bool aSkipSeparator = true )
+{
+    int ret = (int) strtol( text, &text, 10 );
+
+    if( *text == ',' || isspace( *text ) )
+        if( aSkipSeparator )
+            ++text;
+
+    return ret;
+}
+
+
+/**
+ * Function ReadDouble
+ * reads a double from an ASCII character buffer. If there is a comma after
+ * the double, then skip over that.
+ * @param text A reference to a character pointer from which the ASCII double
+ *          is read from and the pointer advanced for each character read.
+ * @param aSkipSeparator = true (default) to skip comma
+ * @return double
+ */
+double ReadDouble( char*& text, bool aSkipSeparator = true )
+{
+    double ret = strtod( text, &text );
+
+    if( *text == ',' || isspace( *text ) )
+        if( aSkipSeparator )
+            ++text;
+
+    return ret;
+}
+

@@ -30,7 +30,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 
     m_NoShow = false;
     m_Size.x = m_Size.y = 400;
-    m_Width  = 120;   /* Set default dimension to a reasonable value. */
+    m_Thickness  = 120;   /* Set default dimension to a reasonable value. */
 
     SetLayer( SILKSCREEN_N_FRONT );
     if( Module && ( Module->Type() == TYPE_MODULE ) )
@@ -82,7 +82,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
                       m_Pos0.x, m_Pos0.y,
                       m_Size.y, m_Size.x,
                       orient,
-                      m_Width,
+                      m_Thickness,
                       m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
                       GetLayer(),
                       m_Italic ? 'I' : 'N',
@@ -115,7 +115,7 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
                 &type,
                 &m_Pos0.x, &m_Pos0.y,
                 &m_Size.y, &m_Size.x,
-                &m_Orient, &m_Width,
+                &m_Orient, &m_Thickness,
                 BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
         success = true;
 
@@ -165,9 +165,9 @@ int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
         m_Size.y = TEXTS_MIN_SIZE;
 
     // Set a reasonable width:
-    if( m_Width < 1 )
-        m_Width = 1;
-    m_Width = Clamp_Text_PenSize( m_Width, m_Size );
+    if( m_Thickness < 1 )
+        m_Thickness = 1;
+    m_Thickness = Clamp_Text_PenSize( m_Thickness, m_Size );
 
     return success;
 }
@@ -187,14 +187,14 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
     m_Orient = source->m_Orient;
     m_Pos0   = source->m_Pos0;
     m_Size   = source->m_Size;
-    m_Width  = source->m_Width;
+    m_Thickness  = source->m_Thickness;
     m_Italic = source->m_Italic;
     m_Bold   = source->m_Bold;
     m_Text   = source->m_Text;
 }
 
 
-int TEXTE_MODULE:: GetLength()
+int TEXTE_MODULE:: GetLength() const
 {
     return m_Text.Len();
 }
@@ -202,7 +202,7 @@ int TEXTE_MODULE:: GetLength()
 
 void TEXTE_MODULE:: SetWidth( int new_width )
 {
-    m_Width = new_width;
+    m_Thickness = new_width;
 }
 
 
@@ -245,11 +245,12 @@ void TEXTE_MODULE:: SetLocalCoord()
 }
 
 
-/** Function GetTextRect
+/**
+ * Function GetTextRect
  * @return an EDA_Rect which gives the position and size of the text area
  *         (for the footprint orientation)
  */
-EDA_Rect TEXTE_MODULE::GetTextRect( void )
+EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
 {
     EDA_Rect area;
 
@@ -257,8 +258,8 @@ EDA_Rect TEXTE_MODULE::GetTextRect( void )
 
     dx  = ( m_Size.x * GetLength() ) / 2;
     dx  = (dx * 10) / 9; /* letter size = 10/9 */
-    dx += m_Width / 2;
-    dy  = ( m_Size.y + m_Width ) / 2;
+    dx += m_Thickness / 2;
+    dy  = ( m_Size.y + m_Thickness ) / 2;
 
     wxPoint Org = m_Pos;    // This is the position of the center of the area
     Org.x -= dx;
@@ -302,7 +303,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
  * returns the bounding box of this Text (according to text and footprint
  * orientation)
  */
-EDA_Rect TEXTE_MODULE::GetBoundingBox()
+EDA_Rect TEXTE_MODULE::GetBoundingBox() const
 {
     // Calculate area without text fields:
     EDA_Rect text_area;
@@ -322,7 +323,8 @@ EDA_Rect TEXTE_MODULE::GetBoundingBox()
 }
 
 
-/** Function Draw
+/**
+ * Function Draw
  * Draw the text according to the footprint pos and orient
  * @param panel = draw panel, Used to know the clip box
  * @param DC = Current Device Context
@@ -353,7 +355,7 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
     size   = m_Size;
     orient = GetDrawRotation();
-    width  = m_Width;
+    width  = m_Thickness;
 
     if( ( frame->m_DisplayModText == FILAIRE )
 
@@ -417,21 +419,38 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
+void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
+                                  wxDC*             aDC,
+                                  int               aDrawMode,
+                                  const wxPoint&    aOffset )
+{
+    MODULE* parent = (MODULE*) GetParent();
+    if( !parent )
+        return;
+
+    GRSetDrawMode( aDC, GR_XOR );
+    GRLine( &aPanel->m_ClipBox, aDC,
+            parent->GetPosition().x, parent->GetPosition().y,
+            GetPosition().x + aOffset.x,
+            GetPosition().y + aOffset.y,
+            0, UMBILICAL_COLOR);
+}
 
 /* Return text rotation for drawings and plotting
  */
-int TEXTE_MODULE::GetDrawRotation()
+int TEXTE_MODULE::GetDrawRotation() const
 {
     int     rotation;
     MODULE* Module = (MODULE*) m_Parent;
 
     rotation = m_Orient;
+
     if( Module )
         rotation += Module->m_Orient;
 
     NORMALIZE_ANGLE_POS( rotation );
 
-//  For angle = 0 .. 180 deg
+    // For angle = 0 .. 180 deg
     while( rotation > 900 )
         rotation -= 1800;
 
@@ -491,8 +510,8 @@ void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orient" ), msg, DARKGREEN );
 
-    valeur_param( m_Width, msg );
-    frame->AppendMsgPanel( _( "Width" ), msg, DARKGREEN );
+    valeur_param( m_Thickness, msg );
+    frame->AppendMsgPanel( _( "Thickness" ), msg, DARKGREEN );
 
     valeur_param( m_Size.x, msg );
     frame->AppendMsgPanel( _( "H Size" ), msg, RED );

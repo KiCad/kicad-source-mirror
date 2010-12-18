@@ -36,24 +36,12 @@ static void recursive_bezier( int x1,
 /***********************************************************************************/
 
 
-/**
- * Function Bezier2Poly
- * convert a Bezier curve to a polyline
- * @return a std::vector<wxPoint> containing the points of the polyline
- * @param C1, c2, c3, c4 = wxPoints of the Bezier curve
- */
 std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3, wxPoint c4 )
 {
     return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y, c4.x, c4.y );
 }
 
 
-/**
- * Function Bezier2Poly
- * convert a Bezier curve to a polyline
- * @return a std::vector<wxPoint> containing the points of the polyline
- * @param C1, c2, c3 = wxPoints of the Bezier curve
- */
 std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3 )
 {
     return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y );

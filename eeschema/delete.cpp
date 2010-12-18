@@ -17,54 +17,7 @@
 
 
 // Imported function:
-void DeleteItemsInList( WinEDA_DrawPanel*  panel, PICKED_ITEMS_LIST& aItemsList );
-
-
-/*
- * Count number of items connected to point pos :
- *     pins, end wire or bus, and junctions if TstJunction == TRUE
- * Return this count
- *
- * Used by WinEDA_SchematicFrame::DeleteConnection()
- */
-static int CountConnectedItems( WinEDA_SchematicFrame* frame,
-                                SCH_ITEM* ListStruct, wxPoint pos,
-                                bool TstJunction )
-{
-    SCH_ITEM* Struct;
-    int       count = 0;
-
-    if( frame->LocatePinEnd( ListStruct, pos ) )
-        count++;
-
-    for( Struct = ListStruct; Struct != NULL; Struct = Struct->Next() )
-    {
-        if( Struct->m_Flags & STRUCT_DELETED )
-            continue;
-        if( Struct->m_Flags & SKIP_STRUCT )
-            continue;
-
-
-        if( TstJunction && ( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE ) )
-        {
-            #define JUNCTION ( (SCH_JUNCTION*) Struct )
-            if( JUNCTION->m_Pos == pos )
-                count++;
-            #undef JUNCTION
-        }
-
-        if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
-            continue;
-
-        #define SEGM ( (SCH_LINE*) Struct )
-        if( SEGM->IsOneEndPointAt( pos ) )
-            count++;
-        #undef SEGM
-    }
-
-    return count;
-}
-
+void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
 
 
 /*
@@ -72,31 +25,30 @@ static int CountConnectedItems( WinEDA_SchematicFrame* frame,
  * "ListStruct"
  * Search wire stop at an any  pin
  *
- * Used by WinEDA_SchematicFrame::DeleteConnection()
+ * Used by SCH_EDIT_FRAME::DeleteConnection()
  */
-static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
-                           SCH_LINE* segment )
+static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE* segment )
 {
-    EDA_BaseStruct* Struct;
+    EDA_ITEM* Struct;
 
     for( Struct = ListStruct; Struct != NULL; Struct = Struct->Next() )
     {
         if( Struct->m_Flags )
             continue;
-        if( Struct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+        if( Struct->Type() == SCH_JUNCTION_T )
         {
         #define JUNCTION ( (SCH_JUNCTION*) Struct )
-            if( segment->IsOneEndPointAt( JUNCTION->m_Pos ) )
+            if( segment->IsEndPoint( JUNCTION->m_Pos ) )
                 Struct->m_Flags |= CANDIDATE;
             continue;
         #undef JUNCTION
         }
 
-        if( Struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+        if( Struct->Type() != SCH_LINE_T )
             continue;
 
         #define SEGM ( (SCH_LINE*) Struct )
-        if( segment->IsOneEndPointAt( SEGM->m_Start ) )
+        if( segment->IsEndPoint( SEGM->m_Start ) )
         {
             if( !frame->LocatePinEnd( ListStruct, SEGM->m_Start ) )
             {
@@ -104,7 +56,7 @@ static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
                 MarkConnected( frame, ListStruct, SEGM );
             }
         }
-        if( segment->IsOneEndPointAt( SEGM->m_End ) )
+        if( segment->IsEndPoint( SEGM->m_End ) )
         {
             if( !frame->LocatePinEnd( ListStruct, SEGM->m_End ) )
             {
@@ -123,27 +75,26 @@ static bool MarkConnected( WinEDA_SchematicFrame* frame, SCH_ITEM* ListStruct,
  * Delete a connection, i.e wires or bus connected
  * stop on a node (more than 2 wires (bus) connected)
  */
-void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
+void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 {
-    wxPoint refpos = GetScreen()->m_Curseur;
+    SCH_SCREEN* screen = GetScreen();
+    wxPoint refpos = screen->m_Curseur;
     SCH_ITEM* DelStruct;
     PICKED_ITEMS_LIST pickList;
 
     /* Clear .m_Flags member for all items */
-    for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
-         DelStruct = DelStruct->Next() )
-        DelStruct->m_Flags = 0;
-
-    BreakSegmentOnJunction( (SCH_SCREEN*) GetScreen() );
+    screen->ClearDrawingState();
+    BreakSegmentOnJunction( screen );
 
     /* Locate all the wires, bus or junction under the mouse cursor, and put
      * them in a list of items to delete
      */
-    ITEM_PICKER picker(NULL, UR_DELETED);
-    SCH_SCREEN* screen = (SCH_SCREEN*) GetScreen();
+    ITEM_PICKER picker( NULL, UR_DELETED );
+
     // Save the list entry point of this screen
-    SCH_ITEM* savedEEDrawList = screen->EEDrawList;
-    DelStruct = GetScreen()->EEDrawList;
+    SCH_ITEM* savedItems = screen->GetDrawItems();
+    DelStruct = screen->GetDrawItems();
+
     while( DelStruct
            && ( DelStruct = PickStruct( screen->m_Curseur, screen,
                                         JUNCTIONITEM | WIREITEM | BUSITEM ) ) != NULL )
@@ -153,34 +104,35 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
         /* Put this structure in the picked list: */
         picker.m_PickedItem = DelStruct;
         picker.m_PickedItemType = DelStruct->Type();
-        pickList.PushItem(picker);
+        pickList.PushItem( picker );
 
         DelStruct  = DelStruct->Next();
-        screen->EEDrawList = DelStruct;
+        screen->SetDrawItems( DelStruct );
     }
 
-    GetScreen()->EEDrawList = savedEEDrawList;
+    screen->SetDrawItems( savedItems );
 
     /* Mark all wires, junctions, .. connected to one of the item to delete
      */
     if( DeleteFullConnection )
     {
-        for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
+        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
              DelStruct = DelStruct->Next() )
         {
             if( !(DelStruct->m_Flags & SELECTEDNODE) )
                 continue;
 
             #define SEGM ( (SCH_LINE*) DelStruct )
-            if( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+
+            if( DelStruct->Type() != SCH_LINE_T )
                 continue;
 
-            MarkConnected( this, GetScreen()->EEDrawList, SEGM );
+            MarkConnected( this, screen->GetDrawItems(), SEGM );
             #undef SEGM
         }
 
         // Search all removable wires (i.e wire with one new dangling end )
-        for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
+        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
              DelStruct = DelStruct->Next() )
         {
             bool noconnect = FALSE;
@@ -191,7 +143,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
             if( !(DelStruct->m_Flags & CANDIDATE) )
                 continue;                                   // Already seen
 
-            if( DelStruct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+            if( DelStruct->Type() != SCH_LINE_T )
                 continue;
 
             DelStruct->m_Flags |= SKIP_STRUCT;
@@ -200,44 +152,41 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
             /* Test the SEGM->m_Start point: if this point was connected to
              * an STRUCT_DELETED wire, and now is not connected, the wire can
              * be deleted */
-            EDA_BaseStruct* removed_struct;
-            for( removed_struct = GetScreen()->EEDrawList;
+            EDA_ITEM* removed_struct;
+            for( removed_struct = screen->GetDrawItems();
                  removed_struct != NULL;
                  removed_struct = removed_struct->Next() )
             {
                 if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
 
-                if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+                if( removed_struct->Type() != SCH_LINE_T )
                     continue;
 
                 #define WIRE ( (SCH_LINE*) removed_struct )
-                if( WIRE->IsOneEndPointAt( SEGM->m_Start ) )
+                if( WIRE->IsEndPoint( SEGM->m_Start ) )
                     break;
             }
 
-            if( WIRE && !CountConnectedItems( this, GetScreen()->EEDrawList,
-                                              SEGM->m_Start, TRUE ) )
+            if( WIRE && !screen->CountConnectedItems( SEGM->m_Start, true ) )
                 noconnect = TRUE;
 
             /* Test the SEGM->m_End point: if this point was connected to
              * an STRUCT_DELETED wire, and now is not connected, the wire
              * can be deleted */
-            for( removed_struct = GetScreen()->EEDrawList;
+            for( removed_struct = screen->GetDrawItems();
                  removed_struct != NULL;
                  removed_struct = removed_struct->Next() )
             {
                 if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
                     continue;
-                if( removed_struct->Type() != DRAW_SEGMENT_STRUCT_TYPE )
+                if( removed_struct->Type() != SCH_LINE_T )
                     continue;
-                if( WIRE->IsOneEndPointAt( SEGM->m_End ) )
+                if( WIRE->IsEndPoint( SEGM->m_End ) )
                     break;
             }
 
-            if( removed_struct &&
-               !CountConnectedItems( this, GetScreen()->EEDrawList,
-                                     SEGM->m_End, TRUE ) )
+            if( removed_struct && !screen->CountConnectedItems( SEGM->m_End, true ) )
                 noconnect = TRUE;
 
             DelStruct->m_Flags &= ~SKIP_STRUCT;
@@ -248,58 +197,55 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                 /* Put this structure in the picked list: */
                 picker.m_PickedItem = DelStruct;
                 picker.m_PickedItemType = DelStruct->Type();
-                pickList.PushItem(picker);
+                pickList.PushItem( picker );
 
-                DelStruct  = GetScreen()->EEDrawList;
+                DelStruct = screen->GetDrawItems();
             }
             #undef SEGM
         }
 
         // Delete redundant junctions (junctions which connect < 3 end wires
         // and no pin are removed)
-        for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
+        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
              DelStruct = DelStruct->Next() )
         {
-            int count;
             if( DelStruct->m_Flags & STRUCT_DELETED )
                 continue;
 
             if( !(DelStruct->m_Flags & CANDIDATE) )
                 continue;
 
-            if( DelStruct->Type() == DRAW_JUNCTION_STRUCT_TYPE )
+            if( DelStruct->Type() == SCH_JUNCTION_T )
             {
                 #define JUNCTION ( (SCH_JUNCTION*) DelStruct )
-                count = CountConnectedItems( this, GetScreen()->EEDrawList,
-                                             JUNCTION->m_Pos, FALSE );
-                if( count <= 2 )
+
+                if( screen->CountConnectedItems( JUNCTION->m_Pos, false ) <= 2 )
                 {
                     DelStruct->m_Flags |= STRUCT_DELETED;
 
                     /* Put this structure in the picked list: */
                     picker.m_PickedItem = DelStruct;
                     picker.m_PickedItemType = DelStruct->Type();
-                    pickList.PushItem(picker);
+                    pickList.PushItem( picker );
                 }
                 #undef JUNCTION
             }
         }
 
         // Delete labels attached to wires
-        wxPoint pos = GetScreen()->m_Curseur;
-        for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
+        wxPoint pos = screen->m_Curseur;
+
+        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
              DelStruct = DelStruct->Next() )
         {
             if( DelStruct->m_Flags & STRUCT_DELETED )
                 continue;
 
-            if( DelStruct->Type() != TYPE_SCH_LABEL )
+            if( DelStruct->Type() != SCH_LABEL_T )
                 continue;
 
             GetScreen()->m_Curseur = ( (SCH_TEXT*) DelStruct )->m_Pos;
-            EDA_BaseStruct* TstStruct =
-                PickStruct( GetScreen()->m_Curseur, GetScreen(),
-                            WIREITEM | BUSITEM );
+            EDA_ITEM* TstStruct = PickStruct( screen->m_Curseur, GetScreen(), WIREITEM | BUSITEM );
 
             if( TstStruct && TstStruct->m_Flags & STRUCT_DELETED )
             {
@@ -308,21 +254,19 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
                 /* Put this structure in the picked list: */
                 picker.m_PickedItem = DelStruct;
                 picker.m_PickedItemType = DelStruct->Type();
-                pickList.PushItem(picker);
+                pickList.PushItem( picker );
             }
         }
 
-        GetScreen()->m_Curseur = pos;
+        screen->m_Curseur = pos;
     }
 
-    for( DelStruct = GetScreen()->EEDrawList; DelStruct != NULL;
-         DelStruct = DelStruct->Next() )
-        DelStruct->m_Flags = 0;
+    screen->ClearDrawingState();
 
     if( pickList.GetCount() )
     {
         DeleteItemsInList( DrawPanel, pickList );
-        OnModify( );
+        OnModify();
     }
 }
 
@@ -341,7 +285,7 @@ void WinEDA_SchematicFrame::DeleteConnection( bool DeleteFullConnection )
  *
  * return TRUE if an item was deleted
  */
-bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
+bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     SCH_ITEM* DelStruct;
     SCH_SCREEN* screen = (SCH_SCREEN*) ( frame->GetScreen() );
@@ -359,8 +303,7 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
     if( DelStruct == NULL )
         DelStruct = PickStruct( screen->m_Curseur, screen, DRAWITEM );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen,
-                                TEXTITEM | LABELITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, TEXTITEM | LABELITEM );
     if( DelStruct == NULL )
         DelStruct = PickStruct( screen->m_Curseur, screen, LIBITEM );
     if( DelStruct == NULL )
@@ -370,7 +313,7 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
     {
         g_ItemToRepeat = NULL;
         DeleteStruct( frame->DrawPanel, DC, DelStruct );
-        frame->TestDanglingEnds( frame->GetScreen()->EEDrawList, DC );
+        frame->TestDanglingEnds( frame->GetScreen()->GetDrawItems(), DC );
         frame->OnModify( );
         item_deleted = TRUE;
     }
@@ -386,13 +329,13 @@ bool LocateAndDeleteItem( WinEDA_SchematicFrame* frame, wxDC* DC )
  *   Screen = pointer on the screen of belonging
  *
  * Note:
- * DRAW_SHEET_STRUCT_TYPE structures for the screen and structures
+ * SCH_SHEET_T structures for the screen and structures
  * Corresponding keys are not.
  * They must be treated separately
  */
 void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 {
-    EDA_BaseStruct* DrawList;
+    EDA_ITEM* DrawList;
 
     if( DrawStruct == NULL )
         return;
@@ -402,7 +345,7 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
 
     Screen->SetModify();
 
-    if( DrawStruct->Type() == DRAW_HIERARCHICAL_PIN_SHEET_STRUCT_TYPE )
+    if( DrawStruct->Type() == SCH_SHEET_LABEL_T )
     {
         // This structure is attached to a sheet, get the parent sheet object.
         SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) DrawStruct;
@@ -414,14 +357,15 @@ void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
     }
     else
     {
-        if( DrawStruct == Screen->EEDrawList )
+        if( DrawStruct == Screen->GetDrawItems() )
         {
-            Screen->EEDrawList = DrawStruct->Next();
+            Screen->SetDrawItems( DrawStruct->Next() );
             SAFE_DELETE( DrawStruct );
         }
         else
         {
-            DrawList = Screen->EEDrawList;
+            DrawList = Screen->GetDrawItems();
+
             while( DrawList && DrawList->Next() )
             {
                 if( DrawList->Next() == DrawStruct )
@@ -444,17 +388,17 @@ void DeleteAllMarkers( int type )
     SCH_MARKER* Marker;
     SCH_SCREENS ScreenList;
 
-    for( screen = ScreenList.GetFirst(); screen != NULL;
-         screen = ScreenList.GetNext() )
+    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        for( DrawStruct = screen->EEDrawList; DrawStruct != NULL;
-             DrawStruct = NextStruct )
+        for( DrawStruct = screen->GetDrawItems(); DrawStruct != NULL; DrawStruct = NextStruct )
         {
             NextStruct = DrawStruct->Next();
-            if( DrawStruct->Type() != TYPE_SCH_MARKER )
+
+            if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             Marker = (SCH_MARKER*) DrawStruct;
+
             if( Marker->GetMarkerType() != type )
                 continue;
 

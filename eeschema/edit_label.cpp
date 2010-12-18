@@ -31,7 +31,7 @@ static bool    lastTextBold = false;
 static bool    lastTextItalic = false;
 
 
-void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
+void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         return;
@@ -48,10 +48,10 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         ItemInitialPosition = TextStruct->m_Pos;
         OldSize   = TextStruct->m_Size;
         OldOrient = TextStruct->GetSchematicTextOrientation();
@@ -75,7 +75,7 @@ void WinEDA_SchematicFrame::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 }
 
 
-void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
+void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
@@ -95,10 +95,10 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         orient  = TextStruct->GetSchematicTextOrientation() + 1;
         orient &= 3;
         TextStruct->SetSchematicTextOrientation( orient );
@@ -116,7 +116,7 @@ void WinEDA_SchematicFrame::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
 /* Routine to create new text struct (GraphicText, label or Glabel).
  */
-SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
+SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
 {
     SCH_TEXT* NewText = NULL;
 
@@ -143,8 +143,7 @@ SCH_TEXT* WinEDA_SchematicFrame::CreateNewText( wxDC* DC, int type )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_SchematicFrame::CreateNewText() Internal error" ) );
+        DisplayError( this, wxT( "SCH_EDIT_FRAME::CreateNewText() Internal error" ) );
         return NULL;
     }
 
@@ -196,10 +195,10 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
     /* redraw the text */
     switch( TextStruct->Type() )
     {
-    case TYPE_SCH_LABEL:
-    case TYPE_SCH_GLOBALLABEL:
-    case TYPE_SCH_HIERLABEL:
-    case TYPE_SCH_TEXT:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_TEXT_T:
         ( (SCH_TEXT*) TextStruct )->m_Pos = panel->GetScreen()->m_Curseur;
         break;
 
@@ -239,10 +238,10 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
     {
         switch( Struct->Type() )
         {
-        case TYPE_SCH_LABEL:
-        case TYPE_SCH_GLOBALLABEL:
-        case TYPE_SCH_HIERLABEL:
-        case TYPE_SCH_TEXT:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_TEXT_T:
         {
             SCH_TEXT* Text = (SCH_TEXT*) Struct;
             Text->m_Pos  = ItemInitialPosition;
@@ -261,13 +260,11 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-/* Routine to change a text type to an other one (GraphicText, label or
- * Glabel).
- * A new test, label or hierarchical or global label is created from the old
- * text.
+/* Routine to change a text type to an other one (GraphicText, label or Glabel).
+ * A new test, label or hierarchical or global label is created from the old text.
  * the old text is deleted
  */
-void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
+void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
 {
     if( Text == NULL )
         return;
@@ -276,19 +273,19 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
 
     switch( newtype )
     {
-    case TYPE_SCH_LABEL:
+    case SCH_LABEL_T:
         newtext = new SCH_LABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_GLOBALLABEL:
+    case SCH_GLOBAL_LABEL_T:
         newtext = new SCH_GLOBALLABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_HIERLABEL:
+    case SCH_HIERARCHICAL_LABEL_T:
         newtext = new SCH_HIERLABEL( Text->m_Pos, Text->m_Text );
         break;
 
-    case TYPE_SCH_TEXT:
+    case SCH_TEXT_T:
         newtext = new SCH_TEXT( Text->m_Pos, Text->m_Text );
         break;
 
@@ -306,7 +303,7 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
     newtext->m_Shape = Text->m_Shape;
     newtext->SetSchematicTextOrientation( Text->GetSchematicTextOrientation() );
     newtext->m_Size   = Text->m_Size;
-    newtext->m_Width  = Text->m_Width;
+    newtext->m_Thickness  = Text->m_Thickness;
     newtext->m_Italic = Text->m_Italic;
     newtext->m_Bold   = Text->m_Bold;
 
@@ -317,20 +314,20 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
     /* add the new text in linked list if old text is in list */
     if( (flags & IS_NEW) == 0 )
     {
-        newtext->SetNext( GetScreen()->EEDrawList );
-        GetScreen()->EEDrawList = newtext;
-        OnModify( );
+        newtext->SetNext( GetScreen()->GetDrawItems() );
+        GetScreen()->SetDrawItems( newtext );
+        OnModify();
     }
 
     /* now delete the old text
-     *  If it is a text flagged IS_NEW it will be deleted by
-     * ForceCloseManageCurseur()
+     *  If it is a text flagged IS_NEW it will be deleted by ForceCloseManageCurseur()
      *  If not, we must delete it.
      */
     if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
     {
         DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
     }
+
     if( (flags & IS_NEW) == 0 )    // Remove old text from current list and
                                    // save it in undo list
     {
@@ -343,16 +340,15 @@ void WinEDA_SchematicFrame::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newty
 
     GetScreen()->SetCurItem( NULL );
 
-    SAFE_DELETE( g_ItemToUndoCopy );
+    delete g_ItemToUndoCopy;
+    g_ItemToUndoCopy = NULL;
 
     DrawPanel->CursorOff( DC );   // Erase schematic cursor
 
-    /* Save the new text in undo list if the old text was not itself a "new
-     * created text"
-     * In this case, the old text is already in undo list as a deleted item
+    /* Save the new text in undo list if the old text was not itself a "new created text"
+     * In this case, the old text is already in undo list as a deleted item.
      * Of course if the old text was a "new created text" the new text will be
-     * put in undo list
-     * later, at the end of the current command (if not aborted)
+     * put in undo list later, at the end of the current command (if not aborted)
      */
     if( (flags & IS_NEW) == 0 )
     {

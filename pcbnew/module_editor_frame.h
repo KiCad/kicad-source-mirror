@@ -40,7 +40,7 @@ public:
     void         ReCreateMenuBar();
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_BaseStruct* DrawStruct );
+    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
     bool         OnHotkeyEditItem( int aIdCommand );
     bool         OnHotkeyDeleteItem( int aIdCommand );
     bool         OnHotkeyMoveItem( int aIdCommand );
@@ -85,7 +85,7 @@ public:
     // BOARD handling
 
     /**
-     * Function Clear_Pcb()
+     * Function Clear_Pcb
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to
      *                 initialize silently
@@ -93,9 +93,9 @@ public:
     bool         Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    int          ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int key );
     virtual void HandleBlockPlace( wxDC* DC );
-    virtual int  HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     BOARD_ITEM*  ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
@@ -138,7 +138,7 @@ public:
 
     // Footprint edition
     void         Place_Ancre( MODULE* module );
-    void         RemoveStruct( EDA_BaseStruct* Item );
+    void         RemoveStruct( EDA_ITEM* Item );
     void         Transform( MODULE* module, int transform );
 
     // importing / exporting Footprint

@@ -55,8 +55,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     filesMenu->AppendSeparator();
 
     filesMenu->Append( wxID_PRINT, _( "P&rint" ), _( "Print gerber" ) );
-    filesMenu->Append( ID_GEN_PLOT, _( "Plot" ),
-                       _( "Plotting in various formats" ) );
 
     filesMenu->AppendSeparator();
     filesMenu->Append( ID_EXIT, _( "E&xit" ), _( "Quit Gerbview" ) );

@@ -10,13 +10,13 @@
 #include "eda_doc.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "get_component_dialog.h"
+#include "dialog_get_component.h"
 #include "appl_wxstruct.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
-#include "protos.h"
+#include "dialog_helpers.h"
 
 class ModList
 {
@@ -24,11 +24,11 @@ public:
     ModList* Next;
     wxString m_Name, m_Doc, m_KeyWord;
 
-public: ModList()
+public:
+    ModList()
     {
         Next = NULL;
     }
-
 
     ~ModList()
     {
@@ -42,7 +42,8 @@ static void ReadDocLib( const wxString& ModLibName );
 
 static ModList* MList;
 
-/** function Load_Module_From_BOARD
+/**
+ * Function Load_Module_From_BOARD
  * load in Modedit a footfrint from the main board
  * @param Module = the module to load. If NULL, a module reference will we asked to user
  * @return true if a module isloaded, false otherwise.
@@ -103,7 +104,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
     bool             AllowWildSeach = TRUE;
 
     /* Ask for a component name or key words */
-    WinEDA_SelectCmp dlg( this, GetComponentDialogPosition(), HistoryList,
+    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
                           _( "Place Module" ), false );
 
     dlg.SetComponentName( lastCommponentName );
@@ -195,7 +196,8 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 }
 
 
-/** function Get_Librairie_Module
+/**
+ * Function Get_Librairie_Module
  *
  *  Read active libraries or one library to find and load a given module
  *  If found the module is linked to the tail of linked list of modules
@@ -337,41 +339,38 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
 }
 
 
-/** Function Select_1_Module_From_List
- *  Display a list of modules found in active libraries or a given library
- *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
+/**
+ * Function Select_1_Module_From_List
+ * Display a list of modules found in active libraries or a given library
+ *
+ * @param aWindow - The active window.
+ * @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
  *                                void, list all modules)
- *  @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used
- * )
- *  @param aKeyWord = keyword list, to display a filtered list of module having
+ * @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used )
+ * @param aKeyWord = keyword list, to display a filtered list of module having
  *                    one (or more) of these keyworks in their keywork list
  *                    ( aKeyWord = wxEmptyString if not used )
  *
  *  @return wxEmptyString if abort or fails, or the selected module name if Ok
  */
-wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
-    WinEDA_DrawFrame* active_window,
-    const wxString& aLibraryFullFilename,
-    const wxString& aMask, const wxString& aKeyWord )
+wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWindow,
+                                                         const wxString&   aLibraryFullFilename,
+                                                         const wxString&   aMask,
+                                                         const wxString&   aKeyWord )
 {
     int             LineNum;
-    unsigned        ii, NbModules;
+    unsigned        ii;
     char            Line[1024];
     wxFileName      fn;
     static wxString OldName;    /* Save the name of the last module loaded. */
     wxString        CmpName, tmp;
     FILE*           file;
     wxString        msg;
-
-    WinEDAListBox*  ListBox = new WinEDAListBox( active_window, wxEmptyString,
-                                                 NULL, OldName, DisplayCmpDoc,
-                                                 wxColour( 200, 200, 255 ),
-                                                 GetComponentDialogPosition() );
+    wxArrayString   itemslist;
 
     wxBeginBusyCursor();
 
     /* Find modules in libraries. */
-    NbModules = 0;
     for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
     {
         /* Calculate the full file name of the library. */
@@ -447,15 +446,9 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
                     strupper( Line );
                     msg = CONV_FROM_UTF8( StrPurge( Line ) );
                     if( aMask.IsEmpty() )
-                    {
-                        ListBox->Append( msg );
-                        NbModules++;
-                    }
+                        itemslist.Add( msg );
                     else if( WildCompareString( aMask, msg, false ) )
-                    {
-                        ListBox->Append( msg );
-                        NbModules++;
-                    }
+                        itemslist.Add( msg );
                 }
             } /* End read INDEX */
         }
@@ -475,27 +468,23 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List(
         while( ItemMod != NULL )
         {
             if( KeyWordOk( aKeyWord, ItemMod->m_KeyWord ) )
-            {
-                NbModules++;
-                ListBox->Append( ItemMod->m_Name );
-            }
+                itemslist.Add( ItemMod->m_Name );
             ItemMod = ItemMod->Next;
         }
     }
 
     wxEndBusyCursor();
 
-    msg.Printf( _( "Modules [%d items]" ), NbModules );
-    ListBox->SetTitle( msg );
-    ListBox->SortList();
+    msg.Printf( _( "Modules [%d items]" ), itemslist.GetCount() );
+    WinEDAListBox dlg( aWindow, msg, itemslist, OldName,
+                       DisplayCmpDoc, GetComponentDialogPosition() );
 
-    ii = ListBox->ShowModal();
-    if( ii >= 0 )
-        CmpName = ListBox->GetTextSelection();
+    dlg.SortList();
+
+    if( dlg.ShowModal() == wxID_OK )
+        CmpName = dlg.GetTextSelection();
     else
         CmpName.Empty();
-
-    ListBox->Destroy();
 
     while( MList != NULL )
     {
@@ -600,44 +589,32 @@ static void ReadDocLib( const wxString& ModLibName )
 }
 
 
-/** Function Select_1_Module_From_BOARD
+/**
+ * Function Select_1_Module_From_BOARD
  * Display the list of modules currently existing on the BOARD
  * @return a pointer to a module if this module is selected or NULL otherwise
  * @param aPcb = the board from modules can be loaded
  */
 MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
-    int             ii;
     MODULE*         Module;
     static wxString OldName;       /* Save name of last module selectec. */
     wxString        CmpName, msg;
 
-    WinEDAListBox*  ListBox = new WinEDAListBox( this, wxEmptyString,
-                                                 NULL, wxEmptyString, NULL,
-                                                 wxColour( 200, 200, 255 ) );
+    wxArrayString listnames;
 
-    ii     = 0;
     Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-    {
-        ii++;
-        ListBox->Append( Module->m_Reference->m_Text );
-    }
+        listnames.Add( Module->m_Reference->m_Text );
 
-    msg.Printf( _( "Modules [%d items]" ), ii );
-    ListBox->SetTitle( msg );
+    msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
-    ListBox->SortList();
+    WinEDAListBox dlg( this, msg, listnames, wxEmptyString );
+    dlg.SortList();
 
-    ii = ListBox->ShowModal();
-    if( ii >= 0 )
-        CmpName = ListBox->GetTextSelection();
+    if( dlg.ShowModal() == wxID_OK )
+        CmpName = dlg.GetTextSelection();
     else
-        CmpName.Empty();
-
-    ListBox->Destroy();
-
-    if( CmpName == wxEmptyString )
         return NULL;
 
     OldName = CmpName;
@@ -645,7 +622,7 @@ MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
     Module = aPcb->m_Modules;
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
-        if( CmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )
+        if( CmpName == Module->m_Reference->m_Text )
             break;
     }
 

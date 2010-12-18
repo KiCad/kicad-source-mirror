@@ -267,7 +267,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
 
 /**
- *  Function used by Marque_Une_Piste()
+ * Function used by Marque_Une_Piste
  *  - Set the BUSY flag of connected segments, the first search point is
  *      ref_pos on layers allowed in masque_layer
  *  - Put segments fount in aList
@@ -533,7 +533,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
 /* Set to onoff the .m_State member, bit mask State of a list of items
  */
-void ListSetState( EDA_BaseStruct* Start, int NbItem, int State, int onoff )
+void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )
 {
     if( Start == NULL )
         return;

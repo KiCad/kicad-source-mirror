@@ -56,12 +56,14 @@ void GRResetPenAndBrush( wxDC* DC );
 void GRSetColorPen( wxDC* DC, int Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, int Color, int fill = 0 );
 
-/** function GRForceBlackPen
+/**
+ * Function GRForceBlackPen
  * @param flagforce True to force a black pen whenever the asked color
  */
 void GRForceBlackPen( bool flagforce );
 
-/** function GetGRForceBlackPenState
+/**
+ * Function GetGRForceBlackPenState
  * @return ForceBlackPen (True if a black pen was forced)
  */
 bool GetGRForceBlackPenState( void );
@@ -90,13 +92,12 @@ void GRBezier( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
  * Function GRClosedPoly
  * draws a closed polygon onto the drawing context \a aDC and optionally fills
  * and/or draws a border around it.
- * @param ClipBox defines a rectangular boundary outside of which no drawing
- *                will occur.
+ * @param ClipBox defines a rectangular boundary outside of which no drawing will occur.
  * @param aDC the device context into which drawing should occur.
- * @param aPointCount the number of points in the array \a aPointArray.
+ * @param aPointCount the number of points in the array \a aPoints.
+ * @param aPoints The points to draw.
  * @param aPointArray an array holding the wxPoints in the polygon.
- * @param doFill true if polygon is to be filled, else false and only the
- *               boundary is drawn.
+ * @param doFill true if polygon is to be filled, else false and only the boundary is drawn.
  * @param aPenColor the color index of the border.
  * @param aFillColor the fill color of the polygon's interior.
  */
@@ -115,15 +116,13 @@ void GRClosedPoly( EDA_Rect* ClipBox,
  * Function GRClosedPoly
  * draws a closed polygon onto the drawing context \a aDC and optionally fills
  * and/or draws a border around it.
- * @param ClipBox defines a rectangular boundary outside of which no drawing
- *                will occur.
+ * @param ClipBox defines a rectangular boundary outside of which no drawing will occur.
  * @param aDC the device context into which drawing should occur.
  * @param aPointCount the number of points in the array \a aPointArray.
+ * @param aPoints the points to draw.
  * @param aPointArray an array holding the wxPoints in the polygon.
- * @param doFill true if polygon is to be filled, else false and only the
- *               boundary is drawn.
- * @param aPenWidth is the width of the pen to use on the perimeter, can be
- *                  zero.
+ * @param doFill true if polygon is to be filled, else false and only the boundary is drawn.
+ * @param aPenWidth is the width of the pen to use on the perimeter, can be zero.
  * @param aPenColor the color index of the border.
  * @param aFillColor the fill color of the polygon's interior.
  */
@@ -142,8 +141,7 @@ void GRClosedPoly( EDA_Rect* ClipBox,
  * draws a circle onto the drawing context \a aDC centered at the user
  * coordinates (x,y)
  *
- * @param ClipBox defines a rectangular boundary outside of which no drawing
- *                will occur.
+ * @param ClipBox defines a rectangular boundary outside of which no drawing will occur.
  * @param aDC the device context into which drawing should occur.
  * @param x The x coordinate in user space of the center of the circle.
  * @param x The y coordinate in user space of the center of the circle.
@@ -202,7 +200,8 @@ void GRRectPs( EDA_Rect* aClipBox, wxDC* aDC,const EDA_Rect& aRect,
 void GRSFilledRect( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1,
                     int x2, int y2, int width, int Color, int BgColor );
 
-/** Function GRLineArray
+/**
+ * Function GRLineArray
  * draws an array of lines (not a polygon).
  * @param aClipBox = the clip box
  * @param aDC = the device context into which drawing should occur.

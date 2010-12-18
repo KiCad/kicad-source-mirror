@@ -280,7 +280,8 @@ FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
 }
 
 
-/** function OnChar
+/**
+ * Function OnChar
  * called on a key pressed
  * Call default handler for some special keys,
  * and for "ascii" keys, select the first footprint
