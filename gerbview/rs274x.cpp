@@ -769,7 +769,7 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
  * test for an end of line
  * if an end of line is found:
  *   read a new line
- * @param aBuff[GERBER_BUFZ] = buffer to fill with a new line
+ * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
  * @param aText = pointer to the last useful char in aBuff
  *          on return: points the beginning of the next line.
  * @param aFile = the opened GERBER file to read

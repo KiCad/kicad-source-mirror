@@ -54,7 +54,7 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame *parent) :
 }
 
 
-void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& WXUNUSED(event) )
+void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& event )
 {
     EndModal( 0 );
 }

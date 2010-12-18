@@ -119,7 +119,7 @@ public:
     {
         return m_LayerNegative;
     }
-    
+
     /**
      * Function HasNegativeItems
      * @return true if this item or at least one shape (when using aperture macros
@@ -147,14 +147,14 @@ public:
     /**
      * Function MoveAB
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     void MoveAB( const wxPoint& aMoveVector );
 
      /**
      * Function MoveXY
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object, in XY gerber axis.
+     * @param aMoveVector - the move vector for this object, in XY gerber axis.
      */
     void MoveXY( const wxPoint& aMoveVector );
 
@@ -238,7 +238,7 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
+     * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
     bool     HitTest( const wxPoint& aRefPos );
@@ -247,7 +247,7 @@ public:
      * Function HitTest (overlayed)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param aRefPos A wxPoint to test
+     * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
     bool     HitTest( EDA_Rect& aRefArea );

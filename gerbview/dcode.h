@@ -164,8 +164,8 @@ public:
      * @param aDC = device context
      * @param aColor = the normal color to use
      * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
-     * @param aFilled = true to draw in filled mode, false to draw in skecth mode
-     * @param aPosition = the actual shape position
+     * @param aShapePos = the actual shape position
+     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void                 DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
                                             EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,

@@ -86,7 +86,6 @@ static wxPoint LastPosition;
  * @param aPos The center point of the flash
  * @param aSize The diameter of the round flash
  * @param aLayerNegative = true if the current layer is negative
- * @param aImageNegative = true if the current image is negative
  */
 static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
@@ -177,17 +176,19 @@ static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * <li> absolute angle 180 to 270 (quadrant 3) or
  * <li> absolute angle 270 to 0 (quadrant 4)
  * </ul><p>
- * @param GERBER_DRAW_ITEM is the GBRITEM to fill in.
+ * @param aGbrItem is the GBRITEM to fill in.
  * @param Dcode_index is the DCODE value, like D14
  * @param aLayer is the layer index to set into the GBRITEM
  * @param aStart is the starting point
  * @param aEnd is the ending point
- * @param rel_center is the center coordinate relative to start point,
+ * @param aRelCenter is the center coordinate relative to start point,
  *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
  *   must be calculated from the previously given constraint: arc only in the
  * same quadrant.
- * @param aDiameter The diameter of the round flash
+ * @param aClockwise true if arc must be created clockwise
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
+ * @param aMultiquadrant = true to create arcs upto 360 deg,
+ *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
  */
 static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
@@ -212,7 +213,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
         // So we must recalculate the actual sign of aRelCenter.x and aRelCenter.y
         center = aRelCenter;
 
-        // calculate arc end coordinate relative to the staring point,
+        // calculate arc end coordinate relative to the starting point,
         // because center is relative to the center point
         delta  = aEnd - aStart;
 
@@ -305,22 +306,22 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
  * <li> absolute angle 270 to 0 (quadrant 4)
  * </ul><p>
  * @param aPcb is the board.
- * @param aLayer is the layer index to set into the GBRITEM
+ * @param aGbrItem is the GBRITEM to fill in.
  * @param aStart is the starting point
  * @param aEnd is the ending point
  * @param rel_center is the center coordinate relative to start point,
  *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
  *   must be calculated from the previously given constraint: arc only in the
  * same quadrant.
- * @param aDiameter The diameter of the round flash
- * @param aWidth is the pen width.
+ * @param aClockwise true if arc must be created clockwise
+ * @param aMultiquadrant = true to create arcs upto 360 deg,
+ *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
- * @param aImageNegative = true if the current image is negative
  */
 static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
                           const wxPoint& aStart, const wxPoint& aEnd,
                           const wxPoint& rel_center,
-                          bool clockwise, bool multiquadrant,
+                          bool aClockwise, bool aMultiquadrant,
                           bool aLayerNegative  )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM
@@ -332,7 +333,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
 
     fillArcGBRITEM(  &dummyGbrItem, 0, 0,
                      aStart, aEnd, rel_center, wxSize(0, 0),
-                     clockwise, multiquadrant, aLayerNegative );
+                     aClockwise, aMultiquadrant, aLayerNegative );
 
     wxPoint   center;
     center = dummyGbrItem.m_ArcCentre;
@@ -370,7 +371,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
     {
         int rot;
         wxPoint end_arc = start;
-        if( clockwise )
+        if( aClockwise )
             rot = ii * increment_angle; // rot is in 0.1 deg
         else
             rot = (count - ii) * increment_angle; // rot is in 0.1 deg
@@ -378,7 +379,7 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
         if( ii < count )
                 RotatePoint( &end_arc, -rot );
         else    // last point
-            end_arc = clockwise ? end : start;
+            end_arc = aClockwise ? end : start;
 
         aGbrItem->m_PolyCorners.push_back( end_arc + center );
 

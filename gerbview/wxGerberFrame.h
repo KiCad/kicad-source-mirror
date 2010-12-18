@@ -387,7 +387,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
      * example: 0.012, 0.012,  L   , D10<br>
      *
      * Categorize all found dcodes into a table of D_CODE instantiations.
-     * @param D_CodeFullFileName The name of the file to read from.
+     * @param D_Code_FullFileName The name of the file to read from.
      * @return int - <br>
      *                 -1 = file not found<br>
      *                 -2 = parsing problem<br>

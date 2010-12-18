@@ -527,7 +527,7 @@ void WinEDA_GerberFrame::Liste_D_Codes()
 }
 
 
-/**
+/*
  * Function UpdateTitleAndInfo
  * displays the short filename (if exists) of the selected layer
  *  on the caption of the main gerbview window
