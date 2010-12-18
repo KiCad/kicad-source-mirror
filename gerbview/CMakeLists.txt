@@ -25,6 +25,7 @@ set(GERBVIEW_SRCS
     block.cpp
     class_am_param.cpp
     class_aperture_macro.cpp
+    class_DCodeSelectionbox.cpp
     class_GERBER.cpp
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp

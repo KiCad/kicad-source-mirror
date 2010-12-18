@@ -19,10 +19,16 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     wxMenuBar*  menuBar = GetMenuBar();
     wxMenuItem* item;
 
-    if( menuBar )
-        return;
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
 
-    menuBar = new wxMenuBar();
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
+
+    // Recreate all menus:
 
     /* File menu */
     wxMenu* fileMenu = new wxMenu;
@@ -310,6 +316,11 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    /* Associate the menu bar with the frame */
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }

@@ -15,7 +15,7 @@
 #include "gerbview_id.h"
 #include "class_GERBER.h"
 #include "dialog_helpers.h"
-
+#include "class_DCodeSelectionbox.h"
 
 /* Process the command triggered by the left button of the mouse when a tool
  * is already selected.
@@ -145,19 +145,18 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
         setActiveLayer(m_SelLayerBox->GetChoice());
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh();
         break;
 
     case ID_TOOLBARH_GERBER_SELECT_TOOL:
         if( gerber_layer )
         {
-            int tool = m_SelLayerTool->GetChoice();
-            if( tool > 0 )
-                tool = tool - 1 + FIRST_DCODE;
-            else
-                tool = 0;
-            gerber_layer->m_Selected_Tool = tool;
-            DrawPanel->Refresh( TRUE );
+            int tool = m_DCodeSelector->GetSelectedDCodeId();
+            if( tool != gerber_layer->m_Selected_Tool )
+            {
+                gerber_layer->m_Selected_Tool = tool;
+                DrawPanel->Refresh();
+            }
         }
         break;
 

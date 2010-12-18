@@ -73,20 +73,21 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     wxMenuItem *item;
     wxMenuBar  *menuBar = GetMenuBar();
 
-    /**
-     * Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly.
-     */
-    if( menuBar )
-        SetMenuBar( NULL );
-    menuBar = new wxMenuBar();
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
 
-    /**
-     * Files menu
-     */
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
+
+    // Recreate all menus:
+
+    // Files menu
     wxMenu* filesMenu = new wxMenu;
 
-    /* Open */
+    // Open
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing project" ) );
 
@@ -96,7 +97,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     filesMenu->Append( item );
 
-    /* Open Recent submenu */
+    // Open Recent submenu
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
@@ -104,7 +105,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                                         _("Open a recent opened schematic project" ),
                                         open_project_xpm );
 
-    /* New */
+    // New
     item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
                            _( "Start a new project" ) );
 
@@ -124,10 +125,8 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     filesMenu->Append( item );
 
-    /* Separator */
+    // Archive
     filesMenu->AppendSeparator();
-
-    /* Archive */
     item = new wxMenuItem( filesMenu, ID_SAVE_AND_ZIP_FILES, _( "&Archive" ),
                            _( "Archive project files in zip archive" ) );
 
@@ -137,7 +136,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     filesMenu->Append( item );
 
-    /* Unarchive */
+    // Unarchive
     item = new wxMenuItem( filesMenu, ID_READ_ZIP_ARCHIVE, _( "&Unarchive" ),
                            _( "Unarchive project files from zip file" ) );
 
@@ -160,12 +159,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
 
 
-    /**
-     * Browse menu
-     */
+    // Browse menu
     wxMenu* browseMenu = new wxMenu();
 
-    /* Text editor */
+    // Text editor
     item = new wxMenuItem( browseMenu, ID_TO_EDITOR, _( "Text E&ditor" ),
                            _( "Open preferred text editor" ) );
 #if !defined( __WXMAC__ )
@@ -186,12 +183,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
 
 
-    /**
-     * Preferences menu
-     */
+    // Preferences menu
     wxMenu* PreferencesMenu = new wxMenu;
 
-    /* Text editor */
+    // Text editor
     item = new wxMenuItem( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,
                            _( "&Text Editor" ),
                            _( "Select your preferred text editor" ) );
@@ -201,13 +196,10 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     PreferencesMenu->Append( item );
 
-    /**
-     * PDF Viewer submenu
-     * System browser or user defined checkbox
-     */
+    // PDF Viewer submenu:System browser or user defined checkbox
     wxMenu* SubMenuPdfBrowserChoice = new wxMenu;
 
-    /* Default */
+    // Default
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_DEFAULT_PDF_BROWSER,
                            _( "Default" ),
@@ -222,7 +214,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().m_PdfBrowserIsDefault );
 
-    /* Favourite */
+    // Favourite viewer
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER,
                            _( "Favourite" ),
@@ -237,7 +229,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
                                     !wxGetApp().m_PdfBrowserIsDefault );
 
-    /* Append PDF Viewer submenu to preferences */
+    // Append PDF Viewer submenu to preferences
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER_NAME,
                            _( "PDF Viewer" ),
@@ -254,14 +246,11 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                                         _( "PDF viewer preferences" ),
                                         datasheet_xpm );
 
+    // Add languages list:
     PreferencesMenu->AppendSeparator();
     wxGetApp().AddMenuLanguageList( PreferencesMenu );
 
-
-
-    /**
-     * Help menu
-     */
+    // Help menu
     wxMenu* helpMenu = new wxMenu;
 
     AddHelpVersionInfoMenuEntry( helpMenu );
@@ -276,27 +265,26 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     helpMenu->Append( item );
 
-    /* About on all platforms except WXMAC */
-#if !defined( __WXMAC__ )
-
+    // About
     helpMenu->AppendSeparator();
     item = new wxMenuItem( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
                            _( "About kicad project manager" ) );
     item->SetBitmap( info_xpm );
     helpMenu->Append( item );
 
-#endif /* !defined( __WXMAC__ ) */
-
-    /**
-     * Create the menubar and append all submenus
-     */
+    // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
     menuBar->Append( PreferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    /* Associate the menu bar with the frame */
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }
 
 

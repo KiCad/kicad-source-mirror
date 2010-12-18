@@ -23,16 +23,18 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
-    /**
-     * Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly.
-     */
-    if( menuBar )
-        SetMenuBar( NULL );
-    menuBar = new wxMenuBar();
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
 
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
 
-    /** Create File Menu */
+    // Recreate all menus:
+
+    // Create File Menu
     wxMenu* filesMenu = new wxMenu;
 
     // New
@@ -606,6 +608,11 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    /* Associate the menu bar with the frame */
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }

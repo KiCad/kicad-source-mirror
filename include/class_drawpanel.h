@@ -35,6 +35,9 @@ public:
     bool m_AbortEnable;                     // TRUE if abort button or menu to
                                             // be displayed
 
+    bool m_DisableEraseBG;                  // if true: do not allow background erasure
+                                            // (used to reduce flicker in Gerbview )
+
 
     bool m_AutoPAN_Enable;                  // TRUE to allow auto pan
     bool m_AutoPAN_Request;                 // TRUE to request an auto pan

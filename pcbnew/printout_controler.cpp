@@ -163,9 +163,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( (m_PrintParams.m_PrintScale > 1.0)          //  scale > 1 -> Recadrage
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
     {
-        DrawOffset.x += pcbframe->GetBoard()->m_BoundaryBox.Centre().x;
-        DrawOffset.y += pcbframe->GetBoard()->m_BoundaryBox.Centre().y;
-    }
+        DrawOffset += pcbframe->GetBoard()->m_BoundaryBox.Centre();
+   }
 
     if( m_PrintParams.m_PageSetupData )
     {
@@ -258,6 +257,11 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
          * the old draw area in the new draw area, because the draw origin has not moved
          * (this is the upper left corner) but the Y axis is reversed, therefore the plotting area
          * is the y coordinate values from  - PlotAreaSize.y to 0 */
+#ifdef USE_WX_ZOOM
+        int y_dc_offset = PlotAreaSizeInPixels.y;
+        y_dc_offset = (int) y_dc_offset * userscale;
+        dc->SetDeviceOrigin( 0, y_dc_offset );
+#endif
         int ysize = (int) ( PlotAreaSizeInPixels.y / sy );
         DrawOffset.y += ysize;
 
@@ -271,7 +275,11 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         wxPoint pcb_centre = pcbframe->GetBoard()->m_BoundaryBox.Centre();
         if( userscale <= 1.0 )
             DrawOffset.y += pcb_centre.y - (ysize / 2);
+#ifdef USE_WX_ZOOM
+       dc->SetLogicalOrigin( ActiveScreen->m_DrawOrg.x, ActiveScreen->m_DrawOrg.y );
+#else
         ActiveScreen->m_DrawOrg = DrawOffset;
+#endif
         panel->m_ClipBox.SetOrigin( wxPoint( -0x7FFFFF, -0x7FFFFF ) );
     }
 

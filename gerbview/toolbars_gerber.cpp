@@ -3,7 +3,6 @@
 /*************************************/
 
 #include "fctsys.h"
-#include "wx/wupdlock.h"
 
 //#include "appl_wxstruct.h"
 #include "common.h"
@@ -14,6 +13,7 @@
 #include "hotkeys.h"
 #include "class_GERBER.h"
 #include "class_layerchoicebox.h"
+#include "class_DCodeSelectionbox.h"
 #include "dialog_helpers.h"
 
 void WinEDA_GerberFrame::ReCreateHToolbar( void )
@@ -26,10 +26,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     // delete and recreate the toolbar
     if( m_HToolBar != NULL )
         return;
-
-    // we create m_SelLayerTool that have a lot of items,
-    // so create a wxWindowUpdateLocker is a good idea
-    wxWindowUpdateLocker dummy(this);
 
     if( GetScreen() )
     {
@@ -89,7 +85,6 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
         msg = _( "Layer " ); msg << ii + 1;
         choices.Add( msg );
     }
-
     m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar,
                                          ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
                                          wxDefaultPosition, wxSize( 150, -1 ),
@@ -97,22 +92,23 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
     m_HToolBar->AddControl( m_SelLayerBox );
 
     m_HToolBar->AddSeparator();
-    choices.Clear();
 
-    choices.Alloc(TOOLS_MAX_COUNT+1);
-    choices.Add( _( "No tool" ) );
+    m_DCodesList.Alloc(TOOLS_MAX_COUNT+1);
+    m_DCodesList.Add( _( "No tool" ) );
 
-    for( ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
+    msg = _( "Tool " );
+    wxString text;
+    for( ii = FIRST_DCODE; ii < TOOLS_MAX_COUNT; ii++ )
     {
-        wxString msg;
-        msg = _( "Tool " ); msg << ii + FIRST_DCODE;
-        choices.Add( msg );
+        text = msg;
+        text << ii;
+        m_DCodesList.Add( text );
     }
-    m_SelLayerTool = new WinEDAChoiceBox( m_HToolBar,
+    m_DCodeSelector = new DCODE_SELECTION_BOX( m_HToolBar,
                                           ID_TOOLBARH_GERBER_SELECT_TOOL,
                                           wxDefaultPosition, wxSize( 150, -1 ),
-                                          choices );
-    m_HToolBar->AddControl( m_SelLayerTool );
+                                          m_DCodesList );
+    m_HToolBar->AddControl( m_DCodeSelector );
 
     m_TextInfo = new wxTextCtrl(m_HToolBar, wxID_ANY, wxEmptyString,
                                 wxDefaultPosition, wxSize(150,-1),
@@ -132,8 +128,6 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
 {
     if( m_VToolBar )
         return;
-
-    wxWindowUpdateLocker dummy(this);
 
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
@@ -156,8 +150,6 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 {
     if( m_OptionsToolBar )
         return;
-
-    wxWindowUpdateLocker dummy(this);
 
     // creation of tool bar options
     m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
@@ -249,26 +241,21 @@ void WinEDA_GerberFrame::SetToolbars()
         m_SelLayerBox->SetSelection( screen->m_Active_Layer );
     }
 
-    if( m_SelLayerTool )
+    if( m_DCodeSelector )
     {
         if( gerber )
         {
-            int sel_index;
-            m_SelLayerTool->Enable( true );
-            if( gerber->m_Selected_Tool < FIRST_DCODE )  // No tool selected
-                sel_index = 0;
-            else
-                sel_index = gerber->m_Selected_Tool - FIRST_DCODE + 1;
+            int dcodeSelected;
+            m_DCodeSelector->Enable( true );
+            dcodeSelected = gerber->m_Selected_Tool;
 
-            if( sel_index != m_SelLayerTool->GetSelection() )
-            {
-                m_SelLayerTool->SetSelection( sel_index );
-            }
+            if( dcodeSelected != m_DCodeSelector->GetSelectedDCodeId() )
+                m_DCodeSelector->SetDCodeSelection( dcodeSelected );
         }
         else
         {
-            m_SelLayerTool->SetSelection( 0 );
-            m_SelLayerTool->Enable( false );
+            m_DCodeSelector->SetDCodeSelection( 0 );
+            m_DCodeSelector->Enable( false );
         }
     }
 

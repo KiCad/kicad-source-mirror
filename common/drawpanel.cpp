@@ -79,6 +79,7 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
     m_AbortEnable       = m_AbortRequest = false;
     m_AutoPAN_Enable    = TRUE;
     m_IgnoreMouseEvents = 0;
+    m_DisableEraseBG    = false;
 
     ManageCurseur = NULL;
     ForceCloseManageCurseur = NULL;
@@ -673,7 +674,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
     // call ~wxDCClipper() before ~wxPaintDC()
     {
         wxDCClipper dcclip( paintDC, PaintClipBox );
-        ReDraw( &paintDC, true );
+        ReDraw( &paintDC, m_DisableEraseBG ? false : true );
     }
 
     m_ClipBox = tmp;
@@ -914,6 +915,13 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
         tmpDC.DrawPoint( 0, ypos );
     }
 
+    // Use the layer bitmap itself as a mask when blitting.
+    // The bitmap cannot be referenced by a device context
+    // when setting the mask.
+    tmpDC.SelectObject( wxNullBitmap );
+    tmpBM.SetMask( new wxMask( tmpBM, MakeColour( g_DrawBgColor ) ) );
+    tmpDC.SelectObject( tmpBM );
+
     ypos = GRMapY( org.y );
     for( ii = 0; ; ii += increment )
     {
@@ -925,7 +933,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
             continue;
         if( xpos > m_ClipBox.GetEnd().x)    // end of active area reached.
             break;
-        DC->Blit( xpos, ypos, 1, screenSize.y, &tmpDC, 0, 0  );
+        DC->Blit( xpos, ypos, 1, screenSize.y, &tmpDC, 0, 0, wxCOPY, true  );
     }
 
 #endif

@@ -62,8 +62,6 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
 
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
                      wxT( " " ) + frame->m_ProjectFileName.GetFullPath() );
-    frame->ReCreateMenuBar();
-    frame->RecreateBaseHToolbar();
 
     frame->m_LeftWin->ReCreateTreePrj();
 
