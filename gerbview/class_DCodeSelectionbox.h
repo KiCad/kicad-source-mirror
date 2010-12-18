@@ -7,9 +7,9 @@
  */
 
 // Define event type for DCODE_SELECTION_BOX
-#define EVT_SELECT_DCODE EVT_CHOICE
+#define EVT_SELECT_DCODE EVT_COMBOBOX
 
-class DCODE_SELECTION_BOX : public wxChoice
+class DCODE_SELECTION_BOX : public wxComboBox
 {
 private:
     const wxArrayString* m_dcodeList;

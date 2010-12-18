@@ -958,6 +958,9 @@ void LIB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     WinEDA_BasicFrame::SetLanguage( event );
     SCH_EDIT_FRAME *parent = (SCH_EDIT_FRAME *)GetParent();
+    // Call parent->WinEDA_BasicFrame::SetLanguage and NOT
+    // parent->SetLanguage because parent->SetLanguage call
+    // LIB_EDIT_FRAME::SetLanguage
     parent->WinEDA_BasicFrame::SetLanguage( event );
 }
 

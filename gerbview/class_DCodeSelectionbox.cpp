@@ -11,14 +11,14 @@
 
 #include "class_DCodeSelectionbox.h"
 
-/***************************************/
-/* ListBox handling the footprint list */
-/***************************************/
+/*******************************************/
+/* Helper class for displaying DCodes list */
+/*******************************************/
 
 DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( WinEDA_Toolbar* aParent, wxWindowID aId,
                              const wxPoint& aLocation, const wxSize& aSize,
                              const wxArrayString& aChoices  ) :
-    wxChoice( aParent, aId, aLocation, aSize, aChoices )
+    wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, aChoices, wxCB_READONLY )
 {
     m_dcodeList  = &aChoices;
 }
