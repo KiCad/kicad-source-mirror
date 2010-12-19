@@ -18,9 +18,12 @@
 DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( WinEDA_Toolbar* aParent, wxWindowID aId,
                              const wxPoint& aLocation, const wxSize& aSize,
                              const wxArrayString& aChoices  ) :
-    wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, aChoices, wxCB_READONLY )
+    wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, 0, NULL, wxCB_READONLY )
 {
     m_dcodeList  = &aChoices;
+    // Append aChoices here is by far faster than use aChoices inside
+    // the wxComboBox constructor
+    Append(aChoices);
 }
 
 
