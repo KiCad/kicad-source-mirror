@@ -37,29 +37,9 @@
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.
 #include <wx/wx.h>
-#include <cstdio>       // FILE
+#include <cstdio>
+#include <kicad_exceptions.h>
 
-
-
-/**
- * Struct IO_ERROR
- * is a class used to hold an error message and may be used to throw exceptions
- * containing meaningful error messages.
- */
-struct IO_ERROR
-{
-    wxString    errorText;
-
-    IO_ERROR( const wxChar* aMsg ) :
-        errorText( aMsg )
-    {
-    }
-
-    IO_ERROR( const wxString& aMsg ) :
-        errorText( aMsg )
-    {
-    }
-};
 
 #define LINE_READER_LINE_DEFAULT_MAX        100000
 #define LINE_READER_LINE_INITIAL_SIZE       5000

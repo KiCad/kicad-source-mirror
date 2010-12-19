@@ -1,4 +1,3 @@
-
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -23,69 +22,45 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIR_LIB_SOURCE_H_
-#define DIR_LIB_SOURCE_H_
 
 
 /*  Note: this LIB_SOURCE implementation relies on the posix specified opendir() and
-    related functions.  Mingw and unix, linux, & osx will all have these posix functions.
+    related functions rather than wx functions which might do the same thing.  This
+    is because I did not want to become very dependent on wxWidgets at such a low
+    level as this, in case someday this code needs to be used on kde or whatever.
+
+    Mingw and unix, linux, & osx will all have these posix functions.
     MS Visual Studio may need the posix compatible opendir() functions brought in
         http://www.softagalleria.net/dirent.php
-    wx has these but they are based on wxString and wx should not be introduced
-    at a level this low.
+    wx has these but they are based on wxString which can be wchar_t based and wx should
+    not be introduced at a level this low.
 */
 
+#include <sch_dir_lib_source.h>
+using namespace SCH;
 
-
-namespace SCH {
-
-
-/**
- * Class DIR_LIB_SOURCE
- * implements a LIB_SOURCE in a file system directory.
- *
- * @author Dick Hollenbeck
- */
-class DIR_LIB_SOURCE : public LIB_SOURCE
-{
-    friend class LIBS;   ///< LIBS::GetLib() can construct one.
-
-    STRING      path;       ///< base directory path of LIB_SOURCE
-
-
-protected:
-
-    /**
-     * Constructor DIR_LIB_SOURCE( const STRING& aDirectoryPath )
-     * sets up a LIB_SOURCE using aDirectoryPath in a file system.
-     * @see LIBS::GetLibrary().
-     *
-     * @param aDirectoryPath is a full pathname of a directory which contains
-     *  the library source of part files.  Examples might be "C:\kicad_data\mylib" or
-     *  "/home/designer/mylibdir".
-     */
-    DIR_LIB_SOURCE( const STRING& aDirectoryPath ) throws( IO_ERROR, PARSE_ERROR );
-
-
-};
-
-}       // namespace SCH
-
-#endif  // DIR_LIB_SOURCE_H_
-
-
+#include <kicad_exceptions.h>
 
 #include <dirent.h>
+#include <sys/stat.h>
 #include <cstring>
-#include <ki_exceptions.h>
+#include <cstdio>
+#include <ctype.h>
 
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+
+#include <vector>
+using namespace std;
+
 
 
 /**
  * Class DIR_WRAP
- * provides a destructor which may be invoked if an exception is thrown,
- * thereby closing the DIR.
+ * provides a destructor which may be invoked if an exception is thrown.
  */
 class DIR_WRAP
 {
@@ -100,33 +75,254 @@ public:
             closedir( dir );
     }
 
-    DIR* operator->() { return dir; }
+    DIR* operator->()   { return dir; }
+    DIR* operator*()    { return dir; }
 };
 
 
-DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath ) throws( IO_ERROR, PARSE_ERROR )
+/**
+ * Class FILE_WRAP
+ * provides a destructor which may be invoked if an exception is thrown.
+ */
+class FILE_WRAP
 {
-    DIR_WRAP*   dir = opendir( aDirectoryPath.c_str() );
+    int     fh;
 
-    if( !dir )
+public:
+    FILE_WRAP( int aFileHandle ) : fh( aFileHandle ) {}
+    ~FILE_WRAP()
     {
-        char    buf[256];
-
-        strerror_r( errno, buf, sizeof(buf) );
-        throw( IO_ERROR( buf ) );
+        if( fh != -1 )
+            close( fh );
     }
 
-    path = aDirectoryPath;
+    operator int ()  { return fh; }
+};
 
 
+/**
+ * Function strrstr
+ * finds the last instance of needle in haystack, if any.
+ */
+static const char* strrstr( const char* haystack, const char* needle )
+{
+    const char* ret = 0;
+    const char* next = haystack;
+
+    // find last instance of haystack
+    while( (next = strstr( next, needle )) != 0 )
+    {
+        ret = next;
+        ++next;     // don't keep finding the same one.
+    }
+
+    return ret;
 }
 
+
+static const char* endsWithRev( const char* cp, const char* limit )
+{
+    // find last instance of ".rev"
+    cp = strrstr( cp, ".rev" );
+    if( cp )
+    {
+        const char* rev = cp + 1;
+
+        cp += sizeof( ".rev" )-1;
+
+        while( isdigit( *cp ) )
+            ++cp;
+
+        if( cp != limit )   // there is garbage after "revN.."
+            rev = 0;
+
+        return rev;
+    }
+
+    return 0;
+}
+
+
+bool DIR_LIB_SOURCE::makePartFileName( const char* aEntry,
+                        const STRING& aCategory, STRING* aPartName )
+{
+    const char* cp = strrstr( aEntry, ".part" );
+
+    // if base name is not empty, contains ".part", && cp is not NULL
+    if( cp > aEntry )
+    {
+        const char* limit = cp + strlen( cp );
+
+        // if file extension is exactly ".part", and no rev
+        if( cp==limit-5 )
+        {
+            if( aCategory.size() )
+                *aPartName = aCategory + "/";
+            else
+                aPartName->clear();
+
+            aPartName->append( aEntry, cp - aEntry );
+            return true;
+        }
+
+        // if versioning, test for a trailing "revN.." type of string
+        if( useVersioning )
+        {
+            const char* rev = endsWithRev( cp + sizeof(".part") - 1, limit );
+            if( rev )
+            {
+                if( aCategory.size() )
+                    *aPartName = aCategory + "/";
+                else
+                    aPartName->clear();
+
+                aPartName->append( aEntry, cp - aEntry );
+                aPartName->append( "/" );
+                aPartName->append( rev );
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+static bool isCategoryName( const char* aName )
+{
+    return true;
+}
+
+
+#define MAX_PART_FILE_SIZE          (1*1024*1024)   // sanity check
+
+DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath, bool doUseVersioning )
+    throw( IO_ERROR )
+{
+    useVersioning = doUseVersioning;
+    sourceURI     = aDirectoryPath;
+    sourceType    = "dir";
+
+    if( sourceURI.size() == 0 )
+    {
+        throw( IO_ERROR( "aDirectoryPath cannot be empty" ) );
+    }
+
+    // remove any trailing separator, so we can add it back later without ambiguity
+    if( strchr( "/\\", sourceURI[sourceURI.size()-1] ) )
+        sourceURI.erase( sourceURI.size()-1 );
+
+    doOneDir( "" );
+}
+
+
+DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
+{
+    // delete the sweet STRINGS, which "sweets" owns by pointer.
+    for( DIR_CACHE::iterator it = sweets.begin();  it != sweets.end();  ++it )
+    {
+        delete it->second;
+    }
+}
+
+
+void DIR_LIB_SOURCE::Show()
+{
+    printf( "categories:\n" );
+    for( STRINGS::const_iterator it = categories.begin();  it!=categories.end();  ++it )
+        printf( " '%s'\n", it->c_str() );
+
+    printf( "\n" );
+    printf( "parts:\n" );
+    for( DIR_CACHE::const_iterator it = sweets.begin();  it != sweets.end();  ++it )
+    {
+        printf( " '%s'\n", it->first.c_str() );
+    }
+}
+
+
+void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
+{
+    STRING      curDir = sourceURI;
+
+    if( aCategory.size() )
+        curDir += "/" + aCategory;
+
+    DIR_WRAP    dir = opendir( curDir.c_str() );
+
+    if( !*dir )
+    {
+        STRING  msg = strerror( errno );
+        msg += "; scanning directory " + curDir;
+        throw( IO_ERROR( msg.c_str() ) );
+    }
+
+    struct stat     fs;
+
+    STRING          partName;
+    STRING          fileName;
+
+    dirent*         entry;
+
+    while( (entry = readdir( *dir )) != NULL )
+    {
+        if( !strcmp( ".", entry->d_name ) || !strcmp( "..", entry->d_name ) )
+            continue;
+
+        fileName = curDir + "/" + entry->d_name;
+
+        //D( printf("name: '%s'\n", fileName.c_str() );)
+
+        if( !stat( fileName.c_str(), &fs ) )
+        {
+            if( S_ISREG( fs.st_mode ) && makePartFileName( entry->d_name, aCategory, &partName ) )
+            {
+                /*
+                if( sweets.find( partName ) != sweets.end() )
+                {
+                    STRING  msg = partName;
+                    msg += " has already been encountered";
+                    throw IO_ERROR( msg.c_str() );
+                }
+                */
+
+                sweets[partName] = NULL;  // NULL for now, load the sweet later.
+                //D( printf("part: %s\n", partName.c_str() );)
+            }
+
+            else if( S_ISDIR( fs.st_mode ) && !aCategory.size() && isCategoryName( entry->d_name ) )
+            {
+                // only one level of recursion is used, controlled by the
+                // emptiness of aCategory.
+                //D( printf("category: %s\n", entry->d_name );)
+                categories.push_back( entry->d_name );
+                doOneDir( entry->d_name );
+            }
+            else
+            {
+                //D( printf( "ignoring %s\n", entry->d_name );)
+            }
+        }
+    }
+}
 
 
 #if 1 || defined( TEST_DIR_LIB_SOURCE )
 
-int main( int argv, char** argv )
+int main( int argc, char** argv )
 {
+
+    try
+    {
+        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", true );
+        uut.Show();
+    }
+
+    catch( IO_ERROR ioe )
+    {
+        printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
+    }
+
+    return 0;
 }
 
 #endif
