@@ -37,29 +37,9 @@
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.
 #include <wx/wx.h>
-#include <cstdio>       // FILE
+#include <cstdio>
+#include <kicad_exceptions.h>
 
-
-
-/**
- * Struct IO_ERROR
- * is a class used to hold an error message and may be used to throw exceptions
- * containing meaningful error messages.
- */
-struct IO_ERROR
-{
-    wxString    errorText;
-
-    IO_ERROR( const wxChar* aMsg ) :
-        errorText( aMsg )
-    {
-    }
-
-    IO_ERROR( const wxString& aMsg ) :
-        errorText( aMsg )
-    {
-    }
-};
 
 #define LINE_READER_LINE_DEFAULT_MAX        100000
 #define LINE_READER_LINE_INITIAL_SIZE       5000
@@ -234,18 +214,19 @@ public:
 
 /**
  * Class OUTPUTFORMATTER
- * is an important interface (abstract) class used to output UTF8 text in a convenient
- * way. The primary interface is "printf() - like" but with support for indentation
- * control.  The destination of the 8 bit wide text is up to the implementer.
+ * is an important interface (abstract) class used to output UTF8 text in
+ * a convenient way. The primary interface is "printf() - like" but
+ * with support for indentation control.  The destination of the 8 bit
+ * wide text is up to the implementer.
  * <p>
- * The implementer only has to implement the write() function, but can also optionaly
- * re-implement GetQuoteChar().
+ * The implementer only has to implement the write() function, but can
+ * also optionally re-implement GetQuoteChar().
  * <p>
- * If you want to output a wxString, then use CONV_TO_UTF8() on it before passing
- * it as an argument to Print().
+ * If you want to output a wxString, then use CONV_TO_UTF8() on it
+ * before passing it as an argument to Print().
  * <p>
- * Since this is an abstract interface, only classes derived from this one
- * may actually be used.
+ * Since this is an abstract interface, only classes derived from
+ * this one may actually be used.
  */
 class OUTPUTFORMATTER
 {
@@ -307,7 +288,7 @@ public:
      * Function Print
      * formats and writes text to the output stream.
      *
-     * @param nestLevel The multiple of spaces to preceed the output with.
+     * @param nestLevel The multiple of spaces to precede the output with.
      * @param fmt A printf() style format string.
      * @param ... a variable list of parameters that will get blended into
      *  the output under control of the format string.

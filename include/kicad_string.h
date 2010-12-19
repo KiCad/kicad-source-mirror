@@ -6,9 +6,10 @@
  */
 
 
-#ifndef __INCLUDE__KICAD_STRING_H__
-#define __INCLUDE__KICAD_STRING_H__ 1
+#ifndef KICAD_STRING_H_
+#define KICAD_STRING_H_
 
+#include <wx/string.h>
 
 char*    strupper( char* Text );
 char*    strlower( char* Text );
@@ -102,4 +103,4 @@ int SplitString( wxString  strToSplit,
                  wxString* strDigits,
                  wxString* strEnd );
 
-#endif // __INCLUDE__KICAD_STRING_H__
+#endif  // KICAD_STRING_H_
