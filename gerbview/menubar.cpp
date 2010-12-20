@@ -3,7 +3,6 @@
 /*************************************/
 
 #include "fctsys.h"
-#include "wx/wupdlock.h"
 
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -16,17 +15,18 @@
 
 void WinEDA_GerberFrame::ReCreateMenuBar( void )
 {
-    wxWindowUpdateLocker dummy(this);
-
     wxMenuBar  *menuBar = GetMenuBar();
 
-    /* Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly. */
-    if( menuBar )
-        SetMenuBar( NULL );
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
 
-    menuBar = new wxMenuBar();
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
 
+    // Recreate all menus:
     wxMenu* filesMenu = new wxMenu;
     filesMenu->Append( wxID_FILE, _( "Load Gerber File" ),
                        _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
@@ -111,9 +111,13 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( miscellaneous_menu, _( "&Miscellaneous" ) );
 
-//TODO: one day...      menuBar->Append(drill_menu, _("&Drill"));
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    // Associate the menu bar with the frame
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }

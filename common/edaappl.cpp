@@ -872,7 +872,7 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
 }
 
 
-/**
+/* GetHelpFile
  * Get the help file path.
  *
  * Return the Kicad help file with path.  The base paths defined in
@@ -880,9 +880,9 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
  * be relative depending on the paths added to m_searchPaths.  See the
  * documentation for wxPathList for more information. If the help file
  * for the current locale is not found, an attempt to find the English
- * version of the help file is made.  wxEmptyString is returned if the
- * help file is not found.
- *  Help file is searched in directories in this order:
+ * version of the help file is made.
+ * wxEmptyString is returned if help file not found.
+ * Help file is searched in directories in this order:
  *  help/<canonical name> like help/en_GB
  *  help/<short name> like help/en
  *  help/en
@@ -1070,13 +1070,12 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aF
 }
 
 
-/** FindLibraryPath
+/* FindLibraryPath
  * Kicad saves user defined library files that are not in the standard
  * library search path list with the full file path.  Calling the library
  * search path list with a user library file will fail.  This helper method
  * solves that problem.
- * @param fileName
- * @return a wxEmptyString if library file is not found.
+ * return a wxEmptyString if library file is not found.
  */
 wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 {
@@ -1087,10 +1086,9 @@ wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 }
 
 
-/**
- * Function RemoveLibraryPath
+/* Function RemoveLibraryPath
  * Removes the given path(s) from the library path list
- * @param aPaths = path or path list to remove. paths must be separated by ";"
+ * aPaths = path or path list to remove. paths must be separated by ";"
  */
 void WinEDA_App::RemoveLibraryPath( const wxString& aPaths )
 {

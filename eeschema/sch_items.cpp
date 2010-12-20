@@ -1031,9 +1031,9 @@ bool SCH_LINE::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFi
         || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
         || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) ) )
     {
-        if( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS && IsEndPoint( aPoint )
-            || aFilter & WIRE_BUS_ENDPOINTS_ONLY && !IsEndPoint( aPoint )
-            || TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
+        if( ( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS && IsEndPoint( aPoint ) )
+            || ( aFilter & WIRE_BUS_ENDPOINTS_ONLY && !IsEndPoint( aPoint ) )
+            || ( TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) ) )
             return true;
     }
 

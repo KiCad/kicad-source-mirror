@@ -271,7 +271,7 @@ EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox() const
 /**
  * Function MoveAB
  * move this object.
- * @param const wxPoint& aMoveVector - the move vector for this object, in AB plotter axis.
+ * @param aMoveVector - the move vector for this object, in AB plotter axis.
  */
 void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
 {
@@ -288,7 +288,7 @@ void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
 /**
  * Function MoveXY
  * move this object.
- * @param const wxPoint& aMoveVector - the move vector for this object, in XY gerber axis.
+ * @param aMoveVector - the move vector for this object, in XY gerber axis.
  */
 void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
 {
@@ -323,7 +323,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
     // we must see if this aperture macro uses a negative shape.
     if( isClear )
         return true;
-    
+
     // see for a macro def
     D_CODE* dcodeDescr = GetDcodeDescr();
     if( dcodeDescr == NULL )
@@ -334,7 +334,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
         if( macro )     // macro == NULL should not occurs
             return macro->HasNegativeItems( this );
     }
-    
+
     return false;
 }
 
@@ -552,7 +552,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 }
 
 
-/**
+/*
  * Function DrawGbrPoly
  * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
  * Draw filled polygons
@@ -661,17 +661,17 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
  * For now, an ending point must be inside this rect.
- * @param refArea : the given EDA_Rect in AB plotter axis
+ * @param aRefArea : the given EDA_Rect in AB plotter axis
  * @return bool - true if a hit, else false
  */
-bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& refArea )
+bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& aRefArea )
 {
     wxPoint pos = GetABPosition( m_Start );
 
-    if( refArea.Inside( pos ) )
+    if( aRefArea.Inside( pos ) )
         return true;
     pos = GetABPosition( m_End );
-    if( refArea.Inside( pos ) )
+    if( aRefArea.Inside( pos ) )
         return true;
     return false;
 }

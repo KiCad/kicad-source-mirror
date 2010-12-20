@@ -1,5 +1,5 @@
 /**
- * @file ./menucfg.cpp
+ * @file menucfg.cpp
  * (Re)Create the CvPCB main MenuBar
  */
 #include "fctsys.h"
@@ -18,9 +18,18 @@
 void WinEDA_CvpcbFrame::ReCreateMenuBar()
 {
     wxMenuItem* item;
-    wxMenuBar*  menuBar;
+    wxMenuBar*  menuBar = GetMenuBar();
 
-    menuBar = new wxMenuBar();
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
+
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
+
+    // Recreate all menus:
 
     wxMenu* filesMenu = new wxMenu;
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT,
@@ -29,7 +38,7 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
     item->SetBitmap( open_xpm );
     filesMenu->Append( item );
 
-   /* Open Recent submenu */
+    /* Open Recent submenu */
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu, -1, _( "Open &Recent" ),
@@ -96,14 +105,16 @@ void WinEDA_CvpcbFrame::ReCreateMenuBar()
 
 #endif /* !defined(__WXMAC__) */
 
-    /**
-     * Create the menubar and append all submenus
-     */
+    // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    /* Calling SetMenuBar() will Destroy the existing menu bar so it can be
-     * rebuilt.  This allows language changes of the menu text on the fly. */
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }

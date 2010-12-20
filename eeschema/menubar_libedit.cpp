@@ -23,44 +23,44 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuItem *item;
     wxMenuBar  *menuBar = GetMenuBar();
 
-    /**
-     * Destroy the existing menu bar so it can be rebuilt.  This allows
-     * language changes of the menu text on the fly.
-     */
-    if( menuBar )
-        SetMenuBar( NULL );
+    if( ! menuBar )
+        menuBar = new wxMenuBar();
 
-    menuBar = new wxMenuBar();
+    // Delete all existing menus so they can be rebuilt.
+    // This allows language changes of the menu text on the fly.
+    menuBar->Freeze();
+    while( menuBar->GetMenuCount() )
+        delete menuBar->Remove(0);
 
-    /**
-     * File menu
-     */
+    // Recreate all menus:
+
+    // File menu
     wxMenu* filesMenu = new wxMenu;
 
-    /* Save current lib */
+    // Save current lib
     item = new wxMenuItem( filesMenu, ID_LIBEDIT_SAVE_CURRENT_LIB,
                            _( "&Save Current Library\tCtrl+S" ),
                            _( "Save the current active library" ) );
     item->SetBitmap( save_xpm );
     filesMenu->Append( item );
 
-    /* Save as... */
+    // Save as...
     item = new wxMenuItem( filesMenu, ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
                            _( "Save Current Library &as" ),
                            _( "Save current active library as..." ) );
     item->SetBitmap( save_as_xpm );
     filesMenu->Append( item );
 
-    /* Separator */
+    // Separator
     filesMenu->AppendSeparator();
 
-    /* Export as png file */
+    // Export as png file
     item = new wxMenuItem( filesMenu, ID_LIBEDIT_GEN_PNG_FILE, _( "&Create PNG File from Screen" ),
                            _( "Create a PNG file from the component displayed on screen" ) );
     item->SetBitmap( plot_xpm );
     filesMenu->Append( item );
 
-    /* Export as SVG file */
+    // Export as SVG file
     item = new wxMenuItem( filesMenu, ID_LIBEDIT_GEN_SVG_FILE, _( "&Create SVG File" ),
                            _( "Create a SVG file from the current loaded component" ) );
     item->SetBitmap( plot_xpm );
@@ -77,19 +77,17 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->Append( item );
 #endif
 
-    /**
-     * Edit menu
-     */
+    // Edit menu
     wxMenu* editMenu = new wxMenu;
 
-    /* Undo */
+    // Undo
     text  = AddHotkeyName( _( "Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO);
 
     item = new wxMenuItem( editMenu, wxID_UNDO, text, _( "Undo last edition" ), wxITEM_NORMAL );
     item->SetBitmap( undo_xpm );
     editMenu->Append( item );
 
-    /* Redo */
+    // Redo
     text  = AddHotkeyName( _( "Redo" ), s_Libedit_Hokeys_Descr, HK_REDO);
 
     item = new wxMenuItem( editMenu, wxID_REDO, text,
@@ -97,18 +95,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     item->SetBitmap( redo_xpm );
     editMenu->Append( item );
 
-    /* Separator */
+    // Delete
     editMenu->AppendSeparator();
-
-    /* Delete */
     item = new wxMenuItem( editMenu, ID_LIBEDIT_DELETE_ITEM_BUTT,
                            _( "Delete" ), HELP_DELETE_ITEMS, wxITEM_NORMAL );
     item->SetBitmap( delete_body_xpm );
     editMenu->Append( item );
 
-    /**
-     * View menu
-     */
+    // View menu
     wxMenu* viewMenu = new wxMenu;
 
     /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
@@ -128,13 +122,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     item->SetBitmap( zoom_in_xpm );
     viewMenu->Append( item );
 
-    /* Zoom out */
+    // Zoom out
     text = _( "Zoom Out" );
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
     item->SetBitmap( zoom_out_xpm );
     viewMenu->Append( item );
 
-    /* Fit on screen */
+    // Fit on screen
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
@@ -143,40 +137,37 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    /* Redraw view */
+    // Redraw view
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, wxITEM_NORMAL );
     item->SetBitmap( zoom_redraw_xpm );
     viewMenu->Append( item );
 
-    /**
-     * Place menu
-     * TODO: Unify the ID names!
-     */
+    // Place menu
     wxMenu* placeMenu = new wxMenu;
 
-    /* Pin */
+    // place Pin
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_PIN_BUTT, _( "&Pin" ),
                            HELP_ADD_PIN, wxITEM_NORMAL );
     item->SetBitmap( pin_xpm );
     placeMenu->Append( item );
 
-    /* Graphic text */
+    // Graphic text
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_TEXT_BUTT,
                            _( "Graphic text" ),
                            HELP_ADD_BODYTEXT, wxITEM_NORMAL );
     item->SetBitmap( add_text_xpm );
     placeMenu->Append( item );
 
-    /* Graphic rectangle */
+    // Graphic rectangle
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_RECT_BUTT,
                            _( "Rectangle" ),
                            HELP_ADD_BODYRECT, wxITEM_NORMAL );
     item->SetBitmap( add_rectangle_xpm );
     placeMenu->Append( item );
 
-    /* Graphic Circle */
+    // Graphic Circle
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_CIRCLE_BUTT,
                            _( "Circle" ),
                            HELP_ADD_BODYCIRCLE,
@@ -184,68 +175,55 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     item->SetBitmap( add_circle_xpm );
     placeMenu->Append( item );
 
-    /* Graphic Arc */
+    // Graphic Arc
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_ARC_BUTT,
                            _( "Arc" ),
                            HELP_ADD_BODYARC, wxITEM_NORMAL );
     item->SetBitmap( add_arc_xpm );
     placeMenu->Append( item );
 
-    /* Graphic line or polygon */
+    // Graphic line or polygon
     item = new wxMenuItem( placeMenu, ID_LIBEDIT_BODY_LINE_BUTT,
                            _( "Line or Polygon" ),
                            HELP_ADD_BODYPOLYGON, wxITEM_NORMAL );
     item->SetBitmap( add_polygon_xpm );
     placeMenu->Append( item );
 
-    /**
-     * Preferences Menu
-     */
+    // Preferences Menu
     wxMenu* configmenu = new wxMenu;
 
-    /* Library */
+    // Library
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
                            _( "Library preferences" ) );
     item->SetBitmap( library_xpm );
     configmenu->Append( item );
 
-    /* Colors */
+    // Colors
     item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
                            _( "Color preferences" ) );
     item->SetBitmap( palette_xpm );
     configmenu->Append( item );
 
-#if 0   // work in progress. activated when finished
-/* Dimension */
-    item = new wxMenuItem( configmenu, ID_LIBEDIT_DIMENSIONS, _( "&Dimensions" ),
-                           _( "Thickness of graphic lines, texts sizes and others" ) );
-    item->SetBitmap( add_dimension_xpm );
-    configmenu->Append( item );
-#endif
-    /* Language submenu */
+    // Language submenu
     wxGetApp().AddMenuLanguageList( configmenu );
 
-    /* Hotkey submenu */
+    // Hotkey submenu
     AddHotkeyConfigMenu( configmenu );
 
-    /* Separator */
+    // Save preferences
     configmenu->AppendSeparator();
-
-    /* Save preferences */
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
                            _( "Save application preferences" ) );
     item->SetBitmap( save_setup_xpm );
     configmenu->Append( item );
 
-    /* Read preferences */
+    // Read preferences
     item = new wxMenuItem( configmenu, ID_CONFIG_READ, _( "&Read preferences" ),
                            _( "Read application preferences" ) );
     item->SetBitmap( read_setup_xpm );
     configmenu->Append( item );
 
-    /**
-     * Help Menu
-     */
+    // Help Menu
     wxMenu* helpMenu = new wxMenu;
 
     AddHelpVersionInfoMenuEntry( helpMenu );
@@ -255,9 +233,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     item->SetBitmap( online_help_xpm );
     helpMenu->Append( item );
 
-    /**
-     * Create the menubar and append all submenus
-     */
+    // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
@@ -265,6 +241,11 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( configmenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
-    /* Associate the menu bar with the frame */
-    SetMenuBar( menuBar );
+    menuBar->Thaw();
+
+    // Associate the menu bar with the frame, if no previous menubar
+    if( GetMenuBar() == NULL )
+        SetMenuBar( menuBar );
+    else
+        menuBar->Refresh();
 }

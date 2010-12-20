@@ -124,7 +124,7 @@ WinEDA_ConfigFrame::WinEDA_ConfigFrame( WinEDA_GerberFrame* parent,
 }
 
 
-void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent &event )
 {
     g_DrillFilenameExt = TextDrillExt->GetValue();
     g_PhotoFilenameExt = TextPhotoExt->GetValue();
@@ -134,7 +134,7 @@ void WinEDA_ConfigFrame::OnOkClick( wxCommandEvent& WXUNUSED (event) )
 }
 
 
-void WinEDA_ConfigFrame::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
+void WinEDA_ConfigFrame::OnCancelClick( wxCommandEvent &event )
 {
     EndModal( -1 );
 }

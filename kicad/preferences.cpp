@@ -98,11 +98,5 @@ void WinEDA_MainFrame::OnSelectPreferredEditor( wxCommandEvent& event )
 
 void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
 {
-    wxGetApp().SetLanguageIdentifier( event.GetId() );
-    if ( wxGetApp().SetLanguage() )
-    {
-        wxLogDebug( wxT( "Recreating menu bar due to language change." ) );
-        ReCreateMenuBar();
-        Refresh();
-    }
+    WinEDA_BasicFrame::SetLanguage( event );
 }

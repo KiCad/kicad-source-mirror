@@ -17,8 +17,7 @@
  * global id.h file.  This will prevent the entire project from being rebuilt
  * when adding new command to the gerber file viewer.
  */
-enum id_gerbview_frm
-{
+enum id_gerbview_frm {
     // A MenuItem ID of Zero does not work under Mac,first id = 1
     ID_GERBVIEW_SHOW_LIST_DCODES = 1,
     ID_GERBVIEW_LOAD_DRILL_FILE,
@@ -32,8 +31,10 @@ enum id_gerbview_frm
 };
 
 
+class DCODE_SELECTION_BOX;
+
 /******************************************************************
-class WinEDA_GerberFrame: this is the main window used in gerbview
+*   class WinEDA_GerberFrame: this is the main window used in gerbview
 ******************************************************************/
 
 class WinEDA_GerberFrame : public WinEDA_BasePcbFrame
@@ -41,36 +42,36 @@ class WinEDA_GerberFrame : public WinEDA_BasePcbFrame
     friend class PCB_LAYER_WIDGET;
 
 protected:
-    GERBER_LAYER_WIDGET* m_LayersManager;
+    GERBER_LAYER_WIDGET*  m_LayersManager;
 
 public:
     WinEDALayerChoiceBox* m_SelLayerBox;
-    WinEDAChoiceBox* m_SelLayerTool;
-    wxTextCtrl*      m_TextInfo;    // a wxTextCtrl used to display some info about
-                                    // gerber data (format..)
+    DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to hightlight.
+    wxTextCtrl*           m_TextInfo;       // a wxTextCtrl used to display some info about
+                                            // gerber data (format..)
+    wxArrayString         m_DCodesList;     // an array string containint all decodes Id (10 to 999)
 
 private:
-    int  m_displayMode;             // Gerber images ("layers" in Gerbview) can be drawn:
-                                    //  - in fast mode (write mode) but if there are negative items
-                                    // only the last image is correctly drawn
-                                    // (no problem to see only one image or when no negative items)
-                                    //  - in "exact" mode (but slower) in write mode:
-                                    //                last image covers previous images
-                                    //  - in "exact" mode (also slower) in OR mode
-                                    //                (transparency mode)
-                                    // m_displayMode = 0, 1 or 2
-    bool m_show_layer_manager_tools;
+    int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
+                                        //  - in fast mode (write mode) but if there are negative items
+                                        // only the last image is correctly drawn
+                                        // (no problem to see only one image or when no negative items)
+                                        //  - in "exact" mode (but slower) in write mode:
+                                        //                last image covers previous images
+                                        //  - in "exact" mode (also slower) in OR mode
+                                        //                (transparency mode)
+                                        // m_displayMode = 0, 1 or 2
+    bool          m_show_layer_manager_tools;
     wxArrayString m_Messages;           // An array sting to store warning messages when reaging a gerber file
 
-public:
-    WinEDA_GerberFrame( wxWindow* father, const wxString& title,
-                        const wxPoint& pos, const wxSize& size,
-                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
+                            const wxPoint& pos, const wxSize& size,
+                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~WinEDA_GerberFrame();
 
-    void         Update_config();
-    void         OnCloseWindow( wxCloseEvent& Event );
+    void Update_config();
+    void OnCloseWindow( wxCloseEvent& Event );
 
     /**
      * Function ReportMessage
@@ -78,19 +79,22 @@ public:
      * for instance when reading a Gerber file
      * @param aMessage = the straing to add in list
      */
-    void ReportMessage(const wxString aMessage )
+    void ReportMessage( const wxString aMessage )
     {
         m_Messages.Add( aMessage );
     }
+
+
     /**
      * Function ClearMessageList
      * Clear the message list
      * Call it before reading a Gerber file
      */
-    void ClearMessageList( )
+    void ClearMessageList()
     {
-        m_Messages.Clear( );
+        m_Messages.Clear();
     }
+
 
     /**
      * Function GetDisplayMode
@@ -98,7 +102,7 @@ public:
      *          1 for exact mode, write mode
      *          2 for exact mode, OR mode (transparency mode)
      */
-    int GetDisplayMode() { return m_displayMode;}
+    int GetDisplayMode() { return m_displayMode; }
 
     /**
      * Function SetDisplayMode
@@ -106,13 +110,13 @@ public:
      *                  1 for exact mode, write mode
      *                  2 for exact mode, OR mode (transparency mode)
      */
-    void SetDisplayMode( int aMode ) { m_displayMode = aMode;}
+    void SetDisplayMode( int aMode ) { m_displayMode = aMode; }
 
     /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool     IsGridVisible();
+    virtual bool IsGridVisible();
 
     /**
      * Function SetGridVisibility() , virtual
@@ -120,19 +124,19 @@ public:
      * if you want to store/retrieve the grid visiblity in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void     SetGridVisibility(bool aVisible);
+    virtual void SetGridVisibility( bool aVisible );
 
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int     GetGridColor();
+    virtual int  GetGridColor();
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void     SetGridColor(int aColor);
+    virtual void SetGridColor( int aColor );
 
     /**
      * Function IsElementVisible
@@ -147,6 +151,7 @@ public:
         return GetBoard()->IsElementVisible( aGERBER_VISIBLE );
     }
 
+
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
@@ -160,14 +165,14 @@ public:
      * Function SetVisibleAlls
      * Set the status of all visible element categories and layers to VISIBLE
      */
-    void SetVisibleAlls( );
+    void SetVisibleAlls();
 
     /**
      * Function ReFillLayerWidget
      * changes out all the layers in m_Layers and may be called upon
      * loading a new BOARD.
      */
-    void             ReFillLayerWidget();
+    void ReFillLayerWidget();
 
     /**
      * Function setActiveLayer
@@ -182,6 +187,7 @@ public:
             syncLayerWidget();
     }
 
+
     /**
      * Function getActiveLayer
      * returns the active layer
@@ -191,6 +197,7 @@ public:
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }
 
+
     /**
      * Function syncLayerWidget
      * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
@@ -199,7 +206,7 @@ public:
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
      */
-    void syncLayerWidget( );
+    void              syncLayerWidget();
 
     /**
      * Function syncLayerBox
@@ -207,7 +214,7 @@ public:
      * The currently active layer, as defined by the return value of
      * getActiveLayer().  And updates the colored icon in the toolbar.
      */
-    void syncLayerBox();
+    void              syncLayerBox();
 
     /**
      * Function UpdateTitleAndInfo
@@ -218,7 +225,7 @@ public:
      *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
      *    and other data in toolbar
      */
-    void UpdateTitleAndInfo();
+    void              UpdateTitleAndInfo();
 
     /**
      * Load applications settings specific to the PCBNew.
@@ -229,7 +236,7 @@ public:
      * drawing frames.  Please put your application settings for PCBNew here
      * to avoid having application settings loaded all over the place.
      */
-    virtual void LoadSettings();
+    virtual void      LoadSettings();
 
     /**
      * Save applications settings common to PCB draw frame objects.
@@ -240,51 +247,53 @@ public:
      * drawing frames.  Please put your application settings for PCBNew here
      * to avoid having application settings saved all over the place.
      */
-    virtual void SaveSettings();
+    virtual void      SaveSettings();
 
     /**
      * Function SetLanguage
      * called on a language menu selection
      */
-    virtual void SetLanguage( wxCommandEvent& event );
+    virtual void      SetLanguage( wxCommandEvent& event );
 
-    void         Process_Special_Functions( wxCommandEvent& event );
-    void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void         ReCreateHToolbar();
-    void         ReCreateVToolbar();
-    void         ReCreateOptToolbar();
-    void         ReCreateMenuBar();
-    void         OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void         OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int          BestZoom();
-    void         OnSelectOptionToolbar( wxCommandEvent& event );
+    void              Process_Special_Functions( wxCommandEvent& event );
+    void              RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void              ReCreateHToolbar();
+    void              ReCreateVToolbar();
+    void              ReCreateOptToolbar();
+    void              ReCreateMenuBar();
+    void              OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void              OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    bool              OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    int               BestZoom();
+    void              OnSelectOptionToolbar( wxCommandEvent& event );
+
     /**
      * Function OnSelectDisplayMode
      * called on a display mode selection
      * Mode selection can be fast display,
      * or exact mode with stacked images or with transparency
      */
-    void         OnSelectDisplayMode( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void              OnSelectDisplayMode( wxCommandEvent& event );
+    void              OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
-    GERBER_DRAW_ITEM*  GerberGeneralLocateAndDisplay();
-    GERBER_DRAW_ITEM*  Locate( int typeloc );
+    GERBER_DRAW_ITEM* GerberGeneralLocateAndDisplay();
+    GERBER_DRAW_ITEM* Locate( int typeloc );
 
 
-    void         SetToolbars();
-    void         Process_Settings( wxCommandEvent& event );
-    void         Process_Config( wxCommandEvent& event );
-    void         InstallConfigFrame( const wxPoint& pos );
-    void         InstallGerberOptionsDialog( wxCommandEvent& event );
-    void         InstallPcbGlobalDeleteFrame( const wxPoint& pos );
+    void              SetToolbars();
+    void              Process_Settings( wxCommandEvent& event );
+    void              Process_Config( wxCommandEvent& event );
+    void              InstallConfigFrame( const wxPoint& pos );
+    void              InstallGerberOptionsDialog( wxCommandEvent& event );
+    void              InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     /* handlers for block commands */
-    virtual int  ReturnBlockCommand( int key );
-    virtual void HandleBlockPlace( wxDC* DC );
-    virtual bool HandleBlockEnd( wxDC* DC );
+    virtual int       ReturnBlockCommand( int key );
+    virtual void      HandleBlockPlace( wxDC* DC );
+    virtual bool      HandleBlockEnd( wxDC* DC );
 
     /* Block operations: */
+
     /**
      * Function Block_Delete
      * deletes all tracks and segments within the selected block.
@@ -292,7 +301,7 @@ public:
      *
      * @param DC A device context to draw on.
      */
-    void         Block_Delete( wxDC* DC );
+    void              Block_Delete( wxDC* DC );
 
     /**
      * Function Block_Move
@@ -303,7 +312,7 @@ public:
      *
      * @param DC A device context to draw on.
      */
-    void         Block_Move( wxDC* DC );
+    void              Block_Move( wxDC* DC );
 
     /**
      * Function Block_Duplicate
@@ -314,39 +323,39 @@ public:
      *
      * @param DC A device context to draw on.
      */
-    void         Block_Duplicate( wxDC* DC );
+    void              Block_Duplicate( wxDC* DC );
 
-    void         ToPostProcess( wxCommandEvent& event );
+    void              ToPostProcess( wxCommandEvent& event );
 
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
-    void ToPlotter( wxCommandEvent& event );
+    void              ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter
      * Open a dialog frame to print layers
      */
-    void ToPrinter( wxCommandEvent& event );
+    void              ToPrinter( wxCommandEvent& event );
 
-    void         Genere_HPGL( const wxString& FullFileName, int Layers );
-    void         Genere_GERBER( const wxString& FullFileName, int Layers );
-    void         Genere_PS( const wxString& FullFileName, int Layers );
-    void         Plot_Layer_HPGL( FILE* File, int masque_layer,
-                                  int garde, bool trace_via,
-                                  GRTraceMode trace_mode );
-    void         Plot_Layer_GERBER( FILE* File, int masque_layer,
-                                    int garde, bool trace_via,
-                                    GRTraceMode trace_mode );
-    int          Gen_D_CODE_File( const wxString& Name_File );
-    void         Plot_Layer_PS( FILE* File, int masque_layer,
-                                int garde, bool trace_via,
-                                GRTraceMode trace_mode );
+    void              Genere_HPGL( const wxString& FullFileName, int Layers );
+    void              Genere_GERBER( const wxString& FullFileName, int Layers );
+    void              Genere_PS( const wxString& FullFileName, int Layers );
+    void              Plot_Layer_HPGL( FILE* File, int masque_layer,
+                                       int garde, bool trace_via,
+                                       GRTraceMode trace_mode );
+    void              Plot_Layer_GERBER( FILE* File, int masque_layer,
+                                         int garde, bool trace_via,
+                                         GRTraceMode trace_mode );
+    int               Gen_D_CODE_File( const wxString& Name_File );
+    void              Plot_Layer_PS( FILE* File, int masque_layer,
+                                     int garde, bool trace_via,
+                                     GRTraceMode trace_mode );
 
-    void         Files_io( wxCommandEvent& event );
-    void         OnFileHistory( wxCommandEvent& event );
+    void              Files_io( wxCommandEvent& event );
+    void              OnFileHistory( wxCommandEvent& event );
 
     /**
      * function LoadGerberFiles
@@ -356,12 +365,12 @@ public:
      *                    if void string: user will be prompted for filename(s)
      * @return true if file was opened successfully.
      */
-    bool         LoadGerberFiles( const wxString& aFileName );
-    int          ReadGerberFile( FILE* File, bool Append );
-    bool         Read_GERBER_File( const wxString& GERBER_FullFileName,
-                                   const wxString& D_Code_FullFileName );
+    bool              LoadGerberFiles( const wxString& aFileName );
+    int               ReadGerberFile( FILE* File, bool Append );
+    bool              Read_GERBER_File( const wxString& GERBER_FullFileName,
+                                        const wxString& D_Code_FullFileName );
 
-    void         GeneralControle( wxDC* DC, wxPoint Mouse );
+    void              GeneralControle( wxDC* DC, wxPoint Mouse );
 
 
     /**
@@ -378,7 +387,7 @@ public:
      * example: 0.012, 0.012,  L   , D10<br>
      *
      * Categorize all found dcodes into a table of D_CODE instantiations.
-     * @param D_CodeFullFileName The name of the file to read from.
+     * @param D_Code_FullFileName The name of the file to read from.
      * @return int - <br>
      *                 -1 = file not found<br>
      *                 -2 = parsing problem<br>
@@ -387,17 +396,17 @@ public:
      *                      g_GERBER_List[]<br>
      *                  1 = read OK<br>
      */
-    int          Read_D_Code_File( const wxString& D_Code_FullFileName );
-    void         CopyDCodesSizeToItems();
-    void         Liste_D_Codes(  );
+    int               Read_D_Code_File( const wxString& D_Code_FullFileName );
+    void              CopyDCodesSizeToItems();
+    void              Liste_D_Codes();
 
     // PCB handling
-    bool         Clear_Pcb( bool query );
-    void         Erase_Current_Layer( bool query );
-    void         Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
+    bool              Clear_Pcb( bool query );
+    void              Erase_Current_Layer( bool query );
+    void              Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
 
     // Conversion function
-    void         ExportDataInPcbnewFormat( wxCommandEvent& event );
+    void              ExportDataInPcbnewFormat( wxCommandEvent& event );
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in gerbview.
@@ -406,7 +415,7 @@ public:
     virtual void SaveCopyInUndoList(
         BOARD_ITEM* aItemToCopy,
         UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,
-        const wxPoint& aTransformPoint = wxPoint(0,0) ) { }
+        const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -420,10 +429,11 @@ public:
     virtual void SaveCopyInUndoList(
         PICKED_ITEMS_LIST& aItemsList,
         UndoRedoOpType aTypeCommand,
-        const wxPoint& aTransformPoint = wxPoint(0,0) )
+        const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
         // currently: do nothing in gerbview.
     }
+
 
     /** Virtual function PrintPage
      * used to print a page
@@ -434,8 +444,8 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                    int aPrintMasklayer, bool aPrintMirrorMode,
-                    void * aData = NULL);
+                            int aPrintMasklayer, bool aPrintMirrorMode,
+                            void* aData = NULL );
 
     /**
      * Function InstallDialogLayerPairChoice
@@ -443,7 +453,7 @@ public:
      * between gerber layers and pcbnew layers
      * @return the "lookup table" if ok, or NULL
      */
-    int* InstallDialogLayerPairChoice( );
+    int*         InstallDialogLayerPairChoice();
 
     /**
      * Function DrawItemsDCodeID
@@ -452,7 +462,7 @@ public:
      * @param aDC = the current device contect
      * @param aDrawMode = GR_COPY, GR_OR ...
      */
-    void DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
+    void         DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
 
     DECLARE_EVENT_TABLE()
 };

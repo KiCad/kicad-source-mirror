@@ -189,6 +189,7 @@ struct APERTURE_MACRO
      * But some parameters are defined outside the aperture primitive
      * and are local to the aperture macro
      * @return the value of a defered parameter defined inside the aperture macro
+     * @param aDcode = the D_CODE that uses this apertur macro and define defered parameters
      * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
      */
     double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;

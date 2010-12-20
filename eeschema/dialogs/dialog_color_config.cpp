@@ -45,6 +45,7 @@ static ColorButton SheetColorButtons[] = {
     { _( "Sheet" ), LAYER_SHEET },
     { _( "Sheet file name" ), LAYER_SHEETFILENAME },
     { _( "Sheet name" ), LAYER_SHEETNAME },
+    { _( "Sheet label" ), LAYER_SHEETLABEL },
     { _( "Hierarchical label" ), LAYER_HIERLABEL },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
@@ -291,6 +292,7 @@ void DIALOG_COLOR_CONFIG::UpdateLayerSettings()
     else
         g_DrawBgColor = BLACK;
 
+    m_Parent->SetGridColor( g_LayerDescr.LayerColor[LAYER_GRID] );
     m_Parent->Refresh();
 }
 

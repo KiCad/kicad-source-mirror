@@ -37,7 +37,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
      * use Refresh() and update() do not change problems
      */
     INSTALL_DC( dc, DrawPanel );
-    DrawPanel->ReDraw( &dc );
+    DrawPanel->ReDraw( &dc, DrawPanel->m_DisableEraseBG ? false : true );
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )

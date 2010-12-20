@@ -38,7 +38,7 @@
 #include "class_gerbview_layer_widget.h"
 
 
-/**
+/*
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
  * may be tied into the WinEDA_GerberFrame's data and so we can add a popup

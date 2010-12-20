@@ -93,11 +93,9 @@ void WinEDA_BasicFrame::SetLanguage( wxCommandEvent& event )
     int id = event.GetId();
 
     wxGetApp().SetLanguageIdentifier( id );
-    if ( wxGetApp().SetLanguage() )
-    {
-        ReCreateMenuBar();
-        Refresh();
-    }
+    wxGetApp().SetLanguage();
+    ReCreateMenuBar();
+    GetMenuBar()->Refresh();
 }
 
 

@@ -136,7 +136,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-/**
+/*
  * Function Read_D_Code_File
  * Can be useful only with old RS274D Gerber file format.
  * Is not needed with RS274X files format.
@@ -326,7 +326,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
 }
 
 
-/**
+/*
  * Function DrawFlashedShape
  * Draw the dcode shape for flashed items.
  * When an item is flashed, the DCode shape is the shape of the item
@@ -442,7 +442,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
 }
 
 
-/**
+/*
  * Function DrawFlashedPolygon
  * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
  * Draw some Apertures shapes when they are defined as filled polygons.
