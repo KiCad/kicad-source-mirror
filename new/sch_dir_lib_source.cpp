@@ -125,33 +125,79 @@ static const char* strrstr( const char* haystack, const char* needle )
     return ret;
 }
 
+
 /**
  * Function endsWithRev
- * returns a pointer to the final string segment: "revN..." or NULL if none.
+ * returns a pointer to the final string segment: "revN[N..]" or NULL if none.
  * @param start is the beginning of string segment to test, the partname or
  *  any middle portion of it.
- * @param tail is a pointer to the terminating nul.
+ * @param tail is a pointer to the terminating nul, or one past inclusive end of
+ *  segment, i.e. the string segment of interest is [start,tail)
  * @param separator is the separating byte, expected: '.' or '/', depending on context.
  */
 static const char* endsWithRev( const char* start, const char* tail, char separator )
 {
     bool    sawDigit = false;
 
-    while( isdigit(*--tail) && tail>start )
+    while( tail>start && isdigit(*--tail) )
     {
         sawDigit = true;
     }
 
-    if( sawDigit && tail-3 >= start && tail[-3] == separator )
+    // if sawDigit, tail points to the 'v' here.
+
+    if( sawDigit && tail-3 >= start )
     {
-        tail -= 2;
-        if( tail[0]=='r' && tail[1]=='e' && tail[2]=='v' )
+        tail -= 3;
+
+        if( tail[0]==separator && tail[1]=='r' && tail[2]=='e' && tail[2]=='v' )
         {
-            return tail;
+            return tail+1;  // omit separator, return "revN[N..]"
         }
     }
 
     return 0;
+}
+
+
+bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
+{
+    const char* rev1 = endsWithRev( s1.c_str(), s1.c_str()+s1.size(), '/' );
+    const char* rev2 = endsWithRev( s2.c_str(), s2.c_str()+s2.size(), '/' );
+
+    // avoid instantiating new STRINGs
+    int rootLen1 =  rev1 ? rev1 - s1.c_str() : s1.size();
+    int rootLen2 =  rev2 ? rev2 - s2.c_str() : s2.size();
+
+    int r = memcmp( s1.c_str(), s2.c_str(), min( rootLen1, rootLen2 ) );
+
+    if( r )
+    {
+        return r < 0;
+    }
+
+    if( rootLen1 != rootLen2 )
+    {
+        return rootLen1 < rootLen2;
+    }
+
+    // root strings match at this point, compare the revision number, numerically
+    // and chose the higher numbered version as "less", according to std::set lingo.
+
+    if( bool(rev1) != bool(rev2) )
+    {
+        return bool(rev1) < bool(rev2);
+    }
+
+    if( rev1 && rev2 )
+    {
+        int rnum1 = atoi( rev1+3 );
+        int rnum2 = atoi( rev2+3 );
+
+        return rnum1 > rnum2;
+    }
+
+    return false;   // strings are equal
 }
 
 
@@ -211,9 +257,9 @@ void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename )
 
     if( fw == -1 )
     {
-        STRING  msg = aFilename;
-        msg += " cannot be open()ed for reading";
-        throw IO_ERROR( msg.c_str() );
+        STRING  msg = strerror( errno );
+        msg += "; cannot open(O_RDONLY) file " + aFilename;
+        throw( IO_ERROR( msg.c_str() ) );
     }
 
     struct stat     fs;
@@ -224,34 +270,43 @@ void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename )
     if( fs.st_size > (1*1024*1024) )
     {
         STRING msg = aFilename;
-        msg += " seems too big.  ( > 1mbyte )";
+        msg += " seems too big.  ( > 1 mbyte )";
         throw IO_ERROR( msg.c_str() );
     }
 
-    // we reuse the same readBuffer, which is not thread safe, but the API
-    // is not expected to be thread safe.
-    readBuffer.resize( fs.st_size );
+    // reuse same readBuffer, which is not thread safe, but the API
+    // is not advertising thread safe (yet, if ever).
+    if( (int) fs.st_size > (int) readBuffer.size() )
+        readBuffer.resize( fs.st_size + 1000 );
 
-    size_t count = read( fw, &readBuffer[0], fs.st_size );
-    if( count != (size_t) fs.st_size )
+    int count = read( fw, &readBuffer[0], fs.st_size );
+    if( count != (int) fs.st_size )
     {
-        STRING msg = aFilename;
-        msg += " cannot be read";
-        throw IO_ERROR( msg.c_str() );
+        STRING  msg = strerror( errno );
+        msg += "; cannot read file " + aFilename;
+        throw( IO_ERROR( msg.c_str() ) );
     }
 
-    // std::string chars are not gauranteed to be contiguous in
+    // std::string chars are not guaranteed to be contiguous in
     // future implementations of C++, so this is why we did not read into
     // aResult directly.
     aResult->assign( &readBuffer[0], count );
 }
 
 
-DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
-                                bool doUseVersioning ) throw( IO_ERROR ) :
-    readBuffer( 512 )
+void DIR_LIB_SOURCE::cache() throw( IO_ERROR )
 {
-    useVersioning = doUseVersioning;
+    partnames.clear();
+    categories.clear();
+
+    cacheOneDir( "" );
+}
+
+
+DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
+                                const STRING& aOptions ) throw( IO_ERROR ) :
+    useVersioning( strstr( aOptions.c_str(), "useVersioning" ) )
+{
     sourceURI     = aDirectoryPath;
     sourceType    = "dir";
 
@@ -264,17 +319,12 @@ DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
     if( strchr( "/\\", sourceURI[sourceURI.size()-1] ) )
         sourceURI.erase( sourceURI.size()-1 );
 
-    doOneDir( "" );
+    cache();
 }
 
 
 DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
 {
-    // delete the sweet STRINGS, which "sweets" owns by pointer.
-    for( DIR_CACHE::iterator it = sweets.begin();  it != sweets.end();  ++it )
-    {
-        delete it->second;
-    }
 }
 
 
@@ -288,26 +338,26 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
         STRING  lower = aCategory + "/";
         STRING  upper = aCategory + char( '/' + 1 );
 
-        DIR_CACHE::const_iterator limit = sweets.upper_bound( upper );
+        PART_CACHE::const_iterator limit = partnames.upper_bound( upper );
 
-        for( DIR_CACHE::const_iterator it = sweets.lower_bound( lower );  it!=limit;  ++it )
+        for( PART_CACHE::const_iterator it = partnames.lower_bound( lower );  it!=limit;  ++it )
         {
-            const char* start = it->first.c_str();
-            size_t      len   = it->first.size();
+            const char* start = it->c_str();
+            size_t      len   = it->size();
 
             if( !endsWithRev( start, start+len, '/' ) )
-                aResults->push_back( it->first );
+                aResults->push_back( *it );
         }
     }
     else
     {
-        for( DIR_CACHE::const_iterator it = sweets.begin();  it!=sweets.end();  ++it )
+        for( PART_CACHE::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
         {
-            const char* start = it->first.c_str();
-            size_t      len   = it->first.size();
+            const char* start = it->c_str();
+            size_t      len   = it->size();
 
             if( !endsWithRev( start, start+len, '/' ) )
-                aResults->push_back( it->first );
+                aResults->push_back( *it );
         }
     }
 }
@@ -321,29 +371,21 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
     if( aRev.size() )
         partname += "/" + aRev;
 
-    DIR_CACHE::iterator it = sweets.find( partname );
+    PART_CACHE::const_iterator it = partnames.find( partname );
 
-    if( it == sweets.end() )    // part not found
+    if( it == partnames.end() )    // part not found
     {
         partname += " not found.";
         throw IO_ERROR( partname.c_str() );
     }
 
-    if( !it->second )   // if the sweet string is not loaded yet
-    {
-        STRING  filename = sourceURI + "/" + aPartName + ".part";
+    // create a filename for the sweet string
+    STRING  filename = sourceURI + "/" + aPartName + ".part";
 
-        if( aRev.size() )
-        {
-            filename += "." + aRev;
-        }
+    if( aRev.size() )
+        filename += "." + aRev;
 
-        it->second = new STRING();
-
-        readSExpression( it->second, filename );
-    }
-
-    *aResult = *it->second;
+    readSExpression( aResult, filename );
 }
 
 
@@ -362,40 +404,36 @@ void DIR_LIB_SOURCE::ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
 
 void DIR_LIB_SOURCE::GetCategories( STRINGS* aResults ) throw( IO_ERROR )
 {
-    *aResults = categories;
+    aResults->clear();
+
+    // caller fetches them sorted.
+    for( NAME_CACHE::const_iterator it = categories.begin();  it!=categories.end();  ++it )
+    {
+        aResults->push_back( *it );
+    }
 }
 
 
 #if defined(DEBUG)
-#include <richio.h>
 
 void DIR_LIB_SOURCE::Show()
 {
     printf( "Show categories:\n" );
-    for( STRINGS::const_iterator it = categories.begin();  it!=categories.end();  ++it )
+    for( NAME_CACHE::const_iterator it = categories.begin();  it!=categories.end();  ++it )
         printf( " '%s'\n", it->c_str() );
 
     printf( "\n" );
     printf( "Show parts:\n" );
-    for( DIR_CACHE::const_iterator it = sweets.begin();  it != sweets.end();  ++it )
+    for( PART_CACHE::const_iterator it = partnames.begin();  it != partnames.end();  ++it )
     {
-        printf( " '%s'\n", it->first.c_str() );
-
-        if( it->second )
-        {
-            STRING_LINE_READER  slr( *it->second, wxString( wxConvertMB2WX( it->first.c_str() ) ) );
-            while( slr.ReadLine() )
-            {
-                printf( "    %s", (char*) slr );
-            }
-            printf( "\n" );
-        }
+        printf( " '%s'\n", it->c_str() );
     }
 }
+
 #endif
 
 
-void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
+void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
 {
     STRING      curDir = sourceURI;
 
@@ -425,29 +463,29 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
 
         if( !stat( fileName.c_str(), &fs ) )
         {
+            // is this a valid part name?
             if( S_ISREG( fs.st_mode ) && makePartFileName( entry->d_name, aCategory, &partName ) )
             {
-                /*
-                if( sweets.find( partName ) != sweets.end() )
+                std::pair<NAME_CACHE::iterator, bool> pair = partnames.insert( partName );
+
+                if( !pair.second )
                 {
                     STRING  msg = partName;
                     msg += " has already been encountered";
                     throw IO_ERROR( msg.c_str() );
                 }
-                */
-
-                sweets[partName] = NULL;  // NULL for now, load the sweet later.
             }
 
+            // is this an acceptable category name?
             else if( S_ISDIR( fs.st_mode ) && !aCategory.size() && isCategoryName( entry->d_name ) )
             {
                 // only one level of recursion is used, controlled by the
                 // emptiness of aCategory.
-                categories.push_back( entry->d_name );
+                categories.insert( entry->d_name );
 
                 // somebody needs to test Windows (mingw), make sure it can
                 // handle opendir() recursively
-                doOneDir( entry->d_name );
+                cacheOneDir( entry->d_name );
             }
             else
             {
@@ -467,26 +505,26 @@ int main( int argc, char** argv )
 
     try
     {
-        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", true );
+//        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "" );
+        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "useVersioning" );
 
-        // initially, only the DIR_CACHE sweets and STRING categories are loaded:
+        // initially, only the NAME_CACHE sweets and STRING categories are loaded:
         uut.Show();
 
         uut.GetCategoricalPartNames( &partnames, "Category" );
 
-        printf( "GetCategoricalPartNames(Category):\n" );
+        printf( "\nGetCategoricalPartNames( aCatagory = 'Category' ):\n" );
         for( STRINGS::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
         {
             printf( " '%s'\n", it->c_str() );
         }
 
         uut.ReadParts( &sweets, partnames );
-
 
         // fetch the part names for ALL categories.
         uut.GetCategoricalPartNames( &partnames );
 
-        printf( "GetCategoricalPartNames(ALL):\n" );
+        printf( "\nGetCategoricalPartNames( aCategory = '' i.e. ALL):\n" );
         for( STRINGS::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
         {
             printf( " '%s'\n", it->c_str() );
@@ -494,7 +532,7 @@ int main( int argc, char** argv )
 
         uut.ReadParts( &sweets, partnames );
 
-        printf( "Sweets for ALL parts:\n" );
+        printf( "\nSweets for ALL parts:\n" );
         STRINGS::const_iterator pn = partnames.begin();
         for( STRINGS::const_iterator it = sweets.begin();  it!=sweets.end();  ++it, ++pn )
         {

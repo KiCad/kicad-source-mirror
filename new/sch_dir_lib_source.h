@@ -28,17 +28,35 @@
 
 #include <sch_lib.h>
 
-#include <map>
+#include <set>
 #include <vector>
 
 
 /**
- * Type DIR_CACHE
- * is a tuple, where the key is partname (prefixed with the category if any),
- * and value is pointer to Sweet string which is loaded lazily, so can be NULL
- * until loaded.
+ * struct BY_REV
+ * is here to provide a custom way to compare STRINGs.  Namely, the revN[N..]
+ * string if present, is collated according to a 'higher revision first', but
+ * any part string without a revision, is even 'before' that.
  */
-typedef std::map< STRING, STRING* >     DIR_CACHE;
+struct BY_REV
+{
+    bool operator() ( const STRING& s1, const STRING& s2 ) const;
+};
+
+
+/**
+ * Type PART_CACHE
+ * holds a set of part names in sorted order, according to the sort
+ * order given by struct BY_REV.
+ */
+typedef std::set< STRING, BY_REV >  PART_CACHE;
+
+
+/**
+ * Type NAME_CACHE
+ * holds a set of categories in sorted order.
+ */
+typedef std::set< STRING >          NAME_CACHE;
 
 
 namespace SCH {
@@ -55,11 +73,20 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
 
     bool                useVersioning;  ///< use files with extension ".revNNN..", else not
 
-    DIR_CACHE           sweets;         ///< @todo, don't really need to cache the sweets, only the partnames.
+    /// normal partnames, some of which may be prefixed with a category,
+    /// and some of which may have legal "revN[N..]" type strings.
+    PART_CACHE          partnames;
 
-    STRINGS             categories;
+    /// categories which we expect to find in the set of @a partnames
+    NAME_CACHE          categories;
+
     std::vector<char>   readBuffer;     ///< used by readSExpression()
 
+    /**
+     * Function cache
+     * [re-]loads the directory cache(s).
+     */
+    void cache() throw( IO_ERROR );
 
     /**
      * Function isPartFileName
@@ -87,14 +114,14 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
 
 
     /**
-     * Function doOneDir
+     * Function cacheOneDir
      * loads part names [and categories] from a directory given by
      * "sourceURI + '/' + category"
      * Categories are only loaded if processing the top most directory because
      * only one level of categories are supported.  We know we are in the
      * top most directory if aCategory is empty.
      */
-    void doOneDir( const STRING& aCategory ) throw( IO_ERROR );
+    void cacheOneDir( const STRING& aCategory ) throw( IO_ERROR );
 
 //protected:
 public:
@@ -112,14 +139,14 @@ public:
      * @param doUseVersioning if true means support versioning in the directory tree, otherwise
      *  only a single version of each part is recognized.
      */
-    DIR_LIB_SOURCE( const STRING& aDirectoryPath, bool doUseVersioning = false )
+    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = StrEmpty )
         throw( IO_ERROR );
 
     ~DIR_LIB_SOURCE();
 
     //-----<LIB_SOURCE implementation functions >------------------------------
 
-    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev=StrEmpty )
+    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = StrEmpty )
         throw( IO_ERROR );
 
     void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
@@ -127,7 +154,7 @@ public:
 
     void GetCategories( STRINGS* aResults ) throw( IO_ERROR );
 
-    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty )
+    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = StrEmpty )
         throw( IO_ERROR );
 
     void GetRevisions( STRINGS* aResults, const STRING& aPartName ) throw( IO_ERROR )
