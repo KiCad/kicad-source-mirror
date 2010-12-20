@@ -89,22 +89,24 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
     void cache() throw( IO_ERROR );
 
     /**
-     * Function isPartFileName
-     * returns true iff aName is a valid part file name.
+     * Function isCategoryName
+     * returns true iff aName is a valid category name.
      */
-    bool  isPartFileName( const char* aName );
+    bool isCategoryName( const char* aName )
+    {
+        return true;
+    }
 
     /**
-     * Function makePartFileName
+     * Function makePartName
      * returns true iff aEntry holds a valid part filename, in the form of
      * "someroot.part[.revNNNN]"  where NNN are number characters [0-9]
      * @param aEntry is the raw directory entry without path information.
      * @param aCategory is the last portion of the directory path.
-     * @param aPartName is where to put a part name, assuming aEntry is legal.
+     * @param aPartName is where to put a part name, assuming @a aEntry is legal.
      * @return bool - true only if aEntry is a legal part file name.
      */
-    bool makePartFileName( const char* aEntry,
-                           const STRING& aCategory, STRING* aPartName );
+    bool makePartName( STRING* aPartName, const char* aEntry, const STRING& aCategory );
 
     /**
      * Function readSExpression
@@ -122,6 +124,12 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      * top most directory if aCategory is empty.
      */
     void cacheOneDir( const STRING& aCategory ) throw( IO_ERROR );
+
+    /**
+     * Function makeFileName
+     * converts a part name into a filename and returns it.
+     */
+    STRING makeFileName( const STRING& aPartName );
 
 //protected:
 public:

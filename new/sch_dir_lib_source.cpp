@@ -150,7 +150,7 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
     {
         tail -= 3;
 
-        if( tail[0]==separator && tail[1]=='r' && tail[2]=='e' && tail[2]=='v' )
+        if( tail[0]==separator && tail[1]=='r' && tail[2]=='e' && tail[3]=='v' )
         {
             return tail+1;  // omit separator, return "revN[N..]"
         }
@@ -159,13 +159,14 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
     return 0;
 }
 
-
+// see struct BY_REV
 bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
 {
+    // avoid instantiating new STRINGs, and thank goodness that c_str() is const.
+
     const char* rev1 = endsWithRev( s1.c_str(), s1.c_str()+s1.size(), '/' );
     const char* rev2 = endsWithRev( s2.c_str(), s2.c_str()+s2.size(), '/' );
 
-    // avoid instantiating new STRINGs
     int rootLen1 =  rev1 ? rev1 - s1.c_str() : s1.size();
     int rootLen2 =  rev2 ? rev2 - s2.c_str() : s2.size();
 
@@ -181,7 +182,7 @@ bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
         return rootLen1 < rootLen2;
     }
 
-    // root strings match at this point, compare the revision number, numerically
+    // root strings match at this point, compare the revision number numerically,
     // and chose the higher numbered version as "less", according to std::set lingo.
 
     if( bool(rev1) != bool(rev2) )
@@ -197,12 +198,12 @@ bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
         return rnum1 > rnum2;
     }
 
-    return false;   // strings are equal
+    return false;   // strings are equal, and they don't have a rev
 }
 
 
-bool DIR_LIB_SOURCE::makePartFileName( const char* aEntry,
-                        const STRING& aCategory, STRING* aPartName )
+bool DIR_LIB_SOURCE::makePartName( STRING* aPartName, const char* aEntry,
+                        const STRING& aCategory )
 {
     const char* cp = strrstr( aEntry, ".part" );
 
@@ -211,19 +212,7 @@ bool DIR_LIB_SOURCE::makePartFileName( const char* aEntry,
     {
         const char* limit = cp + strlen( cp );
 
-        // if file extension is exactly ".part", and no rev
-        if( cp==limit-5 )
-        {
-            if( aCategory.size() )
-                *aPartName = aCategory + "/";
-            else
-                aPartName->clear();
-
-            aPartName->append( aEntry, cp - aEntry );
-            return true;
-        }
-
-        // if versioning, test for a trailing "revN.." type of string
+        // If versioning, then must find a trailing "revN.." type of string.
         if( useVersioning )
         {
             const char* rev = endsWithRev( cp + sizeof(".part") - 1, limit, '.' );
@@ -240,14 +229,52 @@ bool DIR_LIB_SOURCE::makePartFileName( const char* aEntry,
                 return true;
             }
         }
+
+        // If using versioning, then all valid partnames must have a rev string,
+        // so we don't even bother to try and load any other partfile down here.
+        else
+        {
+            // if file extension is exactly ".part", and no rev
+            if( cp==limit-5 )
+            {
+                if( aCategory.size() )
+                    *aPartName = aCategory + "/";
+                else
+                    aPartName->clear();
+
+                aPartName->append( aEntry, cp - aEntry );
+                return true;
+            }
+        }
     }
 
     return false;
 }
 
-static bool isCategoryName( const char* aName )
+
+STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
 {
-    return true;
+    // create a fileName for the sweet string, using a reversible
+    // partname <-> fileName conversion protocol:
+
+    STRING  fileName = sourceURI + "/";
+
+    const char* rev = endsWithRev( aPartName.c_str(), aPartName.c_str()+aPartName.size(), '/' );
+
+    if( rev )
+    {
+        int basePartLen = rev - aPartName.c_str() - 1;  // omit '/' separator
+        fileName.append( aPartName, 0,  basePartLen );
+        fileName += ".part.";    // add '.' separator before rev
+        fileName += rev;
+    }
+    else
+    {
+        fileName += aPartName;
+        fileName += ".part";
+    }
+
+    return fileName;
 }
 
 
@@ -342,22 +369,30 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 
         for( PART_CACHE::const_iterator it = partnames.lower_bound( lower );  it!=limit;  ++it )
         {
+            /*
             const char* start = it->c_str();
             size_t      len   = it->size();
 
-            if( !endsWithRev( start, start+len, '/' ) )
-                aResults->push_back( *it );
+            if( endsWithRev( start, start+len, '/' ) )
+                continue;
+            */
+
+            aResults->push_back( *it );
         }
     }
     else
     {
         for( PART_CACHE::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
         {
+            /*
             const char* start = it->c_str();
             size_t      len   = it->size();
 
             if( !endsWithRev( start, start+len, '/' ) )
-                aResults->push_back( *it );
+                continue;
+            */
+
+            aResults->push_back( *it );
         }
     }
 }
@@ -379,13 +414,12 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         throw IO_ERROR( partname.c_str() );
     }
 
-    // create a filename for the sweet string
-    STRING  filename = sourceURI + "/" + aPartName + ".part";
+    // create a fileName for the sweet string
+    STRING  fileName = makeFileName( aPartName );
 
-    if( aRev.size() )
-        filename += "." + aRev;
+    // @todo what about aRev?, and define the public API wrt to aRev better.
 
-    readSExpression( aResult, filename );
+    readSExpression( aResult, fileName );
 }
 
 
@@ -464,7 +498,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
         if( !stat( fileName.c_str(), &fs ) )
         {
             // is this a valid part name?
-            if( S_ISREG( fs.st_mode ) && makePartFileName( entry->d_name, aCategory, &partName ) )
+            if( S_ISREG( fs.st_mode ) && makePartName( &partName, entry->d_name, aCategory ) )
             {
                 std::pair<NAME_CACHE::iterator, bool> pair = partnames.insert( partName );
 
