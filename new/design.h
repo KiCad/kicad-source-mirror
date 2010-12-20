@@ -352,21 +352,6 @@ Show architecture here.
  */
 
 typedef std::string STRING;
-
-/**
- * Type STRING_TOKS
- * documents a container which holds a sequence of s-expressions suitable for parsing
- * with DSNLEXER.  This can either be a sequence of DSN_SYMBOLs or a sequence of
- * fully parenthesis delimited s-expressions.  There are 2 types: <ol>
- * <li> R C R33 "quoted-name" J2
- * <li> (part R ())(part C ())
- * </ol>
- * Notice that in the 1st example, there are 5 tokens in sequence, and in the
- * 2nd example there are two top most s-expressions in sequence.  So the counts
- * in these are 5 and 2 respectively.
- */
-typedef std::dequeue<STRING>    STRING_TOKS;
-
 typedef std::dequeue<STRING>    STRINGS;
 
 //typedef std::vector<wxString>   WSTRINGS;

@@ -40,7 +40,7 @@
 
 typedef std::string             STRING;
 typedef std::deque<STRING>      STRINGS;
-typedef STRINGS                 STRING_TOKS;
+typedef STRINGS                 STRINGS;
 
 extern const    STRING  StrEmpty;
 
@@ -93,14 +93,14 @@ protected:                  ///< derived classes must implement
      * @param aPartNames is a list of part names, one name per list element.
      * @param aResults receives the s-expressions
      */
-    virtual void ReadParts( STRING_TOKS* aResults, const STRINGS& aPartNames )
+    virtual void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
         throw( IO_ERROR ) = 0;
 
     /**
      * Function GetCategories
      * fetches all categories present in the library source into @a aResults
      */
-    virtual void GetCategories( STRING_TOKS* aResults )
+    virtual void GetCategories( STRINGS* aResults )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -112,7 +112,7 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched result, one category per STRING.
      */
-    virtual void GetCategoricalPartNames( STRING_TOKS* aResults, const STRING& aCategory=StrEmpty )
+    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -120,7 +120,7 @@ protected:                  ///< derived classes must implement
      * fetches all revisions for @a aPartName into @a aResults.  Revisions are strings
      * like "rev12", "rev279", and are library source agnostic.  These
      */
-    virtual void GetRevisions( STRING_TOKS* aResults, const STRING& aPartName )
+    virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -139,7 +139,7 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched part names, one part per STRING.
      */
-    virtual void FindParts( STRING_TOKS* aResults, const STRING& aQuery )
+    virtual void FindParts( STRINGS* aResults, const STRING& aQuery )
         throw( IO_ERROR ) = 0;
 
     //-----</abstract for implementors>--------------------------------------
