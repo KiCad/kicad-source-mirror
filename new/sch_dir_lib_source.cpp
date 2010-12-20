@@ -34,7 +34,12 @@
         http://www.softagalleria.net/dirent.php
     wx has these but they are based on wxString which can be wchar_t based and wx should
     not be introduced at a level this low.
+
+    Part files: have the general form partname.part[.revN...]
+    Categories: are any subdirectories immediately below the sourceURI, one level only.
+    Part names: [category/]partname[/revN...]
 */
+
 
 #include <sch_dir_lib_source.h>
 using namespace SCH;
@@ -60,7 +65,7 @@ using namespace std;
 
 /**
  * Class DIR_WRAP
- * provides a destructor which may be invoked if an exception is thrown.
+ * provides a destructor which is invoked if an exception is thrown.
  */
 class DIR_WRAP
 {
@@ -77,12 +82,13 @@ public:
 
     DIR* operator->()   { return dir; }
     DIR* operator*()    { return dir; }
+    operator bool ()    { return dir!=0; }
 };
 
 
 /**
  * Class FILE_WRAP
- * provides a destructor which may be invoked if an exception is thrown.
+ * provides a destructor which is invoked if an exception is thrown.
  */
 class FILE_WRAP
 {
@@ -119,24 +125,30 @@ static const char* strrstr( const char* haystack, const char* needle )
     return ret;
 }
 
-
-static const char* endsWithRev( const char* cp, const char* limit )
+/**
+ * Function endsWithRev
+ * returns a pointer to the final string segment: "revN..." or NULL if none.
+ * @param start is the beginning of string segment to test, the partname or
+ *  any middle portion of it.
+ * @param tail is a pointer to the terminating nul.
+ * @param separator is the separating byte, expected: '.' or '/', depending on context.
+ */
+static const char* endsWithRev( const char* start, const char* tail, char separator )
 {
-    // find last instance of ".rev"
-    cp = strrstr( cp, ".rev" );
-    if( cp )
+    bool    sawDigit = false;
+
+    while( isdigit(*--tail) && tail>start )
     {
-        const char* rev = cp + 1;
+        sawDigit = true;
+    }
 
-        cp += sizeof( ".rev" )-1;
-
-        while( isdigit( *cp ) )
-            ++cp;
-
-        if( cp != limit )   // there is garbage after "revN.."
-            rev = 0;
-
-        return rev;
+    if( sawDigit && tail-3 >= start && tail[-3] == separator )
+    {
+        tail -= 2;
+        if( tail[0]=='r' && tail[1]=='e' && tail[2]=='v' )
+        {
+            return tail;
+        }
     }
 
     return 0;
@@ -168,7 +180,7 @@ bool DIR_LIB_SOURCE::makePartFileName( const char* aEntry,
         // if versioning, test for a trailing "revN.." type of string
         if( useVersioning )
         {
-            const char* rev = endsWithRev( cp + sizeof(".part") - 1, limit );
+            const char* rev = endsWithRev( cp + sizeof(".part") - 1, limit, '.' );
             if( rev )
             {
                 if( aCategory.size() )
@@ -193,10 +205,51 @@ static bool isCategoryName( const char* aName )
 }
 
 
-#define MAX_PART_FILE_SIZE          (1*1024*1024)   // sanity check
+void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename ) throw( IO_ERROR )
+{
+    FILE_WRAP   fw = open( aFilename.c_str(), O_RDONLY );
 
-DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath, bool doUseVersioning )
-    throw( IO_ERROR )
+    if( fw == -1 )
+    {
+        STRING  msg = aFilename;
+        msg += " cannot be open()ed for reading";
+        throw IO_ERROR( msg.c_str() );
+    }
+
+    struct stat     fs;
+
+    fstat( fw, &fs );
+
+    // sanity check on file size
+    if( fs.st_size > (1*1024*1024) )
+    {
+        STRING msg = aFilename;
+        msg += " seems too big.  ( > 1mbyte )";
+        throw IO_ERROR( msg.c_str() );
+    }
+
+    // we reuse the same readBuffer, which is not thread safe, but the API
+    // is not expected to be thread safe.
+    readBuffer.resize( fs.st_size );
+
+    size_t count = read( fw, &readBuffer[0], fs.st_size );
+    if( count != (size_t) fs.st_size )
+    {
+        STRING msg = aFilename;
+        msg += " cannot be read";
+        throw IO_ERROR( msg.c_str() );
+    }
+
+    // std::string chars are not gauranteed to be contiguous in
+    // future implementations of C++, so this is why we did not read into
+    // aResult directly.
+    aResult->assign( &readBuffer[0], count );
+}
+
+
+DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
+                                bool doUseVersioning ) throw( IO_ERROR ) :
+    readBuffer( 512 )
 {
     useVersioning = doUseVersioning;
     sourceURI     = aDirectoryPath;
@@ -225,19 +278,121 @@ DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
 }
 
 
+void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory )
+    throw( IO_ERROR )
+{
+    aResults->clear();
+
+    if( aCategory.size() )
+    {
+        STRING  lower = aCategory + "/";
+        STRING  upper = aCategory + char( '/' + 1 );
+
+        DIR_CACHE::const_iterator limit = sweets.upper_bound( upper );
+
+        for( DIR_CACHE::const_iterator it = sweets.lower_bound( lower );  it!=limit;  ++it )
+        {
+            const char* start = it->first.c_str();
+            size_t      len   = it->first.size();
+
+            if( !endsWithRev( start, start+len, '/' ) )
+                aResults->push_back( it->first );
+        }
+    }
+    else
+    {
+        for( DIR_CACHE::const_iterator it = sweets.begin();  it!=sweets.end();  ++it )
+        {
+            const char* start = it->first.c_str();
+            size_t      len   = it->first.size();
+
+            if( !endsWithRev( start, start+len, '/' ) )
+                aResults->push_back( it->first );
+        }
+    }
+}
+
+
+void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev )
+    throw( IO_ERROR )
+{
+    STRING  partname = aPartName;
+
+    if( aRev.size() )
+        partname += "/" + aRev;
+
+    DIR_CACHE::iterator it = sweets.find( partname );
+
+    if( it == sweets.end() )    // part not found
+    {
+        partname += " not found.";
+        throw IO_ERROR( partname.c_str() );
+    }
+
+    if( !it->second )   // if the sweet string is not loaded yet
+    {
+        STRING  filename = sourceURI + "/" + aPartName + ".part";
+
+        if( aRev.size() )
+        {
+            filename += "." + aRev;
+        }
+
+        it->second = new STRING();
+
+        readSExpression( it->second, filename );
+    }
+
+    *aResult = *it->second;
+}
+
+
+void DIR_LIB_SOURCE::ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
+    throw( IO_ERROR )
+{
+    aResults->clear();
+
+    for( STRINGS::const_iterator n = aPartNames.begin();  n!=aPartNames.end();  ++n )
+    {
+        aResults->push_back( STRING() );
+        ReadPart( &aResults->back(), *n );
+    }
+}
+
+
+void DIR_LIB_SOURCE::GetCategories( STRINGS* aResults ) throw( IO_ERROR )
+{
+    *aResults = categories;
+}
+
+
+#if defined(DEBUG)
+#include <richio.h>
+
 void DIR_LIB_SOURCE::Show()
 {
-    printf( "categories:\n" );
+    printf( "Show categories:\n" );
     for( STRINGS::const_iterator it = categories.begin();  it!=categories.end();  ++it )
         printf( " '%s'\n", it->c_str() );
 
     printf( "\n" );
-    printf( "parts:\n" );
+    printf( "Show parts:\n" );
     for( DIR_CACHE::const_iterator it = sweets.begin();  it != sweets.end();  ++it )
     {
         printf( " '%s'\n", it->first.c_str() );
+
+        if( it->second )
+        {
+            STRING_LINE_READER  slr( *it->second, wxString( wxConvertMB2WX( it->first.c_str() ) ) );
+            while( slr.ReadLine() )
+            {
+                printf( "    %s", (char*) slr );
+            }
+            printf( "\n" );
+        }
     }
 }
+#endif
 
 
 void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
@@ -249,7 +404,7 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
 
     DIR_WRAP    dir = opendir( curDir.c_str() );
 
-    if( !*dir )
+    if( !dir )
     {
         STRING  msg = strerror( errno );
         msg += "; scanning directory " + curDir;
@@ -257,10 +412,8 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
     }
 
     struct stat     fs;
-
     STRING          partName;
     STRING          fileName;
-
     dirent*         entry;
 
     while( (entry = readdir( *dir )) != NULL )
@@ -269,8 +422,6 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
             continue;
 
         fileName = curDir + "/" + entry->d_name;
-
-        //D( printf("name: '%s'\n", fileName.c_str() );)
 
         if( !stat( fileName.c_str(), &fs ) )
         {
@@ -286,15 +437,16 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
                 */
 
                 sweets[partName] = NULL;  // NULL for now, load the sweet later.
-                //D( printf("part: %s\n", partName.c_str() );)
             }
 
             else if( S_ISDIR( fs.st_mode ) && !aCategory.size() && isCategoryName( entry->d_name ) )
             {
                 // only one level of recursion is used, controlled by the
                 // emptiness of aCategory.
-                //D( printf("category: %s\n", entry->d_name );)
                 categories.push_back( entry->d_name );
+
+                // somebody needs to test Windows (mingw), make sure it can
+                // handle opendir() recursively
                 doOneDir( entry->d_name );
             }
             else
@@ -306,15 +458,53 @@ void DIR_LIB_SOURCE::doOneDir( const STRING& aCategory ) throw( IO_ERROR )
 }
 
 
-#if 1 || defined( TEST_DIR_LIB_SOURCE )
+#if (1 || defined( TEST_DIR_LIB_SOURCE )) && defined(DEBUG)
 
 int main( int argc, char** argv )
 {
+    STRINGS     partnames;
+    STRINGS     sweets;
 
     try
     {
         DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", true );
+
+        // initially, only the DIR_CACHE sweets and STRING categories are loaded:
         uut.Show();
+
+        uut.GetCategoricalPartNames( &partnames, "Category" );
+
+        printf( "GetCategoricalPartNames(Category):\n" );
+        for( STRINGS::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
+        {
+            printf( " '%s'\n", it->c_str() );
+        }
+
+        uut.ReadParts( &sweets, partnames );
+
+
+        // fetch the part names for ALL categories.
+        uut.GetCategoricalPartNames( &partnames );
+
+        printf( "GetCategoricalPartNames(ALL):\n" );
+        for( STRINGS::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
+        {
+            printf( " '%s'\n", it->c_str() );
+        }
+
+        uut.ReadParts( &sweets, partnames );
+
+        printf( "Sweets for ALL parts:\n" );
+        STRINGS::const_iterator pn = partnames.begin();
+        for( STRINGS::const_iterator it = sweets.begin();  it!=sweets.end();  ++it, ++pn )
+        {
+            printf( " %s: %s", pn->c_str(), it->c_str() );
+        }
+    }
+
+    catch( std::exception& ex )
+    {
+        printf( "std::exception\n" );
     }
 
     catch( IO_ERROR ioe )
@@ -326,5 +516,4 @@ int main( int argc, char** argv )
 }
 
 #endif
-
 

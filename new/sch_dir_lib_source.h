@@ -29,6 +29,7 @@
 #include <sch_lib.h>
 
 #include <map>
+#include <vector>
 
 
 /**
@@ -52,10 +53,13 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
 {
     friend class LIBS;          ///< LIBS::GetLib() can construct one.
 
-    bool        useVersioning;  ///< use files with extension ".revNNN..", else not
+    bool                useVersioning;  ///< use files with extension ".revNNN..", else not
 
-    DIR_CACHE   sweets;
-    STRINGS     categories;
+    DIR_CACHE           sweets;         ///< @todo, don't really need to cache the sweets, only the partnames.
+
+    STRINGS             categories;
+    std::vector<char>   readBuffer;     ///< used by readSExpression()
+
 
     /**
      * Function isPartFileName
@@ -74,6 +78,13 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      */
     bool makePartFileName( const char* aEntry,
                            const STRING& aCategory, STRING* aPartName );
+
+    /**
+     * Function readSExpression
+     * reads an s-expression into aResult.  Candidate for virtual function later.
+     */
+    void readSExpression( STRING* aResult, const STRING& aNameSpec ) throw( IO_ERROR );
+
 
     /**
      * Function doOneDir
@@ -109,39 +120,35 @@ public:
     //-----<LIB_SOURCE implementation functions >------------------------------
 
     void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev=StrEmpty )
-        throw( IO_ERROR )
+        throw( IO_ERROR );
+
+    void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
+        throw( IO_ERROR );
+
+    void GetCategories( STRINGS* aResults ) throw( IO_ERROR );
+
+    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty )
+        throw( IO_ERROR );
+
+    void GetRevisions( STRINGS* aResults, const STRING& aPartName ) throw( IO_ERROR )
     {
+        // @todo
     }
 
-    void ReadParts( STRING_TOKS* aResults, const STRINGS& aPartNames )
-        throw( IO_ERROR )
+    void FindParts( STRINGS* aResults, const STRING& aQuery ) throw( IO_ERROR )
     {
-    }
-
-    void GetCategories( STRING_TOKS* aResults ) throw( IO_ERROR )
-    {
-    }
-
-    void GetCategoricalPartNames( STRING_TOKS* aResults,
-                    const STRING& aCategory=StrEmpty ) throw( IO_ERROR )
-    {
-    }
-
-    void GetRevisions( STRING_TOKS* aResults, const STRING& aPartName ) throw( IO_ERROR )
-    {
-    }
-
-    void FindParts( STRING_TOKS* aResults, const STRING& aQuery ) throw( IO_ERROR )
-    {
+        // @todo
     }
 
     //-----</LIB_SOURCE implementation functions >------------------------------
 
+#if defined(DEBUG)
     /**
      * Function Show
      * will output a debug dump of contents.
      */
     void Show();
+#endif
 };
 
 }       // namespace SCH

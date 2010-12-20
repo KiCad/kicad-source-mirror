@@ -56,10 +56,11 @@ else(DOXYGEN_FOUND)
 endif()
 
 
-include_directories( ${CMAKE_SOURCE_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
-add_executable( test_dir_lib_source sch_dir_lib_source.cpp )
+add_executable( test_dir_lib_source sch_dir_lib_source.cpp  ${PROJECT_SOURCE_DIR}/common/richio.cpp )
 #add_executable( test_dir_lib_source EXCLUDE_FROM_ALL sch_dir_lib_source.cpp )
 
 target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
+#target_link_libraries( test_dir_lib_source common ${wxWidgets_LIBRARIES} )
 
