@@ -170,15 +170,14 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 }
 
 
-/**
- * Function AddHotkeyName
+/* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
- * @param aText = a wxString. returns aText + key name
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
- * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *  aText = a wxString. returns aText + key name
+ *  aList = pointer to a Ki_HotkeyInfo list of commands
+ *  aCommandId = Command Id value
+ *  aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
  *                    = false to add <spaces><(keyname)>
- * @return a wxString (aTest + key name) if key found or aText without modification
+ *  Return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
                         int aCommandId, bool aIsShortCut )
@@ -200,15 +199,14 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
 }
 
 
-/**
- * Function AddHotkeyName
+/* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
- * @param aText = a wxString. returns aText + key name
- * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
- * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
+ *  aText = a wxString. returns aText + key name
+ *  aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ *  aCommandId = Command Id value
+ *  aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
  *                    = false to add <spaces><(keyname)>
- * @return a wxString (aTest + key name) if key found or aText without modification
+ * Return a wxString (aText + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString&                        aText,
                         struct Ki_HotkeyInfoSectionDescriptor* aDescList,
@@ -325,13 +323,9 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
 }
 
 
-/**
- * Function DisplayHotkeyList
+/* DisplayHotkeyList
  * Displays the current hotkey list
- * @param aFrame = current active frame
- * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list
- *(Null terminated)
- * @return none
+ * aList = a Ki_HotkeyInfoSectionDescriptor list(Null terminated)
  */
 void DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
                         struct Ki_HotkeyInfoSectionDescriptor* aDescList )
@@ -478,7 +472,6 @@ int WinEDA_BasicFrame::ReadHotkeyConfigFile(
     return 1;
 }
 
-
 void ReadHotkeyConfig( const wxString&                        Appname,
                        struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
@@ -496,11 +489,9 @@ void ReadHotkeyConfig( const wxString&                        Appname,
     ParseHotkeyConfig( data, aDescList );
 }
 
-
-/**
- * Function ReadHotkeyConfig
+/* Function ReadHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys
- * @param aDescList = current hotkey list descr. to initialise.
+ * aDescList is the current hotkey list descr. to initialise.
  */
 int WinEDA_BasicFrame::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
@@ -509,16 +500,14 @@ int WinEDA_BasicFrame::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* 
 }
 
 
-/**
- * Function ParseHotkeyConfig
+/* Function ParseHotkeyConfig
  * the input format is: shortcut  "key"  "function"
  * lines starting by # are ignored (comments)
- * lines like [xxx] are tags (example: [common] or [libedit] which identify
- * sections
+ * lines like [xxx] are tags (example: [common] or [libedit] which identify sections
  */
 void ParseHotkeyConfig(
     const wxString&                        data,
-    struct Ki_HotkeyInfoSectionDescriptor* DescList )
+    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     /* Read the config */
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
@@ -536,7 +525,7 @@ void ParseHotkeyConfig(
         if( line_type[0]  == '[' ) // A tag is found. search infos in list
         {
             CurrentHotkeyList = 0;
-            Ki_HotkeyInfoSectionDescriptor* DList = DescList;
+            Ki_HotkeyInfoSectionDescriptor* DList = aDescList;
             for( ; DList->m_HK_InfoList; DList++ )
             {
                 if( *DList->m_SectionTag == line_type )
@@ -639,8 +628,7 @@ void WinEDA_BasicFrame::ExportHotkeyConfigToFile(
 }
 
 
-/** add hotkey config options submenu to a menu
- * @param menu : root menu
+/* add hotkey config options submenu to aMenu
  */
 void AddHotkeyConfigMenu( wxMenu* aMenu )
 {

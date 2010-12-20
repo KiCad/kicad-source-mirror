@@ -4,6 +4,14 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-20, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+common:
+    Rename EDA_Rect::Inside to EDA_Rect::Contains
+    ( EDA_Rect::Inside( const EDA_Rect& aRect ) was very ambiguous )
+    Fix some Doxygen warnings and erroneous comments
+
+
 2010-Dec-19 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++new:

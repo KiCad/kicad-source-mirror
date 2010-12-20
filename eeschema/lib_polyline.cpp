@@ -162,7 +162,7 @@ bool LIB_POLYLINE::DoTestInside( EDA_Rect& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
-        if( aRect.Inside( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
+        if( aRect.Contains( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
             return true;
     }
 

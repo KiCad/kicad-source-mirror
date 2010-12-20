@@ -263,8 +263,8 @@ void LIB_ARC::DoOffset( const wxPoint& aOffset )
 
 bool LIB_ARC::DoTestInside( EDA_Rect& aRect ) const
 {
-    return aRect.Inside( m_ArcStart.x, -m_ArcStart.y )
-        || aRect.Inside( m_ArcEnd.x, -m_ArcEnd.y );
+    return aRect.Contains( m_ArcStart.x, -m_ArcStart.y )
+        || aRect.Contains( m_ArcEnd.x, -m_ArcEnd.y );
 }
 
 

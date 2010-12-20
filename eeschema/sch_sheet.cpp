@@ -1145,7 +1145,7 @@ bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aF
 
     rect.Inflate( aAccuracy );
 
-    return rect.Inside( aPoint );
+    return rect.Contains( aPoint );
 }
 
 
@@ -1156,7 +1156,7 @@ bool SCH_SHEET::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }

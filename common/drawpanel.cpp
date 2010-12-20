@@ -251,7 +251,7 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
     GetScreen()->Unscale( display_rect.m_Size );
 #endif
 
-    return display_rect.Inside( ref_pos );
+    return display_rect.Contains( ref_pos );
 }
 
 

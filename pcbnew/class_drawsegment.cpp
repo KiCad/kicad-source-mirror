@@ -487,9 +487,9 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
  */
 bool DRAWSEGMENT::HitTest( EDA_Rect& refArea )
 {
-    if( refArea.Inside( m_Start ) )
+    if( refArea.Contains( m_Start ) )
         return true;
-    if( refArea.Inside( m_End ) )
+    if( refArea.Contains( m_End ) )
         return true;
     return false;
 }

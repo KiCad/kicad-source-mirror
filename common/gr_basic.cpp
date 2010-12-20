@@ -188,7 +188,7 @@ int GRMapY( int y )
  */
 static bool clipLine( EDA_Rect* aClipBox, int& x1, int& y1, int& x2, int& y2 )
 {
-    if( aClipBox->Inside( x1, y1 ) && aClipBox->Inside( x2, y2 ) )
+    if( aClipBox->Contains( x1, y1 ) && aClipBox->Contains( x2, y2 ) )
         return false;
 
     wxRect rect = *aClipBox;
@@ -206,7 +206,7 @@ static bool clipLine( EDA_Rect* aClipBox, int& x1, int& y1, int& x2, int& y2 )
     tmpY2 = y2;
 #endif
 
-    if( aClipBox->Inside( x1, y1 ) )
+    if( aClipBox->Contains( x1, y1 ) )
     {
         if( x1 == x2 )         /* Vertical line, clip Y. */
         {
@@ -263,7 +263,7 @@ static bool clipLine( EDA_Rect* aClipBox, int& x1, int& y1, int& x2, int& y2 )
 #endif
         return false;
     }
-    else if( aClipBox->Inside( x2, y2 ) )
+    else if( aClipBox->Contains( x2, y2 ) )
     {
         if( x1 == x2 )         /* Vertical line, clip Y. */
         {
@@ -704,7 +704,7 @@ void GRPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int Color )
 
 void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int Color )
 {
-    if( ClipBox && !ClipBox->Inside( x, y ) )
+    if( ClipBox && !ClipBox->Contains( x, y ) )
         return;
 
     GRSetColorPen( DC, Color );

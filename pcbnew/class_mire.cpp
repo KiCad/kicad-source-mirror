@@ -200,7 +200,7 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
  */
 bool    MIREPCB::HitTest( EDA_Rect& refArea )
 {
-    if( refArea.Inside( m_Pos ) )
+    if( refArea.Contains( m_Pos ) )
         return true;
     return false;
 }

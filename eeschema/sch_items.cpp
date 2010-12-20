@@ -262,7 +262,7 @@ bool SCH_BUS_ENTRY::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccu
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }
@@ -433,7 +433,7 @@ bool SCH_JUNCTION::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T
 
     rect.Inflate( aAccuracy );
 
-    return rect.Inside( aPoint );
+    return rect.Contains( aPoint );
 }
 
 
@@ -444,7 +444,7 @@ bool SCH_JUNCTION::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccur
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }
@@ -628,7 +628,7 @@ bool SCH_NO_CONNECT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAcc
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }
@@ -1048,7 +1048,7 @@ bool SCH_LINE::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy 
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }
@@ -1278,7 +1278,7 @@ bool SCH_POLYLINE::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccur
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }

@@ -37,9 +37,9 @@ void            DuplicateItemsInList( SCH_SCREEN*        screen,
 
 static void     CollectStructsToDrag( SCH_SCREEN* screen );
 static void     AddPickedItem( SCH_SCREEN* screen, wxPoint aPosition );
-static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aComponent,
                                     wxPoint&       aPosition,
-                                    bool           aSearchFirst );
+                                    LIB_PIN*       aPin );
 static void     DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void     SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList );
 
@@ -226,6 +226,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     }
 
     if( DrawPanel->ManageCurseur != NULL )
+    {
         switch( block->m_Command )
         {
         case BLOCK_IDLE:
@@ -234,14 +235,14 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DRAG:    /* Drag */
             BreakSegmentOnJunction( GetScreen() );
-
+            // fall through
         case BLOCK_ROTATE:
         case BLOCK_MIRROR_X:
         case BLOCK_MIRROR_Y:
         case BLOCK_MOVE:    /* Move */
         case BLOCK_COPY:    /* Copy */
             PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
-
+            // fall through
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
             if( block->GetCount() )
             {
@@ -301,6 +302,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_ABORT:               /* not executed here */
             break;
         }
+    }
 
     if( block->m_Command  == BLOCK_ABORT )
     {
@@ -595,7 +597,8 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 }
 
 
-/* creates the list of items found when a drag block is initiated.
+/* Set in  m_BlockLocate.m_ItemsSelection items members .m_Flags to SELECTED
+ * Creates the list of items found when a drag block is initiated.
  * items are those selected in window block an some items outside this area but
  * connected to a selected item (connected wires to a component or an entry )
  */
@@ -624,14 +627,14 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     /* Remove the displacement of segment and undo the selection. */
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
+        Struct = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
         if( Struct->Type() == SCH_LINE_T )
         {
             SegmStruct = (SCH_LINE*) Struct;
-            if( !screen->m_BlockLocate.Inside( SegmStruct->m_Start ) )
+            if( !screen->m_BlockLocate.Contains( SegmStruct->m_Start ) )
                 SegmStruct->m_Flags |= STARTPOINT;
 
-            if( !screen->m_BlockLocate.Inside( SegmStruct->m_End ) )
+            if( !screen->m_BlockLocate.Contains( SegmStruct->m_End ) )
                 SegmStruct->m_Flags |= ENDPOINT;
 
             // Save m_Flags for Undo/redo drag operations:
@@ -642,17 +645,16 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
     /* Search for other items to drag. They are end wires connected to selected
      * items
      */
-
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
-        Struct = (SCH_ITEM*)(SCH_ITEM*) pickedlist->GetPickedItem( ii );
+        Struct = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
         if( ( Struct->Type() == SCH_LABEL_T )
            || ( Struct->Type() == SCH_GLOBAL_LABEL_T )
            || ( Struct->Type() == SCH_HIERARCHICAL_LABEL_T ) )
         {
             #undef STRUCT
             #define STRUCT ( (SCH_TEXT*) Struct )
-            if( !screen->m_BlockLocate.Inside( STRUCT->m_Pos ) )
+            if( !screen->m_BlockLocate.Contains( STRUCT->m_Pos ) )
             {
                 AddPickedItem( screen, STRUCT->m_Pos );
             }
@@ -661,20 +663,20 @@ static void CollectStructsToDrag( SCH_SCREEN* screen )
         if( Struct->Type() == SCH_COMPONENT_T )
         {
             // Add all pins of the selected component to list
-            LIB_PIN* pin;
             wxPoint  pos;
-            pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, true );
+            LIB_PIN* pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, NULL );
             while( pin )
             {
-                if( !screen->m_BlockLocate.Inside( pos ) )
+                if( !screen->m_BlockLocate.Contains( pos ) )
                 {
                     // This pin is outside area,
-                    // but because it it the pin of a selected component
+                    // but because it is a pin of a selected component
                     // we must also select connected items to this pin
+                    // and mainly wires
                     AddPickedItem( screen, pos );
                 }
 
-                pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, false );
+                pin = GetNextPinPosition( (SCH_COMPONENT*) Struct, pos, pin );
             }
         }
 
@@ -774,7 +776,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~STARTPOINT;
-
                 // Save m_Flags for Undo/redo drag operations:
                 picker.m_PickerFlags = Struct->m_Flags;
                 pickedlist->PushItem( picker );
@@ -783,7 +784,6 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
             {
                 Struct->m_Flags  = SELECTED | ENDPOINT | STARTPOINT;
                 Struct->m_Flags &= ~ENDPOINT;
-
                 // Save m_Flags for Undo/redo drag operations:
                 picker.m_PickerFlags = Struct->m_Flags;
                 pickedlist->PushItem( picker );
@@ -856,53 +856,45 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 
 /** GetNextPinPosition()
  * calculate position of the "next" pin of the aDrawLibItem component
- * @param aDrawLibItem = component to test.
+ * @param aComponent = component to test.
  * @param aPosition = the calculated pin position, according to the component
  * orientation and position
  * @param aSearchFirst = if true, search for the first pin
  * @return a pointer to the pin
  */
-static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aDrawLibItem,
+static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aComponent,
                                     wxPoint&       aPosition,
-                                    bool           aSearchFirst )
+                                    LIB_PIN*       aPin )
 {
     static LIB_COMPONENT* Entry;
-    static int Multi, convert;
-    TRANSFORM transform;
-    static wxPoint CmpPosition;
-    static LIB_PIN* Pin;
 
-    if( aSearchFirst )
+    if( aPin == NULL )
     {
-        Entry = CMP_LIBRARY::FindLibraryComponent( aDrawLibItem->GetLibName() );
+        Entry = CMP_LIBRARY::FindLibraryComponent( aComponent->GetLibName() );
 
         if( Entry == NULL )
             return NULL;
-
-        Pin         = Entry->GetNextPin();
-        Multi       = aDrawLibItem->GetUnit();
-        convert     = aDrawLibItem->GetConvert();
-        CmpPosition = aDrawLibItem->m_Pos;
-        transform   = aDrawLibItem->GetTransform();
     }
-    else
-        Pin = Entry->GetNextPin( Pin );
 
-    for( ; Pin != NULL; Pin = Entry->GetNextPin( Pin ) )
+    aPin = Entry->GetNextPin( aPin );
+
+    int multi       = aComponent->GetUnit();
+    int convert     = aComponent->GetConvert();
+    for( ; aPin != NULL; aPin = Entry->GetNextPin( aPin ) )
     {
-        wxASSERT( Pin->Type() == LIB_PIN_T );
+        wxASSERT( aPin->Type() == LIB_PIN_T );
 
         /* Skip items not used for this part */
-        if( Multi && Pin->GetUnit() && ( Pin->GetUnit() != Multi ) )
+        if( multi && aPin->GetUnit() && ( aPin->GetUnit() != multi ) )
             continue;
 
-        if( convert && Pin->GetConvert() && ( Pin->GetConvert() != convert ) )
+        if( convert && aPin->GetConvert() && ( aPin->GetConvert() != convert ) )
             continue;
 
         /* Calculate the pin position (according to the component orientation)
          */
-        aPosition = DefaultTransform.TransformCoordinate( Pin->GetPosition() ) + CmpPosition;
-        return Pin;
+        aPosition = aComponent->GetPinPhysicalPosition( aPin );
+        return aPin;
     }
 
     return NULL;

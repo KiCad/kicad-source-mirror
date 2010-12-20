@@ -271,11 +271,11 @@ public:
 
     /**
      * Function HitTest().
-     * Test if \a aRect intersects or is contained within the bounding box of an item.
+     * Test if \a aRect intersects or contains the bounding box of me.
      *
      * @param aRect - Rectangle to test.
      * @param aContained - Set to true to test for containment instead of an intersection.
-     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @param aAccuracy - Increase aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
      */
     bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const

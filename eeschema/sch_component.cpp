@@ -1664,7 +1664,7 @@ bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_
             bBox = GetField( ii )->GetBoundingBox();
             bBox.Inflate( aAccuracy );
 
-            if( bBox.Inside( aPoint ) )
+            if( bBox.Contains( aPoint ) )
                 return true;
         }
     }
@@ -1674,7 +1674,7 @@ bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_
         bBox = GetBodyBoundingBox();
         bBox.Inflate( aAccuracy );
 
-        if( bBox.Inside( aPoint ) )
+        if( bBox.Contains( aPoint ) )
             return true;
     }
 
@@ -1689,7 +1689,7 @@ bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccu
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }

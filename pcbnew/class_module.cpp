@@ -875,13 +875,12 @@ void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
 bool MODULE::HitTest( const wxPoint& refPos )
 {
     /* Calculation of the cursor coordinate relative to  module */
-    int spot_cX = refPos.x - m_Pos.x;
-    int spot_cY = refPos.y - m_Pos.y;
+    wxPoint pos = refPos - m_Pos;
 
-    RotatePoint( &spot_cX, &spot_cY, -m_Orient );
+    RotatePoint( &pos, -m_Orient );
 
     /* Check if cursor is in the rectangle. */
-    if( m_BoundaryBox.Inside( spot_cX, spot_cY ) )
+    if( m_BoundaryBox.Contains( pos ) )
         return true;
 
     return false;

@@ -146,7 +146,9 @@ public:
  * Class EDA_Rect
  * handles the component boundary box.
  * This class is similar to wxRect, but some wxRect functions are very curious,
- * so I prefer this suitable class
+ * and are working only if dimensions are >= 0 (not always the case in kicad)
+ * and also kicad needs some specific method.
+ * so I prefer this more suitable class
  */
 class EDA_Rect
 {
@@ -173,11 +175,33 @@ public:
      */
     void Move( const wxPoint& aMoveVector );
 
-    void    Normalize();                    // Ensure the height and width are >= 0
-    bool    Inside( const wxPoint& point ) const; // Return TRUE if point is in Rect
+    /**
+     * Function Normalize
+     * Ensure the height and width are >= 0
+     */
+    void    Normalize();
 
-    bool Inside( int x, int y ) const { return Inside( wxPoint( x, y ) ); }
-    bool Inside( const EDA_Rect& aRect ) const;
+    /**
+     * Function Contains
+     * @param aPoint = the wxPoint to test
+     * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside
+     */
+    bool    Contains( const wxPoint& aPoint ) const;
+    /**
+     * Function Contains
+     * @param x = the x coordinate of the point to test
+     * @param y = the x coordinate of the point to test
+     * @return true if point is inside the boundary box. A point on a edge is seen as inside
+     */
+    bool Contains( int x, int y ) const { return Contains( wxPoint( x, y ) ); }
+
+    /**
+     * Function Contains
+     * @param aRect = the EDA_Rect to test
+     * @return true if aRect is Contained. A common edge is seen as contained
+     */
+    bool Contains( const EDA_Rect& aRect ) const;
+
     wxSize GetSize() const { return m_Size; }
     int GetX() const { return m_Pos.x; }
     int GetY() const { return m_Pos.y; }
@@ -209,8 +233,9 @@ public:
     /**
      * Function Intersects
      * @return bool - true if the argument rectangle intersects this rectangle.
+     * (i.e. if the 2 rectangles have at least a common point)
      */
-    bool Intersects( const EDA_Rect aRect ) const;
+    bool Intersects( const EDA_Rect& aRect ) const;
 
 
     /**

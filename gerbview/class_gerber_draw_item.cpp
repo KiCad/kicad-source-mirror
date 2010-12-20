@@ -668,10 +668,10 @@ bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& aRefArea )
 {
     wxPoint pos = GetABPosition( m_Start );
 
-    if( aRefArea.Inside( pos ) )
+    if( aRefArea.Contains( pos ) )
         return true;
     pos = GetABPosition( m_End );
-    if( aRefArea.Inside( pos ) )
+    if( aRefArea.Contains( pos ) )
         return true;
     return false;
 }

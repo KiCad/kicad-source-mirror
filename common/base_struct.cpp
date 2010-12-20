@@ -315,7 +315,7 @@ bool EDA_TextStruct::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
     rect.Inflate( aAccuracy );
     RotatePoint( &location, m_Pos, -m_Orient );
 
-    return rect.Inside( location );
+    return rect.Contains( location );
 }
 
 
@@ -326,7 +326,7 @@ bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAc
     rect.Inflate( aAccuracy );
 
     if( aContains )
-        return rect.Inside( GetTextBox( -1 ) );
+        return rect.Contains( GetTextBox( -1 ) );
 
     return rect.Intersects( GetTextBox( -1 ) );
 }
@@ -515,48 +515,59 @@ void EDA_Rect::Move( const wxPoint& aMoveVector )
 /* Return TRUE if point is in Rect
  *  Accept rect size < 0
  */
-bool EDA_Rect::Inside( const wxPoint& point ) const
+bool EDA_Rect::Contains( const wxPoint& aPoint ) const
 {
-    int    rel_posx = point.x - m_Pos.x;
-    int    rel_posy = point.y - m_Pos.y;
+    wxPoint rel_pos = aPoint - m_Pos;
     wxSize size     = m_Size;
 
     if( size.x < 0 )
     {
         size.x    = -size.x;
-        rel_posx += size.x;
+        rel_pos.x += size.x;
     }
 
     if( size.y < 0 )
     {
         size.y    = -size.y;
-        rel_posy += size.y;
+        rel_pos.y += size.y;
     }
 
-    return (rel_posx >= 0) && (rel_posy >= 0) && ( rel_posy <= size.y) && ( rel_posx <= size.x);
+    return (rel_pos.x >= 0) && (rel_pos.y >= 0) && ( rel_pos.y <= size.y) && ( rel_pos.x <= size.x);
 }
 
-
-bool EDA_Rect::Inside( const EDA_Rect& aRect ) const
+/*
+ * return true if aRect is inside me (or on boundaries)
+ */
+bool EDA_Rect::Contains( const EDA_Rect& aRect ) const
 {
-    wxRect rect = aRect;
-    wxRect me = wxRect();
-
-    return me.Contains( rect );
+    return Contains(aRect.GetOrigin() ) && Contains(aRect.GetEnd() );
 }
 
 
-bool EDA_Rect::Intersects( const EDA_Rect aRect ) const
+/* Intersects
+ * test for a common area between 2 rect.
+ * return true if at least a common point is found
+ */
+bool EDA_Rect::Intersects( const EDA_Rect& aRect ) const
 {
     // this logic taken from wxWidgets' geometry.cpp file:
     bool rc;
+    EDA_Rect me(*this);
+    EDA_Rect rect(aRect);
+    me.Normalize();         // ensure size is >= 0
+    rect.Normalize();       // ensure size is >= 0
 
-    int  left   = MAX( m_Pos.x, aRect.m_Pos.x );
-    int  right  = MIN( m_Pos.x + m_Size.x, aRect.m_Pos.x + aRect.m_Size.x );
-    int  top    = MAX( m_Pos.y, aRect.m_Pos.y );
-    int  bottom = MIN( m_Pos.y + m_Size.y, aRect.m_Pos.y + aRect.m_Size.y );
+    // calculate the left common area coordinate:
+    int  left   = MAX( me.m_Pos.x, rect.m_Pos.x );
+    // calculate the right common area coordinate:
+    int  right  = MIN( me.m_Pos.x + m_Size.x, rect.m_Pos.x + rect.m_Size.x );
+    // calculate the upper common area coordinate:
+    int  top    = MAX( me.m_Pos.y, aRect.m_Pos.y );
+    // calculate the lower common area coordinate:
+    int  bottom = MIN( me.m_Pos.y + m_Size.y, rect.m_Pos.y + rect.m_Size.y );
 
-    if( left < right && top < bottom )
+    // if a common area exists, it must have a positive (null accepted) size
+    if( left <= right && top <= bottom )
         rc = true;
     else
         rc = false;

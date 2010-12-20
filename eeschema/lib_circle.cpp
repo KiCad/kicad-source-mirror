@@ -152,7 +152,7 @@ bool LIB_CIRCLE::DoTestInside( EDA_Rect& aRect ) const
      * FIXME: This fails to take into account the radius around the center
      *        point.
      */
-    return aRect.Inside( m_Pos.x, -m_Pos.y );
+    return aRect.Contains( m_Pos.x, -m_Pos.y );
 }
 
 

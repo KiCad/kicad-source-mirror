@@ -130,7 +130,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     else
                         continue;
                     bool connected = false;
-                    if( bbox.Inside( pos1 ) )
+                    if( bbox.Contains( pos1 ) )
                     {
                         if( TestPointInsidePolygon( curr_zone->m_FilledPolysList, indexstart,
                                                     indexend, pos1.x, pos1.y ) )
@@ -138,7 +138,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     }
                     if( !connected && (pos1 != pos2 ) )
                     {
-                        if( bbox.Inside( pos2 ) )
+                        if( bbox.Contains( pos2 ) )
                             if( TestPointInsidePolygon( curr_zone->m_FilledPolysList, indexstart,
                                                         indexend, pos2.x, pos2.y ) )
                                 connected = true;

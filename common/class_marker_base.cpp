@@ -118,7 +118,7 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos ) const
     rel_pos.x /= m_ScalingFactor;
     rel_pos.y /= m_ScalingFactor;
 
-    return m_ShapeBoundingBox.Inside( rel_pos );
+    return m_ShapeBoundingBox.Contains( rel_pos );
 }
 
 

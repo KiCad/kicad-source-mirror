@@ -466,7 +466,7 @@ bool LIB_FIELD::DoTestInside( EDA_Rect& rect ) const
      * FIXME: This fails to take into acount the size and/or orientation of
      *        the text.
      */
-    return rect.Inside( m_Pos.x, -m_Pos.y );
+    return rect.Contains( m_Pos.x, -m_Pos.y );
 }
 
 

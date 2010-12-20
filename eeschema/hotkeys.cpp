@@ -748,7 +748,12 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 
             case SCH_LINE_T:
                 if( ( (SCH_ITEM*) DrawStruct )->GetLayer() == LAYER_WIRE )
-                    wxPostEvent( this, eventDragWire );
+                {
+                    if( HK_Descr->m_Idcommand == HK_DRAG )
+                        wxPostEvent( this, eventDragWire );
+                    else
+                        wxPostEvent( this, eventMoveItem );
+                }
                 break;
 
             default:

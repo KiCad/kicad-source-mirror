@@ -291,7 +291,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
     rel_pos = refPos;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
 
-    if( area.Inside( rel_pos ) )
+    if( area.Contains( rel_pos ) )
         return true;
 
     return false;

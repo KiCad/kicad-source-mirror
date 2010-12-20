@@ -223,7 +223,7 @@ bool LIB_TEXT::DoTestInside( EDA_Rect& rect ) const
      * FIXME: This should calculate the text size and justification and
      *        use rectangle instect.
      */
-    return rect.Inside( m_Pos.x, -m_Pos.y );
+    return rect.Contains( m_Pos.x, -m_Pos.y );
 }
 
 

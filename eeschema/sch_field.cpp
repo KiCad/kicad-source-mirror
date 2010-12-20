@@ -469,7 +469,7 @@ bool SCH_FIELD::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
 
     rect.Inflate( aAccuracy );
 
-    return rect.Inside( aPoint );
+    return rect.Contains( aPoint );
 }
 
 
@@ -484,7 +484,7 @@ bool SCH_FIELD::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }
