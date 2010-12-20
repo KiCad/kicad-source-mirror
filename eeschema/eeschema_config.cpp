@@ -409,8 +409,7 @@ void SCH_EDIT_FRAME::SaveProjectFile( wxWindow* displayframe, bool askoverwrite 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
-                                   GetProjectFileParameters() );
+    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, GetProjectFileParameters() );
 }
 
 
@@ -460,7 +459,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
         return m_configSettings;
 
     m_configSettings.push_back( new PARAM_CFG_INT( wxT( "Unite" ),
-                                                    (int*)&g_UserUnit, 0 ) );
+                                                   (int*)&g_UserUnit, 0 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
                                                         &g_LayerDescr.LayerColor[LAYER_WIRE],
                                                         GREEN ) );
@@ -534,10 +533,13 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
                                                         &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
                                                         RED ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
+                                                        &g_LayerDescr.LayerColor[LAYER_GRID],
+                                                        DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
-                                                        &m_printMonochrome, true ) );
+                                                    &m_printMonochrome, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintSheetReferenceAndTitleBlock" ),
-                                                        &m_printSheetReference, true ) );
+                                                    &m_printSheetReference, true ) );
 
     return m_configSettings;
 }
@@ -558,8 +560,10 @@ void SCH_EDIT_FRAME::LoadSettings()
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,
-                                            (long) 6 );
+    // This is eqired until someone gets rid of the global variable g_LayerDescription().
+    m_GridColor = g_LayerDescr.LayerColor[LAYER_GRID];
+
+    g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,(long) 6 );
     cfg->Read( ShowHiddenPinsEntry, &m_ShowAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
 
@@ -633,8 +637,8 @@ void SCH_EDIT_FRAME::LoadSettings()
         catch( IO_ERROR e )
         {
             // @todo show error msg
-            D(printf("templatefieldnames parsing error: '%s'\n",
-                CONV_TO_UTF8(e.errorText) );)
+            D( printf( "templatefieldnames parsing error: '%s'\n",
+                       CONV_TO_UTF8( e.errorText ) ); )
         }
     }
 
@@ -710,7 +714,6 @@ void SCH_EDIT_FRAME::SaveSettings()
     wxString record = CONV_FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single
-
 
     cfg->Write( FieldNamesEntry, record );
 }
