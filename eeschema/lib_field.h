@@ -107,6 +107,15 @@ public:
     void          SetFields( const std::vector <LIB_FIELD> aFields );
 
     /**
+     * Function IsVoid
+     * @return true if the field value is void (no text in this field)
+     */
+    bool IsVoid()
+    {
+        return m_Text.IsEmpty();
+    }
+
+    /**
      * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */

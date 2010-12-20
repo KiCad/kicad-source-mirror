@@ -350,6 +350,11 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 
 bool LIB_FIELD::HitTest( const wxPoint& aPosition )
 {
+    // Because HitTest is mainly used to select the field
+    // return always false if this field is void
+    if( IsVoid() )
+        return false;
+
     return HitTest( aPosition, 0, DefaultTransform );
 }
 
