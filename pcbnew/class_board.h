@@ -512,8 +512,16 @@ public:
      */
     void          DisplayInfo( WinEDA_DrawFrame* frame );
 
-    void          Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        int aDrawMode, const wxPoint& offset = ZeroOffset );
+    /**
+     * Function Draw.
+     * Redraw the BOARD items but not cursors, axis or grid.
+     * @param aPanel = the panel relative to the board
+     * @param aDC = the curent device context
+     * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
+     * @param aOffset = an draw offset value (default = 0,0)
+     */
+    void          Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /**
      * Function DrawHighLight

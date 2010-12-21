@@ -611,7 +611,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     m_StyleRadioBox->SetSelection( style );
 
-    // Copy the text justification
+    // Select the right text justification
     if( field.m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
         m_FieldHJustifyCtrl->SetSelection(0);
     else if( field.m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )

@@ -578,6 +578,22 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     m_StyleRadioBox->SetSelection( style );
 
+    // Select the right text justification
+    if( field.m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+        m_FieldHJustifyCtrl->SetSelection(0);
+    else if( field.m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+        m_FieldHJustifyCtrl->SetSelection(2);
+    else
+        m_FieldHJustifyCtrl->SetSelection(1);
+
+    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+        m_FieldVJustifyCtrl->SetSelection(0);
+    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+        m_FieldVJustifyCtrl->SetSelection(2);
+    else
+        m_FieldVJustifyCtrl->SetSelection(1);
+
+
     fieldNameTextCtrl->SetValue( field.m_Name );
 
     // the names of the fixed fields are not editable, others are.
@@ -657,6 +673,19 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
+    // Copy the text justification
+    GRTextHorizJustifyType hjustify[3] = {
+        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
+        GR_TEXT_HJUSTIFY_RIGHT
+    };
+
+    GRTextVertJustifyType vjustify[3] = {
+        GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
+        GR_TEXT_VJUSTIFY_TOP
+    };
+
+    field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
+    field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
 
     field.m_Name = fieldNameTextCtrl->GetValue();
     /* Void fields texts for REFERENCE and VALUE (value is the name of the

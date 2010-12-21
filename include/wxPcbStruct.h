@@ -480,7 +480,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int  ReturnBlockCommand( int key );
+    virtual int  ReturnBlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace( )
@@ -805,18 +805,19 @@ public:
      * Modify a full track width (using DRC control).
      * a full track is the set of track segments between 2 ends: pads or a
      * point that has more than 2 segments ends connected
-     * @param  DC = the curred device context (can be NULL)
+     * @param  aDC = the curred device context (can be NULL)
      * @param aTrackSegment = a segment or via on the track to change
      */
-    void   Edit_Track_Width( wxDC* DC, TRACK* Track );
+    void   Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment );
 
     /**
      * Function Edit_TrackSegm_Width
      *  Modify one track segment width or one via diameter (using DRC control).
-     * @param  DC = the current device context (can be NULL)
+     * @param  aDC = the current device context (can be NULL)
      * @param aTrackItem = the track segment or via to modify
      */
-    void   Edit_TrackSegm_Width( wxDC* DC, TRACK* segm );
+    void   Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem );
+
     TRACK* Begin_Route( TRACK* track, wxDC* DC );
     void   End_Route( TRACK* track, wxDC* DC );
     void   ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC );
@@ -868,7 +869,7 @@ public:
     // zone handling
 
     /**
-     * Function Delete_Zone_Fill
+     * Function Delete_Zone_Fill (obsolete)
      * Remove the zone filling which include the segment aZone, or the zone
      * which have the given time stamp.  A zone is a group of segments which
      * have the same TimeStamp
@@ -876,7 +877,7 @@ public:
      * @param aTimestamp = Timestamp for the zone to delete, used if aZone ==
      *                     NULL
      */
-    void Delete_Zone_Fill( SEGZONE* Track, long aTimestamp = 0 );
+    void Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp = 0 );
 
 
     /**
@@ -1033,6 +1034,13 @@ public:
      * @param aNetlistFullFilename = netlist file name (*.net)
      * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
      * only the netlist will be used
+     * @param aMessageWindow = a reference to a wxTextCtrl where to dislay messages.
+     *                  can be NULL
+     * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
+     * @param aDeleteBadTracks if true, erroneous tracks will be deleted
+     * @param aDeleteExtraFootprints if true, remove unlocked footprints that are not in netlist
+     * @param aSelect_By_Timestamp if true, use timestamp instead of reference to identify footprints
+     *    from components (use after reannotation of the chematic)
      * @return true if Ok
      *
      *  the format of the netlist is something like:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -29,7 +29,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	int unitChoiceNChoices = sizeof( unitChoiceChoices ) / sizeof( wxString );
 	unitChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, unitChoiceNChoices, unitChoiceChoices, 0 );
 	unitChoice->SetSelection( 0 );
-	unitSizer->Add( unitChoice, 1, wxALL|wxEXPAND, 5 );
+	unitSizer->Add( unitChoice, 0, wxALL|wxEXPAND, 5 );
 	
 	optionsSizer->Add( unitSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 	
@@ -42,9 +42,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	orientationRadioBox->SetSelection( 0 );
 	orientationRadioBox->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	orientationSizer->Add( orientationRadioBox, 1, wxALL, 8 );
+	orientationSizer->Add( orientationRadioBox, 1, wxALL|wxEXPAND, 8 );
 	
-	optionsSizer->Add( orientationSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 0 );
+	optionsSizer->Add( orientationSizer, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 0 );
 	
 	wxBoxSizer* mirrorSizer;
 	mirrorSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -57,7 +57,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	mirrorSizer->Add( mirrorRadioBox, 1, wxALL, 8 );
 	
-	optionsSizer->Add( mirrorSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 0 );
+	optionsSizer->Add( mirrorSizer, 0, wxLEFT|wxRIGHT|wxTOP|wxEXPAND, 0 );
 	
 	wxStaticBoxSizer* chipnameSizer;
 	chipnameSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Chip Name") ), wxHORIZONTAL );
@@ -71,7 +71,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( chipnameSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 	
 	convertCheckBox = new wxCheckBox( this, wxID_ANY, _("Convert"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
 	
 	optionsSizer->Add( convertCheckBox, 0, wxALL, 8 );
@@ -113,10 +112,27 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	gridStaticBoxSizer->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
 	
-	fieldsSizer->Add( gridStaticBoxSizer, 5, wxALL|wxEXPAND, 8 );
+	fieldsSizer->Add( gridStaticBoxSizer, 5, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 	
 	wxBoxSizer* fieldEditBoxSizer;
 	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sbSizerOptions;
+	sbSizerOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxHORIZONTAL );
+	
+	wxString m_FieldHJustifyCtrlChoices[] = { _("Align left"), _("Align center"), _("Align right") };
+	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
+	m_FieldHJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FieldHJustifyCtrl->SetSelection( 1 );
+	sbSizerOptions->Add( m_FieldHJustifyCtrl, 1, wxRIGHT|wxLEFT, 5 );
+	
+	wxString m_FieldVJustifyCtrlChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
+	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
+	m_FieldVJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Vert. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_FieldVJustifyCtrl->SetSelection( 1 );
+	sbSizerOptions->Add( m_FieldVJustifyCtrl, 1, wxRIGHT|wxLEFT, 5 );
+	
+	fieldEditBoxSizer->Add( sbSizerOptions, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* visibilitySizer;
 	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxHORIZONTAL );
@@ -125,13 +141,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	bShowRotateSizer = new wxBoxSizer( wxVERTICAL );
 	
 	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
 	bShowRotateSizer->Add( showCheckBox, 0, wxALL, 5 );
 	
 	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
 	bShowRotateSizer->Add( rotateCheckBox, 0, wxALL, 5 );
@@ -146,7 +160,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	visibilitySizer->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -221,15 +235,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	positionBoxSizer->Add( posYBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	fieldEditBoxSizer->Add( positionBoxSizer, 1, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( positionBoxSizer, 0, wxEXPAND, 5 );
 	
-	
-	fieldEditBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	fieldEditBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	fieldsSizer->Add( fieldEditBoxSizer, 3, wxEXPAND, 5 );
+	fieldsSizer->Add( fieldEditBoxSizer, 0, wxEXPAND, 5 );
 	
 	upperSizer->Add( fieldsSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -268,4 +276,5 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP(
 	moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::moveUpButtonHandler ), NULL, this );
 	stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnCancelButtonClick ), NULL, this );
 	stdDialogButtonSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnOKButtonClick ), NULL, this );
+	
 }

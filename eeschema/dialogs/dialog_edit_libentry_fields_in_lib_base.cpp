@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -50,21 +50,13 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxStaticBoxSizer* optionsSizer;
 	optionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxHORIZONTAL );
 	
-	wxBoxSizer* orientationSizer;
-	orientationSizer = new wxBoxSizer( wxHORIZONTAL );
-	
 	wxString m_FieldHJustifyCtrlChoices[] = { _("Align left"), _("Align center"), _("Align right") };
 	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldHJustifyCtrl = new wxRadioBox( this, wxID_ANY, _("Horiz. Justify"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldHJustifyCtrl->SetSelection( 1 );
 	m_FieldHJustifyCtrl->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	orientationSizer->Add( m_FieldHJustifyCtrl, 1, wxALL, 8 );
-	
-	optionsSizer->Add( orientationSizer, 1, wxLEFT|wxRIGHT|wxTOP|wxEXPAND|wxALIGN_CENTER_VERTICAL, 0 );
-	
-	wxBoxSizer* mirrorSizer;
-	mirrorSizer = new wxBoxSizer( wxHORIZONTAL );
+	optionsSizer->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 8 );
 	
 	wxString m_FieldVJustifyCtrlChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
@@ -72,11 +64,9 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_FieldVJustifyCtrl->SetSelection( 1 );
 	m_FieldVJustifyCtrl->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	
-	mirrorSizer->Add( m_FieldVJustifyCtrl, 1, wxALL, 8 );
+	optionsSizer->Add( m_FieldVJustifyCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 8 );
 	
-	optionsSizer->Add( mirrorSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP|wxALIGN_CENTER_VERTICAL, 0 );
-	
-	fieldEditBoxSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxEXPAND|wxBOTTOM, 5 );
 	
 	wxStaticBoxSizer* visibilitySizer;
 	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxHORIZONTAL );
@@ -85,13 +75,11 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bShowRotateSizer = new wxBoxSizer( wxVERTICAL );
 	
 	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
 	bShowRotateSizer->Add( showCheckBox, 0, wxALL, 5 );
 	
 	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
 	bShowRotateSizer->Add( rotateCheckBox, 0, wxALL, 5 );
@@ -101,7 +89,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	m_StyleRadioBox->SetSelection( 0 );
+	m_StyleRadioBox->SetSelection( 1 );
 	visibilitySizer->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND, 5 );
@@ -216,4 +204,5 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BAS
 	moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveUpButtonHandler ), NULL, this );
 	stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCancelButtonClick ), NULL, this );
 	stdDialogButtonSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnOKButtonClick ), NULL, this );
+	
 }

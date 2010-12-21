@@ -1,6 +1,6 @@
-/**
- * @file menucfg.cpp
- * (Re)Create the CvPCB main MenuBar
+/*
+ * menubar.cpp
+ * Build the CvPCB MenuBar
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"

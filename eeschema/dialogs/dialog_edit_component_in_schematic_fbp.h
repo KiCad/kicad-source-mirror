@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,6 +48,8 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxButton* addFieldButton;
 		wxButton* deleteFieldButton;
 		wxButton* moveUpButton;
+		wxRadioBox* m_FieldHJustifyCtrl;
+		wxRadioBox* m_FieldVJustifyCtrl;
 		wxCheckBox* showCheckBox;
 		wxCheckBox* rotateCheckBox;
 		wxRadioBox* m_StyleRadioBox;
@@ -61,25 +63,24 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxTextCtrl* posXTextCtrl;
 		wxStaticText* posYLabel;
 		wxTextCtrl* posYTextCtrl;
-		
-		
 		wxStdDialogButtonSizer* stdDialogButtonSizer;
 		wxButton* stdDialogButtonSizerOK;
 		wxButton* stdDialogButtonSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void SetInitCmp( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnListItemDeselected( wxListEvent& event ){ event.Skip(); }
-		virtual void OnListItemSelected( wxListEvent& event ){ event.Skip(); }
-		virtual void addFieldButtonHandler( wxCommandEvent& event ){ event.Skip(); }
-		virtual void deleteFieldButtonHandler( wxCommandEvent& event ){ event.Skip(); }
-		virtual void moveUpButtonHandler( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOKButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
+		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }
+		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 630,520 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 715,520 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
 	
 };
