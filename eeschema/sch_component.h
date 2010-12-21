@@ -60,14 +60,11 @@ class SCH_COMPONENT : public SCH_ITEM
     TRANSFORM m_transform;  ///< The rotation/mirror transformation matrix.
     SCH_FIELDS m_Fields;    ///< Variable length list of fields.
 
-    /* Hierarchical references.
-     * format is
-     * path reference multi
-     * with:
-     * path = /<timestamp1>/<timestamp2> (subsheet path, = / for the root sheet)
-     * reference = reference for this path (C23, R5, U78 ... )
-     * multi = part selection in multi parts per package (0 or 1 for one part
-     *         per package)
+    /**
+     * Defines the hierarchical path and reference of the component.  This allowa support
+     * for hierarchical sheets that reference the same schematic.  The foramt for the path
+     * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/...  A single / denotes the root
+     * sheet.
      */
     wxArrayString m_PathsAndReferences;
 
@@ -103,12 +100,12 @@ public:
 
     /**
      * Copy Constructor
-     * clones \a aTemplate into this object.  All fields are copied as is except
+     * clones \a aComponent into a new object.  All fields are copied as is except
      * for the linked list management pointers which are set to NULL, and the
      * SCH_FIELD's m_Parent pointers which are set to the new parent,
      * i.e. this new object.
      */
-    SCH_COMPONENT( const SCH_COMPONENT& aTemplate );
+    SCH_COMPONENT( const SCH_COMPONENT& aComponent );
 
     ~SCH_COMPONENT() { }
 
@@ -151,16 +148,6 @@ public:
      * @return True if the component loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
-
-    /**
-     * Function GenCopy
-     * returns a copy of this object but with the linked list pointers set to NULL.
-     * @return SCH_COMPONENT* - a copy of me.
-     */
-    SCH_COMPONENT* GenCopy() const
-    {
-        return new SCH_COMPONENT( *this );
-    }
 
     /**
      * Function SetOrientation
@@ -259,7 +246,6 @@ public:
     {
         m_Fields = aFields;     // vector copying, length is changed possibly
     }
-
 
     //-----</Fields>----------------------------------------------------------
 
@@ -409,9 +395,10 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
-    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
-    virtual bool DoIsConnected( const wxPoint& aPosition ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doIsConnected( const wxPoint& aPosition ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 

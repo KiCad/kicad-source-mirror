@@ -414,7 +414,7 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
 }
 
 
-void WinEDA_PcbFrame::OnQuit( wxCommandEvent & WXUNUSED(event) )
+void WinEDA_PcbFrame::OnQuit( wxCommandEvent& event )
 {
     Close( true );
 }

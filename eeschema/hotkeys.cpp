@@ -13,6 +13,7 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "sch_items.h"
+#include "sch_line.h"
 #include "sch_component.h"
 #include "sch_sheet.h"
 
@@ -510,8 +511,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
             if( DrawStruct->Type() == SCH_LINE_T )
             {
                 SCH_LINE* segment = (SCH_LINE*) DrawStruct;
+
                 if( segment->GetLayer() != LAYER_BUS )
                     break;
+
             // Bus in progress:
             OnLeftClick( DC, MousePos );
             }

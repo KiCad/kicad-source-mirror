@@ -797,7 +797,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
 }
 
 
-void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& WXUNUSED(event) )
+void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& event )
 {
     if( PolyEdges )
         free( PolyEdges );

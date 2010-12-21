@@ -42,7 +42,7 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
 
     SAFE_DELETE( g_ItemToUndoCopy );
-    g_ItemToUndoCopy = comp->GenCopy();
+    g_ItemToUndoCopy = new SCH_COMPONENT( *comp );
 
     pos = comp->m_Pos;
 

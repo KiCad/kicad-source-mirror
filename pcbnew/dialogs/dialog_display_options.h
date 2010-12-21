@@ -1,5 +1,5 @@
 /**
- * @file pcbnew/dialog_display_options.h
+ * @file pcbnew/dialogs/dialog_display_options.h
  */
 #include "dialog_display_options_base.h"
 

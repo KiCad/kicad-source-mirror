@@ -139,7 +139,7 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
 
 
 /**********************************************************************/
-void DIMENSION_EDITOR_DIALOG::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
+void DIMENSION_EDITOR_DIALOG::OnCancelClick( wxCommandEvent& event )
 /**********************************************************************/
 {
     EndModal( -1 );

@@ -297,7 +297,7 @@ void DIALOG_COLOR_CONFIG::UpdateLayerSettings()
 }
 
 
-void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& event )
 {
     UpdateLayerSettings();
     m_Parent->DrawPanel->Refresh();
@@ -305,13 +305,13 @@ void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& WXUNUSED( event ) )
 }
 
 
-void DIALOG_COLOR_CONFIG::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_COLOR_CONFIG::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }
 
 
-void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& event )
 {
     UpdateLayerSettings();
     m_Parent->DrawPanel->Refresh();

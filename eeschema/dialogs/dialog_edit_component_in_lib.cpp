@@ -239,7 +239,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& event )
 {
     if( m_Parent == NULL )
         return;
@@ -261,7 +261,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& WXUNUSED 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& event )
 {
     if( m_PartAliasListCtrl->FindString( m_Parent->GetAliasName() ) != wxNOT_FOUND )
     {
@@ -284,7 +284,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& WXU
 /* Add a new name to the alias list box
  *  New name cannot be the root name, and must not exists
  */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
 {
     wxString aliasname;
     LIB_COMPONENT* component = m_Parent->GetComponent();
@@ -324,7 +324,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& WXUNUSED 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& event )
 {
     wxString aliasname = m_PartAliasListCtrl->GetStringSelection();
 
@@ -444,7 +444,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::BrowseAndSelectDocFile( wxCommandEvent& e
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent& event )
 {
     if( IsOK( this, _( "Ok to Delete FootprintFilter LIST" ) ) )
     {
@@ -458,7 +458,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllFootprintFilter( wxCommandEvent&
 /* Add a new name to the footprint filter list box
  * Obvioulsy, cannot be void
  */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event )
 {
     wxString Line;
     LIB_COMPONENT* component = m_Parent->GetComponent();
@@ -494,7 +494,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& WXUNU
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteOneFootprintFilter( wxCommandEvent& event )
 {
     LIB_COMPONENT* component = m_Parent->GetComponent();
     int ii = m_FootprintFilterListBox->GetSelection();

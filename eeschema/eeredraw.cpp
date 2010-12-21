@@ -14,10 +14,14 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
+#include "sch_bus_entry.h"
 #include "sch_component.h"
 #include "sch_items.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
+#include "sch_polyline.h"
+#include "sch_sheet.h"
+#include "sch_sheet_path.h"
 
 #include "build_version.h"
 
@@ -185,8 +189,8 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
     case SCH_POLYLINE_T:
     {
         SCH_POLYLINE* Struct = (SCH_POLYLINE*) aItem;
-        GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x,
-                  Struct->m_PolyPoints[0].y + aOffset.y );
+        GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x, Struct->m_PolyPoints[0].y + aOffset.y );
+
         for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
             GRLineTo( &aPanel->m_ClipBox,
                       aDC,
@@ -202,15 +206,16 @@ void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
     {
         SCH_LINE* Struct;
         Struct = (SCH_LINE*) aItem;
+
         if( (Struct->m_Flags & STARTPOINT) == 0 )
         {
-            GRMoveTo( Struct->m_Start.x + aOffset.x,
-                      Struct->m_Start.y + aOffset.y );
+            GRMoveTo( Struct->m_Start.x + aOffset.x, Struct->m_Start.y + aOffset.y );
         }
         else
         {
             GRMoveTo( Struct->m_Start.x, Struct->m_Start.y );
         }
+
         if( (Struct->m_Flags & ENDPOINT) == 0 )
         {
             GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_End.x + aOffset.x,

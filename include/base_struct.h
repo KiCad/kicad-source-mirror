@@ -7,13 +7,15 @@
 
 #include "colors.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
 extern std::ostream& operator <<( std::ostream& out, const wxSize& size );
 
 extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
-
 #endif
+
 
 /* Id for class identification, at run time */
 enum KICAD_T {
@@ -170,23 +172,25 @@ public:
                         m_Pos.y + ( m_Size.y >> 1 ) );
     }
 
-
-    /* Move this by the aMoveVector value (this is a relative move
+    /**
+     * Function Move
+     * moves the rectangle by the \a aMoveVector.
+     * @param aMoveVector A wxPoint that is the value to move this rectangle
      */
     void Move( const wxPoint& aMoveVector );
 
     /**
      * Function Normalize
-     * Ensure the height and width are >= 0
+     * ensures thatthe height ant width are positive.
      */
-    void    Normalize();
+    void Normalize();
 
     /**
      * Function Contains
      * @param aPoint = the wxPoint to test
      * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside
      */
-    bool    Contains( const wxPoint& aPoint ) const;
+    bool Contains( const wxPoint& aPoint ) const;
     /**
      * Function Contains
      * @param x = the x coordinate of the point to test
@@ -237,42 +241,38 @@ public:
      */
     bool Intersects( const EDA_Rect& aRect ) const;
 
-
     /**
      * Function operator(wxRect)
      * overloads the cast operator to return a wxRect
      */
     operator wxRect() const { return wxRect( m_Pos, m_Size ); }
 
-    /** Inflate
-     * Inflate this object: move each horizontal edge by dx and each vertical
-     * edge by dy toward rect outside
-     * if dx and/or dy is negative, move toward rect inside (deflate)
-     * Works for positive and negative rect size
+    /**
+     * Function Inflate
+     * inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
+     * and/or \a dy is negative the rectangle is deflated.
      */
     EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
 
-    /** Inflate
-     * Inflate this object: move each horizontal edge and each vertical edge by
-     * aDelta toward rect outside
-     * if aDelta is negative, move toward rect inside (deflate)
-     * Works for positive and negative rect size
+    /**
+     * Function Inflate
+     * inflates the rectangle horizontally and vertically by \a aDelta. If \a aDelta
+     * is negative the rectangle is deflated.
      */
     EDA_Rect& Inflate( int aDelta );
 
     /**
      * Function Merge
-     * Modify Position and Size of this in order to contain the given rect
-     * mainly used to calculate bounding boxes
-     * @param aRect = given rect to merge with this
+     * modifies the position and size of the rectangle in order to contain \a aRect.  It is
+     * mainly used to calculate bounding boxes.
+     * @param aRect  The rectangle to merge with this rectangle.
      */
     void      Merge( const EDA_Rect& aRect );
 
     /**
      * Function Merge
-     * Modify Position and Size of this in order to contain the given point
-     * mainly used to calculate bounding boxes
-     * @param aPoint = given point to merge with this
+     * modifies the position and size of the rectangle in order to contain the given point.
+     * @param aPoint The point to merge with the rectangle.
      */
     void      Merge( const wxPoint& aPoint );
 };
@@ -343,6 +343,21 @@ public:
                                    // old parameters values
 private:
     void InitVars();
+
+    /**
+     * @brief Function doClone
+     * is used by the derived class to actually implement the cloning.
+     *
+     * The default version will return NULL in release builds and likely crash the
+     * program.  In debug builds, an warning message indicating the derived class
+     * has not implemented cloning.  This really should be a pure virtual function.
+     * Due to the fact that there are so many objects derived from EDA_ITEM, the
+     * decision was made to return NULL until all the objects derived from EDA_ITEM
+     * implement cloning.  Once that happens, this function should be made pure.
+     *
+     * @return A clone of the item.
+     */
+    virtual EDA_ITEM* doClone() const;
 
 public:
 
@@ -417,7 +432,6 @@ public:
         // derived classes may implement this
     }
 
-
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -428,7 +442,6 @@ public:
     {
         return false;   // derived classes should override this function
     }
-
 
     /**
      * Function HitTest (overlaid)
@@ -441,7 +454,6 @@ public:
     {
         return false;   // derived classes should override this function
     }
-
 
     /**
      * Function GetBoundingBox
@@ -464,6 +476,16 @@ public:
         return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
     }
 
+    /**
+     * @brief Function Clone
+     * creates a duplicate of this item with linked list members set to NULL.
+     *
+     * The Clone() function only calls the private virtual doClone() which actually
+     * does the cloning for the derived object.
+     *
+     * @return A clone of the item.
+     */
+    EDA_ITEM* Clone() const { return doClone(); }
 
     /**
      * Function IterateForward
@@ -542,6 +564,25 @@ public:
 };
 
 
+/**
+ * Function new_clone
+ * provides cloning capabilities for all Boost pointer containers of EDA_ITEMs.
+ *
+ * @param aItem EDA_ITEM to clone.
+ * @return Clone of \a aItem.
+ */
+inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
+
+
+/**
+ * Define list of drawing items for screens.
+ *
+ * The Boost containter was choosen over the statand C++ contain because you can detach
+ * the pointer from a list with the release method.
+ */
+typedef boost::ptr_vector< EDA_ITEM > EDA_ITEMS;
+
+
 // Graphic Text justify:
 // Values -1,0,1 are used in computations, do not change them
 enum  GRTextHorizJustifyType {
@@ -611,6 +652,7 @@ public:
 
 public:
     EDA_TextStruct( const wxString& text = wxEmptyString );
+    EDA_TextStruct( const EDA_TextStruct& aText );
     virtual ~EDA_TextStruct();
 
     int GetLength() const { return m_Text.Length(); };

@@ -13,7 +13,11 @@
 
 #include "general.h"
 #include "protos.h"
+#include "sch_bus_entry.h"
 #include "sch_marker.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
+#include "sch_polyline.h"
 #include "sch_sheet.h"
 #include "sch_component.h"
 #include "sch_items.h"
@@ -30,8 +34,7 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
 }
 
 
-void DeleteItemsInList( WinEDA_DrawPanel*  panel,
-                        PICKED_ITEMS_LIST& aItemsList );
+void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
 void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                            const wxPoint aMoveVector  );
 
@@ -95,8 +98,7 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
         if( item->Type() == SCH_SHEET_LABEL_T )
         {
             /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT("DeleteItemsInList() err: unexpected \
-SCH_SHEET_LABEL_T" ) );
+            wxMessageBox( wxT( "DeleteItemsInList() err: unexpected SCH_SHEET_LABEL_T" ) );
         }
         else
         {
@@ -218,82 +220,15 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
  */
 SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 {
-    SCH_ITEM* NewDrawStruct = NULL;
+    wxCHECK_MSG( aDrawStruct != NULL, NULL,
+                 wxT( "Cannot duplicate NULL schematic item!  Bad programmer." ) );
 
-    if( aDrawStruct == NULL )
-    {
-        wxMessageBox( wxT( "DuplicateStruct error: NULL struct" ) );
-        return NULL;
-    }
-
-    switch( aDrawStruct->Type() )
-    {
-    case SCH_POLYLINE_T:
-        NewDrawStruct = ( (SCH_POLYLINE*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_LINE_T:
-        NewDrawStruct = ( (SCH_LINE*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_BUS_ENTRY_T:
-        NewDrawStruct = ( (SCH_BUS_ENTRY*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_JUNCTION_T:
-        NewDrawStruct = ( (SCH_JUNCTION*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_MARKER_T:
-        NewDrawStruct = ( (SCH_MARKER*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_NO_CONNECT_T:
-        NewDrawStruct = ( (SCH_NO_CONNECT*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_TEXT_T:
-        NewDrawStruct = ( (SCH_TEXT*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_LABEL_T:
-        NewDrawStruct = ( (SCH_LABEL*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        NewDrawStruct = ( (SCH_HIERLABEL*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        NewDrawStruct = ( (SCH_GLOBALLABEL*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_COMPONENT_T:
-        NewDrawStruct = ( (SCH_COMPONENT*) aDrawStruct )->GenCopy();
-        break;
-
-    case SCH_SHEET_T:
-        NewDrawStruct = ( (SCH_SHEET*) aDrawStruct )->GenCopy();
-        if( aClone )
-        {
-            ( (SCH_SHEET*) NewDrawStruct )->m_SheetName =
-                ( (SCH_SHEET*) aDrawStruct )->m_SheetName;
-        }
-        break;
-
-    default:
-    {
-        wxString msg;
-        msg << wxT( "DuplicateStruct error: unexpected StructType " )
-            << aDrawStruct->Type() << wxT( " " ) << aDrawStruct->GetClass();
-        wxMessageBox( msg );
-    }
-    break;
-    }
+    SCH_ITEM* NewDrawStruct = aDrawStruct->Clone();
 
     if( aClone )
         NewDrawStruct->m_TimeStamp = aDrawStruct->m_TimeStamp;
 
     NewDrawStruct->m_Image = aDrawStruct;
+
     return NewDrawStruct;
 }

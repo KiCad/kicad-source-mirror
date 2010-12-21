@@ -303,7 +303,7 @@ void DIALOG_PLOT::Init_Dialog()
 }
 
 
-void DIALOG_PLOT::OnQuit( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 {
     Close( true );    // true is to force the frame to close
 }

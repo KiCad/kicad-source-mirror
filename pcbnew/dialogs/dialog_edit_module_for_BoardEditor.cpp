@@ -129,7 +129,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
+void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }

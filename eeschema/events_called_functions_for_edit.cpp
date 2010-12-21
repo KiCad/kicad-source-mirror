@@ -34,7 +34,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     case SCH_COMPONENT_T:
     {
         SCH_COMPONENT* newitem;
-        newitem = ((SCH_COMPONENT*) curr_item)->GenCopy();
+        newitem = new SCH_COMPONENT( *( (SCH_COMPONENT*) curr_item ) );
         newitem->m_TimeStamp = GetTimeStamp();
         newitem->ClearAnnotation( NULL );
         newitem->m_Flags = IS_NEW;
@@ -51,7 +51,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     {
-        SCH_TEXT* newitem = ((SCH_TEXT*) curr_item)->GenCopy();
+        SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->m_Flags = IS_NEW;
         StartMoveTexte( newitem, &dc );
         /* Redraw the original part in XOR mode */

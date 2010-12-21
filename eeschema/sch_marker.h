@@ -30,6 +30,7 @@ class SCH_MARKER : public SCH_ITEM, public MARKER_BASE
 public:
     SCH_MARKER();
     SCH_MARKER( const wxPoint& aPos, const wxString& aText );
+    SCH_MARKER( const SCH_MARKER& aMarker );
     ~SCH_MARKER();
 
     virtual wxString GetClass() const
@@ -37,11 +38,8 @@ public:
         return wxT( "SCH_MARKER" );
     }
 
-    SCH_MARKER* GenCopy();
-
-    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, int aDraw_mode,
-                       int aColor = -1 );
+    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                       int aDraw_mode, int aColor = -1 );
 
     /**
      * Function Save
@@ -104,7 +102,8 @@ public:
 
 #endif
 
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 #endif /* _TYPE_SCH_MARKER_H_ */

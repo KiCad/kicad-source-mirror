@@ -139,7 +139,7 @@ public:
 
     ~WinEDA_PcbFrame();
 
-    void             OnQuit( wxCommandEvent & WXUNUSED(event) );
+    void             OnQuit( wxCommandEvent& event );
 
     /**
      * Function ToPlotter

@@ -37,6 +37,7 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType )
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
+    InitVars();
     m_StructType = base.m_StructType;
     m_Parent     = base.m_Parent;
     m_Son        = base.m_Son;
@@ -70,6 +71,13 @@ void EDA_ITEM::SetModified()
     // If this a child object, then the parent modification state also needs to be set.
     if( m_Parent )
         m_Parent->SetModified();
+}
+
+
+EDA_ITEM* EDA_ITEM::doClone() const
+{
+    wxCHECK_MSG( false, NULL, wxT( "doClone not implemented in derived class " ) + GetClass() +
+                 wxT( ".  Bad programmer." ) );
 }
 
 
@@ -117,8 +125,8 @@ SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
     return SEARCH_CONTINUE;
 }
 
-
 #if defined(DEBUG)
+
 
 // A function that should have been in wxWidgets
 std::ostream& operator<<( std::ostream& out, const wxSize& size )
@@ -136,13 +144,6 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
 }
 
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void EDA_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
@@ -154,13 +155,6 @@ void EDA_ITEM::Show( int nestLevel, std::ostream& os ) const
 }
 
 
-/**
- * Function NestedSpace
- * outputs nested space for pretty indenting.
- * @param nestLevel The nest count
- * @param os The ostream&, where to output
- * @return std::ostream& - for continuation.
- **/
 std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 {
     for( int i = 0; i<nestLevel; ++i )
@@ -180,17 +174,34 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 /**************************************************/
 EDA_TextStruct::EDA_TextStruct( const wxString& text )
 {
-    m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;     /* XY size of font */
-    m_Orient    = 0;                                /* Orient in 0.1 degrees */
+    m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;  // Width and height of font.
+    m_Orient    = 0;                             // Rotation angle in 0.1 degrees.
     m_Attributs = 0;
-    m_Mirror    = false;                            // display mirror if true
-    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;
-    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;          /* Justifications Horiz et Vert du texte */
-    m_Thickness     = 0;                                /* thickness */
-    m_Italic    = false;                            /* true = italic shape */
+    m_Mirror    = false;                         // display mirror if true
+    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;       // Defualt horizontal justification is centered.
+    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;       // Defualt vertical justification is centered.
+    m_Thickness     = 0;                         // thickness
+    m_Italic    = false;                         // true = italic shape.
     m_Bold      = false;
-    m_MultilineAllowed = false;                     // Set to true only for texts that can use multiline.
+    m_MultilineAllowed = false;                  // Set to true for multiline text.
     m_Text = text;
+}
+
+
+EDA_TextStruct::EDA_TextStruct( const EDA_TextStruct& aText )
+{
+    m_Pos = aText.m_Pos;
+    m_Size = aText.m_Size;
+    m_Orient = aText.m_Orient;
+    m_Attributs = aText.m_Attributs;
+    m_Mirror = aText.m_Mirror;
+    m_HJustify = aText.m_HJustify;
+    m_VJustify = aText.m_VJustify;
+    m_Thickness = aText.m_Thickness;
+    m_Italic = aText.m_Italic;
+    m_Bold = aText.m_Bold;
+    m_MultilineAllowed = aText.m_MultilineAllowed;
+    m_Text = aText.m_Text;
 }
 
 
@@ -199,12 +210,6 @@ EDA_TextStruct::~EDA_TextStruct()
 }
 
 
-/**
- * Function LenSize
- * @return the text lenght in internal units
- * @param aLine : the line of text to consider.
- * For single line text, this parameter is always m_Text
- */
 int EDA_TextStruct::LenSize( const wxString& aLine ) const
 {
     return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
@@ -332,25 +337,9 @@ bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAc
 }
 
 
-/***************************************************************/
-void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                           const wxPoint& aOffset, EDA_Colors aColor,
-                           int aDrawMode,
+void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                           EDA_Colors aColor, int aDrawMode,
                            GRTraceMode aFillMode, EDA_Colors aAnchor_color )
-/***************************************************************/
-
-/**
- * Function Draw
- * Draws this, that can be a multiline text
- *  @param aPanel = the current DrawPanel
- *  @param aDC = the current Device Context
- *  @param aOffset = draw offset (usually (0,0))
- *  @param EDA_Colors aColor = text color
- *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
- *  @param aFillMode = FILAIRE, FILLED or SKETCH
- *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
- */
-
 {
     if( m_MultilineAllowed )
     {
@@ -361,6 +350,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
         offset.y = GetInterline();
 
         RotatePoint( &offset, m_Orient );
+
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
@@ -391,24 +381,10 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/**
- * Function DrawOneLineOfText
- * Draw a single text line.
- * Used to draw each line of this EDA_TextStruct, that can be multiline
- *  @param aPanel = the current DrawPanel
- *  @param aDC = the current Device Context
- *  @param aOffset = draw offset (usually (0,0))
- *  @param EDA_Colors aColor = text color
- *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
- *  @param aFillMode = FILAIRE, FILLED or SKETCH
- *  @param EDA_Colors aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
- *  @param EDA_Colors aText = the single line of text to draw.
- *  @param EDA_Colors aPos = the position of this line ).
- */
 void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                                         const wxPoint& aOffset, EDA_Colors aColor,
-                                        int aDrawMode,
-                                        GRTraceMode aFillMode, EDA_Colors aAnchor_color,
+                                        int aDrawMode, GRTraceMode aFillMode,
+                                        EDA_Colors aAnchor_color,
                                         wxString& aText, wxPoint aPos )
 {
     int width = m_Thickness;
@@ -449,23 +425,20 @@ void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( aPanel, aDC,
-                     aOffset + aPos, aColor, aText,
-                     m_Orient, size,
+    DrawGraphicText( aPanel, aDC, aOffset + aPos, aColor, aText, m_Orient, size,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
-/**
- * Function GetStyleName
- * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
- */
 wxString EDA_TextStruct::GetTextStyleName()
 {
     int style = 0;
+
     if( m_Italic )
         style = 1;
+
     if( m_Bold )
         style += 2;
+
     wxString stylemsg[4] = {
         _("Normal"),
         _("Italic"),
@@ -481,17 +454,14 @@ wxString EDA_TextStruct::GetTextStyleName()
 /* Class EDA_Rect */
 /******************/
 
-/******************************/
 void EDA_Rect::Normalize()
-/******************************/
-
-// Ensure the height ant width are >= 0
 {
     if( m_Size.y < 0 )
     {
         m_Size.y = -m_Size.y;
         m_Pos.y -= m_Size.y;
     }
+
     if( m_Size.x < 0 )
     {
         m_Size.x = -m_Size.x;
@@ -500,21 +470,12 @@ void EDA_Rect::Normalize()
 }
 
 
-
-/**
- * Function Move
- * Move this rectangle by the aMoveVector value (this is a relative move)
- * @param aMoveVector = a wxPoint that is the value to move this rectangle
- */
 void EDA_Rect::Move( const wxPoint& aMoveVector )
 {
     m_Pos += aMoveVector;
 }
 
 
-/* Return TRUE if point is in Rect
- *  Accept rect size < 0
- */
 bool EDA_Rect::Contains( const wxPoint& aPoint ) const
 {
     wxPoint rel_pos = aPoint - m_Pos;
@@ -540,7 +501,7 @@ bool EDA_Rect::Contains( const wxPoint& aPoint ) const
  */
 bool EDA_Rect::Contains( const EDA_Rect& aRect ) const
 {
-    return Contains(aRect.GetOrigin() ) && Contains(aRect.GetEnd() );
+    return Contains( aRect.GetOrigin() ) && Contains( aRect.GetEnd() );
 }
 
 
@@ -576,35 +537,14 @@ bool EDA_Rect::Intersects( const EDA_Rect& aRect ) const
 }
 
 
-/**************************************************/
 EDA_Rect& EDA_Rect::Inflate( int aDelta )
-/**************************************************/
-
-/**
- * Function Inflate
- * Inflate "this": move each horizontal edgeand each vertical edge by aDelta
- * toward rect outside
- * if aDelta is negative, move toward rect inside (deflate)
- * Works for positive and negative rect size
- *
- */
 {
     Inflate( aDelta, aDelta );
     return *this;
 }
 
-/**************************************************/
-EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
-/**************************************************/
 
-/**
- * Function Inflate
- * Inflate "this": move each horizontal edge by dx and each vertical edge by dy
- * toward rect outside
- * if dx and/or dy is negative, move toward rect inside (deflate)
- * Works for positive and negative rect size
- *
- */
+EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 {
     if( m_Size.x >= 0 )
     {
@@ -636,7 +576,6 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
             m_Size.x -= 2 * dx; // m_Size.x <0: inflate when dx > 0
         }
     }
-
 
     if( m_Size.y >= 0 )
     {
@@ -673,12 +612,6 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 }
 
 
-/**
- * Function Merge
- * modifies Position and Size of this in order to contain the given rect
- * mainly used to calculate bounding boxes
- * @param aRect = given rect to merge with this
- */
 void EDA_Rect::Merge( const EDA_Rect& aRect )
 {
     Normalize();        // ensure width and height >= 0
@@ -695,12 +628,7 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
     SetEnd( end );
 }
 
-/**
- * Function Merge
- * modifies Position and Size of this in order to contain the given point
- * mainly used to calculate bounding boxes
- * @param aPoint = given point to merge with this
- */
+
 void EDA_Rect::Merge( const wxPoint& aPoint )
 {
     Normalize();        // ensure width and height >= 0

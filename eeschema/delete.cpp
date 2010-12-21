@@ -12,6 +12,7 @@
 #include "protos.h"
 #include "sch_marker.h"
 #include "sch_items.h"
+#include "sch_line.h"
 #include "sch_sheet.h"
 #include "sch_text.h"
 

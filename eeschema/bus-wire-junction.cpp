@@ -14,16 +14,18 @@
 #include "lib_pin.h"
 #include "general.h"
 #include "protos.h"
+#include "sch_bus_entry.h"
 #include "sch_items.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
+#include "sch_polyline.h"
 #include "sch_text.h"
 #include "sch_component.h"
 #include "sch_sheet.h"
 
 
 /* Routines Locales */
-static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel,
-                                    wxDC*             DC,
-                                    bool              erase );
+static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
 static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC );
 static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer );
 static bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos );
@@ -172,7 +174,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 
         if( g_HVLines ) // We need 2 segments to go from a given start pin to an end point
         {
-            nextsegment = newsegment->GenCopy();
+            nextsegment = new SCH_LINE( *newsegment );
             nextsegment->m_Flags = IS_NEW;
             newsegment->SetNext( nextsegment );
             nextsegment->SetBack( newsegment );
@@ -220,7 +222,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         /* Create a new segment, and chain it after the current new segment */
         if( nextsegment )
         {
-            newsegment = nextsegment->GenCopy();
+            newsegment = new SCH_LINE( *nextsegment );
             nextsegment->m_Start = newsegment->m_End;
             nextsegment->SetNext( NULL );
             nextsegment->SetBack( newsegment );
@@ -229,7 +231,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         }
         else
         {
-            newsegment = oldsegment->GenCopy();
+            newsegment = new SCH_LINE( *oldsegment );
             newsegment->m_Start = oldsegment->m_End;
         }
 
@@ -332,6 +334,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
             if( !g_ItemToRepeat )
                 g_ItemToRepeat = segment;
         }
+
         segment->m_Flags = 0;
         segment = segment->Next();
     }
@@ -371,7 +374,6 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
 
         item = item->Next();
     }
-
 
     DrawPanel->CursorOn( DC );    // Display schematic cursor
 
@@ -442,6 +444,7 @@ static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool eras
     GRSetDrawMode( DC, g_XorMode );
 
     int idx = NewPoly->GetCornerCount() - 1;
+
     if( g_HVLines )
     {
         /* Coerce the line to vertical or horizontal one: */
@@ -571,111 +574,30 @@ static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 {
-    wxPoint new_pos;
-
     if( g_ItemToRepeat == NULL )
         return;
 
-    switch( g_ItemToRepeat->Type() )
+    g_ItemToRepeat = g_ItemToRepeat->Clone();
+
+    if( g_ItemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {
-    case SCH_JUNCTION_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_JUNCTION*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        break;
-
-    case SCH_NO_CONNECT_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_NO_CONNECT*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        break;
-
-    case SCH_TEXT_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_TEXT*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        IncrementLabelMember( STRUCT->m_Text );
-        break;
-
-
-    case SCH_LABEL_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_LABEL*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        IncrementLabelMember( STRUCT->m_Text );
-        break;
-
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_HIERLABEL*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        IncrementLabelMember( STRUCT->m_Text );
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_GLOBALLABEL*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        IncrementLabelMember( STRUCT->m_Text );
-        break;
-
-    case SCH_LINE_T:
-        #undef STRUCT
-        #define STRUCT ( (SCH_LINE*) g_ItemToRepeat )
-        g_ItemToRepeat   = STRUCT->GenCopy();
-        STRUCT->m_Start += g_RepeatStep;
-        new_pos = STRUCT->m_Start;
-        STRUCT->m_End += g_RepeatStep;
-        break;
-
-    case SCH_BUS_ENTRY_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_BUS_ENTRY*) g_ItemToRepeat )
-        g_ItemToRepeat = STRUCT->GenCopy();
-        STRUCT->m_Pos += g_RepeatStep;
-        new_pos = STRUCT->m_Pos;
-        break;
-
-    case SCH_COMPONENT_T:     // In repeat command the new component is put
-                                 // in move mode
-        #undef STRUCT
-        #define STRUCT ( (SCH_COMPONENT*) g_ItemToRepeat )
-
-        // Create the duplicate component, position = mouse cursor
-        g_ItemToRepeat = STRUCT->GenCopy();
-        new_pos.x = GetScreen()->m_Curseur.x - STRUCT->m_Pos.x;
-        new_pos.y = GetScreen()->m_Curseur.y - STRUCT->m_Pos.y;
-        STRUCT->m_Pos = GetScreen()->m_Curseur;
-        STRUCT->m_Flags     = IS_NEW;
-        STRUCT->m_TimeStamp = GetTimeStamp();
-
-        for( int ii = 0; ii < STRUCT->GetFieldCount(); ii++ )
-        {
-            STRUCT->GetField( ii )->m_Pos += new_pos;
-        }
-
-        RedrawOneStruct( DrawPanel, DC, STRUCT, g_XorMode );
-        StartMovePart( STRUCT, DC );
+        wxPoint pos = GetScreen()->m_Curseur - ( (SCH_COMPONENT*) g_ItemToRepeat )->m_Pos;
+        g_ItemToRepeat->m_Flags = IS_NEW;
+        ( (SCH_COMPONENT*) g_ItemToRepeat )->m_TimeStamp = GetTimeStamp();
+        g_ItemToRepeat->Move( pos );
+        RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, g_XorMode );
+        StartMovePart( (SCH_COMPONENT*) g_ItemToRepeat, DC );
         return;
-        break;
+    }
 
-    default:
-        g_ItemToRepeat = NULL;
-        DisplayError( this, wxT( "Repeat Type Error" ), 10 );
-        break;
+    g_ItemToRepeat->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
+
+    if( g_ItemToRepeat->Type() == SCH_TEXT_T
+        || g_ItemToRepeat->Type() == SCH_LABEL_T
+        || g_ItemToRepeat->Type() == SCH_HIERARCHICAL_LABEL_T
+        || g_ItemToRepeat->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        ( (SCH_TEXT*) g_ItemToRepeat )->IncrementLabel();
     }
 
     if( g_ItemToRepeat )
@@ -686,9 +608,6 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, GR_DEFAULT_DRAWMODE );
         SaveCopyInUndoList( g_ItemToRepeat, UR_NEW );
         g_ItemToRepeat->m_Flags = 0;
-
-//      GetScreen()->Curseur = new_pos;
-//      DrawPanel->MouseTo( DrawPanel->CursorScreenPosition() );
     }
 }
 
@@ -702,6 +621,7 @@ void IncrementLabelMember( wxString& name )
     long number = 0;
 
     ii = name.Len() - 1; nn = 0;
+
     if( !isdigit( name.GetChar( ii ) ) )
         return;
 
@@ -712,6 +632,7 @@ void IncrementLabelMember( wxString& name )
 
     ii++;   /* digits are starting at ii position */
     wxString litt_number = name.Right( nn );
+
     if( litt_number.ToLong( &number ) )
     {
         number += g_RepeatDeltaLabel;
@@ -778,11 +699,13 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             itempos    = LibItem->GetScreenCoord( pin->GetPosition() );
             itempos.x += LibItem->m_Pos.x;
             itempos.y += LibItem->m_Pos.y;
+
             if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )
                 return TRUE;
         }
 
         item = PickStruct( pos, screen, WIREITEM );
+
         if( item )
             return TRUE;
 

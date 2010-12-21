@@ -15,10 +15,13 @@
 #include "protos.h"
 #include "hotkeys.h"
 #include "class_library.h"
+#include "sch_bus_entry.h"
 #include "sch_marker.h"
 #include "sch_text.h"
 #include "sch_items.h"
 #include "sch_component.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
 

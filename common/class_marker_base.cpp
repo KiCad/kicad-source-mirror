@@ -59,6 +59,17 @@ void MARKER_BASE::init()
 }
 
 
+MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
+{
+    m_Pos = aMarker.m_Pos;
+    m_Corners = aMarker.m_Corners;
+    m_MarkerType = aMarker.m_MarkerType;
+    m_Color = aMarker.m_Color;
+    m_ShapeBoundingBox = aMarker.m_ShapeBoundingBox;
+    m_ScalingFactor = aMarker.m_ScalingFactor;
+}
+
+
 MARKER_BASE::MARKER_BASE()
 {
     m_ScalingFactor = M_SHAPE_SCALE;
@@ -122,13 +133,6 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos ) const
 }
 
 
-/**
- * Function GetBoundingBoxMarker
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for visible components of this
- * object, and the units should be in the pcb or schematic coordinate system.
- * It is OK to overestimate the size by a few counts.
- */
 EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
 {
     wxSize realsize = m_ShapeBoundingBox.GetSize();
@@ -141,15 +145,8 @@ EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
     return EDA_Rect( m_Pos, realsize );
 }
 
-/**********************************************************************/
 void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
                               const wxPoint& aOffset )
-/**********************************************************************/
-
-/**
- * Function DrawMarker
- *  The shape is the polygon defined in m_Corners (array of wxPoints)
- */
 {
     wxPoint corners[CORNERS_COUNT];
 
@@ -172,16 +169,11 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
 }
 
 
-/**
- * Function DisplayMarkerInfo
- * Displays the full info of this marker, within an HTML window
- */
 void MARKER_BASE::DisplayMarkerInfo( WinEDA_DrawFrame* aFrame )
 {
     wxString msg = m_drc.ShowHtml();
-    DIALOG_DISPLAY_HTML_TEXT_BASE
-        infodisplay( (wxWindow*)aFrame, wxID_ANY, _("Marker Info"),
-        wxGetMousePosition(), wxSize( 550, 140 ) );
+    DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( (wxWindow*)aFrame, wxID_ANY, _( "Marker Info" ),
+                                               wxGetMousePosition(), wxSize( 550, 140 ) );
 
     infodisplay.m_htmlWindow->SetPage( msg );
     infodisplay.ShowModal();

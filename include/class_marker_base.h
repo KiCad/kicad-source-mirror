@@ -10,13 +10,16 @@
 class MARKER_BASE
 {
 public:
-    wxPoint               m_Pos;                    ///< position of the marker
+    wxPoint               m_Pos;                 ///< position of the marker
 protected:
-    std::vector <wxPoint> m_Corners;                ///< Corner list for shape definition (a polygon)
-    int                   m_MarkerType;             ///< Can be used as a flag
-    EDA_Colors            m_Color;                  ///< color
-    EDA_Rect              m_ShapeBoundingBox;       ///< Bounding box of the graphic symbol, relative to the position of the shape, used for Hit Tests
-    int                   m_ScalingFactor;          ///< Scaling factor for m_Size and m_Corners (can set the physical size
+    std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
+    int                   m_MarkerType;          ///< Can be used as a flag
+    EDA_Colors            m_Color;               ///< color
+    EDA_Rect              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
+                                                 ///< to the position of the shape, used for Hit
+                                                 ///< Tests
+    int                   m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can
+                                                 ///< set the physical size
     DRC_ITEM              m_drc;
 
     void init();
@@ -48,14 +51,21 @@ public:
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
                  const wxString& aText, const wxPoint& aPos );
 
+    /**
+     * Contructor
+     * makes a copy of \a aMarker but does not copy the DRC_ITEM.
+     *
+     * @param aMarker The marker to copy.
+     */
+    MARKER_BASE( const MARKER_BASE& aMarker );
 
     ~MARKER_BASE();
 
     /**
      * Function DrawMarker
+     * draws the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void DrawMarker( WinEDA_DrawPanel* panel, wxDC* DC, int DrawMode, const wxPoint& offset );
-
+    void DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset );
 
     /**
      * Function GetPos
@@ -66,7 +76,6 @@ public:
         return m_Pos;
     }
 
-
     /**
      * Function SetColor
      * Set the color of this marker
@@ -75,7 +84,6 @@ public:
     {
         m_Color = aColor;
     }
-
 
     /**
      * Function to set/get error levels (warning, fatal ..)
@@ -88,12 +96,10 @@ public:
         m_MarkerType |= aErrorLevel << 8;
     }
 
-
     int GetErrorLevel() const
     {
         return (m_MarkerType >> 8) & 0xFF;
     }
-
 
     /** Functions to set/get marker type (DRC, ERC, or other)
      * this value is stored in m_MarkerType
@@ -105,12 +111,10 @@ public:
         m_MarkerType |= aMarkerType;
     }
 
-
     int GetMarkerType() const
     {
         return m_MarkerType & 0xFF;
     }
-
 
     /**
      * Function SetData
@@ -137,11 +141,11 @@ public:
     void SetData( int aErrorCode, const wxPoint& aMarkerPos,
                   const wxString& aText, const wxPoint& aPos );
 
-
     /**
      * Function SetAuxiliaryData
      * initialize data for the second (auxiliary) item
-     * @param aAuxiliaryText = the second text (main text) concerning the second schematic or board item
+     * @param aAuxiliaryText = the second text (main text) concerning the second schematic or
+     *                         board item
      * @param aAuxiliaryPos = position the second item
      */
     void SetAuxiliaryData( const wxString& aAuxiliaryText, const wxPoint& aAuxiliaryPos )
@@ -165,12 +169,11 @@ public:
         return m_drc;
     }
 
-
     /**
      * Function DisplayMarkerInfo
-     * Displays the full info of this marker, in a HTML window
+     * displays the full info of this marker, in a HTML window.
      */
-    void DisplayMarkerInfo(WinEDA_DrawFrame * aFrame);
+    void DisplayMarkerInfo( WinEDA_DrawFrame* aFrame );
 
     /**
      * Function HitTestMarker

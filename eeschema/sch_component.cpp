@@ -130,20 +130,21 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aTemplate ) :
-    SCH_ITEM( NULL, SCH_COMPONENT_T )
+SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
+    SCH_ITEM( aComponent )
 {
-    /* assignment of all fields, including field vector elements, and linked
-     * list pointers */
-    *this = aTemplate;
+    m_Parent = aComponent.m_Parent;
+    m_Pos = aComponent.m_Pos;
+    m_unit = aComponent.m_unit;
+    m_convert = aComponent.m_convert;
+    m_ChipName = aComponent.m_ChipName;
+    m_TimeStamp = aComponent.m_TimeStamp;
+    m_transform = aComponent.m_transform;
+    m_prefix = aComponent.m_prefix;
+    m_PathsAndReferences = aComponent.m_PathsAndReferences;
+    m_Fields = aComponent.m_Fields;
 
-    /* set linked list pointers to null, before this they were copies of
-     * aTemplate's */
-    Pback = NULL;
-    Pnext = NULL;
-    m_Son = NULL;
-
-    // Re-parent the fields, which before this had aTemplate as parent
+    // Re-parent the fields, which before this had aComponent as parent
     for( int i = 0; i<GetFieldCount(); ++i )
     {
         GetField( i )->SetParent( this );
@@ -177,6 +178,12 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     }
 
     m_prefix = wxString( _( "U" ) );
+}
+
+
+EDA_ITEM* SCH_COMPONENT::doClone() const
+{
+    return new SCH_COMPONENT( *this );
 }
 
 
@@ -273,18 +280,18 @@ void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offs
     {
         EDA_Rect BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
             BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
             BoundaryBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, BROWN );
+            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
         }
 #endif
     }
@@ -1367,6 +1374,7 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
     // H and W must be > 0:
     if( x2 < x1 )
         EXCHG( x2, x1 );
+
     if( y2 < y1 )
         EXCHG( y2, y1 );
 
@@ -1649,7 +1657,7 @@ LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aTy
 }
 
 
-bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     EDA_Rect bBox;
 
@@ -1682,7 +1690,7 @@ bool SCH_COMPONENT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_
 }
 
 
-bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_COMPONENT::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_Rect rect = aRect;
 
@@ -1695,7 +1703,7 @@ bool SCH_COMPONENT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccu
 }
 
 
-bool SCH_COMPONENT::DoIsConnected( const wxPoint& aPosition ) const
+bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
     vector< wxPoint > pts;
 

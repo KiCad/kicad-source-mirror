@@ -420,7 +420,8 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
         {
             SAFE_DELETE( g_ItemToUndoCopy );
         }
-        g_ItemToUndoCopy = Component->GenCopy();
+
+        g_ItemToUndoCopy = Component->Clone();
     }
 
     DrawPanel->CursorOff( DC );

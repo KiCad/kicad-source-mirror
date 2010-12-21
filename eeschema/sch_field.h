@@ -5,14 +5,6 @@
 #ifndef CLASS_SCH_FIELD_H
 #define CLASS_SCH_FIELD_H
 
-/* Fields are texts attached to a component, having a special meaning
- * Fields 0 and 1 are very important: reference and value
- * Field 2 is used as default footprint name.
- * Field 3 is reserved (not currently used
- * Fields 4 and more are user fields.
- * They can be renamed and can appear in reports
- */
-
 
 #include "sch_item_struct.h"
 #include "general.h"
@@ -25,11 +17,16 @@ class LIB_FIELD;
 
 /**
  * Class SCH_FIELD
- * instances are attached to a component and provide a place for the
- * component's value,
- * reference designator, footprint, and user definable name-value pairs of
- * arbitrary purpose.
+ * instances are attached to a component and provide a place for the component's value,
+ * reference designator, footprint, and user definable name-value pairs of arbitrary purpose.
+ *
+ * <ul> <li>Field 0 is reserved for the component reference.</li>
+ * <li>Field 1 is reserved for the component value.</li>
+ * <li>Field 2 is reserved for the component footprint.</li>
+ * <li>Field 3 is reserved for the component data sheet file.</li>
+ * <li>Fields 4 and higher are user defineable.</li></ul>
  */
+
 class SCH_FIELD : public SCH_ITEM, public EDA_TextStruct
 {
 public:
@@ -43,6 +40,8 @@ public:
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
                wxString aName = wxEmptyString );
+
+    SCH_FIELD( const SCH_FIELD& aField );
 
     ~SCH_FIELD();
 
@@ -66,8 +65,13 @@ public:
         return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
     }
 
-
-    void SwapData( SCH_FIELD* copyitem );
+    /**
+     * Function SwapData
+     * exchanges the date between the field and \a aField.
+     *
+     * @param aField The field to exchange data with.
+     */
+    void SwapData( SCH_FIELD* aField );
 
     /**
      * Function ImportValues
@@ -160,8 +164,9 @@ public:
                           void* aAuxData, wxPoint * aFindLocation );
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 

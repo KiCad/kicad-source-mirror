@@ -41,6 +41,26 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, SCH_SHEET_T )
 }
 
 
+SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
+    SCH_ITEM( aSheet )
+{
+    m_Pos = aSheet.m_Pos;
+    m_TimeStamp = aSheet.m_TimeStamp;
+    m_SheetNameSize = aSheet.m_SheetNameSize;
+    m_FileNameSize = aSheet.m_FileNameSize;
+    m_AssociatedScreen = aSheet.m_AssociatedScreen;
+    m_SheetName = aSheet.m_SheetName;
+    m_FileName = aSheet.m_FileName;
+    m_labels = aSheet.m_labels;
+
+    for( size_t i = 0;  i < m_labels.size();  i++ )
+        m_labels[i].SetParent( this );
+
+    if( m_AssociatedScreen )
+        m_AssociatedScreen->m_RefCount++;
+}
+
+
 SCH_SHEET::~SCH_SHEET()
 {
     // also, look at the associated sheet & its reference count
@@ -55,12 +75,12 @@ SCH_SHEET::~SCH_SHEET()
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
+EDA_ITEM* SCH_SHEET::doClone() const
+{
+    return new SCH_SHEET( *this );
+}
+
+
 bool SCH_SHEET::Save( FILE* aFile ) const
 {
     if( fprintf( aFile, "$Sheet\n" ) == EOF
@@ -248,49 +268,6 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/* creates a copy of a sheet
- *  The linked data itself (GetDrawItems()) is not duplicated
- */
-SCH_SHEET* SCH_SHEET::GenCopy()
-{
-    SCH_SHEET* newitem = new SCH_SHEET( m_Pos );
-
-    newitem->m_Size = m_Size;
-    newitem->SetParent( m_Parent );
-    newitem->m_TimeStamp = GetTimeStamp();
-
-    newitem->m_FileName     = m_FileName;
-    newitem->m_FileNameSize = m_FileNameSize;
-
-/*    newitem->m_SheetName     = m_SheetName;   m_SheetName must be unique for
- * all sub sheets in a given sheet
- *                                               so we no not duplicate sheet
- * name
- */
-    newitem->m_SheetNameSize = m_SheetNameSize;
-
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
-    {
-        SCH_SHEET_PIN* newSheetPin = sheetPin.GenCopy();
-        newSheetPin->SetParent( newitem );
-        newitem->GetSheetPins().push_back( newSheetPin );
-    }
-
-    newitem->renumberLabels();
-
-    /* don't copy screen data - just reference it. */
-    newitem->m_AssociatedScreen = m_AssociatedScreen;
-
-    if( m_AssociatedScreen )
-        m_AssociatedScreen->m_RefCount++;
-
-    return newitem;
-}
-
-
-/* Used if undo / redo command:
- *  swap data between this and copyitem
- */
 void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
 {
     EXCHG( m_Pos, copyitem->m_Pos );
@@ -487,20 +464,12 @@ SCH_SHEET_PIN* SCH_SHEET::GetLabel( const wxPoint& aPosition )
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int SCH_SHEET::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
 }
 
 
-/**
- * Function GetSheetNamePosition
- * @return the position of the anchor of sheet name text
- */
 wxPoint SCH_SHEET::GetSheetNamePosition()
 {
     wxPoint  pos = m_Pos;
@@ -517,10 +486,7 @@ wxPoint SCH_SHEET::GetSheetNamePosition()
     return pos;
 }
 
-/**
- * Function GetFileNamePosition
- * @return the position of the anchor of filename text
- */
+
 wxPoint SCH_SHEET::GetFileNamePosition()
 {
     wxPoint  pos = m_Pos;
@@ -538,16 +504,6 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 }
 
 
-/**
- * Function Draw
- *  Draw the hierarchical sheet shape
- *  @param aPanel = the current DrawPanel
- *  @param aDc = the current Device Context
- *  @param aOffset = draw offset (usually wxPoint(0,0))
- *  @param aDrawMode = draw mode
- *  @param aColor = color used to draw sheet. Usually -1 to use the normal
- * color for sheet items
- */
 void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
                       const wxPoint& aOffset, int aDrawMode, int aColor )
 {
@@ -613,10 +569,6 @@ void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-/**
- * Function GetBoundingBox
- *  @return an EDA_Rect giving the bounding box of the sheet
- */
 EDA_Rect SCH_SHEET::GetBoundingBox() const
 {
     int      dx, dy;
@@ -637,11 +589,6 @@ EDA_Rect SCH_SHEET::GetBoundingBox() const
 }
 
 
-/**
- * Function ComponentCount
- *  count our own components, without the power components.
- *  @return the component count.
- */
 int SCH_SHEET::ComponentCount()
 {
     int n = 0;
@@ -672,13 +619,6 @@ int SCH_SHEET::ComponentCount()
 }
 
 
-/**
- * Function SearchHierarchy
- *  search the existing hierarchy for an instance of screen "FileName".
- *  @param aFilename = the filename to find
- *  @param aFilename = a location to return a pointer to the screen (if found)
- *  @return bool if found, and a pointer to the screen
- */
 bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
 {
     if( m_AssociatedScreen )
@@ -708,17 +648,6 @@ bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
 }
 
 
-/**
- * Function LocatePathOfScreen
- *  search the existing hierarchy for an instance of screen "FileName".
- *  don't bother looking at the root sheet - it must be unique,
- *  no other references to its m_AssociatedScreen otherwise there would be
- * loops
- *  in the hierarchy.
- *  @param  aScreen = the SCH_SCREEN* screen that we search for
- *  @param aList = the SCH_SHEET_PATH*  that must be used
- *  @return true if found
- */
 bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 {
     if( m_AssociatedScreen )
@@ -749,15 +678,6 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 }
 
 
-/**
- * Function Load.
- *  for the sheet: load the file m_FileName
- *  if a screen already exists, the file is already read.
- *  m_AssociatedScreen point on the screen, and its m_RefCount is incremented
- *  else creates a new associated screen and load the data file.
- *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic frame
- *  @return true if OK
- */
 bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 {
     bool success = true;
@@ -804,12 +724,6 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 }
 
 
-/**
- * Function CountSheets
- * calculates the number of sheets found in "this"
- * this number includes the full subsheets count
- * @return the full count of sheets+subsheets contained by "this"
- */
 int SCH_SHEET::CountSheets()
 {
     int count = 1; //1 = this!!
@@ -837,17 +751,6 @@ wxString SCH_SHEET::GetFileName( void )
 }
 
 
-/**
- * Function ChangeFileName
- * Set a new filename and manage data and associated screen
- * The main difficulty is the filename change in a complex hierarchy.
- * - if new filename is not already used: change to the new name (and if an
- * existing file is found, load it on request)
- * - if new filename is already used (a complex hierarchy) : reference the
- * sheet.
- * @param aFileName = the new filename
- * @param aFrame = the schematic frame
- */
 bool SCH_SHEET::ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName )
 {
     if( ( GetFileName() == aFileName ) && m_AssociatedScreen )
@@ -997,11 +900,6 @@ void SCH_SHEET::Mirror_X( int aXaxis_position )
 }
 
 
-/**
- * Function Mirror_Y (virtual)
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_SHEET::Mirror_Y( int aYaxis_position )
 {
     m_Pos.x -= aYaxis_position;
@@ -1031,14 +929,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 }
 
 
-/** Compare schematic sheet entry (filename and sheetname) against search string.
- * @param aSearchData - Criteria to search against.
- * @param aAuxData - a pointer on auxiliary data, not used here.
- * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
- * @return True if this item matches the search criteria.
- */
-bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData,
-                         void* aAuxData, wxPoint * aFindLocation )
+bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
     if( SCH_ITEM::Matches( m_FileName, aSearchData ) )
     {
@@ -1136,7 +1027,7 @@ void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & SHEET_T ) )
         return false;
@@ -1149,7 +1040,7 @@ bool SCH_SHEET::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aF
 }
 
 
-bool SCH_SHEET::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_SHEET::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_Rect rect = aRect;
 
@@ -1182,4 +1073,3 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os )
 }
 
 #endif
-
