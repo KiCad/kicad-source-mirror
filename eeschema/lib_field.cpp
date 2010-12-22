@@ -326,8 +326,6 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 
     if( aData )
         text = *(wxString*)aData;
-    else if( InEditMode() )
-        text = GetFullText( m_Unit );
     else
         text = m_Text;
 
