@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-18 20:00+0100\n"
-"PO-Revision-Date: 2010-12-18 20:03+0100\n"
+"POT-Creation-Date: 2010-12-21 09:33+0100\n"
+"PO-Revision-Date: 2010-12-21 09:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: pcbnew/pcbplot.cpp:341
 msgid "Select Output Directory"
-msgstr "Selectionner Répertoire de Sortie"
+msgstr "Select Output Directory"
 
 #: pcbnew/pcbplot.cpp:529
 #, c-format
@@ -7787,7 +7787,7 @@ msgid "Key words"
 msgstr "Mots clé"
 
 #: eeschema/libedit.cpp:353
-#: eeschema/lib_field.cpp:588
+#: eeschema/lib_field.cpp:593
 msgid "Datasheet"
 msgstr "Documentation"
 
@@ -7932,11 +7932,11 @@ msgid "Save Project Settings"
 msgstr "Sauver Options Projet"
 
 #: eeschema/lib_field.cpp:82
-#: eeschema/lib_field.cpp:728
+#: eeschema/lib_field.cpp:733
 msgid "Field"
 msgstr "Champ"
 
-#: eeschema/lib_field.cpp:593
+#: eeschema/lib_field.cpp:598
 #, c-format
 msgid "Field%d"
 msgstr "Champ%d"
@@ -9704,35 +9704,39 @@ msgstr "Champs"
 msgid "Sheet file name"
 msgstr "Nom du fichier de la feuille"
 
-#: eeschema/dialogs/dialog_color_config.cpp:53
+#: eeschema/dialogs/dialog_color_config.cpp:48
+msgid "Sheet label"
+msgstr "Pin de hiérar."
+
+#: eeschema/dialogs/dialog_color_config.cpp:54
 msgid "Erc warning"
 msgstr "Erc warning"
 
-#: eeschema/dialogs/dialog_color_config.cpp:54
+#: eeschema/dialogs/dialog_color_config.cpp:55
 msgid "Erc error"
 msgstr "Erc erreur"
 
-#: eeschema/dialogs/dialog_color_config.cpp:61
+#: eeschema/dialogs/dialog_color_config.cpp:62
 msgid "General"
 msgstr "Général "
 
-#: eeschema/dialogs/dialog_color_config.cpp:64
+#: eeschema/dialogs/dialog_color_config.cpp:65
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: eeschema/dialogs/dialog_color_config.cpp:202
+#: eeschema/dialogs/dialog_color_config.cpp:203
 msgid "White"
 msgstr "Blanc"
 
-#: eeschema/dialogs/dialog_color_config.cpp:203
+#: eeschema/dialogs/dialog_color_config.cpp:204
 msgid "Black"
 msgstr "Noir"
 
-#: eeschema/dialogs/dialog_color_config.cpp:204
+#: eeschema/dialogs/dialog_color_config.cpp:205
 msgid "Background Color"
 msgstr "Couleur de Fond"
 
-#: eeschema/dialogs/dialog_color_config.cpp:230
+#: eeschema/dialogs/dialog_color_config.cpp:231
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -10176,10 +10180,302 @@ msgid "Reset"
 msgstr "Défaut"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:137
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:104
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:121
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:51
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:104
 msgid "Options"
 msgstr "Options"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "1"
+msgstr "1"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "3"
+msgstr "3"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "5"
+msgstr "5"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "7"
+msgstr "7"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "9"
+msgstr "9"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "11"
+msgstr "11"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "13"
+msgstr "13"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "15"
+msgstr "15"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "17"
+msgstr "17"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "18"
+msgstr "18"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "19"
+msgstr "19"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "20"
+msgstr "20"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "21"
+msgstr "21"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "22"
+msgstr "22"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "23"
+msgstr "23"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "24"
+msgstr "24"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "25"
+msgstr "25"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
+msgid "26"
+msgstr "26"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:39
+msgid "+90"
+msgstr "+90"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
+msgid "Orientation (Degrees)"
+msgstr "Orientation (Degrés)"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:43
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
+msgid "Select if the component is to be rotated when drawn"
+msgstr "Sélectionner si le composant doit être tourné lors de l'affichage."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
+msgid "Mirror ---"
+msgstr "Miroir---"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
+msgid "Mirror |"
+msgstr "Miroir |"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:65
+msgid "Pick the graphical transformation to be used when displaying the component, if any"
+msgstr "Ajuster la transformation graphique à utiliser pour afficher le composant"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:67
+msgid "The name of the symbol in the library from which this component came"
+msgstr "Le nom du symbole dans la librairie d'où vient le composant."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:74
+msgid ""
+"Use the alternate shape of this component.\n"
+"For gates, this is the \"De Morgan\" conversion"
+msgstr ""
+"Utiliser la représentation alternative pour ce composant\n"
+"Pour les portes, ceci est la conversion \"De Morgan\""
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:78
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:96
+msgid "Parts are locked"
+msgstr "Les parts sont verrouillées"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:82
+msgid "Reset to Library Defaults"
+msgstr "Remettre aux Valeurs en Lib."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:83
+msgid ""
+"Set position and style of fields and component orientation  to default lib value.\n"
+"Fields texts are not modified."
+msgstr ""
+"Ajuster la position et le style des champs et l'orientation du componsant aux valeurs par défaut en librairie.\n"
+"Les textes des champs ne sont pas modifiés."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:100
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:30
+msgid "Add Field"
+msgstr "Ajouter Champ"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:101
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:31
+msgid "Add a new custom field"
+msgstr "Ajouter un nouveau champ utilisateur"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:105
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:35
+msgid "Delete Field"
+msgstr "Supprimer Champ"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:36
+msgid "Delete one of the optional fields"
+msgstr "Supprimer un des champs optionnels."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:111
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:41
+msgid "Move the selected optional fields up one position"
+msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
+msgid "Align left"
+msgstr "Alignement à gauche"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
+msgid "Align center"
+msgstr "Alignement au centre"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
+msgid "Align right"
+msgstr "Alignement à droite"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:81
+msgid "Horiz. Justify"
+msgstr "Justification Horiz."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
+msgid "Align bottom"
+msgstr "Alignement en bas"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
+msgid "Align top"
+msgstr "Alignement au sommet"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:87
+msgid "Vert. Justify"
+msgstr "Justification Vert."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:138
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:72
+msgid "Visibility"
+msgstr "Visibilité"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
+msgid "Show"
+msgstr "Visible"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:144
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
+msgid "Check if you want this field visible"
+msgstr "Activer si vous voulez avoir ce champ visible"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:83
+msgid "Check if you want this field's text rotated 90 degrees"
+msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
+msgid "Bold"
+msgstr "Gras"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
+msgid "Bold Italic"
+msgstr "Gras Italique"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:157
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:91
+msgid "Style:"
+msgstr "Style:"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
+msgid "The style of the currently selected field's text in the schemati"
+msgstr "Le style du texte du champ actuellement sélectionné"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:100
+msgid "Field Name"
+msgstr "Nom Champ"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
+msgid ""
+"The name of the currently selected field\n"
+"Some fixed fields names are not editable"
+msgstr ""
+"Le nom du champ actuellement sélectionné.\n"
+"Quelques noms de champs fixés ne sont pas modifiables."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
+msgid "Field Value"
+msgstr "Texte Champ"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:187
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:105
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
+msgid "The text (or value) of the currently selected field"
+msgstr "Le texte (ou la valeur) du champ actuellement sélectionné"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
+msgid "Size(\")"
+msgstr "Taille(\")"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:201
+msgid "The size of the currently selected field's text in the schematic"
+msgstr "La taille du texte du champ actuellement sélectionné"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:145
+msgid "PosX(\")"
+msgstr "PosX"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:218
+msgid "The X coordinate of the text relative to the component"
+msgstr "La position X du texte relativement au composant"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:157
+msgid "PosY(\")"
+msgstr "PosY"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:232
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:162
+msgid "The Y coordinate of the text relative to the component"
+msgstr "La position Y du texte relativement au composant"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
@@ -10397,6 +10693,10 @@ msgstr "Remplissage en &avant plan"
 msgid "Fill &background"
 msgstr "Remplissage en a&rriere plan"
 
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
+msgid "The vertical height of the currently selected field's text in the schematic"
+msgstr "La taille du texte du champ actuellement sélectionné"
+
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:57
 msgid " Text Options : "
 msgstr "Options du Texte: "
@@ -10413,50 +10713,9 @@ msgstr "Commun aux Unités"
 msgid "Common to convert"
 msgstr "Commun à converti"
 
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:141
-#: eeschema/dialogs/dialog_edit_label_base.cpp:71
-msgid "Bold"
-msgstr "Gras"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:141
-#: eeschema/dialogs/dialog_edit_label_base.cpp:71
-msgid "Bold Italic"
-msgstr "Gras Italique"
-
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
 msgid "Text Shape:"
 msgstr "Aspect Texte:"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-msgid "Align left"
-msgstr "Alignement à gauche"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-msgid "Align center"
-msgstr "Alignement au centre"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-msgid "Align right"
-msgstr "Alignement à droite"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:81
-msgid "Horiz. Justify"
-msgstr "Justification Horiz."
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-msgid "Align bottom"
-msgstr "Alignement en bas"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-msgid "Align top"
-msgstr "Alignement au sommet"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:87
-msgid "Vert. Justify"
-msgstr "Justification Vert."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:25
 msgid "General :"
@@ -10537,11 +10796,6 @@ msgstr ""
 "Les symboles d'alimentation ont des propriétés spécifiques dans eeschema:\n"
 "- La valeur le peut pas être éditée (pour éviter des erreurs) car c'est le nom de la pin qui est important pour un symbole d'alimentation\n"
 "- La référence est mise à jour automatiquement lorsque une netliste est créée (pas besoin de lancer l'annotation)"
-
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:96
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:79
-msgid "Parts are locked"
-msgstr "Les parts sont verrouillées"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:97
 msgid ""
@@ -10630,214 +10884,6 @@ msgstr ""
 msgid "Footprint Filter"
 msgstr "Filtrage Modules"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "1"
-msgstr "1"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "3"
-msgstr "3"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "5"
-msgstr "5"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "7"
-msgstr "7"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "9"
-msgstr "9"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "11"
-msgstr "11"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "13"
-msgstr "13"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "15"
-msgstr "15"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "17"
-msgstr "17"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "18"
-msgstr "18"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "19"
-msgstr "19"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "20"
-msgstr "20"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "21"
-msgstr "21"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "22"
-msgstr "22"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "23"
-msgstr "23"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "24"
-msgstr "24"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "25"
-msgstr "25"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-msgid "26"
-msgstr "26"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:39
-msgid "+90"
-msgstr "+90"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-msgid "Orientation (Degrees)"
-msgstr "Orientation (Degrés)"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:43
-msgid "Select if the component is to be rotated when drawn"
-msgstr "Sélectionner si le composant doit être tourné lors de l'affichage."
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
-msgid "Mirror ---"
-msgstr "Miroir---"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
-msgid "Mirror |"
-msgstr "Miroir |"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-msgid "Pick the graphical transformation to be used when displaying the component, if any"
-msgstr "Ajuster la transformation graphique à utiliser pour afficher le composant"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:67
-msgid "The name of the symbol in the library from which this component came"
-msgstr "Le nom du symbole dans la librairie d'où vient le composant."
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:75
-msgid ""
-"Use the alternate shape of this component.\n"
-"For gates, this is the \"De Morgan\" conversion"
-msgstr ""
-"Utiliser la représentation alternative pour ce composant\n"
-"Pour les portes, ceci est la conversion \"De Morgan\""
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:83
-msgid "Reset to Library Defaults"
-msgstr "Remettre aux Valeurs par Défaut en Librairie"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:84
-msgid ""
-"Set position and style of fields and component orientation  to default lib value.\n"
-"Fields texts are not modified."
-msgstr ""
-"Ajuster la position et le style des champs et l'orientation du componsant aux valeurs par défaut en librairie.\n"
-"Les textes des champs ne sont pas modifiés."
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:101
-msgid "Add Field"
-msgstr "Ajouter Champ"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:102
-msgid "Add a new custom field"
-msgstr "Ajouter un nouveau champ utilisateur"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
-msgid "Delete Field"
-msgstr "Supprimer Champ"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:107
-msgid "Delete one of the optional fields"
-msgstr "Supprimer un des champs optionnels."
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:112
-msgid "Move the selected optional fields up one position"
-msgstr "Déplacer le champ optionnel sélectionné de une position vers le haut"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:122
-msgid "Visibility"
-msgstr "Visibilité"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:127
-msgid "Show"
-msgstr "Visible"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
-msgid "Check if you want this field visible"
-msgstr "Activer si vous voulez avoir ce champ visible"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
-msgid "Check if you want this field's text rotated 90 degrees"
-msgstr "Activer si vous voulez avoir le texte de ce champ tourné à 90°"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
-msgid "Style:"
-msgstr "Style:"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:145
-msgid "The style of the currently selected field's text in the schemati"
-msgstr "Le style du texte du champ actuellement sélectionné"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:154
-msgid "Field Name"
-msgstr "Nom Champ"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:159
-msgid ""
-"The name of the currently selected field\n"
-"Some fixed fields names are not editable"
-msgstr ""
-"Le nom du champ actuellement sélectionné.\n"
-"Quelques noms de champs fixés ne sont pas modifiables."
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
-msgid "Field Value"
-msgstr "Texte Champ"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
-msgid "The text (or value) of the currently selected field"
-msgstr "Le texte (ou la valeur) du champ actuellement sélectionné"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
-msgid "Size(\")"
-msgstr "Taille(\")"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:187
-msgid "The size of the currently selected field's text in the schematic"
-msgstr "La taille du texte du champ actuellement sélectionné"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:199
-msgid "PosX(\")"
-msgstr "PosX"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:204
-msgid "The X coordinate of the text relative to the component"
-msgstr "La position X du texte relativement au composant"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-msgid "PosY(\")"
-msgstr "PosY"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:218
-msgid "The Y coordinate of the text relative to the component"
-msgstr "La position Y du texte relativement au composant"
-
 #: eeschema/dialogs/dialog_edit_label_base.cpp:25
 msgid "&Text:"
 msgstr "&Texte:"
@@ -10861,10 +10907,6 @@ msgstr "3 états"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:79
 msgid "S&hape"
 msgstr "&Forme"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:145
-msgid "The vertical height of the currently selected field's text in the schematic"
-msgstr "La taille du texte du champ actuellement sélectionné"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:51
 msgid "Library Component Properties"
@@ -12218,7 +12260,7 @@ msgstr "Liste D-Codes"
 #: gerbview/gerberframe.cpp:550
 #, c-format
 msgid "Layer %d not in use"
-msgstr "Couche %dnon utilisée"
+msgstr "Couche %d non utilisée"
 
 #: gerbview/gerberframe.cpp:556
 msgid "File:"
@@ -12694,7 +12736,7 @@ msgstr "Via Aveugle/Enterrée"
 msgid "Kicad footprint library files (*.mod)|*.mod"
 msgstr "Fichiers Modules Kicad (*.mod)|*.mod"
 
-#: common/hotkeys_basic.cpp:342
+#: common/hotkeys_basic.cpp:336
 msgid ""
 "Current hotkey list:\n"
 "\n"
@@ -12702,52 +12744,52 @@ msgstr ""
 "Liste des Hotkeys courantes:\n"
 "\n"
 
-#: common/hotkeys_basic.cpp:350
+#: common/hotkeys_basic.cpp:344
 msgid "key "
 msgstr "touche: "
 
-#: common/hotkeys_basic.cpp:597
-#: common/hotkeys_basic.cpp:626
+#: common/hotkeys_basic.cpp:586
+#: common/hotkeys_basic.cpp:615
 msgid "Read Hotkey Configuration File:"
 msgstr "Lecture Fichier Configuration des Hotkeys:"
 
-#: common/hotkeys_basic.cpp:656
+#: common/hotkeys_basic.cpp:644
 msgid "List Current Keys"
 msgstr "Lister Touches Courantes"
 
-#: common/hotkeys_basic.cpp:657
+#: common/hotkeys_basic.cpp:645
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Afficher la liste des hotkeyc courante et les commandes correspondantes"
 
-#: common/hotkeys_basic.cpp:663
+#: common/hotkeys_basic.cpp:651
 msgid "Edit Hotkeys"
 msgstr "Editer Hotkeys"
 
-#: common/hotkeys_basic.cpp:664
+#: common/hotkeys_basic.cpp:652
 msgid "Call the hotkeys editor"
 msgstr "Appeler l'éditeur de hotkeys"
 
-#: common/hotkeys_basic.cpp:672
+#: common/hotkeys_basic.cpp:660
 msgid "Export Hotkeys Config"
 msgstr "Exporter la Configuration des Hotkeys"
 
-#: common/hotkeys_basic.cpp:674
+#: common/hotkeys_basic.cpp:662
 msgid "Create a hotkey configuration file to export the current hotkey config"
 msgstr "Créer un fichier configuration des Hotkeys à partir de la configuration courante"
 
-#: common/hotkeys_basic.cpp:681
+#: common/hotkeys_basic.cpp:669
 msgid "Import Hotkeys Config"
 msgstr "Importer la Configuration des Hotkeys"
 
-#: common/hotkeys_basic.cpp:682
+#: common/hotkeys_basic.cpp:670
 msgid "Load an existing hotkey configuration file"
 msgstr "Charger un fichier existant de configuration des hotkeys"
 
-#: common/hotkeys_basic.cpp:688
+#: common/hotkeys_basic.cpp:676
 msgid "Hotkeys"
 msgstr "Hotkeys"
 
-#: common/hotkeys_basic.cpp:689
+#: common/hotkeys_basic.cpp:677
 msgid "Hotkeys configuration and preferences"
 msgstr "Options et préférences générales des hotkeys"
 
@@ -13347,6 +13389,14 @@ msgstr "Annotation de la Schématique"
 msgid "EESchema Erc"
 msgstr "EESchema ERC"
 
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:83
+msgid "Component Properties"
+msgstr "Propriétés du Composant"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:75
+msgid "Fields Properties"
+msgstr "Propriétés des Champs"
+
 #: eeschema/dialogs/dialog_lib_edit_pin_base.h:86
 msgid "Pin Properties"
 msgstr "Propriétés des Pins"
@@ -13367,18 +13417,9 @@ msgstr "Propriétés du Texte Librairie"
 msgid "Lib Component Properties"
 msgstr "Propriétés du composant librairie"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:82
-#: eeschema/dialogs/dialog_lib_new_component_base.h:77
-msgid "Component Properties"
-msgstr "Propriétés du Composant"
-
 #: eeschema/dialogs/dialog_edit_label_base.h:63
 msgid "Text Editor"
 msgstr "Editeur de Texte"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:74
-msgid "Fields Properties"
-msgstr "Propriétés des Champs"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.h:103
 msgid "Schematic Editor Options"
