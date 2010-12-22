@@ -11,7 +11,7 @@
 
 DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 350,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* m_mainSizer;
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -21,6 +21,7 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 4, 3, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -85,7 +86,6 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();
-	m_mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

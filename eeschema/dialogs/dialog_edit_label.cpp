@@ -92,24 +92,18 @@ void DialogLabelEditor::InitDialog()
         break;
     }
 
-    unsigned MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
+    int MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
 
-    if( m_CurrentText->m_Text.Length() < MINTEXTWIDTH )
+    int max_len = 0;
+    if ( !multiLine )
     {
-        wxString textWidth;
-        textWidth.Append( 'M', MINTEXTWIDTH );
-        EnsureTextCtrlWidth( m_textLabel, &textWidth );
-    }
-    else if ( !multiLine )
-    {
-        EnsureTextCtrlWidth( m_textLabel );
+        max_len =m_CurrentText->m_Text.Length();
     }
     else
     {
         // calculate the length of the biggest line
         // we cannot use the length of the entire text that has no meaning
-        int max_len = 0;
-        int curr_len = 0;
+        int curr_len = MINTEXTWIDTH;
         int imax = m_CurrentText->m_Text.Len();
         for( int count = 0; count < imax; count++ )
         {
@@ -125,10 +119,13 @@ void DialogLabelEditor::InitDialog()
                     max_len = curr_len;
             }
         }
-        wxString textWidth;
-        textWidth.Append( 'M', max_len );
-        EnsureTextCtrlWidth( m_textLabel, &textWidth );
     }
+    if( max_len < MINTEXTWIDTH )
+        max_len = MINTEXTWIDTH;
+
+    wxString textWidth;
+    textWidth.Append( 'M', MINTEXTWIDTH );
+    EnsureTextCtrlWidth( m_textLabel, &textWidth );
 
     // Set validators
     m_TextOrient->SetSelection( m_CurrentText->GetSchematicTextOrientation() );

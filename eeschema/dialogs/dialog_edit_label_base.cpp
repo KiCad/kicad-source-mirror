@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -107,4 +107,5 @@ DialogLabelEditor_Base::~DialogLabelEditor_Base()
 	m_textLabelMultiLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DialogLabelEditor_Base::OnEnterKey ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogLabelEditor_Base::OnOkClick ), NULL, this );
+	
 }
