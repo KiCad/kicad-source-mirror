@@ -1361,27 +1361,12 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T a
      * we temporary copy aTransMat in DefaultTransformMatrix
      */
     LIB_DRAW_ITEM* item;
-    TRANSFORM transform;
-
-    for ( int ii = 0; ii < 2; ii++ )
-    {
-        for ( int jj = 0; jj < 2; jj++ )
-        {
-            transform = DefaultTransform;
-            DefaultTransform = aTransform;
-        }
-    }
+    TRANSFORM transform = DefaultTransform;
 
     item = LocateDrawItem( aUnit, aConvert, aType, aPoint );
 
     //Restore matrix
-    for ( int ii = 0; ii < 2; ii++ )
-    {
-        for ( int jj = 0; jj < 2; jj++ )
-        {
-            DefaultTransform = transform;
-        }
-    }
+    DefaultTransform = transform;
 
     return item;
 }

@@ -685,40 +685,41 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
 
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
+
     TRANSFORM temp = TRANSFORM();
     bool Transform = false;
 
     switch( aOrientation )
     {
     case CMP_ORIENT_0:
-    case CMP_NORMAL:            /* Position Initiale */
+    case CMP_NORMAL:                    // default transform matrix
         m_transform.x1 = 1;
         m_transform.y2 = -1;
         m_transform.x2 = m_transform.y1 = 0;
         break;
 
-    case CMP_ROTATE_CLOCKWISE:            /* Rotate + */
+    case CMP_ROTATE_CLOCKWISE:            // Rotate + (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = 1;
         temp.x2   = -1;
         Transform = true;
         break;
 
-    case CMP_ROTATE_COUNTERCLOCKWISE:             /* Rotate - */
+    case CMP_ROTATE_COUNTERCLOCKWISE:    // Rotate - (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = -1;
         temp.x2   = 1;
         Transform = true;
         break;
 
-    case CMP_MIRROR_Y:          /* MirrorY */
+    case CMP_MIRROR_Y:                  // Mirror Y (incremental rotation)
         temp.x1   = -1;
         temp.y2   = 1;
         temp.y1   = temp.x2 = 0;
         Transform = true;
         break;
 
-    case CMP_MIRROR_X:            /* MirrorX */
+    case CMP_MIRROR_X:                  // Mirror X (incremental rotation)
         temp.x1   = 1;
         temp.y2   = -1;
         temp.y1   = temp.x2 = 0;
@@ -790,14 +791,14 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
     if( Transform )
     {
         /* The new matrix transform is the old matrix transform modified by the
-         *  requested transformation, which is the TempMat transform (rot,
+         *  requested transformation, which is the temp transform (rot,
          *  mirror ..) in order to have (in term of matrix transform):
          *     transform coord = new_m_transform * coord
          *  where transform coord is the coord modified by new_m_transform from
          *  the initial value coord.
-         *  new_m_transform is computed (from old_m_transform and TempMat) to
+         *  new_m_transform is computed (from old_m_transform and temp) to
          *  have:
-         *     transform coord = old_m_transform * coord * TempMat
+         *     transform coord = old_m_transform * temp
          */
         TRANSFORM newTransform;
 
