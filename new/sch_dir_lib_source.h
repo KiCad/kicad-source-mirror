@@ -114,13 +114,12 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      */
     void readSExpression( STRING* aResult, const STRING& aNameSpec ) throw( IO_ERROR );
 
-
     /**
      * Function cacheOneDir
      * loads part names [and categories] from a directory given by
      * "sourceURI + '/' + category"
      * Categories are only loaded if processing the top most directory because
-     * only one level of categories are supported.  We know we are in the
+     * only one level of categories is supported.  We know we are in the
      * top most directory if aCategory is empty.
      */
     void cacheOneDir( const STRING& aCategory ) throw( IO_ERROR );
@@ -144,8 +143,11 @@ public:
      *  "/home/designer/mylibdir".  This is not a URI, but an OS specific path that
      *  can be given to opendir().
      *
-     * @param doUseVersioning if true means support versioning in the directory tree, otherwise
-     *  only a single version of each part is recognized.
+     * @param aOptions is the options string from the library table, currently
+     *  the only supported option, that this LIB_SOURCE knows about is
+     *  "userVersioning".  If present means support versioning in the directory
+     *  tree, otherwise only a single version of each part is recognized, namely the
+     *  one without the ".revN[N..]" trailer.
      */
     DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = StrEmpty )
         throw( IO_ERROR );
