@@ -29,8 +29,7 @@
 #include "template_fieldnames.h"
 
 
-SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,
-                      SCH_COMPONENT* aParent, wxString aName ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TextStruct()
 {
@@ -44,15 +43,27 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId,
 }
 
 
+SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
+    SCH_ITEM( aField ),
+    EDA_TextStruct( aField )
+{
+    m_FieldId = aField.m_FieldId;
+    m_Name = aField.m_Name;
+    m_AddExtraText = aField.m_AddExtraText;
+}
+
+
 SCH_FIELD::~SCH_FIELD()
 {
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
+EDA_ITEM* SCH_FIELD::doClone() const
+{
+    return new SCH_FIELD( *this );
+}
+
+
 int SCH_FIELD::GetPenSize() const
 {
     int pensize = m_Thickness;
@@ -71,9 +82,6 @@ int SCH_FIELD::GetPenSize() const
 }
 
 
-/**
- * Draw schematic component fields.
- */
 void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
                       const wxPoint& offset, int DrawMode, int Color )
 {
@@ -103,6 +111,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
     orient = m_Orient;
+
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -136,9 +145,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
     if( !m_AddExtraText || ( m_FieldId != REFERENCE ) )
     {
-        DrawGraphicText( panel, DC, textpos, color, m_Text,
-                         orient,
-                         m_Size, hjustify, vjustify,
+        DrawGraphicText( panel, DC, textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
                          LineWidth, m_Italic, m_Bold );
     }
     else
@@ -148,9 +155,7 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         wxString fulltext = m_Text;
         fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->GetUnit() );
 
-        DrawGraphicText( panel, DC, textpos, color, fulltext,
-                         orient,
-                         m_Size, hjustify, vjustify,
+        DrawGraphicText( panel, DC, textpos, color, fulltext, orient, m_Size, hjustify, vjustify,
                          LineWidth, m_Italic, m_Bold );
     }
 
@@ -182,13 +187,6 @@ void SCH_FIELD::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/**
- * Function ImportValues
- * copy parameters from a source.
- * Pointers and specific values (position, texts) are not copied
- * used to init a field from the model read from a lib entry
- * @param aSource = the LIB_FIELD to read
- */
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
     m_Orient    = aSource.m_Orient;
@@ -197,38 +195,29 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
     m_VJustify  = aSource.m_VJustify;
     m_Italic    = aSource.m_Italic;
     m_Bold      = aSource.m_Bold;
-    m_Thickness     = aSource.m_Thickness;
+    m_Thickness = aSource.m_Thickness;
     m_Attributs = aSource.m_Attributs;
     m_Mirror    = aSource.m_Mirror;
 }
 
 
-/**
- * Used if undo / redo command:
- *  swap data between this and copyitem
- */
-void SCH_FIELD::SwapData( SCH_FIELD* copyitem )
+void SCH_FIELD::SwapData( SCH_FIELD* aField )
 {
-    EXCHG( m_Text, copyitem->m_Text );
-    EXCHG( m_Layer, copyitem->m_Layer );
-    EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_Thickness, copyitem->m_Thickness );
-    EXCHG( m_Orient, copyitem->m_Orient );
-    EXCHG( m_Mirror, copyitem->m_Mirror );
-    EXCHG( m_Attributs, copyitem->m_Attributs );
-    EXCHG( m_Italic, copyitem->m_Italic );
-    EXCHG( m_Bold, copyitem->m_Bold );
-    EXCHG( m_HJustify, copyitem->m_HJustify );
-    EXCHG( m_VJustify, copyitem->m_VJustify );
+    EXCHG( m_Text, aField->m_Text );
+    EXCHG( m_Layer, aField->m_Layer );
+    EXCHG( m_Pos, aField->m_Pos );
+    EXCHG( m_Size, aField->m_Size );
+    EXCHG( m_Thickness, aField->m_Thickness );
+    EXCHG( m_Orient, aField->m_Orient );
+    EXCHG( m_Mirror, aField->m_Mirror );
+    EXCHG( m_Attributs, aField->m_Attributs );
+    EXCHG( m_Italic, aField->m_Italic );
+    EXCHG( m_Bold, aField->m_Bold );
+    EXCHG( m_HJustify, aField->m_HJustify );
+    EXCHG( m_VJustify, aField->m_VJustify );
 }
 
 
-/**
- * Function GetBoundaryBox
- * @return an EDA_Rect contains the real (user coordinates) boundary box for a text field.
- *  according to the component position, rotation, mirror ...
- */
 EDA_Rect SCH_FIELD::GetBoundingBox() const
 {
     EDA_Rect       BoundaryBox;
@@ -459,7 +448,7 @@ void SCH_FIELD::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_FIELD::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
     if( !IsVisible() )
@@ -469,11 +458,11 @@ bool SCH_FIELD::DoHitTest( const wxPoint& aPoint, int aAccuracy ) const
 
     rect.Inflate( aAccuracy );
 
-    return rect.Inside( aPoint );
+    return rect.Contains( aPoint );
 }
 
 
-bool SCH_FIELD::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_FIELD::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
     if( !IsVisible() )
@@ -484,7 +473,7 @@ bool SCH_FIELD::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Inside( GetBoundingBox() );
+        return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
 }

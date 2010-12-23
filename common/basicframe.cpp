@@ -282,7 +282,7 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /*
  *
  */
-void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& WXUNUSED(event) )
+void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& event )
 {
     bool ShowAboutDialog(wxWindow * parent);
     ShowAboutDialog(this);
@@ -364,7 +364,7 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 
 #endif
 
-void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent& WXUNUSED( event ) )
+void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 {
     if( !wxTheClipboard->Open() )
     {

@@ -150,7 +150,7 @@ void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module,
             Module->m_ModuleStatus &= ~MODULE_is_PLACED;
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
-            if( !GetBoard()->m_BoundaryBox.Inside( Module->m_Pos ) )
+            if( !GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
             break;
 

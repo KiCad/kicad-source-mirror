@@ -12,7 +12,9 @@
 #include "general.h"
 #include "protos.h"
 #include "netlist.h"
+#include "sch_bus_entry.h"
 #include "sch_items.h"
+#include "sch_line.h"
 
 
 /* Routine to start/end segment (BUS or wires) on junctions.
@@ -91,11 +93,11 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
          * Segment connecte: doit etre coupe en 2 si px,py
          * n'est
          *  pas une extremite */
-        if( ( segment->m_Start == aBreakpoint )
-           || ( segment->m_End == aBreakpoint ) )
+        if( ( segment->m_Start == aBreakpoint ) || ( segment->m_End == aBreakpoint ) )
             continue;
+
         /* Here we must cut the segment into 2. */
-        NewSegment = segment->GenCopy();
+        NewSegment = new SCH_LINE( *segment );
         NewSegment->m_Start = aBreakpoint;
         segment->m_End = NewSegment->m_Start;
         NewSegment->SetNext( segment->Next() );

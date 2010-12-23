@@ -41,7 +41,7 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     if( (TextStruct->m_Flags & IS_NEW) == 0 )
     {
         delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = TextStruct->GenCopy();
+        g_ItemToUndoCopy = TextStruct->Clone();
     }
 
     TextStruct->m_Flags |= IS_MOVED;

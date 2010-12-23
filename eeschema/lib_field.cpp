@@ -326,8 +326,6 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 
     if( aData )
         text = *(wxString*)aData;
-    else if( InEditMode() )
-        text = GetFullText( m_Unit );
     else
         text = m_Text;
 
@@ -350,6 +348,11 @@ void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint&
 
 bool LIB_FIELD::HitTest( const wxPoint& aPosition )
 {
+    // Because HitTest is mainly used to select the field
+    // return always false if this field is void
+    if( IsVoid() )
+        return false;
+
     return HitTest( aPosition, 0, DefaultTransform );
 }
 
@@ -466,7 +469,7 @@ bool LIB_FIELD::DoTestInside( EDA_Rect& rect ) const
      * FIXME: This fails to take into acount the size and/or orientation of
      *        the text.
      */
-    return rect.Inside( m_Pos.x, -m_Pos.y );
+    return rect.Contains( m_Pos.x, -m_Pos.y );
 }
 
 

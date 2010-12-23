@@ -1,4 +1,4 @@
 release version:
-2010 dec 18 (BZR testing 26xx)
+2010 dec 22 (BZR testing 2676)
 files (.zip,.tgz):
-kicad-2010-12-18-testing
+kicad-2010-12-22-testing

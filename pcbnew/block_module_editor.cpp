@@ -657,7 +657,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
     {
         pad->m_Selected = 0;
         pos = pad->GetPosition();
-        if( Rect.Inside( pos ) )
+        if( Rect.Contains( pos ) )
         {
             pad->m_Selected = IS_SELECTED;
             ItemsCount++;
@@ -673,13 +673,13 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
         {
         case TYPE_EDGE_MODULE:
             pos = ( (EDGE_MODULE*) item )->m_Start;
-            if( Rect.Inside( pos ) )
+            if( Rect.Contains( pos ) )
             {
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;
             }
             pos = ( (EDGE_MODULE*) item )->m_End;
-            if( Rect.Inside( pos ) )
+            if( Rect.Contains( pos ) )
             {
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;
@@ -688,7 +688,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
 
         case TYPE_TEXTE_MODULE:
             pos = ( (TEXTE_MODULE*) item )->GetPosition();
-            if( Rect.Inside( pos ) )
+            if( Rect.Contains( pos ) )
             {
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;

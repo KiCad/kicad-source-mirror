@@ -307,7 +307,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 
 
 /**********************************************************************/
-void DIALOG_MODULE_MODULE_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED (event) )
+void DIALOG_MODULE_MODULE_EDITOR::OnCancelClick( wxCommandEvent& event )
 /**********************************************************************/
 {
     EndModal( -1 );

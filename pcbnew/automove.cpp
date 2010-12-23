@@ -224,7 +224,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         Module = moduleList[ii];
         if( PlaceModulesHorsPcb && edgesExists )
         {
-            if( GetBoard()->m_BoundaryBox.Inside( Module->m_Pos ) )
+            if( GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
                 continue;
         }
         surface += Module->m_Surface;
@@ -243,7 +243,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         if( PlaceModulesHorsPcb && edgesExists )
         {
-            if( GetBoard()->m_BoundaryBox.Inside( Module->m_Pos ) )
+            if( GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
                 continue;
         }
 

@@ -137,17 +137,18 @@ void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame
  */
 Ki_HotkeyInfo*  GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList );
 
-/** function ReadHotkeyConfig * Read hotkey configuration for a given
- app, possibly before the frame for that app has been created
-
- @param Appname = the value of the app's m_FrameName
- @param DescList = the hotkey data
+/**
+ * Function ReadHotkeyConfig
+ * Read hotkey configuration for a given app,
+ * possibly before the frame for that app has been created
+ * @param Appname = the value of the app's m_FrameName
+ * @param aDescList = the hotkey data
 */
-
 void            ReadHotkeyConfig( const wxString&                        Appname,
-                                  struct Ki_HotkeyInfoSectionDescriptor* DescList );
+                                  struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+
 void            ParseHotkeyConfig( const wxString&                        data,
-                                   struct Ki_HotkeyInfoSectionDescriptor* DescList );
+                                   struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
 
 // common hotkeys event id

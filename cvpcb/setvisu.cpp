@@ -108,11 +108,10 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*
  * Redraw the BOARD items but not cursors, axis or grid.
  */
-void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
-                  int aDrawMode, const wxPoint& offset )
+void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 {
     if( m_Modules )
     {
-        m_Modules->Draw( aPanel, DC, GR_COPY );
+        m_Modules->Draw( aPanel, aDC, GR_COPY );
     }
 }

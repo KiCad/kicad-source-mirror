@@ -76,64 +76,42 @@ static int* TemplateShape[5][4] =
 
 
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
-    SCH_ITEM( NULL, aType ), EDA_TextStruct( text )
+    SCH_ITEM( NULL, aType ),
+    EDA_TextStruct( text )
 {
     m_Layer = LAYER_NOTES;
-    m_Pos   = pos;
+    m_Pos = pos;
     m_Shape = 0;
     m_IsDangling = false;
-    m_MultilineAllowed     = true;
+    m_MultilineAllowed = true;
     m_SchematicOrientation = 0;
 }
 
 
-SCH_TEXT* SCH_TEXT::GenCopy()
+SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
+    SCH_ITEM( aText ),
+    EDA_TextStruct( aText )
 {
-    SCH_TEXT* newitem;
-
-    switch( Type() )
-    {
-    default:
-    case SCH_TEXT_T:
-        newitem = new SCH_TEXT( m_Pos, m_Text );
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        newitem = new SCH_GLOBALLABEL( m_Pos, m_Text );
-        break;
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        newitem = new SCH_HIERLABEL( m_Pos, m_Text );
-        break;
-
-    case SCH_LABEL_T:
-        newitem = new SCH_LABEL( m_Pos, m_Text );
-        break;
-    }
-
-    newitem->m_Layer      = m_Layer;
-    newitem->m_Shape      = m_Shape;
-    newitem->m_Orient     = m_Orient;
-    newitem->m_Size       = m_Size;
-    newitem->m_Thickness      = m_Thickness;
-    newitem->m_HJustify   = m_HJustify;
-    newitem->m_VJustify   = m_VJustify;
-    newitem->m_IsDangling = m_IsDangling;
-    newitem->m_Italic     = m_Italic;
-    newitem->m_Bold       = m_Bold;
-    newitem->m_SchematicOrientation = m_SchematicOrientation;
-
-    return newitem;
+    m_Pos = aText.m_Pos;
+    m_Shape = aText.m_Shape;
+    m_MultilineAllowed = aText.m_MultilineAllowed;
+    m_SchematicOrientation = aText.m_SchematicOrientation;
+    m_IsDangling = false;
 }
 
 
-/**
- * Function GetSchematicTextOffset (virtual)
- * @return the offset between the SCH_TEXT position and the text itself
- * position
- * This offset depend on orientation, and the type of text
- * (room to draw an associated graphic symbol, or put the text above a wire)
- */
+EDA_ITEM* SCH_TEXT::doClone() const
+{
+    return new SCH_TEXT( *this );
+}
+
+
+void SCH_TEXT::IncrementLabel()
+{
+    IncrementLabelMember( m_Text );
+}
+
+
 wxPoint SCH_TEXT::GetSchematicTextOffset()
 {
     wxPoint text_offset;
@@ -178,11 +156,6 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 }
 
 
-/**
- * Function Mirror_Y (virtual)
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_TEXT::Mirror_Y( int aYaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
@@ -224,11 +197,6 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
 }
 
 
-/**
- * Function Mirror_X (virtual)
- * mirror item relative to an X axis
- * @param aXaxis_position = the x axis position
- */
 void SCH_TEXT::Mirror_X( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
@@ -303,19 +271,6 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
 }
 
 
-/**
- * Function SetTextOrientAndJustifyParmeters (virtual)
- * Set m_SchematicOrientation, and initialize
- * m_orient,m_HJustified and m_VJustified, according to the value of
- * m_SchematicOrientation
- * must be called after changing m_SchematicOrientation
- * @param aSchematicOrientation =
- *  0 = normal (horizontal, left justified).
- *  1 = up (vertical)
- *  2 = (horizontal, right justified). This can be seen as the mirrored
- *      position of 0
- *  3 = bottom . This can be seen as the mirrored position of up
- */
 void SCH_TEXT::SetSchematicTextOrientation( int aSchematicOrientation )
 {
     m_SchematicOrientation = aSchematicOrientation;
@@ -388,10 +343,6 @@ void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int SCH_TEXT::GetPenSize() const
 {
     int pensize = m_Thickness;
@@ -410,9 +361,6 @@ int SCH_TEXT::GetPenSize() const
 }
 
 
-/* Text type Comment (text on layer "NOTE") have 4 directions, and the Text
- * origin is the first letter
- */
 void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )
 {
@@ -425,6 +373,7 @@ void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
         color = (EDA_Colors) Color;
     else
         color = ReturnLayerColor( m_Layer );
+
     GRSetDrawMode( DC, DrawMode );
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
@@ -671,7 +620,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox() const
 }
 
 
-bool SCH_TEXT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & TEXT_T ) )
         return false;
@@ -680,7 +629,7 @@ bool SCH_TEXT::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFi
 }
 
 
-bool SCH_TEXT::DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_TEXT::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
 {
     return TextHitTest( aRect, aContained, aAccuracy );
 }
@@ -702,40 +651,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os )
                                  << "</" << s.Lower().mb_str() << ">\n";
 }
 
-
 #endif
-
-
-/**
- * Function GetSchematicTextOffset (virtual)
- * @return the offset between the SCH_TEXT position and the text itself
- * position
- * This offset depend on orientation, and the type of text
- * (room to draw an associated graphic symbol, or put the text above a wire)
- */
-wxPoint SCH_LABEL::GetSchematicTextOffset()
-{
-    return SCH_TEXT::GetSchematicTextOffset();
-}
-
-
-/**
- * Function SetTextOrientAndJustifyParmeters
- * Set m_SchematicOrientation, and initialize
- * m_orient,m_HJustified and m_VJustified, according to the value of
- * m_SchematicOrientation (for a label)
- * must be called after changing m_SchematicOrientation
- * @param aSchematicOrientation =
- *  0 = normal (horizontal, left justified).
- *  1 = up (vertical)
- *  2 = (horizontal, right justified). This can be seen as the mirrored
- *      position of 0
- *  3 = bottom . This can be seen as the mirrored position of up
- */
-void SCH_LABEL::SetSchematicTextOrientation( int aSchematicOrientation )
-{
-    SCH_TEXT::SetSchematicTextOrientation( aSchematicOrientation );
-}
 
 
 SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
@@ -748,11 +664,30 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-/**
- * Function Mirror_X (virtual)
- * mirror item relative to an X axis
- * @param aXaxis_position = the x axis position
- */
+SCH_LABEL::SCH_LABEL( const SCH_LABEL& aLabel ) :
+    SCH_TEXT( aLabel )
+{
+}
+
+
+EDA_ITEM* SCH_LABEL::doClone() const
+{
+    return new SCH_LABEL( *this );
+}
+
+
+wxPoint SCH_LABEL::GetSchematicTextOffset()
+{
+    return SCH_TEXT::GetSchematicTextOffset();
+}
+
+
+void SCH_LABEL::SetSchematicTextOrientation( int aSchematicOrientation )
+{
+    SCH_TEXT::SetSchematicTextOrientation( aSchematicOrientation );
+}
+
+
 void SCH_LABEL::Mirror_X( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
@@ -775,12 +710,6 @@ void SCH_LABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool SCH_LABEL::Save( FILE* aFile ) const
 {
     bool        success = true;
@@ -862,10 +791,6 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function Draw
- * a label is drawn like a text. So just call SCH_TEXT::Draw
- */
 void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
                       int DrawMode, int Color )
 {
@@ -921,7 +846,7 @@ EDA_Rect SCH_LABEL::GetBoundingBox() const
 }
 
 
-bool SCH_LABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_LABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & LABEL_T ) )
         return false;
@@ -940,12 +865,18 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
+    SCH_TEXT( aGlobalLabel )
+{
+}
+
+
+EDA_ITEM* SCH_GLOBALLABEL::doClone() const
+{
+    return new SCH_GLOBALLABEL( *this );
+}
+
+
 bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 {
     bool        success = true;
@@ -953,6 +884,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 
     if( m_Italic )
         shape = "Italic";
+
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
                  SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
@@ -1016,12 +948,16 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_Shape = NET_OUTPUT;
+
     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
         m_Shape = NET_BIDI;
+
     if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
         m_Shape = NET_TRISTATE;
+
     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
         m_Shape = NET_UNSPECIFIED;
+
     if( stricmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
 
@@ -1029,11 +965,6 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function Mirror_Y (virtual)
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 {
     /* The global label is NOT really mirrored.
@@ -1084,13 +1015,6 @@ void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-/**
- * Function GetSchematicTextOffset (virtual)
- * @return the offset between the SCH_TEXT position and the text itself
- * position
- * This offset depend on orientation, and the type of text
- * (room to draw an associated graphic symbol, or put the text above a wire)
- */
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
@@ -1140,19 +1064,6 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 }
 
 
-/**
- * Function SetTextOrientAndJustifyParmeters
- * Set m_SchematicOrientation, and initialize
- * m_orient,m_HJustified and m_VJustified, according to the value of
- * m_SchematicOrientation
- * must be called after changing m_SchematicOrientation
- * @param aSchematicOrientation =
- *  0 = normal (horizontal, left justified).
- *  1 = up (vertical)
- *  2 = (horizontal, right justified). This can be seen as the mirrored
- *      position of 0
- *  3 = bottom . This can be seen as the mirrored position of up
- */
 void SCH_GLOBALLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 {
     m_SchematicOrientation = aSchematicOrientation;
@@ -1187,8 +1098,6 @@ void SCH_GLOBALLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 }
 
 
-/* Texts type Global Label  have 4 directions, and the Text origin is the graphic icon
- */
 void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
                             wxDC*             DC,
                             const wxPoint&    aOffset,
@@ -1198,7 +1107,6 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
     wxPoint    text_offset = aOffset + GetSchematicTextOffset();
-
 
     if( Color >= 0 )
         color = (EDA_Colors) Color;
@@ -1229,12 +1137,6 @@ void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/**
- * Function CreateGraphicShape
- * Calculates the graphic shape (a polygon) associated to the text
- * @param aCorner_list = a buffer to fill with polygon corners coordinates
- * @param Pos = Position of the shape
- */
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                           const wxPoint&         Pos )
 {
@@ -1370,7 +1272,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
 }
 
 
-bool SCH_GLOBALLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_GLOBALLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & LABEL_T ) )
         return false;
@@ -1389,12 +1291,18 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
+SCH_HIERLABEL::SCH_HIERLABEL( const SCH_HIERLABEL& aHierLabel ) :
+    SCH_TEXT( aHierLabel )
+{
+}
+
+
+EDA_ITEM* SCH_HIERLABEL::doClone() const
+{
+    return new SCH_HIERLABEL( *this );
+}
+
+
 bool SCH_HIERLABEL::Save( FILE* aFile ) const
 {
     bool        success = true;
@@ -1402,6 +1310,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
 
     if( m_Italic )
         shape = "Italic";
+
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
                  SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
@@ -1465,12 +1374,16 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_Shape = NET_OUTPUT;
+
     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
         m_Shape = NET_BIDI;
+
     if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
         m_Shape = NET_TRISTATE;
+
     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
         m_Shape = NET_UNSPECIFIED;
+
     if( stricmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
 
@@ -1478,19 +1391,6 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function SetTextOrientAndJustifyParmeters
- * Set m_SchematicOrientation, and initialize
- * m_orient,m_HJustified and m_VJustified, according to the value of
- * m_SchematicOrientation
- * must be called after changing m_SchematicOrientation
- * @param aSchematicOrientation =
- *  0 = normal (horizontal, left justified).
- *  1 = up (vertical)
- *  2 = (horizontal, right justified). This can be seen as the mirrored
- *      position of 0
- *  3 = bottom . This can be seen as the mirrored position of up
- */
 void SCH_HIERLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 {
     m_SchematicOrientation = aSchematicOrientation;
@@ -1525,9 +1425,6 @@ void SCH_HIERLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 }
 
 
-/* Hierarchical Label have a text and a graphic icon.
- * Texts type have 4 directions, and the text origin is the graphic icon
- */
 void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
                           wxDC*             DC,
                           const wxPoint&    offset,
@@ -1568,12 +1465,6 @@ void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
 }
 
 
-/**
- * Function CreateGraphicShape
- * calculates the graphic shape (a polygon) associated to the text
- * @param aCorner_list = a buffer to fill with polygon corners coordinates
- * @param Pos = Postion of the shape
- */
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                         const wxPoint&         Pos )
 {
@@ -1583,6 +1474,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     int  imax = *Template; Template++;
 
     aCorner_list.clear();
+
     for( int ii = 0; ii < imax; ii++ )
     {
         wxPoint corner;
@@ -1595,6 +1487,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
         aCorner_list.push_back( corner );
     }
 }
+
 
 EDA_Rect SCH_HIERLABEL::GetBoundingBox() const
 {
@@ -1648,13 +1541,6 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox() const
 }
 
 
-/**
- * Function GetSchematicTextOffset (virtual)
- * @return the offset between the SCH_TEXT position and the text itself
- * position
- * This offset depend on orientation, and the type of text
- * (room to draw an associated graphic symbol, or put the text above a wire)
- */
 wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 {
     wxPoint text_offset;
@@ -1686,18 +1572,12 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 }
 
 
-/**
- * Function Mirror_Y (virtual)
- * mirror item relative to an Y axis
- * @param aYaxis_position = the y axis position
- */
 void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 {
-/* The hierarchical label is NOT really mirrored.
- *   for an horizontal label, the schematic orientation is changed.
- *   for a vericalal label, the schematic orientation is not changed.
- *   and the label is moved to a suitable position
- */
+    /* The hierarchical label is NOT really mirrored for an horizontal label, the schematic
+     * orientation is changed.  For a vericalal label, the schematic orientation is not changed
+     * and the label is moved to a suitable position.
+     */
 
     switch( GetSchematicTextOrientation() )
     {
@@ -1705,7 +1585,7 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
         SetSchematicTextOrientation( 2 );
         break;
 
-    case 2:        /* invert horizontal text*/
+    case 2:             /* invert horizontal text*/
         SetSchematicTextOrientation( 0 );
         break;
     }
@@ -1742,7 +1622,7 @@ void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_HIERLABEL::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_HIERLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & LABEL_T ) )
         return false;

@@ -39,6 +39,16 @@ enum SCH_FILTER_T {
 };
 
 
+/* used to calculate the pen size from default value
+ * the actual pen size is default value * BUS_WIDTH_EXPAND
+ */
+#if defined(KICAD_GOST)
+#define BUS_WIDTH_EXPAND 3.6
+#else
+#define BUS_WIDTH_EXPAND 1.4
+#endif
+
+
 enum DANGLING_END_T {
     UNKNOWN = 0,
     WIRE_START_END,
@@ -84,12 +94,16 @@ protected:
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
 
+    SCH_ITEM( const SCH_ITEM& aItem );
+
     ~SCH_ITEM();
 
     virtual wxString GetClass() const
     {
         return wxT( "SCH_ITEM" );
     }
+
+    SCH_ITEM* Clone() const { return ( SCH_ITEM* ) EDA_ITEM::Clone(); }
 
     SCH_ITEM* Next() { return (SCH_ITEM*) Pnext; }
     SCH_ITEM* Back() { return (SCH_ITEM*) Pback; }
@@ -122,37 +136,38 @@ public:
                        int               aDrawMode,
                        int               aColor = -1 ) = 0;
 
-
     /* Place function */
     virtual void Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC );
 
-    // Geometric transforms (used in block operations):
-    /** virtual function Move
-     * move item to a new position.
+    /**
+     * Function Move
+     * moves the item by \a aMoveVector to a new position.
      * @param aMoveVector = the deplacement vector
      */
     virtual void Move( const wxPoint& aMoveVector ) = 0;
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
+    /**
+     * Function Mirror_Y
+     * mirrors item relative to an Y axis about \a aYaxis_position.
+     * @param aYaxis_position The Y axis position to mirror around.
      */
     virtual void Mirror_Y( int aYaxis_position ) = 0;
-    virtual void Mirror_X( int aXaxis_position ) = 0;
-    virtual void Rotate( wxPoint rotationPoint ) = 0;
 
+    virtual void Mirror_X( int aXaxis_position ) = 0;
+
+    virtual void Rotate( wxPoint rotationPoint ) = 0;
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
+     * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) const = 0;
 
     /**
-     * Load schematic item from \a aLine in a .sch file.
+     * Function Load
+     * reads a schematic item from \a aLine in a .sch file.
      *
      * @param aLine - Essentially this is file to read the object from.
      * @param aErrorMsg - Description of the error if an error occurs while loading the object.
@@ -161,7 +176,8 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) { return false; }
 
     /**
-     * Compare schematic item against search string.
+     * Function Matches
+     * compares the schematic item against search \a aSearchData.
      *
      * The base class returns false since many of the objects derived from
      * SCH_ITEM do not have any text to search.
@@ -190,7 +206,8 @@ public:
     bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
 
     /**
-     * Add schematic item end points to \a aItemList if the item has endpoints.
+     * Function GetEndPoints
+     * adds the schematic item end points to \a aItemList if the item has end points.
      *
      * The default version doesn't do anything since many of the schematic object cannot
      * be tested for dangling ends.  If you add a new schematic item that can have a
@@ -202,7 +219,8 @@ public:
     virtual void GetEndPoints( vector< DANGLING_END_ITEM >& aItemList ) {}
 
     /**
-     * Test the schematic item to \a aItemList to check if it's dangling state has changed.
+     * Function IsDanglingStateChanged
+     * tests the schematic item to \a aItemList to check if it's dangling state has changed.
      *
      * Note that the return value only true when the state of the test has changed.  Use
      * the IsDangling() method to get the current dangling state of the item.  Some of
@@ -218,9 +236,10 @@ public:
     virtual bool IsDangling() const { return false; }
 
     /**
-     * Check if the selection state of an item  inside \a aRect has changed.
+     * Function IsSelectStateChanged
+     * checks if the selection state of an item inside \a aRect has changed.
      *
-     * The is used by the block selection code to verify if an item is selected or not.
+     * This is used by the block selection code to verify if an item is selected or not.
      * True is be return anytime the select state changes.  If you need to know the
      * the current selection state, use the IsSelected() method.
      *
@@ -229,16 +248,18 @@ public:
     virtual bool IsSelectStateChanged( const wxRect& aRect ) { return false; }
 
     /**
-     * Get a list of connection points for this item.
+     * Function GetConnectionPoints
+     * add all the connection points for this item to \a aPoints.
      *
      * Not all schematic items have connection points so the default method does nothing.
      *
-     * @param aPoints - List of connection points to add to.
+     * @param aPoints List of connection points to add to.
      */
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const { }
 
     /**
-     * Clear all of the connection items from the list.
+     * Function ClearConnections
+     * clears all of the connection items from the list.
      *
      * The vector release method is used to prevent the item pointers from being deleted.
      * Do not use the vector erase method on the connection list.
@@ -246,8 +267,8 @@ public:
     void ClearConnections() { m_connections.release(); }
 
     /**
-     * Function IsConnected().
-     * Test \a aPoint to see if it is connected to this schematic object.
+     * Function IsConnected
+     * tests the item to see if it is connected to \a aPoint.
      *
      * @param aPoint - Position to test for connection.
      * @return True if connection to \a aPoint exists.
@@ -255,8 +276,8 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /**
-     * Function HitTest().
-     * Test if \a aPoint is contained within the bounding box or on an item.
+     * Function HitTest
+     * tests if \a aPoint is contained within or on the bounding box of an item.
      *
      * @param aPoint - Point to test.
      * @param aAccuracy - Increase the item bounding box by this amount.
@@ -266,21 +287,21 @@ public:
     bool HitTest( const wxPoint& aPoint, int aAccuracy = 0,
                   SCH_FILTER_T aFilter = NO_FILTER_T ) const
     {
-        return DoHitTest( aPoint, aAccuracy, aFilter );
+        return doHitTest( aPoint, aAccuracy, aFilter );
     }
 
     /**
-     * Function HitTest().
-     * Test if \a aRect intersects or is contained within the bounding box of an item.
+     * Function HitTest
+     * tests if \a aRect intersects or is contained within the bounding box of an item.
      *
      * @param aRect - Rectangle to test.
      * @param aContained - Set to true to test for containment instead of an intersection.
-     * @param aAccuracy - Increase the item bounding box by this amount.
+     * @param aAccuracy - Increase aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
      */
     bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const
     {
-        return DoHitTest( aRect, aContained, aAccuracy );
+        return doHitTest( aRect, aContained, aAccuracy );
     }
 
     /**
@@ -290,17 +311,17 @@ public:
      *         http://www.gotw.ca/publications/mill18.htm.
      */
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
     {
         return false;
     }
 
-    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
     {
         return false;
     }
 
-    virtual bool DoIsConnected( const wxPoint& aPosition ) const { return false; }
+    virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
 };
 
 #endif /* SCH_ITEM_STRUCT_H */

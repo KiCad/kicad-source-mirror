@@ -13,6 +13,7 @@
 #include "libeditframe.h"
 #include "class_libentry.h"
 #include "sch_items.h"
+#include "sch_line.h"
 #include "sch_component.h"
 #include "sch_sheet.h"
 
@@ -510,8 +511,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
             if( DrawStruct->Type() == SCH_LINE_T )
             {
                 SCH_LINE* segment = (SCH_LINE*) DrawStruct;
+
                 if( segment->GetLayer() != LAYER_BUS )
                     break;
+
             // Bus in progress:
             OnLeftClick( DC, MousePos );
             }
@@ -670,8 +673,13 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 
         if( DrawStruct == NULL )
         {
-            // Find the schematic object to move under the cursor
-            DrawStruct = SchematicGeneralLocateAndDisplay( false );
+            // For a drag or copy command, try to find first a component:
+            if( DrawStruct == NULL && HK_Descr->m_Idcommand != HK_MOVE_COMPONENT_OR_ITEM )
+                DrawStruct = LocateSmallestComponent( GetScreen() );
+
+            // If no component, find the schematic object to move/drag or copy under the cursor
+            if( DrawStruct == NULL )
+                DrawStruct = SchematicGeneralLocateAndDisplay( false );
 
             if( DrawStruct == NULL )
                 break;
@@ -748,7 +756,12 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 
             case SCH_LINE_T:
                 if( ( (SCH_ITEM*) DrawStruct )->GetLayer() == LAYER_WIRE )
-                    wxPostEvent( this, eventDragWire );
+                {
+                    if( HK_Descr->m_Idcommand == HK_DRAG )
+                        wxPostEvent( this, eventDragWire );
+                    else
+                        wxPostEvent( this, eventMoveItem );
+                }
                 break;
 
             default:

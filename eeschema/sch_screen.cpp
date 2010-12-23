@@ -14,6 +14,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "sch_items.h"
+#include "sch_line.h"
 #include "sch_sheet.h"
 #include "sch_component.h"
 
@@ -203,11 +204,7 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
 
             if( CreateCopy )
             {
-                if( item->Type() == SCH_JUNCTION_T )
-                    new_item = ( (SCH_JUNCTION*) item )->GenCopy();
-                else
-                    new_item = ( (SCH_LINE*) item )->GenCopy();
-
+                new_item = item->Clone();
                 new_item->SetNext( GetDrawItems() );
                 SetDrawItems( new_item );
             }

@@ -17,9 +17,11 @@
 #include "eeschema_id.h"
 #include "protos.h"
 #include "class_library.h"
+#include "sch_bus_entry.h"
 #include "sch_marker.h"
 #include "sch_component.h"
 #include "sch_items.h"
+#include "sch_line.h"
 #include "sch_sheet.h"
 
 
@@ -454,7 +456,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
         DrawPanel->MouseToCursorSchema();
-
         // The easiest way to handle a drag component is to simulate a
         // block drag command
         if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
@@ -472,13 +473,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // TODO: a better way to drag only wires
             SCH_LINE* segm = (SCH_LINE*) screen->GetCurItem();
 
-            if( !screen->m_BlockLocate.Inside( segm->m_Start )
-               && !screen->m_BlockLocate.Inside( segm->m_End ) )
+            if( !screen->m_BlockLocate.Contains( segm->m_Start )
+               && !screen->m_BlockLocate.Contains( segm->m_End ) )
             {
                 screen->m_BlockLocate.SetOrigin( segm->m_Start );
                 screen->m_BlockLocate.SetEnd( segm->m_End );
             }
-
             HandleBlockEnd( &dc );
         }
         break;

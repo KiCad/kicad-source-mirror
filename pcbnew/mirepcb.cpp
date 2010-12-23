@@ -124,7 +124,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
 }
 
 
-void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& WXUNUSED( event ) )
+void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }

@@ -36,14 +36,16 @@ const wxString FootprintAliasFileWildcard( _( "Kicad footprint alias files (*.eq
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 
 
-/* MacOSX: Needed for file association 
+/*
+ * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile(const wxString &fileName) {
+void WinEDA_App::MacOpenFile(const wxString &fileName)
+{
     wxFileName    filename = fileName;
     wxString      oldPath;
     WinEDA_CvpcbFrame * frame = ((WinEDA_CvpcbFrame*)GetTopWindow());
-    
+
     if(!filename.FileExists())
 	return;
 

@@ -14,6 +14,8 @@
 #include "lib_pin.h"
 #include "sch_items.h"
 #include "sch_component.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
 #include "sch_text.h"
 #include "sch_sheet.h"
 

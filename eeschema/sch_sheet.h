@@ -47,10 +47,14 @@ private:
                          *  orientation.
                          */
 
+    virtual EDA_ITEM* doClone() const;
+
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    const wxString& text = wxEmptyString );
+
+    SCH_SHEET_PIN( const SCH_SHEET_PIN& aSheetLabel );
 
     ~SCH_SHEET_PIN() { }
 
@@ -59,10 +63,7 @@ public:
         return wxT( "SCH_SHEET_PIN" );
     }
 
-
-    bool operator  ==( const SCH_SHEET_PIN* aPin ) const;
-
-    SCH_SHEET_PIN* GenCopy();
+    bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
     virtual void    Draw( WinEDA_DrawPanel* aPanel,
                           wxDC*             aDC,
@@ -101,6 +102,12 @@ public:
     void        SetNumber( int aNumber );
     void        SetEdge( int aEdge );
     int         GetEdge();
+
+    /**
+     * Function ConstraintOnEdge
+     * is used to adjust label position to egde based on proximity to vertical / horizontal edge
+     * of the parent sheet.
+     */
     void        ConstraintOnEdge( wxPoint Pos );
 
     /**
@@ -223,6 +230,9 @@ public:
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
+
+    SCH_SHEET( const SCH_SHEET& aSheet );
+
     ~SCH_SHEET();
 
     virtual wxString GetClass() const
@@ -249,8 +259,6 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
-
-    SCH_SHEET* GenCopy();
 
     void DisplayInfo( WinEDA_DrawFrame* frame );
 
@@ -513,8 +521,9 @@ protected:
     void renumberLabels();
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
-    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 #endif /* CLASS_DRAWSHEET_H */

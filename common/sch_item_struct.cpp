@@ -29,6 +29,13 @@ SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
 }
 
 
+SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
+    EDA_ITEM( aItem )
+{
+    m_Layer = aItem.m_Layer;
+}
+
+
 SCH_ITEM::~SCH_ITEM()
 {
     // Do not let the connections container go out of scope with any ojbects or they
@@ -101,5 +108,5 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
     if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
         return false;
 
-    return DoIsConnected( aPosition );
+    return doIsConnected( aPosition );
 }

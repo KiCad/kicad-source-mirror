@@ -76,11 +76,23 @@ protected:
 
 public: WinEDA_App();
     ~WinEDA_App();
+
+    /**
+     * Function OnInit
+     * this is the first executed function (like main() )
+     * @return true if the appliction can be started.
+     */
     bool      OnInit();
 
     bool      SetBinDir();
     void      SetDefaultSearchPaths( void );
 
+    /**
+     * Function MacOpenFile
+     * Specific to MacOSX. Not used under Linux or Windows
+     * MacOSX: Needed for file association
+     * http://wiki.wxwidgets.org/WxMac-specific_topics
+     */
     virtual void MacOpenFile(const wxString &fileName);
 
     /**

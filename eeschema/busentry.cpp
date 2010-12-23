@@ -13,7 +13,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "sch_items.h"
+#include "sch_bus_entry.h"
 
 
 static int     s_LastShape = '\\';
@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
     if( (BusEntry->m_Flags & IS_NEW) == 0 )    // not already in edit, save shape
     {
         delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = BusEntry->GenCopy();
+        g_ItemToUndoCopy = BusEntry->Clone();
     }
 
     BusEntry->m_Flags |= IS_MOVED;

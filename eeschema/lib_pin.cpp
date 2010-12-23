@@ -1653,7 +1653,7 @@ bool LIB_PIN::DoTestInside( EDA_Rect& rect ) const
 {
     wxPoint end = ReturnPinEndPoint();
 
-    return rect.Inside( m_position.x, -m_position.y ) || rect.Inside( end.x, -end.y );
+    return rect.Contains( m_position.x, -m_position.y ) || rect.Contains( end.x, -end.y );
 }
 
 

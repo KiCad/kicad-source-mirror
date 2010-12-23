@@ -90,7 +90,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
                  ic++ )
             {                                         // test if this area is connected to a board item:
                 wxPoint pos = ListPointsCandidates[ic];
-                if( !bbox.Inside( pos ) )
+                if( !bbox.Contains( pos ) )
                     continue;
                 if( TestPointInsidePolygon(
                        m_FilledPolysList, indexstart,

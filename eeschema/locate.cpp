@@ -11,9 +11,13 @@
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
+#include "sch_bus_entry.h"
 #include "sch_marker.h"
 #include "sch_items.h"
 #include "sch_component.h"
+#include "sch_line.h"
+#include "sch_no_connect.h"
+#include "sch_polyline.h"
 #include "sch_sheet.h"
 #include "lib_pin.h"
 #include "template_fieldnames.h"
@@ -139,6 +143,7 @@ int PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* aScreen )
 
     for( ; item != NULL; item = item->Next() )
     {
+        // an item is picked if its bounding box intersects the reference area
         if( item->HitTest( area ) )
         {
             /* Put this structure in the picked list: */
@@ -310,7 +315,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
 
                     EDA_Rect BoundaryBox = field->GetBoundingBox();
 
-                    if( BoundaryBox.Inside( aPosRef ) )
+                    if( BoundaryBox.Contains( aPosRef ) )
                     {
                         LastSnappedStruct = field;
                         return true;
@@ -323,7 +328,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
                 #define STRUCT ( (SCH_COMPONENT*) DrawList )
                 EDA_Rect BoundaryBox = STRUCT->GetBoundingBox();
 
-                if( BoundaryBox.Inside( aPosRef ) )
+                if( BoundaryBox.Contains( aPosRef ) )
                 {
                     LastSnappedStruct = DrawList;
                     return true;

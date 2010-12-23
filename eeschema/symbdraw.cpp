@@ -242,7 +242,16 @@ static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool era
     BASE_SCREEN* Screen = panel->GetScreen();
 
     item->SetEraseLastDrawItem( erase );
-    item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
+    // if item is the reference field, we must add the current unit id
+    if( item->Type() == LIB_FIELD_T )
+    {
+        int unit = ((LIB_EDIT_FRAME*)panel->GetParent())->GetUnit();
+        wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
+        item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, &text,
+                    DefaultTransform );
+    }
+    else
+        item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
                 DefaultTransform );
 }
 
@@ -253,9 +262,6 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
         return;
 
     SetCursor( wxCURSOR_HAND );
-
-    if( m_drawItem->GetUnit() != m_unit )
-        m_drawItem->SetUnit( m_unit );
 
     TempCopyComponent();
     m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCursorDrawPosition() );

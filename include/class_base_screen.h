@@ -14,20 +14,9 @@
 #include "block_commande.h"
 #include "common.h"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 
 // Forward declarations:
 class Ki_PageDescr;
-
-
-/**
- * Define list of drawing items for screens.
- *
- * The Boost containter was choosen over the statand C++ contain because you can detach
- * the pointer from a list with the release method.
- */
-typedef boost::ptr_vector< EDA_ITEM > EDA_ITEMS;
 
 
 /* Simple class for handling grid arrays. */

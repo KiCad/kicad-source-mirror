@@ -44,19 +44,21 @@ SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
 }
 
 
+SCH_MARKER::SCH_MARKER( const SCH_MARKER& aMarker ) :
+    SCH_ITEM( aMarker ),
+    MARKER_BASE( aMarker )
+{
+}
+
+
 SCH_MARKER::~SCH_MARKER()
 {
 }
 
 
-SCH_MARKER* SCH_MARKER::GenCopy()
+EDA_ITEM* SCH_MARKER::doClone() const
 {
-    SCH_MARKER* newitem = new SCH_MARKER( GetPos(), GetReporter().GetMainText() );
-
-    newitem->SetMarkerType( GetMarkerType() );
-    newitem->SetErrorLevel( GetErrorLevel() );
-
-    return newitem;
+    return new SCH_MARKER( *this );
 }
 
 
@@ -75,7 +77,6 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os )
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << GetPos() << "/>\n";
 }
-
 
 #endif
 
@@ -194,7 +195,7 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-bool SCH_MARKER::DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_MARKER::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
     if( !( aFilter & MARKER_T ) )
         return false;

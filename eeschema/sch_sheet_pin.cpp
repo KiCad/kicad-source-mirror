@@ -52,22 +52,20 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
 }
 
 
-SCH_SHEET_PIN* SCH_SHEET_PIN::GenCopy()
+SCH_SHEET_PIN::SCH_SHEET_PIN( const SCH_SHEET_PIN& aSheetLabel ) :
+    SCH_HIERLABEL( aSheetLabel )
 {
-    SCH_SHEET_PIN* newitem = new SCH_SHEET_PIN( (SCH_SHEET*) m_Parent, m_Pos, m_Text );
-
-    newitem->SetEdge( GetEdge() );
-    newitem->m_Shape = m_Shape;
-    newitem->m_Size = m_Size;
-    newitem->SetNumber( GetNumber() );
-    return newitem;
+    m_Number = aSheetLabel.m_Number;
+    m_Edge = aSheetLabel.m_Edge;
 }
 
-/** SCH_SHEET_PIN::Draw is the same as SCH_HIERLABEL::Draw
- * but the graphic icon is slightly different
- * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
- * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
- */
+
+EDA_ITEM* SCH_SHEET_PIN::doClone() const
+{
+    return new SCH_SHEET_PIN( *this );
+}
+
+
 void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* aPanel,
                           wxDC*             aDC,
                           const wxPoint&    aOffset,
@@ -76,7 +74,7 @@ void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* aPanel,
 {
     // The icon selection is handle by the virtual method CreateGraphicShape
     // called by ::Draw
-    SCH_HIERLABEL::Draw(aPanel, aDC, aOffset, aDraw_mode, aColor );
+    SCH_HIERLABEL::Draw( aPanel, aDC, aOffset, aDraw_mode, aColor );
 }
 
 
@@ -99,10 +97,6 @@ bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int SCH_SHEET_PIN::GetPenSize() const
 {
     return g_DrawDefaultLineThickness;
@@ -124,6 +118,7 @@ void SCH_SHEET_PIN::SetEdge( int aEdge )
     /* use -1 to adjust text orientation without changing edge*/
     if( aEdge > -1 )
         m_Edge = aEdge;
+
     switch( m_Edge )
     {
     case 0:        /* pin on left side*/
@@ -155,10 +150,6 @@ int SCH_SHEET_PIN::GetEdge()
 }
 
 
-/* ConstraintOnEdge is used to ajust label position to egde based
- * on proximity to vertical / horizontal edge.
- * used by sheetlab and resize
- */
 void SCH_SHEET_PIN::ConstraintOnEdge( wxPoint Pos )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
@@ -195,26 +186,23 @@ void SCH_SHEET_PIN::ConstraintOnEdge( wxPoint Pos )
         }
 
         m_Pos.x = Pos.x;
+
         if( m_Pos.x < Sheet->m_Pos.x )
             m_Pos.x = Sheet->m_Pos.x;
+
         if( m_Pos.x > (Sheet->m_Pos.x + Sheet->m_Size.x) )
             m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
     }
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 {
     int type = 'U', side = 'L';
 
     if( m_Text.IsEmpty() )
         return true;
+
     switch( m_Edge )
     {
     case 0:     //pin on left side
@@ -331,14 +319,6 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function Matches
- * Compare hierarchical pin name against search string.
- * @param aSearchData - Criteria to search against.
- * @param aAuxData - a pointer on auxiliary data, not used here
- * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
- * @return True if this item matches the search criteria.
- */
 bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
                              void* aAuxData, wxPoint * aFindLocation )
 {
@@ -346,6 +326,7 @@ bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
     {
         if( aFindLocation )
             *aFindLocation = m_Pos;
+
         return true;
     }
 
@@ -358,6 +339,7 @@ void SCH_SHEET_PIN::Mirror_X( int aXaxis_position )
     int p = m_Pos.y - aXaxis_position;
 
     m_Pos.y = aXaxis_position - p;
+
     switch( m_Edge )
     {
     case 2:
@@ -376,6 +358,7 @@ void SCH_SHEET_PIN::Mirror_Y( int aYaxis_position )
     int p = m_Pos.x - aYaxis_position;
 
     m_Pos.x = aYaxis_position - p;
+
     switch( m_Edge )
     {
     case 0:
@@ -392,6 +375,7 @@ void SCH_SHEET_PIN::Mirror_Y( int aYaxis_position )
 void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
+
     switch( m_Edge )
     {
     case 0:     //pin on left side
@@ -451,6 +435,7 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 
 #if defined(DEBUG)
+
 void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
 {
     // XML output:
@@ -462,6 +447,5 @@ void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
 
 //    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
 }
-
 
 #endif

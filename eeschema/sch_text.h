@@ -56,6 +56,9 @@ public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
               const wxString& text = wxEmptyString,
               KICAD_T aType = SCH_TEXT_T );
+
+    SCH_TEXT( const SCH_TEXT& aText );
+
     ~SCH_TEXT() { }
 
     virtual wxString GetClass() const
@@ -63,6 +66,11 @@ public:
         return wxT( "SCH_TEXT" );
     }
 
+    /**
+     * Function IncrementLabel
+     * increments the label text.
+     */
+    void IncrementLabel();
 
     /**
      * Function SetTextOrientAndJustifyParmeters
@@ -161,15 +169,16 @@ public:
         m_Pos += aMoveVector;
     }
 
-
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
+    /**
+     * Function Mirror_Y
+     * mirrors the item relative to \a aYaxisPosition.
+     * @param aYaxis_position The y axis coordinate to mirror around.
      */
-    virtual void Rotate( wxPoint rotationPoint );
     virtual void Mirror_Y( int aYaxis_position );
-    virtual void Mirror_X( int aXaxis_position );
 
+    virtual void Rotate( wxPoint rotationPoint );
+
+    virtual void Mirror_X( int aXaxis_position );
 
     /**
      * Compare schematic text entry against search string.
@@ -196,8 +205,9 @@ public:
 #endif
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
-    virtual bool DoHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 
@@ -205,6 +215,9 @@ class SCH_LABEL : public SCH_TEXT
 {
 public:
     SCH_LABEL( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
+
+    SCH_LABEL( const SCH_LABEL& aLabel );
+
     ~SCH_LABEL() { }
 
     virtual void Draw( WinEDA_DrawPanel* panel,
@@ -217,7 +230,6 @@ public:
     {
         return wxT( "SCH_LABEL" );
     }
-
 
     /**
      * Function SetTextOrientAndJustifyParmeters
@@ -243,7 +255,9 @@ public:
      * wire)
      */
     virtual wxPoint GetSchematicTextOffset();
+
     virtual void    Mirror_X( int aXaxis_position );
+
     virtual void    Rotate( wxPoint rotationPoint );
 
     /**
@@ -275,7 +289,8 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 
@@ -283,6 +298,9 @@ class SCH_GLOBALLABEL : public SCH_TEXT
 {
 public:
     SCH_GLOBALLABEL( const wxPoint& pos = wxPoint( 0, 0 ), const wxString& text = wxEmptyString );
+
+    SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel );
+
     ~SCH_GLOBALLABEL() { }
 
     virtual void Draw( WinEDA_DrawPanel* panel,
@@ -295,7 +313,6 @@ public:
     {
         return wxT( "SCH_GLOBALLABEL" );
     }
-
 
     /**
      * Function SetTextOrientAndJustifyParmeters
@@ -356,8 +373,7 @@ public:
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         aPos );
+    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
@@ -370,7 +386,8 @@ public:
     virtual void    Rotate( wxPoint rotationPoint );
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 
@@ -381,7 +398,10 @@ public:
                    const wxString& text = wxEmptyString,
                    KICAD_T aType = SCH_HIERARCHICAL_LABEL_T );
 
+    SCH_HIERLABEL( const SCH_HIERLABEL& aHierLabel );
+
     ~SCH_HIERLABEL() { }
+
     virtual void Draw( WinEDA_DrawPanel* panel,
                        wxDC*             DC,
                        const wxPoint&    offset,
@@ -392,7 +412,6 @@ public:
     {
         return wxT( "SCH_HIERLABEL" );
     }
-
 
     /**
      * Function SetTextOrientAndJustifyParmeters
@@ -425,8 +444,7 @@ public:
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos );
 
     /**
      * Function Save
@@ -467,7 +485,8 @@ public:
     virtual void    Rotate( wxPoint rotationPoint );
 
 private:
-    virtual bool DoHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual EDA_ITEM* doClone() const;
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

@@ -879,7 +879,7 @@ void wxSVGFileDC::DoDrawIcon( const class wxIcon& myIcon, wxCoord x, wxCoord y )
 void wxSVGFileDC::DoDrawBitmap( const class wxBitmap& bmp,
                                 wxCoord               x,
                                 wxCoord               y,
-                                bool WXUNUSED (       bTransparent) /*=0*/ )
+                                bool                  bTransparent /*=0*/ )
 {
     if( m_graphics_changed )
         NewGraphics();
