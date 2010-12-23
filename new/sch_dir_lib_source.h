@@ -77,10 +77,12 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
     /// and some of which may have legal "revN[N..]" type strings.
     PART_CACHE          partnames;
 
+    typedef PART_CACHE::const_iterator PN_ITER;
+
     /// categories which we expect to find in the set of @a partnames
     NAME_CACHE          categories;
 
-    std::vector<char>   readBuffer;     ///< used by readSExpression()
+    std::vector<char>   readBuffer;     ///< used by readString()
 
     /**
      * Function cache
@@ -109,10 +111,10 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
     bool makePartName( STRING* aPartName, const char* aEntry, const STRING& aCategory );
 
     /**
-     * Function readSExpression
-     * reads an s-expression into aResult.  Candidate for virtual function later.
+     * Function readString
+     * reads a Sweet string into aResult.  Candidate for virtual function later.
      */
-    void readSExpression( STRING* aResult, const STRING& aNameSpec ) throw( IO_ERROR );
+    void readString( STRING* aResult, const STRING& aFileName ) throw( IO_ERROR );
 
     /**
      * Function cacheOneDir

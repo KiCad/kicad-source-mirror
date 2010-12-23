@@ -57,6 +57,7 @@ using namespace SCH;
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <assert.h>
 
 #include <vector>
 using namespace std;
@@ -159,13 +160,19 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
     return 0;
 }
 
+static inline const char* endsWithRev( const STRING& aPartName, char separator )
+{
+    return endsWithRev( aPartName.c_str(),  aPartName.c_str()+aPartName.size(), separator );
+}
+
+
 // see struct BY_REV
 bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
 {
     // avoid instantiating new STRINGs, and thank goodness that c_str() is const.
 
-    const char* rev1 = endsWithRev( s1.c_str(), s1.c_str()+s1.size(), '/' );
-    const char* rev2 = endsWithRev( s2.c_str(), s2.c_str()+s2.size(), '/' );
+    const char* rev1 = endsWithRev( s1, '/' );
+    const char* rev2 = endsWithRev( s2, '/' );
 
     int rootLen1 =  rev1 ? rev1 - s1.c_str() : s1.size();
     int rootLen2 =  rev2 ? rev2 - s2.c_str() : s2.size();
@@ -259,7 +266,7 @@ STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
 
     STRING  fileName = sourceURI + "/";
 
-    const char* rev = endsWithRev( aPartName.c_str(), aPartName.c_str()+aPartName.size(), '/' );
+    const char* rev = endsWithRev( aPartName, '/' );
 
     if( rev )
     {
@@ -278,14 +285,14 @@ STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
 }
 
 
-void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename ) throw( IO_ERROR )
+void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) throw( IO_ERROR )
 {
-    FILE_WRAP   fw = open( aFilename.c_str(), O_RDONLY );
+    FILE_WRAP   fw = open( aFileName.c_str(), O_RDONLY );
 
     if( fw == -1 )
     {
         STRING  msg = strerror( errno );
-        msg += "; cannot open(O_RDONLY) file " + aFilename;
+        msg += "; cannot open(O_RDONLY) file " + aFileName;
         throw( IO_ERROR( msg.c_str() ) );
     }
 
@@ -296,7 +303,7 @@ void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename )
     // sanity check on file size
     if( fs.st_size > (1*1024*1024) )
     {
-        STRING msg = aFilename;
+        STRING msg = aFileName;
         msg += " seems too big.  ( > 1 mbyte )";
         throw IO_ERROR( msg.c_str() );
     }
@@ -310,7 +317,7 @@ void DIR_LIB_SOURCE::readSExpression( STRING* aResult, const STRING& aFilename )
     if( count != (int) fs.st_size )
     {
         STRING  msg = strerror( errno );
-        msg += "; cannot read file " + aFilename;
+        msg += "; cannot read file " + aFileName;
         throw( IO_ERROR( msg.c_str() ) );
     }
 
@@ -358,42 +365,42 @@ DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
 void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory )
     throw( IO_ERROR )
 {
+    PN_ITER limit = aCategory.size() ?
+                        partnames.lower_bound( aCategory + char( '/' + 1 ) ) :
+                        partnames.end();
+
+    PN_ITER it    = aCategory.size() ?
+                        partnames.lower_bound( aCategory + "/" ) :
+                        partnames.begin();
+
     aResults->clear();
 
-    if( aCategory.size() )
+    if( useVersioning )
     {
-        STRING  lower = aCategory + "/";
-        STRING  upper = aCategory + char( '/' + 1 );
+        STRING  partName;
 
-        PART_CACHE::const_iterator limit = partnames.upper_bound( upper );
-
-        for( PART_CACHE::const_iterator it = partnames.lower_bound( lower );  it!=limit;  ++it )
+        while( it != limit )
         {
-            /*
-            const char* start = it->c_str();
-            size_t      len   = it->size();
+            const char* rev   = endsWithRev( *it, '/' );
 
-            if( endsWithRev( start, start+len, '/' ) )
-                continue;
-            */
+            // all cached partnames have a rev string in useVersioning mode
+            assert( rev );
 
-            aResults->push_back( *it );
+            // partName is substring which omits the rev AND the rev separator
+            partName.assign( *it, 0, rev - it->c_str() - 1 );
+
+            aResults->push_back( partName );
+
+            // skip over all other versions of the same partName.
+            it = partnames.lower_bound( partName + char( '/' + 1 ) );
         }
+
     }
+
     else
     {
-        for( PART_CACHE::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
-        {
-            /*
-            const char* start = it->c_str();
-            size_t      len   = it->size();
-
-            if( !endsWithRev( start, start+len, '/' ) )
-                continue;
-            */
-
-            aResults->push_back( *it );
-        }
+        while( it != limit )
+            aResults->push_back( *it++ );
     }
 }
 
@@ -401,25 +408,53 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev )
     throw( IO_ERROR )
 {
-    STRING  partname = aPartName;
+    STRING  fileName;
+    STRING  partName = aPartName;   // appended with aRev too if not empty
+    const char* rev  = endsWithRev( partName, '/' );
 
     if( aRev.size() )
-        partname += "/" + aRev;
-
-    PART_CACHE::const_iterator it = partnames.find( partname );
-
-    if( it == partnames.end() )    // part not found
     {
-        partname += " not found.";
-        throw IO_ERROR( partname.c_str() );
+        if( rev )   // a supplied rev replaces any in aPartName
+            partName.resize( rev - partName.c_str() - 1 );
+
+        partName += "/" + aRev;
+
+        rev = endsWithRev( partName, '/' );
     }
 
-    // create a fileName for the sweet string
-    STRING  fileName = makeFileName( aPartName );
+    // partName is the exact part name we need here, or if rev is NULL,
+    // then look for the highest numbered revision.
 
-    // @todo what about aRev?, and define the public API wrt to aRev better.
+    if( rev )
+    {
+        PN_ITER it = partnames.find( partName );
 
-    readSExpression( aResult, fileName );
+        if( it == partnames.end() )    // part not found
+        {
+            partName += " not found.";
+            throw IO_ERROR( partName.c_str() );
+        }
+
+        readString( aResult, makeFileName( partName ) );
+    }
+    else
+    {
+        STRING search = partName + '/';
+
+        // no rev on partName string.  First the first, which should be
+        // the highnest numbered rev because of BY_REV compare method.
+        PN_ITER it = partnames.upper_bound( search );
+
+        // verify that this one that is greater than partName is a match and not
+        // some unrelated name that is larger.
+        if( it == partnames.end() || it->compare( 0, search.size(), search ) != 0 )
+        {
+            partName += " rev not found.";
+            throw IO_ERROR( partName.c_str() );
+        }
+
+        readString( aResult, makeFileName( *it ) );
+    }
 }
 
 
@@ -539,6 +574,8 @@ int main( int argc, char** argv )
 
     try
     {
+        STRINGS::const_iterator  pn;
+
 //        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "" );
         DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "useVersioning" );
 
@@ -555,6 +592,13 @@ int main( int argc, char** argv )
 
         uut.ReadParts( &sweets, partnames );
 
+        printf( "\nSweets for Category = 'Category' parts:\n" );
+        pn = partnames.begin();
+        for( STRINGS::const_iterator it = sweets.begin();  it!=sweets.end();  ++it, ++pn )
+        {
+            printf( " %s: %s", pn->c_str(), it->c_str() );
+        }
+
         // fetch the part names for ALL categories.
         uut.GetCategoricalPartNames( &partnames );
 
@@ -567,7 +611,7 @@ int main( int argc, char** argv )
         uut.ReadParts( &sweets, partnames );
 
         printf( "\nSweets for ALL parts:\n" );
-        STRINGS::const_iterator pn = partnames.begin();
+        pn = partnames.begin();
         for( STRINGS::const_iterator it = sweets.begin();  it!=sweets.end();  ++it, ++pn )
         {
             printf( " %s: %s", pn->c_str(), it->c_str() );

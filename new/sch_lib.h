@@ -90,7 +90,8 @@ protected:                  ///< derived classes must implement
      * Function ReadParts
      * fetches the s-expressions for each part given in @a aPartNames, into @a aResults,
      * honoring the array indices respectfully.
-     * @param aPartNames is a list of part names, one name per list element.
+     * @param aPartNames is a list of part names, one name per list element.  If a part name
+     *        does not have a version string, then the most recent version is fetched.
      * @param aResults receives the s-expressions
      */
     virtual void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
