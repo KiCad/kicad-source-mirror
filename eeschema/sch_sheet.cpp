@@ -45,6 +45,8 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     SCH_ITEM( aSheet )
 {
     m_Pos = aSheet.m_Pos;
+    m_Size = aSheet.m_Size;
+    m_Layer = aSheet.m_Layer;
     m_TimeStamp = aSheet.m_TimeStamp;
     m_SheetNameSize = aSheet.m_SheetNameSize;
     m_FileNameSize = aSheet.m_FileNameSize;

@@ -541,6 +541,8 @@ void SaveStructListForPaste( PICKED_ITEMS_LIST& aItemsList )
     item.m_UndoRedoStatus = UR_DELETED;
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
+        // Clear m_Flag member of selected items:
+        aItemsList.GetPickedItem( ii )->m_Flags = 0;
         /* Make a copy of the original picked item. */
         SCH_ITEM* DrawStructCopy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         DrawStructCopy->SetParent( NULL );
