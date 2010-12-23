@@ -1362,6 +1362,7 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T a
      */
     LIB_DRAW_ITEM* item;
     TRANSFORM transform = DefaultTransform;
+    DefaultTransform = aTransform;
 
     item = LocateDrawItem( aUnit, aConvert, aType, aPoint );
 
