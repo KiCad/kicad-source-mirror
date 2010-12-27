@@ -687,7 +687,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
     delete lexer;
     lexer = 0;
 
-    lexer = new DSNLEXER( fp, filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
+    lexer = new DSNLEXER( SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount, fp, filename );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
@@ -714,9 +714,8 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
     }
 
     delete lexer;
-    lexer = 0;
 
-    lexer = new DSNLEXER( fp, filename, SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount );
+    lexer = new DSNLEXER( SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount, fp, filename );
 
     if( nextTok() != T_LEFT )
         expecting( T_LEFT );
