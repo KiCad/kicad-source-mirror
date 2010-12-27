@@ -371,84 +371,6 @@ const STRING StrEmpty = "";
 /** @} exception_types Exception Types */
 
 
-/**
- * Class PART
- * will have to be unified with what Wayne is doing.  I want a separate copy
-
- * here until I can get the state management correct.  Since a PART only lives
- * within a cache called a LIB, its constructor is private (only a LIB
- * can instantiate one), and it exists in various states of freshness and
- * completeness relative to the LIB_SOURCE within the LIB.
- */
-class PART
-{
-    /// LIB class has great license to modify what's in here, nobody else does.
-    /// Modification is done through the LIB so it can track the state of the
-    /// PART and take action as needed.  Actually most of the modification will
-    /// be done by PARTS_LIST, a class derived from LIB.
-    friend class LIB;
-
-
-    /// a private constructor, only a LIB can instantiate a PART.
-    PART() {}
-
-
-protected:      // not likely to have C++ descendants, but protected none-the-less.
-
-    bool        parsed;     ///< true if the body as been parsed already.
-
-    LIB*        owner;      ///< which LIB am I a part of (pun if you want)
-    STRING      extends;    ///< LPID of base part
-
-    STRING      name;       ///< example "passives/R", immutable.
-
-    /// s-expression text for the part, initially empty, and read in as this part
-    /// actually becomes cached in RAM.
-    STRING      body;
-
-    // 3 separate lists for speed:
-
-    /// A property list.
-    PROPERTIES  properties;
-
-    /// A drawing list for graphics
-    DRAWINGS    drawings;
-
-    /// A pin list
-    PINS        pins;
-
-    /// Alternate body forms.
-    ALTERNATES  alternates;
-
-    // lots of other stuff, like the mandatory properties.
-
-
-public:
-
-    /**
-     * Function Inherit
-     * is a specialized assignment function that copies a specific subset, enough
-     * to fulfill the requirements of the Sweet s-expression language.
-     */
-    void Inherit( const PART& aBasePart );
-
-
-    /**
-     * Function Owner
-     * returns the LIB* owner of this part.
-     */
-    LIB Owner()  { return owner; }
-
-    /**
-     * Function Parse
-     * translates the \a body string into a binary form that is represented
-     * by the normal fields of this class.  Parse is expected to call Inherit()
-     * if this part extends any other.
-     */
-    void Parse( DSN_LEXER* aLexer ) throw( PARSE_EXCEPTION );
-
-};
-
 
 /**
  * Class LPID (aka GUID)
@@ -601,8 +523,6 @@ public:
 };
 
 
-
-
 /**
  * Class SVN_LIB_SOURCE
  * implements a LIB_SOURCE in a subversion repository.
@@ -652,56 +572,6 @@ protected:
 
 
 /**
- * Class LIBS
- * houses a handful of functions that manage all the RAM resident LIBs, and
- * provide for a global part lookup function, GetPart(), which can be the basis
- * of a cross LIB hyperlink.
- */
-class LIBS
-{
-public:
-
-    /**
-     * Function GetPart
-     * finds and loads a PART, and parses it.  As long as the part is
-     * accessible in any LIB_SOURCE, opened or not opened, this function
-     * will find it and load it into its containing LIB, even if that means
-     * having to load a new LIB as given in the library table.
-     */
-    static PART* GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR );
-
-    /**
-     * Function GetLib
-     * is first a lookup function and then if needed, a factory function.
-     * If aLogicalLibraryName has been opened, then return the already opened
-     * LIB.  If not, then instantiate the library and fill the initial
-     * library PARTs (unparsed) and categories, and add it to LIB::libraries
-     * for future reference.
-     */
-    static LIB* GetLib( const STRING& aLogicalLibraryName ) throw( IO_ERROR );
-
-    /**
-     * Function GetOpenedLibNames
-     * returns the logical library names of LIBs that are already opened.
-     * @see LPID::GetLogicalLibraries()
-     */
-    static STRINGS GetOpendedLogicalLibNames();
-
-    /**
-     * Function CloseLibrary
-     * closes an open library @a aLibrary and removes it from class LIBS.
-     */
-    static void CloseLibrary( LIB* aLibrary ) throw( IO_ERROR );
-
-
-private:
-
-    /// collection of LIBs, searchable by logical name.
-    static std::map< STRING, LIB* > libraries;      // owns the LIBs.
-};
-
-
-/**
  * Class PARTS_LIST
  * is a LIB which resides in a SCHEMATIC, and it is a table model for a
  * spread sheet both.  When columns are added or removed to/from the spreadsheet,
@@ -721,94 +591,6 @@ public:
 };
 
 
-/**
- * Class LIB_TABLE_ROW
- * holds a record identifying a LIB in the LIB_TABLE.
- */
-class LIB_TABLE_ROW
-{
-
-protected:
-
-    /**
-     * Function SetLogicalName
-     * changes the logical name of this library, useful for an editor.
-     */
-    void            SetLogicalName( const STRING& aLogicalName );
-
-    /**
-     * Function SetType
-     * changes the type represented by this record.
-     */
-    void            SetType( const STRING& aType );
-
-    /**
-     * Function SetFullURI
-     * changes the full URI for the library, useful from a library table editor.
-     */
-    void            SetFullURI( const STRING& aFullURI );
-
-    /**
-     * Function SetOptions
-     * changes the options string for this record, and is useful from
-     * the library table editor.
-     */
-    void            SetOptions( const STRING& aOptions );
-
-
-public:
-
-    /**
-     * Function GetLogicalName
-     * returns the logical name of this library table entry.
-     */
-    const STRING&   GetLogicalName();
-
-
-    /**
-     * Function GetType
-     * returns the type of LIB represented by this record.
-     */
-    const STRING&   GetType();
-
-    /**
-     * Function GetFullURI
-     * returns the full location specifying URI for the LIB.
-     */
-    const STRING&   GetFullURI();
-
-    /**
-     * Function GetOptions
-     * returns the options string, which may hold a password or anything else needed to
-     * instantiate the underlying LIB_SOURCE.
-     */
-    const STRING&   GetOptions();
-};
-
-/**
- * Class LIB_TABLE
- * holds LIB_TABLE_ROW records, and can be searched in a very high speed way based on
- * logical library name.
- */
-class LIB_TABLE
-{
-public:
-
-    /**
-     * Constructor LIB_TABLE
-     * builds a library table from an s-expression form of the library table.
-     * @param aLibraryTable is an s-expression form of all the rows in a library
-     *   table fragment.  These rows take presedence over rows in @a aFallBackTable.
-     * @param aFallBackTable is another LIB_TABLE which is searched only when
-     *   a record is not found in this table.
-     */
-    LIB_TABLE( const STRING& aLibraryTable, LIB_TABLE* aFallBackTable = NULL )
-    {
-        // s-expression is chosen so we can read a table fragment from either
-        // a schematic or a disk file, for schematic resident or
-        // personal table, respectively.
-    }
-};
 
 } // namespace SCH
 

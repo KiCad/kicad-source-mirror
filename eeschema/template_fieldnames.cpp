@@ -2,6 +2,7 @@
 
 #include "template_fieldnames.h"
 #include "dsnlexer.h"
+#include "fctsys.h"
 #include "macros.h"
 
 using namespace DSN;    // enum TFIELD_T is in this namespace

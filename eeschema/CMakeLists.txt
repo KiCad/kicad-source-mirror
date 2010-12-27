@@ -170,47 +170,18 @@ endif(APPLE)
 
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
 # library format.
-set( inputFile      ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords )
-set( outHeaderFile  ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h )
-set( outCppFile     ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp )
-set( enum           TLIB_T )
-add_custom_command(
-    OUTPUT  ${outHeaderFile}
-            ${outCppFile}
-    COMMAND ${CMAKE_COMMAND}
-        -Denum=${enum}
-        -DinputFile=${inputFile}
-        -DoutHeaderFile=${outHeaderFile}
-        -DoutCppFile=${outCppFile}
-        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-            ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    COMMENT "TokenList2DsnLexer.cmake creating:
-       ${outHeaderFile} and
-       ${outCppFile} from
-       ${inputFile}"
-    )
+make_lexer(
+   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
+   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
+   TLIB_T
+   )
 
-
-set( inputFile      ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords )
-set( outHeaderFile  ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h )
-set( outCppFile     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp )
-set( enum           TFIELD_T )
-add_custom_command(
-    OUTPUT  ${outHeaderFile}
-            ${outCppFile}
-    COMMAND ${CMAKE_COMMAND}
-        -Denum=${enum}
-        -DinputFile=${inputFile}
-        -DoutHeaderFile=${outHeaderFile}
-        -DoutCppFile=${outCppFile}
-        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-            ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    COMMENT "TokenList2DsnLexer.cmake creating:
-       ${outHeaderFile} and
-       ${outCppFile} from
-       ${inputFile}"
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
+    TFIELD_T
     )
 
 add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
