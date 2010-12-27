@@ -132,16 +132,28 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
 
 void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
 {
+#ifdef __WXMAC__
+    // Otherwise fails due: using wxPaintDC without being in a native paint event
+    wxClientDC pict_dc( m_InitialPicturePanel );
+    wxClientDC greyscale_dc( m_GreyscalePicturePanel );
+    wxClientDC nb_dc( m_BNPicturePanel );
+#else
     wxPaintDC pict_dc( m_InitialPicturePanel );
     wxPaintDC greyscale_dc( m_GreyscalePicturePanel );
     wxPaintDC nb_dc( m_BNPicturePanel );
+#endif
 
     m_InitialPicturePanel->PrepareDC( pict_dc );
     m_GreyscalePicturePanel->PrepareDC( greyscale_dc );
     m_BNPicturePanel->PrepareDC( nb_dc );
-    pict_dc.DrawBitmap( m_Pict_Bitmap, 0, 0, false );
-    greyscale_dc.DrawBitmap( m_Greyscale_Bitmap, 0, 0, false );
-    nb_dc.DrawBitmap( m_BN_Bitmap, 0, 0, false );
+    
+    // OSX crashes with empty bitmaps (on initial refreshes)
+    if(m_Pict_Bitmap.IsOk() && m_Greyscale_Bitmap.IsOk() && m_BN_Bitmap.IsOk())
+    {
+        pict_dc.DrawBitmap( m_Pict_Bitmap, 0, 0, false );
+        greyscale_dc.DrawBitmap( m_Greyscale_Bitmap, 0, 0, false );
+        nb_dc.DrawBitmap( m_BN_Bitmap, 0, 0, false );
+    }
 }
 
 /* Called to load a bitmap file
