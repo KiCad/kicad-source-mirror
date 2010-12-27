@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DSNLEXER_H
-#define _DSNLEXER_H
+#ifndef DSNLEXER_H_
+#define DSNLEXER_H_
 
 #include <cstdio>
 #include <string>
@@ -162,12 +162,14 @@ public:
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
      *  token table need not contain the lexer separators such as '(' ')', etc.
      * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aFile is an open file, which will be closed when this is destructed.
+     * @param aFileName is the name of the file
      */
-    DSNLEXER( FILE* aFile, const wxString& aFilename,
-            const KEYWORD* aKeywordTable, unsigned aKeywordCount );
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+              FILE* aFile, const wxString& aFileName );
 
-    DSNLEXER( const std::string& aClipboardTxt,
-        const KEYWORD* aKeywordTable, unsigned aKeywordCount );
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+              const std::string& aClipboardTxt, const wxString& aSource = wxEmptyString );
 
     ~DSNLEXER()
     {
@@ -418,4 +420,4 @@ public:
     }
 };
 
-#endif  // _DSNLEXER_H
+#endif  // DSNLEXER_H_

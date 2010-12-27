@@ -151,14 +151,14 @@ public:
      *  tree, otherwise only a single version of each part is recognized, namely the
      *  one without the ".revN[N..]" trailer.
      */
-    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = StrEmpty )
+    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = "" )
         throw( IO_ERROR );
 
     ~DIR_LIB_SOURCE();
 
     //-----<LIB_SOURCE implementation functions >------------------------------
 
-    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = StrEmpty )
+    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = "" )
         throw( IO_ERROR );
 
     void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
@@ -166,7 +166,7 @@ public:
 
     void GetCategories( STRINGS* aResults ) throw( IO_ERROR );
 
-    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = StrEmpty )
+    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = "" )
         throw( IO_ERROR );
 
     void GetRevisions( STRINGS* aResults, const STRING& aPartName ) throw( IO_ERROR )

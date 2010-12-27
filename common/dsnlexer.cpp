@@ -32,8 +32,8 @@
 
 #include "dsnlexer.h"
 
-#include "fctsys.h"
-#include "pcbnew.h"
+//#include "fctsys.h"
+//#include "pcbnew.h"
 
 //#define STANDALONE  1       // enable this for stand alone testing.
 
@@ -60,8 +60,8 @@ void DSNLEXER::init()
 }
 
 
-DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
-        const KEYWORD* aKeywordTable, unsigned aKeywordCount ) :
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    FILE* aFile, const wxString& aFilename ) :
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -71,12 +71,13 @@ DSNLEXER::DSNLEXER( FILE* aFile, const wxString& aFilename,
 }
 
 
-DSNLEXER::DSNLEXER( const std::string& aClipboardTxt,
-        const KEYWORD* aKeywordTable, unsigned aKeywordCount ) :
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    const std::string& aClipboardTxt, const wxString& aSource ) :
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
-    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, _( "clipboard" ) );
+    STRING_LINE_READER* stringReader = new STRING_LINE_READER( aClipboardTxt, aSource.IsEmpty() ?
+                                        wxString( _( "clipboard" ) ) : aSource );
     PushReader( stringReader );
     init();
 }
@@ -206,7 +207,7 @@ wxString DSNLEXER::GetTokenString( int aTok )
 {
     wxString    ret;
 
-    ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
+    ret << wxT("'") << wxConvertMB2WX( GetTokenText(aTok) ) << wxT("'");
 
     return ret;
 }
@@ -299,6 +300,7 @@ int DSNLEXER::NeedSYMBOLorNUMBER() throw( IO_ERROR )
         Expecting( _("symbol|number") );
     return tok;
 }
+
 
 /**
  * Function isspace

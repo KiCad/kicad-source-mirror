@@ -29,11 +29,9 @@
 #include <boost/ptr_container/ptr_set.hpp>
 #include <sch_lib.h>
 
+class SCH_LIB_TABLE_LEXER;      // outside namespace SCH, since make_lexer() Functions.cmake can't do namespace
 
 namespace SCH {
-
-class LIB_TABLE_LEXER;
-
 
 /**
  * Class LIB_TABLE
@@ -52,6 +50,8 @@ public:
      */
     class ROW
     {
+        friend class LIB_TABLE;
+
     public:
 
         bool operator<( const ROW& other ) const
@@ -101,9 +101,18 @@ public:
             delete lib;
         }
 
+#if defined(DEBUG)
+        void Show() const
+        {
+            printf( "(lib (logical \"%s\")(type \"%s\")(full_uri \"%s\")(options \"%s\"))\n",
+                logicalName.c_str(), libType.c_str(), fullURI.c_str(), options.c_str() );
+        }
+#endif
+
     protected:
 
-        ROW() :
+        ROW( LIB_TABLE* aOwner ) :
+            owner( aOwner ),
             lib( 0 )
         {}
 
@@ -145,37 +154,28 @@ public:
         }
 
     private:
-        STRING  logicalName;
-        STRING  libType;
-        STRING  fullURI;
-        STRING  options;
+        LIB_TABLE*  owner;
+        STRING      logicalName;
+        STRING      libType;
+        STRING      fullURI;
+        STRING      options;
 
-        LIB*    lib;
+        LIB*        lib;
     };
 
 
     /**
      * Constructor LIB_TABLE
      * builds a library table from an s-expression form of the library table.
-     * @param aLibraryTable is an s-expression form of all the rows in a library
-     *   table fragment.  These rows take presedence over rows in @a aFallBackTable.
      * @param aFallBackTable is another LIB_TABLE which is searched only when
-     *   a record is not found in this table.
+     *   a record is not found in this table.  No ownership is taken of aFallBackTable.
      */
-    LIB_TABLE( const STRING& aLibraryTable, LIB_TABLE* aFallBackTable = NULL )
-        throw( PARSE_ERROR )
-    {
-        // s-expression is chosen so we can read a table fragment from either
-        // a schematic or a disk file, for schematic resident or
-        // personal table, respectively.
-    }
+    LIB_TABLE( LIB_TABLE* aFallBackTable = NULL );
 
-
-protected:
     /**
      * Function Parse
-     * fills this object from information in the input stream \a aSpec, which
-     * is a DSN_LEXER customized for the grammar needed to describe instances of this object.
+     * fills this object from information in the input stream \a aLexer, which
+     * is a DSNLEXER customized for the grammar needed to describe instances of this object.
      * The entire textual element spec is <br>
      * (lib_table (logical _yourfieldname_)(value _yourvalue_) visible))
      *
@@ -183,21 +183,33 @@ protected:
      * (lib_table
      *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
      *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
-         (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
+     *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
      * </pre>
      *
-     * When this function is called, the input token stream given by \a aSpec
+     * When this function is called, the input token stream given by \a aLexer
      * is assumed to be positioned at the '^' in the following example, i.e. just after the
      * identifying keyword and before the content specifying stuff.<br>
      * (lib_table ^ (....) )
      *
      * @param aSpec is the input token stream of keywords and symbols.
      */
-    void Parse( LIB_TABLE_LEXER* aLexer ) throw( PARSE_ERROR );
+    void Parse( SCH_LIB_TABLE_LEXER* aLexer ) throw( IO_ERROR );
 
-private:
+#if defined(DEBUG)
+    void Show() const
+    {
+        printf("(lib_table\n" );
+        for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+            it->Show();
+        printf(")\n" );
+    }
+#endif
 
     typedef boost::ptr_set<ROW>     ROWS;
+    typedef ROWS::iterator          ROWS_ITER;
+    typedef ROWS::const_iterator    ROWS_CITER;
+
+private:
 
     ROWS    rows;
 };
