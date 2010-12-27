@@ -196,7 +196,7 @@ public:
      * The last line does not necessarily need a trailing '\n'.
      *
      * @param aSource describes the source of aString for error reporting purposes
-     *  can be anything meaninful, such as wxT( "cliboard" ).
+     *  can be anything meaninful, such as wxT( "clipboard" ).
      */
     STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
         LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),

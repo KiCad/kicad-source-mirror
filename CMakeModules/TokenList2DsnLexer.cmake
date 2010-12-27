@@ -144,9 +144,6 @@ set( sourceFileHeader
  * your DSN lexer.
  */
 
-//#include \"fctsys.h\"
-//#include \"macros.h\"
-
 #include \"${result}_lexer.h\"
 
 namespace DSN {
@@ -228,13 +225,13 @@ class ${RESULT}_LEXER : public DSNLEXER
 public:
     /**
      * Constructor ${RESULT}_LEXER
-     * @param aClipboartTxt is std::string (8 bit) text possibly from the
-     * clipboard that you want to parse.
+     * @param aSExpression is (utf8) text possibly from the clipboard that you want to parse.
+     * @param aSource is a description of the origin of @a aSExpression, such as a filename.
+     *   If left empty, then _("clipboard") is used.
      */
-    ${RESULT}_LEXER( const std::string& aClipboardTxt ) :
-        DSNLEXER( aClipboardTxt,
-                  DSN::${result}_keywords,
-                  DSN::${result}_keyword_count )
+    ${RESULT}_LEXER( const std::string& aSExpression, const wxString& aSource = wxEmptyString ) :
+        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
+                  aSExpression, aSource )
     {
     }
 
@@ -248,9 +245,8 @@ public:
      * @param aFilename is the name of the opened file, needed for error reporting.
      */
     ${RESULT}_LEXER( FILE* aFile, const wxString& aFilename ) :
-        DSNLEXER( aFile, aFilename,
-                  DSN::${result}_keywords,
-                  DSN::${result}_keyword_count )
+        DSNLEXER( DSN::${result}_keywords,  DSN::${result}_keyword_count,
+                  aFile, aFilename )
     {
     }
 

@@ -207,7 +207,7 @@ protected:
  */
 class LIB
 {
-    friend class LIBS;      ///< the LIB factory is LIBS::GetLibrary()
+    friend class LIB_TABLE;    ///< the LIB factory is LIB_TABLE
 
 protected:  // constructor is not public, called from LIBS only.
 
@@ -224,21 +224,11 @@ protected:  // constructor is not public, called from LIBS only.
      * @param aSink is an open LIB_SINK whose ownership is given over
      *          to this LIB, and it is normally NULL.
      */
-    LIB( const STRING& aLogicalLibrary, LIB_SOURCE* aSource, LIB_SINK* aSink=NULL ) :
-        name( aLogicalLibrary ),
-        source( aSource ),
-        sink( aSink )
-    {
-    }
+    LIB( const STRING& aLogicalLibrary, LIB_SOURCE* aSource, LIB_SINK* aSink = NULL );
 
 public:
 
-    ~LIB()
-    {
-        delete source;
-        delete sink;
-    }
-
+    ~LIB();
 
     /**
      * Function HasSink
@@ -294,9 +284,9 @@ public:
      * saves the part to non-volatile storage and returns the next new revision
      * name in the sequence established by the LIB_SINK.
      */
-    virtual STRING WritePart( PART* aPart ) throw( IO_ERROR );
+    STRING WritePart( PART* aPart ) throw( IO_ERROR );
 
-    virtual void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
+    void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
 
     /**
      * Function GetRevisions
@@ -345,7 +335,5 @@ protected:
 
 
 }   // namespace SCH
-
-const    STRING  StrEmpty = "";
 
 #endif  // SCH_LIB_H_

@@ -60,14 +60,22 @@ endif()
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
-add_executable( test_dir_lib_source sch_dir_lib_source.cpp )
+add_executable( test_dir_lib_source
+    sch_dir_lib_source.cpp
+    )
 target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
 
-add_executable( test_lib_table sch_lib_table.cpp sch_lib_table_keywords.cpp )
-target_link_libraries( test_lib_table ${wxWidgets_LIBRARIES} )
+add_executable( test_sch_lib_table
+    sch_lib_table.cpp
+    sch_lib_table_keywords.cpp
+    sch_lib.cpp
+    ${PROJECT_SOURCE_DIR}/common/richio.cpp
+    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
+    )
+target_link_libraries( test_sch_lib_table ${wxWidgets_LIBRARIES} )
 
 add_executable( test_sch_part sch_part.cpp )
-target_link_libraries( test_lib_table ${wxWidgets_LIBRARIES} )
+target_link_libraries( test_sch_part ${wxWidgets_LIBRARIES} )
 
 
 make_lexer(

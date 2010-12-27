@@ -22,10 +22,158 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_lib_table.h>
 
+#include <sch_lib_table.h>
+#include <sch_lib_table_lexer.h>
+
+using namespace std;
+using namespace SCH;
+
+
+LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable )
+{
+    if( aFallBackTable )
+    {
+        const ROWS& t = aFallBackTable->rows;
+
+        for( ROWS_CITER it = t.begin();  it != t.end();  ++it )
+        {
+            // our rows are empty, expect no collisions here
+            auto_ptr<ROW>   row( new ROW( *it ) );
+
+            row->owner = this;
+            rows.insert( row.release() );
+        }
+    }
+}
+
+
+void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
+{
+    /*  grammar:
+
+        (lib_table
+          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+         )
+
+         note: "(lib_table" has already been read in.
+    */
+
+    ELT_T   tok;
+
+    while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    {
+        // (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+
+        if( tok != T_LEFT )
+            in->Expecting( T_LEFT );
+
+        if( ( tok = in->NextTok() ) != T_lib )
+            in->Expecting( T_lib );
+
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_logical )
+            in->Expecting( T_logical );
+
+        in->NeedSYMBOLorNUMBER();
+
+        auto_ptr<ROW>   row( new ROW( this ) );
+
+        row->SetLogicalName( in->CurText() );
+
+        in->NeedRIGHT();
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_type )
+            in->Expecting( T_type );
+
+        in->NeedSYMBOLorNUMBER();
+
+        // verify that type is one of: {dir, schematic, subversion, http}
+        if( strcmp( in->CurText(), "dir" ) &&
+            strcmp( in->CurText(), "schematic" ) &&
+            strcmp( in->CurText(), "subversion" ) &&
+            strcmp( in->CurText(), "http" ) )
+        {
+            in->Expecting( wxT( "dir|schematic|subversion|http" ) );
+        }
+
+        row->SetType( in->CurText() );
+
+        in->NeedRIGHT();
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_full_uri )
+            in->Expecting( T_full_uri );
+
+        in->NeedSYMBOLorNUMBER();
+
+        row->SetFullURI( in->CurText() );
+
+        in->NeedRIGHT();
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_options )
+            in->Expecting( T_options );
+
+        in->NeedSYMBOLorNUMBER();
+
+        row->SetOptions( in->CurText() );
+
+        in->NeedRIGHT();
+        in->NeedRIGHT();            // teriminate the (lib..)
+
+        rows.insert( row.release() );
+    }
+    return;
+}
+
+
+#if 1
 
 int main( int argc, char** argv )
 {
+    // the null string is not really a legal DSN token since any double quotes
+    // as assumed to be a single quote.  To pass an empty string, we pass " "
+    // to (options " ")
+    SCH_LIB_TABLE_LEXER  slr(
+        "(lib_table \n"
+        "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options \" \"))\n"
+        "  (lib (logical old-project)   (type schematic)(full_uri /tmp/old-schematic.sch)   (options \" \"))\n"
+        "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n",
+
+        wxT( "inline text" )        // source
+        );
+
+    LIB_TABLE   lib_table;
+
+    // read the "( lib_table" pair of tokens
+
+    try
+    {
+        slr.NextTok();
+        slr.NextTok();
+
+        lib_table.Parse( &slr );
+    }
+
+    catch( std::exception& ex )
+    {
+        printf( "std::exception\n" );
+    }
+
+    catch( IO_ERROR ioe )
+    {
+        printf( "caught\n" );
+        printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
+    }
+
+    lib_table.Show();
+
     return 0;
 }
+
+#endif
