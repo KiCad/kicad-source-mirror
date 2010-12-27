@@ -105,25 +105,11 @@ set(PCB_COMMON_SRCS
 add_library(pcbcommon ${PCB_COMMON_SRCS})
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
-set( inputFile      ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords )
-set( outHeaderFile  ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h )
-set( outCppFile     ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp )
-set( enum           NL_T )
-add_custom_command(
-    OUTPUT  ${outHeaderFile}
-            ${outCppFile}
-    COMMAND ${CMAKE_COMMAND}
-        -Denum=${enum}
-        -DinputFile=${inputFile}
-        -DoutHeaderFile=${outHeaderFile}
-        -DoutCppFile=${outCppFile}
-        -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
-            ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-    COMMENT "TokenList2DsnLexer.cmake creating:
-       ${outHeaderFile} and
-       ${outCppFile} from
-       ${inputFile}"
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
+    ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
+    NL_T
     )
 
 # The dsntest may not build properly using MS Visual Studio.

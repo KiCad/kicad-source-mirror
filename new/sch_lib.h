@@ -231,14 +231,14 @@ protected:  // constructor is not public, called from LIBS only.
     {
     }
 
+public:
+
     ~LIB()
     {
         delete source;
         delete sink;
     }
 
-
-public:
 
     /**
      * Function HasSink
@@ -348,5 +348,4 @@ protected:
 
 const    STRING  StrEmpty = "";
 
-#endif      // SCH_LIB_H_
-
+#endif  // SCH_LIB_H_

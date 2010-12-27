@@ -62,6 +62,20 @@ using namespace SCH;
 #include <vector>
 using namespace std;
 
+/// This file extension is an implementation detail specific to this LIB_SOURCE
+/// implementation, and to a corresponding LIB_SINK.
+/// Core EESCHEMA should never have to see this.
+#define SWEET_EXT       ".part"
+
+
+/* __func__ is C99 prescribed, but just in case:
+http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=338
+#if defined(__GNUG__)   // The GNU C++ compiler defines this
+#define FUNC_NAME(x)    // nothing, GNU C++ defines __func__ just fine.
+#else
+#define FUNC_NAME(x)    static const char __func__[] = #x;
+#endif
+*/
 
 
 /**
@@ -140,7 +154,7 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
 {
     bool    sawDigit = false;
 
-    while( tail>start && isdigit(*--tail) )
+    while( tail > start && isdigit( *--tail ) )
     {
         sawDigit = true;
     }
@@ -202,6 +216,7 @@ bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
         int rnum1 = atoi( rev1+3 );
         int rnum2 = atoi( rev2+3 );
 
+        // higher numbered revs are "less" so that they bubble to top.
         return rnum1 > rnum2;
     }
 
@@ -212,9 +227,9 @@ bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
 bool DIR_LIB_SOURCE::makePartName( STRING* aPartName, const char* aEntry,
                         const STRING& aCategory )
 {
-    const char* cp = strrstr( aEntry, ".part" );
+    const char* cp = strrstr( aEntry, SWEET_EXT );
 
-    // if base name is not empty, contains ".part", && cp is not NULL
+    // if base name is not empty, contains SWEET_EXT, && cp is not NULL
     if( cp > aEntry )
     {
         const char* limit = cp + strlen( cp );
@@ -222,7 +237,7 @@ bool DIR_LIB_SOURCE::makePartName( STRING* aPartName, const char* aEntry,
         // If versioning, then must find a trailing "revN.." type of string.
         if( useVersioning )
         {
-            const char* rev = endsWithRev( cp + sizeof(".part") - 1, limit, '.' );
+            const char* rev = endsWithRev( cp + sizeof(SWEET_EXT) - 1, limit, '.' );
             if( rev )
             {
                 if( aCategory.size() )
@@ -241,7 +256,7 @@ bool DIR_LIB_SOURCE::makePartName( STRING* aPartName, const char* aEntry,
         // so we don't even bother to try and load any other partfile down here.
         else
         {
-            // if file extension is exactly ".part", and no rev
+            // if file extension is exactly SWEET_EXT, and no rev
             if( cp==limit-5 )
             {
                 if( aCategory.size() )
@@ -272,13 +287,14 @@ STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
     {
         int basePartLen = rev - aPartName.c_str() - 1;  // omit '/' separator
         fileName.append( aPartName, 0,  basePartLen );
-        fileName += ".part.";    // add '.' separator before rev
+        fileName += SWEET_EXT;
+        fileName += '.';
         fileName += rev;
     }
     else
     {
         fileName += aPartName;
-        fileName += ".part";
+        fileName += SWEET_EXT;
     }
 
     return fileName;
@@ -370,7 +386,7 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
                         partnames.end();
 
     PN_ITER it    = aCategory.size() ?
-                        partnames.lower_bound( aCategory + "/" ) :
+                        partnames.upper_bound( aCategory + "/" ) :
                         partnames.begin();
 
     aResults->clear();
@@ -408,7 +424,6 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev )
     throw( IO_ERROR )
 {
-    STRING  fileName;
     STRING  partName = aPartName;   // appended with aRev too if not empty
     const char* rev  = endsWithRev( partName, '/' );
 
@@ -441,8 +456,9 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
     {
         STRING search = partName + '/';
 
-        // no rev on partName string.  First the first, which should be
-        // the highnest numbered rev because of BY_REV compare method.
+        // There's no rev on partName string.  Find the most recent rev, i.e. highest,
+        // which will be first because of the BY_REV compare method, which treats
+        // higher numbered revs as first.
         PN_ITER it = partnames.upper_bound( search );
 
         // verify that this one that is greater than partName is a match and not
@@ -582,9 +598,9 @@ int main( int argc, char** argv )
         // initially, only the NAME_CACHE sweets and STRING categories are loaded:
         uut.Show();
 
-        uut.GetCategoricalPartNames( &partnames, "Category" );
+        uut.GetCategoricalPartNames( &partnames, "lions" );
 
-        printf( "\nGetCategoricalPartNames( aCatagory = 'Category' ):\n" );
+        printf( "\nGetCategoricalPartNames( aCatagory = 'lions' ):\n" );
         for( STRINGS::const_iterator it = partnames.begin();  it!=partnames.end();  ++it )
         {
             printf( " '%s'\n", it->c_str() );
@@ -592,7 +608,7 @@ int main( int argc, char** argv )
 
         uut.ReadParts( &sweets, partnames );
 
-        printf( "\nSweets for Category = 'Category' parts:\n" );
+        printf( "\nSweets for Category = 'lions' parts:\n" );
         pn = partnames.begin();
         for( STRINGS::const_iterator it = sweets.begin();  it!=sweets.end();  ++it, ++pn )
         {
@@ -632,4 +648,3 @@ int main( int argc, char** argv )
 }
 
 #endif
-

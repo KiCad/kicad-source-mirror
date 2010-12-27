@@ -40,6 +40,8 @@ if( STAND_ALONE )
         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     endif(CMAKE_COMPILER_IS_GNUCXX)
 
+    include(Functions)
+
 endif()
 
 
@@ -59,8 +61,19 @@ endif()
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_executable( test_dir_lib_source sch_dir_lib_source.cpp )
-#add_executable( test_dir_lib_source EXCLUDE_FROM_ALL sch_dir_lib_source.cpp )
-
 target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
-#target_link_libraries( test_dir_lib_source common ${wxWidgets_LIBRARIES} )
+
+add_executable( test_lib_table sch_lib_table.cpp sch_lib_table_keywords.cpp )
+target_link_libraries( test_lib_table ${wxWidgets_LIBRARIES} )
+
+add_executable( test_sch_part sch_part.cpp )
+target_link_libraries( test_lib_table ${wxWidgets_LIBRARIES} )
+
+
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_keywords.cpp
+    ELT_T
+    )
 

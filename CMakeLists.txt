@@ -120,6 +120,7 @@ mark_as_advanced(KICAD_BIN
                  KICAD_DEMOS
                  KICAD_TEMPLATE)
 
+include(Functions)
 
 #================================================
 # Find libraries that are needed to build KiCad.

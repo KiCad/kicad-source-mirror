@@ -144,8 +144,8 @@ set( sourceFileHeader
  * your DSN lexer.
  */
 
-#include \"fctsys.h\"
-#include \"macros.h\"
+//#include \"fctsys.h\"
+//#include \"macros.h\"
 
 #include \"${result}_lexer.h\"
 
@@ -241,9 +241,9 @@ public:
     /**
      * Constructor ${RESULT}_LEXER
      * takes @a aFile already opened for reading and @a aFilename as parameters.
-     * The opened file is not closed by this class, and is assumed to be positioned
-     * at the beginning of the file for purposes of accurate line number reporting
-     * in error messages.
+     * The opened file is assumed to be positioned at the beginning of the file
+     * for purposes of accurate line number reporting in error messages.  The
+     * FILE is closed by this instance when its destructor is called.
      * @param aFile is a FILE already opened for reading.
      * @param aFilename is the name of the opened file, needed for error reporting.
      */
@@ -333,7 +333,7 @@ class ${RESULT}_PARSER : public ${RESULT}_LEXER
 file( APPEND "${outCppFile}"
 "};
 
-const unsigned ${result}_keyword_count = DIM( ${result}_keywords );
+const unsigned ${result}_keyword_count = unsigned( sizeof( ${result}_keywords )/sizeof( ${result}_keywords[0] ) );
 
 }   // End namespace DSN
 "
