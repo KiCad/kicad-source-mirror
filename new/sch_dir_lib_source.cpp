@@ -140,6 +140,7 @@ static const char* strrstr( const char* haystack, const char* needle )
     return ret;
 }
 
+#if 1   // @todo switch over to EndsWithRev() global
 
 static inline bool isDigit( char c )
 {
@@ -184,6 +185,8 @@ static inline const char* endsWithRev( const STRING& aPartName, char separator )
 {
     return endsWithRev( aPartName.c_str(),  aPartName.c_str()+aPartName.size(), separator );
 }
+
+#endif
 
 
 // see struct BY_REV
@@ -587,9 +590,9 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
 }
 
 
-#if (1 || defined( TEST_DIR_LIB_SOURCE )) && defined(DEBUG)
+#if 1 && defined(DEBUG)
 
-int main( int argc, char** argv )
+void DIR_LIB_SOURCE::Test( int argc, char** argv )
 {
     STRINGS     partnames;
     STRINGS     sweets;
@@ -601,7 +604,8 @@ int main( int argc, char** argv )
 //        DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "" );
         DIR_LIB_SOURCE  uut( argv[1] ? argv[1] : "", "useVersioning" );
 
-        // initially, only the NAME_CACHE sweets and STRING categories are loaded:
+        // show the cached content, only the directory information is cached,
+        // parts are cached in class LIB, not down here.
         uut.Show();
 
         uut.GetCategoricalPartNames( &partnames, "lions" );
@@ -649,7 +653,12 @@ int main( int argc, char** argv )
     {
         printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
     }
+}
 
+
+int main( int argc, char** argv )
+{
+    DIR_LIB_SOURCE::Test( argc, argv );
     return 0;
 }
 

@@ -25,8 +25,7 @@
 #ifndef SCH_LPID_H_
 #define SCH_LPID_H_
 
-//#include <wx/string.h>
-
+#include <sch_lib.h>    // STRING
 
 /**
  * Class LPID
@@ -45,42 +44,7 @@
  * <li> "rev6" is the revision number, which is optional.  If missing then its
  *      delimiter should also not be present.
  * </ul>
- * <p>
- * This class owns the <b>library table</b>, which is like fstab in concept and maps logical
- * library name to library URI, type, and options. It has the following columns:
- * <ul>
- * <li> Logical Library Name
- * <li> Library Type
- * <li> Library URI.  The full URI to the library source, form dependent on Type.
- * <li> Options, used for access, such as password
- * </ul>
- * <p>
- * For now, the Library Type can be one of:
- * <ul>
- * <li> "dir"
- * <li> "schematic"  i.e. a parts list from another schematic.
- * <li> "subversion"
- * <li> "bazaar"
- * <li> "http"
- * </ul>
- * <p>
- * For now, the Library URI types needed to support the various types can be one of those
- * shown below, which are typical of each type:
- * <ul>
- * <li> "file://C:/mylibdir"
- * <li> "file://home/user/kicadwork/jtagboard.sch"
- * <li> "svn://kicad.org/partlib/trunk"
- * <li> "http://kicad.org/partlib"
- * </ul>
- * <p>
- * The applicable library table is built up from several additive rows (table fragments),
- * and the final table is a merging of the table fragments. Two anticipated sources of
- * the rows are a personal table, and a schematic resident table.  The schematic
- * resident table rows are considered a higher priority in the final dynamically
- * assembled library table. A row in the schematic contribution to the library table
- * will take precedence over the personal table if there is a collision on logical
- * library name, otherwise the rows simply combine without issue to make up the
- * applicable library table.
+ * @author Dick Hollenbeck
  */
 class LPID  // aka GUID
 {
@@ -95,12 +59,19 @@ public:
     LPID( const STRING& aLPID ) throw( PARSE_ERROR );
 
     /**
-     * Function GetLogLib
+     * Function GetLogicalLib
      * returns the logical library portion of a LPID.  There is not Set accessor
      * for this portion since it comes from the library table and is considered
      * read only here.
      */
-    STRING  GetLogLib() const;
+    STRING  GetLogicalLib() const;
+
+    /**
+     * Function SetCategory
+     * overrides the logical lib name portion of the LPID to @a aLogical, and can be empty.
+     * @return bool - true unless parameter has ':' or '/' in it.
+     */
+    bool SetLogicalLib( const STRING& aLogical );
 
     /**
      * Function GetCategory
@@ -113,8 +84,35 @@ public:
      * Function SetCategory
      * overrides the category portion of the LPID to @a aCategory and is typically
      * either the empty string or a single word like "passives".
+     * @return bool - true unless parameter has ':' or '/' in it.
      */
-    void SetCategory( const STRING& aCategory );
+    bool SetCategory( const STRING& aCategory );
+
+    /**
+     * Function GetBaseName
+     * returns the part name without the category.
+     */
+    STRING  GetBaseName() const;
+
+    /**
+     * Function SetBaseName
+     * overrides the base name portion of the LPID to @a aBaseName
+     * @return bool - true unless parameter has ':' or '/' in it.
+     */
+    bool SetBaseName( const STRING& aBaseName );
+
+    /**
+     * Function GetBaseName
+     * returns the part name, i.e. category/baseName without revision.
+     */
+    STRING  GetPartName() const;
+
+    /**
+     * Function SetBaseName
+     * overrides the part name portion of the LPID to @a aPartName
+     not really needed, partname is an agreggate anyway, just parse a new one.
+    void SetPartName( const STRING& aPartName );
+     */
 
     /**
      * Function GetRevision
@@ -126,14 +124,43 @@ public:
      * Function SetRevision
      * overrides the revision portion of the LPID to @a aRevision and must
      * be in the form "rev<num>" where "<num>" is "1", "2", etc.
+     * @return bool - true unless parameter is not of the form "revN]N..]"
      */
-    void SetRevision( const STRING& aRevision );
+    bool SetRevision( const STRING& aRevision );
 
     /**
      * Function GetFullText
      * returns the full text of the LPID.
      */
     STRING  GetFullText() const;
+
+#if defined(DEBUG)
+    static void Test();
+#endif
+
+protected:
+    STRING  logical;        ///< logical lib name or empty
+    STRING  category;       ///< or empty
+    STRING  baseName;       ///< excludes category
+    STRING  revision;       ///< "revN[N..]" or empty
 };
+
+
+/**
+ * Function EndsWithRev
+ * returns a pointer to the final string segment: "revN[N..]" or NULL if none.
+ * @param start is the beginning of string segment to test, the partname or
+ *  any middle portion of it.
+ * @param tail is a pointer to the terminating nul, or one past inclusive end of
+ *  segment, i.e. the string segment of interest is [start,tail)
+ * @param separator is the separating byte, expected: '.' or '/', depending on context.
+ */
+const char* EndsWithRev( const char* start, const char* tail, char separator = '/' );
+
+static inline const char* EndsWithRev( const STRING& aPartName, char separator = '/' )
+{
+    return EndsWithRev( aPartName.c_str(),  aPartName.c_str()+aPartName.size(), separator );
+}
+
 
 #endif // SCH_LPID_H_

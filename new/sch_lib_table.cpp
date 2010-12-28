@@ -25,29 +25,18 @@
 
 #include <sch_lib_table.h>
 #include <sch_lib_table_lexer.h>
+#include <sch_lpid.h>
 #include <set>
 
-using namespace std;
+//using namespace std;    // screws up Doxygen
 using namespace SCH;
 
 
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
-    /* not copying fall back, simply search aFallBackTable separately if "logicalName not found".
-    if( aFallBackTable )
-    {
-        const ROWS& t = aFallBackTable->rows;
-
-        for( ROWS_CITER it = t.begin();  it != t.end();  ++it )
-        {
-            // our rows are empty, expect no collisions here
-            auto_ptr<ROW> row( new ROW( *it->second ) );
-            row->owner = this;
-            insert( row );
-        }
-    }
-    */
+    // not copying fall back, simply search aFallBackTable separately
+    // if "logicalName not found".
 }
 
 
@@ -56,9 +45,9 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
     /*  grammar:
 
         (lib_table
-          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
-          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
-          (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+          (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+          (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+          (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
          )
 
          note: "(lib_table" has already been read in.
@@ -66,7 +55,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
 
     ELT_T   tok;
 
-    while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    while( ( tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {
         // (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
 
@@ -83,7 +72,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
 
         in->NeedSYMBOLorNUMBER();
 
-        auto_ptr<ROW>   row( new ROW( this ) );
+        std::auto_ptr<ROW> row( new ROW( this ) );
 
         row->SetLogicalName( in->CurText() );
 
@@ -127,12 +116,12 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
         row->SetOptions( in->CurText() );
 
         in->NeedRIGHT();
-        in->NeedRIGHT();            // teriminate the (lib..)
+        in->NeedRIGHT();            // terminate the (lib..)
 
         // all logicalNames within this table fragment must be unique, so we do not
-        // replace.  However a fallBack table can have a conflicting logicalName
-        // and ours will supercede that one since in FindLib() we search this table
-        // before any fall back.
+        // use doReplace in InsertRow().  However a fallBack table can have a
+        // conflicting logicalName and ours will supercede that one since in
+        // FindLib() we search this table before any fall back.
         if( !InsertRow( row ) )
         {
             STRING msg;
@@ -144,7 +133,6 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
             throw IO_ERROR( msg );
         }
     }
-    return;
 }
 
 
@@ -172,12 +160,13 @@ void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 
 STRINGS LIB_TABLE::GetLogicalLibs()
 {
-    // only return unique logical library names.  Use std::set::insert() to
-    // quietly reject any duplicates, which can happen in the fall back table(s).
-    set<STRING>     unique;
-    STRINGS         ret;
+    // Only return unique logical library names.  Use std::set::insert() to
+    // quietly reject any duplicates, which can happen when encountering a duplicate
+    // logical lib name from one of the fall back table(s).
 
-    const LIB_TABLE* cur = this;
+    std::set<STRING>    unique;
+    STRINGS             ret;
+    const LIB_TABLE*    cur = this;
 
     do
     {
@@ -188,8 +177,8 @@ STRINGS LIB_TABLE::GetLogicalLibs()
 
     } while( ( cur = cur->fallBack ) != 0 );
 
-    // return a sorted, unique set of STRINGS to caller
-    for( set<STRING>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+    // return a sorted, unique set of logical lib name STRINGS to caller
+    for( std::set<STRING>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
         ret.push_back( *it );
 
     return ret;
@@ -228,7 +217,7 @@ const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
 }
 
 
-bool LIB_TABLE::InsertRow( auto_ptr<ROW>& aRow, bool doReplace )
+bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
 {
     // this does not need to be super fast.
 

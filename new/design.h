@@ -443,4 +443,6 @@ public:
 } // namespace SCH
 
 
+/// @todo remove endsWithRev() in favor of EndsWithRev(), find home for it.
+
 // EOF
