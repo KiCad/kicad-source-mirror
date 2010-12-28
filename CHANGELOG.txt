@@ -4,6 +4,20 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-Dec-28 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++new:
+    Completed a good portion of /new class LIB_TABLE.
+    Starting LPID.
+++common:
+    Tricked xnode.h into not issuing deprecation warnings.
+++richio:
+  * Added support of DSNLEXER( LINE_READER* ) to TokenList2DsnLexer.cmake, which
+    allows the chaining of different grammars on top of a common LINE_READER.
+  * Changed OUTPUT_FORMATTER::Quoted() to return a std::string and not modify
+    its input parameter.
+
+
 2010-dec-21 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
 ++all

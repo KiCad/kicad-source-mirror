@@ -50,7 +50,6 @@ using namespace SCH;
 #include <sys/stat.h>
 #include <cstring>
 #include <cstdio>
-#include <ctype.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -66,6 +65,7 @@ using namespace std;
 /// implementation, and to a corresponding LIB_SINK.
 /// Core EESCHEMA should never have to see this.
 #define SWEET_EXT       ".part"
+#define SWEET_EXTZ      (sizeof(SWEET_EXT)-1)
 
 
 /* __func__ is C99 prescribed, but just in case:
@@ -141,6 +141,12 @@ static const char* strrstr( const char* haystack, const char* needle )
 }
 
 
+static inline bool isDigit( char c )
+{
+    return c >= '0' && c <= '9';
+}
+
+
 /**
  * Function endsWithRev
  * returns a pointer to the final string segment: "revN[N..]" or NULL if none.
@@ -154,7 +160,7 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
 {
     bool    sawDigit = false;
 
-    while( tail > start && isdigit( *--tail ) )
+    while( tail > start && isDigit( *--tail ) )
     {
         sawDigit = true;
     }
@@ -237,7 +243,7 @@ bool DIR_LIB_SOURCE::makePartName( STRING* aPartName, const char* aEntry,
         // If versioning, then must find a trailing "revN.." type of string.
         if( useVersioning )
         {
-            const char* rev = endsWithRev( cp + sizeof(SWEET_EXT) - 1, limit, '.' );
+            const char* rev = endsWithRev( cp + SWEET_EXTZ, limit, '.' );
             if( rev )
             {
                 if( aCategory.size() )
@@ -397,7 +403,7 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 
         while( it != limit )
         {
-            const char* rev   = endsWithRev( *it, '/' );
+            const char* rev = endsWithRev( *it, '/' );
 
             // all cached partnames have a rev string in useVersioning mode
             assert( rev );

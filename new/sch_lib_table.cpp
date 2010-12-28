@@ -25,6 +25,7 @@
 
 #include <sch_lib_table.h>
 #include <sch_lib_table_lexer.h>
+#include <set>
 
 using namespace std;
 using namespace SCH;
@@ -156,26 +157,63 @@ void LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     out->Print( nestLevel, ")\n" );
 }
 
+
 void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(lib (logical \"%s\")(type \"%s\")(full_uri \"%s\")(options \"%s\"))\n",
-        logicalName.c_str(), libType.c_str(), fullURI.c_str(), options.c_str() );
+    out->Print( nestLevel, "(lib (logical %s)(type %s)(full_uri %s)(options %s))\n",
+        out->Quoted( logicalName ).c_str(),
+        out->Quoted( libType ).c_str(),
+        out->Quoted( fullURI ).c_str(),
+        out->Quoted( options ).c_str()
+        );
 }
 
 
-const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName )
+STRINGS LIB_TABLE::GetLogicalLibs()
+{
+    // only return unique logical library names.  Use std::set::insert() to
+    // quietly reject any duplicates, which can happen in the fall back table(s).
+    set<STRING>     unique;
+    STRINGS         ret;
+
+    const LIB_TABLE* cur = this;
+
+    do
+    {
+        for( ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
+        {
+            unique.insert( it->second->logicalName );
+        }
+
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    // return a sorted, unique set of STRINGS to caller
+    for( set<STRING>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+        ret.push_back( *it );
+
+    return ret;
+}
+
+
+PART* LIB_TABLE::GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR )
+{
+    // need LIPD done.
+    return 0;
+}
+
+
+const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
 {
     // this function must be *super* fast, so therefore should not instantiate
     // anything which would require using the heap.  This function is the reason
     // ptr_map<> was used instead of ptr_set<>, which would have required
     // instantiating a ROW just to find a ROW.
-    LIB_TABLE*  cur = this;
-    ROWS_CITER  it;
+    const LIB_TABLE*  cur = this;
 
     do
     {
-        it = cur->rows.find( aLogicalName );
+        ROWS_CITER  it = cur->rows.find( aLogicalName );
 
         if( it != cur->rows.end() )
         {
@@ -192,10 +230,23 @@ const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName )
 
 bool LIB_TABLE::InsertRow( auto_ptr<ROW>& aRow, bool doReplace )
 {
-    ROWS_ITER it = rows.find( aRow->logicalName );
+    // this does not need to be super fast.
 
-    if( doReplace || it == rows.end() )
+    ROWS_CITER it = rows.find( aRow->logicalName );
+
+    if( it == rows.end() )
     {
+        // be careful here, key is needed because aRow can be
+        // release()ed before logicalName is captured.
+        const STRING&   key = aRow->logicalName;
+        rows.insert( key, aRow );
+        return true;
+    }
+
+    if( doReplace )
+    {
+        rows.erase( aRow->logicalName );
+
         // be careful here, key is needed because aRow can be
         // release()ed before logicalName is captured.
         const STRING&   key = aRow->logicalName;
@@ -218,9 +269,10 @@ void LIB_TABLE::Test()
     // To pass an empty string, we can pass " " to (options " ")
     SCH_LIB_TABLE_LEXER  slr(
         "(lib_table \n"
+        "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n"
         "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options \" \"))\n"
         "  (lib (logical old-project)   (type schematic)(full_uri /tmp/old-schematic.sch)   (options \" \"))\n"
-        "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n",
+        ,
 
         wxT( "inline text" )        // source
         );
@@ -247,6 +299,7 @@ void LIB_TABLE::Test()
 
     STRING_FORMATTER    sf;
 
+    // format this whole table into sf, it will be sorted by logicalName.
     Format( &sf, 0 );
 
     printf( "test 'Parse() <-> Format()' round tripping:\n" );
@@ -264,6 +317,14 @@ void LIB_TABLE::Test()
     }
     else
         printf( "not found\n" );
+
+    printf( "\nlist of logical libraries:\n" );
+
+    STRINGS logNames = GetLogicalLibs();
+    for( STRINGS::const_iterator it = logNames.begin(); it!=logNames.end();  ++it )
+    {
+        printf( "logicalName: %s\n", it->c_str() );
+    }
 }
 
 

@@ -50,17 +50,14 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 
 void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 {
-    std::string utf8;
-
     // output attributes first if they exist
     for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )
     {
-        utf8  = CONV_TO_UTF8( attr->GetValue() );   // capture the content
-
         out->Print( 0, " (%s %s)",
             // attr names should never need quoting, no spaces, we designed the file.
             CONV_TO_UTF8( attr->GetName() ),
-            out->Quoted( &utf8 ) );
+            out->Quoted( CONV_TO_UTF8( attr->GetValue() ) ).c_str()
+            );
     }
 
     // we only expect to have used one of two types here:
@@ -85,8 +82,9 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERRO
         break;
 
     case wxXML_TEXT_NODE:
-        utf8  = CONV_TO_UTF8( GetContent() );
-        out->Print( 0, " %s", out->Quoted( &utf8 ) );
+        out->Print( 0, " %s",
+            out->Quoted( CONV_TO_UTF8( GetContent() ) ).c_str()
+            );
         break;
 
     default:
