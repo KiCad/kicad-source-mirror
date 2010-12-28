@@ -362,7 +362,7 @@ DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
 
     if( sourceURI.size() == 0 )
     {
-        throw( IO_ERROR( "aDirectoryPath cannot be empty" ) );
+        throw( IO_ERROR( STRING("aDirectoryPath cannot be empty") ) );
     }
 
     // remove any trailing separator, so we can add it back later without ambiguity

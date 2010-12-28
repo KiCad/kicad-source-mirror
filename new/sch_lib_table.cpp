@@ -134,12 +134,13 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
         // before any fall back.
         if( !InsertRow( row ) )
         {
-            char    buf[300];
+            STRING msg;
 
-            snprintf( buf, sizeof(buf),
-                "'%s' is a duplicate logical lib name",
-                row->logicalName.c_str() );
-            throw IO_ERROR( buf );
+            msg += '\'';
+            msg += row->logicalName;
+            msg += '\'';
+            msg += " is a duplicate logical lib name";
+            throw IO_ERROR( msg );
         }
     }
     return;
