@@ -30,6 +30,7 @@
 
 
 #include <wx/string.h>
+#include <string>
 
 /**
  * Struct IO_ERROR
@@ -41,18 +42,13 @@ struct IO_ERROR
 {
     wxString    errorText;
 
-    IO_ERROR( const wxChar* aMsg ) :
-        errorText( aMsg )
-    {
-    }
-
     IO_ERROR( const wxString& aMsg ) :
         errorText( aMsg )
     {
     }
 
-    IO_ERROR( const char* aMsg ) :
-        errorText( wxConvertMB2WX( aMsg ) )
+    IO_ERROR( const std::string& aMsg ) :
+        errorText( wxConvertMB2WX( aMsg.c_str() ) )
     {
     }
 };
@@ -66,7 +62,7 @@ struct IO_ERROR
  */
 struct PARSE_ERROR : public IO_ERROR
 {
-    wxString    source;         ///< filename typically, unless from RAM
+    wxString    source;         ///< filename typically, or other source
     int         lineNumber;
     int         byteIndex;      ///< char offset, starting from 1, into the problem line.
 
