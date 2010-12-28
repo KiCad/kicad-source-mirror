@@ -1,0 +1,15 @@
+
+
+
+/**
+ * Function GetPart
+ * finds and loads a PART, and parses it.  As long as the part is
+ * accessible in any LIB_SOURCE, opened or not opened, this function
+ * will find it and load it into its containing LIB, even if that means
+ * having to load a new LIB as given in the library table.
+ */
+static PART* SCH_LIBS::GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR )
+{
+}
+
+
