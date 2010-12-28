@@ -234,10 +234,11 @@ public:
      *  Second = VALUE: "VAL**"
      * the new module is added to the board module list
      * @param aModuleName = name of the new footprint
-     *   (will the component reference in board)
+     *                  (will be the component reference in board)
      * @return a pointer to the new module
      */
-    MODULE* Create_1_Module( const wxString& module_name );
+    MODULE* Create_1_Module( const wxString& aModuleName );
+
     void    Edit_Module( MODULE* module, wxDC* DC );
     void    Rotate_Module( wxDC*   DC,
                            MODULE* module,
@@ -285,11 +286,11 @@ public:
      *
      *  Read active libraries or one library to find and load a given module
      *  If found the module is linked to the tail of linked list of modules
-     *  @param aLibraryFullFileName - the full filename of the library to read. If empty,
+     *  @param aLibraryFullFilename - the full filename of the library to read. If empty,
      *                   all active libraries are read
      *  @param aModuleName = module name to load
      *  @param aDisplayMessageError = true to display an error message if any.
-     *  @return a MODULE * pointer to the new module, or NULL
+     *  @return a pointer to the new module, or NULL
      *
      */
     MODULE*  Get_Librairie_Module( const wxString& aLibraryFullFilename,
@@ -299,6 +300,7 @@ public:
     /**
      * Function Select_1_Module_From_List
      *  Display a list of modules found in active libraries or a given library
+     *  @param active_window = the current window ( parent window )
      *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename
      *                                == void, list all modules)
      *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not

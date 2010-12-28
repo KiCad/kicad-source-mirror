@@ -270,7 +270,7 @@ public:
 
     /**
      * Function SetScalingFactor
-     * @param the the current scale used to draw items on screen
+     * @param aScale = the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
     void        SetScalingFactor( double aScale );

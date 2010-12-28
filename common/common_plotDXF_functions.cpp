@@ -170,29 +170,27 @@ void DXF_PLOTTER::pen_to( wxPoint pos, char plume )
 void DXF_PLOTTER::set_dash( bool dashed )
 {
     /* NOP for now */
-    wxASSERT( output_file );
 }
 
 
 /**
- * Function Plot a filled segment (track)
- * @param start = starting point
- * @param end = ending point
+ * Function thick_segment
+ * Plot a filled segment (track)
+ * @param aStart = starting point
+ * @param aEnd = ending point
  * @param aWidth = segment width (thickness)
  * @param aPlotMode = FILLED, SKETCH ..
  */
-void DXF_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
-                                 GRTraceMode tracemode )
+void DXF_PLOTTER::thick_segment( wxPoint aStart, wxPoint aEnd, int aWidth,
+                                 GRTraceMode aPlotMode )
 {
-    wxASSERT( output_file );
-
-    if( tracemode == FILAIRE )  /* just a line is Ok */
+    if( aPlotMode == FILAIRE )  /* just a line is Ok */
     {
-        move_to( start );
-        finish_to( end );
+        move_to( aStart );
+        finish_to( aEnd );
     }
     else
-        segment_as_oval( start, end, width, tracemode );
+        segment_as_oval( aStart, aEnd, aWidth, aPlotMode );
 }
 
 

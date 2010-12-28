@@ -157,21 +157,21 @@ static void DrawGraphicTextPline(
     wxDC* aDC,
     EDA_Colors aColor,
     int aWidth,
-    bool sketch_mode,
+    bool aSketchMode,
     int point_count,
     wxPoint* coord,
     void (* aCallback)(int x0, int y0, int xf, int yf ),
-    PLOTTER* plotter )
+    PLOTTER* aPlotter )
 {
-    if( plotter )
+    if( aPlotter )
     {
-        plotter->move_to( coord[0] );
+        aPlotter->move_to( coord[0] );
         for( int ik = 1; ik < point_count; ik++ )
         {
-            plotter->line_to( coord[ik] );
+            aPlotter->line_to( coord[ik] );
         }
 
-        plotter->pen_finish();
+        aPlotter->pen_finish();
     }
     else if( aCallback )
     {
@@ -181,7 +181,7 @@ static void DrawGraphicTextPline(
                        coord[ik + 1].x, coord[ik + 1].y );
         }
     }
-    else if( sketch_mode )
+    else if( aSketchMode )
     {
         for( int ik = 0; ik < (point_count - 1); ik++ )
             GRCSegm( aClipBox, aDC, coord[ik].x, coord[ik].y,
@@ -218,8 +218,11 @@ static int overbar_position( int size_v, int thickness )
  *      Use a value min(aSize.x, aSize.y) / 5 for a bold text
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font. Useful only with default width value (aWidth = 0)
+ *  @param aCallback() = function called (if non null) to draw each segment.
+ *                  used to draw 3D texts or for plotting, NULL for normal drawings
+ *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
+ *                  the text. NULL to draw this text.
  */
-/****************************************************************************************************/
 void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                       wxDC* aDC,
                       const wxPoint& aPos,
@@ -233,8 +236,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                       bool aItalic,
                       bool aBold,
                       void (* aCallback)( int x0, int y0, int xf, int yf ),
-                      PLOTTER* plotter )
-/****************************************************************************************************/
+                      PLOTTER* aPlotter )
 {
     int       AsciiCode;
     int       x0, y0;
@@ -353,10 +355,10 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         RotatePoint( &current_char_pos, aPos, aOrient );
         RotatePoint( &end, aPos, aOrient );
 
-        if( plotter )
+        if( aPlotter )
         {
-            plotter->move_to( current_char_pos );
-            plotter->finish_to( end );
+            aPlotter->move_to( current_char_pos );
+            aPlotter->finish_to( end );
         }
         else if( aCallback )
         {
@@ -410,7 +412,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                 coord[1] = overbar_pos;
                 /* Plot the overbar segment */
                 DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
-                                      sketch_mode, 2, coord, aCallback, plotter );
+                                      sketch_mode, 2, coord, aCallback, aPlotter );
             }
             continue; /* Skip ~ processing */
         }
@@ -450,7 +452,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
                         aWidth = 0;
                     DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
                                           sketch_mode, point_count, coord,
-                                          aCallback, plotter );
+                                          aCallback, aPlotter );
                 }
                 point_count = 0;
             }
@@ -492,7 +494,7 @@ void DrawGraphicText( WinEDA_DrawPanel* aPanel,
         coord[1] = overbar_pos;
         /* Plot the overbar segment */
         DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
-                              sketch_mode, 2, coord, aCallback, plotter );
+                              sketch_mode, 2, coord, aCallback, aPlotter );
     }
 }
 

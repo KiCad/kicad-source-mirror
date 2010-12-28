@@ -65,6 +65,8 @@ int NegableTextLength( const wxString& aText );
  *  @param aBold = true to use a bold font
  *  @param aCallback() = function called (if non null) to draw each segment.
  *                  used to draw 3D texts or for plotting, NULL for normal drawings
+ *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
+ *                  the text. NULL to draw this text.
  */
 void DrawGraphicText( WinEDA_DrawPanel * aPanel,
                       wxDC * aDC,
@@ -79,7 +81,7 @@ void DrawGraphicText( WinEDA_DrawPanel * aPanel,
                       bool aItalic,
                       bool aBold,
                       void (*aCallback)( int x0, int y0, int xf, int yf ) = NULL,
-                      PLOTTER * plotter = NULL );
+                      PLOTTER * aPlotter = NULL );
 
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

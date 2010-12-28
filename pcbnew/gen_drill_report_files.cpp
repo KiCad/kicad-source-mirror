@@ -242,11 +242,12 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
 
 /** Creates the drill map aFile in HPGL or POSTSCRIPT format
- * @param aPcb BOARD
+ * @param aPcb = the BOARD
+ * @param aPlotter = a PLOTTER instance (HPGL or POSTSCRIPT plotter).
  * @param aHoleListBuffer = std::vector<HOLE_INFO> list of holes descriptors
  * @param aToolListBuffer = std::vector<DRILL_TOOL> drill list buffer
  */
-void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
+void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
                        std::vector<HOLE_INFO>& aHoleListBuffer,
                        std::vector<DRILL_TOOL>& aToolListBuffer )
 {
@@ -269,14 +270,14 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
 
         /* Always plot the drill symbol (for slots identifies the needed
          * cutter!) */
-        plotter->marker( pos, aHoleListBuffer[ii].m_Hole_Diameter,
+        aPlotter->marker( pos, aHoleListBuffer[ii].m_Hole_Diameter,
                          aHoleListBuffer[ii].m_Tool_Reference - 1 );
         if( aHoleListBuffer[ii].m_Hole_Shape != 0 )
         {
             wxSize oblong_size;
             oblong_size.x = aHoleListBuffer[ii].m_Hole_SizeX;
             oblong_size.y = aHoleListBuffer[ii].m_Hole_SizeY;
-            plotter->flash_pad_oval( pos, oblong_size,
+            aPlotter->flash_pad_oval( pos, oblong_size,
                                      aHoleListBuffer[ii].m_Hole_Orient, FILAIRE );
         }
     }

@@ -154,7 +154,7 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     /**
      * Function GetClass
      * returns the class name.
-     * @return wxString
+     * @return wxString = "MTEXT"
      */
     virtual wxString GetClass() const
     {

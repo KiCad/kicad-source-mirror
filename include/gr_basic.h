@@ -96,7 +96,6 @@ void GRBezier( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
  * @param aDC the device context into which drawing should occur.
  * @param aPointCount the number of points in the array \a aPoints.
  * @param aPoints The points to draw.
- * @param aPointArray an array holding the wxPoints in the polygon.
  * @param doFill true if polygon is to be filled, else false and only the boundary is drawn.
  * @param aPenColor the color index of the border.
  * @param aFillColor the fill color of the polygon's interior.
@@ -120,7 +119,6 @@ void GRClosedPoly( EDA_Rect* ClipBox,
  * @param aDC the device context into which drawing should occur.
  * @param aPointCount the number of points in the array \a aPointArray.
  * @param aPoints the points to draw.
- * @param aPointArray an array holding the wxPoints in the polygon.
  * @param doFill true if polygon is to be filled, else false and only the boundary is drawn.
  * @param aPenWidth is the width of the pen to use on the perimeter, can be zero.
  * @param aPenColor the color index of the border.
@@ -144,7 +142,7 @@ void GRClosedPoly( EDA_Rect* ClipBox,
  * @param ClipBox defines a rectangular boundary outside of which no drawing will occur.
  * @param aDC the device context into which drawing should occur.
  * @param x The x coordinate in user space of the center of the circle.
- * @param x The y coordinate in user space of the center of the circle.
+ * @param y The y coordinate in user space of the center of the circle.
  * @param aRadius is the radius of the circle.
  * @param aColor is an index into our color table of RGB colors.
  * @see EDA_Colors and colors.h

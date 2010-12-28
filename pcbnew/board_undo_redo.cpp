@@ -71,7 +71,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
  *   - if a call to SaveCopyInUndoList was forgotten in pcbnew
  *   - in zones outlines, when a change in one zone merges this zone with an other
  * This function avoids a pcbnew crash
- * @param aBoard = board to test
+ * @param aPcb = board to test
  * @param aItem = item to find
  */
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )

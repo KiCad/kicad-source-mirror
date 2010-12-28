@@ -137,7 +137,7 @@ public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
 
 
     /**
-     * SetFormat
+     * Function SetFormat
      * Initialize internal parameters to match the given format
      * @param aMetric = true for metric coordinates, false for imperial units
      * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
@@ -147,12 +147,11 @@ public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
     void SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDigits, int aRightDigits );
 
     /**
-     * SetOptions
+     * Function SetOptions
      * Initialize internal parameters to match drill options
-     * @param aMetric = true for metric coordinates, false for imperial units
-     * @param aZerosFmt =  DECIMAL_FORMAT, SUPPRESS_LEADING, SUPPRESS_TRAILING, KEEP_ZEROS
-     * @param aLeftDigits = number of digits for integer part of coordinates
-     * @param aRightDigits = number of digits for mantissa part of coordinates
+     * @param aMirror = true to create mirrored coordinates (Y coordinates negated)
+     * @param aMinimalHeader = true to use a minimal header (no comments, no info)
+     * @param aOffset = drill coordinates offset
      */
     void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset )
     {
@@ -163,7 +162,7 @@ public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
 
 
     /**
-     * CreateDrillFile
+     * Function CreateDrillFile
      * Creates an Excellon drill file
      * @return hole count
      */
@@ -180,14 +179,14 @@ private:
  * Create the list of holes and tools for a given board
  * The list is sorted by increasing drill values
  * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
- * @param Pcb : the given board
+ * @param aPcb : the given board
  * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
  * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
  * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
  * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
  * @param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
  */
-void     Build_Holes_List( BOARD* Pcb, std::vector<HOLE_INFO>& aHoleListBuffer,
+void     Build_Holes_List( BOARD* aPcb, std::vector<HOLE_INFO>& aHoleListBuffer,
                            std::vector<DRILL_TOOL>& aToolListBuffer,
                            int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles );
 
