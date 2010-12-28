@@ -42,6 +42,11 @@ struct IO_ERROR
 {
     wxString    errorText;
 
+    IO_ERROR( const wxChar* aMsg ) :
+        errorText( aMsg )
+    {
+    }
+
     IO_ERROR( const wxString& aMsg ) :
         errorText( aMsg )
     {

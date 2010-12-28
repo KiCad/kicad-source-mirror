@@ -171,11 +171,10 @@ const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName )
     // ptr_map<> was used instead of ptr_set<>, which would have required
     // instantiating a ROW just to find a ROW.
     LIB_TABLE*  cur = this;
-    ROWS_CITER  it;
 
     do
     {
-        it = cur->rows.find( aLogicalName );
+        ROWS_CITER  it = cur->rows.find( aLogicalName );
 
         if( it != cur->rows.end() )
         {
@@ -192,10 +191,22 @@ const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName )
 
 bool LIB_TABLE::InsertRow( auto_ptr<ROW>& aRow, bool doReplace )
 {
-    ROWS_ITER it = rows.find( aRow->logicalName );
+    // this does not need to be super fast.
 
-    if( doReplace || it == rows.end() )
+    ROWS_CITER it = rows.find( aRow->logicalName );
+
+    if( it == rows.end() )
     {
+        // be careful here, key is needed because aRow can be
+        // release()ed before logicalName is captured.
+        const STRING&   key = aRow->logicalName;
+        rows.insert( key, aRow );
+        return true;
+    }
+    else if( doReplace )
+    {
+        rows.erase( aRow->logicalName );
+
         // be careful here, key is needed because aRow can be
         // release()ed before logicalName is captured.
         const STRING&   key = aRow->logicalName;
