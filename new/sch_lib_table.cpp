@@ -33,7 +33,7 @@ using namespace SCH;
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
-    /* not copying fall back, simply search it separately if "logicalName not found".
+    /* not copying fall back, simply search aFallBackTable separately if "logicalName not found".
     if( aFallBackTable )
     {
         const ROWS& t = aFallBackTable->rows;
@@ -130,9 +130,9 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
 
         // all logicalNames within this table fragment must be unique, so we do not
         // replace.  However a fallBack table can have a conflicting logicalName
-        // and ours will supercede that one since in findLib() we search this table
+        // and ours will supercede that one since in FindLib() we search this table
         // before any fall back.
-        if( !InsertLib( row ) )
+        if( !InsertRow( row ) )
         {
             char    buf[300];
 
@@ -163,30 +163,33 @@ void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 }
 
 
-const LIB_TABLE::ROW* LIB_TABLE::FindLib( const STRING& aLogicalName )
+const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName )
 {
     // this function must be *super* fast, so therefore should not instantiate
     // anything which would require using the heap.  This function is the reason
     // ptr_map<> was used instead of ptr_set<>, which would have required
     // instantiating a ROW just to find a ROW.
+    LIB_TABLE*  cur = this;
+    ROWS_CITER  it;
 
-    ROWS_CITER  it = rows.find( aLogicalName );
-
-    if( it != rows.end() )
+    do
     {
-        // reference: http://myitcorner.com/blog/?p=361
-        return (const LIB_TABLE::ROW*) it->second;  // found
-    }
+        it = cur->rows.find( aLogicalName );
 
-    // not found, search fall back table
-    if( fallBack )
-        return fallBack->FindLib( aLogicalName );
+        if( it != cur->rows.end() )
+        {
+            // reference: http://myitcorner.com/blog/?p=361
+            return (const LIB_TABLE::ROW*) it->second;  // found
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
 
     return 0;   // not found
 }
 
 
-bool LIB_TABLE::InsertLib( auto_ptr<ROW>& aRow, bool doReplace )
+bool LIB_TABLE::InsertRow( auto_ptr<ROW>& aRow, bool doReplace )
 {
     ROWS_ITER it = rows.find( aRow->logicalName );
 
@@ -209,9 +212,9 @@ bool LIB_TABLE::InsertLib( auto_ptr<ROW>& aRow, bool doReplace )
 
 void LIB_TABLE::Test()
 {
-    // the null string is not really a legal DSN token since any double quotes
-    // are assumed to be a single quote.  To pass an empty string, we pass " "
-    // to (options " ")
+    // the null string is not really a legal DSN token since any duplicated
+    // double quote ("") is assumed to be a single double quote (").
+    // To pass an empty string, we can pass " " to (options " ")
     SCH_LIB_TABLE_LEXER  slr(
         "(lib_table \n"
         "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options \" \"))\n"
@@ -249,12 +252,12 @@ void LIB_TABLE::Test()
     printf( "%s", sf.GetString().c_str() );
 
     printf( "\ntest a lookup of 'www':\n" );
-    sf.Clear();
-
-    const LIB_TABLE::ROW* www = FindLib( "www" );
+    const LIB_TABLE::ROW* www = FindRow( "www" );
     if( www )
     {
         // found, print it just to prove it.
+        sf.Clear();
+
         www->Format( &sf, 1 );
         printf( "%s", sf.GetString().c_str() );
     }

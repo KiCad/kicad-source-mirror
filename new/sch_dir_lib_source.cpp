@@ -309,7 +309,7 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING  msg = strerror( errno );
         msg += "; cannot open(O_RDONLY) file " + aFileName;
-        throw( IO_ERROR( msg.c_str() ) );
+        throw( IO_ERROR( msg ) );
     }
 
     struct stat     fs;
@@ -321,7 +321,7 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING msg = aFileName;
         msg += " seems too big.  ( > 1 mbyte )";
-        throw IO_ERROR( msg.c_str() );
+        throw IO_ERROR( msg );
     }
 
     // reuse same readBuffer, which is not thread safe, but the API
@@ -334,7 +334,7 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING  msg = strerror( errno );
         msg += "; cannot read file " + aFileName;
-        throw( IO_ERROR( msg.c_str() ) );
+        throw( IO_ERROR( msg ) );
     }
 
     // std::string chars are not guaranteed to be contiguous in
@@ -447,7 +447,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         if( it == partnames.end() )    // part not found
         {
             partName += " not found.";
-            throw IO_ERROR( partName.c_str() );
+            throw IO_ERROR( partName );
         }
 
         readString( aResult, makeFileName( partName ) );
@@ -466,7 +466,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         if( it == partnames.end() || it->compare( 0, search.size(), search ) != 0 )
         {
             partName += " rev not found.";
-            throw IO_ERROR( partName.c_str() );
+            throw IO_ERROR( partName );
         }
 
         readString( aResult, makeFileName( *it ) );
@@ -531,7 +531,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
     {
         STRING  msg = strerror( errno );
         msg += "; scanning directory " + curDir;
-        throw( IO_ERROR( msg.c_str() ) );
+        throw( IO_ERROR( msg ) );
     }
 
     struct stat     fs;
@@ -557,7 +557,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
                 {
                     STRING  msg = partName;
                     msg += " has already been encountered";
-                    throw IO_ERROR( msg.c_str() );
+                    throw IO_ERROR( msg );
                 }
             }
 

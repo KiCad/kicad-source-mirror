@@ -273,7 +273,7 @@ public:
 protected:  // only a table editor can use these
 
     /**
-     * Function InsertLib
+     * Function InsertRow
      * adds aRow if it does not already exist or if doReplace is true.  If doReplace
      * is not true and the key for aRow already exists, the function fails and returns false.
      * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
@@ -281,13 +281,13 @@ protected:  // only a table editor can use these
      *  if the key already exists.
      * @return bool - true if the operation succeeded.
      */
-    bool InsertLib( std::auto_ptr<ROW>& aRow, bool doReplace = false );
+    bool InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace = false );
 
     /**
-     * Function FindLib
-     * returns a ROW* if aLogicalName is found in this table or in fallBack.
+     * Function FindRow
+     * returns a ROW* if aLogicalName is found in this table or in fallBack, else NULL.
      */
-    const ROW* FindLib( const STRING& aLogicalName );
+    const ROW* FindRow( const STRING& aLogicalName );
 
 private:
 
