@@ -26,12 +26,16 @@
 #define SCH_LIB_TABLE_H_
 
 #include <string>
-#include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <sch_lib.h>
 
 class SCH_LIB_TABLE_LEXER;      // outside namespace SCH, since make_lexer() Functions.cmake can't do namespace
+class OUTPUTFORMATTER;
 
 namespace SCH {
+
+class LPID;
+class PART;
 
 /**
  * Class LIB_TABLE
@@ -54,10 +58,12 @@ public:
 
     public:
 
+        /* was needed for ptr_set<> but not ptr_map<>
         bool operator<( const ROW& other ) const
         {
             return logicalName < other.logicalName;
         }
+        */
 
         /**
          * Function GetLogicalName
@@ -101,13 +107,16 @@ public:
             delete lib;
         }
 
-#if defined(DEBUG)
-        void Show() const
-        {
-            printf( "(lib (logical \"%s\")(type \"%s\")(full_uri \"%s\")(options \"%s\"))\n",
-                logicalName.c_str(), libType.c_str(), fullURI.c_str(), options.c_str() );
-        }
-#endif
+        /**
+         * Function Format
+         * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
+         * make it look good using multiple lines and indentation.
+         * @param out is an OUTPUTFORMATTER
+         * @param nestLevel is the indentation level to base all lines of the output.
+         *   Actual indentation will be 2 spaces for each nestLevel.
+         */
+        void Format( OUTPUTFORMATTER* out, int nestLevel ) const
+            throw( IO_ERROR );
 
     protected:
 
@@ -195,23 +204,100 @@ public:
      */
     void Parse( SCH_LIB_TABLE_LEXER* aLexer ) throw( IO_ERROR );
 
-#if defined(DEBUG)
-    void Show() const
-    {
-        printf("(lib_table\n" );
-        for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-            it->Show();
-        printf(")\n" );
-    }
+    /**
+     * Function Format
+     * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
+     * make it look good using multiple lines and indentation.
+     * @param out is an OUTPUTFORMATTER
+     * @param nestLevel is the indentation level to base all lines of the output.
+     *   Actual indentation will be 2 spaces for each nestLevel.
+     */
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
+
+    /**
+     * Function GetPart
+     * finds and loads a PART, and parses it.  As long as the part is
+     * accessible in any LIB_SOURCE, opened or not opened, this function
+     * will find it and load it into its containing LIB, even if that means
+     * having to open a LIB in this table that was not previously opened.
+     */
+    PART* GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR );
+
+
+#if 0   // moved here from LPID
+    /**
+     * Function GetLogicalLibraries
+     * returns the logical library names, all of them that are in the
+     * library table.
+     */
+    STRINGS GetLogicalLibraries();
+
+    /**
+     * Function GetLibraryURI
+     * returns the full library path from a logical library name.
+     * @param aLogicalLibraryName is the short name for the library of interest.
+     * @param aSchematic provides access to the full library table inclusive
+     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     */
+    STRING  GetLibraryURI( const STRING& aLogicalLibraryName,
+                        SCHEMATIC* aSchematic=NULL ) const;
+
+    /**
+     * Function GetLibraryType
+     * returns the type of a logical library.
+     * @param aLogicalLibraryName is the short name for the library of interest.
+     * @param aSchematic provides access to the full library table inclusive
+     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     */
+    STRING GetLibraryType( const STRING& aLogicalLibraryName,
+                        SCHEMATIC* aSchematic=NULL ) const;
+
+    /**
+     * Function GetOptions
+     * returns the options string for \a aLogicalLibraryName.
+     * @param aLogicalLibraryName is the short name for the library of interest.
+     * @param aSchematic provides access to the full library table inclusive
+     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     */
+    STRING GetOptions( const STRING& aLogicalLibraryName,
+                        SCHEMATIC* aSchematic=NULL ) const;
 #endif
 
-    typedef boost::ptr_set<ROW>     ROWS;
-    typedef ROWS::iterator          ROWS_ITER;
-    typedef ROWS::const_iterator    ROWS_CITER;
+
+#if defined(DEBUG)
+    /// implement the tests in here so we can honor the priviledge levels of the
+    /// accessors, something difficult to do from int main(int, char**)
+    void Test();
+#endif
+
+protected:  // only a table editor can use these
+
+    /**
+     * Function InsertLib
+     * adds aRow if it does not already exist or if doReplace is true.  If doReplace
+     * is not true and the key for aRow already exists, the function fails and returns false.
+     * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
+     * @param doReplace if true, means insert regardless if aRow's key already exists.  If false, then fail
+     *  if the key already exists.
+     * @return bool - true if the operation succeeded.
+     */
+    bool InsertLib( std::auto_ptr<ROW>& aRow, bool doReplace = false );
+
+    /**
+     * Function FindLib
+     * returns a ROW* if aLogicalName is found in this table or in fallBack.
+     */
+    const ROW* FindLib( const STRING& aLogicalName );
 
 private:
 
-    ROWS    rows;
+    typedef boost::ptr_map<STRING, ROW>     ROWS;
+    typedef ROWS::iterator                  ROWS_ITER;
+    typedef ROWS::const_iterator            ROWS_CITER;
+//  typedef std::pair<ROWS_ITER, bool>      ROW_PAIR;
+
+    ROWS        rows;
+    LIB_TABLE*  fallBack;
 };
 
 }   // namespace SCH

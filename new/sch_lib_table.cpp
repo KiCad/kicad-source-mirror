@@ -30,8 +30,10 @@ using namespace std;
 using namespace SCH;
 
 
-LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable )
+LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
+    fallBack( aFallBackTable )
 {
+    /* not copying fall back, simply search it separately if "logicalName not found".
     if( aFallBackTable )
     {
         const ROWS& t = aFallBackTable->rows;
@@ -39,12 +41,12 @@ LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable )
         for( ROWS_CITER it = t.begin();  it != t.end();  ++it )
         {
             // our rows are empty, expect no collisions here
-            auto_ptr<ROW>   row( new ROW( *it ) );
-
+            auto_ptr<ROW> row( new ROW( *it->second ) );
             row->owner = this;
-            rows.insert( row.release() );
+            insert( row );
         }
     }
+    */
 }
 
 
@@ -126,18 +128,89 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
         in->NeedRIGHT();
         in->NeedRIGHT();            // teriminate the (lib..)
 
-        rows.insert( row.release() );
+        // all logicalNames within this table fragment must be unique, so we do not
+        // replace.  However a fallBack table can have a conflicting logicalName
+        // and ours will supercede that one since in findLib() we search this table
+        // before any fall back.
+        if( !InsertLib( row ) )
+        {
+            char    buf[300];
+
+            snprintf( buf, sizeof(buf),
+                "'%s' is a duplicate logical lib name",
+                row->logicalName.c_str() );
+            throw IO_ERROR( buf );
+        }
     }
     return;
 }
 
 
-#if 1
+void LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
+    throw( IO_ERROR )
+{
+    out->Print( nestLevel, "(lib_table\n" );
+    for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+        it->second->Format( out, nestLevel+1 );
+    out->Print( nestLevel, ")\n" );
+}
 
-int main( int argc, char** argv )
+void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
+    throw( IO_ERROR )
+{
+    out->Print( nestLevel, "(lib (logical \"%s\")(type \"%s\")(full_uri \"%s\")(options \"%s\"))\n",
+        logicalName.c_str(), libType.c_str(), fullURI.c_str(), options.c_str() );
+}
+
+
+const LIB_TABLE::ROW* LIB_TABLE::FindLib( const STRING& aLogicalName )
+{
+    // this function must be *super* fast, so therefore should not instantiate
+    // anything which would require using the heap.  This function is the reason
+    // ptr_map<> was used instead of ptr_set<>, which would have required
+    // instantiating a ROW just to find a ROW.
+
+    ROWS_CITER  it = rows.find( aLogicalName );
+
+    if( it != rows.end() )
+    {
+        // reference: http://myitcorner.com/blog/?p=361
+        return (const LIB_TABLE::ROW*) it->second;  // found
+    }
+
+    // not found, search fall back table
+    if( fallBack )
+        return fallBack->FindLib( aLogicalName );
+
+    return 0;   // not found
+}
+
+
+bool LIB_TABLE::InsertLib( auto_ptr<ROW>& aRow, bool doReplace )
+{
+    ROWS_ITER it = rows.find( aRow->logicalName );
+
+    if( doReplace || it == rows.end() )
+    {
+        // be careful here, key is needed because aRow can be
+        // release()ed before logicalName is captured.
+        const STRING&   key = aRow->logicalName;
+        rows.insert( key, aRow );
+        return true;
+    }
+
+    return false;
+}
+
+
+#if 1 && defined(DEBUG)
+
+// build this with a Debug CMAKE_BUILD_TYPE
+
+void LIB_TABLE::Test()
 {
     // the null string is not really a legal DSN token since any double quotes
-    // as assumed to be a single quote.  To pass an empty string, we pass " "
+    // are assumed to be a single quote.  To pass an empty string, we pass " "
     // to (options " ")
     SCH_LIB_TABLE_LEXER  slr(
         "(lib_table \n"
@@ -148,16 +221,14 @@ int main( int argc, char** argv )
         wxT( "inline text" )        // source
         );
 
-    LIB_TABLE   lib_table;
-
-    // read the "( lib_table" pair of tokens
-
     try
     {
+        // read the "( lib_table" pair of tokens
         slr.NextTok();
         slr.NextTok();
 
-        lib_table.Parse( &slr );
+        // parse the rest of input to slr
+        Parse( &slr );
     }
 
     catch( std::exception& ex )
@@ -167,11 +238,36 @@ int main( int argc, char** argv )
 
     catch( IO_ERROR ioe )
     {
-        printf( "caught\n" );
         printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
     }
 
-    lib_table.Show();
+    STRING_FORMATTER    sf;
+
+    Format( &sf, 0 );
+
+    printf( "test 'Parse() <-> Format()' round tripping:\n" );
+    printf( "%s", sf.GetString().c_str() );
+
+    printf( "\ntest a lookup of 'www':\n" );
+    sf.Clear();
+
+    const LIB_TABLE::ROW* www = FindLib( "www" );
+    if( www )
+    {
+        // found, print it just to prove it.
+        www->Format( &sf, 1 );
+        printf( "%s", sf.GetString().c_str() );
+    }
+    else
+        printf( "not found\n" );
+}
+
+
+int main( int argc, char** argv )
+{
+    LIB_TABLE   lib_table;
+
+    lib_table.Test();
 
     return 0;
 }
