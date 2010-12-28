@@ -148,12 +148,6 @@ static inline bool isDigit( char c )
 }
 
 
-static inline bool isDigit( char c )
-{
-    return c >= '0' && c <= '9';
-}
-
-
 /**
  * Function endsWithRev
  * returns a pointer to the final string segment: "revN[N..]" or NULL if none.
