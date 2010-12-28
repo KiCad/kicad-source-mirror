@@ -336,15 +336,14 @@ public:
      *
      * @param aWrapee is a string that might need wraping in double quotes,
      *  and it might need to have its internal quotes doubled up, or not.
-     *  Caller's copy may be modified, or not.
      *
-     * @return const char* - useful for passing to printf() style functions that
-     *  must output utf8 streams.
+     * @return std::string - whose c_str() function can be called for passing
+     *   to printf() style functions that must output utf8 encoded s-expression streams.
      * @throw IO_ERROR, if aWrapee has any \r or \n bytes in it which is
      *        illegal according to the DSNLEXER who does not ever want them
      *        within a string.
      */
-    virtual const char* Quoted( std::string* aWrapee )  throw( IO_ERROR );
+     virtual std::string Quoted( const std::string& aWrapee ) throw( IO_ERROR );
 
     //-----</interface functions>-----------------------------------------
 };

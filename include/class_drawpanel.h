@@ -115,10 +115,20 @@ public:
      * Function DrawAuxiliaryAxis
      * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
      * for gerber and excellon files
-     * @param DC = current Device Context
+     * @param aDC = current Device Context
+     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
      */
-    void         DrawAuxiliaryAxis( wxDC* DC, int drawmode );
-    void         DrawGridAxis( wxDC* DC, int drawmode );
+    void         DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode );
+
+    /**
+     * Function DrawGridAxis
+     * Draw on auxiliary axis, used in pcbnew to show grid origin, when
+     * the grid origin is set by user, and is not (0,0)
+     * @param aDC = current Device Context
+     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
+     */
+    void         DrawGridAxis( wxDC* aDC, int aDrawMode );
+
     void         OnEraseBackground( wxEraseEvent& event );
 
     void         OnActivate( wxActivateEvent& event );

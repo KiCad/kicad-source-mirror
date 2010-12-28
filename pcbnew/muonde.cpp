@@ -342,10 +342,11 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
 /**
  * Function BuildCornersList_S_Shape
  * Create a path like a S-shaped coil
- * @param  aBuffer =  a vector <wxPoint>& buffer where to put points
+ * @param  aBuffer =  a buffer where to store points (ends of segments)
+ * @param  aStartPoint = starting point of the path
  * @param  aEndPoint = ending point of the path
  * @param  aLength = full lenght of the path
- * @param  aWidth = witdth of lines
+ * @param  aWidth = segment width
  */
 int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
                               wxPoint aStartPoint, wxPoint aEndPoint,

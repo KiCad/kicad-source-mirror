@@ -157,7 +157,7 @@ public:
      * @param aFilename = file name to read.
      * @param aDescList = current hotkey list descr. to initialise.
      */
-    int          ReadHotkeyConfigFile( const wxString& Filename,
+    int          ReadHotkeyConfigFile( const wxString& aFilename,
                                        struct Ki_HotkeyInfoSectionDescriptor* aDescList );
 
     /**

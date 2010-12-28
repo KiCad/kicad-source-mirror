@@ -62,6 +62,7 @@ void DSNLEXER::init()
 
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                     FILE* aFile, const wxString& aFilename ) :
+    iOwnReaders( true ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -73,6 +74,7 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
 
 DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                     const std::string& aClipboardTxt, const wxString& aSource ) :
+    iOwnReaders( true ),
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
@@ -80,6 +82,28 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
                                         wxString( _( "clipboard" ) ) : aSource );
     PushReader( stringReader );
     init();
+}
+
+
+DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+                    LINE_READER* aLineReader ) :
+    iOwnReaders( false ),
+    keywords( aKeywordTable ),
+    keywordCount( aKeywordCount )
+{
+    PushReader( aLineReader );
+    init();
+}
+
+
+DSNLEXER::~DSNLEXER()
+{
+    if( iOwnReaders )
+    {
+        // delete the LINE_READERs from the stack, since I own them.
+        for( READER_STACK::iterator it = readerStack.begin(); it!=readerStack.end();  ++it )
+            delete *it;
+    }
 }
 
 
@@ -102,7 +126,7 @@ bool DSNLEXER::PopReader()
     {
         readerStack.pop_back();
 
-        reader = &readerStack.back();
+        reader = readerStack.back();
         start  = (char*) (*reader);
 
         // force a new readLine() as first thing.

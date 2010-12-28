@@ -1,5 +1,5 @@
 /**
- * @file sch_item.h
+ * @file sch_items.h
  *
  */
 

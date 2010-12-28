@@ -27,9 +27,7 @@
 
 #include <cstdio>
 #include <string>
-#include <boost/ptr_container/ptr_vector.hpp>
-
-//#include "fctsys.h"
+#include <vector>
 
 #include "richio.h"
 
@@ -78,14 +76,15 @@ enum DSN_SYNTAX_T {
  */
 class DSNLEXER
 {
+    bool                iOwnReaders;            ///< on readerStack, should I delete them?
     char*               start;
     char*               next;
     char*               limit;
 
-    typedef boost::ptr_vector<LINE_READER>  READER_STACK;
+    typedef std::vector<LINE_READER*>  READER_STACK;
 
-    READER_STACK        readerStack;            ///< owns all the LINE_READERs by pointer.
-    LINE_READER*        reader;                 ///< no ownership. ownership is via readerStack.
+    READER_STACK        readerStack;            ///< all the LINE_READERs by pointer.
+    LINE_READER*        reader;                 ///< no ownership. ownership is via readerStack, maybe, if iOwnReaders
     int                 stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
     bool                commentsAreTokens;      ///< true if should return comments as tokens
@@ -155,7 +154,7 @@ class DSNLEXER
 public:
 
     /**
-     * Constructor DSNLEXER
+     * Constructor ( FILE*, const wxString& )
      * intializes a DSN lexer and prepares to read from aFile which
      * is already open and has aFilename.
      *
@@ -168,12 +167,35 @@ public:
     DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
               FILE* aFile, const wxString& aFileName );
 
+    /**
+     * Constructor ( std::string&*, const wxString& )
+     * intializes a DSN lexer and prepares to read from @a aSExpression.
+     *
+     * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
+     *  token table need not contain the lexer separators such as '(' ')', etc.
+     * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aSExpression is text to feed through a STRING_LINE_READER
+     * @param aSource is a description of aSExpression, used for error reporting.
+     */
     DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
-              const std::string& aClipboardTxt, const wxString& aSource = wxEmptyString );
+              const std::string& aSExpression, const wxString& aSource = wxEmptyString );
 
-    ~DSNLEXER()
-    {
-    }
+    /**
+     * Constructor ( LINE_READER* )
+     * intializes a DSN lexer and prepares to read from @a aLineReader which
+     * is already open, and may be in use by other DSNLEXERs also.  No ownership
+     * is taken of @a aLineReader. This enables it to be used by other DSNLEXERs also.
+     *
+     * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
+     *  token table need not contain the lexer separators such as '(' ')', etc.
+     * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aLineReader is any subclassed instance of LINE_READER, such as
+     *  STRING_LINE_READER or FILE_LINE_READER.
+     */
+    DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
+              LINE_READER* aLineReader );
+
+    virtual ~DSNLEXER();
 
     /**
      * Function PushReader

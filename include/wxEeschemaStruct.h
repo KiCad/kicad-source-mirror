@@ -540,10 +540,10 @@ public:
      * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
      * sub-hierarchy must NOT be deleted.
      *
-     * @Note
+     * @note
      * Edit wires and buses is a bit complex.
-     * because when a new wire is added, modifications in wire list
-     * (wire concatenation) there are modified items, deleted items and new items
+     * because when a new wire is added, a lot of modifications in wire list is made
+     * (wire concatenation): modified items, deleted items and new items
      * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
      * wires saved in Undo List (for Undo or Redo commands, saved wires will be
      * exchanged with current wire list

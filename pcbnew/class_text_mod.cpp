@@ -277,7 +277,7 @@ EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
  * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
+ * @return true if a hit, else false
  */
 bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
 {
@@ -419,6 +419,8 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
+/* Rraws a line from the TEXTE_MODULE origin to parent MODULE origin.
+*/
 void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
                                   wxDC*             aDC,
                                   int               aDrawMode,
@@ -430,9 +432,7 @@ void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
 
     GRSetDrawMode( aDC, GR_XOR );
     GRLine( &aPanel->m_ClipBox, aDC,
-            parent->GetPosition().x, parent->GetPosition().y,
-            GetPosition().x + aOffset.x,
-            GetPosition().y + aOffset.y,
+            parent->GetPosition(), GetPosition() + aOffset,
             0, UMBILICAL_COLOR);
 }
 

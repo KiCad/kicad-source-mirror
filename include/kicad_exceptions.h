@@ -42,6 +42,10 @@ struct IO_ERROR
 {
     wxString    errorText;
 
+    /**
+     * Constructor ( const wxChar* )
+     * handles the case where _() is passed as aMsg.
+     */
     IO_ERROR( const wxChar* aMsg ) :
         errorText( aMsg )
     {

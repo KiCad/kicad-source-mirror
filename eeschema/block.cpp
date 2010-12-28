@@ -859,13 +859,14 @@ static void AddPickedItem( SCH_SCREEN* screen, wxPoint position )
 }
 
 
-/** GetNextPinPosition()
+/**
+ * Function GetNextPinPosition()
  * calculate position of the "next" pin of the aDrawLibItem component
  * @param aComponent = component to test.
- * @param aPosition = the calculated pin position, according to the component
+ * @param aPosition = the actual next pin position in schematic, according to the component
  * orientation and position
- * @param aSearchFirst = if true, search for the first pin
- * @return a pointer to the pin
+ * @param aPin = search for the next pin after aPin. aPin = NULL to find the first pin in list
+ * @return a pointer to the next pin found or NULL
  */
 static LIB_PIN* GetNextPinPosition( SCH_COMPONENT* aComponent,
                                     wxPoint&       aPosition,

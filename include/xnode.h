@@ -26,6 +26,12 @@
  */
 
 #include "richio.h"
+
+// quiet the deprecated warnings with 3 lines:
+#include <wx/defs.h>
+#undef wxDEPRECATED
+#define wxDEPRECATED(x) x
+
 #include <wx/xml/xml.h>
 
 

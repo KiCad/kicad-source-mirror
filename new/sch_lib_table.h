@@ -58,13 +58,6 @@ public:
 
     public:
 
-        /* was needed for ptr_set<> but not ptr_map<>
-        bool operator<( const ROW& other ) const
-        {
-            return logicalName < other.logicalName;
-        }
-        */
-
         /**
          * Function GetLogicalName
          * returns the logical name of this library table entry.
@@ -223,46 +216,54 @@ public:
      */
     PART* GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR );
 
-
-#if 0   // moved here from LPID
     /**
-     * Function GetLogicalLibraries
-     * returns the logical library names, all of them that are in the
-     * library table.
+     * Function GetLogicalLibs
+     * returns the logical library names, all of them that are in pertinent to
+     * a lookup done on this LIB_TABLE.
      */
-    STRINGS GetLogicalLibraries();
+    STRINGS GetLogicalLibs();
+
+    //----<read accessors>----------------------------------------------------
+    // the returning of a const STRING* tells if not found, but might be too
+    // promiscuous?
 
     /**
-     * Function GetLibraryURI
+     * Function GetLibURI
      * returns the full library path from a logical library name.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @param aSchematic provides access to the full library table inclusive
-     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     * @return const STRING* - or NULL if not found.
      */
-    STRING  GetLibraryURI( const STRING& aLogicalLibraryName,
-                        SCHEMATIC* aSchematic=NULL ) const;
+    const STRING* GetLibURI( const STRING& aLogicalLibraryName ) const
+    {
+        const ROW* row = FindRow( aLogicalLibraryName );
+        return row ? &row->fullURI : 0;
+    }
 
     /**
-     * Function GetLibraryType
+     * Function GetLibType
      * returns the type of a logical library.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @param aSchematic provides access to the full library table inclusive
-     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     * @return const STRING* - or NULL if not found.
      */
-    STRING GetLibraryType( const STRING& aLogicalLibraryName,
-                        SCHEMATIC* aSchematic=NULL ) const;
+    const STRING* GetLibType( const STRING& aLogicalLibraryName ) const
+    {
+        const ROW* row = FindRow( aLogicalLibraryName );
+        return row ? &row->libType : 0;
+    }
 
     /**
-     * Function GetOptions
+     * Function GetLibOptions
      * returns the options string for \a aLogicalLibraryName.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @param aSchematic provides access to the full library table inclusive
-     *  of the schematic contribution, or may be NULL to exclude the schematic rows.
+     * @return const STRING* - or NULL if not found.
      */
-    STRING GetOptions( const STRING& aLogicalLibraryName,
-                        SCHEMATIC* aSchematic=NULL ) const;
-#endif
+    const STRING* GetLibOptions( const STRING& aLogicalLibraryName ) const
+    {
+        const ROW* row = FindRow( aLogicalLibraryName );
+        return row ? &row->options : 0;
+    }
 
+    //----</read accessors>---------------------------------------------------
 
 #if defined(DEBUG)
     /// implement the tests in here so we can honor the priviledge levels of the
@@ -276,9 +277,10 @@ protected:  // only a table editor can use these
      * Function InsertRow
      * adds aRow if it does not already exist or if doReplace is true.  If doReplace
      * is not true and the key for aRow already exists, the function fails and returns false.
+     * The key for the table is the logicalName, and all in this table must be unique.
      * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
-     * @param doReplace if true, means insert regardless if aRow's key already exists.  If false, then fail
-     *  if the key already exists.
+     * @param doReplace if true, means insert regardless of whether aRow's key already
+     *  exists.  If false, then fail if the key already exists.
      * @return bool - true if the operation succeeded.
      */
     bool InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace = false );
@@ -287,7 +289,7 @@ protected:  // only a table editor can use these
      * Function FindRow
      * returns a ROW* if aLogicalName is found in this table or in fallBack, else NULL.
      */
-    const ROW* FindRow( const STRING& aLogicalName );
+    const ROW* FindRow( const STRING& aLogicalName ) const;
 
 private:
 

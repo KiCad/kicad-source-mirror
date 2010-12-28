@@ -223,8 +223,9 @@ using namespace DSN;    // enum ${enum} is in this namespace
 class ${RESULT}_LEXER : public DSNLEXER
 {
 public:
+
     /**
-     * Constructor ${RESULT}_LEXER
+     * Constructor ( const std::string&, const wxString& )
      * @param aSExpression is (utf8) text possibly from the clipboard that you want to parse.
      * @param aSource is a description of the origin of @a aSExpression, such as a filename.
      *   If left empty, then _("clipboard") is used.
@@ -236,7 +237,7 @@ public:
     }
 
     /**
-     * Constructor ${RESULT}_LEXER
+     * Constructor ( FILE* )
      * takes @a aFile already opened for reading and @a aFilename as parameters.
      * The opened file is assumed to be positioned at the beginning of the file
      * for purposes of accurate line number reporting in error messages.  The
@@ -245,8 +246,25 @@ public:
      * @param aFilename is the name of the opened file, needed for error reporting.
      */
     ${RESULT}_LEXER( FILE* aFile, const wxString& aFilename ) :
-        DSNLEXER( DSN::${result}_keywords,  DSN::${result}_keyword_count,
+        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
                   aFile, aFilename )
+    {
+    }
+
+    /**
+     * Constructor ( LINE_READER* )
+     * intializes a lexer and prepares to read from @a aLineReader which
+     * is assumed ready, and may be in use by other DSNLEXERs also.  No ownership
+     * is taken of @a aLineReader. This enables it to be used by other lexers also.
+     * The transition between grammars in such a case, must happen on a text
+     * line boundary, not within the same line of text.
+     *
+     * @param aLineReader is any subclassed instance of LINE_READER, such as
+     *  STRING_LINE_READER or FILE_LINE_READER.  No ownership is taken of aLineReader.
+     */
+    ${RESULT}_LEXER( LINE_READER* aLineReader ) :
+        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
+                  aLineReader )
     {
     }
 

@@ -509,9 +509,9 @@ bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_nam
  * Test flag flg_mask or flg_name.
  * @param flg_string = flsg list to test: can be a bit field flag or a list name flsg
  * a bit field flag is an hexadecimal value: Ox00020000
- * a list name flsg is a string list of flags, comma separated like square,option1
- * @param flg_mask = flsg list to test
- * @param flg_mask = flsg list to test
+ * a list name flag is a string list of flags, comma separated like square,option1
+ * @param flg_mask = flag list to test
+ * @param flg_name = flag name to find in list
  * @return true if found
  */
 {

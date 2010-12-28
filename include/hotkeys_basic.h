@@ -108,7 +108,7 @@ wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
  * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
- * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ * @param aDescrList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
  * @param aCommandId = Command Id value
  * @param aIsShortCut = true to add &lttab&gt&ltkeyname&gt (active shortcuts in menus)
  *                    = false to add &ltspaces&gt&lt(keyname)&gt
