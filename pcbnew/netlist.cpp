@@ -174,7 +174,7 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     if( !netfile )
         return false;
 
-    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename, BUFFER_CHAR_SIZE );
+    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename );
     char*   Line = netlistReader;
 
     SetLastNetListRead( aNetlistFullFilename );
@@ -798,7 +798,7 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
     if( !netfile )
         return -1;
 
-    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename, BUFFER_CHAR_SIZE );
+    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename );
     char* Line = netlistReader;
 
     State = 0; Comment = 0;
@@ -901,7 +901,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
         return 0;
     }
 
-    FILE_LINE_READER netlistReader( FichCmp, CmpFullFileName, BUFFER_CHAR_SIZE );
+    FILE_LINE_READER netlistReader( FichCmp, CmpFullFileName );
     char* Line = netlistReader;
 
     while( netlistReader.ReadLine() )

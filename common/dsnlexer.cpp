@@ -65,7 +65,7 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
-    FILE_LINE_READER* fileReader = new FILE_LINE_READER( aFile, aFilename, 4096 );
+    FILE_LINE_READER* fileReader = new FILE_LINE_READER( aFile, aFilename );
     PushReader( fileReader );
     init();
 }

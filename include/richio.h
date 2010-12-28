@@ -53,7 +53,7 @@ class LINE_READER
 {
 protected:
     unsigned    length;         ///< no. bytes in line before trailing nul.
-    int         lineNum;
+    unsigned    lineNum;
 
     char*       line;           ///< the read line of UTF8 text
     unsigned    capacity;       ///< no. bytes allocated for line.
@@ -115,7 +115,7 @@ public:
      * returns the line number of the last line read from this LINE_READER.  Lines
      * start from 1.
      */
-    int LineNumber() const
+    unsigned LineNumber() const
     {
         return lineNum;
     }
@@ -140,7 +140,8 @@ class FILE_LINE_READER : public LINE_READER
 {
 protected:
 
-    FILE*   fp;     ///< I own this file
+    bool    iOwn;   ///< if I own the file, I'll promise to close it, else not.
+    FILE*   fp;     ///< I may own this file, but might not.
 
 public:
 
@@ -151,15 +152,23 @@ public:
      *
      * @param aFile is an open file.
      * @param aFileName is the name of the file for error reporting purposes.
+     * @param doOwn if true, means I should close the open file, else not.
+     * @param aStartingLineNumber is the initial line number to report on error, and is
+     *  accessible here for the case where multiple DSNLEXERs are reading from the
+     *  same file in sequence, all from the same open file (with @a doOwn = false).
+     *  Internally it is incremented by one after each ReadLine(), so the first
+     *  reported line number will always be one greater than what is provided here.
      * @param aMaxLineLength is the number of bytes to use in the line buffer.
      */
-    FILE_LINE_READER( FILE* aFile,  const wxString& aFileName, unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
+    FILE_LINE_READER( FILE* aFile, const wxString& aFileName, bool doOwn = true,
+            unsigned aStartingLineNumber = 0,
+            unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
-    ~FILE_LINE_READER()
-    {
-        if( fp )
-            fclose( fp );
-    }
+    /**
+     * Destructor
+     * may or may not close the open file, depending on @a doOwn in constructor.
+     */
+    ~FILE_LINE_READER();
 
     unsigned ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
 
@@ -198,17 +207,17 @@ public:
      * @param aSource describes the source of aString for error reporting purposes
      *  can be anything meaninful, such as wxT( "clipboard" ).
      */
-    STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
-        LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
-        lines( aString ),
-        ndx( 0 )
-    {
-        // Clipboard text should be nice and _use multiple lines_ so that
-        // we can report _line number_ oriented error messages when parsing.
-        source = aSource;
-    }
+    STRING_LINE_READER( const std::string& aString, const wxString& aSource );
 
-     unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    /**
+     * Constructor STRING_LINE_READER( const STRING_LINE_READER& )
+     * allows for a continuation of the reading of a stream started by another
+     * STRING_LINE_READER.  Any stream offset and source name are used from
+     * @a aStartingPoint.
+     */
+    STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint );
+
+    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 

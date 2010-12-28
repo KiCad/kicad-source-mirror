@@ -82,11 +82,23 @@ void LINE_READER::expandCapacity( unsigned newsize )
 }
 
 
-FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName, unsigned aMaxLineLength ) :
+FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
+                    bool doOwn,
+                    unsigned aStartingLineNumber,
+                    unsigned aMaxLineLength ) :
     LINE_READER( aMaxLineLength ),
+    iOwn( doOwn ),
     fp( aFile )
 {
-    source = aFileName;
+    source  = aFileName;
+    lineNum = aStartingLineNumber;
+}
+
+
+FILE_LINE_READER::~FILE_LINE_READER()
+{
+    if( iOwn && fp )
+        fclose( fp );
 }
 
 
@@ -116,6 +128,29 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
     return length;
 }
 
+
+STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
+    LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
+    lines( aString ),
+    ndx( 0 )
+{
+    // Clipboard text should be nice and _use multiple lines_ so that
+    // we can report _line number_ oriented error messages when parsing.
+    source = aSource;
+}
+
+
+STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint ) :
+    LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
+    lines( aStartingPoint.lines ),
+    ndx( aStartingPoint.ndx )
+{
+    // since we are keeping the same "source" name, for error reporting purposes
+    // we need to have the same notion of line number and offset.
+
+    source  = aStartingPoint.source;
+    lineNum = aStartingPoint.lineNum;
+}
 
 unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 {
