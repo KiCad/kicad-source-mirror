@@ -41,6 +41,41 @@ class PART;
  * Class LIB_TABLE
  * holds LIB_TABLE::ROW records, and can be searched in a very high speed
  * way based on logical library name.
+ * <p>
+ * This class owns the <b>library table</b>, which is like fstab in concept and maps logical
+ * library name to library URI, type, and options. It has the following columns:
+ * <ul>
+ * <li> Logical Library Name
+ * <li> Library Type
+ * <li> Library URI.  The full URI to the library source, form dependent on Type.
+ * <li> Options, used for access, such as password
+ * </ul>
+ * <p>
+ * The Library Type can be one of:
+ * <ul>
+ * <li> "dir"
+ * <li> "schematic"  i.e. a parts list from another schematic.
+ * <li> "subversion"
+ * <li> "http"
+ * </ul>
+ * <p>
+ * For now, the Library URI types needed to support the various types can be one of those
+ * shown below, which are typical of each type:
+ * <ul>
+ * <li> "file://C:/mylibdir"
+ * <li> "file://home/user/kicadwork/jtagboard.sch"
+ * <li> "svn://kicad.org/partlib/trunk"
+ * <li> "http://kicad.org/partlib"
+ * </ul>
+ * <p>
+ * The applicable library table is built up from several additive rows (table fragments),
+ * and the final table is a (conceptual) merging of the table fragments. Two
+ * anticipated sources of the rows are a personal table, and a schematic resident
+ * table.  The schematic resident table rows are considered a higher priority in
+ * the final dynamically assembled library table. A row in the schematic
+ * contribution to the library table takes precedence over the personal table
+ * if there is a collision on logical library name, otherwise the rows simply
+ * combine without issue to make up the applicable library table.
  *
  * @author Dick Hollenbeck
  */
@@ -168,7 +203,8 @@ public:
 
     /**
      * Constructor LIB_TABLE
-     * builds a library table from an s-expression form of the library table.
+     * builds a library table by pre-pending this table fragment in front of
+     * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
      * @param aFallBackTable is another LIB_TABLE which is searched only when
      *   a record is not found in this table.  No ownership is taken of aFallBackTable.
      */
@@ -176,16 +212,15 @@ public:
 
     /**
      * Function Parse
-     * fills this object from information in the input stream \a aLexer, which
+     * fills this table fragment from information in the input stream \a aLexer, which
      * is a DSNLEXER customized for the grammar needed to describe instances of this object.
      * The entire textual element spec is <br>
-     * (lib_table (logical _yourfieldname_)(value _yourvalue_) visible))
      *
      * <pre>
      * (lib_table
-     *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
-     *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
-     *   (lib (logical "LOGICAL")(type "TYPE")(fullURI "FULL_URI")(options "OPTIONS"))
+     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
+     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
+     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
      * </pre>
      *
      * When this function is called, the input token stream given by \a aLexer
@@ -193,7 +228,7 @@ public:
      * identifying keyword and before the content specifying stuff.<br>
      * (lib_table ^ (....) )
      *
-     * @param aSpec is the input token stream of keywords and symbols.
+     * @param aLexer is the input token stream of keywords and symbols.
      */
     void Parse( SCH_LIB_TABLE_LEXER* aLexer ) throw( IO_ERROR );
 

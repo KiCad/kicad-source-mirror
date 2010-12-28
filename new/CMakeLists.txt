@@ -77,6 +77,11 @@ target_link_libraries( test_sch_lib_table ${wxWidgets_LIBRARIES} )
 add_executable( test_sch_part sch_part.cpp )
 target_link_libraries( test_sch_part ${wxWidgets_LIBRARIES} )
 
+add_executable( test_lpid
+    sch_lpid.cpp
+    )
+target_link_libraries( test_lpid ${wxWidgets_LIBRARIES} )
+
 
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table.keywords
@@ -84,4 +89,3 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_keywords.cpp
     ELT_T
     )
-

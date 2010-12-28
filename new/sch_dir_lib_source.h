@@ -132,8 +132,7 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      */
     STRING makeFileName( const STRING& aPartName );
 
-//protected:
-public:
+protected:
 
     /**
      * Constructor DIR_LIB_SOURCE( const STRING& aDirectoryPath )
@@ -151,8 +150,7 @@ public:
      *  tree, otherwise only a single version of each part is recognized, namely the
      *  one without the ".revN[N..]" trailer.
      */
-    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = "" )
-        throw( IO_ERROR );
+    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = "" ) throw( IO_ERROR );
 
     ~DIR_LIB_SOURCE();
 
@@ -187,6 +185,10 @@ public:
      * will output a debug dump of contents.
      */
     void Show();
+
+public:
+    static void Test( int argc, char** argv );
+
 #endif
 };
 

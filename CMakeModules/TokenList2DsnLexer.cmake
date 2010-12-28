@@ -220,6 +220,13 @@ extern const unsigned ${result}_keyword_count;
 
 using namespace DSN;    // enum ${enum} is in this namespace
 
+
+/**
+ * Classs ${RESULT}_LEXER
+ * is an automatically generated class using the TokenList2DnsLexer.cmake
+ * technology, based on keywords provided by file:
+ *    ${inputFile}
+ */
 class ${RESULT}_LEXER : public DSNLEXER
 {
 public:
