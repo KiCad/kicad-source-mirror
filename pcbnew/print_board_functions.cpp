@@ -26,7 +26,7 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
  * @param aPrint_Sheet_Ref = true to print frame references
- * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */
@@ -107,7 +107,7 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
  * @param aPrint_Sheet_Ref = true to print frame references
- * @param aPrint_Sheet_Ref = a 32 bits mask: bit n = 1 -> layer n is printed
+ * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */

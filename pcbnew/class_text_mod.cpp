@@ -93,11 +93,11 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
 
 
 /**
- * Function ReadLineDescr
+ * Function ReadDescr
  * Read description from a given line in "*.brd" format.
  * @param aLine The current line which contains the first line of description.
  * @param aLine The FILE to read next lines (currently not used).
- * @param LineNum a point to the line count (currently not used).
+ * @param aLineNum a point to the line count (currently not used).
  * @return int - > 0 if success reading else 0.
  */
 int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
@@ -276,10 +276,10 @@ EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
+ * @param aRefPos A wxPoint to test
  * @return true if a hit, else false
  */
-bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
+bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
 {
     wxPoint  rel_pos;
     EDA_Rect area = GetTextRect();
@@ -288,7 +288,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& refPos )
      * to test if refPos is within area (which is relative to an horizontal
      * text)
      */
-    rel_pos = refPos;
+    rel_pos = aRefPos;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
 
     if( area.Contains( rel_pos ) )

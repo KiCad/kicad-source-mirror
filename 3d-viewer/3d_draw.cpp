@@ -386,12 +386,12 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
 /**
  * Function Draw3D_SolidPolygonsInZones
  * draw all solid polygons used as filles areas in a zone
- * @param aZone_c = the zone to draw
+ * @param aZone = the zone to draw
  */
-void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
+void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 {
     double zpos;
-    int    layer = zone_c->GetLayer();
+    int    layer = aZone->GetLayer();
 
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
         return;
@@ -420,7 +420,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
 
     // Draw solid areas contained in this zone
     int StartContour = 1;
-    for( unsigned ii = 0; ii < zone_c->m_FilledPolysList.size(); ii++ )
+    for( unsigned ii = 0; ii < aZone->m_FilledPolysList.size(); ii++ )
     {
         if( StartContour == 1 )
         {
@@ -428,11 +428,11 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* zone_c )
             gluTessBeginContour( tess );
             StartContour = 0;
         }
-        v_data[0] = zone_c->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
-        v_data[1] = -zone_c->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale;
-        gluTessVertex( tess, v_data, &zone_c->m_FilledPolysList[ii] );
+        v_data[0] = aZone->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
+        v_data[1] = -aZone->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale;
+        gluTessVertex( tess, v_data, &aZone->m_FilledPolysList[ii] );
 
-        if( zone_c->m_FilledPolysList[ii].end_contour == 1 )
+        if( aZone->m_FilledPolysList[ii].end_contour == 1 )
         {
             gluTessEndContour( tess );
             gluTessEndPolygon( tess );

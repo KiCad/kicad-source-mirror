@@ -264,41 +264,41 @@ void DIMENSION::Move(const wxPoint& offset)
 
 /**
  * Function Rotate
- * @param center : Rotation point
- * @param angle : Rotation angle in 0.1 degrees
+ * @param aRotCentre - the rotation point.
+ * @param aAngle - the rotation angle in 0.1 degree.
  */
-void DIMENSION::Rotate(const wxPoint& centre, int angle)
+void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
 {
-    RotatePoint( &m_Pos, centre, angle );
+    RotatePoint( &m_Pos, aRotCentre, aAngle );
 
-    RotatePoint( &m_Text->m_Pos, centre, angle );
-    m_Text->m_Orient += angle;
+    RotatePoint( &m_Text->m_Pos, aRotCentre, aAngle );
+    m_Text->m_Orient += aAngle;
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
     if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient <2700 ) )
         m_Text->m_Orient -= 1800;
 
-    RotatePoint( &Barre_ox, &Barre_oy, centre.x, centre.y, angle );
-    RotatePoint( &Barre_fx, &Barre_fy, centre.x, centre.y, angle );
-    RotatePoint( &TraitG_ox, &TraitG_oy, centre.x, centre.y, angle );
-    RotatePoint( &TraitG_fx, &TraitG_fy, centre.x, centre.y, angle );
-    RotatePoint( &TraitD_ox, &TraitD_oy, centre.x, centre.y, angle );
-    RotatePoint( &TraitD_fx, &TraitD_fy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, centre.x, centre.y, angle );
-    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, centre.x, centre.y, angle );
+    RotatePoint( &Barre_ox, &Barre_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &Barre_fx, &Barre_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &TraitG_ox, &TraitG_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &TraitG_fx, &TraitG_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &TraitD_ox, &TraitD_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &TraitD_fx, &TraitD_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, aRotCentre.x, aRotCentre.y, aAngle );
 }
 
 
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void DIMENSION::Flip(const wxPoint& aCentre )
 {
@@ -733,7 +733,7 @@ bool DIMENSION::HitTest( const wxPoint& ref_pos )
 /**
  * Function HitTest (overlaid)
  * tests if the given EDA_Rect intersect this object.
- * @param EDA_Rect : the given EDA_Rect
+ * @param refArea : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
 bool DIMENSION::HitTest( EDA_Rect& refArea )

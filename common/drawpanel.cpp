@@ -944,9 +944,10 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
  * Function DrawAuxiliaryAxis
  * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
  * for gerber and excellon files
- * @param DC = current Device Context
+ * @param aDC = current Device Context
+ * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
  */
-void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
+void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 {
     if( m_Parent->m_Auxiliary_Axis_Position == wxPoint( 0, 0 ) )
         return;
@@ -954,10 +955,10 @@ void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
     int          Color  = DARKRED;
     BASE_SCREEN* screen = GetScreen();
 
-    GRSetDrawMode( DC, drawmode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     /* Draw the Y axis */
-    GRDashedLine( &m_ClipBox, DC,
+    GRDashedLine( &m_ClipBox, aDC,
                   m_Parent->m_Auxiliary_Axis_Position.x,
                   -screen->ReturnPageSize().y,
                   m_Parent->m_Auxiliary_Axis_Position.x,
@@ -965,7 +966,7 @@ void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
                   0, Color );
 
     /* Draw the X axis */
-    GRDashedLine( &m_ClipBox, DC,
+    GRDashedLine( &m_ClipBox, aDC,
                   -screen->ReturnPageSize().x,
                   m_Parent->m_Auxiliary_Axis_Position.y,
                   screen->ReturnPageSize().x,
@@ -974,7 +975,7 @@ void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* DC, int drawmode )
 }
 
 /********************************************************************/
-void WinEDA_DrawPanel::DrawGridAxis( wxDC* DC, int drawmode )
+void WinEDA_DrawPanel::DrawGridAxis( wxDC* aDC, int aDrawMode )
 /********************************************************************/
 {
     BASE_SCREEN* screen = GetScreen();
@@ -985,10 +986,10 @@ void WinEDA_DrawPanel::DrawGridAxis( wxDC* DC, int drawmode )
 
     int          Color  = m_Parent->GetGridColor();
 
-    GRSetDrawMode( DC, drawmode );
+    GRSetDrawMode( aDC, aDrawMode );
 
     /* Draw the Y axis */
-    GRDashedLine( &m_ClipBox, DC,
+    GRDashedLine( &m_ClipBox, aDC,
                   screen->m_GridOrigin.x,
                   -screen->ReturnPageSize().y,
                   screen->m_GridOrigin.x,
@@ -996,7 +997,7 @@ void WinEDA_DrawPanel::DrawGridAxis( wxDC* DC, int drawmode )
                   0, Color );
 
     /* Draw the X axis */
-    GRDashedLine( &m_ClipBox, DC,
+    GRDashedLine( &m_ClipBox, aDC,
                   -screen->ReturnPageSize().x,
                   screen->m_GridOrigin.y,
                   screen->ReturnPageSize().x,

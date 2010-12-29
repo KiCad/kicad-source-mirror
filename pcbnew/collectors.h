@@ -378,7 +378,8 @@ public:
      * Constructor GENERAL_COLLECTORS_GUIDE
      * grabs stuff from global preferences and uses reasonable defaults.
      * Add more constructors as needed.
-     * @param settings The BOARD_DESIGN_SETTINGS to reference.
+     * @param aVisibleLayerMask = current visible layers (bit mask)
+     * @param aPreferredLayer = the layer to search first
      */
     GENERAL_COLLECTORS_GUIDE( int aVisibleLayerMask, int aPreferredLayer )
     {
@@ -403,7 +404,7 @@ public:
         m_IgnoreMTextsOnCmp         = false;
         m_IgnoreModulesOnCu         = true; // !Show_Modules_Cmp;
         m_IgnoreModulesOnCmp        = false;
-        
+
         m_IgnorePadsOnFront         = false;
         m_IgnorePadsOnBack          = false;
     }

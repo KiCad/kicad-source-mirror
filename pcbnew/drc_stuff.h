@@ -374,11 +374,11 @@ public:
      * in the status panel only if one exists.
      *      Test Edge inside other areas
      *      Test Edge too close other areas
-     * @param aEdge The areaparent which contains the corner.
-     * @param CornerIndex The starting point of the segment to test.
+     * @param aArea The areaparent which contains the corner.
+     * @param aCornerIndex The starting point of the segment to test.
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int Drc( ZONE_CONTAINER* aArea, int CornerIndex  );
+    int Drc( ZONE_CONTAINER* aArea, int aCornerIndex  );
 
     /**
      * Function DrcBlind

@@ -36,7 +36,7 @@ static const wxString ModExportFileWildcard(
 static bool CreateDocLibrary( const wxString& LibName );
 
 
-/**
+/*
  * Function Import_Module
  * Read a file containing only one footprint.
  * Used to import (after exporting) a footprint
@@ -44,7 +44,6 @@ static bool CreateDocLibrary( const wxString& LibName );
  * This is the same format as .mod files but restricted to only one footprint
  * The import function can also read gpcb footprint file, in Newlib format
  * (One footprint per file, Newlib files have no special ext.)
- * @param DC = Current Device Context (can be NULL)
  */
 MODULE* WinEDA_ModuleEditFrame::Import_Module( )
 {
@@ -146,12 +145,11 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
  * This is the same format as .mod files but restricted to only one footprint
  * So Create a new lib (which will contains one module) and export a footprint
  * is basically the same thing
- * @param DC = Current Device Context (can be NULL)
- * @param createlib : true = use default lib path to create lib
- *                    false = use current path or last used path to export
- * footprint
+ * @param aModule = the module to export
+ * @param aCreateSysLib : true = use default lib path to create lib
+ *                    false = use current path or last used path to export the footprint
  */
-void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
+void WinEDA_ModuleEditFrame::Export_Module( MODULE* aModule, bool aCreateSysLib )
 {
     wxFileName fn;
     char       Line[1025];
@@ -159,21 +157,21 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     wxString   msg, path, title, wildcard;
     wxConfig*  Config = wxGetApp().m_EDA_Config;
 
-    if( ptmod == NULL )
+    if( aModule == NULL )
         return;
 
-    ptmod->m_LibRef = ptmod->m_Reference->m_Text;
-    fn.SetName( ptmod->m_LibRef );
-    fn.SetExt( createlib ? ModuleFileExtension : ModExportFileExtension );
+    aModule->m_LibRef = aModule->m_Reference->m_Text;
+    fn.SetName( aModule->m_LibRef );
+    fn.SetExt( aCreateSysLib ? ModuleFileExtension : ModExportFileExtension );
 
-    if( createlib )
+    if( aCreateSysLib )
         path = wxGetApp().ReturnLastVisitedLibraryPath();
     else if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
     fn.SetPath( path );
-    title    = createlib ? _( "Create New Library" ) : _( "Export Module" );
-    wildcard = createlib ?  ModuleFileWildcard : ModExportFileWildcard;
+    title    = aCreateSysLib ? _( "Create New Library" ) : _( "Export Module" );
+    wildcard = aCreateSysLib ?  ModuleFileWildcard : ModExportFileWildcard;
     wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(), wildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -190,7 +188,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
         return;
     }
 
-    if( !createlib && Config )  // Save file path
+    if( !aCreateSysLib && Config )  // Save file path
     {
         Config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
@@ -202,7 +200,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* ptmod, bool createlib )
     fprintf( file, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
     fputs( "$INDEX\n", file );
 
-    fprintf( file, "%s\n", CONV_TO_UTF8( ptmod->m_LibRef ) );
+    fprintf( file, "%s\n", CONV_TO_UTF8( aModule->m_LibRef ) );
     fputs( "$EndINDEX\n", file );
 
     GetBoard()->m_Modules->Save( file );

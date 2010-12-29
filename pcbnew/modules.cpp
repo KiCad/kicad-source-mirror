@@ -256,28 +256,27 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  * Function Delete Module
  * Remove a footprint from m_Modules linked list and put it in undelete buffer
  * The ratsnest and pad list are recalculated
- * @param module = footprint to delete
- * @param DC = currentDevice Context. if NULL: do not redraw new ratsnest and
- * screen
- * @param aPromptBeforeDeleting : if true: ask for confirmation before deleting
+ * @param aModule = footprint to delete
+ * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
+ * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
  */
-bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
-                                     wxDC*   DC,
+bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
+                                     wxDC*   aDC,
                                      bool    aAskBeforeDeleting )
 {
     wxString msg;
 
-    if( module == NULL )
+    if( aModule == NULL )
         return FALSE;
 
-    module->DisplayInfo( this );
+    aModule->DisplayInfo( this );
 
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
     {
         msg.Printf( _( "Delete Module %s (value %s) ?" ),
-                   GetChars( module->m_Reference->m_Text ),
-                   GetChars( module->m_Value->m_Text ) );
+                   GetChars( aModule->m_Reference->m_Text ),
+                   GetChars( aModule->m_Value->m_Text ) );
         if( !IsOK( this, msg ) )
         {
             return FALSE;
@@ -287,15 +286,15 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* module,
     OnModify();
 
     /* Remove module from list, and put it in undo command list */
-    m_Pcb->m_Modules.Remove( module );
-    module->SetState( DELETED, ON );
-    SaveCopyInUndoList( module, UR_DELETED );
+    m_Pcb->m_Modules.Remove( aModule );
+    aModule->SetState( DELETED, ON );
+    SaveCopyInUndoList( aModule, UR_DELETED );
 
-    if( DC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
-        Compile_Ratsnest( DC, true );
+    if( aDC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+        Compile_Ratsnest( aDC, true );
 
     // Redraw the full screen to ensure perfect display of board and ratsnest.
-    if( DC )
+    if( aDC )
         DrawPanel->Refresh();
 
     return true;
@@ -531,7 +530,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
 
 
 /*************************************************/
-/* Redraw mode XOR the silhouette of the module. */
+/* Redraw in XOR mode the outlines of a module. */
 /*************************************************/
 void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
 {
@@ -559,7 +558,7 @@ void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
     if( g_Show_Module_Ratsnest && panel )
     {
         WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
-        frame->build_ratsnest_module( DC, module );
+        frame->build_ratsnest_module( module );
         frame->trace_ratsnest_module( DC );
     }
 }

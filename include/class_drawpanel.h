@@ -178,9 +178,9 @@ public:
     /**
      * Function CursorRealPosition
      * @return the position in user units of location ScreenPos
-     * @param ScreenPos = the screen (in pixel) position to convert
+     * @param aPosition = the screen (in pixel) position to convert
      */
-    wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
+    wxPoint      CursorRealPosition( const wxPoint& aPosition );
 
     /**
      * Function CursorScreenPosition

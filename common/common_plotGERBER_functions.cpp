@@ -267,9 +267,11 @@ void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
  * Plot one circle as segments (6 to 16 depending on its radius
  * @param aCentre = center coordinates
  * @param aDiameter = diameter of the circle
+ * @param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
+ * not used here: circles are always not filled the gerber. Filled circles are flashed
  * @param aWidth = line width
  */
-void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T fill,
+void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T aFill,
                              int aWidth )
 {
     wxASSERT( output_file );

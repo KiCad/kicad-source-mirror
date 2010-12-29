@@ -660,7 +660,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
             if( Penalite >= 0 ) /* c a d if the module can be placed. */
             {
                 error = 0;
-                build_ratsnest_module( DC, Module );
+                build_ratsnest_module( Module );
                 cout = Compute_Ratsnest_PlaceModule( DC );
                 DisplayChevelu = 1;
                 Score = cout + (float) Penalite;
@@ -1047,7 +1047,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
             continue;
         pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
         Module->DisplayInfo( pcbframe );
-        pcbframe->build_ratsnest_module( DC, Module );
+        pcbframe->build_ratsnest_module( Module );
 
         /* Calculate external ratsnet. */
         for( unsigned ii = 0;

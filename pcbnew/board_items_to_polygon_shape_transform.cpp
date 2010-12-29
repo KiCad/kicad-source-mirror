@@ -558,6 +558,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aPad     = the current pad used to create the thermal shape
  * @param aThermalGap = gap in thermal shape
+ * @param aCopperThickness = stubs thickness in thermal shape
  * @param aMinThicknessValue = min copper thickness allowed
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * @param aCorrectionFactor = the correction to apply to circles radius to keep

@@ -195,7 +195,7 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
 /**
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
- * @param EDA_Rect : the given EDA_Rect
+ * @param refArea : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
 bool    MIREPCB::HitTest( EDA_Rect& refArea )
@@ -209,7 +209,7 @@ bool    MIREPCB::HitTest( EDA_Rect& refArea )
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void MIREPCB::Rotate(const wxPoint& aRotCentre, int aAngle)
@@ -221,7 +221,7 @@ void MIREPCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void MIREPCB::Flip(const wxPoint& aCentre )
 {

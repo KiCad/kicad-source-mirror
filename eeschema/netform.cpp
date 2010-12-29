@@ -240,6 +240,8 @@ public:
     /**
      * Function WriteGENERICNetList
      * creates a generic netlist, now in XML.
+     * @param frame = the parent SCH_EDIT_FRAME frame
+     * @param aOutFileName = the full filename of the file to create
      * @return bool - true if there were no errors, else false.
      */
     bool WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName );
@@ -248,6 +250,8 @@ public:
      * Function WriteNetListPCBNEW
      * generates a net list file (Format 2 improves ORCAD PCB)
      *
+     * @param frame = the parent SCH_EDIT_FRAME frame
+     * @param f = the file to write to
      * @param with_pcbnew if true, then format Pcbnew (OrcadPcb2 + reviews and lists of net),<p>
      *                    else output ORCADPCB2 strict format.
      */
@@ -291,6 +295,8 @@ public:
      * Are considered in placing orders in the netlist
      * [.-] Or PSpice gnucap are beginning
      * + + Gnucap and PSpice are ultimately NetList
+     * @param frame = the parent SCH_EDIT_FRAME frame
+     * @param f = the file to write to
      * @param use_netnames if true, then nodes are identified by the netname,
      *          else by net number.
      */

@@ -178,13 +178,13 @@ void MODULE::Copy( MODULE* aModule )
 /**
  * Function Draw
  *  Draws the footprint to the current Device Context
- *  @param panel = The active Draw Panel (used to know the clip box)
- *  @param DC = current Device Context
- *  @param offset = draw offset (usually wxPoint(0,0)
- *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
+ * @param aPanel = draw panel, Used to know the clip box
+ * @param aDC = Current Device Context
+ * @param aDrawMode = GR_OR, GR_XOR..
+ * @param aOffset = draw offset (usually wxPoint(0,0)
  */
-void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                   int draw_mode, const wxPoint& offset )
+void MODULE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                   int aDrawMode, const wxPoint& aOffset )
 {
     if( (m_Flags & DO_NOT_DRAW) || (m_Flags & IS_MOVED) )
         return;
@@ -194,25 +194,25 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         if( pad->m_Flags & IS_MOVED )
             continue;
 
-        pad->Draw( panel, DC, draw_mode, offset );
+        pad->Draw( aPanel, aDC, aDrawMode, aOffset );
     }
 
     BOARD* brd = GetBoard();
 
     // Draws footprint anchor
-    DrawAncre( panel, DC, offset, DIM_ANCRE_MODULE, draw_mode );
+    DrawAncre( aPanel, aDC, aOffset, DIM_ANCRE_MODULE, aDrawMode );
 
     /* Draw graphic items */
     if( brd->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
     {
         if( !(m_Reference->m_Flags & IS_MOVED) )
-            m_Reference->Draw( panel, DC, draw_mode, offset );
+            m_Reference->Draw( aPanel, aDC, aDrawMode, aOffset );
     }
 
     if( brd->IsElementVisible( MOD_VALUES_VISIBLE ) )
     {
         if( !(m_Value->m_Flags & IS_MOVED) )
-            m_Value->Draw( panel, DC, draw_mode, offset );
+            m_Value->Draw( aPanel, aDC, aDrawMode, aOffset );
     }
 
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
@@ -224,7 +224,7 @@ void MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
         {
         case TYPE_TEXTE_MODULE:
         case TYPE_EDGE_MODULE:
-            item->Draw( panel, DC, draw_mode, offset );
+            item->Draw( aPanel, aDC, aDrawMode, aOffset );
             break;
 
         default:

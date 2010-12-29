@@ -272,7 +272,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
  *      ref_pos on layers allowed in masque_layer
  *  - Put segments fount in aList
  *  Vias are put in list but their flags BUSY is not set
- * @param Pcb = the board
+ * @param aPcb = the board
  * @param aRef_pos = the reference coordinate of the starting search
  * @param aLayerMask = the allowed layers for segments to search
  *  (1 layer when starting point is on a segment, but more than one when

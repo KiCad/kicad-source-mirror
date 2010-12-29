@@ -122,7 +122,7 @@ int ChangeSideMaskLayer( int masque )
 /**
  * Function Move (virtual)
  * move this object.
- * @param const wxPoint& aMoveVector - the move vector for this object.
+ * @param aMoveVector - the move vector for this object.
  */
 void MODULE::Move(const wxPoint& aMoveVector)
 {
@@ -134,7 +134,7 @@ void MODULE::Move(const wxPoint& aMoveVector)
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
@@ -149,7 +149,7 @@ void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void MODULE::Flip(const wxPoint& aCentre )
 {

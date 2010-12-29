@@ -210,11 +210,11 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
 
 /**
  * Function Enter_Edge_Width
- * Edition of the edge items width
+ * Edition of width of module outlines
  * Ask for a new width.
- * Change the width of EDGE_MODULE Edge if aEdge != NULL
+ * Change the width of EDGE_MODULE aEdge if aEdge != NULL
  * @param aEdge = edge to edit, or NULL
- * @output ModuleSegmentWidth (global) = new width
+ * changes g_ModuleSegmentWidth (global) = new width
  */
 void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {

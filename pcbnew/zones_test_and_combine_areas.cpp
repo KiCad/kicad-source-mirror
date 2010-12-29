@@ -328,8 +328,8 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
  * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas (useful in undo commands
  *                      can be NULL
  * @param modified_area = area to test
+ * @param  bMessageBoxArc if true, shows message when clipping can't be done due to arcs.
  * @param bMessageBoxInt == true, shows message when clipping occurs.
- * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
  * @return :
  * -1 if arcs intersect other sides, so polygon can't be clipped
  *  0 if no intersecting sides

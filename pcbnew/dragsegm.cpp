@@ -41,8 +41,9 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
     {
         wxPoint pos;
         Track = g_DragSegmentList[ii].m_Segm;
+#ifndef USE_WX_OVERLAY
         Track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
-
+#endif
         pt_pad = g_DragSegmentList[ii].m_Pad_Start;
         if( pt_pad )
         {

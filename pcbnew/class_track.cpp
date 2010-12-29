@@ -271,7 +271,7 @@ EDA_Rect TRACK::GetBoundingBox() const
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void TRACK::Rotate( const wxPoint& aRotCentre, int aAngle )
@@ -284,7 +284,7 @@ void TRACK::Rotate( const wxPoint& aRotCentre, int aAngle )
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void TRACK::Flip( const wxPoint& aCentre )
 {
@@ -324,11 +324,6 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 bool SEGVIA::IsOnLayer( int layer_number ) const
 /***********************************************/
 {
-/**
- *  @param layer_number = layer number to test
- *  @return true if the via is on the layer layer_number
- */
-
     int bottom_layer, top_layer;
 
     ReturnLayerPair( &top_layer, &bottom_layer );
@@ -343,7 +338,6 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 /***********************************/
 int TRACK::ReturnMaskLayer()
 /***********************************/
-
 /* Return the mask layer for this.
  *  for a via, there is more than one layer used
  */
@@ -432,22 +426,20 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 }
 
 
-/***********************************************/
-TRACK* TRACK::GetBestInsertPoint( BOARD* Pcb )
-/***********************************************/
-
-/**
+/*
+ * Function GetBestInsertPoint
  *  Search the "best" insertion point within the track linked list
  *  the best point is the of the corresponding net code section
- *  @return the item found in the linked list (or NULL if no track)
+ *  return the item found in the linked list (or NULL if no track)
  */
+TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 {
     TRACK* track;
 
     if( Type() == TYPE_ZONE )
-        track = Pcb->m_Zone;
+        track = aPcb->m_Zone;
     else
-        track = Pcb->m_Track;
+        track = aPcb->m_Track;
 
     for( ; track;  track = track->Next() )
     {
@@ -1136,10 +1128,10 @@ void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
+ * @param refPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool TRACK::HitTest( const wxPoint& ref_pos )
+bool TRACK::HitTest( const wxPoint& refPos )
 {
     int radius = m_Width >> 1;
 
@@ -1148,8 +1140,8 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
     int dy = m_End.y - m_Start.y;
 
     // (spot_cX, spot_cY) is a vector from m_Start to ref_pos (an origin of m_Start)
-    int spot_cX = ref_pos.x - m_Start.x;
-    int spot_cY = ref_pos.y - m_Start.y;
+    int spot_cX = refPos.x - m_Start.x;
+    int spot_cY = refPos.y - m_Start.y;
 
     if( Type() == TYPE_VIA )
     {
@@ -1167,10 +1159,10 @@ bool TRACK::HitTest( const wxPoint& ref_pos )
 
 
 /**
- * Function HitTest (overlayed)
+ * Function HitTest (overlaid)
  * tests if the given EDA_Rect intersect this object.
  * For now, an ending point must be inside this rect.
- * @param refArea : the given EDA_Rect
+ * @param refArea an EDA_Rect to test
  * @return bool - true if a hit, else false
  */
 bool TRACK::HitTest( EDA_Rect& refArea )

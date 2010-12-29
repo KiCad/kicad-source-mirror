@@ -61,6 +61,8 @@ public:
 
     /**
      * Constructor
+     * @param aParent is the parent window
+     * @param aFocusOwner is the window that should be sent the focus after
      * @param aPointSize is the font point size to use within the widget.  This
      *  effectively sets the overal size of the widget via the row height and bitmap
      *  button sizes.

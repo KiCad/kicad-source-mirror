@@ -63,9 +63,9 @@ int SaveCopyOfZones(PICKED_ITEMS_LIST & aPickList, BOARD* aPcb, int aNetCode, in
  * check a pick list to remove zones identical to their copies
  * and set the type of operation in picker (UR_DELETED, UR_CHANGED)
  * @param aPickList = the main pick list
- * @param aDeletedList = the list of dleted items
+ * @param aAuxiliaryList = the list of deleted or added (new created) items after calculations
  * @param aPcb = the Board
  */
-void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList, PICKED_ITEMS_LIST& aDeletedList, BOARD* aPcb );
+void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList, PICKED_ITEMS_LIST& aAuxiliaryList, BOARD* aPcb );
 
 #endif      // ZONES_FUNCTIONS_TO_UNDO_REDO_H

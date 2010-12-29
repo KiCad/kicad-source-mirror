@@ -514,7 +514,7 @@ public:
      * @return The draw object if found.  Otherwise NULL.
      */
     LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                   const wxPoint& aPoint, const TRANSFORM& aTransfrom );
+                                   const wxPoint& aPoint, const TRANSFORM& aTransform );
 
     /**
      * Return a reference to the draw item list.

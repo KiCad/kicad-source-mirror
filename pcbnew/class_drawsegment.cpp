@@ -50,7 +50,7 @@ void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void DRAWSEGMENT::Rotate(const wxPoint& aRotCentre, int aAngle)
@@ -62,7 +62,7 @@ void DRAWSEGMENT::Rotate(const wxPoint& aRotCentre, int aAngle)
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void DRAWSEGMENT::Flip(const wxPoint& aCentre )
 {
@@ -418,10 +418,10 @@ void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
+ * @param aRefPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
+bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 {
     int ux0 = m_Start.x;
     int uy0 = m_Start.y;
@@ -430,8 +430,8 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
     int dx = m_End.x - ux0;
     int dy = m_End.y - uy0;
 
-    int spot_cX = ref_pos.x - ux0;
-    int spot_cY = ref_pos.y - uy0;
+    int spot_cX = aRefPos.x - ux0;
+    int spot_cY = aRefPos.y - uy0;
 
     switch(m_Shape){
         case S_CIRCLE:
@@ -465,7 +465,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& ref_pos )
         case S_CURVE:
             for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
             {
-                if( TestSegmentHit( ref_pos,m_BezierPoints[i-1],
+                if( TestSegmentHit( aRefPos,m_BezierPoints[i-1],
                                     m_BezierPoints[i-1], m_Width / 2 ) )
                     return true;
             }

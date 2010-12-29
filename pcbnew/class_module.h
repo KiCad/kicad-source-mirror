@@ -100,7 +100,7 @@ public:
     void Copy( MODULE* Module );        // Copy structure
 
 
-    /**
+    /*
      * Function Add
      * adds the given item to this MODULE and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
@@ -154,14 +154,14 @@ public:
     /**
      * Function Move
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     virtual void Move( const wxPoint& aMoveVector );
 
     /**
      * Function Rotate
      * Rotate this object.
-     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
     virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
@@ -169,14 +169,14 @@ public:
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
-     * @param const wxPoint& aCentre - the rotation point.
+     * @param aCentre - the rotation point.
      */
     virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function IsLocked
      * (virtual from BOARD_ITEM )
-     * @returns bool - true if the MODULE is locked, else false
+     * @return bool - true if the MODULE is locked, else false
      */
     bool IsLocked() const
     {
@@ -204,7 +204,7 @@ public:
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd"
      * format.
-     * a@param aFile The FILE to write to.
+     * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
     bool Save( FILE* aFile ) const;
@@ -227,15 +227,15 @@ public:
     /**
      * Function Draw
      * Draw the text according to the footprint pos and orient
-     * @param panel = draw panel, Used to know the clip box
-     * @param DC = Current Device Context
-     * @param offset = draw offset (usually wxPoint(0,0)
+     * @param aPanel = draw panel, Used to know the clip box
+     * @param aDC = Current Device Context
      * @param aDrawMode = GR_OR, GR_XOR..
+     * @param aOffset = draw offset (usually wxPoint(0,0)
      */
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
+    void Draw( WinEDA_DrawPanel* aPanel,
+               wxDC*             aDC,
                int               aDrawMode,
-               const wxPoint&    offset = ZeroOffset );
+               const wxPoint&    aOffset = ZeroOffset );
 
     void Draw3D( Pcb3D_GLCanvas* glcanvas );
     void DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
@@ -293,7 +293,7 @@ public:
      * Function FindPadByName
      * returns a D_PAD* with a matching name.  Note that names may not be
      * unique, depending on how the foot print was created.
-     * @param
+     * @param aPadName the pad name to find
      * @return D_PAD* - The first matching name is returned, or NULL if not
      *                  found.
      */

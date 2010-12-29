@@ -326,22 +326,17 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 }
 
 
-/**
+/*
  * Function SaveCopyInUndoList
- * Create a copy of the current schematic item, and put it in the undo list.
+ * Create a copy of the current board item, and put it in the undo list.
  *
- *  flag_type_command =
+ *  aCommandType =
  *      UR_CHANGED
  *      UR_NEW
  *      UR_DELETED
  *      UR_MOVED
  *      UR_FLIPPED
  *      UR_ROTATED
- *
- *  If it is a delete command, items are put on list with the .Flags member set to UR_DELETED.
- *  When it will be really deleted, the EEDrawList and the subhierarchy will be deleted.
- *  If it is only a copy, the EEDrawList and the subhierarchy must NOT be deleted.
- *
  */
 void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
                                           UndoRedoOpType aCommandType,

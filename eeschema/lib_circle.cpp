@@ -70,7 +70,7 @@ bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test in eeschema space
+ * @param aPosRef A wxPoint to test in eeschema space
  * @return - true if a hit, else false
  */
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )

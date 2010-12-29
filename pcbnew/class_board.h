@@ -270,7 +270,7 @@ public:
      * Function SetEnabledLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * Changes the bit-mask of enabled layers
-     * @param aMask = The new bit-mask of enabled layers
+     * @param aLayerMask = The new bit-mask of enabled layers
      */
     void SetEnabledLayers( int aLayerMask );
 
@@ -278,7 +278,7 @@ public:
      * Function IsLayerEnabled
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * tests whether a given layer is enabled
-     * @param aLayerIndex = The index of the layer to be tested
+     * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
     bool IsLayerEnabled( int aLayer ) const
@@ -310,7 +310,7 @@ public:
      * Function SetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * changes the bit-mask of visible layers
-     * @param aMask = The new bit-mask of visible layers
+     * @param aLayerMask = The new bit-mask of visible layers
      */
     void SetVisibleLayers( int aLayerMask );
 
@@ -529,9 +529,10 @@ public:
      * and turns on or off the brilliance associated with that net according to the
      * current value of global g_HighLight_Status
      * @param aDrawPanel is needed for the clipping support.
+     * @param aDC = the curent device context
      * @param aNetCode is the net number to highlight or to dim.
      */
-    void          DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode );
+    void          DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* aDC, int aNetCode );
 
     /**
      * Function Visit
@@ -596,8 +597,6 @@ public:
      * Must be called after a Design Rules edition, or after reading a netlist (or editing the list of nets)
      * Also this function removes the non existing nets in netclasses and add net nets in default netclass
      * (this happens after reading a netlist)
-     * @param none
-     * @return none
      */
     void SynchronizeNetsAndNetClasses();
 
@@ -713,7 +712,7 @@ public:
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
      * the test is made on zones on layer from aStartLayer to aEndLayer
      * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
-     * @param refPos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @param aStartLayer the first layer to test
      * @param aEndLayer the last layer (-1 to ignore it) to test
      * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
@@ -726,7 +725,7 @@ public:
      * Function RedrawAreasOutlines
      * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void            RedrawAreasOutlines( WinEDA_DrawPanel* panel,
+    void            RedrawAreasOutlines( WinEDA_DrawPanel* aPanel,
                                          wxDC*             aDC,
                                          int               aDrawMode,
                                          int               aLayer );
@@ -735,7 +734,7 @@ public:
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void RedrawFilledAreas( WinEDA_DrawPanel* panel,
+    void RedrawFilledAreas( WinEDA_DrawPanel* aPanel,
                             wxDC*             aDC,
                             int               aDrawMode,
                             int               aLayer );
@@ -869,7 +868,8 @@ public:
      * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
      *                      (useful in undo commands. Can be NULL
      * @param modified_area = area to test
-     * @param bMessageBox : if TRUE, shows message boxes when clipping occurs.
+     * @param bMessageBoxInt : if TRUE, shows message boxes when clipping occurs.
+     * @param bMessageBoxArc if true, shows message when clipping can't be done due to arcs.
      * @return :
      * -1 if arcs intersect other sides, so polygon can't be clipped
      *  0 if no intersecting sides

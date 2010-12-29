@@ -74,12 +74,12 @@ public:
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrint_Sheet_Ref = true to print page references
-     * @param aPrintMask = not used here
+     * @param aPrintMaskLayer = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                    int aPrintMask, bool aPrintMirrorMode,
+                    int aPrintMaskLayer, bool aPrintMirrorMode,
                     void * aData = NULL);
 
     // BOARD handling
@@ -142,7 +142,19 @@ public:
     void         Transform( MODULE* module, int transform );
 
     // importing / exporting Footprint
-    void         Export_Module( MODULE* ptmod, bool createlib );
+    /**
+     * Function Export_Module
+     * Create a file containing only one footprint.
+     * Used to export a footprint
+     * Exported files  have the standard ext .emp
+     * This is the same format as .mod files but restricted to only one footprint
+     * So Create a new lib (which will contains one module) and export a footprint
+     * is basically the same thing
+     * @param aModule = the module to export
+     * @param aCreateSysLib : true = use default lib path to create lib
+     *                    false = use current path or last used path to export the footprint
+     */
+    void         Export_Module( MODULE* aModule, bool aCreateSysLib );
     /**
      * Function Import_Module
      * Read a file containing only one footprint.
@@ -151,7 +163,6 @@ public:
      * This is the same format as .mod files but restricted to only one footprint
      * The import function can also read gpcb footprint file, in Newlib format
      * (One footprint per file, Newlib files have no special ext.)
-     * @param DC = Current Device Context (can be NULL)
      */
     MODULE* Import_Module( );
 
@@ -188,11 +199,11 @@ public:
     void         End_Edge_Module( EDGE_MODULE* Edge );
     /**
      * Function Enter_Edge_Width
-     * Edition of the edge items width
+     * Edition of width of module outlines
      * Ask for a new width.
      * Change the width of EDGE_MODULE Edge if aEdge != NULL
      * @param aEdge = edge to edit, or NULL
-     * @output ModuleSegmentWidth (global) = new width
+     * changes ModuleSegmentWidth (global) = new width
      */
     void         Enter_Edge_Width( EDGE_MODULE* aEdge );
     void         Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );

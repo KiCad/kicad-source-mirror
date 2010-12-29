@@ -300,7 +300,7 @@ public:
     /**
      * Function Select_1_Module_From_List
      *  Display a list of modules found in active libraries or a given library
-     *  @param active_window = the current window ( parent window )
+     *  @param aWindow = the current window ( parent window )
      *  @param aLibraryFullFilename = library to list (if aLibraryFullFilename
      *                                == void, list all modules)
      *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not
@@ -313,18 +313,52 @@ public:
      *          Ok
      */
     wxString Select_1_Module_From_List(
-        WinEDA_DrawFrame* active_window, const wxString& aLibraryFullFilename,
+        WinEDA_DrawFrame* aWindow, const wxString& aLibraryFullFilename,
         const wxString& aMask, const wxString& aKeyWord );
 
     MODULE*  Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     //  ratsnest functions
-    void     Compile_Ratsnest( wxDC* DC, bool affiche );
-    int      Test_1_Net_Ratsnest( wxDC* DC, int net_code );
-    void     build_ratsnest_module( wxDC* DC, MODULE* Module );
+    /**
+     * Function Compile_Ratsnest
+     *  Create the entire board ratsnest.
+     *  Must be called after a board change (changes for
+     *  pads, footprints or a read netlist ).
+     * @param aDC = the current device context (can be NULL)
+     * @param aDisplayStatus : if true, display the computation results
+     */
+    void     Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
+
+    /**
+     * Function Test_1_Net_Ratsnest
+     * Compute the ratsnest relative to the net "net_code"
+     * @param aDC - Device context to draw on.
+     * @param aNetcode = netcode used to compute the ratsnest.
+     */
+    int      Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode );
+
+    /**
+     * Function build_ratsnest_module
+     * Build a ratsnest relative to one footprint. This is a simplified computation
+     * used only in move footprint. It is not optimal, but it is fast and sufficient
+     * to help a footprint placement
+     * It shows the connections from a pad to the nearest connected pad
+     * @param aModule = module to consider.
+     */
+    void     build_ratsnest_module( MODULE* aModule );
+
     void     trace_ratsnest_module( wxDC* DC );
     void     Build_Board_Ratsnest( wxDC* DC );
-    void     DrawGeneralRatsnest( wxDC* DC, int net_code = 0 );
+
+    /**
+     *  function Displays the general ratsnest
+     *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
+     * @param aDC = the current device context (can be NULL)
+     * @param aNetcode if > 0, Display only the ratsnest relative to the
+     * corresponding net_code
+     */
+    void     DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
+
     void     trace_ratsnest_pad( wxDC* DC );
     void     build_ratsnest_pad( BOARD_ITEM*    ref,
                                  const wxPoint& refpos,

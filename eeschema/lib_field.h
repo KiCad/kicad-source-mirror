@@ -140,7 +140,7 @@ public:
     /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param aPoition A point to test in field coordinate system
+     * @param aPosition A point to test in field coordinate system
      * @return True if a hit, else false
      */
     bool HitTest( const wxPoint& aPosition );
