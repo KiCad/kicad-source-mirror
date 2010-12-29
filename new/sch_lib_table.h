@@ -27,7 +27,9 @@
 
 #include <string>
 #include <boost/ptr_container/ptr_map.hpp>
+
 #include <sch_lib.h>
+//#include <sch_lpid.h>
 
 class SCH_LIB_TABLE_LEXER;      // outside namespace SCH, since make_lexer() Functions.cmake can't do namespace
 class OUTPUTFORMATTER;
@@ -197,14 +199,14 @@ public:
         STRING      fullURI;
         STRING      options;
 
-        LIB*        lib;
+        LIB*        lib;        ///< ownership of the loaded LIB is here
     };
-
 
     /**
      * Constructor LIB_TABLE
      * builds a library table by pre-pending this table fragment in front of
      * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
+     *
      * @param aFallBackTable is another LIB_TABLE which is searched only when
      *   a record is not found in this table.  No ownership is taken of aFallBackTable.
      */
@@ -218,9 +220,9 @@ public:
      *
      * <pre>
      * (lib_table
-     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
-     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
-     *   (lib (logical LOGICAL)(type TYPE)(fullURI FULL_URI)(options OPTIONS))
+     *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+     *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+     *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
      * </pre>
      *
      * When this function is called, the input token stream given by \a aLexer
@@ -236,6 +238,7 @@ public:
      * Function Format
      * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
      * make it look good using multiple lines and indentation.
+     *
      * @param out is an OUTPUTFORMATTER
      * @param nestLevel is the indentation level to base all lines of the output.
      *   Actual indentation will be 2 spaces for each nestLevel.
@@ -243,13 +246,26 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
     /**
-     * Function GetPart
+     * Function LookupPart
      * finds and loads a PART, and parses it.  As long as the part is
      * accessible in any LIB_SOURCE, opened or not opened, this function
      * will find it and load it into its containing LIB, even if that means
      * having to open a LIB in this table that was not previously opened.
+     *
+     * @param aLogicalPartID holds the partName and may also hold the logicalLibName.  If
+     *  logicalLibName is empty, then @a aFallBackLib should not be NULL.
+     *
+     * @param aFallBackLib is used only if aLogicalPartID has an empty logicalLibName.
+     *  This is for the case when an LPID has no logicalLibName because the LPID is using
+     *  a partName from the same LIB as was the referring content.
+     *
+     * @return PART* - this will never be NULL, and no ownership is transfered because
+     *  all PARTs live in LIBs.  You only get to point to them in some LIB. If the PART
+     *  cannot be found, then an exception is thrown.
+     *
+     * @throw IO_ERROR if any problem occurs or if the part cannot be found.
      */
-    PART* GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR );
+    PART* LookupPart( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL ) throw( IO_ERROR );
 
     /**
      * Function GetLogicalLibs
@@ -322,11 +338,41 @@ protected:  // only a table editor can use these
 
     /**
      * Function FindRow
-     * returns a ROW* if aLogicalName is found in this table or in fallBack, else NULL.
+     * returns a ROW* if aLogicalName is found in this table or in any chained
+     * fallBack table fragment, else NULL.
      */
-    const ROW* FindRow( const STRING& aLogicalName ) const;
+    ROW* FindRow( const STRING& aLogicalName ) const;
 
 private:
+
+    /**
+     * Function lookupLib
+     * finds or loads a LIB based on @a aLogicalPartID or @a aFallBackLib.
+     * If the LIB is already loaded then it is returned as is, else it is loaded.
+     *
+     * @param aLogicalPartID may hold the logicalLibName.  If
+     *  logicalLibName is empty, then @a aLocalLib should not be NULL.
+     *
+     * @param aLocalLib is used if not NULL, and should be supplied especiallly if
+     *   aLogicalPartID has an empty logicalLibName.  This is for the case when
+     *   a partName must come from the same LIB as the referring content.
+     *   For example, a PART extends another PART in the same LIB and the extends
+     *   LPID has no logical lib name.
+     *
+     * @return LIB* - this will never be NULL, and no ownership is transfered because
+     *  all LIBs live in the LIB_TABLEs.  You only get to point to them in some LIB_TABLE.
+     *  If the LIB cannot be found, then an exception is thrown.
+     *
+     * @throw IO_ERROR if any problem occurs or if the LIB cannot be found or cannot be loaded.
+     */
+    LIB* lookupLib( const LPID& aLogicalPartID, LIB* aLocalLib = NULL ) throw( IO_ERROR );
+
+    /**
+     * Function loadLib
+     * loads a LIB using information in @a aRow.  Call only if LIB not
+     * already loaded.
+     */
+    void loadLib( ROW* aRow ) throw( IO_ERROR );
 
     typedef boost::ptr_map<STRING, ROW>     ROWS;
     typedef ROWS::iterator                  ROWS_ITER;

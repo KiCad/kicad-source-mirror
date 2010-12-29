@@ -23,8 +23,9 @@
  */
 
 #include <cstring>
+#include <wx/wx.h>      // _()
+
 #include <sch_lpid.h>
-#include <wx/wx.h>
 
 using namespace SCH;
 
@@ -61,7 +62,8 @@ const char* EndsWithRev( const char* start, const char* tail, char separator )
 //----<Policy and field test functions>-------------------------------------
 
 // These all return -1 on success, or >= 0 if there is an error at a
-// particular character offset into their respectives arguments.
+// particular character offset into their respective arguments.  If >=0,
+// then that return value gives the character offset of the error.
 
 static inline int okLogical( const STRING& aField )
 {
@@ -97,7 +99,7 @@ static int okRevision( const STRING& aField )
         strcpy( rev, "x/" );
         strcat( rev, aField.c_str() );
 
-        if( EndsWithRev( rev ) == rev+2 )
+        if( EndsWithRev( rev, rev + strlen(rev) ) == rev+2 )
             return -1;    // success
     }
 
@@ -191,7 +193,7 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
 }
 
 
-STRING LPID::GetLogicalLib() const
+const STRING& LPID::GetLogicalLib() const
 {
     return logical;
 }
@@ -208,7 +210,7 @@ int LPID::SetLogicalLib( const STRING& aLogical )
 }
 
 
-STRING LPID::GetCategory() const
+const STRING& LPID::GetCategory() const
 {
     return category;
 }
@@ -225,7 +227,7 @@ int LPID::SetCategory( const STRING& aCategory )
 }
 
 
-STRING LPID::GetBaseName() const
+const STRING& LPID::GetBaseName() const
 {
     return baseName;
 }
@@ -259,7 +261,7 @@ STRING LPID::GetPartName() const
 }
 
 
-STRING LPID::GetRevision() const
+const STRING& LPID::GetRevision() const
 {
     return revision;
 }

@@ -31,7 +31,7 @@ void PART::Parse( LIB* aLexer ) throw( PARSE_ERROR )
 }
 
 
-#if 1
+#if 0 && defined(DEBUG)
 
 int main( int argc, char** argv )
 {

@@ -329,6 +329,10 @@ is used on the hood ornament. When aResults pointer is passed as an argument, I
 won't refer to this as 'returning' a value, but rather 'fetching' a result to
 distinguish between the two strategies.
 
+<p> Functions named as lookupSomething() or LookupSomething() are to be understood
+as "find and load if needed".  This is different than a simple find operation only, in
+that an implied load operation is also done, but only if needed.
+
 
 @section architecture Architecture
 
@@ -337,47 +341,59 @@ LIB_SOURCE. A library source is the backing to a library. The class name for a
 library in the new design is LIB.
 
 <p>
-Show architecture here.
-
-<a href="../drawing.png" > Click here to see an architectural drawing.</a>
+<IMG SRC="../drawing.png" ALT="You should see design architecture here">
 
 */
 
 
 
 /**
- * \defgroup string_types STRING Types
+ * @defgroup string_types STRING Types
  * Provide some string types for use within the API.
- * @{
  */
 
-typedef std::string STRING;
-typedef std::dequeue<STRING>    STRINGS;
-
-//typedef std::vector<wxString>   WSTRINGS;
-
-
-const STRING StrEmpty = "";
-
-/** @} string_types STRING Types */
 
 /**
- * \defgroup exception_types Exception Types
+ * @defgroup exception_types Exception Types
  * Provide some exception types for use within the API.
- * @{
  */
 
 
-/** @} exception_types Exception Types */
+/**
+ * Class HTTP_LIB_SOURCE
+ * implements a LIB_SOURCE to access a remote document root repository using http protocol.
+ */
+class HTTP_LIB_SOURCE : public LIB_SOURCE
+{
+    friend class LIB_TABLE;   ///< constructor the LIB uses these functions.
+
+protected:
+
+    /**
+     * Constructor ( const STRING& aSvnURL )
+     * sets up a LIB_SOURCE using aSvnURI which points to a subversion
+     * repository.
+     * @see LIBS::GetLibrary().
+     *
+     * @param aHttpURL is a full URL of a document root repo directory.  Example might
+     *  be "http://kicad.org/libs"
+     *
+     * @param aOptions is the options string from the library table.  It can be any
+     *  string that the LIB_SOURCE can parse and understand, perhaps using comma separation
+     *  between options.  Options and their syntax is LIB_SOURCE implementation specific.
+     */
+    HTTP_LIB_SOURCE( const STRING& aHttpURL, const STRING& aOptions ) throws( IO_ERROR );
+};
 
 
 /**
  * Class SVN_LIB_SOURCE
- * implements a LIB_SOURCE in a subversion repository.
+ * implements a LIB_SOURCE to access a [remote or local] subversion repository
+ * using subversion client protocol.
  */
 class SVN_LIB_SOURCE : public LIB_SOURCE
 {
-    friend class LIBS;   ///< constructor the LIB uses these functions.
+    friend class LIB_TABLE;   ///< constructor the LIB uses these functions.
 
 protected:
 
@@ -389,8 +405,12 @@ protected:
      *
      * @param aSvnURL is a full URL of a subversion repo directory.  Example might
      *  be "svn://kicad.org/repos/library/trunk"
+     *
+     * @param aOptions is the options string from the library table.  It can be any
+     *  string that the LIB_SOURCE can parse and understand, perhaps using comma separation
+     *  between options.  Options and their syntax is LIB_SOURCE implementation specific.
      */
-    SVN_LIB_SOURCE( const STRING& aSvnURL ) throws( IO_ERROR );
+    SVN_LIB_SOURCE( const STRING& aSvnURL, const STRING& aOptions ) throws( IO_ERROR );
 };
 
 
@@ -401,7 +421,7 @@ protected:
  */
 class SCHEMATIC_LIB_SOURCE : public LIB_SOURCE
 {
-    friend class LIBS;   ///< constructor the LIB uses these functions.
+    friend class LIB_TABLE;   ///< constructor the LIB uses these functions.
 
 protected:
 
@@ -414,8 +434,12 @@ protected:
      *
      * @param aSchematicFile is a full path and filename.  Example:
      *  "/home/user/kicadproject/design.sch"
+     *
+     * @param aOptions is the options string from the library table.  It can be any
+     *  string that the LIB_SOURCE can parse and understand, perhaps using comma separation
+     *  between options.  Options and their syntax is LIB_SOURCE implementation specific.
      */
-    SCHEMATIC_LIB_SOURCE( const STRING& aSchematicFile ) throws( IO_ERROR );
+    SCHEMATIC_LIB_SOURCE( const STRING& aSchematicFile, const STRING& aOptions ) throws( IO_ERROR );
 };
 
 
@@ -444,5 +468,7 @@ public:
 
 
 /// @todo remove endsWithRev() in favor of EndsWithRev(), find home for it.
+
+/// @todo add simple unit test infrastructure.
 
 // EOF
