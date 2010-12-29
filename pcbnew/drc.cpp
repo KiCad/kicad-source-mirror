@@ -140,24 +140,21 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 }
 
 
-/**************************************************************/
-int DRC::Drc( ZONE_CONTAINER* aArea, int CornerIndex )
-/*************************************************************/
-
 /**
  * Function Drc
  * tests the outline segment starting at CornerIndex and returns the result and displays the error
  * in the status panel only if one exists.
  *      Test Edge inside other areas
  *      Test Edge too close other areas
- * @param aEdge The areaparent which contains the corner.
- * @param CornerIndex The starting point of the segment to test.
+ * @param aArea The areaparent which contains the corner.
+ * @param aCornerIndex The starting point of the segment to test.
  * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
  */
+int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     updatePointers();
 
-    if( !doEdgeZoneDrc( aArea, CornerIndex ) )
+    if( !doEdgeZoneDrc( aArea, aCornerIndex ) )
     {
         wxASSERT( m_currentMarker );
         m_currentMarker->DisplayInfo( m_mainWindow );

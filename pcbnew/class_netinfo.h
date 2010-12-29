@@ -361,7 +361,7 @@ public:
 
     /**
      * Function SetNetname
-     * @param const wxString : the new netname
+     * @param aNetname : the new netname
      */
     void SetNetname( const wxString& aNetname );
 

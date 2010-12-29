@@ -180,7 +180,7 @@ void D_PAD::SetPadName( const wxString& name )
 
 /**
  * Function SetNetname
- * @param const wxString : the new netname
+ * @param aNetname: the new netname
  */
 void D_PAD::SetNetname( const wxString& aNetname )
 {
@@ -772,17 +772,17 @@ bool D_PAD::IsOnLayer( int aLayer ) const
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
+ * @param refPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool D_PAD::HitTest( const wxPoint& ref_pos )
+bool D_PAD::HitTest( const wxPoint& refPos )
 {
     int     dx, dy;
     double  dist;
 
     wxPoint shape_pos = ReturnShapePos();
 
-    wxPoint delta = ref_pos - shape_pos;
+    wxPoint delta = refPos - shape_pos;
 
     /* Quick test: a test point must be inside the circle. */
     if( ( abs( delta.x ) > m_ShapeMaxRadius ) || ( abs( delta.y ) > m_ShapeMaxRadius ) )

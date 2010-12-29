@@ -201,7 +201,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
  *
  *  Read active libraries or one library to find and load a given module
  *  If found the module is linked to the tail of linked list of modules
- *  @param aLibrary: the full filename of the library to read. If empty,
+ *  @param aLibraryFullFilename: the full filename of the library to read. If empty,
  *                    all active libraries are read
  *  @param aModuleName = module name to load
  *  @param aDisplayMessageError = true to display an error message if any.
@@ -351,7 +351,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
  *                    one (or more) of these keyworks in their keywork list
  *                    ( aKeyWord = wxEmptyString if not used )
  *
- *  @return wxEmptyString if abort or fails, or the selected module name if Ok
+ * @return wxEmptyString if abort or fails, or the selected module name if Ok
  */
 wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWindow,
                                                          const wxString&   aLibraryFullFilename,

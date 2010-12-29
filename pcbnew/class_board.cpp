@@ -1180,15 +1180,15 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 /**
  * Function FindNet
  * searches for a net with the given netcode.
- * @param anetcode The netcode to search for.
+ * @param aNetcode The netcode to search for.
  * @return NETINFO_ITEM* - the net or NULL if not found.
  */
-NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
+NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 {
     // the first valid netcode is 1 and the last is m_NetInfo->GetCount()-1.
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
-    NETINFO_ITEM* net = m_NetInfo->GetNetItem( anetcode );
+    NETINFO_ITEM* net = m_NetInfo->GetNetItem( aNetcode );
 
 #if defined(DEBUG)
     if( net )     // item can be NULL if anetcode is not valid
@@ -1196,7 +1196,7 @@ NETINFO_ITEM* BOARD::FindNet( int anetcode ) const
         if( anetcode != net->GetNet() )
         {
             printf( "FindNet() anetcode %d != GetNet() %d (net: %s)\n",
-                    anetcode, net->GetNet(), CONV_TO_UTF8( net->GetNetname() ) );
+                    aNetcode, net->GetNet(), CONV_TO_UTF8( net->GetNetname() ) );
         }
     }
 #endif
@@ -1431,7 +1431,7 @@ out:
 }
 
 
-/**
+/*
  * Function RedrawAreasOutlines
  * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
  */
@@ -1479,7 +1479,7 @@ void BOARD::RedrawFilledAreas( WinEDA_DrawPanel* panel,
  * zone.
  * the test is made on zones on layer from aStartLayer to aEndLayer
  * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
- * @param refPos A wxPoint to test
+ * @param aRefPos A wxPoint to test
  * @param aStartLayer the first layer to test
  * @param aEndLayer the last layer (-1 to ignore it) to test
  * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else

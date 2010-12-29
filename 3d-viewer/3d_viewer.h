@@ -173,9 +173,9 @@ public:
     /**
      * Function Draw3D_SolidPolygonsInZones
      * draw all solid polygons used as filles areas in a zone
-     * @param aZone_c = the zone to draw
+     * @param aZone = the zone to draw
     */
-    void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone_c );
+    void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone );
 
     /**
      * Function Draw3D_Polygon

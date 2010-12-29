@@ -180,9 +180,8 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 }
 
 
-/**
+/*
  * Function Draw
- *  DrawMode = GR_OR, GR_XOR ..
  * Like tracks, texts are drawn in filled or sketch mode, never in line mode
  * because the line mode does not keep the actual size of the text
  * and the actual size is very important, especially for copper texts
@@ -258,7 +257,7 @@ void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
@@ -275,7 +274,7 @@ void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {

@@ -61,7 +61,7 @@ public:
    /**
     * Calculate new coordinate according to the transform.
     *
-    * @param aPosition = The position to transform
+    * @param aPoint = The position to transform
     * @return The transformed coordinate.
     */
     wxPoint TransformCoordinate( const wxPoint& aPoint ) const;

@@ -378,12 +378,11 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
 /* Block operations: */
 
-/**
+/*
  * Function Block_SelectItems
  * Uses GetScreen()->m_BlockLocate
  * select items within the selected block.
  * selected items are put in the pick list
- * @param none
  */
 void WinEDA_PcbFrame::Block_SelectItems()
 {
@@ -657,11 +656,10 @@ void WinEDA_PcbFrame::Block_Delete()
 }
 
 
-/**
+/*
  * Function Block_Rotate
  * Rotate all items within the selected block.
  * The rotation center is the center of the block
- * @param none
  */
 void WinEDA_PcbFrame::Block_Rotate()
 {
@@ -726,7 +724,6 @@ void WinEDA_PcbFrame::Block_Rotate()
  * Function Block_Flip
  * flips items within the selected block.
  * The flip center is the center of the block
- * @param none
  */
 void WinEDA_PcbFrame::Block_Flip()
 {
@@ -788,12 +785,11 @@ void WinEDA_PcbFrame::Block_Flip()
 }
 
 
-/**
+/*
  * Function Block_Move
  * moves all tracks and segments within the selected block.
  * New location is determined by the current offset from the selected block's
  * original location.
- * @param none
  */
 void WinEDA_PcbFrame::Block_Move()
 {
@@ -849,12 +845,11 @@ void WinEDA_PcbFrame::Block_Move()
 }
 
 
-/**
+/*
  * Function Block_Duplicate
  * duplicates all items within the selected block.
  * New location is determined by the current offset from the selected block's
  * original location.
- * @param none
  */
 void WinEDA_PcbFrame::Block_Duplicate()
 {

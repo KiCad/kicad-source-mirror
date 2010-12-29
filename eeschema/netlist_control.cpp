@@ -81,14 +81,8 @@ END_EVENT_TABLE()
 /*******************************/
 
 
-/** Contructor to create a setup page for one netlist format.
+/* Contructor to create a setup page for one netlist format.
  * Used in Netlist format Dialog box creation
- * @param parent = wxNotebook * parent
- * @param title = title (name) of the notebook page
- * @param id_NetType = netlist type id
- * @param idCheckBox = event ID attached to the "format is default" check box
- * @param idCreateFile = event ID attached to the "create netlist" button
- * @param selected - Please document me.
  */
 EDA_NoteBookPage::EDA_NoteBookPage( wxNotebook*     parent,
                                     const wxString& title,

@@ -140,7 +140,7 @@ public:
 
     /**
      * Function SetNetname
-     * @param const wxString : the new netname
+     * @param aNetname: the new netname
      */
     void SetNetname( const wxString& aNetname );
 
@@ -230,8 +230,14 @@ public:
 
 
     /* drawing functions */
-    void          Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        int aDrawMode, const wxPoint& offset = ZeroOffset );
+    /** Draw a pad:
+     * @param aPanel = the WinEDA_DrawPanel panel
+     * @param aDC = the current device context
+     * @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
+     * @param aOffset = draw offset
+     */
+    void          Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     void          Draw3D( Pcb3D_GLCanvas* glcanvas );
 
@@ -247,7 +253,7 @@ public:
      * Has meaning only for polygonal pads (trapezoid and rectangular)
      * Build the Corner list of the polygonal shape,
      * depending on shape, extra size (clearance ...) and orientation
-     * @param aCoord[4] = a buffer to fill.
+     * @param aCoord = a buffer to fill (4 corners).
      * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
@@ -341,7 +347,7 @@ public:
     /**
      * Function Move
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     virtual void Move( const wxPoint& aMoveVector )
     {

@@ -155,11 +155,11 @@ public:
      * Function MenuText
      * returns the text to use in any menu type UI control which must uniquely
      * identify this item.
-     * @param aBoard The PCB in which this item resides, needed for Net lookup.
+     * @param aPcb The PCB in which this item resides, needed for Net lookup.
      * @return wxString
      * @todo: maybe: make this virtual and split into each derived class
      */
-    wxString        MenuText( const BOARD* aBoard ) const;
+    wxString        MenuText( const BOARD* aPcb ) const;
 
 
     /**

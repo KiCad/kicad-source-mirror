@@ -45,7 +45,7 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 
 
 /** Draw a pad:
- *  @param aDC = device context
+ *  @param aPanel = the WinEDA_DrawPanel panel
  *  @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
  *  @param aOffset = draw offset
  */
@@ -663,7 +663,7 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
  * Has meaning only for polygonal pads (trapeziod and rectangular)
  * Build the Corner list of the polygonal shape,
  * depending on shape, extra size (clearance ...) and orientation
- * @param aCoord[4] = a buffer to fill.
+ * @param aCoord = a buffer to fill.
  * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
  * @param aRotation = full rotation of the polygon, usually m_Orient
  */

@@ -131,7 +131,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
  *
  *  @return False if file load fails or is cancelled by the user, otherwise true.
  */
-bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool Append,
+bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                                       bool aForceFileDialog )
 {
     int      ii;
@@ -141,7 +141,7 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool Append,
 
     ActiveScreen = GetScreen();
 
-    if( GetScreen()->IsModify() && !Append )
+    if( GetScreen()->IsModify() && !aAppend )
     {
         if( !IsOK( this, _( "The current board has been modified.  Do you wish to discard \
 the changes?" ) ) )
@@ -150,7 +150,7 @@ the changes?" ) ) )
 
     m_TrackAndViasSizesList_Changed = true;
 
-    if( Append )
+    if( aAppend )
     {
         GetScreen()->m_FileName = wxEmptyString;
         OnModify();
@@ -182,7 +182,7 @@ the changes?" ) ) )
             fileName.SetExt( PcbFileExtension );
     }
 
-    if( !Append )
+    if( !aAppend )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
 
     GetScreen()->m_FileName = fileName.GetFullPath();
@@ -224,7 +224,7 @@ this file again." ) );
 
     // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
-    if( Append )
+    if( aAppend )
         ReadPcbFile( source, true );
     else
     {
@@ -244,7 +244,7 @@ this file again." ) );
     GetScreen()->ClrModify();
 
     /* If append option: change the initial board name to <oldname>-append.brd */
-    if( Append )
+    if( aAppend )
     {
         wxString new_filename = GetScreen()->m_FileName.BeforeLast( '.' );
         if ( ! new_filename.EndsWith( wxT( "-append" ) ) )

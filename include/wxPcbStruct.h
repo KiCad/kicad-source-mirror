@@ -162,12 +162,12 @@ public:
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrint_Sheet_Ref = true to print page references
-     * @param aPrintMask = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
+     * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
+     * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                            int aPrintMask, bool aPrintMirrorMode,
+                            int aPrintMaskLayer, bool aPrintMirrorMode,
                             void * aData = NULL );
 
     void             GetKicadAbout( wxCommandEvent& event );
@@ -713,7 +713,17 @@ public:
     // Footprint edition (see also WinEDA_BasePcbFrame)
     void       InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
     void       StartMove_Module( MODULE* module, wxDC* DC );
-    bool       Delete_Module( MODULE* module, wxDC* DC, bool aAskBeforeDeleting );
+
+    /**
+     * Function Delete Module
+     * Remove a footprint from m_Modules linked list and put it in undelete buffer
+     * The ratsnest and pad list are recalculated
+     * @param aModule = footprint to delete
+     * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
+     * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
+     */
+    bool       Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting );
+
     void       Change_Side_Module( MODULE* Module, wxDC* DC );
 
     void       InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );

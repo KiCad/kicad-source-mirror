@@ -82,7 +82,7 @@ void MARKER_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
 /**
  * Function Rotate
  * Rotate this object.
- * @param const wxPoint& aRotCentre - the rotation point.
+ * @param aRotCentre - the rotation point.
  * @param aAngle - the rotation angle in 0.1 degree.
  */
 void MARKER_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
@@ -95,7 +95,7 @@ void MARKER_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
  * Flip this object, i.e. change the board side for this object
  * this function has not reeally sense for a marker.
  * It moves just the marker to keep its position on board, when the board is flipped
- * @param const wxPoint& aCentre - the rotation point.
+ * @param aCentre - the rotation point.
  */
 void MARKER_PCB::Flip(const wxPoint& aCentre )
 {

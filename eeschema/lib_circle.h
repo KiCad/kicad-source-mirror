@@ -50,10 +50,10 @@ public:
     /**
      * Test if the given point is within the bounds of this object.
      *
-     * @param aRefPos - A wxPoint to test
+     * @param aPosRef - A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aRefPos );
+    virtual bool HitTest( const wxPoint& aPosRef );
 
      /**
       * @param aPosRef - a wxPoint to test

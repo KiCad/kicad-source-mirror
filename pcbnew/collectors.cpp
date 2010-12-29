@@ -128,11 +128,11 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
  * that it finds and does not do any displaying.
  *
  * @param testItem An EDA_ITEM to examine.
- * @param notUsed The const void* testData.
+ * @param testData The const void* testData, not used here.
  * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
  *   else SCAN_CONTINUE;
  */
-SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* notUsed )
+SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
 {
     BOARD_ITEM* item   = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;

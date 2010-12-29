@@ -521,8 +521,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 /** AddPolygonCornersToBoolengine
  * copy a set of polygons in a kbool engine
  * @param aCornersBuffer = list of polygons defined by corners.
- * @ param aBoolengine = the kbool engine to populate
- * @ param aGroup = GROUP_A or GROUP_B
+ * @param aBoolengine = the kbool engine to populate
+ * @param aGroup = GROUP_A or GROUP_B
  */
 void AddPolygonCornersToBoolengine( std::vector <CPolyPt>& aCornersBuffer,
                                     Bool_Engine* aBoolengine, GroupType aGroup )

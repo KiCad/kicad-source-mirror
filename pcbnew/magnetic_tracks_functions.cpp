@@ -92,6 +92,11 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
  * tests to see if there are any magnetic items within near reach of the given
  * "curpos".  If yes, then curpos is adjusted appropriately according to that
  * near magnetic item and true is returned.
+ * @param m_Pcb = the current board
+ * @param frame = the current frame
+ * @param aCurrentTool = the current tool id (from vertical right toolbar)
+ * @param grid = the grid size
+ * @param on_grid = TODO
  * @param curpos The initial position, and what to adjust if a change is needed.
  * @return bool - true if the position was adjusted magnetically, else false.
  */

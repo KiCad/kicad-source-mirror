@@ -93,7 +93,7 @@ out:
 
 /**
  * Function SetNetname
- * @param const wxString : the new netname
+ * @param aNetname : the new netname
  */
 void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 {

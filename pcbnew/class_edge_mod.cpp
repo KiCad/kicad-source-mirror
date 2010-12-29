@@ -499,7 +499,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
  * @param refPos A wxPoint to test
  * @return bool - true if a hit, else false
  */
-bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
+bool EDGE_MODULE::HitTest( const wxPoint& refPos )
 {
     int uxf, uyf;
     int rayon, dist;
@@ -515,8 +515,8 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
     switch( m_Shape )
     {
     case S_SEGMENT:
-        spot_cX = ref_pos.x - ux0;
-        spot_cY = ref_pos.y - uy0;
+        spot_cX = refPos.x - ux0;
+        spot_cY = refPos.y - uy0;
 
         dx = uxf - ux0;
         dy = uyf - uy0;
@@ -526,21 +526,21 @@ bool EDGE_MODULE::HitTest( const wxPoint& ref_pos )
 
     case S_CIRCLE:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (ref_pos.x - ux0),
-                            (double) (ref_pos.y - uy0) );
+        dist  = (int) hypot( (double) (refPos.x - ux0),
+                            (double) (refPos.y - uy0) );
         if( abs( rayon - dist ) <= m_Width )
             return true;
         break;
 
     case S_ARC:
         rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (ref_pos.x - ux0),
-                            (double) (ref_pos.y - uy0) );
+        dist  = (int) hypot( (double) (refPos.x - ux0),
+                            (double) (refPos.y - uy0) );
 
         if( abs( rayon - dist ) > m_Width )
             break;
 
-        int mouseAngle = (int) ArcTangente( ref_pos.y - uy0, ref_pos.x - ux0 );
+        int mouseAngle = (int) ArcTangente( refPos.y - uy0, refPos.x - ux0 );
         int stAngle    = (int) ArcTangente( uyf - uy0, uxf - ux0 );
         int endAngle   = stAngle + m_Angle;
 

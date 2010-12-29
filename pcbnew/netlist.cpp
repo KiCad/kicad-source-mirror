@@ -81,8 +81,7 @@ static FILE *  OpenNetlistFile( const wxString& aFullFileName );
 static void    AddToList( const wxString& NameLibCmp,
                           const wxString& NameCmp,
                           const wxString& TimeStampPath );
-static int     SetPadNetName( wxWindow*   aFrame,
-                              char*       Text,
+static int     SetPadNetName( char*       Text,
                               MODULE*     Module,
                               wxTextCtrl* aMessageWindow );
 static int     ReadListeModules( const wxString& CmpFullFileName,
@@ -315,7 +314,7 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
         {
             if( Module )
             {
-                SetPadNetName( NULL, Text, Module, aMessageWindow );
+                SetPadNetName( Text, Module, aMessageWindow );
             }
             State--;
         }
@@ -579,8 +578,7 @@ is [%s] and netlist said [%s]\n" ),
  *  @param aMessageWindow = a wxTextCtrl to print error and warning message
  * (can be NULL)
  */
-int SetPadNetName( wxWindow*   frame,
-                   char*       Text,
+int SetPadNetName( char*       Text,
                    MODULE*     Module,
                    wxTextCtrl* aMessageWindow )
 {
@@ -784,7 +782,7 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
  * Function BuildFootprintsListFromNetlistFile
  *  Fill BufName with footprints names read from the netlist.
  * @param aNetlistFullFilename = netlist file name
- * @param BufName = wxArrayString to fill with footprint names
+ * @param aBufName = wxArrayString to fill with footprint names
  * @return Footprint count, or -1 if netlist file cannot opened
  */
 int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,

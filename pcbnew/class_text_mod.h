@@ -80,12 +80,12 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     bool     Save( FILE* aFile ) const;
 
     /**
-     * Function ReadLineDescr
+     * Function ReadDescr
      * Read description from a given line in "*.brd" format.
      * @param aLine The current line which contains the first line of
      *              description.
-     * @param aLine The FILE to read next lines (currently not used).
-     * @param LineNum a point to the line count (currently not used).
+     * @param aFile The FILE to read next lines (currently not used).
+     * @param aLineNum a point to the line count (currently not used).
      * @return int - > 0 if success reading else 0.
      */
     int      ReadDescr( char* aLine, FILE* aFile, int* aLineNum = NULL );
@@ -123,10 +123,10 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param posref A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& posref );
+    bool HitTest( const wxPoint& aRefPos );
 
     /**
      * Function IsOnLayer
@@ -139,12 +139,12 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      */
     bool IsOnLayer( int aLayer ) const;
 
-    /**
+    /*
      * Function IsOnOneOfTheseLayers
      * returns true if this object is on one of the given layers.  Is virtual
      * so objects like D_PAD, which reside on multiple layers, can do their own
      * form of testing.
-     * virtual inheritance from BOARD_ITEM.
+     * virtual inheritance from BOARD_ITEM. (not yet written)
      * @param aLayerMask The bit-mapped set of layers to test for.
      * @return bool - true if on one of the given layers, else false.
      * bool IsOnOneOfTheseLayers( int aLayerMask ) const;

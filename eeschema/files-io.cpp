@@ -308,7 +308,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 /**
  *  Save the entire project and create an archive for components.
  *
- *  The library archive name is <root_name>-cache.lib
+ *  The library archive name is &ltroot_name&gt-cache.lib
  */
 void SCH_EDIT_FRAME::SaveProject()
 {

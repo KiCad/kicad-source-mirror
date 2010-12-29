@@ -84,6 +84,8 @@ public:
     /**
      * Constructor
      * stuffs a NETCLASS instance with aParent, aName, and optionally the initialParameters
+     * @param aParent = the parent board
+     * @param aName = the name of this new netclass
      * @param initialParameters is a NETCLASS to copy parameters from, or if
      *  NULL tells me to copy from g_DesignSettings.
      */
@@ -205,6 +207,7 @@ public:
      * Function ReadDescr
      * reads the data structures for this object from a FILE in "*.brd" format.
      * @param aFile The FILE to read to.
+     * @param aLineNum a pointer to a line number counter
      * @return bool - true if success reading else false.
      */
     bool ReadDescr( FILE* aFile, int* aLineNum );

@@ -50,6 +50,16 @@ public:
     wxBoxSizer*       m_RightOptionsBoxSizer;
     wxBoxSizer*       m_LowBoxSizer;
 
+    /** Contructor to create a setup page for one netlist format.
+     * Used in Netlist format Dialog box creation
+     * @param parent = wxNotebook * parent
+     * @param title = title (name) of the notebook page
+     * @param id_NetType = netlist type id
+     * @param idCheckBox = event ID attached to the "format is default" check box
+     * @param idCreateFile = event ID attached to the "create netlist" button
+     * @param selected = true to have this notebook page selected when the dialog is opened
+     *    Only one page can be created with selected = true.
+     */
     EDA_NoteBookPage( wxNotebook* parent, const wxString& title,
                       int id_NetType, int idCheckBox, int idCreateFile,
                       bool selected );

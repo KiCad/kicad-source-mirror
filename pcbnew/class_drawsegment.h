@@ -80,16 +80,16 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
+     * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool         HitTest( const wxPoint& ref_pos );
+    bool         HitTest( const wxPoint& aRefPos );
 
     /**
      * Function HitTest (overlayed)
      * tests if the given EDA_Rect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refPos the given EDA_Rect to test
+     * @param refArea the given EDA_Rect to test
      * @return bool - true if a hit, else false
      */
     bool         HitTest( EDA_Rect& refArea );
@@ -121,7 +121,7 @@ public:
     /**
      * Function Move
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
@@ -133,7 +133,7 @@ public:
     /**
      * Function Rotate
      * Rotate this object.
-     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
     virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
@@ -141,7 +141,7 @@ public:
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
-     * @param const wxPoint& aCentre - the rotation point.
+     * @param aCentre - the rotation point.
      */
     virtual void Flip( const wxPoint& aCentre );
 

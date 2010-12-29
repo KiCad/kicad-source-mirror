@@ -34,18 +34,14 @@
 #include "zones.h"
 
 
-/**********************************************************************************/
-void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
-/**********************************************************************************/
-
 /**
  * Function Delete_Zone_Fill
  * Remove the zone fillig which include the segment aZone, or the zone which have the given time stamp.
- *  A zone is a group of segments which have the same TimeStamp
- * @param DC = current Device Context (can be NULL)
+ * A zone is a group of segments which have the same TimeStamp
  * @param aZone = zone segment within the zone to delete. Can be NULL
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
  */
+void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 {
     bool          modify  = false;
     unsigned long TimeStamp;

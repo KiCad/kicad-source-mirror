@@ -110,10 +110,10 @@ bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
 /**
  * Function Edit_TrackSegm_Width
  * Modify one track segment width or one via diameter (using DRC control).
- * @param  DC = the curred device context (can be NULL)
+ * @param aDC = the curred device context (can be NULL)
  * @param aTrackItem = the track segment or via to modify
  */
-void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
+void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
 {
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
@@ -122,14 +122,14 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
         return;     // No change
 
     // The segment has changed: redraw it and save it in undo list
-    if( DC )
+    if( aDC )
     {
         TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItemLink( 0 );
         wxASSERT( oldsegm );
-        DrawPanel->CursorOff( DC );                     // Erase cursor shape
-        oldsegm->Draw( DrawPanel, DC, GR_XOR );         // Erase old track shape
-        aTrackItem->Draw( DrawPanel, DC, GR_OR );       // Display new track shape
-        DrawPanel->CursorOn( DC );                      // Display cursor shape
+        DrawPanel->CursorOff( aDC );                     // Erase cursor shape
+        oldsegm->Draw( DrawPanel, aDC, GR_XOR );         // Erase old track shape
+        aTrackItem->Draw( DrawPanel, aDC, GR_OR );       // Display new track shape
+        DrawPanel->CursorOn( aDC );                      // Display cursor shape
     }
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
@@ -139,11 +139,10 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* DC, TRACK* aTrackItem )
  * Function Edit_Track_Width
  * Modify a full track width (using DRC control).
  * a full track is the set of track segments between 2 ends: pads or a point that has more than 2 segments ends connected
- * @param  DC = the curred device context (can be NULL)
+ * @param aDC = the curred device context (can be NULL)
  * @param aTrackSegment = a segment or via on the track to change
- * @return  none
  */
-void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* aTrackSegment )
+void WinEDA_PcbFrame::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 {
     TRACK* pt_track;
     int    nb_segm;
@@ -166,18 +165,18 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* DC, TRACK* aTrackSegment )
         return;
 
     // Some segment have changed: redraw them and save in undo list
-    if( DC )
+    if( aDC )
     {
-        DrawPanel->CursorOff( DC );                     // Erase cursor shape
+        DrawPanel->CursorOff( aDC );                     // Erase cursor shape
         for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
         {
             TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
-            segm->Draw( DrawPanel, DC, GR_XOR );            // Erase old track shape
+            segm->Draw( DrawPanel, aDC, GR_XOR );            // Erase old track shape
             segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
-            segm->Draw( DrawPanel, DC, GR_OR );             // Display new track shape
+            segm->Draw( DrawPanel, aDC, GR_OR );             // Display new track shape
         }
 
-        DrawPanel->CursorOn( DC );                   // Display cursor shape
+        DrawPanel->CursorOn( aDC );                   // Display cursor shape
     }
 
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );

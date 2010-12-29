@@ -39,7 +39,6 @@ public:
     BOARD_ITEM* start;              // pointers to a connected item (pad or track)
     BOARD_ITEM* end;
 
-    // chain = 0 indique une connexion non encore traitee
     int         m_Param;            // Auxiliary variable ( used in some computations )
 
 protected:
@@ -64,7 +63,7 @@ public:
     /**
      * Function Move
      * move this object.
-     * @param const wxPoint& aMoveVector - the move vector for this object.
+     * @param aMoveVector - the move vector for this object.
      */
     virtual void Move(const wxPoint& aMoveVector)
     {
@@ -75,7 +74,7 @@ public:
     /**
      * Function Rotate
      * Rotate this object.
-     * @param const wxPoint& aRotCentre - the rotation point.
+     * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
     virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
@@ -83,7 +82,7 @@ public:
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
-     * @param const wxPoint& aCentre - the rotation point.
+     * @param aCentre - the rotation point.
      */
     virtual void Flip(const wxPoint& aCentre );
 
@@ -256,10 +255,10 @@ public:
     bool            HitTest( const wxPoint& refPos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overlaid)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refPos A wxPoint to test
+     * @param refArea an EDA_Rect to test
      * @return bool - true if a hit, else false
      */
     bool            HitTest( EDA_Rect& refArea );
@@ -346,9 +345,8 @@ public:
     /**
      * Function IsOnLayer
      * tests to see if this object is on the given layer.  Is virtual
-     * from BOARD_ITEM.  Tests the starting and ending range of layers for the
-     * via.
-     * @param aLayer The layer to test for.
+     * from BOARD_ITEM.  Tests the starting and ending range of layers for the via.
+     * @param aLayer the layer to test for.
      * @return bool - true if on given layer, else false.
      */
     bool    IsOnLayer( int aLayer ) const;

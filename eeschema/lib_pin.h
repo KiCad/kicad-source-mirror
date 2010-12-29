@@ -147,7 +147,7 @@ public:
      * @param aPosRef - a wxPoint to test
      * @param aThreshold - max distance to this object (usually the half
      *                     thickness of a line)
-     * @param aTransMat - the transform matrix
+     * @param aTransform - the transform matrix
      * @return - true if the point aPosRef is near this object
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
