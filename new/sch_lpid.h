@@ -49,6 +49,10 @@
 class LPID  // aka GUID
 {
 public:
+
+    LPID();
+
+
     /**
      * Constructor LPID
      * takes aLPID string and parses it.  A typical LPID string uses a logical
@@ -57,6 +61,14 @@ public:
      * e.g.: "mylib:R33"
      */
     LPID( const STRING& aLPID ) throw( PARSE_ERROR );
+
+    /**
+     * Function Parse
+     * [re-]stuffs this LPID with the information from @a aLPID.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into aLPID at which an error was detected.
+     */
+    int Parse( const STRING& aLPID );
 
     /**
      * Function GetLogicalLib
@@ -69,9 +81,11 @@ public:
     /**
      * Function SetCategory
      * overrides the logical lib name portion of the LPID to @a aLogical, and can be empty.
-     * @return bool - true unless parameter has ':' or '/' in it.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into the parameter at which an error was detected, usually
+     *  because it contained '/' or ':'.
      */
-    bool SetLogicalLib( const STRING& aLogical );
+    int SetLogicalLib( const STRING& aLogical );
 
     /**
      * Function GetCategory
@@ -84,9 +98,11 @@ public:
      * Function SetCategory
      * overrides the category portion of the LPID to @a aCategory and is typically
      * either the empty string or a single word like "passives".
-     * @return bool - true unless parameter has ':' or '/' in it.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into the parameter at which an error was detected, usually
+     *  because it contained '/' or ':'.
      */
-    bool SetCategory( const STRING& aCategory );
+    int SetCategory( const STRING& aCategory );
 
     /**
      * Function GetBaseName
@@ -97,9 +113,11 @@ public:
     /**
      * Function SetBaseName
      * overrides the base name portion of the LPID to @a aBaseName
-     * @return bool - true unless parameter has ':' or '/' in it.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into the parameter at which an error was detected, usually
+     *  because it contained '/' or ':', or is blank.
      */
-    bool SetBaseName( const STRING& aBaseName );
+    int SetBaseName( const STRING& aBaseName );
 
     /**
      * Function GetBaseName
@@ -124,15 +142,17 @@ public:
      * Function SetRevision
      * overrides the revision portion of the LPID to @a aRevision and must
      * be in the form "rev<num>" where "<num>" is "1", "2", etc.
-     * @return bool - true unless parameter is not of the form "revN]N..]"
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into the parameter at which an error was detected,
+     *  because it did not look like "rev23"
      */
-    bool SetRevision( const STRING& aRevision );
+    int SetRevision( const STRING& aRevision );
 
     /**
-     * Function GetFullText
+     * Function Format
      * returns the full text of the LPID.
      */
-    STRING  GetFullText() const;
+    STRING  Format() const;
 
 #if defined(DEBUG)
     static void Test();
