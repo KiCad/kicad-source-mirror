@@ -1193,7 +1193,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 #if defined(DEBUG)
     if( net )     // item can be NULL if anetcode is not valid
     {
-        if( anetcode != net->GetNet() )
+        if( aNetcode != net->GetNet() )
         {
             printf( "FindNet() anetcode %d != GetNet() %d (net: %s)\n",
                     aNetcode, net->GetNet(), CONV_TO_UTF8( net->GetNetname() ) );
