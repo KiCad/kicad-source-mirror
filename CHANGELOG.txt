@@ -7,8 +7,8 @@ email address.
 2010-Dec-28 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++new:
-    Completed a good portion of /new class LIB_TABLE.
-    Starting LPID.
+    Completed most of /new class LIB_TABLE.
+    Completed all of /new class LPID.
 ++common:
     Tricked xnode.h into not issuing deprecation warnings.
 ++richio:

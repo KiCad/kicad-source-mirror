@@ -24,7 +24,7 @@
 
 #include <cstring>
 #include <sch_lpid.h>
-
+#include <wx/wx.h>
 
 using namespace SCH;
 
@@ -58,17 +58,74 @@ const char* EndsWithRev( const char* start, const char* tail, char separator )
 }
 
 
-LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
+//----<Policy and field test functions>-------------------------------------
+
+// These all return -1 on success, or >= 0 if there is an error at a
+// particular character offset into their respectives arguments.
+
+static inline int okLogical( const STRING& aField )
 {
+    // std::string::npos is largest positive number, casting to int makes it -1.
+    // Returning that means success.
+    return int( aField.find_first_of( ":/" ) );
+}
+
+static inline int okBase( const STRING& aField )
+{
+    int offset = int( aField.find_first_of( ":/" ) );
+    if( offset != -1 )
+        return offset;
+
+    // cannot be empty
+    if( !aField.size() )
+        return 0;
+
+    return offset;  // ie. -1
+}
+
+static inline int okCategory( const STRING& aField )
+{
+    return int( aField.find_first_of( ":/" ) );
+}
+
+static int okRevision( const STRING& aField )
+{
+    char  rev[32];  // C string for speed
+
+    if( aField.size() >= 4 && aField.size() <= sizeof(rev)-3 )
+    {
+        strcpy( rev, "x/" );
+        strcat( rev, aField.c_str() );
+
+        if( EndsWithRev( rev ) == rev+2 )
+            return -1;    // success
+    }
+
+    return 0; // first character position "is in error", is best we can do.
+}
+
+//----</Policy and field test functions>-------------------------------------
+
+
+int LPID::Parse( const STRING& aLPID )
+{
+    logical.clear();
+    category.clear();
+    baseName.clear();
+    revision.clear();
+
     const char* rev = EndsWithRev( aLPID );
     size_t      revNdx;
     size_t      partNdx;
     size_t      baseNdx;
+    int         offset;
 
     //=====<revision>=========================================
     if( rev )
     {
-        revNdx   = rev - aLPID.c_str();
+        revNdx = rev - aLPID.c_str();
+
+        // no need to check revision, EndsWithRev did that.
         revision = aLPID.substr( revNdx );
         --revNdx;  // back up to omit the '/' which preceeds the rev
     }
@@ -78,7 +135,11 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
     //=====<logical>==========================================
     if( ( partNdx = aLPID.find( ':' ) ) != aLPID.npos )
     {
-        logical = aLPID.substr( 0, partNdx );
+        offset = SetLogicalLib( aLPID.substr( 0, partNdx ) );
+        if( offset > -1 )
+        {
+            return offset;
+        }
         ++partNdx;  // skip ':'
     }
     else
@@ -91,7 +152,11 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
     if( base )
     {
         baseNdx  = base - aLPID.c_str();
-        category = aLPID.substr( partNdx, baseNdx - partNdx );
+        offset  = SetCategory( aLPID.substr( partNdx, baseNdx - partNdx ) );
+        if( offset > -1 )
+        {
+            return offset + partNdx;
+        }
         ++baseNdx;   // skip '/'
     }
     else
@@ -100,7 +165,29 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
     }
 
     //=====<baseName>==========================================
-    baseName = aLPID.substr( baseNdx, revNdx - baseNdx );
+    offset = SetBaseName( aLPID.substr( baseNdx, revNdx - baseNdx ) );
+    if( offset > -1 )
+    {
+        return offset + baseNdx;
+    }
+
+    return -1;
+}
+
+
+LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
+{
+    int offset = Parse( aLPID );
+
+    if( offset != -1 )
+    {
+        throw PARSE_ERROR(
+                _( "Illegal character found in LPID string" ),
+                wxConvertMB2WX( aLPID.c_str() ),
+                0,
+                offset
+                );
+    }
 }
 
 
@@ -110,14 +197,14 @@ STRING LPID::GetLogicalLib() const
 }
 
 
-bool LPID::SetLogicalLib( const STRING& aLogical )
+int LPID::SetLogicalLib( const STRING& aLogical )
 {
-    if( aLogical.find_first_of( ":/" ) == STRING::npos )
+    int offset = okLogical( aLogical );
+    if( offset == -1 )
     {
         logical = aLogical;
-        return true;
     }
-    return false;
+    return offset;
 }
 
 
@@ -127,14 +214,14 @@ STRING LPID::GetCategory() const
 }
 
 
-bool LPID::SetCategory( const STRING& aCategory )
+int LPID::SetCategory( const STRING& aCategory )
 {
-    if( aCategory.find_first_of( ":/" ) == STRING::npos )
+    int offset = okCategory( aCategory );
+    if( offset == -1 )
     {
         category = aCategory;
-        return true;
     }
-    return false;
+    return offset;
 }
 
 
@@ -144,14 +231,14 @@ STRING LPID::GetBaseName() const
 }
 
 
-bool LPID::SetBaseName( const STRING& aBaseName )
+int LPID::SetBaseName( const STRING& aBaseName )
 {
-    if( aBaseName.find_first_of( ":/" ) == STRING::npos )
+    int offset = okBase( aBaseName );
+    if( offset == -1 )
     {
         baseName = aBaseName;
-        return true;
     }
-    return false;
+    return offset;
 }
 
 
@@ -178,23 +265,18 @@ STRING LPID::GetRevision() const
 }
 
 
-bool LPID::SetRevision( const STRING& aRevision )
+int LPID::SetRevision( const STRING& aRevision )
 {
-    STRING rev;
-
-    rev += "x/";
-    rev += aRevision;
-
-    if( EndsWithRev( rev ) )
+    int offset = okRevision( aRevision );
+    if( offset == -1 )
     {
         revision = aRevision;
-        return true;
     }
-    return false;
+    return offset;
 }
 
 
-STRING LPID::GetFullText() const
+STRING LPID::Format() const
 {
     STRING  ret;
 
@@ -248,12 +330,13 @@ void LPID::Test()
         LPID lpid( lpids[i] );  // parse
 
         // format
-        printf( "input:'%s'  full:'%s'  base:'%s'  partName:'%s'  cat:'%s'\n",
+        printf( "input:'%s'  full:'%s'  base:'%s'  partName:'%s'  cat:'%s'  rev:'%s'\n",
             lpids[i],
-            lpid.GetFullText().c_str(),
+            lpid.Format().c_str(),
             lpid.GetBaseName().c_str(),
             lpid.GetPartName().c_str(),
-            lpid.GetCategory().c_str()
+            lpid.GetCategory().c_str(),
+            lpid.GetRevision().c_str()
             );
     }
 }
