@@ -43,3 +43,24 @@ LIB::~LIB()
     delete sink;
 }
 
+
+PART* LIB::LookupPart( const LPID& aLPID ) throw( IO_ERROR )
+{
+    return 0;
+}
+
+
+#if 0 && defined(DEBUG)
+
+void LIB::Test( int argc, char** argv ) throw( IO_ERROR );
+{
+}
+
+int main( int argc, char** argv )
+{
+    LIB::Test( argc, argv );
+
+    return 0;
+}
+
+#endif

@@ -60,19 +60,13 @@ endif()
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
+#=====<on standby until unit testing infrastructure>============================
+if( false )
+
 add_executable( test_dir_lib_source
     sch_dir_lib_source.cpp
     )
 target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
-
-add_executable( test_sch_lib_table
-    sch_lib_table.cpp
-    sch_lib_table_keywords.cpp
-    sch_lib.cpp
-    ${PROJECT_SOURCE_DIR}/common/richio.cpp
-    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
-    )
-target_link_libraries( test_sch_lib_table ${wxWidgets_LIBRARIES} )
 
 add_executable( test_sch_part sch_part.cpp )
 target_link_libraries( test_sch_part ${wxWidgets_LIBRARIES} )
@@ -81,6 +75,21 @@ add_executable( test_lpid
     sch_lpid.cpp
     )
 target_link_libraries( test_lpid ${wxWidgets_LIBRARIES} )
+
+endif( false )
+
+#=====</on standby until unit testing infrastructure>===========================
+
+add_executable( test_sch_lib_table
+    sch_lib_table.cpp
+    sch_lib_table_keywords.cpp
+    sch_lib.cpp
+    sch_lpid.cpp
+    sch_dir_lib_source.cpp
+    ${PROJECT_SOURCE_DIR}/common/richio.cpp
+    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
+    )
+target_link_libraries( test_sch_lib_table ${wxWidgets_LIBRARIES} )
 
 
 make_lexer(

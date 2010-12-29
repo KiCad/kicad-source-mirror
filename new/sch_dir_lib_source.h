@@ -69,7 +69,7 @@ namespace SCH {
  */
 class DIR_LIB_SOURCE : public LIB_SOURCE
 {
-    friend class LIBS;          ///< LIBS::GetLib() can construct one.
+    friend class LIB_TABLE;     ///< constructor is protected, LIB_TABLE can construct
 
     bool                useVersioning;  ///< use files with extension ".revNNN..", else not
 
@@ -146,7 +146,7 @@ protected:
      *
      * @param aOptions is the options string from the library table, currently
      *  the only supported option, that this LIB_SOURCE knows about is
-     *  "userVersioning".  If present means support versioning in the directory
+     *  "useVersioning".  If present means support versioning in the directory
      *  tree, otherwise only a single version of each part is recognized, namely the
      *  one without the ".revN[N..]" trailer.
      */

@@ -25,27 +25,13 @@
 #ifndef SCH_LIB_H_
 #define SCH_LIB_H_
 
-#include <string>
-#include <deque>
-
+#include <utf8.h>
 #include <kicad_exceptions.h>
 
 
-#ifdef DEBUG
-#define D(x)        x
-#else
-#define D(x)        // nothing
-#endif
-
-
-typedef std::string             STRING;
-typedef std::deque<STRING>      STRINGS;
-typedef STRINGS                 STRINGS;
-
-extern const    STRING  StrEmpty;
-
 namespace SCH {
 
+class LPID;
 class PART;
 
 
@@ -83,7 +69,7 @@ protected:                  ///< derived classes must implement
      * Function ReadPart
      * fetches @a aPartName's s-expression into @a aResult after clear()ing aResult.
      */
-    virtual void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev=StrEmpty )
+    virtual void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = "" )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -113,7 +99,7 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched result, one category per STRING.
      */
-    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory=StrEmpty )
+    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory="" )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -186,7 +172,7 @@ protected:                  ///< derived classes must implement
      * part is done, then LIB::ReloadPart() must be called on this same part
      * and all parts that inherit it must be reparsed.
      * @return STRING - if the LIB_SINK support revision numbering, then return a
-     *   evision name that was next in the sequence, e.g. "rev22", else StrEmpty.
+     *   revision name that was next in the sequence, e.g. "rev22", else "".
      */
     virtual STRING WritePart( const STRING& aPartName, const STRING& aSExpression )
         throw( IO_ERROR ) = 0;
@@ -207,15 +193,15 @@ protected:
  */
 class LIB
 {
-    friend class LIB_TABLE;    ///< the LIB factory is LIB_TABLE
+    friend class LIB_TABLE;    ///< protected constructor, LIB_TABLE may construct
 
-protected:  // constructor is not public, called from LIBS only.
+protected:  // constructor is not public, called from LIB_TABLE only.
 
     /**
      * Constructor LIB
-     * is not public and is only called from LIBS::GetLib()
+     * is not public and is only called from class LIB_TABLE
      *
-     * @param aLogicalLibrary is the name of a well know logical library, and is
+     * @param aLogicalLibrary is the name of a well known logical library, and is
      *  known because it already exists in the library table.
      *
      * @param aSource is an open LIB_SOURCE whose ownership is
@@ -246,13 +232,20 @@ public:
     //-----<use delegates: source and sink>---------------------------------
 
     /**
-     * Function GetPart
-     * returns a PART given @a aPartName, such as "passives/R".
-     * @param aPartName is local to this LIB and does not have the logical
-     *  library name prefixed.
+     * Function LookupPart
+     * returns a PART given @a aPartName, such as "passives/R".  No ownership
+     * is given to the PART, it stays in the cache that is this LIB.
+     *
+     * @param aLPID is the part to lookup.  The logicalLibName can be empty in it
+     *    since yes, we know which LIB is in play.
+     *
+     * @return PART* - The desired PART and will never be NULL.  No ownership is
+     *  given to caller.  PARTs always reside in the cache that is a LIB.
+     *
+     * @throw IO_ERROR if the part cannot be found or loaded.
      */
-    const PART* GetPart( const STRING& aPartName ) throw( IO_ERROR );
-
+    PART* LookupPart( const LPID& aLPID )
+        throw( IO_ERROR );
 
     /**
      * Function ReloadPart
@@ -273,8 +266,7 @@ public:
      * creates cache entries for the very same parts if they do not already exist
      * in this LIB (i.e. cache).
      */
-    STRINGS GetCategoricalPartNames( const STRING& aCategory=StrEmpty ) throw( IO_ERROR );
-
+    STRINGS GetCategoricalPartNames( const STRING& aCategory = "" ) throw( IO_ERROR );
 
 
     //-----<.use delegates: source and sink>--------------------------------
@@ -317,6 +309,9 @@ public:
         return STRINGS();
     }
 
+#if defined(DEBUG)
+    static void Test( int argc, char** argv ) throw( IO_ERROR );
+#endif
 
 protected:
 

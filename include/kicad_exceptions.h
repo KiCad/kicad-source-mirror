@@ -25,8 +25,10 @@
 #ifndef KICAD_EXCEPTIONS_H_
 #define KICAD_EXCEPTIONS_H_
 
-/*  Just exceptions
-*/
+/**
+ * @ingroup exception_types
+ * @{
+ */
 
 
 #include <wx/string.h>
@@ -83,5 +85,8 @@ struct PARSE_ERROR : public IO_ERROR
     {
     }
 };
+
+/** @} exception_types */
+
 
 #endif  // KICAD_EXCEPTIONS_H_

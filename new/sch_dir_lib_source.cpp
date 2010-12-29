@@ -590,7 +590,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
 }
 
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
 
 void DIR_LIB_SOURCE::Test( int argc, char** argv )
 {

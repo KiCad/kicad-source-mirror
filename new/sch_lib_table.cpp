@@ -22,11 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <set>
+#include <assert.h>
 
-#include <sch_lib_table.h>
 #include <sch_lib_table_lexer.h>
 #include <sch_lpid.h>
-#include <set>
+#include <sch_lib_table.h>
+#include <sch_dir_lib_source.h>
 
 //using namespace std;    // screws up Doxygen
 using namespace SCH;
@@ -185,14 +187,99 @@ STRINGS LIB_TABLE::GetLogicalLibs()
 }
 
 
-PART* LIB_TABLE::GetPart( const LPID& aLogicalPartID ) throw( IO_ERROR )
+PART* LIB_TABLE::LookupPart( const LPID& aLogicalPartID, LIB* aLocalLib )
+    throw( IO_ERROR )
 {
-    // need LIPD done.
-    return 0;
+    LIB* lib = lookupLib( aLogicalPartID, aLocalLib );
+
+    return lib->LookupPart( aLogicalPartID );
 }
 
 
-const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
+LIB* LIB_TABLE::lookupLib( const LPID& aLogicalPartID, LIB* aLocalLib )
+    throw( IO_ERROR )
+{
+    if( aLocalLib )
+    {
+        return aLocalLib;
+    }
+    else
+    {
+        const STRING& logName = aLogicalPartID.GetLogicalLib();
+
+        if( logName.size() )
+        {
+            ROW* row = FindRow( logName );
+            if( !row )
+            {
+                STRING msg = "Unable to find logical lib ";
+                msg += logName;
+                throw IO_ERROR( msg );
+            }
+
+            if( !row->lib )
+            {
+                loadLib( row );
+            }
+
+            assert( row->lib );     // loadLib() throws if cannot load
+
+            return row->lib;
+        }
+        else
+        {
+            STRING msg = "No logicalLibName in LPID and no localLib";
+            throw IO_ERROR( msg );
+        }
+    }
+
+//    return NULL;  never get here
+}
+
+
+void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
+{
+    assert( !aRow->lib );   // caller should know better.
+
+    const STRING& libType = aRow->GetType();
+
+    if( !libType.compare( "dir" ) )
+    {
+        // autor_ptr wrap source while we create sink, in case sink throws.
+        std::auto_ptr<LIB_SOURCE>   source(
+            new DIR_LIB_SOURCE(
+                aRow->GetFullURI(),
+                aRow->GetOptions() ) );
+
+        /* @todo load LIB_SINK
+        std::auto_ptr<LIB_SINK>     sink(
+            new DIR_LIB_SINK(
+                aRow->GetFullURI(),
+                aRow->GetOptions() ) );
+        */
+
+        // LIB::LIB( const STRING& aLogicalLibrary, LIB_SOURCE* aSource, LIB_SINK* aSink = NULL );
+        aRow->lib = new LIB( aRow->GetLogicalName(), source.release(), NULL );
+    }
+
+    else if( !libType.compare( "schematic" ) )
+    {
+        // @todo code and load SCHEMATIC_LIB_SOURCE
+    }
+
+    else if( !libType.compare( "subversion" ) )
+    {
+        // @todo code and load SVN_LIB_SOURCE
+    }
+
+    else if( !libType.compare( "http" ) )
+    {
+        // @todo code and load HTTP_LIB_SOURCE
+    }
+}
+
+
+LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
 {
     // this function must be *super* fast, so therefore should not instantiate
     // anything which would require using the heap.  This function is the reason
@@ -207,7 +294,7 @@ const LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
         if( it != cur->rows.end() )
         {
             // reference: http://myitcorner.com/blog/?p=361
-            return (const LIB_TABLE::ROW*) it->second;  // found
+            return (LIB_TABLE::ROW*) it->second;  // found
         }
 
         // not found, search fall back table(s), if any
@@ -247,7 +334,7 @@ bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
 }
 
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
 
 // build this with a Debug CMAKE_BUILD_TYPE
 

@@ -25,14 +25,22 @@
 #ifndef SCH_LPID_H_
 #define SCH_LPID_H_
 
-#include <sch_lib.h>    // STRING
+#include <utf8.h>
+#include <kicad_exceptions.h>
+
+namespace SCH {
 
 /**
  * Class LPID
  * (aka GUID) is a Logical Part ID and consists of various portions much like a URI.
- * It relies heavily on a logical library name to hide where actual physical library
- * sources reside.  Its static functions serve as managers of the "library table" to
- * map logical library names to actual library sources.
+ * It is a container for the separated portions of a logical part id STRING so they
+ * can be accessed individually.  The various portions of an LPID are:
+ * logicalLibraryName, category, baseName, and revision.  Only the baseName is
+ * mandatory.  There is another construct called "partName" which consists of
+ * [category/]baseName.  That is the category followed by a slash, but only if
+ * the category is not empty.
+ * <p>
+ * partName = [category/]baseName
  * <p>
  * Example LPID string:
  * "kicad:passives/R/rev6".
@@ -41,8 +49,9 @@
  * <li> "kicad" is the logical library name.
  * <li> "passives" is the category.
  * <li> "passives/R" is the partname.
- * <li> "rev6" is the revision number, which is optional.  If missing then its
- *      delimiter should also not be present.
+ * <li> "rev6" is the revision, which is optional.  If missing then its
+ *      / delimiter should also not be present. A revision must begin with
+ *      "rev" and be followed by at least one or more decimal digits.
  * </ul>
  * @author Dick Hollenbeck
  */
@@ -51,7 +60,6 @@ class LPID  // aka GUID
 public:
 
     LPID();
-
 
     /**
      * Constructor LPID
@@ -76,7 +84,7 @@ public:
      * for this portion since it comes from the library table and is considered
      * read only here.
      */
-    STRING  GetLogicalLib() const;
+    const STRING& GetLogicalLib() const;
 
     /**
      * Function SetCategory
@@ -92,7 +100,7 @@ public:
      * returns the category of this part id, "passives" in the example at the
      * top of the class description.
      */
-    STRING  GetCategory() const;
+    const STRING& GetCategory() const;
 
     /**
      * Function SetCategory
@@ -108,7 +116,7 @@ public:
      * Function GetBaseName
      * returns the part name without the category.
      */
-    STRING  GetBaseName() const;
+    const STRING&  GetBaseName() const;
 
     /**
      * Function SetBaseName
@@ -120,7 +128,7 @@ public:
     int SetBaseName( const STRING& aBaseName );
 
     /**
-     * Function GetBaseName
+     * Function GetPartName
      * returns the part name, i.e. category/baseName without revision.
      */
     STRING  GetPartName() const;
@@ -134,9 +142,9 @@ public:
 
     /**
      * Function GetRevision
-     * returns the revision portion of the LPID or StrEmpty if none.
+     * returns the revision portion of the LPID.
      */
-    STRING GetRevision() const;
+    const STRING& GetRevision() const;
 
     /**
      * Function SetRevision
@@ -161,10 +169,11 @@ public:
 protected:
     STRING  logical;        ///< logical lib name or empty
     STRING  category;       ///< or empty
-    STRING  baseName;       ///< excludes category
+    STRING  baseName;       ///< without category
     STRING  revision;       ///< "revN[N..]" or empty
 };
 
+} // namespace SCH
 
 /**
  * Function EndsWithRev
