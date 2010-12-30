@@ -84,7 +84,10 @@ public:
      * for this portion since it comes from the library table and is considered
      * read only here.
      */
-    const STRING& GetLogicalLib() const;
+    const STRING& GetLogicalLib() const
+    {
+        return logical;
+    }
 
     /**
      * Function SetCategory
@@ -100,7 +103,10 @@ public:
      * returns the category of this part id, "passives" in the example at the
      * top of the class description.
      */
-    const STRING& GetCategory() const;
+    const STRING& GetCategory() const
+    {
+        return category;
+    }
 
     /**
      * Function SetCategory
@@ -116,7 +122,10 @@ public:
      * Function GetBaseName
      * returns the part name without the category.
      */
-    const STRING&  GetBaseName() const;
+    const STRING&  GetBaseName() const
+    {
+        return baseName;
+    }
 
     /**
      * Function SetBaseName
@@ -131,20 +140,19 @@ public:
      * Function GetPartName
      * returns the part name, i.e. category/baseName without revision.
      */
-    STRING  GetPartName() const;
-
-    /**
-     * Function SetBaseName
-     * overrides the part name portion of the LPID to @a aPartName
-     not really needed, partname is an agreggate anyway, just parse a new one.
-    void SetPartName( const STRING& aPartName );
-     */
+    const STRING& GetPartName() const
+    {
+        return partName;
+    }
 
     /**
      * Function GetRevision
      * returns the revision portion of the LPID.
      */
-    const STRING& GetRevision() const;
+    const STRING& GetRevision() const
+    {
+        return revision;
+    }
 
     /**
      * Function SetRevision
@@ -171,6 +179,7 @@ protected:
     STRING  category;       ///< or empty
     STRING  baseName;       ///< without category
     STRING  revision;       ///< "revN[N..]" or empty
+    STRING  partName;       ///< cannot be set directory, set via SetBaseName() & SetCategory()
 };
 
 } // namespace SCH

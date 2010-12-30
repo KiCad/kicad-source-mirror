@@ -86,6 +86,8 @@ add_executable( test_sch_lib_table
     sch_lib.cpp
     sch_lpid.cpp
     sch_dir_lib_source.cpp
+    sch_part.cpp
+    sweet_keywords.cpp
     ${PROJECT_SOURCE_DIR}/common/richio.cpp
     ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
     )
@@ -97,4 +99,11 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_keywords.cpp
     ELT_T
+    )
+
+make_lexer(
+    ${CMAKE_CURRENT_SOURCE_DIR}/sweet.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/sweet_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/sweet_keywords.cpp
+    PART_T
     )

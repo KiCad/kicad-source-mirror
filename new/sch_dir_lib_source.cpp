@@ -157,7 +157,7 @@ static inline bool isDigit( char c )
  *  segment, i.e. the string segment of interest is [start,tail)
  * @param separator is the separating byte, expected: '.' or '/', depending on context.
  */
-static const char* endsWithRev( const char* start, const char* tail, char separator )
+static const char* endsWithRev( const char* start, const char* tail, char separator = '/' )
 {
     bool    sawDigit = false;
 
@@ -181,7 +181,7 @@ static const char* endsWithRev( const char* start, const char* tail, char separa
     return 0;
 }
 
-static inline const char* endsWithRev( const STRING& aPartName, char separator )
+static inline const char* endsWithRev( const STRING& aPartName, char separator = '/' )
 {
     return endsWithRev( aPartName.c_str(),  aPartName.c_str()+aPartName.size(), separator );
 }
@@ -194,8 +194,8 @@ bool BY_REV::operator() ( const STRING& s1, const STRING& s2 ) const
 {
     // avoid instantiating new STRINGs, and thank goodness that c_str() is const.
 
-    const char* rev1 = endsWithRev( s1, '/' );
-    const char* rev2 = endsWithRev( s2, '/' );
+    const char* rev1 = endsWithRev( s1 );
+    const char* rev2 = endsWithRev( s2 );
 
     int rootLen1 =  rev1 ? rev1 - s1.c_str() : s1.size();
     int rootLen2 =  rev2 ? rev2 - s2.c_str() : s2.size();
@@ -290,7 +290,7 @@ STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
 
     STRING  fileName = sourceURI + "/";
 
-    const char* rev = endsWithRev( aPartName, '/' );
+    const char* rev = endsWithRev( aPartName );
 
     if( rev )
     {
@@ -406,7 +406,7 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 
         while( it != limit )
         {
-            const char* rev = endsWithRev( *it, '/' );
+            const char* rev = endsWithRev( *it );
 
             // all cached partnames have a rev string in useVersioning mode
             assert( rev );
@@ -434,7 +434,13 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
     throw( IO_ERROR )
 {
     STRING  partName = aPartName;   // appended with aRev too if not empty
-    const char* rev  = endsWithRev( partName, '/' );
+    const char* rev  = endsWithRev( partName );
+
+    if( !useVersioning && (aRev.size() || rev) )
+    {
+        STRING msg = "this type 'dir' LIB_SOURCE not using 'useVersioning' option, cannot ask for a revision";
+        throw IO_ERROR( msg );
+    }
 
     if( aRev.size() )
     {
@@ -443,7 +449,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
 
         partName += "/" + aRev;
 
-        rev = endsWithRev( partName, '/' );
+        rev = endsWithRev( partName );
     }
 
     // partName is the exact part name we need here, or if rev is NULL,
@@ -474,7 +480,8 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         // some unrelated name that is larger.
         if( it == partnames.end() || it->compare( 0, search.size(), search ) != 0 )
         {
-            partName += " rev not found.";
+            partName.insert( partName.begin(), '\'' );
+            partName += "' is not present without a revision.";
             throw IO_ERROR( partName );
         }
 
@@ -651,7 +658,7 @@ void DIR_LIB_SOURCE::Test( int argc, char** argv )
 
     catch( IO_ERROR ioe )
     {
-        printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
+        printf( "exception: %s\n", (const char*) ioe.errorText.ToUTF8() ) );
     }
 }
 

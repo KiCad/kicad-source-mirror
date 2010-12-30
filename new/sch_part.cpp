@@ -22,12 +22,18 @@
  */
 
 
-#include "sch_part.h"
+#include <sch_part.h>
+#include <sweet_lexer.h>
+#include <wx/wx.h>          // _()
+
 
 using namespace SCH;
 
-void PART::Parse( LIB* aLexer ) throw( PARSE_ERROR )
+
+void PART::Parse( SWEET_LEXER* aLexer, LIB_TABLE* aTable ) throw( PARSE_ERROR )
 {
+    // Wayne's world, if he still wants it.
+
 }
 
 

@@ -27,8 +27,30 @@
 
 #include <sch_lib.h>
 
+class SWEET_LEXER;
 
 namespace SCH {
+
+/**
+ * Enum PartBit
+ * is a set of bit positions that can be used to create flag bits within
+ * PART::contains to indicate what state the PART is in and what it contains, i.e.
+ * whether the PART has been parsed, and what the PART contains, categorically.
+ */
+enum PartBit
+{
+    PARSED,     ///< have parsed this part already, otherwise 'body' text must be parsed
+    EXTENDS,    ///< saw and "extends" keyword, inheriting from another PART
+
+};
+
+/// Function PB
+/// is a PartBit shifter for PART::contains field.
+static inline const int PB( PartBit oneBitOnly )
+{
+    return ( 1 << oneBitOnly );
+}
+
 
 /**
  * Class PART
@@ -47,19 +69,23 @@ class PART
     /// be done by PARTS_LIST, a class derived from LIB.
     friend class LIB;
 
-
     /// a private constructor, only a LIB can instantiate a PART.
-    PART() {}
-
+    PART( LIB* aOwner, const STRING& aPartName, const STRING& aRevision ) :
+        owner( aOwner ),
+        contains( 0 ),
+        partName( aPartName ),
+        revision( aRevision )
+    {}
 
 protected:      // not likely to have C++ descendants, but protected none-the-less.
 
-    bool        parsed;     ///< true if the body as been parsed already.
-
     LIB*        owner;      ///< which LIB am I a part of (pun if you want)
+    int         contains;   ///< has bits from Enum PartParts
+
     STRING      extends;    ///< LPID of base part
 
-    STRING      name;       ///< example "passives/R", immutable.
+    STRING      partName;   ///< example "passives/R", immutable.
+    STRING      revision;   // @todo need a single search key, this won't do.
 
     /// s-expression text for the part, initially empty, and read in as this part
     /// actually becomes cached in RAM.
@@ -81,7 +107,6 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
 
     // lots of other stuff, like the mandatory properties.
 
-
 public:
 
     /**
@@ -91,7 +116,6 @@ public:
      */
     void Inherit( const PART& aBasePart );
 
-
     /**
      * Function Owner
      * returns the LIB* owner of this part.
@@ -100,12 +124,23 @@ public:
 
     /**
      * Function Parse
-     * translates the \a body string into a binary form that is represented
+     * translates a Sweet string into a binary form that is represented
      * by the normal fields of this class.  Parse is expected to call Inherit()
      * if this part extends any other.
+     *
+     * @param aLexer is an instance of SWEET_LEXER, rewound at the first line.
+     *
+     * @param aLibTable is the LIB_TABLE view that is in effect for inheritance,
+     *  and comes from the big containing SCHEMATIC object.
      */
-    void Parse( LIB* aLexer ) throw( PARSE_ERROR );
+    void Parse( SWEET_LEXER* aLexer, LIB_TABLE* aTable ) throw( PARSE_ERROR );
 
+/*
+    void SetBody( const STR_UTF& aSExpression )
+    {
+        body = aSExpression;
+    }
+*/
 };
 
 }   // namespace PART

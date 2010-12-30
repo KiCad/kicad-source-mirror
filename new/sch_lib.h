@@ -33,7 +33,7 @@ namespace SCH {
 
 class LPID;
 class PART;
-
+class LIB_TABLE;
 
 /**
  * Class LIB_SOURCE
@@ -69,7 +69,7 @@ protected:                  ///< derived classes must implement
      * Function ReadPart
      * fetches @a aPartName's s-expression into @a aResult after clear()ing aResult.
      */
-    virtual void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = "" )
+    virtual void ReadPart( STR_UTF* aResult, const STRING& aPartName, const STRING& aRev = "" )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -80,7 +80,7 @@ protected:                  ///< derived classes must implement
      *        does not have a version string, then the most recent version is fetched.
      * @param aResults receives the s-expressions
      */
-    virtual void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
+    virtual void ReadParts( STR_UTFS* aResults, const STRINGS& aPartNames )
         throw( IO_ERROR ) = 0;
 
     /**
@@ -239,12 +239,15 @@ public:
      * @param aLPID is the part to lookup.  The logicalLibName can be empty in it
      *    since yes, we know which LIB is in play.
      *
+     * @param aLibTable is the LIB_TABLE view that is in effect for inheritance,
+     *  and comes from the big containing SCHEMATIC object.
+     *
      * @return PART* - The desired PART and will never be NULL.  No ownership is
      *  given to caller.  PARTs always reside in the cache that is a LIB.
      *
      * @throw IO_ERROR if the part cannot be found or loaded.
      */
-    PART* LookupPart( const LPID& aLPID )
+    PART* LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable )
         throw( IO_ERROR );
 
     /**
@@ -315,13 +318,13 @@ public:
 
 protected:
 
-    STRING              fetch;      // scratch, used to fetch things, grows to worst case size.
-    STRINGS             vfetch;     // scratch, used to fetch things.
+    STR_UTF             fetch;      // scratch, used to fetch things, grows to worst case size.
+    STR_UTFS            vfetch;     // scratch, used to fetch things.
 
     STRING              name;
     LIB_SOURCE*         source;
     LIB_SINK*           sink;
-    STRING              libraryURI;
+//    STRING              libraryURI;
 
     STRINGS             categories;
 

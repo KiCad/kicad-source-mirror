@@ -22,9 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>           // std::auto_ptr
+#include <wx/string.h>
+
 #include <sch_lib.h>
-
-
+#include <sch_lpid.h>
+#include <sch_part.h>
+#include <sweet_lexer.h>
+#include <sch_lib_table.h>
 
 using namespace SCH;
 
@@ -44,9 +49,40 @@ LIB::~LIB()
 }
 
 
-PART* LIB::LookupPart( const LPID& aLPID ) throw( IO_ERROR )
+PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR )
 {
-    return 0;
+    PART*   part;
+
+    // If part not already cached
+    if( 1 /* @todo test cache */ )
+    {
+        // load it.
+
+        part = new PART( this, aLPID.GetPartName(), aLPID.GetRevision() );
+
+        std::auto_ptr<PART> wrapped( part );
+
+        source->ReadPart( &part->body, aLPID.GetPartName(), aLPID.GetRevision() );
+
+#if defined(DEBUG)
+        const STRING& body = part->body;
+        printf( "body: %s", body.c_str() );
+        if( !body.size() || body[body.size()-1] != '\n' )
+            printf( "\n" );
+#endif
+
+        SWEET_LEXER sw( part->body, wxString::FromUTF8("body") /* @todo have ReadPart give better source */ );
+
+        part->Parse( &sw, aLibTable );
+
+
+        // stuff the part into this LIBs cache:
+        // @todo
+
+        wrapped.release();
+    }
+
+    return part;
 }
 
 
