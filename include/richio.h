@@ -38,7 +38,134 @@
 // but the errorText needs to be wide char so wxString rules.
 #include <wx/wx.h>
 #include <cstdio>
-#include <kicad_exceptions.h>
+
+
+/**
+ * @ingroup exception_types
+ * @{
+ */
+
+
+#define IO_FORMAT       _( "IO_ERROR: '%s'\n from %s : %s" )
+#define PARSE_FORMAT    _( "PARSE_ERROR: '%s' in input/source '%s', line %d, offset %d\n from %s : %s" )
+
+// references:
+// http://stackoverflow.com/questions/2670816/how-can-i-use-the-compile-time-constant-line-in-a-string
+#define STRINGIFY(x)    #x
+#define TOSTRING(x)     STRINGIFY(x)
+
+// use one of the following __LOC__ defs, depending on whether your
+// compiler supports __func__ or not, and how it handles __LINE__
+#define __LOC__         ((std::string(__func__) + " : ") + TOSTRING(__LINE__)).c_str()
+//#define __LOC__         TOSTRING(__LINE__)
+
+/// macro which captures the "call site" values of __FILE_ & __LOC__
+#define THROW_IO_ERROR( msg )   throw IO_ERROR( __FILE__, __LOC__, msg )
+
+/**
+ * Struct IO_ERROR
+ * is a class used to hold an error message and may be used to throw exceptions
+ * containing meaningful error messages.
+ * @author Dick Hollenbeck
+ */
+struct IO_ERROR // : std::exception
+{
+    wxString    errorText;
+
+    /**
+     * Constructor
+     *
+     * @param aThrowersFile is the __FILE__ preprocessor macro but generated
+     *  at the source file of thrower.
+     *
+     * @param aThrowersLoc can be either a function name, such as __func__
+     *   or a stringified __LINE__ preprocessor macro but generated
+     *   at the source function of the thrower, or concatonation.  Use macro
+     *   THROW_IO_ERROR() to wrap a call to this constructor at the call site.
+     *
+     * @param aMsg is error text that will be streamed through wxString.Printf()
+     *  using the format string IO_FORMAT above.
+     */
+    IO_ERROR( const char* aThrowersFile,
+              const char* aThrowersLoc,
+              const wxString& aMsg )
+    {
+        init( aThrowersFile, aThrowersLoc, aMsg );
+    }
+
+    IO_ERROR( const char* aThrowersFile,
+              const char* aThrowersLoc,
+              const std::string& aMsg )
+    {
+        init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg.c_str() ) );
+    }
+
+    /**
+     * handles the case where _() is passed as aMsg.
+     */
+    IO_ERROR( const char* aThrowersFile,
+              const char* aThrowersLoc,
+              const wxChar* aMsg )
+    {
+        init( aThrowersFile, aThrowersLoc, wxString( aMsg ) );
+    }
+
+    void init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )
+    {
+        errorText.Printf( IO_FORMAT, aMsg.GetData(),
+            wxString::FromUTF8( aThrowersFile ).GetData(),
+            wxString::FromUTF8( aThrowersLoc ).GetData() );
+    }
+
+    IO_ERROR() {}
+
+    ~IO_ERROR() throw ( /*none*/ ){}
+};
+
+
+#define THROW_PARSE_ERROR( msg, input, line, offset )   throw PARSE_ERROR( __FILE__, __LOC__, msg, input, line, offset )
+
+/**
+ * Class PARSE_ERROR
+ * contains a filename or source description, a line number, a character offset,
+ * and an error message.
+ * @author Dick Hollenbeck
+ */
+struct PARSE_ERROR : public IO_ERROR
+{
+    // wxString errorText is still public from IO_ERROR
+
+    int lineNumber;     ///< at which line number, 1 based index.
+    int byteIndex;      ///< at which character position within the line, 1 based index
+
+    PARSE_ERROR( const char* aThrowersFile, const char* aThrowersLoc,
+                 const wxString& aMsg, const wxString& aSource,
+                 int aLineNumber, int aByteIndex ) :
+        IO_ERROR()
+    {
+        init( aThrowersFile, aThrowersLoc, aMsg, aSource, aLineNumber, aByteIndex );
+    }
+
+    void init( const char* aThrowersFile, const char* aThrowersLoc,
+               const wxString& aMsg, const wxString& aSource,
+               int aLineNumber, int aByteIndex )
+    {
+        // save line and offset in binary for Sweet text editor, which will catch exceptions
+        lineNumber = aLineNumber;
+        byteIndex  = aByteIndex;
+
+        // #define PARSE_FORMAT    _( "PARSE_ERROR: %s in source %s, line %d, offset %d\nfrom cpp:%s func:%s" )
+
+        errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
+            aLineNumber, aByteIndex,
+            wxString::FromUTF8( aThrowersFile ).GetData(),
+            wxString::FromUTF8( aThrowersLoc ).GetData() );
+    }
+
+    ~PARSE_ERROR() throw ( /*none*/ ){}
+};
+
+/** @} exception_types */
 
 
 #define LINE_READER_LINE_DEFAULT_MAX        100000

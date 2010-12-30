@@ -132,7 +132,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
             msg += row->logicalName;
             msg += '\'';
             msg += " is a duplicate logical lib name";
-            throw IO_ERROR( msg );
+            THROW_IO_ERROR( msg );
         }
     }
 }
@@ -207,7 +207,7 @@ LIB* LIB_TABLE::lookupLib( const LPID& aLPID, LIB* aFallBackLib )
             STRING msg = "lib table contains no logical lib '";
             msg += aLPID.GetLogicalLib();
             msg += '\'';
-            throw IO_ERROR( msg );
+            THROW_IO_ERROR( msg );
         }
 
         if( !row->lib )
@@ -226,7 +226,7 @@ LIB* LIB_TABLE::lookupLib( const LPID& aLPID, LIB* aFallBackLib )
     }
 
     STRING msg = "lookupLib() requires logicalLibName or a fallback lib";
-    throw IO_ERROR( msg );
+    THROW_IO_ERROR( msg );
 }
 
 
@@ -276,7 +276,7 @@ void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
         STRING msg = "cannot load unknown libType: '";
         msg += libType;
         msg += '\'';
-        throw IO_ERROR( msg );
+        THROW_IO_ERROR( msg );
     }
 }
 
@@ -342,9 +342,12 @@ bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
 
 void LIB_TABLE::Test()
 {
-    // the null string is not really a legal DSN token since any duplicated
-    // double quote ("") is assumed to be a single double quote (").
-    // To pass an empty string, we can pass " " to (options " ")
+    // A pair of double quotes alone, is not really a legal DSN token since
+    // any duplicated double quote ("") is assumed to be a single double quote (")
+    // in any DSN lexer.
+    // To pass an empty string, we can pass " " to (options " "), or if you passed
+    // """" this would show up as "" with quotes present in the parser.  The parser
+    // probably doesn't want a pair of double quotes, strlen() = 2.
     SCH_LIB_TABLE_LEXER  slr(
         "(lib_table \n"
         "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n"
@@ -355,25 +358,12 @@ void LIB_TABLE::Test()
         wxT( "inline text" )        // source
         );
 
-    try
-    {
-        // read the "( lib_table" pair of tokens
-        slr.NextTok();
-        slr.NextTok();
+    // read the "( lib_table" pair of tokens
+    slr.NextTok();
+    slr.NextTok();
 
-        // parse the rest of input to slr
-        Parse( &slr );
-    }
-
-    catch( std::exception& ex )
-    {
-        printf( "std::exception\n" );
-    }
-
-    catch( IO_ERROR& ioe )
-    {
-        printf( "exception: %s\n", (const char*) ioe.errorText.ToUTF8() );
-    }
+    // parse the rest of input to slr
+    Parse( &slr );
 
     STRING_FORMATTER    sf;
 
@@ -404,17 +394,10 @@ void LIB_TABLE::Test()
         printf( "logicalName: %s\n", it->c_str() );
     }
 
-    try
-    {
-        // find a part
-        LPID    lpid( "meparts:tigers/ears/rev10" );
+    // find a part
+    LPID    lpid( "meparts:tigers/ears/rev10" );
 
-        LookupPart( lpid );
-    }
-    catch( IO_ERROR& ioe )
-    {
-        printf( "exception: %s\n", (const char*) ioe.errorText.ToUTF8() );
-    }
+    LookupPart( lpid );
 }
 
 
@@ -422,7 +405,18 @@ int main( int argc, char** argv )
 {
     LIB_TABLE   lib_table;
 
-    lib_table.Test();
+    try
+    {
+        // test exceptions:
+        // THROW_PARSE_ERROR( wxT("test problem"), wxT("input"), 23, 46 );
+        //THROW_IO_ERROR( wxT("io test") );
+
+        lib_table.Test();
+    }
+    catch( IO_ERROR& ioe )
+    {
+        printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );
+    }
 
     return 0;
 }

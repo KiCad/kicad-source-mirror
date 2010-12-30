@@ -17,25 +17,6 @@ class LIB_PIN;
 class LIB_COMPONENT;
 
 
-/**
- * Holder of an error message and may be thrown from functions.
- */
-struct Error
-{
-    wxString errorText;
-
-    Error( const wxChar* aMsg ) :
-        errorText( aMsg )
-    {
-    }
-
-
-    Error( const wxString& aMsg ) :
-        errorText( aMsg )
-    {
-    }
-};
-
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD> SCH_FIELDS;
 

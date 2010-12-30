@@ -6,6 +6,19 @@ email address.
 
 2010-Dec-28 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
+++richio:
+  * Deleted kicad_exceptions, because it required the big #include <wx/wx.h> and
+    that was slowing down compiling.  Moved that stuff back into richio.h where
+    it came from.
+  * Enhanced IO_ERROR to format an errorText.
+  * Added THROW_IO_ERROR() and THROW_PARSE_ERROR() macros to capture the
+    the call site of the thrower.  If you have problems compiling, it is probably
+    due to the definition of __LOC__ in richio.h.  Some compilers may not support
+    __func__ in C++ yet.  Find a macro that identifies your compiler, and we can
+    work out something in the #define of __LOC__.
+
+2010-Dec-28 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
 ++new:
     Completed most of /new class LIB_TABLE.
     Completed all of /new class LPID.

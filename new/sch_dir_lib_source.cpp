@@ -41,16 +41,10 @@
 */
 
 
-#include <sch_dir_lib_source.h>
-using namespace SCH;
-
-#include <kicad_exceptions.h>
-
 #include <dirent.h>
 #include <sys/stat.h>
 #include <cstring>
 #include <cstdio>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -61,11 +55,8 @@ using namespace SCH;
 #include <vector>
 using namespace std;
 
-/// This file extension is an implementation detail specific to this LIB_SOURCE
-/// implementation, and to a corresponding LIB_SINK.
-/// Core EESCHEMA should never have to see this.
-#define SWEET_EXT       ".part"
-#define SWEET_EXTZ      (sizeof(SWEET_EXT)-1)
+#include <sch_dir_lib_source.h>
+using namespace SCH;
 
 
 /* __func__ is C99 prescribed, but just in case:
@@ -318,7 +309,7 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING  msg = strerror( errno );
         msg += "; cannot open(O_RDONLY) file " + aFileName;
-        throw( IO_ERROR( msg ) );
+        THROW_IO_ERROR( msg );
     }
 
     struct stat     fs;
@@ -330,8 +321,13 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING msg = aFileName;
         msg += " seems too big.  ( > 1 mbyte )";
-        throw IO_ERROR( msg );
+        THROW_IO_ERROR( msg );
     }
+
+#if 0
+    // I read somewhere on the Internet that std::string chars are not guaranteed
+    // (over time) to be contiguous in future implementations of C++, so this
+    // strategy is here for that eventuality.  We buffer through readBuffer here.
 
     // reuse same readBuffer, which is not thread safe, but the API
     // is not advertising thread safe (yet, if ever).
@@ -343,13 +339,27 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
     {
         STRING  msg = strerror( errno );
         msg += "; cannot read file " + aFileName;
-        throw( IO_ERROR( msg ) );
+        THROW_IO_ERROR( msg );
     }
 
-    // std::string chars are not guaranteed to be contiguous in
-    // future implementations of C++, so this is why we did not read into
-    // aResult directly.
     aResult->assign( &readBuffer[0], count );
+#else
+
+    // read into the string directly
+    aResult->resize( fs.st_size );
+
+    int count = read( fw, &(*aResult)[0], fs.st_size );
+    if( count != (int) fs.st_size )
+    {
+        STRING  msg = strerror( errno );
+        msg += "; cannot read file " + aFileName;
+        THROW_IO_ERROR( msg );
+    }
+
+    // test trailing nul is there, which should have been put there with resize() above
+    // printf( "'%s'\n", aResult->c_str() );    // checked OK.
+#endif
+
 }
 
 
@@ -371,7 +381,7 @@ DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
 
     if( sourceURI.size() == 0 )
     {
-        throw( IO_ERROR( STRING("aDirectoryPath cannot be empty") ) );
+        THROW_IO_ERROR( STRING("aDirectoryPath cannot be empty")  );
     }
 
     // remove any trailing separator, so we can add it back later without ambiguity
@@ -439,7 +449,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
     if( !useVersioning && (aRev.size() || rev) )
     {
         STRING msg = "this type 'dir' LIB_SOURCE not using 'useVersioning' option, cannot ask for a revision";
-        throw IO_ERROR( msg );
+        THROW_IO_ERROR( msg );
     }
 
     if( aRev.size() )
@@ -462,7 +472,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         if( it == partnames.end() )    // part not found
         {
             partName += " not found.";
-            throw IO_ERROR( partName );
+            THROW_IO_ERROR( partName );
         }
 
         readString( aResult, makeFileName( partName ) );
@@ -482,7 +492,7 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         {
             partName.insert( partName.begin(), '\'' );
             partName += "' is not present without a revision.";
-            throw IO_ERROR( partName );
+            THROW_IO_ERROR( partName );
         }
 
         readString( aResult, makeFileName( *it ) );
@@ -547,7 +557,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
     {
         STRING  msg = strerror( errno );
         msg += "; scanning directory " + curDir;
-        throw( IO_ERROR( msg ) );
+        THROW_IO_ERROR( msg );
     }
 
     struct stat     fs;
@@ -573,7 +583,7 @@ void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
                 {
                     STRING  msg = partName;
                     msg += " has already been encountered";
-                    throw IO_ERROR( msg );
+                    THROW_IO_ERROR( msg );
                 }
             }
 
@@ -656,7 +666,7 @@ void DIR_LIB_SOURCE::Test( int argc, char** argv )
         printf( "std::exception\n" );
     }
 
-    catch( IO_ERROR ioe )
+    catch( IO_ERROR& ioe )
     {
         printf( "exception: %s\n", (const char*) ioe.errorText.ToUTF8() ) );
     }

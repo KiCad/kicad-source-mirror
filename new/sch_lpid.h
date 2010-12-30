@@ -26,7 +26,7 @@
 #define SCH_LPID_H_
 
 #include <utf8.h>
-#include <kicad_exceptions.h>
+#include <richio.h>
 
 namespace SCH {
 
