@@ -132,7 +132,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
             msg += row->logicalName;
             msg += '\'';
             msg += " is a duplicate logical lib name";
-            throw IO_ERROR( msg );
+            THROW_IO_ERROR( msg );
         }
     }
 }
@@ -187,53 +187,46 @@ STRINGS LIB_TABLE::GetLogicalLibs()
 }
 
 
-PART* LIB_TABLE::LookupPart( const LPID& aLogicalPartID, LIB* aLocalLib )
+PART* LIB_TABLE::LookupPart( const LPID& aLPID, LIB* aLocalLib )
     throw( IO_ERROR )
 {
-    LIB* lib = lookupLib( aLogicalPartID, aLocalLib );
+    LIB* lib = lookupLib( aLPID, aLocalLib );
 
-    return lib->LookupPart( aLogicalPartID );
+    return lib->LookupPart( aLPID, this );
 }
 
 
-LIB* LIB_TABLE::lookupLib( const LPID& aLogicalPartID, LIB* aLocalLib )
+LIB* LIB_TABLE::lookupLib( const LPID& aLPID, LIB* aFallBackLib )
     throw( IO_ERROR )
 {
-    if( aLocalLib )
+    if( aLPID.GetLogicalLib().size() )
     {
-        return aLocalLib;
-    }
-    else
-    {
-        const STRING& logName = aLogicalPartID.GetLogicalLib();
-
-        if( logName.size() )
+        ROW* row = FindRow( aLPID.GetLogicalLib() );
+        if( !row )
         {
-            ROW* row = FindRow( logName );
-            if( !row )
-            {
-                STRING msg = "Unable to find logical lib ";
-                msg += logName;
-                throw IO_ERROR( msg );
-            }
-
-            if( !row->lib )
-            {
-                loadLib( row );
-            }
-
-            assert( row->lib );     // loadLib() throws if cannot load
-
-            return row->lib;
+            STRING msg = "lib table contains no logical lib '";
+            msg += aLPID.GetLogicalLib();
+            msg += '\'';
+            THROW_IO_ERROR( msg );
         }
-        else
+
+        if( !row->lib )
         {
-            STRING msg = "No logicalLibName in LPID and no localLib";
-            throw IO_ERROR( msg );
+            loadLib( row );
         }
+
+        assert( row->lib );     // fix loadLib() to throw if cannot load
+
+        return row->lib;
     }
 
-//    return NULL;  never get here
+    if( aFallBackLib )
+    {
+        return aFallBackLib;
+    }
+
+    STRING msg = "lookupLib() requires logicalLibName or a fallback lib";
+    THROW_IO_ERROR( msg );
 }
 
 
@@ -262,6 +255,7 @@ void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
         aRow->lib = new LIB( aRow->GetLogicalName(), source.release(), NULL );
     }
 
+/*
     else if( !libType.compare( "schematic" ) )
     {
         // @todo code and load SCHEMATIC_LIB_SOURCE
@@ -275,6 +269,14 @@ void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
     else if( !libType.compare( "http" ) )
     {
         // @todo code and load HTTP_LIB_SOURCE
+    }
+*/
+    else
+    {
+        STRING msg = "cannot load unknown libType: '";
+        msg += libType;
+        msg += '\'';
+        THROW_IO_ERROR( msg );
     }
 }
 
@@ -334,44 +336,34 @@ bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
 }
 
 
-#if 0 && defined(DEBUG)
+#if 1 && defined(DEBUG)
 
 // build this with a Debug CMAKE_BUILD_TYPE
 
 void LIB_TABLE::Test()
 {
-    // the null string is not really a legal DSN token since any duplicated
-    // double quote ("") is assumed to be a single double quote (").
-    // To pass an empty string, we can pass " " to (options " ")
+    // A pair of double quotes alone, is not really a legal DSN token since
+    // any duplicated double quote ("") is assumed to be a single double quote (")
+    // in any DSN lexer.
+    // To pass an empty string, we can pass " " to (options " "), or if you passed
+    // """" this would show up as "" with quotes present in the parser.  The parser
+    // probably doesn't want a pair of double quotes, strlen() = 2.
     SCH_LIB_TABLE_LEXER  slr(
         "(lib_table \n"
         "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n"
-        "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options \" \"))\n"
+        "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options useVersioning))\n"
         "  (lib (logical old-project)   (type schematic)(full_uri /tmp/old-schematic.sch)   (options \" \"))\n"
         ,
 
         wxT( "inline text" )        // source
         );
 
-    try
-    {
-        // read the "( lib_table" pair of tokens
-        slr.NextTok();
-        slr.NextTok();
+    // read the "( lib_table" pair of tokens
+    slr.NextTok();
+    slr.NextTok();
 
-        // parse the rest of input to slr
-        Parse( &slr );
-    }
-
-    catch( std::exception& ex )
-    {
-        printf( "std::exception\n" );
-    }
-
-    catch( IO_ERROR ioe )
-    {
-        printf( "exception: %s\n", (const char*) wxConvertWX2MB( ioe.errorText ) );
-    }
+    // parse the rest of input to slr
+    Parse( &slr );
 
     STRING_FORMATTER    sf;
 
@@ -401,6 +393,11 @@ void LIB_TABLE::Test()
     {
         printf( "logicalName: %s\n", it->c_str() );
     }
+
+    // find a part
+    LPID    lpid( "meparts:tigers/ears/rev10" );
+
+    LookupPart( lpid );
 }
 
 
@@ -408,7 +405,18 @@ int main( int argc, char** argv )
 {
     LIB_TABLE   lib_table;
 
-    lib_table.Test();
+    try
+    {
+        // test exceptions:
+        // THROW_PARSE_ERROR( wxT("test problem"), wxT("input"), 23, 46 );
+        //THROW_IO_ERROR( wxT("io test") );
+
+        lib_table.Test();
+    }
+    catch( IO_ERROR& ioe )
+    {
+        printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );
+    }
 
     return 0;
 }

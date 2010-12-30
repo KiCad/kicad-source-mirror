@@ -113,7 +113,7 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
         length += strlen( line + length );
 
         if( length == maxLineLength )
-            throw IO_ERROR( _("Line length exceeded") );
+            THROW_IO_ERROR( _("Line length exceeded") );
 
         // a normal line breaks here, once through while loop
         if( length+1 < capacity || line[length-1] == '\n' )
@@ -164,7 +164,7 @@ unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
     if( length )
     {
         if( length >= maxLineLength )
-            throw IO_ERROR( _("Line length exceeded") );
+            THROW_IO_ERROR( _("Line length exceeded") );
 
         if( length+1 > capacity )   // +1 for terminating nul
             expandCapacity( length+1 );
@@ -305,7 +305,7 @@ std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERRO
             // a decision was made to make all S-expression strings be on a single
             // line.  You can embed \n (human readable) in the text but not
             // '\n' which is 0x0a.
-            throw IO_ERROR( _( "S-expression string has newline" ) );
+            THROW_IO_ERROR( _( "S-expression string has newline" ) );
         }
     }
 
@@ -363,7 +363,7 @@ void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_
 
         if( !os.IsOk() )
         {
-            throw IO_ERROR( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
+            THROW_IO_ERROR( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
         }
     }
 }

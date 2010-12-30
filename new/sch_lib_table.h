@@ -350,14 +350,12 @@ private:
      * finds or loads a LIB based on @a aLogicalPartID or @a aFallBackLib.
      * If the LIB is already loaded then it is returned as is, else it is loaded.
      *
-     * @param aLogicalPartID may hold the logicalLibName.  If
-     *  logicalLibName is empty, then @a aLocalLib should not be NULL.
+     * @param aLogicalPartID holds the partName and may also hold the logicalLibName.  If
+     *  logicalLibName is empty, then @a aFallBackLib should not be NULL.
      *
-     * @param aLocalLib is used if not NULL, and should be supplied especiallly if
-     *   aLogicalPartID has an empty logicalLibName.  This is for the case when
-     *   a partName must come from the same LIB as the referring content.
-     *   For example, a PART extends another PART in the same LIB and the extends
-     *   LPID has no logical lib name.
+     * @param aFallBackLib is used only if aLogicalPartID has an empty logicalLibName.
+     *  This is for the case when an LPID has no logicalLibName because the LPID is using
+     *  a partName from the same LIB as was the referring content.
      *
      * @return LIB* - this will never be NULL, and no ownership is transfered because
      *  all LIBs live in the LIB_TABLEs.  You only get to point to them in some LIB_TABLE.
@@ -365,7 +363,7 @@ private:
      *
      * @throw IO_ERROR if any problem occurs or if the LIB cannot be found or cannot be loaded.
      */
-    LIB* lookupLib( const LPID& aLogicalPartID, LIB* aLocalLib = NULL ) throw( IO_ERROR );
+    LIB* lookupLib( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL ) throw( IO_ERROR );
 
     /**
      * Function loadLib

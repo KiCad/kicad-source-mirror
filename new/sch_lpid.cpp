@@ -114,6 +114,7 @@ int LPID::Parse( const STRING& aLPID )
     logical.clear();
     category.clear();
     baseName.clear();
+    partName.clear();
     revision.clear();
 
     const char* rev = EndsWithRev( aLPID );
@@ -183,19 +184,13 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
 
     if( offset != -1 )
     {
-        throw PARSE_ERROR(
+        THROW_PARSE_ERROR(
                 _( "Illegal character found in LPID string" ),
                 wxConvertMB2WX( aLPID.c_str() ),
                 0,
                 offset
                 );
     }
-}
-
-
-const STRING& LPID::GetLogicalLib() const
-{
-    return logical;
 }
 
 
@@ -210,26 +205,25 @@ int LPID::SetLogicalLib( const STRING& aLogical )
 }
 
 
-const STRING& LPID::GetCategory() const
-{
-    return category;
-}
-
-
 int LPID::SetCategory( const STRING& aCategory )
 {
     int offset = okCategory( aCategory );
     if( offset == -1 )
     {
         category = aCategory;
+
+        // set the partName too
+        if( category.size() )
+        {
+            partName = category;
+            partName += '/';
+            partName += baseName;
+        }
+        else
+            partName = baseName;
+
     }
     return offset;
-}
-
-
-const STRING& LPID::GetBaseName() const
-{
-    return baseName;
 }
 
 
@@ -239,31 +233,18 @@ int LPID::SetBaseName( const STRING& aBaseName )
     if( offset == -1 )
     {
         baseName = aBaseName;
+
+        // set the partName too
+        if( category.size() )
+        {
+            partName = category;
+            partName += '/';
+            partName += baseName;
+        }
+        else
+            partName = baseName;
     }
     return offset;
-}
-
-
-STRING LPID::GetPartName() const
-{
-    STRING ret;
-
-    // return [category/]baseName
-    if( category.size() )
-    {
-        ret += category;
-        ret += '/';
-    }
-
-    ret += baseName;
-
-    return ret;
-}
-
-
-const STRING& LPID::GetRevision() const
-{
-    return revision;
 }
 
 
@@ -306,7 +287,7 @@ STRING LPID::Format() const
 }
 
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
 
 // build this with Debug CMAKE_BUILD_TYPE
 

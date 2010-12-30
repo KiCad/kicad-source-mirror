@@ -5,9 +5,6 @@ eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
-new/html
-new/sch_lib_table_keywords.cpp
-new/sch_lib_table_lexer.h
 pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
 Makefile
 CMakeFiles
@@ -20,3 +17,8 @@ install_manifest.txt
 Documentation/doxygen
 *.cmake
 *.bak
+new/html
+new/sch_lib_table_keywords.cpp
+new/sch_lib_table_lexer.h
+new/sweet_keywords.cpp
+new/sweet_lexer.h

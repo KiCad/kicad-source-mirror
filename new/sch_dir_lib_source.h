@@ -26,10 +26,17 @@
 #define DIR_LIB_SOURCE_H_
 
 
-#include <sch_lib.h>
-
 #include <set>
 #include <vector>
+
+#include <sch_lib.h>
+
+
+/// This file extension is an implementation detail specific to this LIB_SOURCE
+/// and to a corresponding LIB_SINK.
+/// Core EESCHEMA should never have to see this.
+#define SWEET_EXT       ".part"
+#define SWEET_EXTZ      (sizeof(SWEET_EXT)-1)
 
 
 /**

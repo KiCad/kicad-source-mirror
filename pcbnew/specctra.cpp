@@ -542,7 +542,7 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR )
     errText.PrintfV( fmt, args );
     va_end( args );
 
-    throw IO_ERROR( errText );
+    THROW_IO_ERROR( errText );
 }
 
 

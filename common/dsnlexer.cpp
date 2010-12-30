@@ -251,12 +251,14 @@ bool DSNLEXER::IsSymbol( int aTok )
 
 void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw( IO_ERROR )
 {
+    // @todo convert this to THROW_PARSE_ERROR()
+
     // append to aText, do not overwrite
     aText << wxT(" ") << _("in") << wxT(" \"") << CurSource()
           << wxT("\" ") << _("on line") << wxT(" ") << reader->LineNumber()
           << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
 
-    throw IO_ERROR( aText );
+    THROW_IO_ERROR( aText );
 }
 
 
