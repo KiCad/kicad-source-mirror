@@ -9,6 +9,7 @@
 #include <wx/gdicmn.h>
 
 #include "block_commande.h"
+#include "class_netlist_object.h"
 
 
 class SCH_ITEM;
@@ -202,5 +203,13 @@ extern int g_ItemSelectetColor;
 // Color to draw items flagged invisible, in libedit (they are invisible in
 // eeschema
 extern int g_InvisibleItemColor;
+
+/* Global Variables */
+
+extern NETLIST_OBJECT_LIST g_NetObjectslist;
+
+extern bool g_OptNetListUseNames;   /* TRUE to use names rather than
+                                     * net numbers. SPICE netlist only
+                                     */
 
 #endif   // _GENERAL_H_

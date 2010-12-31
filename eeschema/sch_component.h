@@ -44,8 +44,8 @@ class SCH_COMPONENT : public SCH_ITEM
     /**
      * Defines the hierarchical path and reference of the component.  This allowa support
      * for hierarchical sheets that reference the same schematic.  The foramt for the path
-     * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/...  A single / denotes the root
-     * sheet.
+     * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/.../&lscomponent time stamp&gt.
+     * A single / denotes the root sheet.
      */
     wxArrayString m_PathsAndReferences;
 
@@ -168,10 +168,10 @@ public:
     /**
      * Function ClearAnnotation
      * clears exiting component annotation ( i.i IC23 changed to IC? and part reset to 1)
-     * @param aSheet: SCH_SHEET_PATH value: if NULL remove all annotations,
-     *             else remove annotation relative to this sheetpath
+     * @param aSheetPath: SCH_SHEET_PATH value: if NULL remove all annotations,
+     *                    else remove annotation relative to this sheetpath
      */
-    void       ClearAnnotation( SCH_SHEET_PATH* aSheet );
+    void       ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function SetTimeStamp

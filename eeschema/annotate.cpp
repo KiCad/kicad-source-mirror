@@ -13,91 +13,18 @@
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
+#include "netlist.h"
 #include "class_library.h"
 #include "protos.h"
 #include "sch_component.h"
-#include "netlist.h"
 #include "lib_pin.h"
 
 
-static int  AddComponentsInSheetToList( std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
-                                        SCH_SHEET_PATH*                sheet );
-static void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
-static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
-static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
-int         GetLastReferenceNumber( int                            aObjet,
-                                    std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
-static int  ExistUnit( int aObjet, int aUnit,
-                       std::vector <OBJ_CMP_TO_LIST>& aComponentsList );
-static int  ReplaceDuplicatedTimeStamps();
-
-
-/* Set a sheet number, the sheet count for sheets in the whole schematic
- * and update the date in all screens
- */
-void SCH_EDIT_FRAME::UpdateSheetNumberAndDate()
-{
-    wxString    date = GenDate();
-    SCH_SCREENS s_list;
-
-    // Set the date
-    for( SCH_SCREEN* screen = s_list.GetFirst(); screen != NULL;
-         screen = s_list.GetNext() )
-        screen->m_Date = date;
-
-    // Set sheet counts
-    SetSheetNumberAndCount();
-}
-
-
-/*****************************************************************************
- * Used to annotate the power symbols, before testing erc or computing
- * netlist when a component reannotation is not necessary
- *
- * In order to avoid conflicts the reference number starts with a 0. A
- * PWR with id 12 is named PWR12 in global annotation and PWR012 by the
- * Power annotation.
- ****************************************************************************/
-void ReAnnotatePowerSymbolsOnly( void )
-{
-    /* Build the whole sheet list in hierarchy (sheet, not screen) */
-    SCH_SHEET_LIST  SheetList;
-
-    SCH_SHEET_PATH* sheet;
-    int             CmpNumber = 1;
-
-    for( sheet = SheetList.GetFirst(); sheet != NULL;
-         sheet = SheetList.GetNext() )
-    {
-        EDA_ITEM* DrawList = sheet->LastDrawList();
-
-        for( ; DrawList != NULL; DrawList = DrawList->Next() )
-        {
-            if( DrawList->Type() != SCH_COMPONENT_T )
-                continue;
-
-            SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
-            LIB_COMPONENT* Entry =
-                CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
-
-            if( ( Entry == NULL ) || !Entry->IsPower() )
-                continue;
-
-            //DrawLibItem->ClearAnnotation(sheet); this clears all annotation :(
-            wxString refstr = DrawLibItem->GetPrefix();
-
-            //str will be "C?" or so after the ClearAnnotation call.
-            while( refstr.Last() == '?' )
-                refstr.RemoveLast();
-
-            if( !refstr.StartsWith( wxT( "#" ) ) )
-                refstr = wxT( "#" ) + refstr;
-            refstr << wxT( "0" ) << CmpNumber;
-            DrawLibItem->SetRef( sheet, refstr );
-            CmpNumber++;
-        }
-    }
-}
+static void BreakReference( std::vector< SCH_REFERENCE >& aComponentsList );
+static void ReAnnotateComponents( std::vector< SCH_REFERENCE >& aComponentsList );
+static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsList );
+int         GetLastReferenceNumber( int aObjet, std::vector< SCH_REFERENCE >& aComponentsList );
+static int  ExistUnit( int aObjet, int aUnit, std::vector< SCH_REFERENCE >& aComponentList );
 
 
 /* sort function to annotate items by their position.
@@ -108,8 +35,7 @@ void ReAnnotatePowerSymbolsOnly( void )
  *                if same X pos, by Y pos
  *                  if same Y pos, by time stamp
  */
-static bool AnnotateBy_X_Position( const OBJ_CMP_TO_LIST& item1,
-                                   const OBJ_CMP_TO_LIST& item2 )
+static bool SortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
 
@@ -134,8 +60,7 @@ static bool AnnotateBy_X_Position( const OBJ_CMP_TO_LIST& item1,
  *                if same Y pos, by X pos
  *                  if same X pos, by time stamp
  */
-static bool AnnotateBy_Y_Position( const OBJ_CMP_TO_LIST& item1,
-                                   const OBJ_CMP_TO_LIST& item2 )
+static bool SortByYPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
 
@@ -161,8 +86,7 @@ static bool AnnotateBy_Y_Position( const OBJ_CMP_TO_LIST& item1,
  *              if same unit number, by sheet
  *                  if same sheet, by time stamp
  *****************************************************************************/
-static bool AnnotateByValue( const OBJ_CMP_TO_LIST& item1,
-                             const OBJ_CMP_TO_LIST& item2 )
+static bool SortByValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
 
@@ -187,8 +111,7 @@ static bool AnnotateByValue( const OBJ_CMP_TO_LIST& item1,
  * qsort function to annotate items by value
  *  Components are sorted by time stamp
  *****************************************************************************/
-static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
-                             const OBJ_CMP_TO_LIST& item2 )
+static bool SortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
 {
     int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
 
@@ -208,41 +131,19 @@ static bool SortByTimeStamp( const OBJ_CMP_TO_LIST& item1,
  */
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 {
-    SCH_ITEM*   strct;
-    SCH_SCREEN* screen;
-    SCH_SCREENS ScreenList;
-
-    screen = ScreenList.GetFirst();
-
     if( aCurrentSheetOnly )
-        screen = GetScreen();
-
-    if( screen == NULL )
-        return;
-
-    while( screen )
     {
-        strct = screen->GetDrawItems();
-
-        for( ; strct; strct = strct->Next() )
-        {
-            if( strct->Type() == SCH_COMPONENT_T )
-            {
-                if( aCurrentSheetOnly )
-                    ( (SCH_COMPONENT*) strct )->ClearAnnotation( m_CurrentSheet );
-                else
-                    ( (SCH_COMPONENT*) strct )->ClearAnnotation( NULL );
-            }
-        }
-
-        OnModify( );
-        if( aCurrentSheetOnly )
-            break;
-        screen = ScreenList.GetNext();
+        SCH_SCREEN* screen = GetScreen();
+        wxCHECK_RET( screen != NULL, wxT( "Attempt to clear annotation of a NULL screen." ) );
+        screen->ClearAnnotation( m_CurrentSheet );
+    }
+    else
+    {
+        SCH_SCREENS ScreenList;
+        ScreenList.ClearAnnotation();
     }
 
-
-    //update the References
+    // Update the references for the sheet that is currently being displayed.
     m_CurrentSheet->UpdateAllScreenReferences();
 
     if( aRedraw )
@@ -276,240 +177,113 @@ void AnnotateComponents( SCH_EDIT_FRAME* parent,
                          bool            resetAnnotation,
                          bool            repairsTimestamps )
 {
-    std::vector <OBJ_CMP_TO_LIST> ComponentsList;
+    std::vector< SCH_REFERENCE > references;
 
     wxBusyCursor dummy;
 
-    // Test and replace duplicate time stamps
-    // duplicate can happen with old schematics, or schematic conversions or
-    // manual editions of files ...
+    SCH_SCREENS screens;
+
+    /* Build the sheet list */
+    SCH_SHEET_LIST sheets;
+
+    // Test for and replace duplicate time stamps in components and sheets.  Duplicate
+    // time stamps can happen with old schematics, schematic conversions, or manual
+    // editing of files.
     if( repairsTimestamps )
     {
-        int ireplacecount = ReplaceDuplicatedTimeStamps();
-        if( ireplacecount )
+        int count = screens.ReplaceDuplicateTimeStamps();
+
+        if( count )
         {
             wxString msg;
-            msg.Printf( _( "%d duplicate time stamps replaced." ),
-                        ireplacecount );
+            msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
             DisplayInfoMessage( NULL, msg, 2 );
         }
     }
 
-    /* If it is an annotation for all the components, reset previous
-     * annotation: */
+    // If it is an annotation for all the components, reset previous annotation.
     if( resetAnnotation )
         parent->DeleteAnnotation( !annotateSchematic, false );
 
-    /* Build the sheet list */
-    SCH_SHEET_LIST SheetList;
+    // Update the screen date.
+    screens.SetDate( GenDate() );
 
-    /* Update the sheet number, sheet count and date */
-    parent->UpdateSheetNumberAndDate();
+    // Set sheet number and total sheet counts.
+    parent->SetSheetNumberAndCount();
 
     /* Build component list */
     if( annotateSchematic )
     {
-        SCH_SHEET_PATH* sheet;
-        for( sheet = SheetList.GetFirst();
-            sheet != NULL;
-            sheet = SheetList.GetNext() )
-            AddComponentsInSheetToList( ComponentsList, sheet );
+        sheets.GetComponents( references );
     }
     else
-        AddComponentsInSheetToList( ComponentsList, parent->GetSheet() );
-
+    {
+        parent->GetSheet()->GetComponents( references );
+    }
 
     /* Break full components reference in name (prefix) and number:
      * example: IC1 become IC, and 1 */
-    BreakReference( ComponentsList );
+    BreakReference( references );
 
     switch( sortOption )
     {
     case 0:
-        sort( ComponentsList.begin(), ComponentsList.end(),
-              AnnotateBy_X_Position );
+        sort( references.begin(), references.end(), SortByXPosition );
         break;
 
     case 1:
-        sort( ComponentsList.begin(), ComponentsList.end(),
-              AnnotateBy_Y_Position );
+        sort( references.begin(), references.end(), SortByYPosition );
         break;
 
     case 2:
-        sort( ComponentsList.begin(), ComponentsList.end(), AnnotateByValue );
+        sort( references.begin(), references.end(), SortByValue );
         break;
     }
 
     /* Recalculate reference numbers */
-    ComputeReferenceNumber( ComponentsList );
-    ReAnnotateComponents( ComponentsList );
+    ComputeReferenceNumber( references );
+    ReAnnotateComponents( references );
 
     /* Final control (just in case ... )*/
     parent->CheckAnnotate( NULL, !annotateSchematic );
-    parent->OnModify( );
+    parent->OnModify();
     parent->DrawPanel->Refresh( true );
 }
 
 
-/**
- * Function AddComponentsInSheetToList
- * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
- * in sheet
- * @param aComponentsList = a std::vector list to fill
- * @param aSheet - The SCH_SHEET_PATH sheet to analyze
- */
-int AddComponentsInSheetToList(  std::vector <OBJ_CMP_TO_LIST>& aComponentsList,
-                                 SCH_SHEET_PATH*                aSheet )
-{
-    int            NbrCmp   = 0;
-    EDA_ITEM*      DrawList = aSheet->LastDrawList();
-    SCH_COMPONENT* DrawLibItem;
-    LIB_COMPONENT* Entry;
-
-    for( ; DrawList != NULL;   DrawList = DrawList->Next() )
-    {
-        if( DrawList->Type() == SCH_COMPONENT_T )
-        {
-            DrawLibItem = (SCH_COMPONENT*) DrawList;
-            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
-
-            if( Entry == NULL )
-                continue;
-
-            OBJ_CMP_TO_LIST new_object;
-            new_object.m_RootCmp   = DrawLibItem;
-            new_object.m_Entry     = Entry;
-            new_object.m_Unit      = DrawLibItem->GetUnitSelection( aSheet );
-            new_object.m_SheetPath = *aSheet;
-            new_object.m_IsNew     = false;
-            new_object.m_Flag      = 0;
-            new_object.m_TimeStamp = DrawLibItem->m_TimeStamp;
-
-            if( DrawLibItem->GetRef( aSheet ).IsEmpty() )
-                DrawLibItem->SetRef( aSheet, wxT( "DefRef?" ) );
-
-            new_object.SetRef( DrawLibItem->GetRef( aSheet ) );
-
-            new_object.m_NumRef = -1;
-
-            if( DrawLibItem->GetField( VALUE )->m_Text.IsEmpty() )
-                DrawLibItem->GetField( VALUE )->m_Text = wxT( "~" );
-
-            new_object.m_Value = &DrawLibItem->GetField( VALUE )->m_Text;
-
-            aComponentsList.push_back( new_object );
-            NbrCmp++;
-        }
-    }
-
-    return NbrCmp;
-}
-
-
 /*
- * Update the reference component for the schematic project (or the current
- * sheet)
+ * Update the reference component for the schematic project (or the current sheet)
  */
-static void ReAnnotateComponents( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
+static void ReAnnotateComponents( std::vector< SCH_REFERENCE >& aComponentList )
 {
     /* update the reference numbers */
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentList.size(); ii++ )
     {
 #if 0
-        char*          Text = aComponentsList[ii].m_Reference;
-        SCH_COMPONENT* component = aComponentsList[ii].m_RootCmp;
+        char*          Text = aComponentList[ii].m_Reference;
+        SCH_COMPONENT* component = aComponentList[ii].m_RootCmp;
 
-        if( aComponentsList[ii].m_NumRef < 0 )
+        if( aComponentList[ii].m_NumRef < 0 )
             strcat( Text, "?" );
         else
-            sprintf( Text + strlen( Text ), "%d", aComponentsList[ii].m_NumRef );
+            sprintf( Text + strlen( Text ), "%d", aComponentList[ii].m_NumRef );
 
-        component->SetRef( &(aComponentsList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
+        component->SetRef( &(aComponentList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
+
+        component->SetUnit( aComponentList[ii].m_Unit );
+        component->SetUnitSelection( &aComponentList[ii].m_SheetPath,
+                                     aComponentList[ii].m_Unit );
 #else
-
-        wxString        ref = aComponentsList[ii].GetRef();
-        SCH_COMPONENT*  component = aComponentsList[ii].m_RootCmp;
-
-        if( aComponentsList[ii].m_NumRef < 0 )
-            ref += wxChar( '?' );
-        else
-            ref << aComponentsList[ii].m_NumRef;
-
-        aComponentsList[ii].SetRef( ref );
-
-        component->SetRef( &aComponentsList[ii].m_SheetPath, ref );
+        aComponentList[ii].Annotate();
 #endif
-
-        component->SetUnit( aComponentsList[ii].m_Unit );
-        component->SetUnitSelection( &aComponentsList[ii].m_SheetPath,
-                                     aComponentsList[ii].m_Unit );
     }
 }
 
 
-/**
- * Split component reference designators into a name (prefix) and number.
- * Example: IC1 becomes IC and 1 in the .m_NumRef member.
- * For multi part per package components not already annotated, set .m_Unit
- * to a max value (0x7FFFFFFF).
- *
- * @param aComponentsList = list of component
- */
-void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
+void BreakReference( std::vector< SCH_REFERENCE >& aComponentsList )
 {
-    std::string refText;    // construct once outside loop
-
     for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
-    {
-        aComponentsList[ii].m_NumRef = -1;
-
-        refText = aComponentsList[ii].GetRefStr();
-
-        int ll = refText.length() - 1;
-
-        if( refText[ll] == '?' )
-        {
-            aComponentsList[ii].m_IsNew = true;
-
-            if( !aComponentsList[ii].IsPartsLocked() )
-                aComponentsList[ii].m_Unit = 0x7FFFFFFF;
-
-            refText.erase(ll);  // delete last char
-
-            aComponentsList[ii].SetRefStr( refText );
-        }
-
-        else if( isdigit( refText[ll] ) == 0 )
-        {
-            aComponentsList[ii].m_IsNew = true;
-            if( !aComponentsList[ii].IsPartsLocked() )
-                aComponentsList[ii].m_Unit = 0x7FFFFFFF;
-        }
-
-        else
-        {
-            while( ll >= 0 )
-            {
-                if( (refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
-                    ll--;
-                else
-                {
-                    if( isdigit( refText[ll + 1] ) )
-                    {
-                        // nul terminated C string into cp
-                        const char* cp = refText.c_str() + ll + 1;
-
-                        aComponentsList[ii].m_NumRef = atoi( cp );
-                    }
-
-                    refText.erase( ll+1 );  // delete from ll+1 to end
-                    break;
-                }
-            }
-
-            aComponentsList[ii].SetRefStr( refText );
-        }
-    }
+        aComponentsList[ii].Split();
 }
 
 
@@ -517,7 +291,7 @@ void BreakReference( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
  * Compute the reference number for components without reference number
  *  Compute .m_NumRef member
  */
-static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
+static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsList )
 {
     int LastReferenceNumber, NumberOfUnits, Unit;
 
@@ -562,6 +336,7 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
                 LastReferenceNumber++;
                 aComponentsList[ii].m_NumRef = LastReferenceNumber;
             }
+
             aComponentsList[ii].m_Unit  = 1;
             aComponentsList[ii].m_Flag  = 1;
             aComponentsList[ii].m_IsNew = false;
@@ -590,7 +365,9 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
         {
             if( aComponentsList[ii].m_Unit == Unit )
                 continue;
+
             int found = ExistUnit( ii, Unit, aComponentsList );
+
             if( found >= 0 )
                 continue; /* this unit exists for this reference (unit
                            * already annotated) */
@@ -604,8 +381,10 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
 
                 if( aComponentsList[ii].CompareRef( aComponentsList[jj] ) != 0 )
                     continue;
+
                 if( aComponentsList[jj].CompareValue( aComponentsList[ii] ) != 0 )
                     continue;
+
                 if( !aComponentsList[jj].m_IsNew )
                     continue;
 
@@ -635,8 +414,7 @@ static void ComputeReferenceNumber( std::vector <OBJ_CMP_TO_LIST>& aComponentsLi
  *                 the search pattern)
  * @param aComponentsList = list of items
  */
-int GetLastReferenceNumber( int aObjet,
-                            std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
+int GetLastReferenceNumber( int aObjet, std::vector< SCH_REFERENCE >& aComponentsList )
 {
     int LastNumber = 0;
 
@@ -645,6 +423,7 @@ int GetLastReferenceNumber( int aObjet,
         /* New identifier. */
         if( aComponentsList[aObjet].CompareRef( aComponentsList[ii] ) != 0 )
             continue;
+
         if( LastNumber < aComponentsList[ii].m_NumRef )
             LastNumber = aComponentsList[ii].m_NumRef;
     }
@@ -657,18 +436,18 @@ int GetLastReferenceNumber( int aObjet,
  * Search in the sorted list of components, for a given component an other
  * component with the same reference and a given part unit.  Mainly used to
  * manage multiple parts per package components.
- * @param aObjet = index in aComponentsList for the given OBJ_CMP_TO_LIST
+ * @param aObjet = index in aComponentsList for the given SCH_REFERENCE
  *                 item to test
  * @param Unit = the given unit number to search
  * @param aComponentsList = list of items to examine
  * @return index in aComponentsList if found or -1 if not found
  */
-static int ExistUnit( int aObjet, int Unit,
-                      std::vector <OBJ_CMP_TO_LIST>& aComponentsList )
+static int ExistUnit( int aObjet, int Unit, std::vector< SCH_REFERENCE >& aComponentsList )
 {
     int NumRef;
 
     NumRef = aComponentsList[aObjet].m_NumRef;
+
     for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
     {
         if( aObjet == (int) ii )
@@ -717,20 +496,15 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     /* build the screen list */
     SCH_SHEET_LIST SheetList;
 
-    std::vector <OBJ_CMP_TO_LIST> ComponentsList;
+    std::vector< SCH_REFERENCE > ComponentsList;
 
     /* Build the list of components */
     if( !aOneSheetOnly )
-    {
-        SCH_SHEET_PATH* sheet;
-        for( sheet = SheetList.GetFirst(); sheet != NULL;
-             sheet = SheetList.GetNext() )
-            AddComponentsInSheetToList( ComponentsList, sheet );
-    }
+        SheetList.GetComponents( ComponentsList );
     else
-        AddComponentsInSheetToList( ComponentsList, GetSheet() );
+        GetSheet()->GetComponents( ComponentsList );
 
-    sort( ComponentsList.begin(), ComponentsList.end(), AnnotateByValue );
+    sort( ComponentsList.begin(), ComponentsList.end(), SortByValue );
 
     /* Break full components reference in name (prefix) and number: example:
      * IC1 become IC, and 1 */
@@ -739,6 +513,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     /* count not yet annotated items */
     error = 0;
     int imax = ComponentsList.size() - 1;
+
     for( int ii = 0; ii < imax; ii++ )
     {
         msg.Empty();
@@ -752,31 +527,25 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
                 Buff = wxT( "?" );
 
             cmpref = ComponentsList[ii].GetRef();
-            msg.Printf( _( "item not annotated: %s%s" ),
-                       GetChars( cmpref ), GetChars( Buff ) );
+            msg.Printf( _( "item not annotated: %s%s" ), GetChars( cmpref ), GetChars( Buff ) );
 
-            if( ( ComponentsList[ii].m_Unit > 0 )
-                && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
+            if( ( ComponentsList[ii].m_Unit > 0 ) && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
             {
                 Buff.Printf( _( "( unit %d)" ), ComponentsList[ii].m_Unit );
                 msg << Buff;
             }
 
             if( aMessageList )
-            {
                 aMessageList->Add( msg + wxT( "\n" ) );
-            }
             else
-            {
                 DisplayError( NULL, msg );
-            }
+
             error++;
             break;
         }
 
         // Annotate error
-        if( MAX( ComponentsList[ii].m_Entry->GetPartCount(), 1 )
-            < ComponentsList[ii].m_Unit )
+        if( MAX( ComponentsList[ii].m_Entry->GetPartCount(), 1 ) < ComponentsList[ii].m_Unit )
         {
             if( ComponentsList[ii].m_NumRef >= 0 )
                 Buff << ComponentsList[ii].m_NumRef;
@@ -785,19 +554,18 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
             cmpref = ComponentsList[ii].GetRef();
 
-            msg.Printf( _( "Error item %s%s" ), GetChars( cmpref ),
-                       GetChars( Buff ) );
+            msg.Printf( _( "Error item %s%s" ), GetChars( cmpref ), GetChars( Buff ) );
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
                          ComponentsList[ii].m_Unit,
                          ComponentsList[ii].m_Entry->GetPartCount() );
             msg << Buff;
+
             if( aMessageList )
-            {
                 aMessageList->Add( msg + wxT( "\n" ));
-            }
             else
                 DisplayError( NULL, msg );
+
             error++;
             break;
         }
@@ -827,21 +595,19 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
             cmpref = ComponentsList[ii].GetRef();
 
-            msg.Printf( _( "Multiple item %s%s" ),
-                       GetChars( cmpref ), GetChars( Buff ) );
+            msg.Printf( _( "Multiple item %s%s" ), GetChars( cmpref ), GetChars( Buff ) );
 
-            if( ( ComponentsList[ii].m_Unit > 0 )
-                && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
+            if( ( ComponentsList[ii].m_Unit > 0 )&& ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
             {
                 Buff.Printf( _( " (unit %d)" ), ComponentsList[ii].m_Unit );
                 msg << Buff;
             }
+
             if( aMessageList )
-            {
                 aMessageList->Add( msg + wxT( "\n" ));
-            }
             else
                 DisplayError( NULL, msg );
+
             error++;
             continue;
         }
@@ -857,30 +623,26 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
                 Buff = wxT( "?" );
 
             cmpref = ComponentsList[ii].GetRef();
-            msg.Printf( _( "Multiple item %s%s" ),
-                       GetChars( cmpref ), GetChars( Buff ) );
+            msg.Printf( _( "Multiple item %s%s" ), GetChars( cmpref ), GetChars( Buff ) );
 
-            if( ( ComponentsList[ii].m_Unit > 0 )
-                && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
+            if( ( ComponentsList[ii].m_Unit > 0 ) && ( ComponentsList[ii].m_Unit < 0x7FFFFFFF ) )
             {
                 Buff.Printf( _( " (unit %d)" ), ComponentsList[ii].m_Unit );
                 msg << Buff;
             }
 
             if( aMessageList )
-            {
                 aMessageList->Add( msg + wxT( "\n" ));
-            }
             else
-            {
                 DisplayError( NULL, msg );
-            }
+
             error++;
         }
 
         /* Error if values are different between units, for the same
          * reference */
         int next = ii + 1;
+
         if( ComponentsList[ii].CompareValue( ComponentsList[next] ) != 0 )
         {
             wxString nextcmpref = ComponentsList[next].GetRef();
@@ -910,13 +672,9 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 #endif
 
             if( aMessageList )
-            {
                 aMessageList->Add( msg + wxT( "\n" ));
-            }
             else
-            {
                 DisplayError( NULL, msg );
-            }
 
             error++;
         }
@@ -924,12 +682,11 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
     // count the duplicated time stamps
     sort( ComponentsList.begin(), ComponentsList.end(), SortByTimeStamp );
+
     for( int ii = 0; ( ii < imax ) && ( error < 4 ); ii++ )
     {
-        if( (ComponentsList[ii].m_TimeStamp
-             != ComponentsList[ii + 1].m_TimeStamp)
-           || ( ComponentsList[ii].m_SheetPath
-                != ComponentsList[ii + 1].m_SheetPath ) )
+        if( ( ComponentsList[ii].m_TimeStamp != ComponentsList[ii + 1].m_TimeStamp )
+           || ( ComponentsList[ii].m_SheetPath != ComponentsList[ii + 1].m_SheetPath ) )
             continue;
 
         /* Same time stamp found.  */
@@ -949,102 +706,12 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
                     GetChars( nextcmpref ), ComponentsList[ii + 1].m_NumRef );
 
         if( aMessageList )
-        {
             aMessageList->Add( msg + wxT( "\n" ));
-        }
         else
-        {
             DisplayError( NULL, msg );
-        }
 
         error++;
     }
 
     return error;
-}
-
-
-/***********************************************
- * function to sort sch_items by time stamp
- ************************************************/
-static bool SortItemByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
-{
-    int ii = item1->m_TimeStamp - item2->m_TimeStamp;
-
-    /* if same time stamp, compare type, in order to have
-     *  first : component
-     *  after : sheet
-     * because this is the first item that have its time stamp changed
-     * and changing the time stamp of a sheet can loose annotation
-     */
-
-    if( ii == 0 && ( item1->Type() != item2->Type() ) )
-        if( item1->Type() == SCH_SHEET_T )
-            ii = -1;
-
-    return ii < 0;
-}
-
-
-/**
- * Function ReplaceDuplicatedTimeStamps
- * Search for duplicate time stamps in the whole hierarchy, and replace
- * duplicate by new time stamps
- */
-int ReplaceDuplicatedTimeStamps()
-{
-    /* Build the whole screen list */
-    SCH_SCREENS ScreenList;
-
-    /* Build the list of items with time stamps (components and sheets)
-     * note: if all items have a different time stamp, this ensure also
-     * different paths in complex hierarchy
-     * this is the reason we have different time stamps for components AND
-     * sheets
-     */
-    std::vector <SCH_ITEM*> itemlist;
-    SCH_SCREEN*             screen;
-    SCH_ITEM* item;
-
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-    {
-        item = screen->GetDrawItems();
-
-        while( item )
-        {
-            if( ( item->Type() == SCH_SHEET_T )
-               || ( item->Type() == SCH_COMPONENT_T ) )
-                itemlist.push_back( item );
-
-            item = item->Next();
-        }
-    }
-
-    // Test and replace duplicated time stamps
-    int imax     = itemlist.size() - 1;
-    int errcount = 0;
-    sort( itemlist.begin(), itemlist.end(), SortItemByTimeStamp );
-    for( int ii = 0; ii < imax; ii++ )
-    {
-        item = itemlist[ii];
-        SCH_ITEM* nextitem = itemlist[ii + 1];
-        if( item->m_TimeStamp == nextitem->m_TimeStamp )
-        {
-            errcount++;
-
-            // for a component, update its Time stamp and its paths
-            // (m_PathsAndReferences field)
-            if( item->Type() == SCH_COMPONENT_T )
-                ( (SCH_COMPONENT*) item )->SetTimeStamp( GetTimeStamp() );
-
-            // for a sheet, update only its time stamp (annotation of its
-            // components will be lost)
-            // @todo: see how to change sheet paths for its cmp list (can
-            //        be possible in most cases)
-            else
-                item->m_TimeStamp = GetTimeStamp();
-        }
-    }
-
-    return errcount;
 }

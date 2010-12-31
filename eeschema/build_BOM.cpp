@@ -27,49 +27,6 @@
  */
 
 
-/**
- * Function BuildComponentsListFromSchematic
- * creates the list of components found in the whole schematic.
- *
- * Goes through the 'sheets', not the screens, so that we account for
- * multiple instances of a given screen.
- */
-void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList )
-{
-    // Build the sheet list (which is not screen a screen list)
-    SCH_SHEET_LIST  sheetList;  // uses a global
-
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
-    {
-        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
-        {
-            if( schItem->Type() != SCH_COMPONENT_T )
-                continue;
-
-            SCH_COMPONENT* comp = (SCH_COMPONENT*) schItem;
-
-            comp->SetParent( path->LastScreen() );
-
-            OBJ_CMP_TO_LIST item;
-
-            item.m_RootCmp   = comp;
-            item.m_SheetPath = *path;
-            item.m_Unit      = comp->GetUnitSelection( path );
-
-            item.SetRef( comp->GetRef( path ) );
-
-            // skip pseudo components, which have a reference starting
-            // with #, mainly power symbols
-            if( item.GetRefStr()[0] == '#' )
-                continue;
-
-            // Real component found, keep it
-            aList.push_back( item );
-        }
-    }
-}
-
-
 /* Fill aList  with Glabel info
  */
 void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
@@ -125,7 +82,7 @@ void GenListeGLabels( std::vector <LABEL_OBJECT>& aList )
  *    if same value: by reference
  *         if same reference: by unit number
  */
-bool SortComponentsByValue( const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 )
+bool SortComponentsByValue( const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 )
 {
     int             ii;
     const wxString* Text1, * Text2;
@@ -154,7 +111,7 @@ bool SortComponentsByValue( const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& 
  *     if same reference: by value
  *         if same value: by unit number
  */
-bool SortComponentsByReference( const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 )
+bool SortComponentsByReference( const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 )
 {
     int             ii;
     const wxString* Text1, * Text2;
@@ -242,7 +199,7 @@ bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
  * found in this list
  * The component list **MUST** be sorted by reference and by unit number
  */
-void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
+void DeleteSubCmp( std::vector< SCH_REFERENCE >& aList )
 {
     SCH_COMPONENT* libItem;
     wxString       oldName;
@@ -252,6 +209,7 @@ void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
         libItem = aList[ii].m_RootCmp;
+
         if( libItem == NULL )
             continue;
 
@@ -259,8 +217,7 @@ void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList )
 
         if( !oldName.IsEmpty() )
         {
-            if( oldName == currName )   // currName is a subpart of oldName:
-                                        // remove it
+            if( oldName == currName )   // currName is a subpart of oldName: remove it
             {
                 aList.erase( aList.begin() + ii );
                 ii--;

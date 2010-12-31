@@ -287,8 +287,10 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         wxString sheetpath = sheet->Path();
+
         if( sheetpath == current_sheetpath )    // Current sheet path found
             break;
+
         SheetNumber++;                          /* Not found, increment sheet
                                                  * number before this current
                                                  * path */
@@ -323,11 +325,13 @@ void SCH_EDIT_FRAME::CreateScreens()
     {
         g_RootSheet = new SCH_SHEET();
     }
+
     if( g_RootSheet->m_AssociatedScreen == NULL )
     {
         g_RootSheet->m_AssociatedScreen = new SCH_SCREEN();
         g_RootSheet->m_AssociatedScreen->m_RefCount++;
     }
+
     g_RootSheet->m_AssociatedScreen->m_FileName = m_DefaultSchematicFileName;
     g_RootSheet->m_AssociatedScreen->m_Date     = GenDate();
     m_CurrentSheet->Clear();
@@ -335,6 +339,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( GetBaseScreen() == NULL )
         SetBaseScreen( new SCH_SCREEN() );
+
     GetBaseScreen()->SetZoom( 4 * GetBaseScreen()->m_ZoomScalar );
     GetBaseScreen()->m_UndoRedoCountMax = 10;
 }

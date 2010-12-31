@@ -55,6 +55,7 @@ class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
+class SCH_REFERENCE;
 
 
 /**
@@ -186,6 +187,25 @@ public:
     void             UpdateAllScreenReferences();
 
     /**
+     * Function AnnotatePowerSymbols
+     * annotates the power symbols only starting at \a aReference in the sheet path.
+     * @param aReference A pointer to the number for the reference designator of the
+     *                   first power symbol to be annotated.  If the pointer is NULL
+     *                   the annotation starts at 1.  The number is incremented for
+     *                   each power symbol annotated.
+     */
+    void AnnotatePowerSymbols( int* aReference );
+
+    /**
+     * Function GetComponents
+     * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
+     * @param aReferences List of references to populate.
+     * @param aIncludePowerSymbols Set to false to only get normal components.
+     */
+    void GetComponents( std::vector< SCH_REFERENCE >& aReferences,
+                        bool                          aIncludePowerSymbols = true  );
+
+    /**
      * Find the next schematic item in this sheet ojbect.
      *
      * @param aType - The type of schematic item object to search for.
@@ -230,7 +250,7 @@ public:
 
 /**
  * Class SCH_SHEET_LIST
- * handles the list of Sheets in a hiearchy.
+ * handles the list of Sheets in a hierarchy.
  * Sheets are not unique, there can be many sheets with the same
  * filename and the same SCH_SCREEN reference.
  * The schematic (SCH_SCREEN) is shared between these sheets,
@@ -317,6 +337,22 @@ public:
     SCH_SHEET_PATH* GetSheet( int aIndex );
 
     /**
+     * Function AnnotatePowerSymbols
+     * clear and annotates the entire hierarchy of the sheet path list.
+     */
+    void AnnotatePowerSymbols();
+
+    /**
+     * Function GetComponents
+     * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
+     * of sheets.
+     * @param aReferences List of references to populate.
+     * @param aIncludePowerSymbols Set to false to only get normal components.
+     */
+    void GetComponents( std::vector< SCH_REFERENCE >& aReferences,
+                        bool                          aIncludePowerSymbols = true  );
+
+    /**
      * Function FindNextItem
      * searches the entire schematic for the next schematic object.
      *
@@ -370,7 +406,7 @@ private:
      * @param aSheet is the starting sheet from which the list is built,
      *   or NULL indicating that g_RootSheet should be used.
      */
-    void           BuildSheetList( SCH_SHEET* sheet );
+    void           BuildSheetList( SCH_SHEET* aSheet );
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H

@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_build_BOM.cpp
 // Author:      jean-pierre Charras
 // Modified by:
@@ -222,11 +221,12 @@ void DIALOG_BUILD_BOM::SavePreferences()
     s_ListBySheet = m_GenListLabelsbySheet->GetValue();
     s_BrowseCreatedList = m_GetListBrowser->GetValue();
 
-    // (aved in config ):
+    // (saved in config ):
 
     // Determine current settings of both radiobutton groups
     s_OutputFormOpt = m_OutputFormCtrl->GetSelection();
     s_OutputSeparatorOpt = m_OutputSeparatorCtrl->GetSelection();
+
     if( s_OutputSeparatorOpt < 0 )
         s_OutputSeparatorOpt = 0;
 
@@ -249,10 +249,12 @@ void DIALOG_BUILD_BOM::SavePreferences()
 
     // Now save current settings of all "Fields to add" checkboxes
     long addfields = 0;
+
     for( int ii = 0, bitmask = 1; s_AddFieldList[ii] != NULL; ii++ )
     {
         if( *s_AddFieldList[ii] )
             addfields |= bitmask;
+
         bitmask <<= 1;
     }
 
@@ -319,7 +321,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
         GenereListeOfItems( m_ListFileName, aIncludeSubComponents );
         break;
 
-    case 1: // speadsheet
+    case 1: // spreadsheet
         CreateExportList( m_ListFileName, aIncludeSubComponents );
         break;
 
@@ -390,9 +392,10 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
         return;
     }
 
-    std::vector <OBJ_CMP_TO_LIST> cmplist;
+    std::vector <SCH_REFERENCE> cmplist;
+    SCH_SHEET_LIST sheetList;              // uses a global
 
-    BuildComponentsListFromSchematic( cmplist );
+    sheetList.GetComponents( cmplist, false );
 
     // sort component list by ref and remove sub components
     if( !aIncludeSubComponents )
@@ -428,8 +431,10 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
         return;
     }
 
-    std::vector <OBJ_CMP_TO_LIST> cmplist;
-    BuildComponentsListFromSchematic( cmplist );
+    std::vector <SCH_REFERENCE> cmplist;
+    SCH_SHEET_LIST sheetList;              // uses a global
+
+    sheetList.GetComponents( cmplist, false );
 
     // sort component list
     sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
@@ -464,17 +469,19 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         return;
     }
 
-    std::vector <OBJ_CMP_TO_LIST> cmplist;
-    BuildComponentsListFromSchematic( cmplist );
+    std::vector <SCH_REFERENCE> cmplist;
+    SCH_SHEET_LIST sheetList;              // uses a global
+
+    sheetList.GetComponents( cmplist, false );
 
     itemCount = cmplist.size();
+
     if( itemCount )
     {
         // creates the list file
         DateAndTime( Line );
 
-        wxString Title = wxGetApp().GetAppName() + wxT( " " ) +
-                         GetBuildVersion();
+        wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
@@ -569,11 +576,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
 /* Print the B.O.M sorted by reference
  */
-int DIALOG_BUILD_BOM::PrintComponentsListByRef(
-    FILE*                          f,
-    std::vector <OBJ_CMP_TO_LIST>& aList,
-    bool                           CompactForm,
-    bool                           aIncludeSubComponents )
+int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                        f,
+                                                std::vector <SCH_REFERENCE>& aList,
+                                                bool                         CompactForm,
+                                                bool                         aIncludeSubComponents )
 {
     wxString        msg;
 
@@ -714,16 +720,14 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef(
  *  This is true for most designs but will produce an
  *  incorrect output if two or more parts with the same
  *  value have different footprints, tolerances, voltage
- *  rating, etc.  Also usefull if the following fields
+ *  rating, etc.  Also useful if the following fields
  *  are edited:
  *   FIELD1 - manufacture
  *   FIELD2 - manufacture part number
  *   FIELD3 - distributor part number
  */
-int DIALOG_BUILD_BOM::PrintComponentsListByPart(
-    FILE*                          f,
-    std::vector <OBJ_CMP_TO_LIST>& aList,
-    bool aIncludeSubComponents)
+int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, std::vector <SCH_REFERENCE>& aList,
+                                                 bool aIncludeSubComponents )
 {
     int             qty = 0;
     wxString        refName;
@@ -800,7 +804,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 
         lastRef = refName;
 
-        // if the next cmoponent has same value the line will be printed after.
+        // if the next component has same value the line will be printed after.
 #if defined(KICAD_GOST)
         if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0
             && nextCmp->GetField( FOOTPRINT )->m_Text.CmpNoCase( footName ) == 0
@@ -856,10 +860,9 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart(
 }
 
 
-int DIALOG_BUILD_BOM::PrintComponentsListByVal(
-    FILE*                          f,
-    std::vector <OBJ_CMP_TO_LIST>& aList,
-    bool                           aIncludeSubComponents )
+int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*                        f,
+                                                std::vector <SCH_REFERENCE>& aList,
+                                                bool                         aIncludeSubComponents )
 {
     EDA_ITEM*      schItem;
     SCH_COMPONENT* DrawLibItem;
@@ -871,6 +874,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal(
 
     if( aIncludeSubComponents )
         msg << _( " (with SubCmp)" );
+
     msg << wxT( "\n" );
 
     fputs( CONV_TO_UTF8( msg ), f );

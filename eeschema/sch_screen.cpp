@@ -12,6 +12,7 @@
 
 #include "general.h"
 #include "protos.h"
+#include "netlist.h"
 #include "class_library.h"
 #include "sch_items.h"
 #include "sch_line.h"
@@ -418,9 +419,56 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
 }
 
 
+void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+            component->ClearAnnotation( aSheetPath );
+        }
+    }
+}
+
+
+void SCH_SCREEN::GetHierarchicalItems( std::vector <SCH_ITEM*> aItems )
+{
+    SCH_ITEM* item = GetDrawItems();
+
+    while( item )
+    {
+        if( ( item->Type() == SCH_SHEET_T ) || ( item->Type() == SCH_COMPONENT_T ) )
+            aItems.push_back( item );
+
+        item = item->Next();
+    }
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/
+
+/**
+ * Function SortByTimeStamp
+ * sorts a list of schematic items by time stamp and type.
+ */
+static bool SortByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
+{
+    int ii = item1->m_TimeStamp - item2->m_TimeStamp;
+
+    /* If the time stamps are the same, compare type in order to have component objects
+     * before sheet object. This is done because the changing the sheet time stamp
+     * before the component time stamp could cause the current annotation to be lost.
+     */
+    if( ( ii == 0 && ( item1->Type() != item2->Type() ) ) && ( item1->Type() == SCH_SHEET_T ) )
+        ii = -1;
+
+    return ii < 0;
+}
+
 
 SCH_SCREENS::SCH_SCREENS()
 {
@@ -502,4 +550,73 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
             strct = strct->Next();
         }
     }
+}
+
+
+void SCH_SCREENS::ClearAnnotation()
+{
+    for( size_t i = 0;  i < m_screens.size();  i++ )
+        m_screens[i]->ClearAnnotation( NULL );
+}
+
+
+void SCH_SCREENS::SchematicCleanUp()
+{
+    for( size_t i = 0;  i < m_screens.size();  i++ )
+    {
+        // if wire list has changed, delete the undo/redo list to avoid
+        // pointer problems with deleted data.
+        if( m_screens[i]->SchematicCleanUp( NULL ) )
+            m_screens[i]->ClearUndoRedoList();
+    }
+}
+
+
+int SCH_SCREENS::ReplaceDuplicateTimeStamps()
+{
+    std::vector <SCH_ITEM*> items;
+    SCH_ITEM*               item;
+
+    for( size_t i = 0;  i < m_screens.size();  i++ )
+        m_screens[i]->GetHierarchicalItems( items );
+
+    if( items.size() < 2 )
+        return 0;
+
+    sort( items.begin(), items.end(), SortByTimeStamp );
+
+    int count = 0;
+
+    for( size_t ii = 0;  ii < items.size() - 1;  ii++ )
+    {
+        item = items[ii];
+
+        SCH_ITEM* nextItem = items[ii + 1];
+
+        if( item->m_TimeStamp == nextItem->m_TimeStamp )
+        {
+            count++;
+
+            // for a component, update its Time stamp and its paths
+            // (m_PathsAndReferences field)
+            if( item->Type() == SCH_COMPONENT_T )
+                ( (SCH_COMPONENT*) item )->SetTimeStamp( GetTimeStamp() );
+
+            // for a sheet, update only its time stamp (annotation of its
+            // components will be lost)
+            // @todo: see how to change sheet paths for its cmp list (can
+            //        be possible in most cases)
+            else
+                item->m_TimeStamp = GetTimeStamp();
+        }
+    }
+
+    return count;
+}
+
+
+void SCH_SCREENS::SetDate( const wxString& aDate )
+{
+    for( size_t i = 0;  i < m_screens.size();  i++ )
+        m_screens[i]->m_Date = aDate;
 }

@@ -4,6 +4,19 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2010-dec-31 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+++all
+  * Exclude boost header include path from Doxygen files.
+  * Coding guide line and doxygen warning fixes.
+++EESchema
+  * Rename OBJ_CMP_TO_LIST to SCH_REFERENCE.
+  * Move code related to SCH_REFERENCE into the object where it belongs in hope
+    that some day the object members can be made private instead of public.
+  * Add GetComponent method to sheet path and sheet path list objects.
+  * Move screen list code into screen list object.
+
+
 2010-Dec-28 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++richio:

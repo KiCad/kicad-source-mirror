@@ -471,13 +471,6 @@ private:
 public:
     bool            EditSheet( SCH_SHEET* Sheet, wxDC* DC );
 
-    /**
-     * Function UpdateSheetNumberAndDate
-     * Set a sheet number, the sheet count for sheets in the whole schematic
-     * and update the date in all screens
-     */
-    void            UpdateSheetNumberAndDate();
-
 private:
     void            StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
     SCH_SHEET_PIN*  Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC );

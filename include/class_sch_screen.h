@@ -12,7 +12,7 @@
 
 class LIB_PIN;
 class SCH_COMPONENT;
-
+class SCH_SHEET_PATH;
 
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500
@@ -118,6 +118,21 @@ public:
 
     LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL );
 
+    /**
+     * Function ClearAnnotation
+     * clears the annotation for the components in \a aSheetPath on the screen.
+     * @param aSheetPath The sheet path of the component annotation to clear.  If NULL then
+     *                   the entire heirarchy is cleared.
+     */
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
+
+    /**
+     * Function GetHierarchicalItems
+     * adds all schematica sheet and component object in the screen to \a aItems.
+     * @param aItems Hierarchical item list.
+     */
+    void GetHierarchicalItems( std::vector <SCH_ITEM*> aItems );
+
     virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
     {
@@ -144,6 +159,35 @@ public:
     SCH_SCREEN* GetFirst();
     SCH_SCREEN* GetNext();
     SCH_SCREEN* GetScreen( unsigned int aIndex );
+
+    /**
+     * Function ClearAnnotation
+     * clears the annotation for all components in the hierarchy.
+     */
+    void ClearAnnotation();
+
+    /**
+     * Function SchematicCleanUp
+     * merges and breaks wire segments in the entire schematic hierarchy.
+     */
+    void SchematicCleanUp();
+
+    /**
+     * Function ReplaceDuplicateTimeStamps
+     * test all sheet and component objects in the schematic for duplicate time stamps
+     * an replaces them as neccessary.  Time stamps must be unique in order for complex
+     * hierarcies know which components go to which sheets.
+     * @return The number of duplicate time stamps replaced.
+     */
+    int ReplaceDuplicateTimeStamps();
+
+    /**
+     * Function SetDate
+     * sets the date string for every screen to \a aDate.
+     * @see GetDate()
+     * @param aDate The date string to set for each screen.
+     */
+    void SetDate( const wxString& aDate );
 
 private:
     void        AddScreenToList( SCH_SCREEN* aScreen );

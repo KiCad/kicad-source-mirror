@@ -9,6 +9,7 @@
 #include "macros.h"
 
 #include "class_libentry.h"
+#include "sch_sheet_path.h"
 
 
 class SCH_COMPONENT;
@@ -18,37 +19,19 @@ class SCH_COMPONENT;
 
 #define ISBUS 1
 
-#define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
-
-#include "class_netlist_object.h"
-
-/* Id to select netlist type */
-enum  TypeNetForm {
-    NET_TYPE_UNINIT = 0,
-    NET_TYPE_PCBNEW,
-    NET_TYPE_ORCADPCB2,
-    NET_TYPE_CADSTAR,
-    NET_TYPE_SPICE,
-    NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
-                         * is the first id for user netlist format
-                         * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
-                         * is the last id for user netlist format
-                         */
-    NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
-};
-
-
 /* Max pin number per component and footprint */
 #define MAXPIN 5000
 
 
-/* object used in annotation to handle a list of components in schematic
- * because in a complex hierarchy, a component is used more than once,
- * and its reference is depending on the sheet path
- * for the same component, we must create a flat list of components
- * used in nelist generation, BOM generation and annotation
+/**
+ * Class SCH_REFERENCE
+ * is used as a helper to define a component's reference designator in a schematic.  This
+ * helper is required in a complex hierarchy because a component can be used more than
+ * once and its reference depends on the sheet path.  This class is used to flatten the
+ * schematic hierarchy for annotation, net list generation, and bill of material
+ * generation.
  */
-class OBJ_CMP_TO_LIST
+class SCH_REFERENCE
 {
 private:
     /// Component reference prefix, without number (for IC1, this is IC) )
@@ -73,7 +56,7 @@ public:
 
 public:
 
-    OBJ_CMP_TO_LIST()
+    SCH_REFERENCE()
     {
         m_RootCmp      = NULL;
         m_Entry        = NULL;
@@ -84,6 +67,24 @@ public:
         m_NumRef       = 0;
         m_Flag         = 0;
     }
+
+    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,
+                   SCH_SHEET_PATH& aSheetPath );
+
+    /**
+     * Function Annotate
+     * updates the annotation of the component according the the current object state.
+     */
+    void Annotate();
+
+    /**
+     * Function Split
+     * attempts to split the reference designator into a name (U) and number (1).  If the
+     * last character is '?' or not a digit, the reference is tagged as not annotated.
+     * For components with multiple parts per package that are not already annotated, set
+     * m_Unit to a max value (0x7FFFFFFF).
+     */
+    void Split();
 
     /*  Some accessors which hide the strategy of how the reference is stored,
         thereby making it easy to change that strategy.
@@ -108,13 +109,13 @@ public:
     }
 
 
-    int CompareValue( const OBJ_CMP_TO_LIST& item ) const
+    int CompareValue( const SCH_REFERENCE& item ) const
     {
         return m_Value->CmpNoCase( *item.m_Value );
     }
 
 
-    int CompareRef( const OBJ_CMP_TO_LIST& item ) const
+    int CompareRef( const SCH_REFERENCE& item ) const
     {
         return m_Ref.compare( item.m_Ref );
     }
@@ -125,31 +126,6 @@ public:
         return m_Entry->UnitsLocked();
     }
 };
-
-
-/* Global Variables */
-
-// Buffer to build the list of items used in netlist and erc calculations
-typedef std::vector <NETLIST_OBJECT*> NETLIST_OBJECT_LIST;
-extern NETLIST_OBJECT_LIST g_NetObjectslist;
-
-extern bool g_OptNetListUseNames;   /* TRUE to use names rather than
-                                     * net numbers. SPICE netlist only
-                                     */
-
-/* Prototypes: */
-void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
-
-/**
- * Function ReturnUserNetlistTypeName
- * to retrieve user netlist type names
- * @param first_item = true: return first name of the list, false = return next
- * @return a wxString : name of the type netlist or empty string
- * this function must be called first with "first_item" = true
- * and after with "first_item" = false to get all the other existing netlist
- * names
- */
-wxString ReturnUserNetlistTypeName( bool first_item );
 
 
 #endif

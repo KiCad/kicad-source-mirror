@@ -25,7 +25,7 @@ class PLOTTER;
 class SCH_SHEET;
 class LIB_PIN;
 class LABEL_OBJECT;
-class OBJ_CMP_TO_LIST;
+class NETLIST_OBJECT;
 
 
 wxString ReturnDefaultFieldName( int aFieldNdx );
@@ -66,6 +66,7 @@ void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct 
 
 
 // build_BOM.cpp
+
 /**
  * Class LABEL_OBJECT
  * is used in build BOM to handle the list of labels in schematic
@@ -88,20 +89,21 @@ public: LABEL_OBJECT()
     }
 };
 
-void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList );
+
 void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
-bool SortComponentsByReference(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
-bool SortComponentsByValue(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
+bool SortComponentsByReference(  const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 );
+bool SortComponentsByValue(  const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 );
 bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
 bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList );
+void DeleteSubCmp( std::vector< SCH_REFERENCE >& aList );
 int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
 
 
 // operations_on_item_lists.cpp
+
 /**
  * Function DuplicateStruct
- *  Routine to create a new copy of given struct.
+ * creates a new copy of given struct.
  * @param aDrawStruct = the SCH_ITEM to duplicate
  * @param aClone (defualt = true)
  *     if true duplicate also some parameters that must be unique
@@ -193,12 +195,6 @@ EDA_Colors ReturnLayerColor( int Layer );
 /* NETLIST.CPP */
 /**************/
 int  IsBusLabel( const wxString& LabelDrawList );
-
-/***************/
-/* ANNOTATE.CPP */
-/***************/
-void ReAnnotatePowerSymbolsOnly();
-
 
 /************/
 /* PLOT.CPP */
@@ -311,5 +307,20 @@ void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
+
+
+/* Prototypes in netlist_control.cpp */
+void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
+
+/**
+ * Function ReturnUserNetlistTypeName
+ * to retrieve user netlist type names
+ * @param first_item = true: return first name of the list, false = return next
+ * @return a wxString : name of the type netlist or empty string
+ * this function must be called first with "first_item" = true
+ * and after with "first_item" = false to get all the other existing netlist
+ * names
+ */
+wxString ReturnUserNetlistTypeName( bool first_item );
 
 #endif  /* __PROTOS_H__ */

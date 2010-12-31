@@ -42,6 +42,7 @@
 
 #include "general.h"
 #include "netlist.h"
+#include "netlist_control.h"
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
@@ -143,7 +144,7 @@ class EXPORT_HELP
 
     /**
      * Function eraseDuplicatePins
-     * removes duplicate Pins fromt the pin list, m_SortedComponentPinList.
+     * removes duplicate Pins from the pin list, m_SortedComponentPinList.
      * (This is a list of pins found in the whole schematic, for a single
      * component.) These duplicate pins were put in list because some pins (powers... )
      * are found more than one time when we have a multiple parts per package
@@ -725,7 +726,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
         LIB_COMPONENT*  lcomp = (LIB_COMPONENT*) *it;
         CMP_LIBRARY*    library = lcomp->GetLibrary();
 
-        m_Libraries.insert( library );  // inserts component's library iff unique
+        m_Libraries.insert( library );  // inserts component's library if unique
 
         XNODE*      xlibpart;
         xlibparts->AddChild( xlibpart = node( sLibpart ) );
@@ -958,7 +959,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
             XNODE* xcomp;  // current component being constructed
 
-            // Output the component's elments in order of expected access frequency.
+            // Output the component's elements in order of expected access frequency.
             // This may not always look best, but it will allow faster execution
             // under XSL processing systems which do sequential searching within
             // an element.
@@ -1015,8 +1016,8 @@ XNODE* EXPORT_HELP::makeGenericComponents()
             timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
 
-            // Add pins list for this cmponent.
-            // Usedful to build netlist which have pads connection inside the footprint description
+            // Add pins list for this component.
+            // Useful to build netlist which have pads connection inside the footprint description
             // (Spice, OrcadPCB2 ...)
             XNODE* xpinslist;
             xcomp->AddChild( xpinslist = node( sPins ) );
@@ -1086,7 +1087,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
 
     return xdoc.Save( aOutFileName, 2 /* indent bug, today was ignored by wxXml lib */ );
 
-#else   // ouput the well established/old generic net list format which was not XML.
+#else   // output the well established/old generic net list format which was not XML.
 
     wxString        field;
     wxString        footprint;
@@ -1341,7 +1342,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
     int         ret = 0;        // zero now, OR in the sign bit on error
     wxString    netName;
 
-    std::vector<OBJ_CMP_TO_LIST> cmpList;
+    std::vector< SCH_REFERENCE > cmpList;
 
     DateAndTime( dateBuf );
 
@@ -1361,6 +1362,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
         for( EDA_ITEM* item = path->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, path );
+
             if( !comp )
                 break;
 
@@ -1375,8 +1377,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
             {
                 if( entry->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( OBJ_CMP_TO_LIST() );
-
+                    cmpList.push_back( SCH_REFERENCE() );
                     cmpList.back().m_RootCmp = comp;
                     cmpList.back().SetRef( comp->GetRef( path ) );
                 }
