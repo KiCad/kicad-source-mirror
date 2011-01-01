@@ -65,40 +65,6 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* Draw
 void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 
-// build_BOM.cpp
-
-/**
- * Class LABEL_OBJECT
- * is used in build BOM to handle the list of labels in schematic
- * because in a complex hierarchy, a label is used more than once,
- * and had more than one sheet path, so we must create a flat list of labels
- */
-class LABEL_OBJECT
-{
-public:
-    int            m_LabelType;
-    SCH_ITEM*      m_Label;
-
-    //have to store it here since the object references will be duplicated.
-    SCH_SHEET_PATH m_SheetPath;  //composed of UIDs
-
-public: LABEL_OBJECT()
-    {
-        m_Label     = NULL;
-        m_LabelType = 0;
-    }
-};
-
-
-void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
-bool SortComponentsByReference(  const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 );
-bool SortComponentsByValue(  const SCH_REFERENCE& obj1, const SCH_REFERENCE& obj2 );
-bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-void DeleteSubCmp( std::vector< SCH_REFERENCE >& aList );
-int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
-
-
 // operations_on_item_lists.cpp
 
 /**

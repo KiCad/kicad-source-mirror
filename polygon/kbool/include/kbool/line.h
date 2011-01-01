@@ -1,11 +1,11 @@
-/*! \file include/line.h
+/*! \file line.h
     \brief Mainy used for calculating crossings
     \author Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: line.h,v 1.5 2009/09/10 17:04:09 titato Exp $
 */
 

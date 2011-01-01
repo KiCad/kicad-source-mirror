@@ -1,10 +1,10 @@
-/*! \file kbool/_lnk_itr.cpp
+/*! \file _lnk_itr.cpp
     \author Probably Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: _lnk_itr.cpp,v 1.4 2009/02/06 21:33:03 titato Exp $
 */
 

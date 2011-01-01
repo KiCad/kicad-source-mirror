@@ -22,15 +22,15 @@ public:
     /**
      * Function ListSet
      * Add a list of items.
-     * @param list = a string containing items. Items are separated by '\n'
+     * @param aList = a string containing items. Items are separated by '\n'
      */
-    void ListSet(const wxString &list);
+    void ListSet(const wxString &aList);
     /**
      * Function ListSet
      * Add a list of items.
-     * @param list = a wxArrayString containing items.
+     * @param aList = a wxArrayString containing items.
      */
-    void ListSet(const wxArrayString &list);
+    void ListSet(const wxArrayString &aList);
 
     void ListClear();
     /**

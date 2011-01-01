@@ -20,106 +20,11 @@
 #include "lib_pin.h"
 
 
-static void BreakReference( std::vector< SCH_REFERENCE >& aComponentsList );
-static void ReAnnotateComponents( std::vector< SCH_REFERENCE >& aComponentsList );
-static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsList );
-int         GetLastReferenceNumber( int aObjet, std::vector< SCH_REFERENCE >& aComponentsList );
-static int  ExistUnit( int aObjet, int aUnit, std::vector< SCH_REFERENCE >& aComponentList );
-
-
-/* sort function to annotate items by their position.
- *  Components are sorted
- *      by reference
- *      if same reference: by sheet
- *          if same sheet, by X pos
- *                if same X pos, by Y pos
- *                  if same Y pos, by time stamp
- */
-static bool SortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
-{
-    int ii = item1.CompareRef( item2 );
-
-    if( ii == 0 )
-        ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.x - item2.m_RootCmp->m_Pos.x;
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.y - item2.m_RootCmp->m_Pos.y;
-    if( ii == 0 )
-        ii = item1.m_TimeStamp - item2.m_TimeStamp;
-
-    return ii < 0;
-}
-
-
-/* sort function to annotate items by their position.
- *  Components are sorted
- *      by reference
- *      if same reference: by sheet
- *          if same sheet, by Y pos
- *                if same Y pos, by X pos
- *                  if same X pos, by time stamp
- */
-static bool SortByYPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
-{
-    int ii = item1.CompareRef( item2 );
-
-    if( ii == 0 )
-        ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.y - item2.m_RootCmp->m_Pos.y;
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.x - item2.m_RootCmp->m_Pos.x;
-    if( ii == 0 )
-        ii = item1.m_TimeStamp - item2.m_TimeStamp;
-
-    return ii < 0;
-}
-
-
-/*****************************************************************************
- * qsort function to annotate items by value
- *  Components are sorted
- *      by reference
- *      if same reference: by value
- *          if same value: by unit number
- *              if same unit number, by sheet
- *                  if same sheet, by time stamp
- *****************************************************************************/
-static bool SortByValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
-{
-    int ii = item1.CompareRef( item2 );
-
-    if( ii == 0 )
-        ii = item1.CompareValue( item2 );
-    if( ii == 0 )
-        ii = item1.m_Unit - item2.m_Unit;
-    if( ii == 0 )
-        ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.x - item2.m_RootCmp->m_Pos.x;
-    if( ii == 0 )
-        ii = item1.m_RootCmp->m_Pos.y - item2.m_RootCmp->m_Pos.y;
-    if( ii == 0 )
-        ii = item1.m_TimeStamp - item2.m_TimeStamp;
-
-    return ii < 0;
-}
-
-
-/*****************************************************************************
- * qsort function to annotate items by value
- *  Components are sorted by time stamp
- *****************************************************************************/
-static bool SortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
-{
-    int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
-
-    if( ii == 0 )
-        ii = item1.m_TimeStamp - item2.m_TimeStamp;
-
-    return ii < 0;
-}
+static void BreakReference( SCH_REFERENCE_LIST& aComponentsList );
+static void ReAnnotateComponents( SCH_REFERENCE_LIST& aComponentsList );
+static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList, bool aUseSheetNum );
+static int  GetLastReferenceNumber( int aObjet,SCH_REFERENCE_LIST& aComponentsList );
+static int  ExistUnit( int aObjet, int aUnit, SCH_REFERENCE_LIST& aComponentList );
 
 
 /**
@@ -127,9 +32,8 @@ static bool SortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& it
  * Remove current component annotations
  * @param aCurrentSheetOnly : if false: remove all annotations, else remove
  *                             annotation relative to the current sheet only
- * @param aRedraw : true to refresh display
  */
-void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
+void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
     if( aCurrentSheetOnly )
     {
@@ -145,9 +49,6 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
 
     // Update the references for the sheet that is currently being displayed.
     m_CurrentSheet->UpdateAllScreenReferences();
-
-    if( aRedraw )
-        DrawPanel->Refresh( true );
 }
 
 
@@ -171,13 +72,13 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly, bool aRedraw )
  *              stamps are used to handle annotation mainly in complex
  *              hierarchies.
  */
-void AnnotateComponents( SCH_EDIT_FRAME* parent,
+void SCH_EDIT_FRAME::AnnotateComponents(
                          bool            annotateSchematic,
                          int             sortOption,
                          bool            resetAnnotation,
                          bool            repairsTimestamps )
 {
-    std::vector< SCH_REFERENCE > references;
+    SCH_REFERENCE_LIST references;
 
     wxBusyCursor dummy;
 
@@ -203,13 +104,13 @@ void AnnotateComponents( SCH_EDIT_FRAME* parent,
 
     // If it is an annotation for all the components, reset previous annotation.
     if( resetAnnotation )
-        parent->DeleteAnnotation( !annotateSchematic, false );
+        DeleteAnnotation( !annotateSchematic );
 
     // Update the screen date.
     screens.SetDate( GenDate() );
 
     // Set sheet number and total sheet counts.
-    parent->SetSheetNumberAndCount();
+    SetSheetNumberAndCount();
 
     /* Build component list */
     if( annotateSchematic )
@@ -218,71 +119,66 @@ void AnnotateComponents( SCH_EDIT_FRAME* parent,
     }
     else
     {
-        parent->GetSheet()->GetComponents( references );
+        GetSheet()->GetComponents( references );
     }
 
     /* Break full components reference in name (prefix) and number:
      * example: IC1 become IC, and 1 */
     BreakReference( references );
 
+    bool useSheetNum = false;
     switch( sortOption )
     {
     case 0:
-        sort( references.begin(), references.end(), SortByXPosition );
+        references.SortCmpByXCoordinate();
         break;
 
     case 1:
-        sort( references.begin(), references.end(), SortByYPosition );
+        useSheetNum = true;
+        references.SortCmpByXCoordinate();
         break;
 
     case 2:
-        sort( references.begin(), references.end(), SortByValue );
+        references.SortCmpByYCoordinate();
+        break;
+
+    case 3:
+        useSheetNum = true;
+        references.SortCmpByYCoordinate();
+        break;
+
+    case 4:
+        references.SortComponentsByRefAndValue();
         break;
     }
 
     /* Recalculate reference numbers */
-    ComputeReferenceNumber( references );
+    ComputeReferenceNumber( references, useSheetNum );
     ReAnnotateComponents( references );
 
     /* Final control (just in case ... )*/
-    parent->CheckAnnotate( NULL, !annotateSchematic );
-    parent->OnModify();
-    parent->DrawPanel->Refresh( true );
+    CheckAnnotate( NULL, !annotateSchematic );
+    OnModify();
+    DrawPanel->Refresh( true );
 }
 
 
 /*
  * Update the reference component for the schematic project (or the current sheet)
  */
-static void ReAnnotateComponents( std::vector< SCH_REFERENCE >& aComponentList )
+static void ReAnnotateComponents( SCH_REFERENCE_LIST& aComponentList )
 {
     /* update the reference numbers */
-    for( unsigned ii = 0; ii < aComponentList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentList.GetCount(); ii++ )
     {
-#if 0
-        char*          Text = aComponentList[ii].m_Reference;
-        SCH_COMPONENT* component = aComponentList[ii].m_RootCmp;
-
-        if( aComponentList[ii].m_NumRef < 0 )
-            strcat( Text, "?" );
-        else
-            sprintf( Text + strlen( Text ), "%d", aComponentList[ii].m_NumRef );
-
-        component->SetRef( &(aComponentList[ii].m_SheetPath), CONV_FROM_UTF8( Text ) );
-
-        component->SetUnit( aComponentList[ii].m_Unit );
-        component->SetUnitSelection( &aComponentList[ii].m_SheetPath,
-                                     aComponentList[ii].m_Unit );
-#else
         aComponentList[ii].Annotate();
-#endif
     }
 }
 
 
-void BreakReference( std::vector< SCH_REFERENCE >& aComponentsList )
+void BreakReference( SCH_REFERENCE_LIST& aComponentsList )
 {
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
         aComponentsList[ii].Split();
 }
 
@@ -291,14 +187,14 @@ void BreakReference( std::vector< SCH_REFERENCE >& aComponentsList )
  * Compute the reference number for components without reference number
  *  Compute .m_NumRef member
  */
-static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsList )
+static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList, bool aUseSheetNum  )
 {
     int LastReferenceNumber, NumberOfUnits, Unit;
 
     /* Components with an invisible reference (power...) always are
      * re-annotated.  So set their .m_IsNew member to true
      */
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
     {
         if( aComponentsList[ii].GetRefStr()[0] == '#' )
         {
@@ -315,7 +211,7 @@ static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsLis
     unsigned first = 0;
     /* calculate the last used number for this reference prefix: */
     LastReferenceNumber = GetLastReferenceNumber( first, aComponentsList );
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
     {
         if( aComponentsList[ii].m_Flag )
             continue;
@@ -327,7 +223,13 @@ static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsLis
             first = ii;
             LastReferenceNumber = GetLastReferenceNumber( ii, aComponentsList );
         }
-
+        // when using sheet number, ensure annot number >= sheet number* 100
+        if( aUseSheetNum )
+        {
+            int min_num = aComponentsList[ii].m_SheetNum * 100;
+            if( LastReferenceNumber < min_num )
+                LastReferenceNumber = min_num;
+        }
         /* Annotation of one part per package components (trivial case)*/
         if( aComponentsList[ii].m_Entry->GetPartCount() <= 1 )
         {
@@ -374,7 +276,7 @@ static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsLis
 
             /* Search a component to annotate ( same prefix, same value,
              * not annotated) */
-            for( unsigned jj = ii + 1; jj < aComponentsList.size(); jj++ )
+            for( unsigned jj = ii + 1; jj < aComponentsList.GetCount(); jj++ )
             {
                 if( aComponentsList[jj].m_Flag )    // already tested
                     continue;
@@ -414,11 +316,11 @@ static void ComputeReferenceNumber( std::vector< SCH_REFERENCE >& aComponentsLis
  *                 the search pattern)
  * @param aComponentsList = list of items
  */
-int GetLastReferenceNumber( int aObjet, std::vector< SCH_REFERENCE >& aComponentsList )
+int GetLastReferenceNumber( int aObjet,SCH_REFERENCE_LIST& aComponentsList )
 {
     int LastNumber = 0;
 
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
     {
         /* New identifier. */
         if( aComponentsList[aObjet].CompareRef( aComponentsList[ii] ) != 0 )
@@ -442,13 +344,13 @@ int GetLastReferenceNumber( int aObjet, std::vector< SCH_REFERENCE >& aComponent
  * @param aComponentsList = list of items to examine
  * @return index in aComponentsList if found or -1 if not found
  */
-static int ExistUnit( int aObjet, int Unit, std::vector< SCH_REFERENCE >& aComponentsList )
+static int ExistUnit( int aObjet, int Unit, SCH_REFERENCE_LIST& aComponentsList )
 {
     int NumRef;
 
     NumRef = aComponentsList[aObjet].m_NumRef;
 
-    for( unsigned ii = 0; ii < aComponentsList.size(); ii++ )
+    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
     {
         if( aObjet == (int) ii )
             // Do not compare with itself !
@@ -496,7 +398,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     /* build the screen list */
     SCH_SHEET_LIST SheetList;
 
-    std::vector< SCH_REFERENCE > ComponentsList;
+    SCH_REFERENCE_LIST ComponentsList;
 
     /* Build the list of components */
     if( !aOneSheetOnly )
@@ -504,7 +406,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     else
         GetSheet()->GetComponents( ComponentsList );
 
-    sort( ComponentsList.begin(), ComponentsList.end(), SortByValue );
+    ComponentsList.SortComponentsByRefAndValue();
 
     /* Break full components reference in name (prefix) and number: example:
      * IC1 become IC, and 1 */
@@ -512,7 +414,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
     /* count not yet annotated items */
     error = 0;
-    int imax = ComponentsList.size() - 1;
+    int imax = ComponentsList.GetCount() - 1;
 
     for( int ii = 0; ii < imax; ii++ )
     {
@@ -681,7 +583,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     }
 
     // count the duplicated time stamps
-    sort( ComponentsList.begin(), ComponentsList.end(), SortByTimeStamp );
+    ComponentsList.SortComponentsByTimeStamp();
 
     for( int ii = 0; ( ii < imax ) && ( error < 4 ); ii++ )
     {

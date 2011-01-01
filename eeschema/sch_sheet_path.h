@@ -55,7 +55,7 @@ class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_SHEET;
 class SCH_ITEM;
-class SCH_REFERENCE;
+class SCH_REFERENCE_LIST;
 
 
 /**
@@ -202,8 +202,8 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( std::vector< SCH_REFERENCE >& aReferences,
-                        bool                          aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences,
+                        bool                aIncludePowerSymbols = true  );
 
     /**
      * Find the next schematic item in this sheet ojbect.
@@ -349,8 +349,8 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( std::vector< SCH_REFERENCE >& aReferences,
-                        bool                          aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences,
+                        bool                aIncludePowerSymbols = true  );
 
     /**
      * Function FindNextItem

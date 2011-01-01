@@ -64,7 +64,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
  * Function GetPointToLineSegmentDistance
  * Get distance between line segment and point
  * @param x,y = point
- * @param	xi,yi and xf,yf = the end-points of the line segment
+ * @param xi,yi, xf,yf = the end-points of the line segment
  * @return the distance
  */
 double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int yf );

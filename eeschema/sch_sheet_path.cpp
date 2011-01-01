@@ -313,9 +313,17 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( int* aReference )
 }
 
 
-void SCH_SHEET_PATH::GetComponents( std::vector< SCH_REFERENCE >& aReferences,
-                                    bool                          aIncludePowerSymbols )
+void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences,
+                                    bool                aIncludePowerSymbols )
 {
+    // Search to sheet path number:
+    int sheetnumber = 1;    // 1 = root
+    SCH_SHEET_LIST sheetList;
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path != NULL;
+         path = sheetList.GetNext(), sheetnumber++ )
+        if( Cmp(*path) == 0 )
+            break;
+
     for( SCH_ITEM* item = LastDrawList(); item != NULL; item = item->Next() )
     {
         if( item->Type() == SCH_COMPONENT_T )
@@ -333,7 +341,8 @@ void SCH_SHEET_PATH::GetComponents( std::vector< SCH_REFERENCE >& aReferences,
                 continue;
 
             SCH_REFERENCE reference = SCH_REFERENCE( component, entry, *this );
-            aReferences.push_back( reference );
+            reference.m_SheetNum = sheetnumber;
+            aReferences.AddItem( reference );
         }
     }
 }
@@ -635,8 +644,8 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 }
 
 
-void SCH_SHEET_LIST::GetComponents( std::vector< SCH_REFERENCE >& aReferences,
-                                    bool                          aIncludePowerSymbols )
+void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences,
+                                    bool                aIncludePowerSymbols )
 {
     for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
         path->GetComponents( aReferences, aIncludePowerSymbols );

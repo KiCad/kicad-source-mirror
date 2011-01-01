@@ -18,7 +18,6 @@
 #include "sch_no_connect.h"
 #include "sch_text.h"
 #include "sch_sheet.h"
-
 #include "algorithm"
 
 #include <boost/foreach.hpp>
@@ -63,98 +62,6 @@ void dumpNetTable()
 
 
 #endif
-
-
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,
-                              SCH_SHEET_PATH& aSheetPath )
-{
-    wxASSERT( aComponent != NULL && aLibComponent != NULL );
-
-    m_RootCmp   = aComponent;
-    m_Entry     = aLibComponent;
-    m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
-    m_SheetPath = aSheetPath;
-    m_IsNew     = false;
-    m_Flag      = 0;
-    m_TimeStamp = aComponent->m_TimeStamp;
-
-    if( aComponent->GetRef( &aSheetPath ).IsEmpty() )
-        aComponent->SetRef( &aSheetPath, wxT( "DefRef?" ) );
-
-    SetRef( aComponent->GetRef( &aSheetPath ) );
-
-    m_NumRef = -1;
-
-    if( aComponent->GetField( VALUE )->GetText().IsEmpty() )
-        aComponent->GetField( VALUE )->SetText( wxT( "~" ) );
-
-    m_Value = &aComponent->GetField( VALUE )->m_Text;
-}
-
-
-void SCH_REFERENCE::Annotate()
-{
-    if( m_NumRef < 0 )
-        m_Ref += wxChar( '?' );
-    else
-        m_Ref = CONV_TO_UTF8( GetRef() << m_NumRef );
-
-    m_RootCmp->SetRef( &m_SheetPath, CONV_FROM_UTF8( m_Ref.c_str() ) );
-    m_RootCmp->SetUnit( m_Unit );
-    m_RootCmp->SetUnitSelection( &m_SheetPath, m_Unit );
-}
-
-
-void SCH_REFERENCE::Split()
-{
-    std::string refText = GetRefStr();
-
-    m_NumRef = -1;
-
-    int ll = refText.length() - 1;
-
-    if( refText[ll] == '?' )
-    {
-        m_IsNew = true;
-
-        if( !IsPartsLocked() )
-            m_Unit = 0x7FFFFFFF;
-
-        refText.erase( ll );  // delete last char
-
-        SetRefStr( refText );
-    }
-    else if( isdigit( refText[ll] ) == 0 )
-    {
-        m_IsNew = true;
-
-        if( !IsPartsLocked() )
-            m_Unit = 0x7FFFFFFF;
-    }
-    else
-    {
-        while( ll >= 0 )
-        {
-            if( (refText[ll] <= ' ' ) || isdigit( refText[ll] ) )
-                ll--;
-            else
-            {
-                if( isdigit( refText[ll + 1] ) )
-                {
-                    // null terminated C string into cp
-                    const char* cp = refText.c_str() + ll + 1;
-
-                    m_NumRef = atoi( cp );
-                }
-
-                refText.erase( ll+1 );  // delete from ll+1 to end
-                break;
-            }
-        }
-
-        SetRefStr( refText );
-    }
-}
 
 
 /*

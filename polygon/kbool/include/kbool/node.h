@@ -1,11 +1,11 @@
-/*! \file include/node.h
+/*! \file node.h
     \brief Holds a GDSII node structure (Header)
     \author Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: node.h,v 1.7 2009/09/14 16:50:12 titato Exp $
 */
 
@@ -60,7 +60,7 @@ public:
     kbLink*  GetNotFlat();
 
     //! get a link to a hole or from a hole.
-    kbLink* GetHoleLink( kbLink* const prev, LinkStatus whatside, 
+    kbLink* GetHoleLink( kbLink* const prev, LinkStatus whatside,
                          bool checkbin, BOOL_OP operation );
 
     int Merge( kbNode* );

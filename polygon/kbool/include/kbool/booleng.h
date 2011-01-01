@@ -1,10 +1,10 @@
-/*! \file include/booleng.h
+/*! \file booleng.h
     \author Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: booleng.h,v 1.9 2009/09/14 18:18:03 titato Exp $
 */
 
@@ -225,7 +225,7 @@ template<class Type> class TDLI;
  The boolean operation ( BOOL_OR, BOOL_AND, BOOL_EXOR, BOOL_A_SUB_B, BOOL_B_SUB_A )
  are based on the two sets of polygons in group A and B.
  The other operation on group A only.
- 
+
     At the end of the operation the resulting polygons can be extracted.
 */
 class A2DKBOOLDLLEXP Bool_Engine
@@ -257,7 +257,7 @@ public:
     /*
           The algorithm takes into account gaps and inaccuracies caused by rounding to integer coordinates
           in the original data.
-          Imagine two rectangles one with a side ( 0,0 ) ( 2.0, 17.0 ) 
+          Imagine two rectangles one with a side ( 0,0 ) ( 2.0, 17.0 )
           and the other has a side ( 0,0 ) ( 1.0, 8.5 )
           If for some reason those coordinates where round to ( 0,0 ) ( 2, 17 ) ( 0,0 ) ( 1, 9 ),
           there will be clearly a gap or overlap that was not intended.
@@ -280,8 +280,8 @@ public:
     Grid makes sure that the integer data used within the algorithm has room for extra intersections
     smaller than the smallest number within the input data.
     The input data scaled up with DGrid is related to the accuracy the user has in his input data.
-         Another scaling with Grid is applied on top of it to create space in the integer number for 
-    even smaller numbers. 
+         Another scaling with Grid is applied on top of it to create space in the integer number for
+    even smaller numbers.
     */
     void SetGrid( B_INT grid );
 
@@ -299,7 +299,7 @@ public:
        doubles, part of the integers used in vertexes within the boolean algorithm.
        And therefore DGRID bigger than 1 is not usefull, you would only loose accuracy.
        Within the algorithm all input data is multiplied with DGRID, and the result
-       is rounded to an integer. 
+       is rounded to an integer.
     */
     void SetDGrid( double dgrid );
 
@@ -417,7 +417,7 @@ public:
 
     //! if set true holes are linked into outer contours by double overlapping segments.
     /*!
-        This mode is needed when the software using the boolean algorithm does 
+        This mode is needed when the software using the boolean algorithm does
         not understand hole polygons. In that case a contour and its holes form one
         polygon. In cases where software understands the concept of holes, contours
         are clockwise oriented, while holes are anticlockwise oriented.
@@ -457,11 +457,11 @@ public:
        if (booleng->StartPolygonAdd(GROUP_A))
        {
         booleng->AddPoint(100,100);
-        booleng->AddPoint(-100,100); 
-        booleng->AddPoint(-100,-100); 
-        booleng->AddPoint(100,-100); 
+        booleng->AddPoint(-100,100);
+        booleng->AddPoint(-100,-100);
+        booleng->AddPoint(100,-100);
        }
-       booleng->EndPolygonAdd(); 
+       booleng->EndPolygonAdd();
 
        \param A_or_B defines if the new polygon will be of group A or B
 
@@ -469,7 +469,7 @@ public:
        to another polygon added.
        So the contour polygon ClockWise, then add counterclockwise polygons for holes, and visa versa.
        BUT only if m_orientationEntryMode is set true, else all polygons are redirected, and become
-       individual areas without holes. 
+       individual areas without holes.
        Holes in such a case must be linked into the contour using two extra segments.
     */
     bool StartPolygonAdd( GroupType A_or_B );
@@ -505,7 +505,7 @@ public:
     /*!
        This iterates through the first graph in the graphlist.
        Setting the current kbNode properly by following the links in the graph
-       through its nodes. 
+       through its nodes.
     */
     bool PolygonHasMorePoints();
 

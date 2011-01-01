@@ -9,16 +9,11 @@
 #include "bitmaps.h"
 #include "common.h"
 #include "wxEeschemaStruct.h"
+#include "class_drawpanel.h"
 
 #include "annotate_dialog.h"
 
 #define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
-
-extern void AnnotateComponents( SCH_EDIT_FRAME* parent,
-                                bool annotateSchematic,
-                                int sortOption,
-                                bool resetAnnotation,
-                                bool repairsTimestamps );
 
 
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
@@ -44,29 +39,35 @@ void DIALOG_ANNOTATE::InitValues()
         m_Config->Read(KEY_ANNOTATE_SORT_OPTION, &option, 0l);
         switch( option )
         {
+            default:
             case 0:
                 m_rbSortBy_X_Position->SetValue(1);
                 break;
 
-
             case 1:
+                m_rbSortBy_X_Position_and_useSheet->SetValue(1);
+                break;
+
+            case 2:
                 m_rbSortBy_Y_Position->SetValue(1);
                 break;
 
-
-            case 2:
-                rbSortByValue->SetValue(1);
+            case 3:
+                m_rbSortBy_Y_Position_and_useSheet->SetValue(1);
                 break;
 
-            default:
+            case 4:
+                rbSortByValue->SetValue(1);
                 break;
         }
     }
 
     wxBitmap bitmap0(annotate_down_right_xpm);
     annotate_down_right_bitmap->SetBitmap(bitmap0);
+    annotate_down_right_bitmap1->SetBitmap(bitmap0);
     wxBitmap bitmap1(annotate_right_down_xpm);
 	annotate_right_down_bitmap->SetBitmap(bitmap1);
+	annotate_right_down_bitmap1->SetBitmap(bitmap1);
     wxBitmap bitmap2(add_text_xpm);
 	annotate_by_value_bitmap->SetBitmap(bitmap2);
 
@@ -97,7 +98,9 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
-    AnnotateComponents( m_Parent, GetLevel(), GetSortOrder(), GetResetItems() , true );
+    m_Parent->AnnotateComponents( GetLevel(), GetSortOrder(), GetResetItems() , true );
+    m_Parent->DrawPanel->Refresh();
+
     m_btnClear->Enable();
 }
 
@@ -119,7 +122,9 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
                              wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
-    m_Parent->DeleteAnnotation( GetLevel() ? false : true, true );
+    m_Parent->DeleteAnnotation( GetLevel() ? false : true );
+    m_Parent->DrawPanel->Refresh();
+
     m_btnClear->Enable(false);
 }
 
@@ -157,14 +162,20 @@ int DIALOG_ANNOTATE::GetSortOrder( void )
 /****************************************/
 /**
  * @return 0 if annotation by X position,
- *         1 if annotation by Y position
- *         2 if annotation by value
+ *         1 if annotation by X position and use sheet number,
+ *         2 if annotation by Y position,
+ *         3 if annotation by Y position and use sheet number,
+ *         4 if annotation by value
  */
 {
     if ( m_rbSortBy_X_Position->GetValue() )
         return 0;
-    if ( m_rbSortBy_Y_Position->GetValue() )
+    if ( m_rbSortBy_X_Position_and_useSheet->GetValue() )
         return 1;
-    return 2;
+    if ( m_rbSortBy_Y_Position->GetValue() )
+        return 2;
+    if ( m_rbSortBy_Y_Position_and_useSheet->GetValue() )
+        return 3;
+    return 4;
 }
 

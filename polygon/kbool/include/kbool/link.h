@@ -1,11 +1,11 @@
-/*! \file include/link.h
+/*! \file link.h
     \brief Part of a graph, connection between nodes (Header)
     \author Klaas Holwerda or Julian Smart
- 
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: link.h,v 1.5 2009/09/10 17:04:09 titato Exp $
 */
 
@@ -23,13 +23,13 @@ class kbRecord;
 
 //!   segment within a graph
 /*
-   A Graph contains a list of kbLink, the kbLink or connected by Node's. 
-   Several kbLink can be connected to one Node. 
+   A Graph contains a list of kbLink, the kbLink or connected by Node's.
+   Several kbLink can be connected to one Node.
    A kbLink has a direction defined by its begin and end node.
    Node do have a list of connected kbLink's.
    So one can walk trough a graph in two ways:
-   1- via its kbLink list 
-   2- via the node connected to the kbLink's 
+   1- via its kbLink list
+   2- via the node connected to the kbLink's
 */
 class A2DKBOOLDLLEXP kbLink
 {

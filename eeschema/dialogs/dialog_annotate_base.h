@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 21 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -56,9 +56,15 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 		wxRadioButton* m_rbSortBy_X_Position;
 		
 		wxStaticBitmap* annotate_down_right_bitmap;
+		wxRadioButton* m_rbSortBy_X_Position_and_useSheet;
+		
+		wxStaticBitmap* annotate_down_right_bitmap1;
 		wxRadioButton* m_rbSortBy_Y_Position;
 		
 		wxStaticBitmap* annotate_right_down_bitmap;
+		wxRadioButton* m_rbSortBy_Y_Position_and_useSheet;
+		
+		wxStaticBitmap* annotate_right_down_bitmap1;
 		wxRadioButton* rbSortByValue;
 		
 		wxStaticBitmap* annotate_by_value_bitmap;
@@ -68,13 +74,14 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 		wxButton* m_btnApply;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnApplyClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnClearAnnotationCmpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnApplyClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 432,376 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_ANNOTATE_BASE();
 	
 };

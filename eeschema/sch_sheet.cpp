@@ -861,6 +861,11 @@ void SCH_SHEET::DisplayInfo( WinEDA_DrawFrame* frame )
     frame->ClearMsgPanel();
     frame->AppendMsgPanel( _( "Sheet name" ), m_SheetName, CYAN );
     frame->AppendMsgPanel( _( "File name" ), m_FileName, BROWN );
+#if 0   // Set to 1 to display the sheet time stamp (mainly for test)
+    wxString msg;
+    msg.Printf(wxT("%.8X"), m_TimeStamp );
+    frame->AppendMsgPanel( _( "Time Stamp" ), msg, BLUE );
+#endif
 }
 
 

@@ -17,7 +17,7 @@ using namespace std;
  * Function TestLineHit
  * test for hit on line segment i.e. a point within a given distance from segment
  * @param x, y = cursor coords
- * @param xi,yi and xf,yf = the end-points of the line segment
+ * @param xi,yi,xf,yf = the end-points of the line segment
  * @param dist = maximum distance for hit
  * return true if dist < distance between the point and the segment
  */
@@ -484,7 +484,7 @@ int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int
     return 1;
 }
 
-/**
+/*
  * Function TestForIntersectionOfStraightLineSegments
  * Test for intersection of line segments
  * If lines are parallel, returns false

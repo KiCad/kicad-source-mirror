@@ -21,6 +21,7 @@ set(EESCHEMA_SRCS
     cleanup.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
+    component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
     dangling_ends.cpp

@@ -30,6 +30,12 @@
 #include "protos.h"
 
 
+extern void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
+extern bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+extern bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
+extern int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
+
+
 /* Local variables */
 static bool     s_ListByRef    = TRUE;
 static bool     s_ListByValue  = TRUE;
@@ -392,20 +398,17 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
         return;
     }
 
-    std::vector <SCH_REFERENCE> cmplist;
+    SCH_REFERENCE_LIST cmplist;
     SCH_SHEET_LIST sheetList;              // uses a global
 
     sheetList.GetComponents( cmplist, false );
 
     // sort component list by ref and remove sub components
     if( !aIncludeSubComponents )
-    {
-        sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
-        DeleteSubCmp( cmplist );
-    }
+        cmplist.RemoveSubComponentsFromList();
 
     // sort component list by value
-    sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
+    cmplist.SortComponentsByValueOnly( );
     PrintComponentsListByPart( f, cmplist,aIncludeSubComponents );
 
     fclose( f );
@@ -431,16 +434,16 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
         return;
     }
 
-    std::vector <SCH_REFERENCE> cmplist;
+    SCH_REFERENCE_LIST cmplist;
     SCH_SHEET_LIST sheetList;              // uses a global
 
     sheetList.GetComponents( cmplist, false );
 
     // sort component list
-    sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
+    cmplist.SortComponentsByReferenceOnly( );
 
     if( !aIncludeSubComponents )
-        DeleteSubCmp( cmplist );
+        cmplist.RemoveSubComponentsFromList();
 
     // create the file
     PrintComponentsListByRef( f, cmplist, TRUE, aIncludeSubComponents );
@@ -469,12 +472,12 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         return;
     }
 
-    std::vector <SCH_REFERENCE> cmplist;
-    SCH_SHEET_LIST sheetList;              // uses a global
+    SCH_REFERENCE_LIST cmplist;
+    SCH_SHEET_LIST sheetList;
 
     sheetList.GetComponents( cmplist, false );
 
-    itemCount = cmplist.size();
+    itemCount = cmplist.GetCount();
 
     if( itemCount )
     {
@@ -486,17 +489,17 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
         // sort component list
-        sort( cmplist.begin(), cmplist.end(), SortComponentsByReference );
+        cmplist.SortComponentsByReferenceOnly();
 
         if( !aIncludeSubComponents )
-            DeleteSubCmp( cmplist );
+            cmplist.RemoveSubComponentsFromList();
 
         if( m_ListCmpbyRefItems->GetValue() )
             PrintComponentsListByRef( f, cmplist, false, aIncludeSubComponents );
 
         if( m_ListCmpbyValItems->GetValue() )
         {
-            sort( cmplist.begin(), cmplist.end(), SortComponentsByValue );
+            cmplist.SortComponentsByValueOnly();
             PrintComponentsListByVal( f, cmplist, aIncludeSubComponents );
         }
     }
@@ -576,10 +579,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
 /* Print the B.O.M sorted by reference
  */
-int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                        f,
-                                                std::vector <SCH_REFERENCE>& aList,
-                                                bool                         CompactForm,
-                                                bool                         aIncludeSubComponents )
+int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
+                                                SCH_REFERENCE_LIST& aList,
+                                                bool                     CompactForm,
+                                                bool                     aIncludeSubComponents )
 {
     wxString        msg;
 
@@ -627,7 +630,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                        f,
     wxString        subRef;
 
     // Print list of items
-    for( unsigned ii = 0; ii < aList.size(); ii++ )
+    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
         EDA_ITEM* item = aList[ii].m_RootCmp;
 
@@ -678,25 +681,23 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                        f,
         if( aIncludeSubComponents )
         {
             msg = aList[ii].m_SheetPath.PathHumanReadable();
+            BASE_SCREEN * screen = (BASE_SCREEN*) comp->GetParent();
 
-            if( CompactForm )
+            if( screen )
             {
-                fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
-
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) comp->GetParent(),
-                                                      comp->m_Pos );
-
-                fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
-                         CONV_TO_UTF8( msg ) );
-            }
-            else
-            {
-                fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-
-                msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) comp->GetParent(),
-                                                      comp->m_Pos );
-
-                fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+                if( CompactForm )
+                {
+                    fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
+                             CONV_TO_UTF8( msg ) );
+                }
+                else
+                {
+                    fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+                }
             }
         }
 
@@ -726,7 +727,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                        f,
  *   FIELD2 - manufacture part number
  *   FIELD3 - distributor part number
  */
-int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, std::vector <SCH_REFERENCE>& aList,
+int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aList,
                                                  bool aIncludeSubComponents )
 {
     int             qty = 0;
@@ -744,11 +745,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, std::vector <SCH_REFER
     SCH_COMPONENT*  nextCmp;
     SCH_COMPONENT   dummyCmp;           // A dummy component, to store fields
 
-    for( unsigned ii = 0; ii < aList.size(); ii++ )
+    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
         currCmp = (SCH_COMPONENT*) aList[ii].m_RootCmp;
 
-        if( ii < aList.size() -1 )
+        if( ii < aList.GetCount() -1 )
             nextCmp = aList[ii+1].m_RootCmp;
         else
             nextCmp = NULL;
@@ -860,9 +861,9 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, std::vector <SCH_REFER
 }
 
 
-int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*                        f,
-                                                std::vector <SCH_REFERENCE>& aList,
-                                                bool                         aIncludeSubComponents )
+int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
+                                                SCH_REFERENCE_LIST& aList,
+                                                bool                aIncludeSubComponents )
 {
     EDA_ITEM*      schItem;
     SCH_COMPONENT* DrawLibItem;
@@ -879,7 +880,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*                        f,
 
     fputs( CONV_TO_UTF8( msg ), f );
 
-    for( unsigned ii = 0; ii < aList.size(); ii++ )
+    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
         schItem = aList[ii].m_RootCmp;
 
@@ -914,11 +915,14 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*                        f,
         // print the sheet path
         if( aIncludeSubComponents )
         {
-            msg = aList[ii].m_SheetPath.PathHumanReadable();
-            fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
-            msg = m_Parent->GetXYSheetReferences( (BASE_SCREEN*) DrawLibItem->GetParent(),
-                                                  DrawLibItem->m_Pos );
-            fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+            BASE_SCREEN * screen = (BASE_SCREEN*) DrawLibItem->GetParent();
+            if( screen )
+            {
+                msg = aList[ii].m_SheetPath.PathHumanReadable();
+                fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+                msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->m_Pos );
+                fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+            }
         }
 
         PrintFieldData( f, DrawLibItem );

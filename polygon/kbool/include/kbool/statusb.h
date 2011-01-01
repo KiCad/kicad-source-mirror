@@ -1,10 +1,10 @@
-/*! \file kbool/include/kbool/statusb.h
+/*! \file statusb.h
     \author Probably Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Probably Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: statusb.h,v 1.3 2009/02/06 21:33:03 titato Exp $
 */
 

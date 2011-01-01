@@ -46,13 +46,13 @@ private:
      */
     void    CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents );
 
-    int     PrintComponentsListByRef( FILE* f, std::vector <SCH_REFERENCE>& aList,
+    int     PrintComponentsListByRef( FILE* f, SCH_REFERENCE_LIST& aList,
                                       bool CompactForm, bool aIncludeSubComponents );
 
-    int     PrintComponentsListByVal( FILE* f, std::vector <SCH_REFERENCE>& aList,
+    int     PrintComponentsListByVal( FILE* f, SCH_REFERENCE_LIST& aList,
                                       bool aIncludeSubComponents );
 
-    int     PrintComponentsListByPart( FILE* f, std::vector <SCH_REFERENCE>& aList,
+    int     PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aList,
                                        bool aIncludeSubComponents );
 
     void    PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem, bool CompactForm = FALSE );

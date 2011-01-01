@@ -253,7 +253,7 @@ wxString LIB_COMPONENT::GetLibraryName()
 
 
 /**
- * Function IsMulti
+ * Function ReturnSubReference
  * @return the sub reference for component having multiple parts per package.
  * The sub reference identify the part (or unit)
  * @param aUnit = the part identifier ( 1 to 26)
