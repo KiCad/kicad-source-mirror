@@ -247,9 +247,7 @@ void PART::inherit( const PART& other )
 {
     contains = other.contains;
 
-    setExtends( other.extends ? new LPID( *other.extends ) : 0 );
-
-    body     = other.body;
+    // @todo copy the inherited drawables, properties, and pins here
 }
 
 
@@ -258,8 +256,11 @@ PART& PART::operator=( const PART& other )
     owner    = other.owner;
     partName = other.partName;
     revision = other.revision;
+    body     = other.body;
 
-    // maintain inherit() as a partial assignment operator.
+    setExtends( other.extends ? new LPID( *other.extends ) : 0 );
+
+    // maintain in concert with inherit(), which is a partial assignment operator.
     inherit( other );
 
     return *this;
