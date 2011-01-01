@@ -15,6 +15,8 @@
 #include "class_sch_screen.h"
 #include "sch_item_struct.h"
 
+#include "netlist.h"
+#include "class_library.h"
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
 #include "sch_component.h"
@@ -55,16 +57,20 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
         return true;
 
     SCH_ITEM* schitem = LastDrawList();
+
     while( schitem && GetSheetsCount() < NB_MAX_SHEET )
     {
         if( schitem->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             Push( sheet );
+
             if( aPath == Path() )
                 return true;
+
             if( BuildSheetPathInfoFromSheetPathValue( aPath ) )
                 return true;
+
             Pop();
         }
         schitem = schitem->Next();
@@ -84,17 +90,17 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 {
     if( m_numSheets > aSheetPathToTest.m_numSheets )
         return 1;
+
     if( m_numSheets < aSheetPathToTest.m_numSheets )
         return -1;
 
     //otherwise, same number of sheets.
     for( unsigned i = 0; i<m_numSheets; i++ )
     {
-        if( m_sheets[i]->m_TimeStamp >
-            aSheetPathToTest.m_sheets[i]->m_TimeStamp )
+        if( m_sheets[i]->m_TimeStamp > aSheetPathToTest.m_sheets[i]->m_TimeStamp )
             return 1;
-        if( m_sheets[i]->m_TimeStamp <
-            aSheetPathToTest.m_sheets[i]->m_TimeStamp )
+
+        if( m_sheets[i]->m_TimeStamp < aSheetPathToTest.m_sheets[i]->m_TimeStamp )
             return -1;
     }
 
@@ -111,6 +117,7 @@ SCH_SHEET* SCH_SHEET_PATH::Last()
 {
     if( m_numSheets )
         return m_sheets[m_numSheets - 1];
+
     return NULL;
 }
 
@@ -122,8 +129,10 @@ SCH_SHEET* SCH_SHEET_PATH::Last()
 SCH_SCREEN* SCH_SHEET_PATH::LastScreen()
 {
     SCH_SHEET* lastSheet = Last();
+
     if( lastSheet )
         return lastSheet->m_AssociatedScreen;
+
     return NULL;
 }
 
@@ -196,6 +205,7 @@ SCH_SHEET* SCH_SHEET_PATH::Pop()
         m_numSheets--;
         return m_sheets[m_numSheets];
     }
+
     return NULL;
 }
 
@@ -262,6 +272,78 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         }
 
         t = t->Next();
+    }
+}
+
+
+void SCH_SHEET_PATH::AnnotatePowerSymbols( int* aReference )
+{
+    int ref = 1;
+
+    if( aReference != NULL )
+        ref = *aReference;
+
+    for( EDA_ITEM* item = LastDrawList(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+        LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
+        if( ( entry == NULL ) || !entry->IsPower() )
+            continue;
+
+        wxString refstr = component->GetPrefix();
+
+        //str will be "C?" or so after the ClearAnnotation call.
+        while( refstr.Last() == '?' )
+            refstr.RemoveLast();
+
+        if( !refstr.StartsWith( wxT( "#" ) ) )
+            refstr = wxT( "#" ) + refstr;
+
+        refstr << wxT( "0" ) << ref;
+        component->SetRef( this, refstr );
+        ref++;
+    }
+
+    if( aReference != NULL )
+        *aReference = ref;
+}
+
+
+void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences,
+                                    bool                aIncludePowerSymbols )
+{
+    // Search to sheet path number:
+    int sheetnumber = 1;    // 1 = root
+    SCH_SHEET_LIST sheetList;
+    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path != NULL;
+         path = sheetList.GetNext(), sheetnumber++ )
+        if( Cmp(*path) == 0 )
+            break;
+
+    for( SCH_ITEM* item = LastDrawList(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+            // Skip pseudo components, which have a reference starting with #.  This mainly
+            // effects power symbols.
+            if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
+                continue;
+
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
+            if( entry == NULL )
+                continue;
+
+            SCH_REFERENCE reference = SCH_REFERENCE( component, entry, *this );
+            reference.m_SheetNum = sheetnumber;
+            aReferences.AddItem( reference );
+        }
     }
 }
 
@@ -371,6 +453,7 @@ bool SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
     m_numSheets = d1.m_numSheets;
 
     unsigned i;
+
     for( i = 0; i < m_numSheets; i++ )
     {
         m_sheets[i] = d1.m_sheets[i];
@@ -437,8 +520,10 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
     m_index = 0;
     m_count = 0;
     m_List  = NULL;
+
     if( aSheet == NULL )
         aSheet = g_RootSheet;
+
     BuildSheetList( aSheet );
 }
 
@@ -450,8 +535,10 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 SCH_SHEET_PATH* SCH_SHEET_LIST::GetFirst()
 {
     m_index = 0;
+
     if( GetCount() > 0 )
         return &( m_List[0] );
+
     return NULL;
 }
 
@@ -465,6 +552,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetNext()
 {
     if( m_index < GetCount() )
         m_index++;
+
     return GetSheet( m_index );
 }
 
@@ -501,6 +589,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex )
 {
     if( aIndex < GetCount() )
         return &( m_List[aIndex] );
+
     return NULL;
 }
 
@@ -546,6 +635,23 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
 }
 
 
+void SCH_SHEET_LIST::AnnotatePowerSymbols()
+{
+    int ref = 1;
+
+    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
+        path->AnnotatePowerSymbols( &ref );
+}
+
+
+void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences,
+                                    bool                aIncludePowerSymbols )
+{
+    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
+        path->GetComponents( aReferences, aIncludePowerSymbols );
+}
+
+
 SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFoundIn,
                                         SCH_ITEM* aLastItem, bool aWrap )
 {
@@ -566,6 +672,7 @@ SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFo
                 {
                     if( aSheetFoundIn )
                         *aSheetFoundIn = sheet;
+
                     return drawItem;
                 }
                 else if( !firstItemFound && drawItem == aLastItem )
@@ -610,6 +717,7 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
                 {
                     if( aSheetFoundIn )
                         *aSheetFoundIn = sheet;
+
                     return drawItem;
                 }
                 else if( !firstItemFound && drawItem == aLastItem )
@@ -661,6 +769,7 @@ SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
                 {
                     if( aSheetFoundIn )
                         *aSheetFoundIn = sheet;
+
                     return drawItem;
                 }
             }

@@ -25,7 +25,7 @@ class PLOTTER;
 class SCH_SHEET;
 class LIB_PIN;
 class LABEL_OBJECT;
-class OBJ_CMP_TO_LIST;
+class NETLIST_OBJECT;
 
 
 wxString ReturnDefaultFieldName( int aFieldNdx );
@@ -65,43 +65,11 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* Draw
 void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 
-// build_BOM.cpp
-/**
- * Class LABEL_OBJECT
- * is used in build BOM to handle the list of labels in schematic
- * because in a complex hierarchy, a label is used more than once,
- * and had more than one sheet path, so we must create a flat list of labels
- */
-class LABEL_OBJECT
-{
-public:
-    int            m_LabelType;
-    SCH_ITEM*      m_Label;
-
-    //have to store it here since the object references will be duplicated.
-    SCH_SHEET_PATH m_SheetPath;  //composed of UIDs
-
-public: LABEL_OBJECT()
-    {
-        m_Label     = NULL;
-        m_LabelType = 0;
-    }
-};
-
-void BuildComponentsListFromSchematic( std::vector <OBJ_CMP_TO_LIST>& aList );
-void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
-bool SortComponentsByReference(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
-bool SortComponentsByValue(  const OBJ_CMP_TO_LIST& obj1, const OBJ_CMP_TO_LIST& obj2 );
-bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-void DeleteSubCmp( std::vector <OBJ_CMP_TO_LIST>& aList );
-int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
-
-
 // operations_on_item_lists.cpp
+
 /**
  * Function DuplicateStruct
- *  Routine to create a new copy of given struct.
+ * creates a new copy of given struct.
  * @param aDrawStruct = the SCH_ITEM to duplicate
  * @param aClone (defualt = true)
  *     if true duplicate also some parameters that must be unique
@@ -193,12 +161,6 @@ EDA_Colors ReturnLayerColor( int Layer );
 /* NETLIST.CPP */
 /**************/
 int  IsBusLabel( const wxString& LabelDrawList );
-
-/***************/
-/* ANNOTATE.CPP */
-/***************/
-void ReAnnotatePowerSymbolsOnly();
-
 
 /************/
 /* PLOT.CPP */
@@ -311,5 +273,20 @@ void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
+
+
+/* Prototypes in netlist_control.cpp */
+void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
+
+/**
+ * Function ReturnUserNetlistTypeName
+ * to retrieve user netlist type names
+ * @param first_item = true: return first name of the list, false = return next
+ * @return a wxString : name of the type netlist or empty string
+ * this function must be called first with "first_item" = true
+ * and after with "first_item" = false to get all the other existing netlist
+ * names
+ */
+wxString ReturnUserNetlistTypeName( bool first_item );
 
 #endif  /* __PROTOS_H__ */

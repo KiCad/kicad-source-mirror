@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 04/12/2010 17:36:18
+EESchema Schematic File Version 2  date 30/12/2010 18:27:52
 LIBS:power
 LIBS:device
 LIBS:valves
@@ -24,12 +24,13 @@ LIBS:display
 LIBS:cypress
 LIBS:siliconi
 LIBS:contrib
-EELAYER 23  0
+LIBS:ecc83-pp_v2-cache
+EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 Sheet 1 1
 Title "ECC Push-Pull"
-Date "11 dec 2006"
+Date "30 dec 2010"
 Rev "0.1"
 Comp ""
 Comment1 ""
@@ -41,7 +42,6 @@ Wire Wire Line
 	6050 4450 6150 4450
 Wire Wire Line
 	5750 3850 5750 4050
-Connection ~ 4450 4500
 Wire Wire Line
 	4450 5400 4450 4450
 Wire Wire Line
@@ -102,7 +102,7 @@ L ECC83 U1
 U 3 1 48B4F266
 P 9950 5700
 F 0 "U1" H 10080 6010 50  0000 C CNN
-F 1 "ECC81_83" H 10300 5400 50  0000 C CNN
+F 1 "ECC83" H 10300 5400 50  0000 C CNN
 F 2 "VALVE-NOVAL_P" H 10220 5300 50  0001 C CNN
 	3    9950 5700
 	1    0    0    -1  

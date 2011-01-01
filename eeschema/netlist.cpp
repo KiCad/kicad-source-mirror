@@ -18,7 +18,6 @@
 #include "sch_no_connect.h"
 #include "sch_text.h"
 #include "sch_sheet.h"
-
 #include "algorithm"
 
 #include <boost/foreach.hpp>
@@ -369,8 +368,8 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
  * @param aLabelItemBuffer = list of NETLIST_OBJECT type labels candidates.
  *  labels are local labels, hierarchical labels or pin labels
  *   labels in included sheets have a lower priority than labels in the current sheet.
- *     so labels inside the root sheet have the highter priority.
- *   pin labels are global labels and have the highter priority
+ *     so labels inside the root sheet have the higher priority.
+ *   pin labels are global labels and have the higher priority
  *   local labels have the lower priority
  *   labels having the same priority are sorted by alphabetic order.
  *
@@ -434,7 +433,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
             }
             else    // not global: names are prefixed by their sheetpath
             {
-                // use name defined in highter hierarchical sheet
+                // use name defined in higher hierarchical sheet
                 // (i.e. shorter path because paths are /<timestamp1>/<timestamp2>/...
                 // and timestamp = 8 letters.
                 if( candidate->m_SheetList.Path().Length() < item->m_SheetList.Path().Length() )

@@ -517,7 +517,8 @@ void WinEDA_NetlistFrame::GenNetlist( wxCommandEvent& event )
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
                                     bool aUse_netnames )
 {
-    ReAnnotatePowerSymbolsOnly();
+    SCH_SHEET_LIST sheets;
+    sheets.AnnotatePowerSymbols();
 
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )
@@ -534,19 +535,8 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
     }
 
     /* Cleanup the entire hierarchy */
-    SCH_SCREENS ScreenList;
-    for( SCH_SCREEN* screen = ScreenList.GetFirst();
-        screen != NULL;
-        screen = ScreenList.GetNext() )
-    {
-        bool ModifyWires;
-        ModifyWires = screen->SchematicCleanUp( NULL );
-
-        // if wire list has changed, delete the Undo Redo list to avoid
-        // pointer problems with deleted data
-        if( ModifyWires )
-            screen->ClearUndoRedoList();
-    }
+    SCH_SCREENS screens;
+    screens.SchematicCleanUp();
 
     BuildNetListBase();
     bool success = WriteNetListFile( aFormat, aFullFileName, g_OptNetListUseNames );
@@ -555,23 +545,18 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
 }
 
 
-/***********************************************************/
 void WinEDA_NetlistFrame::OnCancelClick( wxCommandEvent& event )
-/***********************************************************/
 {
     EndModal( NET_ABORT );
 }
 
 
-/***********************************************************/
 void WinEDA_NetlistFrame::RunSimulator( wxCommandEvent& event )
-/***********************************************************/
 {
     wxFileName fn;
     wxString   ExecFile, CommandLine;
 
-    g_SimulatorCommandLine =
-        m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
+    g_SimulatorCommandLine = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
     g_SimulatorCommandLine.Trim( FALSE );
     g_SimulatorCommandLine.Trim( TRUE );
     ExecFile = g_SimulatorCommandLine.BeforeFirst( ' ' );

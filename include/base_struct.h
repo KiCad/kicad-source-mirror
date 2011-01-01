@@ -757,6 +757,10 @@ public:
      * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
      */
     wxString GetTextStyleName();
+
+    void SetText( const wxString& aText ) { m_Text = aText; }
+
+    wxString GetText() const { return m_Text; }
 };
 
 #endif /* BASE_STRUCT_H */

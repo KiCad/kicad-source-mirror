@@ -1,10 +1,10 @@
-/*! \file include/record.h
+/*! \file record.h
     \author Klaas Holwerda
- 
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: record.h,v 1.5 2009/09/10 17:04:09 titato Exp $
 */
 

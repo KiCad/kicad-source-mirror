@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 21 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -60,7 +60,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerXpos;
 	bSizerXpos = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_rbSortBy_X_Position = new wxRadioButton( this, ID_SORT_BY_X_POSITION, _("Sort Components by &X Position"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbSortBy_X_Position = new wxRadioButton( this, ID_SORT_BY_X_POSITION, _("Sort components by &X position"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizerXpos->Add( m_rbSortBy_X_Position, 0, wxALL, 3 );
 	
 	
@@ -71,10 +71,24 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	b_orderOptSizer->Add( bSizerXpos, 0, wxEXPAND|wxRIGHT, 5 );
 	
+	wxBoxSizer* bSizerXpos_and_use_sheet;
+	bSizerXpos_and_use_sheet = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbSortBy_X_Position_and_useSheet = new wxRadioButton( this, wxID_ANY, _("Sort components by X position and use sheet &number"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerXpos_and_use_sheet->Add( m_rbSortBy_X_Position_and_useSheet, 0, wxALL, 3 );
+	
+	
+	bSizerXpos_and_use_sheet->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	annotate_down_right_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerXpos_and_use_sheet->Add( annotate_down_right_bitmap1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT, 12 );
+	
+	b_orderOptSizer->Add( bSizerXpos_and_use_sheet, 0, wxEXPAND|wxRIGHT, 5 );
+	
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_rbSortBy_Y_Position = new wxRadioButton( this, ID_SORT_BY_Y_POSITION, _("Sort Components by &Y Position"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbSortBy_Y_Position = new wxRadioButton( this, ID_SORT_BY_Y_POSITION, _("Sort components by &Y position"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerYpos->Add( m_rbSortBy_Y_Position, 0, wxALL, 3 );
 	
 	
@@ -85,10 +99,24 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	b_orderOptSizer->Add( bSizerYpos, 0, wxEXPAND|wxRIGHT, 5 );
 	
+	wxBoxSizer* bSizerYpos_and_useSheet;
+	bSizerYpos_and_useSheet = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbSortBy_Y_Position_and_useSheet = new wxRadioButton( this, wxID_ANY, _("Sort components by Y position and use &sheet number"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerYpos_and_useSheet->Add( m_rbSortBy_Y_Position_and_useSheet, 0, wxALL, 3 );
+	
+	
+	bSizerYpos_and_useSheet->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	annotate_right_down_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerYpos_and_useSheet->Add( annotate_right_down_bitmap1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 12 );
+	
+	b_orderOptSizer->Add( bSizerYpos_and_useSheet, 0, wxEXPAND|wxRIGHT, 5 );
+	
 	wxBoxSizer* bSizerValuepos;
 	bSizerValuepos = new wxBoxSizer( wxHORIZONTAL );
 	
-	rbSortByValue = new wxRadioButton( this, ID_SORT_BY_VALUE, _("Sort Components by &Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	rbSortByValue = new wxRadioButton( this, ID_SORT_BY_VALUE, _("Sort components by &value"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerValuepos->Add( rbSortByValue, 0, wxALL, 3 );
 	
 	
@@ -122,7 +150,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	this->SetSizer( bmainSizer );
 	this->Layout();
-	bmainSizer->Fit( this );
 	
 	// Connect Events
 	m_btnClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnCancelClick ), NULL, this );
@@ -136,4 +163,5 @@ DIALOG_ANNOTATE_BASE::~DIALOG_ANNOTATE_BASE()
 	m_btnClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnCancelClick ), NULL, this );
 	m_btnClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnClearAnnotationCmpClick ), NULL, this );
 	m_btnApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnApplyClick ), NULL, this );
+	
 }

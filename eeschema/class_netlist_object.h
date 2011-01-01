@@ -123,4 +123,8 @@ public:
     }
 };
 
+// Buffer to build the list of items used in netlist and erc calculations
+typedef std::vector <NETLIST_OBJECT*> NETLIST_OBJECT_LIST;
+
+
 #endif  // _CLASS_NETLIST_OBJECT_H_

@@ -45,7 +45,7 @@ CPolyLine::~CPolyLine()
  * if more than one outside contour are found, extra CPolyLines will be created
  * because copper areas have only one outside contour
  * Therefore, if this results in new CPolyLines, return them as std::vector pa
- * @param aExtraPolys: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
+ * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
  * @param bRetainArcs == TRUE, try to retain arcs in polys
  * @return number of external contours, or -1 if error
  */

@@ -88,7 +88,7 @@ INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h \
                          *.cpp
 RECURSIVE              = YES
-EXCLUDE                =
+EXCLUDE                = include\boost
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       =
 EXCLUDE_SYMBOLS        =

@@ -7,6 +7,9 @@
 #ifndef _NETLIST_CONTROL_H_
 #define _NETLIST_CONTROL_H_
 
+class WinEDA_EnterText;
+
+
 /* Event id for notebook page buttons: */
 enum id_netlist {
     ID_CREATE_NETLIST = 1550,
@@ -64,6 +67,24 @@ public:
                       int id_NetType, int idCheckBox, int idCreateFile,
                       bool selected );
     ~EDA_NoteBookPage() { };
+};
+
+
+#define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
+
+/* Id to select netlist type */
+enum  TypeNetForm {
+    NET_TYPE_UNINIT = 0,
+    NET_TYPE_PCBNEW,
+    NET_TYPE_ORCADPCB2,
+    NET_TYPE_CADSTAR,
+    NET_TYPE_SPICE,
+    NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
+                         * is the first id for user netlist format
+                         * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1
+                         * is the last id for user netlist format
+                         */
+    NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
 };
 
 

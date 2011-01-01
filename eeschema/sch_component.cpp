@@ -622,7 +622,7 @@ void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
+void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     wxString       defRef    = m_prefix;
     bool           KeepMulti = false;
@@ -648,15 +648,15 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
         wxString NewHref;
         wxString path;
 
-        if( aSheet )
-            path = GetPath( aSheet );
+        if( aSheetPath )
+            path = GetPath( aSheetPath );
 
         for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
         {
             // Break hierarchical reference in path, ref and multi selection:
             reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
 
-            if( aSheet == NULL || reference_fields[0].Cmp( path ) == 0 )
+            if( aSheetPath == NULL || reference_fields[0].Cmp( path ) == 0 )
             {
                 if( KeepMulti )  // Get and keep part selection
                     multi = reference_fields[2];
@@ -680,6 +680,8 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheet )
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
     m_Fields[REFERENCE].m_Text = defRef; //for drawing.
+
+    SetModified();
 }
 
 

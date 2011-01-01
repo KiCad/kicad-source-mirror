@@ -412,7 +412,9 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     m_writeErcFile = m_WriteResultOpt->GetValue();
 
-    ReAnnotatePowerSymbolsOnly();
+    /* Build the whole sheet list in hierarchy (sheet, not screen) */
+    SCH_SHEET_LIST  sheets;
+    sheets.AnnotatePowerSymbols();
 
     if( m_Parent->CheckAnnotate( aMessagesList, false ) )
     {

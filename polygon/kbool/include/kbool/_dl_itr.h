@@ -1,10 +1,10 @@
-/*! \file kbool/include/kbool/_dl_itr.h
-    \author Klaas Holwerda 
- 
+/*! \file _dl_itr.h
+    \author Klaas Holwerda
+
     Copyright: 2001-2004 (C) Klaas Holwerda
- 
-    Licence: see kboollicense.txt 
- 
+
+    Licence: see kboollicense.txt
+
     RCS-ID: $Id: _dl_itr.h,v 1.6 2009/09/10 17:04:09 titato Exp $
 */
 

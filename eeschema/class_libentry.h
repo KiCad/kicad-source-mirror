@@ -545,7 +545,7 @@ public:
     bool IsMulti() { return m_unitCount > 1; }
 
     /**
-     * Function IsMulti
+     * Function ReturnSubReference
      * @return the sub reference for component having multiple parts per package.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)
