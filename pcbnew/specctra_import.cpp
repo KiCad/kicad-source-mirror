@@ -96,7 +96,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
         db.LoadSESSION( fullFileName );
         db.FromSESSION( GetBoard() );
     }
-    catch( IO_ERROR ioe )
+    catch( IO_ERROR& ioe )
     {
         SetLocaleTo_Default( );    // revert to the current locale
 

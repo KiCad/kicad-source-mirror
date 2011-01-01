@@ -25,6 +25,7 @@ keywords
 length
 line
 line_width
+model
 name
 none
 number
@@ -38,6 +39,7 @@ pin_del
 pin_merge
 pin_rename
 pin_renum
+pin_swap
 polyline
 pos
 power_in
@@ -58,5 +60,6 @@ tristate
 unconnected
 units
 unspecified
+value
 visible
 xy

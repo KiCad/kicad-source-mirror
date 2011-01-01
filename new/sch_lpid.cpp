@@ -187,6 +187,7 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
         THROW_PARSE_ERROR(
                 _( "Illegal character found in LPID string" ),
                 wxConvertMB2WX( aLPID.c_str() ),
+                aLPID.c_str(),
                 0,
                 offset
                 );

@@ -413,6 +413,12 @@ int main( int argc, char** argv )
 
         lib_table.Test();
     }
+    catch( PARSE_ERROR& ioe )   // most derived class first
+    {
+        printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );
+        printf( "%s", ioe.inputLine.c_str() );      // rare not to have \n at end
+        printf( "%*s^\n", ioe.byteIndex-1, " " );
+    }
     catch( IO_ERROR& ioe )
     {
         printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );

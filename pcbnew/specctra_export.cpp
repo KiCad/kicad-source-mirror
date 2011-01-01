@@ -111,7 +111,7 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.
     }
-    catch( IO_ERROR ioe )
+    catch( IO_ERROR& ioe )
     {
         ok = false;
 

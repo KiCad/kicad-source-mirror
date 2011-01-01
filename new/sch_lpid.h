@@ -59,7 +59,7 @@ class LPID  // aka GUID
 {
 public:
 
-    LPID();
+    LPID() {}
 
     /**
      * Constructor LPID

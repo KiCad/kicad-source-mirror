@@ -331,13 +331,6 @@ public:
     static bool IsSymbol( int aTok );
 
     /**
-     * Function ThrowIOError
-     * encapsulates the formatting of an error message which contains the exact
-     * location within the input file of something the caller is rejecting.
-     */
-    void ThrowIOError( wxString aText, int charOffset ) throw( IO_ERROR );
-
-    /**
      * Function Expecting
      * throws an IO_ERROR exception with an input file specific error message.
      * @param aTok is the token/keyword type which was expected at the current input location.
@@ -362,6 +355,16 @@ public:
      * @throw IO_ERROR with the location within the input file of the problem.
      */
     void Unexpected( int aTok ) throw( IO_ERROR );
+
+    /**
+     * Function Duplicate
+     * throws an IO_ERROR exception with a message saying specifically that aTok
+     * is a duplicate of one already seen in current context.
+     * @param aTok is the token/keyword type which was not expected at the
+     *         current input location.
+     * @throw IO_ERROR with the location within the input file of the problem.
+     */
+    void Duplicate( int aTok ) throw( IO_ERROR );
 
     /**
      * Function Unexpected
@@ -412,12 +415,32 @@ public:
     }
 
     /**
+     * Function FromUTF8
+     * returns the current token text as a wxString, assuming that the input
+     * byte stream is UTF8 encoded.
+     */
+    wxString FromUTF8()
+    {
+        return wxString::FromUTF8( curText.c_str() );
+    }
+
+    /**
      * Function CurLineNumber
      * returns the current line number within my LINE_READER
      */
     int CurLineNumber()
     {
         return reader->LineNumber();
+    }
+
+    /**
+     * Function CurLine
+     * returns the current line of text, from which the CurText() would return
+     * its token.
+     */
+    const char* CurLine()
+    {
+        return (const char*)(*reader);
     }
 
     /**
@@ -433,7 +456,7 @@ public:
 
     /**
      * Function CurOffset
-     * returns the char offset within the current line, using a 1 based index.
+     * returns the byte offset within the current line, using a 1 based index.
      * @return int - a one based index into the current line.
      */
     int CurOffset()

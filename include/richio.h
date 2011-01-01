@@ -46,8 +46,8 @@
  */
 
 
-#define IO_FORMAT       _( "IO_ERROR: '%s'\n from %s : %s" )
-#define PARSE_FORMAT    _( "PARSE_ERROR: '%s' in input/source '%s', line %d, offset %d\n from %s : %s" )
+#define IO_FORMAT       _( "IO_ERROR: %s\n from %s : %s" )
+#define PARSE_FORMAT    _( "PARSE_ERROR: %s in input/source \"%s\", line %d, offset %d\n from %s : %s" )
 
 // references:
 // http://stackoverflow.com/questions/2670816/how-can-i-use-the-compile-time-constant-line-in-a-string
@@ -123,38 +123,49 @@ struct IO_ERROR // : std::exception
 };
 
 
-#define THROW_PARSE_ERROR( msg, input, line, offset )   throw PARSE_ERROR( __FILE__, __LOC__, msg, input, line, offset )
-
 /**
  * Class PARSE_ERROR
- * contains a filename or source description, a line number, a character offset,
- * and an error message.
+ * contains a filename or source description, a problem input line, a line number,
+ * a byte offset, and an error message which contains the the caller's report and his
+ * call site information: CPP source file, function, and line number.
  * @author Dick Hollenbeck
  */
 struct PARSE_ERROR : public IO_ERROR
 {
     // wxString errorText is still public from IO_ERROR
 
-    int lineNumber;     ///< at which line number, 1 based index.
-    int byteIndex;      ///< at which character position within the line, 1 based index
+    int         lineNumber;     ///< at which line number, 1 based index.
+    int         byteIndex;      ///< at which character position within the line, 1 based index
 
+    /// problem line of input [say, from a LINE_READER].
+    /// this is brought up in original byte format rather than wxString form, incase
+    /// there was a problem with the encoding, in which case converting to wxString is
+    /// not reliable in this context.
+    std::string inputLine;
+
+    /**
+     * Constructor
+     * which is normally called via the macro THROW_PARSE_ERROR so that
+     * __FILE__ and __LOC__ can be captured from the call site.
+     */
     PARSE_ERROR( const char* aThrowersFile, const char* aThrowersLoc,
                  const wxString& aMsg, const wxString& aSource,
+                 const char* aInputLine,
                  int aLineNumber, int aByteIndex ) :
         IO_ERROR()
     {
-        init( aThrowersFile, aThrowersLoc, aMsg, aSource, aLineNumber, aByteIndex );
+        init( aThrowersFile, aThrowersLoc, aMsg, aSource, aInputLine, aLineNumber, aByteIndex );
     }
 
     void init( const char* aThrowersFile, const char* aThrowersLoc,
                const wxString& aMsg, const wxString& aSource,
+               const char* aInputLine,
                int aLineNumber, int aByteIndex )
     {
-        // save line and offset in binary for Sweet text editor, which will catch exceptions
+        // save inpuLine, lineNumber, and offset for UI (.e.g. Sweet text editor)
+        inputLine  = aInputLine;
         lineNumber = aLineNumber;
         byteIndex  = aByteIndex;
-
-        // #define PARSE_FORMAT    _( "PARSE_ERROR: %s in source %s, line %d, offset %d\nfrom cpp:%s func:%s" )
 
         errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
             aLineNumber, aByteIndex,
@@ -164,6 +175,11 @@ struct PARSE_ERROR : public IO_ERROR
 
     ~PARSE_ERROR() throw ( /*none*/ ){}
 };
+
+
+#define THROW_PARSE_ERROR( aMsg, aSource, aInputLine, aLineNumber, aByteIndex )  \
+        throw PARSE_ERROR( __FILE__, __LOC__, aMsg, aSource, aInputLine, aLineNumber, aByteIndex )
+
 
 /** @} exception_types */
 

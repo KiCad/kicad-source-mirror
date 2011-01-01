@@ -231,7 +231,7 @@ wxString DSNLEXER::GetTokenString( int aTok )
 {
     wxString    ret;
 
-    ret << wxT("'") << wxConvertMB2WX( GetTokenText(aTok) ) << wxT("'");
+    ret << wxT("'") << wxString::FromUTF8( GetTokenText(aTok) ) << wxT("'");
 
     return ret;
 }
@@ -249,24 +249,11 @@ bool DSNLEXER::IsSymbol( int aTok )
 }
 
 
-void DSNLEXER::ThrowIOError( wxString aText, int charOffset ) throw( IO_ERROR )
-{
-    // @todo convert this to THROW_PARSE_ERROR()
-
-    // append to aText, do not overwrite
-    aText << wxT(" ") << _("in") << wxT(" \"") << CurSource()
-          << wxT("\" ") << _("on line") << wxT(" ") << reader->LineNumber()
-          << wxT(" ") << _("at offset") << wxT(" ") << charOffset;
-
-    THROW_IO_ERROR( aText );
-}
-
-
 void DSNLEXER::Expecting( int aTok ) throw( IO_ERROR )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" ") << GetTokenString( aTok );
-    ThrowIOError( errText, CurOffset() );
+    THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
@@ -274,7 +261,7 @@ void DSNLEXER::Expecting( const wxString& text ) throw( IO_ERROR )
 {
     wxString    errText( _("Expecting") );
     errText << wxT(" '") << text << wxT("'");
-    ThrowIOError( errText, CurOffset() );
+    THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
@@ -282,15 +269,22 @@ void DSNLEXER::Unexpected( int aTok ) throw( IO_ERROR )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" ") << GetTokenString( aTok );
-    ThrowIOError( errText, CurOffset() );
+    THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
+void DSNLEXER::Duplicate( int aTok ) throw( IO_ERROR )
+{
+    wxString    errText;
+
+    errText.Printf( _("%s is a duplicate"), GetTokenString( aTok ).GetData() );
+    THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+}
 
 void DSNLEXER::Unexpected( const wxString& text ) throw( IO_ERROR )
 {
     wxString    errText( _("Unexpected") );
     errText << wxT(" '") << text << wxT("'");
-    ThrowIOError( errText, CurOffset() );
+    THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
 
@@ -408,7 +402,7 @@ L_read:
             case '"':
                 break;
             default:
-                ThrowIOError( errtxt, CurOffset() );
+                THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
             curText = cc;
@@ -417,7 +411,7 @@ L_read:
 
             if( head<limit && *head!=')' && *head!='(' && !isSpace(*head) )
             {
-                ThrowIOError( errtxt, CurOffset() );
+                THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
             curTok = DSN_QUOTE_DEF;
@@ -514,7 +508,7 @@ L_read:
             }
 
             wxString errtxt(_("Un-terminated delimited string") );
-            ThrowIOError( errtxt, CurOffset() );
+            THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 
 #else   // old code, did not understand nested quotes
             ++cur;  // skip over the leading delimiter: ",', or $
@@ -527,7 +521,7 @@ L_read:
             if( head >= limit )
             {
                 wxString errtxt(_("Un-terminated delimited string") );
-                ThrowIOError( errtxt, CurOffset() );
+                THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
             curText.clear();
