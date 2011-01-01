@@ -28,8 +28,12 @@
 #include <sch_lib.h>
 
 class SWEET_LEXER;
+class PART_PARSER;
+
 
 namespace SCH {
+
+class LPID;
 
 /**
  * Enum PartBit
@@ -39,9 +43,16 @@ namespace SCH {
  */
 enum PartBit
 {
+    BODY,       ///< body has been read in.
     PARSED,     ///< have parsed this part already, otherwise 'body' text must be parsed
     EXTENDS,    ///< saw and "extends" keyword, inheriting from another PART
-
+    VALUE,
+    ANCHOR,
+    REFERENCE,
+    FOOTPRINT,
+    DATASHEET,
+    MODEL,
+    KEYWORDS,
 };
 
 /// Function PB
@@ -63,33 +74,39 @@ static inline const int PB( PartBit oneBitOnly )
  */
 class PART
 {
-    /// LIB class has great license to modify what's in here, nobody else does.
-    /// Modification is done through the LIB so it can track the state of the
-    /// PART and take action as needed.  Actually most of the modification will
-    /// be done by PARTS_LIST, a class derived from LIB.
-    friend class LIB;
-
-    /// a private constructor, only a LIB can instantiate a PART.
-    PART( LIB* aOwner, const STRING& aPartName, const STRING& aRevision ) :
-        owner( aOwner ),
-        contains( 0 ),
-        partName( aPartName ),
-        revision( aRevision )
-    {}
+    friend class LIB;           // is the owner of all PARTS, afterall
+    friend class ::PART_PARSER;
 
 protected:      // not likely to have C++ descendants, but protected none-the-less.
+
+    /// a protected constructor, only a LIB can instantiate a PART.
+    PART( LIB* aOwner, const STRING& aPartName, const STRING& aRevision );
+
+    /**
+     * Function inherit
+     * is a specialized assignment function that copies a specific subset, enough
+     * to fulfill the requirements of the Sweet s-expression language.
+     */
+    void inherit( const PART& aBasePart );
+
+
+    //PART( LIB* aOwner );
 
     LIB*        owner;      ///< which LIB am I a part of (pun if you want)
     int         contains;   ///< has bits from Enum PartParts
 
-    STRING      extends;    ///< LPID of base part
-
     STRING      partName;   ///< example "passives/R", immutable.
     STRING      revision;   // @todo need a single search key, this won't do.
+
+    LPID*       extends;    ///< of base part, NULL if none, otherwise I own it.
+
+    /// encapsulate the old version deletion, take ownership of @a aLPID
+    void setExtends( LPID* aLPID );
 
     /// s-expression text for the part, initially empty, and read in as this part
     /// actually becomes cached in RAM.
     STRING      body;
+
 
     // 3 separate lists for speed:
 
@@ -105,22 +122,20 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// Alternate body forms.
     //ALTERNATES  alternates;
 
-    // lots of other stuff, like the mandatory properties.
+    // lots of other stuff, like the mandatory properties, but no units, since we went with dimensionless
 
 public:
 
-    /**
-     * Function Inherit
-     * is a specialized assignment function that copies a specific subset, enough
-     * to fulfill the requirements of the Sweet s-expression language.
-     */
-    void Inherit( const PART& aBasePart );
+    ~PART();
+
+    PART& operator=( const PART& other );
 
     /**
      * Function Owner
      * returns the LIB* owner of this part.
      */
     LIB* Owner()  { return owner; }
+
 
     /**
      * Function Parse
@@ -133,7 +148,7 @@ public:
      * @param aLibTable is the LIB_TABLE view that is in effect for inheritance,
      *  and comes from the big containing SCHEMATIC object.
      */
-    void Parse( SWEET_LEXER* aLexer, LIB_TABLE* aTable ) throw( PARSE_ERROR );
+    void Parse( SWEET_LEXER* aLexer, LIB_TABLE* aTable ) throw( IO_ERROR );
 
 /*
     void SetBody( const STR_UTF& aSExpression )
