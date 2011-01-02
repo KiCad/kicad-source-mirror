@@ -680,7 +680,11 @@ bool WinEDA_App::SetLanguage( bool first_time )
         delete m_Locale;
     m_Locale = new wxLocale;
 
+#if wxCHECK_VERSION( 2, 9, 0 )
+    if( !m_Locale->Init( m_LanguageId ) )
+#else
     if( !m_Locale->Init( m_LanguageId, wxLOCALE_CONV_ENCODING ) )
+#endif
     {
         wxLogDebug( wxT("This language is not supported by the system.") );
 
