@@ -174,10 +174,8 @@ protected:
     void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = "" )
         throw( IO_ERROR );
 
-    void GetRevisions( STRINGS* aResults, const STRING& aPartName ) throw( IO_ERROR )
-    {
-        // @todo
-    }
+    void GetRevisions( STRINGS* aResults, const STRING& aPartName )
+        throw( IO_ERROR );
 
     void FindParts( STRINGS* aResults, const STRING& aQuery ) throw( IO_ERROR )
     {

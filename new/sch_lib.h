@@ -105,7 +105,9 @@ protected:                  ///< derived classes must implement
     /**
      * Function GetRevisions
      * fetches all revisions for @a aPartName into @a aResults.  Revisions are strings
-     * like "rev12", "rev279", and are library source agnostic.  These
+     * like "rev12", "rev279", and are library source agnostic.  These do not have to be
+     * in a contiguous order, but the first 3 characters must be "rev" and subsequent
+     * characters must consist of at least one decimal digit.
      */
     virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName )
         throw( IO_ERROR ) = 0;
@@ -181,6 +183,9 @@ protected:
     STRING      sinkType;
     STRING      sinkURI;
 };
+
+
+class PARTS;
 
 
 /**
@@ -318,17 +323,34 @@ public:
 
 protected:
 
-    STR_UTF             fetch;      // scratch, used to fetch things, grows to worst case size.
-    STR_UTFS            vfetch;     // scratch, used to fetch things.
+    STR_UTF             fetch;          // scratch, used to fetch things, grows to worst case size.
+    STR_UTFS            vfetch;         // scratch, used to fetch things.
 
-    STRING              name;
+    STRING              logicalName;
     LIB_SOURCE*         source;
     LIB_SINK*           sink;
-//    STRING              libraryURI;
 
     STRINGS             categories;
+    bool                cachedCategories;   /// < is true only after reading categories
 
-//    PARTS               parts;
+
+    /** parts are in various states of readiness:
+     *  1) not even loaded (if cachedParts is false)
+     *  2) present, but without member 'body' having been read() yet.
+     *  3) body has been read, but not parsed yet.
+     *  4) parsed and inheritance if any has been applied.
+     */
+    PARTS*              parts;
+
+    /**
+     * Function findPart
+     * finds a PART, returns NULL if cannot find.
+     * @throw IO_ERROR if there is some kind of communications error reading
+     *  the original list of parts.
+     */
+    const PART* findPart( const LPID& aLPID ) throw( IO_ERROR );
+
+
 };
 
 

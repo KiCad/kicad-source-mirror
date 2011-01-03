@@ -43,9 +43,8 @@ class LPID;
  */
 enum PartBit
 {
-    BODY,       ///< body has been read in.
     PARSED,     ///< have parsed this part already, otherwise 'body' text must be parsed
-    EXTENDS,    ///< saw and "extends" keyword, inheriting from another PART
+    EXTENDS,    ///< saw "extends" keyword, inheriting from another PART
     VALUE,
     ANCHOR,
     REFERENCE,
@@ -54,6 +53,7 @@ enum PartBit
     MODEL,
     KEYWORDS,
 };
+
 
 /// Function PB
 /// is a PartBit shifter for PART::contains field.
@@ -80,7 +80,7 @@ class PART
 protected:      // not likely to have C++ descendants, but protected none-the-less.
 
     /// a protected constructor, only a LIB can instantiate a PART.
-    PART( LIB* aOwner, const STRING& aPartName, const STRING& aRevision );
+    PART( LIB* aOwner, const STRING& aPartNameAndRev );
 
     /**
      * Function inherit
@@ -95,10 +95,10 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     LIB*        owner;      ///< which LIB am I a part of (pun if you want)
     int         contains;   ///< has bits from Enum PartParts
 
-    STRING      partName;   ///< example "passives/R", immutable.
-    STRING      revision;   // @todo need a single search key, this won't do.
+    STRING      partNameAndRev;   ///< example "passives/R[/revN..]", immutable.
 
     LPID*       extends;    ///< of base part, NULL if none, otherwise I own it.
+    PART*       base;       ///< which PART am I extending, if any.  no ownership.
 
     /// encapsulate the old version deletion, take ownership of @a aLPID
     void setExtends( LPID* aLPID );
@@ -107,6 +107,7 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// actually becomes cached in RAM.
     STRING      body;
 
+//    bool        cachedRevisions;    ///< allows lazy loading of revision of this same part name
 
     // 3 separate lists for speed:
 
@@ -135,7 +136,6 @@ public:
      * returns the LIB* owner of this part.
      */
     LIB* Owner()  { return owner; }
-
 
     /**
      * Function Parse

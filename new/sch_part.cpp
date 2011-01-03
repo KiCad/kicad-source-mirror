@@ -31,8 +31,12 @@
 using namespace SCH;
 
 
-//-----<temporary home for PART sub objects, move after stable>------------------
+#define MAX_INHERITANCE_NESTING     10      // no problem going larger
 
+
+//-----<temporary home for PART sub objects, move after stable>------------------
+struct XY {};
+struct AT {};
 
 
 //-----</temporary home for PART sub objects, move after stable>-----------------
@@ -55,7 +59,8 @@ class PART_PARSER
 {
     SWEET_LEXER*    in;
     LIB_TABLE*      libs;
-    int             contains;
+    int             contains;       // separate from PART::contains until done
+                                    // so we can see what we inherited from base PART
 
 public:
     PART_PARSER( PART* aPart, SWEET_LEXER* aLexer, LIB_TABLE* aTable ) :
@@ -66,51 +71,98 @@ public:
         parsePart( aPart );
     }
 
+
+    void parseXY( XY* me )
+    {
+    }
+
+    void parseAt( AT* me )
+    {
+    }
+
+
+    void parseExtends( PART* me )
+    {
+        PART*   base;
+        int     offset;
+
+        if( contains & PB(EXTENDS) )
+            in->Duplicate( T_extends );
+
+        in->NeedSYMBOLorNUMBER();
+        me->setExtends( new LPID() );
+
+        offset = me->extends->Parse( in->CurText() );
+        if( offset > -1 )   // -1 is success
+            THROW_PARSE_ERROR( _("invalid extends LPID"),
+                in->CurSource(),
+                in->CurLine(),
+                in->CurLineNumber(),
+                in->CurOffset() + offset );
+
+        base = libs->LookupPart( *me->extends, me->Owner() );
+
+        // we could be going in circles here, recursively, or too deep, set limits
+        // and disallow extending from self (even indirectly)
+        int extendsDepth = 0;
+        for( PART* ancestor = base; ancestor && extendsDepth<MAX_INHERITANCE_NESTING;
+                ++extendsDepth, ancestor = ancestor->base )
+        {
+            if( ancestor == me )
+            {
+                THROW_PARSE_ERROR( _("'extends' may not have self as any ancestor"),
+                    in->CurSource(),
+                    in->CurLine(),
+                    in->CurLineNumber(),
+                    in->CurOffset() );
+            }
+        }
+
+        if( extendsDepth == MAX_INHERITANCE_NESTING )
+        {
+            THROW_PARSE_ERROR( _("max allowed extends depth exceeded"),
+                in->CurSource(),
+                in->CurLine(),
+                in->CurLineNumber(),
+                in->CurOffset() );
+        }
+
+        me->inherit( *base );
+        me->base = base;
+        contains |= PB(EXTENDS);
+    }
+
     /// @param me = ja mir, the object getting stuffed, from its perspective
     void parsePart( PART* me )
     {
-        PART_T tok;
+        PART_T tok = in->NextTok();
 
-        if( (tok = in->NextTok()) == T_LEFT )
-            tok = in->NextTok();
-
-        // a token "( part .." i.e. class PART
         // Be flexible regarding the starting point of the stream.
         // Caller may not have read the first two tokens out of the
         // stream: T_LEFT and T_part, so ignore them if seen here.
         // The 1st two tokens T_LEFT and T_part are then optional in the grammar.
-        if( tok == T_part )
+
+        if( tok == T_LEFT )
         {
-            in->NeedSYMBOLorNUMBER(); // read in part NAME_HINT, and toss
-            tok = in->NextTok();
+            if( ( tok = in->NextTok() ) != T_part )
+                in->Expecting( T_part );
         }
+
+        in->NeedSYMBOLorNUMBER(); // read in part NAME_HINT, and toss
+        tok = in->NextTok();
 
         // extends must be _first_ thing, if it is present at all, after NAME_HINT
         if( tok == T_extends )
         {
-            PART*   base;
-            int     offset;
-
-            if( contains & PB(EXTENDS) )
-                in->Duplicate( tok );
-            in->NeedSYMBOLorNUMBER();
-            me->setExtends( new LPID() );
-            offset = me->extends->Parse( in->CurText() );
-            if( offset > -1 )   // -1 is success
-                THROW_PARSE_ERROR( _("invalid extends LPID"),
-                    in->CurSource(),
-                    in->CurLine(),
-                    in->CurLineNumber(),
-                    in->CurOffset() + offset );
-            // we could be going in circles here, recursively, @todo add a max counter or stack chain
-            base = libs->LookupPart( *me->extends, me->Owner() );
-            me->inherit( *base );
-            contains |= PB(EXTENDS);
+            parseExtends( me );
             tok = in->NextTok();
         }
 
-        for(  ; tok!=T_RIGHT && tok!=T_EOF;  tok = in->NextTok() )
+        for(  ; tok!=T_RIGHT;  tok = in->NextTok() )
         {
+            if( tok==T_EOF )
+                in->Unexpected( _( "end of input" ) );
+
             if( tok == T_LEFT )
                 tok = in->NextTok();
 
@@ -212,22 +264,26 @@ public:
                 break;
             }
         }
+
+        contains |= PB(PARSED);
+
+        this->contains |= contains;
     }
 
-
-    void parseAt( PART* me )
-    {
-    }
 };
 
 
-PART::PART( LIB* aOwner, const STRING& aPartName, const STRING& aRevision ) :
+PART::PART( LIB* aOwner, const STRING& aPartNameAndRev ) :
     owner( aOwner ),
     contains( 0 ),
-    partName( aPartName ),
-    revision( aRevision ),
-    extends( 0 )
-{}
+    partNameAndRev( aPartNameAndRev ),
+    extends( 0 ),
+    base( 0 )
+{
+    // Our goal is to have class LIB only instantiate what is needed, so print here
+    // what it is doing. It is the only class where PART can be instantiated.
+    D(printf("PART::PART(%s)\n", aPartNameAndRev.c_str() );)
+}
 
 
 PART::~PART()
@@ -247,19 +303,20 @@ void PART::inherit( const PART& other )
 {
     contains = other.contains;
 
-    setExtends( other.extends ? new LPID( *other.extends ) : 0 );
-
-    body     = other.body;
+    // @todo copy the inherited drawables, properties, and pins here
 }
 
 
 PART& PART::operator=( const PART& other )
 {
-    owner    = other.owner;
-    partName = other.partName;
-    revision = other.revision;
+    owner          = other.owner;
+    partNameAndRev = other.partNameAndRev;
+    body           = other.body;
+    base           = other.base;
 
-    // maintain inherit() as a partial assignment operator.
+    setExtends( other.extends ? new LPID( *other.extends ) : 0 );
+
+    // maintain in concert with inherit(), which is a partial assignment operator.
     inherit( other );
 
     return *this;
