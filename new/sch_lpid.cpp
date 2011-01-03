@@ -186,7 +186,7 @@ LPID::LPID( const STRING& aLPID ) throw( PARSE_ERROR )
     {
         THROW_PARSE_ERROR(
                 _( "Illegal character found in LPID string" ),
-                wxConvertMB2WX( aLPID.c_str() ),
+                wxString::FromUTF8( aLPID.c_str() ),
                 aLPID.c_str(),
                 0,
                 offset
@@ -249,6 +249,36 @@ int LPID::SetBaseName( const STRING& aBaseName )
 }
 
 
+int LPID::SetPartName( const STRING& aPartName )
+{
+    STRING  category;
+    STRING  base;
+    int     offset;
+    int     separation = int( aPartName.find_first_of( "/" ) );
+
+    if( separation != -1 )
+    {
+        category = aPartName.substr( 0, separation );
+        base     = aPartName.substr( separation+1 );
+    }
+    else
+    {
+        // leave category empty
+        base = aPartName;
+    }
+
+    if( (offset = SetCategory( category )) != -1 )
+        return offset;
+
+    if( (offset = SetBaseName( base )) != -1 )
+    {
+        return offset + separation + 1;
+    }
+
+    return -1;
+}
+
+
 int LPID::SetRevision( const STRING& aRevision )
 {
     int offset = okRevision( aRevision );
@@ -282,6 +312,121 @@ STRING LPID::Format() const
     {
         ret += '/';
         ret += revision;
+    }
+
+    return ret;
+}
+
+
+STRING LPID::GetPartNameAndRev() const
+{
+    STRING ret;
+
+    if( category.size() )
+    {
+        ret += category;
+        ret += '/';
+    }
+
+    ret += baseName;
+
+    if( revision.size() )
+    {
+        ret += '/';
+        ret += revision;
+    }
+
+    return ret;
+}
+
+
+STRING LPID::Format( const STRING& aLogicalLib, const STRING& aPartName, const STRING& aRevision )
+    throw( PARSE_ERROR )
+{
+    STRING  ret;
+    int     offset;
+
+    if( aLogicalLib.size() )
+    {
+        offset = okLogical( aLogicalLib );
+        if( offset != -1 )
+        {
+            THROW_PARSE_ERROR(
+                    _( "Illegal character found in logical lib name" ),
+                    wxString::FromUTF8( aLogicalLib.c_str() ),
+                    aLogicalLib.c_str(),
+                    0,
+                    offset
+                    );
+        }
+        ret += aLogicalLib;
+        ret += ':';
+    }
+
+    {
+        STRING  category;
+        STRING  base;
+
+        int separation = int( aPartName.find_first_of( "/" ) );
+
+        if( separation != -1 )
+        {
+            category = aPartName.substr( 0, separation );
+            base     = aPartName.substr( separation+1 );
+        }
+        else
+        {
+            // leave category empty
+            base = aPartName;
+        }
+
+        if( (offset = okCategory( category )) != -1 )
+        {
+            THROW_PARSE_ERROR(
+                    _( "Illegal character found in category" ),
+                    wxString::FromUTF8( aRevision.c_str() ),
+                    aRevision.c_str(),
+                    0,
+                    offset
+                    );
+        }
+
+        if( (offset = okBase( base )) != -1 )
+        {
+            THROW_PARSE_ERROR(
+                    _( "Illegal character found in base name" ),
+                    wxString::FromUTF8( aRevision.c_str() ),
+                    aRevision.c_str(),
+                    0,
+                    offset + separation + 1
+                    );
+        }
+
+        if( category.size() )
+        {
+            ret += category;
+            ret += '/';
+        }
+
+        ret += base;
+    }
+
+    if( aRevision.size() )
+    {
+        offset = okRevision( aRevision );
+        if( offset != -1 )
+        {
+            THROW_PARSE_ERROR(
+                    _( "Illegal character found in revision" ),
+                    wxString::FromUTF8( aRevision.c_str() ),
+                    aRevision.c_str(),
+                    0,
+                    offset
+                    );
+        }
+
+        ret += '/';
+        ret += aRevision;
     }
 
     return ret;

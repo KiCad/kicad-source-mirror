@@ -400,11 +400,11 @@ DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
 void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory )
     throw( IO_ERROR )
 {
-    PN_ITER limit = aCategory.size() ?
+    PN_ITER end = aCategory.size() ?
                         partnames.lower_bound( aCategory + char( '/' + 1 ) ) :
                         partnames.end();
 
-    PN_ITER it    = aCategory.size() ?
+    PN_ITER it  = aCategory.size() ?
                         partnames.upper_bound( aCategory + "/" ) :
                         partnames.begin();
 
@@ -414,7 +414,7 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
     {
         STRING  partName;
 
-        while( it != limit )
+        while( it != end )
         {
             const char* rev = endsWithRev( *it );
 
@@ -434,7 +434,32 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 
     else
     {
-        while( it != limit )
+        while( it != end )
+            aResults->push_back( *it++ );
+    }
+}
+
+
+void DIR_LIB_SOURCE::GetRevisions( STRINGS* aResults, const STRING& aPartName )
+    throw( IO_ERROR )
+{
+    aResults->clear();
+
+    if( useVersioning )
+    {
+        STRING partName;
+
+        const char* rev = endsWithRev( aPartName );
+        if( rev )
+            // partName is substring which omits the rev and the separator
+            partName.assign( aPartName, 0, rev - aPartName.c_str() - 1 );
+        else
+            partName = aPartName;
+
+        PN_ITER it  = partnames.upper_bound( partName +'/' );
+        PN_ITER end = partnames.lower_bound( partName + char( '/' +1 ) );
+
+        while( it != end )
             aResults->push_back( *it++ );
     }
 }

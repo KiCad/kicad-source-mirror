@@ -375,7 +375,6 @@ private:
     typedef boost::ptr_map<STRING, ROW>     ROWS;
     typedef ROWS::iterator                  ROWS_ITER;
     typedef ROWS::const_iterator            ROWS_CITER;
-//  typedef std::pair<ROWS_ITER, bool>      ROW_PAIR;
 
     ROWS        rows;
     LIB_TABLE*  fallBack;

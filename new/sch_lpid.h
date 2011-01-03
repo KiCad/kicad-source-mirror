@@ -146,6 +146,23 @@ public:
     }
 
     /**
+     * Function GetPartNameAndRev
+     * returns the part name with revision if any, i.e. [category/]baseName[/revN..]
+     */
+    STRING GetPartNameAndRev() const;
+
+    /**
+     * Function SetPartName
+     * overrides the part name portion of the LPID to @a aPartName
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
+     *  character offset into the parameter at which an error was detected, usually
+     *  because it contained more than one '/', or one or more ':', or is blank.
+     *  A single '/' is allowed, since that is used to separate the category from the
+     *  base name.
+     */
+    int SetPartName( const STRING& aPartName );
+
+    /**
      * Function GetRevision
      * returns the revision portion of the LPID.
      */
@@ -169,6 +186,16 @@ public:
      * returns the full text of the LPID.
      */
     STRING  Format() const;
+
+    /**
+     * Function Format
+     * returns a STRING in the proper format as an LPID for a combination of
+     * aLogicalLib, aPartName, and aRevision.
+     * @throw PARSE_ERROR if any of the pieces are illegal.
+     */
+    static STRING Format( const STRING& aLogicalLib, const STRING& aPartName, const STRING& aRevision="" )
+        throw( PARSE_ERROR );
+
 
 #if defined(DEBUG)
     static void Test();
