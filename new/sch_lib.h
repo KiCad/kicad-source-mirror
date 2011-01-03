@@ -343,14 +343,17 @@ protected:
     PARTS*              parts;
 
     /**
-     * Function findPart
-     * finds a PART, returns NULL if cannot find.
+     * Function lookupPart
+     * looks up a PART, returns NULL if cannot find in source.  Does not parse
+     * the part.  Does not even load the part's Sweet string.   No ownership
+     * is given to the PART, it stays in the cache that is this LIB.
+     *
      * @throw IO_ERROR if there is some kind of communications error reading
      *  the original list of parts.
+     *
+     * @return PART* - the cached PART, or NULL if not found.  No ownership transferred.
      */
-    const PART* findPart( const LPID& aLPID ) throw( IO_ERROR );
-
-
+    const PART* lookupPart( const LPID& aLPID ) throw( IO_ERROR );
 };
 
 
