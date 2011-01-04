@@ -46,7 +46,7 @@ class LIB_TABLE;
  */
 class LIB_SOURCE
 {
-    friend class LIBS;      ///< the LIB factory is LIBS::GetLibrary()
+    friend class LIBS;      ///< the LIB factory is thru LIB_TABLE::LookupPart()
     friend class LIB;       ///< the LIB uses these functions.
 
 protected:                  ///< derived classes must implement

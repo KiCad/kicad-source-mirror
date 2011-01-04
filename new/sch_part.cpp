@@ -38,6 +38,11 @@ using namespace SCH;
 struct XY {};
 struct AT {};
 
+class POLY_LINE
+{
+
+};
+
 
 //-----</temporary home for PART sub objects, move after stable>-----------------
 
@@ -196,6 +201,11 @@ public:
                 contains |= PB(ANCHOR);
                 break;
 
+            case T_line:
+
+                break;
+
+
         /*
             case T_value:
                 if( contains & PB(VALUE) )
@@ -243,9 +253,6 @@ public:
                 break;
 
             case T_polyline:
-                break;
-
-            case T_line:
                 break;
 
             case T_rectangle:

@@ -171,7 +171,7 @@ const PART* LIB::lookupPart( const LPID& aLPID ) throw( IO_ERROR )
         }
     }
 
-    // load all the revisions for this part name
+    // load all the revisions for this part name, only if it has any
     PARTS::iterator  pi = parts->find( aLPID.GetPartName() );
 
     PART_REVS*  revs = pi != parts->end() ? pi->second : NULL;

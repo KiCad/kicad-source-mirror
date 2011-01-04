@@ -144,7 +144,7 @@ protected:
     /**
      * Constructor DIR_LIB_SOURCE( const STRING& aDirectoryPath )
      * sets up a LIB_SOURCE using aDirectoryPath in a file system.
-     * @see LIBS::GetLibrary().
+     * @see LIB_TABLE::LookupPart().
      *
      * @param aDirectoryPath is a full file pathname of a directory which contains
      *  the library source of part files.  Examples might be "C:\kicad_data\mylib" or

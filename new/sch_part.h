@@ -145,10 +145,10 @@ public:
      *
      * @param aLexer is an instance of SWEET_LEXER, rewound at the first line.
      *
-     * @param aLibTable is the LIB_TABLE view that is in effect for inheritance,
+     * @param aLibTable is the LIB_TABLE "view" that is in effect for inheritance,
      *  and comes from the big containing SCHEMATIC object.
      */
-    void Parse( SWEET_LEXER* aLexer, LIB_TABLE* aTable ) throw( IO_ERROR );
+    void Parse( SWEET_LEXER* aLexer, LIB_TABLE* aLibTable ) throw( IO_ERROR );
 
 /*
     void SetBody( const STR_UTF& aSExpression )
