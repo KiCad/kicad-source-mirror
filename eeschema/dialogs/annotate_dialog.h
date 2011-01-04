@@ -55,7 +55,7 @@ public:
     bool GetLevel( void );
     bool GetResetItems( void );
     int GetSortOrder( void );
-
+    int GetAnnotateAlgo( void );
 };
 
 #endif

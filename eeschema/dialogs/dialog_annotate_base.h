@@ -34,8 +34,7 @@
 #define ID_RESET_ANNOTATION 1003
 #define ID_SORT_BY_X_POSITION 1004
 #define ID_SORT_BY_Y_POSITION 1005
-#define ID_SORT_BY_VALUE 1006
-#define ID_CLEAR_ANNOTATION_CMP 1007
+#define ID_CLEAR_ANNOTATION_CMP 1006
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ANNOTATE_BASE
@@ -56,19 +55,18 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 		wxRadioButton* m_rbSortBy_X_Position;
 		
 		wxStaticBitmap* annotate_down_right_bitmap;
-		wxRadioButton* m_rbSortBy_X_Position_and_useSheet;
-		
-		wxStaticBitmap* annotate_down_right_bitmap1;
 		wxRadioButton* m_rbSortBy_Y_Position;
 		
 		wxStaticBitmap* annotate_right_down_bitmap;
-		wxRadioButton* m_rbSortBy_Y_Position_and_useSheet;
-		
-		wxStaticBitmap* annotate_right_down_bitmap1;
-		wxRadioButton* rbSortByValue;
-		
-		wxStaticBitmap* annotate_by_value_bitmap;
 		wxStaticLine* m_staticline5;
+		wxStaticText* m_staticTextAnnotateAlgo;
+		wxRadioButton* m_rbUseIncremental;
+		
+		wxRadioButton* m_rbUseSheetNum;
+		
+		wxRadioButton* m_rbStartSheetNumLarge;
+		
+		wxStaticLine* m_staticline4;
 		wxButton* m_btnClose;
 		wxButton* m_btnClear;
 		wxButton* m_btnApply;
@@ -81,7 +79,7 @@ class DIALOG_ANNOTATE_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 432,376 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Annotate Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 432,382 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_ANNOTATE_BASE();
 	
 };

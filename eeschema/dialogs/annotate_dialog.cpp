@@ -1,7 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        annotate_dialog.cpp
-// Licence:   License GNU
-/////////////////////////////////////////////////////////////////////////////
+/*
+*  annotate_dialog.cpp
+*/
+/*
+ * annotate_dialog.cpp
+ * Annotation dialog functions.
+ */
+
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+  * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 
 #include "fctsys.h"
@@ -14,6 +41,7 @@
 #include "annotate_dialog.h"
 
 #define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
+#define KEY_ANNOTATE_ALGO_OPTION wxT("AnnotateAlgoOption")
 
 
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
@@ -45,31 +73,36 @@ void DIALOG_ANNOTATE::InitValues()
                 break;
 
             case 1:
-                m_rbSortBy_X_Position_and_useSheet->SetValue(1);
-                break;
-
-            case 2:
                 m_rbSortBy_Y_Position->SetValue(1);
                 break;
 
-            case 3:
-                m_rbSortBy_Y_Position_and_useSheet->SetValue(1);
+            case 2:
+                m_rbUseIncremental->SetValue(1);
+                break;
+            }
+
+        m_Config->Read(KEY_ANNOTATE_ALGO_OPTION, &option, 0l);
+        switch( option )
+        {
+            default:
+            case 0:
+                m_rbUseIncremental->SetValue(1);
                 break;
 
-            case 4:
-                rbSortByValue->SetValue(1);
+            case 1:
+                m_rbUseSheetNum->SetValue(1);
+                break;
+
+            case 2:
+                m_rbStartSheetNumLarge->SetValue(1);
                 break;
         }
     }
 
     wxBitmap bitmap0(annotate_down_right_xpm);
     annotate_down_right_bitmap->SetBitmap(bitmap0);
-    annotate_down_right_bitmap1->SetBitmap(bitmap0);
     wxBitmap bitmap1(annotate_right_down_xpm);
 	annotate_right_down_bitmap->SetBitmap(bitmap1);
-	annotate_right_down_bitmap1->SetBitmap(bitmap1);
-    wxBitmap bitmap2(add_text_xpm);
-	annotate_by_value_bitmap->SetBitmap(bitmap2);
 
     m_btnApply->SetDefault();
 }
@@ -83,7 +116,10 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     wxString message;
 
     if( m_Config )
+    {
         m_Config->Write(KEY_ANNOTATE_SORT_OPTION, GetSortOrder());
+        m_Config->Write(KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo());
+    }
 
     if( GetResetItems() )
         message = _( "Clear and annotate all of the components " );
@@ -98,7 +134,9 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
     if (response == wxCANCEL)
         return;
-    m_Parent->AnnotateComponents( GetLevel(), GetSortOrder(), GetResetItems() , true );
+
+    m_Parent->AnnotateComponents( GetLevel(), GetSortOrder(), GetAnnotateAlgo(),
+                                  GetResetItems() , true );
     m_Parent->DrawPanel->Refresh();
 
     m_btnClear->Enable();
@@ -157,25 +195,30 @@ bool DIALOG_ANNOTATE::GetResetItems( void )
     return m_rbResetAnnotation->GetValue();
 }
 
-/****************************************/
 int DIALOG_ANNOTATE::GetSortOrder( void )
-/****************************************/
 /**
  * @return 0 if annotation by X position,
- *         1 if annotation by X position and use sheet number,
- *         2 if annotation by Y position,
- *         3 if annotation by Y position and use sheet number,
- *         4 if annotation by value
+ *         1 if annotation by Y position,
+ *         2 if annotation by value
  */
 {
     if ( m_rbSortBy_X_Position->GetValue() )
         return 0;
-    if ( m_rbSortBy_X_Position_and_useSheet->GetValue() )
-        return 1;
     if ( m_rbSortBy_Y_Position->GetValue() )
-        return 2;
-    if ( m_rbSortBy_Y_Position_and_useSheet->GetValue() )
-        return 3;
-    return 4;
+        return 1;
+    return 2;
 }
 
+int DIALOG_ANNOTATE::GetAnnotateAlgo( void )
+/**
+ * @return 0 if annotation using first not used Id value
+ *         1 if annotation using first not used Id value inside sheet num * 100 to  sheet num * 100 + 99
+ *         2 if annotation using first nhot used Id value inside sheet num * 1000 to  sheet num * 1000 + 999
+ */
+{
+    if ( m_rbUseIncremental->GetValue() )
+        return 0;
+    if ( m_rbUseSheetNum->GetValue() )
+        return 1;
+    return 2;
+}

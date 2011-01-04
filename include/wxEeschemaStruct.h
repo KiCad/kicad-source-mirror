@@ -283,18 +283,17 @@ public:
      *  Compute the annotation of the components for the whole project, or the
      *  current sheet only.  All the components or the new ones only will be
      *  annotated.
-     * @param annotateSchematic : true = entire schematic annotation,
+     * @param aAnnotateSchematic : true = entire schematic annotation,
      *                            false = current sheet only
-     * @param sortOption : 0 = annotate by sorting X position,
-     *                     1 = annotate by sorting X position,
-     *                         and use sheet number to calculate annotation
-     *                     2 = annotate by sorting Y position,
-     *                     3 = annotate by sorting Y position,
-     *                         and use sheet number to calculate annotation
-     *                     4 = annotate by sorting value
-     * @param resetAnnotation : true = remove previous annotation
+     * @param aSortOption : 0 = annotate by sorting X position,
+     *                      1 = annotate by sorting Y position,
+     *                      2 = annotate by sorting value
+     * @param aAlgoOption : 0 = annotate schematic using first free Id number
+     *                      1 = annotate using first free Id number, starting to sheet number * 100
+     *                      2 = annotate  using first free Id number, starting to sheet number * 1000
+     * @param aResetAnnotation : true = remove previous annotation
      *                          false = annotate new components only
-     * @param repairsTimestamps : true = test for duplicate times stamps and
+     * @param aRepairsTimestamps : true = test for duplicate times stamps and
      *                                   replace duplicated
      *        Note: this option could change previous annotation, because time
      *              stamps are used to handle annotation mainly in complex
@@ -303,8 +302,9 @@ public:
      *      for each sheet annotation starts from sheet number * 100
      *      ( the first sheet uses 100 to 199, the second 200 to 299 ... )
      */
-    void AnnotateComponents(bool annotateSchematic, int  sortOption,
-                            bool resetAnnotation, bool repairsTimestamps );
+    void AnnotateComponents(bool aAnnotateSchematic, int aSortOption,
+                            int aAlgoOption,
+                            bool aResetAnnotation, bool aRepairsTimestamps );
     // Functions used for hierarchy handling
     void         InstallPreviousSheet();
     void         InstallNextScreen( SCH_SHEET* Sheet );

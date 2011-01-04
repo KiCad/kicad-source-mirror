@@ -11,7 +11,7 @@ endif(WIN32)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 # Command line option to enable or disable building minizip. Minizip
-# building is enabled by default. Use -DKICAD_MINZIP=OFF to disable
+# building is enabled by default. Use -DKICAD_MINIZIP=OFF to disable
 # building minizip.
 option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 

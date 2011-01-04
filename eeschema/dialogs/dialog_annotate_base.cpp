@@ -71,20 +71,6 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	b_orderOptSizer->Add( bSizerXpos, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxBoxSizer* bSizerXpos_and_use_sheet;
-	bSizerXpos_and_use_sheet = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_rbSortBy_X_Position_and_useSheet = new wxRadioButton( this, wxID_ANY, _("Sort components by X position and use sheet &number"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerXpos_and_use_sheet->Add( m_rbSortBy_X_Position_and_useSheet, 0, wxALL, 3 );
-	
-	
-	bSizerXpos_and_use_sheet->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	annotate_down_right_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerXpos_and_use_sheet->Add( annotate_down_right_bitmap1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT, 12 );
-	
-	b_orderOptSizer->Add( bSizerXpos_and_use_sheet, 0, wxEXPAND|wxRIGHT, 5 );
-	
 	wxBoxSizer* bSizerYpos;
 	bSizerYpos = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -99,38 +85,62 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	b_orderOptSizer->Add( bSizerYpos, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxBoxSizer* bSizerYpos_and_useSheet;
-	bSizerYpos_and_useSheet = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_rbSortBy_Y_Position_and_useSheet = new wxRadioButton( this, wxID_ANY, _("Sort components by Y position and use &sheet number"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerYpos_and_useSheet->Add( m_rbSortBy_Y_Position_and_useSheet, 0, wxALL, 3 );
-	
-	
-	bSizerYpos_and_useSheet->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	annotate_right_down_bitmap1 = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerYpos_and_useSheet->Add( annotate_right_down_bitmap1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 12 );
-	
-	b_orderOptSizer->Add( bSizerYpos_and_useSheet, 0, wxEXPAND|wxRIGHT, 5 );
-	
-	wxBoxSizer* bSizerValuepos;
-	bSizerValuepos = new wxBoxSizer( wxHORIZONTAL );
-	
-	rbSortByValue = new wxRadioButton( this, ID_SORT_BY_VALUE, _("Sort components by &value"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerValuepos->Add( rbSortByValue, 0, wxALL, 3 );
-	
-	
-	bSizerValuepos->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	annotate_by_value_bitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerValuepos->Add( annotate_by_value_bitmap, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 12 );
-	
-	b_orderOptSizer->Add( bSizerValuepos, 0, wxEXPAND|wxRIGHT, 5 );
-	
-	bupperSizer->Add( b_orderOptSizer, 1, wxEXPAND|wxLEFT, 25 );
+	bupperSizer->Add( b_orderOptSizer, 0, wxEXPAND|wxLEFT, 25 );
 	
 	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bupperSizer->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizerAnnotAlgo;
+	bSizerAnnotAlgo = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextAnnotateAlgo = new wxStaticText( this, wxID_ANY, _("Annotation Choice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAnnotateAlgo->Wrap( -1 );
+	m_staticTextAnnotateAlgo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizerAnnotAlgo->Add( m_staticTextAnnotateAlgo, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizer1AlgoChoice;
+	bSizer1AlgoChoice = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizerChoiceInc;
+	bSizerChoiceInc = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbUseIncremental = new wxRadioButton( this, ID_SORT_BY_X_POSITION, _("Use first free number in schematic"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizerChoiceInc->Add( m_rbUseIncremental, 0, wxALL, 3 );
+	
+	
+	bSizerChoiceInc->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer1AlgoChoice->Add( bSizerChoiceInc, 0, wxEXPAND|wxRIGHT, 5 );
+	
+	wxBoxSizer* bSizerChoiceIncBySheet;
+	bSizerChoiceIncBySheet = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbUseSheetNum = new wxRadioButton( this, wxID_ANY, _("Start to  sheet number*100 and use first free number"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChoiceIncBySheet->Add( m_rbUseSheetNum, 0, wxALL, 3 );
+	
+	
+	bSizerChoiceIncBySheet->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer1AlgoChoice->Add( bSizerChoiceIncBySheet, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerChoiceIncBySheetLarge;
+	bSizerChoiceIncBySheetLarge = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbStartSheetNumLarge = new wxRadioButton( this, wxID_ANY, _("Start to  sheet number*1000 and use first free number"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerChoiceIncBySheetLarge->Add( m_rbStartSheetNumLarge, 0, wxALL, 3 );
+	
+	
+	bSizerChoiceIncBySheetLarge->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	bSizer1AlgoChoice->Add( bSizerChoiceIncBySheetLarge, 1, wxEXPAND, 5 );
+	
+	bSizerAnnotAlgo->Add( bSizer1AlgoChoice, 1, wxEXPAND|wxLEFT, 25 );
+	
+	bupperSizer->Add( bSizerAnnotAlgo, 0, wxEXPAND|wxRIGHT, 5 );
+	
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bupperSizer->Add( m_staticline4, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
