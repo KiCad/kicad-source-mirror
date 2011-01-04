@@ -226,6 +226,39 @@ public:
      *    When annotating,  some or all components are not annotated,
      *    i.e. ref is only U or R, with no number.
      */
+
+
+    /**
+     * Function SplitReferences
+     * attempts to split all reference designators into a name (U) and number (1).  If the
+     * last character is '?' or not a digit, the reference is tagged as not annotated.
+     * For components with multiple parts per package that are not already annotated, set
+     * m_Unit to a max value (0x7FFFFFFF).
+     * @see SCH_REFERENCE::Split()
+     */
+    void SplitReferences()
+    {
+        for( unsigned ii = 0; ii < GetCount(); ii++ )
+            componentFlatList[ii].Split();
+    }
+
+    /**
+     * function UpdateAnnotation
+     * Update the reference components for the schematic project (or the current sheet)
+     * Note: this function does not calculate the reference numbers
+     * stored in m_NumRef
+     * So, it must be called after calcultaion of new reference numbers
+     * @see SCH_REFERENCE::Annotate()
+     */
+    void UpdateAnnotation()
+    {
+        /* update the reference numbers */
+        for( unsigned ii = 0; ii < GetCount(); ii++ )
+        {
+            componentFlatList[ii].Annotate();
+        }
+    }
+
     /**
      * Function SortCmpByXCoordinate
      * sort the flat list by X coordinates.

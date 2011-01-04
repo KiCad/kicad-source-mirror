@@ -39,13 +39,12 @@
 
 /*
 
-The LIB part cache consist of a std::map of partnames without revisions at the top level.
-Each top level map entry can point to another std::map which it owns and holds all the revisions
-for that part name.  At any point in the tree, there can be NULL pointers which
-allow for lazy loading, including the very top most root pointer itself, which
-is PARTS* parts.  We use the key to hold the partName at one level, and revision
-at the deeper nested level, and that key information may not be present within
-right hand side of the map tuple.
+The LIB part cache consists of a std::map of partnames without revisions at the
+top level. Each top level map entry can point to another std::map which it owns
+and which holds all the revisions for that part name. At any point in the tree,
+there can be NULL pointers which allow for lazy loading, including the very top
+most root pointer itself, which is PARTS* parts. We use the key to hold the
+partName at one level, and revision at the deeper nested level.
 
 1) Only things which are asked for are done.
 2) Anything we learn we remember.
@@ -54,10 +53,31 @@ right hand side of the map tuple.
 
 namespace SCH {
 
-class PART_REVS : public std::map< STRING, PART* >
-{
-    // @todo provide an integer sort on revN.. strings here.
 
+/**
+ * Struct LTREV
+ * is for PART_REVS, and provides a custom way to compare rev STRINGs.
+ * Namely, the revN[N..] string if present, is collated according to a
+ * 'higher revision first'.
+ */
+struct LTREV
+{
+    bool operator() ( const STRING& s1, const STRING& s2 ) const
+    {
+        return RevCmp( s1.c_str(), s2.c_str() ) < 0;
+    }
+};
+
+
+/**
+ * Class PART_REVS
+ * contains the collection of revisions for a particular part name, in the
+ * form of cached PARTs.  The tuple consists of a rev string and a PART pointer.
+ * The rev string is like "rev1", the PART pointer will be NULL until the PART
+ * gets loaded, lazily.
+ */
+class PART_REVS : public std::map< STRING, PART*, LTREV >
+{
 public:
     ~PART_REVS()
     {
@@ -68,6 +88,15 @@ public:
     }
 };
 
+
+/**
+ * Class PARTS
+ * contains the collection of PART_REVS for all PARTs in the lib.
+ * The tuple consists of a part name and a PART_REVS pointer.
+ * The part name does not have the revision attached (of course this is understood
+ * by definition of "part name"). The PART_REVS pointer will be NULL until a client
+ * askes about the revisions for a part name, so the loading is done lazily.
+ */
 class PARTS : public std::map< STRING, PART_REVS* >
 {
 public:
@@ -126,7 +155,7 @@ LIB::~LIB()
 }
 
 
-const PART* LIB::findPart( const LPID& aLPID ) throw( IO_ERROR )
+const PART* LIB::lookupPart( const LPID& aLPID ) throw( IO_ERROR )
 {
     if( !parts )
     {
@@ -137,7 +166,7 @@ const PART* LIB::findPart( const LPID& aLPID ) throw( IO_ERROR )
         // insert a PART_REVS for each part name
         for( STRINGS::const_iterator it = vfetch.begin();  it!=vfetch.end();  ++it )
         {
-            // D(printf("findPart:%s\n", it->c_str() );)
+            D(printf("lookupPart:%s\n", it->c_str() );)
             (*parts)[*it] = new PART_REVS;
         }
     }
@@ -152,44 +181,46 @@ const PART* LIB::findPart( const LPID& aLPID ) throw( IO_ERROR )
     // if the key for parts has no aLPID.GetPartName() the part is not in this lib
     if( revs )
     {
-        if( revs->size() == 0 )
+        if( revs->size() == 0 ) // assume rev list has not been loaded yet
         {
             // load all the revisions for this part.
             source->GetRevisions( &vfetch, aLPID.GetPartName() );
 
-            // creat a PART_REV entry for revision, but leave the PART* NULL
+            // create a PART_REV entry for each revision, but leave the PART* NULL
             for( STRINGS::const_iterator it = vfetch.begin();  it!=vfetch.end();  ++it )
             {
-                // D(printf("findPartRev:%s\n", it->c_str() );)
+                D(printf("lookupPartRev:%s\n", it->c_str() );)
                 (*revs)[*it] = 0;
             }
-
         }
 
-        PART_REVS::iterator  result = revs->find( aLPID.GetPartNameAndRev() );
-
-        if( result != revs->end() )
-        {
-            if( !result->second )    // the PART has never been loaded before
-            {
-                result->second = new PART( this, aLPID.GetPartNameAndRev() );
-            }
-
-            return result->second;
-        }
+        PART_REVS::iterator rev;
 
         // If caller did not say what revision, find the highest numbered one and return that.
-        // Otherwise he knew what he wanted specifically, and we do not have it.
         if( !aLPID.GetRevision().size() && revs->size() )
         {
-            result = revs->begin();     // sort order has highest rev first
+            rev = revs->begin();     // sort order has highest rev first
 
-            if( !result->second )       // the PART has never been loaded before
+            if( !rev->second )       // the PART has never been instantiated before
             {
-                result->second = new PART( this, LPID::Format( "", aLPID.GetPartName(), result->first ) );
+                rev->second = new PART( this, LPID::Format( "", aLPID.GetPartName(), rev->first ) );
             }
 
-            return result->second;
+            D(printf("lookupPartLatestRev:%s\n", rev->second->partNameAndRev.c_str() );)
+            return rev->second;
+        }
+        else
+        {
+            rev = revs->find( aLPID.GetRevision() );
+
+            if( rev != revs->end() )
+            {
+                if( !rev->second )    // the PART has never been instantiated before
+                {
+                    rev->second = new PART( this, aLPID.GetPartNameAndRev() );
+                }
+                return rev->second;
+            }
         }
     }
 
@@ -199,7 +230,7 @@ const PART* LIB::findPart( const LPID& aLPID ) throw( IO_ERROR )
 
 PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR )
 {
-    PART*   part = (PART*) findPart( aLPID );
+    PART*   part = (PART*) lookupPart( aLPID );
 
     if( !part )     // part does not exist in this lib
     {
@@ -221,7 +252,8 @@ PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR
             printf( "\n" );
 #endif
 
-        SWEET_LEXER sw( part->body, wxString::FromUTF8("body") /* @todo have ReadPart give better source */ );
+        // @todo consider changing ReadPart to return a "source"
+        SWEET_LEXER sw( part->body, wxString::FromUTF8( aLPID.Format().c_str() ) );
 
         part->Parse( &sw, aLibTable );
     }

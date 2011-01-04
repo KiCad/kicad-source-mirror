@@ -38,6 +38,11 @@ using namespace SCH;
 struct XY {};
 struct AT {};
 
+class POLY_LINE
+{
+
+};
+
 
 //-----</temporary home for PART sub objects, move after stable>-----------------
 
@@ -135,18 +140,27 @@ public:
     /// @param me = ja mir, the object getting stuffed, from its perspective
     void parsePart( PART* me )
     {
-        PART_T tok = in->NextTok();
+        PART_T tok;
 
+#if 0
         // Be flexible regarding the starting point of the stream.
         // Caller may not have read the first two tokens out of the
         // stream: T_LEFT and T_part, so ignore them if seen here.
         // The 1st two tokens T_LEFT and T_part are then optional in the grammar.
 
-        if( tok == T_LEFT )
+        if( (tok = in->NextTok() ) == T_LEFT )
         {
             if( ( tok = in->NextTok() ) != T_part )
                 in->Expecting( T_part );
         }
+
+#else
+        // "( part" are not optional
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_part )
+            in->Expecting( T_part );
+#endif
 
         in->NeedSYMBOLorNUMBER(); // read in part NAME_HINT, and toss
         tok = in->NextTok();
@@ -186,6 +200,11 @@ public:
                     in->Duplicate( tok );
                 contains |= PB(ANCHOR);
                 break;
+
+            case T_line:
+
+                break;
+
 
         /*
             case T_value:
@@ -236,9 +255,6 @@ public:
             case T_polyline:
                 break;
 
-            case T_line:
-                break;
-
             case T_rectangle:
                 break;
 
@@ -267,7 +283,7 @@ public:
 
         contains |= PB(PARSED);
 
-        this->contains |= contains;
+        me->contains |= contains;
     }
 
 };

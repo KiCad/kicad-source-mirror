@@ -459,8 +459,12 @@ void DIR_LIB_SOURCE::GetRevisions( STRINGS* aResults, const STRING& aPartName )
         PN_ITER it  = partnames.upper_bound( partName +'/' );
         PN_ITER end = partnames.lower_bound( partName + char( '/' +1 ) );
 
-        while( it != end )
-            aResults->push_back( *it++ );
+        for( ; it != end; ++it )
+        {
+            const char* rev = endsWithRev( *it );
+            assert( rev );
+            aResults->push_back( it->substr( rev - it->c_str() ) );
+        }
     }
 }
 

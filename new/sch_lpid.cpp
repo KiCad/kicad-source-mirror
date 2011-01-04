@@ -58,6 +58,20 @@ const char* EndsWithRev( const char* start, const char* tail, char separator )
     return 0;
 }
 
+int RevCmp( const char* s1, const char* s2 )
+{
+    int r = strncmp( s1, s2, 3 );
+
+    if( r || strlen(s1)<4 || strlen(s2)<4 )
+    {
+        return r;
+    }
+
+    int rnum1 = atoi( s1+3 );
+    int rnum2 = atoi( s2+3 );
+
+    return -(rnum1 - rnum2);    // swap the sign, higher revs first
+}
 
 //----<Policy and field test functions>-------------------------------------
 
@@ -94,7 +108,7 @@ static int okRevision( const STRING& aField )
 {
     char  rev[32];  // C string for speed
 
-    if( aField.size() >= 4 && aField.size() <= sizeof(rev)-3 )
+    if( aField.size() >= 4 )
     {
         strcpy( rev, "x/" );
         strcat( rev, aField.c_str() );

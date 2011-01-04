@@ -228,4 +228,16 @@ static inline const char* EndsWithRev( const STRING& aPartName, char separator =
 }
 
 
+/**
+ * Function RevCmp
+ * compares two rev strings in a way like strcmp() except that the highest numbered
+ * revision is considered first in the sort order.  The function probably won't work
+ * unless you give it two rev strings.
+ * @param s1 is a rev string like "rev10"
+ * @param s2 is a rev string like "rev1".
+ * @return int - either negative, zero, or positive depending on whether the revision
+ *  is greater, equal, or less on the left hand side.
+ */
+int RevCmp( const char* s1, const char* s2 );
+
 #endif // SCH_LPID_H_
