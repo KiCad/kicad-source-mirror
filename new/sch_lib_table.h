@@ -223,6 +223,7 @@ public:
      *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
      *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
      *   (lib (logical LOGICAL)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+     *  )
      * </pre>
      *
      * When this function is called, the input token stream given by \a aLexer

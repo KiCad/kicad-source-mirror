@@ -9,7 +9,7 @@ also, in the future.
 
 @author Dick Hollenbeck <dick@softplc.com>
 
-@date   October-December 2010
+@date   October 2010 - January 2011
 
 @section intr_sec Introduction
 
@@ -370,10 +370,10 @@ class HTTP_LIB_SOURCE : public LIB_SOURCE
 protected:
 
     /**
-     * Constructor ( const STRING& aSvnURL )
-     * sets up a LIB_SOURCE using aSvnURI which points to a subversion
+     * Constructor ( const STRING& aHttpURL )
+     * sets up a LIB_SOURCE using aHttpURI which points to a subversion
      * repository.
-     * @see LIBS::GetLibrary().
+     * @see LIB_TABLE::LookupPart()
      *
      * @param aHttpURL is a full URL of a document root repo directory.  Example might
      *  be "http://kicad.org/libs"
@@ -401,7 +401,7 @@ protected:
      * Constructor SVN_LIB_SOURCE( const STRING& aSvnURL )
      * sets up a LIB_SOURCE using aSvnURI which points to a subversion
      * repository.
-     * @see LIBS::GetLibrary().
+     * @see LIB_TABLE::LookupPart().
      *
      * @param aSvnURL is a full URL of a subversion repo directory.  Example might
      *  be "svn://kicad.org/repos/library/trunk"
@@ -430,7 +430,7 @@ protected:
      * sets up a LIB_SOURCE using aSchematicFile which is a full path and filename
      * for a schematic not related to the schematic being editing in
      * this EESCHEMA session.
-     * @see LIBS::GetLibrary().
+     * @see LIB_TABLE::LookupPart().
      *
      * @param aSchematicFile is a full path and filename.  Example:
      *  "/home/user/kicadproject/design.sch"
@@ -470,5 +470,7 @@ public:
 /// @todo remove endsWithRev() in favor of EndsWithRev(), find home for it.
 
 /// @todo add simple unit test infrastructure.
+
+/// @todo review: http://www.sfml-dev.org/tutorials/1.2/graphics-wxwidgets.php
 
 // EOF
