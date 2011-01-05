@@ -346,16 +346,17 @@ int DSNLEXER::NextTok() throw( IO_ERROR )
         if( cur >= limit )
         {
 L_read:
-            cur = start;
-
             // blank lines are returned as "\n" and will have a len of 1.
             // EOF will have a len of 0 and so is detectable.
             int len = readLine();
             if( len == 0 )
             {
+                cur = start;        // after readLine(), since start can change, set cur offset to start
                 curTok = DSN_EOF;
                 goto exit;
             }
+
+            cur = start;    // after readLine() since start can change.
 
             // skip leading whitespace
             while( cur<limit && isSpace(*cur) )
