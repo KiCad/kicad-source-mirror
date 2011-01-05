@@ -1370,16 +1370,13 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
 
             // Get the Component FootprintFilter and put the component in
             // cmpList if filter is present
-            LIB_COMPONENT* entry =
-                CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
             if( entry )
             {
                 if( entry->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( SCH_REFERENCE() );
-                    cmpList.back().m_RootCmp = comp;
-                    cmpList.back().SetRef( comp->GetRef( path ) );
+                    cmpList.push_back( SCH_REFERENCE( comp, entry, *path ) );
                 }
             }
 
@@ -1442,11 +1439,10 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
         wxString    ref;
 
         ret |= fprintf( f, "{ Allowed footprints by component:\n" );
+
         for( unsigned ii = 0; ii < cmpList.size(); ii++ )
         {
-            SCH_COMPONENT* comp = cmpList[ii].m_RootCmp;
-
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+            LIB_COMPONENT* entry = cmpList[ii].GetLibComponent();
 
             ref = cmpList[ii].GetRef();
 

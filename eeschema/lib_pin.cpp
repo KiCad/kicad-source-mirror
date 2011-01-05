@@ -1841,34 +1841,18 @@ wxArrayString LIB_PIN::GetElectricalTypeNames( void )
 }
 
 
-/**
- * Get a list of pin electrical type icons.
- * @return  List of valid pin electrical type bitmaps symbols in .xpm format
- * for menus and dialogs .
- */
 const char*** LIB_PIN::GetElectricalTypeSymbols( void )
 {
     return s_icons_Pins_Electrical_Type;
 }
 
 
-/**
- * Get a list of pin orientation icons.
- *
- * @return  List of valid pin orientation bitmaps symbols in .xpm format
- * for menus and dialogs .
- */
 const char*** LIB_PIN::GetOrientationSymbols()
 {
     return s_icons_Pins_Orientations;
 }
 
 
-/**
- * Get a list of pin styles bitmaps for menus and dialogs.
- *
- * @return  List of valid pin electrical type bitmaps symbols in .xpm format.
- */
 const char*** LIB_PIN::GetStyleSymbols()
 {
     return s_icons_Pins_Shapes;

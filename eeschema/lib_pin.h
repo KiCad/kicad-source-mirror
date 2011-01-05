@@ -361,7 +361,7 @@ public:
     static wxArrayString GetOrientationNames();
 
     /**
-     * Get a list of pin orientation bitmaps for menus and dialogs..
+     * Get a list of pin orientation bitmaps for menus and dialogs.
      *
      * @return  List of valid pin orientation bitmaps symbols in .xpm format
      */

@@ -44,18 +44,6 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
                                     bool aUseSheetNum, int aSheetIntervalId );
 
 /**
- * Search in the sorted list of components, for a given component an other
- * component with the same reference and a given part unit.  Mainly used to
- * manage multiple parts per package components in aComponentsList.
- * @param aObjet = index in aComponentsList for the given SCH_REFERENCE
- *                 item to test
- * @param Unit = the given unit number to search
- * @param aComponentsList = list of items to examine
- * @return index in aComponentsList if found or -1 if not found
- */
-static int  ExistUnit( int aObjet, int aUnit, SCH_REFERENCE_LIST& aComponentList );
-
-/**
  * Function DeleteAnnotation
  * Remove current component annotations
  * @param aCurrentSheetOnly : if false: remove all annotations, else remove
@@ -105,12 +93,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
  *      for each sheet annotation starts from sheet number * 100
  *      ( the first sheet uses 100 to 199, the second 200 to 299 ... )
  */
-void SCH_EDIT_FRAME::AnnotateComponents(
-                         bool            aAnnotateSchematic,
-                         int             aSortOption,
-                         int             aAlgoOption,
-                         bool            aResetAnnotation,
-                         bool            aRepairsTimestamps )
+void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
+                                         int  aSortOption,
+                                         int  aAlgoOption,
+                                         bool aResetAnnotation,
+                                         bool aRepairsTimestamps )
 {
     SCH_REFERENCE_LIST references;
 
@@ -158,22 +145,23 @@ void SCH_EDIT_FRAME::AnnotateComponents(
 
     /* Break full components reference in name (prefix) and number:
      * example: IC1 become IC, and 1 */
-    references.SplitReferences( );
+    references.SplitReferences();
 
     switch( aSortOption )
     {
     default:
     case 0:
-        references.SortCmpByXCoordinate();
+        references.SortByXCoordinate();
         break;
 
     case 1:
-        references.SortCmpByYCoordinate();
+        references.SortByYCoordinate();
         break;
     }
 
     bool useSheetNum = false;
     int idStep = 100;
+
     switch( aAlgoOption )
     {
     default:
@@ -198,74 +186,15 @@ void SCH_EDIT_FRAME::AnnotateComponents(
     CheckAnnotate( NULL, !aAnnotateSchematic );
     OnModify();
 
-    // Update on screen refences, that can be modified by previous calculations:
+    // Update on screen references, that can be modified by previous calculations:
     m_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     DrawPanel->Refresh( true );
 }
 
-#ifdef USE_OLD_ALGO
-/** helper function
- * Search the last used (greatest) reference number in the component list
- * for the prefix reference given by Objet
- * The component list must be sorted.
- *
- * @param aObjet = reference item ( aComponentsList[aObjet].m_TextRef is
- *                 the search pattern)
- * @param aComponentsList = list of items
- * @param aMinValue = min value for the current search
- */
-static int GetLastNumberInReference( int aObjet,SCH_REFERENCE_LIST& aComponentsList,
-                              int aMinValue )
-{
-    int lastNumber = aMinValue;
 
-    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
-    {
-        // search only for the current reference prefix:
-        if( aComponentsList[aObjet].CompareRef( aComponentsList[ii] ) != 0 )
-            continue;
-
-        // update max value for the current reference prefix
-        if( lastNumber < aComponentsList[ii].m_NumRef )
-            lastNumber = aComponentsList[ii].m_NumRef;
-    }
-
-    return lastNumber;
-}
-
-#else
-/**
- * helper function BuildRefIdInUseList
- * creates the list of reference numbers in use for a given reference prefix.
- * This list is read by CreateFirstFreeRefId to fing not yet used reference Id.
- * @see CreateFirstFreeRefId
- * @param aObjet = the current component index to use for reference prefix filtering.
- * @param aComponentsList = the full list of components
- * @param aIdList = the buffer to fill
- * @param aMinRefId = the min id value to store. all values < aMinRefId are ignored
- */
-static void  BuildRefIdInUseList( int aObjet,SCH_REFERENCE_LIST& aComponentsList,
-                           std::vector<int>& aIdList, int aMinRefId )
-{
-    aIdList.clear();
-
-    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
-    {
-        if(    ( aComponentsList[aObjet].CompareRef( aComponentsList[ii] ) == 0 )
-            && ( aComponentsList[ii].m_NumRef >= aMinRefId ) )
-            aIdList.push_back( aComponentsList[ii].m_NumRef );
-    }
-    sort( aIdList.begin(), aIdList.end() );
-
-    // Ensure each reference Id appears only once
-    // If there are multiple parts per package the same Id will be stored for each part.
-    std::vector<int>::iterator new_end = unique( aIdList.begin(), aIdList.end() );
-    if( new_end != aIdList.end() )
-        aIdList.erase(new_end, aIdList.end() );
-}
-
+#ifndef USE_OLD_ALGO
 /**
  * helper function CreateFirstFreeRefId
  * Search for a free ref Id inside a list of reference numbers in use.
@@ -279,13 +208,14 @@ static void  BuildRefIdInUseList( int aObjet,SCH_REFERENCE_LIST& aComponentsList
  * @return a free (not yet used) Id
  * and this new id is added in list
  */
-static int CreateFirstFreeRefId(  std::vector<int>& aIdList, int aFirstValue )
+static int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue )
 {
     int expectedId = aFirstValue;
 
-    // We search for expectedId a value >= aFirstValue.
+    // We search for expected Id a value >= aFirstValue.
     // Skip existing Id < aFirstValue
     unsigned ii = 0;
+
     for( ; ii < aIdList.size(); ii++ )
     {
         if( expectedId <= aIdList[ii]  )
@@ -294,7 +224,7 @@ static int CreateFirstFreeRefId(  std::vector<int>& aIdList, int aFirstValue )
 
     // Ids are sorted by increasing value, from aFirstValue
     // So we search from aFirstValue the first not used value, i.e. the first hole in list.
-     for(; ii < aIdList.size(); ii++ )
+    for(; ii < aIdList.size(); ii++ )
     {
         if( expectedId != aIdList[ii]  )    // This id is not yet used.
         {
@@ -302,6 +232,7 @@ static int CreateFirstFreeRefId(  std::vector<int>& aIdList, int aFirstValue )
             aIdList.insert(aIdList.begin() + ii, expectedId);
             return expectedId;
         }
+
         expectedId++;
     }
 
@@ -329,17 +260,8 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
     int LastReferenceNumber = 0;
     int NumberOfUnits, Unit;
 
-    /* Components with an invisible reference (power...) always are
-     * re-annotated.  So set their .m_IsNew member to true
-     */
-    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
-    {
-        if( aComponentsList[ii].GetRefStr()[0] == '#' )
-        {
-            aComponentsList[ii].m_IsNew  = true;
-            aComponentsList[ii].m_NumRef = 0;
-        }
-    }
+    /* Components with an invisible reference (power...) always are re-annotated. */
+    aComponentsList.ResetHiddenReferences();
 
     /* calculate index of the first component with the same reference prefix
      * than the current component.  All components having the same reference
@@ -351,47 +273,56 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
     /* calculate the last used number for this reference prefix: */
 #ifdef USE_OLD_ALGO
     int minRefId = 0;
+
     // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
     if( aUseSheetNum )
         minRefId = aComponentsList[first].m_SheetNum * aSheetIntervalId;
-    LastReferenceNumber = GetLastNumberInReference( first, aComponentsList, minRefId );
+
+    LastReferenceNumber = aComponentsList.GetLastReference( first, minRefId );
 #else
     int minRefId = 1;
+
     // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
     if( aUseSheetNum )
         minRefId = aComponentsList[first].m_SheetNum * aSheetIntervalId + 1;
+
     // This is the list of all Id already in use for a given reference prefix.
     // Will be refilled for each new reference prefix.
     std::vector<int>idList;
-    BuildRefIdInUseList( first, aComponentsList, idList, minRefId );
+    aComponentsList.GetRefsInUse( first, idList, minRefId );
 #endif
     for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
     {
         if( aComponentsList[ii].m_Flag )
             continue;
-        if( ( aComponentsList[first].CompareRef( aComponentsList[ii] ) != 0 ) ||
-            ( aUseSheetNum && ( aComponentsList[first].m_SheetNum != aComponentsList[ii].m_SheetNum ) )
-            )
+
+        if( ( aComponentsList[first].CompareRef( aComponentsList[ii] ) != 0 )
+            || ( aUseSheetNum
+                 && ( aComponentsList[first].m_SheetNum != aComponentsList[ii].m_SheetNum ) ) )
         {
-            /* New reference found: we need a new ref number for this
-             * reference */
+            /* New reference found: we need a new ref number for this reference */
             first = ii;
 #ifdef USE_OLD_ALGO
             minRefId = 0;
+
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
                 minRefId = aComponentsList[ii].m_SheetNum * aSheetIntervalId;
-            LastReferenceNumber = GetLastNumberInReference( ii, aComponentsList, minRefId);
+
+            LastReferenceNumber = aComponentsList.GetLastReference( ii, minRefId );
 #else
             minRefId = 1;
+
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
                 minRefId = aComponentsList[ii].m_SheetNum * aSheetIntervalId + 1;
-            BuildRefIdInUseList( first, aComponentsList, idList, minRefId );
+
+            aComponentsList.GetRefsInUse( first, idList, minRefId );
 #endif
         }
-        /* Annotation of one part per package components (trivial case)*/
-        if( aComponentsList[ii].m_Entry->GetPartCount() <= 1 )
+
+        // Annotation of one part per package components (trivial case).
+        if( aComponentsList[ii].GetLibComponent()->GetPartCount() <= 1 )
         {
             if( aComponentsList[ii].m_IsNew )
             {
@@ -409,9 +340,8 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
             continue;
         }
 
-        /* Annotation of multi-part components ( n parts per package )
-         * (complex case) */
-        NumberOfUnits = aComponentsList[ii].m_Entry->GetPartCount();
+        /* Annotation of multi-part components ( n parts per package ) (complex case) */
+        NumberOfUnits = aComponentsList[ii].GetLibComponent()->GetPartCount();
 
         if( aComponentsList[ii].m_IsNew )
         {
@@ -424,6 +354,7 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
 
             if( !aComponentsList[ii].IsPartsLocked() )
                 aComponentsList[ii].m_Unit = 1;
+
             aComponentsList[ii].m_Flag = 1;
         }
 
@@ -436,14 +367,12 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
             if( aComponentsList[ii].m_Unit == Unit )
                 continue;
 
-            int found = ExistUnit( ii, Unit, aComponentsList );
+            int found = aComponentsList.FindUnit( ii, Unit );
 
             if( found >= 0 )
-                continue; /* this unit exists for this reference (unit
-                           * already annotated) */
+                continue; /* this unit exists for this reference (unit already annotated) */
 
-            /* Search a component to annotate ( same prefix, same value,
-             * not annotated) */
+            /* Search a component to annotate ( same prefix, same value, not annotated) */
             for( unsigned jj = ii + 1; jj < aComponentsList.GetCount(); jj++ )
             {
                 if( aComponentsList[jj].m_Flag )    // already tested
@@ -458,8 +387,7 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
                 if( !aComponentsList[jj].m_IsNew )
                     continue;
 
-                /* Component without reference number found, annotate it
-                 * if possible */
+                /* Component without reference number found, annotate it if possible */
                 if( !aComponentsList[jj].IsPartsLocked()
                     || ( aComponentsList[jj].m_Unit == Unit ) )
                 {
@@ -472,42 +400,6 @@ static void ComputeReferenceNumber( SCH_REFERENCE_LIST& aComponentsList,
             }
         }
     }
-}
-
-
-/*
- * Search in the sorted list of components, for a given component an other
- * component with the same reference and a given part unit.  Mainly used to
- * manage multiple parts per package components in aComponentsList.
- */
-static int ExistUnit( int aObjet, int Unit, SCH_REFERENCE_LIST& aComponentsList )
-{
-    int NumRef;
-
-    NumRef = aComponentsList[aObjet].m_NumRef;
-
-    for( unsigned ii = 0; ii < aComponentsList.GetCount(); ii++ )
-    {
-        if( aObjet == (int) ii )
-            // Do not compare with itself !
-            continue;
-        if( aComponentsList[ii].m_IsNew )
-            // Not already with an updated reference
-            continue;
-        if( aComponentsList[ii].m_NumRef != NumRef )
-            // Not the same reference number (like 35 in R35)
-            continue;
-        if( aComponentsList[aObjet].CompareRef( aComponentsList[ii] ) != 0 )
-            // Not the same reference prefix
-            continue;
-        if( aComponentsList[ii].m_Unit == Unit )
-        {
-            // A part with the same reference and the given unit is found
-            return ii;
-        }
-    }
-
-    return -1;
 }
 
 
@@ -542,13 +434,13 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     else
         GetSheet()->GetComponents( ComponentsList );
 
-    ComponentsList.SortComponentsByRefAndValue();
+    ComponentsList.SortByRefAndValue();
 
     /* Break full components reference in name (prefix) and number: example:
      * IC1 become IC, and 1 */
     ComponentsList.SplitReferences();
 
-    /* count not yet annotated items or annottaion error*/
+    /* count not yet annotated items or annotation error*/
     for( unsigned ii = 0; ii < ComponentsList.GetCount(); ii++ )
     {
         msg.Empty();
@@ -581,7 +473,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
         // Annotate error if unit selected does not exist ( i.e. > number of parts )
         // Can happen if a component has changed in a lib, after a previous annotation
-        if( MAX( ComponentsList[ii].m_Entry->GetPartCount(), 1 ) < ComponentsList[ii].m_Unit )
+        if( MAX( ComponentsList[ii].GetLibComponent()->GetPartCount(), 1 ) < ComponentsList[ii].m_Unit )
         {
             if( ComponentsList[ii].m_NumRef >= 0 )
                 Buff << ComponentsList[ii].m_NumRef;
@@ -594,7 +486,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
             Buff.Printf( _( " unit %d and no more than %d parts" ),
                          ComponentsList[ii].m_Unit,
-                         ComponentsList[ii].m_Entry->GetPartCount() );
+                         ComponentsList[ii].GetLibComponent()->GetPartCount() );
             msg << Buff;
 
             if( aMessageList )
@@ -651,8 +543,8 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
         /* Test error if units are different but number of parts per package
          * too high (ex U3 ( 1 part) and we find U3B this is an error) */
-        if( ComponentsList[ii].m_Entry->GetPartCount()
-            != ComponentsList[ii + 1].m_Entry->GetPartCount() )
+        if( ComponentsList[ii].GetLibComponent()->GetPartCount()
+            != ComponentsList[ii + 1].GetLibComponent()->GetPartCount() )
         {
             if( ComponentsList[ii].m_NumRef >= 0 )
                 Buff << ComponentsList[ii].m_NumRef;
@@ -676,8 +568,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
             error++;
         }
 
-        /* Error if values are different between units, for the same
-         * reference */
+        /* Error if values are different between units, for the same reference */
         int next = ii + 1;
 
         if( ComponentsList[ii].CompareValue( ComponentsList[next] ) != 0 )
@@ -723,7 +614,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     for( int ii = 0; ( ii < imax ) && ( error < 4 ); ii++ )
     {
         if( ( ComponentsList[ii].m_TimeStamp != ComponentsList[ii + 1].m_TimeStamp )
-           || ( ComponentsList[ii].m_SheetPath != ComponentsList[ii + 1].m_SheetPath ) )
+            || ( ComponentsList[ii].GetSheetPath() != ComponentsList[ii + 1].GetSheetPath() ) )
             continue;
 
         /* Same time stamp found.  */
@@ -731,7 +622,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
         wxString full_path;
 
         full_path.Printf( wxT( "%s%8.8X" ),
-                          GetChars( ComponentsList[ii].m_SheetPath.Path() ),
+                          GetChars( ComponentsList[ii].GetSheetPath().Path() ),
                           ComponentsList[ii].m_TimeStamp );
 
         cmpref     = ComponentsList[ii].GetRef();

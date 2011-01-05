@@ -39,6 +39,7 @@
 
 
 class SCH_COMPONENT;
+class SCH_REFERENC_LIST;
 
 
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
@@ -61,16 +62,17 @@ class SCH_REFERENCE
 private:
     /// Component reference prefix, without number (for IC1, this is IC) )
     std::string    m_Ref;               // it's private, use the accessors please
+    SCH_COMPONENT* m_RootCmp;           ///< The component associated the reference object.
+    LIB_COMPONENT* m_Entry;             ///< The source component from a library.
+    wxPoint        m_CmpPos;            ///< The physical position of the component in schematic
+                                        ///< used to annotate by X or Y position
+    SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
 
+    friend class SCH_REFERENCE_LIST;
 
 public:
-    SCH_COMPONENT* m_RootCmp;           // the component in schematic
-    LIB_COMPONENT* m_Entry;             // the source component in library
     int            m_Unit;              /* Selected part (For multi parts per
-                                        * package) depending on sheet path */
-    wxPoint        m_CmpPos;            // The physical position of the component in schematic
-                                        // used to annotate by Y ou Y position
-    SCH_SHEET_PATH m_SheetPath;         /* the sheet path for this component */
+                                         * package) depending on sheet path */
     int            m_SheetNum;          // the sheet num for this component
     unsigned long  m_TimeStamp;         /* unique identification number
                                          * depending on sheet path */
@@ -100,6 +102,12 @@ public:
     SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,
                    SCH_SHEET_PATH& aSheetPath );
 
+    SCH_COMPONENT* GetComponent() const { return m_RootCmp; }
+
+    LIB_COMPONENT* GetLibComponent() const { return m_Entry; }
+
+    SCH_SHEET_PATH GetSheetPath() const { return m_SheetPath; }
+
     /**
      * Function Annotate
      * updates the annotation of the component according the the current object state.
@@ -119,11 +127,11 @@ public:
         thereby making it easy to change that strategy.
     */
 
-
     void SetRef( const wxString& aReference )
     {
         m_Ref =  CONV_TO_UTF8( aReference );
     }
+
     wxString GetRef() const
     {
         return CONV_FROM_UTF8( m_Ref.c_str() );
@@ -137,18 +145,15 @@ public:
         return m_Ref.c_str();
     }
 
-
     int CompareValue( const SCH_REFERENCE& item ) const
     {
         return m_Value->CmpNoCase( *item.m_Value );
     }
 
-
     int CompareRef( const SCH_REFERENCE& item ) const
     {
         return m_Ref.compare( item.m_Ref );
     }
-
 
     bool IsPartsLocked()
     {
@@ -156,13 +161,14 @@ public:
     }
 };
 
-/* object used in annotation to handle a list of components in schematic
- * because in a complex hierarchy, a component is used more than once,
- * and its reference is depending on the sheet path
- * for the same component, we must create a flat list of components
- * used in nelist generation, BOM generation and annotation
- */
 
+/**
+ * Class SCH_REFERENCE_LIST
+ * is used create a flattened list of components because in a complex hierarchy, a component
+ * can used more than once and its reference designator is dependent on the sheet path for the
+ * same component.  This flattened list is used for netlist generation, BOM generation, and
+ * schematic annotation.
+ */
 class SCH_REFERENCE_LIST
 {
 private:
@@ -193,20 +199,19 @@ public:
      * Function GetItem
      * @return the aIdx item
      */
-    SCH_REFERENCE& GetItem(int aIdx)
+    SCH_REFERENCE& GetItem( int aIdx )
     {
         return componentFlatList[aIdx];
     }
 
     /**
      * Function AddItem
-     * Add a OBJ_CMP_TO_LIST object in aComponentsList for each component found
-     * in sheet
+     * adds a SCH_REFERENCE object to the list of references.
      * @param aItem - a SCH_REFERENCE item to add
      */
     void AddItem( SCH_REFERENCE& aItem )
     {
-        componentFlatList.push_back( aItem);
+        componentFlatList.push_back( aItem );
     }
 
     /**
@@ -215,18 +220,17 @@ public:
      * found in this list.
      * Useful to create BOM, when a component must appear only once
      */
-    void RemoveSubComponentsFromList( );
+    void RemoveSubComponentsFromList();
 
     /* Sort functions:
-     * Sort functions are used to sort components for annotatioon or BOM generation.
+     * Sort functions are used to sort components for annotation or BOM generation.
      * Because sorting depend on we want to do, there are many sort functions.
      * Note:
      *    When creating BOM, components are fully annotated.
-     *    references are somethink like U3, U5 or R4, R8
+     *    references are something like U3, U5 or R4, R8
      *    When annotating,  some or all components are not annotated,
      *    i.e. ref is only U or R, with no number.
      */
-
 
     /**
      * Function SplitReferences
@@ -244,10 +248,9 @@ public:
 
     /**
      * function UpdateAnnotation
-     * Update the reference components for the schematic project (or the current sheet)
-     * Note: this function does not calculate the reference numbers
-     * stored in m_NumRef
-     * So, it must be called after calcultaion of new reference numbers
+     * Updates the reference components for the schematic project (or the current sheet)
+     * Note: this function does not calculate the reference numbers stored in m_NumRef
+     * So, it must be called after calculation of new reference numbers
      * @see SCH_REFERENCE::Annotate()
      */
     void UpdateAnnotation()
@@ -260,23 +263,41 @@ public:
     }
 
     /**
-     * Function SortCmpByXCoordinate
-     * sort the flat list by X coordinates.
-     * The list is always sorted first by ref and sheet
+     * Function sortByXCoordinate
+     * sorts the list of references by X position.
+     * <p>
+     * Components are sorted as follows:
+     * <ul>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Sheet number.</li>
+     * <li>X coordinate position.</li>
+     * <li>Y coordinate position.</li>
+     * <li>Time stamp.</li>
+     * </ul>
+     * </p>
      */
-    void SortCmpByXCoordinate()
+    void SortByXCoordinate()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortBy_X_Position );
+        sort( componentFlatList.begin(), componentFlatList.end(), sortByXPosition );
     }
 
     /**
-     * Function SortCmpByYCoordinate
-     * sort the flat list by Y coordinates.
-     * The list is always sorted first by ref and sheet
+     * Function sortByYCoordinate
+     * sorts the list of references by Y position.
+     * <p>
+     * Components are sorted as follows:
+     * <ul>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Sheet number.</li>
+     * <li>Y coordinate position.</li>
+     * <li>X coordinate position.</li>
+     * <li>Time stamp.</li>
+     * </ul>
+     * </p>
      */
-    void SortCmpByYCoordinate()
+    void SortByYCoordinate()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortBy_Y_Position );
+        sort( componentFlatList.begin(), componentFlatList.end(), sortByYPosition );
     }
 
     /**
@@ -290,102 +311,114 @@ public:
     }
 
     /**
-     * Function SortComponentsByValue
-     * sort the flat list by Value.
-     * Values are sorted by numeric values, not by alpahbetic order
-     * The list is always sorted first by ref
+     * Function SortByRefAndValue
+     * sorts the list of references by value.
+     * <p>
+     * Components are sorted in the following order:
+     * <ul>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Value of component.</li>
+     * <li>Unit number when component has multiple parts.</li>
+     * <li>Sheet number.</li>
+     * <li>X coordinate position.</li>
+     * <li>Y coordinate position.</li>
+     * </ul>
+     * </p>
      */
-    void SortComponentsByRefAndValue()
+    void SortByRefAndValue()
     {
         sort( componentFlatList.begin(), componentFlatList.end(), sortByRefAndValue );
     }
 
     /**
-     * Function SortComponentsByReferenceOnly
-     * sort the flat list by references
-     * For BOM, sorted by reference
+     * Function SortByReferenceOnly
+     * sorts the list of references by reference.
+     * <p>
+     * Components are sorted in the following order:
+     * <ul>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Unit number when component has multiple parts.</li>
+     * </ul>
+     * </p>
      */
-    void SortComponentsByReferenceOnly()
+    void SortByReferenceOnly()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortComponentsByReferenceOnly );
+        sort( componentFlatList.begin(), componentFlatList.end(), sortByReferenceOnly );
     }
 
     /**
-     * Function SortComponentsByValueOnly
-     * sort the flat list by references
-     * For BOM, sorted by values
+     * Function SortByValueOnly
+     * sort the list of references by value.
+     * <p>
+     * Components are sorted in the following order:
+     * <ul>
+     * <li>Value of component.</li>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Unit number when component has multiple parts.</li>
+     * </ul>
+     * </p>
      */
-    void SortComponentsByValueOnly()
+    void SortByValueOnly()
     {
-        sort( componentFlatList.begin(), componentFlatList.end(), sortComponentsByValueOnly );
+        sort( componentFlatList.begin(), componentFlatList.end(), sortByValueOnly );
     }
+
+    /**
+     * Function GetUnit
+     * searches the sorted list of components for a another component with the same
+     * reference and a given part unit.  Use this method to manage components with
+     * multiple parts per package.
+     * @param aIndex = index in aComponentsList for of given SCH_REFERENCE item to test.
+     * @param aUnit = the given unit number to search
+     * @return index in aComponentsList if found or -1 if not found
+     */
+    int FindUnit( size_t aIndex, int aUnit );
+
+    /**
+     * Function ResetHiddenReferences
+     * clears the annotation for all references that have an invisible reference designator.
+     * Invisible reference designators always have # as the first letter.
+     */
+    void ResetHiddenReferences();
+
+    /**
+     * Function GetRefsInUse
+     * adds all the reference designator numbers greater than \a aMinRefId to \a aIdList
+     * skipping the reference at \a aIndex.
+     * @param aIndex = the current component index to use for reference prefix filtering.
+     * @param aIdList = the buffer to fill
+     * @param aMinRefId = the min id value to store. all values < aMinRefId are ignored
+     */
+    void GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId );
+
+    /**
+     * Function GetLastReference
+     * returns the last used (greatest) reference number in the reference list
+     * for the prefix reference given by \a aIndex.  The component list must be
+     * sorted.
+     *
+     * @param aIndex The index of the reference item used for the search pattern.
+     * @param aMinValue The minimum value for the current search.
+     */
+    int GetLastReference( int aIndex, int aMinValue );
 
 private:
     /* sort functions used to sort componentFlatList
     */
 
-    /**
-     * Function sortByRefAndValue
-     * sort function to annotate items by value
-     *  Components are sorted
-     *      by reference (when used, referenc is only U ot R, with no number)
-     *      if same reference: by value
-     *          if same value: by unit number
-     *              if same unit number, by sheet
-     *                  if same sheet, by position X, and Y
-     * @param item1, item2 = SCH_REFERENCE items to compare
-     */
     static bool sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
-    /**
-     * Function sortBy_X_Position
-     * sort function to annotate items from their position.
-     *  Components are sorted
-     *      by reference (when used, referenc is only U ot R, with no number)
-     *      if same reference: by sheet
-     *          if same sheet, by X pos
-     *                if same X pos, by Y pos
-     *                  if same Y pos, by time stamp
-     * @param item1, item2 = SCH_REFERENCE items to compare
-     */
-    static bool sortBy_X_Position( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
-    /**
-     * Function sortBy_Y_Position
-     * sort function to annotate items from their position.
-     *  Components are sorted
-     *      by reference (when used, referenc is only U ot R, with no number)
-     *      if same reference: by sheet
-     *          if same sheet, by Y pos
-     *                if same Y pos, by X pos
-     *                  if same X pos, by time stamp
-     * @param item1, item2 = SCH_REFERENCE items to compare
-     */
-    static bool sortBy_Y_Position( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+    static bool sortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+
+    static bool sortByYPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByTimeStamp( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
-    /**
-     * Function sortComponentsByValueOnly
-     * compare function for sorting in BOM creation.
-     * components are sorted
-     *     by value
-     *     if same value: by reference
-     *         if same reference: by unit number
-     * @param item1, item2 = SCH_REFERENCE items to compare
-     */
+    static bool sortByValueOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
-    static bool sortComponentsByValueOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
-    /**
-     * Function sortComponentsByReferenceOnly
-     * compare function for sorting in BOM creation.
-     * components are sorted
-     *     by reference
-     *     if same reference: by value (happens only for multi parts per package)
-     *         if same value: by unit number
-     * @param item1, item2 = SCH_REFERENCE items to compare
-     */
-    static bool sortComponentsByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+    static bool sortByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 };
+
 
 /**
  * helper Class LABEL_OBJECT

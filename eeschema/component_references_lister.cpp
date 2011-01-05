@@ -43,16 +43,8 @@
 
 
 
-/* sort function to annotate items from their position.
- *  Components are sorted
- *      by reference
- *      if same reference: by sheet
- *          if same sheet, by X pos
- *                if same X pos, by Y pos
- *                  if same Y pos, by time stamp
- */
-bool SCH_REFERENCE_LIST::sortBy_X_Position( const SCH_REFERENCE& item1,
-                                   const SCH_REFERENCE& item2 )
+bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1,
+                                          const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
 
@@ -69,16 +61,8 @@ bool SCH_REFERENCE_LIST::sortBy_X_Position( const SCH_REFERENCE& item1,
 }
 
 
-/* sort function to annotate items by their position.
- *  Components are sorted
- *      by reference
- *      if same reference: by sheet
- *          if same sheet, by Y pos
- *                if same Y pos, by X pos
- *                  if same X pos, by time stamp
- */
-bool SCH_REFERENCE_LIST::sortBy_Y_Position( const SCH_REFERENCE& item1,
-                                   const SCH_REFERENCE& item2 )
+bool SCH_REFERENCE_LIST::sortByYPosition( const SCH_REFERENCE& item1,
+                                          const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
 
@@ -94,16 +78,9 @@ bool SCH_REFERENCE_LIST::sortBy_Y_Position( const SCH_REFERENCE& item1,
     return ii < 0;
 }
 
-/*
- * sort function to annotate items by value
- *  Components are sorted
- *      by reference
- *      if same reference: by value
- *          if same value: by unit number
- *              if same unit number, by sheet
- *                  if same sheet, by position X, and Y
- */
-bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
+
+bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
+                                            const SCH_REFERENCE& item2 )
 {
     int ii = item1.CompareRef( item2 );
     if( ii == 0 )
@@ -122,13 +99,9 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1, const SC
     return ii < 0;
 }
 
-/* sort function for for list by values
- * components are sorted
- *    by value
- *    if same value: by reference
- *         if same reference: by unit number
- */
-bool SCH_REFERENCE_LIST::sortComponentsByValueOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 )
+
+bool SCH_REFERENCE_LIST::sortByValueOnly( const SCH_REFERENCE& item1,
+                                          const SCH_REFERENCE& item2 )
 {
     int             ii;
     const wxString* Text1, * Text2;
@@ -150,16 +123,9 @@ bool SCH_REFERENCE_LIST::sortComponentsByValueOnly( const SCH_REFERENCE& item1, 
     return ii < 0;
 }
 
-/**
- * Function sortComponentsByReferenceOnly
- * compare function for sorting in BOM creation.
- * components are sorted
- *     by reference
- *     if same reference: by value
- *         if same value: by unit number
- */
-bool SCH_REFERENCE_LIST::sortComponentsByReferenceOnly( const SCH_REFERENCE& item1,
-                                                  const SCH_REFERENCE& item2 )
+
+bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
+                                              const SCH_REFERENCE& item2 )
 {
     int             ii;
     const wxString* Text1, * Text2;
@@ -182,12 +148,8 @@ bool SCH_REFERENCE_LIST::sortComponentsByReferenceOnly( const SCH_REFERENCE& ite
 }
 
 
-/*****************************************************************************
- * qsort function to annotate items by value
- *  Components are sorted by time stamp
- *****************************************************************************/
 bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
-                             const SCH_REFERENCE& item2 )
+                                          const SCH_REFERENCE& item2 )
 {
     int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
 
@@ -198,10 +160,32 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 }
 
 
+int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
+{
+    int NumRef;
+
+    NumRef = componentFlatList[aIndex].m_NumRef;
+
+    for( size_t ii = 0; ii < componentFlatList.size(); ii++ )
+    {
+        if(  ( aIndex == ii )
+          || ( componentFlatList[ii].m_IsNew )
+          || ( componentFlatList[ii].m_NumRef != NumRef )
+          || ( componentFlatList[aIndex].CompareRef( componentFlatList[ii] ) != 0 ) )
+            continue;
+
+        if( componentFlatList[ii].m_Unit == aUnit )
+            return (int) ii;
+    }
+
+    return -1;
+}
+
+
 /* Remove sub components from the list, when multiples parts per package are
  * found in this list
  */
-void SCH_REFERENCE_LIST::RemoveSubComponentsFromList( )
+void SCH_REFERENCE_LIST::RemoveSubComponentsFromList()
 {
     SCH_COMPONENT* libItem;
     wxString       oldName;
@@ -209,7 +193,8 @@ void SCH_REFERENCE_LIST::RemoveSubComponentsFromList( )
 
     // The component list **MUST** be sorted by reference and by unit number
     // in order to find all parts of a component
-    SortComponentsByReferenceOnly();
+    SortByReferenceOnly();
+
     for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
     {
         libItem = componentFlatList[ii].m_RootCmp;
@@ -220,17 +205,71 @@ void SCH_REFERENCE_LIST::RemoveSubComponentsFromList( )
 
         if( !oldName.IsEmpty() )
         {
-            if( oldName == currName )   // currName is a subpart of oldName:
-                                        // remove it
+            if( oldName == currName )   // currName is a subpart of oldName: remove it
             {
                 componentFlatList.erase( componentFlatList.begin() + ii );
                 ii--;
             }
         }
+
         oldName = currName;
     }
 }
 
+
+void SCH_REFERENCE_LIST::ResetHiddenReferences()
+{
+    for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
+    {
+        if( componentFlatList[ii].GetRefStr()[0] == '#' )
+        {
+            componentFlatList[ii].m_IsNew  = true;
+            componentFlatList[ii].m_NumRef = 0;
+        }
+    }
+}
+
+
+void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId )
+{
+    aIdList.clear();
+
+    for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
+    {
+        if(    ( componentFlatList[aIndex].CompareRef( componentFlatList[ii] ) == 0 )
+            && ( componentFlatList[ii].m_NumRef >= aMinRefId ) )
+            aIdList.push_back( componentFlatList[ii].m_NumRef );
+    }
+
+    sort( aIdList.begin(), aIdList.end() );
+
+    // Ensure each reference number appears only once.  If there are components with
+    // multiple parts per package the same number will be stored for each part.
+    std::vector< int >::iterator it = unique( aIdList.begin(), aIdList.end() );
+
+    // Using the C++ unique algorithm only moves the duplicate entries to the end of
+    // of the array.  This removes the duplicate entries from the array.
+    aIdList.resize( it - aIdList.begin() );
+}
+
+
+int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue )
+{
+    int lastNumber = aMinValue;
+
+    for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
+    {
+        // search only for the current reference prefix:
+        if( componentFlatList[aIndex].CompareRef( componentFlatList[ii] ) != 0 )
+            continue;
+
+        // update max value for the current reference prefix
+        if( lastNumber < componentFlatList[ii].m_NumRef )
+            lastNumber = componentFlatList[ii].m_NumRef;
+    }
+
+    return lastNumber;
+}
 
 
 SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComponent,

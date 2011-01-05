@@ -408,7 +408,7 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
         cmplist.RemoveSubComponentsFromList();
 
     // sort component list by value
-    cmplist.SortComponentsByValueOnly( );
+    cmplist.SortByValueOnly( );
     PrintComponentsListByPart( f, cmplist,aIncludeSubComponents );
 
     fclose( f );
@@ -440,7 +440,7 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
     sheetList.GetComponents( cmplist, false );
 
     // sort component list
-    cmplist.SortComponentsByReferenceOnly( );
+    cmplist.SortByReferenceOnly( );
 
     if( !aIncludeSubComponents )
         cmplist.RemoveSubComponentsFromList();
@@ -489,7 +489,7 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
         fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
 
         // sort component list
-        cmplist.SortComponentsByReferenceOnly();
+        cmplist.SortByReferenceOnly();
 
         if( !aIncludeSubComponents )
             cmplist.RemoveSubComponentsFromList();
@@ -499,7 +499,7 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
 
         if( m_ListCmpbyValItems->GetValue() )
         {
-            cmplist.SortComponentsByValueOnly();
+            cmplist.SortByValueOnly();
             PrintComponentsListByVal( f, cmplist, aIncludeSubComponents );
         }
     }
@@ -632,7 +632,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
     // Print list of items
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        EDA_ITEM* item = aList[ii].m_RootCmp;
+        EDA_ITEM* item = aList[ii].GetComponent();
 
         if( item == NULL )
             continue;
@@ -680,7 +680,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 
         if( aIncludeSubComponents )
         {
-            msg = aList[ii].m_SheetPath.PathHumanReadable();
+            msg = aList[ii].GetSheetPath().PathHumanReadable();
             BASE_SCREEN * screen = (BASE_SCREEN*) comp->GetParent();
 
             if( screen )
@@ -747,10 +747,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
 
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        currCmp = (SCH_COMPONENT*) aList[ii].m_RootCmp;
+        currCmp = aList[ii].GetComponent();
 
         if( ii < aList.GetCount() -1 )
-            nextCmp = aList[ii+1].m_RootCmp;
+            nextCmp = aList[ii+1].GetComponent();
         else
             nextCmp = NULL;
 
@@ -882,7 +882,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
 
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        schItem = aList[ii].m_RootCmp;
+        schItem = aList[ii].GetComponent();
 
         if( schItem == NULL )
             continue;
@@ -918,7 +918,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             BASE_SCREEN * screen = (BASE_SCREEN*) DrawLibItem->GetParent();
             if( screen )
             {
-                msg = aList[ii].m_SheetPath.PathHumanReadable();
+                msg = aList[ii].GetSheetPath().PathHumanReadable();
                 fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
                 msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->m_Pos );
                 fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
