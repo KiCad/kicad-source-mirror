@@ -634,14 +634,13 @@ void SCH_EDIT_FRAME::LoadSettings()
         {
             m_TemplateFieldNames.Parse( &lexer );
         }
-        catch( IO_ERROR e )
+        catch( IO_ERROR& e )
         {
             // @todo show error msg
             D( printf( "templatefieldnames parsing error: '%s'\n",
                        CONV_TO_UTF8( e.errorText ) ); )
         }
     }
-
 }
 
 

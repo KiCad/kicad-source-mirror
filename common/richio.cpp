@@ -122,7 +122,10 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
         expandCapacity( capacity * 2 );
     }
 
-    if( length )
+    /* if( length ) RHH: this may now refer to a non-existent line but
+     * that leads to better error reporting on unexpected end of file.
+     */
+
         ++lineNum;
 
     return length;
@@ -173,9 +176,10 @@ unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 
         memcpy( line, &lines[ndx], length );
 
-        ++lineNum;
         ndx += length;
     }
+
+    ++lineNum;      // this gets incremented even if no bytes were read
 
     line[length] = 0;
 

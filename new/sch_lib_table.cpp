@@ -57,9 +57,12 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
 
     ELT_T   tok;
 
-    while( ( tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    while( ( tok = in->NextTok() ) != T_RIGHT )
     {
         // (lib (logical "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+
+        if( tok == T_EOF )
+            in->Expecting( T_RIGHT );
 
         if( tok != T_LEFT )
             in->Expecting( T_LEFT );
@@ -353,6 +356,7 @@ void LIB_TABLE::Test()
         "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n"
         "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options useVersioning))\n"
         "  (lib (logical old-project)   (type schematic)(full_uri /tmp/old-schematic.sch)   (options \" \"))\n"
+        ")\n"
         ,
 
         wxT( "inline text" )        // source
@@ -416,8 +420,13 @@ int main( int argc, char** argv )
     catch( PARSE_ERROR& ioe )   // most derived class first
     {
         printf( "%s\n", (const char*) ioe.errorText.ToUTF8() );
-        printf( "%s", ioe.inputLine.c_str() );      // rare not to have \n at end
-        printf( "%*s^\n", ioe.byteIndex-1, " " );
+
+        printf( "%s%s",
+                ioe.inputLine.c_str(),
+                ioe.inputLine.empty() || *ioe.inputLine.rbegin() != '\n' ?
+                        "\n" : "" );      // rare not to have \n at end
+
+        printf( "%*s^\n", ioe.byteIndex>=1 ? ioe.byteIndex-1 : 0, "" );
     }
     catch( IO_ERROR& ioe )
     {
