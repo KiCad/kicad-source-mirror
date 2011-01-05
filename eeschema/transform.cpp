@@ -62,8 +62,8 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
     x = t;
     *aAngle2 = (int) ( atan2( y, x ) * 1800.0 / M_PI + 0.5 );
 
-    NORMALIZE_ANGLE( *aAngle1 );
-    NORMALIZE_ANGLE( *aAngle2 );
+    NORMALIZE_ANGLE_POS( *aAngle1 );
+    NORMALIZE_ANGLE_POS( *aAngle2 );
     if( *aAngle2 < *aAngle1 )
         *aAngle2 += 3600;
 
@@ -73,8 +73,8 @@ bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
         *aAngle1 = (*aAngle2);
         *aAngle2 = Angle;
 
-        NORMALIZE_ANGLE( *aAngle1 );
-        NORMALIZE_ANGLE( *aAngle2 );
+        NORMALIZE_ANGLE_POS( *aAngle1 );
+        NORMALIZE_ANGLE_POS( *aAngle2 );
         if( *aAngle2 < *aAngle1 )
             *aAngle2 += 3600;
         swap = true;

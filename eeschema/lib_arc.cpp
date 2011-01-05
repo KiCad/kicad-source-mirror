@@ -126,8 +126,8 @@ bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
     if( tmp[0] == 'f' )
         m_Fill = FILLED_WITH_BG_BODYCOLOR;
 
-    NORMALIZE_ANGLE( m_t1 );
-    NORMALIZE_ANGLE( m_t2 );
+    NORMALIZE_ANGLE_POS( m_t1 );
+    NORMALIZE_ANGLE_POS( m_t2 );
 
     // Actual Coordinates of arc ends are read from file
     if( cnt >= 13 )
@@ -712,8 +712,8 @@ void LIB_ARC::calcRadiusAngles()
     m_t2 = (int) ( atan2( (double) centerEndVector.y,
                           (double) centerEndVector.x ) * 1800 / M_PI );
 
-    NORMALIZE_ANGLE( m_t1 );
-    NORMALIZE_ANGLE( m_t2 );  // angles = 0 .. 3600
+    NORMALIZE_ANGLE_POS( m_t1 );
+    NORMALIZE_ANGLE_POS( m_t2 );  // angles = 0 .. 3600
 
     // Restrict angle to less than 180 to avoid PBS display mirror Trace because it is
     // assumed that the arc is less than 180 deg to find orientation after rotate or mirror.
@@ -734,8 +734,8 @@ void LIB_ARC::calcRadiusAngles()
         m_t1--;
     }
 
-    NORMALIZE_ANGLE( m_t1 );
+    NORMALIZE_ANGLE_POS( m_t1 );
 
     if( !IsMoving() )
-        NORMALIZE_ANGLE( m_t2 );
+        NORMALIZE_ANGLE_POS( m_t2 );
 }

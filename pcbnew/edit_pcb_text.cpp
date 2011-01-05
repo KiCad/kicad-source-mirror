@@ -192,7 +192,7 @@ void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
 
     TextePcb->m_Orient += angle;
-    NORMALIZE_ANGLE( TextePcb->m_Orient );
+    NORMALIZE_ANGLE_POS( TextePcb->m_Orient );
 
     /* Redraw text in new position. */
     TextePcb->Draw( DrawPanel, DC, drawmode );

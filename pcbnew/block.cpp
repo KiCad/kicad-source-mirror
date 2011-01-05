@@ -248,6 +248,8 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     }
 
     DisplayToolMsg( wxEmptyString );
+    DrawPanel->SetCursor( DrawPanel->m_PanelCursor =
+                                      DrawPanel->m_PanelDefaultCursor );
 }
 
 
@@ -263,7 +265,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
  */
 bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 {
-    bool nextcmd = false;
+    bool nextcmd = false;       // Will be set to true if a block place is needed
     bool cancelCmd = false;
 
     // If coming here after cancel block, clean up and exit
@@ -296,8 +298,8 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             // Exit if no items found
             if( !GetScreen()->m_BlockLocate.GetCount() )
                 cancelCmd = true;
-            else
-                nextcmd = true;
+//            else
+//                nextcmd = true;
         }
     }
 

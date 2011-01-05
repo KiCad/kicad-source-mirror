@@ -215,7 +215,7 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     {
         long angle;
         m_Angle_Ctrl->GetValue().ToLong(&angle);
-        NORMALIZE_ANGLE(angle);
+        NORMALIZE_ANGLE_360(angle);
         m_Item->m_Angle = angle;
     }
 

@@ -63,15 +63,16 @@ static inline const wxChar* GetChars( const wxString& s )
 #define DEG2RAD( Deg ) ( (Deg) * M_PI / 180.0 )
 #define RAD2DEG( Rad ) ( (Rad) * 180.0 / M_PI )
 
-/* Normalize angle to be in the -360.0 .. 360.0 range or 0 .. 360.0: */
-#define NORMALIZE_ANGLE( Angle ) { while( Angle < 0 ) \
+// Normalize angle to be in the -360.0 .. 360.0:
+#define NORMALIZE_ANGLE_360( Angle ) { while( Angle < -3600 ) \
                                        Angle += 3600;\
                                    while( Angle > 3600 ) \
                                        Angle -= 3600;}
 
 /* Normalize angle to be in the 0.0 .. 360.0 range: */
 #define NORMALIZE_ANGLE_POS( Angle ) { while( Angle < 0 ) \
-                                           Angle += 3600;while( Angle >= 3600 ) \
+                                           Angle += 3600;\
+                                           while( Angle >= 3600 ) \
                                            Angle -= 3600;}
 #define NEGATE_AND_NORMALIZE_ANGLE_POS( Angle ) \
     { Angle = -Angle; while( Angle < 0 ) \

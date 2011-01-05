@@ -532,7 +532,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         NEGATE( pad->m_Offset.x );
         NEGATE( pad->m_DeltaSize.x );
         pad->m_Orient      = 1800 - pad->m_Orient;
-        NORMALIZE_ANGLE( pad->m_Orient );
+        NORMALIZE_ANGLE_POS( pad->m_Orient );
     }
 
     item = module->m_Drawings;
@@ -587,7 +587,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         ROTATE( pad->GetPosition() );
         pad->m_Pos0    = pad->GetPosition();
         pad->m_Orient += 900;
-        NORMALIZE_ANGLE( pad->m_Orient );
+        NORMALIZE_ANGLE_POS( pad->m_Orient );
     }
 
     item = module->m_Drawings;

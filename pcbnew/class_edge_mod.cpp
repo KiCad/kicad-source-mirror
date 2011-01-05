@@ -421,7 +421,7 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
                 &m_Start0.x, &m_Start0.y,
                 &m_End0.x, &m_End0.y,
                 &m_Angle, &m_Width, &m_Layer );
-        NORMALIZE_ANGLE( m_Angle );
+        NORMALIZE_ANGLE_360( m_Angle );
         break;
 
     case S_SEGMENT:
