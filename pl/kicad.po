@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-02 19:52+0100\n"
-"PO-Revision-Date: 2011-01-02 20:08+0100\n"
+"POT-Creation-Date: 2011-01-05 21:16+0100\n"
+"PO-Revision-Date: 2011-01-05 21:16+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -454,146 +454,13 @@ msgstr "> %-28.28s Arkusz pinów %-7.7s (Arkusz %s) pozycja: %3.3f, %3.3f\n"
 msgid "#End labels\n"
 msgstr "#End labels\n"
 
-#: eeschema/lib_pin.cpp:31
-msgid "Right"
-msgstr "Prawo"
-
-#: eeschema/lib_pin.cpp:32
-msgid "Left"
-msgstr "Lewo"
-
-#: eeschema/lib_pin.cpp:33
-msgid "Up"
-msgstr "Góra"
-
-#: eeschema/lib_pin.cpp:34
-msgid "Down"
-msgstr "Dół"
-
-#: eeschema/lib_pin.cpp:61
-msgid "Line"
-msgstr "Linia"
-
-#: eeschema/lib_pin.cpp:62
-msgid "Inverted"
-msgstr "Zanegowany"
-
-#: eeschema/lib_pin.cpp:63
-msgid "Clock"
-msgstr "Zegarowe"
-
-#: eeschema/lib_pin.cpp:64
-msgid "Inverted clock"
-msgstr "Zanegowane zegarowe"
-
-#: eeschema/lib_pin.cpp:65
-msgid "Input low"
-msgstr "Wejście, aktywny niski"
-
-#: eeschema/lib_pin.cpp:66
-msgid "Clock low"
-msgstr "Zegarowy, aktywny niski"
-
-#: eeschema/lib_pin.cpp:67
-msgid "Output low"
-msgstr "Wyjście, aktywny niski"
-
-#: eeschema/lib_pin.cpp:68
-msgid "Falling edge clock"
-msgstr "Zegar, zbocze opadające"
-
-#: eeschema/lib_pin.cpp:69
-msgid "NonLogic"
-msgstr "NieLogiczny"
-
-#: eeschema/lib_pin.cpp:107
-msgid "Input"
-msgstr "Wejście"
-
-#: eeschema/lib_pin.cpp:108
-msgid "Output"
-msgstr "Wyjście"
-
-#: eeschema/lib_pin.cpp:109
-msgid "Bidirectional"
-msgstr "Dwukierunkowy"
-
-#: eeschema/lib_pin.cpp:110
-msgid "Tri-state"
-msgstr "Trójstanowy"
-
-#: eeschema/lib_pin.cpp:111
-msgid "Passive"
-msgstr "Pasywny"
-
-#: eeschema/lib_pin.cpp:112
-msgid "Unspecified"
-msgstr "Nieokreślony"
-
-#: eeschema/lib_pin.cpp:113
-msgid "Power input"
-msgstr "Wejście zasilania"
-
-#: eeschema/lib_pin.cpp:114
-msgid "Power output"
-msgstr "Wyjście zasilania"
-
-#: eeschema/lib_pin.cpp:115
-msgid "Open collector"
-msgstr "Otwarty kolektor"
-
-#: eeschema/lib_pin.cpp:116
-msgid "Open emitter"
-msgstr "Otwarty emiter"
-
-#: eeschema/lib_pin.cpp:117
-msgid "Not connected"
-msgstr "Nie podłączony"
-
-#: eeschema/lib_pin.cpp:174
-msgid "Pin"
-msgstr "Pin"
-
-#: eeschema/lib_pin.cpp:1722
-msgid "Name"
-msgstr "Nazwa"
-
-#: eeschema/lib_pin.cpp:1729
-msgid "Number"
-msgstr "Numer"
-
-#: eeschema/lib_pin.cpp:1731
-#: eeschema/lib_draw_item.cpp:61
-msgid "Type"
-msgstr "Typ"
-
-#: eeschema/lib_pin.cpp:1735
-msgid "Style"
-msgstr "Styl"
-
-#: eeschema/lib_pin.cpp:1737
-msgid "Yes"
-msgstr "Tak"
-
-#: eeschema/lib_pin.cpp:1739
-msgid "No"
-msgstr "Nie"
-
-#: eeschema/lib_pin.cpp:1740
-msgid "Visible"
-msgstr "Widoczny"
-
-#: eeschema/lib_pin.cpp:1744
-msgid "Length"
-msgstr "Długość"
-
-#: eeschema/lib_pin.cpp:1747
-msgid "Orientation"
-msgstr "Orientacja"
-
 #: eeschema/lib_draw_item.cpp:31
 msgid "Undefined"
 msgstr "Nieokreślony"
+
+#: eeschema/lib_draw_item.cpp:61
+msgid "Type"
+msgstr "Typ"
 
 #: eeschema/lib_draw_item.cpp:64
 #: eeschema/lib_draw_item.cpp:70
@@ -673,58 +540,6 @@ msgstr "Plik dokumentacji biblioteki <%s> jest pusty."
 #, c-format
 msgid "File <%s> is not a valid component library document file."
 msgstr "Plik <%s> nie jest poprawnym plikiem dokumentacji biblioteki."
-
-#: eeschema/annotate.cpp:100
-#, c-format
-msgid "%d duplicate time stamps were found and replaced."
-msgstr "%d powielonych odcisków czasowych zostało zamienionych."
-
-#: eeschema/annotate.cpp:432
-#, c-format
-msgid "item not annotated: %s%s"
-msgstr "element nie ma numeracji: %s%s"
-
-#: eeschema/annotate.cpp:436
-#, c-format
-msgid "( unit %d)"
-msgstr "( część %d)"
-
-#: eeschema/annotate.cpp:459
-#, c-format
-msgid "Error item %s%s"
-msgstr "Błąd elementu %s%s"
-
-#: eeschema/annotate.cpp:461
-#, c-format
-msgid " unit %d and no more than %d parts"
-msgstr " część %d i nie więcej niż %d elementów"
-
-#: eeschema/annotate.cpp:500
-#: eeschema/annotate.cpp:528
-#, c-format
-msgid "Multiple item %s%s"
-msgstr "Element wielokrotny %s%s"
-
-#: eeschema/annotate.cpp:504
-#: eeschema/annotate.cpp:532
-#, c-format
-msgid " (unit %d)"
-msgstr " (część %d)"
-
-#: eeschema/annotate.cpp:555
-#, c-format
-msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
-msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
-
-#: eeschema/annotate.cpp:565
-#, c-format
-msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
-
-#: eeschema/annotate.cpp:605
-#, c-format
-msgid "duplicate time stamp (%s) for %s%d and %s%d"
-msgstr "zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 
 #: eeschema/database.cpp:52
 msgid "No components found matching "
@@ -1466,7 +1281,6 @@ msgid "Enter a name to create a new component based on this one."
 msgstr "Wpisz nazwę by stworzyć nowy element na podstawie tego elementu."
 
 #: eeschema/libfield.cpp:40
-#: eeschema/onrightclick.cpp:242
 msgid "Edit Field"
 msgstr "Edytuj pole"
 
@@ -2692,6 +2506,10 @@ msgstr "Pole"
 msgid "Field%d"
 msgstr "Pole%d"
 
+#: eeschema/lib_field.cpp:721
+msgid "Style"
+msgstr "Styl"
+
 #: eeschema/lib_field.cpp:724
 msgid "Size X"
 msgstr "Rozmiar X"
@@ -2766,6 +2584,10 @@ msgstr "U"
 #: eeschema/sch_component.cpp:1429
 msgid "Power symbol"
 msgstr "Symbol zasilania"
+
+#: eeschema/sch_component.cpp:1431
+msgid "Name"
+msgstr "Nazwa"
 
 #: eeschema/sch_component.cpp:1439
 msgid "Alias of"
@@ -2924,15 +2746,16 @@ msgid "&Pin"
 msgstr "&Pin"
 
 #: eeschema/menubar_libedit.cpp:165
+#: eeschema/lib_rectangle.cpp:25
 msgid "Rectangle"
 msgstr "Prostokąt"
 
 #: eeschema/menubar_libedit.cpp:172
+#: eeschema/lib_circle.cpp:25
 msgid "Circle"
 msgstr "Okrąg"
 
 #: eeschema/menubar_libedit.cpp:180
-#: eeschema/lib_arc.cpp:64
 msgid "Arc"
 msgstr "Łuk"
 
@@ -2974,16 +2797,6 @@ msgstr "Nazwa pliku"
 msgid "Time Stamp"
 msgstr "Znacznik czasowy"
 
-#: eeschema/lib_arc.cpp:120
-#, c-format
-msgid "arc only had %d parameters of the required 8"
-msgstr "łuk posiada tylko %d parametrów z wymaganych 8"
-
-#: eeschema/lib_arc.cpp:491
-#: eeschema/lib_bezier.cpp:384
-msgid "Bounding box"
-msgstr "Bryła brzegowa"
-
 #: eeschema/lib_bezier.cpp:27
 msgid "Bezier"
 msgstr "Krzywa Beziera"
@@ -3007,6 +2820,12 @@ msgstr "pozycja punktu X krzywej Beziera %d nie jest ustalona"
 #, c-format
 msgid "Bezier point %d Y position not defined"
 msgstr "pozycja punktu Y krzywej Beziera %d nie jest ustalona"
+
+#: eeschema/lib_bezier.cpp:384
+#: eeschema/lib_circle.cpp:270
+#: eeschema/lib_polyline.cpp:402
+msgid "Bounding box"
+msgstr "Bryła brzegowa"
 
 #: eeschema/lib_circle.cpp:57
 #, c-format
@@ -3046,117 +2865,187 @@ msgstr "pozycja punktu Y lini łamanej %d nie jest ustalona"
 msgid "rectangle only had %d parameters of the required 7"
 msgstr "prostokąt posiada tylko %d z wymaganych 7"
 
-#: eeschema/dialogs/annotate_dialog.cpp:89
-msgid "Clear and annotate all of the components "
-msgstr "Czy wyczyścić i ponumerować wszystkie elementy "
-
-#: eeschema/dialogs/annotate_dialog.cpp:91
-msgid "Annotate only the unannotated components "
-msgstr "Czy numerować tylko nieponumerowane elementy "
-
-#: eeschema/dialogs/annotate_dialog.cpp:93
-msgid "on the entire schematic?"
-msgstr "na całym schemacie?"
-
-#: eeschema/dialogs/annotate_dialog.cpp:95
-msgid "on the current sheet?"
-msgstr "na bieżącym arkuszu?"
-
-#: eeschema/dialogs/annotate_dialog.cpp:97
-msgid ""
-"\n"
-"\n"
-"This operation will change the current annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Ta operacja zmieni istniejącą numerację i nie może być cofnięta."
-
-#: eeschema/dialogs/annotate_dialog.cpp:114
-msgid "Clear the existing annotation for "
-msgstr "Czy usunąć istniejącą numerację dla "
-
-#: eeschema/dialogs/annotate_dialog.cpp:116
-msgid "the entire schematic?"
-msgstr "całego schematu?"
-
-#: eeschema/dialogs/annotate_dialog.cpp:118
-msgid "the current sheet?"
-msgstr "bieżącego arkusza?"
-
-#: eeschema/dialogs/annotate_dialog.cpp:120
-msgid ""
-"\n"
-"\n"
-"This operation will clear the existing annotation and cannot be undone."
-msgstr ""
-"\n"
-"\n"
-"Ta operacja usunie istniejącą numerację i nie może zostać cofnięta."
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:298
-msgid "Bill of Materials"
-msgstr "Lista materiałów"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:395
-#: eeschema/dialogs/dialog_build_BOM.cpp:431
-#: eeschema/dialogs/dialog_build_BOM.cpp:469
-msgid "Failed to open file "
-msgstr "Błąd otwierania pliku "
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:519
+#: eeschema/annotate.cpp:121
 #, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer arkusza ) liczba = %d\n"
+msgid "%d duplicate time stamps were found and replaced."
+msgstr "%d powielonych odcisków czasowych zostało zamienionych."
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:531
+#: eeschema/annotate.cpp:457
 #, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Alfabetyczny ) liczba = %d\n"
-"\n"
+msgid "item not annotated: %s%s"
+msgstr "element nie ma numeracji: %s%s"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:540
-msgid ""
-"\n"
-"#End List\n"
-msgstr ""
-"\n"
-"#Koniec listy\n"
+#: eeschema/annotate.cpp:461
+#, c-format
+msgid "( unit %d)"
+msgstr "( część %d)"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:621
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( porządek = Oznaczenie )"
+#: eeschema/annotate.cpp:485
+#, c-format
+msgid "Error item %s%s"
+msgstr "Błąd elementu %s%s"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:624
-#: eeschema/dialogs/dialog_build_BOM.cpp:877
-msgid " (with SubCmp)"
-msgstr " (z podelementem)"
+#: eeschema/annotate.cpp:487
+#, c-format
+msgid " unit %d and no more than %d parts"
+msgstr " część %d i nie więcej niż %d elementów"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:711
-#: eeschema/dialogs/dialog_build_BOM.cpp:933
-msgid "#End Cmp\n"
-msgstr "#Koniec Cmp\n"
+#: eeschema/annotate.cpp:527
+#: eeschema/annotate.cpp:555
+#, c-format
+msgid "Multiple item %s%s"
+msgstr "Element wielokrotny %s%s"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:874
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( porządek = Wartość )"
+#: eeschema/annotate.cpp:531
+#: eeschema/annotate.cpp:559
+#, c-format
+msgid " (unit %d)"
+msgstr " (część %d)"
+
+#: eeschema/annotate.cpp:581
+#, c-format
+msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
+msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
+
+#: eeschema/annotate.cpp:591
+#, c-format
+msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
+msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
+
+#: eeschema/annotate.cpp:631
+#, c-format
+msgid "duplicate time stamp (%s) for %s%d and %s%d"
+msgstr "zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
+
+#: eeschema/lib_arc.cpp:120
+#, c-format
+msgid "arc only had %d parameters of the required 8"
+msgstr "łuk posiada tylko %d parametrów z wymaganych 8"
+
+#: eeschema/lib_pin.cpp:31
+msgid "Right"
+msgstr "Prawo"
+
+#: eeschema/lib_pin.cpp:32
+msgid "Left"
+msgstr "Lewo"
+
+#: eeschema/lib_pin.cpp:33
+msgid "Up"
+msgstr "Góra"
+
+#: eeschema/lib_pin.cpp:34
+msgid "Down"
+msgstr "Dół"
+
+#: eeschema/lib_pin.cpp:61
+msgid "Line"
+msgstr "Linia"
+
+#: eeschema/lib_pin.cpp:62
+msgid "Inverted"
+msgstr "Zanegowany"
+
+#: eeschema/lib_pin.cpp:63
+msgid "Clock"
+msgstr "Zegarowe"
+
+#: eeschema/lib_pin.cpp:64
+msgid "Inverted clock"
+msgstr "Zanegowane zegarowe"
+
+#: eeschema/lib_pin.cpp:65
+msgid "Input low"
+msgstr "Wejście, aktywny niski"
+
+#: eeschema/lib_pin.cpp:66
+msgid "Clock low"
+msgstr "Zegarowy, aktywny niski"
+
+#: eeschema/lib_pin.cpp:67
+msgid "Output low"
+msgstr "Wyjście, aktywny niski"
+
+#: eeschema/lib_pin.cpp:68
+msgid "Falling edge clock"
+msgstr "Zegar, zbocze opadające"
+
+#: eeschema/lib_pin.cpp:69
+msgid "NonLogic"
+msgstr "NieLogiczny"
+
+#: eeschema/lib_pin.cpp:107
+msgid "Input"
+msgstr "Wejście"
+
+#: eeschema/lib_pin.cpp:108
+msgid "Output"
+msgstr "Wyjście"
+
+#: eeschema/lib_pin.cpp:109
+msgid "Bidirectional"
+msgstr "Dwukierunkowy"
+
+#: eeschema/lib_pin.cpp:110
+msgid "Tri-state"
+msgstr "Trójstanowy"
+
+#: eeschema/lib_pin.cpp:111
+msgid "Passive"
+msgstr "Pasywny"
+
+#: eeschema/lib_pin.cpp:112
+msgid "Unspecified"
+msgstr "Nieokreślony"
+
+#: eeschema/lib_pin.cpp:113
+msgid "Power input"
+msgstr "Wejście zasilania"
+
+#: eeschema/lib_pin.cpp:114
+msgid "Power output"
+msgstr "Wyjście zasilania"
+
+#: eeschema/lib_pin.cpp:115
+msgid "Open collector"
+msgstr "Otwarty kolektor"
+
+#: eeschema/lib_pin.cpp:116
+msgid "Open emitter"
+msgstr "Otwarty emiter"
+
+#: eeschema/lib_pin.cpp:117
+msgid "Not connected"
+msgstr "Nie podłączony"
+
+#: eeschema/lib_pin.cpp:174
+#: eeschema/dialogs/dialog_color_config.cpp:35
+msgid "Pin"
+msgstr "Pin"
+
+#: eeschema/lib_pin.cpp:1729
+msgid "Number"
+msgstr "Numer"
+
+#: eeschema/lib_pin.cpp:1737
+msgid "Yes"
+msgstr "Tak"
+
+#: eeschema/lib_pin.cpp:1739
+msgid "No"
+msgstr "Nie"
+
+#: eeschema/lib_pin.cpp:1740
+msgid "Visible"
+msgstr "Widoczny"
+
+#: eeschema/lib_pin.cpp:1744
+msgid "Length"
+msgstr "Długość"
+
+#: eeschema/lib_pin.cpp:1747
+msgid "Orientation"
+msgstr "Orientacja"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:51
 msgid "Library Component Properties"
@@ -3346,7 +3235,6 @@ msgstr "&Nazwa pinu:"
 
 #: eeschema/dialogs/dialog_color_config.cpp:40
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:90
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:20
 msgid "Fields"
 msgstr "Pola"
 
@@ -3400,9 +3288,6 @@ msgstr "Zastosuj"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:121
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:51
-#: eeschema/dialogs/dialog_erc_base.cpp:137
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:104
 msgid "Options"
 msgstr "Opcje"
 
@@ -3531,7 +3416,6 @@ msgid "Orientation (Degrees)"
 msgstr "Orientacja (stopnie)"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:43
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
 msgid "Select if the component is to be rotated when drawn"
 msgstr "Zaznacz jeśli element jest obrócony podczas przeciągania"
 
@@ -3548,12 +3432,10 @@ msgid "Mirror"
 msgstr "Odbicie"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:65
 msgid "Pick the graphical transformation to be used when displaying the component, if any"
 msgstr "Pobierz transformację graficzną wykorzystaną podczas wyświetlania elementu, jeśli istnieje"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:63
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:638
 msgid "Chip Name"
 msgstr "Nazwa elementu"
 
@@ -3570,7 +3452,6 @@ msgstr ""
 "Dla bramek, jest to konwersja \"De Morgan-a\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:78
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:96
 msgid "Parts are locked"
 msgstr "Elementy są zablokowane"
 
@@ -3587,129 +3468,92 @@ msgstr ""
 "Pola tekstowe nie są modyfikowane."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:100
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:30
 msgid "Add Field"
 msgstr "Dodaj pole"
 
 # "pole dowolne" ?
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:101
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:31
 msgid "Add a new custom field"
 msgstr "Dodaj nowe pole dowolne"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:105
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:35
 msgid "Delete Field"
 msgstr "Usuń pole"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:36
 msgid "Delete one of the optional fields"
 msgstr "Usuń jedno z pól dodatkowych"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:110
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
 msgid "Move Up"
 msgstr "Przesuń w górę"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:111
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:41
 msgid "Move the selected optional fields up one position"
 msgstr "Przesuń zaznaczone pola dodatkowe o jedną pozycję w górę"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
 msgid "Align left"
 msgstr "Wyrównaj do lewej"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
 msgid "Align center"
 msgstr "Wyrównaj do środka"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:79
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:53
 msgid "Align right"
 msgstr "Wyrównaj do prawej"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:81
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
 msgid "Horiz. Justify"
 msgstr "Wyrównanie w poziomie"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
 msgid "Align bottom"
 msgstr "Wyrównaj do dołu"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
 msgid "Align top"
 msgstr "Wyrównaj do góry"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:87
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
 msgid "Vert. Justify"
 msgstr "Wyrównanie w pionie"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:138
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:72
 msgid "Visibility"
 msgstr "Widoczność"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 msgid "Show"
 msgstr "Pokaż"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:144
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
 msgid "Check if you want this field visible"
 msgstr "Zaznacz jeśli chcesz aby to pole było widoczne"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:82
 msgid "Rotate"
 msgstr "Obrót"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:83
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Zaznacz jeśli chcesz aby tekst tego pola był obrócony o 90 stopni"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
-#: eeschema/dialogs/dialog_edit_label_base.cpp:71
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
 msgid "Italic"
 msgstr "Kursywa"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
-#: eeschema/dialogs/dialog_edit_label_base.cpp:71
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
 msgid "Bold"
 msgstr "Pogrubiony"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
-#: eeschema/dialogs/dialog_edit_label_base.cpp:71
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:73
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
 msgid "Bold Italic"
 msgstr "Pogrubiona kursywa"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:157
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:91
 msgid "Style:"
 msgstr "Styl:"
 
@@ -3718,7 +3562,6 @@ msgid "The style of the currently selected field's text in the schemati"
 msgstr "Styl aktualnie zaznaczonego na schemacie pola tekstowego"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:100
 msgid "Field Name"
 msgstr "Nazwa pola"
 
@@ -3731,18 +3574,14 @@ msgstr ""
 "Niektóre stałe nazwy pól są nieedytowalne"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:182
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
 msgid "Field Value"
 msgstr "Wartość pola"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:187
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:105
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
 msgid "The text (or value) of the currently selected field"
 msgstr "Tekst (lub wartość) aktualnie zaznaczonego pola"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:196
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
 msgid "Size(\")"
 msgstr "Rozmiar(\")"
 
@@ -3751,7 +3590,6 @@ msgid "The size of the currently selected field's text in the schematic"
 msgstr "Rozmiar aktualnie zaznaczonego na schemacie pola tekstowego"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:145
 msgid "PosX(\")"
 msgstr "PozX(\")"
 
@@ -3760,12 +3598,10 @@ msgid "The X coordinate of the text relative to the component"
 msgstr "Pozycja X tekstu relatywnie do elementu"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:157
 msgid "PosY(\")"
 msgstr "PozY(\")"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:232
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:162
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Pozycja Y tekstu relatywnie do elementu"
 
@@ -4195,6 +4031,7 @@ msgid "As Convert"
 msgstr "Jako skonwertowany"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:105
 msgid ""
 "Check this option for components that have a De Morgan representation.\n"
 "This is usual for gates."
@@ -4235,6 +4072,7 @@ msgid "Number of Units:"
 msgstr "Liczba części:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 msgid ""
 "This is the number of parts in this component package.\n"
 "A 74LS00 gate has 4 parts per packages."
@@ -4247,6 +4085,7 @@ msgid "Skew:"
 msgstr "Margines:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:77
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:156
 msgid ""
 "Margin (in 0.001 inches) between a pin name position and the component body.\n"
 "A value from 10 to 40 is usually good."
@@ -4255,6 +4094,7 @@ msgstr ""
 "Wartość z zakresu 10 do 40 zwykle jest poprawna."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:92
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:119
 msgid ""
 "Check this option for power symbols.\n"
 "Power symbols have specific properties for Eeschema:\n"
@@ -4267,6 +4107,7 @@ msgstr ""
 "- Odnośnik jest aktualizowany automatycznie gdy tworzona jest netlista (nie ma potrzeby ich numerowania)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:97
+#: eeschema/dialogs/dialog_lib_new_component_base.cpp:133
 msgid ""
 "Check this option if Eeschema cannot change parts selections inside a given package\n"
 "This happens when parts are different in this package.\n"
@@ -4402,19 +4243,6 @@ msgid "Pin text position &offset:"
 msgstr "Przesunięcie p&ozycji tekstu w opisie pinu:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:166
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:63
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:74
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:85
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:96
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:107
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:43
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:54
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:65
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:79
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:93
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:104
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:115
-#: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:126
 msgid "mils"
 msgstr "milsy"
 
@@ -4461,58 +4289,6 @@ msgstr "Wypełnienie pierwszoplanowe"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:99
 msgid "Fill &background"
 msgstr "Wypełnienie drugoplanowe"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:22
-msgid "Scope"
-msgstr "Zakres"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:31
-msgid "Use the &entire schematic"
-msgstr "Użyj całego &schematu"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:34
-msgid "Use the current &page only"
-msgstr "Użyj tylko &bieżącą stronę"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:40
-msgid "&Keep existing annotation"
-msgstr "&Pozostaw bieżącą numerację"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:43
-msgid "&Reset existing annotation"
-msgstr "&Resetuj bieżącą numerację"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:51
-msgid "Annotation Order"
-msgstr "Porządek numeracji"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:63
-msgid "Sort components by &X position"
-msgstr "Sortuj elementy wg pozycji w osi &X"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:77
-msgid "Sort components by X position and use sheet &number"
-msgstr "Sortuj elementy wg pozycji w osi X wraz z &numerem arkusza"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:91
-msgid "Sort components by &Y position"
-msgstr "Sortuj elementy wg pozycji w osi &Y"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:105
-msgid "Sort components by Y position and use &sheet number"
-msgstr "Sortuj elementy wg pozycji w osi Y wraz z numerem arku&sza"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:119
-msgid "Sort components by &value"
-msgstr "Sortuj elementy wg wartości"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:141
-msgid "Clear Annotation"
-msgstr "Usuń numerację"
-
-#: eeschema/dialogs/dialog_annotate_base.cpp:144
-msgid "Annotation"
-msgstr "Numeruj"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:42
 msgid "Measurement &units:"
@@ -4782,6 +4558,7 @@ msgid "&Visible"
 msgstr "&Widoczny"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:22
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:25
 msgid "Schematic size"
 msgstr "Rozmiar schematu"
 
@@ -4794,6 +4571,7 @@ msgid "Force size A"
 msgstr "Wymuś rozmiar A"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:24
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:27
 msgid "Plot Page Size:"
 msgstr "Rozmiar strony rysunku:"
 
@@ -4806,14 +4584,17 @@ msgid "Plot Mode:"
 msgstr "Tryb rysunku"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:40
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:31
 msgid "Print page references"
 msgstr "Drukuj oznaczenia arkusza"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:52
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:93
 msgid "&Plot Page"
 msgstr "&Rysuj stronę"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:55
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:96
 msgid "Plot A&LL"
 msgstr "Rysuj &wszystko"
 
@@ -4822,14 +4603,19 @@ msgid "Default line width:"
 msgstr "Domyślna szerokość &linii:"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:77
+#: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:112
 msgid "Messages :"
 msgstr "Wiadomości:"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS.cpp:266
+#: eeschema/dialogs/dialog_plot_schematic_HPGL.cpp:362
+#: eeschema/dialogs/dialog_plot_schematic_DXF.cpp:219
 msgid "Unable to create "
 msgstr "Nie mogę utworzyć "
 
 #: eeschema/dialogs/dialog_plot_schematic_PS.cpp:273
+#: eeschema/dialogs/dialog_plot_schematic_HPGL.cpp:369
+#: eeschema/dialogs/dialog_plot_schematic_DXF.cpp:224
 #, c-format
 msgid "Plot: %s "
 msgstr "Rysuj: %s"
@@ -4922,6 +4708,174 @@ msgstr "Szerokość tekstu:"
 msgid "Connection type:"
 msgstr "Typ połączenia:"
 
+#: eeschema/dialogs/annotate_dialog.cpp:125
+msgid "Clear and annotate all of the components "
+msgstr "Czy wyczyścić i ponumerować wszystkie elementy "
+
+#: eeschema/dialogs/annotate_dialog.cpp:127
+msgid "Annotate only the unannotated components "
+msgstr "Czy numerować tylko nieponumerowane elementy "
+
+#: eeschema/dialogs/annotate_dialog.cpp:129
+msgid "on the entire schematic?"
+msgstr "na całym schemacie?"
+
+#: eeschema/dialogs/annotate_dialog.cpp:131
+msgid "on the current sheet?"
+msgstr "na bieżącym arkuszu?"
+
+#: eeschema/dialogs/annotate_dialog.cpp:133
+msgid ""
+"\n"
+"\n"
+"This operation will change the current annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Ta operacja zmieni istniejącą numerację i nie może być cofnięta."
+
+#: eeschema/dialogs/annotate_dialog.cpp:152
+msgid "Clear the existing annotation for "
+msgstr "Czy usunąć istniejącą numerację dla "
+
+#: eeschema/dialogs/annotate_dialog.cpp:154
+msgid "the entire schematic?"
+msgstr "całego schematu?"
+
+#: eeschema/dialogs/annotate_dialog.cpp:156
+msgid "the current sheet?"
+msgstr "bieżącego arkusza?"
+
+#: eeschema/dialogs/annotate_dialog.cpp:158
+msgid ""
+"\n"
+"\n"
+"This operation will clear the existing annotation and cannot be undone."
+msgstr ""
+"\n"
+"\n"
+"Ta operacja usunie istniejącą numerację i nie może zostać cofnięta."
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:22
+msgid "Scope"
+msgstr "Zakres"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:31
+msgid "Use the &entire schematic"
+msgstr "Użyj całego &schematu"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:34
+msgid "Use the current &page only"
+msgstr "Użyj tylko &bieżącą stronę"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:40
+msgid "&Keep existing annotation"
+msgstr "&Pozostaw bieżącą numerację"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:43
+msgid "&Reset existing annotation"
+msgstr "&Resetuj bieżącą numerację"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:51
+msgid "Annotation Order"
+msgstr "Porządek numeracji"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:63
+msgid "Sort components by &X position"
+msgstr "Sortuj elementy wg pozycji w osi &X"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:77
+msgid "Sort components by &Y position"
+msgstr "Sortuj elementy wg pozycji w osi &Y"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:96
+msgid "Annotation Choice"
+msgstr "Wybór numeracji"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:108
+msgid "Use first free number in schematic"
+msgstr "Użyj pierwszego wolnego numeru na schemacie"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:119
+msgid "Start to  sheet number*100 and use first free number"
+msgstr "Rozpocznij od numer arkusza*100 i użyj pierwszego wolnego numeru"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:130
+msgid "Start to  sheet number*1000 and use first free number"
+msgstr "Rozpocznij od numer arkusza*1000 i użyj pierwszego wolnego numeru"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:151
+msgid "Clear Annotation"
+msgstr "Usuń numerację"
+
+#: eeschema/dialogs/dialog_annotate_base.cpp:154
+msgid "Annotation"
+msgstr "Numeruj"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:298
+msgid "Bill of Materials"
+msgstr "Lista materiałów"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:395
+#: eeschema/dialogs/dialog_build_BOM.cpp:431
+#: eeschema/dialogs/dialog_build_BOM.cpp:469
+msgid "Failed to open file "
+msgstr "Błąd otwierania pliku "
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:519
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+msgstr ""
+"\n"
+"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer arkusza ) liczba = %d\n"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:531
+#, c-format
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Alfabetyczny ) liczba = %d\n"
+"\n"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:540
+msgid ""
+"\n"
+"#End List\n"
+msgstr ""
+"\n"
+"#Koniec listy\n"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:621
+msgid ""
+"\n"
+"#Cmp ( order = Reference )"
+msgstr ""
+"\n"
+"#Cmp ( porządek = Oznaczenie )"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:624
+#: eeschema/dialogs/dialog_build_BOM.cpp:877
+msgid " (with SubCmp)"
+msgstr " (z podelementem)"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:711
+#: eeschema/dialogs/dialog_build_BOM.cpp:933
+msgid "#End Cmp\n"
+msgstr "#Koniec Cmp\n"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:874
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( porządek = Wartość )"
+
 #: pcbnew/zones_non_copper_type_functions.cpp:141
 msgid ""
 "Error :\n"
@@ -4997,10 +4951,6 @@ msgstr "Brak pamięci dla autoroutingu"
 #: pcbnew/autorout.cpp:161
 msgid "Place Cells"
 msgstr "Dodaj komórki"
-
-#: pcbnew/block.cpp:286
-msgid "Block Operation"
-msgstr "Operacje na blokach"
 
 #: pcbnew/class_board.cpp:57
 msgid "This is the default net class."
@@ -5127,7 +5077,6 @@ msgid "BAD INDEX"
 msgstr "BŁĘDNY INDEKS"
 
 #: pcbnew/class_board.cpp:886
-#: pcbnew/class_module.cpp:839
 msgid "Pads"
 msgstr "Pola lutownicze"
 
@@ -5159,34 +5108,6 @@ msgstr "Połączone"
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_edge_mod.cpp:298
-msgid "Graphic Item"
-msgstr "Elementy graficzne"
-
-#: pcbnew/class_edge_mod.cpp:300
-#: pcbnew/class_module.cpp:854
-#: pcbnew/class_pad.cpp:603
-#: pcbnew/class_text_mod.cpp:480
-msgid "Module"
-msgstr "Moduł"
-
-#: pcbnew/class_edge_mod.cpp:305
-msgid "TimeStamp"
-msgstr "Znacznik czasowy"
-
-#: pcbnew/class_edge_mod.cpp:307
-msgid "Mod Layer"
-msgstr "Warstwa modułu"
-
-#: pcbnew/class_edge_mod.cpp:310
-msgid "Seg Layer"
-msgstr "Warstwa segmentu"
-
-#: pcbnew/class_edge_mod.cpp:314
-#: pcbnew/class_track.cpp:1109
-msgid "Width"
-msgstr "Szerokość"
-
 #: pcbnew/class_module.cpp:819
 msgid "Last Change"
 msgstr "Ostatnia zmiana"
@@ -5213,6 +5134,12 @@ msgstr "Status"
 #: pcbnew/class_text_mod.cpp:511
 msgid "Orient"
 msgstr "Orientacja"
+
+#: pcbnew/class_module.cpp:854
+#: pcbnew/class_pad.cpp:603
+#: pcbnew/class_text_mod.cpp:480
+msgid "Module"
+msgstr "Moduł"
 
 #: pcbnew/class_module.cpp:859
 msgid "No 3D shape"
@@ -5352,6 +5279,10 @@ msgstr "(Określona)"
 msgid "(Default)"
 msgstr "(Domyślny)"
 
+#: pcbnew/class_track.cpp:1109
+msgid "Width"
+msgstr "Szerokość"
+
 #: pcbnew/class_track.cpp:1116
 msgid "Net Class"
 msgstr "Klasy połączeń"
@@ -5463,7 +5394,6 @@ msgid "Edge Width"
 msgstr "Szerokość krawędzi"
 
 #: pcbnew/edit.cpp:162
-#: pcbnew/editmod.cpp:43
 msgid "Module Editor"
 msgstr "Edytor modułów"
 
@@ -6078,10 +6008,12 @@ msgid "Show pads in filled mode"
 msgstr "Pokaż pola lutownicze jako wypełnione"
 
 #: pcbnew/moduleframe.cpp:451
+#: pcbnew/pcbframe.cpp:476
 msgid "3D Frame already opened"
 msgstr "Ramka 3D już otwarta"
 
 #: pcbnew/moduleframe.cpp:455
+#: pcbnew/pcbframe.cpp:480
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
@@ -6870,14 +6802,17 @@ msgid "Add Pads"
 msgstr "Dodaj pola lutownicze"
 
 #: pcbnew/tool_modedit.cpp:158
+#: pcbnew/tool_pcb.cpp:447
 msgid "Add graphic line or polygon"
 msgstr "Dodaj linię lub wielokąt (grafika)"
 
 #: pcbnew/tool_modedit.cpp:162
+#: pcbnew/tool_pcb.cpp:451
 msgid "Add graphic circle"
 msgstr "Dodaj okrąg (grafika)"
 
 #: pcbnew/tool_modedit.cpp:166
+#: pcbnew/tool_pcb.cpp:455
 msgid "Add graphic arc"
 msgstr "Dodaj łuk (grafika)"
 
@@ -6886,10 +6821,12 @@ msgid "Place the footprint module reference anchor"
 msgstr "Ustaw punkt zakotwiczenia modułu"
 
 #: pcbnew/tool_modedit.cpp:181
+#: pcbnew/tool_pcb.cpp:473
 msgid "Delete items"
 msgstr "Usuń elementy"
 
 #: pcbnew/tool_modedit.cpp:185
+#: pcbnew/tool_pcb.cpp:483
 msgid "Set the origin point for the grid"
 msgstr "Ustaw punkt bazowy dla siatki"
 
@@ -6914,10 +6851,12 @@ msgid "Show Edges Sketch"
 msgstr "Pokaż zarys krawędzi"
 
 #: pcbnew/tool_modedit.cpp:267
+#: pcbnew/tool_pcb.cpp:613
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
 #: pcbnew/tool_modedit.cpp:272
+#: pcbnew/tool_pcb.cpp:617
 msgid "Zoom "
 msgstr "Powiększenie "
 
@@ -6937,6 +6876,7 @@ msgid "Grid %f"
 msgstr "Siatka %f"
 
 #: pcbnew/tool_modedit.cpp:322
+#: pcbnew/tool_pcb.cpp:675
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
@@ -7309,7 +7249,6 @@ msgid "Middle click for color change"
 msgstr "Zmiana koloru środkowym klawiszem"
 
 #: pcbnew/layer_widget.cpp:494
-#: pcbnew/class_pcb_layer_widget.cpp:210
 msgid "Render"
 msgstr "Pokaż"
 
@@ -7392,7 +7331,6 @@ msgid "Save the current loaded module to a file"
 msgstr "Zapisz obecnie wczytany moduł do pliku"
 
 #: pcbnew/menubar_modedit.cpp:100
-#: pcbnew/menubar_pcbframe.cpp:189
 msgid "&Print\tCtrl+P"
 msgstr "Drukuj\tCtrl+P"
 
@@ -7477,12 +7415,10 @@ msgid "3D View"
 msgstr "Podgląd 3D"
 
 #: pcbnew/menubar_modedit.cpp:229
-#: pcbnew/menubar_pcbframe.cpp:352
 msgid "Show board in 3D viewer"
 msgstr "Pokaż płytkę w przeglądarce 3D"
 
 #: pcbnew/menubar_modedit.cpp:240
-#: pcbnew/class_board_item.cpp:56
 msgid "Pad"
 msgstr "Pole lutownicze"
 
@@ -8442,6 +8378,26 @@ msgstr "wire_via odnosi się do brakującego stosu \"%s\""
 #: pcbnew/hotkeys_board_editor.cpp:420
 msgid "Delete module?"
 msgstr "Usunąć moduł?"
+
+#: pcbnew/block.cpp:288
+msgid "Block Operation"
+msgstr "Operacje na blokach"
+
+#: pcbnew/class_edge_mod.cpp:298
+msgid "Graphic Item"
+msgstr "Elementy graficzne"
+
+#: pcbnew/class_edge_mod.cpp:305
+msgid "TimeStamp"
+msgstr "Znacznik czasowy"
+
+#: pcbnew/class_edge_mod.cpp:307
+msgid "Mod Layer"
+msgstr "Warstwa modułu"
+
+#: pcbnew/class_edge_mod.cpp:310
+msgid "Seg Layer"
+msgstr "Warstwa segmentu"
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:22
 msgid "Include Modules"
@@ -10251,32 +10207,6 @@ msgstr "Zmień pola lut. w module"
 msgid "Change Pads on Same Modules"
 msgstr "Zamień pola lut. w tych samych modułach"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:89
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:98
-msgid "Center X"
-msgstr "Wyśrodkuj w poziomie"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:90
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:99
-msgid "Center Y"
-msgstr "Wyśrodkuj w pionie"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:91
-msgid "Point X"
-msgstr "Punkt X"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:92
-msgid "Point Y"
-msgstr "Punkt Y"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:100
-msgid "Start Point X"
-msgstr "Pozycja początkowa X"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:101
-msgid "Start Point Y"
-msgstr "Pozycja początkowa Y"
-
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:23
 msgid "Graphics:"
 msgstr "Grafika:"
@@ -11559,6 +11489,32 @@ msgstr "Drukuj zaznaczone"
 msgid "Print Board"
 msgstr "Drukuj płytkę"
 
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:89
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:98
+msgid "Center X"
+msgstr "Wyśrodkuj w poziomie"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:90
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:99
+msgid "Center Y"
+msgstr "Wyśrodkuj w pionie"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:91
+msgid "Point X"
+msgstr "Punkt X"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:92
+msgid "Point Y"
+msgstr "Punkt Y"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:100
+msgid "Start Point X"
+msgstr "Pozycja początkowa X"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:101
+msgid "Start Point Y"
+msgstr "Pozycja początkowa Y"
+
 #: cvpcb/autosel.cpp:93
 #, c-format
 msgid "Footprint alias library file <%s> could not be found in the default search paths."
@@ -12722,74 +12678,6 @@ msgstr "Plik dokumentacji "
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
 
-#: common/edaappl.cpp:108
-msgid "French"
-msgstr "Francuski"
-
-#: common/edaappl.cpp:116
-msgid "Finnish"
-msgstr "Zakończ"
-
-#: common/edaappl.cpp:124
-msgid "Spanish"
-msgstr "Hiszpański"
-
-#: common/edaappl.cpp:132
-msgid "Portuguese"
-msgstr "Portugalski"
-
-#: common/edaappl.cpp:140
-msgid "Italian"
-msgstr "Włoski"
-
-#: common/edaappl.cpp:148
-msgid "German"
-msgstr "Niemiecki"
-
-#: common/edaappl.cpp:156
-msgid "Slovenian"
-msgstr "Słoweński"
-
-#: common/edaappl.cpp:164
-msgid "Hungarian"
-msgstr "Węgierski"
-
-#: common/edaappl.cpp:172
-msgid "Polish"
-msgstr "Polski"
-
-#: common/edaappl.cpp:180
-msgid "Czech"
-msgstr "Czeski"
-
-#: common/edaappl.cpp:188
-msgid "Russian"
-msgstr "Rosyjski"
-
-#: common/edaappl.cpp:196
-msgid "Korean"
-msgstr "Koreański"
-
-#: common/edaappl.cpp:204
-msgid "Chinese simplified"
-msgstr "Chiński uproszczony"
-
-#: common/edaappl.cpp:212
-msgid "Catalan"
-msgstr "Kataloński"
-
-#: common/edaappl.cpp:220
-msgid "Dutch"
-msgstr "Holenderski"
-
-#: common/edaappl.cpp:829
-msgid "Language"
-msgstr "Język"
-
-#: common/edaappl.cpp:830
-msgid "Select application language (only for testing!)"
-msgstr "Wybierz język aplikacji (tylko do testowania!)"
-
 #: common/gestfich.cpp:449
 #, c-format
 msgid "Command <%s> could not found"
@@ -12960,6 +12848,74 @@ msgstr "Polecenie"
 #: common/hotkey_grid_table.cpp:152
 msgid "Hotkey"
 msgstr "Skróty klawiszowe"
+
+#: common/edaappl.cpp:108
+msgid "French"
+msgstr "Francuski"
+
+#: common/edaappl.cpp:116
+msgid "Finnish"
+msgstr "Zakończ"
+
+#: common/edaappl.cpp:124
+msgid "Spanish"
+msgstr "Hiszpański"
+
+#: common/edaappl.cpp:132
+msgid "Portuguese"
+msgstr "Portugalski"
+
+#: common/edaappl.cpp:140
+msgid "Italian"
+msgstr "Włoski"
+
+#: common/edaappl.cpp:148
+msgid "German"
+msgstr "Niemiecki"
+
+#: common/edaappl.cpp:156
+msgid "Slovenian"
+msgstr "Słoweński"
+
+#: common/edaappl.cpp:164
+msgid "Hungarian"
+msgstr "Węgierski"
+
+#: common/edaappl.cpp:172
+msgid "Polish"
+msgstr "Polski"
+
+#: common/edaappl.cpp:180
+msgid "Czech"
+msgstr "Czeski"
+
+#: common/edaappl.cpp:188
+msgid "Russian"
+msgstr "Rosyjski"
+
+#: common/edaappl.cpp:196
+msgid "Korean"
+msgstr "Koreański"
+
+#: common/edaappl.cpp:204
+msgid "Chinese simplified"
+msgstr "Chiński uproszczony"
+
+#: common/edaappl.cpp:212
+msgid "Catalan"
+msgstr "Kataloński"
+
+#: common/edaappl.cpp:220
+msgid "Dutch"
+msgstr "Holenderski"
+
+#: common/edaappl.cpp:833
+msgid "Language"
+msgstr "Język"
+
+#: common/edaappl.cpp:834
+msgid "Select application language (only for testing!)"
+msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
 #: common/dialog_about/AboutDialog_main.cpp:125
 msgid "The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards."
@@ -13405,10 +13361,6 @@ msgstr "Właściwości elementu biblioteki"
 msgid "Drawing Properties"
 msgstr "Właściwości rysowania"
 
-#: eeschema/dialogs/dialog_annotate_base.h:84
-msgid "Annotate Schematic"
-msgstr "Numeruj schemat"
-
 #: eeschema/dialogs/dialog_eeschema_options_base.h:103
 msgid "Schematic Editor Options"
 msgstr "Opcje edytora schematów"
@@ -13444,6 +13396,10 @@ msgstr "Rysowanie w DXF przez EESchema"
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:55
 msgid "Sheet Pin Properties"
 msgstr "Właściwości arkusza pinów"
+
+#: eeschema/dialogs/dialog_annotate_base.h:82
+msgid "Annotate Schematic"
+msgstr "Numeruj schemat"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -13553,6 +13509,15 @@ msgstr "Ustawienia strony"
 #: bitmap2component/bitmap2cmp_gui_base.h:77
 msgid "Bitmap to Component Converter"
 msgstr "Konwerter obrazów"
+
+#~ msgid "Sort components by X position and use sheet &number"
+#~ msgstr "Sortuj elementy wg pozycji w osi X wraz z &numerem arkusza"
+
+#~ msgid "Sort components by Y position and use &sheet number"
+#~ msgstr "Sortuj elementy wg pozycji w osi Y wraz z numerem arku&sza"
+
+#~ msgid "Sort components by &value"
+#~ msgstr "Sortuj elementy wg wartości"
 
 #~ msgid "on line"
 #~ msgstr "w linii"
