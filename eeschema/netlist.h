@@ -66,23 +66,18 @@ private:
     LIB_COMPONENT* m_Entry;             ///< The source component from a library.
     wxPoint        m_CmpPos;            ///< The physical position of the component in schematic
                                         ///< used to annotate by X or Y position
+    int            m_Unit;              ///< The unit number for components with multiple parts
+                                        ///< per package.
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
+    bool           m_IsNew;             ///< True if not yet annotated.
+    int            m_SheetNum;          ///< The sheet number for the reference.
+    unsigned long  m_TimeStamp;         ///< The time stamp for the reference.
+    wxString*      m_Value;             ///< The component value of the refernce.  It is the
+                                        ///< same for all instances.
+    int            m_NumRef;            ///< The numeric part of the reference designator.
+    int            m_Flag;
 
     friend class SCH_REFERENCE_LIST;
-
-public:
-    int            m_Unit;              /* Selected part (For multi parts per
-                                         * package) depending on sheet path */
-    int            m_SheetNum;          // the sheet num for this component
-    unsigned long  m_TimeStamp;         /* unique identification number
-                                         * depending on sheet path */
-    bool           m_IsNew;             /* true for not yet annotated
-                                         * components */
-    wxString*      m_Value;             /* Component value (same for all
-                                         * instances) */
-    int            m_NumRef;            /* Reference number (for IC1, this is
-                                         * 1) ) depending on sheet path*/
-    int            m_Flag;              /* flag for computations */
 
 public:
 
@@ -107,6 +102,10 @@ public:
     LIB_COMPONENT* GetLibComponent() const { return m_Entry; }
 
     SCH_SHEET_PATH GetSheetPath() const { return m_SheetPath; }
+
+    int GetUnit() const { return m_Unit; }
+
+    void SetSheetNumber( int aSheetNumber ) { m_SheetNum = aSheetNumber; }
 
     /**
      * Function Annotate
@@ -165,9 +164,9 @@ public:
 /**
  * Class SCH_REFERENCE_LIST
  * is used create a flattened list of components because in a complex hierarchy, a component
- * can used more than once and its reference designator is dependent on the sheet path for the
- * same component.  This flattened list is used for netlist generation, BOM generation, and
- * schematic annotation.
+ * can be used more than once and its reference designator is dependent on the sheet path for
+ * the same component.  This flattened list is used for netlist generation, BOM generation,
+ * and schematic annotation.
  */
 class SCH_REFERENCE_LIST
 {
@@ -263,6 +262,38 @@ public:
     }
 
     /**
+     * Function Annotate
+     * set the reference designators in the list that have not been annotated.
+     * @param aUseSheetNum Set to true to start annotation for each sheet at the sheet number
+     *                     times \a aSheetIntervalId.  Otherwise annotate incrementally.
+     * @param aSheetIntervalId The per sheet reference designator multiplier.
+     * <p>
+     * If a the sheet number is 2 and \a aSheetIntervalId is 100, then the first reference
+     * designator would be 201 and the last reference designator would be 299 when no overlap
+     * occurs with sheet number 3.  If there are 150 items in sheet number 2, then items are
+     * referenced U201 to U351, and items in sheet 3 start from U352
+     * </p>
+     */
+    void Annotate( bool aUseSheetNum, int aSheetIntervalId );
+
+    /**
+     * Function CheckAnnotation
+     * check for annotations errors.
+     * <p>
+     * The following annotation error conditions are tested:
+     * <ul>
+     * <li>Components not annotated.</li>
+     * <li>Components having the same reference designator (duplicates).</li>
+     * <li>Components with multiple parts per package having different reference designators.</li>
+     * <li>Components with multiple parts per package with invalid part count.</li>
+     * </ul>
+     * </p>
+     * @param aMessageList A wxArrayString to store error messages.
+     * @return The number of errors found.
+     */
+    int CheckAnnotation( wxArrayString* aMessageList );
+
+    /**
      * Function sortByXCoordinate
      * sorts the list of references by X position.
      * <p>
@@ -305,7 +336,7 @@ public:
      * sort the flat list by Time Stamp.
      * Useful to detect duplicate Time Stamps
      */
-    void SortComponentsByTimeStamp()
+    void SortByTimeStamp()
     {
         sort( componentFlatList.begin(), componentFlatList.end(), sortByTimeStamp );
     }
@@ -417,6 +448,19 @@ private:
     static bool sortByValueOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByReferenceOnly( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+
+    /**
+     * Function CreateFirstFreeRefId
+     * searches for the first free reference number in \a aListId of reference numbers in use.
+     * This function just searches for a hole in a list of incremented numbers, this list must
+     * be sorted by increasing values and each value can be stored only once.  The new value
+     * is added to the list.
+     * @see BuildRefIdInUseList to prepare this list
+     * @param aIdList The buffer that contains the reference numbers in use.
+     * @param aFirstValue The first expected free value
+     * @return The first free (not yet used) value.
+     */
+    int CreateFirstFreeRefId( std::vector<int>& aIdList, int aFirstValue );
 };
 
 

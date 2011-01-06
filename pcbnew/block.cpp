@@ -118,6 +118,7 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* aParent,
     m_Include_Edges_Items->SetValue( blockIncludeBoardOutlineLayer );
     m_Include_PcbTextes->SetValue( blockIncludePcbTexts );
     m_DrawBlockItems->SetValue( blockDrawItems );
+    m_sdbSizer1OK->SetDefault();
     SetFocus();
     GetSizer()->SetSizeHints( this );
     Centre();

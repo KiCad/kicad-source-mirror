@@ -341,7 +341,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences,
                 continue;
 
             SCH_REFERENCE reference = SCH_REFERENCE( component, entry, *this );
-            reference.m_SheetNum = sheetnumber;
+            reference.SetSheetNumber( sheetnumber );
             aReferences.AddItem( reference );
         }
     }

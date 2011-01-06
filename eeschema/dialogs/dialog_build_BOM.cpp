@@ -649,7 +649,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
             isMulti = entry->IsMulti();
 
         if( isMulti && aIncludeSubComponents )
-            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].m_Unit );
+            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].GetUnit() );
         else
             subRef.Empty();
 
@@ -786,8 +786,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
                 multi = 0;
         }
 
-        if ( multi && aList[ii].m_Unit > 0 )
-            unitId.Printf( wxT("%c"), 'A' -1 + aList[ii].m_Unit );
+        if ( multi && aList[ii].GetUnit() > 0 )
+            unitId.Printf( wxT("%c"), 'A' -1 + aList[ii].GetUnit() );
         else
             unitId.Empty();
 
@@ -901,7 +901,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
         wxString subRef;
 
         if( isMulti && aIncludeSubComponents )
-            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].m_Unit );
+            subRef = LIB_COMPONENT::ReturnSubReference( aList[ii].GetUnit() );
         else
             subRef.Empty();
 
