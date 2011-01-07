@@ -1,4 +1,4 @@
 release version:
-2010 dec 23 (BZR 2682)
+2011 jan 06 (BZR 2717)
 files (.zip,.tgz):
-kicad-2010-12-23
+kicad-2011-01-06
