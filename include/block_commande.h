@@ -124,6 +124,12 @@ public:
     {
         m_BlockLastCursorPosition = aPosition;
     }
+
+    /**
+     * Function IsDragging
+     * returns true if the current block command is a drag operation.
+     */
+    bool IsDragging() const { return m_Command == BLOCK_DRAG; }
 };
 
 

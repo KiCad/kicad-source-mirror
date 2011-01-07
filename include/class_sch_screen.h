@@ -20,6 +20,18 @@ class SCH_SHEET_PATH;
 
 class SCH_SCREEN : public BASE_SCREEN
 {
+    /**
+     * Function addConnectedItemsToBlock
+     * add items connected at \a aPosition to the block pick list.
+     * <p>
+     * This method tests all connectable unselected items in the screen that are connected to
+     * \a aPosition and adds them to the block selection pick list.  This is used when a block
+     * drag is being performed to ensure connections to items in the block are not lost.
+     *</p>
+     * @param aPosition = The connection point to test.
+     */
+    void addConnectedItemsToBlock( const wxPoint& aPosition );
+
 public:
     int       m_RefCount;     ///< Number of sheets referencing this screen.
                               ///< Delete when it goes to zero.
@@ -132,6 +144,14 @@ public:
      * @param aItems Hierarchical item list.
      */
     void GetHierarchicalItems( std::vector <SCH_ITEM*> aItems );
+
+    /**
+     * Function SelectBlockItems
+     * creates a list of items found when a block command is initiated.  The items selected
+     * depend on the block commad.  If the drag block command is issued, than any items
+     * connected to items in the block are also selected.
+     */
+    void SelectBlockItems();
 
     virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )

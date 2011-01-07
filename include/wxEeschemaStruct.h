@@ -9,6 +9,7 @@
 #include "param_config.h"
 #include "class_undoredo_container.h"
 #include "template_fieldnames.h"
+#include "block_commande.h"
 
 
 class LIB_EDIT_FRAME;
@@ -91,6 +92,7 @@ private:
     wxSize                m_findDialogSize;
     wxArrayString         m_findStringHistoryList;
     wxArrayString         m_replaceStringHistoryList;
+    BLOCK_SELECTOR        m_blockItems;         ///< List of selected items.
 
 public:
     SCH_EDIT_FRAME( wxWindow* father,
@@ -617,6 +619,13 @@ private:
      */
     void     GetSchematicFromUndoList( wxCommandEvent& event );
 
+    /**
+     * Function copyBlockItems
+     * copies the list of block item.
+     * @sa m_blockItems
+     * @param aItemList List to copy the block select items into.
+     */
+    void copyBlockItems( PICKED_ITEMS_LIST& aItemsList );
 
 public:
     void     Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );

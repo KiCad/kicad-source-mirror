@@ -26,9 +26,6 @@
 #include "build_version.h"
 
 
-static EDA_ITEM* HighLightStruct = NULL;
-
-
 void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color )
 {
     BASE_SCREEN* screen = panel->GetScreen();
@@ -40,12 +37,6 @@ void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, 
                 pos.x + DANGLING_SYMBOL_SIZE, pos.y + DANGLING_SYMBOL_SIZE,
                 0, Color );
     }
-}
-
-
-void SetHighLightStruct( EDA_ITEM* HighLight )
-{
-    HighLightStruct = HighLight;
 }
 
 
@@ -78,8 +69,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( GetScreen()->m_FileName == m_DefaultSchematicFileName )
     {
         wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-        title.Printf( wxT( "%s [%s]" ), msg.GetData(),
-                     GetScreen()->m_FileName.GetData() );
+        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->m_FileName ) );
         SetTitle( title );
     }
     else
@@ -149,7 +139,7 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
 // EDA_ITEM::GetBoundingBox()
             //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
             // ) )
-            RedrawOneStruct( panel, DC, Structlist, DrawMode, Color );
+            Structlist->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, Color );
         }
 
         Structlist = Structlist->Next();
@@ -157,152 +147,12 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-/*****************************************************************************
-* Routine to redraw list of structs.                                         *
-*****************************************************************************/
+/* Routine to redraw on schematic object. */
 void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
                       SCH_ITEM* Struct, int DrawMode, int Color )
 {
     if( Struct == NULL )
         return;
 
-    if( HighLightStruct == Struct )
-        Color = HIGHLIGHT_COLOR;
-
     Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, Color );
-}
-
-
-/* Routine for repainting item in ghost mode. Used in the block moves. */
-void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
-                         wxDC*             aDC,
-                         SCH_ITEM*         aItem,
-                         const wxPoint&    aOffset )
-{
-    int DrawMode = g_XorMode;
-    int width    = g_DrawDefaultLineThickness;
-
-    GRSetDrawMode( aDC, DrawMode );
-
-    switch( aItem->Type() )
-    {
-    case SCH_POLYLINE_T:
-    {
-        SCH_POLYLINE* Struct = (SCH_POLYLINE*) aItem;
-        GRMoveTo( Struct->m_PolyPoints[0].x + aOffset.x, Struct->m_PolyPoints[0].y + aOffset.y );
-
-        for( unsigned ii = 1; ii < Struct->GetCornerCount(); ii++ )
-            GRLineTo( &aPanel->m_ClipBox,
-                      aDC,
-                      Struct->m_PolyPoints[ii].x + aOffset.x,
-                      Struct->m_PolyPoints[ii].y + aOffset.y,
-                      width,
-                      g_GhostColor );
-
-        break;
-    }
-
-    case SCH_LINE_T:
-    {
-        SCH_LINE* Struct;
-        Struct = (SCH_LINE*) aItem;
-
-        if( (Struct->m_Flags & STARTPOINT) == 0 )
-        {
-            GRMoveTo( Struct->m_Start.x + aOffset.x, Struct->m_Start.y + aOffset.y );
-        }
-        else
-        {
-            GRMoveTo( Struct->m_Start.x, Struct->m_Start.y );
-        }
-
-        if( (Struct->m_Flags & ENDPOINT) == 0 )
-        {
-            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_End.x + aOffset.x,
-                      Struct->m_End.y + aOffset.y, width, g_GhostColor );
-        }
-        else
-        {
-            GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_End.x,
-                      Struct->m_End.y, width, g_GhostColor );
-        }
-        break;
-    }
-
-    case SCH_BUS_ENTRY_T:
-    {
-        SCH_BUS_ENTRY* Struct = (SCH_BUS_ENTRY*) aItem;
-        wxPoint        start  = Struct->m_Pos + aOffset;
-        GRMoveTo( start.x, start.y );
-        GRLineTo( &aPanel->m_ClipBox, aDC, Struct->m_Size.x + start.x,
-                  Struct->m_Size.y + start.y, width, g_GhostColor );
-        break;
-    }
-
-    case SCH_JUNCTION_T:
-    {
-        SCH_JUNCTION* Struct;
-        Struct = (SCH_JUNCTION*) aItem;
-        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
-        break;
-    }
-
-    case SCH_TEXT_T:
-    {
-        SCH_TEXT* Struct;
-        Struct = (SCH_TEXT*) aItem;
-        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
-        break;
-    }
-
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    {
-        SCH_LABEL* Struct;
-        Struct = (SCH_LABEL*) aItem;
-        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
-        break;
-    }
-
-    case SCH_NO_CONNECT_T:
-    {
-        SCH_NO_CONNECT* Struct;
-        Struct = (SCH_NO_CONNECT*) aItem;
-        Struct->Draw( aPanel, aDC, aOffset, DrawMode, g_GhostColor );
-        break;
-    }
-
-    case SCH_COMPONENT_T:
-    {
-        SCH_COMPONENT* Component = (SCH_COMPONENT*) aItem;
-
-        if( Component == NULL )
-            break;
-
-        Component->Draw( aPanel, aDC, aOffset, g_XorMode, g_GhostColor, false );
-        break;
-    }
-
-    case SCH_SHEET_T:
-    {
-        SCH_SHEET* Struct = (SCH_SHEET*) aItem;
-        GRRect( &aPanel->m_ClipBox,
-                aDC,
-                Struct->m_Pos.x + aOffset.x,
-                Struct->m_Pos.y + aOffset.y,
-                Struct->m_Pos.x + Struct->m_Size.x + aOffset.x,
-                Struct->m_Pos.y + Struct->m_Size.y + aOffset.y,
-                width,
-                g_GhostColor );
-        break;
-    }
-
-    case SCH_SHEET_LABEL_T:
-    case SCH_MARKER_T:
-        break;
-
-    default:
-        break;
-    }
 }

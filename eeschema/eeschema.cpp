@@ -37,10 +37,6 @@ SCH_ITEM* g_ItemToUndoCopy;     /* copy of last modified schematic item
                                  * before it is modified (used for undo
                                  * managing to restore old values ) */
 
-/* Block operation (copy, paste) */
-BLOCK_SELECTOR           g_BlockSaveDataList;   // List of items to paste
-                                                // (Created by Block Save)
-
 bool                     g_HVLines = true;      // Bool: force H or V
                                                 // directions (Wires, Bus ..)
 

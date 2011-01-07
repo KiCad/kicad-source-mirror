@@ -288,6 +288,8 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
+    virtual bool IsConnectable() const { return true; }
+
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual EDA_ITEM* doClone() const;
@@ -384,6 +386,8 @@ public:
     virtual void    Mirror_X( int aXaxis_position );
 
     virtual void    Rotate( wxPoint rotationPoint );
+
+    virtual bool IsConnectable() const { return true; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
@@ -483,6 +487,8 @@ public:
     virtual void    Mirror_X( int aXaxis_position );
 
     virtual void    Rotate( wxPoint rotationPoint );
+
+    virtual bool IsConnectable() const { return true; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;

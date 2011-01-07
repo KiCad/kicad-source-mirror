@@ -497,8 +497,8 @@ void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
-    event.Enable( g_BlockSaveDataList.GetCount() > 0 );
-    m_HToolBar->EnableTool( wxID_PASTE, g_BlockSaveDataList.GetCount() > 0 );
+    event.Enable( m_blockItems.GetCount() > 0 );
+    m_HToolBar->EnableTool( wxID_PASTE, m_blockItems.GetCount() > 0 );
 }
 
 

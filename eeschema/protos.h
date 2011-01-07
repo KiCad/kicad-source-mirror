@@ -132,12 +132,6 @@ SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList );
 /* EEREDRAW.CPP */
 /***************/
 void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color );
-
-void DrawStructsInGhost( WinEDA_DrawPanel* aPanel,
-                         wxDC*             aDC,
-                         SCH_ITEM*         aItem,
-                         const wxPoint&    aOffset );
-void SetHighLightStruct( SCH_ITEM* HighLight );
 void RedrawActiveWindow( WinEDA_DrawPanel* panel, wxDC* DC );
 void RedrawStructList( WinEDA_DrawPanel* panel,
                        wxDC*             DC,

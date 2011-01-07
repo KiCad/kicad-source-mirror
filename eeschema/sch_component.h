@@ -42,8 +42,8 @@ class SCH_COMPONENT : public SCH_ITEM
     SCH_FIELDS m_Fields;    ///< Variable length list of fields.
 
     /**
-     * Defines the hierarchical path and reference of the component.  This allowa support
-     * for hierarchical sheets that reference the same schematic.  The foramt for the path
+     * Defines the hierarchical path and reference of the component.  This allows support
+     * for hierarchical sheets that reference the same schematic.  The format for the path
      * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/.../&lscomponent time stamp&gt.
      * A single / denotes the root sheet.
      */
@@ -282,7 +282,7 @@ public:
      * adds a full hierarchical reference (path + local reference)
      * @param aPath Hierarchical path (/&ltsheet timestamp&gt/&ltcomponent
      *              timestamp&gt like /05678E50/A23EF560)
-     * @param aRef :ocal reference like C45, R56
+     * @param aRef :local reference like C45, R56
      * @param aMulti Part selection, used in multi part per package (0 or 1 for non multi)
      */
     void           AddHierarchicalReference( const wxString& aPath,
@@ -349,6 +349,8 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    virtual bool IsConnectable() const { return true; }
+
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
     /**
@@ -360,8 +362,6 @@ public:
      * @return A pointer to the component library object if found, otherwise NULL.
      */
     LIB_DRAW_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
-
-
 #if defined(DEBUG)
 
     /**

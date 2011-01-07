@@ -87,6 +87,8 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    virtual bool IsConnectable() const { return true; }
+
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)

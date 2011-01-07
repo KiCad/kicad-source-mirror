@@ -15,7 +15,10 @@
 #include "netlist.h"
 #include "class_library.h"
 #include "sch_items.h"
+#include "sch_bus_entry.h"
 #include "sch_line.h"
+#include "sch_marker.h"
+#include "sch_no_connect.h"
 #include "sch_sheet.h"
 #include "sch_component.h"
 
@@ -443,6 +446,80 @@ void SCH_SCREEN::GetHierarchicalItems( std::vector <SCH_ITEM*> aItems )
             aItems.push_back( item );
 
         item = item->Next();
+    }
+}
+
+
+void SCH_SCREEN::SelectBlockItems()
+{
+    SCH_ITEM*          item;
+
+    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.m_ItemsSelection;
+
+    if( pickedlist->GetCount() == 0 )
+        return;
+
+    ClearDrawingState();
+
+    for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
+    {
+        item = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
+        item->m_Flags = SELECTED;
+    }
+
+    if( !m_BlockLocate.IsDragging() )
+        return;
+
+    // Select all the items in the screen connected to the items in the block.
+    for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
+    {
+        item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            item->IsSelectStateChanged( m_BlockLocate );
+            pickedlist->SetPickerFlags( item->m_Flags, ii );
+        }
+        else if( item->IsConnectable() )
+        {
+            std::vector< wxPoint > connections;
+
+            item->GetConnectionPoints( connections );
+
+            for( size_t i = 0; i < connections.size(); i++ )
+                addConnectedItemsToBlock( connections[i] );
+        }
+    }
+}
+
+
+void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
+{
+    SCH_ITEM* item;
+    ITEM_PICKER picker;
+
+    for( item = GetDrawItems(); item != NULL; item = item = item->Next() )
+    {
+        picker.m_PickedItem     = item;
+        picker.m_PickedItemType = item->Type();
+
+        if( item->IsSelected() || !item->IsConnectable() || !item->IsConnected( position ) )
+            continue;
+
+        item->m_Flags = SELECTED;
+
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = (SCH_LINE*) item;
+
+            if( line->m_Start == position )
+                item->m_Flags |= ENDPOINT;
+            else if( line->m_End == position )
+                item->m_Flags |= STARTPOINT;
+        }
+
+        picker.m_PickerFlags = item->m_Flags;
+        m_BlockLocate.m_ItemsSelection.PushItem( picker );
     }
 }
 

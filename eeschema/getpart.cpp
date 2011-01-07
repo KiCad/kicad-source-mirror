@@ -212,8 +212,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     // Set the component value that can differ from component name in lib, for aliases
     Component->GetField( VALUE )->m_Text = Name;
     Component->DisplayInfo( this );
-
-    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint( 0, 0 ) );
+    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 
     return Component;
 }
@@ -232,13 +231,12 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     if( erase )
     {
-        DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
+        Component->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     }
 
     move_vector = screen->m_Curseur - Component->m_Pos;
     Component->Move( move_vector );
-
-    DrawStructsInGhost( panel, DC, Component, wxPoint(0,0) );
+    Component->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 }
 
 
@@ -258,7 +256,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
         DrawPanel->CursorOff( DC );
 
         if( DrawComponent->m_Flags )
-            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
+            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
         else
         {
             DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox() );
@@ -271,7 +269,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
     if( DC )
     {
         if( DrawComponent->m_Flags )
-            DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint(0,0) );
+            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
         else
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         DrawPanel->CursorOn( DC );
@@ -342,7 +340,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
         unit = m_UnitCount;
 
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -352,7 +350,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
@@ -380,7 +378,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     }
 
     if( DrawComponent->m_Flags )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
@@ -397,7 +395,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags & IS_MOVED )
-        DrawStructsInGhost( DrawPanel, DC, DrawComponent, wxPoint( 0, 0 ) );
+        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
@@ -444,11 +442,11 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
     Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
     DrawPanel->PostDirtyRect( Component->GetBoundingBox() );
 
-    DrawStructsInGhost( DrawPanel, DC, Component, wxPoint(0,0) );
+    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 
 #else
 
-    RedrawOneStruct( DrawPanel, DC, Component, g_XorMode );
+    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     Component->m_Flags |= IS_MOVED;
 

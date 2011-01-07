@@ -201,14 +201,18 @@ void SCH_LINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
 
     GRSetDrawMode( DC, DrawMode );
 
+    wxPoint start = m_Start;
+    wxPoint end = m_End;
+
+    if( ( m_Flags & STARTPOINT ) == 0 )
+        start += offset;
+    if( ( m_Flags & ENDPOINT ) == 0 )
+        end += offset;
+
     if( m_Layer == LAYER_NOTES )
-        GRDashedLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
-                      m_Start.y + offset.y, m_End.x + offset.x,
-                      m_End.y + offset.y, width, color );
+        GRDashedLine( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, width, color );
     else
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + offset.x,
-                m_Start.y + offset.y, m_End.x + offset.x, m_End.y + offset.y,
-                width, color );
+        GRLine( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, width, color );
 
     if( m_StartIsDangling )
         DrawDanglingSymbol( panel, DC, m_Start + offset, color );
@@ -367,17 +371,35 @@ bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
-    if( aRect.Contains( m_Start ) )
-        m_Flags |= STARTPOINT | SELECTED;
+    if( aRect.Contains( m_Start ) && aRect.Contains( m_End ) )
+    {
+        m_Flags |= SELECTED;
+    }
+    else if( aRect.Contains( m_Start ) )
+    {
+        m_Flags &= ~STARTPOINT;
+        m_Flags |= ( SELECTED | ENDPOINT );
+    }
+    else if( aRect.Contains( m_End ) )
+    {
+        m_Flags &= ~ENDPOINT;
+        m_Flags |= ( SELECTED | STARTPOINT );
+    }
     else
-        m_Flags &= ~( STARTPOINT | SELECTED );
-
-    if( aRect.Contains( m_End ) )
-        m_Flags |= ENDPOINT | SELECTED;
-    else
-        m_Flags &= ~( ENDPOINT | SELECTED );
+    {
+        m_Flags &= ~( SELECTED | STARTPOINT | ENDPOINT );
+    }
 
     return previousState != IsSelected();
+}
+
+
+bool SCH_LINE::IsConnectable() const
+{
+    if( m_Layer == LAYER_WIRE || m_Layer == LAYER_BUS )
+        return true;
+
+    return false;
 }
 
 

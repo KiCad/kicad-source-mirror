@@ -389,7 +389,7 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
             frame->GetScreen()->SetCurItem( NULL );
             frame->DrawPanel->ManageCurseur = NULL;
             frame->DrawPanel->ForceCloseManageCurseur = NULL;
-            RedrawOneStruct( frame->DrawPanel, DC, this, g_XorMode );
+            Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
             delete this;
             return;
         }

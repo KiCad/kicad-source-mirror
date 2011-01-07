@@ -142,10 +142,6 @@ extern SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
                                          * before it is modified (used for undo
                                          * managing to restore old values ) */
 
-/* Block operation (copy, paste) */
-extern BLOCK_SELECTOR g_BlockSaveDataList; /* List of items to paste (Created
-                                            * by Block Save) */
-
 // Management options.
 extern bool      g_HVLines;
 

@@ -119,6 +119,12 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    /**
+     * Function IsConnectable
+     * returns true if the schematic item can connect to another schematic item.
+     */
+    virtual bool IsConnectable() const;
+
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 #if defined(DEBUG)

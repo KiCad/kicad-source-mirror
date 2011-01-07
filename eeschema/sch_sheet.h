@@ -187,6 +187,8 @@ public:
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+
+    virtual bool IsConnectable() const { return true; }
 };
 
 
@@ -499,6 +501,8 @@ public:
     virtual bool IsDangling() const;
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
+
+    virtual bool IsConnectable() const { return true; }
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
