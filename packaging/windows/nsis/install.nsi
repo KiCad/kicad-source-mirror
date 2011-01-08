@@ -17,7 +17,11 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
+<<<<<<< TREE
+!define PRODUCT_VERSION "2011.01.07"
+=======
 !define PRODUCT_VERSION "2010.12.22"
+>>>>>>> MERGE-SOURCE
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
