@@ -498,7 +498,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
     SCH_ITEM* item;
     ITEM_PICKER picker;
 
-    for( item = GetDrawItems(); item != NULL; item = item = item->Next() )
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
     {
         picker.m_PickedItem     = item;
         picker.m_PickedItemType = item->Type();
