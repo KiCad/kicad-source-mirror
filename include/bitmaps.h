@@ -338,6 +338,7 @@ extern const char* red_xpm[];
 extern const char* reload2_xpm[];
 extern const char* reload_xpm[];
 extern const char* repaint_xpm[];
+extern const char* reset_text_xpm[];
 extern const char* resize_sheet_xpm[];
 extern const char* right_xpm[];
 extern const char* rotate_field_xpm[];

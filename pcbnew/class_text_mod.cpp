@@ -199,13 +199,6 @@ int TEXTE_MODULE:: GetLength() const
     return m_Text.Len();
 }
 
-
-void TEXTE_MODULE:: SetWidth( int new_width )
-{
-    m_Thickness = new_width;
-}
-
-
 // Update draw coordinates
 void TEXTE_MODULE:: SetDrawCoord()
 {

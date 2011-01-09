@@ -1,0 +1,27 @@
+/* XPM */
+#ifndef XPMMAIN
+extern const char *reset_text_xpm[];
+
+#else
+const char * reset_text_xpm[] = {
+"16 16 3 1",
+" 	c None",
+".	c #00009B",
+"+	c #ACACAC",
+"                ",
+"                ",
+"           ...+ ",
+"            .++ ",
+"        ... .+  ",
+"         ..+.+  ",
+"        . .+++  ",
+"       . + +    ",
+" .....  +       ",
+"   .+++         ",
+"   .+           ",
+"   .+           ",
+"   .+           ",
+"   .+           ",
+"   .+           ",
+"   ++           "};
+#endif

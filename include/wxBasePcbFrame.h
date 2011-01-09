@@ -256,6 +256,24 @@ public:
                                         wxDC*         DC );
     TEXTE_MODULE* CreateTextModule( MODULE* Module, wxDC* DC );
 
+    /**
+     * Function ResetTextSize
+     * resets given field text size and width to current settings in
+     * Preferences->Dimensions->Texts and Drawings.
+     * @param aItem is the item to be reset, either TEXTE_PCB or TEXTE_MODULE.
+     * @param aDC is the drawing context.
+     */
+    void          ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC );
+
+    /**
+     * Function ResetModuleTextSizes
+     * resets text size and width of all module text fields of given field
+     * type to current settings in Preferences->Dimensions->Texts and Drawings.
+     * @param aType is the field type (TEXT_is_REFERENCE, TEXT_is_VALUE, or TEXT_is_DIVERS).
+     * @param aDC is the drawing context.
+     */
+    void          ResetModuleTextSizes( int aType, wxDC* aDC );
+
     void          InstallPadOptionsFrame( D_PAD*         pad );
     void          InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
                                               wxDC*         DC );

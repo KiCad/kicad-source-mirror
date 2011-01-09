@@ -266,3 +266,154 @@ static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC,
     // Redraw text
     Text->Draw( panel, DC, GR_XOR, MoveVector );
 }
+
+void WinEDA_BasePcbFrame::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
+{
+    wxSize newSize;
+    int newThickness;
+    TEXTE_PCB* pcbText;
+    TEXTE_MODULE* moduleText;
+    EDA_TextStruct* text;
+
+    switch( aItem->Type() )
+    {
+    case TYPE_TEXTE:
+        newSize = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
+        newThickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
+        pcbText = (TEXTE_PCB*) aItem;
+        text = (EDA_TextStruct*) pcbText;
+        break;
+    case TYPE_TEXTE_MODULE:
+        newSize = g_ModuleTextSize;
+        newThickness = g_ModuleTextWidth;
+        moduleText = (TEXTE_MODULE*) aItem;
+        text = (EDA_TextStruct*) moduleText;
+        break;
+    default:
+        // Exit if aItem is not a text field
+        return;
+        break;
+    }
+
+    // Exit if there's nothing to do
+    if( text->GetSize() == newSize
+        && text->GetThickness() == newThickness )
+        return;
+
+    // Push item to undo list
+    switch( aItem->Type() )
+    {
+    case TYPE_TEXTE:
+        SaveCopyInUndoList( pcbText, UR_CHANGED );
+        break;
+    case TYPE_TEXTE_MODULE:
+        SaveCopyInUndoList( moduleText->GetParent(), UR_CHANGED );
+        break;
+    default:
+        break;
+    }
+
+    // Apply changes
+    text->SetSize( newSize );
+    text->SetThickness( newThickness );
+
+    if( aDC )
+        DrawPanel->Refresh();
+
+    OnModify();
+}
+
+void WinEDA_BasePcbFrame::ResetModuleTextSizes( int aType, wxDC* aDC )
+{
+    MODULE* module;
+    BOARD_ITEM* boardItem;
+    TEXTE_MODULE* item;
+    ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
+    PICKED_ITEMS_LIST undoItemList;
+    unsigned int ii;
+
+    itemWrapper.m_PickedItemType = TYPE_MODULE;
+
+    module = GetBoard()->m_Modules;
+
+    // Prepare undo list
+    while( module )
+    {
+        itemWrapper.m_PickedItem = module;
+        switch( aType )
+        {
+        case TEXT_is_REFERENCE:
+            item = module->m_Reference;
+            if( item->GetSize() != g_ModuleTextSize
+                || item->GetThickness() != g_ModuleTextWidth )
+                undoItemList.PushItem( itemWrapper );
+            break;
+        case TEXT_is_VALUE:
+            item = module->m_Value;
+            if( item->GetSize() != g_ModuleTextSize
+                || item->GetThickness() != g_ModuleTextWidth )
+                undoItemList.PushItem( itemWrapper );
+            break;
+        case TEXT_is_DIVERS:
+            // Go through all other module text fields
+            for( boardItem = module->m_Drawings; boardItem;
+                 boardItem = boardItem->Next() )
+            {
+                if( boardItem->Type() == TYPE_TEXTE_MODULE )
+                {
+                    item = (TEXTE_MODULE*) boardItem;
+                    if( item->GetSize() != g_ModuleTextSize
+                        || item->GetThickness() != g_ModuleTextWidth )
+                    {
+                        undoItemList.PushItem( itemWrapper );
+                        break;
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+        }
+        module = module->Next();
+    }
+
+    // Exit if there's nothing to do
+    if( !undoItemList.GetCount() )
+        return;
+
+    SaveCopyInUndoList( undoItemList, UR_CHANGED );
+
+    // Apply changes to modules in the undo list
+    for( ii = 0; ii < undoItemList.GetCount(); ii++ )
+    {
+        module = (MODULE*) undoItemList.GetPickedItem( ii );
+        switch( aType )
+        {
+        case TEXT_is_REFERENCE:
+            module->m_Reference->SetThickness( g_ModuleTextWidth );
+            module->m_Reference->SetSize( g_ModuleTextSize );
+            break;
+        case TEXT_is_VALUE:
+            module->m_Value->SetThickness( g_ModuleTextWidth );
+            module->m_Value->SetSize( g_ModuleTextSize );
+            break;
+        case TEXT_is_DIVERS:
+            for( boardItem = module->m_Drawings; boardItem;
+                 boardItem = boardItem->Next() )
+            {
+                if( boardItem->Type() == TYPE_TEXTE_MODULE )
+                {
+                    item = (TEXTE_MODULE*) boardItem;
+                    item->SetThickness( g_ModuleTextWidth );
+                    item->SetSize( g_ModuleTextSize );
+                }
+            }
+            break;
+        }
+    }
+
+    if( aDC )
+        DrawPanel->Refresh();
+
+    OnModify();
+}

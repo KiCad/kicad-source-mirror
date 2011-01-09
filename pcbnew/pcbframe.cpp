@@ -139,6 +139,10 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
+              WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
+              WinEDA_PcbFrame::Process_Special_Functions )
 
     // Menu Help
     EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )

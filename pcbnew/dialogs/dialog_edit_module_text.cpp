@@ -187,7 +187,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
         DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
         width = maxthickness;
     }
-    m_CurrentTextMod->SetWidth( width );
+    m_CurrentTextMod->SetThickness( width );
 
     m_CurrentTextMod->m_NoShow = (m_Show->GetSelection() == 0) ? 0 : 1;
     int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;

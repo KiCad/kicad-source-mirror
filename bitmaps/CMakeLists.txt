@@ -344,6 +344,7 @@ set(BITMAP_SRCS
     red.xpm
     reload2.xpm
     reload.xpm
+    Reset_Text.xpm
     Resize_Sheet.xpm
     right.xpm
     Rotate_Field.xpm

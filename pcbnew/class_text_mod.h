@@ -46,7 +46,6 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     void     Copy( TEXTE_MODULE* source ); // copy structure
 
     /* Gestion du texte */
-    void     SetWidth( int new_width );
 
     int      GetLength() const;        /* text length */
 

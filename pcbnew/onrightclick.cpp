@@ -699,6 +699,8 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
         msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
                       msg, edit_text_xpm );
+        ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_RESET_TEXT_SIZE,
+                      _( "Reset Size" ), reset_text_xpm );
     }
 
     if( !flags && FpText->m_Type == TEXT_is_DIVERS )    // Graphic texts can be deleted only if are not currently edited
@@ -809,6 +811,8 @@ void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
     msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB,
                   msg, edit_text_xpm );
+    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_RESET_TEXT_SIZE,
+                  _( "Reset Size" ), reset_text_xpm );
 
     sub_menu_Text->AppendSeparator();
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB,

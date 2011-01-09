@@ -811,6 +811,10 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         break;
 
+    case ID_POPUP_PCB_RESET_TEXT_SIZE:
+        ResetTextSize( GetCurItem(), &dc );
+        break;
+
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
         DrawPanel->MouseToCursorSchema();
         StartMoveTexteModule( (TEXTE_MODULE*) GetCurItem(), &dc );
@@ -1010,6 +1014,14 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_SWAP_LAYERS:
         Swap_Layers( event );
+        break;
+
+    case ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES:
+        ResetModuleTextSizes( TEXT_is_REFERENCE, &dc );
+        break;
+
+    case ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES:
+        ResetModuleTextSizes( TEXT_is_VALUE, &dc );
         break;
 
     case ID_PCB_USER_GRID_SETUP:

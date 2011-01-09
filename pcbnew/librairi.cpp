@@ -765,13 +765,13 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( const wxString& aModuleName )
 
     /* Update reference: */
     Module->m_Reference->m_Text = moduleName;
-    Module->m_Reference->SetWidth( g_ModuleTextWidth );
-    Module->m_Reference->m_Size = g_ModuleTextSize;
+    Module->m_Reference->SetThickness( g_ModuleTextWidth );
+    Module->m_Reference->SetSize( g_ModuleTextSize );
 
     /* Set the value field to a default value */
     Module->m_Value->m_Text = wxT( "VAL**" );
-    Module->m_Value->SetWidth( g_ModuleTextWidth );
-    Module->m_Value->m_Size = g_ModuleTextSize;
+    Module->m_Value->SetThickness( g_ModuleTextWidth );
+    Module->m_Value->SetSize( g_ModuleTextSize );
 
     Module->SetPosition( wxPoint( 0, 0 ) );
 

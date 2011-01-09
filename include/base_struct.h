@@ -636,7 +636,7 @@ public:
     wxString m_Text;                    /* text! */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
-    int      m_Thickness;                   /* pen size used to draw this text */
+    int      m_Thickness;               /* pen size used to draw this text */
     int      m_Orient;                  /* Orient in 0.1 degrees */
     bool     m_Mirror;                  /* Display Normal / mirror */
     int      m_Attributs;               /* flags (visible...) */
@@ -654,6 +654,34 @@ public:
     EDA_TextStruct( const wxString& text = wxEmptyString );
     EDA_TextStruct( const EDA_TextStruct& aText );
     virtual ~EDA_TextStruct();
+
+    /**
+     * Function SetThickness
+     * sets text thickness.
+     * @param aNewThickness is the new text thickness.
+     */
+    void SetThickness( int aNewThickness ) { m_Thickness = aNewThickness; };
+
+    /**
+     * Function GetThickness
+     * returns text thickness.
+     * @return int - text thickness.
+     */
+    int GetThickness() const { return m_Thickness; };
+
+    /**
+     * Function SetSize
+     * sets text size.
+     * @param aNewSize is the new text size.
+     */
+    void SetSize( wxSize aNewSize ) { m_Size = aNewSize; };
+
+    /**
+     * Function GetSize
+     * returns text size.
+     * @return wxSize - text size.
+     */
+    wxSize GetSize() const { return m_Size; };
 
     int GetLength() const { return m_Text.Length(); };
 

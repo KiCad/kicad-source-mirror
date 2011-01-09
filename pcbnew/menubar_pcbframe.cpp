@@ -292,6 +292,21 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     item->SetBitmap( swap_layer_xpm );
     editMenu->Append( item );
 
+    // Reset module reference sizes
+    item = new wxMenuItem( editMenu,
+                           ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
+                           _( "Reset Module &Reference Sizes" ),
+                           _( "Reset text size and width of all module references to current defaults" ) );
+    item->SetBitmap( reset_text_xpm );
+    editMenu->Append( item );
+
+    // Reset module value sizes
+    item = new wxMenuItem( editMenu,
+                           ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
+                           _( "Reset Module &Value Sizes" ),
+                           _( "Reset text size and width of all module values to current defaults" ) );
+    item->SetBitmap( reset_text_xpm );
+    editMenu->Append( item );
 
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
