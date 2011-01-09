@@ -318,7 +318,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             if( item_boundingbox.Intersects( zone_boundingbox ) )
             {
                 ( (EDGE_MODULE*) item )->TransformShapeWithClearanceToPolygon(
-                    cornerBufferPolysToSubstract, m_ZoneClearance,
+                    cornerBufferPolysToSubstract, zone_clearance,
                     s_CircleToSegmentsCount, s_Correction );
             }
         }
@@ -335,7 +335,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         case TYPE_DRAWSEGMENT:
             ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
                 cornerBufferPolysToSubstract,
-                m_ZoneClearance,
+                zone_clearance,
                 s_CircleToSegmentsCount,
                 s_Correction );
             break;
@@ -344,7 +344,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         case TYPE_TEXTE:
             ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygon(
                 cornerBufferPolysToSubstract,
-                m_ZoneClearance,
+                zone_clearance,
                 s_CircleToSegmentsCount,
                 s_Correction );
             break;
