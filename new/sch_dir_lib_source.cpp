@@ -59,16 +59,6 @@ using namespace std;
 using namespace SCH;
 
 
-/* __func__ is C99 prescribed, but just in case:
-http://www.informit.com/guides/content.aspx?g=cplusplus&seqNum=338
-#if defined(__GNUG__)   // The GNU C++ compiler defines this
-#define FUNC_NAME(x)    // nothing, GNU C++ defines __func__ just fine.
-#else
-#define FUNC_NAME(x)    static const char __func__[] = #x;
-#endif
-*/
-
-
 /**
  * Class DIR_WRAP
  * provides a destructor which is invoked if an exception is thrown.
@@ -466,36 +456,90 @@ void DIR_LIB_SOURCE::GetRevisions( STRINGS* aResults, const STRING& aPartName )
             aResults->push_back( it->substr( rev - it->c_str() ) );
         }
     }
+
+    else
+    {
+        // In non-version mode, there were no revisions read in, only part
+        // files without a revision.  But clients higher up expect to see
+        // at least one revision in order for the API to work, so we return
+        // a revision ""
+        aResults->push_back( "" );
+    }
 }
 
 
 void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev )
     throw( IO_ERROR )
 {
-    STRING  partName = aPartName;   // appended with aRev too if not empty
-    const char* rev  = endsWithRev( partName );
+    STRING      partName = aPartName;
+    const char* hasRev   = endsWithRev( partName );
 
-    if( !useVersioning && (aRev.size() || rev) )
+    if( useVersioning )
     {
-        STRING msg = "this type 'dir' LIB_SOURCE not using 'useVersioning' option, cannot ask for a revision";
-        THROW_IO_ERROR( msg );
+        if( aRev.size() )
+        {
+            // a supplied rev replaces any in aPartName
+            if( hasRev )
+                partName.resize( hasRev - partName.c_str() - 1 );
+
+            partName += '/';
+            partName + aRev;
+
+            // find this exact revision
+
+            PN_ITER it = partnames.find( partName );
+
+            if( it == partnames.end() )    // part not found
+            {
+                partName += " not found.";
+                THROW_IO_ERROR( partName );
+            }
+
+            readString( aResult, makeFileName( partName ) );
+        }
+
+        else
+        {
+            // There's no rev on partName string.  Find the most recent rev, i.e. highest,
+            // which will be first because of the BY_REV compare method, which treats
+            // higher numbered revs as first.
+
+            STRING search = partName + '/';
+
+            // There's no rev on partName string.  Find the most recent rev, i.e. highest,
+            // which will be first because of the BY_REV compare method, which treats
+            // higher numbered revs as first.
+            PN_ITER it = partnames.upper_bound( search );
+
+            // verify that this one that is greater than partName is a match and not
+            // some unrelated name that is larger.
+            if( it == partnames.end() ||
+                it->compare( 0, search.size(), search ) != 0 )
+            {
+                partName += " is not present without a revision.";
+                THROW_IO_ERROR( partName );
+            }
+
+            readString( aResult, makeFileName( *it ) );
+        }
     }
 
-    if( aRev.size() )
+    else    // !useVersioning
     {
-        if( rev )   // a supplied rev replaces any in aPartName
-            partName.resize( rev - partName.c_str() - 1 );
+#if 1
+        if( hasRev || aRev.size() )
+        {
+            STRING msg = "this type 'dir' LIB_SOURCE not using 'useVersioning' option, cannot ask for a revision";
+            THROW_IO_ERROR( msg );
+        }
+#else
+        // no revisions allowed, strip it
+        if( hasRev )
+            partName.resize( hasRev - partName.c_str() - 1 );
+#endif
 
-        partName += "/" + aRev;
+        // find the part name without any revision
 
-        rev = endsWithRev( partName );
-    }
-
-    // partName is the exact part name we need here, or if rev is NULL,
-    // then look for the highest numbered revision.
-
-    if( rev )
-    {
         PN_ITER it = partnames.find( partName );
 
         if( it == partnames.end() )    // part not found
@@ -505,26 +549,6 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
         }
 
         readString( aResult, makeFileName( partName ) );
-    }
-    else
-    {
-        STRING search = partName + '/';
-
-        // There's no rev on partName string.  Find the most recent rev, i.e. highest,
-        // which will be first because of the BY_REV compare method, which treats
-        // higher numbered revs as first.
-        PN_ITER it = partnames.upper_bound( search );
-
-        // verify that this one that is greater than partName is a match and not
-        // some unrelated name that is larger.
-        if( it == partnames.end() || it->compare( 0, search.size(), search ) != 0 )
-        {
-            partName.insert( partName.begin(), '\'' );
-            partName += "' is not present without a revision.";
-            THROW_IO_ERROR( partName );
-        }
-
-        readString( aResult, makeFileName( *it ) );
     }
 }
 

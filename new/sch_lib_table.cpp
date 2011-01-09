@@ -355,6 +355,7 @@ void LIB_TABLE::Test()
         "(lib_table \n"
         "  (lib (logical www)           (type http)     (full_uri http://kicad.org/libs)    (options \" \"))\n"
         "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options useVersioning))\n"
+//        "  (lib (logical meparts)       (type dir)      (full_uri /tmp/eeschema-lib)        (options \" \"))\n"
         "  (lib (logical old-project)   (type schematic)(full_uri /tmp/old-schematic.sch)   (options \" \"))\n"
         ")\n"
         ,
@@ -399,7 +400,7 @@ void LIB_TABLE::Test()
     }
 
     // find a part
-    LPID    lpid( "meparts:tigers/ears/rev10" );
+    LPID    lpid( "meparts:tigers/ears" );
 
     LookupPart( lpid );
 }

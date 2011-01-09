@@ -107,7 +107,10 @@ protected:                  ///< derived classes must implement
      * fetches all revisions for @a aPartName into @a aResults.  Revisions are strings
      * like "rev12", "rev279", and are library source agnostic.  These do not have to be
      * in a contiguous order, but the first 3 characters must be "rev" and subsequent
-     * characters must consist of at least one decimal digit.
+     * characters must consist of at least one decimal digit.  If the LIB_SOURCE
+     * does not support revisions, it is allowed to return a single "" string as
+     * the only result.  This means aPartName is present in the libsource, only once
+     * without a revision.  This is a special case.
      */
     virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName )
         throw( IO_ERROR ) = 0;

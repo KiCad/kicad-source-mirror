@@ -31,7 +31,7 @@
 using namespace SCH;
 
 
-#define MAX_INHERITANCE_NESTING     10      // no problem going larger
+#define MAX_INHERITANCE_NESTING     6      // no problem going larger
 
 
 //-----<temporary home for PART sub objects, move after stable>------------------

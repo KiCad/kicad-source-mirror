@@ -230,7 +230,7 @@ int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IO_ERROR )
     int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     if( ret >= (int) buffer.size() )
     {
-        buffer.reserve( ret+200 );
+        buffer.resize( ret+2000 );
         ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     }
 

@@ -16,7 +16,10 @@ for C in ${CATEGORIES}; do
 
     for P in ${PARTS};  do
         for R in ${REVS}; do
-            (part $C/$P/$R extends $P/$R (value 22)(footprint SM0805)) > $BASEDIR/$C/$P.part.$R
+            echo "(part $C/$P (value 22)(footprint SM0805))" > $BASEDIR/$C/$P.part.$R
         done
+        # also make the part without a rev:
+        echo "(part $C/$P (value 22)(footprint SM0805))" > $BASEDIR/$C/$P.part
     done
 done
+
