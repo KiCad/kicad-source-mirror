@@ -156,7 +156,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
 
     if( DrawStruct )  // We have found a wire: Search for a connected pin at the same location
     {
-        Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+        Pin = GetScreen()->GetPin( refpoint, &LibItem );
 
         if( Pin )
         {
@@ -192,7 +192,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     /* search for a pin */
-    Pin = LocateAnyPin( (SCH_ITEM*) m_CurrentSheet->LastDrawList(), refpoint, &LibItem );
+    Pin = GetScreen()->GetPin( refpoint, &LibItem );
 
     if( Pin )
     {

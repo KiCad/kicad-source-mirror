@@ -378,7 +378,8 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent )
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent,
+                             bool aEndPointOnly )
 {
     SCH_ITEM* item;
     SCH_COMPONENT* component = NULL;
@@ -396,6 +397,9 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         if( pin )
             break;
     }
+
+    if( pin && aEndPointOnly && ( component->GetPinPhysicalPosition( pin ) != aPosition ) )
+        pin = NULL;
 
     if( aComponent )
         *aComponent = component;

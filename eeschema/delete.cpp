@@ -51,7 +51,7 @@ static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE
         #define SEGM ( (SCH_LINE*) Struct )
         if( segment->IsEndPoint( SEGM->m_Start ) )
         {
-            if( !frame->LocatePinEnd( ListStruct, SEGM->m_Start ) )
+            if( !frame->GetScreen()->GetPin( SEGM->m_Start, NULL, true ) )
             {
                 Struct->m_Flags |= CANDIDATE;
                 MarkConnected( frame, ListStruct, SEGM );
@@ -59,7 +59,7 @@ static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE
         }
         if( segment->IsEndPoint( SEGM->m_End ) )
         {
-            if( !frame->LocatePinEnd( ListStruct, SEGM->m_End ) )
+            if( !frame->GetScreen()->GetPin( SEGM->m_End, NULL, true ) )
             {
                 Struct->m_Flags |= CANDIDATE;
                 MarkConnected( frame, ListStruct, SEGM );

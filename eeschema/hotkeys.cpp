@@ -689,9 +689,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
                 break;
             if( DrawStruct->Type() == SCH_SHEET_T )
             {
+                SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
                 // If it's a sheet, then check if a pinsheet is under the cursor
-                SCH_SHEET_PIN* slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct,
-                                                          GetScreen()->m_Curseur );
+                SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->m_Curseur );
+
                 if( slabel )
                     DrawStruct = slabel;
             }
@@ -707,8 +708,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         if( HK_Descr->m_Idcommand == HK_COPY_COMPONENT_OR_LABEL )
         {
             GetScreen()->SetCurItem( (SCH_ITEM*) DrawStruct );
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
             break;
         }

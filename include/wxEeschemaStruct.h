@@ -668,7 +668,6 @@ public:
     void     RepeatDrawItem( wxDC* DC );
 
     void     TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
-    LIB_PIN* LocatePinEnd( SCH_ITEM* DrawList, const wxPoint& pos );
 
     // ERC:
 

@@ -753,7 +753,7 @@ bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos )
         if( PickStruct( pos, frame->GetScreen(), WIREITEM | WIRE_BUS_ENDPOINTS_ONLY ) )
             return TRUE;
 
-        if( frame->LocatePinEnd( frame->GetScreen()->GetDrawItems(), pos ) )
+        if( frame->GetScreen()->GetPin( pos, NULL, true ) )
             return TRUE;
     }
 

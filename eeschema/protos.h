@@ -114,12 +114,7 @@ SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
  *     Pointer to the structure if only 1 item is selected.
  *     NULL if no items are selects.
  */
-SCH_ITEM*          PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
-
-SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
-LIB_PIN*       LocateAnyPin( SCH_ITEM*       DrawList,
-                             const wxPoint&  RefPos,
-                             SCH_COMPONENT** libpart = NULL );
+SCH_ITEM*      PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
 SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList );
 

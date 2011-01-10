@@ -324,38 +324,6 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
 }
 
 
-SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos )
-{
-    return Sheet->GetLabel( pos );
-}
-
-
-LIB_PIN* LocateAnyPin( SCH_ITEM* DrawList, const wxPoint& RefPos, SCH_COMPONENT** libpart )
-{
-    SCH_ITEM* item;
-    SCH_COMPONENT* component = NULL;
-    LIB_PIN* pin = NULL;
-
-    for( item = DrawList; item != NULL; item = item->Next() )
-    {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
-        component = (SCH_COMPONENT*) item;
-
-        pin = (LIB_PIN*) component->GetDrawItem( RefPos, LIB_PIN_T );
-
-        if( pin )
-            break;
-    }
-
-    if( libpart )
-        *libpart = component;
-
-    return pin;
-}
-
-
 SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList )
 {
     SCH_ITEM* DrawStruct;
@@ -366,7 +334,8 @@ SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList )
         if( DrawStruct->Type() != SCH_SHEET_T )
             continue;
 
-        PinSheet = LocateSheetLabel( (SCH_SHEET*) DrawStruct, RefPos );
+        SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
+        PinSheet = sheet->GetLabel( RefPos );
 
         if( PinSheet )
             break;

@@ -70,8 +70,9 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 
         if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
-            SCH_SHEET_PIN* slabel;
-            slabel = LocateSheetLabel( (SCH_SHEET*) DrawStruct, GetScreen()->m_Curseur );
+            SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
+            SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->m_Curseur );
+
             if( slabel )
                 DrawStruct = slabel;
         }
