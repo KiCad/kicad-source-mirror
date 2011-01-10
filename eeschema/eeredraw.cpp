@@ -145,14 +145,3 @@ void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
         Structlist = Structlist->Next();
     }
 }
-
-
-/* Routine to redraw on schematic object. */
-void RedrawOneStruct( WinEDA_DrawPanel* panel, wxDC* DC,
-                      SCH_ITEM* Struct, int DrawMode, int Color )
-{
-    if( Struct == NULL )
-        return;
-
-    Struct->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, Color );
-}

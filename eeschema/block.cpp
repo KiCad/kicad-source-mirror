@@ -240,7 +240,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_MIRROR_Y:
         case BLOCK_MOVE:    /* Move */
         case BLOCK_COPY:    /* Copy */
-            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
+            GetScreen()->UpdatePickList();
             // fall through
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
             if( block->GetCount() )
@@ -261,7 +261,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DELETE: /* Delete */
-            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
+            GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( DrawPanel, DC, false );
 
             if( block->GetCount() )
@@ -276,7 +276,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_SAVE:  /* Save */
-            PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
+            GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( DrawPanel, DC, false );
 
             if( block->GetCount() )
@@ -374,7 +374,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
         BreakSegmentOnJunction( GetScreen() );
 
-        PickItemsInBlock( GetScreen()->m_BlockLocate, GetScreen() );
+        GetScreen()->UpdatePickList();
 
         if( block->GetCount() )
         {

@@ -42,7 +42,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         return false;
 
     /* Get the new texts */
-    RedrawOneStruct( DrawPanel, aDC, aSheet, g_XorMode );
+    aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     DrawPanel->m_IgnoreMouseEvents = true;
 
@@ -137,7 +137,7 @@ structures and cannot be undone.\nOk to continue renaming?" );
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = false;
 
-    RedrawOneStruct( DrawPanel, aDC, aSheet, GR_DEFAULT_DRAWMODE );
+    aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     return edit;
 }
@@ -153,7 +153,7 @@ static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase 
     SCH_SHEET*     sheet = (SCH_SHEET*) screen->GetCurItem();
 
     if( aErase )
-        RedrawOneStruct( aPanel, aDC, sheet, g_XorMode );
+        sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( sheet->m_Flags & IS_RESIZED )
     {
@@ -167,7 +167,7 @@ static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase 
         sheet->Move( moveVector );
     }
 
-    RedrawOneStruct( aPanel, aDC, sheet, g_XorMode );
+    sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -182,7 +182,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
 
     if( sheet->m_Flags & IS_NEW )
     {
-        RedrawOneStruct( aPanel, aDC, sheet, g_XorMode );
+        sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
         SAFE_DELETE( sheet );
     }
     else if( (sheet->m_Flags & (IS_RESIZED|IS_MOVED)) )
@@ -190,7 +190,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
         wxPoint curspos = screen->m_Curseur;
         aPanel->GetScreen()->m_Curseur = s_OldPos;
         MoveOrResizeSheet( aPanel, aDC, true );
-        RedrawOneStruct( aPanel, aDC, sheet, GR_DEFAULT_DRAWMODE );
+        sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         sheet->m_Flags = 0;
         screen->m_Curseur = curspos;
     }

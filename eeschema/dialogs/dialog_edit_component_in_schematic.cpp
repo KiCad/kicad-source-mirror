@@ -823,7 +823,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     INSTALL_DC( dc, m_Parent->DrawPanel );
 
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, g_XorMode );
+    m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     // Initialize field values to default values found in library:
     LIB_FIELD& refField = entry->GetReferenceField();
@@ -838,6 +838,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     m_Parent->OnModify( );
 
-    RedrawOneStruct( m_Parent->DrawPanel, &dc, m_Cmp, GR_DEFAULT_DRAWMODE );
+    m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     EndModal( 1 );
 }

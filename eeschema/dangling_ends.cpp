@@ -44,8 +44,8 @@ void SCH_EDIT_FRAME::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
     {
         if( item->IsDanglingStateChanged( endPoints ) && aDC != NULL )
         {
-            RedrawOneStruct( DrawPanel, aDC, item, g_XorMode );
-            RedrawOneStruct( DrawPanel, aDC, item, GR_DEFAULT_DRAWMODE );
+            item->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+            item->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         }
     }
 }

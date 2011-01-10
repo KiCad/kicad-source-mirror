@@ -27,7 +27,8 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( BusEntry )
     {
-        RedrawOneStruct( Panel, DC, BusEntry, g_XorMode );
+        BusEntry->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
+
         if( BusEntry->m_Flags & IS_NEW )
         {
             delete BusEntry;
@@ -36,7 +37,7 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
         else
         {
             BusEntry->m_Pos = ItemInitialPosition;
-            RedrawOneStruct( Panel, DC, BusEntry, GR_DEFAULT_DRAWMODE );
+            BusEntry->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
             BusEntry->m_Flags = 0;
         }
     }
@@ -58,11 +59,11 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     /* Erase the last segment position. */
     if( erase )
-        RedrawOneStruct( panel, DC, BusEntry, g_XorMode );
+        BusEntry->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     /* Redraw at the new position. */
     BusEntry->m_Pos = screen->m_Curseur;
-    RedrawOneStruct( panel, DC, BusEntry, g_XorMode );
+    BusEntry->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -121,7 +122,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     if( BusEntry->m_Flags == 0 )
         SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
-    RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
+    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     switch( entry_shape )
     {
@@ -137,7 +138,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     }
 
     TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
-    RedrawOneStruct( DrawPanel, DC, BusEntry, g_XorMode );
+    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     OnModify( );
 }
 

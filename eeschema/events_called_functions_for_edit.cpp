@@ -42,7 +42,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
 
         /* Redraw the original part, because StartMovePart() erased
          * it from screen */
-        RedrawOneStruct( DrawPanel, &dc, curr_item, GR_DEFAULT_DRAWMODE );
+        curr_item->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     }
     break;
 
@@ -55,7 +55,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->m_Flags = IS_NEW;
         StartMoveTexte( newitem, &dc );
         /* Redraw the original part in XOR mode */
-        RedrawOneStruct( DrawPanel, &dc, curr_item, g_XorMode );
+        curr_item->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
     }
         break;
 

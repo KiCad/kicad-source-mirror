@@ -41,17 +41,17 @@ static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     if( SheetLabel->m_Flags & IS_NEW )
     {
-        RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
+        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
         SAFE_DELETE( SheetLabel );
     }
     else
     {
-        RedrawOneStruct( Panel, DC, SheetLabel, g_XorMode );
+        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
         SheetLabel->m_Pos = s_InitialPosition;
 
         // Restore edge position:
         SheetLabel->SetEdge( s_InitialEdge );
-        RedrawOneStruct( Panel, DC, SheetLabel, GR_DEFAULT_DRAWMODE );
+        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         SheetLabel->m_Flags = 0;
     }
 
@@ -87,7 +87,7 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
     ConstraintOnEdge( frame->GetScreen()->m_Curseur );
 
-    RedrawOneStruct( frame->DrawPanel, DC, Sheet, GR_DEFAULT_DRAWMODE );
+    Sheet->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     frame->DrawPanel->ManageCurseur = NULL;
     frame->DrawPanel->ForceCloseManageCurseur = NULL;
 }
@@ -115,11 +115,11 @@ static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         return;
 
     if( erase )
-        RedrawOneStruct( panel, DC, SheetLabel, g_XorMode );
+        SheetLabel->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     SheetLabel->ConstraintOnEdge( panel->GetScreen()->m_Curseur );
 
-    RedrawOneStruct( panel, DC, SheetLabel, g_XorMode );
+    SheetLabel->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -129,7 +129,7 @@ int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
         return wxID_CANCEL;
 
     if( aDC )
-        RedrawOneStruct( DrawPanel, aDC, aLabel, g_XorMode );
+        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
@@ -158,7 +158,7 @@ int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
     aLabel->m_Shape = dlg.GetConnectionType();
 
     if( aDC )
-        RedrawOneStruct( DrawPanel, aDC, aLabel, GR_DEFAULT_DRAWMODE );
+        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     return wxID_OK;
 }

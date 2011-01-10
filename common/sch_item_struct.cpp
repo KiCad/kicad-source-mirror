@@ -74,7 +74,7 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     if( DC )
     {
         frame->DrawPanel->CursorOff( DC );      // Erase schematic cursor
-        RedrawOneStruct( frame->DrawPanel, DC, this, GR_DEFAULT_DRAWMODE );
+        Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         frame->DrawPanel->CursorOn( DC );       // Display schematic cursor
     }
 }

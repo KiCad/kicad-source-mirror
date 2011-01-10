@@ -89,7 +89,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     /* Erase old text */
     DrawPanel->CursorOff( DC );
-    RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
+    TextStruct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     int orient;
 
@@ -109,7 +109,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
     }
 
     OnModify( );
-    RedrawOneStruct( DrawPanel, DC, TextStruct, g_XorMode );
+    TextStruct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     DrawPanel->CursorOn( DC );
 }
 
@@ -153,7 +153,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
     NewText->m_Size.x = NewText->m_Size.y = g_DefaultTextLabelSize;
     NewText->m_Flags  = IS_NEW | IS_MOVED;
 
-    RedrawOneStruct( DrawPanel, DC, NewText, g_XorMode );
+    NewText->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     EditSchematicText( NewText );
 
     if( NewText->m_Text.IsEmpty() )
@@ -171,7 +171,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
         lastGlobalLabelShape = NewText->m_Shape;
     }
 
-    RedrawOneStruct( DrawPanel, DC, NewText, GR_DEFAULT_DRAWMODE );
+    NewText->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
 
@@ -190,7 +190,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     /* "Undraw" the current text at its old position*/
     if( erase )
-        RedrawOneStruct( panel, DC, TextStruct, g_XorMode );
+        TextStruct->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     /* redraw the text */
     switch( TextStruct->Type() )
@@ -206,7 +206,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
         break;
     }
 
-    RedrawOneStruct( panel, DC, TextStruct, g_XorMode );
+    TextStruct->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -227,7 +227,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 
     /* "Undraw" the text, and delete it if new (i.e. it was being just
      * created)*/
-    RedrawOneStruct( Panel, DC, Struct, g_XorMode );
+    Struct->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     if( Struct->m_Flags & IS_NEW )
     {
@@ -254,7 +254,7 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
             break;
         }
 
-        RedrawOneStruct( Panel, DC, Struct, GR_DEFAULT_DRAWMODE );
+        Struct->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         Struct->m_Flags = 0;
     }
 }
@@ -367,6 +367,6 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
         StartMoveTexte( newtext, DC );
     }
 
-    RedrawOneStruct( DrawPanel, DC, newtext, GR_DEFAULT_DRAWMODE );
+    newtext->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );    // redraw schematic cursor
 }

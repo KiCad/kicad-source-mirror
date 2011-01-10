@@ -118,46 +118,6 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask 
 }
 
 
-/**
- * Function PickStruct
- * Search items in a block
- * @return items count
- * @param aBlock a BLOCK_SELECTOR that gives the search area boundary
- * @param aScreen - The screen to pick items from.
- * list of items is stored in aBlock
- */
-int PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* aScreen )
-{
-    int itemcount = 0;
-
-    if( aScreen == NULL )
-        return itemcount;
-
-    EDA_Rect area;
-    area.SetOrigin( aBlock.GetOrigin());
-    area.SetSize( aBlock.GetSize() );
-    area.Normalize();
-
-    ITEM_PICKER picker;
-    SCH_ITEM*   item = aScreen->GetDrawItems();
-
-    for( ; item != NULL; item = item->Next() )
-    {
-        // an item is picked if its bounding box intersects the reference area
-        if( item->HitTest( area ) )
-        {
-            /* Put this structure in the picked list: */
-            picker.m_PickedItem     = item;
-            picker.m_PickedItemType = item->Type();
-            aBlock.PushItem( picker );
-            itemcount++;
-        }
-    }
-
-    return itemcount;
-}
-
-
 /*****************************************************************************
 * Routine to search all objects for the closest point to a given point, in   *
 * drawing space, and snap it to that points if closer than SnapDistance.     *

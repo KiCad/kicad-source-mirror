@@ -118,7 +118,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     {
     case SCH_NO_CONNECT_T:
 
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Noconn" ), delete_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete No Connect" ), delete_xpm );
         break;
 
     case SCH_JUNCTION_T:
@@ -477,7 +477,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
         ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
                       _( "Change to Hierarchical Label" ), label2glabel_xpm );
         ADD_MENUITEM( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                      _( "Change to Glabel" ), label2glabel_xpm );
+                      _( "Change to Global Label" ), label2glabel_xpm );
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT,
                                    _( "Change Type" ), gl_change_xpm );
     }

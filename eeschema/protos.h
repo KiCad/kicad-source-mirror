@@ -84,9 +84,6 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 
 SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
 
-/* Find the item within block selection. */
-int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* screen );
-
 /* function PickStruct:
  *   Search at location pos
  *
@@ -119,7 +116,6 @@ int             PickItemsInBlock( BLOCK_SELECTOR& aBlock, SCH_SCREEN* screen );
  */
 SCH_ITEM*          PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
-
 SCH_SHEET_PIN* LocateSheetLabel( SCH_SHEET* Sheet, const wxPoint& pos );
 LIB_PIN*       LocateAnyPin( SCH_ITEM*       DrawList,
                              const wxPoint&  RefPos,
@@ -138,11 +134,6 @@ void RedrawStructList( WinEDA_DrawPanel* panel,
                        SCH_ITEM*         Structs,
                        int               DrawMode,
                        int               Color = -1 );
-void RedrawOneStruct( WinEDA_DrawPanel* panel,
-                      wxDC*             DC,
-                      SCH_ITEM*         Struct,
-                      int               DrawMode,
-                      int               Color = -1 );
 
 /**************/
 /* EELAYER.CPP */

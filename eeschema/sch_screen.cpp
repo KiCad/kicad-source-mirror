@@ -524,6 +524,29 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 }
 
 
+int SCH_SCREEN::UpdatePickList()
+{
+    ITEM_PICKER picker;
+    EDA_Rect area;
+    area.SetOrigin( m_BlockLocate.GetOrigin());
+    area.SetSize( m_BlockLocate.GetSize() );
+    area.Normalize();
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        // An item is picked if its bounding box intersects the reference area.
+        if( item->HitTest( area ) )
+        {
+            picker.m_PickedItem     = item;
+            picker.m_PickedItemType = item->Type();
+            m_BlockLocate.PushItem( picker );
+        }
+    }
+
+    return m_BlockLocate.GetCount();
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/

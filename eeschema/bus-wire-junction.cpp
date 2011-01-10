@@ -91,7 +91,7 @@ static void DrawSegment( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase )
         while( segment )
         {
             if( !segment->IsNull() )  // Redraw if segment length != 0
-                RedrawOneStruct( aPanel, aDC, segment, g_XorMode, color );
+                segment->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, color );
 
             segment = segment->Next();
         }
@@ -109,7 +109,7 @@ static void DrawSegment( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase )
     while( segment )
     {
         if( !segment->IsNull() )  // Redraw if segment length != 0
-            RedrawOneStruct( aPanel, aDC, segment, g_XorMode, color );
+            segment->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, color );
 
         segment = segment->Next();
     }
@@ -216,7 +216,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         oldsegment->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( oldsegment );
         DrawPanel->CursorOff( DC );     // Erase schematic cursor
-        RedrawOneStruct( DrawPanel, DC, oldsegment, GR_DEFAULT_DRAWMODE );
+        oldsegment->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         DrawPanel->CursorOn( DC );      // Display schematic cursor
 
         /* Create a new segment, and chain it after the current new segment */
@@ -456,10 +456,10 @@ static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool eras
     }
 
     if( erase )
-        RedrawOneStruct( panel, DC, NewPoly, g_XorMode, color );
+        NewPoly->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, color );
 
     NewPoly->m_PolyPoints[idx] = endpos;
-    RedrawOneStruct( panel, DC, NewPoly, g_XorMode, color );
+    NewPoly->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, color );
 }
 
 
@@ -505,7 +505,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::CreateNewJunctionStruct( wxDC*          DC,
     g_ItemToRepeat = NewJunction;
 
     DrawPanel->CursorOff( DC );     // Erase schematic cursor
-    RedrawOneStruct( DrawPanel, DC, NewJunction, GR_DEFAULT_DRAWMODE );
+    NewJunction->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );      // Display schematic cursor
 
     NewJunction->SetNext( GetScreen()->GetDrawItems() );
@@ -528,7 +528,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::CreateNewNoConnectStruct( wxDC* DC )
     g_ItemToRepeat = NewNoConnect;
 
     DrawPanel->CursorOff( DC );     // Erase schematic cursor
-    RedrawOneStruct( DrawPanel, DC, NewNoConnect, GR_DEFAULT_DRAWMODE );
+    NewNoConnect->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->CursorOn( DC );      // Display schematic cursor
 
     NewNoConnect->SetNext( GetScreen()->GetDrawItems() );
@@ -585,7 +585,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         g_ItemToRepeat->m_Flags = IS_NEW;
         ( (SCH_COMPONENT*) g_ItemToRepeat )->m_TimeStamp = GetTimeStamp();
         g_ItemToRepeat->Move( pos );
-        RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, g_XorMode );
+        g_ItemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
         StartMovePart( (SCH_COMPONENT*) g_ItemToRepeat, DC );
         return;
     }
@@ -605,7 +605,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         g_ItemToRepeat->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( g_ItemToRepeat );
         TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
-        RedrawOneStruct( DrawPanel, DC, g_ItemToRepeat, GR_DEFAULT_DRAWMODE );
+        g_ItemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         SaveCopyInUndoList( g_ItemToRepeat, UR_NEW );
         g_ItemToRepeat->m_Flags = 0;
     }
