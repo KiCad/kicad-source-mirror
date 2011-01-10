@@ -26,6 +26,7 @@
 #include "sch_sheet.h"
 #include "dialog_helpers.h"
 #include "netlist_control.h"
+#include "dialogs/annotate_dialog.h"
 
 
 //Imported function:
@@ -523,7 +524,13 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )
     {
-        if( !IsOK( NULL, _( "Must be Annotated, Continue ?" ) ) )
+        if( !IsOK( NULL, _( "Some items are not annotated\n\
+Do you want to annotate schematic?" ) ) )
+            return false;
+        // Schematic must be annotated: call Annotate dialog:
+        wxCommandEvent event;
+        OnAnnotate( event );
+        if( CheckAnnotate( NULL, 0 ) )
             return false;
     }
 

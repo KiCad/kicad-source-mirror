@@ -271,8 +271,8 @@ void WinEDA_BasePcbFrame::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
 {
     wxSize newSize;
     int newThickness;
-    TEXTE_PCB* pcbText;
-    TEXTE_MODULE* moduleText;
+    TEXTE_PCB* pcbText = NULL;
+    TEXTE_MODULE* moduleText = NULL;
     EDA_TextStruct* text;
 
     switch( aItem->Type() )
