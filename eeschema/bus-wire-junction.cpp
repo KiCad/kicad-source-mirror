@@ -667,7 +667,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         if( item )
             return TRUE;
 
-        pinsheet = LocateAnyPinSheet( pos, screen->GetDrawItems() );
+        pinsheet = screen->GetSheetLabel( pos );
 
         if( pinsheet && IsBusLabel( pinsheet->m_Text ) )
         {
@@ -715,7 +715,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
             return TRUE;
 
-        pinsheet = LocateAnyPinSheet( pos, screen->GetDrawItems() );
+        pinsheet = screen->GetSheetLabel( pos );
 
         if( pinsheet && !IsBusLabel( pinsheet->m_Text ) )
         {

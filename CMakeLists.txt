@@ -22,7 +22,7 @@ option(KICAD_GOST "enable/disable building using GOST notation for multiple gate
 #for those who bored with uppercase
 option(KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected")
 
-option(USE_WX_ZOOM "Use wxDC to perform zooming (default OFF). Warning, this is experimental" )
+option(USE_WX_ZOOM "Use wxDC to perform zooming (default ON)." ON)
 
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF). Warning, this is experimental")

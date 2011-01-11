@@ -14,9 +14,7 @@
 #include "gestfich.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
-
 #include "dcsvg.h"
-
 #include "general.h"
 #include "libeditframe.h"
 #include "sch_sheet_path.h"
@@ -136,7 +134,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 
             fn = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".svg" );
 
-            bool success = DrawSVGPage( m_Parent, fn.GetFullPath(), schscreen,
+            bool success = DrawSVGPage( m_Parent, fn.GetFullPath(), ( SCH_SCREEN* ) schscreen,
                                         m_ModeColorOption->GetSelection() == 0 ? false : true,
                                         aPrint_Sheet_Ref );
             msg = _( "Create file " ) + fn.GetFullPath();
@@ -160,7 +158,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
         fn.SetExt( wxT( "svg" ) );
         fn.MakeAbsolute();
 
-        bool success = DrawSVGPage( m_Parent, fn.GetFullPath(), screen,
+        bool success = DrawSVGPage( m_Parent, fn.GetFullPath(), ( SCH_SCREEN* ) screen,
                                     m_ModeColorOption->GetSelection() == 0 ? false : true,
                                     aPrint_Sheet_Ref );
         msg = _( "Create file " ) + fn.GetFullPath();
@@ -176,11 +174,11 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 }
 
 
-bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame*   frame,
-                                    const wxString&     FullFileName,
-                                    BASE_SCREEN*        screen,
-                                    bool                aPrintBlackAndWhite,
-                                    bool                aPrint_Sheet_Ref )
+bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame* frame,
+                                    const wxString&   FullFileName,
+                                    SCH_SCREEN*       screen,
+                                    bool              aPrintBlackAndWhite,
+                                    bool              aPrint_Sheet_Ref )
 {
     int     tmpzoom;
     wxPoint tmp_startvisu;
@@ -216,7 +214,11 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame*   frame,
     panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     screen->m_IsPrinting = true;
-    frame->PrintPage( &dc, aPrint_Sheet_Ref, 1, false );
+    screen->Draw( panel, &dc, GR_COPY );
+
+    if( aPrint_Sheet_Ref )
+        frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness );
+
     SetLocaleTo_Default();       // revert to the current locale
     screen->m_IsPrinting   = false;
     panel->m_ClipBox       = tmp;

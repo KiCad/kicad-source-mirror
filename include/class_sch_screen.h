@@ -13,6 +13,8 @@
 class LIB_PIN;
 class SCH_COMPONENT;
 class SCH_SHEET_PATH;
+class SCH_SHEET_PIN;
+
 
 /* Max number of sheets in a hierarchy project: */
 #define NB_MAX_SHEET 500
@@ -38,6 +40,11 @@ public:
 
     SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
     ~SCH_SCREEN();
+
+    virtual wxString GetClass() const
+    {
+        return wxT( "SCH_SCREEN" );
+    }
 
     /**
      * Function GetDrawItems().
@@ -65,35 +72,63 @@ public:
         BASE_SCREEN::SetCurItem( (BASE_SCREEN*) aItem );
     }
 
-
-    virtual wxString GetClass() const
-    {
-        return wxT( "SCH_SCREEN" );
-    }
-
     /**
      * Free all the items from the schematic associated with the screen.
      *
      * This does not delete any sub hierarchies.
      */
-    void         FreeDrawList();
+    void FreeDrawList();
 
-    void         Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
+    /**
+     * Function GetItems
+     * adds all items found at \a aPosition to \a aItemList.  Please note that \a aItemList
+     * will own the item pointers added to it.  Do not allow it to go out of scope without
+     * first calling the release() method.  Otherwise, the pointer will be deleted and
+     * EESchema will crash.
+     * @param aPosition The position to test.
+     * @param aItemList The list to place items into.
+     * @return The number of items found at \a aPosition.
+     */
+    int GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const;
+
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
+
+    /**
+     * Function Draw
+     * draws all the items in the screen to \a aCanvas.
+     * @param aCanvas The canvas item to draw on.
+     * @param aDC The device context to draw on.
+     * @param aDrawMode The drawing mode.
+     * @param aColor The drawing color.
+     */
+    void Draw( WinEDA_DrawPanel* aCanvas, wxDC* aDC, int aDrawMode, int aColor = -1 );
 
     /**
      * Remove \a aItem from the schematic associated with this screen.
      *
      * @param aItem - Item to be removed from schematic.
      */
-    void         RemoveFromDrawList( SCH_ITEM* aItem );
+    void RemoveFromDrawList( SCH_ITEM* aItem );
 
-    bool         CheckIfOnDrawList( SCH_ITEM* st );
+    bool CheckIfOnDrawList( SCH_ITEM* st );
 
-    void         AddToDrawList( SCH_ITEM* st );
+    void AddToDrawList( SCH_ITEM* st );
 
-    bool         SchematicCleanUp( wxDC* DC = NULL );
+    bool SchematicCleanUp( wxDC* DC = NULL );
 
-    SCH_ITEM*    ExtractWires( bool CreateCopy );
+    /**
+     * Function ExtractWires
+     * extracts the old wires, junctions and buses.  If \a aCreateCopy is true, replace
+     * them with a copy.  Old item must be put in undo list, and the new ones can be
+     * modified by clean up safely.  If an abort command is made, old wires must be put
+     * in GetDrawItems(), and copies must be deleted.  This is because previously stored
+     * undo commands can handle pointers on wires or busses, and we do not delete wires or
+     * busses, we must put they in undo list.
+     *
+     * Because cleanup delete and/or modify bus and wires, the it is easier is to put
+     * all wires in undo list and use a new copy of wires for cleanup.
+     */
+    SCH_ITEM* ExtractWires( bool aCreateCopy );
 
     /* full undo redo management : */
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
@@ -129,6 +164,24 @@ public:
     int CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
 
     /**
+     * Function IsJunctionNeeded
+     * tests if a junction is required for the items at \a aPosition on the screen.
+     * <p>
+     * A junction is required at \a aPosition if the following criteria are satisfied:
+     * <ul>
+     * <li>one wire midpoint, one or more wire endpoints and no junction.</li>
+     * <li>three or more wire endpoints and no junction.</li>
+     * <li>two wire midpoints and no junction</li>
+     * <li>one wire midpoint, a component pin, and no junction.</li>
+     * <li>three wire endpoints, a component pin, and no junction.</li>
+     * </ul>
+     * </p>
+     * @param aPosition The position to test.
+     * @return True if a junction is required at \a aPosition.
+     */
+    bool IsJunctionNeeded( const wxPoint& aPosition ) const;
+
+    /**
      * Function GetPin
      * test the screen for a component pin item at \a aPosition.
      * @param aPosition Position to test.
@@ -141,16 +194,24 @@ public:
                      bool aEndPointOnly = false );
 
     /**
+     * Function GetSheetLabel
+     * test the screen if \a aPosition is a sheet label object.
+     * @param aPosition The position to test.
+     * @return The sheet label object if found otherwise NULL.
+     */
+    SCH_SHEET_PIN* GetSheetLabel( const wxPoint& aPosition );
+
+    /**
      * Function ClearAnnotation
      * clears the annotation for the components in \a aSheetPath on the screen.
      * @param aSheetPath The sheet path of the component annotation to clear.  If NULL then
-     *                   the entire heirarchy is cleared.
+     *                   the entire hierarchy is cleared.
      */
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function GetHierarchicalItems
-     * adds all schematica sheet and component object in the screen to \a aItems.
+     * adds all schematic sheet and component object in the screen to \a aItems.
      * @param aItems Hierarchical item list.
      */
     void GetHierarchicalItems( std::vector <SCH_ITEM*> aItems );
@@ -158,7 +219,7 @@ public:
     /**
      * Function SelectBlockItems
      * creates a list of items found when a block command is initiated.  The items selected
-     * depend on the block commad.  If the drag block command is issued, than any items
+     * depend on the block command.  If the drag block command is issued, than any items
      * connected to items in the block are also selected.
      */
     void SelectBlockItems();
@@ -212,8 +273,8 @@ public:
     /**
      * Function ReplaceDuplicateTimeStamps
      * test all sheet and component objects in the schematic for duplicate time stamps
-     * an replaces them as neccessary.  Time stamps must be unique in order for complex
-     * hierarcies know which components go to which sheets.
+     * an replaces them as necessary.  Time stamps must be unique in order for complex
+     * hierarchies know which components go to which sheets.
      * @return The number of duplicate time stamps replaced.
      */
     int ReplaceDuplicateTimeStamps();

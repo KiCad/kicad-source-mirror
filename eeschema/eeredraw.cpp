@@ -54,7 +54,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     DrawPanel->DrawBackGround( DC );
 
-    RedrawStructList( DrawPanel, DC, GetScreen()->GetDrawItems(), GR_DEFAULT_DRAWMODE );
+    GetScreen()->Draw( DrawPanel, DC, GR_DEFAULT_DRAWMODE );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
@@ -96,52 +96,5 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #endif
 
         SetTitle( title );
-    }
-}
-
-
-/**
- * PrintPage
- * used to print a page.
- * Print the page pointed by ActiveScreen, set by the calling print function
- * @param aDC = wxDC given by the calling print function
- * @param aPrint_Sheet_Ref = true to print page references
- * @param aPrintMask = not used here
- * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
- * @param aData = a pointer on an auxiliary data (not used here)
- */
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
-                                bool aPrintMirrorMode, void* aData)
-{
-    wxBeginBusyCursor();
-
-    RedrawStructList( DrawPanel, aDC, (SCH_ITEM*) ActiveScreen->GetDrawItems(), GR_COPY );
-
-    if( aPrint_Sheet_Ref )
-        TraceWorkSheet( aDC, ActiveScreen, g_DrawDefaultLineThickness );
-
-    wxEndBusyCursor();
-}
-
-
-/*****************************************************************************
-* Routine to redraw list of structs.                                         *
-* If the list is of DrawPickStruct types then the picked item are drawn.     *
-*****************************************************************************/
-void RedrawStructList( WinEDA_DrawPanel* panel, wxDC* DC,
-                       SCH_ITEM* Structlist, int DrawMode, int Color )
-{
-    while( Structlist )
-    {
-        if( !(Structlist->m_Flags & IS_MOVED) )
-        {
-// uncomment line below when there is a virtual
-// EDA_ITEM::GetBoundingBox()
-            //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
-            // ) )
-            Structlist->Draw( panel, DC, wxPoint( 0, 0 ), DrawMode, Color );
-        }
-
-        Structlist = Structlist->Next();
     }
 }

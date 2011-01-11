@@ -114,9 +114,7 @@ SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
  *     Pointer to the structure if only 1 item is selected.
  *     NULL if no items are selects.
  */
-SCH_ITEM*      PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
-
-SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList );
+SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
 
 /***************/
@@ -124,11 +122,7 @@ SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList );
 /***************/
 void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color );
 void RedrawActiveWindow( WinEDA_DrawPanel* panel, wxDC* DC );
-void RedrawStructList( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       SCH_ITEM*         Structs,
-                       int               DrawMode,
-                       int               Color = -1 );
+
 
 /**************/
 /* EELAYER.CPP */

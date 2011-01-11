@@ -32,7 +32,7 @@ private:
 
 public:
     static bool DrawSVGPage( WinEDA_DrawFrame* frame,
-                             const wxString& FullFileName, BASE_SCREEN* screen,
+                             const wxString& FullFileName, SCH_SCREEN* screen,
                              bool aPrintBlackAndWhite = false,
                              bool aPrint_Sheet_Ref = false );
 };

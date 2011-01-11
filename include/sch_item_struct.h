@@ -17,6 +17,9 @@ class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 
 
+typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
+
+
 // Schematic item filter mask for hit test objects in schematic editor.
 enum SCH_FILTER_T {
     COMPONENT_T         = 0x0001,

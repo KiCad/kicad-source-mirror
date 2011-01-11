@@ -179,17 +179,18 @@ void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 }
 
 
-/* Extract the old wires, junctions and buses, an if CreateCopy replace them
- * by a copy.  Old ones must be put in undo list, and the new ones can be
- * modified by clean up safely.
- * If an abort command is made, old wires must be put in GetDrawItems(), and
- * copies must be deleted.  This is because previously stored undo commands
- * can handle pointers on wires or bus, and we do not delete wires or bus,
- * we must put they in undo list.
- *
- * Because cleanup delete and/or modify bus and wires, the more easy is to put
- * all wires in undo list and use a new copy of wires for cleanup.
- */
+int SCH_SCREEN::GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->HitTest( aPosition ) )
+            aItemList.push_back( item );
+    }
+
+    return aItemList.size();
+}
+
+
 SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
 {
     SCH_ITEM* item, * next_item, * new_item, * List = NULL;
@@ -335,6 +336,22 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
+void SCH_SCREEN::Draw( WinEDA_DrawPanel* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->IsMoving() )
+            continue;
+
+        // uncomment line below when there is a virtual
+        // EDA_ITEM::GetBoundingBox()
+        //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
+        // ) )
+        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+    }
+}
+
+
 /**
  * Function ClearUndoORRedoList
  * free the undo or redo list from List element
@@ -405,6 +422,79 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         *aComponent = component;
 
     return pin;
+}
+
+
+SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
+{
+    SCH_SHEET_PIN* sheetLabel = NULL;
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_SHEET_T )
+            continue;
+
+        SCH_SHEET* sheet = (SCH_SHEET*) item;
+        sheetLabel = sheet->GetLabel( aPosition );
+
+        if( sheetLabel )
+            break;
+    }
+
+    return sheetLabel;
+}
+
+
+bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition ) const
+{
+    SCH_ITEMS items;
+    int wireEndPoints = 0;
+
+    if( GetItems( aPosition, items ) == 0 )
+        return false;
+
+    bool isJunctionNeeded = false;
+    bool isWireMidpoint = false;
+
+    for( size_t i = 0; i < items.size(); i++ )
+    {
+        KICAD_T itemType = items[i].Type();
+
+        if( itemType == SCH_JUNCTION_T )
+        {
+            isJunctionNeeded = false;
+            break;
+        }
+        else if( itemType == SCH_LINE_T )
+        {
+            SCH_LINE* line = ( SCH_LINE* ) &items[i];
+
+            if( !line->IsConnectable() )
+                continue;
+
+            if( !line->IsEndPoint( aPosition ) )
+                isWireMidpoint = true;
+            else
+                wireEndPoints += 1;
+
+            if( ( isWireMidpoint && ( wireEndPoints != 0 ) ) || ( wireEndPoints > 2 ) )
+                isJunctionNeeded = true;
+        }
+        else if( itemType == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = ( SCH_COMPONENT* ) &items[i];
+
+            if( !component->IsConnected( aPosition ) )
+                continue;
+
+            if( isWireMidpoint || wireEndPoints > 2 )
+                isJunctionNeeded = true;
+        }
+    }
+
+    items.release();
+
+    return isJunctionNeeded;
 }
 
 

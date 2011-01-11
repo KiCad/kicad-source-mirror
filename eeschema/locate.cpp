@@ -322,24 +322,3 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
 
     return FALSE;
 }
-
-
-SCH_SHEET_PIN* LocateAnyPinSheet( const wxPoint& RefPos, SCH_ITEM* DrawList )
-{
-    SCH_ITEM* DrawStruct;
-    SCH_SHEET_PIN* PinSheet = NULL;
-
-    for( DrawStruct = DrawList; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
-    {
-        if( DrawStruct->Type() != SCH_SHEET_T )
-            continue;
-
-        SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
-        PinSheet = sheet->GetLabel( RefPos );
-
-        if( PinSheet )
-            break;
-    }
-
-    return PinSheet;
-}

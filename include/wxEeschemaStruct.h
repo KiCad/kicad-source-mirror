@@ -333,20 +333,6 @@ public:
     void         SetSheetNumberAndCount();
 
     /**
-     * Function PrintPage
-     * is used to print a schematic page.
-     * Print the page pointed by ActiveScreen, set by the calling print function
-     * @param aDC = wxDC given by the calling print function
-     * @param aPrint_Sheet_Ref = true to print page references
-     * @param aPrintMask = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
-     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
-     */
-    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
-                            int aPrintMask, bool aPrintMirrorMode,
-                            void* aData = NULL );
-
-    /**
      * Show the print dialog
      */
     void         OnPrint( wxCommandEvent& event );

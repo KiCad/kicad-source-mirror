@@ -5,11 +5,11 @@
 
 /**
  * These strings are used in menus and tools, that do the same command
- * But they are internatinalized, and therefore must be created
+ * But they are internationalized, and therefore must be created
  * at run time, on the fly.
  * So they cannot be static.
  *
- * Therefore they are defined by #define, used inside menu constructors
+ * Therefore they are defined by \#define, used inside menu constructors
  */
 
 // Common to schematic editor and component editor
@@ -57,5 +57,3 @@
 #define HELP_ADD_BODYCIRCLE _( "Add circles to the component body" )
 #define HELP_ADD_BODYARC _( "Add arcs to the component body" )
 #define HELP_ADD_BODYPOLYGON _( "Add lines and polygons to the component body" )
-
-
