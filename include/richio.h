@@ -205,7 +205,13 @@ protected:
 
     wxString    source;         ///< origin of text lines, e.g. filename or "clipboard"
 
+    /**
+     * Function expandCapacity
+     * will exand the capacity of @a line up to maxLineLength but not greater, so
+     * be careful about making assumptions of @a capacity after calling this.
+     */
     void        expandCapacity( unsigned newsize );
+
 
 public:
 
@@ -238,9 +244,18 @@ public:
      * of lines of text.  The returned string is useful for reporting error
      * messages.
      */
-    const wxString& GetSource() const
+    virtual const wxString& GetSource() const
     {
         return source;
+    }
+
+    /**
+     * Function Line
+     * returns a pointer to the last line that was read in.
+     */
+    virtual char* Line() const
+    {
+        return line;
     }
 
     /**
@@ -250,7 +265,7 @@ public:
      */
     operator char* () const
     {
-        return line;
+        return Line();
     }
 
     /**
@@ -258,7 +273,7 @@ public:
      * returns the line number of the last line read from this LINE_READER.  Lines
      * start from 1.
      */
-    unsigned LineNumber() const
+    virtual unsigned LineNumber() const
     {
         return lineNum;
     }
@@ -267,7 +282,7 @@ public:
      * Function Length
      * returns the number of bytes in the last line read from this LINE_READER.
      */
-    unsigned Length() const
+    virtual unsigned Length() const
     {
         return length;
     }

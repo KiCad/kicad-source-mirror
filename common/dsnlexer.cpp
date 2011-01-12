@@ -111,7 +111,7 @@ void DSNLEXER::PushReader( LINE_READER* aLineReader )
 {
     readerStack.push_back( aLineReader );
     reader = aLineReader;
-    start  = (char*) (*reader);
+    start  = (const char*) (*reader);
 
     // force a new readLine() as first thing.
     limit = start;
@@ -127,7 +127,7 @@ bool DSNLEXER::PopReader()
         readerStack.pop_back();
 
         reader = readerStack.back();
-        start  = (char*) (*reader);
+        start  = (const char*) (*reader);
 
         // force a new readLine() as first thing.
         limit = start;
@@ -336,8 +336,8 @@ static inline bool isSpace( int cc )
 
 int DSNLEXER::NextTok() throw( IO_ERROR )
 {
-    char*   cur  = next;
-    char*   head = cur;
+    const char*   cur  = next;
+    const char*   head = cur;
 
     prevTok = curTok;
 

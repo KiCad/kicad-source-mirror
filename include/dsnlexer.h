@@ -77,9 +77,9 @@ enum DSN_SYNTAX_T {
 class DSNLEXER
 {
     bool                iOwnReaders;            ///< on readerStack, should I delete them?
-    char*               start;
-    char*               next;
-    char*               limit;
+    const char*         start;
+    const char*         next;
+    const char*         limit;
 
     typedef std::vector<LINE_READER*>  READER_STACK;
 

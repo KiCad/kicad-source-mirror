@@ -91,7 +91,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     char       alim[1024];
     int        idx, jj, k, l;
     char       cbuffer[BUFFER_CHAR_SIZE];      /* temporary storage */
-    char* ptchar;
+    char*      ptchar;
     COMPONENT* Cmp;
     FILE*      source;
 
@@ -114,8 +114,11 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
     }
 
     // FILE_LINE_READER will close the file.
-    FILE_LINE_READER netlistReader( source, m_NetlistFileName.GetFullPath(), BUFFER_CHAR_SIZE );
-    char* Line = netlistReader;
+    FILE_LINE_READER netlistReader( source, m_NetlistFileName.GetFullPath() );
+
+    // hopes netlistReader's line buffer does not move.  It won't unless you encounter
+    // a line larger than LINE_READER_LINE_INITIAL_SIZE = 5000
+    const char* Line = netlistReader.Line();
 
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
      * or "# EESchema Netlist"
@@ -194,11 +197,11 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
         /* idx points the component value.
          * Read value */
-        ptchar = strstr( &Line[idx], " " );  // Search end of value field (space)
+        ptchar = strstr( (char*) &Line[idx], " " );  // Search end of value field (space)
         if( ptchar == 0 )
         {
             wxString msg;
-            msg.Printf( _( "Netlist error: %s" ), Line );
+            msg.Printf( _( "Netlist error: %s" ), (const wxChar*) CONV_FROM_UTF8( Line ) );
             DisplayError( this, msg );
             k = 0;
         }
@@ -213,7 +216,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         }
         cbuffer[jj] = 0;
         // Copy footprint name:
-        if( m_isEESchemaNetlist && (strnicmp( cbuffer, "$noname", 7 ) != 0) )
+        if( m_isEESchemaNetlist &&  strnicmp( cbuffer, "$noname", 7 ) != 0 )
             Cmp->m_Module = CONV_FROM_UTF8(cbuffer);
 
         if( (Line[++idx] == '(') && (Line[k - 1] == ')' ) )
@@ -271,7 +274,7 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
 
 int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& aComponentsList )
 {
-    char*       Line = aNetlistReader;
+    const char* Line = aNetlistReader;
     wxString    CmpRef;
     COMPONENT*  Cmp = NULL;
 

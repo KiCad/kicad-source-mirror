@@ -85,6 +85,7 @@ add_executable( test_sch_lib_table
     sch_lib_table_keywords.cpp
     sch_lib.cpp
     sch_lpid.cpp
+    filter_reader.cpp
     sch_dir_lib_source.cpp
     sch_part.cpp
     sweet_keywords.cpp

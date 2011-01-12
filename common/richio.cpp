@@ -107,12 +107,12 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
     length  = 0;
     line[0] = 0;
 
-    // fgets always put a terminating nul at end of its read.
+    // fgets always puts a terminating nul at end of its read.
     while( fgets( line + length, capacity - length, fp ) )
     {
         length += strlen( line + length );
 
-        if( length == maxLineLength )
+        if( length >= maxLineLength )
             THROW_IO_ERROR( _("Line length exceeded") );
 
         // a normal line breaks here, once through while loop
@@ -122,11 +122,9 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
         expandCapacity( capacity * 2 );
     }
 
-    /* if( length ) RHH: this may now refer to a non-existent line but
-     * that leads to better error reporting on unexpected end of file.
-     */
-
-        ++lineNum;
+    // lineNum is incremented even if there was no line read, because this
+    // leads to better error reporting when we hit an end of file.
+    ++lineNum;
 
     return length;
 }
