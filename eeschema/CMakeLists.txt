@@ -119,7 +119,7 @@ set(EESCHEMA_SRCS
     sch_bus_entry.cpp
     sch_component.cpp
     sch_field.cpp
-    sch_items.cpp
+    sch_junction.cpp
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp

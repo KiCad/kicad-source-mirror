@@ -11,7 +11,7 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_marker.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_line.h"
 #include "sch_sheet.h"
 #include "sch_text.h"
@@ -312,7 +312,7 @@ bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
 
     if( DelStruct )
     {
-        g_ItemToRepeat = NULL;
+        frame->SetRepeatItem( NULL );
         DeleteStruct( frame->DrawPanel, DC, DelStruct );
         frame->TestDanglingEnds( frame->GetScreen()->GetDrawItems(), DC );
         frame->OnModify( );

@@ -61,7 +61,7 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
         if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
             screen->AddToDrawList( this );
 
-        g_ItemToRepeat = this;
+        frame->SetRepeatItem( this );
         frame->SaveCopyInUndoList( this, UR_NEW );
     }
 

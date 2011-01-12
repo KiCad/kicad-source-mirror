@@ -12,7 +12,7 @@
 
 #include "general.h"
 #include "protos.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 
 
 /**********************/

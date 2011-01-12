@@ -20,7 +20,7 @@
 #include "sch_polyline.h"
 #include "sch_sheet.h"
 #include "sch_component.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 
 
 void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )

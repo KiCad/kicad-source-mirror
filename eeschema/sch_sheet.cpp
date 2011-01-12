@@ -59,7 +59,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
         m_labels[i].SetParent( this );
 
     if( m_AssociatedScreen )
-        m_AssociatedScreen->m_RefCount++;
+        m_AssociatedScreen->IncRefCount();
 }
 
 
@@ -69,9 +69,9 @@ SCH_SHEET::~SCH_SHEET()
     // perhaps it should be deleted also.
     if( m_AssociatedScreen )
     {
-        m_AssociatedScreen->m_RefCount--;
+        m_AssociatedScreen->GetRefCount();
 
-        if( m_AssociatedScreen->m_RefCount == 0 )
+        if( m_AssociatedScreen->GetRefCount() == 0 )
             delete m_AssociatedScreen;
     }
 }
@@ -692,14 +692,14 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
         if( screen )
         {
             m_AssociatedScreen = screen;
-            m_AssociatedScreen->m_RefCount++;
+            m_AssociatedScreen->IncRefCount();
 
             //do not need to load the sub-sheets - this has already been done.
         }
         else
         {
             m_AssociatedScreen = new SCH_SCREEN();
-            m_AssociatedScreen->m_RefCount++;
+            m_AssociatedScreen->IncRefCount();
             success = aFrame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
 
             if( success )
@@ -790,9 +790,9 @@ current sheet data if possible)?" ),
             // Can be NULL if loading a file when creating a new sheet.
             if( m_AssociatedScreen )
             {
-                m_AssociatedScreen->m_RefCount--;  // be careful with these
+                m_AssociatedScreen->DecRefCount();  // be careful with these
 
-                if( m_AssociatedScreen->m_RefCount == 0 )
+                if( m_AssociatedScreen->GetRefCount() == 0 )
                     SAFE_DELETE( m_AssociatedScreen );
 
                m_AssociatedScreen = NULL;         // will be created later
@@ -802,7 +802,7 @@ current sheet data if possible)?" ),
 
     // if an associated screen exists, shared between this sheet and others
     // sheets, what we do ?
-    if( m_AssociatedScreen && ( m_AssociatedScreen->m_RefCount > 1 ) )
+    if( m_AssociatedScreen && ( m_AssociatedScreen->GetRefCount() > 1 ) )
     {
         msg = _( "This sheet uses shared data in a complex hierarchy" );
         msg << wxT( "\n" );
@@ -817,8 +817,8 @@ otherwise delete current sheet data)" );
             aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
             m_AssociatedScreen->m_FileName = oldfilename;
         }
-        m_AssociatedScreen->m_RefCount--;   //be careful with these
-        m_AssociatedScreen = NULL;          //will be created later
+        m_AssociatedScreen->DecRefCount();   //be careful with these
+        m_AssociatedScreen = NULL;           //will be created later
     }
 
     SetFileName( aFileName );
@@ -827,9 +827,9 @@ otherwise delete current sheet data)" );
     // current sheet data
     if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
     {
-        m_AssociatedScreen->m_RefCount--;
+        m_AssociatedScreen->DecRefCount();
 
-        if( m_AssociatedScreen->m_RefCount == 0 )
+        if( m_AssociatedScreen->GetRefCount() == 0 )
             SAFE_DELETE( m_AssociatedScreen );
 
         m_AssociatedScreen = NULL;         // so that we reload..
@@ -840,14 +840,14 @@ otherwise delete current sheet data)" );
     else if( Screen_to_use )
     {
         m_AssociatedScreen = Screen_to_use;
-        m_AssociatedScreen->m_RefCount++;
+        m_AssociatedScreen->IncRefCount();
     }
 
     //just make a new screen if needed.
     if( !m_AssociatedScreen )
     {
         m_AssociatedScreen = new SCH_SCREEN();
-        m_AssociatedScreen->m_RefCount++;         // be careful with these
+        m_AssociatedScreen->IncRefCount();         // be careful with these
     }
 
     m_AssociatedScreen->m_FileName = aFileName;

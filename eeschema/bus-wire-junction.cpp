@@ -15,7 +15,7 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_bus_entry.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_line.h"
 #include "sch_no_connect.h"
 #include "sch_polyline.h"
@@ -183,7 +183,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         GetScreen()->SetCurItem( newsegment );
         DrawPanel->ManageCurseur = DrawSegment;
         DrawPanel->ForceCloseManageCurseur = AbortCreateNewLine;
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
     }
     else    // A segment is in progress: terminates the current segment and add a new segment.
     {
@@ -331,8 +331,8 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     {
         if( segment->m_Flags )
         {
-            if( !g_ItemToRepeat )
-                g_ItemToRepeat = segment;
+            if( !m_itemToRepeat )
+                m_itemToRepeat = segment;
         }
 
         segment->m_Flags = 0;
@@ -468,7 +468,7 @@ static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool eras
  */
 void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 {
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
 
     if( ( GetScreen()->GetCurItem() == NULL )
        || ( ( GetScreen()->GetCurItem()->m_Flags & IS_NEW ) == 0 ) )
@@ -502,7 +502,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::CreateNewJunctionStruct( wxDC*          DC,
 
     NewJunction = new SCH_JUNCTION( pos );
 
-    g_ItemToRepeat = NewJunction;
+    m_itemToRepeat = NewJunction;
 
     DrawPanel->CursorOff( DC );     // Erase schematic cursor
     NewJunction->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -525,7 +525,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::CreateNewNoConnectStruct( wxDC* DC )
     SCH_NO_CONNECT* NewNoConnect;
 
     NewNoConnect   = new SCH_NO_CONNECT( GetScreen()->m_Curseur );
-    g_ItemToRepeat = NewNoConnect;
+    m_itemToRepeat = NewNoConnect;
 
     DrawPanel->CursorOff( DC );     // Erase schematic cursor
     NewNoConnect->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -555,7 +555,11 @@ static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC )
         Panel->Refresh();
     }
     else
-        g_ItemToRepeat = NULL;
+    {
+        SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
+
+        parent->SetRepeatItem( NULL );
+    }
 
     /* Clear m_Flags which is used in edit functions: */
     SCH_ITEM* item = Screen->GetDrawItems();
@@ -574,40 +578,40 @@ static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC )
  */
 void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 {
-    if( g_ItemToRepeat == NULL )
+    if( m_itemToRepeat == NULL )
         return;
 
-    g_ItemToRepeat = g_ItemToRepeat->Clone();
+    m_itemToRepeat = m_itemToRepeat->Clone();
 
-    if( g_ItemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
+    if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {
-        wxPoint pos = GetScreen()->m_Curseur - ( (SCH_COMPONENT*) g_ItemToRepeat )->m_Pos;
-        g_ItemToRepeat->m_Flags = IS_NEW;
-        ( (SCH_COMPONENT*) g_ItemToRepeat )->m_TimeStamp = GetTimeStamp();
-        g_ItemToRepeat->Move( pos );
-        g_ItemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-        StartMovePart( (SCH_COMPONENT*) g_ItemToRepeat, DC );
+        wxPoint pos = GetScreen()->m_Curseur - ( (SCH_COMPONENT*) m_itemToRepeat )->m_Pos;
+        m_itemToRepeat->m_Flags = IS_NEW;
+        ( (SCH_COMPONENT*) m_itemToRepeat )->m_TimeStamp = GetTimeStamp();
+        m_itemToRepeat->Move( pos );
+        m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        StartMovePart( (SCH_COMPONENT*) m_itemToRepeat, DC );
         return;
     }
 
-    g_ItemToRepeat->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
+    m_itemToRepeat->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
 
-    if( g_ItemToRepeat->Type() == SCH_TEXT_T
-        || g_ItemToRepeat->Type() == SCH_LABEL_T
-        || g_ItemToRepeat->Type() == SCH_HIERARCHICAL_LABEL_T
-        || g_ItemToRepeat->Type() == SCH_GLOBAL_LABEL_T )
+    if( m_itemToRepeat->Type() == SCH_TEXT_T
+        || m_itemToRepeat->Type() == SCH_LABEL_T
+        || m_itemToRepeat->Type() == SCH_HIERARCHICAL_LABEL_T
+        || m_itemToRepeat->Type() == SCH_GLOBAL_LABEL_T )
     {
-        ( (SCH_TEXT*) g_ItemToRepeat )->IncrementLabel();
+        ( (SCH_TEXT*) m_itemToRepeat )->IncrementLabel();
     }
 
-    if( g_ItemToRepeat )
+    if( m_itemToRepeat )
     {
-        g_ItemToRepeat->SetNext( GetScreen()->GetDrawItems() );
-        GetScreen()->SetDrawItems( g_ItemToRepeat );
+        m_itemToRepeat->SetNext( GetScreen()->GetDrawItems() );
+        GetScreen()->SetDrawItems( m_itemToRepeat );
         TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
-        g_ItemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        SaveCopyInUndoList( g_ItemToRepeat, UR_NEW );
-        g_ItemToRepeat->m_Flags = 0;
+        m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        SaveCopyInUndoList( m_itemToRepeat, UR_NEW );
+        m_itemToRepeat->m_Flags = 0;
     }
 }
 

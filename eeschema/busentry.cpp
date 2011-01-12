@@ -42,7 +42,9 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
         }
     }
 
-    g_ItemToRepeat = NULL;
+    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
+
+    parent->SetRepeatItem( NULL );
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 }

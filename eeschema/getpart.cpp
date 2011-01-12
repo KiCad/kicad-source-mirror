@@ -76,7 +76,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     bool            AllowWildSeach = TRUE;
     static wxString lastCommponentName;
 
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
     if( !libname.IsEmpty() )

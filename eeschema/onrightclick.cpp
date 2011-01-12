@@ -18,7 +18,7 @@
 #include "sch_bus_entry.h"
 #include "sch_marker.h"
 #include "sch_text.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_component.h"
 #include "sch_line.h"
 #include "sch_no_connect.h"

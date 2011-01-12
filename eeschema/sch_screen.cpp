@@ -14,7 +14,7 @@
 #include "protos.h"
 #include "netlist.h"
 #include "class_library.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_bus_entry.h"
 #include "sch_line.h"
 #include "sch_marker.h"
@@ -101,7 +101,7 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
         AddGrid( SchematicGridList[i] );
 
     SetGrid( wxRealPoint( 50, 50 ) );   /* Default grid size. */
-    m_RefCount = 0;
+    m_refCount = 0;
     m_Center = false;                   /* Suitable for schematic only. For
                                          * libedit and viewlib, must be set
                                          * to true */
@@ -113,6 +113,14 @@ SCH_SCREEN::~SCH_SCREEN()
 {
     ClearUndoRedoList();
     FreeDrawList();
+}
+
+
+void SCH_SCREEN::DecRefCount()
+{
+    wxCHECK_RET( m_refCount != 0,
+                 wxT( "Screen reference count already zero.  Bad programmer!" ) );
+    m_refCount--;
 }
 
 

@@ -22,6 +22,9 @@ class SCH_SHEET_PIN;
 
 class SCH_SCREEN : public BASE_SCREEN
 {
+    int       m_refCount;     ///< Number of sheets referencing this screen.
+                              ///< Delete when it goes to zero.
+
     /**
      * Function addConnectedItemsToBlock
      * add items connected at \a aPosition to the block pick list.
@@ -35,9 +38,6 @@ class SCH_SCREEN : public BASE_SCREEN
     void addConnectedItemsToBlock( const wxPoint& aPosition );
 
 public:
-    int       m_RefCount;     ///< Number of sheets referencing this screen.
-                              ///< Delete when it goes to zero.
-
     SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
     ~SCH_SCREEN();
 
@@ -45,6 +45,12 @@ public:
     {
         return wxT( "SCH_SCREEN" );
     }
+
+    void DecRefCount();
+
+    void IncRefCount() { m_refCount++; }
+
+    int GetRefCount() const { return m_refCount; }
 
     /**
      * Function GetDrawItems().

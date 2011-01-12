@@ -12,7 +12,7 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_libentry.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_line.h"
 #include "sch_component.h"
 #include "sch_sheet.h"
@@ -351,7 +351,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         break;
 
     case HK_REPEAT_LAST:
-        if( notBusy && g_ItemToRepeat && ( g_ItemToRepeat->m_Flags == 0 ) )
+        if( notBusy && m_itemToRepeat && ( m_itemToRepeat->m_Flags == 0 ) )
             RepeatDrawItem( DC );
         break;
 

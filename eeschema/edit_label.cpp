@@ -36,7 +36,7 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     if( TextStruct == NULL )
         return;
 
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
 
     if( (TextStruct->m_Flags & IS_NEW) == 0 )
     {
@@ -120,7 +120,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
 {
     SCH_TEXT* NewText = NULL;
 
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
 
     switch( type )
     {
@@ -215,8 +215,9 @@ static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
 {
     BASE_SCREEN* screen = Panel->GetScreen();
     SCH_ITEM*    Struct = (SCH_ITEM*) screen->GetCurItem();
+    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
 
-    g_ItemToRepeat = NULL;
+    parent->SetRepeatItem( NULL );
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
 
@@ -335,7 +336,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
         DeleteStruct( DrawPanel, DC, Text );    // old text is really saved in
                                                 // undo list
         GetScreen()->SetCurItem( NULL );
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
     }
 
     GetScreen()->SetCurItem( NULL );

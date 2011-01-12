@@ -256,7 +256,7 @@ void SCH_EDIT_FRAME::InstallPreviousSheet()
     if( m_CurrentSheet->Last() == g_RootSheet )
         return;
 
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
     ClearMsgPanel();
 
     //make a copy for testing purposes.
@@ -287,7 +287,7 @@ void SCH_EDIT_FRAME::InstallNextScreen( SCH_SHEET* Sheet )
         DisplayError( this, wxT( "InstallNextScreen() error" ) ); return;
     }
     m_CurrentSheet->Push( Sheet );
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
     ClearMsgPanel();
     UpdateScreenFromSheet( this );
 }

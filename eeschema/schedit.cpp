@@ -20,7 +20,7 @@
 #include "sch_bus_entry.h"
 #include "sch_marker.h"
 #include "sch_component.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_line.h"
 #include "sch_sheet.h"
 
@@ -161,14 +161,14 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_HIERARCHY:
         InstallHierarchyFrame( &dc, pos );
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
         break;
 
     case wxID_CUT:
         if( screen->m_BlockLocate.m_Command != BLOCK_MOVE )
             break;
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
         SetSheetNumberAndCount();
         break;
 
@@ -316,7 +316,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MouseToCursorSchema();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
         screen->SetCurItem( NULL );
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
         TestDanglingEnds( screen->GetDrawItems(), &dc );
         DrawPanel->Refresh();
         break;
@@ -352,7 +352,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         DeleteStruct( DrawPanel, &dc, item );
         screen->SetCurItem( NULL );
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
         TestDanglingEnds( screen->GetDrawItems(), &dc );
         SetSheetNumberAndCount();
         OnModify();
@@ -757,7 +757,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     // End switch ( id )    (Command execution)
 
     if( m_ID_current_state == 0 )
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
 
     SetToolbars();
 }

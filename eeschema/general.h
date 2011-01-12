@@ -132,9 +132,6 @@ public:
     int  Flags;
 };
 
-extern SCH_ITEM*      g_ItemToRepeat; /* Pointer to the last structure used
-                                       * by the repeat command.   NULL if no
-                                       * item to repeat */
 extern wxSize         g_RepeatStep;
 extern int            g_RepeatDeltaLabel;
 

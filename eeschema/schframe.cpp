@@ -181,7 +181,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     SetIcon( wxICON( icon_eeschema ) );
 #endif
 
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
 
     /* Get config */
     LoadSettings();
@@ -329,7 +329,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     if( g_RootSheet->m_AssociatedScreen == NULL )
     {
         g_RootSheet->m_AssociatedScreen = new SCH_SCREEN();
-        g_RootSheet->m_AssociatedScreen->m_RefCount++;
+        g_RootSheet->m_AssociatedScreen->IncRefCount();
     }
 
     g_RootSheet->m_AssociatedScreen->m_FileName = m_DefaultSchematicFileName;

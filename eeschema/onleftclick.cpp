@@ -15,7 +15,7 @@
 #include "sch_bus_entry.h"
 #include "sch_text.h"
 #include "sch_marker.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_line.h"
 #include "sch_no_connect.h"
 #include "sch_component.h"
@@ -36,7 +36,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     if( ( m_ID_current_state == 0 ) || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = FALSE;
-        g_ItemToRepeat = NULL;
+        m_itemToRepeat = NULL;
 
         if( DrawStruct && DrawStruct->m_Flags )
         {
@@ -106,8 +106,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_NOCONN_BUTT:
         if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
         {
-            g_ItemToRepeat = CreateNewNoConnectStruct( DC );
-            GetScreen()->SetCurItem( g_ItemToRepeat );
+            m_itemToRepeat = CreateNewNoConnectStruct( DC );
+            GetScreen()->SetCurItem( m_itemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
@@ -122,8 +122,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_JUNCTION_BUTT:
         if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
         {
-            g_ItemToRepeat = CreateNewJunctionStruct( DC, GetScreen()->m_Curseur, TRUE );
-            GetScreen()->SetCurItem( g_ItemToRepeat );
+            m_itemToRepeat = CreateNewJunctionStruct( DC, GetScreen()->m_Curseur, TRUE );
+            GetScreen()->SetCurItem( m_itemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else

@@ -213,7 +213,7 @@ static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
 /* Create hierarchy sheet.  */
 SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 {
-    g_ItemToRepeat = NULL;
+    m_itemToRepeat = NULL;
     SAFE_DELETE( g_ItemToUndoCopy );
 
     SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->m_Curseur );

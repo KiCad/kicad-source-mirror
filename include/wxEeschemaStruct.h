@@ -93,6 +93,8 @@ private:
     wxArrayString         m_findStringHistoryList;
     wxArrayString         m_replaceStringHistoryList;
     BLOCK_SELECTOR        m_blockItems;         ///< List of selected items.
+    SCH_ITEM*             m_itemToRepeat;       ///< Last item to insert by the repeat command.
+    int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
 
 public:
     SCH_EDIT_FRAME( wxWindow* father,
@@ -500,6 +502,8 @@ public:
     void            DeleteSheetLabel( bool           aRedraw,
                                       SCH_SHEET_PIN* aSheetLabelToDel );
 
+    int GetLabelIncrement() const { return m_repeatLabelDelta; }
+
 private:
 
     // Component
@@ -652,6 +656,8 @@ public:
     virtual bool HandleBlockEnd( wxDC* DC );
 
     void     RepeatDrawItem( wxDC* DC );
+
+    void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }
 
     void     TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
 

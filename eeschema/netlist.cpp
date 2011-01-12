@@ -12,7 +12,7 @@
 #include "protos.h"
 #include "class_library.h"
 #include "lib_pin.h"
-#include "sch_items.h"
+#include "sch_junction.h"
 #include "sch_component.h"
 #include "sch_line.h"
 #include "sch_no_connect.h"
