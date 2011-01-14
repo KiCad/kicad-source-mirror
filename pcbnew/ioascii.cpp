@@ -549,6 +549,23 @@ int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
             continue;
         }
 
+        if( stricmp( Line, "GridOrigin" ) == 0 )
+        {
+            int Ox = 0;
+            int Oy = 0;
+
+            Ox = atoi( data );
+            data = strtok( NULL, " =\n\r" );
+
+            if ( data )
+                Oy = atoi( data );
+
+            GetScreen()->m_GridOrigin.x = Ox;
+            GetScreen()->m_GridOrigin.y = Oy;
+
+            continue;
+        }
+
 #endif
     }
 
@@ -686,6 +703,14 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
         fprintf( aFile,
                  "Pad2PasteClearanceRatio %g\n",
                  aBoard->GetBoardDesignSettings()->m_SolderPasteMarginRatio );
+
+    if ( aFrame->GetScreen()->m_GridOrigin != wxPoint( 0, 0 ) )
+    {
+        fprintf( aFile,
+                 "GridOrigin %d %d\n",
+                 aFrame->GetScreen()->m_GridOrigin.x,
+                 aFrame->GetScreen()->m_GridOrigin.y );
+    }
 
     fprintf( aFile,
              "AuxiliaryAxisOrg %d %d\n",
