@@ -15,6 +15,7 @@
 #include "colors_selection.h"
 #include "trigo.h"
 #include "protos.h"
+#include "richio.h"
 
 
 /*******************/
@@ -77,13 +78,15 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
  * $EndTEXTPCB
  * Nl "line nn" is a line added to the current text
  */
-int TEXTE_PCB::ReadTextePcbDescr( FILE* File, int* LineNum )
+int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
 {
-    char text[1024], Line[1024];
-    char style[256];
+    char* Line;
+    char  text[1024];
+    char  style[256];
 
-    while( GetLine( File, Line, LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$EndTEXTPCB", 11 ) == 0 )
             return 0;
         if( strncmp( Line, "Te", 2 ) == 0 ) /* Text line (first line for multi line texts */

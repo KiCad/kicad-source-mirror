@@ -13,6 +13,8 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "3d_viewer.h"
+#include "richio.h"
+#include "filter_reader.h"
 
 #define BACKUP_FILE_EXT wxT( "000" )
 
@@ -134,10 +136,8 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
 bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                                       bool aForceFileDialog )
 {
-    int      ii;
     FILE*    source;
     wxString msg;
-    char     cbuf[1024];
 
     ActiveScreen = GetScreen();
 
@@ -198,18 +198,20 @@ the changes?" ) ) )
         return false;
     }
 
+    FILE_LINE_READER fileReader( source, GetScreen()->m_FileName );
+
+    FILTER_READER reader( fileReader );
 
     /* Read header and TEST if it is a PCB file format */
-    GetLine( source, cbuf, &ii );
-    if( strncmp( cbuf, "PCBNEW-BOARD", 12 ) != 0 )
+    reader.ReadLine();
+    if( strncmp( reader.Line(), "PCBNEW-BOARD", 12 ) != 0 )
     {
-        fclose( source );
         DisplayError( this, wxT( "Unknown file type" ) );
         return false;
     }
 
     int ver;
-    sscanf(cbuf, "PCBNEW-BOARD Version %d date", &ver );
+    sscanf( reader.Line() , "PCBNEW-BOARD Version %d date", &ver );
     if ( ver > g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by a more recent \
@@ -225,7 +227,7 @@ this file again." ) );
     // Reload the corresponding configuration file:
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->m_FileName ) );
     if( aAppend )
-        ReadPcbFile( source, true );
+        ReadPcbFile( &reader, true );
     else
     {
         // Update the option toolbar
@@ -235,11 +237,9 @@ this file again." ) );
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
-        ReadPcbFile( source, false );
+        ReadPcbFile( &reader, false );
         LoadProjectSettings( GetScreen()->m_FileName );
     }
-
-    fclose( source );
 
     GetScreen()->ClrModify();
 

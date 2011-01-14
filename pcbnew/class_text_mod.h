@@ -6,6 +6,7 @@
 #ifndef TEXT_MODULE_H
 #define TEXT_MODULE_H
 
+#include "richio.h"
 
 #define TEXT_is_REFERENCE 0
 #define TEXT_is_VALUE     1
@@ -81,13 +82,10 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     /**
      * Function ReadDescr
      * Read description from a given line in "*.brd" format.
-     * @param aLine The current line which contains the first line of
-     *              description.
-     * @param aFile The FILE to read next lines (currently not used).
-     * @param aLineNum a point to the line count (currently not used).
+     * @param aReader is a pointer to a LINE_READER to read from.
      * @return int - > 0 if success reading else 0.
      */
-    int      ReadDescr( char* aLine, FILE* aFile, int* aLineNum = NULL );
+    int      ReadDescr( LINE_READER* aReader );
 
     /* drawing functions */
     void     Draw( WinEDA_DrawPanel* panel,

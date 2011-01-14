@@ -30,7 +30,7 @@
 
 #include <set>
 #include <map>
-
+#include "richio.h"
 
 /**
  * Class NETCLASS
@@ -205,12 +205,11 @@ public:
 
     /**
      * Function ReadDescr
-     * reads the data structures for this object from a FILE in "*.brd" format.
-     * @param aFile The FILE to read to.
-     * @param aLineNum a pointer to a line number counter
+     * reads the data structures for this object from a LINE_READER in "*.brd" format.
+     * @param aReader is a pointer to a LINE_READER to read from.
      * @return bool - true if success reading else false.
      */
-    bool ReadDescr( FILE* aFile, int* aLineNum );
+    bool ReadDescr( LINE_READER* aReader );
 
 #if defined(DEBUG)
 

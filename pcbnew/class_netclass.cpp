@@ -30,6 +30,7 @@
 #include "kicad_string.h"
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "richio.h"
 
 // Current design settings (used also to read configs):
 extern BOARD_DESIGN_SETTINGS boardDesignSettings;
@@ -332,15 +333,16 @@ void NETCLASS::Show( int nestLevel, std::ostream& os )
 
 
 
-bool NETCLASS::ReadDescr( FILE* aFile, int* aLineNum )
+bool NETCLASS::ReadDescr( LINE_READER* aReader )
 {
     bool        result = false;
-    char        Line[1024];
+    char*       Line;
     char        Buffer[1024];
     wxString    netname;
 
-    while( GetLine( aFile, Line, aLineNum, 1024 ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "AddNet", 6 ) == 0 )
         {
             ReadDelimitedText( Buffer, Line + 6, sizeof(Buffer) );

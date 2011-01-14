@@ -8,6 +8,7 @@
 #include <vector>
 #include "gr_basic.h"
 #include "PolyLine.h"
+#include "richio.h"
 
 /* a small class used when filling areas with segments */
 class SEGMENT
@@ -66,7 +67,14 @@ public:
     ~ZONE_CONTAINER();
 
     bool     Save( FILE* aFile ) const;
-    int      ReadDescr( FILE* aFile, int* aLineNum = NULL );
+
+     /**
+     * Function ReadDescr
+     * reads the data structures for this object from a LINE_READER in "*.brd" format.
+     * @param aReader is a pointer to a LINE_READER to read from.
+     * @return int - 1 if success, 0 if not.
+     */
+    int      ReadDescr( LINE_READER* aReader );
 
     /** virtual function GetPosition
      * @return a wxPoint, position of the first point of the outline

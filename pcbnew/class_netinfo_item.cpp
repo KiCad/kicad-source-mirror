@@ -9,7 +9,7 @@
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
-
+#include "richio.h"
 
 /*********************************************************/
 /* class NETINFO_ITEM: handle data relative to a given net */
@@ -42,13 +42,15 @@ NETINFO_ITEM::~NETINFO_ITEM()
  * Returns 0 if OK
  * 1 if incomplete reading
  */
-int NETINFO_ITEM::ReadDescr( FILE* File, int* LineNum )
+int NETINFO_ITEM::ReadDescr( LINE_READER* aReader )
 {
-    char Line[1024], Ltmp[1024];
-    int  tmp;
+    char* Line;
+    char  Ltmp[1024];
+    int   tmp;
 
-    while( GetLine( File, Line, LineNum ) )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return 0;
 

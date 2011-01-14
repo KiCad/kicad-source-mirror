@@ -5,6 +5,7 @@
 #define MIRE_H
 
 #include "base_struct.h"
+#include "richio.h"
 
 
 class MIREPCB : public BOARD_ITEM
@@ -61,7 +62,7 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    bool    ReadMirePcbDescr( FILE* File, int* LineNum );
+    bool    ReadMirePcbDescr( LINE_READER* aReader );
 
     void    Copy( MIREPCB* source );
 

@@ -17,6 +17,7 @@
 #include "colors_selection.h"
 
 #include "protos.h"
+#include "richio.h"
 
 /************************/
 /* class ZONE_CONTAINER */
@@ -215,26 +216,20 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 
 
 /**********************************************************/
-int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
+int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
 /**********************************************************/
-
-/**
- * Function ReadDescr
- * @param aFile = opened file
- * @param aLineNum = pointer on a line number counter (can be NULL or missing)
- * @return 1 if ok or 0
- */
 {
-    char Line[1024], * text;
-    char netname_buffer[1024];
-    int  ret;
-    int  n_corner_item = 0;
-    int  outline_hatch = CPolyLine::NO_HATCH;
-    bool error = false, has_corner = false;
+    char* Line, * text;
+    char  netname_buffer[1024];
+    int   ret;
+    int   n_corner_item = 0;
+    int   outline_hatch = CPolyLine::NO_HATCH;
+    bool  error = false, has_corner = false;
 
     netname_buffer[0] = 0;
-    while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "ZCorner", 7 ) == 0 ) // new corner found
         {
             int x;
@@ -382,8 +377,9 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
 
         else if( strnicmp( Line, "$POLYSCORNERS", 13 ) == 0  )  // Read the PolysList (polygons used for fill areas in the zone)
         {
-            while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
+            while( aReader->ReadLine() )
             {
+                Line = aReader->Line();
                 if( strnicmp( Line, "$endPOLYSCORNERS", 4 ) == 0  )
                     break;
                 CPolyPt corner;
@@ -401,8 +397,9 @@ int ZONE_CONTAINER::ReadDescr( FILE* aFile, int* aLineNum )
         else if( strnicmp( Line, "$FILLSEGMENTS", 13) == 0  )
         {
             SEGMENT segm;
-            while( GetLine( aFile, Line, aLineNum, sizeof(Line) - 1 ) != NULL )
+            while( aReader->ReadLine() )
             {
+                Line = aReader->Line();
                 if( strnicmp( Line, "$endFILLSEGMENTS", 4 ) == 0  )
                     break;
                 ret = sscanf( Line, "%d %d %d %d", &segm.m_Start.x, &segm.m_Start.y, &segm.m_End.x, &segm.m_End.y );

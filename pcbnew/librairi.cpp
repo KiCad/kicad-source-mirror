@@ -13,6 +13,8 @@
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "dialog_helpers.h"
+#include "richio.h"
+#include "filter_reader.h"
 
 /*
  * Module library header format:
@@ -47,8 +49,7 @@ static bool CreateDocLibrary( const wxString& LibName );
  */
 MODULE* WinEDA_ModuleEditFrame::Import_Module( )
 {
-    int       NbLine = 0;
-    char      Line[1024];
+    char*     Line;
     FILE*     file;
     MODULE*   module = NULL;
     bool      Footprint_Is_GPCB_Format = false;
@@ -76,6 +77,10 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
         return NULL;
     }
 
+    FILE_LINE_READER fileReader( file, dlg.GetPath() );
+
+    FILTER_READER reader( fileReader );
+
     if( Config )    // Save file path
     {
         LastOpenedPathForLoading = wxPathOnly( dlg.GetPath() );
@@ -87,7 +92,8 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
     SetLocaleTo_C_standard();
 
     /* Read header and test file type */
-    GetLine( file, Line, &NbLine );
+    reader.ReadLine();
+    Line = reader.Line();
     if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
     {
         if( strnicmp( Line, "Element", 7 ) == 0 )
@@ -103,7 +109,7 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
     /* Read file: Search the description starting line (skip lib header)*/
     if( !Footprint_Is_GPCB_Format )
     {
-        while( GetLine( file, Line, &NbLine ) != NULL )
+        while( reader.ReadLine() )
         {
             if( strnicmp( Line, "$MODULE", 7 ) == 0 )
                 break;
@@ -114,13 +120,11 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
 
     if( Footprint_Is_GPCB_Format )
     {
-        fclose( file );
         module->Read_GPCB_Descr( dlg.GetPath() );
     }
     else
     {
-        module->ReadDescr( file, &NbLine );
-        fclose( file );
+        module->ReadDescr( &reader );
     }
     SetLocaleTo_Default();       // revert to the current locale
 

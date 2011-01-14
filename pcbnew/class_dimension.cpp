@@ -13,6 +13,7 @@
 #include "colors_selection.h"
 #include "kicad_string.h"
 #include "protos.h"
+#include "richio.h"
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_DIMENSION )
@@ -100,12 +101,14 @@ void DIMENSION::Copy( DIMENSION* source )
 }
 
 
-bool DIMENSION::ReadDimensionDescr( FILE* File, int* LineNum )
+bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
 {
-    char Line[2048], Text[2048];
+    char* Line;
+    char  Text[2048];
 
-    while(  GetLine( File, Line, LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$EndDIMENSION", 4 ) == 0 )
             return TRUE;
 

@@ -21,6 +21,7 @@
 
 #include "3d_struct.h"
 #include "protos.h"
+#include "richio.h"
 
 
 /*********************************************/
@@ -409,9 +410,9 @@ int MODULE::Write_3D_Descr( FILE* File ) const
  * The 1st line of descr ($MODULE) is assumed to be already read
  * Returns 0 if OK
  */
-int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
+int MODULE::Read_3D_Descr( LINE_READER* aReader )
 {
-    char        Line[1024];
+    char*       Line = aReader->Line();
     char*       text = Line + 3;
 
     S3D_MASTER* t3D = m_3D_Drawings;
@@ -425,8 +426,9 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
         t3D = n3D;
     }
 
-    while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         switch( Line[0] )
         {
         case '$':
@@ -476,13 +478,15 @@ int MODULE::Read_3D_Descr( FILE* File, int* LineNum )
  *  The first description line ($MODULE) is already read
  *  @return 0 if no error
  */
-int MODULE::ReadDescr( FILE* File, int* LineNum )
+int MODULE::ReadDescr( LINE_READER* aReader )
 {
-    char Line[256], BufLine[256], BufCar1[128], * PtLine;
-    int  itmp1, itmp2;
+    char* Line;
+    char  BufLine[256], BufCar1[128], * PtLine;
+    int   itmp1, itmp2;
 
-    while( GetLine( File, Line, LineNum, sizeof(Line) - 1 ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( Line[0] == '$' )
         {
             if( Line[1] == 'E' )
@@ -490,7 +494,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
             if( Line[1] == 'P' )
             {
                 D_PAD* pad = new D_PAD( this );
-                pad->ReadDescr( File, LineNum );
+                pad->ReadDescr( aReader );
                 RotatePoint( &pad->m_Pos, m_Orient );
                 pad->m_Pos.x += m_Pos.x;
                 pad->m_Pos.y += m_Pos.y;
@@ -499,7 +503,7 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 continue;
             }
             if( Line[1] == 'S' )
-                Read_3D_Descr( File, LineNum );
+                Read_3D_Descr( aReader );
         }
 
         if( strlen( Line ) < 4 )
@@ -584,14 +588,14 @@ int MODULE::ReadDescr( FILE* File, int* LineNum )
                 textm = new TEXTE_MODULE( this );
                 m_Drawings.PushBack( textm );
             }
-            textm->ReadDescr( Line, File, LineNum );
+            textm->ReadDescr( aReader );
             break;
 
         case 'D':    /* read a drawing item */
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             m_Drawings.PushBack( edge );
-            edge->ReadDescr( Line, File, LineNum );
+            edge->ReadDescr( aReader );
             edge->SetDrawCoord();
             break;
 

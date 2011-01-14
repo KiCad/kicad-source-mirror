@@ -2,6 +2,8 @@
 /* class_edge_module.h : EDGE_MODULE class definition. */
 /*******************************************************/
 
+#include "richio.h"
+
 class Pcb3D_GLCanvas;
 
 
@@ -53,7 +55,7 @@ public:
      */
     bool             Save( FILE* aFile ) const;
 
-    int              ReadDescr( char* Line, FILE* File, int* LineNum = NULL );
+    int              ReadDescr( LINE_READER* aReader );
 
     void             SetDrawCoord();
 

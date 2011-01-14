@@ -13,6 +13,7 @@
 #include "colors_selection.h"
 #include "trigo.h"
 #include "protos.h"
+#include "richio.h"
 
 
 MIREPCB::MIREPCB( BOARD_ITEM* aParent ) :
@@ -41,12 +42,13 @@ void MIREPCB::Copy( MIREPCB* source )
 
 /* Read the description from the PCB file.
  */
-bool MIREPCB::ReadMirePcbDescr( FILE* File, int* LineNum )
+bool MIREPCB::ReadMirePcbDescr( LINE_READER* aReader )
 {
-    char Line[256];
+    char* Line;
 
-    while( GetLine( File, Line, LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return TRUE;
         if( Line[0] == 'P' )

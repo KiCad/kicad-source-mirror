@@ -17,6 +17,8 @@
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "dialog_helpers.h"
+#include "richio.h"
+#include "filter_reader.h"
 
 class ModList
 {
@@ -213,9 +215,9 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
     const wxString& aModuleName,
     bool            aDisplayMessageError )
 {
-    int        LineNum, Found = 0;
+    int        Found = 0;
     wxFileName fn;
-    char       Line[512];
+    char*      Line;
     wxString   Name;
     wxString   msg, tmp;
     MODULE*    NewModule;
@@ -256,12 +258,16 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
             continue;
         }
 
+        FILE_LINE_READER fileReader( file, tmp );
+
+        FILTER_READER reader( fileReader );
+
         msg.Printf( _( "Scan Lib: %s" ), GetChars( tmp ) );
         Affiche_Message( msg );
 
         /* Reading header ENTETE_LIBRAIRIE */
-        LineNum = 0;
-        GetLine( file, Line, &LineNum );
+        reader.ReadLine();
+        Line = reader.Line();
         StrPurge( Line );
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
@@ -269,20 +275,21 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
                         GetChars( tmp ) );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
-            fclose( file );
             return NULL;
         }
 
         /* Reading the list of modules in the library. */
         Found = 0;
-        while( !Found && GetLine( file, Line, &LineNum ) )
+        while( !Found && reader.ReadLine() )
         {
+            Line = reader.Line();
             if( strnicmp( Line, "$MODULE", 6 ) == 0 )
                 break;
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( file, Line, &LineNum ) )
+                while( reader.ReadLine() )
                 {
+                    Line = reader.Line();
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
                     StrPurge( Line );
@@ -297,8 +304,9 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
         }
 
         /* Read library. */
-        while( Found && GetLine( file, Line, &LineNum ) )
+        while( Found && reader.ReadLine() )
         {
+            Line = reader.Line();
             if( Line[0] != '$' )
                 continue;
             if( Line[1] != 'M' )
@@ -315,16 +323,14 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
                 // Switch the locale to standard C (needed to print
                 // floating point numbers like 1.3)
                 SetLocaleTo_C_standard();
-                NewModule->ReadDescr( file, &LineNum );
+                NewModule->ReadDescr( &reader );
                 SetLocaleTo_Default();         // revert to the current locale
                 GetBoard()->Add( NewModule, ADD_APPEND );
-                fclose( file );
                 Affiche_Message( wxEmptyString );
                 return NewModule;
             }
         }
 
-        fclose( file );
         if( one_lib )
             break;
     }
@@ -358,9 +364,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWind
                                                          const wxString&   aMask,
                                                          const wxString&   aKeyWord )
 {
-    int             LineNum;
     unsigned        ii;
-    char            Line[1024];
+    char*           Line;
     wxFileName      fn;
     static wxString OldName;    /* Save the name of the last module loaded. */
     wxString        CmpName, tmp;
@@ -412,13 +417,17 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWind
             continue;
         }
 
+        FILE_LINE_READER fileReader( file, tmp );
+
+        FILTER_READER reader( fileReader );
+
         // Statusbar library loaded message
         msg = _( "Library " ) + fn.GetFullPath() + _( " loaded" );
         Affiche_Message( msg );
 
         /* Read header. */
-        LineNum = 0;
-        GetLine( file, Line, &LineNum, sizeof(Line) - 1 );
+        reader.ReadLine();
+        Line = reader.Line();
 
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
@@ -426,21 +435,22 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWind
                         GetChars( tmp ) );
             wxMessageBox( msg, _( "Library Load Error" ),
                           wxOK | wxICON_ERROR, this );
-            fclose( file );
             continue;
         }
 
         /* Read library. */
-        while( GetLine( file, Line, &LineNum, sizeof(Line) - 1 ) )
+        while( reader.ReadLine() )
         {
+            Line = reader.Line();
             if( Line[0] != '$' )
                 continue;
             if( strnicmp( Line, "$MODULE", 6 ) == 0 )
                 break;
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( file, Line, &LineNum ) )
+                while( reader.ReadLine() )
                 {
+                    Line = reader.Line();
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
                     strupper( Line );
@@ -454,7 +464,6 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWind
         }
 
         /* End read library. */
-        fclose( file );
         file = NULL;
 
         if( !aLibraryFullFilename.IsEmpty() )
@@ -538,7 +547,7 @@ static void DisplayCmpDoc( wxString& Name )
 static void ReadDocLib( const wxString& ModLibName )
 {
     ModList*   NewMod;
-    char       Line[1024];
+    char*      Line;
     FILE*      LibDoc;
     wxFileName fn = ModLibName;
 
@@ -547,12 +556,18 @@ static void ReadDocLib( const wxString& ModLibName )
     if( ( LibDoc = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
         return;
 
-    GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 );
+    FILE_LINE_READER fileReader( LibDoc, fn.GetFullPath() );
+
+    FILTER_READER reader( fileReader );
+
+    reader.ReadLine();
+    Line = reader.Line();
     if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
         return;
 
-    while( GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 ) )
+    while( reader.ReadLine() )
     {
+        Line = reader.Line();
         if( Line[0] != '$' )
             continue;
         if( Line[1] == 'E' )
@@ -562,8 +577,9 @@ static void ReadDocLib( const wxString& ModLibName )
             NewMod = new ModList();
             NewMod->Next = MList;
             MList = NewMod;
-            while( GetLine( LibDoc, Line, NULL, sizeof(Line) - 1 ) )
+            while( reader.ReadLine() )
             {
+                Line = reader.Line();
                 if( Line[0] ==  '$' ) /* $EndMODULE */
                     break;
 
@@ -585,7 +601,6 @@ static void ReadDocLib( const wxString& ModLibName )
         } /* End read 1 module. */
     }
 
-    fclose( LibDoc );
 }
 
 

@@ -50,6 +50,7 @@ set(COMMON_SRCS
     edaappl.cpp
     eda_dde.cpp
     eda_doc.cpp
+    filter_reader.cpp
     gestfich.cpp
     gr_basic.cpp
     hotkeys_basic.cpp

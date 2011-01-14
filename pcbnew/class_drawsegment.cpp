@@ -16,6 +16,7 @@
 
 #include "trigo.h"
 #include "protos.h"
+#include "richio.h"
 
 /* DRAWSEGMENT: constructor */
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
@@ -113,16 +114,17 @@ out:
 
 
 /******************************************************************/
-bool DRAWSEGMENT::ReadDrawSegmentDescr( FILE* File, int* LineNum )
+bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
 /******************************************************************/
 
 /* Read a DRAWSEGMENT from a file
  */
 {
-    char Line[2048];
+    char* Line;
 
-    while( GetLine( File, Line, LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return TRUE; /* End of description */
         if( Line[0] == 'P' )

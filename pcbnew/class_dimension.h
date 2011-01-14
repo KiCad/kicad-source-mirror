@@ -5,6 +5,7 @@
 #define DIMENSION_H
 
 #include "base_struct.h"
+#include "richio.h"
 
 class DIMENSION : public BOARD_ITEM
 {
@@ -47,7 +48,7 @@ public:
      */
     void AdjustDimensionDetails( bool aDoNotChangeText = false);
 
-    bool    ReadDimensionDescr( FILE* File, int* LineNum );
+    bool    ReadDimensionDescr( LINE_READER* aReader );
 
     /**
      * Function Save

@@ -6,6 +6,7 @@
 
 #include "base_struct.h"
 #include "PolyLine.h"
+#include "richio.h"
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TextStruct
 {
@@ -57,7 +58,7 @@ public:
                const wxPoint& offset = ZeroOffset );
 
     // File Operations:
-    int ReadTextePcbDescr( FILE* File, int* LineNum );
+    int ReadTextePcbDescr( LINE_READER* aReader );
 
     /**
      * Function Save

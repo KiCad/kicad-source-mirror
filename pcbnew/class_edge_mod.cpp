@@ -14,6 +14,7 @@
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "richio.h"
 
 #define MAX_WIDTH 10000     /* Thickness (in 1 / 10000 ") of maximum reasonable
                              * features, text... */
@@ -381,12 +382,14 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
  *  - Polygon
  *
  */
-int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
-                            int* LineNum )
+int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
 {
     int  ii;
     int  error = 0;
-    char Buf[1024];
+    char* Buf;
+    char* Line;
+
+    Line = aReader->Line();
 
     switch( Line[1] )
     {
@@ -439,13 +442,13 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
                 &m_End0.x, &m_End0.y,
                 &pointCount, &m_Width, &m_Layer );
 
-        (*LineNum)++;
         m_PolyPoints.clear();
         m_PolyPoints.reserve( pointCount );
         for( ii = 0;  ii<pointCount;  ii++ )
         {
-            if( GetLine( File, Buf, LineNum, sizeof(Buf) - 1 ) != NULL )
+            if( aReader->ReadLine() )
             {
+                Buf = aReader->Line();
                 if( strncmp( Buf, "Dl", 2 ) != 0 )
                 {
                     error = 1;
@@ -457,8 +460,6 @@ int EDGE_MODULE::ReadDescr( char* Line, FILE* File,
                 sscanf( Buf + 3, "%d %d\n", &x, &y );
 
                 m_PolyPoints.push_back( wxPoint( x, y ) );
-
-                (*LineNum)++;
             }
             else
             {

@@ -23,6 +23,7 @@
 #include "build_version.h"
 
 #include "pcbnew_id.h"
+#include "richio.h"
 
 /* ASCII format of structures:
  *
@@ -80,42 +81,50 @@ int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 /** Read a list of segments (Tracks, zones)
  * @return items count or - count if no end block ($End...) found.
  */
-int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE*  File,
+int WinEDA_BasePcbFrame::ReadListeSegmentDescr( LINE_READER* aReader,
                                                 TRACK* insertBeforeMe,
                                                 int    StructType,
-                                                int*   LineNum,
                                                 int    NumSegm )
 {
     int    shape, width, drill, layer, type, flags, net_code;
+    int    tempStartX, tempStartY;
+    int    tempEndX, tempEndY;
     int    ii = 0;
-    char   line1[256];
-    char   line2[256];
+    char*  line;
 
     TRACK* newTrack;
 
-    while( GetLine( File, line1, LineNum ) )
+    while( aReader->ReadLine() )
     {
+        line = aReader->Line();
         int           makeType;
         unsigned long timeStamp;
 
-        if( line1[0] == '$' )
+        if( line[0] == '$' )
         {
             return ii;      /* end of segmentlist: OK */
         }
+
+        int arg_count = sscanf( line + 2, " %d %d %d %d %d %d %d", &shape,
+                                &tempStartX, &tempStartY,
+                                &tempEndX, &tempEndY, &width,
+                                &drill );
 
         // Read the 2nd line to determine the exact type, one of:
         // TYPE_TRACK, TYPE_VIA, or TYPE_ZONE.  The type field in 2nd line
         // differentiates between TYPE_TRACK and TYPE_VIA.  With virtual
         // functions in use, it is critical to instantiate the TYPE_VIA
         // exactly.
-        if( GetLine( File, line2, LineNum ) == NULL )
+        if( !aReader->ReadLine() )
             break;
 
-        if( line2[0] == '$' )
+        line = aReader->Line();
+
+        if( line[0] == '$' )
             break;
 
         // parse the 2nd line first to determine the type of object
-        sscanf( line2 + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
+        sscanf( line + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
                 &timeStamp, &flags );
 
         if( StructType==TYPE_TRACK && type==1 )
@@ -145,10 +154,10 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE*  File,
 
         newTrack->m_TimeStamp = timeStamp;
 
-        int arg_count = sscanf( line1 + 2, " %d %d %d %d %d %d %d", &shape,
-                                &newTrack->m_Start.x, &newTrack->m_Start.y,
-                                &newTrack->m_End.x, &newTrack->m_End.y, &width,
-                                &drill );
+        newTrack->m_Start.x = tempStartX;
+        newTrack->m_Start.y = tempStartY;
+        newTrack->m_End.x = tempEndX;
+        newTrack->m_End.y = tempEndY;
 
         newTrack->m_Width = width;
         newTrack->m_Shape = shape;
@@ -176,12 +185,13 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( FILE*  File,
 }
 
 
-int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
+int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( LINE_READER* aReader )
 {
-    char Line[1024], * data;
+    char* Line, * data;
 
-    while(  GetLine( File, Line, LineNum ) != NULL )
+    while(  aReader->ReadLine() )
     {
+        Line = aReader->Line();
         data = strtok( Line, " =\n\r" );
         if( strnicmp( data, "$EndGENERAL", 10 ) == 0 )
             break;
@@ -294,15 +304,16 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( FILE* File, int* LineNum )
 }
 
 
-int WinEDA_BasePcbFrame::ReadSetup( FILE* File, int* LineNum )
+int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
 {
-    char      Line[1024];
+    char*     Line;
     char*     data;
 
     NETCLASS* netclass_default = GetBoard()->m_NetClasses.GetDefault();
 
-    while(  GetLine( File, Line, LineNum ) != NULL )
+    while(  aReader->ReadLine() )
     {
+        Line = aReader->Line();
         strtok( Line, " =\n\r" );
         data = strtok( NULL, " =\n\r" );
 
@@ -802,12 +813,13 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 }
 
 
-static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
+static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 {
-    char Line[1024], buf[1024], * text;
+    char* Line, buf[1024], * text;
 
-    while(  GetLine( File, Line, LineNum ) != NULL )
+    while(  aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return TRUE;
 
@@ -899,10 +911,9 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, FILE* File, int* LineNum )
 }
 
 
-int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
+int WinEDA_PcbFrame::ReadPcbFile( LINE_READER* aReader, bool Append )
 {
-    char         Line[1024];
-    int          LineNum = 0;
+    char*        Line;
 
     wxBusyCursor dummy;
 
@@ -922,8 +933,9 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
     // string.
 #define TESTLINE( x ) (strncmp( Line, "$" x, sizeof("$" x) - 1 ) == 0)
 
-    while( GetLine( File, Line, &LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         // put the more frequent ones at the top
 
         if( TESTLINE( "MODULE" ) )
@@ -934,7 +946,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
                 continue;
 
             board->Add( Module, ADD_APPEND );
-            Module->ReadDescr( File, &LineNum );
+            Module->ReadDescr( aReader );
             continue;
         }
 
@@ -942,7 +954,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( board );
             board->Add( DrawSegm, ADD_APPEND );
-            DrawSegm->ReadDrawSegmentDescr( File, &LineNum );
+            DrawSegm->ReadDrawSegmentDescr( aReader );
             continue;
         }
 
@@ -950,7 +962,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             NETINFO_ITEM* net = new NETINFO_ITEM( board );
             board->m_NetInfo->AppendNet( net );
-            net->ReadDescr( File, &LineNum );
+            net->ReadDescr( aReader );
             continue;
         }
 
@@ -958,7 +970,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             TEXTE_PCB* pcbtxt = new TEXTE_PCB( board );
             board->Add( pcbtxt, ADD_APPEND );
-            pcbtxt->ReadTextePcbDescr( File, &LineNum );
+            pcbtxt->ReadTextePcbDescr( aReader );
             continue;
         }
 
@@ -966,8 +978,8 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
 #ifdef PCBNEW
             TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
-            ReadListeSegmentDescr( File, insertBeforeMe, TYPE_TRACK,
-                                   &LineNum, NbTrack );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_TRACK,
+                                   NbTrack );
 #endif
             continue;
         }
@@ -978,7 +990,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
             NETCLASS* netclass = new NETCLASS( board, wxEmptyString );
 
             // fill it from the *.brd file, and establish its name.
-            netclass->ReadDescr( File, &LineNum );
+            netclass->ReadDescr( aReader );
 
             if( !board->m_NetClasses.Add( netclass ) )
             {
@@ -996,7 +1008,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         if( TESTLINE( "CZONE_OUTLINE" ) )
         {
             ZONE_CONTAINER* zone_descr = new ZONE_CONTAINER( board );
-            zone_descr->ReadDescr( File, &LineNum );
+            zone_descr->ReadDescr( aReader );
             if( zone_descr->GetNumCorners() > 2 )       // should always occur
                 board->Add( zone_descr );
             else
@@ -1008,7 +1020,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             DIMENSION* Dimension = new DIMENSION( board );
             board->Add( Dimension, ADD_APPEND );
-            Dimension->ReadDimensionDescr( File, &LineNum );
+            Dimension->ReadDimensionDescr( aReader );
             continue;
         }
 
@@ -1016,7 +1028,7 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             MIREPCB* Mire = new MIREPCB( board );
             board->Add( Mire, ADD_APPEND );
-            Mire->ReadMirePcbDescr( File, &LineNum );
+            Mire->ReadMirePcbDescr( aReader );
             continue;
         }
 
@@ -1025,21 +1037,21 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
-            ReadListeSegmentDescr( File, insertBeforeMe, TYPE_ZONE,
-                                   &LineNum, NbZone );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_ZONE,
+                                   NbZone );
 #endif
             continue;
         }
 
         if( TESTLINE( "GENERAL" ) )
         {
-            ReadGeneralDescrPcb( File, &LineNum );
+            ReadGeneralDescrPcb( aReader );
             continue;
         }
 
         if( TESTLINE( "SHEETDESCR" ) )
         {
-            ReadSheetDescr( GetScreen(), File, &LineNum );
+            ReadSheetDescr( GetScreen(), aReader );
             continue;
         }
 
@@ -1047,13 +1059,15 @@ int WinEDA_PcbFrame::ReadPcbFile( FILE* File, bool Append )
         {
             if( !Append )
             {
-                ReadSetup( File, &LineNum );
+                ReadSetup( aReader );
             }
             else
             {
-                while( GetLine( File, Line, &LineNum ) != NULL )
+                while( aReader->ReadLine() ) {
+                    Line = aReader->Line();
                     if( TESTLINE( "EndSETUP" ) )
                         break;
+                }
             }
             continue;
         }

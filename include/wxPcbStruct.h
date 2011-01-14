@@ -10,6 +10,7 @@
 #include "base_struct.h"
 #include "param_config.h"
 #include "class_layerchoicebox.h"
+#include "richio.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -594,7 +595,7 @@ public:
      *               the file else all items of the board file are added to the
      *               existing board
      */
-    int  ReadPcbFile( FILE* File, bool Append );
+    int  ReadPcbFile( LINE_READER* aReader, bool Append );
 
     bool SavePcbFile( const wxString& FileName );
     int  SavePcbFormatAscii( FILE* File );

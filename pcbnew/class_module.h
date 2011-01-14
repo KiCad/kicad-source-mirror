@@ -6,6 +6,8 @@
 class Pcb3D_GLCanvas;
 class S3D_MASTER;
 
+#include "richio.h"
+
 /************************************/
 /* Modules (footprints) description */
 /* pad are in class_pad.xx          */
@@ -210,7 +212,7 @@ public:
     bool Save( FILE* aFile ) const;
 
     int  Write_3D_Descr( FILE* File ) const;
-    int  ReadDescr( FILE* File, int* LineNum = NULL );
+    int  ReadDescr( LINE_READER* aReader );
 
     /**
      * Function Read_GPCB_Descr
@@ -220,7 +222,7 @@ public:
      * @return bool - true if success reading else false.
      */
     bool Read_GPCB_Descr( const wxString& CmpFullFileName );
-    int  Read_3D_Descr( FILE* File, int* LineNum = NULL );
+    int  Read_3D_Descr( LINE_READER* aReader );
 
     /* drawing functions */
 

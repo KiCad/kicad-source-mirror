@@ -15,6 +15,8 @@
 #include "protos.h"
 #include "cvstruct.h"
 #include "class_DisplayFootprintsFrame.h"
+#include "richio.h"
+#include "filter_reader.h"
 
 
 /**
@@ -27,9 +29,10 @@
  */
 MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
 {
-    int        LineNum, Found = 0;
+    int        Found = 0;
     unsigned   ii;
-    char       Line[1024], Name[255];
+    char*      Line;
+    char       Name[255];
     wxString   tmp, msg;
     wxFileName fn;
     MODULE*    Module = NULL;
@@ -61,9 +64,13 @@ found in the default search paths." ),
             continue;
         }
 
+        FILE_LINE_READER fileReader( file, tmp );
+
+        FILTER_READER reader( fileReader );
+
         /* Read header. */
-        LineNum = 0;
-        GetLine( file, Line, &LineNum );
+        reader.ReadLine();
+        Line = reader.Line();
         StrPurge( Line );
 
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
@@ -76,15 +83,17 @@ found in the default search paths." ),
         }
 
         Found = 0;
-        while( !Found && GetLine( file, Line, &LineNum ) )
+        while( !Found && reader.ReadLine() )
         {
+            Line = reader.Line();
             if( strncmp( Line, "$MODULE", 6 ) == 0 )
                 break;
 
             if( strnicmp( Line, "$INDEX", 6 ) == 0 )
             {
-                while( GetLine( file, Line, &LineNum ) )
+                while( reader.ReadLine() )
                 {
+                    Line = reader.Line();
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
 
@@ -98,8 +107,9 @@ found in the default search paths." ),
             }
         }
 
-        while( Found && GetLine( file, Line, &LineNum ) )
+        while( Found && reader.ReadLine() )
         {
+            Line = reader.Line();
             if( Line[0] != '$' )
                 continue;
 
@@ -117,15 +127,13 @@ found in the default search paths." ),
                 // Switch the locale to standard C (needed to print floating
                 // point numbers like 1.3)
                 SetLocaleTo_C_standard();
-                Module->ReadDescr( file, &LineNum );
+                Module->ReadDescr( &reader );
                 SetLocaleTo_Default();       // revert to the current locale
                 Module->SetPosition( wxPoint( 0, 0 ) );
-                fclose( file );
                 return Module;
             }
         }
 
-        fclose( file );
         file = NULL;
     }
 

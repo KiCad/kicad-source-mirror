@@ -12,6 +12,7 @@
 #include "trigo.h"
 #include "pcbnew_id.h"             // ID_TRACK_BUTT
 #include "class_board_design_settings.h"
+#include "richio.h"
 
 int D_PAD::m_PadSketchModePenSize = 0;   // Pen size used to draw pads in sketch mode
 
@@ -355,14 +356,16 @@ wxSize D_PAD::GetSolderPasteMargin()
  * Po 6000 -6000
  * $EndPAD
  */
-int D_PAD::ReadDescr( FILE* File, int* LineNum )
+int D_PAD::ReadDescr( LINE_READER* aReader )
 {
-    char  Line[1024], BufLine[1024], BufCar[256];
+    char* Line;
+    char  BufLine[1024], BufCar[256];
     char* PtLine;
     int   nn, ll, dx, dy;
 
-    while( GetLine( File, Line, LineNum ) != NULL )
+    while( aReader->ReadLine() )
     {
+        Line = aReader->Line();
         if( Line[0] == '$' )
             return 0;
 

@@ -6,6 +6,7 @@ class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
 #include "PolyLine.h"
+#include "richio.h"
 
 /* Default layers used for pads, according to the pad type.
  * this is default values only, they can be changed for a given pad
@@ -218,7 +219,7 @@ public:
     wxSize        GetSolderPasteMargin();
 
     /* Reading and writing data on files */
-    int           ReadDescr( FILE* File, int* LineNum = NULL );
+    int           ReadDescr( LINE_READER* aReader );
 
     /**
      * Function Save

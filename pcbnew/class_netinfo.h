@@ -10,6 +10,7 @@
 #define __CLASSES_NETINFO__
 
 #include "class_netclass.h"
+#include "richio.h"
 
 class NETINFO_ITEM;
 
@@ -317,7 +318,7 @@ public:
 #endif
 
     /* Reading and writing data on files */
-    int  ReadDescr( FILE* File, int* LineNum );
+    int  ReadDescr( LINE_READER* aReader );
 
     /**
      * Function Save

@@ -14,7 +14,8 @@
 #include "class_board_design_settings.h"
 #include "protos.h"
 #include "dialog_helpers.h"
-
+#include "richio.h"
+#include "filter_reader.h"
 
 #define COEFF_COUNT 6
 static double* PolyEdges;
@@ -835,7 +836,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
     wxString FullFileName;
     wxString ext, mask;
     FILE*    File;
-    char     Line[1024];
+    char*    Line;
     double   unitconv = 10000;
     char*    param1, * param2;
     int      bufsize;
@@ -862,14 +863,17 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         return;
     }
 
+    FILE_LINE_READER fileReader( File, FullFileName );
+
+    FILTER_READER reader( fileReader );
 
     bufsize = 100;
     ptbuf   = PolyEdges = (double*) MyZMalloc( bufsize * 2 * sizeof(double) );
 
     SetLocaleTo_C_standard();
-    int LineNum = 0;
-    while( GetLine( File, Line, &LineNum, sizeof(Line) - 1 ) != NULL )
+    while( reader.ReadLine() )
     {
+        Line = reader.Line();
         param1 = strtok( Line, " =\n\r" );
         param2 = strtok( NULL, " \t\n\r" );
 
@@ -884,8 +888,9 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
             break;
         if( strnicmp( param1, "$COORD", 6 ) == 0 )
         {
-            while( GetLine( File, Line, &LineNum, sizeof(Line) - 1 ) != NULL )
+            while( reader.ReadLine() )
             {
+                Line = reader.Line();
                 param1 = strtok( Line, " \t\n\r" );
                 param2 = strtok( NULL, " \t\n\r" );
                 if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
@@ -921,7 +926,6 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         free( PolyEdges );
         PolyEdges = NULL;
     }
-    fclose( File );
     SetLocaleTo_Default();       // revert to the current locale
 
     ShapeScaleX *= unitconv;

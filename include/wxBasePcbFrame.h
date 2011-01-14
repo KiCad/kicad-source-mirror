@@ -11,6 +11,7 @@
 
 #include "wxstruct.h"
 #include "base_struct.h"
+#include "richio.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -121,15 +122,14 @@ public:
 public:
 
     // Read/write functions:
-    EDA_ITEM* ReadDrawSegmentDescr( FILE* File, int* LineNum );
-    int             ReadListeSegmentDescr( FILE*  File,
+    EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );
+    int             ReadListeSegmentDescr( LINE_READER* aReader,
                                            TRACK* PtSegm,
                                            int    StructType,
-                                           int*   LineNum,
                                            int    NumSegm );
 
-    int             ReadSetup( FILE* File, int* LineNum );
-    int             ReadGeneralDescrPcb( FILE* File, int* LineNum );
+    int             ReadSetup( LINE_READER* aReader );
+    int             ReadGeneralDescrPcb( LINE_READER* aReader );
 
 
     /**

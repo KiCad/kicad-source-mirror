@@ -7,7 +7,8 @@
 #include "kicad_string.h"
 #include "pcbnew.h"
 #include "trigo.h"
-
+#include "richio.h"
+#include "filter_reader.h"
 
 /* read parameters from a line, and return all params in a wxArrayString
  * each param is in one wxString, and double quotes removed if exists
@@ -155,8 +156,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     double        conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and pcbnew 0.1
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     bool          success = true;
-    char          Line[1024];
-    int           NbLine = 0;
+    char*         Line;
     long          ibuf[100];
     EDGE_MODULE*  DrawSegm;
     D_PAD*        Pad;
@@ -166,7 +166,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     if( ( cmpfile = wxFopen( CmpFullFileName, wxT( "rt" ) ) ) == NULL )
         return false;
 
-    GetLine( cmpfile, Line, &NbLine );
+    FILE_LINE_READER fileReader( cmpfile, CmpFullFileName );
+
+    FILTER_READER reader( fileReader );
+
+    reader.ReadLine();
+
+    Line = reader.Line();
 
     params.Clear();
     Extract_Parameters( params, Line );
@@ -176,7 +182,6 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     if( params[iprmcnt].CmpNoCase( wxT( "Element" ) ) != 0 )
     {
-        fclose( cmpfile );
         return false;
     }
 
@@ -232,8 +237,9 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     m_Value->m_Size   = m_Reference->m_Size;
     m_Value->m_Thickness  = m_Reference->m_Thickness;
 
-    while( GetLine( cmpfile, Line, &NbLine, sizeof(Line) - 1 ) != NULL )
+    while( reader.ReadLine() )
     {
+        Line = reader.Line();
         params.Clear();
         Extract_Parameters( params, Line );
         if( params.GetCount() > 3 )    // Test units value for a string line param (more than 3 params : ident [ xx ] )
@@ -408,8 +414,6 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             continue;
         }
     }
-
-    fclose( cmpfile );
 
     if( m_Value->m_Text.IsEmpty() )
         m_Value->m_Text = wxT( "Val**" );

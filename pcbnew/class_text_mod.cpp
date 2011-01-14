@@ -14,6 +14,7 @@
 #include "pcbcommon.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
+#include "richio.h"
 
 /*******************************************************************/
 /* Class TEXTE_MODULE base class type of text elements in a module */
@@ -100,12 +101,15 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
  * @param aLineNum a point to the line count (currently not used).
  * @return int - > 0 if success reading else 0.
  */
-int TEXTE_MODULE::ReadDescr( char* aLine, FILE* aFile, int* aLineNum )
+int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
 {
     int  success = true;
     int  type;
     int  layer;
     char BufCar1[128], BufCar2[128], BufCar3[128], BufLine[256];
+    char *aLine;
+
+    aLine = aReader->Line();
 
     layer = SILKSCREEN_N_FRONT;
     BufCar1[0] = 0;

@@ -5,6 +5,7 @@
 #ifndef CLASS_DRAWSEGMENT_H
 #define CLASS_DRAWSEGMENT_H
 #include "PolyLine.h"
+#include "richio.h"
 
 class DRAWSEGMENT : public BOARD_ITEM
 {
@@ -59,7 +60,7 @@ public:
      */
     bool         Save( FILE* aFile ) const;
 
-    bool         ReadDrawSegmentDescr( FILE* File, int* LineNum );
+    bool         ReadDrawSegmentDescr( LINE_READER* aReader );
 
     void         Copy( DRAWSEGMENT* source );
 
