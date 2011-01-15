@@ -1085,10 +1085,20 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  vrmlm->m_MatScale.x * aScalingFactor,
                  vrmlm->m_MatScale.y * aScalingFactor,
                  vrmlm->m_MatScale.z * aScalingFactor );
+        /* adjust 3D shape offset position (offset is given inch) */
+        #define UNITS_3D_TO_PCB_UNITS PCB_INTERNAL_UNIT
+        int offsetx = wxRound( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
+        int offsety = wxRound( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
+        double offsetz = vrmlm->m_MatPosition.z * UNITS_3D_TO_PCB_UNITS;
+
+        RotatePoint(&offsetx, &offsety, aModule->m_Orient);
+        if ( isFlipped )
+            NEGATE(offsetz);
+
         fprintf( aOutputFile, "  translation %g %g %g\n",
-                 vrmlm->m_MatPosition.x + aModule->m_Pos.x,
-                 -vrmlm->m_MatPosition.y - aModule->m_Pos.y,
-                 vrmlm->m_MatPosition.z + layer_z[aModule->GetLayer()] );
+                 (double) (offsetx + aModule->m_Pos.x),
+                 - (double)(offsety + aModule->m_Pos.y),    // Y axis is reversed in pcbnew
+                 offsetz + layer_z[aModule->GetLayer()] );
         fprintf( aOutputFile,
                 "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
                 CONV_TO_UTF8( fname ) );
