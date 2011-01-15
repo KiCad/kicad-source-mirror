@@ -36,6 +36,5 @@ unsigned FILTER_READER::ReadLine() throw( IO_ERROR )
         if( !strchr( "#\n\r", reader[0] ) )
             break;
     }
-    strtok( reader, "\n\r" );
     return ret;
 }
