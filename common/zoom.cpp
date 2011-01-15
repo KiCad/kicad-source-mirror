@@ -29,7 +29,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
 
-
+#if !(defined(__WXMAC__) && defined(USE_WX_ZOOM))
     /* We do not use here DrawPanel->Refresh() because
      * the redraw is delayed and the mouse events (from MouseToCursorSchema ot others)
      * during this delay create problems: the mouse cursor position is false in calculations.
@@ -38,7 +38,10 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
      */
     INSTALL_DC( dc, DrawPanel );
     DrawPanel->ReDraw( &dc, DrawPanel->m_DisableEraseBG ? false : true );
-
+#else
+    DrawPanel->Refresh();
+    DrawPanel->Update();
+#endif
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( ToMouse == TRUE )
         DrawPanel->MouseToCursorSchema();
