@@ -1051,17 +1051,25 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
          * for footprints that are flipped
          * When flipped, axis rotation is the horizontal axis (X axis)
          */
-        int rotx = wxRound( vrmlm->m_MatRotation.x );
+        double rotx = - vrmlm->m_MatRotation.x;
+        double roty = - vrmlm->m_MatRotation.y;
+        double rotz = - vrmlm->m_MatRotation.z;
         if ( isFlipped )
-            rotx += 1800;
+        {
+            rotx += 180.0;
+            NEGATE(roty);
+            NEGATE(rotz);
+        }
 
         /* Do some quaternion munching */
         double q1[4], q2[4], rot[4];
-        build_quat( 1, 0, 0, rotx / 1800.0 * M_PI, q1 );
-        build_quat( 0, 1, 0, vrmlm->m_MatRotation.y / 1800.0 * M_PI, q2 );
+        build_quat( 1, 0, 0, rotx / 180.0 * M_PI, q1 );
+        build_quat( 0, 1, 0, roty / 180.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
-        build_quat( 0, 0, 1, vrmlm->m_MatRotation.z / 1800.0 * M_PI, q2 );
+        build_quat( 0, 0, 1, rotz / 180.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
+        // Note here aModule->m_Orient is in 0.1 degrees,
+        // so module rotation is aModule->m_Orient / 1800.0
         build_quat( 0, 0, 1, aModule->m_Orient / 1800.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );

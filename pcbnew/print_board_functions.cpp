@@ -81,9 +81,18 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
     Module = (MODULE*) Pcb->m_Modules;
     int tmp = D_PAD::m_PadSketchModePenSize;
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
+    wxPoint offset;
+    offset.x = GetScreen()->m_CurrentSheetDesc->m_Size.x / 2;
+    offset.y = GetScreen()->m_CurrentSheetDesc->m_Size.y / 2;
+    // offset is in mils, converts in internal units
+    offset.x *= m_InternalUnits / 1000;
+    offset.y *= m_InternalUnits / 1000;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
+        Module->Move( offset );
         Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
+        Module->Move( -offset );
     }
     D_PAD::m_PadSketchModePenSize = tmp;
 

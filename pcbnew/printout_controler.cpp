@@ -137,15 +137,9 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
     ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
 
-    // Gerbview uses a very large sheet (called "World" in gerber language)
-    // to print a sheet, uses A4 is better
     SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
-    if( m_Parent->m_Ident == GERBER_FRAME )
-    {
-        SheetSize = g_Sheet_A4.m_Size;    // size in 1/1000 inch
-    }
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in pixels
+    SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in internal units
 
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundaryBox();
@@ -234,8 +228,11 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
     EDA_Rect          tmp   = panel->m_ClipBox;
 
+    // SEt clip box to the max size
+    #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
+                                    // and that allows calculations without overflow
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
-    panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
+    panel->m_ClipBox.SetSize( wxSize( MAX_VALUE, MAX_VALUE ) );
 
     m_Parent->GetBaseScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
@@ -280,7 +277,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 #else
         ActiveScreen->m_DrawOrg = DrawOffset;
 #endif
-        panel->m_ClipBox.SetOrigin( wxPoint( -0x7FFFFF, -0x7FFFFF ) );
+        panel->m_ClipBox.SetOrigin( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ) );
     }
 
     g_DrawBgColor = WHITE;

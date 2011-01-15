@@ -289,6 +289,7 @@ void PCB_LAYER_WIDGET::ReFill()
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->ReCreateLayerBox( NULL );
     myframe->DrawPanel->Refresh();
 }
 

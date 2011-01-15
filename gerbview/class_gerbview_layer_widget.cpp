@@ -194,6 +194,7 @@ void GERBER_LAYER_WIDGET::ReFill()
 void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->m_SelLayerBox->ResyncBitmapOnly();
     myframe->DrawPanel->Refresh();
 }
 
