@@ -42,7 +42,7 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
  */
 char* StrPurge( char* text )
 {
-    const char whitespace[] = " \t\n\r\f\v";
+    static const char whitespace[] = " \t\n\r\f\v";
 
     if( text )
     {
