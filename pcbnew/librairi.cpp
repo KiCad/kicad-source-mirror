@@ -100,7 +100,6 @@ MODULE* WinEDA_ModuleEditFrame::Import_Module( )
             Footprint_Is_GPCB_Format = true;
         else
         {
-            fclose( file );
             DisplayError( this, _( "Not a module file" ) );
             return NULL;
         }
@@ -211,6 +210,7 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* aModule, bool aCreateSysLib 
 
     fputs( "$EndLIBRARY\n", file );
     fclose( file );
+
     SetLocaleTo_Default();       // revert to the current locale
 
     msg.Printf( _( "Module exported in file <%s>" ),
@@ -238,6 +238,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
     /* Confirmation */
     msg.Printf( _( "Ok to delete module %s in library %s" ),
                GetChars( CmpName ), GetChars( aLibname ) );
+
     if( !IsOK( this, msg ) )
         return;
 
@@ -587,7 +588,8 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
                 if( !aOverwrite )    /* Do not save the given footprint: an old
                                       * one exists */
                 {
-                    fclose( lib_module ); return 1;
+                    fclose( lib_module );
+                    return 1;
                 }
                 end = 1; break;
             }
@@ -680,7 +682,8 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     fprintf( dest, "$EndLIBRARY\n" );
     aModule->m_TimeStamp = tmp;
 
-    fclose( dest );  fclose( lib_module );
+    fclose( dest );
+    fclose( lib_module );
     SetLocaleTo_Default();       // revert to the current locale
 
     wxEndBusyCursor();
@@ -826,7 +829,8 @@ int WinEDA_ModuleEditFrame::Create_Librairie( const wxString& LibName )
     {
         msg = _( "Create error " ) + LibName;
         DisplayError( this, msg );
-        fclose( lib_module ); return -1;
+        fclose( lib_module );
+        return -1;
     }
 
     fprintf( lib_module, "  %s\n", DateAndTime( cbuf ) );

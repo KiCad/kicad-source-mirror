@@ -309,11 +309,16 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
             Line = reader.Line();
             if( Line[0] != '$' )
                 continue;
+
             if( Line[1] != 'M' )
                 continue;
+
             if( strnicmp( Line, "$MODULE", 7 ) != 0 )
                 continue;
-            /* Read module name. */
+
+            StrPurge( Line + 8 );
+
+            // Read module name.
             Name = CONV_FROM_UTF8( Line + 8 );
 
             if( Name.CmpNoCase( aModuleName ) == 0 )

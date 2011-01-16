@@ -42,18 +42,17 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
  */
 char* StrPurge( char* text )
 {
-    char* ptspace;
+    const char whitespace[] = " \t\n\r\f\v";
 
-    if( text == NULL )
-        return NULL;
-
-    while( ( *text <= ' ' ) && *text )
-        text++;
-
-    ptspace = text + strlen( text ) - 1;
-    while( ( *ptspace <= ' ' ) && *ptspace && ( ptspace >= text ) )
+    if( text )
     {
-        *ptspace = 0; ptspace--;
+        while( strchr( whitespace, *text ) )
+            ++text;
+
+        char* cp = text + strlen( text ) - 1;
+
+        while( cp >= text && strchr( whitespace, *cp ) )
+            *cp-- = '\0';
     }
 
     return text;
