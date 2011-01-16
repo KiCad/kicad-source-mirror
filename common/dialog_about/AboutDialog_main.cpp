@@ -249,6 +249,9 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator( new Contributor( wxT( "Rafael Sokolowski" ),
                                         wxT( "rafael.sokolowski@web.de" ), wxT( "German (DE)" ),
                                         new wxBitmap( lang_de_xpm ) ) );
+    info.AddTranslator( new Contributor( wxT( "Kenta Yonekura" ),
+                                        wxT( "midpika@hotmail.com" ), wxT( "Japanese (JP)" ),
+                                        new wxBitmap( lang_jp_xpm ) ) );
 
     /* TODO: are these all russian translators, placed them here now, or else align them below other language maintainer with mail adress */
     info.AddTranslator( new Contributor( wxT( "Remy Halvick" ), wxEmptyString, wxT( "Others" ) ) );

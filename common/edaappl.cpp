@@ -212,13 +212,21 @@ static struct LANGUAGE_DESCR s_Language_List[] =
         _( "Catalan" )
     },
 
-    /* Dutch language */
+    // Dutch language
     {
         wxLANGUAGE_DUTCH,
         ID_LANGUAGE_DUTCH,
         lang_nl_xpm,
         _( "Dutch" )
-    }
+    },
+
+    // Japanese language
+    {
+        wxLANGUAGE_JAPANESE,
+        ID_LANGUAGE_JAPANESE,
+        lang_jp_xpm,
+        _( "Japanese" )
+     }
 };
 
 
