@@ -37,8 +37,8 @@ int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
 }
 
 
-/* Remove training spaces in text
- *  return a pointer on the first non space char in text
+/* Remove leading and training spaces, tabs and end of line chars in text
+ * return a pointer on the first n char in text
  */
 char* StrPurge( char* text )
 {
@@ -46,7 +46,7 @@ char* StrPurge( char* text )
 
     if( text )
     {
-        while( strchr( whitespace, *text ) )
+        while( *text && strchr( whitespace, *text ) )
             ++text;
 
         char* cp = text + strlen( text ) - 1;

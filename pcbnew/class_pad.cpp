@@ -468,7 +468,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             /* read Netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
             SetNetname( CONV_FROM_UTF8( StrPurge( BufLine ) ) );
-            break;
+        break;
 
         case 'P':
             nn    = sscanf( PtLine, "%d %d", &m_Pos0.x, &m_Pos0.y );

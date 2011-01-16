@@ -1069,7 +1069,8 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
     }
 
     // Test list of values for specific vias and tracks
-    for( int row = 1; row < m_gridTrackWidthList->GetNumberRows();  ++row )
+    // Test tracks
+    for( int row = 0; row < m_gridTrackWidthList->GetNumberRows();  ++row )
     {
         wxString tvalue = m_gridTrackWidthList->GetCellValue( row, 0 );
         if( tvalue.IsEmpty() )
@@ -1096,15 +1097,20 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         }
     }
 
-    for( int row = 1; row < m_gridViaSizeList->GetNumberRows();  ++row )
+    // Test vias
+    for( int row = 0; row < m_gridViaSizeList->GetNumberRows();  ++row )
     {
         wxString tvalue = m_gridViaSizeList->GetCellValue( row, 0 );
         if( tvalue.IsEmpty() )
             continue;
 
-        int viadia = ReturnValueFromString( g_UserUnit,
-                                            tvalue,
+        int viadia = ReturnValueFromString( g_UserUnit, tvalue,
                                             m_Parent->m_InternalUnits );
+        int viadrill = 0;
+        wxString drlvalue = m_gridViaSizeList->GetCellValue( row, 1 );
+        if( !drlvalue.IsEmpty() )
+            viadrill = ReturnValueFromString( g_UserUnit, drlvalue,
+                                              m_Parent->m_InternalUnits );
         if( viadia < minViaDia )
         {
             result = false;
@@ -1113,7 +1119,18 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
             m_MessagesList->AppendToPage( msg );
         }
-        if( viadia > 10000 )
+
+        if( viadia < viadrill )
+        {
+            result = false;
+            msg.Printf( _( "<b>Extra Via %d Size</b> %s &lt; <b> Drill Size</b> %s<br>" ),
+                       row + 1, GetChars( tvalue ), GetChars( drlvalue ) );
+
+            m_MessagesList->AppendToPage( msg );
+        }
+
+        // Test for a reasonnable via size:
+        if( viadia > 10000 )    // 1 inch!
         {
             result = false;
             msg.Printf( _( "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>" ),

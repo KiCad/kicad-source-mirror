@@ -275,6 +275,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ),
                                            BoxSizer, UNSCALED_UNITS, 1 );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
+
+    // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
+    if( m_3D_ShapeNameListBox->GetCount() > 0 )
+    {
+        m_LastSelected3DShapeIndex = 0;
+        m_3D_ShapeNameListBox->SetSelection( m_LastSelected3DShapeIndex );
+        Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
+    }
 }
 
 

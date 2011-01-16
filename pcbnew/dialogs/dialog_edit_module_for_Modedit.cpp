@@ -156,6 +156,14 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     else
         msg.Printf( wxT( "%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
+
+    // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
+    if( m_3D_ShapeNameListBox->GetCount() > 0 )
+    {
+        m_LastSelected3DShapeIndex = 0;
+        m_3D_ShapeNameListBox->SetSelection( m_LastSelected3DShapeIndex );
+        Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
+    }
 }
 
 
