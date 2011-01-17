@@ -33,6 +33,7 @@
 
 //using namespace std;    // screws up Doxygen
 using namespace SCH;
+using namespace LT;         // tokens, enum T for LIB_TABLE
 
 
 LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :

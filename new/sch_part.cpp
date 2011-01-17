@@ -29,6 +29,7 @@
 #include <sch_lib_table.h>
 
 using namespace SCH;
+using namespace PR;         // tokens, enum T for SWEET_LEXER
 
 
 #define MAX_INHERITANCE_NESTING     6      // no problem going larger
