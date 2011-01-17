@@ -228,7 +228,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
     EDA_Rect          tmp   = panel->m_ClipBox;
 
-    // SEt clip box to the max size
+    // Set clip box to the max size
     #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
                                     // and that allows calculations without overflow
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
@@ -243,12 +243,9 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( printMirror )
     {
         // To plot mirror, we reverse the y axis, and modify the plot y origin
-        double sx, sy;
-
-        dc->GetUserScale( &sx, &sy );
         dc->SetAxisOrientation( true, true );
         if( userscale < 1.0 )
-            sy /= userscale;
+            scaley /= userscale;
 
         /* Plot offset y is moved by the y plot area size in order to have
          * the old draw area in the new draw area, because the draw origin has not moved
@@ -259,7 +256,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         y_dc_offset = (int) y_dc_offset * userscale;
         dc->SetDeviceOrigin( 0, y_dc_offset );
 #endif
-        int ysize = (int) ( PlotAreaSizeInPixels.y / sy );
+        int ysize = (int) ( PlotAreaSizeInPixels.y / scaley );
         DrawOffset.y += ysize;
 
         /* in order to keep the board position in the sheet
@@ -291,11 +288,11 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( !m_PrintParams.m_Print_Black_and_White )
     {   // Creates a "local" black background
         GRForceBlackPen( true );
-        m_Parent->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+        m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
         GRForceBlackPen( false );
     }
 
-    m_Parent->PrintPage( dc, 0, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
+    m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 
     g_DrawBgColor = bg_color;
     m_Parent->GetBaseScreen()->m_IsPrinting = false;

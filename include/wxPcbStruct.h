@@ -162,12 +162,11 @@ public:
      * used to print a page
      * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
-     * @param aPrint_Sheet_Ref = true to print page references
      * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
      * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+    virtual void PrintPage( wxDC* aDC,
                             int aPrintMaskLayer, bool aPrintMirrorMode,
                             void * aData = NULL );
 

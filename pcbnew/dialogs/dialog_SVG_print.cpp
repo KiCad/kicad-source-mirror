@@ -249,16 +249,23 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     panel->m_ClipBox.SetX( 0 );
     panel->m_ClipBox.SetY( 0 );
-    panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
-    panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    // Set clip box to the max size
+    #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
+                                    // and that allows calculations without overflow
+    panel->m_ClipBox.SetWidth( MAX_VALUE );
+    panel->m_ClipBox.SetHeight( MAX_VALUE );
 
     screen->m_IsPrinting = true;
 
     int bg_color = g_DrawBgColor;
     g_DrawBgColor = WHITE;
-    m_Parent->PrintPage( &dc, aPrint_Frame_Ref, m_PrintMaskLayer, false, &s_Parameters);
+ 
+    if( aPrint_Frame_Ref )
+        m_Parent->TraceWorkSheet( &dc, ActiveScreen, s_Parameters.m_PenDefaultSize );
+
+    m_Parent->PrintPage( &dc,  m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;
-    SetLocaleTo_Default();          // revert to the current  locale
+    SetLocaleTo_Default();          // revert to the current locale
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;
 

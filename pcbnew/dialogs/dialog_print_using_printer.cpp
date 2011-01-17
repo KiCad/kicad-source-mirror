@@ -35,8 +35,8 @@ static double s_ScaleList[] =
 #define MAX_SCALE 100.0
 
 // static print data and page setup data, to remember settings during the session
-static wxPrintData* g_PrintData;
-static wxPageSetupDialogData* g_pageSetupData = (wxPageSetupDialogData*) NULL;
+static wxPrintData* s_PrintData;
+static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 static PRINT_PARAMETERS  s_Parameters;
 
@@ -95,16 +95,16 @@ void WinEDA_PcbFrame::ToPrinter( wxCommandEvent& event )
  * Display the print dialog
  */
 {
-    if( g_PrintData == NULL )  // First print
+    if( s_PrintData == NULL )  // First print
     {
-        g_PrintData = new wxPrintData();
+        s_PrintData = new wxPrintData();
 
-        if( !g_PrintData->Ok() )
+        if( !s_PrintData->Ok() )
         {
             DisplayError( this, _( "Error Init Printer info" ) );
         }
-        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
-        g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
+        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+        s_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
@@ -140,16 +140,16 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     int      layer_max = NB_LAYERS;
     wxString msg;
     BOARD*   board = m_Parent->GetBoard();
-    if( g_pageSetupData == NULL )
+    if( s_pageSetupData == NULL )
     {
-        g_pageSetupData = new wxPageSetupDialogData;
+        s_pageSetupData = new wxPageSetupDialogData;
         // Set initial page margins.
         // Margins are already set in Pcbnew, so we cans use 0
-        g_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
-        g_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
     }
 
-    s_Parameters.m_PageSetupData = g_pageSetupData;
+    s_Parameters.m_PageSetupData = s_pageSetupData;
 
      // Create layer list.
     int      layer;
@@ -450,13 +450,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    *g_pageSetupData = *g_PrintData;
+    *s_pageSetupData = *s_PrintData;
 
-    wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
+    wxPageSetupDialog pageSetupDialog(this, s_pageSetupData);
     pageSetupDialog.ShowModal();
 
-    (*g_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
-    (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
+    (*s_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 
@@ -474,7 +474,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxPrintPreview* preview =
         new wxPrintPreview( new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
                             new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
-                            g_PrintData );
+                            s_PrintData );
 
     if( preview == NULL )
     {
@@ -522,7 +522,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
         return;
     }
 
-    wxPrintDialogData printDialogData( *g_PrintData );
+    wxPrintDialogData printDialogData( *s_PrintData );
 
     wxPrinter         printer( &printDialogData );
 
@@ -542,7 +542,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     }
     else
     {
-        *g_PrintData = printer.GetPrintDialogData().GetPrintData();
+        *s_PrintData = printer.GetPrintDialogData().GetPrintData();
     }
 }
 

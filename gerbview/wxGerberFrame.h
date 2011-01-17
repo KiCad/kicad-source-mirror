@@ -438,12 +438,11 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     /** Virtual function PrintPage
      * used to print a page
      * @param aDC = wxDC given by the calling print function
-     * @param aPrint_Sheet_Ref = true to print page references
      * @param aPrintMasklayer = a 32 bits mask: bit n = 1 -> layer n is printed
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,
+    virtual void PrintPage( wxDC* aDC,
                             int aPrintMasklayer, bool aPrintMirrorMode,
                             void* aData = NULL );
 

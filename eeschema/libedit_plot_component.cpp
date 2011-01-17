@@ -126,12 +126,11 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
  * Function PrintPage (virtual)
  * used to print a page.
  * @param aDC = wxDC given by the calling print function
- * @param aPrint_Sheet_Ref = true to print page references
  * @param aPrintMask = not used here
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMask,
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask,
                                 bool aPrintMirrorMode, void* aData)
 {
     if( ! m_component )

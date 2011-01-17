@@ -25,13 +25,11 @@ static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
- * @param aPrint_Sheet_Ref = true to print frame references
  * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */
 void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
-                                  bool  aPrint_Sheet_Ref,
                                   int   aPrintMaskLayer,
                                   bool  aPrintMirrorMode,
                                   void * aData)
@@ -96,9 +94,6 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
     }
     D_PAD::m_PadSketchModePenSize = tmp;
 
-    if( aPrint_Sheet_Ref )
-        TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
-
     DrawPanel->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
@@ -115,13 +110,11 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
  * is used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
- * @param aPrint_Sheet_Ref = true to print frame references
  * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */
 void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
-                                  bool  aPrint_Sheet_Ref,
                                   int   aPrintMaskLayer,
                                   bool  aPrintMirrorMode,
                                   void * aData)
@@ -309,9 +302,6 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
         }
         GRForceBlackPen( blackpenstate );
     }
-
-    if( aPrint_Sheet_Ref )
-        TraceWorkSheet( aDC, GetScreen(), defaultPenSize );
 
     DrawPanel->m_PrintIsMirrored = false;
 

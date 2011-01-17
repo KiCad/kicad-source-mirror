@@ -191,7 +191,7 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
  * because WinEDA_DrawFrame does not know how to print a page
  * This is the reason it is a virtual function
  */
-void WinEDA_DrawFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref,int aPrintMask,
+void WinEDA_DrawFrame::PrintPage( wxDC* aDC,int aPrintMask,
                                   bool aPrintMirrorMode, void* aData )
 {
     wxMessageBox( wxT("WinEDA_DrawFrame::PrintPage() error"));

@@ -27,7 +27,8 @@ static double s_ScaleList[] =
 
 // static print data and page setup data, to remember settings during the session
 static PRINT_PARAMETERS  s_Parameters;
-static wxPrintData* g_PrintData;
+static wxPrintData* s_PrintData;
+static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 
 /* Dialog to print schematic. Class derived from DIALOG_PRINT_FOR_MODEDIT_BASE
@@ -61,16 +62,16 @@ void WinEDA_ModuleEditFrame::ToPrinter( wxCommandEvent& event )
  * Display the print dialog
  */
 {
-    if( g_PrintData == NULL )  // First print
+    if( s_PrintData == NULL )  // First print
     {
-        g_PrintData = new wxPrintData();
+        s_PrintData = new wxPrintData();
 
-        if( !g_PrintData->Ok() )
+        if( !s_PrintData->Ok() )
         {
             DisplayError( this, _( "Error Init Printer info" ) );
         }
-        g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
-        g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
+        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+        s_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
 
     DIALOG_PRINT_FOR_MODEDIT* frame = new DIALOG_PRINT_FOR_MODEDIT( this );
@@ -98,6 +99,17 @@ void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
 /************************************************************************/
 {
     SetFocus();
+
+    if( s_pageSetupData == NULL )
+    {
+        s_pageSetupData = new wxPageSetupDialogData;
+        // Set initial page margins.
+        // Margins are already set in Pcbnew, so we cans use 0
+        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
+        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
+    }
+
+    s_Parameters.m_PageSetupData = s_pageSetupData;
 
     // Read the scale adjust option
     int scale_Select = 3; // default selected scale = ScaleList[3] = 1
@@ -136,13 +148,13 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintSetup( wxCommandEvent& event )
 /* Open a dialog box for printer setup (printer options, page size ...)
  */
 {
-    wxPrintDialogData printDialogData( *g_PrintData );
+    wxPrintDialogData printDialogData( *s_PrintData );
 
     if( printDialogData.Ok() )
     {
         wxPrintDialog printerDialog( this, &printDialogData );
         printerDialog.ShowModal();
-        *g_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
+        *s_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
     }
     else
         DisplayError( this, _( "Printer Problem!" ) );
@@ -164,7 +176,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
     wxPrintPreview* preview =
         new wxPrintPreview( new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
                             new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
-                            g_PrintData );
+                            s_PrintData );
 
     if( preview == NULL )
     {
@@ -198,7 +210,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     g_PcbPlotOptions.m_FineScaleAdjustY = s_Parameters.m_YScaleAdjust;
     g_PcbPlotOptions.m_PlotScale = s_Parameters.m_PrintScale;
 
-    wxPrintDialogData printDialogData( *g_PrintData );
+    wxPrintDialogData printDialogData( *s_PrintData );
     wxPrinter         printer( &printDialogData );
 
     BOARD_PRINTOUT_CONTROLER      printout( s_Parameters, m_Parent, _( "Print Footprint" ) );
@@ -216,6 +228,6 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     }
     else
     {
-        *g_PrintData = printer.GetPrintDialogData().GetPrintData();
+        *s_PrintData = printer.GetPrintDialogData().GetPrintData();
     }
 }

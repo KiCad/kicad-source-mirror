@@ -32,12 +32,11 @@
  * Used to print the board (on printer, or when creating SVF files).
  * Print the board, but only layers allowed by aPrintMaskLayer
  * @param aDC = the print device context
- * @param aPrint_Sheet_Ref = true to print frame references
  * @param aPrintMasklayer = a 32 bits mask: bit n = 1 -> layer n is printed
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (not used here: can be NULL)
  */
-void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrintMasklayer,
+void WinEDA_GerberFrame::PrintPage( wxDC* aDC, int aPrintMasklayer,
                                     bool aPrintMirrorMode, void* aData )
 {
     // Save current draw options, because print mode has specfic options:
@@ -55,9 +54,6 @@ void WinEDA_GerberFrame::PrintPage( wxDC* aDC, bool aPrint_Sheet_Ref, int aPrint
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
     GetBoard()->Draw( DrawPanel, aDC, GR_COPY, wxPoint( 0, 0 ) );
-
-    if( aPrint_Sheet_Ref )
-        TraceWorkSheet( aDC, GetScreen(), 0 );
 
     DrawPanel->m_PrintIsMirrored = false;
 
