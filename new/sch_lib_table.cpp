@@ -30,6 +30,7 @@
 #include <sch_lib_table.h>
 #include <sch_dir_lib_source.h>
 
+
 //using namespace std;    // screws up Doxygen
 using namespace SCH;
 
@@ -55,7 +56,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
          note: "(lib_table" has already been read in.
     */
 
-    ELT_T   tok;
+    T tok;
 
     while( ( tok = in->NextTok() ) != T_RIGHT )
     {
@@ -339,7 +340,7 @@ bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
 }
 
 
-#if 1 && defined(DEBUG)
+#if 0 && defined(DEBUG)
 
 // build this with a Debug CMAKE_BUILD_TYPE
 

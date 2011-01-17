@@ -5,8 +5,7 @@
 #include "fctsys.h"
 #include "macros.h"
 
-using namespace DSN;    // enum TFIELD_T is in this namespace
-
+using namespace TFIELD_T;
 
 wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 {
@@ -48,7 +47,7 @@ void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const thr
 
 void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
 {
-    TFIELD_T    tok;
+    T    tok;
 
     in->NeedLEFT();     // begin (name ...)
 
@@ -97,9 +96,10 @@ void TEMPLATES::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ER
     out->Print( 0, ")\n" );
 }
 
+
 void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
 {
-    TFIELD_T        tok;
+    T  tok;
 
     while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {

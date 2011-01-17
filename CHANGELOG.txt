@@ -4,6 +4,19 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Jan-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * TokenList2DsnLexer.cmake now wraps each token enum in its own namespace. It
+    also no longer setup of the "using" directive in the header file, which was
+    bad behavior.  C++ enum values will have name collisions unless the enums
+    themselves are different namespaces.
+++new:
+  * Sweet library is now a DSO/DLL.
+  * Brought in SWIG to do a wrap of the Sweet DSO/DLL for unit testing
+    and scripting.  The SWIG DSO/DLLs are built separate from the Sweet DSO/DLL
+    and are also optional.
+
 2011-Jan-1 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++new:

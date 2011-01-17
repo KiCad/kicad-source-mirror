@@ -140,7 +140,7 @@ public:
     /// @param me = ja mir, the object getting stuffed, from its perspective
     void parsePart( PART* me )
     {
-        PART_T tok;
+        T tok;
 
 #if 0
         // Be flexible regarding the starting point of the stream.

@@ -38,7 +38,11 @@
 #
 # Invocation Parameters are:  enum, inputFile, outCppFile, outHeaderFile
 #
-#     enum       - Required, name of the enum to generate.
+#     enum       - Required, namespace in which the enum T will be placed.
+#                  Keep it short because from outside the class you want a short enum name
+#                  like enum::T.   Enums are contained in their own namespace to avoid
+#                  collisions on enum value names, a problem with C++ unless the enum
+#                  itself is in a separate namespace.
 #
 #     inputFile  - Required, name of the token list file, or "*.keywords" file.
 #                  Choose the basefilename carefully, it decides the class name
@@ -52,23 +56,8 @@
 #                  *.h lexfer file.  If not defined, the output path is the same
 #                  path as the token list file path, with a file name of *_lexer.h
 #
-# Example Usage from within a CMakeLists.txt file is shown below.  CMake itself
-# is invoked as a child process to execute this script and parameters are passed on
-# the command line, which is formulated as the "COMMAND" sequence below:
-#
-# add_custom_command(
-#     OUTPUT  ${CMAKE_BINARY_DIR}/cmp_library_lexer.h
-#             ${CMAKE_BINARY_DIR}/cmp_library_keywords.cpp
-#     COMMAND ${CMAKE_COMMAND}
-#             -Denum=YOURTOK_T
-#             -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-#             -DoutCppFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
-#             -DoutHeaderFile=${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
-#             -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
-#     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_{lexer.h,keywords.cpp}
-#         from ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords"
-# )
+# Use the max_lexer() CMake function from functions.cmake for invocation convenience.
+
 
 #message( STATUS "TokenList2DsnLexer.cmake" )    # indicate we are running
 
@@ -90,6 +79,9 @@ get_filename_component( outputPath "${inputFile}" PATH )
 get_filename_component( result "${inputFile}" NAME_WE )
 string( TOUPPER "${result}" RESULT )
 
+set( LEXERCLASS "${RESULT}_LEXER" )
+set( PARSERCLASS "${RESULT}_PARSER" )
+
 #message( "enum:'${enum}' result:'${result}' outputPath:'${outputPath}' inputFile:'${inputFile}'" )
 
 if( NOT DEFINED outCppFile )
@@ -101,7 +93,7 @@ if( NOT DEFINED outHeaderFile )
 endif()
 
 # Create tag for generating header file.
-set( headerTag "_${RESULT}_H_" )
+set( headerTag "${LEXERCLASS}_H_" )
 
 set( includeFileHeader
 "
@@ -114,26 +106,40 @@ set( includeFileHeader
 
 #include \"dsnlexer.h\"
 
-namespace DSN {
-
-enum ${enum} {
-
-    // these first few are negative special ones for syntax, and are
-    // inherited from DSNLEXER.
-    T_NONE = DSN_NONE,
-    T_COMMENT = DSN_COMMENT,
-    T_STRING_QUOTE = DSN_STRING_QUOTE,
-    T_QUOTE_DEF = DSN_QUOTE_DEF,
-    T_DASH = DSN_DASH,
-    T_SYMBOL = DSN_SYMBOL,
-    T_NUMBER = DSN_NUMBER,
-    T_RIGHT = DSN_RIGHT,    // right bracket, ')'
-    T_LEFT = DSN_LEFT,      // left bracket, '('
-    T_STRING = DSN_STRING,  // a quoted string, stripped of the quotes
-    T_EOF = DSN_EOF,        // special case for end of file
+/**
+ * C++ does not put enum _values_ in separate namespaces unless the enum itself
+ * is in a separate namespace.  All the token enums must be in separate namespaces
+ * otherwise the C++ compiler will eventually complain if it sees more than one
+ * DSNLEXER in the same compilation unit, say by mutliple header file inclusion.
+ * Plus this also enables re-use of the same enum name T.  A typedef can always be used
+ * to clarify which enum T is in play should that ever be a problem.  This is
+ * unlikely since Parse() functions will usually only be exposed to one header
+ * file like this one.  But if there is a problem, then use:
+ *   typedef ${enum}::T T;
+ * within that problem area.
+ */
+namespace ${enum}
+{
+    /// enum T contains all this lexer's tokens.
+    enum T
+    {
+        // these first few are negative special ones for syntax, and are
+        // inherited from DSNLEXER.
+        T_NONE          = DSN_NONE,
+        T_COMMENT       = DSN_COMMENT,
+        T_STRING_QUOTE  = DSN_STRING_QUOTE,
+        T_QUOTE_DEF     = DSN_QUOTE_DEF,
+        T_DASH          = DSN_DASH,
+        T_SYMBOL        = DSN_SYMBOL,
+        T_NUMBER        = DSN_NUMBER,
+        T_RIGHT         = DSN_RIGHT,        // right bracket: ')'
+        T_LEFT          = DSN_LEFT,         // left bracket:  '('
+        T_STRING        = DSN_STRING,       // a quoted string, stripped of the quotes
+        T_EOF           = DSN_EOF,          // special case for end of file
 
 "
 )
+
 
 set( sourceFileHeader
 "
@@ -146,11 +152,11 @@ set( sourceFileHeader
 
 #include \"${result}_lexer.h\"
 
-namespace DSN {
+using namespace ${enum};
 
 #define TOKDEF(x)    { #x, T_##x }
 
-const KEYWORD ${result}_keywords[] = {
+const KEYWORD ${LEXERCLASS}::keywords[] = {
 "
 )
 
@@ -193,9 +199,9 @@ set( lineCount 1 )
 
 foreach( token ${tokens} )
     if( lineCount EQUAL 1 )
-        file( APPEND "${outHeaderFile}" "    T_${token} = 0" )
+        file( APPEND "${outHeaderFile}" "        T_${token} = 0" )
     else( lineCount EQUAL 1 )
-        file( APPEND "${outHeaderFile}" "    T_${token}" )
+        file( APPEND "${outHeaderFile}" "        T_${token}" )
     endif( lineCount EQUAL 1 )
 
     file(APPEND "${outCppFile}" "    TOKDEF( ${token} )" )
@@ -211,35 +217,31 @@ foreach( token ${tokens} )
 endforeach( token ${tokens} )
 
 file( APPEND "${outHeaderFile}"
-"};
-
-extern const KEYWORD  ${result}_keywords[];
-extern const unsigned ${result}_keyword_count;
-
-}   // End namespace DSN
-
-using namespace DSN;    // enum ${enum} is in this namespace
+"    };
+}   // namespace ${enum}
 
 
 /**
- * Classs ${RESULT}_LEXER
+ * Class ${LEXERCLASS}
  * is an automatically generated class using the TokenList2DnsLexer.cmake
  * technology, based on keywords provided by file:
  *    ${inputFile}
  */
-class ${RESULT}_LEXER : public DSNLEXER
+class ${LEXERCLASS} : public DSNLEXER
 {
-public:
+    /// Auto generated lexer keywords table and length:
+    static const KEYWORD  keywords[];
+    static const unsigned keyword_count;
 
+public:
     /**
      * Constructor ( const std::string&, const wxString& )
      * @param aSExpression is (utf8) text possibly from the clipboard that you want to parse.
      * @param aSource is a description of the origin of @a aSExpression, such as a filename.
      *   If left empty, then _("clipboard") is used.
      */
-    ${RESULT}_LEXER( const std::string& aSExpression, const wxString& aSource = wxEmptyString ) :
-        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
-                  aSExpression, aSource )
+    ${LEXERCLASS}( const std::string& aSExpression, const wxString& aSource = wxEmptyString ) :
+        DSNLEXER( keywords, keyword_count, aSExpression, aSource )
     {
     }
 
@@ -252,9 +254,8 @@ public:
      * @param aFile is a FILE already opened for reading.
      * @param aFilename is the name of the opened file, needed for error reporting.
      */
-    ${RESULT}_LEXER( FILE* aFile, const wxString& aFilename ) :
-        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
-                  aFile, aFilename )
+    ${LEXERCLASS}( FILE* aFile, const wxString& aFilename ) :
+        DSNLEXER( keywords, keyword_count, aFile, aFilename )
     {
     }
 
@@ -269,9 +270,8 @@ public:
      * @param aLineReader is any subclassed instance of LINE_READER, such as
      *  STRING_LINE_READER or FILE_LINE_READER.  No ownership is taken of aLineReader.
      */
-    ${RESULT}_LEXER( LINE_READER* aLineReader ) :
-        DSNLEXER( DSN::${result}_keywords, DSN::${result}_keyword_count,
-                  aLineReader )
+    ${LEXERCLASS}( LINE_READER* aLineReader ) :
+        DSNLEXER( keywords, keyword_count, aLineReader )
     {
     }
 
@@ -282,12 +282,12 @@ public:
      * to aid in grammar debugging while running under a debugger, but leave
      * this lower level function returning an int (so the enum does not collide
      * with another usage).
-     * @return ${enum} - the type of token found next.
+     * @return ${enum}::T - the type of token found next.
      * @throw IO_ERROR - only if the LINE_READER throws it.
      */
-    ${enum} NextTok() throw( IO_ERROR )
+    ${enum}::T NextTok() throw( IO_ERROR )
     {
-        return (${enum}) DSNLEXER::NextTok();
+        return (${enum}::T) DSNLEXER::NextTok();
     }
 
     /**
@@ -298,9 +298,9 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
      */
-    ${enum} NeedSYMBOL() throw( IO_ERROR )
+    ${enum}::T NeedSYMBOL() throw( IO_ERROR )
     {
-        return (${enum}) DSNLEXER::NeedSYMBOL();
+        return (${enum}::T) DSNLEXER::NeedSYMBOL();
     }
 
     /**
@@ -311,41 +311,41 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    ${enum} NeedSYMBOLorNUMBER() throw( IO_ERROR )
+    ${enum}::T NeedSYMBOLorNUMBER() throw( IO_ERROR )
     {
-        return (${enum}) DSNLEXER::NeedSYMBOLorNUMBER();
+        return (${enum}::T) DSNLEXER::NeedSYMBOLorNUMBER();
     }
 
     /**
      * Function CurTok
      * returns whatever NextTok() returned the last time it was called.
      */
-    ${enum} CurTok()
+    ${enum}::T CurTok()
     {
-        return (${enum}) DSNLEXER::CurTok();
+        return (${enum}::T) DSNLEXER::CurTok();
     }
 
     /**
      * Function PrevTok
      * returns whatever NextTok() returned the 2nd to last time it was called.
      */
-    ${enum} PrevTok()
+    ${enum}::T PrevTok()
     {
-        return (${enum}) DSNLEXER::PrevTok();
+        return (${enum}::T) DSNLEXER::PrevTok();
     }
 };
 
 // example usage
 
 /**
- * Class ${RESULT}_PARSER
+ * Class ${LEXCLASS}_PARSER
  * holds data and functions pertinent to parsing a S-expression file .
  *
-class ${RESULT}_PARSER : public ${RESULT}_LEXER
+class ${PARSERCLASS} : public ${LEXERCLASS}
 {
 
 };
- */
+*/
 
 #endif   // ${headerTag}
 "
@@ -354,8 +354,7 @@ class ${RESULT}_PARSER : public ${RESULT}_LEXER
 file( APPEND "${outCppFile}"
 "};
 
-const unsigned ${result}_keyword_count = unsigned( sizeof( ${result}_keywords )/sizeof( ${result}_keywords[0] ) );
+const unsigned ${LEXERCLASS}::keyword_count = unsigned( sizeof( ${LEXERCLASS}::keywords )/sizeof( ${LEXERCLASS}::keywords[0] ) );
 
-}   // End namespace DSN
 "
 )

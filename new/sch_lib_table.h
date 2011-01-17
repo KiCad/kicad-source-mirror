@@ -29,7 +29,6 @@
 #include <boost/ptr_container/ptr_map.hpp>
 
 #include <sch_lib.h>
-//#include <sch_lpid.h>
 
 class SCH_LIB_TABLE_LEXER;      // outside namespace SCH, since make_lexer() Functions.cmake can't do namespace
 class OUTPUTFORMATTER;

@@ -9,9 +9,9 @@ if( STAND_ALONE )
     set( PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
     # Path to local CMake modules.
-    set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
+    set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 
-    include(CheckFindPackageResult)
+    include( CheckFindPackageResult )
 
     find_package(Doxygen)
 
@@ -60,51 +60,78 @@ endif()
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
-#=====<on standby until unit testing infrastructure>============================
+#=====<on standby for possible C++ unit testing>================================
 if( false )
 
-add_executable( test_dir_lib_source
-    sch_dir_lib_source.cpp
-    )
-target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
+    add_executable( test_dir_lib_source
+        sch_dir_lib_source.cpp
+        )
+    target_link_libraries( test_dir_lib_source ${wxWidgets_LIBRARIES} )
 
-add_executable( test_sch_part sch_part.cpp )
-target_link_libraries( test_sch_part ${wxWidgets_LIBRARIES} )
+    add_executable( test_sch_part sch_part.cpp )
+    target_link_libraries( test_sch_part ${wxWidgets_LIBRARIES} )
 
-add_executable( test_lpid
-    sch_lpid.cpp
-    )
-target_link_libraries( test_lpid ${wxWidgets_LIBRARIES} )
+    add_executable( test_lpid
+        sch_lpid.cpp
+        )
+    target_link_libraries( test_lpid ${wxWidgets_LIBRARIES} )
 
 endif( false )
 
-#=====</on standby until unit testing infrastructure>===========================
-
-add_executable( test_sch_lib_table
-    sch_lib_table.cpp
-    sch_lib_table_keywords.cpp
-    sch_lib.cpp
-    sch_lpid.cpp
-    filter_reader.cpp
-    sch_dir_lib_source.cpp
-    sch_part.cpp
-    sweet_keywords.cpp
-    ${PROJECT_SOURCE_DIR}/common/richio.cpp
-    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
-    )
-target_link_libraries( test_sch_lib_table ${wxWidgets_LIBRARIES} )
+#=====</on standby for possible C++ unit testing>===============================
 
 
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_keywords.cpp
-    ELT_T
+    LT
     )
 
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet_keywords.cpp
-    PART_T
+    PR
     )
+
+add_library( sweet SHARED
+    sch_lib_table.cpp
+    sch_lib_table_keywords.cpp
+    sch_lib.cpp
+    sch_lpid.cpp
+    sch_dir_lib_source.cpp
+    sch_part.cpp
+    sweet_keywords.cpp
+    ${PROJECT_SOURCE_DIR}/common/richio.cpp
+    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
+    )
+target_link_libraries( sweet ${wxWidgets_LIBRARIES} )
+
+
+#=====<USE_SWIG>============================================================
+# if you want a Python scripting layer on top for unit testing or driving.
+# reference: http://www.swig.org/Doc1.3/Introduction.html#Introduction_build_system
+
+option( USE_SWIG "Use SWIG to build a python scripting interface (default ON)." ON)
+if( USE_SWIG )
+
+    find_package( SWIG REQUIRED )
+    include( ${SWIG_USE_FILE} )
+
+    # first install "python-dev" linux package for this:
+    find_package( PythonLibs )
+    include_directories( ${PYTHON_INCLUDE_PATH} )
+
+    set( CMAKE_SWIG_FLAGS "" )
+
+    set_source_files_properties( sweet.i PROPERTIES CPLUSPLUS ON )
+    #set_source_files_properties( sweet.i PROPERTIES SWIG_FLAGS "-includeall" )
+
+    swig_add_module( sweet python sweet.i )
+    swig_link_libraries( sweet ${PYTHON_LIBRARIES} sweet )
+
+    # @todo need a separate interface for each DSNLEXER
+
+endif()
+
