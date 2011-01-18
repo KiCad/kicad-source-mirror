@@ -339,7 +339,11 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
     if( unit > m_UnitCount )
         unit = m_UnitCount;
 
-    if( DrawComponent->m_Flags )
+    int curr_flg = DrawComponent->m_Flags;
+    if( ! curr_flg )    // No command in progress: save in undo list
+        SaveCopyInUndoList( DrawComponent, UR_CHANGED );
+
+    if( curr_flg )
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
@@ -347,6 +351,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
     /* Update the unit number. */
     DrawComponent->SetUnitSelection( GetSheet(), unit );
     DrawComponent->SetUnit( unit );
+    DrawComponent->m_Flags = curr_flg;  // Restore m_Flag modified by SetUnit();
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags )

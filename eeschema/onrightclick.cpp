@@ -311,9 +311,14 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         for( ii = 0; ii < libComponent->GetPartCount(); ii++ )
         {
             wxString num_unit;
+            int unit = Component->GetUnit();
             num_unit.Printf( _( "Unit %d %c" ), ii + 1,
                              "?ABCDEFGHIJKLMNOPQRSTUVWXYZ"[ ii + 1 ] );
-            sel_unit_menu->Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit );
+            wxMenuItem * item = sel_unit_menu->Append( ID_POPUP_SCH_SELECT_UNIT1 + ii,
+                                                        num_unit, wxEmptyString,
+                                                        wxITEM_CHECK );
+            if( unit == ii + 1 )
+                item->Check(true);
         }
 
         ADD_MENUITEM_WITH_SUBMENU( editmenu, sel_unit_menu, ID_POPUP_SCH_SELECT_UNIT_CMP,

@@ -228,11 +228,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     if( !copyPanelToSelectedField() )
         return;
 
-    copyPanelToOptions();
-
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
+
+    copyPanelToOptions();
 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
