@@ -1,4 +1,4 @@
-#
+
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 #  Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
@@ -160,26 +160,33 @@ const KEYWORD ${LEXERCLASS}::keywords[] = {
 "
 )
 
-file( STRINGS ${inputFile} tmpTokens NO_HEX_CONVERSION )
+file( STRINGS ${inputFile} lines NO_HEX_CONVERSION )
 
-foreach( tmpToken ${tmpTokens} )
+foreach( line ${lines} )
     math( EXPR lineCount "${lineCount} + 1" )
 
-    string( STRIP tmpToken "${tmpToken}" )
+    # strip any comment from # to end of line
+    string( REGEX REPLACE "#.*$" "" tmpToken "${line}" )
+    string( STRIP "${tmpToken}" token )
 
     # Ignore empty lines.
-    if( tmpToken )
+    if( NOT token STREQUAL "" )           # if token is "off" simple if( token) does not work
         # Make sure token is valid.
-        string( REGEX MATCH "[a-z][_0-9a-z]*[0-9a-z]$" validToken "${tmpToken}" )
-        if( validToken STREQUAL tmpToken )
+
+        #message( "token=${token}" )
+
+        string( REGEX MATCH "[a-z][_0-9a-z]*" validToken "${token}" )
+        #message( "validToken=${validToken}" )
+
+        if( validToken STREQUAL token )
             list( APPEND tokens "${validToken}" )
-        else( validToken STREQUAL tmpToken )
+        else()
             message( FATAL_ERROR
                      "Invalid token string \"${tmpToken}\" at line ${lineCount} in file "
                      "<${inputFile}>." )
-        endif( validToken STREQUAL tmpToken )
-    endif( tmpToken )
-endforeach( tmpToken ${tmpTokens} )
+        endif()
+    endif()
+endforeach()
 
 list( SORT tokens )
 
@@ -190,7 +197,7 @@ list( LENGTH tokens tokensAfter )
 
 if( NOT ( tokensBefore EQUAL tokensAfter ) )
     message( FATAL_ERROR "Duplicate tokens found in file <${inputFile}>." )
-endif( NOT ( tokensBefore EQUAL tokensAfter ) )
+endif()
 
 file( WRITE "${outHeaderFile}" "${includeFileHeader}" )
 file( WRITE "${outCppFile}" "${sourceFileHeader}" )
@@ -214,7 +221,7 @@ foreach( token ${tokens} )
         file( APPEND "${outCppFile}" ",\n" )
     endif( lineCount EQUAL tokensAfter )
     math( EXPR lineCount "${lineCount} + 1" )
-endforeach( token ${tokens} )
+endforeach()
 
 file( APPEND "${outHeaderFile}"
 "    };
@@ -274,6 +281,12 @@ public:
         DSNLEXER( keywords, keyword_count, aLineReader )
     {
     }
+
+    /**
+     * Function TokenName
+     * returns the name of the token in ASCII form.
+     */
+    static const char* TokenName( ${enum}::T aTok );
 
     /**
      * Function NextTok
@@ -356,5 +369,23 @@ file( APPEND "${outCppFile}"
 
 const unsigned ${LEXERCLASS}::keyword_count = unsigned( sizeof( ${LEXERCLASS}::keywords )/sizeof( ${LEXERCLASS}::keywords[0] ) );
 
+
+const char* ${LEXERCLASS}::TokenName( T aTok )
+{
+    const char* ret;
+
+    if( (unsigned) aTok < keyword_count )
+    {
+        ret = keywords[aTok].name;
+    }
+    else if( aTok < 0 )
+    {
+        return DSNLEXER::Syntax( aTok );
+    }
+    else
+        ret = \"token too big\";
+
+    return ret;
+}
 "
 )

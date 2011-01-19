@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -60,441 +60,12 @@ namespace DSN {
 
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
-#define TOKDEF(x)    { #x, T_##x }
-
-// This MUST be sorted alphabetically, and the order of enum DSN_T {} be
-// identially alphabetized. These MUST all be lower case because of the
-// conversion to lowercase in findToken().
-const KEYWORD SPECCTRA_DB::keywords[] = {
-
-    // Note that TOKDEF(string_quote) has been moved to the
-    // DSNLEXER, and DSN_SYNTAX_T enum, and the string for it is "string_quote".
-
-    TOKDEF(absolute),
-    TOKDEF(added),
-    TOKDEF(add_group),
-    TOKDEF(add_pins),
-    TOKDEF(allow_antenna),
-    TOKDEF(allow_redundant_wiring),
-    TOKDEF(amp),
-    TOKDEF(ancestor),
-    TOKDEF(antipad),
-    TOKDEF(aperture_type),
-    TOKDEF(array),
-    TOKDEF(attach),
-    TOKDEF(attr),
-    TOKDEF(average_pair_length),
-    TOKDEF(back),
-    TOKDEF(base_design),
-    TOKDEF(bbv_ctr2ctr),
-    TOKDEF(bend_keepout),
-    TOKDEF(bond),
-    TOKDEF(both),
-    TOKDEF(bottom),
-    TOKDEF(bottom_layer_sel),
-    TOKDEF(boundary),
-    TOKDEF(brickpat),
-    TOKDEF(bundle),
-    TOKDEF(bus),
-    TOKDEF(bypass),
-    TOKDEF(capacitance_resolution),
-    TOKDEF(capacitor),
-    TOKDEF(case_sensitive),
-    TOKDEF(cct1),
-    TOKDEF(cct1a),
-    TOKDEF(center_center),
-    TOKDEF(checking_trim_by_pin),
-    TOKDEF(circ),
-    TOKDEF(circle),
-    TOKDEF(circuit),
-    TOKDEF(class),
-    TOKDEF(class_class),
-    TOKDEF(classes),
-    TOKDEF(clear),
-    TOKDEF(clearance),
-    TOKDEF(cluster),
-    TOKDEF(cm),
-    TOKDEF(color),
-    TOKDEF(colors),
-    TOKDEF(comment),
-    TOKDEF(comp),
-    TOKDEF(comp_edge_center),
-    TOKDEF(comp_order),
-    TOKDEF(component),
-    TOKDEF(composite),
-    TOKDEF(conductance_resolution),
-    TOKDEF(conductor),
-    TOKDEF(conflict),
-    TOKDEF(connect),
-    TOKDEF(constant),
-    TOKDEF(contact),
-    TOKDEF(control),
-    TOKDEF(corner),
-    TOKDEF(corners),
-    TOKDEF(cost),
-    TOKDEF(created_time),
-    TOKDEF(cross),
-    TOKDEF(crosstalk_model),
-    TOKDEF(current_resolution),
-    TOKDEF(delete_pins),
-    TOKDEF(deleted),
-    TOKDEF(deleted_keepout),
-    TOKDEF(delta),
-    TOKDEF(diagonal),
-    TOKDEF(direction),
-    TOKDEF(directory),
-    TOKDEF(discrete),
-    TOKDEF(effective_via_length),
-    TOKDEF(elongate_keepout),
-    TOKDEF(exclude),
-    TOKDEF(expose),
-    TOKDEF(extra_image_directory),
-    TOKDEF(family),
-    TOKDEF(family_family),
-    TOKDEF(family_family_spacing),
-    TOKDEF(fanout),
-    TOKDEF(farad),
-    TOKDEF(file),
-    TOKDEF(fit),
-    TOKDEF(fix),
-    TOKDEF(flip_style),
-    TOKDEF(floor_plan),
-    TOKDEF(footprint),
-    TOKDEF(forbidden),
-    TOKDEF(force_to_terminal_point),
-    TOKDEF(forgotten),
-    TOKDEF(free),
-    TOKDEF(fromto),
-    TOKDEF(front),
-    TOKDEF(front_only),
-    TOKDEF(gap),
-    TOKDEF(gate),
-    TOKDEF(gates),
-    TOKDEF(generated_by_freeroute),
-    TOKDEF(global),
-    TOKDEF(grid),
-    TOKDEF(group),
-    TOKDEF(group_set),
-    TOKDEF(guide),
-    TOKDEF(hard),
-    TOKDEF(height),
-    TOKDEF(high),
-    TOKDEF(history),
-    TOKDEF(horizontal),
-    TOKDEF(host_cad),
-    TOKDEF(host_version),
-    TOKDEF(image),
-    TOKDEF(image_conductor),
-    TOKDEF(image_image),
-    TOKDEF(image_image_spacing),
-    TOKDEF(image_outline_clearance),
-    TOKDEF(image_set),
-    TOKDEF(image_type),
-    TOKDEF(inch),
-    TOKDEF(include),
-    TOKDEF(include_pins_in_crosstalk),
-    TOKDEF(inductance_resolution),
-    TOKDEF(insert),
-    TOKDEF(instcnfg),
-    TOKDEF(inter_layer_clearance),
-    TOKDEF(jumper),
-    TOKDEF(junction_type),
-    TOKDEF(keepout),
-    TOKDEF(kg),
-    TOKDEF(kohm),
-    TOKDEF(large),
-    TOKDEF(large_large),
-    TOKDEF(layer),
-    TOKDEF(layer_depth),
-    TOKDEF(layer_noise_weight),
-    TOKDEF(layer_pair),
-    TOKDEF(layer_rule),
-    TOKDEF(length),
-    TOKDEF(length_amplitude),
-    TOKDEF(length_factor),
-    TOKDEF(length_gap),
-    TOKDEF(library),
-    TOKDEF(library_out),
-    TOKDEF(limit),
-    TOKDEF(limit_bends),
-    TOKDEF(limit_crossing),
-    TOKDEF(limit_vias),
-    TOKDEF(limit_way),
-    TOKDEF(linear),
-    TOKDEF(linear_interpolation),
-    TOKDEF(load),
-    TOKDEF(lock_type),
-    TOKDEF(logical_part),
-    TOKDEF(logical_part_mapping),
-    TOKDEF(low),
-    TOKDEF(match_fromto_delay),
-    TOKDEF(match_fromto_length),
-    TOKDEF(match_group_delay),
-    TOKDEF(match_group_length),
-    TOKDEF(match_net_delay),
-    TOKDEF(match_net_length),
-    TOKDEF(max_delay),
-    TOKDEF(max_len),
-    TOKDEF(max_length),
-    TOKDEF(max_noise),
-    TOKDEF(max_restricted_layer_length),
-    TOKDEF(max_stagger),
-    TOKDEF(max_stub),
-    TOKDEF(max_total_delay),
-    TOKDEF(max_total_length),
-    TOKDEF(max_total_vias),
-    TOKDEF(medium),
-    TOKDEF(mhenry),
-    TOKDEF(mho),
-    TOKDEF(microvia),
-    TOKDEF(mid_driven),
-    TOKDEF(mil),
-    TOKDEF(min_gap),
-    TOKDEF(mirror),
-    TOKDEF(mirror_first),
-    TOKDEF(mixed),
-    TOKDEF(mm),
-    TOKDEF(negative_diagonal),
-    TOKDEF(net),
-    TOKDEF(net_number),
-    TOKDEF(net_out),
-    TOKDEF(net_pin_changes),
-    TOKDEF(nets),
-    TOKDEF(network),
-    TOKDEF(network_out),
-    TOKDEF(no),
-    TOKDEF(noexpose),
-    TOKDEF(noise_accumulation),
-    TOKDEF(noise_calculation),
-    TOKDEF(normal),
-    TOKDEF(object_type),
-    TOKDEF(off),
-    TOKDEF(off_grid),
-    TOKDEF(offset),
-    TOKDEF(on),
-    TOKDEF(open),
-    TOKDEF(opposite_side),
-    TOKDEF(order),
-    TOKDEF(orthogonal),
-    TOKDEF(outline),
-    TOKDEF(overlap),
-    TOKDEF(pad),
-    TOKDEF(pad_pad),
-    TOKDEF(padstack),
-    TOKDEF(pair),
-    TOKDEF(parallel),
-    TOKDEF(parallel_noise),
-    TOKDEF(parallel_segment),
-    TOKDEF(parser),
-    TOKDEF(part_library),
-    TOKDEF(path),
-    TOKDEF(pcb),
-    TOKDEF(permit_orient),
-    TOKDEF(permit_side),
-    TOKDEF(physical),
-    TOKDEF(physical_part_mapping),
-    TOKDEF(piggyback),
-    TOKDEF(pin),
-    TOKDEF(pin_allow),
-    TOKDEF(pin_cap_via),
-    TOKDEF(pin_via_cap),
-    TOKDEF(pin_width_taper),
-    TOKDEF(pins),
-    TOKDEF(pintype),
-    TOKDEF(place),
-    TOKDEF(place_boundary),
-    TOKDEF(place_control),
-    TOKDEF(place_keepout),
-    TOKDEF(place_rule),
-    TOKDEF(placement),
-    TOKDEF(plan),
-    TOKDEF(plane),
-    TOKDEF(pn),
-    TOKDEF(point),
-    TOKDEF(polyline_path),      // used by freerouting.com
-    TOKDEF(polygon),
-    TOKDEF(position),
-    TOKDEF(positive_diagonal),
-    TOKDEF(power),
-    TOKDEF(power_dissipation),
-    TOKDEF(power_fanout),
-    TOKDEF(prefix),
-    TOKDEF(primary),
-    TOKDEF(priority),
-    TOKDEF(property),
-    TOKDEF(protect),
-    TOKDEF(qarc),
-    TOKDEF(quarter),
-    TOKDEF(radius),
-    TOKDEF(ratio),
-    TOKDEF(ratio_tolerance),
-    TOKDEF(rect),
-    TOKDEF(reduced),
-    TOKDEF(region),
-    TOKDEF(region_class),
-    TOKDEF(region_class_class),
-    TOKDEF(region_net),
-    TOKDEF(relative_delay),
-    TOKDEF(relative_group_delay),
-    TOKDEF(relative_group_length),
-    TOKDEF(relative_length),
-    TOKDEF(reorder),
-    TOKDEF(reroute_order_viols),
-    TOKDEF(resistance_resolution),
-    TOKDEF(resistor),
-    TOKDEF(resolution),
-    TOKDEF(restricted_layer_length_factor),
-    TOKDEF(room),
-    TOKDEF(rotate),
-    TOKDEF(rotate_first),
-    TOKDEF(round),
-    TOKDEF(roundoff_rotation),
-    TOKDEF(route),
-    TOKDEF(route_to_fanout_only),
-    TOKDEF(routes),
-    TOKDEF(routes_include),
-    TOKDEF(rule),
-    TOKDEF(same_net_checking),
-    TOKDEF(sample_window),
-    TOKDEF(saturation_length),
-    TOKDEF(sec),
-    TOKDEF(secondary),
-    TOKDEF(self),
-    TOKDEF(sequence_number),
-    TOKDEF(session),
-    TOKDEF(set_color),
-    TOKDEF(set_pattern),
-    TOKDEF(shape),
-    TOKDEF(shield),
-    TOKDEF(shield_gap),
-    TOKDEF(shield_loop),
-    TOKDEF(shield_tie_down_interval),
-    TOKDEF(shield_width),
-    TOKDEF(side),
-    TOKDEF(signal),
-    TOKDEF(site),
-    TOKDEF(small),
-    TOKDEF(smd),
-    TOKDEF(snap),
-    TOKDEF(snap_angle),
-    TOKDEF(soft),
-    TOKDEF(source),
-    TOKDEF(space_in_quoted_tokens),
-    TOKDEF(spacing),
-    TOKDEF(spare),
-    TOKDEF(spiral_via),
-    TOKDEF(square),
-    TOKDEF(stack_via),
-    TOKDEF(stack_via_depth),
-    TOKDEF(standard),
-    TOKDEF(starburst),
-    TOKDEF(status),
-    TOKDEF(structure),
-    TOKDEF(structure_out),
-    TOKDEF(subgate),
-    TOKDEF(subgates),
-    TOKDEF(substituted),
-    TOKDEF(such),
-    TOKDEF(suffix),
-    TOKDEF(super_placement),
-    TOKDEF(supply),
-    TOKDEF(supply_pin),
-    TOKDEF(swapping),
-    TOKDEF(switch_window),
-    TOKDEF(system),
-    TOKDEF(tandem_noise),
-    TOKDEF(tandem_segment),
-    TOKDEF(tandem_shield_overhang),
-    TOKDEF(terminal),
-    TOKDEF(terminator),
-    TOKDEF(term_only),
-    TOKDEF(test),
-    TOKDEF(test_points),
-    TOKDEF(testpoint),
-    TOKDEF(threshold),
-    TOKDEF(time_length_factor),
-    TOKDEF(time_resolution),
-    TOKDEF(tjunction),
-    TOKDEF(tolerance),
-    TOKDEF(top),
-    TOKDEF(topology),
-    TOKDEF(total),
-    TOKDEF(track_id),
-    TOKDEF(turret),
-    TOKDEF(type),
-    TOKDEF(um),
-    TOKDEF(unassigned),
-    TOKDEF(unconnects),
-    TOKDEF(unit),
-    TOKDEF(up),
-    TOKDEF(use_array),
-    TOKDEF(use_layer),
-    TOKDEF(use_net),
-    TOKDEF(use_via),
-    TOKDEF(value),
-    TOKDEF(vertical),
-    TOKDEF(via),
-    TOKDEF(via_array_template),
-    TOKDEF(via_at_smd),
-    TOKDEF(via_keepout),
-    TOKDEF(via_number),
-    TOKDEF(via_rotate_first),
-    TOKDEF(via_site),
-    TOKDEF(via_size),
-    TOKDEF(virtual_pin),
-    TOKDEF(volt),
-    TOKDEF(voltage_resolution),
-    TOKDEF(was_is),
-    TOKDEF(way),
-    TOKDEF(weight),
-    TOKDEF(width),
-    TOKDEF(window),
-    TOKDEF(wire),
-    TOKDEF(wire_keepout),
-    TOKDEF(wires),
-    TOKDEF(wires_include),
-    TOKDEF(wiring),
-    TOKDEF(write_resolution),
-    TOKDEF(x),
-    TOKDEF(xy),
-    TOKDEF(y),
-};
-
-const unsigned SPECCTRA_DB::keywordCount = DIM(SPECCTRA_DB::keywords);
-
-
 //-----<SPECCTRA_DB>-------------------------------------------------
 
-const char* SPECCTRA_DB::TokenName( int aTok )
+
+const char* GetTokenText( T aTok )
 {
-    const char* ret;
-
-    if( (unsigned) aTok < keywordCount )
-    {
-        ret = keywords[aTok].name;
-    }
-    else if( aTok < 0 )
-    {
-        return DSNLEXER::Syntax( aTok );
-    }
-    else
-        ret = "token too big";
-
-    return ret;
-}
-
-const char* GetTokenText( int aTok )
-{
-    return SPECCTRA_DB::TokenName( aTok );
-}
-
-wxString SPECCTRA_DB::GetTokenString( int aTok )
-{
-    wxString    ret;
-
-    ret << wxT("'") << CONV_FROM_UTF8( GetTokenText(aTok) ) << wxT("'");
-
-    return ret;
+    return SPECCTRA_LEXER::TokenName( aTok );
 }
 
 void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
@@ -546,44 +117,24 @@ void SPECCTRA_DB::ThrowIOError( const wxChar* fmt, ... ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::expecting( const char* text ) throw( IO_ERROR )
-{
-    wxString    errText = CONV_FROM_UTF8( text );
-    lexer->Expecting( errText );
-}
-
-
-void SPECCTRA_DB::unexpected( const char* text ) throw( IO_ERROR )
-{
-    wxString    errText = CONV_FROM_UTF8( text );
-    lexer->Unexpected( errText );
-}
-
-
-DSN_T SPECCTRA_DB::nextTok()
-{
-    DSN_T   ret = (DSN_T) lexer->NextTok();
-    return ret;
-}
-
 void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id ) throw( IO_ERROR )
 {
-    DSN_T  tok;
+    T      tok;
 
     static const char pin_def[] = "<pin_reference>::=<component_id>-<pin_id>";
 
-    if( !isSymbol( (DSN_T) lexer->CurTok() ) )
-        expecting( pin_def );
+    if( !IsSymbol( (T) CurTok() ) )
+        Expecting( pin_def );
 
     // case for:  A12-14, i.e. no wrapping quotes.  This should be a single
     // token, so split it.
-    if( lexer->CurTok() != T_STRING )
+    if( CurTok() != T_STRING )
     {
-        const char* toktext = lexer->CurText();
+        const char* toktext = CurText();
         const char* dash    = strchr( toktext, '-' );
 
         if( !dash )
-            expecting( pin_def );
+            Expecting( pin_def );
 
         while( toktext != dash )
             *component_id += *toktext++;
@@ -597,21 +148,21 @@ void SPECCTRA_DB::readCOMPnPIN( std::string* component_id, std::string* pin_id )
     // quoted string:  "U12"-"14" or "U12"-14,  3 tokens in either case
     else
     {
-        *component_id = lexer->CurText();
+        *component_id = CurText();
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok!=T_DASH )
-            expecting( pin_def );
+            Expecting( pin_def );
 
-        nextTok();          // accept anything after the dash.
-        *pin_id = lexer->CurText();
+        NextTok();          // accept anything after the dash.
+        *pin_id = CurText();
     }
 }
 
 
 void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
 {
-    DSN_T tok;
+    T     tok;
 
     struct tm   mytime;
 
@@ -622,9 +173,9 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL
     };
 
-    needSYMBOL();       // month
+    NeedSYMBOL();       // month
 
-    const char* ptok = lexer->CurText();
+    const char* ptok = CurText();
 
     mytime.tm_mon = 0;      // remains if we don't find a month match.
     for( int m=0;  months[m];  ++m )
@@ -636,40 +187,40 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
         }
     }
 
-    tok = nextTok();    // day
+    tok = NextTok();    // day
     if( tok != T_NUMBER )
-        expecting( time_toks );
-    mytime.tm_mday = atoi( lexer->CurText() );
+        Expecting( time_toks );
+    mytime.tm_mday = atoi( CurText() );
 
-    tok = nextTok();    // hour
+    tok = NextTok();    // hour
     if( tok != T_NUMBER )
-        expecting( time_toks );
-    mytime.tm_hour = atoi( lexer->CurText() );
+        Expecting( time_toks );
+    mytime.tm_hour = atoi( CurText() );
 
     // : colon
-    needSYMBOL();
-    if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
-        expecting( time_toks );
+    NeedSYMBOL();
+    if( *CurText() != ':' || strlen( CurText() )!=1 )
+        Expecting( time_toks );
 
-    tok = nextTok();    // minute
+    tok = NextTok();    // minute
     if( tok != T_NUMBER )
-        expecting( time_toks );
-    mytime.tm_min = atoi( lexer->CurText() );
+        Expecting( time_toks );
+    mytime.tm_min = atoi( CurText() );
 
     // : colon
-    needSYMBOL();
-    if( *lexer->CurText() != ':' || strlen( lexer->CurText() )!=1 )
-        expecting( time_toks );
+    NeedSYMBOL();
+    if( *CurText() != ':' || strlen( CurText() )!=1 )
+        Expecting( time_toks );
 
-    tok = nextTok();    // second
+    tok = NextTok();    // second
     if( tok != T_NUMBER )
-        expecting( time_toks );
-    mytime.tm_sec = atoi( lexer->CurText() );
+        Expecting( time_toks );
+    mytime.tm_sec = atoi( CurText() );
 
-    tok = nextTok();    // year
+    tok = NextTok();    // year
     if( tok != T_NUMBER )
-        expecting( time_toks );
-    mytime.tm_year = atoi( lexer->CurText() ) - 1900;
+        Expecting( time_toks );
+    mytime.tm_year = atoi( CurText() ) - 1900;
 
     *time_stamp = mktime( &mytime );
 }
@@ -684,23 +235,19 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
         ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
     }
 
-    delete lexer;
-    lexer = 0;
+    PushReader( new FILE_LINE_READER( fp, filename ) );
 
-    lexer = new DSNLEXER( SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount, fp, filename );
+    if( NextTok() != T_LEFT )
+        Expecting( T_LEFT );
 
-    if( nextTok() != T_LEFT )
-        expecting( T_LEFT );
-
-    if( nextTok() != T_pcb )
-        expecting( T_pcb );
+    if( NextTok() != T_pcb )
+        Expecting( T_pcb );
 
     SetPCB( new PCB() );
 
     doPCB( pcb );
 
-    delete lexer;       // close the file.
-    lexer = 0;
+    delete PopReader();     // close fp
 }
 
 
@@ -713,28 +260,25 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
         ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
     }
 
-    delete lexer;
+    PushReader( new FILE_LINE_READER( fp, filename ) );
 
-    lexer = new DSNLEXER( SPECCTRA_DB::keywords, SPECCTRA_DB::keywordCount, fp, filename );
+    if( NextTok() != T_LEFT )
+        Expecting( T_LEFT );
 
-    if( nextTok() != T_LEFT )
-        expecting( T_LEFT );
-
-    if( nextTok() != T_session )
-        expecting( T_session );
+    if( NextTok() != T_session )
+        Expecting( T_session );
 
     SetSESSION( new SESSION() );
 
     doSESSION( session );
 
-    delete lexer;       // close the file.
-    lexer = 0;
+    delete PopReader();      // close fp
 }
 
 
 void SPECCTRA_DB::doPCB( PCB* growth ) throw( IO_ERROR )
 {
-    DSN_T tok;
+    T     tok;
 
     /*  <design_descriptor >::=
         (pcb <pcb_id >
@@ -759,87 +303,87 @@ void SPECCTRA_DB::doPCB( PCB* growth ) throw( IO_ERROR )
         )
     */
 
-    needSYMBOL();
-    growth->pcbname = lexer->CurText();
+    NeedSYMBOL();
+    growth->pcbname = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_parser:
             if( growth->parser )
-                unexpected( tok );
+                Unexpected( tok );
             growth->parser = new PARSER( growth );
             doPARSER( growth->parser );
             break;
 
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
 
         case T_resolution:
             if( growth->resolution )
-                unexpected( tok );
+                Unexpected( tok );
             growth->resolution = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->resolution );
             break;
 
         case T_structure:
             if( growth->structure )
-                unexpected( tok );
+                Unexpected( tok );
             growth->structure = new STRUCTURE( growth );
             doSTRUCTURE( growth->structure );
             break;
 
         case T_placement:
             if( growth->placement )
-                unexpected( tok );
+                Unexpected( tok );
             growth->placement = new PLACEMENT( growth );
             doPLACEMENT( growth->placement );
             break;
 
         case T_library:
             if( growth->library )
-                unexpected( tok );
+                Unexpected( tok );
             growth->library = new LIBRARY( growth );
             doLIBRARY( growth->library );
             break;
 
         case T_network:
             if( growth->network )
-                unexpected( tok );
+                Unexpected( tok );
             growth->network = new NETWORK( growth );
             doNETWORK( growth->network );
             break;
 
         case T_wiring:
             if( growth->wiring )
-                unexpected( tok );
+                Unexpected( tok );
             growth->wiring = new WIRING( growth );
             doWIRING( growth->wiring );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok != T_EOF )
-        expecting( T_EOF );
+        Expecting( T_EOF );
 }
 
 
 void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IO_ERROR )
 {
-    DSN_T       tok;
+    T           tok;
     std::string const1;
     std::string const2;
 
@@ -859,69 +403,69 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_STRING_QUOTE:
-            tok = nextTok();
+            tok = NextTok();
             if( tok != T_QUOTE_DEF )
-                expecting( T_QUOTE_DEF );
-            lexer->SetStringDelimiter( (unsigned char) *lexer->CurText() );
-            growth->string_quote = *lexer->CurText();
-            quote_char = lexer->CurText();
-            needRIGHT();
+                Expecting( T_QUOTE_DEF );
+            SetStringDelimiter( (unsigned char) *CurText() );
+            growth->string_quote = *CurText();
+            quote_char = CurText();
+            NeedRIGHT();
             break;
 
         case T_space_in_quoted_tokens:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
-            lexer->SetSpaceInQuotedTokens( tok==T_on );
+                Expecting( "on|off" );
+            SetSpaceInQuotedTokens( tok==T_on );
             growth->space_in_quoted_tokens = (tok==T_on);
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_host_cad:
-            needSYMBOL();
-            growth->host_cad = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->host_cad = CurText();
+            NeedRIGHT();
             break;
 
         case T_host_version:
-            needSYMBOLorNUMBER();
-            growth->host_version = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOLorNUMBER();
+            growth->host_version = CurText();
+            NeedRIGHT();
             break;
 
         case T_constant:
-            needSYMBOLorNUMBER();
-            const1 = lexer->CurText();
-            needSYMBOLorNUMBER();
-            const2 = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOLorNUMBER();
+            const1 = CurText();
+            NeedSYMBOLorNUMBER();
+            const2 = CurText();
+            NeedRIGHT();
             growth->constants.push_back( const1 );
             growth->constants.push_back( const2 );
             break;
 
         case T_write_resolution:   // [(writee_resolution {<character> <positive_integer >})]
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
                 if( tok!=T_SYMBOL )
-                    expecting( T_SYMBOL );
-                tok = nextTok();
+                    Expecting( T_SYMBOL );
+                tok = NextTok();
                 if( tok!=T_NUMBER )
-                    expecting( T_NUMBER );
+                    Expecting( T_NUMBER );
                 // @todo
             }
             break;
 
         case T_routes_include:  // [(routes_include {[testpoint | guides | image_conductor]})]
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
                 switch( tok )
                 {
@@ -935,42 +479,42 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IO_ERROR )
                     growth->routes_include_image_conductor = true;
                     break;
                 default:
-                    expecting( "testpoint|guides|image_conductor" );
+                    Expecting( "testpoint|guides|image_conductor" );
                 }
             }
             break;
 
         case T_wires_include:   // [(wires_include testpoint)]
-            tok = nextTok();
+            tok = NextTok();
             if( tok != T_testpoint )
-                expecting( T_testpoint );
+                Expecting( T_testpoint );
             growth->routes_include_testpoint = true;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_case_sensitive:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->case_sensitive = (tok==T_on);
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_via_rotate_first:    // [(via_rotate_first [on | off])]
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->via_rotate_first = (tok==T_on);
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_generated_by_freeroute:
             growth->generated_by_freeroute = true;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -978,7 +522,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     switch( tok )
     {
@@ -990,22 +534,22 @@ void SPECCTRA_DB::doRESOLUTION( UNIT_RES* growth ) throw( IO_ERROR )
         growth->units = tok;
         break;
     default:
-        expecting( "inch|mil|cm|mm|um" );
+        Expecting( "inch|mil|cm|mm|um" );
     }
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok != T_NUMBER )
-        expecting( T_NUMBER );
+        Expecting( T_NUMBER );
 
-    growth->value = atoi( lexer->CurText() );
+    growth->value = atoi( CurText() );
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     switch( tok )
     {
@@ -1017,40 +561,40 @@ void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw( IO_ERROR )
         growth->units = tok;
         break;
     default:
-        expecting( "inch|mil|cm|mm|um" );
+        Expecting( "inch|mil|cm|mm|um" );
     }
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR )
 {
-    needSYMBOL();
-    growth->layer_id0 = lexer->CurText();
+    NeedSYMBOL();
+    growth->layer_id0 = CurText();
 
-    needSYMBOL();
-    growth->layer_id1 = lexer->CurText();
+    NeedSYMBOL();
+    growth->layer_id1 = CurText();
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->layer_weight = strtod( lexer->CurText(), 0 );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->layer_weight = strtod( CurText(), 0 );
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        if( nextTok() != T_layer_pair )
-            expecting( T_layer_pair );
+        if( NextTok() != T_layer_pair )
+            Expecting( T_layer_pair );
 
         LAYER_PAIR* layer_pair = new LAYER_PAIR( growth );
         growth->layer_pairs.push_back( layer_pair );
@@ -1061,33 +605,33 @@ void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth ) throw( IO_E
 
 void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
 
         case T_resolution:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->unit );
             break;
 
         case T_layer_noise_weight:
             if( growth->layer_noise_weight )
-                unexpected( tok );
+                Unexpected( tok );
             growth->layer_noise_weight = new LAYER_NOISE_WEIGHT( growth );
             doLAYER_NOISE_WEIGHT( growth->layer_noise_weight );
             break;
@@ -1095,7 +639,7 @@ void SPECCTRA_DB::doSTRUCTURE( STRUCTURE* growth ) throw( IO_ERROR )
         case T_place_boundary:
 L_place:
             if( growth->place_boundary )
-                unexpected( tok );
+                Unexpected( tok );
             growth->place_boundary = new BOUNDARY( growth, T_place_boundary );
             doBOUNDARY( growth->place_boundary );
             break;
@@ -1104,7 +648,7 @@ L_place:
             if( growth->boundary )
             {
                 if( growth->place_boundary )
-                    unexpected( tok );
+                    Unexpected( tok );
                 goto L_place;
             }
             growth->boundary = new BOUNDARY( growth );
@@ -1134,14 +678,14 @@ L_place:
 
         case T_via:
             if( growth->via )
-                unexpected( tok );
+                Unexpected( tok );
             growth->via = new VIA( growth );
             doVIA( growth->via );
             break;
 
         case T_control:
             if( growth->control )
-                unexpected( tok );
+                Unexpected( tok );
             growth->control = new CONTROL( growth );
             doCONTROL( growth->control );
             break;
@@ -1155,14 +699,14 @@ L_place:
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         case T_place_rule:
             if( growth->place_rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
@@ -1187,7 +731,7 @@ L_place:
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -1203,14 +747,14 @@ void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR )
         )
     */
 
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     while( tok != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_layer:
@@ -1222,72 +766,72 @@ void SPECCTRA_DB::doSTRUCTURE_OUT( STRUCTURE_OUT* growth ) throw( IO_ERROR )
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
     }
 }
 
 
 void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
-    if( isSymbol(tok) )
+    if( IsSymbol(tok) )
     {
-        growth->name = lexer->CurText();
-        tok = nextTok();
+        growth->name = CurText();
+        tok = NextTok();
     }
 
     if( tok!=T_LEFT )
-        expecting( T_LEFT );
+        Expecting( T_LEFT );
 
     while( tok != T_RIGHT )
     {
         if( tok!=T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_sequence_number:
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->sequence_number = atoi( lexer->CurText() );
-            needRIGHT();
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->sequence_number = atoi( CurText() );
+            NeedRIGHT();
             break;
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         case T_place_rule:
             if( growth->place_rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
 
         case T_rect:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
 
         case T_circle:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
@@ -1297,14 +841,14 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR )
         case T_path:
         case T_polygon:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
 
         case T_qarc:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new QARC( growth );
             doQARC( (QARC*) growth->shape );
             break;
@@ -1317,36 +861,36 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
     }
 }
 
 
 void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     while( tok != T_RIGHT )
     {
         if( tok!=T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_rect:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
 
         case T_circle:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
@@ -1356,267 +900,267 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IO_ERROR )
         case T_path:
         case T_polygon:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
 
         case T_qarc:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new QARC( growth );
             doQARC( (QARC*) growth->shape );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
     }
 }
 
 
 void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     if( tok != T_LEFT )
-        expecting( T_LEFT );
+        Expecting( T_LEFT );
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok == T_rect )
     {
         if( growth->paths.size() )
-            unexpected( "rect when path already encountered" );
+            Unexpected( "rect when path already encountered" );
 
         growth->rectangle = new RECTANGLE( growth );
         doRECTANGLE( growth->rectangle );
-        needRIGHT();
+        NeedRIGHT();
     }
     else if( tok == T_path )
     {
         if( growth->rectangle )
-            unexpected( "path when rect already encountered" );
+            Unexpected( "path when rect already encountered" );
 
         for(;;)
         {
             if( tok != T_path )
-                expecting( T_path );
+                Expecting( T_path );
 
             PATH* path = new PATH( growth, T_path ) ;
             growth->paths.push_back( path );
 
             doPATH( path );
 
-            tok = nextTok();
+            tok = NextTok();
             if( tok == T_RIGHT )
                 break;
 
             if( tok != T_LEFT )
-                expecting(T_LEFT);
+                Expecting(T_LEFT);
 
-            tok = nextTok();
+            tok = NextTok();
         }
     }
     else
-        expecting( "rect|path" );
+        Expecting( "rect|path" );
 }
 
 
 void SPECCTRA_DB::doPATH( PATH* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
-    if( !isSymbol( tok ) )
-        expecting( "layer_id" );
+    if( !IsSymbol( tok ) )
+        Expecting( "layer_id" );
 
-    growth->layer_id = lexer->CurText();
+    growth->layer_id = CurText();
 
-    if( nextTok() != T_NUMBER )
-        expecting( "aperture_width" );
+    if( NextTok() != T_NUMBER )
+        Expecting( "aperture_width" );
 
-    growth->aperture_width = strtod( lexer->CurText(), NULL );
+    growth->aperture_width = strtod( CurText(), NULL );
 
     POINT   ptTemp;
 
-    tok = nextTok();
+    tok = NextTok();
 
     do
     {
         if( tok != T_NUMBER )
-            expecting( T_NUMBER );
-        ptTemp.x = strtod( lexer->CurText(), NULL );
+            Expecting( T_NUMBER );
+        ptTemp.x = strtod( CurText(), NULL );
 
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        ptTemp.y = strtod( lexer->CurText(), NULL );
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        ptTemp.y = strtod( CurText(), NULL );
 
         growth->points.push_back( ptTemp );
 
-    } while( (tok = nextTok())!=T_RIGHT && tok!=T_LEFT );
+    } while( (tok = NextTok())!=T_RIGHT && tok!=T_LEFT );
 
     if( tok == T_LEFT )
     {
-        if( nextTok() != T_aperture_type )
-            expecting( T_aperture_type );
+        if( NextTok() != T_aperture_type )
+            Expecting( T_aperture_type );
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok!=T_round && tok!=T_square )
-            expecting( "round|square" );
+            Expecting( "round|square" );
 
         growth->aperture_type = tok;
 
-        needRIGHT();
+        NeedRIGHT();
     }
 }
 
 
 void SPECCTRA_DB::doRECTANGLE( RECTANGLE* growth ) throw( IO_ERROR )
 {
-    needSYMBOL();
-    growth->layer_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->layer_id = CurText();
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->point0.x = strtod( lexer->CurText(), NULL );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->point0.x = strtod( CurText(), NULL );
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->point0.y = strtod( lexer->CurText(), NULL );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->point0.y = strtod( CurText(), NULL );
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->point1.x = strtod( lexer->CurText(), NULL );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->point1.x = strtod( CurText(), NULL );
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->point1.y = strtod( lexer->CurText(), NULL );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->point1.y = strtod( CurText(), NULL );
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    needSYMBOL();
-    growth->layer_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->layer_id = CurText();
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->diameter = strtod( lexer->CurText(), 0 );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->diameter = strtod( CurText(), 0 );
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok == T_NUMBER )
     {
-        growth->vertex.x = strtod( lexer->CurText(), 0 );
+        growth->vertex.x = strtod( CurText(), 0 );
 
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        growth->vertex.y = strtod( lexer->CurText(), 0 );
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        growth->vertex.y = strtod( CurText(), 0 );
 
-        tok = nextTok();
+        tok = NextTok();
     }
 
     if( tok != T_RIGHT )
-        expecting( T_RIGHT );
+        Expecting( T_RIGHT );
 }
 
 
 void SPECCTRA_DB::doQARC( QARC* growth ) throw( IO_ERROR )
 {
-    needSYMBOL();
-    growth->layer_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->layer_id = CurText();
 
-    if( nextTok() != T_NUMBER )
-        expecting( T_NUMBER );
-    growth->aperture_width = strtod( lexer->CurText(), 0 );
+    if( NextTok() != T_NUMBER )
+        Expecting( T_NUMBER );
+    growth->aperture_width = strtod( CurText(), 0 );
 
     for( int i=0;  i<3;  ++i )
     {
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        growth->vertex[i].x = strtod( lexer->CurText(), 0 );
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        growth->vertex[i].x = strtod( CurText(), 0 );
 
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        growth->vertex[i].y = strtod( lexer->CurText(), 0 );
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        growth->vertex[i].y = strtod( CurText(), 0 );
     }
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doSTRINGPROP( STRINGPROP* growth ) throw( IO_ERROR )
 {
-    needSYMBOL();
-    growth->value = lexer->CurText();
-    needRIGHT();
+    NeedSYMBOL();
+    growth->value = CurText();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doTOKPROP( TOKPROP* growth ) throw( IO_ERROR )
 {
-    DSN_T tok = nextTok();
+    T     tok = NextTok();
 
     if( tok<0 )
-        unexpected( lexer->CurText() );
+        Unexpected( CurText() );
 
     growth->value = tok;
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doVIA( VIA* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok == T_LEFT )
         {
-            if( nextTok() != T_spare )
-                expecting( T_spare );
+            if( NextTok() != T_spare )
+                Expecting( T_spare );
 
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
-                if( !isSymbol( tok ) )
-                    expecting( T_SYMBOL );
+                if( !IsSymbol( tok ) )
+                    Expecting( T_SYMBOL );
 
-                growth->spares.push_back( lexer->CurText() );
+                growth->spares.push_back( CurText() );
             }
         }
-        else if( isSymbol( tok ) )
+        else if( IsSymbol( tok ) )
         {
-            growth->padstacks.push_back( lexer->CurText() );
+            growth->padstacks.push_back( CurText() );
         }
         else
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
     }
 }
 
 
 void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_via_at_smd:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->via_at_smd = (tok==T_on);
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_off_grid:
@@ -1640,7 +1184,7 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -1648,51 +1192,51 @@ void SPECCTRA_DB::doCONTROL( CONTROL* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doPROPERTIES( PROPERTIES* growth ) throw( IO_ERROR )
 {
-    DSN_T       tok;
+    T           tok;
     PROPERTY    property;  // construct it once here, append multiple times.
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        needSYMBOLorNUMBER();
-        property.name = lexer->CurText();
+        NeedSYMBOLorNUMBER();
+        property.name = CurText();
 
-        needSYMBOLorNUMBER();
-        property.value = lexer->CurText();
+        NeedSYMBOLorNUMBER();
+        property.value = CurText();
 
         growth->push_back( property );
 
-        needRIGHT();
+        NeedRIGHT();
     }
 }
 
 
 void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
-    if( !isSymbol(tok) )
-        expecting(T_SYMBOL);
+    if( !IsSymbol(tok) )
+        Expecting(T_SYMBOL);
 
-    growth->name = lexer->CurText();
+    growth->name = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_signal && tok!=T_power && tok!=T_mixed && tok!=T_jumper )
-                expecting( "signal|power|mixed|jumper" );
+                Expecting( "signal|power|mixed|jumper" );
             growth->layer_type = tok;
-            if( nextTok()!=T_RIGHT )
-                expecting(T_RIGHT);
+            if( NextTok()!=T_RIGHT )
+                Expecting(T_RIGHT);
             break;
 
         case T_rule:
@@ -1705,7 +1249,7 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IO_ERROR )
             break;
 
         case T_direction:
-            tok = nextTok();
+            tok = NextTok();
             switch( tok )
             {
             case T_horizontal:
@@ -1719,24 +1263,24 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IO_ERROR )
                 break;
             default:
                 // the spec has an example show an abbreviation of the "horizontal" keyword.  Ouch.
-                if( !strcmp( "hori", lexer->CurText() ) )
+                if( !strcmp( "hori", CurText() ) )
                 {
                     growth->direction = T_horizontal;
                     break;
                 }
-                else if( !strcmp( "vert", lexer->CurText() ) )
+                else if( !strcmp( "vert", CurText() ) )
                 {
                     growth->direction = T_vertical;
                     break;
                 }
-                expecting( "horizontal|vertical|orthogonal|positive_diagonal|negative_diagonal|diagonal|off" );
+                Expecting( "horizontal|vertical|orthogonal|positive_diagonal|negative_diagonal|diagonal|off" );
             }
-            if( nextTok()!=T_RIGHT )
-                expecting(T_RIGHT);
+            if( NextTok()!=T_RIGHT )
+                Expecting(T_RIGHT);
             break;
 
         case T_cost:
-            tok = nextTok();
+            tok = NextTok();
             switch( tok )
             {
             case T_forbidden:
@@ -1748,44 +1292,44 @@ void SPECCTRA_DB::doLAYER( LAYER* growth ) throw( IO_ERROR )
                 break;
             case T_NUMBER:
                 // store as negative so we can differentiate between
-                // DSN_T (positive) and T_NUMBER (negative)
-                growth->cost = -atoi( lexer->CurText() );
+                // T     (positive) and T_NUMBER (negative)
+                growth->cost = -atoi( CurText() );
                 break;
             default:
-                expecting( "forbidden|high|medium|low|free|<positive_integer>|-1" );
+                Expecting( "forbidden|high|medium|low|free|<positive_integer>|-1" );
             }
-            tok = nextTok();
+            tok = NextTok();
             if( tok == T_LEFT )
             {
-                if( nextTok() != T_type )
-                    unexpected( lexer->CurText() );
+                if( NextTok() != T_type )
+                    Unexpected( CurText() );
 
-                tok = nextTok();
+                tok = NextTok();
                 if( tok!=T_length && tok!=T_way )
-                    expecting( "length|way" );
+                    Expecting( "length|way" );
 
                 growth->cost_type = tok;
-                if( nextTok()!=T_RIGHT )
-                    expecting(T_RIGHT);
+                if( NextTok()!=T_RIGHT )
+                    Expecting(T_RIGHT);
 
-                tok = nextTok();
+                tok = NextTok();
             }
             if( tok!=T_RIGHT )
-                expecting(T_RIGHT);
+                Expecting(T_RIGHT);
             break;
 
         case T_use_net:
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
-                if( !isSymbol(tok) )
-                    expecting( T_SYMBOL );
+                if( !IsSymbol(tok) )
+                    Expecting( T_SYMBOL );
 
-                growth->use_net.push_back( lexer->CurText() );
+                growth->use_net.push_back( CurText() );
             }
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -1795,11 +1339,11 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IO_ERROR )
 {
     std::string     builder;
     int             bracketNesting = 1; // we already saw the opening T_LEFT
-    DSN_T           tok = T_NONE;
+    T               tok = T_NONE;
 
     while( bracketNesting!=0 && tok!=T_EOF )
     {
-        tok = nextTok();
+        tok = NextTok();
 
         if( tok==T_LEFT)
             ++bracketNesting;
@@ -1809,13 +1353,13 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IO_ERROR )
 
         if( bracketNesting >= 1 )
         {
-            if( lexer->PrevTok()!=T_LEFT && tok!=T_RIGHT && (tok!=T_LEFT || bracketNesting>2) )
+            if( PrevTok()!=T_LEFT && tok!=T_RIGHT && (tok!=T_LEFT || bracketNesting>2) )
                 builder += ' ';
 
             if( tok==T_STRING )
                 builder += quote_char;
 
-            builder += lexer->CurText();
+            builder += CurText();
 
             if( tok==T_STRING )
                 builder += quote_char;
@@ -1832,7 +1376,7 @@ void SPECCTRA_DB::doRULE( RULE* growth ) throw( IO_ERROR )
     }
 
     if( tok==T_EOF )
-        unexpected( T_EOF );
+        Unexpected( T_EOF );
 }
 
 
@@ -1847,16 +1391,16 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
          )
     */
 
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     if( tok!=T_LEFT )
-        expecting( T_LEFT );
+        Expecting( T_LEFT );
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok==T_object_type )
     {
         if( !expect_object_type )
-            unexpected( tok );
+            Unexpected( tok );
 
         /*  [(object_type
               [pcb |
@@ -1865,7 +1409,7 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
             )]
         */
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_pcb:
@@ -1873,7 +1417,7 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
             break;
 
         case T_image_set:
-            tok = nextTok();
+            tok = NextTok();
             switch( tok )
             {
             case T_large:
@@ -1884,34 +1428,34 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
                 growth->object_type = tok;
                 break;
             default:
-                unexpected( lexer->CurText() );
+                Unexpected( CurText() );
             }
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok == T_LEFT )
         {
-            tok = nextTok();
+            tok = NextTok();
             if( tok != T_image_type )
-                expecting( T_image_type );
+                Expecting( T_image_type );
 
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_smd && tok!=T_pin )
-                expecting( "smd|pin" );
+                Expecting( "smd|pin" );
 
-            needRIGHT();
+            NeedRIGHT();
 
-            tok = nextTok();
+            tok = NextTok();
         }
 
         if( tok != T_RIGHT )
-            expecting( T_RIGHT );
+            Expecting( T_RIGHT );
 
-        tok = nextTok();
+        tok = NextTok();
     }
 
     /*  {[<spacing_descriptor> |
@@ -1925,32 +1469,32 @@ void SPECCTRA_DB::doPLACE_RULE( PLACE_RULE* growth, bool expect_object_type ) th
 
 void SPECCTRA_DB::doREGION( REGION* growth ) throw( IO_ERROR )
 {
-    DSN_T tok = nextTok();
+    T     tok = NextTok();
 
-    if( isSymbol(tok) )
+    if( IsSymbol(tok) )
     {
-        growth->region_id = lexer->CurText();
-        tok = nextTok();
+        growth->region_id = CurText();
+        tok = NextTok();
     }
 
     for(;;)
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_rect:
             if( growth->rectangle )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rectangle = new RECTANGLE( growth );
             doRECTANGLE( growth->rectangle );
             break;
 
         case T_polygon:
             if( growth->polygon )
-                unexpected( tok );
+                Unexpected( tok );
             growth->polygon = new PATH( growth, T_polygon );
             doPATH( growth->polygon );
             break;
@@ -1972,20 +1516,20 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IO_ERROR )
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok == T_RIGHT )
         {
             if( !growth->rules )
-                expecting( T_rule );
+                Expecting( T_rule );
             break;
         }
     }
@@ -1994,18 +1538,18 @@ void SPECCTRA_DB::doREGION( REGION* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     if( tok != T_LEFT )
-        expecting( T_LEFT );
+        Expecting( T_LEFT );
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         switch( tok )
         {
         case T_classes:
             if( growth->classes )
-                unexpected( tok );
+                Unexpected( tok );
             growth->classes = new CLASSES( growth );
             doCLASSES( growth->classes );
             break;
@@ -2013,7 +1557,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
         case T_rule:
             // only T_class_class takes a T_rule
             if( growth->Type() == T_region_class_class )
-                unexpected( tok );
+                Unexpected( tok );
             RULE* rule;
             rule = new RULE( growth, T_rule );
             growth->Append( rule );
@@ -2023,7 +1567,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
         case T_layer_rule:
             // only T_class_class takes a T_layer_rule
             if( growth->Type() == T_region_class_class )
-                unexpected( tok );
+                Unexpected( tok );
             LAYER_RULE* layer_rule;
             layer_rule = new LAYER_RULE( growth );
             growth->Append( layer_rule );
@@ -2031,7 +1575,7 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( tok );
+            Unexpected( tok );
         }
     }
 }
@@ -2039,30 +1583,30 @@ void SPECCTRA_DB::doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doCLASSES( CLASSES* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     // require at least 2 class_ids
 
-    if( !isSymbol( tok ) )
-        expecting( "class_id" );
+    if( !IsSymbol( tok ) )
+        Expecting( "class_id" );
 
-    growth->class_ids.push_back( lexer->CurText() );
+    growth->class_ids.push_back( CurText() );
 
     do
     {
-        tok = nextTok();
-        if( !isSymbol( tok ) )
-            expecting( "class_id" );
+        tok = NextTok();
+        if( !IsSymbol( tok ) )
+            Expecting( "class_id" );
 
-        growth->class_ids.push_back( lexer->CurText() );
+        growth->class_ids.push_back( CurText() );
 
-    } while( (tok = nextTok()) != T_RIGHT );
+    } while( (tok = NextTok()) != T_RIGHT );
 }
 
 
 void SPECCTRA_DB::doGRID( GRID* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     switch( tok )
     {
@@ -2072,194 +1616,194 @@ void SPECCTRA_DB::doGRID( GRID* growth ) throw( IO_ERROR )
     case T_snap:
     case T_place:
         growth->grid_type = tok;
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        growth->dimension = strtod( lexer->CurText(), 0 );
-        tok = nextTok();
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        growth->dimension = strtod( CurText(), 0 );
+        tok = NextTok();
         if( tok == T_LEFT )
         {
-            while( (tok=nextTok()) != T_RIGHT )
+            while( (tok=NextTok()) != T_RIGHT )
             {
                 if( tok==T_direction )
                 {
                     if( growth->grid_type == T_place )
-                        unexpected( tok );
-                    tok = nextTok();
+                        Unexpected( tok );
+                    tok = NextTok();
                     if( tok!=T_x && tok!=T_y )
-                        unexpected( lexer->CurText() );
+                        Unexpected( CurText() );
                     growth->direction = tok;
-                    if( nextTok() != T_RIGHT )
-                        expecting(T_RIGHT);
+                    if( NextTok() != T_RIGHT )
+                        Expecting(T_RIGHT);
                 }
                 else if( tok==T_offset )
                 {
                     if( growth->grid_type == T_place )
-                        unexpected( tok );
+                        Unexpected( tok );
 
-                    if( nextTok() != T_NUMBER )
-                        expecting( T_NUMBER );
+                    if( NextTok() != T_NUMBER )
+                        Expecting( T_NUMBER );
 
-                    growth->offset = strtod( lexer->CurText(), 0 );
+                    growth->offset = strtod( CurText(), 0 );
 
-                    if( nextTok() != T_RIGHT )
-                        expecting(T_RIGHT);
+                    if( NextTok() != T_RIGHT )
+                        Expecting(T_RIGHT);
                 }
                 else if( tok==T_image_type )
                 {
                     if( growth->grid_type != T_place )
-                        unexpected( tok );
-                    tok = nextTok();
+                        Unexpected( tok );
+                    tok = NextTok();
                     if( tok!=T_smd && tok!=T_pin )
-                        unexpected( lexer->CurText() );
+                        Unexpected( CurText() );
                     growth->image_type = tok;
-                    if( nextTok() != T_RIGHT )
-                        expecting(T_RIGHT);
+                    if( NextTok() != T_RIGHT )
+                        Expecting(T_RIGHT);
                 }
             }
         }
         break;
 
     default:
-        unexpected( tok );
+        Unexpected( tok );
     }
 }
 
 
 void SPECCTRA_DB::doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    needSYMBOL();
+    NeedSYMBOL();
 
     do
     {
-        growth->layer_ids.push_back( lexer->CurText() );
+        growth->layer_ids.push_back( CurText() );
 
-    }  while( isSymbol(tok = nextTok()) );
+    }  while( IsSymbol(tok = NextTok()) );
 
     if( tok != T_LEFT )
-        expecting( T_LEFT );
+        Expecting( T_LEFT );
 
-    if( nextTok() != T_rule )
-        expecting( T_rule );
+    if( NextTok() != T_rule )
+        Expecting( T_rule );
 
     growth->rule = new RULE( growth, T_rule );
     doRULE( growth->rule );
 
-    needRIGHT();
+    NeedRIGHT();
 }
 
 
 void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
-    if( !isSymbol( tok ) )
-        expecting( "component_id" );
+    if( !IsSymbol( tok ) )
+        Expecting( "component_id" );
 
-    growth->component_id = lexer->CurText();
+    growth->component_id = CurText();
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok == T_NUMBER )
     {
         POINT   point;
 
-        point.x = strtod( lexer->CurText(), 0 );
+        point.x = strtod( CurText(), 0 );
 
-        if( nextTok() != T_NUMBER )
-            expecting( T_NUMBER );
-        point.y = strtod( lexer->CurText(), 0 );
+        if( NextTok() != T_NUMBER )
+            Expecting( T_NUMBER );
+        point.y = strtod( CurText(), 0 );
 
         growth->SetVertex( point );
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok!=T_front && tok!=T_back )
-            expecting( "front|back" );
+            Expecting( "front|back" );
         growth->side = tok;
 
-        if( nextTok() != T_NUMBER )
-            expecting( "rotation" );
-        growth->SetRotation( strtod( lexer->CurText(), 0)  );
+        if( NextTok() != T_NUMBER )
+            Expecting( "rotation" );
+        growth->SetRotation( strtod( CurText(), 0)  );
     }
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_mirror:
-            tok = nextTok();
+            tok = NextTok();
             if( tok==T_x || tok==T_y || tok==T_xy || tok==T_off )
                 growth->mirror = tok;
             else
-                expecting("x|y|xy|off");
+                Expecting("x|y|xy|off");
             break;
 
         case T_status:
-            tok = nextTok();
+            tok = NextTok();
             if( tok==T_added || tok==T_deleted || tok==T_substituted )
                 growth->status = tok;
             else
-                expecting("added|deleted|substituted");
+                Expecting("added|deleted|substituted");
             break;
 
         case T_logical_part:
             if( growth->logical_part.size() )
-                unexpected( tok );
-            tok = nextTok();
-            if( !isSymbol( tok ) )
-                expecting( "logical_part_id");
-            growth->logical_part = lexer->CurText();
+                Unexpected( tok );
+            tok = NextTok();
+            if( !IsSymbol( tok ) )
+                Expecting( "logical_part_id");
+            growth->logical_part = CurText();
             break;
 
         case T_place_rule:
             if( growth->place_rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->place_rules = new RULE( growth, T_place_rule );
             doRULE( growth->place_rules );
             break;
 
         case T_property:
             if( growth->properties.size() )
-                unexpected( tok );
+                Unexpected( tok );
             doPROPERTIES( &growth->properties );
             break;
 
         case T_lock_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok==T_position || tok==T_gate || tok==T_subgate || tok==T_pin )
                 growth->lock_type = tok;
             else
-                expecting("position|gate|subgate|pin");
+                Expecting("position|gate|subgate|pin");
             break;
 
         case T_rule:
             if( growth->rules || growth->region )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         case T_region:
             if( growth->rules || growth->region )
-                unexpected( tok );
+                Unexpected( tok );
             growth->region = new REGION( growth );
             doREGION( growth->region );
             break;
 
         case T_pn:
             if( growth->part_number.size() )
-                unexpected( tok );
-            needSYMBOLorNUMBER();
-            growth->part_number = lexer->CurText();
-            needRIGHT();
+                Unexpected( tok );
+            NeedSYMBOLorNUMBER();
+            growth->part_number = CurText();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( tok );
+            Unexpected( tok );
         }
     }
 }
@@ -2267,18 +1811,18 @@ void SPECCTRA_DB::doPLACE( PLACE* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
-    if( !isSymbol( tok ) && tok != T_NUMBER )
-        expecting( "image_id" );
-    growth->image_id = lexer->CurText();
+    if( !IsSymbol( tok ) && tok != T_NUMBER )
+        Expecting( "image_id" );
+    growth->image_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_place:
@@ -2289,7 +1833,7 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected(tok);
+            Unexpected(tok);
         }
     }
 }
@@ -2297,11 +1841,11 @@ void SPECCTRA_DB::doCOMPONENT( COMPONENT* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
-    needLEFT();
+    NeedLEFT();
 
-    tok = nextTok();
+    tok = NextTok();
     if( tok==T_unit || tok==T_resolution )
     {
         growth->unit = new UNIT_RES( growth, tok );
@@ -2310,30 +1854,30 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR )
         else
             doUNIT( growth->unit );
 
-        if( nextTok() != T_LEFT )
-            expecting( T_LEFT );
-        tok = nextTok();
+        if( NextTok() != T_LEFT )
+            Expecting( T_LEFT );
+        tok = NextTok();
     }
 
     if( tok == T_place_control )
     {
-        if( nextTok() != T_LEFT )
-            expecting( T_LEFT );
+        if( NextTok() != T_LEFT )
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok != T_flip_style )
-            expecting( T_flip_style );
+            Expecting( T_flip_style );
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok==T_mirror_first || tok==T_rotate_first )
             growth->flip_style = tok;
         else
-            expecting("mirror_first|rotate_first");
+            Expecting("mirror_first|rotate_first");
 
-        needRIGHT();
-        needRIGHT();
-        needLEFT();
-        tok = nextTok();
+        NeedRIGHT();
+        NeedRIGHT();
+        NeedLEFT();
+        tok = NextTok();
     }
 
     while( tok == T_component )
@@ -2342,21 +1886,21 @@ void SPECCTRA_DB::doPLACEMENT( PLACEMENT* growth ) throw( IO_ERROR )
         growth->components.push_back( component );
         doCOMPONENT( component );
 
-        tok = nextTok();
+        tok = NextTok();
         if( tok == T_RIGHT )
             return;
 
         else if( tok == T_LEFT )
-            tok = nextTok();
+            tok = NextTok();
     }
 
-    unexpected( lexer->CurText() );
+    Unexpected( CurText() );
 }
 
 
 void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     /*  (padstack <padstack_id >
         [<unit_descriptor> ]
@@ -2373,40 +1917,40 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
     */
 
     // padstack_id may be a number
-    if( !isSymbol( tok ) && tok!=T_NUMBER )
-        expecting( "padstack_id" );
+    if( !IsSymbol( tok ) && tok!=T_NUMBER )
+        Expecting( "padstack_id" );
 
-    growth->padstack_id = lexer->CurText();
+    growth->padstack_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
 
         case T_rotate:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->rotate = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_absolute:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->absolute = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_shape:
@@ -2417,21 +1961,21 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
             break;
 
         case T_attach:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_off && tok!=T_on )
-                expecting( "off|on" );
+                Expecting( "off|on" );
             growth->attach = tok;
-            tok = nextTok();
+            tok = NextTok();
             if( tok == T_LEFT )
             {
-                if( nextTok() != T_use_via )
-                    expecting( T_use_via );
+                if( NextTok() != T_use_via )
+                    Expecting( T_use_via );
 
-                needSYMBOL();
-                growth->via_id = lexer->CurText();
+                NeedSYMBOL();
+                growth->via_id = CurText();
 
-                needRIGHT();
-                needRIGHT();
+                NeedRIGHT();
+                NeedRIGHT();
             }
             break;
 
@@ -2442,13 +1986,13 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2456,7 +2000,7 @@ void SPECCTRA_DB::doPADSTACK( PADSTACK* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  (shape <shape_descriptor>
          [<reduced_shape_descriptor> ]
@@ -2464,12 +2008,12 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IO_ERROR )
          [{<window_descriptor> }])
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_polyline_path:
@@ -2481,11 +2025,11 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth ) throw( IO_ERROR )
         case T_qarc:
 L_done_that:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             break;
         default:
             // the example in the spec uses "circ" instead of "circle".  Bad!
-            if( !strcmp( "circ", lexer->CurText() ) )
+            if( !strcmp( "circ", CurText() ) )
             {
                 tok = T_circle;
                 goto L_done_that;
@@ -2516,11 +2060,11 @@ L_done_that:
             break;
 
         case T_connect:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_on && tok!=T_off )
-                expecting( "on|off" );
+                Expecting( "on|off" );
             growth->connect = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_window:
@@ -2531,7 +2075,7 @@ L_done_that:
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2539,7 +2083,7 @@ L_done_that:
 
 void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     /*  <image_descriptor >::=
         (image <image_id >
@@ -2558,32 +2102,32 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
         )
     */
 
-    if( !isSymbol( tok ) && tok != T_NUMBER  )
-        expecting( "image_id" );
+    if( !IsSymbol( tok ) && tok != T_NUMBER  )
+        Expecting( "image_id" );
 
-    growth->image_id = lexer->CurText();
+    growth->image_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
 
         case T_side:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_front && tok!=T_back && tok!=T_both )
-                expecting( "front|back|both" );
+                Expecting( "front|back|both" );
             growth->side = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_outline:
@@ -2602,14 +2146,14 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, tok );
             doRULE( growth->rules );
             break;
 
         case T_place_rule:
             if( growth->place_rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->place_rules = new RULE( growth, tok );
             doRULE( growth->place_rules );
             break;
@@ -2627,7 +2171,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2635,7 +2179,7 @@ void SPECCTRA_DB::doIMAGE( IMAGE* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doPIN( PIN* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok = nextTok();
+    T       tok = NextTok();
 
     /*  (pin <padstack_id > [(rotate <rotation> )]
           [<reference_descriptor> | <pin_array_descriptor> ]
@@ -2643,38 +2187,38 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IO_ERROR )
     */
 
     // a padstack_id may be a number
-    if( !isSymbol( tok ) && tok!=T_NUMBER )
-        expecting( "padstack_id" );
+    if( !IsSymbol( tok ) && tok!=T_NUMBER )
+        Expecting( "padstack_id" );
 
-    growth->padstack_id = lexer->CurText();
+    growth->padstack_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok == T_LEFT )
         {
-            tok = nextTok();
+            tok = NextTok();
             if( tok != T_rotate )
-                expecting( T_rotate );
+                Expecting( T_rotate );
 
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->SetRotation( strtod( lexer->CurText(), 0 ) );
-            needRIGHT();
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->SetRotation( strtod( CurText(), 0 ) );
+            NeedRIGHT();
         }
         else
         {
-            if( !isSymbol(tok) && tok!=T_NUMBER )
-                expecting( "pin_id" );
+            if( !IsSymbol(tok) && tok!=T_NUMBER )
+                Expecting( "pin_id" );
 
-            growth->pin_id = lexer->CurText();
+            growth->pin_id = CurText();
 
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->vertex.x = strtod( lexer->CurText(), 0 );
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->vertex.x = strtod( CurText(), 0 );
 
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->vertex.y = strtod( lexer->CurText(), 0 );
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->vertex.y = strtod( CurText(), 0 );
         }
     }
 }
@@ -2682,7 +2226,7 @@ void SPECCTRA_DB::doPIN( PIN* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <library_descriptor >::=
         (library
@@ -2698,17 +2242,17 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
@@ -2728,7 +2272,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2736,7 +2280,7 @@ void SPECCTRA_DB::doLIBRARY( LIBRARY* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR )
 {
-    DSN_T       tok = nextTok();
+    T           tok = NextTok();
     PIN_REFS*   pin_refs;
 
     /*  <net_descriptor >::=
@@ -2760,29 +2304,29 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR )
         )
     */
 
-    if( !isSymbol( tok ) )
-        expecting( "net_id" );
+    if( !IsSymbol( tok ) )
+        Expecting( "net_id" );
 
-    growth->net_id = lexer->CurText();
+    growth->net_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unassigned:
             growth->unassigned = true;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_net_number:
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->net_number = atoi( lexer->CurText() );
-            needRIGHT();
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->net_number = atoi( CurText() );
+            NeedRIGHT();
             break;
 
         case T_pins:
@@ -2814,7 +2358,7 @@ void SPECCTRA_DB::doNET( NET* growth ) throw( IO_ERROR )
 L_pins:
             {
                 PIN_REF     empty( growth );
-                while( (tok = nextTok()) != T_RIGHT )
+                while( (tok = NextTok()) != T_RIGHT )
                 {
                     // copy the empty one, then fill its copy later thru pin_ref.
                     pin_refs->push_back( empty );
@@ -2828,17 +2372,17 @@ L_pins:
 
         case T_comp_order:
             if( growth->comp_order )
-                unexpected( tok );
+                Unexpected( tok );
             growth->comp_order = new COMP_ORDER( growth );
             doCOMP_ORDER( growth->comp_order );
             break;
 
         case T_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_fix && tok!=T_normal )
-                expecting( "fix|normal" );
+                Expecting( "fix|normal" );
             growth->type = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
 /* @todo
@@ -2848,7 +2392,7 @@ L_pins:
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
@@ -2868,7 +2412,7 @@ L_pins:
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2876,19 +2420,19 @@ L_pins:
 
 void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <topology_descriptor >::=
         (topology {[<fromto_descriptor> |
         <component_order_descriptor> ]})
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_fromto:
@@ -2906,7 +2450,7 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -2914,7 +2458,7 @@ void SPECCTRA_DB::doTOPOLOGY( TOPOLOGY* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <class_descriptor >::=
         (class
@@ -2926,28 +2470,28 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
         )
     */
 
-    needSYMBOL();
+    NeedSYMBOL();
 
-    growth->class_id = lexer->CurText();
+    growth->class_id = CurText();
 
     // do net_ids, do not support <composite_name_list>s at this time
-    while( isSymbol(tok = nextTok()) )
+    while( IsSymbol(tok = NextTok()) )
     {
-        growth->net_ids.push_back( lexer->CurText() );
+        growth->net_ids.push_back( CurText() );
     }
 
 
     while( tok != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
@@ -2961,7 +2505,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 
         case T_topology:
             if( growth->topology )
-                unexpected( tok );
+                Unexpected( tok );
             growth->topology = new TOPOLOGY( growth );
             doTOPOLOGY( growth->topology );
             break;
@@ -2970,11 +2514,11 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
             {
                 std::string     builder;
                 int             bracketNesting = 1; // we already saw the opening T_LEFT
-                DSN_T           tok = T_NONE;
+                T               tok = T_NONE;
 
                 while( bracketNesting!=0 && tok!=T_EOF )
                 {
-                    tok = nextTok();
+                    tok = NextTok();
 
                     if( tok==T_LEFT)
                         ++bracketNesting;
@@ -2984,7 +2528,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 
                     if( bracketNesting >= 1 )
                     {
-                        DSN_T prevTok = (DSN_T) lexer->PrevTok();
+                        T     prevTok = (T) PrevTok();
 
                         if( prevTok!=T_LEFT && prevTok!=T_circuit && tok!=T_RIGHT )
                             builder += ' ';
@@ -2992,7 +2536,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
                         if( tok==T_STRING )
                             builder += quote_char;
 
-                        builder += lexer->CurText();
+                        builder += CurText();
 
                         if( tok==T_STRING )
                             builder += quote_char;
@@ -3008,15 +2552,15 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
                 }
 
                 if( tok==T_EOF )
-                    unexpected( T_EOF );
+                    Unexpected( T_EOF );
             }                                   // scope bracket
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }                                       // switch
 
-        tok = nextTok();
+        tok = NextTok();
 
     } // while
 }
@@ -3024,7 +2568,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <network_descriptor >::=
         (network
@@ -3038,12 +2582,12 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_net:
@@ -3061,7 +2605,7 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3069,25 +2613,25 @@ void SPECCTRA_DB::doNETWORK( NETWORK* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doCOMP_ORDER( COMP_ORDER* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <component_order_descriptor >::=
         (comp_order {<placement_id> })
     */
 
-    while( isSymbol(tok = nextTok()) )
+    while( IsSymbol(tok = NextTok()) )
     {
-        growth->placement_ids.push_back( lexer->CurText() );
+        growth->placement_ids.push_back( CurText() );
     }
 
     if( tok != T_RIGHT )
-        expecting( T_RIGHT );
+        Expecting( T_RIGHT );
 }
 
 
 void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <fromto_descriptor >::=
         {(fromto
@@ -3106,43 +2650,43 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
     // split apart the <pin_reference>s into 3 separate tokens.  Do this by
     // turning off the string delimiter in the lexer.
 
-    int old = lexer->SetStringDelimiter( 0 );
+    int old = SetStringDelimiter( 0 );
 
-    if( !isSymbol(nextTok() ) )
+    if( !IsSymbol(NextTok() ) )
     {
-        lexer->SetStringDelimiter( old );
-        expecting( T_SYMBOL );
+        SetStringDelimiter( old );
+        Expecting( T_SYMBOL );
     }
-    growth->fromText = lexer->CurText();
+    growth->fromText = CurText();
 
-    if( !isSymbol(nextTok() ) )
+    if( !IsSymbol(NextTok() ) )
     {
-        lexer->SetStringDelimiter( old );
-        expecting( T_SYMBOL );
+        SetStringDelimiter( old );
+        Expecting( T_SYMBOL );
     }
-    growth->toText = lexer->CurText();
+    growth->toText = CurText();
 
-    lexer->SetStringDelimiter( old );
+    SetStringDelimiter( old );
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_fix && tok!=T_normal && tok!=T_soft )
-                expecting( "fix|normal|soft" );
+                Expecting( "fix|normal|soft" );
             growth->fromto_type = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, T_rule );
             doRULE( growth->rules );
             break;
@@ -3156,16 +2700,16 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
 
         case T_net:
             if( growth->net_id.size() )
-                unexpected( tok );
-            needSYMBOL();
-            growth->net_id = lexer->CurText();
-            needRIGHT();
+                Unexpected( tok );
+            NeedSYMBOL();
+            growth->net_id = CurText();
+            NeedRIGHT();
             break;
 
         // circuit descriptor not supported at this time
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3173,7 +2717,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <wire_shape_descriptor >::=
         (wire
@@ -3192,24 +2736,24 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_rect:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new RECTANGLE( growth );
             doRECTANGLE( (RECTANGLE*) growth->shape );
             break;
 
         case T_circle:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new CIRCLE( growth );
             doCIRCLE( (CIRCLE*) growth->shape );
             break;
@@ -3219,51 +2763,51 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
         case T_path:
         case T_polygon:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new PATH( growth, tok );
             doPATH( (PATH*) growth->shape );
             break;
 
         case T_qarc:
             if( growth->shape )
-                unexpected( tok );
+                Unexpected( tok );
             growth->shape = new QARC( growth );
             doQARC( (QARC*) growth->shape );
             break;
 
         case T_net:
-            needSYMBOL();
-            growth->net_id = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->net_id = CurText();
+            NeedRIGHT();
             break;
 
         case T_turret:
-            if( nextTok() != T_NUMBER )
-                expecting( T_NUMBER );
-            growth->turret = atoi( lexer->CurText() );
-            needRIGHT();
+            if( NextTok() != T_NUMBER )
+                Expecting( T_NUMBER );
+            growth->turret = atoi( CurText() );
+            NeedRIGHT();
             break;
 
         case T_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
-                expecting( "fix|route|normal|protect" );
+                Expecting( "fix|route|normal|protect" );
             growth->wire_type = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_attr:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_test && tok!=T_fanout && tok!=T_bus && tok!=T_jumper )
-                expecting( "test|fanout|bus|jumper" );
+                Expecting( "test|fanout|bus|jumper" );
             growth->attr = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_shield:
-            needSYMBOL();
-            growth->shield = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->shield = CurText();
+            NeedRIGHT();
             break;
 
         case T_window:
@@ -3275,7 +2819,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
 
         case T_connect:
             if( growth->connect )
-                unexpected( tok );
+                Unexpected( tok );
 /* @todo
             growth->connect = new CONNECT( growth );
             doCONNECT( growth->connect );
@@ -3284,11 +2828,11 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
 
         case T_supply:
             growth->supply = true;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3296,7 +2840,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
     POINT   point;
 
     /*  <wire_via_descriptor >::=
@@ -3315,17 +2859,17 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR )
         )
     */
 
-    needSYMBOL();
-    growth->padstack_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->padstack_id = CurText();
 
-    while( (tok = nextTok()) == T_NUMBER )
+    while( (tok = NextTok()) == T_NUMBER )
     {
-        point.x = strtod( lexer->CurText(), 0 );
+        point.x = strtod( CurText(), 0 );
 
-        if( nextTok() != T_NUMBER )
-            expecting( "vertex.y" );
+        if( NextTok() != T_NUMBER )
+            Expecting( "vertex.y" );
 
-        point.y = strtod( lexer->CurText(), 0 );
+        point.y = strtod( CurText(), 0 );
 
         growth->vertexes.push_back( point );
     }
@@ -3333,74 +2877,74 @@ void SPECCTRA_DB::doWIRE_VIA( WIRE_VIA* growth ) throw( IO_ERROR )
     while( tok != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_net:
-            needSYMBOL();
-            growth->net_id = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->net_id = CurText();
+            NeedRIGHT();
             break;
 
         case T_via_number:
-            if( nextTok() != T_NUMBER )
-                expecting( "<via#>" );
-            growth->via_number = atoi( lexer->CurText() );
-            needRIGHT();
+            if( NextTok() != T_NUMBER )
+                Expecting( "<via#>" );
+            growth->via_number = atoi( CurText() );
+            NeedRIGHT();
             break;
 
         case T_type:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_fix && tok!=T_route && tok!=T_normal && tok!=T_protect )
-                expecting( "fix|route|normal|protect" );
+                Expecting( "fix|route|normal|protect" );
             growth->via_type = tok;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_attr:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!=T_test && tok!=T_fanout && tok!=T_jumper && tok!=T_virtual_pin )
-                expecting( "test|fanout|jumper|virtual_pin" );
+                Expecting( "test|fanout|jumper|virtual_pin" );
             growth->attr = tok;
             if( tok == T_virtual_pin )
             {
-                needSYMBOL();
-                growth->virtual_pin_name = lexer->CurText();
+                NeedSYMBOL();
+                growth->virtual_pin_name = CurText();
             }
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_contact:
-            needSYMBOL();
+            NeedSYMBOL();
             tok = T_SYMBOL;
-            while( isSymbol(tok) )
+            while( IsSymbol(tok) )
             {
-                growth->contact_layers.push_back( lexer->CurText() );
-                tok = nextTok();
+                growth->contact_layers.push_back( CurText() );
+                tok = NextTok();
             }
             if( tok != T_RIGHT )
-                expecting( T_RIGHT );
+                Expecting( T_RIGHT );
             break;
 
         case T_supply:
             growth->supply = true;
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
 
-        tok = nextTok();
+        tok = NextTok();
     }
 }
 
 
 void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <wiring_descriptor >::=
         (wiring
@@ -3411,24 +2955,24 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_unit:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doUNIT( growth->unit );
             break;
 
         case T_resolution:
             if( growth->unit )
-                unexpected( tok );
+                Unexpected( tok );
             growth->unit = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->unit );
             break;
@@ -3448,7 +2992,7 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3456,37 +3000,37 @@ void SPECCTRA_DB::doWIRING( WIRING* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <ancestor_file_descriptor >::=
           (ancestor <file_path_name> (created_time <time_stamp> )
           [(comment <comment_string> )])
     */
 
-    needSYMBOL();
-    growth->filename = lexer->CurText();
+    NeedSYMBOL();
+    growth->filename = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_created_time:
             readTIME( &growth->time_stamp );
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         case T_comment:
-            needSYMBOL();
-            growth->comment = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->comment = CurText();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3494,18 +3038,18 @@ void SPECCTRA_DB::doANCESTOR( ANCESTOR* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <history_descriptor >::=
         (history [{<ancestor_file_descriptor> }] <self_descriptor> )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_ancestor:
@@ -3516,33 +3060,33 @@ void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR )
             break;
 
         case T_self:
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
                 if( tok != T_LEFT )
-                    expecting( T_LEFT );
+                    Expecting( T_LEFT );
 
-                tok = nextTok();
+                tok = NextTok();
                 switch( tok )
                 {
                 case T_created_time:
                     readTIME( &growth->time_stamp );
-                    needRIGHT();
+                    NeedRIGHT();
                     break;
 
                 case T_comment:
-                    needSYMBOL();
-                    growth->comments.push_back( lexer->CurText() );
-                    needRIGHT();
+                    NeedSYMBOL();
+                    growth->comments.push_back( CurText() );
+                    NeedRIGHT();
                     break;
 
                 default:
-                    unexpected( lexer->CurText() );
+                    Unexpected( CurText() );
                 }
             }
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3550,7 +3094,7 @@ void SPECCTRA_DB::doHISTORY( HISTORY* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <session_file_descriptor >::=
         (session <session_id >
@@ -3566,60 +3110,60 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IO_ERROR )
         )
     */
 
-    needSYMBOL();
-    growth->session_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->session_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_base_design:
-            needSYMBOL();
-            growth->base_design = lexer->CurText();
-            needRIGHT();
+            NeedSYMBOL();
+            growth->base_design = CurText();
+            NeedRIGHT();
             break;
 
         case T_history:
             if( growth->history )
-                unexpected( tok );
+                Unexpected( tok );
             growth->history = new HISTORY( growth );
             doHISTORY( growth->history );
             break;
 
         case T_structure:
             if( growth->structure )
-                unexpected( tok );
+                Unexpected( tok );
             growth->structure = new STRUCTURE( growth );
             doSTRUCTURE( growth->structure );
             break;
 
         case T_placement:
             if( growth->placement )
-                unexpected( tok );
+                Unexpected( tok );
             growth->placement = new PLACEMENT( growth );
             doPLACEMENT( growth->placement );
             break;
 
         case T_was_is:
             if( growth->was_is )
-                unexpected( tok );
+                Unexpected( tok );
             growth->was_is = new WAS_IS( growth );
             doWAS_IS( growth->was_is );
             break;
 
         case T_routes:
             if( growth->route )
-                unexpected( tok );
+                Unexpected( tok );
             growth->route = new ROUTE( growth );
             doROUTE( growth->route );
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3627,7 +3171,7 @@ void SPECCTRA_DB::doSESSION( SESSION* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
 {
-    DSN_T       tok;
+    T           tok;
     PIN_PAIR    empty( growth );
     PIN_PAIR*   pin_pair;
 
@@ -3636,13 +3180,13 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
     */
 
     // none of the pins is ok too
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
 
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_pins:
@@ -3650,17 +3194,17 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
             growth->pin_pairs.push_back( empty );
             pin_pair= &growth->pin_pairs.back();
 
-            needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
+            NeedSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
             readCOMPnPIN( &pin_pair->was.component_id, &pin_pair->was.pin_id );
 
-            needSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
+            NeedSYMBOL();       // readCOMPnPIN() expects 1st token to have been read
             readCOMPnPIN( &pin_pair->is.component_id, &pin_pair->is.pin_id );
 
-            needRIGHT();
+            NeedRIGHT();
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3668,7 +3212,7 @@ void SPECCTRA_DB::doWAS_IS( WAS_IS* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <route_descriptor >::=
         (routes
@@ -3681,51 +3225,51 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
         )
     */
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_resolution:
             if( growth->resolution )
-                unexpected( tok );
+                Unexpected( tok );
             growth->resolution = new UNIT_RES( growth, tok );
             doRESOLUTION( growth->resolution );
             break;
 
         case T_parser:
             if( growth->parser )
-                unexpected( tok );
+                Unexpected( tok );
             growth->parser = new PARSER( growth );
             doPARSER( growth->parser );
             break;
 
         case T_structure_out:
             if( growth->structure_out )
-                unexpected( tok );
+                Unexpected( tok );
             growth->structure_out = new STRUCTURE_OUT( growth );
             doSTRUCTURE_OUT( growth->structure_out );
             break;
 
         case T_library_out:
             if( growth->library )
-                unexpected( tok );
+                Unexpected( tok );
             growth->library = new LIBRARY( growth, tok );
             doLIBRARY( growth->library );
             break;
 
         case T_network_out:
-            while( (tok = nextTok()) != T_RIGHT )
+            while( (tok = NextTok()) != T_RIGHT )
             {
                 if( tok != T_LEFT )
-                    expecting( T_LEFT );
+                    Expecting( T_LEFT );
 
-                tok = nextTok();
+                tok = NextTok();
                 if( tok != T_net )      // it is class NET_OUT, but token T_net
-                    unexpected( lexer->CurText() );
+                    Unexpected( CurText() );
 
                 NET_OUT*    net_out;
                 net_out = new NET_OUT( growth );
@@ -3736,7 +3280,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3744,7 +3288,7 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
 
     /*  <net_out_descriptor >::=
         (net <net_id >
@@ -3756,28 +3300,28 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
         )
     */
 
-    needSYMBOL();
-    growth->net_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->net_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
         if( tok != T_LEFT )
-            expecting( T_LEFT );
+            Expecting( T_LEFT );
 
-        tok = nextTok();
+        tok = NextTok();
         switch( tok )
         {
         case T_net_number:
-            tok = nextTok();
+            tok = NextTok();
             if( tok!= T_NUMBER )
-                expecting( T_NUMBER );
-            growth->net_number = atoi( lexer->CurText() );
-            needRIGHT();
+                Expecting( T_NUMBER );
+            growth->net_number = atoi( CurText() );
+            NeedRIGHT();
             break;
 
         case T_rule:
             if( growth->rules )
-                unexpected( tok );
+                Unexpected( tok );
             growth->rules = new RULE( growth, tok );
             doRULE( growth->rules );
             break;
@@ -3804,7 +3348,7 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
             break;
 
         default:
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
         }
     }
 }
@@ -3812,19 +3356,19 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
 
 void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR )
 {
-    DSN_T   tok;
+    T       tok;
     PIN_REF empty(growth);
 
     /*  <supply_pin_descriptor >::=
         (supply_pin {<pin_reference> } [(net <net_id >)])
     */
 
-    needSYMBOL();
-    growth->net_id = lexer->CurText();
+    NeedSYMBOL();
+    growth->net_id = CurText();
 
-    while( (tok = nextTok()) != T_RIGHT )
+    while( (tok = NextTok()) != T_RIGHT )
     {
-        if( isSymbol(tok) )
+        if( IsSymbol(tok) )
         {
             growth->pin_refs.push_back( empty );
 
@@ -3834,14 +3378,14 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR )
         }
         else if( tok == T_LEFT )
         {
-            tok = nextTok();
+            tok = NextTok();
             if( tok != T_net )
-                expecting( T_net );
-            growth->net_id = lexer->CurText();
-            needRIGHT();
+                Expecting( T_net );
+            growth->net_id = CurText();
+            NeedRIGHT();
         }
         else
-            unexpected( lexer->CurText() );
+            Unexpected( CurText() );
     }
 }
 
@@ -3912,7 +3456,7 @@ PCB* SPECCTRA_DB::MakePCB()
 
 //-----<ELEM>---------------------------------------------------------------
 
-ELEM::ELEM( DSN_T aType, ELEM* aParent ) :
+ELEM::ELEM( T     aType, ELEM* aParent ) :
    type( aType ),
    parent( aParent )
 {
@@ -3956,7 +3500,7 @@ void ELEM_HOLDER::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( I
 }
 
 
-int ELEM_HOLDER::FindElem( DSN_T aType, int instanceNum )
+int ELEM_HOLDER::FindElem( T     aType, int instanceNum )
 {
     int repeats=0;
     for( unsigned i=0;  i<kids.size();  ++i )

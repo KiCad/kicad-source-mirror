@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Jan-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * TokenList2DsnLexer.cmake now supports comments, which start with a leading
+    # character, and may be either on their own line or on a line after a token.
+  * DSNLEXER::PopReader() now pops even the last LINE_READER* and returns it.
+++pcbnew:
+  * SPECCTRA_DB now inherits from new class SPECCTRA_LEXER, which led to a great
+    deal of simplification and code factoring.
+  * Moved specctra keywords into specctra.keywords.
+
 2011-Jan-17 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++all:

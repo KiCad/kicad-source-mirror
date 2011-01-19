@@ -34,13 +34,15 @@
 
 #include "fctsys.h"
 
-#include "dsnlexer.h"
+#include "specctra_lexer.h"
 
 #include "pcbnew.h"
 
 
 class TYPE_COLLECTOR;           // outside the DSN namespace
 
+typedef DSN::T            DSN_T;
+using namespace DSN;
 
 
 /**
@@ -68,419 +70,6 @@ class TYPE_COLLECTOR;           // outside the DSN namespace
 namespace DSN {
 
 
-enum DSN_T {
-
-    // these first few are negative special ones for syntax, and are
-    // inherited from DSNLEXER.
-    T_NONE = DSN_NONE,
-    T_COMMENT = DSN_COMMENT,
-    T_STRING_QUOTE = DSN_STRING_QUOTE,
-    T_QUOTE_DEF = DSN_QUOTE_DEF,
-    T_DASH = DSN_DASH,
-    T_SYMBOL = DSN_SYMBOL,
-    T_NUMBER = DSN_NUMBER,
-    T_RIGHT = DSN_RIGHT,    // right bracket, ')'
-    T_LEFT = DSN_LEFT,      // left bracket, '('
-    T_STRING = DSN_STRING,  // a quoted string, stripped of the quotes
-    T_EOF = DSN_EOF,        // special case for end of file
-
-
-    // This should be coordinated with the
-    // const static KEYWORD tokens[] array, and both must be sorted
-    // identically and alphabetically.  Remember that '_' is less than any
-    // alpha character according to ASCII.
-
-    T_absolute = 0,        // this one should be == zero
-    T_added,
-    T_add_group,
-    T_add_pins,
-    T_allow_antenna,
-    T_allow_redundant_wiring,
-    T_amp,
-    T_ancestor,
-    T_antipad,
-    T_aperture_type,
-    T_array,
-    T_attach,
-    T_attr,
-    T_average_pair_length,
-    T_back,
-    T_base_design,
-    T_bbv_ctr2ctr,
-    T_bend_keepout,
-    T_bond,
-    T_both,
-    T_bottom,
-    T_bottom_layer_sel,
-    T_boundary,
-    T_brickpat,
-    T_bundle,
-    T_bus,
-    T_bypass,
-    T_capacitance_resolution,
-    T_capacitor,
-    T_case_sensitive,
-    T_cct1,
-    T_cct1a,
-    T_center_center,
-    T_checking_trim_by_pin,
-    T_circ,
-    T_circle,
-    T_circuit,
-    T_class,
-    T_class_class,
-    T_classes,
-    T_clear,
-    T_clearance,
-    T_cluster,
-    T_cm,
-    T_color,
-    T_colors,
-    T_comment,
-    T_comp,
-    T_comp_edge_center,
-    T_comp_order,
-    T_component,
-    T_composite,
-    T_conductance_resolution,
-    T_conductor,
-    T_conflict,
-    T_connect,
-    T_constant,
-    T_contact,
-    T_control,
-    T_corner,
-    T_corners,
-    T_cost,
-    T_created_time,
-    T_cross,
-    T_crosstalk_model,
-    T_current_resolution,
-    T_delete_pins,
-    T_deleted,
-    T_deleted_keepout,
-    T_delta,
-    T_diagonal,
-    T_direction,
-    T_directory,
-    T_discrete,
-    T_effective_via_length,
-    T_elongate_keepout,
-    T_exclude,
-    T_expose,
-    T_extra_image_directory,
-    T_family,
-    T_family_family,
-    T_family_family_spacing,
-    T_fanout,
-    T_farad,
-    T_file,
-    T_fit,
-    T_fix,
-    T_flip_style,
-    T_floor_plan,
-    T_footprint,
-    T_forbidden,
-    T_force_to_terminal_point,
-    T_free,
-    T_forgotten,
-    T_fromto,
-    T_front,
-    T_front_only,
-    T_gap,
-    T_gate,
-    T_gates,
-    T_generated_by_freeroute,
-    T_global,
-    T_grid,
-    T_group,
-    T_group_set,
-    T_guide,
-    T_hard,
-    T_height,
-    T_high,
-    T_history,
-    T_horizontal,
-    T_host_cad,
-    T_host_version,
-    T_image,
-    T_image_conductor,
-    T_image_image,
-    T_image_image_spacing,
-    T_image_outline_clearance,
-    T_image_set,
-    T_image_type,
-    T_inch,
-    T_include,
-    T_include_pins_in_crosstalk,
-    T_inductance_resolution,
-    T_insert,
-    T_instcnfg,
-    T_inter_layer_clearance,
-    T_jumper,
-    T_junction_type,
-    T_keepout,
-    T_kg,
-    T_kohm,
-    T_large,
-    T_large_large,
-    T_layer,
-    T_layer_depth,
-    T_layer_noise_weight,
-    T_layer_pair,
-    T_layer_rule,
-    T_length,
-    T_length_amplitude,
-    T_length_factor,
-    T_length_gap,
-    T_library,
-    T_library_out,
-    T_limit,
-    T_limit_bends,
-    T_limit_crossing,
-    T_limit_vias,
-    T_limit_way,
-    T_linear,
-    T_linear_interpolation,
-    T_load,
-    T_lock_type,
-    T_logical_part,
-    T_logical_part_mapping,
-    T_low,
-    T_match_fromto_delay,
-    T_match_fromto_length,
-    T_match_group_delay,
-    T_match_group_length,
-    T_match_net_delay,
-    T_match_net_length,
-    T_max_delay,
-    T_max_len,
-    T_max_length,
-    T_max_noise,
-    T_max_restricted_layer_length,
-    T_max_stagger,
-    T_max_stub,
-    T_max_total_delay,
-    T_max_total_length,
-    T_max_total_vias,
-    T_medium,
-    T_mhenry,
-    T_mho,
-    T_microvia,
-    T_mid_driven,
-    T_mil,
-    T_min_gap,
-    T_mirror,
-    T_mirror_first,
-    T_mixed,
-    T_mm,
-    T_negative_diagonal,
-    T_net,
-    T_net_number,
-    T_net_out,
-    T_net_pin_changes,
-    T_nets,
-    T_network,
-    T_network_out,
-    T_no,
-    T_noexpose,
-    T_noise_accumulation,
-    T_noise_calculation,
-    T_normal,
-    T_object_type,
-    T_off,
-    T_off_grid,
-    T_offset,
-    T_on,
-    T_open,
-    T_opposite_side,
-    T_order,
-    T_orthogonal,
-    T_outline,
-    T_overlap,
-    T_pad,
-    T_pad_pad,
-    T_padstack,
-    T_pair,
-    T_parallel,
-    T_parallel_noise,
-    T_parallel_segment,
-    T_parser,
-    T_part_library,
-    T_path,
-    T_pcb,
-    T_permit_orient,
-    T_permit_side,
-    T_physical,
-    T_physical_part_mapping,
-    T_piggyback,
-    T_pin,
-    T_pin_allow,
-    T_pin_cap_via,
-    T_pin_via_cap,
-    T_pin_width_taper,
-    T_pins,
-    T_pintype,
-    T_place,
-    T_place_boundary,
-    T_place_control,
-    T_place_keepout,
-    T_place_rule,
-    T_placement,
-    T_plan,
-    T_plane,
-    T_pn,
-    T_point,
-    T_polyline_path,
-    T_polygon,
-    T_position,
-    T_positive_diagonal,
-    T_power,
-    T_power_dissipation,
-    T_power_fanout,
-    T_prefix,
-    T_primary,
-    T_priority,
-    T_property,
-    T_protect,
-    T_qarc,
-    T_quarter,
-    T_radius,
-    T_ratio,
-    T_ratio_tolerance,
-    T_rect,
-    T_reduced,
-    T_region,
-    T_region_class,
-    T_region_class_class,
-    T_region_net,
-    T_relative_delay,
-    T_relative_group_delay,
-    T_relative_group_length,
-    T_relative_length,
-    T_reorder,
-    T_reroute_order_viols,
-    T_resistance_resolution,
-    T_resistor,
-    T_resolution,
-    T_restricted_layer_length_factor,
-    T_room,
-    T_rotate,
-    T_rotate_first,
-    T_round,
-    T_roundoff_rotation,
-    T_route,
-    T_route_to_fanout_only,
-    T_routes,
-    T_routes_include,
-    T_rule,
-    T_same_net_checking,
-    T_sample_window,
-    T_saturation_length,
-    T_sec,
-    T_secondary,
-    T_self,
-    T_sequence_number,
-    T_session,
-    T_set_color,
-    T_set_pattern,
-    T_shape,
-    T_shield,
-    T_shield_gap,
-    T_shield_loop,
-    T_shield_tie_down_interval,
-    T_shield_width,
-    T_side,
-    T_signal,
-    T_site,
-    T_small,
-    T_smd,
-    T_snap,
-    T_snap_angle,
-    T_soft,
-    T_source,
-    T_space_in_quoted_tokens,
-    T_spacing,
-    T_spare,
-    T_spiral_via,
-    T_square,
-    T_stack_via,
-    T_stack_via_depth,
-    T_standard,
-    T_starburst,
-    T_status,
-    T_structure,
-    T_structure_out,
-    T_subgate,
-    T_subgates,
-    T_substituted,
-    T_such,
-    T_suffix,
-    T_super_placement,
-    T_supply,
-    T_supply_pin,
-    T_swapping,
-    T_switch_window,
-    T_system,
-    T_tandem_noise,
-    T_tandem_segment,
-    T_tandem_shield_overhang,
-    T_terminal,
-    T_terminator,
-    T_term_only,
-    T_test,
-    T_test_points,
-    T_testpoint,
-    T_threshold,
-    T_time_length_factor,
-    T_time_resolution,
-    T_tjunction,
-    T_tolerance,
-    T_top,
-    T_topology,
-    T_total,
-    T_track_id,
-    T_turret,
-    T_type,
-    T_um,
-    T_unassigned,
-    T_unconnects,
-    T_unit,
-    T_up,
-    T_use_array,
-    T_use_layer,
-    T_use_net,
-    T_use_via,
-    T_value,
-    T_vertical,
-    T_via,
-    T_via_array_template,
-    T_via_at_smd,
-    T_via_keepout,
-    T_via_number,
-    T_via_rotate_first,
-    T_via_site,
-    T_via_size,
-    T_virtual_pin,
-    T_volt,
-    T_voltage_resolution,
-    T_was_is,
-    T_way,
-    T_weight,
-    T_width,
-    T_window,
-    T_wire,
-    T_wire_keepout,
-    T_wires,
-    T_wires_include,
-    T_wiring,
-    T_write_resolution,
-    T_x,
-    T_xy,
-    T_y
-};
-
-
 class SPECCTRA_DB;
 
 
@@ -490,7 +79,7 @@ class SPECCTRA_DB;
  * SPECCTRA_DB::keyword.  We needed a non-instanance function to get at
  * the SPECCTRA_DB::keyword[] and class SPECCTRA_DB is not defined yet.
  */
-const char* GetTokenText( int aTok );
+const char* GetTokenText( T aTok );
 
 
 /**
@@ -819,7 +408,6 @@ public:
      * See page 108 of the specctra spec, May 2000.
      */
     static UNIT_RES Default;
-
 
     UNIT_RES( ELEM* aParent, DSN_T aType ) :
         ELEM( aType, aParent )
@@ -1814,14 +1402,10 @@ class GRID : public ELEM
     friend class SPECCTRA_DB;
 
     DSN_T       grid_type;      ///< T_via | T_wire | T_via_keepout | T_place | T_snap
-
     double      dimension;
-
-    int         direction;      ///< T_x | T_y | -1 for both
-
+    DSN_T       direction;      ///< T_x | T_y | -1 for both
     double      offset;
-
-    int         image_type;     // DSN_T
+    DSN_T       image_type;
 
 public:
 
@@ -2060,18 +1644,18 @@ public:
     PLACE( ELEM* aParent ) :
         ELEM( T_place, aParent )
     {
-        side = DSN_T( T_front );
+        side = T_front;
 
         rotation = 0.0;
 
         hasVertex = false;
 
-        mirror = DSN_T( T_NONE );
-        status = DSN_T( T_NONE );
+        mirror = T_NONE;
+        status = T_NONE;
 
         place_rules = 0;
 
-        lock_type = DSN_T( T_NONE );
+        lock_type = T_NONE;
         rules = 0;
         region = 0;
     }
@@ -3969,15 +3553,14 @@ typedef boost::ptr_set<PADSTACK>    PADSTACKSET;
 
 /**
  * Class SPECCTRA_DB
- * holds a DSN data tree, usually coming from a DSN file.
+ * holds a DSN data tree, usually coming from a DSN file. Is essentially a
+ * SPECCTRA_PARSER class.
  */
-class SPECCTRA_DB
+class SPECCTRA_DB : public SPECCTRA_LEXER
 {
     /// specctra DSN keywords
     static const KEYWORD keywords[];
     static const unsigned keywordCount;
-
-    DSNLEXER*       lexer;
 
     PCB*            pcb;
     SESSION*        session;
@@ -4024,76 +3607,6 @@ class SPECCTRA_DB
      */
     int findLayerName( const std::string& aLayerName ) const;
 
-
-    /**
-     * Function nextTok
-     * returns the next token from the lexer as a DSN_T.  Note to anybody
-     * who wants to use SPECCTRA_DB as a model for usage of DSNLEXER, you
-     * want to have this function return an enum, not an int, and to use
-     * that enum type whereever you can, because this allows the debugger
-     * to show you symbolic values for your tokens.
-     */
-    DSN_T   nextTok();
-
-    /**
-     * Function isSymbol
-     * tests a token to see if it is a symbol.  This means it cannot be a
-     * special delimiter character such as T_LEFT, T_RIGHT, T_QUOTE, etc.  It may
-     * however, coincidentally match a keyword and still be a symbol.
-     */
-    static bool isSymbol( DSN_T aTok )
-    {
-        return DSNLEXER::IsSymbol( aTok );
-    }
-
-    /**
-     * Function needLEFT
-     * calls nextTok() and then verifies that the token read in is a T_LEFT.
-     * If it is not, an IO_ERROR is thrown.
-     * @throw IO_ERROR, if the next token is not a T_LEFT
-     */
-    void needLEFT() throw( IO_ERROR )
-    {
-        lexer->NeedLEFT();
-    }
-
-    /**
-     * Function needRIGHT
-     * calls nextTok() and then verifies that the token read in is a T_RIGHT.
-     * If it is not, an IO_ERROR is thrown.
-     * @throw IO_ERROR, if the next token is not a T_RIGHT
-     */
-    void needRIGHT() throw( IO_ERROR )
-    {
-        lexer->NeedRIGHT();
-    }
-
-    /**
-     * Function needSYMBOL
-     * calls nextTok() and then verifies that the token read in
-     * satisfies bool isSymbol().
-     * If not, an IO_ERROR is thrown.
-     * @return DSN_T - the actual token read in.
-     * @throw IO_ERROR, if the next token does not satisfy isSymbol()
-     */
-    DSN_T needSYMBOL() throw( IO_ERROR )
-    {
-        return (DSN_T) lexer->NeedSYMBOL();
-    }
-
-    /**
-     * Function needSYMBOLorNUMBER
-     * calls nextTok() and then verifies that the token read in
-     * satisfies bool isSymbol() or tok==T_NUMBER.
-     * If not, an IO_ERROR is thrown.
-     * @return DSN_T - the actual token read in.
-     * @throw IO_ERROR, if the next token does not satisfy the above test
-     */
-    DSN_T needSYMBOLorNUMBER() throw( IO_ERROR )
-    {
-        return (DSN_T) lexer->NeedSYMBOLorNUMBER();
-    }
-
     /**
      * Function readCOMPnPIN
      * reads a &lt;pin_reference&gt; and splits it into the two parts which are
@@ -4103,7 +3616,7 @@ class SPECCTRA_DB
      * single T_SYMBOL, so in that case we have to split it into two here.
      * <p>
      * The caller should have already read in the first token comprizing the
-     * pin_reference and it will be tested through lexer->CurTok().
+     * pin_reference and it will be tested through CurTok().
      *
      * @param component_id Where to put the text preceeding the '-' hyphen.
      * @param pin_d Where to put the text which trails the '-'.
@@ -4111,7 +3624,6 @@ class SPECCTRA_DB
      * or there is an error reading from the input stream.
      */
     void readCOMPnPIN( std::string* component_id, std::string* pid_id ) throw( IO_ERROR );
-
 
     /**
      * Function readTIME
@@ -4128,24 +3640,6 @@ class SPECCTRA_DB
      * or there is an error reading from the input stream.
      */
     void readTIME( time_t* time_stamp ) throw( IO_ERROR );
-
-
-    /**
-     * Function expecting
-     * throws an IO_ERROR exception with an input file specific error message.
-     * @param int is the token type which was expected at the current input location.
-     * @throw IO_ERROR with the location within the input file of the problem.
-     */
-    void expecting( DSN_T aTok ) throw( IO_ERROR )
-    {
-        lexer->Expecting( aTok );
-    }
-    void unexpected( DSN_T aTok ) throw( IO_ERROR )
-    {
-        lexer->Unexpected( aTok );
-    }
-    void expecting( const char* text ) throw( IO_ERROR );
-    void unexpected( const char* text ) throw( IO_ERROR );
 
     void doPCB( PCB* growth ) throw( IO_ERROR );
     void doPARSER( PARSER* growth ) throw( IO_ERROR );
@@ -4295,9 +3789,11 @@ class SPECCTRA_DB
 
 public:
 
-    SPECCTRA_DB()
+    SPECCTRA_DB() :
+        SPECCTRA_LEXER( 0 )         // LINE_READER* == NULL, no DSNLEXER::PushReader()
     {
-        lexer = 0;
+        iOwnReaders = true;         // if an exception is thrown, close file.
+
         pcb   = 0;
         session = 0;
         quote_char += '"';
@@ -4306,21 +3802,11 @@ public:
 
     virtual ~SPECCTRA_DB()
     {
-        delete lexer;
         delete pcb;
         delete session;
 
         deleteNETs();
     }
-
-    static const char* TokenName( int aToken );
-
-
-    /**
-     * Function GetTokenString
-     * returns the wxString representation of aToken.
-     */
-    static wxString GetTokenString( int aToken );
 
     /**
      * Function MakePCB

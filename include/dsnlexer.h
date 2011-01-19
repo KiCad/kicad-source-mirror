@@ -76,10 +76,12 @@ enum DSN_SYNTAX_T {
  */
 class DSNLEXER
 {
+protected:
     bool                iOwnReaders;            ///< on readerStack, should I delete them?
     const char*         start;
     const char*         next;
     const char*         limit;
+    char                dummy[1];               ///< when there is no reader.
 
     typedef std::vector<LINE_READER*>  READER_STACK;
 
@@ -103,16 +105,20 @@ class DSNLEXER
 
     int readLine() throw( IO_ERROR )
     {
-        unsigned len = reader->ReadLine();
+        if( reader )
+        {
+            unsigned len = reader->ReadLine();
 
-        // start may have changed in ReadLine(), which can resize and
-        // relocate reader's line buffer.
-        start = (*reader);
+            // start may have changed in ReadLine(), which can resize and
+            // relocate reader's line buffer.
+            start = reader->Line();
 
-        next  = start;
-        limit = next + len;
+            next  = start;
+            limit = next + len;
 
-        return len;
+            return len;
+        }
+        return 0;
     }
 
 
@@ -220,10 +226,11 @@ public:
      * possible if there are at least 2 LINE_READERs on the stack, since popping
      * the last one is not supported.
      *
-     * @return bool - true if there was at least two readers on the stack and
-     *  therefore the pop succeeded, else false and the pop failed.
+     * @return LINE_READER* - is the one that was in use before the pop, or NULL
+     *   if there was not at least two readers on the stack and therefore the
+     *   pop failed.
      */
-    bool PopReader();
+    LINE_READER* PopReader();
 
     // Some functions whose return value is best overloaded to return an enum
     // in a derived class.
@@ -341,11 +348,11 @@ public:
     /**
      * Function Expecting
      * throws an IO_ERROR exception with an input file specific error message.
-     * @param aErrorMsg is the token/keyword type which was expected at the
-     *         current input location.
+     * @param aTokenList is the token/keyword type which was expected at the
+     *         current input location, e.g.  "pin|graphic|property"
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( const wxString& aErrorMsg ) throw( IO_ERROR );
+    void Expecting( const char* aTokenList ) throw( IO_ERROR );
 
     /**
      * Function Unexpected
@@ -369,11 +376,11 @@ public:
     /**
      * Function Unexpected
      * throws an IO_ERROR exception with an input file specific error message.
-     * @param aErrorMsg is the token/keyword type which was not expected at the
+     * @param aToken is the token which was not expected at the
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( const wxString& aErrorMsg ) throw( IO_ERROR );
+    void Unexpected( const char* aToken ) throw( IO_ERROR );
 
     /**
      * Function NeedLEFT

@@ -17,6 +17,8 @@ install_manifest.txt
 Documentation/doxygen
 *.cmake
 *.bak
+pcbnew/specctra_keywords.cpp
+pcbnew/specctra_lexer.h
 new/html
 new/sch_lib_table_keywords.cpp
 new/sch_lib_table_lexer.h

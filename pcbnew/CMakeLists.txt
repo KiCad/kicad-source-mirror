@@ -171,6 +171,7 @@ set(PCBNEW_SRCS
     specctra.cpp
     specctra_export.cpp
     specctra_import.cpp
+    specctra_keywords.cpp
     surbrill.cpp
     swap_layers.cpp
     tool_modedit.cpp
@@ -244,6 +245,16 @@ set_source_files_properties( dialogs/dialog_freeroute_exchange.cpp
     PROPERTIES
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_freeroute_exchange_help_html.h
     )
+
+
+# auto-generate specctra_lexer.h and specctra_keywords.cpp
+make_lexer(
+   ${CMAKE_CURRENT_SOURCE_DIR}/specctra.keywords
+   ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
+   DSN
+   )
+
 
 ###
 # Create the pcbnew executable

@@ -79,7 +79,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR 
             break;
 
         default:
-            in->Expecting( wxT( "value|visible" ) );
+            in->Expecting( "value|visible" );
             break;
         }
     }
@@ -129,7 +129,7 @@ void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
             break;
 
         default:
-            in->Unexpected( CONV_FROM_UTF8( in->CurText() ) );
+            in->Unexpected( in->CurText() );
             break;
         }
     }

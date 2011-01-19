@@ -91,7 +91,8 @@ DSNLEXER::DSNLEXER( const KEYWORD* aKeywordTable, unsigned aKeywordCount,
     keywords( aKeywordTable ),
     keywordCount( aKeywordCount )
 {
-    PushReader( aLineReader );
+    if( aLineReader )
+        PushReader( aLineReader );
     init();
 }
 
@@ -119,22 +120,33 @@ void DSNLEXER::PushReader( LINE_READER* aLineReader )
 }
 
 
-bool DSNLEXER::PopReader()
+LINE_READER* DSNLEXER::PopReader()
 {
-    // the very last reader cannot be popped, for that would screw up limit and next.
-    if( readerStack.size() >= 2 )
+    LINE_READER*    ret = 0;
+
+    if( readerStack.size() )
     {
+        ret = reader;
         readerStack.pop_back();
 
-        reader = readerStack.back();
-        start  = (const char*) (*reader);
+        if( readerStack.size() )
+        {
+            reader = readerStack.back();
+            start  = reader->Line();
 
-        // force a new readLine() as first thing.
-        limit = start;
-        next  = start;
-        return true;
+            // force a new readLine() as first thing.
+            limit = start;
+            next  = start;
+        }
+        else
+        {
+            reader = 0;
+            start  = dummy;
+            limit  = dummy;
+            limit  = dummy;
+        }
     }
-    return false;
+    return ret;
 }
 
 
@@ -198,7 +210,7 @@ const char* DSNLEXER::Syntax( int aTok )
         ret = "quoted string";
         break;
     case DSN_EOF:
-        ret = "end of file";
+        ret = "end of input";
         break;
     default:
         ret = "???";
@@ -257,10 +269,10 @@ void DSNLEXER::Expecting( int aTok ) throw( IO_ERROR )
 }
 
 
-void DSNLEXER::Expecting( const wxString& text ) throw( IO_ERROR )
+void DSNLEXER::Expecting( const char* text ) throw( IO_ERROR )
 {
     wxString    errText( _("Expecting") );
-    errText << wxT(" '") << text << wxT("'");
+    errText << wxT(" '") << wxString::FromUTF8( text ) << wxT("'");
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -272,6 +284,7 @@ void DSNLEXER::Unexpected( int aTok ) throw( IO_ERROR )
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
+
 void DSNLEXER::Duplicate( int aTok ) throw( IO_ERROR )
 {
     wxString    errText;
@@ -280,10 +293,11 @@ void DSNLEXER::Duplicate( int aTok ) throw( IO_ERROR )
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
-void DSNLEXER::Unexpected( const wxString& text ) throw( IO_ERROR )
+
+void DSNLEXER::Unexpected( const char* text ) throw( IO_ERROR )
 {
     wxString    errText( _("Unexpected") );
-    errText << wxT(" '") << text << wxT("'");
+    errText << wxT(" '") << wxString::FromUTF8( text ) << wxT("'");
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -317,7 +331,7 @@ int DSNLEXER::NeedSYMBOLorNUMBER() throw( IO_ERROR )
 {
     int  tok = NextTok();
     if( !IsSymbol( tok ) && tok!=DSN_NUMBER )
-        Expecting( _("symbol|number") );
+        Expecting( "symbol|number" );
     return tok;
 }
 
