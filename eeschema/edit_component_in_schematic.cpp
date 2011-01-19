@@ -46,15 +46,8 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
 
     pos = comp->m_Pos;
 
-    /* Positions are computed by the transpose matrix.  Rotating mirror. */
+    /* Positions are computed by the rotation/mirror transform. */
     newpos = aField->m_Pos - pos;
-
-    // Empirically this is necessary.  The Y coordinate appears to be inverted
-    // under some circumstances, but that inversion is not preserved by all
-    // combinations of mirroring and rotation.  The following clause is true
-    // when the number of rotations and the number of mirrorings are both odd.
-    if( comp->GetTransform().x2 * comp->GetTransform().y1 < 0 )
-        NEGATE( newpos.y );
 
     newpos = comp->GetTransform().TransformCoordinate( newpos ) + pos;
 
@@ -206,10 +199,14 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
     pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
 
-    /* Positions are calculated by the transpose matrix,  Rotating mirror. */
+    // Actual positions are calculated by the rotation/mirror transform
+    // But here we want the relative position of the moved field
+    // and we know the actual position.
+    // So we are using the inverse rotation/mirror transform.
     wxPoint pt( panel->GetScreen()->m_Curseur - pos );
 
-    currentField->m_Pos = pos + component->GetTransform().TransformCoordinate( pt );
+    TRANSFORM itrsfm = component->GetTransform().InverseTransform();
+    currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
 
     currentField->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
 }

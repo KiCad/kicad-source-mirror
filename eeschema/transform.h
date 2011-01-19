@@ -59,12 +59,23 @@ public:
     bool operator!=( const TRANSFORM& aTransform ) const { return !( *this == aTransform ); }
 
    /**
-    * Calculate new coordinate according to the transform.
-    *
+    * Calculate new coordinate according to the mirror/rotation transform.
+    * Useful to calculate actual coordinates of a point
+    * from coordinates relative to a component
+    * which are given for a non rotated, non mirrored item
     * @param aPoint = The position to transform
     * @return The transformed coordinate.
     */
     wxPoint TransformCoordinate( const wxPoint& aPoint ) const;
+
+   /**
+    * Calculate the Inverse mirror/rotation transform.
+    * Useful to calculate coordinates relative to a component
+    * which must be for a non rotated, non mirrored item
+    * from the actual coordinate.
+    * @return The inverse transform.
+    */
+    TRANSFORM InverseTransform( ) const;
 
    /**
     * Calculate new angles according to the transform.

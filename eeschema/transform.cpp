@@ -31,6 +31,30 @@ wxPoint TRANSFORM::TransformCoordinate( const wxPoint& aPoint ) const
                     ( x2 * aPoint.x ) + ( y2 * aPoint.y ) );
 }
 
+/*
+* Calculate the Inverse mirror/rotation transform.
+*/
+TRANSFORM TRANSFORM::InverseTransform( ) const
+{
+    int invx1;
+    int invx2;
+    int invy1;
+    int invy2;
+
+    /* Calculates the inverse matrix coeffs:
+    * for a matrix m{x1, x2, y1, y2}
+    * the inverse matrix is 1/(x1*y2 -x2*y1) m{y2,-x2,-y1,x1)
+    */
+    int det = x1*y2 -x2*y1; // Is never null, because the inverse matrix exists
+    invx1 = y2/det;
+    invx2 = -x2/det;
+    invy1 = -y1/det;
+    invy2 = x1/det;
+
+    TRANSFORM invtransform( invx1, invy1, invx2, invy2 );
+    return invtransform;
+}
+
 
 bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
 {

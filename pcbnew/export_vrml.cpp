@@ -1091,9 +1091,12 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         int offsety = wxRound( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
         double offsetz = vrmlm->m_MatPosition.z * UNITS_3D_TO_PCB_UNITS;
 
-        RotatePoint(&offsetx, &offsety, aModule->m_Orient);
         if ( isFlipped )
             NEGATE(offsetz);
+        else    // In normal mode, Y axis is reversed in Pcbnew.
+            NEGATE(offsety);
+
+        RotatePoint(&offsetx, &offsety, aModule->m_Orient);
 
         fprintf( aOutputFile, "  translation %g %g %g\n",
                  (double) (offsetx + aModule->m_Pos.x),

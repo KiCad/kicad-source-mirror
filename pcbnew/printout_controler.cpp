@@ -143,13 +143,24 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundaryBox();
+    EDA_Rect brd_BBox = pcbframe->GetBoard()->m_BoundaryBox;
+    // In module editor, the module is located at 0,0 but for printing
+    // it is moved to SheetSize.x/2, SheetSize.y/2.
+    // So the equivalent board must be moved:
+    if( m_Parent->m_Ident == MODULE_EDITOR_FRAME )
+    {
+        wxPoint mv_offset;
+        mv_offset.x = SheetSize.x / 2;
+        mv_offset.y = SheetSize.y / 2;
+        brd_BBox.Move( mv_offset );
+    }
     /* Compute the PCB size in internal units*/
     userscale = m_PrintParams.m_PrintScale;
     if( userscale == 0 )            //  fit in page
     {
         int extra_margin = 4000*2;    // Margin = 4000 units pcb = 0.4 inch
-        SheetSize.x = pcbframe->GetBoard()->m_BoundaryBox.GetWidth() + extra_margin;
-        SheetSize.y = pcbframe->GetBoard()->m_BoundaryBox.GetHeight() + extra_margin;
+        SheetSize.x = brd_BBox.GetWidth() + extra_margin;
+        SheetSize.y = brd_BBox.GetHeight() + extra_margin;
         userscale   = 0.99;
     }
 
@@ -157,8 +168,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( (m_PrintParams.m_PrintScale > 1.0)          //  scale > 1 -> Recadrage
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
     {
-        DrawOffset += pcbframe->GetBoard()->m_BoundaryBox.Centre();
-   }
+        DrawOffset += brd_BBox.Centre();
+    }
 
     if( m_PrintParams.m_PageSetupData )
     {
@@ -266,7 +277,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
          * for scales > 1, the DrawOffset was already computed to have the board centre
          * to the middle of the page.
          */
-        wxPoint pcb_centre = pcbframe->GetBoard()->m_BoundaryBox.Centre();
+        wxPoint pcb_centre = brd_BBox.Centre();
         if( userscale <= 1.0 )
             DrawOffset.y += pcb_centre.y - (ysize / 2);
 #ifdef USE_WX_ZOOM
