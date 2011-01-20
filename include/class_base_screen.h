@@ -56,6 +56,7 @@ class BASE_SCREEN : public EDA_ITEM
     EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
     GRIDS     m_grids;          ///< List of valid grid sizes.
     EDA_ITEM* m_drawList;       ///< Object list for the screen.
+    wxString  m_fileName;       ///< File used to load the screen.
 
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
@@ -105,7 +106,6 @@ public:
     int             m_ScreenNumber;
     int             m_NumberOfScreen;
 
-    wxString        m_FileName;
     wxString        m_Title;
     wxString        m_Date;
     wxString        m_Revision;
@@ -156,6 +156,10 @@ public:
     virtual void SetDrawItems( EDA_ITEM* aItem ) { m_drawList = aItem; }
 
     void         InitDatas();
+
+    void         SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
+
+    wxString     GetFileName() const { return m_fileName; }
 
     void         SetPageSize( wxSize& aPageSize );
     wxSize       ReturnPageSize( void );

@@ -602,7 +602,7 @@ void Pcb3D_GLCanvas::SetLights()
  */
 void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
 {
-    wxFileName fn( m_Parent->m_Parent->GetScreen()->m_FileName );
+    wxFileName fn( m_Parent->m_Parent->GetScreen()->GetFileName() );
     wxString   FullFileName;
     wxString   file_ext, mask;
     bool       fmt_is_jpeg = FALSE;
@@ -613,7 +613,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     {
         file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
         mask         = wxT( "*." ) + file_ext;
-        FullFileName = m_Parent->m_Parent->GetScreen()->m_FileName;
+        FullFileName = m_Parent->m_Parent->GetScreen()->GetFileName();
         fn.SetExt( file_ext );
 
         FullFileName =

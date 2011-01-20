@@ -311,7 +311,7 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
     wxPoint    pos_sheetname, pos_filename;
     wxPoint    pos;
 
-    plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
+    plotter->set_color( ReturnLayerColor( Struct->GetLayer() ) );
 
     int thickness = Struct->GetPenSize();
     plotter->set_current_line_width( thickness );
@@ -370,7 +370,7 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                    thickness, italic, false );
 
-    plotter->set_color( ReturnLayerColor( Struct->m_Layer ) );
+    plotter->set_color( ReturnLayerColor( Struct->GetLayer() ) );
 
     /* Draw texts : SheetLabel */
     BOOST_FOREACH( SCH_SHEET_PIN & pin_sheet, Struct->GetSheetPins() ) {

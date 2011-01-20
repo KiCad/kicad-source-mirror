@@ -177,7 +177,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
         fn = m_FileNameCtrl->GetValue();
         if( !fn.IsOk() )
         {
-            fn = screen->m_FileName;
+            fn = screen->GetFileName();
         }
 
         if( aPrintAll )

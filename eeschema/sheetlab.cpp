@@ -205,10 +205,10 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
     SCH_SHEET_PIN* NewSheetLabel;
     SCH_HIERLABEL* HLabel = NULL;
 
-    if( !Sheet->m_AssociatedScreen )
+    if( !Sheet->GetScreen() )
         return NULL;
 
-    DrawStruct = Sheet->m_AssociatedScreen->GetDrawItems();
+    DrawStruct = Sheet->GetScreen()->GetDrawItems();
     HLabel     = NULL;
 
     for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )

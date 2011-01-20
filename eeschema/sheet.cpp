@@ -33,19 +33,35 @@ static int     s_PreviousSheetHeight;
 static wxPoint s_OldPos;  /* Former position for cancellation or move ReSize */
 
 
-/* Routine to edit the SheetName and the FileName for the sheet "Sheet" */
+/**
+ * Function EditSheet
+ * is used to edit an existing sheet or add a new sheet to the schematic.
+ * <p>
+ * When \a aSheet is a new sheet:
+ * <ul>
+ * <li>and the file name already exists in the schematic hierarchy, the screen associated with
+ * the sheet found in the hierarchy is associated with \a aSheet.</li>
+ * <li>and the file name already exists on the system, then \a aSheet is loaded with the
+ * existing file.</li>
+ * <li>and the file name does not exist in the schematic hierarchy or on the file system, then
+ * a new screen is created and associated with \a aSheet.</li>
+ * </ul> </p> <p>
+ * When \a aSheet is an existing sheet:
+ * <ul>
+ * <li>and the file name already exists in the schematic hierarchy, the current associated screen
+ * is replace by the one found in the hierarchy.</li>
+ * <li>and the file name already exists on the system, the current associated screen file name
+ * is changed and the file is loaded.</li>
+ * <li>and the file name does not exist in the schematic hierarchy or on the file system, the
+ * current associated screen file name is changed and saved to disk.</li>
+ * </ul> </p>
+ */
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    bool edit = true;
-
     if( aSheet == NULL )
         return false;
 
     /* Get the new texts */
-    aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    DrawPanel->m_IgnoreMouseEvents = true;
-
     DIALOG_SCH_SHEET_PROPS dlg( this );
 
     wxString units = GetUnitsLabel( g_UserUnit );
@@ -70,76 +86,135 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
 
-    if( dlg.ShowModal() == wxID_OK )
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return false;
+
+    wxFileName fileName = dlg.GetFileName();
+    fileName.SetExt( SchematicFileExtension );
+
+    if( !fileName.IsOk() )
     {
-        wxFileName fileName;
-        wxString   msg;
+        DisplayError( this, _( "File name is not valid!" ) );
+        return false;
+    }
 
-        fileName = dlg.GetFileName();
+    wxString msg;
+    wxString tmp;
+    bool loadFromFile = false;
+    SCH_SCREEN* useScreen = NULL;
 
-        if( !fileName.IsOk() )
+    if( !g_RootSheet->SearchHierarchy( fileName.GetFullPath(), &useScreen ) )
+        loadFromFile = fileName.FileExists();
+
+    if( aSheet->GetScreen() == NULL )                          // New sheet.
+    {
+        if( ( useScreen != NULL ) || loadFromFile )            // Load from existing file.
         {
-            DisplayError( this, _( "File name is not valid! Aborted" ) );
-            edit = false;
+            msg.Printf( _( "A file named \"%s\" already exists" ),
+                        GetChars( fileName.GetFullName() ) );
+
+            if( useScreen != NULL )
+                msg += _( " in the current schematic hierarchy" );
+
+            msg += _(".\n\nDo you want to create a sheet with the contents of this file?" );
+
+            if( !IsOK( this, msg ) )
+                return false;
         }
-        else
+        else                                                   // New file.
         {
-            fileName.SetExt( SchematicFileExtension );
+            aSheet->SetScreen( new SCH_SCREEN() );
+            aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+        }
+    }
+    else                                                       // Existing sheet.
+    {
+        bool isUndoable = true;
+        bool renameFile = false;
 
-            /* m_CurrentSheet->m_AssociatedScreen must be a valid screen, and the
-             * sheet must have a valid associated filename,
-             * so we must call m_CurrentSheet->ChangeFileName to set a filename,
-             * AND always when a new sheet is created ( when
-             * m_CurrentSheet->m_AssociatedScreen is null ),
-             * to create or set an Associated Screen
-             */
-            if( ( fileName.GetFullPath() != aSheet->GetFileName() )
-                || ( aSheet->m_AssociatedScreen == NULL ) )
+        if( fileName.GetFullName().CmpNoCase( aSheet->GetFileName() ) != 0 )
+        {
+            // Sheet file name changes cannot be undone.
+            isUndoable = false;
+            msg = _( "Changing the sheet file name cannot be undone.  " );
+
+            if( ( useScreen != NULL ) || loadFromFile )        // Load from existing file.
             {
-                msg = _( "Changing the sheet file name can change all the schematic \
-structures and cannot be undone.\nOk to continue renaming?" );
+                tmp.Printf( _( "A file named \"%s\" already exists" ),
+                            GetChars( fileName.GetFullName() ) );
+                msg += tmp;
 
-                if( aSheet->m_AssociatedScreen == NULL || IsOK( NULL, msg ) )
+                if( useScreen != NULL )
+                    msg += _( " in the current schematic hierarchy" );
+
+                msg += _(".\n\nDo you want to replace the sheet with the contents of this file?" );
+
+                if( !IsOK( this, msg ) )
+                    return false;
+
+                if( loadFromFile )
+                    aSheet->SetScreen( NULL );
+            }
+            else                                               // Save to new file name.
+            {
+                if( aSheet->GetScreenCount() > 1 )
                 {
-                    // do not prompt on a new sheet. in fact, we should not allow a
-                    // sheet to be created without a valid associated filename to be
-                    // read from.
-                    GetScreen()->ClearUndoRedoList();
+                    msg += _( "This sheet uses shared data in a complex hierarchy.\n\n" );
+                    msg += _( "Do you wish to convert it to a simple hierarchical sheet?" );
 
-                    // set filename and the associated screen
-                    aSheet->ChangeFileName( this, fileName.GetFullPath() );
+                    if( !IsOK( NULL, msg ) )
+                        return false;
                 }
+
+                renameFile = true;
             }
+        }
 
-            else
-                SaveCopyInUndoList( aSheet, UR_CHANGED );
+        aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        DrawPanel->m_IgnoreMouseEvents = true;
 
-            aSheet->m_FileNameSize = ReturnValueFromString( g_UserUnit,
-                                                            dlg.GetFileNameTextSize(),
-                                                            m_InternalUnits );
+        if( isUndoable )
+            SaveCopyInUndoList( aSheet, UR_CHANGED );
 
-            aSheet->m_SheetName = dlg.GetSheetName();
-            aSheet->m_SheetNameSize = ReturnValueFromString( g_UserUnit,
-                                                             dlg.GetSheetNameTextSize(),
-                                                             m_InternalUnits );
+        if( renameFile )
+        {
+            aSheet->GetScreen()->SetFileName( fileName.GetFullName() );
+            SaveEEFile( aSheet->GetScreen(), FILE_SAVE_AS );
 
-            if( aSheet->m_SheetName.IsEmpty() )
+            // If the the associated screen is shared by more than one sheet, remove the
+            // screen and reload the file to a new screen.  Failure to do this will trash
+            // the screen reference counting in complex hierarchies.
+            if( aSheet->GetScreenCount() > 1 )
             {
-                aSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ), GetTimeStamp() );
+                aSheet->SetScreen( NULL );
+                loadFromFile = true;
             }
         }
     }
-    else
-    {
-        edit = false;
-    }
+
+    aSheet->SetFileName( fileName.GetFullPath() );
+
+    if( useScreen )
+        aSheet->SetScreen( useScreen );
+    else if( loadFromFile )
+        aSheet->Load( this );
+
+    aSheet->m_FileNameSize = ReturnValueFromString( g_UserUnit,
+                                                    dlg.GetFileNameTextSize(),
+                                                    m_InternalUnits );
+    aSheet->m_SheetName = dlg.GetSheetName();
+    aSheet->m_SheetNameSize = ReturnValueFromString( g_UserUnit,
+                                                     dlg.GetSheetNameTextSize(),
+                                                     m_InternalUnits );
+
+    if( aSheet->m_SheetName.IsEmpty() )
+        aSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ), GetTimeStamp() );
 
     DrawPanel->MouseToCursorSchema();
     DrawPanel->m_IgnoreMouseEvents = false;
-
     aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    return edit;
+    return true;
 }
 
 
@@ -221,7 +296,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     sheet->m_Flags     = IS_NEW | IS_RESIZED;
     sheet->m_TimeStamp = GetTimeStamp();
     sheet->SetParent( GetScreen() );
-    sheet->m_AssociatedScreen = NULL;
+    sheet->SetScreen( NULL );
     s_PreviousSheetWidth = SHEET_MIN_WIDTH;
     s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
 

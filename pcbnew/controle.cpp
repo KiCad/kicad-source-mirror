@@ -243,7 +243,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     if( (CurrentTime - g_SaveTime) > g_TimeOut )
     {
-        wxString tmpFileName = GetScreen()->m_FileName;
+        wxString tmpFileName = GetScreen()->GetFileName();
         wxFileName fn = wxFileName( wxEmptyString, g_SaveFileName, PcbFileExtension );
         bool     flgmodify   = GetScreen()->IsModify();
 
@@ -254,8 +254,8 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
             OnModify();
             GetScreen()->SetSave(); // Set the flags m_FlagSave cleared by SetModify()
         }
-        GetScreen()->m_FileName = tmpFileName;
-        SetTitle( GetScreen()->m_FileName );
+        GetScreen()->SetFileName( tmpFileName );
+        SetTitle( GetScreen()->GetFileName() );
     }
 
     double scalar = GetScreen()->GetScalingFactor();

@@ -540,7 +540,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     if( m_writeErcFile )
     {
-        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( wxT( "erc" ) );
 
         wxFileDialog dlg( this, _( "ERC File" ), fn.GetPath(), fn.GetFullName(),

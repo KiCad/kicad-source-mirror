@@ -277,7 +277,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
 
     static wxFileName fn;
 
-    wxFileName  current = g_RootSheet->m_AssociatedScreen->m_FileName;
+    wxFileName  current = g_RootSheet->GetScreen()->GetFileName();
 
     s_ExportSeparatorSymbol = aExportSeparatorSymbol;
 

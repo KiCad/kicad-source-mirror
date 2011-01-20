@@ -33,13 +33,13 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
         screen = GetScreen();
 
     /* If no name exists in the window yet - save as new. */
-    if( screen->m_FileName.IsEmpty() )
+    if( screen->GetFileName().IsEmpty() )
         FileSave = FILE_SAVE_NEW;
 
     switch( FileSave )
     {
     case FILE_SAVE_AS:
-        schematicFileName = screen->m_FileName;
+        schematicFileName = screen->GetFileName();
         backupFileName = schematicFileName;
 
         /* Rename the old file to a '.bak' one: */
@@ -58,13 +58,13 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
     case FILE_SAVE_NEW:
     {
         wxFileDialog dlg( this, _( "Schematic Files" ), wxGetCwd(),
-                          screen->m_FileName, SchematicFileWildcard,
+                          screen->GetFileName(), SchematicFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        screen->m_FileName = dlg.GetPath();
+        screen->SetFileName( dlg.GetPath() );
         schematicFileName = dlg.GetPath();
 
         break;
@@ -82,7 +82,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
     }
 
     if( FileSave == FILE_SAVE_NEW )
-        screen->m_FileName = schematicFileName.GetFullPath();
+        screen->SetFileName( schematicFileName.GetFullPath() );
 
     bool success = screen->Save( f );
 
@@ -146,13 +146,15 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 
     if( screen )
     {
-        if( !IsOK( this, _( "Clear schematic hierarchy?" ) ) )
+        if( !IsOK( this, _( "Discard changes to the current schematic?" ) ) )
             return false;
-        if( g_RootSheet->m_AssociatedScreen->m_FileName != m_DefaultSchematicFileName )
-            SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
+
+        if( g_RootSheet->GetScreen()->GetFileName() != m_DefaultSchematicFileName )
+            SetLastProject( g_RootSheet->GetScreen()->GetFileName() );
     }
 
     FullFileName = FileName;
+
     if( ( FullFileName.IsEmpty() ) && !IsNew )
     {
         wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
@@ -183,7 +185,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     wxLogDebug( wxT( "Loading schematic " ) + FullFileName );
     wxSetWorkingDirectory( fn.GetPath() );
 
-    screen->m_FileName = FullFileName;
+    screen->SetFileName( FullFileName );
     g_RootSheet->SetFileName( FullFileName );
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
@@ -199,7 +201,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
         screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
         screen->m_Title = NAMELESS_PROJECT;
         screen->m_Title += wxT( ".sch" );
-        GetScreen()->m_FileName = screen->m_Title;
+        GetScreen()->SetFileName( screen->m_Title );
         screen->m_Company.Empty();
         screen->m_Commentaire1.Empty();
         screen->m_Commentaire2.Empty();
@@ -230,16 +232,17 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
      * and after (due to code change): <root_name>-cache.lib
      * so if the <name>-cache.lib is not found, the old way will be tried
     */
-    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn = g_RootSheet->GetScreen()->GetFileName();
 
     bool use_oldcachename = false;
     wxString cachename =  fn.GetName() + wxT( "-cache" );
 
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
+
     if( ! fn.FileExists() )
     {
-        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( wxT( "cache.lib" ) );
         use_oldcachename = true;
     }
@@ -282,18 +285,17 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
         PrintMsg( msg );
     }
 
-    if( !wxFileExists( g_RootSheet->m_AssociatedScreen->m_FileName )
-        && !LibCacheExist )
+    if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) && !LibCacheExist )
     {
         Zoom_Automatique( FALSE );
         msg.Printf( _( "File <%s> not found." ),
-                    GetChars( g_RootSheet->m_AssociatedScreen->m_FileName ) );
+                    GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
         DisplayInfoMessage( this, msg, 0 );
         return false;
     }
 
     // load the project.
-    SAFE_DELETE( g_RootSheet->m_AssociatedScreen );
+    g_RootSheet->SetScreen( NULL );
     bool diag = g_RootSheet->Load( this );
 
     /* Redraw base screen (ROOT) if necessary. */
@@ -318,7 +320,7 @@ void SCH_EDIT_FRAME::SaveProject()
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        D( printf( "SaveEEFile, %s\n", CONV_TO_UTF8( screen->m_FileName ) ); )
+        D( printf( "SaveEEFile, %s\n", CONV_TO_UTF8( screen->GetFileName() ) ); )
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 

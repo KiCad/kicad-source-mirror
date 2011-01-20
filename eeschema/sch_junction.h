@@ -1,10 +1,10 @@
 /**
- * @file sch_items.h
+ * @file sch_junction.h
  *
  */
 
-#ifndef _SCH_ITEMS_H_
-#define _SCH_ITEMS_H_
+#ifndef _SCH_JUNCTION_H_
+#define _SCH_JUNCTION_H_
 
 
 #include "sch_item_struct.h"
@@ -103,4 +103,4 @@ private:
 };
 
 
-#endif    // _SCH_ITEMS_H_
+#endif    // _SCH_JUNCTION_H_

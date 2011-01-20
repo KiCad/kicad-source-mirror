@@ -63,7 +63,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     }
 */
 
-    wxString fullFileName = GetScreen()->m_FileName;
+    wxString fullFileName = GetScreen()->GetFileName();
     wxString path;
     wxString name;
     wxString ext;

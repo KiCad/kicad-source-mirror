@@ -27,7 +27,7 @@ void WinEDA_PcbFrame::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
 
     if( !fn.FileExists() )
     {
-        fn = GetScreen()->m_FileName;
+        fn = GetScreen()->GetFileName();
         fn.SetExt( NetExtBuffer );
     }
 

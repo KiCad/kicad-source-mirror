@@ -1389,10 +1389,11 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
         case WS_FILENAME:
         {
             wxString fname, fext;
-            wxFileName::SplitPath( screen->m_FileName, (wxString*) NULL,
-                                   &fname, &fext );
+            wxFileName::SplitPath( screen->GetFileName(), (wxString*) NULL, &fname, &fext );
+
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
+
             msg << fname << wxT( "." ) << fext;
             DrawGraphicText( DrawPanel, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,

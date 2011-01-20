@@ -64,7 +64,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_READ:
     {
-        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( ProjectFileExtension );
 
         wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
@@ -132,7 +132,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_READ:
     {
-        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( ProjectFileExtension );
 
         wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
@@ -354,7 +354,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRer
     wxArrayString           liblist_tmp = m_ComponentLibFiles;
 
     if( CfgFileName.IsEmpty() )
-        fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+        fn = g_RootSheet->GetScreen()->GetFileName();
     else
         fn = CfgFileName;
 
@@ -397,7 +397,7 @@ void SCH_EDIT_FRAME::SaveProjectFile( wxWindow* displayframe, bool askoverwrite 
 {
     wxFileName fn;
 
-    fn = g_RootSheet->m_AssociatedScreen->m_FileName  /*ConfigFileName*/;
+    fn = g_RootSheet->GetScreen()->GetFileName();  /*ConfigFileName*/
     fn.SetExt( ProjectFileExtension );
 
     int options = wxFD_SAVE;

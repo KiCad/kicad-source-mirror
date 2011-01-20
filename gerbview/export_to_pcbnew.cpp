@@ -75,7 +75,7 @@ void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
             DisplayError( this, msg );
             return;
         }
-        GetScreen()->m_FileName = FullFileName;
+        GetScreen()->SetFileName( FullFileName );
         SavePcbFormatAscii( this, dest, LayerLookUpTable );
         fclose( dest );
     }

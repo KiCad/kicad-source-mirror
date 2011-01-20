@@ -448,14 +448,14 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 
         case wxID_OK:
         case wxID_YES:
-            SavePcbFile( GetScreen()->m_FileName );
+            SavePcbFile( GetScreen()->GetFileName() );
             break;
         }
     }
 
-    if( !GetScreen()->m_FileName.IsEmpty() )
+    if( !GetScreen()->GetFileName().IsEmpty() )
     {
-        wxFileName fn = GetScreen()->m_FileName;
+        wxFileName fn = GetScreen()->GetFileName();
         fn.SetExt( ProjectFileExtension );
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
     }
@@ -668,7 +668,7 @@ void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
 wxString WinEDA_PcbFrame::GetLastNetListRead()
 {
     wxFileName absoluteFileName = m_lastNetListRead;
-    wxFileName pcbFileName = GetScreen()->m_FileName;
+    wxFileName pcbFileName = GetScreen()->GetFileName();
 
     if( !absoluteFileName.MakeAbsolute( pcbFileName.GetPath() )
         || !absoluteFileName.FileExists() )
@@ -684,7 +684,7 @@ wxString WinEDA_PcbFrame::GetLastNetListRead()
 void WinEDA_PcbFrame::SetLastNetListRead( const wxString& aLastNetListRead )
 {
     wxFileName relativeFileName = aLastNetListRead;
-    wxFileName pcbFileName = GetScreen()->m_FileName;
+    wxFileName pcbFileName = GetScreen()->GetFileName();
 
     if( relativeFileName.MakeRelativeTo( pcbFileName.GetPath() )
         && relativeFileName.GetFullPath() != aLastNetListRead )

@@ -158,17 +158,19 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
 
     // Read gerber files: each file is loaded on a new gerbview layer
     int layer = getActiveLayer();
+
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
         wxFileName filename = filenamesList[ii];
         filename.SetPath( currentPath );
-        GetScreen()->m_FileName = filename.GetFullPath();
+        GetScreen()->SetFileName( filename.GetFullPath() );
         filename.SetExt( g_PenFilenameExt );
 
         setActiveLayer( layer, false );
-        if( Read_GERBER_File( GetScreen()->m_FileName, filename.GetFullPath() ) )
+
+        if( Read_GERBER_File( GetScreen()->GetFileName(), filename.GetFullPath() ) )
         {
-            SetLastProject( GetScreen()->m_FileName );
+            SetLastProject( GetScreen()->GetFileName() );
             layer++;
             if( layer >= NB_LAYERS )
                 layer = 0;
@@ -209,7 +211,7 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame,
                          GetChars( g_PenFilenameExt ),
                          GetChars( g_PenFilenameExt ) );
         wildcard += AllFilesWildcard;
-        fn = frame->GetScreen()->m_FileName;
+        fn = frame->GetScreen()->GetFileName();
         fn.SetExt( g_PenFilenameExt );
         wxFileDialog dlg( (wxWindow*) frame, _( "Load GERBER DCODE File" ),
                           fn.GetPath(), fn.GetFullName(), wildcard,

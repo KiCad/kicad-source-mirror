@@ -48,7 +48,7 @@ public:
 
     void DecRefCount();
 
-    void IncRefCount() { m_refCount++; }
+    void IncRefCount();
 
     int GetRefCount() const { return m_refCount; }
 

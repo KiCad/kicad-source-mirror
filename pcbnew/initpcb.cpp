@@ -46,7 +46,7 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
     SetCurItem( NULL );
 
     /* clear filename, to avoid overwriting an old file */
-    GetScreen()->m_FileName.Empty();
+    GetScreen()->GetFileName().Empty();
 
     /* Init new grid size */
     wxRealPoint gridsize = GetScreen()->GetGridSize();
@@ -101,7 +101,7 @@ bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
     GetBoard()->m_Modules.DeleteAll();
 
     /* init pointeurs  et variables */
-    GetScreen()->m_FileName.Empty();
+    GetScreen()->GetFileName().Empty();
 
     SetCurItem( NULL );
 

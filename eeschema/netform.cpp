@@ -646,7 +646,7 @@ XNODE* EXPORT_HELP::makeGenericDesignHeader()
     DateAndTime( date );
 
     // the root sheet is a special sheet, call it source
-    xdesign->AddChild( node( wxT( "source" ), g_RootSheet->m_AssociatedScreen->m_FileName ) );
+    xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
 
     xdesign->AddChild( node( wxT( "date" ), CONV_FROM_UTF8( date )) );
 

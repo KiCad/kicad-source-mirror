@@ -36,7 +36,7 @@ void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
         return;
     }
 
-    if( FirstSheet->m_AssociatedScreen->IsModify() && confirm_deletion )
+    if( FirstSheet->GetScreen()->IsModify() && confirm_deletion )
     {
         msg.Printf( _( "Sheet %s (file %s) modified. Save it?" ),
                     FirstSheet->m_SheetName.GetData(),
@@ -44,14 +44,14 @@ void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
 
         if( IsOK( NULL, msg ) )
         {
-            frame->SaveEEFile( FirstSheet->m_AssociatedScreen, FILE_SAVE_AS );
+            frame->SaveEEFile( FirstSheet->GetScreen(), FILE_SAVE_AS );
         }
     }
 
     /* free the sub hierarchy */
-    if( FirstSheet->m_AssociatedScreen )
+    if( FirstSheet->GetScreen() )
     {
-        EEDrawList = FirstSheet->m_AssociatedScreen->GetDrawItems();
+        EEDrawList = FirstSheet->GetScreen()->GetDrawItems();
 
         while( EEDrawList != NULL )
         {
@@ -64,7 +64,7 @@ void DeleteSubHierarchy( SCH_SHEET* FirstSheet, bool confirm_deletion )
             }
         }
 
-        FirstSheet->m_AssociatedScreen->FreeDrawList();
+        FirstSheet->GetScreen()->FreeDrawList();
     }
 }
 

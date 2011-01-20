@@ -49,7 +49,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
         return FALSE;
 
     screen->SetCurItem( NULL );
-    screen->m_FileName = FullFileName;
+    screen->SetFileName( FullFileName );
 
     // D(printf("LoadOneEEFile:%s\n", CONV_TO_UTF8( FullFileName ) ); )
 
@@ -64,7 +64,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
     // reader now owns the open FILE.
     FILE_LINE_READER    reader( f, FullFileName );
 
-    MsgDiag = _( "Loading " ) + screen->m_FileName;
+    MsgDiag = _( "Loading " ) + screen->GetFileName();
     PrintMsg( MsgDiag );
 
     if( !reader.ReadLine()
@@ -223,7 +223,7 @@ again." );
 
     TestDanglingEnds( screen->GetDrawItems(), NULL );
 
-    MsgDiag = _( "Done Loading " ) + screen->m_FileName;
+    MsgDiag = _( "Done Loading " ) + screen->GetFileName();
     PrintMsg( MsgDiag );
 
     return true;    // Although it may be that file is only partially loaded.

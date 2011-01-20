@@ -264,7 +264,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
          * is the y coordinate values from  - PlotAreaSize.y to 0 */
 #ifdef USE_WX_ZOOM
         int y_dc_offset = PlotAreaSizeInPixels.y;
-        y_dc_offset = (int) y_dc_offset * userscale;
+        y_dc_offset = (int) ( ( double ) y_dc_offset * userscale );
         dc->SetDeviceOrigin( 0, y_dc_offset );
 #endif
         int ysize = (int) ( PlotAreaSizeInPixels.y / scaley );

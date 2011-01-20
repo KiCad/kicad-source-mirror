@@ -86,7 +86,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_READ:
     {
-        fn = GetScreen()->m_FileName;
+        fn = GetScreen()->GetFileName();
         fn.SetExt( ProjectFileExtension );
 
         wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
@@ -175,7 +175,7 @@ void WinEDA_PcbFrame::SaveProjectSettings()
 {
     wxFileName fn;
 
-    fn = GetScreen()->m_FileName;
+    fn = GetScreen()->GetFileName();
     fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),

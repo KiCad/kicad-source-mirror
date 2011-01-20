@@ -88,11 +88,23 @@ SCH_SCREEN::~SCH_SCREEN()
 }
 
 
+void SCH_SCREEN::IncRefCount()
+{
+    m_refCount++;
+
+    wxLogDebug( wxT("Screen %s reference count after increment is %d." ),
+                GetChars( GetFileName() ), m_refCount );
+}
+
+
 void SCH_SCREEN::DecRefCount()
 {
     wxCHECK_RET( m_refCount != 0,
                  wxT( "Screen reference count already zero.  Bad programmer!" ) );
     m_refCount--;
+
+    wxLogDebug( wxT("Screen %s reference count after decrement is %d." ),
+                GetChars( GetFileName() ), m_refCount );
 }
 
 
@@ -736,7 +748,7 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
     if( aItem && aItem->Type() == SCH_SHEET_T )
     {
         SCH_SHEET* ds = (SCH_SHEET*) aItem;
-        aItem = ds->m_AssociatedScreen;
+        aItem = ds->GetScreen();
     }
 
     if( aItem && aItem->Type() == SCH_SCREEN_T )

@@ -129,7 +129,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
 
         if( s_ToolListBuffer.size() > 0 ) //holes?
         {
-            fn = m_Parent->GetScreen()->m_FileName;
+            fn = m_Parent->GetScreen()->GetFileName();
             layer_extend.Empty();
 
             if( !gen_through_holes )
@@ -220,7 +220,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        GenDrillReport( m_Parent->GetScreen()->m_FileName );
+        GenDrillReport( m_Parent->GetScreen()->GetFileName() );
     }
 }
 
@@ -647,7 +647,7 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
     }
 
     GenDrillReportFile( report_dest, m_Parent->GetBoard(),
-                        m_Parent->GetScreen()->m_FileName,
+                        m_Parent->GetScreen()->GetFileName(),
                         m_UnitDrillIsInch,
                         s_HoleListBuffer,
                         s_ToolListBuffer );

@@ -1134,12 +1134,13 @@ void WinEDA_PcbFrame::OnExportVRML( wxCommandEvent& event )
 
     // Build default file name
     wxString ext = wxT( "wrl" );
-    fn = GetScreen()->m_FileName;
+    fn = GetScreen()->GetFileName();
     fn.SetExt( ext );
 
     DIALOG_EXPORT_3DFILE dlg( this );
     dlg.FilePicker()->SetPath( fn.GetFullPath() );
     dlg.SetSubdir( subDirFor3Dshapes );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 

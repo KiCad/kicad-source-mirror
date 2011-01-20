@@ -80,11 +80,6 @@ public:
     virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
                                         const wxPoint&         aPos );
 
-    SCH_SHEET_PIN* Next()
-    {
-        return (SCH_SHEET_PIN*) Pnext;
-    }
-
     void SwapData( SCH_SHEET_PIN* copyitem );
 
     /**
@@ -202,19 +197,19 @@ typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PIN_LIST;
 
 class SCH_SHEET : public SCH_ITEM
 {
-public:
-    wxString m_SheetName;               /* this is equivalent to C101 for
-                                         * components: it is stored in F0 ...
-                                         * of the file. */
-private:
+    SCH_SCREEN* m_AssociatedScreen;     ///< Screen that contains the physical data for
+                                        ///< the sheet.  In complex hierarchies multiple
+                                        ///< sheets can share a common screen.
+    SCH_SHEET_PIN_LIST m_labels;        ///< List of sheet connection points.
     wxString m_FileName;                /* also in SCH_SCREEN (redundant),
                                          * but need it here for loading after
                                          * reading the sheet description from
                                          * file. */
 
-protected:
-    SCH_SHEET_PIN_LIST m_labels;        /* List of points to be connected.*/
-
+public:
+    wxString m_SheetName;               /* this is equivalent to C101 for
+                                         * components: it is stored in F0 ...
+                                         * of the file. */
 public:
     int         m_SheetNameSize;        /* Size (height) of the text, used to
                                          * draw the sheet name */
@@ -222,13 +217,6 @@ public:
                                          * draw the file name */
     wxPoint     m_Pos;
     wxSize      m_Size;                 /* Position and Size of *sheet symbol */
-    int         m_Layer;
-    SCH_SCREEN* m_AssociatedScreen;     /* Associated Screen which
-                                         * handle the physical data
-                                         * In complex hierarchies we
-                                         * can have many SCH_SHEET
-                                         * using the same data
-                                         */
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -241,6 +229,29 @@ public:
     {
         return wxT( "SCH_SHEET" );
     }
+
+    SCH_SCREEN* GetScreen() { return m_AssociatedScreen; }
+
+    /**
+     * Function SetScreen
+     * sets the screen associated with this sheet to \a aScreen.
+     * <p>
+     * The screen reference counting is performed by SetScreen.  If \a aScreen is not
+     * the same as the current screen, the current screen reference count is decremented
+     * and \a aScreen becomes the screen for the sheet.  If the current screen reference
+     * count reaches zero, the current screen is deleted.  NULL is a valid value for
+     * \a aScreen.
+     * </p>
+     * @param aScreen The new screen to associate with the sheet.
+     */
+    void SetScreen( SCH_SCREEN* aScreen );
+
+    /**
+     * Function GetScreenCount
+     * returns the number of times the associated screen for the sheet is being used.  If
+     * no screen is associated with the sheet, then zero is returned.
+     */
+    int GetScreenCount() const;
 
     /**
      * Function Save
@@ -385,7 +396,7 @@ public:
      *  @param aScreen = a location to return a pointer to the screen (if found)
      *  @return bool if found, and a pointer to the screen
      */
-    bool SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen );
+    bool SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen );
 
     /**
      * Function LocatePathOfScreen
@@ -421,17 +432,6 @@ public:
         m_FileName = aFilename;
     }
 
-    /**
-     * Function ChangeFileName
-     * Set a new filename and manage data and associated screen
-     * The main difficulty is the filename change in a complex hierarchy.
-     * - if new filename is not already used: change to the new name (and if an
-     *   existing file is found, load it on request)
-     * - if new filename is already used (a complex hierarchy) : reference the
-     *   sheet.
-     * @param aFileName = the new filename
-     * @param aFrame = the schematic frame
-     */
     bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
 
     //void      RemoveSheet(SCH_SHEET* sheet);

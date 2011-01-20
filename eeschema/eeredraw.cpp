@@ -66,17 +66,17 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     DrawPanel->DrawCursor( DC );
 
     // Display the sheet filename, and the sheet path, for non root sheets
-    if( GetScreen()->m_FileName == m_DefaultSchematicFileName )
+    if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
         wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->m_FileName ) );
+        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->GetFileName() ) );
         SetTitle( title );
     }
     else
     {
 #if 0
         title = wxT( "[" );
-        title << GetScreen()->m_FileName << wxT( "]  " ) << _( "Sheet" );
+        title << GetScreen()->GetFileName() << wxT( "]  " ) << _( "Sheet" );
         title << wxT( " " ) << m_CurrentSheet->PathHumanReadable();
 
 #else
@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
         // Often the /path/to/filedir is blank because of the FullFileName argument
         // passed to LoadOneEEFile() which currently omits the path on non-root schematics.
-        wxFileName t( GetScreen()->m_FileName );
+        wxFileName t( GetScreen()->GetFileName() );
 
         title = wxChar( '[' );
         title << t.GetName() << wxChar( ' ' );

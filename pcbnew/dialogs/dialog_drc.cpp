@@ -272,7 +272,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
     wxString   wildcard( _( "DRC report files (.rpt)|*.rpt" ) );
     wxString   Ext( wxT( "rpt" ) );
 
-    fn = m_Parent->GetScreen()->m_FileName + wxT( "-drc" );
+    fn = m_Parent->GetScreen()->GetFileName() + wxT( "-drc" );
     fn.SetExt( Ext );
 
     wxFileDialog dlg( this, _( "Save DRC Report File" ), wxEmptyString,
@@ -555,7 +555,7 @@ void DIALOG_DRC_CONTROL::writeReport( FILE* fp )
     int count;
 
     fprintf( fp, "** Drc report for %s **\n",
-            CONV_TO_UTF8( m_Parent->GetScreen()->m_FileName ) );
+             CONV_TO_UTF8( m_Parent->GetScreen()->GetFileName() ) );
 
     wxDateTime now = wxDateTime::Now();
 

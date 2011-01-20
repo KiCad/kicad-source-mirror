@@ -285,7 +285,7 @@ void DIALOG_PLOT::Init_Dialog()
     // Output directory
     if( g_PcbPlotOptions.GetOutputDirectory().IsEmpty() )
     {
-        fileName = m_Parent->GetScreen()->m_FileName;
+        fileName = m_Parent->GetScreen()->GetFileName();
         m_outputDirectoryName->SetValue( fileName.GetPath() );
     }
     else
@@ -612,7 +612,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         {
             s_SelectedLayers |= mask;
 
-            fn = m_Parent->GetScreen()->m_FileName;
+            fn = m_Parent->GetScreen()->GetFileName();
             fn.SetPath( m_outputDirectoryName->GetValue() );
 
             // Create file name.

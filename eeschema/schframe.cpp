@@ -326,14 +326,13 @@ void SCH_EDIT_FRAME::CreateScreens()
         g_RootSheet = new SCH_SHEET();
     }
 
-    if( g_RootSheet->m_AssociatedScreen == NULL )
+    if( g_RootSheet->GetScreen() == NULL )
     {
-        g_RootSheet->m_AssociatedScreen = new SCH_SCREEN();
-        g_RootSheet->m_AssociatedScreen->IncRefCount();
+        g_RootSheet->SetScreen( new SCH_SCREEN() );
     }
 
-    g_RootSheet->m_AssociatedScreen->m_FileName = m_DefaultSchematicFileName;
-    g_RootSheet->m_AssociatedScreen->m_Date     = GenDate();
+    g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
+    g_RootSheet->GetScreen()->m_Date     = GenDate();
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
@@ -396,11 +395,11 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    if( !g_RootSheet->m_AssociatedScreen->m_FileName.IsEmpty()
-       && (g_RootSheet->m_AssociatedScreen->GetDrawItems() != NULL) )
-        SetLastProject( g_RootSheet->m_AssociatedScreen->m_FileName );
+    if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty()
+       && (g_RootSheet->GetScreen()->GetDrawItems() != NULL) )
+        SetLastProject( g_RootSheet->GetScreen()->GetFileName() );
 
-    ClearProjectDrawList( g_RootSheet->m_AssociatedScreen, TRUE );
+    ClearProjectDrawList( g_RootSheet->GetScreen(), TRUE );
 
     /* all sub sheets are deleted, only the main sheet is usable */
     m_CurrentSheet->Clear();
@@ -678,7 +677,7 @@ void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 {
-    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
 
     if( fn.IsOk() )
     {
@@ -695,7 +694,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 {
-    wxFileName fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
 
     fn.SetExt( NetlistFileExtension );
 
@@ -765,10 +764,11 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 
     dlg.ShowModal();
 
-    fn = g_RootSheet->m_AssociatedScreen->m_FileName;
+    fn = g_RootSheet->GetScreen()->GetFileName();
 
     wxString default_name = NAMELESS_PROJECT;
     default_name += wxT( ".sch" );
+
     if( fn.GetFullName() != default_name )
     {
         fn.SetExt( ProjectFileExtension );

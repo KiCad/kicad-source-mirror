@@ -154,7 +154,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 0;                           /* no change of name */
 
     /* Calculation CMP file name by changing the extension name NetList */
-    fn = m_Parent->GetScreen()->m_FileName;
+    fn = m_Parent->GetScreen()->GetFileName();
     fn.SetExt( NetCmpExtBuffer );
 
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
@@ -576,7 +576,7 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     }
 
     /* Calculation file name by changing the extension name to NetList */
-    fn = GetScreen()->m_FileName;
+    fn = GetScreen()->GetFileName();
     fn.SetExt( NetCmpExtBuffer );
     wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
                NetCmpExtBuffer;

@@ -134,7 +134,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         return;
     }
 
-    fnFront = GetScreen()->m_FileName;
+    fnFront = GetScreen()->GetFileName();
     frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
     fnFront.SetName( fnFront.GetName() + frontLayerName );
     fnFront.SetExt( wxT( "pos") );
@@ -149,7 +149,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
     if( doBoardBack )
     {
-        fnBack = GetScreen()->m_FileName;
+        fnBack = GetScreen()->GetFileName();
         backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
         fnBack.SetName( fnBack.GetName() + backLayerName );
         fnBack.SetExt( wxT( "pos" ) );
@@ -320,7 +320,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
 
     File_Place_Offset = wxPoint( 0, 0 );
 
-    fn = GetScreen()->m_FileName;
+    fn = GetScreen()->GetFileName();
     fn.SetExt( wxT( "rpt" ) );
 
     rptfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );

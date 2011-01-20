@@ -3,7 +3,7 @@
 // Purpose:     member functions for SCH_SHEET
 //              header = sch_sheet.h
 // Author:      jean-pierre Charras
-// Modified by:
+// Modified by: Wayne Stambaugh
 // Created:     08/02/2006 18:37:02
 // RCS-ID:
 // Copyright:
@@ -16,7 +16,6 @@
 #include "macros.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
-#include "confirm.h"
 #include "trigo.h"
 #include "richio.h"
 #include "class_sch_screen.h"
@@ -29,7 +28,8 @@
 #include "sch_component.h"
 
 
-SCH_SHEET::SCH_SHEET( const wxPoint& pos ) : SCH_ITEM( NULL, SCH_SHEET_T )
+SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
+    SCH_ITEM( NULL, SCH_SHEET_T )
 {
     m_Layer = LAYER_SHEET;
     m_Pos = pos;
@@ -69,7 +69,7 @@ SCH_SHEET::~SCH_SHEET()
     // perhaps it should be deleted also.
     if( m_AssociatedScreen )
     {
-        m_AssociatedScreen->GetRefCount();
+        m_AssociatedScreen->DecRefCount();
 
         if( m_AssociatedScreen->GetRefCount() == 0 )
             delete m_AssociatedScreen;
@@ -80,6 +80,38 @@ SCH_SHEET::~SCH_SHEET()
 EDA_ITEM* SCH_SHEET::doClone() const
 {
     return new SCH_SHEET( *this );
+}
+
+
+void SCH_SHEET::SetScreen( SCH_SCREEN* aScreen )
+{
+    if( aScreen == m_AssociatedScreen )
+        return;
+
+    if( m_AssociatedScreen != NULL )
+    {
+        m_AssociatedScreen->DecRefCount();
+
+        if( m_AssociatedScreen->GetRefCount() == 0 )
+        {
+            delete m_AssociatedScreen;
+            m_AssociatedScreen = NULL;
+        }
+    }
+
+    m_AssociatedScreen = aScreen;
+
+    if( m_AssociatedScreen )
+        m_AssociatedScreen->IncRefCount();
+}
+
+
+int SCH_SHEET::GetScreenCount() const
+{
+    if( m_AssociatedScreen == NULL )
+        return 0;
+
+    return m_AssociatedScreen->GetRefCount();
 }
 
 
@@ -380,9 +412,7 @@ bool SCH_SHEET::HasUndefinedLabels()
 void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* Place list structures for new sheet. */
-    bool isnew = ( m_Flags & IS_NEW ) ? true : false;
-
-    if( isnew )
+    if( IsNew() )
     {
         if( !frame->EditSheet( this, DC ) )
         {
@@ -413,7 +443,7 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
     SCH_ITEM::Place( frame, DC ); //puts it on the GetDrawItems().
 
-    if( isnew )
+    if( IsNew() )
     {
         frame->SetSheetNumberAndCount();
     }
@@ -621,28 +651,30 @@ int SCH_SHEET::ComponentCount()
 }
 
 
-bool SCH_SHEET::SearchHierarchy( wxString aFilename, SCH_SCREEN** aScreen )
+bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen )
 {
     if( m_AssociatedScreen )
     {
-        EDA_ITEM* strct = m_AssociatedScreen->GetDrawItems();
+        EDA_ITEM* item = m_AssociatedScreen->GetDrawItems();
 
-        while( strct )
+        while( item )
         {
-            if( strct->Type() == SCH_SHEET_T )
+            if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* ss = (SCH_SHEET*) strct;
-                if( ss->m_AssociatedScreen
-                    && ss->m_AssociatedScreen->m_FileName.CmpNoCase( aFilename ) == 0 )
+                SCH_SHEET* sheet = (SCH_SHEET*) item;
+
+                if( sheet->m_AssociatedScreen
+                    && sheet->m_AssociatedScreen->GetFileName().CmpNoCase( aFilename ) == 0 )
                 {
-                    *aScreen = ss->m_AssociatedScreen;
+                    *aScreen = sheet->m_AssociatedScreen;
                     return true;
                 }
 
-                if( ss->SearchHierarchy( aFilename, aScreen ) )
+                if( sheet->SearchHierarchy( aFilename, aScreen ) )
                     return true;
             }
-            strct = strct->Next();
+
+            item = item->Next();
         }
     }
 
@@ -691,15 +723,13 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
 
         if( screen )
         {
-            m_AssociatedScreen = screen;
-            m_AssociatedScreen->IncRefCount();
+            SetScreen( screen );
 
             //do not need to load the sub-sheets - this has already been done.
         }
         else
         {
-            m_AssociatedScreen = new SCH_SCREEN();
-            m_AssociatedScreen->IncRefCount();
+            SetScreen( new SCH_SCREEN() );
             success = aFrame->LoadOneEEFile( m_AssociatedScreen, m_FileName );
 
             if( success )
@@ -750,109 +780,6 @@ int SCH_SHEET::CountSheets()
 wxString SCH_SHEET::GetFileName( void )
 {
     return m_FileName;
-}
-
-
-bool SCH_SHEET::ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName )
-{
-    if( ( GetFileName() == aFileName ) && m_AssociatedScreen )
-        return true;
-
-    SCH_SCREEN* Screen_to_use = NULL;
-    wxString    msg;
-    bool        LoadFromFile = false;
-
-    // do we reload the data from the existing hierarchy
-    if( g_RootSheet->SearchHierarchy( aFileName, &Screen_to_use ) )
-    {
-        if( m_AssociatedScreen ) // upon initial load, this will be null.
-        {
-            msg.Printf( _( "A Sub Hierarchy named %s exists, Use it (The \
-data in this sheet will be replaced)?" ),
-                        GetChars( aFileName ) );
-            if( !IsOK( NULL, msg ) )
-            {
-                DisplayInfoMessage( (wxWindow*) NULL, _( "Sheet Filename Renaming Aborted" ) );
-                return false;
-            }
-        }
-    }
-    else if( wxFileExists( aFileName ) ) // do we reload the data from an existing file
-    {
-        msg.Printf( _( "A file named %s exists, load it (otherwise keep \
-current sheet data if possible)?" ),
-                    GetChars( aFileName ) );
-
-        if( IsOK( NULL, msg ) )
-        {
-            LoadFromFile = true;
-
-            // Can be NULL if loading a file when creating a new sheet.
-            if( m_AssociatedScreen )
-            {
-                m_AssociatedScreen->DecRefCount();  // be careful with these
-
-                if( m_AssociatedScreen->GetRefCount() == 0 )
-                    SAFE_DELETE( m_AssociatedScreen );
-
-               m_AssociatedScreen = NULL;         // will be created later
-            }
-        }
-    }
-
-    // if an associated screen exists, shared between this sheet and others
-    // sheets, what we do ?
-    if( m_AssociatedScreen && ( m_AssociatedScreen->GetRefCount() > 1 ) )
-    {
-        msg = _( "This sheet uses shared data in a complex hierarchy" );
-        msg << wxT( "\n" );
-        msg << _( "Do we convert it in a simple hierarchical sheet (\
-otherwise delete current sheet data)" );
-
-        if( IsOK( NULL, msg ) )
-        {
-            LoadFromFile = true;
-            wxString oldfilename = m_AssociatedScreen->m_FileName;
-            m_AssociatedScreen->m_FileName = aFileName;
-            aFrame->SaveEEFile( m_AssociatedScreen, FILE_SAVE_AS );
-            m_AssociatedScreen->m_FileName = oldfilename;
-        }
-        m_AssociatedScreen->DecRefCount();   //be careful with these
-        m_AssociatedScreen = NULL;           //will be created later
-    }
-
-    SetFileName( aFileName );
-
-    // if we use new data (from file or from internal hierarchy), delete the
-    // current sheet data
-    if( m_AssociatedScreen && (LoadFromFile || Screen_to_use) )
-    {
-        m_AssociatedScreen->DecRefCount();
-
-        if( m_AssociatedScreen->GetRefCount() == 0 )
-            SAFE_DELETE( m_AssociatedScreen );
-
-        m_AssociatedScreen = NULL;         // so that we reload..
-    }
-
-    if( LoadFromFile )
-        Load( aFrame );
-    else if( Screen_to_use )
-    {
-        m_AssociatedScreen = Screen_to_use;
-        m_AssociatedScreen->IncRefCount();
-    }
-
-    //just make a new screen if needed.
-    if( !m_AssociatedScreen )
-    {
-        m_AssociatedScreen = new SCH_SCREEN();
-        m_AssociatedScreen->IncRefCount();         // be careful with these
-    }
-
-    m_AssociatedScreen->m_FileName = aFileName;
-
-    return true;
 }
 
 

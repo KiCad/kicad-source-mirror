@@ -67,7 +67,7 @@ static int mapYto( int y )
  */
 void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
 {
-    wxFileName fn = GetScreen()->m_FileName;
+    wxFileName fn = GetScreen()->GetFileName();
     wxString   msg, ext, wildcard;
     FILE*      file;
 
@@ -540,7 +540,7 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
     msg = wxT( "USER " ) + wxGetApp().GetAppName() + wxT( " " ) +
           GetBuildVersion();
     fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
-    msg = wxT( "DRAWING " ) + screen->m_FileName;
+    msg = wxT( "DRAWING " ) + screen->GetFileName();
     fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
     msg = wxT( "REVISION " ) + screen->m_Revision + wxT( " " ) +
           screen->m_Date;

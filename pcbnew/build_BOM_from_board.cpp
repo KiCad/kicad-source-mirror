@@ -61,7 +61,7 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     }
 
     /* Set the file extension: */
-    fn = GetScreen()->m_FileName;
+    fn = GetScreen()->GetFileName();
     fn.SetExt( CsvFileExtension );
 
     wxFileDialog dlg( this, _( "Save Bill of Materials" ), wxGetCwd(),

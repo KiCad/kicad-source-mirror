@@ -18,6 +18,8 @@ class wxFindReplaceData;
 
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
+typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
+typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 
 
 // Schematic item filter mask for hit test objects in schematic editor.

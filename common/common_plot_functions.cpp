@@ -487,7 +487,7 @@ void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         case WS_FILENAME:
         {
             wxString fname, fext;
-            wxFileName::SplitPath( screen->m_FileName,
+            wxFileName::SplitPath( screen->GetFileName(),
                                    (wxString*) NULL,
                                    &fname,
                                    &fext );
