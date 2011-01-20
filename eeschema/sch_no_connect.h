@@ -95,6 +95,7 @@ public:
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
 private:
+    virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;

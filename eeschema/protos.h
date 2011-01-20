@@ -232,12 +232,6 @@ void BreakSegmentOnJunction( SCH_SCREEN* Screen );
  */
 void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 
-/**************/
-/* EECLASS.CPP */
-/**************/
-
-void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
-
 /***************/
 /* OPTIONS.CPP */
 /***************/

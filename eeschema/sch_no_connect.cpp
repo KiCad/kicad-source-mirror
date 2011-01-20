@@ -152,6 +152,10 @@ void SCH_NO_CONNECT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
     aPoints.push_back( m_Pos );
 }
 
+bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
+{
+    return m_Pos == aPosition;
+}
 
 bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {

@@ -189,7 +189,11 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     GetScreen()->ClearUndoRedoList();
 
     OnModify();
+    
+    // Clear flags and pointeurs to avoid inconsistencies
     GetBoard()->m_Status_Pcb = 0;
+    SetCurItem( NULL );
+
     State = 0;
     Comment = 0;
     s_NbNewModules = 0;

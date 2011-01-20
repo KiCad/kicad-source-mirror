@@ -212,13 +212,13 @@ void SCH_LINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
     if( m_Layer == LAYER_NOTES )
         GRDashedLine( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, width, color );
     else
-        GRLine( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, width, color );
+        GRLine( &panel->m_ClipBox, DC, start, end, width, color );
 
     if( m_StartIsDangling )
-        DrawDanglingSymbol( panel, DC, m_Start + offset, color );
+        DrawDanglingSymbol( panel, DC, start, color );
 
     if( m_EndIsDangling )
-        DrawDanglingSymbol( panel, DC, m_End + offset, color );
+        DrawDanglingSymbol( panel, DC, end, color );
 }
 
 
@@ -374,6 +374,7 @@ bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
     if( aRect.Contains( m_Start ) && aRect.Contains( m_End ) )
     {
         m_Flags |= SELECTED;
+        m_Flags &= ~(STARTPOINT | ENDPOINT);
     }
     else if( aRect.Contains( m_Start ) )
     {

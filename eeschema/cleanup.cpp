@@ -89,14 +89,12 @@ void BreakSegment( SCH_SCREEN* aScreen, wxPoint aBreakpoint )
         if( !TestSegmentHit( aBreakpoint, segment->m_Start, segment->m_End, 0 ) )
             continue;
 
-        /* ???
-         * Segment connecte: doit etre coupe en 2 si px,py
-         * n'est
-         *  pas une extremite */
+        /* A segment is found
+         * It will be cut if aBreakpoint is not a segment end */
         if( ( segment->m_Start == aBreakpoint ) || ( segment->m_End == aBreakpoint ) )
             continue;
 
-        /* Here we must cut the segment into 2. */
+        /* Here we must cut the segment and create a new segment. */
         NewSegment = new SCH_LINE( *segment );
         NewSegment->m_Start = aBreakpoint;
         segment->m_End = NewSegment->m_Start;

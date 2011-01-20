@@ -25,34 +25,6 @@
 #include <boost/foreach.hpp>
 
 
-void SetaParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
-{
-    switch( Struct->Type() )
-    {
-    case SCH_POLYLINE_T:
-    case SCH_JUNCTION_T:
-    case SCH_TEXT_T:
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_COMPONENT_T:
-    case SCH_LINE_T:
-    case SCH_BUS_ENTRY_T:
-    case SCH_SHEET_T:
-    case SCH_MARKER_T:
-    case SCH_NO_CONNECT_T:
-        Struct->SetParent( Screen );
-        break;
-
-    case SCH_SHEET_LABEL_T:
-        break;
-
-    default:
-        break;
-    }
-}
-
-
 /* Default EESchema zoom values. Limited to 17 values to keep a decent size
  * to menus
  */
@@ -573,13 +545,29 @@ void SCH_SCREEN::SelectBlockItems()
         return;
 
     // Select all the items in the screen connected to the items in the block.
-    for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
+    // be sure end lines that are on the block limits are seen inside this block
+    m_BlockLocate.Inflate(1);
+    unsigned last_select_id = pickedlist->GetCount();
+    unsigned ii = 0;
+    for( ; ii < last_select_id; ii++ )
     {
         item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
 
         if( item->Type() == SCH_LINE_T )
         {
             item->IsSelectStateChanged( m_BlockLocate );
+            if( ( item->m_Flags & SELECTED ) == 0 )
+            {   // This is a special case:
+                // this selected wire has no ends in block.
+                // But it was selected (because it intersects the selecting area),
+                // so we must keep it selected and select items connected to it
+                // Note: an other option could be: remove it from drag list
+                item->m_Flags |= SELECTED | SKIP_STRUCT;
+                std::vector< wxPoint > connections;
+                item->GetConnectionPoints( connections );
+                for( size_t i = 0; i < connections.size(); i++ )
+                    addConnectedItemsToBlock( connections[i] );
+            }
             pickedlist->SetPickerFlags( item->m_Flags, ii );
         }
         else if( item->IsConnectable() )
@@ -592,6 +580,8 @@ void SCH_SCREEN::SelectBlockItems()
                 addConnectedItemsToBlock( connections[i] );
         }
     }
+
+    m_BlockLocate.Inflate(-1);
 }
 
 
@@ -599,29 +589,42 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 {
     SCH_ITEM* item;
     ITEM_PICKER picker;
+    bool addinlist = true;
 
     for( item = GetDrawItems(); item != NULL; item = item->Next() )
     {
         picker.m_PickedItem     = item;
         picker.m_PickedItemType = item->Type();
 
-        if( item->IsSelected() || !item->IsConnectable() || !item->IsConnected( position ) )
+        if( !item->IsConnectable() || !item->IsConnected( position ) || (item->m_Flags & SKIP_STRUCT) )
             continue;
 
-        item->m_Flags = SELECTED;
+        if( item->IsSelected() && item->Type() != SCH_LINE_T )
+            continue;
 
+        // A line having 2 ends, it can be tested twice: one time per end
         if( item->Type() == SCH_LINE_T )
         {
+            if( ! item->IsSelected() )      // First time this line is tested
+                item->m_Flags = SELECTED | STARTPOINT | ENDPOINT;
+            else      // second time (or more) this line is tested
+                addinlist = false;
+
             SCH_LINE* line = (SCH_LINE*) item;
 
             if( line->m_Start == position )
-                item->m_Flags |= ENDPOINT;
+                item->m_Flags &= ~STARTPOINT;
             else if( line->m_End == position )
-                item->m_Flags |= STARTPOINT;
+                item->m_Flags &= ~ENDPOINT;
         }
+        else
+            item->m_Flags = SELECTED;
 
-        picker.m_PickerFlags = item->m_Flags;
-        m_BlockLocate.m_ItemsSelection.PushItem( picker );
+        if( addinlist )
+        {
+            picker.m_PickerFlags = item->m_Flags;
+            m_BlockLocate.m_ItemsSelection.PushItem( picker );
+        }
     }
 }
 

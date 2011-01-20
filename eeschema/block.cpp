@@ -28,12 +28,13 @@
 
 
 // Imported functions:
-void        MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
-void        RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-void        Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
-void        MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-void        DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
-void        DuplicateItemsInList( SCH_SCREEN*        screen,
+extern void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
+extern void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
+extern void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
+extern void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
+extern void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
+extern void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
+extern void DuplicateItemsInList( SCH_SCREEN*        screen,
                                   PICKED_ITEMS_LIST& aItemsList,
                                   const wxPoint      aMoveVector );
 
@@ -581,7 +582,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
             ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
             ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
         }
-        SetaParent( Struct, GetScreen() );
+        SetSchItemParent( Struct, GetScreen() );
         Struct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         Struct->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( Struct );

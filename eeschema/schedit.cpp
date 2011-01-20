@@ -464,21 +464,11 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
 
             // Ensure the block selection contains the segment, or one end of
-            // the segment.  The initial rect is only one point (w = h = 0)
-            // The rect must contains one or 2 ends.
-            // If only one end is selected, this is a drag Node
-            // if no ends selected, we adjust the rect area to contain the
-            // whole segment.  This works fine only for H and V segments and
-            // only if they do not cross a component
-            // TODO: a better way to drag only wires
-            SCH_LINE* segm = (SCH_LINE*) screen->GetCurItem();
-
-            if( !screen->m_BlockLocate.Contains( segm->m_Start )
-               && !screen->m_BlockLocate.Contains( segm->m_End ) )
-            {
-                screen->m_BlockLocate.SetOrigin( segm->m_Start );
-                screen->m_BlockLocate.SetEnd( segm->m_End );
-            }
+            // the segment.  The initial rect is only one point (w = h = 2)
+            // The rect contains one or 0 ends.
+            // If one end is selected, this is a drag Node
+            // if no ends selected the current segment is dragged
+            screen->m_BlockLocate.Inflate( 1 );
             HandleBlockEnd( &dc );
         }
         break;
