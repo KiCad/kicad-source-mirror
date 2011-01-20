@@ -112,6 +112,12 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* aParent,
 
     m_Include_Modules->SetValue( blockIncludeModules );
     m_IncludeLockedModules->SetValue( blockIncludeLockedModules );
+
+    if( m_Include_Modules->GetValue() )
+        m_IncludeLockedModules->Enable();
+    else
+        m_IncludeLockedModules->Disable();
+
     m_Include_Tracks->SetValue( blockIncludeTracks );
     m_Include_Zones->SetValue( blockIncludeZones );
     m_Include_Draw_Items->SetValue( blockIncludeItemsOnTechLayers );
