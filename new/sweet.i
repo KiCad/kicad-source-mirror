@@ -22,6 +22,10 @@
 
 %ignore LINE_READER::operator char* () const;
 
+namespace SCH {
+%ignore PART::operator=( const PART& other );
+}
+
 %include "richio.h"
 %include "dsnlexer.h"
 //%include "sch_lib_table_lexer.h"
@@ -29,4 +33,5 @@
 %include "sch_lib.h"
 %include "sch_lib_table.h"
 %include "sweet_lexer.h"
+
 %include "sch_part.h"

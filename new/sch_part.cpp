@@ -176,7 +176,7 @@ public:
         for(  ; tok!=T_RIGHT;  tok = in->NextTok() )
         {
             if( tok==T_EOF )
-                in->Unexpected( _( "end of input" ) );
+                in->Unexpected( T_EOF );
 
             if( tok == T_LEFT )
                 tok = in->NextTok();
@@ -185,14 +185,13 @@ public:
             {
             default:
                 // describe what we expect at this level
-                in->Expecting( wxT(
+                in->Expecting(
                     "anchor|value|footprint|model|keywords|alternates\n"
                     "|property\n"
                     "  |property_del\n"
                     "|pin\n"
                     "  |pin_merge|pin_swap|pin_renum|pin_rename|route_pin_swap\n"
                     "|polyline|line|rectangle|circle|arc|bezier|text"
-                    )
                  );
                 break;
 

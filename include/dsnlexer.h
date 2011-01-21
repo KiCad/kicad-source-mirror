@@ -31,7 +31,7 @@
 
 #include "richio.h"
 
-
+#ifndef SWIG
 /**
  * Struct KEYWORD
  * holds a keyword string and its unique integer token.
@@ -41,6 +41,7 @@ struct KEYWORD
     const char* name;       ///< unique keyword.
     int         token;      ///< a zero based index into an array of KEYWORDs
 };
+#endif
 
 // something like this macro can be used to help initialize a KEYWORD table.
 // see SPECCTRA_DB::keywords[] as an example.
@@ -76,6 +77,7 @@ enum DSN_SYNTAX_T {
  */
 class DSNLEXER
 {
+#ifndef SWIG
 protected:
     bool                iOwnReaders;            ///< on readerStack, should I delete them?
     const char*         start;
@@ -155,7 +157,7 @@ protected:
 
         return false;
     }
-
+#endif
 
 public:
 

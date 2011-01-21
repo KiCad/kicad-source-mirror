@@ -380,7 +380,7 @@ const char* ${LEXERCLASS}::TokenName( T aTok )
     }
     else if( aTok < 0 )
     {
-        return DSNLEXER::Syntax( aTok );
+        ret = DSNLEXER::Syntax( aTok );
     }
     else
         ret = \"token too big\";

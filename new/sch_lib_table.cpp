@@ -97,7 +97,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
             strcmp( in->CurText(), "subversion" ) &&
             strcmp( in->CurText(), "http" ) )
         {
-            in->Expecting( wxT( "dir|schematic|subversion|http" ) );
+            in->Expecting( "dir|schematic|subversion|http" );
         }
 
         row->SetType( in->CurText() );
