@@ -55,7 +55,7 @@ MARKER_PCB::~MARKER_PCB()
 }
 
 
-void MARKER_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
+void MARKER_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     frame->ClearMsgPanel();
 

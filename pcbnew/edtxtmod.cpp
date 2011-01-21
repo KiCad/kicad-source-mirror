@@ -13,10 +13,8 @@
 #include "protos.h"
 
 
-static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel,
-                                   wxDC*             DC,
-                                   bool              erase );
-static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Show_MoveTexte_Module( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
 wxPoint        MoveVector;              // Move vector for move edge, exported
@@ -125,7 +123,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
  *
  * If a text is selected, its initial coordinates are regenerated.
  */
-static void AbortMoveTextModule( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     BASE_SCREEN*  screen = Panel->GetScreen();
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
@@ -242,8 +240,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-static void Show_MoveTexte_Module( WinEDA_DrawPanel* panel, wxDC* DC,
-                                   bool erase )
+static void Show_MoveTexte_Module( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BASE_SCREEN*  screen = panel->GetScreen();
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();

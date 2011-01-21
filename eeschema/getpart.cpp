@@ -22,8 +22,8 @@
 #include <boost/foreach.hpp>
 
 
-static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 static TRANSFORM OldTransform;
 static wxPoint   OldPos;
@@ -221,7 +221,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 /**
  * Move a component.
  */
-static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     wxPoint        move_vector;
 
@@ -275,7 +275,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
         DrawPanel->CursorOn( DC );
     }
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+    GetScreen()->TestDanglingEnds( DrawPanel, DC );
     OnModify( );
 }
 
@@ -283,7 +283,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
 /*
  * Abort a place component command in progress.
  */
-static void ExitPlaceCmp( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     SCH_SCREEN*    screen = (SCH_SCREEN*) Panel->GetScreen();
 
@@ -359,7 +359,7 @@ void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* 
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+    GetScreen()->TestDanglingEnds( DrawPanel, DC );
     OnModify( );
 }
 
@@ -404,7 +404,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+    GetScreen()->TestDanglingEnds( DrawPanel, DC );
     OnModify( );
 }
 

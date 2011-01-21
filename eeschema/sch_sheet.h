@@ -65,11 +65,11 @@ public:
 
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
-    virtual void    Draw( WinEDA_DrawPanel* aPanel,
-                          wxDC*             aDC,
-                          const wxPoint&    aOffset,
-                          int               aDraw_mode,
-                          int               aColor = -1 );
+    virtual void    Draw( EDA_DRAW_PANEL* aPanel,
+                          wxDC*           aDC,
+                          const wxPoint&  aOffset,
+                          int             aDraw_mode,
+                          int             aColor = -1 );
 
     /**
      * Function CreateGraphicShape (virual)
@@ -273,7 +273,7 @@ public:
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-    void DisplayInfo( WinEDA_DrawFrame* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges
@@ -356,11 +356,11 @@ public:
      *  @param aColor = color used to draw sheet. Usually -1 to use the normal
      * color for sheet items
      */
-    void Draw( WinEDA_DrawPanel* aPanel,
-               wxDC*             aDC,
-               const wxPoint&    aOffset,
-               int               aDrawMode,
-               int               aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel,
+               wxDC*           aDC,
+               const wxPoint&  aOffset,
+               int             aDrawMode,
+               int             aColor = -1 );
 
     /**
      * Function GetBoundingBox

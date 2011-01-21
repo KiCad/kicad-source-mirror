@@ -664,7 +664,7 @@ void WinEDA_TextFrame::OnClose( wxCloseEvent& event )
 }
 
 
-void Affiche_1_Parametre( WinEDA_DrawFrame* frame, int pos_X,
+void Affiche_1_Parametre( EDA_DRAW_FRAME* frame, int pos_X,
                           const wxString& texte_H, const wxString& texte_L,
                           int color )
 {

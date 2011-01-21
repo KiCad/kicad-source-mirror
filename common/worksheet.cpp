@@ -928,8 +928,7 @@ Ki_WorkSheetData WS_Segm5_LT =
 
 /* Draw the page reference sheet.
  */
-void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
-                                       int line_width )
+void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width )
 {
     if( !m_Draw_Sheet_Ref )
         return;
@@ -958,7 +957,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
     if( Sheet == NULL )
     {
         DisplayError( this,
-                      wxT( "WinEDA_DrawFrame::TraceWorkSheet() error: NULL Sheet" ) );
+                      wxT( "EDA_DRAW_FRAME::TraceWorkSheet() error: NULL Sheet" ) );
         return;
     }
 
@@ -1527,8 +1526,7 @@ void WinEDA_DrawFrame::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen,
  * @param aPosition = position to identify by YX ref
  * @return a wxString containing the message locator like A3 or B6 (or ?? if out of page limits)
  */
-wxString WinEDA_DrawFrame::GetXYSheetReferences( BASE_SCREEN*   aScreen,
-                                                 const wxPoint& aPosition )
+wxString EDA_DRAW_FRAME::GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition )
 {
     Ki_PageDescr* Sheet = aScreen->m_CurrentSheetDesc;
     int ii, xg, yg, ipas, gxpas, gypas;
@@ -1538,7 +1536,7 @@ wxString WinEDA_DrawFrame::GetXYSheetReferences( BASE_SCREEN*   aScreen,
     if( Sheet == NULL )
     {
         DisplayError( this,
-                      wxT( "WinEDA_DrawFrame::GetXYSheetReferences() error: NULL Sheet" ) );
+                      wxT( "EDA_DRAW_FRAME::GetXYSheetReferences() error: NULL Sheet" ) );
         return msg;
     }
 
@@ -1574,7 +1572,7 @@ wxString WinEDA_DrawFrame::GetXYSheetReferences( BASE_SCREEN*   aScreen,
 }
 
 
-wxString WinEDA_DrawFrame::GetScreenDesc()
+wxString EDA_DRAW_FRAME::GetScreenDesc()
 {
     wxString msg;
 

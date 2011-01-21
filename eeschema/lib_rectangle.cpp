@@ -171,7 +171,7 @@ int LIB_RECTANGLE::GetPenSize()
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                  const wxPoint& aOffset, int aColor, int aDrawMode,
                                  void* aData, const TRANSFORM& aTransform )
 {
@@ -217,7 +217,7 @@ void LIB_RECTANGLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-void LIB_RECTANGLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 

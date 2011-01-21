@@ -14,7 +14,7 @@
 #include "dialog_helpers.h"
 
 
-CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame )
+CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
 {
     static wxString OldLibName;
     wxString        msg;
@@ -51,7 +51,7 @@ CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame )
 }
 
 
-int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
+int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
                                  CMP_LIBRARY* Library,
                                  wxString& Buffer, wxString& OldName )
 {
@@ -76,8 +76,7 @@ int DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
 }
 
 
-int GetNameOfPartToLoad( WinEDA_DrawFrame* frame, CMP_LIBRARY* Library,
-                         wxString& BufName )
+int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Library, wxString& BufName )
 {
     int             ii;
     static wxString OldCmpName;

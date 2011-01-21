@@ -197,7 +197,7 @@ int LIB_CIRCLE::GetPenSize()
 }
 
 
-void LIB_CIRCLE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                               int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1;
@@ -250,7 +250,7 @@ EDA_Rect LIB_CIRCLE::GetBoundingBox() const
 }
 
 
-void LIB_CIRCLE::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();

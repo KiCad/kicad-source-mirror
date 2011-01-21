@@ -151,8 +151,7 @@ void EDGE_MODULE::SetDrawCoord()
  * - Circles
  * - Arcs
  */
-void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        int draw_mode, const wxPoint& offset )
+void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 {
     int                  ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
     int                  color, type_trace;
@@ -281,7 +280,7 @@ void EDGE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
+void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
 

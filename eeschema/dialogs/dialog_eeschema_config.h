@@ -7,7 +7,7 @@
 
 
 class SCH_EDIT_FRAME;
-class WinEDA_DrawFrame;
+class EDA_DRAW_FRAME;
 
 
 class DIALOG_EESCHEMA_CONFIG : public DIALOG_EESCHEMA_CONFIG_FBP
@@ -34,7 +34,7 @@ private:
 
 
 public:
-    DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* parent, WinEDA_DrawFrame* activeWindow );
+    DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* parent, EDA_DRAW_FRAME* activeWindow );
     ~DIALOG_EESCHEMA_CONFIG() {};
 };
 

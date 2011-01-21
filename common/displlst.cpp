@@ -17,13 +17,13 @@ enum listbox {
 
 
 BEGIN_EVENT_TABLE( WinEDAListBox, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDAListBox::OnCancelClick )
-EVT_LISTBOX( ID_LISTBOX_LIST, WinEDAListBox::ClickOnList )
-EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList )
-EVT_CHAR( WinEDAListBox::OnKeyEvent )
-EVT_CHAR_HOOK( WinEDAListBox::OnKeyEvent )
-EVT_CLOSE( WinEDAListBox::OnClose )
+    EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDAListBox::OnCancelClick )
+    EVT_LISTBOX( ID_LISTBOX_LIST, WinEDAListBox::ClickOnList )
+    EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList )
+    EVT_CHAR( WinEDAListBox::OnKeyEvent )
+    EVT_CHAR_HOOK( WinEDAListBox::OnKeyEvent )
+    EVT_CLOSE( WinEDAListBox::OnClose )
 END_EVENT_TABLE()
 
 
@@ -37,7 +37,7 @@ END_EVENT_TABLE()
  * @param aCallBackFunction callback function to display comments
  * @param aPos = position of the dialog.
  */
-WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* aParent, const wxString& aTitle,
+WinEDAListBox::WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                               const wxArrayString& aItemList, const wxString& aRefText,
                               void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
     wxDialog( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
@@ -51,8 +51,8 @@ WinEDAListBox::WinEDAListBox( WinEDA_DrawFrame* aParent, const wxString& aTitle,
     SetSizer( GeneralBoxSizer );
 
     m_listBox = new wxListBox( this, ID_LISTBOX_LIST, wxDefaultPosition,
-                            wxSize( 300, 200 ), 0, NULL,
-                            wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
+                               wxSize( 300, 200 ), 0, NULL,
+                               wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
 
     GeneralBoxSizer->Add( m_listBox, 0, wxGROW | wxALL, 5 );
 

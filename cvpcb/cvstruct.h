@@ -20,7 +20,7 @@ class DISPLAY_FOOTPRINTS_FRAME;
 /**
  * The CVPcb application main window.
  */
-class WinEDA_CvpcbFrame : public WinEDA_BasicFrame
+class WinEDA_CvpcbFrame : public EDA_BASE_FRAME
 {
 public:
 

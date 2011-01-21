@@ -32,7 +32,7 @@ dialog_hotkeys_editor.cpp
 
 #include "dialog_hotkeys_editor.h"
 
-void InstallHotkeyFrame( WinEDA_DrawFrame*               parent,
+void InstallHotkeyFrame( EDA_DRAW_FRAME*                 parent,
                          Ki_HotkeyInfoSectionDescriptor* hotkeys )
 {
     HOTKEYS_EDITOR_DIALOG dialog( parent, hotkeys );
@@ -46,7 +46,7 @@ void InstallHotkeyFrame( WinEDA_DrawFrame*               parent,
 }
 
 
-HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( WinEDA_DrawFrame*               parent,
+HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*                 parent,
                                               Ki_HotkeyInfoSectionDescriptor* hotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( parent )
 {

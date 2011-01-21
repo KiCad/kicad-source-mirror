@@ -56,7 +56,7 @@ WinEDA_Server* CreateServer( wxWindow* window, int service )
 
 /* Function called on every client request.
  */
-void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
+void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
 {
     size_t        len;
     wxSocketBase* sock = evt.GetSocket();
@@ -80,7 +80,7 @@ void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
         break;
 
     default:
-        wxPrintf( wxT( "WinEDA_DrawFrame::OnSockRequest() error: Invalid event !" ) );
+        wxPrintf( wxT( "EDA_DRAW_FRAME::OnSockRequest() error: Invalid event !" ) );
         break;
     }
 }
@@ -88,7 +88,7 @@ void WinEDA_DrawFrame::OnSockRequest( wxSocketEvent& evt )
 
 /* Function called when a connection is requested by a client.
  */
-void WinEDA_DrawFrame::OnSockRequestServer( wxSocketEvent& evt )
+void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
 {
     wxSocketBase*   sock2;
     wxSocketServer* server = (wxSocketServer*) evt.GetSocket();

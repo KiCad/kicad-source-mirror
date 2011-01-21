@@ -53,7 +53,7 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem ) :
  * all library items.  Call the base class from the derived class or the
  * common information will not be updated in the message panel.
  */
-void LIB_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_DRAW_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 
@@ -108,7 +108,7 @@ bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& aOther ) const
 }
 
 
-void LIB_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
+void LIB_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
                           int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     if( InEditMode() )

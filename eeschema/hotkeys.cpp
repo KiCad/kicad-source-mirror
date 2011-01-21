@@ -346,7 +346,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
             RefreshToolBar = LocateAndDeleteItem( this, DC );
             OnModify();
             GetScreen()->SetCurItem( NULL );
-            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+            GetScreen()->TestDanglingEnds( DrawPanel, DC );
         }
         break;
 
@@ -661,7 +661,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
                 RefreshToolBar = TRUE;
             }
             CmpRotationMiroir( (SCH_COMPONENT*) DrawStruct, DC, CMP_NORMAL );
-            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+            GetScreen()->TestDanglingEnds( DrawPanel, DC );
         }
         break;
 

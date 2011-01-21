@@ -37,7 +37,7 @@ class LIB_ARC : public LIB_DRAW_ITEM
     /**
      * Draws the arc.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
@@ -97,7 +97,7 @@ public:
     virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     virtual EDA_Rect GetBoundingBox() const;
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item

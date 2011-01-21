@@ -17,7 +17,7 @@
 #include "drag.h"
 
 
-static void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
 static MODULE*           s_ModuleInitialCopy = NULL;    /* Copy of module for
@@ -114,7 +114,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
 
 /* Called on a move or copy module command abort
  */
-void Abort_MoveOrCopyModule( WinEDA_DrawPanel* Panel, wxDC* DC )
+void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     TRACK*                pt_segm;
     MODULE*               module;
@@ -231,7 +231,7 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
 
 /* Redraw the footprint when moving the mouse.
  */
-void Montre_Position_Empreinte( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     MODULE* module = (MODULE*) panel->GetScreen()->GetCurItem();
 
@@ -532,7 +532,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
 /*************************************************/
 /* Redraw in XOR mode the outlines of a module. */
 /*************************************************/
-void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module )
+void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
 {
     int    pad_fill_tmp;
     D_PAD* pt_pad;

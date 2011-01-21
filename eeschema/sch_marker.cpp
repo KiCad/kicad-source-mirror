@@ -92,7 +92,7 @@ bool SCH_MARKER::Save( FILE* aFile ) const
 }
 
 
-void SCH_MARKER::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                        const wxPoint& aOffset, int aDrawMode, int aColor )
 {
     EDA_Colors color = (EDA_Colors) m_Color;
@@ -147,7 +147,7 @@ EDA_Rect SCH_MARKER::GetBoundingBox() const
 }
 
 
-void SCH_MARKER::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void SCH_MARKER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     if( aFrame == NULL )
         return;

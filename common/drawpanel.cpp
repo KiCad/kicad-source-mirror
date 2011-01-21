@@ -37,26 +37,26 @@
 static bool s_IgnoreNextLeftButtonRelease = false;
 
 
-// Events used by WinEDA_DrawPanel
-BEGIN_EVENT_TABLE( WinEDA_DrawPanel, wxScrolledWindow )
-    EVT_LEAVE_WINDOW( WinEDA_DrawPanel::OnMouseLeaving )
-    EVT_MOUSEWHEEL( WinEDA_DrawPanel::OnMouseWheel )
-    EVT_MOUSE_EVENTS( WinEDA_DrawPanel::OnMouseEvent )
-    EVT_CHAR( WinEDA_DrawPanel::OnKeyEvent )
-    EVT_CHAR_HOOK( WinEDA_DrawPanel::OnKeyEvent )
-    EVT_PAINT( WinEDA_DrawPanel::OnPaint )
-    EVT_SIZE( WinEDA_DrawPanel::OnSize )
-    EVT_SCROLLWIN( WinEDA_DrawPanel::OnScroll )
-    EVT_ACTIVATE( WinEDA_DrawPanel::OnActivate )
-    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, WinEDA_DrawPanel::OnPan )
+// Events used by EDA_DRAW_PANEL
+BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
+    EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
+    EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
+    EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
+    EVT_CHAR( EDA_DRAW_PANEL::OnKeyEvent )
+    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnKeyEvent )
+    EVT_PAINT( EDA_DRAW_PANEL::OnPaint )
+    EVT_SIZE( EDA_DRAW_PANEL::OnSize )
+    EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
+    EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
+    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
 /***********************************************************************/
-/* WinEDA_DrawPanel base functions (WinEDA_DrawPanel is the main panel)*/
+/* EDA_DRAW_PANEL base functions (EDA_DRAW_PANEL is the main panel)*/
 /***********************************************************************/
 
-WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
-                                    const wxPoint& pos, const wxSize& size ) :
+EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
+                                const wxPoint& pos, const wxSize& size ) :
     wxScrolledWindow( parent, id, pos, size,
                       wxBORDER | wxNO_FULL_REPAINT_ON_RESIZE )
 {
@@ -96,15 +96,15 @@ WinEDA_DrawPanel::WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id,
 }
 
 
-WinEDA_DrawPanel::~WinEDA_DrawPanel()
+EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
     wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
 }
 
 
-BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
+BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 {
-    WinEDA_DrawFrame* parentFrame = m_Parent;
+    EDA_DRAW_FRAME* parentFrame = m_Parent;
 
     return parentFrame->GetBaseScreen();
 }
@@ -113,7 +113,7 @@ BASE_SCREEN* WinEDA_DrawPanel::GetScreen()
 /*
  *  Draw the schematic cursor which is usually on grid
  */
-void WinEDA_DrawPanel::DrawCursor( wxDC* aDC, int aColor )
+void EDA_DRAW_PANEL::DrawCursor( wxDC* aDC, int aColor )
 {
     if( m_CursorLevel != 0 || aDC == NULL )
         return;
@@ -166,7 +166,7 @@ void WinEDA_DrawPanel::DrawCursor( wxDC* aDC, int aColor )
  * Remove the grid cursor from the display in preparation for other drawing
  * operations
  */
-void WinEDA_DrawPanel::CursorOff( wxDC* DC )
+void EDA_DRAW_PANEL::CursorOff( wxDC* DC )
 {
     DrawCursor( DC );
     --m_CursorLevel;
@@ -176,7 +176,7 @@ void WinEDA_DrawPanel::CursorOff( wxDC* DC )
 /*
  *  Display the grid cursor
  */
-void WinEDA_DrawPanel::CursorOn( wxDC* DC )
+void EDA_DRAW_PANEL::CursorOn( wxDC* DC )
 {
     ++m_CursorLevel;
     DrawCursor( DC );
@@ -186,19 +186,19 @@ void WinEDA_DrawPanel::CursorOn( wxDC* DC )
 }
 
 
-int WinEDA_DrawPanel::GetZoom()
+int EDA_DRAW_PANEL::GetZoom()
 {
     return GetScreen()->GetZoom();
 }
 
 
-void WinEDA_DrawPanel::SetZoom( int zoom )
+void EDA_DRAW_PANEL::SetZoom( int zoom )
 {
     GetScreen()->SetZoom( zoom );
 }
 
 
-wxRealPoint WinEDA_DrawPanel::GetGrid()
+wxRealPoint EDA_DRAW_PANEL::GetGrid()
 {
     return GetScreen()->GetGridSize();
 }
@@ -210,7 +210,7 @@ wxRealPoint WinEDA_DrawPanel::GetGrid()
  * @param  aPosition = position in device (screen) units.
  * @return  position in logical (drawing) units.
  */
-wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& aPosition )
+wxPoint EDA_DRAW_PANEL::CursorRealPosition( const wxPoint& aPosition )
 {
     double scalar = GetScreen()->GetScalingFactor();
     wxPoint pos;
@@ -227,7 +227,7 @@ wxPoint WinEDA_DrawPanel::CursorRealPosition( const wxPoint& aPosition )
  * @return TRUE if ref_pos is a point currently visible on screen
  *         false if ref_pos is out of screen
  */
-bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
+bool EDA_DRAW_PANEL::IsPointOnDisplay( wxPoint ref_pos )
 {
     wxPoint  pos;
     EDA_Rect display_rect;
@@ -255,7 +255,7 @@ bool WinEDA_DrawPanel::IsPointOnDisplay( wxPoint ref_pos )
 }
 
 
-void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
+void EDA_DRAW_PANEL::PostDirtyRect( EDA_Rect aRect )
 {
     // D( printf( "1) PostDirtyRect( x=%d, y=%d, width=%d, height=%d)\n", aRect.m_Pos.x, aRect.m_Pos.y, aRect.m_Size.x, aRect.m_Size.y ); )
 
@@ -283,7 +283,7 @@ void WinEDA_DrawPanel::PostDirtyRect( EDA_Rect aRect )
  *
  * @param aRect - Rectangle to scale.
  */
-void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
+void EDA_DRAW_PANEL::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
 {
     // Calculate the draw area origin in internal units:
     wxPoint pos = aRect->GetPosition();
@@ -297,7 +297,7 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect )
 }
 
 
-void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
+void EDA_DRAW_PANEL::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
 {
     // Calculate the draw area origin in internal units:
     wxPoint drwOrig;
@@ -326,7 +326,7 @@ void WinEDA_DrawPanel::ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition )
  * Function CursorScreenPosition
  * @return the cursor current position in pixels in the screen draw area
  */
-wxPoint WinEDA_DrawPanel::CursorScreenPosition()
+wxPoint EDA_DRAW_PANEL::CursorScreenPosition()
 {
     wxPoint pos = GetScreen()->m_Curseur - GetScreen()->m_DrawOrg;
     double scalar = GetScreen()->GetScalingFactor();
@@ -343,7 +343,7 @@ wxPoint WinEDA_DrawPanel::CursorScreenPosition()
  * @return position (in internal units) of the current area center showed
  *         on screen
  */
-wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
+wxPoint EDA_DRAW_PANEL::GetScreenCenterRealPosition( void )
 {
     int x, y, ppuX, ppuY;
     wxPoint pos;
@@ -363,7 +363,7 @@ wxPoint WinEDA_DrawPanel::GetScreenCenterRealPosition( void )
 
 /* Move the mouse cursor to the current schematic cursor
  */
-void WinEDA_DrawPanel::MouseToCursorSchema()
+void EDA_DRAW_PANEL::MouseToCursorSchema()
 {
     wxPoint Mouse = CursorScreenPosition();
 
@@ -374,7 +374,7 @@ void WinEDA_DrawPanel::MouseToCursorSchema()
 /** Move the mouse cursor to the position "Mouse"
  * @param Mouse = mouse cursor position, in pixels units
  */
-void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
+void EDA_DRAW_PANEL::MouseTo( const wxPoint& Mouse )
 {
     int     x, y, xPpu, yPpu;
     wxPoint screenPos, drawingPos;
@@ -424,13 +424,13 @@ void WinEDA_DrawPanel::MouseTo( const wxPoint& Mouse )
  * command wanted.
  * This happens when enter on a hierarchy sheet on double click
  */
-void WinEDA_DrawPanel::OnActivate( wxActivateEvent& event )
+void EDA_DRAW_PANEL::OnActivate( wxActivateEvent& event )
 {
     m_CanStartBlock = -1;   // Block Command can't start
     event.Skip();
 }
 
-void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
+void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
 {
     int id = event.GetEventType();
     int dir;
@@ -502,7 +502,7 @@ void WinEDA_DrawPanel::OnScroll( wxScrollWinEvent& event )
     event.Skip();
 }
 
-void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
+void EDA_DRAW_PANEL::OnSize( wxSizeEvent& event )
 {
     if( IsShown() )
     {
@@ -525,7 +525,7 @@ void WinEDA_DrawPanel::OnSize( wxSizeEvent& event )
  * @param dc - The device context use for drawing with the correct scale and
  *             offsets already configured.  See DoPrepareDC().
  */
-void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
+void EDA_DRAW_PANEL::SetBoundaryBox( wxDC* dc )
 {
     wxASSERT( dc != NULL );
 
@@ -569,7 +569,7 @@ void WinEDA_DrawPanel::SetBoundaryBox( wxDC* dc )
 }
 
 
-void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
+void EDA_DRAW_PANEL::EraseScreen( wxDC* DC )
 {
     GRSetDrawMode( DC, GR_COPY );
 
@@ -587,7 +587,7 @@ void WinEDA_DrawPanel::EraseScreen( wxDC* DC )
 }
 
 
-void WinEDA_DrawPanel::DoPrepareDC(wxDC& dc)
+void EDA_DRAW_PANEL::DoPrepareDC(wxDC& dc)
 {
 #ifdef USE_WX_ZOOM
     if( GetScreen() != NULL )
@@ -608,7 +608,7 @@ void WinEDA_DrawPanel::DoPrepareDC(wxDC& dc)
 }
 
 
-void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
+void EDA_DRAW_PANEL::OnPaint( wxPaintEvent& event )
 {
     if( GetScreen() == NULL )
     {
@@ -682,7 +682,7 @@ void WinEDA_DrawPanel::OnPaint( wxPaintEvent& event )
 }
 
 
-void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
+void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 {
     BASE_SCREEN* Screen = GetScreen();
 
@@ -726,7 +726,7 @@ void WinEDA_DrawPanel::ReDraw( wxDC* DC, bool erasebg )
  * X and Y axis
  * X and Y auxiliary axis
  */
-void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
+void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
 {
     int          axis_color = BLUE;
     BASE_SCREEN* screen     = GetScreen();
@@ -763,7 +763,7 @@ void WinEDA_DrawPanel::DrawBackGround( wxDC* DC )
  *  - the grid is drawn only if the zoom level allows a good visibility
  *  - the grid is always centered on the screen center
  */
-void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
+void EDA_DRAW_PANEL::DrawGrid( wxDC* DC )
 {
     #define MIN_GRID_SIZE 10        // min grid size in pixels to allow drawing
     BASE_SCREEN* screen = GetScreen();
@@ -947,7 +947,7 @@ void WinEDA_DrawPanel::DrawGrid( wxDC* DC )
  * @param aDC = current Device Context
  * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
  */
-void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
+void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 {
     if( m_Parent->m_Auxiliary_Axis_Position == wxPoint( 0, 0 ) )
         return;
@@ -974,9 +974,8 @@ void WinEDA_DrawPanel::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
                   0, Color );
 }
 
-/********************************************************************/
-void WinEDA_DrawPanel::DrawGridAxis( wxDC* aDC, int aDrawMode )
-/********************************************************************/
+
+void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, int aDrawMode )
 {
     BASE_SCREEN* screen = GetScreen();
     if( !m_Parent->m_Draw_Grid_Axis
@@ -1005,10 +1004,11 @@ void WinEDA_DrawPanel::DrawGridAxis( wxDC* aDC, int aDrawMode )
                   0, Color );
 }
 
+
 /** Build and display a Popup menu on a right mouse button click
  * @return true if a popup menu is shown, or false
  */
-bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
+bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
 {
     wxPoint pos;
     wxMenu  MasterMenu;
@@ -1030,7 +1030,7 @@ bool WinEDA_DrawPanel::OnRightClick( wxMouseEvent& event )
 
 
 // Called when the canvas receives a mouse event leaving frame.
-void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
+void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 {
     if( ManageCurseur == NULL )          // No command in progress.
         m_AutoPAN_Request = false;
@@ -1058,7 +1058,7 @@ void WinEDA_DrawPanel::OnMouseLeaving( wxMouseEvent& event )
  * is accomplished by converting mouse wheel events in pseudo menu command
  * events.
  */
-void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
+void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 {
     if( m_IgnoreMouseEvents )
         return;
@@ -1111,11 +1111,11 @@ void WinEDA_DrawPanel::OnMouseWheel( wxMouseEvent& event )
 
 
 // Called when the canvas receives a mouse event.
-void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
+void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 {
-    int                      localrealbutt = 0, localbutt = 0, localkey = 0;
-    BASE_SCREEN*             screen = GetScreen();
-    static WinEDA_DrawPanel* LastPanel;
+    int                    localrealbutt = 0, localbutt = 0, localkey = 0;
+    BASE_SCREEN*           screen = GetScreen();
+    static EDA_DRAW_PANEL* LastPanel;
 
     if( !screen )
         return;
@@ -1319,12 +1319,11 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
                     MinDragEventCount++;
                 else
                 {
-                    if( !m_Parent->HandleBlockBegin( &DC, cmd_type,
-                                                     m_CursorStartPos ) )
+                    if( !m_Parent->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
                     {
                         // should not occurs: error
                         m_Parent->DisplayToolMsg(
-                            wxT( "WinEDA_DrawPanel::OnMouseEvent() Block Error" ) );
+                            wxT( "EDA_DRAW_PANEL::OnMouseEvent() Block Error" ) );
                     }
                     else
                     {
@@ -1403,7 +1402,7 @@ void WinEDA_DrawPanel::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
+void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
     long key, localkey;
     bool escape = false;
@@ -1481,7 +1480,7 @@ void WinEDA_DrawPanel::OnKeyEvent( wxKeyEvent& event )
 }
 
 
-void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
+void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
 {
     int x, y;
     int ppux, ppuy;
@@ -1515,8 +1514,7 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
         break;
 
     default:
-        wxLogDebug( wxT( "Unknown ID %d in WinEDA_DrawPanel::OnPan()." ),
-                    event.GetId() );
+        wxLogDebug( wxT( "Unknown ID %d in EDA_DRAW_PANEL::OnPan()." ), event.GetId() );
     }
 
     if( x < 0 )
@@ -1532,8 +1530,7 @@ void WinEDA_DrawPanel::OnPan( wxCommandEvent& event )
 }
 
 
-void WinEDA_DrawPanel::UnManageCursor( int id, int cursor,
-                                       const wxString& title )
+void EDA_DRAW_PANEL::UnManageCursor( int id, int cursor, const wxString& title )
 {
     if( ManageCurseur && ForceCloseManageCurseur )
     {

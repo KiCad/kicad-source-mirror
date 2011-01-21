@@ -24,7 +24,7 @@
  *
  *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
  */
-void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
+void EDA_DRAW_FRAME::Recadre_Trace( bool ToMouse )
 {
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
@@ -52,7 +52,7 @@ void WinEDA_DrawFrame::Recadre_Trace( bool ToMouse )
  * @param aCoord = coordinate to adjust
  * @param aGridSize = pointer to a grid value. if NULL uses the current grid size
  */
-void WinEDA_DrawFrame::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
+void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 {
     wxRealPoint grid_size;
     if( aGridSize )
@@ -74,7 +74,7 @@ void WinEDA_DrawFrame::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 /** Redraw the screen with best zoom level and the best centering
  * that shows all the page or the board
  */
-void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
+void EDA_DRAW_FRAME::Zoom_Automatique( bool move_mouse_cursor )
 {
     GetBaseScreen()->SetZoom( BestZoom() ); // Set the best zoom
     Recadre_Trace( move_mouse_cursor );     // Set the best centering and refresh the screen
@@ -85,7 +85,7 @@ void WinEDA_DrawFrame::Zoom_Automatique( bool move_mouse_cursor )
  *  selected area (Rect) in full window screen
  *  @param Rect = selected area to show after zooming
  */
-void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
+void EDA_DRAW_FRAME::Window_Zoom( EDA_Rect& Rect )
 {
     double scalex, bestscale;
     wxSize size;
@@ -109,7 +109,7 @@ void WinEDA_DrawFrame::Window_Zoom( EDA_Rect& Rect )
  * Function OnZoom
  * Called from any zoom event (toolbar , hotkey or popup )
  */
-void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
+void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
     if( DrawPanel == NULL )
         return;
@@ -184,7 +184,7 @@ void WinEDA_DrawFrame::OnZoom( wxCommandEvent& event )
 /* add the zoom list menu the the MasterMenu.
  *  used in OnRightClick(wxMouseEvent& event)
  */
-void WinEDA_DrawFrame::AddMenuZoomAndGrid( wxMenu* MasterMenu )
+void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
     int         maxZoomIds;
     int         zoom;

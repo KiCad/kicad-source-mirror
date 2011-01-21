@@ -30,7 +30,7 @@ class Pcb3D_GLCanvas;
 class PAD_DRAWINFO
 {
 public:
-    WinEDA_DrawPanel * m_DrawPanel;    // the WinEDA_DrawPanel used to draw a PAD ; can be null
+    EDA_DRAW_PANEL * m_DrawPanel;    // the EDA_DRAW_PANEL used to draw a PAD ; can be null
     int m_DrawMode;             // the draw mode
     int m_Color;                // color used to draw the pad shape , from pad layers and visible layers
     int m_HoleColor;            // color used to draw the pad hole
@@ -232,12 +232,12 @@ public:
 
     /* drawing functions */
     /** Draw a pad:
-     * @param aPanel = the WinEDA_DrawPanel panel
+     * @param aPanel = the EDA_DRAW_PANEL panel
      * @param aDC = the current device context
      * @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
      * @param aOffset = draw offset
      */
-    void          Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+    void          Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                         int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     void          Draw3D( Pcb3D_GLCanvas* glcanvas );
@@ -297,9 +297,9 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void DisplayInfo( WinEDA_DrawFrame* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**

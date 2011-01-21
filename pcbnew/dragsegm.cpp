@@ -27,7 +27,7 @@ DRAG_SEGM::DRAG_SEGM( TRACK* segm )
 
 
 /*******************************************************************/
-void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
+void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC )
 /*******************************************************************/
 /* Redraw the list of segments starting in g_DragSegmentList, while moving a footprint */
 {
@@ -64,7 +64,7 @@ void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC )
 
 
 /*************************************************************************/
-void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module )
+void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
 /*************************************************************************/
 /** Build the list of track segments connected to pads of a given module
  *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
@@ -85,7 +85,7 @@ void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module )
 
 
 /**********************************************************************************/
-void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad )
+void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
 /**********************************************************************************/
 /** Build the list of track segments connected to a given pad
  *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
@@ -128,8 +128,7 @@ void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad
 
 
 /******************************************************************/
-void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
-                           int flag, TRACK* Track )
+void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Track )
 /******************************************************************/
 /* Add the segment"Track" to the drag list, and erase it from screen
  *  flag = STARTPOINT (if the point to drag is the start point of Track) or ENDPOINT
@@ -158,7 +157,7 @@ void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 /**********************************************************************************/
-void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
+void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
                                   wxPoint& aRefPos, int MasqueLayer, int net_code )
 /**********************************************************************************/
 

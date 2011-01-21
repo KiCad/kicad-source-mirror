@@ -1,6 +1,6 @@
 
 /*********************************************************/
-/* class WinEDA_ModuleEditFrame: public WinEDA_DrawFrame */
+/* class WinEDA_ModuleEditFrame: public EDA_DRAW_FRAME */
 /* Class for the footprint editor                        */
 /*********************************************************/
 

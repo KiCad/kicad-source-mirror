@@ -330,7 +330,7 @@ public:
      * @param aOnlySelected - Draws only the body items that are selected.
      *                        Used for block move redraws.
      */
-    void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDc, const wxPoint& aOffset,
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
                int aMulti, int aConvert, int aDrawMode, int aColor = -1,
                const TRANSFORM& aTransform = DefaultTransform,
                bool aShowPinText = true, bool aDrawFields = true,
@@ -362,7 +362,7 @@ public:
      * @param aPanel - Panel to remove part from.
      * @param aDc - Device context to remove part from.
      */
-    void RemoveDrawItem( LIB_DRAW_ITEM* aItem, WinEDA_DrawPanel* aPanel = NULL, wxDC* aDc = NULL );
+    void RemoveDrawItem( LIB_DRAW_ITEM* aItem, EDA_DRAW_PANEL* aPanel = NULL, wxDC* aDc = NULL );
 
     /**
      * Return the next draw object pointer.

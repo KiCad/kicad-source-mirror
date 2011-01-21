@@ -34,7 +34,7 @@ Ki_PageDescr * SheetList[NB_ITEMS + 1] =
 
 
 /******************************************************************/
-void WinEDA_DrawFrame::Process_PageSettings(wxCommandEvent& event)
+void EDA_DRAW_FRAME::Process_PageSettings(wxCommandEvent& event)
 /******************************************************************/
 /* Creation de la fenetre de configuration
  */
@@ -46,7 +46,7 @@ void WinEDA_DrawFrame::Process_PageSettings(wxCommandEvent& event)
 }
 
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( WinEDA_DrawFrame* parent ):
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ):
     DIALOG_PAGES_SETTINGS_BASE( parent )
 {
     m_Parent = parent;

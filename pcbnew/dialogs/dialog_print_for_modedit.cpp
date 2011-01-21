@@ -37,11 +37,11 @@ static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
 class DIALOG_PRINT_FOR_MODEDIT : public DIALOG_PRINT_FOR_MODEDIT_BASE
 {
 private:
-    WinEDA_DrawFrame* m_Parent;
-    wxConfig*         m_Config;
+    EDA_DRAW_FRAME* m_Parent;
+    wxConfig*       m_Config;
 
 public:
-    DIALOG_PRINT_FOR_MODEDIT( WinEDA_DrawFrame* parent );
+    DIALOG_PRINT_FOR_MODEDIT( EDA_DRAW_FRAME* parent );
     ~DIALOG_PRINT_FOR_MODEDIT() {};
 
 private:
@@ -80,7 +80,7 @@ void WinEDA_ModuleEditFrame::ToPrinter( wxCommandEvent& event )
 }
 
 /*************************************************************************************/
-DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( WinEDA_DrawFrame* parent ) :
+DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( EDA_DRAW_FRAME* parent ) :
     DIALOG_PRINT_FOR_MODEDIT_BASE( parent )
 /*************************************************************************************/
 {

@@ -58,7 +58,7 @@ extern wxString g_ModuleEditSectionTag;
 /* Functions:
  */
 void            AddHotkeyConfigMenu( wxMenu* menu );
-void            HandleHotkeyConfigMenuSelection( WinEDA_DrawFrame* frame, int id );
+void            HandleHotkeyConfigMenuSelection( EDA_DRAW_FRAME* frame, int id );
 
 /**
  * Function ReturnKeyNameFromKeyCode
@@ -125,7 +125,7 @@ wxString        AddHotkeyName( const wxString&                        aText,
  * @param aFrame = current active frame
  * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list (Null terminated)
  */
-void            DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
+void            DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
                                    struct Ki_HotkeyInfoSectionDescriptor* aList );
 
 /**

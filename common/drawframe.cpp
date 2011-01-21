@@ -36,22 +36,22 @@ static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeId( wxT( "_LastGridSize" ) );
 
 
-BEGIN_EVENT_TABLE( WinEDA_DrawFrame, WinEDA_BasicFrame )
-    EVT_MOUSEWHEEL( WinEDA_DrawFrame::OnMouseEvent )
-    EVT_MENU_OPEN( WinEDA_DrawFrame::OnMenuOpen )
-    EVT_ACTIVATE( WinEDA_DrawFrame::OnActivate )
+BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
+    EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
+    EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
+    EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
     EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                    WinEDA_DrawFrame::OnZoom )
+                    EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
-                    WinEDA_DrawFrame::OnSelectGrid )
+                    EDA_DRAW_FRAME::OnSelectGrid )
 END_EVENT_TABLE()
 
 
-WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
+EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype,
                                     const wxString& title,
                                     const wxPoint& pos, const wxSize& size,
                                     long style ) :
-    WinEDA_BasicFrame( father, idtype, title, pos, size, style )
+    EDA_BASE_FRAME( father, idtype, title, pos, size, style )
 {
     wxSize minsize;
 
@@ -108,7 +108,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
-    DrawPanel = new WinEDA_DrawPanel( this, -1, wxPoint( 0, 0 ), m_FrameSize );
+    DrawPanel = new EDA_DRAW_PANEL( this, -1, wxPoint( 0, 0 ), m_FrameSize );
     MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
                                      wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
@@ -118,7 +118,7 @@ WinEDA_DrawFrame::WinEDA_DrawFrame( wxWindow* father, int idtype,
 }
 
 
-WinEDA_DrawFrame::~WinEDA_DrawFrame()
+EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
     if( m_CurrentScreen != NULL )
         delete m_CurrentScreen;
@@ -130,20 +130,20 @@ WinEDA_DrawFrame::~WinEDA_DrawFrame()
 /*
  *  Display the message in the first pane of the status bar.
  */
-void WinEDA_DrawFrame::Affiche_Message( const wxString& message )
+void EDA_DRAW_FRAME::Affiche_Message( const wxString& message )
 {
     SetStatusText( message, 0 );
 }
 
 
-void WinEDA_DrawFrame::EraseMsgBox()
+void EDA_DRAW_FRAME::EraseMsgBox()
 {
     if( MsgPanel )
         MsgPanel->EraseMsgBox();
 }
 
 
-void WinEDA_DrawFrame::OnActivate( wxActivateEvent& event )
+void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
     m_FrameIsActive = event.GetActive();
     if( DrawPanel )
@@ -153,7 +153,7 @@ void WinEDA_DrawFrame::OnActivate( wxActivateEvent& event )
 }
 
 
-void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
+void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
     if( DrawPanel )
         DrawPanel->m_CanStartBlock = -1;
@@ -162,25 +162,25 @@ void WinEDA_DrawFrame::OnMenuOpen( wxMenuEvent& event )
 
 
 // Virtual function
-void WinEDA_DrawFrame::ReCreateAuxiliaryToolbar()
+void EDA_DRAW_FRAME::ReCreateAuxiliaryToolbar()
 {
 }
 
 
 // Virtual function
-void WinEDA_DrawFrame::ReCreateMenuBar()
+void EDA_DRAW_FRAME::ReCreateMenuBar()
 {
 }
 
 
 // Virtual function
-void WinEDA_DrawFrame::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
+void EDA_DRAW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 {
 }
 
 
 // Virtual function
-void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
+void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
@@ -188,17 +188,17 @@ void WinEDA_DrawFrame::ToolOnRightClick( wxCommandEvent& event )
  * Function PrintPage (virtual)
  * used to print a page
  * this basic function must be derived to be used for printing
- * because WinEDA_DrawFrame does not know how to print a page
+ * because EDA_DRAW_FRAME does not know how to print a page
  * This is the reason it is a virtual function
  */
-void WinEDA_DrawFrame::PrintPage( wxDC* aDC,int aPrintMask,
+void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask,
                                   bool aPrintMirrorMode, void* aData )
 {
-    wxMessageBox( wxT("WinEDA_DrawFrame::PrintPage() error"));
+    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error"));
 }
 
 // Virtual function
-void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
+void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
     int* clientData;
     int  id = ID_POPUP_GRID_LEVEL_100;
@@ -267,7 +267,7 @@ void WinEDA_DrawFrame::OnSelectGrid( wxCommandEvent& event )
  *      last position : special zoom
  *      virtual function
  */
-void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )
+void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
     if( m_SelZoomBox == NULL )
         return;                        // Should not happen!
@@ -295,25 +295,25 @@ void WinEDA_DrawFrame::OnSelectZoom( wxCommandEvent& event )
 
 
 /* Return the current zoom level */
-int WinEDA_DrawFrame::GetZoom(void)
+int EDA_DRAW_FRAME::GetZoom(void)
 {
     return GetBaseScreen()->GetZoom();
 }
 
 
-void WinEDA_DrawFrame::OnMouseEvent( wxMouseEvent& event )
+void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
 {
     event.Skip();
 }
 
 
 // Virtual
-void WinEDA_DrawFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void EDA_DRAW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 
-void WinEDA_DrawFrame::SetToolbars()
+void EDA_DRAW_FRAME::SetToolbars()
 {
     DisplayUnitsMsg();
 
@@ -322,7 +322,7 @@ void WinEDA_DrawFrame::SetToolbars()
 }
 
 
-void WinEDA_DrawFrame::DisplayToolMsg( const wxString& msg )
+void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 5 );
 }
@@ -330,7 +330,7 @@ void WinEDA_DrawFrame::DisplayToolMsg( const wxString& msg )
 
 /* Display current unit Selection on Statusbar
  */
-void WinEDA_DrawFrame::DisplayUnitsMsg()
+void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
 
@@ -356,7 +356,7 @@ void WinEDA_DrawFrame::DisplayUnitsMsg()
 
 /* Recalculate the size of toolbars and display panel.
  */
-void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
+void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     m_FrameSize = GetClientSize( );
 
@@ -378,7 +378,7 @@ void WinEDA_DrawFrame::OnSize( wxSizeEvent& SizeEv )
  *      Only updates the cursor shape and message in status bar
  *      (does not the current m_ID_current_state value
  */
-void WinEDA_DrawFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
+void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
@@ -437,36 +437,36 @@ void WinEDA_DrawFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg
 /* default virtual functions */
 /*****************************/
 
-void WinEDA_DrawFrame::OnGrid( int grid_type )
+void EDA_DRAW_FRAME::OnGrid( int grid_type )
 {
 }
 
 
-int WinEDA_DrawFrame::ReturnBlockCommand( int key )
+int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
 {
     return 0;
 }
 
 
-void WinEDA_DrawFrame::InitBlockPasteInfos()
+void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
     GetBaseScreen()->m_BlockLocate.ClearItemsList();
     DrawPanel->ManageCurseur = NULL;
 }
 
 
-void WinEDA_DrawFrame::HandleBlockPlace( wxDC* DC )
+void EDA_DRAW_FRAME::HandleBlockPlace( wxDC* DC )
 {
 }
 
 
-bool WinEDA_DrawFrame::HandleBlockEnd( wxDC* DC )
+bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 {
     return false;
 }
 
 
-void WinEDA_DrawFrame::AdjustScrollBars()
+void EDA_DRAW_FRAME::AdjustScrollBars()
 {
     int     unitsX, unitsY, posX, posY;
     wxSize  drawingSize, clientSize;
@@ -557,9 +557,9 @@ void WinEDA_DrawFrame::AdjustScrollBars()
  * called on a language menu selection
  * when using a derived function, do not forget to call this one
  */
-void WinEDA_DrawFrame::SetLanguage( wxCommandEvent& event )
+void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_BasicFrame::SetLanguage( event );
+    EDA_BASE_FRAME::SetLanguage( event );
 }
 
 /**
@@ -600,7 +600,7 @@ double RoundTo0( double x, double precision )
  * ( in this status is also displayed the zoom level, but this is not made
  *   by this function )
  */
-void WinEDA_DrawFrame::UpdateStatusBar()
+void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;
     int             dx, dy;
@@ -695,13 +695,13 @@ void WinEDA_DrawFrame::UpdateStatusBar()
  * Don't forget to call this base method from any derived classes or the
  * settings will not get loaded.
  */
-void WinEDA_DrawFrame::LoadSettings()
+void EDA_DRAW_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::LoadSettings();
+    EDA_BASE_FRAME::LoadSettings();
     cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_CursorShape, ( long )0 );
     bool btmp;
     if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
@@ -719,13 +719,13 @@ void WinEDA_DrawFrame::LoadSettings()
  * Don't forget to call this base method from any derived classes or the
  * settings will not get saved.
  */
-void WinEDA_DrawFrame::SaveSettings()
+void EDA_DRAW_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::SaveSettings();
+    EDA_BASE_FRAME::SaveSettings();
     cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_CursorShape );
     cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
     cfg->Write( m_FrameName + GridColorEntryKeyword, GetGridColor() );
@@ -733,9 +733,9 @@ void WinEDA_DrawFrame::SaveSettings()
 }
 
 
-void WinEDA_DrawFrame::AppendMsgPanel( const wxString& textUpper,
-                                       const wxString& textLower,
-                                       int color, int pad )
+void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
+                                     const wxString& textLower,
+                                     int color, int pad )
 {
     if( MsgPanel == NULL )
         return;
@@ -744,7 +744,7 @@ void WinEDA_DrawFrame::AppendMsgPanel( const wxString& textUpper,
 }
 
 
-void WinEDA_DrawFrame::ClearMsgPanel( void )
+void EDA_DRAW_FRAME::ClearMsgPanel( void )
 {
     if( MsgPanel == NULL )
         return;

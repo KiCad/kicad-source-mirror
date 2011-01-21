@@ -1,5 +1,5 @@
 /**
- * WinEDA_BasicFrame Class Functions
+ * EDA_BASE_FRAME Class Functions
  * @file basicframe.cpp
  */
 
@@ -23,14 +23,14 @@
 #include "bitmaps.h"
 
 /*
- * Class constructor for WinEDA_BasicFrame general options
+ * Class constructor for EDA_BASE_FRAME general options
  */
-WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
-                                      int idtype,
-                                      const wxString& title,
-                                      const wxPoint& pos,
-                                      const wxSize& size,
-                                      long style ) :
+EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
+                                int idtype,
+                                const wxString& title,
+                                const wxPoint& pos,
+                                const wxSize& size,
+                                long style ) :
     wxFrame( father, -1, title, pos, size, style )
 {
     wxSize minsize;
@@ -58,11 +58,11 @@ WinEDA_BasicFrame::WinEDA_BasicFrame( wxWindow* father,
 
     Connect( ID_HELP_COPY_VERSION_STRING,
              wxEVT_COMMAND_MENU_SELECTED,
-             wxCommandEventHandler( WinEDA_BasicFrame::CopyVersionInfoToClipboard ) );
+             wxCommandEventHandler( EDA_BASE_FRAME::CopyVersionInfoToClipboard ) );
 }
 
 
-WinEDA_BasicFrame::~WinEDA_BasicFrame()
+EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     if( wxGetApp().m_HtmlCtrl )
         delete wxGetApp().m_HtmlCtrl;
@@ -78,7 +78,7 @@ WinEDA_BasicFrame::~WinEDA_BasicFrame()
 /*
  * Virtual function
  */
-void WinEDA_BasicFrame::ReCreateMenuBar()
+void EDA_BASE_FRAME::ReCreateMenuBar()
 {
 
 }
@@ -88,7 +88,7 @@ void WinEDA_BasicFrame::ReCreateMenuBar()
  * called on a language menu selection
  * when using a derived function, do not forget to call this one
  */
-void WinEDA_BasicFrame::SetLanguage( wxCommandEvent& event )
+void EDA_BASE_FRAME::SetLanguage( wxCommandEvent& event )
 {
     int id = event.GetId();
 
@@ -106,7 +106,7 @@ void WinEDA_BasicFrame::SetLanguage( wxCommandEvent& event )
  * parameters.  Don't forget to call the base method or your frames won't
  * remember their positions and sizes.
  */
-void WinEDA_BasicFrame::LoadSettings()
+void EDA_BASE_FRAME::LoadSettings()
 {
     wxString  text;
     int       Ypos_min;
@@ -146,7 +146,7 @@ void WinEDA_BasicFrame::LoadSettings()
  * parameters.  Don't forget to call the base method or your frames won't
  * remember their positions and sizes.
  */
-void WinEDA_BasicFrame::SaveSettings()
+void EDA_BASE_FRAME::SaveSettings()
 {
     wxString text;
     wxConfig* config;
@@ -170,7 +170,7 @@ void WinEDA_BasicFrame::SaveSettings()
 }
 
 
-void WinEDA_BasicFrame::PrintMsg( const wxString& text )
+void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 {
     SetStatusText( text );
 }
@@ -179,7 +179,7 @@ void WinEDA_BasicFrame::PrintMsg( const wxString& text )
 /*
  * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
  */
-void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
+void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
 {
     wxString Line;
 
@@ -198,7 +198,7 @@ void WinEDA_BasicFrame::DisplayActivity( int PerCent, const wxString& Text )
 /*
  * Update the list of past projects.
  */
-void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
+void EDA_BASE_FRAME::SetLastProject( const wxString& FullFileName )
 {
     wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
     ReCreateMenuBar();
@@ -208,7 +208,7 @@ void WinEDA_BasicFrame::SetLastProject( const wxString& FullFileName )
 /*
  * Fetch the file name from the file history list.
  */
-wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId, const wxString& type )
+wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type )
 {
     wxString fn, msg;
     size_t   i;
@@ -239,7 +239,7 @@ wxString WinEDA_BasicFrame::GetFileFromHistory( int cmdId, const wxString& type 
 /*
  *
  */
-void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
+void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 {
     wxString msg;
 
@@ -282,14 +282,14 @@ void WinEDA_BasicFrame::GetKicadHelp( wxCommandEvent& event )
 /*
  *
  */
-void WinEDA_BasicFrame::GetKicadAbout( wxCommandEvent& event )
+void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
 {
     bool ShowAboutDialog(wxWindow * parent);
     ShowAboutDialog(this);
 }
 
 
-void WinEDA_BasicFrame::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
+void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
 {
     wxASSERT( aMenu != NULL );
 
@@ -364,7 +364,7 @@ static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
 
 #endif
 
-void WinEDA_BasicFrame::CopyVersionInfoToClipboard( wxCommandEvent&  event )
+void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 {
     if( !wxTheClipboard->Open() )
     {

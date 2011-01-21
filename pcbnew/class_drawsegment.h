@@ -65,7 +65,7 @@ public:
     void         Copy( DRAWSEGMENT* source );
 
 
-    void         Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+    void         Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /**
@@ -75,7 +75,7 @@ public:
      * Is virtual from EDA_ITEM.
      * @param frame A WinEDA_BasePcbFrame in which to print status information.
      */
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**

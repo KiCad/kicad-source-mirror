@@ -106,10 +106,10 @@ enum SEARCH_RESULT {
 
 
 class EDA_ITEM;
-class WinEDA_DrawFrame;
+class EDA_DRAW_FRAME;
 class BOARD;
 class EDA_Rect;
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 
 /**
  * Class INSPECTOR
@@ -425,9 +425,9 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status
      * information about this object into the frame's message panel.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    virtual void    DisplayInfo( WinEDA_DrawFrame* frame )
+    virtual void    DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         // derived classes may implement this
     }
@@ -696,7 +696,7 @@ public:
      *  @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do
      *                                    not draw anchor ).
      */
-    void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                const wxPoint& aOffset, EDA_Colors aColor,
                int aDrawMode, GRTraceMode aDisplay_mode = FILAIRE,
                EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
@@ -718,7 +718,7 @@ private:
      *  @param aText = the single line of text to draw.
      *  @param aPos = the position of this line ).
      */
-    void DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+    void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, EDA_Colors aColor,
                             int aDrawMode, GRTraceMode aFillMode,
                             EDA_Colors aAnchor_color, wxString& aText,

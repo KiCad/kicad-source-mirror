@@ -48,7 +48,7 @@ typedef enum {
 int  GRMapX( int x );
 int  GRMapY( int y );
 
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 
 void GRSetDrawMode( wxDC* DC, int mode );
 int  GRGetDrawMode( wxDC* DC );

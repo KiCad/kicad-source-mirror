@@ -61,10 +61,7 @@ public:
     /**
      * Function Draw
      */
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
-               int               aDrawMode,
-               const wxPoint&    offset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
 };
 
 /***************************************************************/
@@ -335,8 +332,7 @@ public:
      * @todo we actually could show a NET, simply show all the tracks and
      *       a pads or net name on pad and vias
      */
-    void Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode,
-               const wxPoint& offset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
 
 
     /**
@@ -372,9 +368,9 @@ public:
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Is virtual from EDA_ITEM.
- * @param frame A WinEDA_DrawFrame in which to print status information.
+ * @param frame A EDA_DRAW_FRAME in which to print status information.
  */
-    void DisplayInfo( WinEDA_DrawFrame* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 };
 
 

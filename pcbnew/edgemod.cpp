@@ -19,9 +19,9 @@
 #include "module_editor_frame.h"
 
 
-static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 int            ArcValue = 900;
 static wxPoint MoveVector;              // Move vector for move edge
@@ -72,7 +72,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge )
 
 
 /* Move and redraw the current edited graphic item when mouse is moving */
-static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BASE_SCREEN* screen = panel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
@@ -97,7 +97,7 @@ static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 /* Redraw the current edited (moved) graphic item
  */
-static void ShowEdgeModule( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BASE_SCREEN* screen = panel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
@@ -266,7 +266,7 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge )
 
 /* abort function in moving edge.
  */
-static void Exit_EditEdge_Module( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 

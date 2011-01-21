@@ -55,7 +55,7 @@ class LIB_DRAW_ITEM : public EDA_ITEM
     /**
      * Draws the item.
      */
-    virtual void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+    virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                               const wxPoint& aOffset, int aColor,
                               int aDrawMode, void* aData, const TRANSFORM& aTransform ) = 0;
 
@@ -179,7 +179,7 @@ public:
      *                or to pass reference to the lib component for pins
      * @param aTransform - Transform Matrix (rotation, mirror ..)
      */
-    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint &aOffset, int aColor,
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset, int aColor,
                        int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
@@ -233,7 +233,7 @@ public:
      * in msg panel
      * @param aFrame = main frame where the message manel info is.
      */
-    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
      * Make a copy of this draw item.

@@ -240,7 +240,7 @@ int LIB_POLYLINE::GetPenSize()
 }
 
 
-void LIB_POLYLINE::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                                 int aColor, int aDrawMode, void* aData,
                                 const TRANSFORM& aTransform )
 {
@@ -385,7 +385,7 @@ void LIB_POLYLINE::DeleteSegment( const wxPoint aPosition )
 }
 
 
-void LIB_POLYLINE::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();

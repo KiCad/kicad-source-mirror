@@ -60,7 +60,7 @@ public:
     void             SetDrawCoord();
 
     /* drawing functions */
-    void             Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+    void             Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                            int aDrawMode, const wxPoint& offset = ZeroOffset );
 
     void             Draw3D( Pcb3D_GLCanvas* glcanvas );
@@ -70,9 +70,9 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void             DisplayInfo( WinEDA_DrawFrame* frame );
+    void             DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**

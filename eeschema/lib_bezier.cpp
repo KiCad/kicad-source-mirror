@@ -241,7 +241,7 @@ int LIB_BEZIER::GetPenSize()
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
 
-void LIB_BEZIER::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                               int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint              pos1;
@@ -367,7 +367,7 @@ EDA_Rect LIB_BEZIER::GetBoundingBox() const
 }
 
 
-void LIB_BEZIER::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();

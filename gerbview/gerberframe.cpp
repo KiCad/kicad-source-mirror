@@ -63,7 +63,7 @@ EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
 EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberOptionsDialog )
 
 EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                WinEDA_DrawFrame::SetLanguage )
+                EDA_DRAW_FRAME::SetLanguage )
 
 // menu Postprocess
 EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES,
@@ -79,8 +79,8 @@ EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE,
           WinEDA_GerberFrame::Process_Special_Functions )
 
 // Menu Help
-EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
+EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
 EVT_TOOL( wxID_CUT, WinEDA_GerberFrame::Process_Special_Functions )
 EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
@@ -452,7 +452,7 @@ void WinEDA_GerberFrame::syncLayerBox()
  */
 void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_DrawFrame::SetLanguage( event );
+    EDA_DRAW_FRAME::SetLanguage( event );
     m_LayersManager->SetLayersManagerTabsText();
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_LayersManager );
     pane_info.Caption( _( "Visibles" ) );

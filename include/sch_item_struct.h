@@ -135,11 +135,11 @@ public:
     /**
      * Function Draw
      */
-    virtual void Draw( WinEDA_DrawPanel* aPanel,
-                       wxDC*             aDC,
-                       const wxPoint&    aOffset,
-                       int               aDrawMode,
-                       int               aColor = -1 ) = 0;
+    virtual void Draw( EDA_DRAW_PANEL* aPanel,
+                       wxDC*           aDC,
+                       const wxPoint&  aOffset,
+                       int             aDrawMode,
+                       int             aColor = -1 ) = 0;
 
     /* Place function */
     virtual void Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC );

@@ -39,7 +39,7 @@ static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
 /*!
  * DIALOG_SVG_PRINT functions
  */
-DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent ) :
+DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
     m_Parent = (WinEDA_BasePcbFrame*) parent;
@@ -235,7 +235,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     screen->SetScalingFactor( 1.0 );
     float dpi = (float)m_Parent->m_InternalUnits;
 
-    WinEDA_DrawPanel* panel = m_Parent->DrawPanel;
+    EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
 
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
                                     // to print floating point numbers like 1.3)

@@ -18,7 +18,7 @@ class LIB_BEZIER : public LIB_DRAW_ITEM
     /**
      * Draw the bezier curve.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
 public:
@@ -74,7 +74,7 @@ public:
      */
     virtual int GetPenSize( );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();

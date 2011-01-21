@@ -345,7 +345,7 @@ void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
 }
 
 
-void LIB_ARC::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     // Don't draw the arc until the end point is selected.  Only the edit indicators
@@ -474,7 +474,7 @@ start(%d, %d), end(%d, %d), radius %d" ),
 }
 
 
-void LIB_ARC::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_ARC::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
     EDA_Rect bBox = GetBoundingBox();

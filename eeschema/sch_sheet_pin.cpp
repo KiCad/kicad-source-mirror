@@ -66,11 +66,11 @@ EDA_ITEM* SCH_SHEET_PIN::doClone() const
 }
 
 
-void SCH_SHEET_PIN::Draw( WinEDA_DrawPanel* aPanel,
-                          wxDC*             aDC,
-                          const wxPoint&    aOffset,
-                          int               aDraw_mode,
-                          int               aColor )
+void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel,
+                          wxDC*           aDC,
+                          const wxPoint&  aOffset,
+                          int             aDraw_mode,
+                          int             aColor )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape
     // called by ::Draw

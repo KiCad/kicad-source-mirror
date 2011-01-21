@@ -25,9 +25,9 @@ public:
 
 public:
     // Constructor and destructor
-    DIALOG_GET_COMPONENT( WinEDA_DrawFrame* parent, const wxPoint& framepos,
-                      wxArrayString& HistoryList, const wxString& Title,
-                      bool show_extra_tool );
+    DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent, const wxPoint& framepos,
+                          wxArrayString& HistoryList, const wxString& Title,
+                          bool show_extra_tool );
     ~DIALOG_GET_COMPONENT() {};
 
     wxString GetComponentName( void );

@@ -536,7 +536,7 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 }
 
 
-void SCH_SHEET::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                       const wxPoint& aOffset, int aDrawMode, int aColor )
 {
     int      txtcolor;
@@ -783,7 +783,7 @@ wxString SCH_SHEET::GetFileName( void )
 }
 
 
-void SCH_SHEET::DisplayInfo( WinEDA_DrawFrame* frame )
+void SCH_SHEET::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     frame->ClearMsgPanel();
     frame->AppendMsgPanel( _( "Sheet name" ), m_SheetName, CYAN );

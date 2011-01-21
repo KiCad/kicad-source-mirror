@@ -101,11 +101,11 @@ public:
 
     SCH_TEXT* GenCopy();
 
-    virtual void Draw( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       const wxPoint&    offset,
-                       int               draw_mode,
-                       int               Color = -1 );
+    virtual void Draw( EDA_DRAW_PANEL* panel,
+                       wxDC*           DC,
+                       const wxPoint&  offset,
+                       int             draw_mode,
+                       int             Color = -1 );
 
     /**
      * Function CreateGraphicShape
@@ -220,11 +220,11 @@ public:
 
     ~SCH_LABEL() { }
 
-    virtual void Draw( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       const wxPoint&    offset,
-                       int               draw_mode,
-                       int               Color = -1 );
+    virtual void Draw( EDA_DRAW_PANEL* panel,
+                       wxDC*           DC,
+                       const wxPoint&  offset,
+                       int             draw_mode,
+                       int             Color = -1 );
 
     virtual wxString GetClass() const
     {
@@ -305,11 +305,11 @@ public:
 
     ~SCH_GLOBALLABEL() { }
 
-    virtual void Draw( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       const wxPoint&    offset,
-                       int               draw_mode,
-                       int               Color = -1 );
+    virtual void Draw( EDA_DRAW_PANEL* panel,
+                       wxDC*           DC,
+                       const wxPoint&  offset,
+                       int             draw_mode,
+                       int             Color = -1 );
 
     virtual wxString GetClass() const
     {
@@ -406,11 +406,11 @@ public:
 
     ~SCH_HIERLABEL() { }
 
-    virtual void Draw( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       const wxPoint&    offset,
-                       int               draw_mode,
-                       int               Color = -1 );
+    virtual void Draw( EDA_DRAW_PANEL* panel,
+                       wxDC*           DC,
+                       const wxPoint&  offset,
+                       int             draw_mode,
+                       int             Color = -1 );
 
     virtual wxString GetClass() const
     {

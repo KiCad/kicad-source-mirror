@@ -81,15 +81,15 @@ public:
      * sets the initial values of a BLOCK_SELECTOR, before starting a block
      * command
      */
-    void InitData( WinEDA_DrawPanel* Panel, const wxPoint& startpos );
+    void InitData( EDA_DRAW_PANEL* Panel, const wxPoint& startpos );
 
     /**
      * Function SetMessageBlock
      * Displays the type of block command in the status bar of the window
      */
-    void SetMessageBlock( WinEDA_DrawFrame* frame );
+    void SetMessageBlock( EDA_DRAW_FRAME* frame );
 
-    void Draw( WinEDA_DrawPanel* aPanel,
+    void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC* aDC, const wxPoint& aOffset,
                int aDrawMode,
                int aColor );
@@ -135,7 +135,7 @@ public:
 
 /* Cancel Current block operation.
  */
-void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC );
+void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
 /* Redraw the outlines of the block which shows the search area for block
@@ -144,7 +144,7 @@ void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC );
  *  by InitBlockLocateDatas().
  *  The other point of the rectangle is the mouse cursor
  */
-void DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 #endif /* __INCLUDE__BLOCK_COMMANDE_H__ */

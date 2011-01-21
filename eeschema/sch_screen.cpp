@@ -91,9 +91,6 @@ SCH_SCREEN::~SCH_SCREEN()
 void SCH_SCREEN::IncRefCount()
 {
     m_refCount++;
-
-    wxLogDebug( wxT("Screen %s reference count after increment is %d." ),
-                GetChars( GetFileName() ), m_refCount );
 }
 
 
@@ -102,9 +99,6 @@ void SCH_SCREEN::DecRefCount()
     wxCHECK_RET( m_refCount != 0,
                  wxT( "Screen reference count already zero.  Bad programmer!" ) );
     m_refCount--;
-
-    wxLogDebug( wxT("Screen %s reference count after decrement is %d." ),
-                GetChars( GetFileName() ), m_refCount );
 }
 
 
@@ -220,8 +214,10 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
  * - Includes segments or buses aligned in only 1 segment
  * - Detects identical objects superimposed
  */
-bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
+bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
+    wxASSERT( aCanvas != NULL );
+
     SCH_ITEM* DrawList, * TstDrawList;
     bool      Modify = FALSE;
 
@@ -262,9 +258,7 @@ bool SCH_SCREEN::SchematicCleanUp( wxDC* DC )
         }
     }
 
-    SCH_EDIT_FRAME* frame;
-    frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
-    frame->TestDanglingEnds( GetDrawItems(), DC );
+    TestDanglingEnds( aCanvas, aDC );
 
     return Modify;
 }
@@ -328,7 +322,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
-void SCH_SCREEN::Draw( WinEDA_DrawPanel* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
+void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
 {
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
     {
@@ -608,7 +602,8 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
         picker.m_PickedItem     = item;
         picker.m_PickedItemType = item->Type();
 
-        if( !item->IsConnectable() || !item->IsConnected( position ) || (item->m_Flags & SKIP_STRUCT) )
+        if( !item->IsConnectable() || !item->IsConnected( position )
+          || (item->m_Flags & SKIP_STRUCT) )
             continue;
 
         if( item->IsSelected() && item->Type() != SCH_LINE_T )
@@ -661,6 +656,88 @@ int SCH_SCREEN::UpdatePickList()
     }
 
     return m_BlockLocate.GetCount();
+}
+
+
+bool SCH_SCREEN::TestDanglingEnds( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
+{
+    SCH_ITEM* item;
+    std::vector< DANGLING_END_ITEM > endPoints;
+    bool hasDanglingEnds = false;
+
+    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        item->GetEndPoints( endPoints );
+
+    for( item = GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->IsDanglingStateChanged( endPoints ) && ( aCanvas != NULL ) && ( aDC != NULL ) )
+        {
+            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
+            if( item->IsDangling() )
+                hasDanglingEnds = true;
+        }
+    }
+
+    return hasDanglingEnds;
+}
+
+
+bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
+{
+    SCH_LINE* segment;
+    SCH_LINE* newSegment;
+    bool brokenSegments = false;
+    SCH_FILTER_T filter = ( SCH_FILTER_T ) ( WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T );
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        segment = (SCH_LINE*) item;
+
+        if( !segment->HitTest( aPoint, 0, filter ) )
+            continue;
+
+        // Break the segment at aPoint and create a new segment.
+        newSegment = new SCH_LINE( *segment );
+        newSegment->m_Start = aPoint;
+        segment->m_End = newSegment->m_Start;
+        newSegment->SetNext( segment->Next() );
+        segment->SetNext( newSegment );
+        item = newSegment;
+        brokenSegments = true;
+    }
+
+    return brokenSegments;
+}
+
+
+bool SCH_SCREEN::BreakSegmentsOnJunctions()
+{
+    bool brokenSegments = false;
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_JUNCTION_T )
+        {
+            SCH_JUNCTION* junction = ( SCH_JUNCTION* ) item;
+
+            if( BreakSegment( junction->m_Pos ) )
+                brokenSegments = true;
+        }
+        else if( item->Type() == SCH_BUS_ENTRY_T )
+        {
+            SCH_BUS_ENTRY* busEntry = ( SCH_BUS_ENTRY* ) item;
+
+            if( BreakSegment( busEntry->m_Pos ) || BreakSegment( busEntry->m_End() ) )
+                brokenSegments = true;
+        }
+    }
+
+    return brokenSegments;
 }
 
 
@@ -783,7 +860,7 @@ void SCH_SCREENS::SchematicCleanUp()
     {
         // if wire list has changed, delete the undo/redo list to avoid
         // pointer problems with deleted data.
-        if( m_screens[i]->SchematicCleanUp( NULL ) )
+        if( m_screens[i]->SchematicCleanUp() )
             m_screens[i]->ClearUndoRedoList();
     }
 }

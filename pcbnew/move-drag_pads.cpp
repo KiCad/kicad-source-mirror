@@ -22,7 +22,7 @@ static wxPoint Pad_OldPos;
 
 /* Cancel move pad command.
  */
-static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     D_PAD* pad = s_CurrentSelectedPad;
 
@@ -57,7 +57,7 @@ static void Exit_Move_Pad( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 /* Draw in drag mode when moving a pad.
  */
-static void Show_Pad_Move( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Show_Pad_Move( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     TRACK*       Track;
     BASE_SCREEN* screen = panel->GetScreen();

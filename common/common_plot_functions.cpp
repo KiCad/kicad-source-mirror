@@ -18,7 +18,7 @@
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
  */
-void WinEDA_DrawFrame::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
+void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 {
 #define WSTEXTSIZE 50   // Text size in mils
     Ki_PageDescr* Sheet = screen->m_CurrentSheetDesc;

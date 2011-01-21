@@ -217,7 +217,7 @@ int TestDuplicateSheetNames( bool aCreateMarker )
  * or between aNetItemRef and aNetItemTst
  *  if MinConn < 0: this is an error on labels
  */
-void Diagnose( WinEDA_DrawPanel* aPanel,
+void Diagnose( EDA_DRAW_PANEL* aPanel,
                NETLIST_OBJECT* aNetItemRef,
                NETLIST_OBJECT* aNetItemTst,
                int aMinConn, int aDiag )
@@ -352,7 +352,7 @@ void Diagnose( WinEDA_DrawPanel* aPanel,
 /* Routine testing electrical conflicts between NetItemRef and other items
  * of the same net
  */
-void TestOthersItems( WinEDA_DrawPanel* panel,
+void TestOthersItems( EDA_DRAW_PANEL* panel,
                       unsigned NetItemRef,
                       unsigned netstart,
                       int* NetNbItems, int* MinConnexion )
@@ -571,7 +571,7 @@ static bool IsLabelsConnected( NETLIST_OBJECT* a, NETLIST_OBJECT* b )
 /* Routine to perform erc on a sheetLabel that is connected to a corresponding
  * sub sheet Glabel
  */
-void TestLabel( WinEDA_DrawPanel* panel, unsigned NetItemRef, unsigned StartNet )
+void TestLabel( EDA_DRAW_PANEL* panel, unsigned NetItemRef, unsigned StartNet )
 {
     unsigned NetItemTst;
     int      erc = 1;

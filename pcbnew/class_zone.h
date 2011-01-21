@@ -89,7 +89,7 @@ public:
      */
     void     Copy( ZONE_CONTAINER* src );
 
-    void     DisplayInfo( WinEDA_DrawFrame* frame );
+    void     DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function Draw
@@ -99,10 +99,10 @@ public:
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      * @param offset = Draw offset (usually wxPoint(0,0))
      */
-    void     Draw( WinEDA_DrawPanel* panel,
-                   wxDC*             DC,
-                   int               aDrawMode,
-                   const wxPoint&    offset = ZeroOffset );
+    void     Draw( EDA_DRAW_PANEL* panel,
+                   wxDC*           DC,
+                   int             aDrawMode,
+                   const wxPoint&  offset = ZeroOffset );
 
     /**
      * Function DrawDrawFilledArea
@@ -112,10 +112,10 @@ public:
      * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      */
-    void DrawFilledArea( WinEDA_DrawPanel* panel,
-                         wxDC*             DC,
-                         int               aDrawMode,
-                         const wxPoint&    offset = ZeroOffset );
+    void DrawFilledArea( EDA_DRAW_PANEL* panel,
+                         wxDC*           DC,
+                         int             aDrawMode,
+                         const wxPoint&  offset = ZeroOffset );
 
     /**
      * Function DrawWhileCreateOutline
@@ -126,7 +126,7 @@ public:
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
      */
-    void     DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode = GR_OR );
+    void     DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode = GR_OR );
 
 
     /* Function GetBoundingBox

@@ -866,7 +866,7 @@ bool BOARD::ComputeBoundaryBox()
 
 /* Display board statistics: pads, nets, connections.. count
  */
-void BOARD::DisplayInfo( WinEDA_DrawFrame* frame )
+void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString txt;
 
@@ -1435,10 +1435,7 @@ out:
  * Function RedrawAreasOutlines
  * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
  */
-void BOARD::RedrawAreasOutlines( WinEDA_DrawPanel* panel,
-                                 wxDC*             aDC,
-                                 int               aDrawMode,
-                                 int               aLayer )
+void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode, int aLayer )
 {
     if( !aDC )
         return;
@@ -1456,10 +1453,7 @@ void BOARD::RedrawAreasOutlines( WinEDA_DrawPanel* panel,
  * Function RedrawFilledAreas
  * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
  */
-void BOARD::RedrawFilledAreas( WinEDA_DrawPanel* panel,
-                               wxDC*             aDC,
-                               int               aDrawMode,
-                               int               aLayer )
+void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode, int aLayer )
 {
     if( !aDC )
         return;

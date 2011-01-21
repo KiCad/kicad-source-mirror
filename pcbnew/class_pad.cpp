@@ -580,7 +580,7 @@ bool D_PAD::Save( FILE* aFile ) const
 }
 
 
-void D_PAD::DisplayInfo( WinEDA_DrawFrame* frame )
+void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     MODULE*     module;
     wxString    Line;

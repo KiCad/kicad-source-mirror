@@ -340,7 +340,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
 
 
 /*********************************************************************/
-void GERBER_DRAW_ITEM::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
+void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
                              const wxPoint& aOffset )
 /*********************************************************************/
 {
@@ -581,9 +581,9 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about this GERBER item
- * @param frame A WinEDA_DrawFrame in which to print status information.
+ * @param frame A EDA_DRAW_FRAME in which to print status information.
  */
-void GERBER_DRAW_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
+void GERBER_DRAW_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
 

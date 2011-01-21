@@ -22,11 +22,11 @@ static unsigned s_HistoryMaxCount = 8;  // Max number of items displayed in hist
  * Dialog frame to choose a component or a footprint
  *   This dialog shows an history of last selected items
  */
-DIALOG_GET_COMPONENT::DIALOG_GET_COMPONENT( WinEDA_DrawFrame* parent,
-                                    const wxPoint&    framepos,
-                                    wxArrayString&    HistoryList,
-                                    const wxString&   Title,
-                                    bool              show_extra_tool ) :
+DIALOG_GET_COMPONENT::DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
+                                            const wxPoint&  framepos,
+                                            wxArrayString&  HistoryList,
+                                            const wxString& Title,
+                                            bool            show_extra_tool ) :
     DIALOG_GET_COMPONENT_BASE( parent, -1, Title, framepos )
 {
 

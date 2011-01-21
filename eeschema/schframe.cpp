@@ -38,9 +38,9 @@
 #include "dialogs/dialog_SVG_print.h"
 
 
-BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, WinEDA_DrawFrame )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_DrawFrame::OnSockRequestServer )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT, WinEDA_DrawFrame::OnSockRequest )
+BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
+    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, EDA_DRAW_FRAME::OnSockRequestServer )
+    EVT_SOCKET( ID_EDA_SOCKET_EVENT, EDA_DRAW_FRAME::OnSockRequest )
 
     EVT_CLOSE( SCH_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( SCH_EDIT_FRAME::OnSize )
@@ -62,8 +62,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_MENU( ID_GEN_PLOT_HPGL, SCH_EDIT_FRAME::ToPlot_HPGL )
     EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
     EVT_MENU( ID_GEN_PLOT_DXF, SCH_EDIT_FRAME::ToPlot_DXF )
-    EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
-    EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, WinEDA_DrawFrame::CopyToClipboard )
+    EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
+    EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
     EVT_MENU( ID_POPUP_SCH_COPY_ITEM, SCH_EDIT_FRAME::OnCopySchematicItemRequest )
@@ -88,7 +88,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_TOOL( ID_TO_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
     EVT_TOOL( ID_TO_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
 
-    EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
+    EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
     EVT_TOOL( ID_HIERARCHY, SCH_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_CUT, SCH_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, SCH_EDIT_FRAME::Process_Special_Functions )
@@ -104,8 +104,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadStuffFile )
     EVT_TOOL( ID_COMPONENT_BUTT, SCH_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT, WinEDA_DrawFrame::GetKicadAbout )
+    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.
     EVT_TOOL( ID_NO_SELECT_BUTT, SCH_EDIT_FRAME::Process_Special_Functions )
@@ -150,7 +150,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    WinEDA_DrawFrame( father, SCHEMATIC_FRAME, title, pos, size, style )
+    EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
     m_Draw_Axis = FALSE;                // TRUE to show axis
@@ -750,10 +750,10 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
  */
 void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_BasicFrame::SetLanguage( event );
+    EDA_BASE_FRAME::SetLanguage( event );
 
     if( m_LibeditFrame )
-        m_LibeditFrame->WinEDA_BasicFrame::SetLanguage( event );
+        m_LibeditFrame->EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

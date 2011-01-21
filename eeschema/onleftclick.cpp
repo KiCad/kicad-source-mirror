@@ -54,7 +54,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case SCH_FIELD_T:
                 DrawStruct->Place( this, DC );
                 GetScreen()->SetCurItem( NULL );
-                TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+                GetScreen()->TestDanglingEnds();
                 DrawPanel->Refresh( TRUE );
                 return;
 
@@ -115,7 +115,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+        GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -131,7 +131,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
-        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+        GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -149,7 +149,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             GetScreen()->SetCurItem( NULL );
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
@@ -159,7 +159,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         LocateAndDeleteItem( this, DC );
         OnModify( );
         GetScreen()->SetCurItem( NULL );
-        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+        GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
@@ -201,7 +201,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -220,7 +220,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -235,7 +235,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -259,7 +259,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         else if( (DrawStruct->Type() == SCH_SHEET_LABEL_T) && (DrawStruct->m_Flags != 0) )
         {
             DrawStruct->Place( this, DC );
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -274,7 +274,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
@@ -289,7 +289,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             DrawStruct->Place( this, DC );
             DrawPanel->m_AutoPAN_Request = FALSE;
-            TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+            GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;

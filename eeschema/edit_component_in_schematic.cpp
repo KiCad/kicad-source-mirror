@@ -16,8 +16,8 @@
 #include "sch_component.h"
 
 
-static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 /******************************************************************************/
@@ -125,7 +125,7 @@ modified!\nYou must create a new power"  ) );
     wxString newtext = Field->m_Text;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
-    wxString title = _( "Field:" ) + wxT(" ") + Field->m_Name;
+    wxString title = _( "Field: " ) + Field->m_Name;
     wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     int diag = dlg.ShowModal();
     newtext = dlg.GetValue( );
@@ -178,7 +178,7 @@ modified!\nYou must create a new power"  ) );
 /*
  * Move standard text field.  This routine is normally attached to the cursor.
  */
-static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     wxPoint pos;
     int fieldNdx;
@@ -213,7 +213,7 @@ static void MoveCmpField( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 }
 
 
-static void AbortMoveCmpField( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     Panel->ForceCloseManageCurseur = NULL;
     Panel->ManageCurseur = NULL;

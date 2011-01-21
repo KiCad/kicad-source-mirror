@@ -14,7 +14,7 @@
 class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 private:
-    WinEDA_DrawFrame *m_Parent;
+    EDA_DRAW_FRAME *m_Parent;
     BASE_SCREEN * m_Screen;
     int m_Modified;
     Ki_PageDescr * m_SelectedSheet;
@@ -22,7 +22,7 @@ private:
     int m_CurrentSelection;
 
 public:
-    DIALOG_PAGES_SETTINGS( WinEDA_DrawFrame* parent );
+    DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
     ~DIALOG_PAGES_SETTINGS();
 
 private:

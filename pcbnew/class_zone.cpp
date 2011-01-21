@@ -444,7 +444,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
 }
 
 
-void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
+void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
     if( DC == NULL )
         return;
@@ -525,7 +525,7 @@ void ZONE_CONTAINER::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, con
 
 
 /************************************************************************************/
-void ZONE_CONTAINER::DrawFilledArea( WinEDA_DrawPanel* panel,
+void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                                      wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
 /************************************************************************************/
@@ -689,7 +689,7 @@ EDA_Rect ZONE_CONTAINER::GetBoundingBox() const
 
 
 /**********************************************************************************************/
-void ZONE_CONTAINER::DrawWhileCreateOutline( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode )
+void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode )
 {
 /***********************************************************************************************/
 /**
@@ -925,10 +925,8 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
 }
 
 
-/************************************************************/
-void ZONE_CONTAINER::DisplayInfo( WinEDA_DrawFrame* frame )
+void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
-/************************************************************/
     wxString msg;
 
     BOARD*   board = (BOARD*) m_Parent;

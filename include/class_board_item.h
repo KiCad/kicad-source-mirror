@@ -94,8 +94,8 @@ public:
      * Function Draw
      * BOARD_ITEMs have their own color information.
      */
-    virtual void Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                      int aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
+    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+                       int aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
 
 
     /**
@@ -327,7 +327,7 @@ public:
         return dummy;
     }
 
-    void Draw( WinEDA_DrawPanel* DrawPanel, wxDC* DC,
+    void Draw( EDA_DRAW_PANEL* DrawPanel, wxDC* DC,
                int aDrawMode, const wxPoint& offset = ZeroOffset )
     {
     }

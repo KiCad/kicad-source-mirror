@@ -17,7 +17,7 @@ BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
 END_EVENT_TABLE()
 
 
-WinEDA_MsgPanel::WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id,
+WinEDA_MsgPanel::WinEDA_MsgPanel( EDA_DRAW_FRAME* parent, int id,
                                   const wxPoint& pos, const wxSize& size ) :
     wxPanel( parent, id, pos, size )
 {

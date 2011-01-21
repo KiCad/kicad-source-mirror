@@ -36,7 +36,7 @@ static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 /* class WinEDA_BasePcbFrame */
 /*******************************/
 
-BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, WinEDA_DrawFrame )
+BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
                     ID_POPUP_PCB_ITEM_SELECTION_END,
                     WinEDA_BasePcbFrame::ProcessItemSelection )
@@ -49,7 +49,7 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
                                           const wxPoint&  pos,
                                           const wxSize&   size,
                                           long style) :
-    WinEDA_DrawFrame( father, idtype, title, pos, size, style )
+    EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
     m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
     m_Pcb                 = NULL;
@@ -291,7 +291,7 @@ void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aTool
 {
     bool redraw = false;
 
-    WinEDA_DrawFrame::SetToolID( aId, aCursor, aToolMsg );
+    EDA_DRAW_FRAME::SetToolID( aId, aCursor, aToolMsg );
 
     if( aId < 0 )
         return;
@@ -316,7 +316,7 @@ void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aTool
  */
 void WinEDA_BasePcbFrame::UpdateStatusBar()
 {
-    WinEDA_DrawFrame::UpdateStatusBar();
+    EDA_DRAW_FRAME::UpdateStatusBar();
 
     if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
     {
@@ -382,7 +382,7 @@ void WinEDA_BasePcbFrame::LoadSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_DrawFrame::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings();
     // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
@@ -418,7 +418,7 @@ void WinEDA_BasePcbFrame::SaveSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_DrawFrame::SaveSettings();
+    EDA_DRAW_FRAME::SaveSettings();
     cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );
     cfg->Write( m_FrameName + UserGridSizeYEntry, m_UserGridSize.y );
     cfg->Write( m_FrameName + UserGridUnitsEntry, ( long )m_UserGridUnit );

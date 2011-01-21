@@ -148,7 +148,7 @@ int SCH_BUS_ENTRY::GetPenSize() const
 }
 
 
-void SCH_BUS_ENTRY::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                           int aDrawMode, int aColor )
 {
     int color;

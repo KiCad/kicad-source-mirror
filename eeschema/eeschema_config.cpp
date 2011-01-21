@@ -556,7 +556,7 @@ void SCH_EDIT_FRAME::LoadSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_DrawFrame::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings();
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
@@ -653,7 +653,7 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_DrawFrame::SaveSettings();
+    EDA_DRAW_FRAME::SaveSettings();
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 

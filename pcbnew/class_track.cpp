@@ -547,8 +547,7 @@ bool TRACK::Save( FILE* aFile ) const
 
 
 /*********************************************************************/
-void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
-                  const wxPoint& aOffset )
+void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 /*********************************************************************/
 {
     int l_piste;
@@ -743,8 +742,7 @@ void TRACK::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
 
 /*******************************************************************************************/
-void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
-                   const wxPoint& aOffset )
+void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 /*******************************************************************************************/
 {
     int color;
@@ -979,7 +977,7 @@ void SEGVIA::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
 
 // see class_track.h
-void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
+void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
     BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
@@ -1003,9 +1001,9 @@ void TRACK::DisplayInfo( WinEDA_DrawFrame* frame )
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Display info about the track segment only, and does not calculate the full track length
- * @param frame A WinEDA_DrawFrame in which to print status information.
+ * @param frame A EDA_DRAW_FRAME in which to print status information.
  */
-void TRACK::DisplayInfoBase( WinEDA_DrawFrame* frame )
+void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
     BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();

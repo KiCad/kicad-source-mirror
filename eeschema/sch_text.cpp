@@ -361,7 +361,7 @@ int SCH_TEXT::GetPenSize() const
 }
 
 
-void SCH_TEXT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& aOffset,
+void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )
 {
     EDA_Colors color;
@@ -791,7 +791,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-void SCH_LABEL::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                       int DrawMode, int Color )
 {
     SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
@@ -1098,11 +1098,11 @@ void SCH_GLOBALLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 }
 
 
-void SCH_GLOBALLABEL::Draw( WinEDA_DrawPanel* panel,
-                            wxDC*             DC,
-                            const wxPoint&    aOffset,
-                            int               DrawMode,
-                            int               Color )
+void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
+                            wxDC*           DC,
+                            const wxPoint&  aOffset,
+                            int             DrawMode,
+                            int             Color )
 {
     static std::vector <wxPoint> Poly;
     EDA_Colors color;
@@ -1425,11 +1425,11 @@ void SCH_HIERLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
 }
 
 
-void SCH_HIERLABEL::Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          const wxPoint&    offset,
-                          int               DrawMode,
-                          int               Color )
+void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
+                          wxDC*           DC,
+                          const wxPoint&  offset,
+                          int             DrawMode,
+                          int             Color )
 {
     static std::vector <wxPoint> Poly;
     EDA_Colors color;

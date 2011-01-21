@@ -18,7 +18,7 @@ class CMP_LIBRARY;
 /**
  * Component library viewer main window.
  */
-class LIB_VIEW_FRAME : public WinEDA_DrawFrame
+class LIB_VIEW_FRAME : public EDA_DRAW_FRAME
 {
 private:
     WinEDAChoiceBox*    SelpartBox;

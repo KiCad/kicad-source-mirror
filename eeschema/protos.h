@@ -10,8 +10,8 @@
 
 
 class EDA_ITEM;
-class WinEDA_DrawPanel;
-class WinEDA_DrawFrame;
+class EDA_DRAW_PANEL;
+class EDA_DRAW_FRAME;
 class SCH_EDIT_FRAME;
 class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
@@ -35,7 +35,7 @@ wxString ReturnDefaultFieldName( int aFieldNdx );
 /* DATABASE.CPP */
 /****************/
 void DisplayCmpDoc( wxString& Name );
-wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys, wxString& BufName );
+wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName );
 
 /*********************/
 /* DANGLING_ENDS.CPP */
@@ -62,7 +62,7 @@ bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* Draw
 /************/
 /* BLOCK.CPP */
 /************/
-void      DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct );
+void      DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 
 // operations_on_item_lists.cpp
@@ -120,8 +120,8 @@ SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask 
 /***************/
 /* EEREDRAW.CPP */
 /***************/
-void DrawDanglingSymbol( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& pos, int Color );
-void RedrawActiveWindow( WinEDA_DrawPanel* panel, wxDC* DC );
+void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, int Color );
+void RedrawActiveWindow( EDA_DRAW_PANEL* panel, wxDC* DC );
 
 
 /**************/
@@ -181,10 +181,10 @@ void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos )
  *   1 if selected component
  *   0 if canceled order
  */
-int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
-                                            CMP_LIBRARY*      Library,
-                                            wxString&         Buffer,
-                                            wxString&         OldName );
+int            DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
+                                            CMP_LIBRARY*    Library,
+                                            wxString&       Buffer,
+                                            wxString&       OldName );
 
 /**
  * Function SelectLibraryFromList
@@ -192,7 +192,7 @@ int            DisplayComponentsNamesInLib( WinEDA_DrawFrame* frame,
  * a library
  * This list is sorted, with the library cache always at end of the list
  */
-CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame );
+CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
 
 /**
  * Get the name component from a library to load.
@@ -203,9 +203,9 @@ CMP_LIBRARY* SelectLibraryFromList( WinEDA_DrawFrame* frame );
  *   0 if canceled order
  * Place the name of the selected component list in BufName
  */
-int            GetNameOfPartToLoad( WinEDA_DrawFrame* frame,
-                                    CMP_LIBRARY*      Lib,
-                                    wxString&         BufName );
+int            GetNameOfPartToLoad( EDA_DRAW_FRAME* frame,
+                                    CMP_LIBRARY*    Lib,
+                                    wxString&       BufName );
 
 /**************/
 /* LIBARCH.CPP */
@@ -213,29 +213,12 @@ int            GetNameOfPartToLoad( WinEDA_DrawFrame* frame,
 
 bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName );
 
-/**************/
-/* CLEANUP.CPP */
-/**************/
-
-void SchematicCleanUp( SCH_SCREEN* screen, wxDC* DC );
-
-/* Routine de nettoyage:
- *    - regroupe les segments de fils (ou de bus) alignes en 1 seul segment
- *    - Detecte les objets identiques superposes
- */
-
-void BreakSegmentOnJunction( SCH_SCREEN* Screen );
-
-/* Break a segment ( BUS, WIRE ) int 2 segments at location aBreakpoint,
- * if aBreakpoint in on segment segment
- * ( excluding ends)
- */
-void BreakSegment(SCH_SCREEN * aScreen, wxPoint aBreakpoint );
 
 /***************/
 /* OPTIONS.CPP */
 /***************/
 void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
+
 
 /****************/
 /* CONTROLE.CPP */

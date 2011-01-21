@@ -74,7 +74,7 @@ FILL_T LIB_EDIT_FRAME::        m_drawFillStyle   = NO_FILL;
 /************************/
 /* class LIB_EDIT_FRAME */
 /************************/
-BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
+BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
@@ -115,7 +115,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, WinEDA_DrawFrame )
     EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::SaveActiveLibrary )
     EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
-    EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
+    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
 
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::OnColorConfig )
     EVT_MENU( ID_CONFIG_REQ, LIB_EDIT_FRAME::InstallConfigFrame )
@@ -168,7 +168,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    WinEDA_DrawFrame( aParent, LIBEDITOR_FRAME, title, pos, size, style )
+    EDA_DRAW_FRAME( aParent, LIBEDITOR_FRAME, title, pos, size, style )
 {
     wxASSERT( aParent );
 
@@ -267,7 +267,7 @@ void LIB_EDIT_FRAME::LoadSettings()
 {
     wxConfig* cfg;
 
-    WinEDA_DrawFrame::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings();
 
     wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
     cfg = wxGetApp().m_EDA_Config;
@@ -293,7 +293,7 @@ void LIB_EDIT_FRAME::SaveSettings()
 {
     wxConfig* cfg;
 
-    WinEDA_DrawFrame::SaveSettings();
+    EDA_DRAW_FRAME::SaveSettings();
 
     wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
     cfg = wxGetApp().m_EDA_Config;
@@ -933,7 +933,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
 {
-    WinEDA_DrawFrame::OnActivate( event );
+    EDA_DRAW_FRAME::OnActivate( event );
 
     // Verify the existence of the current active library
     // (can be removed or changed by the schematic editor)
@@ -956,12 +956,12 @@ void LIB_EDIT_FRAME::EnsureActiveLibExists()
 
 void LIB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_BasicFrame::SetLanguage( event );
+    EDA_BASE_FRAME::SetLanguage( event );
     SCH_EDIT_FRAME *parent = (SCH_EDIT_FRAME *)GetParent();
-    // Call parent->WinEDA_BasicFrame::SetLanguage and NOT
+    // Call parent->EDA_BASE_FRAME::SetLanguage and NOT
     // parent->SetLanguage because parent->SetLanguage call
     // LIB_EDIT_FRAME::SetLanguage
-    parent->WinEDA_BasicFrame::SetLanguage( event );
+    parent->EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

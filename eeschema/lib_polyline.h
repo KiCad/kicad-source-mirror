@@ -19,7 +19,7 @@ class LIB_POLYLINE : public LIB_DRAW_ITEM
     /**
      * Draw the polyline.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
@@ -88,7 +88,7 @@ public:
      */
     virtual int GetPenSize( );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
      * See LIB_DRAW_ITEM::BeginEdit().

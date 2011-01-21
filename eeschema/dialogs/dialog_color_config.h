@@ -41,7 +41,7 @@ class DIALOG_COLOR_CONFIG: public wxDialog
 private:
     DECLARE_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG )
 
-    WinEDA_DrawFrame*       m_Parent;
+    EDA_DRAW_FRAME*         m_Parent;
     wxBoxSizer*             OuterBoxSizer;
     wxBoxSizer*             MainBoxSizer;
     wxBoxSizer*             ColumnBoxSizer;
@@ -79,7 +79,7 @@ private:
 public:
     // Constructors and destructor
     DIALOG_COLOR_CONFIG();
-    DIALOG_COLOR_CONFIG( WinEDA_DrawFrame* aParent );
+    DIALOG_COLOR_CONFIG( EDA_DRAW_FRAME* aParent );
     ~DIALOG_COLOR_CONFIG();
 };
 

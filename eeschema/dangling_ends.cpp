@@ -31,22 +31,3 @@ bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint )
 
     return true;
 }
-
-
-void SCH_EDIT_FRAME::TestDanglingEnds( SCH_ITEM* aDrawList, wxDC* aDC )
-{
-    SCH_ITEM* item;
-    std::vector< DANGLING_END_ITEM > endPoints;
-
-    for( item = aDrawList; item != NULL; item = item->Next() )
-        item->GetEndPoints( endPoints );
-
-    for( item = aDrawList; item; item = item->Next() )
-    {
-        if( item->IsDanglingStateChanged( endPoints ) && aDC != NULL )
-        {
-            item->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-            item->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        }
-    }
-}

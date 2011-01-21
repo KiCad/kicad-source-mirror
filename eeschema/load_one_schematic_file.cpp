@@ -221,7 +221,7 @@ again." );
     screen->Show( 0, std::cout );
 #endif
 
-    TestDanglingEnds( screen->GetDrawItems(), NULL );
+    screen->TestDanglingEnds();
 
     MsgDiag = _( "Done Loading " ) + screen->GetFileName();
     PrintMsg( MsgDiag );

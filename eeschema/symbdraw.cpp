@@ -23,8 +23,8 @@
 #include "dialogs/dialog_lib_edit_draw_item.h"
 
 
-static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void SymbolDisplayDraw( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 /*
@@ -97,7 +97,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 }
 
 
-static void AbortSymbolTraceOn( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
     LIB_DRAW_ITEM*  item   = parent->GetDrawItem();
@@ -230,7 +230,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 /*
  * Redraw the graphic shape while moving
  */
-static void RedrawWhileMovingCursor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     LIB_DRAW_ITEM* item;
 
@@ -286,7 +286,7 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 
 
 //! @brief Manage mouse events when creating new graphic object or modifying an graphic object.
-static void SymbolDisplayDraw( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void SymbolDisplayDraw( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BASE_SCREEN*   Screen   = panel->GetScreen();
     LIB_DRAW_ITEM* item = ( (LIB_EDIT_FRAME*) panel->GetParent() )->GetDrawItem();

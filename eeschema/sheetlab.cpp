@@ -19,8 +19,8 @@
 #include "dialogs/dialog_sch_edit_sheet_pin.h"
 
 
-static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Move_PinSheet( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 static int     s_CurrentTypeLabel = NET_INPUT;
@@ -32,7 +32,7 @@ static int     s_InitialEdge;
 /* Called when aborting a move pinsheet label
  * delete a new pin sheet label, or restire its old position
  */
-static void ExitPinSheet( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) Panel->GetScreen()->GetCurItem();
 
@@ -107,7 +107,7 @@ void SCH_EDIT_FRAME::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
 }
 
 
-static void Move_PinSheet( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Move_PinSheet( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) panel->GetScreen()->GetCurItem();
 

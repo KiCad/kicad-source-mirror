@@ -18,7 +18,7 @@
 
 
 // Imported function:
-void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
+void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 
 
 /*
@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 
     /* Clear .m_Flags member for all items */
     screen->ClearDrawingState();
-    BreakSegmentOnJunction( screen );
+    screen->BreakSegmentsOnJunctions();
 
     /* Locate all the wires, bus or junction under the mouse cursor, and put
      * them in a list of items to delete
@@ -314,7 +314,7 @@ bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
     {
         frame->SetRepeatItem( NULL );
         DeleteStruct( frame->DrawPanel, DC, DelStruct );
-        frame->TestDanglingEnds( frame->GetScreen()->GetDrawItems(), DC );
+        frame->GetScreen()->TestDanglingEnds( frame->DrawPanel, DC );
         frame->OnModify( );
         item_deleted = TRUE;
     }

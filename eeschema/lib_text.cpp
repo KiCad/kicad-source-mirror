@@ -279,7 +279,7 @@ int LIB_TEXT::GetPenSize( )
 }
 
 
-void LIB_TEXT::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                             int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1, pos2;
@@ -351,7 +351,7 @@ void LIB_TEXT::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-void LIB_TEXT::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
 

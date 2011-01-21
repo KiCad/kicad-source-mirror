@@ -33,12 +33,12 @@ extern void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveV
 extern void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
 extern void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
 extern void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-extern void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
+extern void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 extern void DuplicateItemsInList( SCH_SCREEN*        screen,
                                   PICKED_ITEMS_LIST& aItemsList,
                                   const wxPoint      aMoveVector );
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
@@ -178,7 +178,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     block->m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+    GetScreen()->TestDanglingEnds( DrawPanel, DC );
 
     if( block->GetCount() )
     {
@@ -234,7 +234,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DRAG:    /* Drag */
-            BreakSegmentOnJunction( GetScreen() );
+            GetScreen()->BreakSegmentsOnJunctions();
             // fall through
         case BLOCK_ROTATE:
         case BLOCK_MIRROR_X:
@@ -272,7 +272,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             }
 
             block->ClearItemsList();
-            TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+            GetScreen()->TestDanglingEnds( DrawPanel, DC );
             DrawPanel->Refresh();
             break;
 
@@ -373,8 +373,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
 
-        BreakSegmentOnJunction( GetScreen() );
-
+        GetScreen()->BreakSegmentsOnJunctions();
         GetScreen()->UpdatePickList();
 
         if( block->GetCount() )
@@ -399,7 +398,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             OnModify();
         }
 
-        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+        GetScreen()->TestDanglingEnds( DrawPanel, DC );
         DrawPanel->Refresh();
         break;
 
@@ -435,7 +434,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             OnModify();
         }
 
-        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+        GetScreen()->TestDanglingEnds( DrawPanel, DC );
         DrawPanel->Refresh();
         break;
 
@@ -452,7 +451,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             Mirror_X_ListOfItems( block->m_ItemsSelection, mirrorPoint );
             OnModify();
         }
-        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+        GetScreen()->TestDanglingEnds( DrawPanel, DC );
         DrawPanel->Refresh();
         break;
 
@@ -470,7 +469,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             OnModify();
         }
 
-        TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+        GetScreen()->TestDanglingEnds( DrawPanel, DC );
         DrawPanel->Refresh();
         break;
 
@@ -495,7 +494,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 /* Traces the outline of the search block structures
  * The entire block follows the cursor
  */
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR* block = &panel->GetScreen()->m_BlockLocate;;
     BASE_SCREEN*    screen = panel->GetScreen();

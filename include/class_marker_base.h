@@ -65,7 +65,7 @@ public:
      * Function DrawMarker
      * draws the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset );
+    void DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset );
 
     /**
      * Function GetPos
@@ -173,7 +173,7 @@ public:
      * Function DisplayMarkerInfo
      * displays the full info of this marker, in a HTML window.
      */
-    void DisplayMarkerInfo( WinEDA_DrawFrame* aFrame );
+    void DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
      * Function HitTestMarker

@@ -99,8 +99,7 @@ out:
  * The circle radius is half the radius of the target
  * 2 lines have length the diameter of the target
  */
-void MIREPCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                    int mode_color, const wxPoint& offset )
+void MIREPCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxPoint& offset )
 {
     int rayon, ox, oy, gcolor, width;
     int dx1, dx2, dy1, dy2;

@@ -20,14 +20,14 @@
 bool s_Verbose = false;       // false if zone outline diags must not be shown
 
 // Outline creation:
-static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 // Corner moving
-static void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* panel,
-                                                          wxDC*             DC,
-                                                          bool              erase );
+static void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* panel,
+                                                          wxDC*           DC,
+                                                          bool            erase );
 
 /* Local variables */
 static wxPoint         s_CornerInitialPosition;     // Used to abort a move corner command
@@ -132,7 +132,7 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
 
 
 /*************************************************************************/
-static void Abort_Zone_Create_Outline( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /*************************************************************************/
 
 /**
@@ -376,7 +376,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
 
 
 /**************************************************************************/
-void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
+void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /**************************************************************************/
 
 /**
@@ -426,7 +426,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /*************************************************************************************************/
-void Show_Zone_Corner_Or_Outline_While_Move_Mouse( WinEDA_DrawPanel* Panel, wxDC* DC, bool erase )
+void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* Panel, wxDC* DC, bool erase )
 /*************************************************************************************************/
 
 /* Redraws the zone outline when moving a corner according to the cursor position
@@ -723,7 +723,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
 
 /******************************************************************************************/
-static void Show_New_Edge_While_Move_Mouse( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 /******************************************************************************************/
 
 /* Redraws the zone outlines when moving mouse

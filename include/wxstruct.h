@@ -35,7 +35,7 @@
 
 class EDA_ITEM;
 class EDA_Rect;
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 class WinEDA_MsgPanel;
 class BASE_SCREEN;
 class WinEDA_Toolbar;
@@ -85,7 +85,7 @@ enum id_toolbar {
 /* not directly used: the real frames are derived from this class */
 /******************************************************************/
 
-class WinEDA_BasicFrame : public wxFrame
+class EDA_BASE_FRAME : public wxFrame
 {
 public:
     int             m_Ident;        // Id Type (pcb, schematic, library..)
@@ -102,11 +102,11 @@ public:
     wxAuiManager   m_auimgr;
 
 public:
-    WinEDA_BasicFrame( wxWindow* father, int idtype,
-                       const wxString& title,
-                       const wxPoint& pos, const wxSize& size,
-                       long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
-    ~WinEDA_BasicFrame();
+    EDA_BASE_FRAME( wxWindow* father, int idtype,
+                    const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    ~EDA_BASE_FRAME();
 
     void         GetKicadHelp( wxCommandEvent& event );
     void         GetKicadAbout( wxCommandEvent& event );
@@ -192,10 +192,10 @@ public:
 /* Basic draw frame for eeschema, pcbnew and gerbview. */
 /*******************************************************/
 
-class WinEDA_DrawFrame : public WinEDA_BasicFrame
+class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
 public:
-    WinEDA_DrawPanel* DrawPanel;            // Draw area
+    EDA_DRAW_PANEL*   DrawPanel;            // Draw area
     WinEDA_MsgPanel*  MsgPanel;             // Panel used to display some
                                             //  info (bottom of the screen)
     WinEDA_Toolbar*   m_VToolBar;           // Vertical (right side) Toolbar
@@ -251,12 +251,12 @@ protected:
     }
 
 public:
-    WinEDA_DrawFrame( wxWindow* father, int idtype,
-                      const wxString& title,
-                      const wxPoint& pos, const wxSize& size,
-                      long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    EDA_DRAW_FRAME( wxWindow* father, int idtype,
+                    const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_DrawFrame();
+    ~EDA_DRAW_FRAME();
 
     virtual wxString GetScreenDesc();
 
@@ -418,7 +418,7 @@ public:
      * Function OnActivate (virtual)
      * is called when activating the frame.
      * In derived classes with a overriding OnActivate function,
-     * do not forget to call this WinEDA_DrawFrame::OnActivate( event ) basic function.
+     * do not forget to call this EDA_DRAW_FRAME::OnActivate( event ) basic function.
      */
     virtual void     OnActivate( wxActivateEvent& event );
 
@@ -582,12 +582,11 @@ protected:
     wxSize computeTextSize( const wxString& text );
 
 public:
-    WinEDA_DrawFrame* m_Parent;
+    EDA_DRAW_FRAME* m_Parent;
     int m_BgColor;
 
 public:
-    WinEDA_MsgPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos,
-                     const wxSize& size );
+    WinEDA_MsgPanel( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
     ~WinEDA_MsgPanel();
 
 

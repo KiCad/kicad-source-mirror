@@ -19,11 +19,11 @@
 #include "protos.h"
 
 
-static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
-                                                    wxDC*             DC,
-                                                    bool              erase );
-static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
+                                                    wxDC*           DC,
+                                                    bool            erase );
+static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static bool InitialiseDragParameters();
 
 
@@ -48,7 +48,7 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 /** Abort function for commands drag, copy or move track
  */
-static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     TRACK* NextS;
     int    ii;
@@ -134,7 +134,7 @@ static void Abort_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
 
 
 /* Redraw the moved node according to the mouse cursor position */
-static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     int          ii;
     wxPoint      moveVector;
@@ -236,7 +236,7 @@ static void Show_MoveNode( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
  * when moving segments
  *  (i.e. when a segment length is 0) and we want keep them constant
  */
-static void Show_Drag_Track_Segment_With_Cte_Slope( WinEDA_DrawPanel* panel,
+static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
                                                     wxDC* DC, bool erase )
 {
     double       xi1 = 0, yi1 = 0, xi2 = 0, yi2 = 0;    // calculated

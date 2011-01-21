@@ -107,7 +107,7 @@ public:
      * @param aDrawMode The drawing mode.
      * @param aColor The drawing color.
      */
-    void Draw( WinEDA_DrawPanel* aCanvas, wxDC* aDC, int aDrawMode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor = -1 );
 
     /**
      * Remove \a aItem from the schematic associated with this screen.
@@ -120,7 +120,16 @@ public:
 
     void AddToDrawList( SCH_ITEM* st );
 
-    bool SchematicCleanUp( wxDC* DC = NULL );
+    bool SchematicCleanUp( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
+
+    /**
+     * Function TestDanglingEnds
+     * tests all of the connectible objects in the schematic for unused connection points.
+     * @param aDC - The device context to draw the dangling status indicators.
+     * @param aCanvas - The window to draw on.
+     * @return True if any dangling ends were found.
+     */
+    bool TestDanglingEnds( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
 
     /**
      * Function ExtractWires
@@ -135,6 +144,23 @@ public:
      * all wires in undo list and use a new copy of wires for cleanup.
      */
     SCH_ITEM* ExtractWires( bool aCreateCopy );
+
+    /**
+     * Function BreakSegment
+     * checks every wire and bus for a intersection at \a aPoint and break into two segments
+     * at \a aPoint if an intersection is found.
+     * @param aPoint Test this point for an intersection.
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegment( const wxPoint& aPoint );
+
+    /**
+     * Function BreakSegmentsOnJunctions
+     * tests all junctions and bus entries in the schematic for intersections with wires and
+     * buses and breaks any intersections into multiple segments.
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegmentsOnJunctions();
 
     /* full undo redo management : */
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
@@ -160,7 +186,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool         Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Clear the state flags of all the items in the screen.

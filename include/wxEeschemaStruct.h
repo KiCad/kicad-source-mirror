@@ -55,7 +55,7 @@ enum fl_rot_cmp {
 /**
  * Schematic editor (EESchema) main window.
  */
-class SCH_EDIT_FRAME : public WinEDA_DrawFrame
+class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
 {
 public:
     WinEDAChoiceBox*      m_SelPartBox;
@@ -658,8 +658,6 @@ public:
     void     RepeatDrawItem( wxDC* DC );
 
     void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }
-
-    void     TestDanglingEnds( SCH_ITEM* DrawList, wxDC* DC );
 
     // ERC:
 

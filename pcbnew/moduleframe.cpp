@@ -243,7 +243,7 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
      * the last edited item
      */
     SetBaseScreen( NULL );  /* Do not delete (by the destructor of
-                             * WinEDA_DrawFrame) the PCB_SCREEN handling
+                             * EDA_DRAW_FRAME) the PCB_SCREEN handling
                              * g_ModuleEditor_Pcb
                              */
 

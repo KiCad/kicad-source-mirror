@@ -95,7 +95,7 @@ class LIB_PIN : public LIB_DRAW_ITEM
     /**
      * Draw the pin.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
 public:
@@ -152,7 +152,7 @@ public:
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    virtual void DisplayInfo( WinEDA_DrawFrame* frame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     virtual EDA_Rect GetBoundingBox() const;
 
@@ -338,10 +338,10 @@ public:
      */
     virtual int GetPenSize();
 
-    void DrawPinSymbol( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aPosition,
+    void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, int aDrawMode, int aColor = -1 );
 
-    void DrawPinTexts( WinEDA_DrawPanel* aPanel, wxDC* aDC, wxPoint& aPosition,
+    void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
                        int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
                        int aColor, int aDrawMode );
 

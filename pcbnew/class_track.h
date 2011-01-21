@@ -141,7 +141,8 @@ public:
 
 
     /* Display on screen: */
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+                  const wxPoint& aOffset = ZeroOffset );
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
@@ -210,18 +211,18 @@ public:
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
      * Display info about the track segment and the full track length
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void            DisplayInfo( WinEDA_DrawFrame* frame );
+    void            DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function DisplayInfoBase
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Display info about the track segment only, and does not calculate the full track length
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void            DisplayInfoBase( WinEDA_DrawFrame* frame );
+    void            DisplayInfoBase( EDA_DRAW_FRAME* frame );
 
     /**
      * Function ShowWidth
@@ -339,7 +340,8 @@ public:
     }
 
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+                  const wxPoint& aOffset = ZeroOffset );
 
 
     /**

@@ -1229,7 +1229,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
     int dx0, dy0, dx1, dy1;
     int marge, via_marge;
-    WinEDA_DrawPanel* panel = pcbframe->DrawPanel;
+    EDA_DRAW_PANEL* panel = pcbframe->DrawPanel;
 
     marge = s_Clearance +
             ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );

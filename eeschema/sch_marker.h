@@ -38,7 +38,7 @@ public:
         return wxT( "SCH_MARKER" );
     }
 
-    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDraw_mode, int aColor = -1 );
 
     /**
@@ -93,7 +93,7 @@ public:
      *
      * @param aFrame - Top window that owns the message panel.
      */
-    void         DisplayInfo( WinEDA_DrawFrame* aFrame );
+    void         DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 

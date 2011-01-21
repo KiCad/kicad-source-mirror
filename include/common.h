@@ -12,9 +12,9 @@
 
 class wxAboutDialogInfo;
 class BASE_SCREEN;
-class WinEDA_DrawFrame;
+class EDA_DRAW_FRAME;
 class WinEDAListBox;
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 
 /* Flag for special keys */
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
@@ -286,11 +286,11 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
  * If "by posting on this line
  * Color = color display
  */
-void Affiche_1_Parametre( WinEDA_DrawFrame* frame,
-                          int               pos_X,
-                          const wxString&   texte_H,
-                          const wxString&   texte_L,
-                          int               color );
+void Affiche_1_Parametre( EDA_DRAW_FRAME* frame,
+                          int             pos_X,
+                          const wxString& texte_H,
+                          const wxString& texte_L,
+                          int             color );
 
 int GetTimeStamp();
 

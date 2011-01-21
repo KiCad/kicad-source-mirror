@@ -41,9 +41,7 @@
 #define BLOCK_COLOR BROWN
 
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                     wxDC*             DC,
-                                     bool              erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
@@ -230,9 +228,7 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
 /* Traces the outline of the block structures of a repositioning move
  */
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel,
-                                     wxDC*             DC,
-                                     bool              erase )
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     int          Color;
     BASE_SCREEN* screen = panel->GetScreen();

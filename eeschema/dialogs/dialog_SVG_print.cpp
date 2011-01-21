@@ -37,7 +37,7 @@ static int  s_PlotBlackAndWhite    = 0;
 /*!
  * DIALOG_SVG_PRINT functions
  */
-DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent ) :
+DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
     m_Parent   = parent;
@@ -174,11 +174,11 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 }
 
 
-bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame* frame,
-                                    const wxString&   FullFileName,
-                                    SCH_SCREEN*       screen,
-                                    bool              aPrintBlackAndWhite,
-                                    bool              aPrint_Sheet_Ref )
+bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
+                                    const wxString& FullFileName,
+                                    SCH_SCREEN*     screen,
+                                    bool            aPrintBlackAndWhite,
+                                    bool            aPrint_Sheet_Ref )
 {
     int     tmpzoom;
     wxPoint tmp_startvisu;
@@ -195,7 +195,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( WinEDA_DrawFrame* frame,
     SheetSize = screen->ReturnPageSize();      // page size in 1/1000 inch, ie in internal units
 
     screen->SetScalingFactor( 1.0 );
-    WinEDA_DrawPanel* panel = frame->DrawPanel;
+    EDA_DRAW_PANEL* panel = frame->DrawPanel;
 
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
                                     // to print floating point numbers like 1.3)

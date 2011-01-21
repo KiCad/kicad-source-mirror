@@ -531,8 +531,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 
 /* Print 1 dimension: segments and text
  */
-void DIMENSION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                     int mode_color, const wxPoint& offset )
+void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxPoint& offset )
 {
     int ox, oy, typeaff, width, gcolor;
 
@@ -622,7 +621,7 @@ void DIMENSION::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_cotation.h
-void DIMENSION::DisplayInfo( WinEDA_DrawFrame* frame )
+void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
     m_Text->DisplayInfo( frame );

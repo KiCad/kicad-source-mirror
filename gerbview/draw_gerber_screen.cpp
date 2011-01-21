@@ -125,7 +125,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*
  * Redraw All gerbview layers, using a buffered mode or not
  */
-void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
+void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled

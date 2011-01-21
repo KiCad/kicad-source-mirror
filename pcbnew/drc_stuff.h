@@ -72,7 +72,7 @@
 #define DRCE_NETCLASS_uVIADRILLSIZE            35   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
 
 
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 class MARKER_PCB;
 class DIALOG_DRC_CONTROL;
 

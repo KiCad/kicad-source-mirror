@@ -199,7 +199,7 @@ void WinEDA_PcbFrame::Reset_Noroutable( wxDC* DC )
 
 
 /* Function DEBUG: displays filling cells TOP and BOTTOM */
-void DisplayBoard( WinEDA_DrawPanel* panel, wxDC* DC )
+void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
     int row, col, i, j;
     int dcell0, dcell1 = 0, color;

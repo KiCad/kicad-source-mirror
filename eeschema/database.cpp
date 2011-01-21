@@ -31,7 +31,7 @@
  * Place the name of the component has loaded, select from a list in
  * BufName
  */
-wxString DataBaseGetName( WinEDA_DrawFrame* frame, wxString& Keys, wxString& BufName )
+wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName )
 {
     wxArrayString  nameList;
     wxString       msg;

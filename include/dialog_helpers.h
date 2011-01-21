@@ -31,7 +31,7 @@ public:
      * @param aCallBackFunction callback function to display comments
      * @param aPos = position of the dialog.
      */
-    WinEDAListBox( WinEDA_DrawFrame* aParent, const wxString& aTitle,
+    WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                    const wxArrayString& aItemList, const wxString& aRefText,
                    void(* aCallBackFunction)(wxString& Text) = NULL,
                    wxPoint aPos = wxDefaultPosition );

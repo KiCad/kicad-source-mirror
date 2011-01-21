@@ -24,15 +24,14 @@
 class HOTKEYS_EDITOR_DIALOG : public HOTKEYS_EDITOR_DIALOG_BASE
 {
 protected:
-    WinEDA_DrawFrame* m_parent;
+    EDA_DRAW_FRAME* m_parent;
     struct Ki_HotkeyInfoSectionDescriptor* m_hotkeys;
     HotkeyGridTable* m_table;
 
     int m_curEditingRow;
 
 public:
-    HOTKEYS_EDITOR_DIALOG( WinEDA_DrawFrame* parent,
-                         Ki_HotkeyInfoSectionDescriptor* hotkeys );
+    HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME* parent, Ki_HotkeyInfoSectionDescriptor* hotkeys );
 
     ~HOTKEYS_EDITOR_DIALOG() {};
 
@@ -46,7 +45,6 @@ private:
     void SetHotkeyCellState( int aRow, bool aHightlight );
 };
 
-void InstallHotkeyFrame( WinEDA_DrawFrame* parent,
-                         Ki_HotkeyInfoSectionDescriptor* hotkeys );
+void InstallHotkeyFrame( EDA_DRAW_FRAME* parent, Ki_HotkeyInfoSectionDescriptor* hotkeys );
 
 #endif

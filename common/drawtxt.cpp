@@ -223,7 +223,7 @@ static int overbar_position( int size_v, int thickness )
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( WinEDA_DrawPanel* aPanel,
+void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                       wxDC* aDC,
                       const wxPoint& aPos,
                       EDA_Colors aColor,

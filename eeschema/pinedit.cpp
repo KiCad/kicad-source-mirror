@@ -20,10 +20,9 @@
 #include "dialog_lib_edit_pin.h"
 
 
-static void CreateImagePins( LIB_PIN* Pin, int unit, int convert,
-                             bool asDeMorgan );
-static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan );
+static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void DrawMovePin( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 static wxPoint OldPos;
@@ -177,7 +176,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 /**
  * Clean up after aborting a move pin command.
  */
-static void AbortPinMove( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
 
@@ -337,7 +336,7 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
 /* Move pin to the current mouse position.  This function is called by the
  * cursor management code. */
-static void DrawMovePin( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void DrawMovePin( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) panel->GetParent();
 

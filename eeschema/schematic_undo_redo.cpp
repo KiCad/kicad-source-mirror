@@ -429,7 +429,7 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+    GetScreen()->TestDanglingEnds();
     DrawPanel->Refresh();
 }
 
@@ -455,6 +455,6 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
     ReCreateHToolbar();
     SetToolbars();
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+    GetScreen()->TestDanglingEnds();
     DrawPanel->Refresh();
 }

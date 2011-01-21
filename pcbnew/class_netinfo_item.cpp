@@ -107,10 +107,10 @@ void NETINFO_ITEM::SetNetname( const wxString& aNetname )
 /**
  * Function Draw (TODO)
  */
-void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
-                         wxDC*             DC,
-                         int               aDrawMode,
-                         const wxPoint&    aOffset )
+void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
+                         wxDC*           DC,
+                         int             aDrawMode,
+                         const wxPoint&  aOffset )
 {
 }
 
@@ -120,9 +120,9 @@ void NETINFO_ITEM::Draw( WinEDA_DrawPanel* panel,
  * has knowledge about the frame and how and where to put status information
  * about this object into the frame's message panel.
  * Is virtual from EDA_ITEM.
- * @param frame A WinEDA_DrawFrame in which to print status information.
+ * @param frame A EDA_DRAW_FRAME in which to print status information.
  */
-void NETINFO_ITEM::DisplayInfo( WinEDA_DrawFrame* frame )
+void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     int       count;
     EDA_ITEM* Struct;
@@ -192,10 +192,10 @@ RATSNEST_ITEM::RATSNEST_ITEM()
  * Function Draw
  * Draws a line (a ratsnest) from the starting pad to the ending pad
  */
-void RATSNEST_ITEM::Draw( WinEDA_DrawPanel* panel,
-                          wxDC*             DC,
-                          int               aDrawMode,
-                          const wxPoint&    aOffset )
+void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
+                          wxDC*           DC,
+                          int             aDrawMode,
+                          const wxPoint&  aOffset )
 {
     GRSetDrawMode( DC, aDrawMode );
     int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);

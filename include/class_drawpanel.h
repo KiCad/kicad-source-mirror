@@ -1,6 +1,6 @@
 /******************************
  *  drawpanel.h:
- *  define class WinEDA_DrawPanel
+ *  define class EDA_DRAW_PANEL
  *************************************/
 
 #ifndef  PANEL_WXSTRUCT_H
@@ -10,15 +10,15 @@
 #include "base_struct.h"
 #include <wx/overlay.h>
 
-class WinEDA_DrawFrame;
+class EDA_DRAW_FRAME;
 class BASE_SCREEN;
 class PCB_SCREEN;
 
 
-class WinEDA_DrawPanel : public wxScrolledWindow
+class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
-    WinEDA_DrawFrame* m_Parent;
+    EDA_DRAW_FRAME* m_Parent;
 
 public:
     EDA_Rect          m_ClipBox;            // the clipbox used in screen
@@ -71,20 +71,19 @@ public:
     /* Cursor management (used in editing functions) */
 
     /* Mouse capture move callback function prototype. */
-    void (*ManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+    void (*ManageCurseur)( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
     /* Abort managed cursor callback function prototype. */
-    void (*ForceCloseManageCurseur)( WinEDA_DrawPanel* panel, wxDC* DC );
+    void (*ForceCloseManageCurseur)( EDA_DRAW_PANEL* panel, wxDC* DC );
 
 public:
 
-    WinEDA_DrawPanel( WinEDA_DrawFrame* parent, int id, const wxPoint& pos,
-                      const wxSize& size );
-    ~WinEDA_DrawPanel();
+    EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
+    ~EDA_DRAW_PANEL();
 
     BASE_SCREEN* GetScreen();
 
-    WinEDA_DrawFrame* GetParent()
+    EDA_DRAW_FRAME* GetParent()
     {
         return m_Parent;
     }

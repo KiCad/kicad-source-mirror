@@ -22,7 +22,7 @@
  * The starting point of a track following MUST exist: may be
  * then put a 0 before calling a routine if the track is the last drawn.
  */
-void Trace_Une_Piste( WinEDA_DrawPanel* panel, wxDC* DC, TRACK* aTrackList,
+void Trace_Une_Piste( EDA_DRAW_PANEL* panel, wxDC* DC, TRACK* aTrackList,
                       int nbsegment, int draw_mode )
 {
     // preserve the start of the list for debugging.

@@ -27,7 +27,7 @@ class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
     /**
      * Draw the field.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
@@ -135,7 +135,7 @@ public:
      * in msg panel
      * @param aFrame = main frame where the message manel info is.
      */
-    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
      * Test if the given point is within the bounds of this object.

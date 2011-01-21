@@ -783,13 +783,13 @@ int LIB_PIN::GetPenSize()
 }
 
 
-void LIB_PIN::drawGraphic( WinEDA_DrawPanel* aPanel,
-                           wxDC*             aDC,
-                           const wxPoint&    aOffset,
-                           int               aColor,
-                           int               aDrawMode,
-                           void*             aData,
-                           const TRANSFORM&  aTransform )
+void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
+                           wxDC*            aDC,
+                           const wxPoint&   aOffset,
+                           int              aColor,
+                           int              aDrawMode,
+                           void*            aData,
+                           const TRANSFORM& aTransform )
 {
     // Invisible pins are only drawn on request.  In libedit they are drawn
     // in g_InvisibleItemColor because we must see them.
@@ -841,12 +841,12 @@ void LIB_PIN::drawGraphic( WinEDA_DrawPanel* aPanel,
  * Draw the pin symbol (without texts)
  *  if Color != 0 draw with Color, else with the normal pin color
  */
-void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
-                             wxDC*             aDC,
-                             const wxPoint&    aPinPos,
-                             int               aOrient,
-                             int               aDrawMode,
-                             int               aColor )
+void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
+                             wxDC*           aDC,
+                             const wxPoint&  aPinPos,
+                             int             aOrient,
+                             int             aDrawMode,
+                             int             aColor )
 {
     int          MapX1, MapY1, x1, y1;
     int          color;
@@ -1063,15 +1063,15 @@ void LIB_PIN::DrawPinSymbol( WinEDA_DrawPanel* aPanel,
 *  Pin Name:    substring beteween '~' is negated
 *  DrawMode = GR_OR, XOR ...
 *****************************************************************************/
-void LIB_PIN::DrawPinTexts( WinEDA_DrawPanel* panel,
-                            wxDC*             DC,
-                            wxPoint&          pin_pos,
-                            int               orient,
-                            int               TextInside,
-                            bool              DrawPinNum,
-                            bool              DrawPinName,
-                            int               Color,
-                            int               DrawMode )
+void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
+                            wxDC*           DC,
+                            wxPoint&        pin_pos,
+                            int             orient,
+                            int             TextInside,
+                            bool            DrawPinNum,
+                            bool            DrawPinName,
+                            int             Color,
+                            int             DrawMode )
 {
     int        x, y, x1, y1;
     wxString   StringPinNum;
@@ -1713,7 +1713,7 @@ void LIB_PIN::DoSetWidth( int aWidth )
  * Displays info (pin num and name, orientation ...
  * on the Info window
  */
-void LIB_PIN::DisplayInfo( WinEDA_DrawFrame* frame )
+void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString Text;
 

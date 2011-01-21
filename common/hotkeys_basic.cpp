@@ -327,7 +327,7 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
  * Displays the current hotkey list
  * aList = a Ki_HotkeyInfoSectionDescriptor list(Null terminated)
  */
-void DisplayHotkeyList( WinEDA_DrawFrame*                      aFrame,
+void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
                         struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     wxString        keyname;
@@ -382,8 +382,8 @@ Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
  * the output format is: shortcut  "key"  "function"
  * lines starting with # are comments
  */
-int WinEDA_BasicFrame::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
-                                          wxString*                              aFullFileName )
+int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
+                                       wxString*                              aFullFileName )
 {
     wxString msg;
     wxString keyname, infokey;
@@ -446,9 +446,8 @@ int WinEDA_BasicFrame::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor*
  * @param aFilename = file name to read.
  * @param aDescList = current hotkey list descr. to initialise.
  */
-int WinEDA_BasicFrame::ReadHotkeyConfigFile(
-    const wxString&                        aFilename,
-    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&                        aFilename,
+                                          struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     wxFile cfgfile( aFilename );
 
@@ -493,7 +492,7 @@ void ReadHotkeyConfig( const wxString&                        Appname,
  * Read configuration data and fill the current hotkey list with hotkeys
  * aDescList is the current hotkey list descr. to initialise.
  */
-int WinEDA_BasicFrame::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+int EDA_BASE_FRAME::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     ::ReadHotkeyConfig( m_FrameName, aDescList );
     return 1;
@@ -575,8 +574,7 @@ void ParseHotkeyConfig(
  * Prompt the user for an old hotkey file to read, and read it.
  * @param aDescList = current hotkey list descr. to initialise.
  */
-void WinEDA_BasicFrame::ImportHotkeyConfigFromFile(
-    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -604,8 +602,7 @@ void WinEDA_BasicFrame::ImportHotkeyConfigFromFile(
  * Prompt the user for an old hotkey file to read, and read it.
  * @param aDescList = current hotkey list descr. to initialise.
  */
-void WinEDA_BasicFrame::ExportHotkeyConfigToFile(
-    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void EDA_BASE_FRAME::ExportHotkeyConfigToFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;

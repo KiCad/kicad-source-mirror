@@ -145,8 +145,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
               WinEDA_PcbFrame::Process_Special_Functions )
 
     // Menu Help
-    EVT_MENU( ID_GENERAL_HELP, WinEDA_DrawFrame::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT, WinEDA_BasicFrame::GetKicadAbout )
+    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( ID_KICAD_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
@@ -156,7 +156,7 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
 
     // Horizontal toolbar
     EVT_TOOL( ID_TO_LIBRARY, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_SHEET_SET, WinEDA_DrawFrame::Process_PageSettings )
+    EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
     EVT_TOOL( wxID_CUT, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, WinEDA_PcbFrame::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, WinEDA_PcbFrame::Process_Special_Functions )
@@ -653,7 +653,7 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
  */
 void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_DrawFrame::SetLanguage( event );
+    EDA_DRAW_FRAME::SetLanguage( event );
     m_Layers->SetLayersManagerTabsText( );
     wxAuiPaneInfo& pane_info = m_auimgr.GetPane(m_Layers);
     pane_info.Caption( _( "Visibles" ) );
@@ -661,7 +661,7 @@ void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
     ReFillLayerWidget();
 
     if( m_ModuleEditFrame )
-        m_ModuleEditFrame->WinEDA_DrawFrame::SetLanguage( event );
+        m_ModuleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
 }
 
 

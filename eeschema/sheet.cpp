@@ -221,7 +221,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 /* Move selected sheet with the cursor.
  * Callback function use by ManageCurseur.
  */
-static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase )
+static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
 {
     wxPoint        moveVector;
     BASE_SCREEN*   screen = aPanel->GetScreen();
@@ -247,7 +247,7 @@ static void MoveOrResizeSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase 
 
 
 /*  Complete sheet move.  */
-static void ExitSheet( WinEDA_DrawPanel* aPanel, wxDC* aDC )
+static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_SHEET*  sheet  = (SCH_SHEET*) screen->GetCurItem();

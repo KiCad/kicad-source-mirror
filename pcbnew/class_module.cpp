@@ -64,7 +64,7 @@ MODULE::~MODULE()
  * Must be done after the pads, because drawing the hole will erase overwrite
  * every thing already drawn.
  */
-void MODULE::DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, int draw_mode )
 {
 #ifdef USE_WX_ZOOM
@@ -184,8 +184,7 @@ void MODULE::Copy( MODULE* aModule )
  * @param aDrawMode = GR_OR, GR_XOR..
  * @param aOffset = draw offset (usually wxPoint(0,0)
  */
-void MODULE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                   int aDrawMode, const wxPoint& aOffset )
+void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 {
     if( (m_Flags & DO_NOT_DRAW) || (m_Flags & IS_MOVED) )
         return;
@@ -243,8 +242,7 @@ void MODULE::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  *  @param offset = draw offset (usually wxPoint(0,0)
  *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
  */
-void MODULE::DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
-                            const wxPoint& offset, int draw_mode )
+void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode )
 {
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
@@ -795,7 +793,7 @@ EDA_Rect MODULE::GetBoundingBox() const
 /* Virtual function, from EDA_ITEM.
  * display module info on MsgPanel
  */
-void MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
+void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     int      nbpad;
     char     bufcar[512], Line[512];

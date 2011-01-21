@@ -17,9 +17,8 @@
 #include "protos.h"
 
 
-static void Exit_Editrack( WinEDA_DrawPanel* panel, wxDC* DC );
-void        ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
-                                          wxDC* DC, bool erase );
+static void Exit_Editrack( EDA_DRAW_PANEL* panel, wxDC* DC );
+void        ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 static void ComputeBreakPoint( TRACK* track, int n, wxPoint end );
 static void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList );
 
@@ -34,7 +33,7 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
 /* Routine to cancel the route if a track is being drawn, or exit the
  * application EDITRACK.
  */
-static void Exit_Editrack( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) Panel->GetParent();
     TRACK*           track = (TRACK*) frame->GetCurItem();
@@ -612,7 +611,7 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
  *   the magnetic hit instead of solving the violation
  * - should locate conflicting tracks also when we're crossing over them
  */
-static void PushTrack( WinEDA_DrawPanel* panel )
+static void PushTrack( EDA_DRAW_PANEL* panel )
 {
     BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
     wxPoint cursor = ActiveScreen->m_Curseur;
@@ -673,9 +672,7 @@ static void PushTrack( WinEDA_DrawPanel* panel )
 
 /* Redraw the current track beiing created when the mouse cursor is moved
  */
-void ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
-                                   wxDC*             DC,
-                                   bool              erase )
+void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 

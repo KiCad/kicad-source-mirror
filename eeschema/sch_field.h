@@ -100,11 +100,11 @@ public:
     /**
      * Function Draw
      */
-    void Draw( WinEDA_DrawPanel* aPanel,
-               wxDC*             aDC,
-               const wxPoint&    aOffset,
-               int               aDrawMode,
-               int               aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel,
+               wxDC*           aDC,
+               const wxPoint&  aOffset,
+               int             aDrawMode,
+               int             aColor = -1 );
 
     /**
      * Function Save

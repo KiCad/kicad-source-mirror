@@ -163,7 +163,7 @@ public:
      */
     wxPoint    GetScreenCoord( const wxPoint& aPoint );
 
-    void       DisplayInfo( WinEDA_DrawFrame* frame );
+    void       DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function ClearAnnotation
@@ -245,21 +245,21 @@ public:
      */
     LIB_PIN* GetPin( const wxString& number );
 
-    virtual void Draw( WinEDA_DrawPanel* panel,
-                       wxDC*             DC,
-                       const wxPoint&    offset,
-                       int               draw_mode,
-                       int               Color = -1 )
+    virtual void Draw( EDA_DRAW_PANEL* panel,
+                       wxDC*           DC,
+                       const wxPoint&  offset,
+                       int             draw_mode,
+                       int             Color = -1 )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
 
-    void Draw( WinEDA_DrawPanel* panel,
-               wxDC*             DC,
-               const wxPoint&    offset,
-               int               draw_mode,
-               int               Color,
-               bool              DrawPinText );
+    void Draw( EDA_DRAW_PANEL* panel,
+               wxDC*           DC,
+               const wxPoint&  offset,
+               int             draw_mode,
+               int             Color,
+               bool            DrawPinText );
 
     void           SwapData( SCH_COMPONENT* copyitem );
 

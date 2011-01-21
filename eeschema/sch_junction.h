@@ -40,7 +40,7 @@ public:
 
     SCH_JUNCTION* GenCopy();
 
-    virtual void Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
 
     /**

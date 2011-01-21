@@ -52,12 +52,12 @@ public:
 class BOARD_PRINTOUT_CONTROLER : public wxPrintout
 {
 private:
-    WinEDA_DrawFrame* m_Parent;
+    EDA_DRAW_FRAME* m_Parent;
     PRINT_PARAMETERS m_PrintParams;
 
 public:
     BOARD_PRINTOUT_CONTROLER( const PRINT_PARAMETERS& print_params,
-                              WinEDA_DrawFrame* parent,
+                              EDA_DRAW_FRAME* parent,
                               const wxString&   title );
 
     bool OnPrintPage( int page );
@@ -66,7 +66,8 @@ public:
     {
         if (page <= m_PrintParams.m_PageCount)
             return true;
-        else return false;
+        else
+            return false;
     }
 
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );

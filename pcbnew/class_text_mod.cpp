@@ -328,8 +328,7 @@ EDA_Rect TEXTE_MODULE::GetBoundingBox() const
  * @param offset = draw offset (usually wxPoint(0,0)
  * @param draw_mode = GR_OR, GR_XOR..
  */
-void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
-                         const wxPoint& offset )
+void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 {
     int                  width, color, orient;
     wxSize               size;
@@ -418,10 +417,10 @@ void TEXTE_MODULE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, int draw_mode,
 
 /* Rraws a line from the TEXTE_MODULE origin to parent MODULE origin.
 */
-void TEXTE_MODULE::DrawUmbilical( WinEDA_DrawPanel* aPanel,
-                                  wxDC*             aDC,
-                                  int               aDrawMode,
-                                  const wxPoint&    aOffset )
+void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
+                                  wxDC*           aDC,
+                                  int             aDrawMode,
+                                  const wxPoint&  aOffset )
 {
     MODULE* parent = (MODULE*) GetParent();
     if( !parent )
@@ -456,7 +455,7 @@ int TEXTE_MODULE::GetDrawRotation() const
 
 
 // see class_text_mod.h
-void TEXTE_MODULE::DisplayInfo( WinEDA_DrawFrame* frame )
+void TEXTE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     MODULE* module = (MODULE*) m_Parent;
 

@@ -508,9 +508,9 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void          DisplayInfo( WinEDA_DrawFrame* frame );
+    void          DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function Draw.
@@ -520,7 +520,7 @@ public:
      * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
      * @param aOffset = an draw offset value (default = 0,0)
      */
-    void          Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+    void          Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                         int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /**
@@ -532,7 +532,7 @@ public:
      * @param aDC = the curent device context
      * @param aNetCode is the net number to highlight or to dim.
      */
-    void          DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* aDC, int aNetCode );
+    void          DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* aDC, int aNetCode );
 
     /**
      * Function Visit
@@ -725,19 +725,16 @@ public:
      * Function RedrawAreasOutlines
      * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void            RedrawAreasOutlines( WinEDA_DrawPanel* aPanel,
-                                         wxDC*             aDC,
-                                         int               aDrawMode,
-                                         int               aLayer );
+    void            RedrawAreasOutlines( EDA_DRAW_PANEL* aPanel,
+                                         wxDC*           aDC,
+                                         int             aDrawMode,
+                                         int             aLayer );
 
     /**
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void RedrawFilledAreas( WinEDA_DrawPanel* aPanel,
-                            wxDC*             aDC,
-                            int               aDrawMode,
-                            int               aLayer );
+    void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, int aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames

@@ -189,7 +189,7 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
  * because the line mode does not keep the actual size of the text
  * and the actual size is very important, especially for copper texts
  */
-void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
+void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       int DrawMode, const wxPoint& offset )
 {
     BOARD * brd =  GetBoard( );
@@ -213,7 +213,7 @@ void TEXTE_PCB::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see class_pcb_text.h
-void TEXTE_PCB::DisplayInfo( WinEDA_DrawFrame* frame )
+void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString    msg;
 

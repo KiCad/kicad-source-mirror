@@ -316,7 +316,7 @@ void SCH_PRINTOUT::DrawPage()
     wxRect   fitRect;
     wxDC*    dc = GetDC();
     SCH_EDIT_FRAME* parent = m_Parent->GetParent();
-    WinEDA_DrawPanel* panel = parent->DrawPanel;
+    EDA_DRAW_PANEL* panel = parent->DrawPanel;
 
     wxBusyCursor dummy;
 

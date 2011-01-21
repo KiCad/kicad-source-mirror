@@ -47,7 +47,7 @@ class GENERAL_COLLECTORS_GUIDE;
 /* class WinEDA_BasePcbFrame: Basic class for pcbnew and gerbview */
 /******************************************************************/
 
-class WinEDA_BasePcbFrame : public WinEDA_DrawFrame
+class WinEDA_BasePcbFrame : public EDA_DRAW_FRAME
 {
 public:
 
@@ -110,7 +110,7 @@ public:
 
     PCB_SCREEN*     GetScreen() const
     {
-        return (PCB_SCREEN*) WinEDA_DrawFrame::GetBaseScreen();
+        return (PCB_SCREEN*) EDA_DRAW_FRAME::GetBaseScreen();
     }
 
     BASE_SCREEN*    GetBaseScreen() const;
@@ -330,9 +330,10 @@ public:
      *  @return wxEmptyString if abort or fails, or the selected module name if
      *          Ok
      */
-    wxString Select_1_Module_From_List(
-        WinEDA_DrawFrame* aWindow, const wxString& aLibraryFullFilename,
-        const wxString& aMask, const wxString& aKeyWord );
+    wxString Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
+                                        const wxString& aLibraryFullFilename,
+                                        const wxString& aMask,
+                                        const wxString& aKeyWord );
 
     MODULE*  Load_Module_From_Library( const wxString& library, wxDC* DC );
 
@@ -474,7 +475,7 @@ public:
     /**
      * Load applications settings common to PCB draw frame objects.
      *
-     * This overrides the base class WinEDA_DrawFrame::LoadSettings() to
+     * This overrides the base class EDA_DRAW_FRAME::LoadSettings() to
      * handle settings common to the PCB layout application and footprint
      * editor main windows.  It calls down to the base class to load
      * settings common to all drawing frames.  Please put your application
@@ -486,7 +487,7 @@ public:
     /**
      * Save applications settings common to PCB draw frame objects.
      *
-     * This overrides the base class WinEDA_DrawFrame::SaveSettings() to
+     * This overrides the base class EDA_DRAW_FRAME::SaveSettings() to
      * save settings common to the PCB layout application and footprint
      * editor main windows.  It calls down to the base class to save
      * settings common to all drawing frames.  Please put your application

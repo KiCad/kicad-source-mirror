@@ -23,7 +23,7 @@ class DIALOG_LIB_EDIT_TEXT;
 /**
  * The component library editor main window.
  */
-class LIB_EDIT_FRAME : public WinEDA_DrawFrame
+class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
 {
     LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
 

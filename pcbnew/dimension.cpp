@@ -13,8 +13,8 @@
 #include "dialog_helpers.h"
 
 /* Loca functions */
-static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 /* Local variables : */
 static int status_dimension; /* Used in cimension creation:
@@ -191,7 +191,7 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
 
 /**************************************************************/
-static void Exit_EditDimension( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /**************************************************************/
 {
     DIMENSION* Dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
@@ -296,7 +296,7 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
 
 
 /************************************************************************************/
-static void Montre_Position_New_Dimension( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 /************************************************************************************/
 /* redessin du contour de la piste  lors des deplacements de la souris */
 {

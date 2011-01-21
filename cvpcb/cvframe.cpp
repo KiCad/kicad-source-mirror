@@ -29,7 +29,7 @@ static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
 static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
 
 
-BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, WinEDA_BasicFrame )
+BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, EDA_BASE_FRAME )
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_CvpcbFrame::LoadNetList )
 
     // Menu events
@@ -99,10 +99,8 @@ BEGIN_EVENT_TABLE( WinEDA_CvpcbFrame, WinEDA_BasicFrame )
                    WinEDA_CvpcbFrame::OnUpdateKeepOpenOnSave )
 END_EVENT_TABLE()
 
-WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title,
-                                      long            style ) :
-    WinEDA_BasicFrame( NULL, CVPCB_FRAME, title, wxDefaultPosition,
-                       wxDefaultSize, style )
+WinEDA_CvpcbFrame::WinEDA_CvpcbFrame( const wxString& title, long style ) :
+    EDA_BASE_FRAME( NULL, CVPCB_FRAME, title, wxDefaultPosition, wxDefaultSize, style )
 {
     m_FrameName = wxT( "CvpcbFrame" );
 
@@ -213,7 +211,7 @@ void WinEDA_CvpcbFrame::LoadSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::LoadSettings();
+    EDA_BASE_FRAME::LoadSettings();
     cfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, false );
     cfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
                DEFAULT_FOOTPRINTS_LIST_FILENAME );
@@ -232,7 +230,7 @@ void WinEDA_CvpcbFrame::SaveSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::SaveSettings();
+    EDA_BASE_FRAME::SaveSettings();
     cfg->Write( KeepCvpcbOpenEntry, m_KeepCvpcbOpen );
     cfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
 }
@@ -503,7 +501,7 @@ void WinEDA_CvpcbFrame::DisplayModule( wxCommandEvent& event )
  */
 void WinEDA_CvpcbFrame::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_BasicFrame::SetLanguage( event );
+    EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

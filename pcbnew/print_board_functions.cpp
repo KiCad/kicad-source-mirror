@@ -16,7 +16,7 @@
 #include "protos.h"
 
 
-static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
+static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
@@ -317,7 +317,7 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
 }
 
 
-static void Print_Module( WinEDA_DrawPanel* aPanel, wxDC* aDC, MODULE* aModule,
+static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {

@@ -24,7 +24,7 @@
 #define IS_SELECTED 1
 
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 static int  MarkItemsInBloc( MODULE* module, EDA_Rect& Rect );
 
 static void ClearMarkItems( MODULE* module );
@@ -289,8 +289,7 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
 /* Traces the outline of the search block structures
  * The entire block follows the cursor
  */
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC,
-                                     bool erase )
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR*  PtBlock;
     BASE_SCREEN*     screen = panel->GetScreen();

@@ -188,7 +188,7 @@ int SCH_LINE::GetPenSize() const
 }
 
 
-void SCH_LINE::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                      int DrawMode, int Color )
 {
     int color;
@@ -416,14 +416,20 @@ bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFi
     if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
         return false;
 
-    if( ( ( aFilter & DRAW_ITEM_T ) && ( m_Layer == LAYER_NOTES ) )
-        || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
-        || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) ) )
+    if(  ( ( aFilter & DRAW_ITEM_T ) && ( m_Layer == LAYER_NOTES ) )
+      || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
+      || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) )  )
     {
-        if( ( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS && IsEndPoint( aPoint ) )
-            || ( aFilter & WIRE_BUS_ENDPOINTS_ONLY && !IsEndPoint( aPoint ) )
-            || ( TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) ) )
-            return true;
+        if( !TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
+            return false;
+
+        if( ( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS ) && IsEndPoint( aPoint ) )
+            return false;
+
+        if( ( aFilter & WIRE_BUS_ENDPOINTS_ONLY ) && !IsEndPoint( aPoint ) )
+            return false;
+
+        return true;
     }
 
     return false;

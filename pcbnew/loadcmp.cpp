@@ -364,10 +364,10 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
  *
  * @return wxEmptyString if abort or fails, or the selected module name if Ok
  */
-wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( WinEDA_DrawFrame* aWindow,
-                                                         const wxString&   aLibraryFullFilename,
-                                                         const wxString&   aMask,
-                                                         const wxString&   aKeyWord )
+wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
+                                                         const wxString& aLibraryFullFilename,
+                                                         const wxString& aMask,
+                                                         const wxString& aKeyWord )
 {
     unsigned        ii;
     char*           Line;

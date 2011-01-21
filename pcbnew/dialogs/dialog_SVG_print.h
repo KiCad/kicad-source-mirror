@@ -20,7 +20,7 @@ private:
     wxCheckBox*          m_BoxSelectLayer[32];
 
 public:
-    DIALOG_SVG_PRINT( WinEDA_DrawFrame* parent );
+    DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent );
     ~DIALOG_SVG_PRINT() {}
 
 private:

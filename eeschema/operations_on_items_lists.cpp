@@ -62,7 +62,7 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
 }
 
 
-void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList );
+void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                            const wxPoint aMoveVector  );
 
@@ -110,7 +110,7 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
  * delete schematic items in aItemsList
  * deleted items are put in undo list
  */
-void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
+void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
 {
     SCH_SCREEN*        screen = (SCH_SCREEN*) panel->GetScreen();
     SCH_EDIT_FRAME*    frame  = (SCH_EDIT_FRAME*) panel->GetParent();
@@ -146,7 +146,7 @@ void DeleteItemsInList( WinEDA_DrawPanel* panel, PICKED_ITEMS_LIST& aItemsList )
 /* Routine to delete an object from global drawing object list.
  *  Object is put in Undo list
  */
-void DeleteStruct( WinEDA_DrawPanel* panel, wxDC* DC, SCH_ITEM* DrawStruct )
+void DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct )
 {
     SCH_SCREEN*     screen = (SCH_SCREEN*) panel->GetScreen();
     SCH_EDIT_FRAME* frame  = (SCH_EDIT_FRAME*) panel->GetParent();

@@ -268,9 +268,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
 
     m_Parent->OnModify();
-
-    m_Parent->TestDanglingEnds( m_Parent->GetScreen()->GetDrawItems(), NULL );
-
+    m_Parent->GetScreen()->TestDanglingEnds();
     m_Parent->DrawPanel->Refresh( TRUE );
 
     EndModal( 0 );

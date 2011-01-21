@@ -25,14 +25,14 @@ static wxSize  ShapeSize;
 static int     PolyShapeType;
 
 
-static void Exit_Self( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void gen_arc( std::vector <wxPoint>& aBuffer,
                      wxPoint                aStartPoint,
                      wxPoint                aCenter,
                      int                    a_ArcAngle );
-static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel,
-                                              wxDC*             DC,
-                                              bool              erase );
+static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel,
+                                              wxDC*           DC,
+                                              bool            erase );
 
 
 int         BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
@@ -57,7 +57,7 @@ static int     Self_On;
 /* This function shows on screen the bounding box of the inductor that will be
  * created at the end of the build inductor process
  */
-static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     /* Calculate the orientation and size of the box containing the inductor:
      * the box is a rectangle with height = lenght/2
@@ -106,7 +106,7 @@ static void ShowBoundingBoxMicroWaveInductor( WinEDA_DrawPanel* panel, wxDC* DC,
 }
 
 
-void Exit_Self( WinEDA_DrawPanel* Panel, wxDC* DC )
+void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     if( Self_On )
     {

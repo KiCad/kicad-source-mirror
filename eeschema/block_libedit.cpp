@@ -15,7 +15,7 @@
 #include "libeditframe.h"
 
 
-static void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 /*
@@ -274,7 +274,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
  * Traces the outline of the search block structures
  * The entire block follows the cursor
  */
-void DrawMovingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR* PtBlock;
     BASE_SCREEN* screen = panel->GetScreen();

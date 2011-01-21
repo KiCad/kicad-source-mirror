@@ -57,7 +57,7 @@ enum id_kicad_frm {
 /* class WinEDA_MainFrame
  * This is the main kicad frame
  */
-class WinEDA_MainFrame : public WinEDA_BasicFrame
+class WinEDA_MainFrame : public EDA_BASE_FRAME
 {
 public:
     TREE_PROJECT_FRAME* m_LeftWin;

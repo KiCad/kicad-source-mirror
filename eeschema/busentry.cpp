@@ -20,7 +20,7 @@ static int     s_LastShape = '\\';
 static wxPoint ItemInitialPosition;
 
 
-static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void ExitBusEntry( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     /* Exit bus entry mode. */
     SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) Panel->GetScreen()->GetCurItem();
@@ -50,7 +50,7 @@ static void ExitBusEntry( WinEDA_DrawPanel* Panel, wxDC* DC )
 }
 
 
-static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     // Draws the bus entry while moving the cursor
     BASE_SCREEN*   screen   = panel->GetScreen();
@@ -139,7 +139,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
         break;
     }
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+    GetScreen()->TestDanglingEnds();
     BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     OnModify( );
 }

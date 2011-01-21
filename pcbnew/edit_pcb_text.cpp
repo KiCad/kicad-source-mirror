@@ -14,8 +14,8 @@
 #include "protos.h"
 
 
-static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Move_Texte_Pcb( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
 static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
@@ -29,7 +29,7 @@ static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
  *
  * If a text is selected, its initial coord are regenerated
  */
-void Abort_Edit_Pcb_Text( WinEDA_DrawPanel* Panel, wxDC* DC )
+void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     Panel->ManageCurseur = NULL;
     Panel->ForceCloseManageCurseur = NULL;
@@ -116,7 +116,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
 
 /* Move  PCB text following the cursor. */
-static void Move_Texte_Pcb( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Move_Texte_Pcb( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) panel->GetScreen()->GetCurItem();
 

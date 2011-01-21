@@ -145,7 +145,7 @@ EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
     return EDA_Rect( m_Pos, realsize );
 }
 
-void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode,
+void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
                               const wxPoint& aOffset )
 {
     wxPoint corners[CORNERS_COUNT];
@@ -169,7 +169,7 @@ void MARKER_BASE::DrawMarker( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode
 }
 
 
-void MARKER_BASE::DisplayMarkerInfo( WinEDA_DrawFrame* aFrame )
+void MARKER_BASE::DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg = m_drc.ShowHtml();
     DIALOG_DISPLAY_HTML_TEXT_BASE infodisplay( (wxWindow*)aFrame, wxID_ANY, _( "Marker Info" ),

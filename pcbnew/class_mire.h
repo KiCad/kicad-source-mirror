@@ -66,7 +66,8 @@ public:
 
     void    Copy( MIREPCB* source );
 
-    void    Draw( WinEDA_DrawPanel* panel, wxDC* DC, int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+                  const wxPoint& offset = ZeroOffset );
 
 
     /**

@@ -33,7 +33,7 @@ BLOCK_SELECTOR::~BLOCK_SELECTOR()
 /*
  *  Print block command message (Block move, Block copy ...) in status bar
  */
-void BLOCK_SELECTOR::SetMessageBlock( WinEDA_DrawFrame* frame )
+void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
 
@@ -96,7 +96,7 @@ void BLOCK_SELECTOR::SetMessageBlock( WinEDA_DrawFrame* frame )
 }
 
 
-void BLOCK_SELECTOR::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aOffset,
                            int aDrawMode,
                            int aColor )
@@ -119,8 +119,7 @@ void BLOCK_SELECTOR::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * Function InitData
  *  Init the initial values of a BLOCK_SELECTOR, before starting a block command
  */
-void BLOCK_SELECTOR::InitData( WinEDA_DrawPanel* aPanel,
-                               const wxPoint&    startpos )
+void BLOCK_SELECTOR::InitData( EDA_DRAW_PANEL* aPanel, const wxPoint& startpos )
 {
     m_State = STATE_BLOCK_INIT;
     SetOrigin( startpos );
@@ -166,8 +165,7 @@ void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
 /*  First command block function:
  *  Init the Block infos: command type, initial position, and other variables..
  */
-bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
-                                         const wxPoint& startpos )
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpos )
 {
     BLOCK_SELECTOR* Block = &GetBaseScreen()->m_BlockLocate;
 
@@ -215,7 +213,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
         {
             Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
-                          wxT( "WinEDA_DrawFrame::HandleBlockBegin() Err: ManageCurseur NULL" ) );
+                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: ManageCurseur NULL" ) );
             return TRUE;
         }
         Block->m_State = STATE_BLOCK_MOVE;
@@ -225,7 +223,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
     default:
     {
         wxString msg;
-        msg << wxT( "WinEDA_DrawFrame::HandleBlockBegin() error: Unknown command " ) <<
+        msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
         Block->m_Command;
         DisplayError( this, msg );
     }
@@ -243,7 +241,7 @@ bool WinEDA_DrawFrame::HandleBlockBegin( wxDC* DC, int key,
  *  by Initm_BlockLocateDatas().
  *  The other point of the rectangle is the mouse cursor
  */
-void DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     BLOCK_SELECTOR* PtBlock;
 
@@ -271,7 +269,7 @@ void DrawAndSizingBlockOutlines( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 /*
  *  Cancel Current block operation.
  */
-void AbortBlockCurrentCommand( WinEDA_DrawPanel* Panel, wxDC* DC )
+void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     BASE_SCREEN* screen = Panel->GetScreen();
 

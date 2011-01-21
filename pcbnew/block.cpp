@@ -28,8 +28,7 @@
  * @param aDC = Current device context
  * @param aOffset = Drawing offset
  **/
-static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                             wxPoint aOffset );
+static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset );
 
 /**
  * Function drawMovingBlock
@@ -38,8 +37,7 @@ static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
  * @param aDC = Current device context
  * @param aErase = Erase block at current position
  **/
-static void drawMovingBlock( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                             bool aErase );
+static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase );
 
 
 static bool blockIncludeModules     = true;
@@ -528,8 +526,7 @@ void WinEDA_PcbFrame::Block_SelectItems()
 }
 
 
-static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                             wxPoint aOffset )
+static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset )
 {
     PICKED_ITEMS_LIST*   itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
     WinEDA_BasePcbFrame* frame     = (WinEDA_BasePcbFrame*) aPanel->GetParent();
@@ -569,8 +566,7 @@ static void drawPickedItems( WinEDA_DrawPanel* aPanel, wxDC* aDC,
 }
 
 
-static void drawMovingBlock( WinEDA_DrawPanel* aPanel, wxDC* aDC,
-                             bool aErase )
+static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
 

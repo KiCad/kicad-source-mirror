@@ -29,8 +29,8 @@ extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw F
  * and we want to see pad through.
  * The pads must appear on the layers selected in MasqueLayer
  */
-static void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
-                      int ox, int oy, int MasqueLayer, int draw_mode );
+static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
+                             int ox, int oy, int MasqueLayer, int draw_mode );
 
 
 /* Draw the footprint editor BOARD, and others elements : axis, grid ..
@@ -113,7 +113,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 
 /* Redraw the BOARD items but not cursors, axis or grid */
-void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
+void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC,
                   int aDrawMode, const wxPoint& offset )
 {
     /* The order of drawing is flexible on some systems and not on others.  For
@@ -216,7 +216,7 @@ void BOARD::Draw( WinEDA_DrawPanel* aPanel, wxDC* DC,
 }
 
 
-void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode )
+void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
 {
     int draw_mode;
 
@@ -274,7 +274,7 @@ void BOARD::DrawHighLight( WinEDA_DrawPanel* aDrawPanel, wxDC* DC, int aNetCode 
  * and we want to see pad through.
  * The pads must appear on the layers selected in MasqueLayer
  */
-void Trace_Pads_Only( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module,
+void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
                       int ox, int oy, int MasqueLayer, int draw_mode )
 {
     int                  tmp;

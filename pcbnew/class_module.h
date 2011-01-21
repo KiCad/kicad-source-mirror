@@ -234,24 +234,23 @@ public:
      * @param aDrawMode = GR_OR, GR_XOR..
      * @param aOffset = draw offset (usually wxPoint(0,0)
      */
-    void Draw( WinEDA_DrawPanel* aPanel,
-               wxDC*             aDC,
-               int               aDrawMode,
-               const wxPoint&    aOffset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* aPanel,
+               wxDC*           aDC,
+               int             aDrawMode,
+               const wxPoint&  aOffset = ZeroOffset );
 
     void Draw3D( Pcb3D_GLCanvas* glcanvas );
-    void DrawEdgesOnly( WinEDA_DrawPanel* panel, wxDC* DC,
-                        const wxPoint& offset, int draw_mode );
-    void DrawAncre( WinEDA_DrawPanel* panel, wxDC* DC,
+    void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
+    void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, int draw_mode );
 
     /**
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void DisplayInfo( WinEDA_DrawFrame* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**

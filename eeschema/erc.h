@@ -26,7 +26,7 @@
 #define _ERC_H
 
 
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 class NETLIST_OBJECT;
 
 /* For ERC markers: error types (used in diags, and to set the color):
@@ -60,13 +60,13 @@ enum errortype
 
 extern bool WriteDiagnosticERC( const wxString& FullFileName );
 
-extern void Diagnose( WinEDA_DrawPanel* panel, NETLIST_OBJECT* NetItemRef,
+extern void Diagnose( EDA_DRAW_PANEL* panel, NETLIST_OBJECT* NetItemRef,
                       NETLIST_OBJECT* NetItemTst, int MinConnexion, int Diag );
 
-extern void TestOthersItems( WinEDA_DrawPanel* panel, unsigned NetItemRef, unsigned NetStart,
+extern void TestOthersItems( EDA_DRAW_PANEL* panel, unsigned NetItemRef, unsigned NetStart,
                              int* NetNbItems, int* MinConnexion );
 
-extern void TestLabel( WinEDA_DrawPanel* panel, unsigned NetItemRef, unsigned StartNet );
+extern void TestLabel( EDA_DRAW_PANEL* panel, unsigned NetItemRef, unsigned StartNet );
 
 extern int TestDuplicateSheetNames( bool aCreateMarker );
 

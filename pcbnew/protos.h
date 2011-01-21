@@ -55,11 +55,11 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
  * The starting point of a track following MUST exist: may be
  * Then put a 0 before calling a routine if the track is the last draw
  */
-void Trace_Une_Piste( WinEDA_DrawPanel* panel,
-                      wxDC*             DC,
-                      TRACK*            pt_start_piste,
-                      int               nbsegment,
-                      int               mode_color );
+void Trace_Une_Piste( EDA_DRAW_PANEL* panel,
+                      wxDC*           DC,
+                      TRACK*          pt_start_piste,
+                      int             nbsegment,
+                      int             mode_color );
 
 
 /****************/
@@ -203,10 +203,8 @@ TRACK*       Locate_Zone( TRACK*         start_adresse,
 /* MODULES.C */
 /*************/
 int  ChangeSideNumLayer( int oldlayer );
-void DrawModuleOutlines( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* module );
-void Montre_Position_Empreinte( WinEDA_DrawPanel* panel,
-                                wxDC*             DC,
-                                bool              erase );
+void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
+void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 /****************/
@@ -215,8 +213,7 @@ void Montre_Position_Empreinte( WinEDA_DrawPanel* panel,
 
 TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack );
 
-void   ShowNewTrackWhenMovingCursor( WinEDA_DrawPanel* panel,
-                                     wxDC* DC, bool erase );
+void   ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 /* Determine coordinate for a segment direction of 0, 90 or 45 degrees,
  * depending on it's position from the origin (ox, oy) and the current

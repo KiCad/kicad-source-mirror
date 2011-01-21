@@ -230,8 +230,7 @@ wxPoint DRAWSEGMENT::GetEnd() const
 
 
 
-void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
-                        int draw_mode, const wxPoint& aOffset )
+void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 {
     int ux0, uy0, dx, dy;
     int l_piste;
@@ -364,7 +363,7 @@ void DRAWSEGMENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC,
 
 
 // see pcbstruct.h
-void DRAWSEGMENT::DisplayInfo( WinEDA_DrawFrame* frame )
+void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     int      itype;
     wxString msg;

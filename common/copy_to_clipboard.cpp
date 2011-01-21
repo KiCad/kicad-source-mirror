@@ -18,13 +18,13 @@
 static const bool   s_PlotBlackAndWhite = FALSE;
 static const bool   Print_Sheet_Ref = TRUE;
 
-static bool DrawPage( WinEDA_DrawFrame* aFrame );
+static bool DrawPage( EDA_DRAW_FRAME* aFrame );
 
 
 /* calls the function to copy the current page or the current bock to
  * the clipboard
  */
-void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
+void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
     DrawPage( this );
 
@@ -43,7 +43,7 @@ void WinEDA_DrawFrame::CopyToClipboard( wxCommandEvent& event )
  * to export drawings to other applications (word processing ...)
  * This is not suitable for copy command within eeschema or pcbnew
  */
-bool DrawPage( WinEDA_DrawFrame* aFrame )
+bool DrawPage( EDA_DRAW_FRAME* aFrame )
 {
     bool    success = TRUE;
 

@@ -45,12 +45,11 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 
 
 /** Draw a pad:
- *  @param aPanel = the WinEDA_DrawPanel panel
+ *  @param aPanel = the EDA_DRAW_PANEL panel
  *  @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
  *  @param aOffset = draw offset
  */
-void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
-                  const wxPoint& aOffset )
+void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoint& aOffset )
 {
     int    color = 0;
     wxSize mask_margin;   // margin (clearance) used for some non copper layers
@@ -353,7 +352,7 @@ void D_PAD::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDraw_mode,
  * basic function to draw a pad.
  * used by D_PAD::Draw after calculation of parameters (color, final orientation ...)
  * this function can be called to draw a pad on a panel
- * even if this panel is not a WinEDA_DrawPanel (for instance on a wxPanel inside the pad editor)
+ * even if this panel is not a EDA_DRAW_PANEL (for instance on a wxPanel inside the pad editor)
  */
 void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {

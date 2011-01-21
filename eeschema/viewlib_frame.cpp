@@ -35,7 +35,7 @@ wxString LIB_VIEW_FRAME::m_exportToEeschemaCmpName;
 /*****************************/
 /* class WinEDA_ViewlibFrame */
 /*****************************/
-BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, WinEDA_DrawFrame )
+BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     /* Window events */
     EVT_CLOSE( LIB_VIEW_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_VIEW_FRAME::OnSize )
@@ -84,8 +84,7 @@ static wxAcceleratorEntry accels[] =
 
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaphore* semaphore ) :
-    WinEDA_DrawFrame( father, VIEWER_FRAME, _( "Library browser" ),
-                      wxDefaultPosition, wxDefaultSize )
+    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library browser" ), wxDefaultPosition, wxDefaultSize )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -515,7 +514,7 @@ void LIB_VIEW_FRAME::LoadSettings( )
 {
     wxConfig* cfg ;
 
-    WinEDA_DrawFrame::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings();
 
     wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
     cfg = wxGetApp().m_EDA_Config;
@@ -545,7 +544,7 @@ void LIB_VIEW_FRAME::SaveSettings()
 {
     wxConfig* cfg;
 
-    WinEDA_DrawFrame::SaveSettings();
+    EDA_DRAW_FRAME::SaveSettings();
 
     wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
     cfg = wxGetApp().m_EDA_Config;
@@ -561,7 +560,7 @@ void LIB_VIEW_FRAME::SaveSettings()
  */
 void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    WinEDA_DrawFrame::OnActivate( event );
+    EDA_DRAW_FRAME::OnActivate( event );
 
     // Ensure we do not have old selection:
     if( m_FrameIsActive )

@@ -38,10 +38,10 @@ public:
 extern std::vector<DRAG_SEGM> g_DragSegmentList;
 
 /* Functions */
-void Dessine_Segments_Dragges( WinEDA_DrawPanel* panel, wxDC* DC );
-void Build_Drag_Liste( WinEDA_DrawPanel* panel, wxDC* DC, MODULE* Module );
-void Build_1_Pad_SegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC, D_PAD* PtPad );
-void Collect_TrackSegmentsToDrag( WinEDA_DrawPanel* panel, wxDC* DC,
+void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC );
+void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module );
+void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad );
+void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
                                   wxPoint& point, int MasqueLayer, int net_code );
 
 
@@ -58,5 +58,4 @@ void EraseDragList();
  * flag = STARTPOINT (if the point to drag is the start point of Track)
  * or ENDPOINT
  */
-void AddSegmentToDragList( WinEDA_DrawPanel* panel, wxDC* DC,
-                           int flag, TRACK* Track );
+void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Track );

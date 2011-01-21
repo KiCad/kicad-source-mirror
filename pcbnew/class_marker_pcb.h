@@ -68,7 +68,8 @@ public:
     /**
      * Function Draw
      */
-    void    Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset = ZeroOffset )
+    void    Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
+                  const wxPoint& aOffset = ZeroOffset )
     {
         DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     }
@@ -97,9 +98,9 @@ public:
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void    DisplayInfo( WinEDA_DrawFrame* frame );
+    void    DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function Save

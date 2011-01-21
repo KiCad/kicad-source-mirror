@@ -227,7 +227,7 @@ void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
 }
 
 
-void SCH_COMPONENT::Draw( WinEDA_DrawPanel* panel, wxDC* DC, const wxPoint& offset,
+void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                           int DrawMode, int Color, bool DrawPinText )
 {
     bool           dummy = FALSE;
@@ -1408,7 +1408,7 @@ EDA_Rect SCH_COMPONENT::GetBoundingBox() const
 }
 
 
-void SCH_COMPONENT::DisplayInfo( WinEDA_DrawFrame* frame )
+void SCH_COMPONENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     // search for the component in lib
     // Entry and root_component can differ if Entry is an alias

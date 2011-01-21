@@ -25,8 +25,8 @@
 
 
 /* Routines Locales */
-static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC );
+static void Show_Polyline_in_Ghost( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer );
 static bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos );
 static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
@@ -73,7 +73,7 @@ static void RestoreOldWires( SCH_SCREEN* screen )
 /**
  * Mouse capture callback for drawing line segments.
  */
-static void DrawSegment( WinEDA_DrawPanel* aPanel, wxDC* aDC, bool aErase )
+static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
 {
     SCH_LINE* CurrentLine = (SCH_LINE*) aPanel->GetScreen()->GetCurItem();
     SCH_LINE* segment;
@@ -150,7 +150,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         s_ConnexionStartPoint = cursorpos;
         s_OldWiresList = GetScreen()->ExtractWires( TRUE );
-        GetScreen()->SchematicCleanUp( NULL );
+        GetScreen()->SchematicCleanUp( DrawPanel );
 
         switch( type )
         {
@@ -322,7 +322,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         alt_end_point = lastsegment->m_Start;
     }
 
-    GetScreen()->SchematicCleanUp( NULL );
+    GetScreen()->SchematicCleanUp( DrawPanel );
 
     /* clear flags and find last segment entered, for repeat function */
     segment = (SCH_LINE*) GetScreen()->GetDrawItems();
@@ -353,7 +353,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     if( IsJunctionNeeded( this, s_ConnexionStartPoint ) )
         CreateNewJunctionStruct( DC, s_ConnexionStartPoint );
 
-    TestDanglingEnds( GetScreen()->GetDrawItems(), DC );
+    GetScreen()->TestDanglingEnds( DrawPanel, DC );
 
     /* Redraw wires and junctions which can be changed by TestDanglingEnds() */
     DrawPanel->CursorOff( DC );   // Erase schematic cursor
@@ -432,7 +432,7 @@ static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos )
 
 /*  Drawing Polyline phantom at the displacement of the cursor
  */
-static void Show_Polyline_in_Ghost( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Show_Polyline_in_Ghost( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     SCH_POLYLINE* NewPoly = (SCH_POLYLINE*) panel->GetScreen()->GetCurItem();
     int           color;
@@ -541,7 +541,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::CreateNewNoConnectStruct( wxDC* DC )
 
 /* Abort function for wire, bus or line creation
  */
-static void AbortCreateNewLine( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     SCH_SCREEN* Screen = (SCH_SCREEN*) Panel->GetScreen();
 
@@ -608,7 +608,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     {
         m_itemToRepeat->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( m_itemToRepeat );
-        TestDanglingEnds( GetScreen()->GetDrawItems(), NULL );
+        GetScreen()->TestDanglingEnds();
         m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         SaveCopyInUndoList( m_itemToRepeat, UR_NEW );
         m_itemToRepeat->m_Flags = 0;

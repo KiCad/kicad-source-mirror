@@ -292,7 +292,7 @@ int LIB_FIELD::GetPenSize()
  * if aData not NULL, aData must point a wxString which is used instead of
  * the m_Text
  */
-void LIB_FIELD::drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                              int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
@@ -710,7 +710,7 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
     }
 }
 
-void LIB_FIELD::DisplayInfo( WinEDA_DrawFrame* aFrame )
+void LIB_FIELD::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 

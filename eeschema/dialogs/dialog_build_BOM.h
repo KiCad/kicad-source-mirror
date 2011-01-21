@@ -10,7 +10,7 @@
 #include "dialog_build_BOM_base.h"
 
 
-class WinEDA_DrawFrame;
+class EDA_DRAW_FRAME;
 class SCH_COMPONENT;
 class wxConfig;
 
@@ -18,9 +18,9 @@ class wxConfig;
 class DIALOG_BUILD_BOM : public DIALOG_BUILD_BOM_BASE
 {
 private:
-    WinEDA_DrawFrame*   m_Parent;
-    wxConfig*           m_Config;
-    wxString            m_ListFileName;
+    EDA_DRAW_FRAME* m_Parent;
+    wxConfig*       m_Config;
+    wxString        m_ListFileName;
 
 private:
     void    OnRadioboxSelectFormatSelected( wxCommandEvent& event );
@@ -60,7 +60,7 @@ private:
     bool    IsFieldChecked( int aFieldId );
 
 public:
-    DIALOG_BUILD_BOM( WinEDA_DrawFrame* parent );
+    DIALOG_BUILD_BOM( EDA_DRAW_FRAME* parent );
 
     // ~DIALOG_BUILD_BOM() {};
 };

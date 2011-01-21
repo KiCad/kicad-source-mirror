@@ -25,7 +25,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
                                     const wxString& title,
                                     const wxPoint&  pos,
                                     const wxSize&   size ) :
-    WinEDA_BasicFrame( parent, KICAD_MAIN_FRAME, title, pos, size )
+    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME, title, pos, size )
 {
     wxString msg;
     wxString line;
@@ -267,7 +267,7 @@ void WinEDA_MainFrame::LoadSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::LoadSettings();
+    EDA_BASE_FRAME::LoadSettings();
     cfg->Read( TreeFrameWidthEntry, &m_LeftWin_Width );
 }
 
@@ -284,7 +284,7 @@ void WinEDA_MainFrame::SaveSettings()
 
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
-    WinEDA_BasicFrame::SaveSettings();
+    EDA_BASE_FRAME::SaveSettings();
 
     cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
 }

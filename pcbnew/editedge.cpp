@@ -14,9 +14,9 @@
 #include "protos.h"
 
 
-static void Exit_EditEdge( WinEDA_DrawPanel* Panel, wxDC* DC );
-static void Montre_Position_NewSegment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
+static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Montre_Position_NewSegment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 
 static wxPoint s_InitialPosition;  // Initial cursor position.
@@ -59,7 +59,7 @@ void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 /*
  * Redraw segment during cursor movement.
  */
-static void Move_Segment( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) panel->GetScreen()->GetCurItem();
     int          t_fill = DisplayOpt.DisplayDrawItems;
@@ -168,7 +168,7 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
 }
 
 
-static void Exit_EditEdge( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) Panel->GetScreen()->GetCurItem();
 
@@ -293,8 +293,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
 /* Redraw segment during cursor movement
  */
-static void Montre_Position_NewSegment( WinEDA_DrawPanel* panel,
-                                        wxDC* DC, bool erase )
+static void Montre_Position_NewSegment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*)
                            panel->GetScreen()->GetCurItem();

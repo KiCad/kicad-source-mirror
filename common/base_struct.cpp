@@ -337,7 +337,7 @@ bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAc
 }
 
 
-void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void EDA_TextStruct::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            EDA_Colors aColor, int aDrawMode,
                            GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 {
@@ -381,7 +381,7 @@ void EDA_TextStruct::Draw( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-void EDA_TextStruct::DrawOneLineOfText( WinEDA_DrawPanel* aPanel, wxDC* aDC,
+void EDA_TextStruct::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                         const wxPoint& aOffset, EDA_Colors aColor,
                                         int aDrawMode, GRTraceMode aFillMode,
                                         EDA_Colors aAnchor_color,

@@ -199,10 +199,10 @@ public:
     EDA_Rect GetBoundingBox() const;
 
     /* Display on screen: */
-    void     Draw( WinEDA_DrawPanel* aPanel,
-                   wxDC*             aDC,
-                   int               aDrawMode,
-                   const wxPoint&    aOffset = ZeroOffset );
+    void     Draw( EDA_DRAW_PANEL* aPanel,
+                   wxDC*           aDC,
+                   int             aDrawMode,
+                   const wxPoint&  aOffset = ZeroOffset );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -229,9 +229,9 @@ public:
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
      * Display info about this GERBER item
-     * @param frame A WinEDA_DrawFrame in which to print status information.
+     * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void     DisplayInfo( WinEDA_DrawFrame* frame );
+    void     DisplayInfo( EDA_DRAW_FRAME* frame );
 
     wxString ShowGBRShape();
 

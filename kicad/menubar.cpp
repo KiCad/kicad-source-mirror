@@ -10,7 +10,7 @@
 #include "bitmaps.h"
 
 /* Menubar and toolbar event table */
-BEGIN_EVENT_TABLE( WinEDA_MainFrame, WinEDA_BasicFrame )
+BEGIN_EVENT_TABLE( WinEDA_MainFrame, EDA_BASE_FRAME )
     /* Window events */
     EVT_SIZE( WinEDA_MainFrame::OnSize )
     EVT_CLOSE( WinEDA_MainFrame::OnCloseWindow )

@@ -9,7 +9,7 @@
 
 #include "base_struct.h"
 
-class WinEDA_DrawPanel;
+class EDA_DRAW_PANEL;
 class PLOTTER;
 
 /**
@@ -68,7 +68,7 @@ int NegableTextLength( const wxString& aText );
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( WinEDA_DrawPanel * aPanel,
+void DrawGraphicText( EDA_DRAW_PANEL * aPanel,
                       wxDC * aDC,
                       const wxPoint &aPos,
                       enum EDA_Colors aColor,

@@ -98,5 +98,5 @@ void WinEDA_MainFrame::OnSelectPreferredEditor( wxCommandEvent& event )
 
 void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
 {
-    WinEDA_BasicFrame::SetLanguage( event );
+    EDA_BASE_FRAME::SetLanguage( event );
 }

@@ -18,8 +18,8 @@
 #include "sch_text.h"
 
 
-static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase );
-static void ExitMoveTexte( WinEDA_DrawPanel* panel, wxDC* DC );
+static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void ExitMoveTexte( EDA_DRAW_PANEL* panel, wxDC* DC );
 
 
 static wxPoint ItemInitialPosition;
@@ -184,7 +184,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
 /************************************/
 /*		Redraw a Text while moving	*/
 /************************************/
-static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
     SCH_ITEM* TextStruct = (SCH_ITEM*) panel->GetScreen()->GetCurItem();
 
@@ -211,7 +211,7 @@ static void ShowWhileMoving( WinEDA_DrawPanel* panel, wxDC* DC, bool erase )
 
 
 /* Abort function for the command move text */
-static void ExitMoveTexte( WinEDA_DrawPanel* Panel, wxDC* DC )
+static void ExitMoveTexte( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     BASE_SCREEN* screen = Panel->GetScreen();
     SCH_ITEM*    Struct = (SCH_ITEM*) screen->GetCurItem();

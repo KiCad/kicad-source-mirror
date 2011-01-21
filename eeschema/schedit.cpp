@@ -317,7 +317,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
-        TestDanglingEnds( screen->GetDrawItems(), &dc );
+        screen->TestDanglingEnds( DrawPanel, &dc );
         DrawPanel->Refresh();
         break;
 
@@ -325,12 +325,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         DrawPanel->MouseToCursorSchema();
         SCH_ITEM* oldWiresList = screen->ExtractWires( true );
-        BreakSegment( screen, screen->m_Curseur );
+        screen->BreakSegment( screen->m_Curseur );
 
         if( oldWiresList )
             SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
 
-        TestDanglingEnds( screen->GetDrawItems(), &dc );
+        screen->TestDanglingEnds( DrawPanel, &dc );
     }
     break;
 
@@ -353,7 +353,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DeleteStruct( DrawPanel, &dc, item );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
-        TestDanglingEnds( screen->GetDrawItems(), &dc );
+        screen->TestDanglingEnds( DrawPanel, &dc );
         SetSheetNumberAndCount();
         OnModify();
     }
@@ -371,7 +371,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
         DrawPanel->MouseToCursorSchema();
         ReSizeSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
-        TestDanglingEnds( screen->GetDrawItems(), &dc );
+        screen->TestDanglingEnds( DrawPanel, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
@@ -717,7 +717,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_JUNCTION:
         DrawPanel->MouseToCursorSchema();
         screen->SetCurItem( CreateNewJunctionStruct( &dc, screen->m_Curseur, true ) );
-        TestDanglingEnds( screen->GetDrawItems(), &dc );
+        screen->TestDanglingEnds( DrawPanel, &dc );
         screen->SetCurItem( NULL );
         break;
 
@@ -728,7 +728,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem() )
         {
             ( (SCH_ITEM*) screen->GetCurItem() )->Place( this, &dc );
-            TestDanglingEnds( screen->GetDrawItems(), &dc );
+            screen->TestDanglingEnds( DrawPanel, &dc );
             screen->SetCurItem( NULL );
         }
         break;

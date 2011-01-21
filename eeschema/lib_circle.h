@@ -18,7 +18,7 @@ class LIB_CIRCLE : public LIB_DRAW_ITEM
     /**
      * Draws the arc.
      */
-    void drawGraphic( WinEDA_DrawPanel* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
@@ -70,7 +70,7 @@ public:
     virtual int GetPenSize( );
 
     virtual EDA_Rect GetBoundingBox() const;
-    virtual void DisplayInfo( WinEDA_DrawFrame* aFrame );
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
      * See LIB_DRAW_ITEM::BeginEdit().
