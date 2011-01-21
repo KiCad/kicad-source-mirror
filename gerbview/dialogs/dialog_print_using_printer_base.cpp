@@ -82,12 +82,6 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_PagesOptionChoices[] = { _("1 Page per Layer"), _("Single page") };
-	int m_PagesOptionNChoices = sizeof( m_PagesOptionChoices ) / sizeof( wxString );
-	m_PagesOption = new wxRadioBox( this, wxID_PAGE_MODE, _("Page Print"), wxDefaultPosition, wxDefaultSize, m_PagesOptionNChoices, m_PagesOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_PagesOption->SetSelection( 0 );
-	bmiddleRightSizer->Add( m_PagesOption, 0, wxALL|wxEXPAND, 5 );
-	
 	bMainSizer->Add( bmiddleRightSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* b_buttonsSizer;

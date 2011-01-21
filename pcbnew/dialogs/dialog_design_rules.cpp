@@ -322,6 +322,23 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
     wxString msg;
     int      Internal_Unit = m_Parent->m_InternalUnits;
 
+    // Compute the column widths here, after setting texts
+    msg = wxT("000000.000000"); // This is a very long text to display values.
+                                // Actual values are shorter.
+    m_gridViaSizeList->SetCellValue( 0, 0, msg );
+    m_gridViaSizeList->SetCellValue( 0, 1, msg );
+    m_gridTrackWidthList->SetCellValue( 0, 0, msg );
+    m_gridViaSizeList->SetColMinimalWidth(0,150);
+    m_gridViaSizeList->SetColMinimalWidth(1,150);
+    m_gridViaSizeList->AutoSizeColumns(true);
+    m_gridTrackWidthList->SetColMinimalWidth(0,150);
+    m_gridTrackWidthList->AutoSizeColumns(true);
+
+    // Fill cells with actual values:
+    m_gridViaSizeList->SetCellValue( 0, 0, wxEmptyString );
+    m_gridViaSizeList->SetCellValue( 0, 1, wxEmptyString );
+    m_gridTrackWidthList->SetCellValue( 0, 0, wxEmptyString );
+
     for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
     {
         msg = ReturnStringFromValue( g_UserUnit, m_TracksWidthList[ii], Internal_Unit, false );
@@ -340,10 +357,6 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
             m_gridViaSizeList->SetCellValue( ii, 1, msg );
         }
     }
-
-    // recompute the column widths here, after setting texts
-    m_gridViaSizeList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    m_gridTrackWidthList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
 }
 
 

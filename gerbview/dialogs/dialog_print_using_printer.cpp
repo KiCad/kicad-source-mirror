@@ -70,7 +70,7 @@ private:
 
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
-    bool PrintUsingSinglePage() { return m_PagesOption->GetSelection(); }
+    bool PrintUsingSinglePage() { return true; }
     int SetLayerMaskFromListSelection();
 };
 
@@ -314,9 +314,9 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     s_Parameters.m_Print_Black_and_White =
         m_ModeColorOption->GetSelection() != 0;
 
-    if( m_PagesOption )
-        s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;
-
+    // Due to negative objects in gerber objects, always use one page per image,
+    // because these objects create artefact when they are printed on an existing image.
+    s_Parameters.m_OptionPrintPage = false;
 
     SetLayerMaskFromListSelection();
 

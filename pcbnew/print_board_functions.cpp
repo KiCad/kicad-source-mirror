@@ -184,8 +184,8 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
     DisplayOpt.DisplayPadIsol    = false;
-    DisplayOpt.DisplayModEdge    = FILLED;
-    DisplayOpt.DisplayModText    = FILLED;
+    m_DisplayModEdge = DisplayOpt.DisplayModEdge    = FILLED;
+    m_DisplayModText = DisplayOpt.DisplayModText    = FILLED;
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
     DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
@@ -311,6 +311,8 @@ void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
+    m_DisplayModText = DisplayOpt.DisplayModText;
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
 }
 

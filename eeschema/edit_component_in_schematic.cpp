@@ -76,9 +76,9 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
 }
 
 
-/******************************************************************************/
-/* Edit the field Field (text, size)  */
-/******************************************************************************/
+/*
+ * Edit a field: text and size
+*/
 void SCH_EDIT_FRAME::EditCmpFieldText( SCH_FIELD* Field, wxDC* DC )
 {
     int            fieldNdx, flag;
@@ -125,7 +125,8 @@ modified!\nYou must create a new power"  ) );
     wxString newtext = Field->m_Text;
     DrawPanel->m_IgnoreMouseEvents = TRUE;
 
-    wxTextEntryDialog dlg( this, Field->m_Name, _( "Component field text" ), newtext );
+    wxString title = _( "Field:" ) + wxT(" ") + Field->m_Name;
+    wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     int diag = dlg.ShowModal();
     newtext = dlg.GetValue( );
     newtext.Trim( true );

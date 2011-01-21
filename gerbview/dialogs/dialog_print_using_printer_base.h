@@ -37,7 +37,6 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		enum
 		{
 			wxID_PRINT_MODE = 1000,
-			wxID_PAGE_MODE,
 			wxID_PRINT_OPTIONS,
 			wxID_PRINT_ALL,
 		};
@@ -51,7 +50,6 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		wxTextCtrl* m_FineAdjustYscaleOpt;
 		wxCheckBox* m_Print_Mirror;
 		wxRadioBox* m_ModeColorOption;
-		wxRadioBox* m_PagesOption;
 		wxButton* m_buttonOption;
 		wxButton* m_buttonPreview;
 		wxButton* m_buttonPrint;

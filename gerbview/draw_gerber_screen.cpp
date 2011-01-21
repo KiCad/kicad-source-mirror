@@ -53,7 +53,7 @@ void WinEDA_GerberFrame::PrintPage( wxDC* aDC, int aPrintMasklayer,
 
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    GetBoard()->Draw( DrawPanel, aDC, GR_COPY, wxPoint( 0, 0 ) );
+    GetBoard()->Draw( DrawPanel, aDC, -1, wxPoint( 0, 0 ) );
 
     DrawPanel->m_PrintIsMirrored = false;
 
