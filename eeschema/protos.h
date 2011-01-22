@@ -2,29 +2,19 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
-#include "block_commande.h"
 #include "colors.h"
-#include "sch_sheet_path.h"
-
-#include <wx/wx.h>
 
 
-class EDA_ITEM;
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
 class SCH_EDIT_FRAME;
 class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
-class LIB_COMPONENT;
-class LIB_DRAW_ITEM;
 class SCH_COMPONENT;
 class SCH_SCREEN;
 class SCH_ITEM;
-class SCH_SHEET_PIN;
 class PLOTTER;
 class SCH_SHEET;
-class LIB_PIN;
-class LABEL_OBJECT;
 class NETLIST_OBJECT;
 
 
@@ -52,17 +42,18 @@ void IncrementLabelMember( wxString& name );
 /****************/
 void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
 
-void           SnapLibItemPoint( int            OrigX,
-                                 int            OrigY,
-                                 int*           ClosestX,
-                                 int*           ClosestY,
-                                 SCH_COMPONENT* DrawLibItem );
-bool           LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* DrawLibItem );
+void SnapLibItemPoint( int            OrigX,
+                       int            OrigY,
+                       int*           ClosestX,
+                       int*           ClosestY,
+                       SCH_COMPONENT* DrawLibItem );
+
+bool LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* DrawLibItem );
 
 /************/
 /* BLOCK.CPP */
 /************/
-void      DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct );
+void DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct );
 
 
 // operations_on_item_lists.cpp
@@ -82,7 +73,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 /* LOCATE.CPP */
 /*************/
 
-SCH_COMPONENT*  LocateSmallestComponent( SCH_SCREEN* Screen );
+SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen );
 
 /* function PickStruct:
  *   Search at location pos
@@ -127,14 +118,14 @@ void RedrawActiveWindow( EDA_DRAW_PANEL* panel, wxDC* DC );
 /**************/
 /* EELAYER.CPP */
 /**************/
-void       SeedLayers();
+void SeedLayers();
 EDA_Colors ReturnLayerColor( int Layer );
 
 
 /**************/
 /* NETLIST.CPP */
 /**************/
-int  IsBusLabel( const wxString& LabelDrawList );
+int IsBusLabel( const wxString& LabelDrawList );
 
 /************/
 /* PLOT.CPP */
@@ -181,10 +172,10 @@ void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos )
  *   1 if selected component
  *   0 if canceled order
  */
-int            DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
-                                            CMP_LIBRARY*    Library,
-                                            wxString&       Buffer,
-                                            wxString&       OldName );
+int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
+                                 CMP_LIBRARY*    Library,
+                                 wxString&       Buffer,
+                                 wxString&       OldName );
 
 /**
  * Function SelectLibraryFromList
@@ -203,9 +194,7 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
  *   0 if canceled order
  * Place the name of the selected component list in BufName
  */
-int            GetNameOfPartToLoad( EDA_DRAW_FRAME* frame,
-                                    CMP_LIBRARY*    Lib,
-                                    wxString&       BufName );
+int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Lib, wxString& BufName );
 
 /**************/
 /* LIBARCH.CPP */
@@ -227,7 +216,7 @@ void RemoteCommand( const char* cmdline );
 
 
 /* Prototypes in netlist_control.cpp */
-void     FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
+void FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
 
 /**
  * Function ReturnUserNetlistTypeName

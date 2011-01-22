@@ -5,7 +5,7 @@
 #ifndef CLASS_DRAWSHEET_PATH_H
 #define CLASS_DRAWSHEET_PATH_H
 
-#include "base_struct.h"
+#include "sch_sheet.h"
 
 /** Info about complex hierarchies handling:
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a
@@ -53,74 +53,61 @@
 class wxFindReplaceData;
 class SCH_SCREEN;
 class SCH_MARKER;
-class SCH_SHEET;
 class SCH_ITEM;
 class SCH_REFERENCE_LIST;
 
 
 /**
  * Class SCH_SHEET_PATH
- * handles access to a sheet by way of a path.
+ * handles access to a hierarchical sheet by way of a path.
  * <p>
- * The member m_sheets stores the list of sheets from the first (usually
- * g_RootSheet) to a given sheet in last position.
- * The _last_ sheet is usually the sheet we want to select or reach (which is
- * what the function Last() returns).
- * Others sheets constitute the "path" from the first to the last sheet.
+ * The sheets are stored from the first (usually the root sheet) to the last sheet in
+ * the hierarchy.  The _last_ sheet is usually the sheet used to select or reach the
+ * data for the sheet (which is what the function Last() returns).  The other sheets
+ * constitute the "path" to the last sheet.
  */
 class SCH_SHEET_PATH
 {
-private:
-    unsigned        m_numSheets;
+    SCH_SHEETS m_sheets;  ///< The list of sheets used to create this sheet path.
 
 public:
-#define DSLSZ 32          // Max number of levels for a sheet path
-    SCH_SHEET*      m_sheets[DSLSZ];
+#define MAX_SHEET_PATH_DEPTH 32          // Max number of levels for a sheet path
 
-
-public:
     SCH_SHEET_PATH();
-    // ~SCH_SHEET_PATH() { };
 
-    void Clear()
-    {
-        m_numSheets = 0;
-    }
+    ~SCH_SHEET_PATH();
 
+    void Clear();
 
-    unsigned GetSheetsCount()
-    {
-        return m_numSheets;
-    }
-
+    unsigned GetSheetCount() const { return m_sheets.size(); }
 
     /**
      * Function Cmp
-     * Compare if this is the same sheet path as aSheetPathToTest
-     * @param aSheetPathToTest = sheet path to compare
-     * @return -1 if different, 0 if same
+     * compares if the sheet path is the same as the sheet path of \a aSheetPathToTest
+     * @param aSheetPathToTest Sheet path to compare.
+     * @return -1 is less than, 0 if same as, or 1 if greater than.
      */
-    int              Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
+    int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
      * Function Last
-     * returns a pointer to the last sheet of the list
-     * One can see the others sheet as the "path" to reach this last sheet
+     * returns a pointer to the last sheet of the list.
+     * One can see the others sheet as the "path" to reach this last sheet.
      */
-    SCH_SHEET*      Last();
+    SCH_SHEET* Last();
 
     /**
      * Function LastScreen
-     * @return the SCH_SCREEN relative to the last sheet in list
+     * @return The SCH_SCREEN relative to the last sheet in the hierarchy.
      */
-    SCH_SCREEN*      LastScreen();
+    SCH_SCREEN* LastScreen();
 
     /**
-     * Function LastScreen
-     * @return a pointer to the first schematic item handled by the
-     * SCH_SCREEN relative to the last sheet in list
+     * Function LastDrawItem
+     * @return The first item in the draw list of the screen associated with the last
+     * sheet in the hierarchy.
      */
-    SCH_ITEM*        LastDrawList();
+    SCH_ITEM* LastDrawList();
 
     /**
      * Get the last schematic item relative to the first sheet in the list.
@@ -128,63 +115,60 @@ public:
      * @return Last schematic item relative to the first sheet in the list if list
      *         is not empty.  Otherwise NULL.
      */
-    SCH_ITEM*        FirstDrawList();
+    SCH_ITEM* FirstDrawList();
 
     /**
      * Function Push
-     * store (push) aSheet in list
-     * @param aSheet = pointer to the SCH_SHEET to store in list
-     * Push is used when entered a sheet to select or analyze it
-     * This is like cd &ltdirectory&gt in directories navigation
+     * adds \a aSheet to the end of the hierarchy.
+     * @param aSheet The SCH_SHEET to store in the hierarchy.
+     * Push is used to enter a sheet to select or analyze it.  This is like using
+     * cd &ltdirectory&gt to navigate a directory.
      */
-    void             Push( SCH_SHEET* aSheet );
+    void Push( SCH_SHEET* aSheet );
 
     /**
      * Function Pop
-     * retrieves (pop) the last entered sheet and remove it from list
-     * @return a SCH_SHEET* pointer to the removed sheet in list
-     * Pop is used when leaving a sheet after a selection or analyze
-     * This is like cd .. in directories navigation
+     * removes and returns the last sheet in the hierarchy.
+     * @return The last in the hierarchy or NULL if there are no sheets in the hierarchy.
+     * <p>
+     * Pop is used when leaving a sheet after a has been selected or analyzed.  This is
+     * like using cd .. to navigate a directory.
      */
-    SCH_SHEET*      Pop();
+    SCH_SHEET* Pop();
 
     /**
      * Function Path
-     * the path uses the time stamps which do not changes even when editing
-     * sheet parameters
-     * a path is something like / (root) or /34005677 or /34005677/00AE4523
+     * returns the path using the time stamps which do not changes even when editing
+     * sheet parameters.
+     * Sample paths include / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString         Path();
+    wxString Path() const;
 
     /**
      * Function PathHumanReadable
-     * returns the sheet path in a human readable form, i.e. as a path made
-     * from sheet names.  The the "normal" path instead uses the time
-     * stamps in the path.  (Time stamps do not change even when editing
-     * sheet parameters).
+     * returns the sheet path in a human readable form, i.e. as a path made from sheet
+     * names.  This is the "normal" path instead of the path that uses the time stamps
+     * in the path.  Time stamps do not change even when the sheet name is changed.
      */
-    wxString         PathHumanReadable()  const;
+    wxString PathHumanReadable() const;
 
     /**
      * Function BuildSheetPathInfoFromSheetPathValue
-     * Fill this with data to access to the hierarchical sheet known by its path \a aPath
+     * creates the hierarchy to access the sheet known by \a aPath.
      * @param aPath = path of the sheet to reach (in non human readable format)
      * @param aFound - Please document me.
      * @return true if success else false
      */
-    bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath,
-                                               bool            aFound = false );
+    bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
      * Function UpdateAllScreenReferences
-     * updates the reference and the m_Multi parameter (part selection) for all
-     * components on a screen depending on the actual sheet path.
-     * Mandatory in complex hierarchies because sheets use the same screen
-     * (basic schematic)
-     * but with different references and part selections according to the
-     * displayed sheet
+     * updates the reference and the part selection parameter for all components with
+     * multiple parts on a screen depending on the actual sheet path.  This is required
+     * in complex hierarchies because sheets use the same screen with different references
+     * and part selections according to the displayed sheet.
      */
-    void             UpdateAllScreenReferences();
+    void UpdateAllScreenReferences();
 
     /**
      * Function AnnotatePowerSymbols
@@ -206,56 +190,61 @@ public:
                         bool                aIncludePowerSymbols = true  );
 
     /**
-     * Find the next schematic item in this sheet ojbect.
+     * Function FindNextItem
+     * searches for the next schematic item of \a aType in the hierarchy.
      *
-     * @param aType - The type of schematic item object to search for.
-     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
-     *                    the beginning of the list.
-     * @param aWrap - Wrap around the end of the list to find the next item if aLastItem
+     * @param aType The type of schematic item object to search for.
+     * @param aLastItem Start search from aLastItem.  If no aLastItem, search from
+     *                  the beginning of the list.
+     * @param aWrap Wrap around the end of the list to find the next item if aLastItem
      *                is defined.
-     * @return - The next schematic item if found.  Otherwise, NULL is returned.
+     * @return The next schematic item if found.  Otherwise, NULL is returned.
      */
     SCH_ITEM* FindNextItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false );
 
     /**
-     * Find the previous schematic item in this sheet path object.
+     * Fucntion FindPreviousItem
+     * searched for the previous schematic item of \a aType in the hierarchy.
      *
-     * @param aType - The type of schematic item object to search for.
-     * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
-     *                    the end of the list.
-     * @param aWrap - Wrap around the beginning of the list to find the next item if aLastItem
-     *                is defined.
-     * @return - The previous schematic item if found.  Otherwise, NULL is returned.
+     * @param aType The type of schematic item object to search for.
+     * @param aLastItem Start search from aLastItem.  If no aLastItem, search from
+     *                  the end of the list.
+     * @param aWrap Wrap around the beginning of the list to find the next item if aLastItem
+     *              is defined.
+     * @return The previous schematic item if found.  Otherwise, NULL is returned.
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false );
 
     /**
-     * Search this sheet path for the next item that matches the search criteria.
+     * Funnction MatchNextItem
+     * searches the hierarchy for the next item that matches the search criteria
+     * \a aSeaechDate.
      *
-     * @param aSearchData - Criteria to search item against.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
+     * @param aSearchData Criteria to search item against.
+     * @param aLastItem Find next item after aLastItem if not NULL.
+     * @param aFindLocation The location where to put the location of matched item.  Can be NULL.
+     * @return The next schematic item if found.  Otherwise, returns NULL.
      */
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData, SCH_ITEM* aLastItem,
-                             wxPoint * aFindLocation  );
-
-    bool operator=( const SCH_SHEET_PATH& d1 );
+                             wxPoint* aFindLocation );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
-    bool operator!=( const SCH_SHEET_PATH& d1 ) const;
+    bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ); }
 };
 
 
 /**
  * Class SCH_SHEET_LIST
- * handles the list of Sheets in a hierarchy.
- * Sheets are not unique, there can be many sheets with the same
- * filename and the same SCH_SCREEN reference.
- * The schematic (SCH_SCREEN) is shared between these sheets,
- * and component references are specific to a sheet path.
- * When a sheet is entered, component references and sheet number are updated.
+ * handles a list of hierarchies.
+ * <p>
+ * Sheets may not be unique.  There can be many sheets that share the same file name and
+ * SCH_SCREEN reference.  When a file is shared between sheets the component references
+ * are specific to where the sheet is in the hierarchy.   When a sheet is entered, the
+ * component references and sheet number in the screen are updated to reflect the sheet
+ * path.  If the hierarchy is created with the root sheet, the hierarchy represents the
+ * entire schematic.
+ * </p>
  */
 class SCH_SHEET_LIST
 {
@@ -293,35 +282,34 @@ public:
 
     /**
      * Function GetCount
-     * @return the number of sheets in list:
+     * @return The number of sheets in the hierarchy.
      * usually the number of sheets found in the whole hierarchy
      */
     int GetCount() { return m_count; }
 
     /**
      * Function GetFirst
-     * @return the first item (sheet) in m_List and prepare calls to GetNext()
+     * @return The first hierarchical path and prepare for calls to GetNext().
      */
     SCH_SHEET_PATH* GetFirst();
 
     /**
      * Function GetNext
-     * @return the next item (sheet) in m_List or NULL if no more item in
-     * sheet list
+     * @return The next hierarchical path or NULL if the end of the list.
      */
     SCH_SHEET_PATH* GetNext();
 
     /**
      * Function GetLast
-     * returns the last sheet in the sheet list.
+     * returns the last sheet in the hierarchy.
      *
-     * @return Last sheet in the list or NULL if sheet list is empty.
+     * @return Last sheet in the hierarchy or NULL if the hierarchy is empty.
      */
     SCH_SHEET_PATH* GetLast();
 
     /**
      * Function GetPrevious
-     * returns the previous sheet in the sheet list.
+     * returns the previous sheet in the hierarchy.
      *
      * @return The previous sheet in the sheet list or NULL if already at the
      *         beginning of the list.
@@ -330,15 +318,23 @@ public:
 
     /**
      * Function GetSheet
-     * @return the item (sheet) in aIndex position in m_List or NULL if less
-     * than index items
-     * @param aIndex = index in sheet list to get the sheet
+     * @return The hierarchy at \a aIndex position or NULL if \a aIndex is out of range.
+     * @param aIndex Index in the list of hierarchies.
      */
     SCH_SHEET_PATH* GetSheet( int aIndex );
 
     /**
+     * Function IsModified
+     * checks the entire hierachy for any modifications.
+     * @returns True if the hierarchy is modified otherwise false.
+     */
+    bool IsModified();
+
+    void ClearModifyStatus();
+
+    /**
      * Function AnnotatePowerSymbols
-     * clear and annotates the entire hierarchy of the sheet path list.
+     * clear and annotate the entire hierarchy of the sheet path list.
      */
     void AnnotatePowerSymbols();
 
@@ -356,11 +352,11 @@ public:
      * Function FindNextItem
      * searches the entire schematic for the next schematic object.
      *
-     * @param aType - The type of schematic item to find.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the next item
-     *                      is not found.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aWrap - Wrap past around the end of the list of sheets.
+     * @param aType The type of schematic item to find.
+     * @param aSheetFound The sheet the item was found in.  NULL if the next item
+     *                    is not found.
+     * @param aLastItem Find next item after aLastItem if not NULL.
+     * @param aWrap Wrap past around the end of the list of sheets.
      * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
      */
     SCH_ITEM* FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
@@ -370,11 +366,11 @@ public:
      * Function FindPreviousItem
      * searches the entire schematic for the previous schematic item.
      *
-     * @param aType - The type of schematic item to find.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the previous item
-     *                      is not found.
-     * @param aLastItem - Find the previous item before aLastItem if not NULL.
-     * @param aWrap - Wrap past around the beginning of the list of sheets.
+     * @param aType The type of schematic item to find.
+     * @param aSheetFound The sheet the item was found in.  NULL if the previous item
+     *                    is not found.
+     * @param aLastItem Find the previous item before aLastItem if not NULL.
+     * @param aWrap Wrap past around the beginning of the list of sheets.
      * @return If found, the previous schematic item.  Otherwise, NULL.
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
@@ -384,27 +380,27 @@ public:
      * Function MatchNextItem
      * searches the entire schematic for the next item that matches the search criteria.
      *
-     * @param aSearchData - Criteria to search item against.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the next item
-     *                      is not found.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
+     * @param aSearchData Criteria to search item against.
+     * @param aSheetFound The sheet the item was found in.  NULL if the next item
+     *                    is not found.
+     * @param aLastItem Find next item after aLastItem if not NULL.
+     * @param aFindLocation a wxPoint where to put the location of matched item. can be NULL.
      * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
      */
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData,
                              SCH_SHEET_PATH**   aSheetFound,
                              SCH_ITEM*          aLastItem,
-                             wxPoint * aFindLocation );
+                             wxPoint*           aFindLocation );
 
 private:
 
     /**
      * Function BuildSheetList
-     * builds the list of sheets and their sheet path from \a aSheet.
-     * If aSheet = g_RootSheet, the full sheet path and sheet list is built
+     * builds the list of sheets and their sheet path from \a aSheet.  If \a aSheet is
+     * the root sheet, the full sheet path and sheet list is built.
      *
-     * @param aSheet is the starting sheet from which the list is built,
-     *   or NULL indicating that g_RootSheet should be used.
+     * @param aSheet The starting sheet from which the list is built, or NULL indicating
+     *               that the root sheet should be used.
      */
     void           BuildSheetList( SCH_SHEET* aSheet );
 };

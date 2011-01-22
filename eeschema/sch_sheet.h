@@ -530,4 +530,7 @@ private:
     virtual EDA_ITEM* doClone() const;
 };
 
+
+typedef boost::ptr_vector< SCH_SHEET > SCH_SHEETS;
+
 #endif /* CLASS_DRAWSHEET_H */
