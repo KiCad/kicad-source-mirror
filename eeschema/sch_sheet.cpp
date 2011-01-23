@@ -65,6 +65,8 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
 
 SCH_SHEET::~SCH_SHEET()
 {
+    wxLogDebug( wxT( "Destroying sheet " ) + m_SheetName );
+
     // also, look at the associated sheet & its reference count
     // perhaps it should be deleted also.
     if( m_AssociatedScreen )

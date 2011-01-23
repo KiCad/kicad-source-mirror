@@ -216,8 +216,6 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
  */
 bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
-    wxASSERT( aCanvas != NULL );
-
     SCH_ITEM* DrawList, * TstDrawList;
     bool      Modify = FALSE;
 
@@ -674,10 +672,10 @@ bool SCH_SCREEN::TestDanglingEnds( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
         {
             item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), g_XorMode );
             item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-
-            if( item->IsDangling() )
-                hasDanglingEnds = true;
         }
+
+        if( item->IsDangling() )
+            hasDanglingEnds = true;
     }
 
     return hasDanglingEnds;
