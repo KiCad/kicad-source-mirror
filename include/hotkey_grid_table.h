@@ -25,6 +25,7 @@ public:
     virtual ~HotkeyGridTable();
     hotkey_spec_vector& getHotkeys();
 
+private:
     virtual int GetNumberRows();
     virtual int GetNumberCols();
     virtual bool IsEmptyCell( int row, int col );
@@ -43,6 +44,7 @@ public:
     virtual void SetValueAsCustom( int row, int col, void* value );
     virtual wxString GetColLabelValue( int col );
 
+public:
     virtual bool isHeader( int row );
     virtual void SetKeyCode( int row, long key );
     virtual void RestoreFrom( struct Ki_HotkeyInfoSectionDescriptor* origin );

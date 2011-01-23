@@ -1,4 +1,4 @@
-update=ven. 03 déc. 2010 20:28:58 CET
+update=22/01/2011 11:10:15
 version=1
 last_client=pcbnew
 [common]
@@ -7,11 +7,6 @@ NetDir=
 version=1
 RootSch=interf_u.sch
 BoardNm=interf_u.brd
-[cvpcb]
-version=1
-NetIExt=net
-[cvpcb/libraries]
-EquName1=devcms
 [eeschema]
 version=1
 LibDir=F:\\kicad\\share\\library
@@ -55,11 +50,16 @@ LibName8=adc-dac
 LibName9=memory
 LibName10=xilinx
 LibName11=special
+[cvpcb]
+version=1
+NetIExt=net
+[cvpcb/libraries]
+EquName1=devcms
 [pcbnew]
 version=1
-PadDrlX=0
-PadDimH=1500
-PadDimV=2500
+PadDrlX=354
+PadDimH=550
+PadDimV=550
 BoardThickness=630
 SgPcb45=1
 TxtPcbV=800
@@ -76,10 +76,9 @@ LastNetListRead=interf_u.net
 [pcbnew/libraries]
 LibDir=F:\\kicad\\share\\modules\\packages3d
 LibName1=connect
-LibName2=image
-LibName3=discret
+LibName2=discret
+LibName3=dip_sockets
 LibName4=pin_array
-LibName5=sockets
-LibName6=divers
-LibName7=libcms
-LibName8=display
+LibName5=divers
+LibName6=libcms
+LibName7=display

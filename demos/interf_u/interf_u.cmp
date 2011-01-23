@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (20080731.r1175 date = 1/8/2008-07:52:43
+Cmp-Mod V01 Genere par PcbNew le 17/01/2011 13:55:19
 
 BeginCmp
 TimeStamp = /322D3011;
@@ -134,7 +134,7 @@ IdModule  = 20dip300;
 EndCmp
 
 BeginCmp
-TimeStamp = /322D31CA;
+TimeStamp = /4A087146;
 Reference = U3;
 ValeurCmp = 74LS541;
 IdModule  = 20dip300;
@@ -144,7 +144,7 @@ BeginCmp
 TimeStamp = /3240023F;
 Reference = U5;
 ValeurCmp = 628128;
-IdModule  = 32dip600;
+IdModule  = DIP-32__600;
 EndCmp
 
 BeginCmp

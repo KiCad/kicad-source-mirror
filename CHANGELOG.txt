@@ -4,6 +4,20 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Jan-21 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  EESchema code refactoring and coding policy naming fixes.
+
+  * Move schematic wire and bus break code into schematic screen object.
+  * Move schematic test for dangling ends into schematic screen object.
+  * Remove left over debugging output in schematic screen object.
+  * Remove unused file eeschema/cleanup.cpp.
+  * Fix bug in schematic line object hit test algorithm.
+  * Fix a string concatenation compile error added in r2752.
+  * Rename class WinEDA_BasicFrame to EDA_BASE_FRAME.
+  * Rename class WinEDA_DrawFrame to EDA_DRAW_FRAME.
+  * Rename class WinEDA_DrawPanel to EDA_DRAW_PANEL.
+
 2011-Jan-19 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++all:

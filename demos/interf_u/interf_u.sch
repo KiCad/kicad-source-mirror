@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 19/08/2010 20:44:23
+EESchema Schematic File Version 2  date 07/12/2010 12:09:23
 LIBS:power
 LIBS:device
 LIBS:conn
@@ -10,14 +10,13 @@ LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
 LIBS:special
-LIBS:image
 LIBS:interf_u-cache
-EELAYER 24  0
+EELAYER 25  0
 EELAYER END
 $Descr A3 16535 11700
 Sheet 1 1
 Title "INTERFACE UNIVERSEL"
-Date "19 aug 2010"
+Date "7 dec 2010"
 Rev "2B"
 Comp "KICAD"
 Comment1 "Comment 1"

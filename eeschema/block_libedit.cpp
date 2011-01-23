@@ -130,7 +130,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if( ItemCount )
             SaveCopyInUndoList( m_component );
         if ( m_component )
+        {
             m_component->DeleteSelectedItems();
+            OnModify();
+        }
         break;
 
     case BLOCK_SAVE:     /* Save */
@@ -151,7 +154,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
         if ( m_component )
+        {
+            OnModify();
             m_component->MirrorSelectedItemsH( pt );
+        }
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
