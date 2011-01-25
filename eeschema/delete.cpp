@@ -98,7 +98,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 
     while( DelStruct
            && ( DelStruct = PickStruct( screen->m_Curseur, screen,
-                                        JUNCTIONITEM | WIREITEM | BUSITEM ) ) != NULL )
+                                        JUNCTION_T | WIRE_T | BUS_T ) ) != NULL )
     {
         DelStruct->m_Flags = SELECTEDNODE | STRUCT_DELETED;
 
@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
         screen->SetDrawItems( DelStruct );
     }
 
-    screen->SetDrawItems( savedItems );
+    screen->SetDrawItems( savedItems ); // Restore the list entry point.
 
     /* Mark all wires, junctions, .. connected to one of the item to delete
      */
@@ -246,7 +246,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
                 continue;
 
             GetScreen()->m_Curseur = ( (SCH_TEXT*) DelStruct )->m_Pos;
-            EDA_ITEM* TstStruct = PickStruct( screen->m_Curseur, GetScreen(), WIREITEM | BUSITEM );
+            EDA_ITEM* TstStruct = PickStruct( screen->m_Curseur, GetScreen(), WIRE_T | BUS_T );
 
             if( TstStruct && TstStruct->m_Flags & STRUCT_DELETED )
             {
@@ -279,9 +279,9 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
  *  2 : JUNCTION
  *  2 : NOCONNECT
  *  3 : WIRE or BUS
- *  4 : DRAWITEM
+ *  4 : GRAPHIC ITEM
  *  5 : TEXT
- *  6 : COMPOSANT
+ *  6 : COMPONENT
  *  7 : SHEET
  *
  * return TRUE if an item was deleted
@@ -292,23 +292,23 @@ bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
     SCH_SCREEN* screen = (SCH_SCREEN*) ( frame->GetScreen() );
     bool item_deleted  = FALSE;
 
-    DelStruct = PickStruct( screen->m_Curseur, screen, MARKERITEM );
+    DelStruct = PickStruct( screen->m_Curseur, screen, MARKER_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, JUNCTIONITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, JUNCTION_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, NOCONNECTITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, NO_CONNECT_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, RACCORDITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, BUS_ENTRY_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, WIREITEM | BUSITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, WIRE_T | BUS_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, DRAWITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, DRAW_ITEM_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, TEXTITEM | LABELITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, TEXT_T | LABEL_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, LIBITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, COMPONENT_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, SHEETITEM );
+        DelStruct = PickStruct( screen->m_Curseur, screen, SHEET_T );
 
     if( DelStruct )
     {

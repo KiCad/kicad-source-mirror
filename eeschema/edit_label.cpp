@@ -79,7 +79,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
         TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
-                                             GetScreen(), TEXTITEM | LABELITEM );
+                                             GetScreen(), TEXT_T | LABEL_T );
     if( TextStruct == NULL )
         return;
 

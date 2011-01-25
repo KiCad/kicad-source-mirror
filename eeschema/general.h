@@ -45,29 +45,6 @@ class TRANSFORM;
 
 extern wxString g_DefaultSchematicFileName;
 
-/* Search mask for locating objects in editor. */
-#define LIBITEM                    1
-#define WIREITEM                   2
-#define BUSITEM                    4
-#define RACCORDITEM                4
-#define JUNCTIONITEM               0x10
-#define DRAWITEM                   0x20
-#define TEXTITEM                   0x40
-#define LABELITEM                  0x80
-#define SHEETITEM                  0x100
-#define MARKERITEM                 0x200
-#define NOCONNECTITEM              0x400
-#define SEARCH_PINITEM             0x800
-#define SHEETLABELITEM             0x1000
-#define FIELDCMPITEM               0x2000
-#define EXCLUDE_WIRE_BUS_ENDPOINTS 0x4000
-#define WIRE_BUS_ENDPOINTS_ONLY    0x8000
-
-#define SEARCHALL ( LIBITEM | WIREITEM | BUSITEM | RACCORDITEM |        \
-                    JUNCTIONITEM | DRAWITEM | TEXTITEM | LABELITEM |    \
-                    SHEETITEM | MARKERITEM | NOCONNECTITEM |            \
-                    SEARCH_PINITEM | SHEETLABELITEM )
-
 typedef enum
 {
     LAYER_WIRE,

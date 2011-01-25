@@ -1133,10 +1133,10 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
             m_MessagesList->AppendToPage( msg );
         }
 
-        if( viadia < viadrill )
+        if( viadia <= viadrill )
         {
             result = false;
-            msg.Printf( _( "<b>Extra Via %d Size</b> %s &lt; <b> Drill Size</b> %s<br>" ),
+            msg.Printf( _( "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>" ),
                        row + 1, GetChars( tvalue ), GetChars( drlvalue ) );
 
             m_MessagesList->AppendToPage( msg );

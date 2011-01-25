@@ -127,7 +127,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     wxString       Text;
     wxString       msg;
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKERITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKER_T );
 
     if( DrawStruct )
     {
@@ -135,7 +135,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NOCONNECTITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NO_CONNECT_T );
 
     if( DrawStruct )
     {
@@ -143,7 +143,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTIONITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTION_T );
 
     if( DrawStruct )
     {
@@ -152,7 +152,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
     }
 
     DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(),
-                                         WIREITEM | BUSITEM | RACCORDITEM );
+                                         WIRE_T | BUS_T | BUS_ENTRY_T );
 
     if( DrawStruct )  // We have found a wire: Search for a connected pin at the same location
     {
@@ -172,7 +172,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELDCMPITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELD_T );
 
     if( DrawStruct )
     {
@@ -183,7 +183,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABELITEM | TEXTITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABEL_T | TEXT_T );
 
     if( DrawStruct )
     {
@@ -205,7 +205,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
             return LibItem;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LIBITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), COMPONENT_T );
 
     if( DrawStruct )
     {
@@ -215,7 +215,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEETITEM );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEET_T );
 
     if( DrawStruct )
     {
@@ -223,7 +223,7 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         return DrawStruct;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SEARCHALL );
+    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NO_FILTER_T );
 
     if( DrawStruct )
     {

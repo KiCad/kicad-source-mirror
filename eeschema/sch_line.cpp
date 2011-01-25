@@ -423,10 +423,10 @@ bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFi
         if( !TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
             return false;
 
-        if( ( aFilter & EXCLUDE_WIRE_BUS_ENDPOINTS ) && IsEndPoint( aPoint ) )
+        if( ( aFilter & EXCLUDE_ENDPOINTS_T ) && IsEndPoint( aPoint ) )
             return false;
 
-        if( ( aFilter & WIRE_BUS_ENDPOINTS_ONLY ) && !IsEndPoint( aPoint ) )
+        if( ( aFilter & ENDPOINTS_ONLY_T ) && !IsEndPoint( aPoint ) )
             return false;
 
         return true;

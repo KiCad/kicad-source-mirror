@@ -45,9 +45,9 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 
     while( DrawList )
     {
-        if( !SnapPoint2( Screen->m_MousePosition, LIBITEM, DrawList ) )
+        if( !SnapPoint2( Screen->m_MousePosition, COMPONENT_T, DrawList ) )
         {
-            if( !SnapPoint2( Screen->m_Curseur, LIBITEM, DrawList ) )
+            if( !SnapPoint2( Screen->m_Curseur, COMPONENT_T, DrawList ) )
                 break;
         }
 
@@ -79,24 +79,24 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 
 /* Search an item at pos refpos
  *  SearchMask = (bitwise OR):
- *  LIBITEM
- *  WIREITEM
- *  BUSITEM
- *  RACCORDITEM
- *  JUNCTIONITEM
- *  DRAWITEM
- *  TEXTITEM
- *  LABELITEM
+ *  COMPONENT_T
+ *  WIRE_T
+ *  BUS_T
+ *  BUS_ENTRY_T
+ *  JUNCTION_T
+ *  DRAW_ITEM_T
+ *  TEXT_T
+ *  LABEL_T
  *  SHEETITEM
- *  MARKERITEM
- *  NOCONNECTITEM
+ *  MARKER_T
+ *  NO_CONNECT_T
  *  SEARCH_PINITEM
- *  SHEETLABELITEM
+ *  SHEETLABEL_T
  *  FIELDCMPITEM
  *
- *  if EXCLUDE_WIRE_BUS_ENDPOINTS is set, in wire or bus search and locate,
+ *  if EXCLUDE_ENDPOINTS_T is set, in wire or bus search and locate,
  *  start and end points are not included in search
- *  if WIRE_BUS_ENDPOINTS_ONLY is set, in wire or bus search and locate,
+ *  if ENDPOINTS_ONLY_T is set, in wire or bus search and locate,
  *  only start and end points are included in search
  *
  *
@@ -137,7 +137,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_POLYLINE_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_POLYLINE*) DrawList )
-            if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
+            if( !( SearchMask & (DRAW_ITEM_T | WIRE_T | BUS_T) ) )
                 break;
 
             for( unsigned i = 0; i < STRUCT->GetCornerCount() - 1; i++ )
@@ -155,19 +155,19 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_LINE_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_LINE*) DrawList )
-            if( !( SearchMask & (DRAWITEM | WIREITEM | BUSITEM) ) )
+            if( !( SearchMask & (DRAW_ITEM_T | WIRE_T | BUS_T) ) )
                 break;
 
             if( TestSegmentHit( aPosRef, STRUCT->m_Start, STRUCT->m_End, 0 ) )
             {
-                if( ( ( SearchMask & DRAWITEM ) && ( STRUCT->GetLayer() == LAYER_NOTES ) )
-                   || ( ( SearchMask & WIREITEM ) && ( STRUCT->GetLayer() == LAYER_WIRE ) )
-                   || ( ( SearchMask & BUSITEM ) && ( STRUCT->GetLayer() == LAYER_BUS ) ) )
+                if( ( ( SearchMask & DRAW_ITEM_T ) && ( STRUCT->GetLayer() == LAYER_NOTES ) )
+                   || ( ( SearchMask & WIRE_T ) && ( STRUCT->GetLayer() == LAYER_WIRE ) )
+                   || ( ( SearchMask & BUS_T ) && ( STRUCT->GetLayer() == LAYER_BUS ) ) )
                 {
-                    if( SearchMask & EXCLUDE_WIRE_BUS_ENDPOINTS && STRUCT->IsEndPoint( aPosRef ) )
+                    if( SearchMask & EXCLUDE_ENDPOINTS_T && STRUCT->IsEndPoint( aPosRef ) )
                         break;
 
-                    if( SearchMask & WIRE_BUS_ENDPOINTS_ONLY && !STRUCT->IsEndPoint( aPosRef ) )
+                    if( SearchMask & ENDPOINTS_ONLY_T && !STRUCT->IsEndPoint( aPosRef ) )
                         break;
 
                     LastSnappedStruct = DrawList;
@@ -180,7 +180,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_BUS_ENTRY_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_BUS_ENTRY*) DrawList )
-            if( !( SearchMask & (RACCORDITEM) ) )
+            if( !( SearchMask & (BUS_ENTRY_T) ) )
                 break;
 
             if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(), hitminDist ) )
@@ -193,7 +193,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_JUNCTION_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_JUNCTION*) DrawList )
-            if( !(SearchMask & JUNCTIONITEM) )
+            if( !(SearchMask & JUNCTION_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -205,7 +205,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_NO_CONNECT_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
-            if( !(SearchMask & NOCONNECTITEM) )
+            if( !(SearchMask & NO_CONNECT_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -218,7 +218,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         {
             #undef  STRUCT
             #define STRUCT ( (SCH_MARKER*) DrawList )
-            if( !(SearchMask & MARKERITEM) )
+            if( !(SearchMask & MARKER_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -231,7 +231,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_TEXT_T:
             #undef  STRUCT
             #define STRUCT ( (SCH_TEXT*) DrawList )
-            if( !( SearchMask & TEXTITEM) )
+            if( !( SearchMask & TEXT_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -247,7 +247,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
             #undef  STRUCT
             #define STRUCT ( (SCH_TEXT*) DrawList ) // SCH_TEXT is the base
                                                     // class of these labels
-            if( !(SearchMask & LABELITEM) )
+            if( !(SearchMask & LABEL_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {
@@ -257,10 +257,10 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
             break;
 
         case SCH_COMPONENT_T:
-            if( !( SearchMask & (LIBITEM | FIELDCMPITEM) ) )
+            if( !( SearchMask & (COMPONENT_T | FIELD_T) ) )
                 break;
 
-            if( SearchMask & FIELDCMPITEM )
+            if( SearchMask & FIELD_T )
             {
                 SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
                 for( int i = REFERENCE; i < DrawLibItem->GetFieldCount(); i++ )
@@ -299,7 +299,7 @@ bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
         case SCH_SHEET_T:
             #undef STRUCT
             #define STRUCT ( (SCH_SHEET*) DrawList )
-            if( !(SearchMask & SHEETITEM) )
+            if( !(SearchMask & SHEET_T) )
                 break;
             if( STRUCT->HitTest( aPosRef ) )
             {

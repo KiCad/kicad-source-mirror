@@ -699,7 +699,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
             if( DrawStruct->Type() == SCH_JUNCTION_T )
             {
                 // If it's a junction, pick the underlying wire instead
-                DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(), WIREITEM );
+                DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(), WIRE_T );
             }
             if( DrawStruct == NULL )
                 break;
@@ -778,7 +778,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         if( DrawStruct == NULL )
         {
             DrawStruct = PickStruct( GetScreen()->m_Curseur, GetScreen(),
-                                     LIBITEM | TEXTITEM | LABELITEM | SHEETITEM );
+                                     COMPONENT_T | TEXT_T | LABEL_T | SHEET_T );
             if( DrawStruct == NULL )
                 break;
             if( DrawStruct->Type() == SCH_COMPONENT_T )

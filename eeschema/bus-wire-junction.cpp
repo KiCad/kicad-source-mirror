@@ -666,7 +666,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
     switch( layer )
     {
     case LAYER_BUS:
-        item = PickStruct( pos, screen, BUSITEM );
+        item = PickStruct( pos, screen, BUS_T );
 
         if( item )
             return TRUE;
@@ -683,13 +683,13 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         break;
 
     case LAYER_NOTES:
-        item = PickStruct( pos, screen, DRAWITEM );
+        item = PickStruct( pos, screen, DRAW_ITEM_T );
         if( item )
             return TRUE;
         break;
 
     case LAYER_WIRE:
-        item = PickStruct( pos, screen, RACCORDITEM | JUNCTIONITEM );
+        item = PickStruct( pos, screen, BUS_ENTRY_T | JUNCTION_T );
 
         if( item )
             return TRUE;
@@ -708,12 +708,12 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
                 return TRUE;
         }
 
-        item = PickStruct( pos, screen, WIREITEM );
+        item = PickStruct( pos, screen, WIRE_T );
 
         if( item )
             return TRUE;
 
-        item = PickStruct( pos, screen, LABELITEM );
+        item = PickStruct( pos, screen, LABEL_T );
         if( item && (item->Type() != SCH_TEXT_T)
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
@@ -749,12 +749,12 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
  */
 bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos )
 {
-    if( PickStruct( pos, frame->GetScreen(), JUNCTIONITEM ) )
+    if( PickStruct( pos, frame->GetScreen(), JUNCTION_T ) )
         return FALSE;
 
-    if( PickStruct( pos, frame->GetScreen(), WIREITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
+    if( PickStruct( pos, frame->GetScreen(), WIRE_T | EXCLUDE_ENDPOINTS_T ) )
     {
-        if( PickStruct( pos, frame->GetScreen(), WIREITEM | WIRE_BUS_ENDPOINTS_ONLY ) )
+        if( PickStruct( pos, frame->GetScreen(), WIRE_T | ENDPOINTS_ONLY_T ) )
             return TRUE;
 
         if( frame->GetScreen()->GetPin( pos, NULL, true ) )

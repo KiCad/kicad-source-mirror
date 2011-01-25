@@ -498,14 +498,14 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
     if( !is_new )
     {
         if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
-                        WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
+                        WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
 
     msg = AddHotkeyName( _( "Delete Junction" ), s_Schematic_Hokeys_Descr, HK_DELETE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_xpm );
 
-    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(), WIREITEM | BUSITEM ) )
+    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(), WIRE_T | BUS_T ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
@@ -536,7 +536,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
                   delete_connection_xpm );
 
     if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
-                    WIREITEM | BUSITEM | EXCLUDE_WIRE_BUS_ENDPOINTS ) )
+                    WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
 
     PopMenu->AppendSeparator();
