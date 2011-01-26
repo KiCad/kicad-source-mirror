@@ -30,7 +30,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxString    msg;
     int         flags = 0;
     bool        locate_track = FALSE;
-    bool        BlockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
+    bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
     wxClientDC  dc( DrawPanel );
 
@@ -42,7 +42,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     // If a command or a block is in progress:
     // Put the Cancel command (if needed) and the End command
 
-    if( BlockActive )
+    if( blockActive )
     {
         createPopUpBlockMenu( aPopMenu );
         aPopMenu->AppendSeparator();

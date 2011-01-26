@@ -23,26 +23,26 @@
  */
 void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
-    BOARD_ITEM* DrawStruct = GetCurItem();
+    BOARD_ITEM* item = GetCurItem();
 
     DrawPanel->CursorOff( DC );
     if( m_ID_current_state == 0 )
     {
-        if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
+        if( item && item->m_Flags ) // Command in progress
         {
-            switch( DrawStruct->Type() )
+            switch( item->Type() )
             {
             case TYPE_TEXTE_MODULE:
-                PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, DC );
+                PlaceTexteModule( (TEXTE_MODULE*) item, DC );
                 break;
 
             case TYPE_EDGE_MODULE:
                 SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-                Place_EdgeMod( (EDGE_MODULE*) DrawStruct );
+                Place_EdgeMod( (EDGE_MODULE*) item );
                 break;
 
             case TYPE_PAD:
-                PlacePad( (D_PAD*) DrawStruct, DC );
+                PlacePad( (D_PAD*) item, DC );
                 break;
 
             default:
@@ -50,23 +50,22 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 wxString msg;
                 msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err: \
 m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
-                            DrawStruct, DrawStruct->Type(),
-                            DrawStruct->m_Flags );
+                            item, item->Type(), item->m_Flags );
                 DisplayError( this, msg );
-                DrawStruct->m_Flags = 0;
+                item->m_Flags = 0;
                 break;
             }
             }
         }
     }
 
-    DrawStruct = GetCurItem();
-    if( !DrawStruct || (DrawStruct->m_Flags == 0) )
+    item = GetCurItem();
+    if( !item || (item->m_Flags == 0) )
     {
         if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
            && !wxGetKeyState( WXK_CONTROL ) )
-            DrawStruct = ModeditLocateAndDisplay();
-        SetCurItem( DrawStruct );
+            item = ModeditLocateAndDisplay();
+        SetCurItem( item );
     }
 
     switch( m_ID_current_state )
@@ -80,7 +79,7 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_ADD_LINE_BUTT:
-        if( !DrawStruct || DrawStruct->m_Flags == 0 )
+        if( !item || item->m_Flags == 0 )
         {
             int shape = S_SEGMENT;
             if( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
@@ -91,39 +90,39 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
             SetCurItem(
                 Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
         }
-        else if( (DrawStruct->m_Flags & IS_NEW) )
+        else if( (item->m_Flags & IS_NEW) )
         {
-            if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_CIRCLE )
+            if( ( (EDGE_MODULE*) item )->m_Shape == S_CIRCLE )
             {
-                End_Edge_Module( (EDGE_MODULE*) DrawStruct );
+                End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
                 DrawPanel->Refresh();
             }
-            else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_ARC )
+            else if( ( (EDGE_MODULE*) item )->m_Shape == S_ARC )
             {
-                End_Edge_Module( (EDGE_MODULE*) DrawStruct );
+                End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
                 DrawPanel->Refresh();
             }
-            else if( ( (EDGE_MODULE*) DrawStruct )->m_Shape == S_SEGMENT )
+            else if( ( (EDGE_MODULE*) item )->m_Shape == S_SEGMENT )
             {
                 SetCurItem(
-                    Begin_Edge_Module( (EDGE_MODULE*) DrawStruct, DC, 0 ) );
+                    Begin_Edge_Module( (EDGE_MODULE*) item, DC, 0 ) );
             }
             else
                 DisplayError( this,
-                              wxT( "ProcessCommand error: DrawStruct flags error" ) );
+                              wxT( "ProcessCommand error: item flags error" ) );
         }
         break;
 
     case ID_MODEDIT_DELETE_ITEM_BUTT:
-        if( DrawStruct == NULL ||           // No item to delete
-            (DrawStruct->m_Flags != 0) )    // Item in edit, cannot delete it
+        if( item == NULL ||           // No item to delete
+            (item->m_Flags != 0) )    // Item in edit, cannot delete it
             break;
-        if( DrawStruct->Type() != TYPE_MODULE ) // Cannot delete the module itself
+        if( item->Type() != TYPE_MODULE ) // Cannot delete the module itself
         {
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-            RemoveStruct( DrawStruct );
+            RemoveStruct( item );
             SetCurItem( NULL );
         }
         break;
@@ -190,22 +189,21 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
 bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                                            wxMenu*        PopMenu )
 {
-    BOARD_ITEM* DrawStruct = GetCurItem();
+    BOARD_ITEM* item = GetCurItem();
     wxString    msg;
     bool        append_set_width = FALSE;
-    bool        BlockActive =
-        ( GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE );
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
     // Simple location of elements where possible.
-    if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+    if( ( item == NULL ) || ( item->m_Flags == 0 ) )
     {
-        SetCurItem( DrawStruct = ModeditLocateAndDisplay() );
+        SetCurItem( item = ModeditLocateAndDisplay() );
     }
 
     // End command in progress.
     if(  m_ID_current_state )
     {
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( item && item->m_Flags )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                           _( "Cancel" ), cancel_xpm );
@@ -217,9 +215,9 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     }
     else
     {
-        if( (DrawStruct && DrawStruct->m_Flags) || BlockActive )
+        if( (item && item->m_Flags) || blockActive )
         {
-            if( BlockActive )  // Put block commands in list
+            if( blockActive )  // Put block commands in list
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                               _( "Cancel Block" ), cancel_xpm );
@@ -251,12 +249,12 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
         }
     }
 
-    if( DrawStruct == NULL )
+    if( (item == NULL) || blockActive )
         return true;
 
-    int flags = DrawStruct->m_Flags;
+    int flags = item->m_Flags;
 
-    switch( DrawStruct->Type() )
+    switch( item->Type() )
     {
     case TYPE_MODULE:
     {
@@ -321,7 +319,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
                                  HK_EDIT_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE,
                           msg, edit_text_xpm );
-            if( ( (TEXTE_MODULE*) DrawStruct )->m_Type == TEXT_is_DIVERS )
+            if( ( (TEXTE_MODULE*) item )->m_Type == TEXT_is_DIVERS )
             {
                 msg = AddHotkeyName( _("Delete Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                      HK_DELETE );
@@ -380,13 +378,13 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
     case TYPE_NOT_INIT:
     case TYPE_PCB:
         msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
-            DrawStruct->Type() );
+            item->Type() );
         DisplayError( this, msg );
         break;
 
     default:
         msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: unknown DrawType %d" ),
-            DrawStruct->Type() );
+            item->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -413,33 +411,33 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
  */
 void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
-    BOARD_ITEM* DrawStruct = GetCurItem();
+    BOARD_ITEM* item = GetCurItem();
     wxPoint     pos = GetPosition();
 
     switch( m_ID_current_state )
     {
     case 0:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            DrawStruct = ModeditLocateAndDisplay();
+            item = ModeditLocateAndDisplay();
         }
 
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags != 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags != 0 ) )
             break;
 
         // Item found
-        SetCurItem( DrawStruct );
+        SetCurItem( item );
 
-        switch( DrawStruct->Type() )
+        switch( item->Type() )
         {
         case TYPE_PAD:
-            InstallPadOptionsFrame( (D_PAD*) DrawStruct );
+            InstallPadOptionsFrame( (D_PAD*) item );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case TYPE_MODULE:
         {
-            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) DrawStruct );
+            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->m_Flags = 0;
             DrawPanel->MouseToCursorSchema();
@@ -449,7 +447,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
         case TYPE_TEXTE_MODULE:
-            InstallTextModOptionsFrame( (TEXTE_MODULE*) DrawStruct, DC );
+            InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
             DrawPanel->MouseToCursorSchema();
             break;
 
@@ -461,9 +459,9 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_PCB_ADD_LINE_BUTT:
     {
-        if( DrawStruct && ( DrawStruct->m_Flags & IS_NEW ) )
+        if( item && ( item->m_Flags & IS_NEW ) )
         {
-            End_Edge_Module( (EDGE_MODULE*) DrawStruct );
+            End_Edge_Module( (EDGE_MODULE*) item );
             SetCurItem( NULL );
             DrawPanel->Refresh();
         }

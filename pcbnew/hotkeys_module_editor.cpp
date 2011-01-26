@@ -22,16 +22,16 @@
 
 /*****************************************************************************************/
 void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStruct )
+{
 /*****************************************************************************************/
-
 /* Hot keys. Some commands are relative to the item under the mouse cursor
  *  Commands are case insensitive
  */
-{
     if( hotkey == 0 )
         return;
 
-    BOARD_ITEM* item = GetCurItem();
+    bool           blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
+    BOARD_ITEM*    item     = GetCurItem();
     bool           ItemFree = (item == 0) || (item->m_Flags == 0);
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -60,7 +60,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStru
         break;
 
     case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        if( !blockActive )
+            GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
         break;
 
     case HK_SWITCH_UNITS:
@@ -89,7 +90,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStru
 
     case HK_UNDO:
     case HK_REDO:
-        if( ItemFree )
+        if( ItemFree && !blockActive )
         {
             wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
                                   HK_Descr->m_IdMenuEvent );
@@ -120,12 +121,14 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStru
     }
 }
 
+
 bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
-    if( itemCurrentlyEdited )
+    if( itemCurrentlyEdited || blockActive )
         return false;
 
     item = ModeditLocateAndDisplay();
@@ -170,12 +173,14 @@ bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
     return false;
 }
 
+
 bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
-    if( itemCurrentlyEdited )
+    if( itemCurrentlyEdited || blockActive )
         return false;
 
     item = ModeditLocateAndDisplay();
@@ -220,12 +225,14 @@ bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
     return false;
 }
 
+
 bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
-    if( itemCurrentlyEdited )
+    if( itemCurrentlyEdited || blockActive )
         return false;
 
     item = ModeditLocateAndDisplay();
@@ -270,11 +277,16 @@ bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
     return false;
 }
 
+
 bool WinEDA_ModuleEditFrame::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;
-    int         evt_type = 0; // Used to post a wxCommandEvent on demand
+    int         evt_type    = 0; // Used to post a wxCommandEvent on demand
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
+
+    if( blockActive )
+        return false;
 
     if( !itemCurrentlyEdited )
         item = ModeditLocateAndDisplay();
