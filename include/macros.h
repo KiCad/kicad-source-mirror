@@ -7,10 +7,18 @@
 
 #include <wx/wx.h>
 
+// comment this line to use old Kicad behavior (use local convention)
+// uncomment this line to use UTF8 only convention in kicad files
+#define USE_UTF8_ONLY
 
 #if wxUSE_UNICODE
+#ifdef USE_UTF8_ONLY
+#define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvUTF8.cWX2MB( wxstring ) )
+#define CONV_FROM_UTF8( utf8string ) ( wxConvUTF8.cMB2WC( utf8string ) )
+#else
 #define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvCurrent->cWX2MB( wxstring ) )
 #define CONV_FROM_UTF8( utf8string ) ( wxConvCurrent->cMB2WC( utf8string ) )
+#endif
 #else
 #define CONV_TO_UTF8( wxstring )     ( (const char*) ( (wxstring).c_str() ) )
 #define CONV_FROM_UTF8( utf8string ) (utf8string)
