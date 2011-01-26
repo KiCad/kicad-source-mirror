@@ -416,11 +416,13 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     /* Place list structures for new sheet. */
     if( IsNew() )
     {
+        // fix size and position of the new sheet
+        // using the last values set by the ManageCurseur function
+        frame->DrawPanel->ManageCurseur = NULL;
+        frame->DrawPanel->ForceCloseManageCurseur = NULL;
         if( !frame->EditSheet( this, DC ) )
         {
             frame->GetScreen()->SetCurItem( NULL );
-            frame->DrawPanel->ManageCurseur = NULL;
-            frame->DrawPanel->ForceCloseManageCurseur = NULL;
             Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
             delete this;
             return;
