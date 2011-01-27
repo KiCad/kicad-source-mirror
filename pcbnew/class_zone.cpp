@@ -340,7 +340,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             if( arcsegmentcount >= ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF )
                 m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
 
-            m_IsFilled = fillstate == 'F' ? true : false;
+            m_IsFilled = (fillstate == 'S') ? true : false;
         }
         else if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
         {
