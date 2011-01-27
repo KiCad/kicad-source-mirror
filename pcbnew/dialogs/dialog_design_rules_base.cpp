@@ -153,7 +153,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelNetClassesEditor->SetSizer( bpanelNetClassesSizer );
 	m_panelNetClassesEditor->Layout();
 	bpanelNetClassesSizer->Fit( m_panelNetClassesEditor );
-	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), false );
+	m_DRnotebook->AddPage( m_panelNetClassesEditor, _("Net Classes Editor"), true );
 	m_panelGolbalDesignRules = new wxPanel( m_DRnotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bpanelGlobRulesSizer;
 	bpanelGlobRulesSizer = new wxBoxSizer( wxVERTICAL );
@@ -173,7 +173,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	sbViasOptionSizer->Add( m_OptViaType, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgViasMinValuesSizer;
-	fgViasMinValuesSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgViasMinValuesSizer = new wxFlexGridSizer( 2, 2, 0, 0 );
 	fgViasMinValuesSizer->AddGrowableCol( 1 );
 	fgViasMinValuesSizer->SetFlexibleDirection( wxBOTH );
 	fgViasMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -208,7 +208,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	sbuViasSizer->Add( m_AllowMicroViaCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgMinMicroviasValuesSizer;
-	fgMinMicroviasValuesSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgMinMicroviasValuesSizer = new wxFlexGridSizer( 2, 2, 0, 0 );
 	fgMinMicroviasValuesSizer->AddGrowableCol( 1 );
 	fgMinMicroviasValuesSizer->SetFlexibleDirection( wxBOTH );
 	fgMinMicroviasValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -357,7 +357,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_panelGolbalDesignRules->SetSizer( bpanelGlobRulesSizer );
 	m_panelGolbalDesignRules->Layout();
 	bpanelGlobRulesSizer->Fit( m_panelGolbalDesignRules );
-	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), true );
+	m_DRnotebook->AddPage( m_panelGolbalDesignRules, _("Global Design Rules"), false );
 	
 	bMainSizer->Add( m_DRnotebook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	

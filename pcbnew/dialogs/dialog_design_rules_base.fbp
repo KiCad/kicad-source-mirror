@@ -142,7 +142,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Net Classes Editor</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -1048,7 +1048,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Global Design Rules</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -1195,7 +1195,7 @@
                                                             <property name="name">fgViasMinValuesSizer</property>
                                                             <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                             <property name="permission">none</property>
-                                                            <property name="rows">1</property>
+                                                            <property name="rows">2</property>
                                                             <property name="vgap">0</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
@@ -1518,7 +1518,7 @@
                                                             <property name="name">fgMinMicroviasValuesSizer</property>
                                                             <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                             <property name="permission">none</property>
-                                                            <property name="rows">1</property>
+                                                            <property name="rows">2</property>
                                                             <property name="vgap">0</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>

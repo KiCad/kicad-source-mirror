@@ -7,11 +7,16 @@
 
 #include <wx/wx.h>
 
-
+// Note: we should use wxConvUTF8 insdeat of wxConvCurrent here,
+// in order to use UTF8 in Kicad files.
+// But this change break compatibility with older files under Windows,
+// if some non ASCII characters are found in strings.
+// So this is a TODO change.
 #if wxUSE_UNICODE
 #define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvCurrent->cWX2MB( wxstring ) )
 #define CONV_FROM_UTF8( utf8string ) ( wxConvCurrent->cMB2WC( utf8string ) )
 #else
+// Should not used: Kicad uses Unicode verion on wxWidgets
 #define CONV_TO_UTF8( wxstring )     ( (const char*) ( (wxstring).c_str() ) )
 #define CONV_FROM_UTF8( utf8string ) (utf8string)
 #endif

@@ -112,7 +112,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DrawPanel->UnManageCursor( 0, 0, wxEmptyString );
+        DrawPanel->UnManageCursor( );
         break;
     }
 

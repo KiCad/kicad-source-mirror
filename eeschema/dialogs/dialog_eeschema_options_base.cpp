@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -124,23 +124,18 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
 	m_checkShowGrid = new wxCheckBox( m_panel1, wxID_ANY, _("Show g&rid"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer2->Add( m_checkShowGrid, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkShowHiddenPins = new wxCheckBox( m_panel1, wxID_ANY, _("Show hi&dden pins"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer2->Add( m_checkShowHiddenPins, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Enable automatic &panning"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer2->Add( m_checkAutoPan, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkHVOrientation = new wxCheckBox( m_panel1, wxID_ANY, _("Allow buses and wires to be placed in H or V &orientation only"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer2->Add( m_checkHVOrientation, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkPageLimits = new wxCheckBox( m_panel1, wxID_ANY, _("Show p&age limits"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer2->Add( m_checkPageLimits, 0, wxALL|wxEXPAND, 3 );
 	
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 0 );
@@ -173,7 +168,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer2 = new wxFlexGridSizer( 8, 2, 0, 0 );
 	fgSizer2->AddGrowableCol( 1 );
 	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );

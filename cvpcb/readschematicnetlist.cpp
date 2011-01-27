@@ -200,8 +200,8 @@ int WinEDA_CvpcbFrame::ReadSchematicNetlist()
         ptchar = strstr( (char*) &Line[idx], " " );  // Search end of value field (space)
         if( ptchar == 0 )
         {
-            wxString msg;
-            msg.Printf( _( "Netlist error: %s" ), (const wxChar*) CONV_FROM_UTF8( Line ) );
+            wxString msg = _( "Netlist error: " );
+            msg << CONV_FROM_UTF8( Line );
             DisplayError( this, msg );
             k = 0;
         }

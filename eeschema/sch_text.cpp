@@ -478,7 +478,6 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     wxString val = CONV_FROM_UTF8( text );
-
     for( ;; )
     {
         int i = val.find( wxT( "\\n" ) );

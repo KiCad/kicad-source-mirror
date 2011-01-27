@@ -5,7 +5,6 @@
 #define PCBNEW_H
 
 #include "pcbstruct.h"
-#include "macros.h"
 #include "pcbcommon.h"
 #include "class_board_design_settings.h"
 
