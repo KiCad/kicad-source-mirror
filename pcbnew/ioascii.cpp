@@ -374,7 +374,7 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
                 wxString layerName = CONV_FROM_UTF8( data );
                 GetBoard()->SetLayerName( layer, layerName );
 
-                data = strtok( NULL, " " );
+                data = strtok( NULL, " \n\r" );
                 if( data )
                 {
                     LAYER_T type = LAYER::ParseType( data );
