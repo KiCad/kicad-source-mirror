@@ -17,7 +17,7 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
         _( "Datasheet" ),   // Link to a datasheet for component
     };
 
-    if ( (unsigned) aFieldNdx <  DIM(fixedNames) )
+    if( (unsigned) aFieldNdx < DIM(fixedNames) )
         return fixedNames[aFieldNdx];
 
     else
@@ -32,11 +32,12 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
 {
-    // user may want spaces in his field name, ug, so quote them for the parser.
-    out->Print( nestLevel, "(field (name \"%s\")", CONV_TO_UTF8(m_Name) );
+    out->Print( nestLevel, "(field (name %s)",
+        out->Quoted( CONV_TO_UTF8(m_Name) ).c_str() );
 
     if( !m_Value.IsEmpty() )
-        out->Print( 0, "(value \"%s\")", CONV_TO_UTF8(m_Value) );
+        out->Print( 0, "(value %s)",
+            out->Quoted( CONV_TO_UTF8(m_Value) ).c_str() );
 
     if( m_Visible )
         out->Print( 0, " visible" );

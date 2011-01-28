@@ -311,7 +311,7 @@ std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERRO
         }
     }
 
-    if( *squote )
+    if( *squote || strchr( wrapee.c_str(), quote ) )
     {
         // wrap the beginning and end of the string in a quote.
         wrapee.insert( wrapee.begin(), quote );
