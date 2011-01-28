@@ -12,7 +12,6 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "protos.h"
-#include "pcbplot.h"
 
 #include "printout_controler.h"
 

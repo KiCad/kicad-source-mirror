@@ -25,6 +25,8 @@
 #include "pcbnew_id.h"
 #include "richio.h"
 
+#include "pcb_plot_params.h"
+
 /* ASCII format of structures:
  *
  * Structure PAD:
@@ -314,6 +316,27 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
     while(  aReader->ReadLine() )
     {
         Line = aReader->Line();
+
+        if( strnicmp( Line, "PcbPlotParams", 13 ) == 0 )
+        {
+            PCB_PLOT_PARAMS_PARSER parser( &Line[13], aReader->GetSource() );
+
+            try
+            {
+                g_PcbPlotOptions.Parse( &parser );
+            }
+            catch( IO_ERROR& e )
+            {
+                wxString msg;
+                msg.Printf( wxT( "Error reading PcbPlotParams from %s:\n%s" ),
+                            aReader->GetSource().GetData(),
+                            e.errorText.GetData() );
+                wxMessageBox( msg, wxT( "Open Board File" ), wxICON_ERROR );
+            }
+
+            continue;
+        }
+
         strtok( Line, " =\n\r" );
         data = strtok( NULL, " =\n\r" );
 
@@ -576,7 +599,6 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
 
             continue;
         }
-
 #endif
     }
 
@@ -727,6 +749,15 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
              "AuxiliaryAxisOrg %d %d\n",
              aFrame->m_Auxiliary_Axis_Position.x,
              aFrame->m_Auxiliary_Axis_Position.y );
+
+    STRING_FORMATTER sf;
+
+    g_PcbPlotOptions.Format( &sf, 0 );
+
+    wxString record = CONV_FROM_UTF8( sf.GetString().c_str() );
+    record.Replace( wxT("\n"), wxT(""), true );
+    record.Replace( wxT("  "), wxT(" "), true);
+    fprintf( aFile, "PcbPlotParams %s\n", CONV_TO_UTF8( record ) );
 
     fprintf( aFile, "$EndSETUP\n\n" );
     return 1;

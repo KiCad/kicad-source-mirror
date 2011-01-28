@@ -154,6 +154,8 @@ set(PCBNEW_SRCS
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
+    pcb_plot_params.cpp
+    pcb_plot_params_keywords.cpp
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
@@ -253,6 +255,15 @@ make_lexer(
    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_lexer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/specctra_keywords.cpp
    DSN
+   )
+
+
+# auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
+make_lexer(
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
+   PCBPLOTPARAMS_T
    )
 
 
