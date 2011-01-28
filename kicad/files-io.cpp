@@ -135,7 +135,7 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
     };
 
     wxString cmd = wxT( "-o " );    // run minizip with option -o (overwrite)
-    cmd += zip.GetFullPath();
+    cmd += QuoteFullPath(zip);
 
     wxString currdirname = wxT( "." );
     currdirname += zip.GetPathSeparator();
@@ -153,9 +153,9 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
         while( cont )
         {
             wxFileName fn( f );
-            cmd += wxT( " " );
-            cmd +=  fn.GetFullName();
-            PrintMsg( _( "Compress file " ) + fn.GetFullName() + wxT( "\n" ) );
+            wxString filename = QuoteFullPath(fn);
+            cmd += wxT( " " ) + filename;
+            PrintMsg( _( "Archive file " ) + filename + wxT( "\n" ) );
             cont = dir.GetNext( &f );
         }
     }
