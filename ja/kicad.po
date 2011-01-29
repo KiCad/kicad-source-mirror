@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-12 18:07+0900\n"
-"PO-Revision-Date: 2011-01-17 15:23+0900\n"
+"PO-Revision-Date: 2011-01-29 22:49+0900\n"
 "Last-Translator: yoneken <midpika@hotmail.com>\n"
 "Language-Team: KiCad Developers <midpika@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2113,7 +2113,7 @@ msgstr "Specctra DSN ファイル:"
 
 #: pcbnew/menubar_pcbframe.cpp:143
 msgid "Import a routed \"Specctra Session\" (*.ses) file"
-msgstr ""
+msgstr "配線済みのスペクトラ・セッション ファイル (*.ses)のインポート"
 
 #: pcbnew/menubar_pcbframe.cpp:148
 msgid "Import"
@@ -2643,7 +2643,7 @@ msgstr "セッションファイルで不正なレイヤーID \"%s\" が使用�
 
 #: pcbnew/specctra_import.cpp:254
 msgid "Session via padstack has no shapes"
-msgstr ""
+msgstr "パッドスタックを通したセッションにシェイプがありません"
 
 #: pcbnew/specctra_import.cpp:261
 #: pcbnew/specctra_import.cpp:279
@@ -2676,7 +2676,7 @@ msgstr "セッションファイルが存在しないコンポーネント \"%s\
 #: pcbnew/specctra_import.cpp:539
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr ""
+msgstr "wire_via が失われたパッドスタック \"%s\" を参照しています"
 
 #: pcbnew/librairi.cpp:33
 msgid "Kicad foot print export files (*.emp)|*.emp"
@@ -3037,7 +3037,7 @@ msgstr "サポートされていない DRAWSEGMENT タイプ %s です"
 
 #: pcbnew/specctra_export.cpp:868
 msgid "Unable to find the next segment with an endpoint of "
-msgstr ""
+msgstr "この端点を持つ次のセグメントが見つかりません"
 
 #: pcbnew/specctra_export.cpp:871
 msgid "Edit Edges_Pcb segments, making them contiguous."
@@ -3160,11 +3160,11 @@ msgstr "モジュールのチェック"
 
 #: pcbnew/netlist.cpp:714
 msgid "Duplicates"
-msgstr ""
+msgstr "重複"
 
 #: pcbnew/netlist.cpp:734
 msgid "Lack:"
-msgstr ""
+msgstr "ラック:"
 
 #: pcbnew/netlist.cpp:756
 #, fuzzy
@@ -3510,11 +3510,11 @@ msgstr "パッドの追加"
 #: pcbnew/tool_modedit.cpp:175
 #: pcbnew/menubar_modedit.cpp:285
 msgid "Place the footprint module reference anchor"
-msgstr ""
+msgstr "アンカーを参照したフットプリント モジュールの配置"
 
 #: pcbnew/tool_modedit.cpp:208
 msgid "Display Polar Coord ON"
-msgstr ""
+msgstr "同層電極の表示 ON"
 
 #: pcbnew/tool_modedit.cpp:220
 msgid "Change Cursor Shape"
@@ -3805,7 +3805,7 @@ msgstr "数"
 
 #: pcbnew/build_BOM_from_board.cpp:91
 msgid "Designation"
-msgstr ""
+msgstr "名称"
 
 #: pcbnew/build_BOM_from_board.cpp:92
 #, fuzzy
@@ -3903,7 +3903,7 @@ msgstr "???"
 
 #: pcbnew/class_board_item.cpp:67
 msgid ") of "
-msgstr ""
+msgstr ") の"
 
 #: pcbnew/class_board_item.cpp:71
 msgid "Pcb Graphic"
@@ -4063,7 +4063,7 @@ msgstr "DRCエラー: 端の点が内部にあるか、他のエリアに近す�
 
 #: pcbnew/zones_by_polygon.cpp:649
 msgid "DRC error: closing this area creates a drc error with an other area"
-msgstr ""
+msgstr "DRCエラー: 密接したこのエリアは他のエリアとのDRCエラーを引き起こします"
 
 #: pcbnew/find.cpp:112
 msgid "Marker found"
@@ -4277,6 +4277,9 @@ msgid ""
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
+"フットプリントの認識方法を選択:\n"
+"リファレンス (U1, R3, ...) による (標準)\n"
+"タイムスタンプによる (回路図全体の再アノテーション後に使用する特殊な設定)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:46
@@ -4384,7 +4387,7 @@ msgstr "属性:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
 msgid "Free"
-msgstr ""
+msgstr "フリー"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
 msgid "Locked"
@@ -4408,7 +4411,7 @@ msgstr "180度回転"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:128
 msgid "Masks clearances local values:"
-msgstr ""
+msgstr "ローカル マスク クリアランス値:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:130
 msgid "Set these values to 0 to use global values"
@@ -4447,6 +4450,9 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used"
 msgstr ""
+"これはフットプリントのパッドとハンダマスク間のローカル クリアランスです。\n"
+"この値はパッドのローカル値に取って替わられます。\n"
+"0ならば、グローバルな値が使用されます。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:170
 msgid "inch"
@@ -4465,11 +4471,15 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
+"これはフットプリントのパッドとハンダペースト間のローカル クリアランスです。\n"
+"この値はパッドのローカル値に取って替わられます。\n"
+"最終的なクリアランス値はこの値とクリアランス率の合算です。\n"
+"負値ならば、パッド径よりも小さなマスクが使用されます。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:187
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:334
 msgid "Solder mask ratio clearance:"
-msgstr ""
+msgstr "ハンダ マスク率 クリアランス:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:189
 msgid ""
@@ -4480,6 +4490,12 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"これはフットプリント用のパッドとハンダ ペースト間のローカル クリアランス率を\n"
+"パーセント指定したものです。\n"
+"これが10のとき、クリアランスの値はパッドの10%になります。\n"
+"この値はパッドのローカル値に上書きされます。\n"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。\n"
+"負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:196
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:343
@@ -4528,7 +4544,7 @@ msgstr "DRCリポートファイルの保存"
 
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:40
 msgid "from "
-msgstr ""
+msgstr "から"
 
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:256
 msgid "Footprint library files:"
@@ -4640,7 +4656,7 @@ msgstr "SoldP_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:80
 msgid "If you want an adhesive template for the front side of the board"
-msgstr ""
+msgstr "ボード表面に接着するテンプレートが欲しい場合"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:89
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:114
@@ -4788,7 +4804,7 @@ msgstr "ジャンパー"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:573
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:604
 msgid "Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus."
-msgstr ""
+msgstr "Freerouter用の銅箔レイヤー。電源レイヤーはFreerouterのレイヤーメニューで削除されます。"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:579
 msgid "Layer name of back (bottom) copper layer"
@@ -4839,7 +4855,7 @@ msgstr "PCBbew (基板エディタ)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:720
 msgid "If you want a board perimeter layer"
-msgstr ""
+msgstr "ボード外周に図面レイヤーが欲しい場合"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:729
 #, fuzzy
@@ -4855,7 +4871,7 @@ msgstr "Eco1_later"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:800
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:825
 msgid "Auxiliary"
-msgstr ""
+msgstr "補助の"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:756
 msgid "Eco2_later"
@@ -4936,7 +4952,7 @@ msgstr "ポリノミナル シェイプの追加"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:164
 msgid "Trap. Direction"
-msgstr ""
+msgstr "トラップ。方向"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:171
 msgid ">"
@@ -4948,16 +4964,16 @@ msgstr "^"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:180
 msgid "Rot 0"
-msgstr ""
+msgstr "0回転"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:204
 msgid "Oval"
-msgstr ""
+msgstr "楕円"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:198
 msgid "Trapezoidal"
-msgstr ""
+msgstr "台形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:200
 msgid "Pad Shape:"
@@ -5017,6 +5033,9 @@ msgid ""
 "This pad is flipped on board.\n"
 "Back and front layers will be swapped."
 msgstr ""
+"警告:\n"
+"このパッドはボード上でひっくり返されています。\n"
+"裏と表レイヤーは交換されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Clearances:"
@@ -5057,6 +5076,10 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value ratio\n"
 "A negative value means a smaller mask size than pad size"
 msgstr ""
+"これはパッドとハンダ ペースト間のローカル クリアランスです。\n"
+"0ならばグローバル値が使用されます。\n"
+"最終的なクリアランス値はこの値とクリアランス率の合算となります。\n"
+"負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 msgid ""
@@ -5066,6 +5089,11 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"これはこのパッドとハンダ ペースト間のローカル クリアランス率をパーセント指定したものです。\n"
+"これが10のとき、クリアランスの値はパッドの10%になります。\n"
+"0のときはフットプリントの値かグローバル値が使用されます。\n"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。\n"
+"負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:356
 msgid "Standard"
@@ -5209,6 +5237,8 @@ msgid ""
 "Choose if you wand to draw the sheet like it appears on screen,\n"
 "or in black and white mode, better to print it when using  black and white printers"
 msgstr ""
+"スクリーンに現れるようなシートを描いたり、モノクロモードを使用したり、\n"
+"モノクロのプリンターでより良い印刷をした場合に選択"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:46
 msgid "Page Options"
@@ -5359,6 +5389,8 @@ msgid ""
 "Paths  (system paths and user paths) used to search and load libraries files and component doc files.\n"
 "Sorted by decreasing priority order."
 msgstr ""
+"パス (システムのパスとユーザーパス) を使用してライブラリとコンポーネントのドキュメント\n"
+"ファイルは検索されます。これは降順の優先度でソートされます。"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:25
 msgid "Export/Import to/from FreeRoute:"
@@ -5384,7 +5416,7 @@ msgstr "Java Web Startの機能を使用して、インターネット（もし�
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:50
 msgid "Back Import the Specctra Session (*.ses) File"
-msgstr ""
+msgstr "スペクトラ・セッション ファイル (*.ses) のバックインポート"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange_base.cpp:51
 msgid "Merge a session file created by FreeRouter with the current board."
@@ -5692,7 +5724,7 @@ msgstr "最大リンク:"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:56
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
-msgstr ""
+msgstr "カーソルから最も近いパッドまでに表示されたラッツネット ナンバーをアジャスト"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:60
 msgid "Auto Save (minutes):"
@@ -5731,6 +5763,8 @@ msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
 msgstr ""
+"移動時にフットプリントに関連したローカルのラッツネストを表示 (非表示)。\n"
+"このラッツネストはフットプリントの配置に役立ちます。"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:93
 #, fuzzy
@@ -5747,7 +5781,7 @@ msgstr "配線は45度のみです"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:101
 msgid "If enabled, force tracks directions to H, V or 45 degrees, when creating a track."
-msgstr ""
+msgstr "可能ならば、配線時にパターンの方向を横・縦・45度で合わせる"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:105
 #, fuzzy
@@ -5756,7 +5790,7 @@ msgstr "配線は45度のみです"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:107
 msgid "If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers."
-msgstr ""
+msgstr "可能ならば、セグメントやテクニカルレイヤーの作成時にセグメントの方向を横・縦・45度で合わせる"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:111
 #, fuzzy
@@ -5765,7 +5799,7 @@ msgstr "自動幅"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Allows auto pan when creating a track, or moving an item."
-msgstr ""
+msgstr "配線時やアイテムの移動時の自動視点移動を許可"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:117
 #, fuzzy
@@ -5773,13 +5807,14 @@ msgid "Double Segm Track"
 msgstr "配線幅の変更"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:119
+#, fuzzy
 msgid "If enabled, uses two track segments, with 45 degrees angle between them when creating a new track "
-msgstr ""
+msgstr "可能ならば、新規配線時に2本の配線パターンセグメントを"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:136
 msgid "Never"
-msgstr ""
+msgstr "二度としない"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:136
@@ -5790,7 +5825,7 @@ msgstr "配線とビアをクリア(&C)"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:136
 msgid "Always"
-msgstr ""
+msgstr "いつも"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:130
 #, fuzzy
@@ -5816,15 +5851,15 @@ msgstr "パッド フィルター:"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr ""
+msgstr "違うシェイプのパッドは更新しない"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:29
 msgid "Do not modify pads having different layers"
-msgstr ""
+msgstr "違うレイヤーのパッドは更新しない"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:33
 msgid "Do not modify pads having a different orientation"
-msgstr ""
+msgstr "違うオリエンテーションのパッドは更新しない"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:44
 msgid "Pad Editor"
@@ -5848,11 +5883,11 @@ msgstr "テクニカル レイヤー:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:35
 msgid "Exclude Edges_Pcb Layer"
-msgstr ""
+msgstr "Edges_Pcbレイヤーの除外"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:37
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
-msgstr ""
+msgstr "全ての他のレイヤーからEdges_Pcbレイヤーに含まれるものを除外"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:46
 #, fuzzy
@@ -5891,6 +5926,8 @@ msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
 "Used mainly to draw items in sketch mode."
 msgstr ""
+"アイテムを描くのに使用されるペン サイズが指定されていません。\n"
+"スケッチモードでアイテムを描画されることに主に使用されます。"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
 #, fuzzy
@@ -5978,7 +6015,7 @@ msgstr "上に移動"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 msgid "Move the currently selected Net Class up one row"
-msgstr ""
+msgstr "現在選択中のネットを一行上のクラスに移動"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:94
 msgid "Membership:"
@@ -6041,6 +6078,8 @@ msgid ""
 "Select the current via type.\n"
 "Trough via is the usual selection"
 msgstr ""
+"現在のビア タイプを選択。\n"
+"スルービアが通常の選択です。"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:181
 msgid "Min via diameter"
@@ -6452,6 +6491,8 @@ msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"デフォルトのファイル名でないものを使いたい場合、ファイル名を入力してください。\n"
+"これは現在のシートを印刷するときにのみ使用されます。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:98
@@ -6489,7 +6530,7 @@ msgstr "Freerouteのヘルプ"
 
 #: pcbnew/dialogs/dialog_freeroute_exchange.cpp:92
 msgid "Do you want to rebuild connectivity data ?"
-msgstr ""
+msgstr "接続可能生のデータを再構築しますか？"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:22
 msgid "Current Settings:"
@@ -6537,11 +6578,11 @@ msgstr "グローバル編集オプション:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:131
 msgid "Set tracks and vias of the current Net to the current value"
-msgstr ""
+msgstr "現在のネットの配線パターンとビアを現在の値にセットし"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:135
 msgid "Set tracks and vias of the current Net to the Netclass value"
-msgstr ""
+msgstr "現在のネットの配線パターンとビアをネットクラスの値にセット"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:138
 msgid "Set all tracks and vias to their Netclass value"
@@ -6565,12 +6606,17 @@ msgid ""
 "- a positive value means a mask bigger than a pad\n"
 "- a negative value means a mask smaller than a pad\n"
 msgstr ""
+"注意:\n"
+"- 正の値ではマスクがパッドよりも大\n"
+"- 負の値ではマスクがパッドよりも小\n"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:44
 msgid ""
 "This is the global clearance between pads and the solder mask\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"これはパッドとハンダ マスク間のグローバル クリアランスです。\n"
+"この値はフットプリントかパッドのローカルな値に上書きされます。"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:57
 msgid ""
@@ -6578,6 +6624,9 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value ratio"
 msgstr ""
+"これはパッドとハンダ マスク間のグローバル クリアランスです。\n"
+"この値はフットプリントかパッドのローカルな値に上書きされます。\n"
+"最終的なクリアランスの値は、この値とクリアランス率の合算となります。"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:70
 msgid ""
@@ -6589,27 +6638,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:207
 msgid "Back side (footprint is mirrored)"
-msgstr ""
+msgstr "裏面 (フットプリントは鏡像)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:639
 msgid "Unknown netname, netname not changed"
-msgstr ""
+msgstr "不明なネット名、ネット名は変更されていません"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:838
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr ""
+msgstr "不正なパッド ドリル値: パッド ドリルがパッド径よりも大きいです"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:847
 msgid "Error: pad is not on a copper layer and has a hole"
-msgstr ""
+msgstr "エラー: パッドが銅箔レイヤー上になく、穴をもっています"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:855
 msgid "Incorrect value for pad offset"
-msgstr ""
+msgstr "不正なパッド オフセット値"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:861
 msgid "Too large value for pad delta size"
-msgstr ""
+msgstr "広過ぎるパッド デルタ サイズ"
 
 #: pcbnew/dialogs/dialog_general_options.cpp:225
 msgid "Show &Layers Manager"
@@ -6637,7 +6686,7 @@ msgstr "*"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
 msgid "Filter to select footprints by reference"
-msgstr ""
+msgstr "リファレンスで選択するフットプリントを選別"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
 #, fuzzy
@@ -6646,7 +6695,7 @@ msgstr "新規フットプリントをアーカイブ"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
 msgid "Force locked footprints to be modified"
-msgstr ""
+msgstr "強制的にロックされたフットプリントを編集"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
 #, fuzzy
@@ -6667,7 +6716,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:33
 msgid "delete track segment having a dangling end"
-msgstr ""
+msgstr "浮き配線を持つ配線セグメントを削除"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:37
 msgid "Connect to pads"
@@ -6799,11 +6848,11 @@ msgstr "フットプリントの印刷"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:154
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
-msgstr ""
+msgstr "現在のネット配線パターンとビア径・ドリルを現在の値にセットしますか？"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:165
 msgid "Set current Net tracks and vias sizes and drill to the Netclass default value?"
-msgstr ""
+msgstr "現在のネット配線パターンとビア径・ドリルをデフォルトの値にセットしますか？"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:174
 msgid "Set All Tracks and Vias to Netclass value"
@@ -6833,17 +6882,17 @@ msgstr "このパッドに現在のセッティングをコピー"
 #: pcbnew/dialogs/dialog_design_rules.cpp:213
 #, c-format
 msgid "Minimum value for tracks width: <b>%s</b><br>\n"
-msgstr ""
+msgstr "配線パターンの最小幅: <b>%s</b> <br>\n"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:217
 #, c-format
 msgid "Minimum value for vias diameter: <b>%s</b><br>\n"
-msgstr ""
+msgstr "ビアの最小径: <b>%s</b> <br>\n"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:224
 #, c-format
 msgid "Minimum value for microvias diameter: <b>%s</b><br>\n"
-msgstr ""
+msgstr "マイクロビアの最小径: <b>%s</b> <br>\n"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:684
 msgid "Errors detected, Abort"
@@ -6864,57 +6913,57 @@ msgstr "デフォルトのネットクラスは削除できません"
 #: pcbnew/dialogs/dialog_design_rules.cpp:994
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
-msgstr ""
+msgstr "%s: <b>配線パターン サイズ</b> &lt; <b>最小配線パターンサイズ</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1008
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>"
-msgstr ""
+msgstr "%s: <b>ビア径</b> &lt; <b>最小ビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1020
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
-msgstr ""
+msgstr "%s: <b>ビア ドリル</b> &ge; <b>ビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1029
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
-msgstr ""
+msgstr "%s: <b>ビア ドリル</b> &lt; <b>最小ビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1043
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
-msgstr ""
+msgstr "%s: <b>マイクロアビア径</b> &lt; <b>最小マイクロアビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1055
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
-msgstr ""
+msgstr "%s: <b>マイクロアビア ドリル</b> &ge; <b>マイクロアビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1064
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
-msgstr ""
+msgstr "%s: <b>最小マイクロアビア ドリル</b> &lt; <b>最小マイクロアビア ドリル</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1084
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
-msgstr ""
+msgstr "<b>エクストラ 配線パターン %d サイズ</b> %s &lt; <b>最小配線パターンサイズ</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1092
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
-msgstr ""
+msgstr "<b>エクストラ 配線パターン %d サイズ</b> %s &gt; <b>1インチ!</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1111
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
-msgstr ""
+msgstr "<b>エクストラ ビア %d 径</b> %s &lt; <b>最小ビア径</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1119
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
-msgstr ""
+msgstr "<b>エクストラ ビア %d 径</b> %s &gt; <b>1インチ!</b><br>"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27
 msgid "Grid Size Units"
@@ -7080,14 +7129,17 @@ msgid ""
 "Depending on the complexity and the size of the zone,\n"
 "sometimes polygons are better and sometimes segments are better."
 msgstr ""
+"塗りつぶしエリアはポリゴンやセグメントに使用できます。\n"
+"複雑さとゾーンの大きさによって、ポリゴンが適していたり、\n"
+"セグメントが適していたりします。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid "16 segments / 360 deg"
-msgstr ""
+msgstr "16セグメント/360度"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid "32 segments / 360 deg"
-msgstr ""
+msgstr "32セグメント/360度"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
 msgid "Arcs Approximation:"
@@ -7099,6 +7151,9 @@ msgid ""
 "16 segment is faster to calculate and when redraw screen.\n"
 "32 segment give a better quality"
 msgstr ""
+"だいたいの円を埋める計算に使うセグメント数。\n"
+"16セグメントは計算とスクリーンの再描画が高速です。\n"
+"32セグメントではより良い品質が得られます。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:56
 #, fuzzy
@@ -7107,7 +7162,7 @@ msgstr "未接続パッド"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:56
 msgid "Thermal relief"
-msgstr ""
+msgstr "サーマル リリーフ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:56
 #, fuzzy
@@ -7121,7 +7176,7 @@ msgstr "ゾーンの塗りつぶされたエリアを削除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:63
 msgid "Thermal Reliefs:"
-msgstr ""
+msgstr "サーマル リリーフ:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:65
 #, fuzzy
@@ -7130,7 +7185,7 @@ msgstr "ユーザー グリッドのサイズ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:70
 msgid "Define the gap around the pad"
-msgstr ""
+msgstr "パッド周りのギャップ定義"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:74
 msgid "Copper Width"
@@ -7138,7 +7193,7 @@ msgstr "銅箔の幅"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:79
 msgid "Define the tickness of copper in thermal reliefs"
-msgstr ""
+msgstr "サーマル リリーフ内の銅箔厚み定義"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
 #, fuzzy
@@ -7171,6 +7226,10 @@ msgid ""
 "- Short hatching\n"
 "- Full zone area hatched"
 msgstr ""
+"ゾーン外周の描画方法を選択\n"
+"- 一本線\n"
+"- 破線\n"
+"- ゾーンエリアをハッチで埋める"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
 msgid "Others Options:"
@@ -7183,15 +7242,15 @@ msgstr "現在のネットクラスのクリアランス値"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Value of minimun thickness of filled areas"
-msgstr ""
+msgstr "塗りつぶしエリアの最小厚さ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 msgid "Export Setup to other zones"
-msgstr ""
+msgstr "他のゾーンに設定をエクスポート"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 msgid "Export this zone setup to all other copper zones"
-msgstr ""
+msgstr "他の銅箔ゾーンにゾーン設定をエクスポート"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:155
 msgid "Ok"
@@ -7213,11 +7272,11 @@ msgstr "全ての銅箔面を表示"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:168
 msgid "Filtered, alphabetic"
-msgstr ""
+msgstr "アルファベット順でフィルタ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:168
 msgid "Filtered, advanced"
-msgstr ""
+msgstr "高度なフィルタ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:170
 #, fuzzy
@@ -7230,30 +7289,37 @@ msgid ""
 "By alphabetic order\n"
 "By number of pads in the net (advanced)"
 msgstr ""
+"ネットは並べ替えできます:\n"
+"アルファベット順\n"
+"ネット内のパッド数順 (高度)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:176
 msgid "Filter: Hidden Nets"
-msgstr ""
+msgstr "フィルタ: 隠れネット"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:181
 msgid ""
 "Pattern in advanced mode, to filter net names in list\n"
 "Net names matching this pattern are not displayed"
 msgstr ""
+"リスト内のネット名をフィルタするアドバンスモードのパターン,\n"
+"このパターンにマッチしたネット名は表示されません"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:185
 msgid "Filter: Allowed Nets"
-msgstr ""
+msgstr "フィルタ: 許可されたネット"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid ""
 "Pattern in advanced mode, to filter net names in list\n"
 "Only net names matching this pattern are displayed"
 msgstr ""
+"リスト内のネット名をフィルタするアドバンスモードのパターン,\n"
+"このパターンにマッチしたネット名のみ表示されます"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
 msgid "Apply Filters"
-msgstr ""
+msgstr "フィルタ適用"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:200
 msgid "Create file "
@@ -7269,7 +7335,7 @@ msgstr "テキスト内容:"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:24
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "選択されたレイヤー上に置くテキストを入力"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:56
 msgid "Position X"
@@ -7281,31 +7347,31 @@ msgstr "ポジション Y"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:77
 msgid "Select the layer on which text should lay."
-msgstr ""
+msgstr "テキストを置くレイヤーを選択"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:38
 msgid "Use proper Gerber extensions"
-msgstr ""
+msgstr "正規のガーバー エクステンションを使用"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:39
 msgid "Use Proper Gerber Extensions - .GBL, .GTL, etc..."
-msgstr ""
+msgstr "正規のガーバー エクステンションを使用 - .GBL, .GTL, など..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:43
 msgid "Exclude pcb edge layer"
-msgstr ""
+msgstr "PCBエッジレイヤーの除外"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:44
 msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr ""
+msgstr "PCBエッジレイヤーの内容を他のレイヤーから除外"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:48
 msgid "Subtract mask from silk"
-msgstr ""
+msgstr "シルクからマスクを減算"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:49
 msgid "Remove silkscreen from areas without soldermask"
-msgstr ""
+msgstr "ハンダマスクを除いてエリアからシルクスクリーンを削除"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:53
 #, fuzzy
@@ -7314,7 +7380,7 @@ msgstr "プロット ファイル <%s> が作成されました"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:56
 msgid "Plot pads on silkscreen"
-msgstr ""
+msgstr "シルクスクリーンにパッドをプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:57
 msgid ""
@@ -7322,6 +7388,9 @@ msgid ""
 "When disable, pads are never potted on silkscreen layers\n"
 "When enable, pads are potted only if they appear on silkscreen layers"
 msgstr ""
+"シルクスクリーンレイヤー上のパッドの印刷/プロットを有効化/無効化\n"
+"無効化のとき、パッドはシルクスクリーンレイヤー上にプロットされません。\n"
+"有効かのとき、パッドはシルクスクリーン上にのみ現れます。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:61
 #, fuzzy
@@ -7335,19 +7404,19 @@ msgstr "モジュール自動配置"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:67
 msgid "Plot other module texts"
-msgstr ""
+msgstr "他モジュールのテキストをプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
-msgstr ""
+msgstr "シルクスクリーンレイヤー上のモジュール フィールドのテキストを印刷/プロットを有効化/無効化"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:72
 msgid "Force plot invisible texts"
-msgstr ""
+msgstr "非表示テキストを強制的にプロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:73
 msgid "Force print/plot module invisible texts on silkscreen layers"
-msgstr ""
+msgstr "シルクスクリーンレイヤー上のモジュール非表示テキストを強制的に印刷/プロット"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:82
 #, fuzzy
@@ -7401,7 +7470,7 @@ msgstr "プロット原点"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Gerber"
@@ -7447,7 +7516,7 @@ msgstr "ペン ナンバー"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid "Set plot overlay for filling"
-msgstr ""
+msgstr "塗りつぶしのプロットオーバーレイを設定"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:153
 msgid "Plot Options:"
@@ -7470,7 +7539,7 @@ msgstr "スクリーンに合わせる"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:162
 msgid "Print/plot vias on mask layers. They are in this case not protected"
-msgstr ""
+msgstr "マスクレイヤー上のビアを印刷/プロット。この場合、それらはプロテクトされていません。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:180
 #, fuzzy
@@ -7537,7 +7606,7 @@ msgstr "配線パターン:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:26
 msgid "Select how tracks are displayed"
-msgstr ""
+msgstr "配線パターンの表示方法を選択"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:30
 msgid "New track"
@@ -7545,7 +7614,7 @@ msgstr "新規配線パターン"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:30
 msgid "New track with via area"
-msgstr ""
+msgstr "ビアエリアに新規配線パターン"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:32
 #, fuzzy
@@ -7557,6 +7626,8 @@ msgid ""
 "Show( or not) tracks clearance area.\n"
 "If New track is selected,  track clearance area is shown only when creating the track."
 msgstr ""
+"配線パターンのクリアランス エリアを表示/非表示。\n"
+"新しい配線パターンが選択された場合、クリアランス エリアは配線が作成されたときのみ表示されます"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:38
 msgid "Defined holes"
@@ -7571,6 +7642,8 @@ msgid ""
 "Show (or not) via holes.\n"
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
+"ビア穴の表示/非表示。\n"
+"選択された定義穴の場合、デフォルト径でない穴のみ表示されます。"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:49
 msgid "Net Names:"
@@ -7599,7 +7672,7 @@ msgstr "ネット名を表示:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:55
 msgid "Show or not net names on pads and/or tracks"
-msgstr ""
+msgstr "パッドと/か配線パターンのネット名を表示/非表示"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:62
 msgid "Footprints:"
@@ -7611,7 +7684,7 @@ msgstr "モジュール端:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:75
 msgid "Texts:"
-msgstr ""
+msgstr "テキスト:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:82
 msgid "Pad Options:"
@@ -7640,7 +7713,7 @@ msgstr "パッド削除 (モジュール %s %s)"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:118
 msgid "Others:"
-msgstr ""
+msgstr "他:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:122
 msgid "Display other items:"
@@ -7652,21 +7725,23 @@ msgstr "ページの制限を表示"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
 msgid "Error : Zone clearance is set to an unreasonnable value"
-msgstr ""
+msgstr "エラー: ゾーンのクリアランスが無意味な値にセットされています"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:279
 msgid ""
 "Error :\n"
 "you must choose a copper bridge value for thermal reliefs bigger than the min zone thickness"
 msgstr ""
+"エラー:\n"
+"サーマルリリーフ用の銅箔ブリッジの値は最薄ゾーン厚みより大きいものを選ばなけれなばりません"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:303
 msgid "Error : you must choose a net name"
-msgstr ""
+msgstr "エラー: ネット名を選択してください"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:310
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
-msgstr ""
+msgstr "\"未配線\"オプションが選択されました。浮きパターンを作成します。本当に大丈夫ですか？"
 
 #: eeschema/lib_export.cpp:43
 msgid "Import Component"
@@ -7675,11 +7750,11 @@ msgstr "コンポーネントのインポート"
 #: eeschema/lib_export.cpp:63
 #, c-format
 msgid "Component library file <%s> is empty."
-msgstr ""
+msgstr "コンポーネント ライブラリ ファイル <%s> は空です。"
 
 #: eeschema/lib_export.cpp:102
 msgid "There is no component selected to save."
-msgstr ""
+msgstr "保存するのに選択されたコンポーネントがありません。"
 
 #: eeschema/lib_export.cpp:109
 msgid "New Library"
@@ -7777,7 +7852,7 @@ msgstr "フットプリントの文書化"
 
 #: eeschema/tool_sch.cpp:157
 msgid "Hierarchy Push/Pop"
-msgstr ""
+msgstr "階層構造を上下に移動"
 
 #: eeschema/tool_sch.cpp:251
 #, fuzzy
@@ -7807,6 +7882,8 @@ msgid ""
 "Part is a POWER, value cannot be modified!\n"
 "You must create a new power"
 msgstr ""
+"電源パーツの値は編集できません!\n"
+"新しい電源を作成する必要があります"
 
 #: eeschema/edit_component_in_schematic.cpp:135
 #, fuzzy
@@ -7815,11 +7892,11 @@ msgstr "テキストエディタで編集する(&E)"
 
 #: eeschema/edit_component_in_schematic.cpp:166
 msgid "Reference needed !, No change"
-msgstr ""
+msgstr "リファレンスが必要です! 変更されません"
 
 #: eeschema/edit_component_in_schematic.cpp:170
 msgid "Value needed !, No change"
-msgstr ""
+msgstr "値が必要です! 変更されません"
 
 #: eeschema/edit_component_in_schematic.cpp:304
 #, fuzzy
@@ -7843,7 +7920,7 @@ msgstr "編集するファイルを読み込む"
 
 #: eeschema/backanno.cpp:147
 msgid "Set the foot print field to visible?"
-msgstr ""
+msgstr "フットプリントフィールドを可視化しますか?"
 
 #: eeschema/backanno.cpp:148
 #, fuzzy
@@ -7885,12 +7962,12 @@ msgstr "線の幅"
 
 #: eeschema/lib_bezier.cpp:384
 msgid "Bounding box"
-msgstr ""
+msgstr "境界ボックス"
 
 #: eeschema/annotate.cpp:97
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "%d 重複したタイムスタンプが見つかり、置き換えられました。"
 
 #: eeschema/annotate.cpp:523
 #, fuzzy, c-format
@@ -7900,7 +7977,7 @@ msgstr "%s ピン %s が見つかりません"
 #: eeschema/annotate.cpp:527
 #, c-format
 msgid "( unit %d)"
-msgstr ""
+msgstr "(ユニット %d)"
 
 #: eeschema/annotate.cpp:551
 #, fuzzy, c-format
@@ -7910,7 +7987,7 @@ msgstr "アイテム削除"
 #: eeschema/annotate.cpp:553
 #, c-format
 msgid " unit %d and no more than %d parts"
-msgstr ""
+msgstr "ユニット %d と %d パーツ以下"
 
 #: eeschema/annotate.cpp:593
 #: eeschema/annotate.cpp:621
@@ -7922,22 +7999,22 @@ msgstr "アイテム削除"
 #: eeschema/annotate.cpp:625
 #, c-format
 msgid " (unit %d)"
-msgstr ""
+msgstr "(ユニット %d)"
 
 #: eeschema/annotate.cpp:648
 #, c-format
 msgid "Diff values for %s%d.%c (%s) and %s%d.%c (%s)"
-msgstr ""
+msgstr "%s%d.%c (%s) と %s%d.%c (%s) の差分値"
 
 #: eeschema/annotate.cpp:658
 #, c-format
 msgid "Diff values for %s%d%c (%s) and %s%d%c (%s)"
-msgstr ""
+msgstr "%s%d%c (%s) と %s%d%c (%s) の差分値"
 
 #: eeschema/annotate.cpp:698
 #, c-format
 msgid "duplicate time stamp (%s) for %s%d and %s%d"
-msgstr ""
+msgstr "重複したタイムスタンプ - (%s) %s%d と %s%d のもの"
 
 #: eeschema/libedit.cpp:28
 #, fuzzy
@@ -7955,6 +8032,9 @@ msgid ""
 "\n"
 "Discard current changes?"
 msgstr ""
+"現在のパーツは保存されていません。\n"
+"\n"
+"現在の変更を破棄しますか？"
 
 #: eeschema/libedit.cpp:102
 #, c-format
