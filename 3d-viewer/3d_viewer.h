@@ -141,11 +141,11 @@ private:
     /// Tracks whether to use Orthographic or Perspective projection
     //TODO: Does this belong here, or in  WinEDA3D_DrawFrame ???
     bool         m_ortho;
-#if wxCHECK_VERSION( 2, 9, 0 )
+#if wxCHECK_VERSION( 2, 7, 0 )
     wxGLContext* m_glRC;
 #endif
 public:
-    Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent );
+    Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList = 0 );
     ~Pcb3D_GLCanvas();
 
     void   ClearLists();

@@ -73,9 +73,9 @@ EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
                 Pcb3D_GLCanvas::OnPopUpMenu )
 END_EVENT_TABLE()
 
-Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
-#if wxCHECK_VERSION( 2, 9, 0 )
-    wxGLCanvas( parent, -1, NULL, wxDefaultPosition, wxDefaultSize,
+Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList ) :
+#if wxCHECK_VERSION( 2, 7, 0 )
+    wxGLCanvas( parent, -1, attribList, wxDefaultPosition, wxDefaultSize,
                 wxFULL_REPAINT_ON_RESIZE )
 #else
     wxGLCanvas( parent, -1, wxDefaultPosition, wxDefaultSize,
@@ -87,7 +87,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent ) :
     m_Parent = parent;
     m_ortho = false;
 
-#if wxCHECK_VERSION( 2, 9, 0 )
+#if wxCHECK_VERSION( 2, 7, 0 )
 
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext( this );
@@ -101,7 +101,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 {
     ClearLists();
     m_init = FALSE;
-#if wxCHECK_VERSION( 2, 9, 0 )
+#if wxCHECK_VERSION( 2, 7, 0 )
     delete m_glRC;
 #endif
 }

@@ -78,7 +78,8 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
     ReCreateVToolbar();
 
     // Make a Pcb3D_GLCanvas
-    m_Canvas = new Pcb3D_GLCanvas( this );
+    int attrs[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0};
+    m_Canvas = new Pcb3D_GLCanvas( this, attrs );
 
     m_auimgr.SetManagedWindow( this );
 

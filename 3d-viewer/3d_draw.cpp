@@ -55,7 +55,11 @@ static void CALLBACK tesswxPoint2Vertex( const GLvoid* data );
 
 void Pcb3D_GLCanvas::Redraw( bool finish )
 {
-#if wxCHECK_VERSION( 2, 9, 0 )
+    /* SwapBuffer requires the window to be shown before calling */
+    if( !IsShown() )
+        return;
+
+#if wxCHECK_VERSION( 2, 7, 0 )
     SetCurrent( *m_glRC );
 #else
     SetCurrent();
@@ -96,8 +100,9 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
     }
 
     glFlush();
-    if( finish )
+    if( finish );
         glFinish();
+
     SwapBuffers();
 }
 
