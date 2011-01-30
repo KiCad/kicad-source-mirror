@@ -207,9 +207,10 @@ void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
 void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
+    wxString path = wxT("\"");
+    path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT("\"");
 
-    ExecuteFile( this, GERBVIEW_EXE,
-                 fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
+    ExecuteFile( this, GERBVIEW_EXE, path );
 }
 
 
@@ -238,8 +239,10 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    wxString filename = wxT("\"");
+    filename += dlg.GetPath() + wxT("\"");
     if( !dlg.GetPath().IsEmpty() &&  !wxGetApp().GetEditorName().IsEmpty() )
-        ExecuteFile( this, wxGetApp().GetEditorName(), dlg.GetPath() );
+        ExecuteFile( this, wxGetApp().GetEditorName(), filename );
 }
 
 

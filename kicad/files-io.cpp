@@ -18,6 +18,7 @@
 #include "bitmaps.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "macros.h"
 
 #include "kicad.h"
 #include "prjconfig.h"
@@ -168,7 +169,8 @@ void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
     if( ExecuteFile( this, ZIPPER, cmd ) >= 0 )
     {
         wxString msg;
-        msg.Printf( _("\nCreate Zip Archive <%s>" ), zip.GetFullName().GetData() );
+        wxString filename = QuoteFullPath(zip);
+        msg.Printf( _("\nZip archive <%s> created" ), GetChars( filename ) );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
