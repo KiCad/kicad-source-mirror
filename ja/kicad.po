@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-12 18:07+0900\n"
-"PO-Revision-Date: 2011-01-29 22:49+0900\n"
+"PO-Revision-Date: 2011-01-30 17:21+0900\n"
 "Last-Translator: yoneken <midpika@hotmail.com>\n"
 "Language-Team: KiCad Developers <midpika@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -13,6 +13,7 @@ msgstr ""
 "X-Poedit-Basepath: /home/yoneken/workspace/embedded/kicad\n"
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
+"X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,2620\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
 "X-Poedit-SearchPath-2: eeschema\n"
@@ -5144,7 +5145,7 @@ msgstr "ハンダ ペーストのクリアランス"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:386
 msgid "Silkscreen Cmp"
-msgstr ""
+msgstr "コンポーネント シルクスクリーン"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:389
 #, fuzzy
@@ -5263,6 +5264,8 @@ msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
 msgstr ""
+"この属性はハンダ コンポーネント用に使用されます。\n"
+"このオプションを持つコンポーネントのみがフットプリント ポジション リスト ファイルにリストされます。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:227
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:91
@@ -6496,15 +6499,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:89
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:98
-#, fuzzy
 msgid "Center X"
-msgstr "中央寄せ"
+msgstr "X中央"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:90
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:99
-#, fuzzy
 msgid "Center Y"
-msgstr "中央寄せ"
+msgstr "Y中央"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:91
 msgid "Point X"
@@ -6712,7 +6713,7 @@ msgstr "セグメントのマージ"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:28
 msgid "merge aligned track segments, and remove null segments"
-msgstr ""
+msgstr "並んだ配線セグメントをマージし、空のセグメントを削除"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:33
 msgid "delete track segment having a dangling end"
@@ -6833,6 +6834,9 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
+"これはこのフットプリントの全てのパッドのローカル ネット クリアランスです。\n"
+"0ならば、ネットクラスの値が使用されます。\n"
+"この値はパッドのローカルな値に上書きされます。"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:248
 msgid "Browse Shapes"
@@ -7774,6 +7778,9 @@ msgid ""
 "\n"
 "Modify the EESchema library configuration if you want to include it as part of this project."
 msgstr ""
+"このライブラリはEESchemaに読込まれるまで使用できません。\n"
+"\n"
+"このプロジェクトにパーツとして取り込む場合はEESchemaのライブラリ設定を変更してください。"
 
 #: eeschema/lib_export.cpp:143
 msgid " - Export OK"
@@ -7930,7 +7937,7 @@ msgstr "ローカル ラッツネストの表示"
 #: eeschema/backanno.cpp:161
 #, c-format
 msgid "Failed to open stuff file <%s>"
-msgstr ""
+msgstr "部品ファイル <%s> を開くのに失敗しました"
 
 #: eeschema/lib_bezier.cpp:27
 msgid "Bezier"
@@ -7939,22 +7946,22 @@ msgstr "ベジェ曲線"
 #: eeschema/lib_bezier.cpp:70
 #, c-format
 msgid "Bezier only had %d parameters of the required 4"
-msgstr ""
+msgstr "ベジェ曲線には4つのパラメータが必要ですが %d しかありません"
 
 #: eeschema/lib_bezier.cpp:75
 #, c-format
 msgid "Bezier count parameter %d is invalid"
-msgstr ""
+msgstr "ベジェ曲線の %d 番目のパラメータが不正です"
 
 #: eeschema/lib_bezier.cpp:90
 #, c-format
 msgid "Bezier point %d X position not defined"
-msgstr ""
+msgstr "ベジェ曲線の %d ポイントのX座標が定義されていません"
 
 #: eeschema/lib_bezier.cpp:96
 #, c-format
 msgid "Bezier point %d Y position not defined"
-msgstr ""
+msgstr "ベジェ曲線の %d ポイントのY座標が定義されていません"
 
 #: eeschema/lib_bezier.cpp:379
 msgid "Line width"
@@ -8039,16 +8046,16 @@ msgstr ""
 #: eeschema/libedit.cpp:102
 #, c-format
 msgid "Component name \"%s\" not found in library \"%s\"."
-msgstr ""
+msgstr "\"%s\"というコンポーネント名は\"%s\"ライブラリ中にみつかりません"
 
 #: eeschema/libedit.cpp:166
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
-msgstr ""
+msgstr "ライブラリ <%s> 内にパーツ <%s> のコピーを作成できません"
 
 #: eeschema/libedit.cpp:244
 msgid "Include last component changes?"
-msgstr ""
+msgstr "前のコンポーネントの変更を含めますか？"
 
 #: eeschema/libedit.cpp:257
 #, fuzzy
@@ -8062,15 +8069,15 @@ msgstr "ライブラリではありません"
 
 #: eeschema/libedit.cpp:277
 msgid "\"?"
-msgstr ""
+msgstr "\"?"
 
 #: eeschema/libedit.cpp:289
 msgid "Error while saving library file \""
-msgstr ""
+msgstr "ライブラリ ファイルの保存中にエラーが発生しました \""
 
 #: eeschema/libedit.cpp:289
 msgid "\"."
-msgstr ""
+msgstr "\"."
 
 #: eeschema/libedit.cpp:290
 msgid "*** ERROR: ***"
@@ -8091,15 +8098,15 @@ msgstr "パーツ"
 
 #: eeschema/libedit.cpp:331
 msgid "Alias"
-msgstr ""
+msgstr "エイリアス"
 
 #: eeschema/libedit.cpp:336
 msgid "Unit"
-msgstr ""
+msgstr "ユニット"
 
 #: eeschema/libedit.cpp:339
 msgid "Convert"
-msgstr ""
+msgstr "コンバート"
 
 #: eeschema/libedit.cpp:343
 msgid "Body"
@@ -8107,7 +8114,7 @@ msgstr ""
 
 #: eeschema/libedit.cpp:346
 msgid "Power Symbol"
-msgstr ""
+msgstr "電源シンボル"
 
 #: eeschema/libedit.cpp:348
 msgid "Component"
@@ -8115,24 +8122,24 @@ msgstr "コンポーネント"
 
 #: eeschema/libedit.cpp:351
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: eeschema/libedit.cpp:352
 msgid "Key words"
-msgstr ""
+msgstr "キーワード"
 
 #: eeschema/libedit.cpp:353
 msgid "Datasheet"
-msgstr ""
+msgstr "データシート"
 
 #: eeschema/libedit.cpp:389
 msgid "Please select a component library."
-msgstr ""
+msgstr "コンポーネント ライブラリを選択してください"
 
 #: eeschema/libedit.cpp:398
 #, c-format
 msgid "Component library <%s> is empty."
-msgstr ""
+msgstr "コンポーネント ライブラリ <%s> は空です。"
 
 #: eeschema/libedit.cpp:399
 #, fuzzy
@@ -8158,11 +8165,11 @@ msgstr ""
 #: eeschema/libedit.cpp:423
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
-msgstr ""
+msgstr "コンポーネント \"%s\"をライブラリ\"%s\"から削除しますか？"
 
 #: eeschema/libedit.cpp:441
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
-msgstr ""
+msgstr "削除されようとしているコンポーネントは編集されています。全ての変更が失われます。変更を取りやめますか？"
 
 #: eeschema/libedit.cpp:473
 msgid ""
@@ -8170,19 +8177,22 @@ msgid ""
 "\n"
 "Clear the current component from the screen?"
 msgstr ""
+"現在のコンポーネントの全ての変更が失われます!\n"
+"\n"
+"スクリーンから現在のコンポーネントをクリアしますか？"
 
 #: eeschema/libedit.cpp:489
 msgid "This new component has no name and cannot be created. Aborted"
-msgstr ""
+msgstr "この新しいコンポーネントは名前がなく、作成できませんでした。中止"
 
 #: eeschema/libedit.cpp:504
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
-msgstr ""
+msgstr "コンポーネント \"%s\" はライブラリ \"%s\"内に既に存在します。"
 
 #: eeschema/libedit.cpp:578
 msgid "No component to save."
-msgstr ""
+msgstr "保存するコンポーネントがありません。"
 
 #: eeschema/libedit.cpp:587
 #, fuzzy
@@ -8192,7 +8202,7 @@ msgstr "ネットがロックされている: いいえ"
 #: eeschema/libedit.cpp:597
 #, c-format
 msgid "Component \"%s\" already exists. Change it?"
-msgstr ""
+msgstr "コンポーネント \"%s\" は既に存在します。変更しますか？"
 
 #: eeschema/libedit.cpp:614
 #, fuzzy, c-format
@@ -8214,15 +8224,15 @@ msgstr "現在のライブラリを名前をつけて保存(&a)"
 
 #: eeschema/menubar_libedit.cpp:50
 msgid "Save current active library as..."
-msgstr ""
+msgstr "現在アクティブなライブラリを名前をつけて保存"
 
 #: eeschema/menubar_libedit.cpp:58
 msgid "&Create PNG File from Screen"
-msgstr ""
+msgstr "スクリーンからPNGファイルを作成 (&C)"
 
 #: eeschema/menubar_libedit.cpp:59
 msgid "Create a PNG file from the component displayed on screen"
-msgstr ""
+msgstr "スクリーン上に表示されたコンポーネントからPNGファイルを作成"
 
 #: eeschema/menubar_libedit.cpp:64
 msgid "&Create SVG File"
@@ -8230,7 +8240,7 @@ msgstr "SVGファイル作成(&C)"
 
 #: eeschema/menubar_libedit.cpp:65
 msgid "Create a SVG file from the current loaded component"
-msgstr ""
+msgstr "現在読込まれているコンポーネントからSVGファイルを作成"
 
 #: eeschema/menubar_libedit.cpp:75
 msgid "Quit Library Editor"
@@ -8247,7 +8257,7 @@ msgstr "グラフィック テキスト"
 
 #: eeschema/menubar_libedit.cpp:165
 msgid "Rectangle"
-msgstr ""
+msgstr "四角"
 
 #: eeschema/menubar_libedit.cpp:197
 msgid "Library preferences"
@@ -8255,7 +8265,7 @@ msgstr "ライブラリ詳細"
 
 #: eeschema/menubar_libedit.cpp:202
 msgid "&Colors"
-msgstr ""
+msgstr "カラー (&C)"
 
 #: eeschema/menubar_libedit.cpp:203
 msgid "Color preferences"
@@ -8275,7 +8285,7 @@ msgstr "eeschema説明書を開く"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:62
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:84
 #, c-format
@@ -8283,6 +8293,8 @@ msgid ""
 "Component library <%s> failed to load.\n"
 "Error: %s"
 msgstr ""
+"コンポーネント ライブラリ <%s> の読込みに失敗しました。\n"
+"エラー: %s"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:88
 msgid " error!"
@@ -8290,15 +8302,15 @@ msgstr "エラー !"
 
 #: eeschema/eelibs_read_libraryfiles.cpp:98
 msgid "The following libraries could not be found:"
-msgstr ""
+msgstr "これらのライブラリは見つかりませんでした:"
 
 #: eeschema/sch_marker.cpp:158
 msgid "Electronics rule check error"
-msgstr ""
+msgstr "電気的ルールチェックエラー"
 
 #: eeschema/selpart.cpp:27
 msgid "No component libraries are loaded."
-msgstr ""
+msgstr "コンポーネント ライブラリが読込まれていません"
 
 #: eeschema/selpart.cpp:33
 #, fuzzy, c-format
@@ -8319,11 +8331,11 @@ msgstr "U"
 
 #: eeschema/sch_component.cpp:1429
 msgid "Power symbol"
-msgstr ""
+msgstr "電源シンボル"
 
 #: eeschema/sch_component.cpp:1439
 msgid "Alias of"
-msgstr ""
+msgstr "エイリアス"
 
 #: eeschema/onrightclick.cpp:106
 msgid "Leave Sheet"
@@ -8398,7 +8410,7 @@ msgstr "フットプリント"
 #: eeschema/onrightclick.cpp:313
 #, c-format
 msgid "Unit %d %c"
-msgstr ""
+msgstr "ユニット %d %c"
 
 #: eeschema/onrightclick.cpp:323
 msgid "Edit Component"
@@ -8436,7 +8448,7 @@ msgstr "グローバル ラベルの削除"
 #: eeschema/onrightclick.cpp:438
 #: eeschema/onrightclick.cpp:478
 msgid "Change to Hierarchical Label"
-msgstr ""
+msgstr "階層ラベルの変更"
 
 #: eeschema/onrightclick.cpp:368
 #: eeschema/onrightclick.cpp:402
@@ -8474,7 +8486,7 @@ msgstr "選択したアイテムをコピー"
 
 #: eeschema/onrightclick.cpp:393
 msgid "Rotate Hierarchical Label"
-msgstr ""
+msgstr "階層ラベルの回転"
 
 #: eeschema/onrightclick.cpp:395
 #, fuzzy
@@ -8489,7 +8501,7 @@ msgstr "一つ前の角を削除"
 #: eeschema/onrightclick.cpp:406
 #: eeschema/onrightclick.cpp:442
 msgid "Change to Global Label"
-msgstr ""
+msgstr "グローバルラベルの変更"
 
 #: eeschema/onrightclick.cpp:419
 msgid "Move Label"
@@ -8668,7 +8680,7 @@ msgstr "ブロックの横軸ミラー"
 
 #: eeschema/onrightclick.cpp:661
 msgid "Rotate Block ccw"
-msgstr ""
+msgstr "ブロックを反時計周り"
 
 #: eeschema/onrightclick.cpp:666
 msgid "Copy to Clipboard"
@@ -8676,22 +8688,22 @@ msgstr "クリップボードにコピー"
 
 #: eeschema/symbedit.cpp:48
 msgid "Import Symbol Drawings"
-msgstr ""
+msgstr "シンボルの絵をインポート"
 
 #: eeschema/symbedit.cpp:66
 #, c-format
 msgid "Error <%s> occurred loading symbol library <%s>."
-msgstr ""
+msgstr "エラー <%s> がシンボル ライブラリ <%s> の読み込み時に発生しました。"
 
 #: eeschema/symbedit.cpp:75
 #, c-format
 msgid "No components found in symbol library <%s>."
-msgstr ""
+msgstr "シンボル ライブラリ <%s> 内にコンポーネントがありません。"
 
 #: eeschema/symbedit.cpp:83
 #, c-format
 msgid "More than one part in symbol file <%s>."
-msgstr ""
+msgstr "シンボル ファイル <%s> 内に1つ以上のパーツがあります。"
 
 #: eeschema/symbedit.cpp:85
 msgid "Warning"
@@ -8714,7 +8726,7 @@ msgstr "インチ単位"
 
 #: eeschema/sheetlab.cpp:230
 msgid "No new hierarchical labels found"
-msgstr ""
+msgstr "新しい階層ラベルが見つかりません"
 
 #: eeschema/netlist_control.cpp:126
 #: eeschema/netlist_control.cpp:252
@@ -8757,11 +8769,11 @@ msgstr "ネットリスト オプション:"
 
 #: eeschema/netlist_control.cpp:266
 msgid "Simulator command:"
-msgstr ""
+msgstr "シミュレータ コマンド:"
 
 #: eeschema/netlist_control.cpp:275
 msgid "&Run Simulator"
-msgstr ""
+msgstr "シミュレータ起動 (&R)"
 
 #: eeschema/netlist_control.cpp:313
 msgid "Add Plugin"
@@ -8781,7 +8793,7 @@ msgstr "プラグイン ファイル:"
 
 #: eeschema/netlist_control.cpp:380
 msgid "Do not forget to choose a title for this netlist control page"
-msgstr ""
+msgstr "このネットリストのコントロールページからタイトルを選択することを忘れないでください"
 
 #: eeschema/netlist_control.cpp:446
 msgid "Save Netlist File"
@@ -8789,11 +8801,11 @@ msgstr "ネットリスト ファイルの保存"
 
 #: eeschema/netlist_control.cpp:460
 msgid "SPICE netlist file (.cir)|*.cir"
-msgstr ""
+msgstr "SPICEネットリスト ファイル (.cir)|*.cir"
 
 #: eeschema/netlist_control.cpp:465
 msgid "CadStar netlist file (.frp)|*.frp"
-msgstr ""
+msgstr "CadStarネットリスト ファイル (.frp)|*.frp"
 
 #: eeschema/netlist_control.cpp:477
 #, c-format
@@ -8802,15 +8814,15 @@ msgstr "エクスポート %s"
 
 #: eeschema/netlist_control.cpp:526
 msgid "Must be Annotated, Continue ?"
-msgstr ""
+msgstr "アノテーションされていなければなりません。続けますか？"
 
 #: eeschema/netlist_control.cpp:533
 msgid "Error: duplicate sheet names. Continue?"
-msgstr ""
+msgstr "エラー: シート名の重複。続けますか？"
 
 #: eeschema/netlist_control.cpp:664
 msgid "Error. You must provide a command String"
-msgstr ""
+msgstr "エラー: コマンド文字列を設定する必要があります"
 
 #: eeschema/netlist_control.cpp:669
 msgid "Error. You must provide a Title"
@@ -8818,35 +8830,35 @@ msgstr "エラー タイトルを設定してください"
 
 #: eeschema/class_drc_erc_item.cpp:39
 msgid "ERC err unspecified"
-msgstr ""
+msgstr "明記されていないERCエラー"
 
 #: eeschema/class_drc_erc_item.cpp:41
 msgid "Duplicate sheet names within a given sheet"
-msgstr ""
+msgstr "与えられたシートの中でシート名が重複しています"
 
 #: eeschema/class_drc_erc_item.cpp:43
 msgid "Pin not connected (and no connect symbol found on this pin)"
-msgstr ""
+msgstr "ピンは接続されていません (そして、このピンに接続するシンボルが見つかりません)"
 
 #: eeschema/class_drc_erc_item.cpp:45
 msgid "Pin connected to some others pins but no pin to drive it"
-msgstr ""
+msgstr "ピンは他のピンと接続されていますが、どのピンもドライブしていません"
 
 #: eeschema/class_drc_erc_item.cpp:47
 msgid "Conflict problem between pins. Severity: warning"
-msgstr ""
+msgstr "ピン間の衝突問題。厳密さ: 警告"
 
 #: eeschema/class_drc_erc_item.cpp:49
 msgid "Conflict problem between pins. Severity: error"
-msgstr ""
+msgstr "ピン間の衝突問題。厳密さ: エラー"
 
 #: eeschema/class_drc_erc_item.cpp:51
 msgid "Mismatch between hierarchical labels and pins sheets"
-msgstr ""
+msgstr "階層ラベルとピンシート間のミスマッチ"
 
 #: eeschema/class_drc_erc_item.cpp:53
 msgid "A no connect symbol is connected to more than 1 pin"
-msgstr ""
+msgstr "未接続シンボルが1つ以上のピンと接続しています"
 
 #: eeschema/lib_field.cpp:82
 #: eeschema/lib_field.cpp:731
@@ -8861,31 +8873,31 @@ msgstr "フィールド%d"
 #: eeschema/libarch.cpp:60
 #, c-format
 msgid "An error occurred attempting to save component library <%s>."
-msgstr ""
+msgstr "コンポーネント ライブラリ <%s> を保存しようとしたところエラーが発生しました。"
 
 #: eeschema/lib_polyline.cpp:28
 msgid "PolyLine"
-msgstr ""
+msgstr "ポリライン"
 
 #: eeschema/lib_polyline.cpp:74
 #, c-format
 msgid "polyline only had %d parameters of the required 4"
-msgstr ""
+msgstr "ポリラインには4つのパラメータが必要ですが %d しかありません"
 
 #: eeschema/lib_polyline.cpp:79
 #, c-format
 msgid "polyline count parameter %d is invalid"
-msgstr ""
+msgstr "ポリラインの %d 番目のパラメータが不正です"
 
 #: eeschema/lib_polyline.cpp:94
 #, c-format
 msgid "polyline point %d X position not defined"
-msgstr ""
+msgstr "ポリラインの %d ポイントのX座標が定義されていません"
 
 #: eeschema/lib_polyline.cpp:100
 #, c-format
 msgid "polyline point %d Y position not defined"
-msgstr ""
+msgstr "ポリラインの %d ポイントのY座標が定義されていません"
 
 #: eeschema/build_BOM.cpp:150
 #, c-format
@@ -8911,13 +8923,15 @@ msgstr "ファイルの作成に失敗しました"
 
 #: eeschema/sheet.cpp:82
 msgid "File name is not valid! Aborted"
-msgstr ""
+msgstr "ファイル名が不正です! 中止"
 
 #: eeschema/sheet.cpp:99
 msgid ""
 "Changing the sheet file name can change all the schematic structures and cannot be undone.\n"
 "Ok to continue renaming?"
 msgstr ""
+"シートファイル名を全ての回路図構成に対して行うと、やり直しができません。\n"
+"ファイル名変更を続けますか？"
 
 #: eeschema/eeredraw.cpp:89
 msgid "Sheet"
@@ -8925,11 +8939,11 @@ msgstr "シート"
 
 #: eeschema/tool_viewlib.cpp:36
 msgid "Select library to browse"
-msgstr ""
+msgstr "ブラウズするライブラリの選択"
 
 #: eeschema/tool_viewlib.cpp:40
 msgid "Select part to browse"
-msgstr ""
+msgstr "ブラウズするパーツの選択"
 
 #: eeschema/tool_viewlib.cpp:45
 msgid "Display previous part"
@@ -8941,11 +8955,11 @@ msgstr "次のパーツを表示"
 
 #: eeschema/tool_viewlib.cpp:75
 msgid "Show as \"De Morgan\" normal part"
-msgstr ""
+msgstr "\"ド・モルガン\" ノーマルパーツとして表示"
 
 #: eeschema/tool_viewlib.cpp:80
 msgid "Show as \"De Morgan\" convert part"
-msgstr ""
+msgstr "\"ド・モルガン\" コンバートパーツとして表示"
 
 #: eeschema/tool_viewlib.cpp:93
 #, fuzzy
@@ -8954,7 +8968,7 @@ msgstr "コンポーネント面に配置されたファイル: "
 
 #: eeschema/tool_viewlib.cpp:102
 msgid "Insert component in schematic"
-msgstr ""
+msgstr "回路図にコンポーネントを挿入"
 
 #: eeschema/tool_viewlib.cpp:148
 #, c-format
@@ -8971,15 +8985,15 @@ msgstr ""
 #: eeschema/class_library.cpp:224
 #, c-format
 msgid "Cannot add duplicate alias <%s> to library <%s>."
-msgstr ""
+msgstr "重複したエイリアス<%s>をライブラリ<%s>に追加できません。"
 
 #: eeschema/class_library.cpp:410
 msgid "The component library file name is not set."
-msgstr ""
+msgstr "コンポーネント ライブラリ ファイル名がセットされていません。"
 
 #: eeschema/class_library.cpp:418
 msgid "The file could not be opened."
-msgstr ""
+msgstr "そのファイルは開けません。"
 
 #: eeschema/class_library.cpp:424
 #, fuzzy
@@ -8993,31 +9007,31 @@ msgstr "%s ファイルは EESchemaライブラリではありません"
 
 #: eeschema/class_library.cpp:455
 msgid "The file header is missing version and time stamp information."
-msgstr ""
+msgstr "ファイルのヘッダからバージョンとタイムスタンプの情報が失われています。"
 
 #: eeschema/class_library.cpp:500
 msgid "An error occurred attempting to read the header."
-msgstr ""
+msgstr "ヘッダの読込み中にエラーが発生しました。"
 
 #: eeschema/class_library.cpp:530
 #, c-format
 msgid "Library <%s> component load error %s."
-msgstr ""
+msgstr "ライブラリ <%s> コンポーネント読込みエラー %s。"
 
 #: eeschema/class_library.cpp:598
 #, c-format
 msgid "Could not open component document library file <%s>."
-msgstr ""
+msgstr "コンポーネントのドキュメント ライブラリ ファイルを開けません <%s>。"
 
 #: eeschema/class_library.cpp:605
 #, c-format
 msgid "Component document library file <%s> is empty."
-msgstr ""
+msgstr "コンポーネントのドキュメント ライブラリ ファイル <%s> が空です。"
 
 #: eeschema/class_library.cpp:613
 #, c-format
 msgid "File <%s> is not a valid component library document file."
-msgstr ""
+msgstr "ファイル <%s> が不正なコンポーネント ライブラリ ドキュメント ファイルです。"
 
 #: eeschema/eeschema_config.cpp:406
 #, fuzzy
@@ -9030,17 +9044,17 @@ msgstr "コンポーネント名"
 
 #: eeschema/libfield.cpp:36
 msgid "Enter a name to create a new component based on this one."
-msgstr ""
+msgstr "この一つをベースとして新しいコンポーネントを作成するための名前を入力してください。"
 
 #: eeschema/libfield.cpp:41
 #, c-format
 msgid "Enter a new value for the %s field."
-msgstr ""
+msgstr "%s フィールドの新しい値を入力してください。"
 
 #: eeschema/libfield.cpp:56
 #, c-format
 msgid "A %s field cannot be empty."
-msgstr ""
+msgstr "%s フィールドは空にできません。"
 
 #: eeschema/libfield.cpp:74
 #, c-format
@@ -9049,6 +9063,9 @@ msgid ""
 "\n"
 "Do you wish to replace the current component in library with this one?"
 msgstr ""
+"<%s> という名前はコンポーネント ライブラリ<%s>内の既存エントリと衝突します。\n"
+"\n"
+"現在のコンポーネントをライブラリ内のそれと交換しますか？"
 
 #: eeschema/libfield.cpp:79
 #: eeschema/libfield.cpp:94
@@ -9063,6 +9080,9 @@ msgid ""
 "\n"
 "Do you wish to remove this alias from the component?"
 msgstr ""
+"現在のコンポーネントは既にエイリアス名 <%s> を持っています。\n"
+"\n"
+"コンポーネントのこのエイリアスを削除しますか？"
 
 #: eeschema/libfield.cpp:107
 #, c-format
@@ -9071,15 +9091,18 @@ msgid ""
 "\n"
 "Do you wish to remove all of the conflicting aliases from this component?"
 msgstr ""
+"新しいコンポーネントに含まれているエイリアス名はコンポーネント ライブラリ <%s> 内の既存エントリと衝突します。\n"
+"\n"
+"このコンポーネント内の衝突するエイリアスを削除しますか？"
 
 #: eeschema/lib_circle.cpp:57
 #, c-format
 msgid "circle only had %d parameters of the required 6"
-msgstr ""
+msgstr "円に必要な6のパラメータのうち %d しかありません"
 
 #: eeschema/lib_circle.cpp:265
 msgid "Radius"
-msgstr ""
+msgstr "半径"
 
 #: eeschema/hotkeys.cpp:394
 msgid "Add Component"
@@ -9096,11 +9119,11 @@ msgstr "円弧スタブの追加"
 
 #: eeschema/hotkeys.cpp:454
 msgid "Add Wire to Bus entry"
-msgstr ""
+msgstr "バス エントリにワイヤを追加"
 
 #: eeschema/hotkeys.cpp:464
 msgid "Add Bus to Bus entry"
-msgstr ""
+msgstr "バス エントリにバスを追加"
 
 #: eeschema/hotkeys.cpp:474
 msgid "Add Sheet"
@@ -9126,7 +9149,7 @@ msgstr "円弧スタブの追加"
 #: eeschema/sch_sheet_path.cpp:184
 #, c-format
 msgid "Schematic sheets can only be nested %d levels deep."
-msgstr ""
+msgstr "回路図シートは %d 層までしかネストできません。"
 
 #: eeschema/sch_sheet_path.cpp:230
 #, c-format
@@ -9139,7 +9162,7 @@ msgstr "回路図ファイル"
 
 #: eeschema/files-io.cpp:90
 msgid "File write operation failed."
-msgstr ""
+msgstr "ファイルの書き込みに失敗しました。"
 
 #: eeschema/files-io.cpp:149
 #, fuzzy
@@ -9197,6 +9220,8 @@ msgid ""
 "Component was modified!\n"
 "Discard changes?"
 msgstr ""
+"コンポーネントは編集されています!\n"
+"変更を破棄しますか？"
 
 #: eeschema/libeditframe.cpp:324
 #, c-format
@@ -9204,6 +9229,8 @@ msgid ""
 "Library \"%s\" was modified!\n"
 "Discard changes?"
 msgstr ""
+"ライブラリ \"%s\"は変数されています! \n"
+"変更を破棄しますか？"
 
 #: eeschema/libeditframe.cpp:665
 msgid "Add pin"
@@ -9235,9 +9262,8 @@ msgid "Add line"
 msgstr "線の追加"
 
 #: eeschema/libeditframe.cpp:702
-#, fuzzy
 msgid "Set anchor position"
-msgstr "モジュール ポジション ファイル(&M)"
+msgstr "アンカー位置の設定"
 
 #: eeschema/libeditframe.cpp:712
 msgid "Export"
@@ -9249,29 +9275,27 @@ msgstr "存在する回路図プロジェクトを開く"
 
 #: eeschema/menubar.cpp:70
 msgid "&Save Whole Schematic Project\tCtrl+S"
-msgstr ""
+msgstr "全ての回路図プロジェクトを保存 (&S)\tCtrl+S"
 
 #: eeschema/menubar.cpp:71
 msgid "Save all sheets in the schematic project"
-msgstr ""
+msgstr "回路図プロジェクト内の全てのシートを保存"
 
 #: eeschema/menubar.cpp:75
-#, fuzzy
 msgid "Save &Current Sheet Only"
-msgstr "現在のボードを名前をつけて保存"
+msgstr "現在のボードのみ保存 (&C)"
 
 #: eeschema/menubar.cpp:76
 msgid "Save only current schematic sheet"
-msgstr ""
+msgstr "現在の回路図シートのみ保存"
 
 #: eeschema/menubar.cpp:82
-#, fuzzy
 msgid "Save Current Sheet &as"
-msgstr "現在のボードを名前をつけて保存"
+msgstr "現在のシートを名前をつけて保存"
 
 #: eeschema/menubar.cpp:83
 msgid "Save current schematic sheet as..."
-msgstr ""
+msgstr "現在の回路図シートを名前をつけて保存"
 
 #: eeschema/menubar.cpp:90
 msgid "P&rint"
@@ -9283,7 +9307,7 @@ msgstr "PostScriptのプロット"
 
 #: eeschema/menubar.cpp:98
 msgid "Plot schematic sheet in PostScript format"
-msgstr ""
+msgstr "PostScriptフォーマットで回路図シートをプロット"
 
 #: eeschema/menubar.cpp:103
 msgid "Plot HPGL"
@@ -9291,7 +9315,7 @@ msgstr "HPGLのプロット"
 
 #: eeschema/menubar.cpp:104
 msgid "Plot schematic sheet in HPGL format"
-msgstr ""
+msgstr "HPGLフォーマットで回路図シートをプロット"
 
 #: eeschema/menubar.cpp:109
 msgid "Plot SVG"
@@ -9299,7 +9323,7 @@ msgstr "SVGのプロット"
 
 #: eeschema/menubar.cpp:110
 msgid "Plot schematic sheet in SVG format"
-msgstr ""
+msgstr "SVGフォーマットで回路図シートをプロット"
 
 #: eeschema/menubar.cpp:115
 msgid "Plot DXF"
@@ -9307,7 +9331,7 @@ msgstr "DXFのプロット"
 
 #: eeschema/menubar.cpp:116
 msgid "Plot schematic sheet in DXF format"
-msgstr ""
+msgstr "DXFフォーマットで回路図シートをプロット"
 
 #: eeschema/menubar.cpp:124
 msgid "Plot to Clipboard"
@@ -9315,11 +9339,11 @@ msgstr "クリップボードにプロット"
 
 #: eeschema/menubar.cpp:125
 msgid "Export drawings to clipboard"
-msgstr ""
+msgstr "クリップボードへ絵をエクスポート"
 
 #: eeschema/menubar.cpp:132
 msgid "Plot schematic sheet in HPGL, PostScript or SVG format"
-msgstr ""
+msgstr "HPGL, PostScript, SVGフォーマットのいづれかで回路図シートをプロット"
 
 #: eeschema/menubar.cpp:139
 msgid "Quit EESchema"
@@ -9327,15 +9351,15 @@ msgstr "EESchemaの終了"
 
 #: eeschema/menubar.cpp:182
 msgid "Backannotate"
-msgstr ""
+msgstr "バックアノテーション"
 
 #: eeschema/menubar.cpp:183
 msgid "Back annotated footprint fields"
-msgstr ""
+msgstr "バックアノテーションされたフットプリント フィールド"
 
 #: eeschema/menubar.cpp:249
 msgid "Power port"
-msgstr ""
+msgstr "電源ポート"
 
 #: eeschema/menubar.cpp:257
 msgid "Wire"
@@ -9347,7 +9371,7 @@ msgstr "バス"
 
 #: eeschema/menubar.cpp:273
 msgid "Wire to bus entry"
-msgstr ""
+msgstr "バス エントリへのワイヤ"
 
 #: eeschema/menubar.cpp:281
 #, fuzzy
@@ -9372,22 +9396,20 @@ msgid "Junction"
 msgstr "接続"
 
 #: eeschema/menubar.cpp:323
-#, fuzzy
 msgid "Hierarchical label"
-msgstr "シート ラベル"
+msgstr "階層ラベル"
 
 #: eeschema/menubar.cpp:331
-#, fuzzy
 msgid "Hierarchical sheet"
-msgstr "ドリル シート:"
+msgstr "階層シート"
 
 #: eeschema/menubar.cpp:339
 msgid "Import Hierarchical Label"
-msgstr ""
+msgstr "階層ラベルのインポート"
 
 #: eeschema/menubar.cpp:345
 msgid "Add Hierarchical Pin to Sheet"
-msgstr ""
+msgstr "シートに階層ピンを追加"
 
 #: eeschema/menubar.cpp:354
 #, fuzzy
@@ -9400,26 +9422,25 @@ msgstr "オプション(&O)"
 
 #: eeschema/menubar.cpp:387
 msgid "Eeschema general options and preferences"
-msgstr ""
+msgstr "Eeschemaの全体オプションと詳細設定"
 
 #: eeschema/menubar.cpp:427
 msgid "About eeschema schematic designer"
-msgstr ""
+msgstr "EESchema回路図デザイナについて"
 
 #: eeschema/erc.cpp:198
-#, fuzzy
 msgid "Duplicate Sheet name"
-msgstr "現在のネットクラス名"
+msgstr "シート名の重複"
 
 #: eeschema/erc.cpp:251
 #, c-format
 msgid "HLabel %s not connected to SheetLabel"
-msgstr ""
+msgstr "階層ラベル %s がシートラベルに未接続"
 
 #: eeschema/erc.cpp:256
 #, c-format
 msgid "SheetLabel %s not connected to HLabel"
-msgstr ""
+msgstr "シートラベル %s が階層ラベルに未接続"
 
 #: eeschema/erc.cpp:284
 #, fuzzy, c-format
@@ -9433,7 +9454,7 @@ msgstr ""
 
 #: eeschema/erc.cpp:311
 msgid "More than 1 Pin connected to UnConnect symbol"
-msgstr ""
+msgstr "1つ以上のピンが接続しないシンボルに接続しています"
 
 #: eeschema/erc.cpp:338
 #, c-format
@@ -9469,6 +9490,8 @@ msgid ""
 "\n"
 " >> Errors ERC: %d\n"
 msgstr ""
+"\n"
+" > > ERCエラー: %d\n"
 
 #: eeschema/netlist.cpp:96
 #, fuzzy
@@ -9481,7 +9504,7 @@ msgstr "ネット数 ="
 
 #: eeschema/netlist.cpp:120
 msgid "connections"
-msgstr ""
+msgstr "接続"
 
 #: eeschema/netlist.cpp:222
 #: eeschema/netlist.cpp:267
@@ -9491,21 +9514,21 @@ msgstr "完了"
 
 #: eeschema/netlist.cpp:228
 msgid "bus labels"
-msgstr ""
+msgstr "バス ラベル"
 
 #: eeschema/netlist.cpp:271
 msgid "hierarchy..."
-msgstr ""
+msgstr "階層..."
 
 #: eeschema/lib_arc.cpp:120
 #, c-format
 msgid "arc only had %d parameters of the required 8"
-msgstr ""
+msgstr "円弧に必要な8のパラメータのうち %d しかありません"
 
 #: eeschema/lib_text.cpp:89
 #, c-format
 msgid "text only had %d parameters of the required 8"
-msgstr ""
+msgstr "テキストに必要な8のパラメータのうち %d しかありません"
 
 #: eeschema/lib_pin.cpp:31
 msgid "Right"
@@ -9529,7 +9552,7 @@ msgstr "クロック反転"
 
 #: eeschema/lib_pin.cpp:65
 msgid "Input low"
-msgstr ""
+msgstr "低レベル入力"
 
 #: eeschema/lib_pin.cpp:66
 #, fuzzy
@@ -9537,9 +9560,8 @@ msgid "Clock low"
 msgstr "クロック反転"
 
 #: eeschema/lib_pin.cpp:67
-#, fuzzy
 msgid "Output low"
-msgstr "出力するディレクトリの選択"
+msgstr "低レベル出力"
 
 #: eeschema/lib_pin.cpp:68
 #, fuzzy
@@ -9548,7 +9570,7 @@ msgstr "端面の配置"
 
 #: eeschema/lib_pin.cpp:69
 msgid "NonLogic"
-msgstr ""
+msgstr "ロジックでない"
 
 #: eeschema/lib_pin.cpp:107
 msgid "Input"
@@ -9560,7 +9582,7 @@ msgstr "出力"
 
 #: eeschema/lib_pin.cpp:109
 msgid "Bidirectional"
-msgstr ""
+msgstr "双方向"
 
 #: eeschema/lib_pin.cpp:110
 msgid "Tri-state"
@@ -9568,7 +9590,7 @@ msgstr ""
 
 #: eeschema/lib_pin.cpp:111
 msgid "Passive"
-msgstr ""
+msgstr "パッシブ"
 
 #: eeschema/lib_pin.cpp:112
 msgid "Unspecified"
@@ -9576,26 +9598,23 @@ msgstr ""
 
 #: eeschema/lib_pin.cpp:113
 msgid "Power input"
-msgstr ""
+msgstr "電源入力"
 
 #: eeschema/lib_pin.cpp:114
 msgid "Power output"
 msgstr "電源出力"
 
 #: eeschema/lib_pin.cpp:115
-#, fuzzy
 msgid "Open collector"
-msgstr "開く(&O)\tCtrl+O"
+msgstr "オープンコレクタ"
 
 #: eeschema/lib_pin.cpp:116
-#, fuzzy
 msgid "Open emitter"
-msgstr "開く(&O)\tCtrl+O"
+msgstr "オープンエミッタ"
 
 #: eeschema/lib_pin.cpp:117
-#, fuzzy
 msgid "Not connected"
-msgstr "見つかりませんでした。"
+msgstr "接続されていません"
 
 #: eeschema/lib_pin.cpp:174
 msgid "Pin"
@@ -9625,24 +9644,24 @@ msgstr "はい"
 #: eeschema/sch_sheet.cpp:770
 #, c-format
 msgid "A Sub Hierarchy named %s exists, Use it (The data in this sheet will be replaced)?"
-msgstr ""
+msgstr "サブ階層名 %s が存在します。(このシート中のデータを入れ替えて)それを使いますか？"
 
 #: eeschema/sch_sheet.cpp:775
 msgid "Sheet Filename Renaming Aborted"
-msgstr ""
+msgstr "シートのファイル名変更が中止されました"
 
 #: eeschema/sch_sheet.cpp:782
 #, c-format
 msgid "A file named %s exists, load it (otherwise keep current sheet data if possible)?"
-msgstr ""
+msgstr "ファイル名 %s は存在します、(できるだけ現在のシートのデータを残したまま)読込みますか？"
 
 #: eeschema/sch_sheet.cpp:807
 msgid "This sheet uses shared data in a complex hierarchy"
-msgstr ""
+msgstr "このシートは複雑な階層の中でシェアしたデータを使用します"
 
 #: eeschema/sch_sheet.cpp:809
 msgid "Do we convert it in a simple hierarchical sheet (otherwise delete current sheet data)"
-msgstr ""
+msgstr "(現在のシートのデータを削除して)シンプルな階層のシートにコンバートしますか？"
 
 #: eeschema/sch_sheet.cpp:862
 msgid "Sheet name"
@@ -9657,14 +9676,12 @@ msgid "Time Stamp"
 msgstr "タイムスタンプ"
 
 #: eeschema/tool_lib.cpp:40
-#, fuzzy
 msgid "Deselect current tool"
-msgstr "現在のネットクラス名"
+msgstr "現在のツールの選択を外す"
 
 #: eeschema/tool_lib.cpp:70
-#, fuzzy
 msgid "Move part anchor"
-msgstr "全てのモジュールを移動"
+msgstr "パーツのアンカーを移動"
 
 #: eeschema/tool_lib.cpp:75
 #, fuzzy
@@ -9678,7 +9695,7 @@ msgstr "現在のネットクラス名"
 
 #: eeschema/tool_lib.cpp:103
 msgid "Save current library to disk"
-msgstr ""
+msgstr "ディスクに現在のライブラリを保存"
 
 #: eeschema/tool_lib.cpp:111
 msgid "Delete component in current library"
@@ -9690,15 +9707,15 @@ msgstr "新規コンポーネント作成"
 
 #: eeschema/tool_lib.cpp:120
 msgid "Load component to edit from the current lib"
-msgstr ""
+msgstr "現在のライブラリから編集するコンポーネントを読込み"
 
 #: eeschema/tool_lib.cpp:124
 msgid "Create a new component from the current one"
-msgstr ""
+msgstr "現在のものから新規コンポーネントを作成"
 
 #: eeschema/tool_lib.cpp:128
 msgid "Update current component in current library"
-msgstr ""
+msgstr "現在のライブラリ内の現在のコンポーネントを更新"
 
 #: eeschema/tool_lib.cpp:131
 msgid "Import component"
@@ -9710,7 +9727,7 @@ msgstr "コンポーネントのエクスポート"
 
 #: eeschema/tool_lib.cpp:138
 msgid "Save current component to new library"
-msgstr ""
+msgstr "新しいライブラリへ現在のコンポーネントを保存"
 
 #: eeschema/tool_lib.cpp:141
 msgid "Undo last command"
@@ -9726,11 +9743,11 @@ msgstr "コンポーネント プロパティの編集"
 
 #: eeschema/tool_lib.cpp:157
 msgid "Add and remove fields and edit field properties"
-msgstr ""
+msgstr "フィールドの追加と削除とプロパティの編集"
 
 #: eeschema/tool_lib.cpp:162
 msgid "Test for duplicate pins and off grid pins"
-msgstr ""
+msgstr "重複ピンとグリッドから外れたピンのテスト"
 
 #: eeschema/tool_lib.cpp:194
 msgid "Edit document file"
@@ -9738,15 +9755,15 @@ msgstr "ドキュメント ファイルの編集"
 
 #: eeschema/tool_lib.cpp:209
 msgid "Edit pins part per part ( Use carefully!)"
-msgstr ""
+msgstr "パーツごとのピンの編集 (気をつけて使うこと!)"
 
 #: eeschema/tool_lib.cpp:211
 msgid "Usual option = OFF when parts are not locked"
-msgstr ""
+msgstr "通常のオプション = OFF パーツがロックされていないとき"
 
 #: eeschema/tool_lib.cpp:213
 msgid "Usual option = ON when parts are locked"
-msgstr ""
+msgstr "通常のオプション = ON パーツがロックされているとき"
 
 #: eeschema/class_libentry.cpp:86
 #: eeschema/class_libentry.cpp:251
@@ -9761,16 +9778,16 @@ msgstr ""
 #: eeschema/delsheet.cpp:41
 #, c-format
 msgid "Sheet %s (file %s) modified. Save it?"
-msgstr ""
+msgstr "シート %s (ファイル %s) は編集されています。保存しますか？"
 
 #: eeschema/getpart.cpp:98
 #, c-format
 msgid "component selection (%d items loaded):"
-msgstr ""
+msgstr "コンポーネント選択 (%d アイテムが読込まれています):"
 
 #: eeschema/getpart.cpp:194
 msgid "Failed to find part "
-msgstr ""
+msgstr "パーツの検索に失敗しました"
 
 #: eeschema/getpart.cpp:194
 msgid " in library"
@@ -9779,11 +9796,11 @@ msgstr "ライブラリ内"
 #: eeschema/find.cpp:76
 #, c-format
 msgid "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s"
-msgstr ""
+msgstr "シート %s 中にデザイン ルール チェック マーカーが %0.3f%s と %0.3f%s に見つかりました"
 
 #: eeschema/find.cpp:82
 msgid "No more markers were found."
-msgstr ""
+msgstr "これ以上マーカーは見つかりませんでした。"
 
 #: eeschema/find.cpp:247
 msgid "Pin "
@@ -9810,16 +9827,16 @@ msgstr "ズーム イン"
 #: eeschema/find.cpp:345
 #, c-format
 msgid "No item found matching %s."
-msgstr ""
+msgstr "%s にマッチするアイテムは見つかりませんでした。"
 
 #: eeschema/lib_rectangle.cpp:62
 #, c-format
 msgid "rectangle only had %d parameters of the required 7"
-msgstr ""
+msgstr "四角形は 7つのパラメータが必要ですが、%dしかありません"
 
 #: eeschema/schedit.cpp:180
 msgid "Push/Pop Hierarchy"
-msgstr ""
+msgstr "階層の上下移動"
 
 #: eeschema/schedit.cpp:184
 #, fuzzy
@@ -9831,9 +9848,8 @@ msgid "Add Global label"
 msgstr "グローバル ラベルの追加"
 
 #: eeschema/schedit.cpp:212
-#, fuzzy
 msgid "Add Hierarchical label"
-msgstr "円弧スタブの追加"
+msgstr "階層ラベルの追加"
 
 #: eeschema/schedit.cpp:232
 msgid "Add PinSheet"
@@ -9845,20 +9861,19 @@ msgstr "ピンシートのインポート"
 
 #: eeschema/schedit.cpp:395
 msgid "There are no undefined labels in this sheet to clean up."
-msgstr ""
+msgstr "このクリーンアップするシート中に未定義のラベルはありません。"
 
 #: eeschema/schedit.cpp:399
 msgid "Do you wish to cleanup this sheet?"
-msgstr ""
+msgstr "このシートをクリーンアップしますか？"
 
 #: eeschema/pinedit.cpp:237
 msgid "This position is already occupied by another pin. Continue?"
-msgstr ""
+msgstr "この位置にはすでに他のピンがあります。続けますか？"
 
 #: eeschema/pinedit.cpp:669
-#, fuzzy
 msgid "No pins!"
-msgstr "ロックされている: いいえ"
+msgstr "ピンがありません！"
 
 #: eeschema/pinedit.cpp:680
 msgid "Marker Information"
@@ -9867,7 +9882,7 @@ msgstr "マーカー情報"
 #: eeschema/pinedit.cpp:699
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
-msgstr ""
+msgstr "<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s \"%s\" 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:712
 #: eeschema/pinedit.cpp:751
@@ -9889,15 +9904,15 @@ msgstr "標準"
 #: eeschema/pinedit.cpp:743
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-msgstr ""
+msgstr "<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:768
 msgid "No off grid or duplicate pins were found."
-msgstr ""
+msgstr "グリッドから外れたり、重複したピンは見つかりませんでした。"
 
 #: eeschema/database.cpp:52
 msgid "No components found matching "
-msgstr ""
+msgstr "マッチするコンポーネントはありません"
 
 #: eeschema/database.cpp:55
 #, fuzzy
@@ -9913,14 +9928,13 @@ msgid "key search criteria <"
 msgstr ""
 
 #: eeschema/libedit_plot_component.cpp:34
-#, fuzzy
 msgid "No component"
-msgstr "コンポーネント ファイル(&C)"
+msgstr "コンポーネントがありません"
 
 #: eeschema/libedit_plot_component.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file <%s>"
-msgstr "ボード ファイルの保存"
+msgstr "ファイル <%s> が保存できません"
 
 #: eeschema/hierarch.cpp:121
 msgid "Navigator"
@@ -9935,22 +9949,20 @@ msgid "Library Browser"
 msgstr "ライブラリ ブラウザ"
 
 #: eeschema/schframe.cpp:369
-#, fuzzy
 msgid "Schematic modified, Save before exit ?"
-msgstr "ボードは変更されています。終了する前に保存しますか？"
+msgstr "回路図は変更されています。終了する前に保存しますか？"
 
 #: eeschema/schframe.cpp:522
 msgid "Draw wires and buses in any direction"
-msgstr ""
+msgstr "様々な方向へワイヤとバスを引く"
 
 #: eeschema/schframe.cpp:523
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr ""
 
 #: eeschema/schframe.cpp:532
-#, fuzzy
 msgid "Do not show hidden pins"
-msgstr "ゾーンの塗りつぶされた領域を非表示"
+msgstr "非表示のピンを表示しない"
 
 #: eeschema/schframe.cpp:650
 msgid "Schematic"
@@ -9961,9 +9973,8 @@ msgid "Move Arc"
 msgstr "円弧の移動"
 
 #: eeschema/libedit_onrightclick.cpp:87
-#, fuzzy
 msgid "Drag Arc Size"
-msgstr "円弧スタブの追加"
+msgstr "円弧サイズのドラッグ"
 
 #: eeschema/libedit_onrightclick.cpp:91
 msgid "Edit Arc Options"
@@ -10056,27 +10067,27 @@ msgstr "グローバル"
 
 #: eeschema/libedit_onrightclick.cpp:265
 msgid "Pin Size to selected pins"
-msgstr ""
+msgstr "選択したピンのピンサイズ"
 
 #: eeschema/libedit_onrightclick.cpp:266
 msgid "Pin Size to Others"
-msgstr ""
+msgstr "他のピンサイズ"
 
 #: eeschema/libedit_onrightclick.cpp:269
 msgid "Pin Name Size to selected pin"
-msgstr ""
+msgstr "選択したピンのピン名サイズ"
 
 #: eeschema/libedit_onrightclick.cpp:270
 msgid "Pin Name Size to Others"
-msgstr ""
+msgstr "他のピン名サイズ"
 
 #: eeschema/libedit_onrightclick.cpp:273
 msgid "Pin Num Size to selected pin"
-msgstr ""
+msgstr "選択したピンのピン番号サイズ"
 
 #: eeschema/libedit_onrightclick.cpp:274
 msgid "Pin Num Size to Others"
-msgstr ""
+msgstr "他のピンのピン番号サイズ"
 
 #: eeschema/libedit_onrightclick.cpp:295
 msgid "Select Items"
@@ -10103,11 +10114,11 @@ msgstr "ピン ナンバー (&u)"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "ピン番号: 1から4文字のASCII文字と/か数字"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:63
 msgid "Number te&xt size:"
-msgstr ""
+msgstr "番号テキスト サイズ (&x):"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:74
 msgid "&Orientation:"
@@ -10123,7 +10134,7 @@ msgstr "電気的タイプ (&E):"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:97
 msgid "Used by the ERC."
-msgstr ""
+msgstr "ERCで使用。"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:116
 msgid "Graphic &Style:"
@@ -10131,7 +10142,7 @@ msgstr "グラフィック スタイル (&S):"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:137
 msgid "Add to all &parts in package"
-msgstr ""
+msgstr "パッケージ内の全てのパーツを追加 (&p)"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:140
 msgid "Add to all alternate &body styles (DeMorgan)"
@@ -10155,14 +10166,12 @@ msgid "Print page references"
 msgstr "ページ設定 (サイズ, テキスト)"
 
 #: eeschema/dialogs/dialog_plot_schematic_DXF_base.cpp:46
-#, fuzzy
 msgid "&Plot Page"
-msgstr "ページ オプション"
+msgstr "ページのプロット (&P)"
 
 #: eeschema/dialogs/dialog_plot_schematic_DXF_base.cpp:49
-#, fuzzy
 msgid "Plot A&LL"
-msgstr "プロット ファイル <%s> が作成されました"
+msgstr "全てをプロット (&L)"
 
 #: eeschema/dialogs/dialog_plot_schematic_DXF_base.cpp:59
 msgid "Messages :"
@@ -10250,7 +10259,7 @@ msgstr "CVpcb (モジュール作成)"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:29
 msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr ""
+msgstr "サブ コンポーネント (例えば, U2A, U2B ...)"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:33
 #, fuzzy
@@ -10275,7 +10284,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:47
 msgid "Single Part per line"
-msgstr ""
+msgstr "一行ごとに一つのパーツ"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:49
 msgid "Output format:"
@@ -10295,17 +10304,15 @@ msgstr ","
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:55
 msgid "Field separator for spreadsheet import:"
-msgstr ""
+msgstr "スプレッドシートをインポートするときの、区切り文字:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:62
-#, fuzzy
 msgid "Launch list browser"
-msgstr "好みのPDFビューワーの選択"
+msgstr "リスト ブラウザの起動"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:74
-#, fuzzy
 msgid "Fields to add:"
-msgstr "円弧スタブの追加"
+msgstr "追加するフィールド:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:77
 msgid "System Fields:"
@@ -10360,9 +10367,8 @@ msgid "Notes"
 msgstr "注意"
 
 #: eeschema/dialogs/dialog_color_config.cpp:28
-#, fuzzy
 msgid "No connection"
-msgstr "ロックされている: いいえ"
+msgstr "接続されていない"
 
 #: eeschema/dialogs/dialog_color_config.cpp:34
 #, fuzzy
@@ -10383,9 +10389,8 @@ msgid "Fields"
 msgstr "フィールド"
 
 #: eeschema/dialogs/dialog_color_config.cpp:46
-#, fuzzy
 msgid "Sheet file name"
-msgstr "現在のネットクラス名"
+msgstr "シート ファイル名"
 
 #: eeschema/dialogs/dialog_color_config.cpp:48
 msgid "Sheet label"
@@ -10393,7 +10398,7 @@ msgstr "シート ラベル"
 
 #: eeschema/dialogs/dialog_color_config.cpp:54
 msgid "Erc warning"
-msgstr ""
+msgstr "ERC警告"
 
 #: eeschema/dialogs/dialog_color_config.cpp:55
 msgid "Erc error"
@@ -10405,7 +10410,7 @@ msgstr "一般設定"
 
 #: eeschema/dialogs/dialog_color_config.cpp:65
 msgid "Miscellaneous"
-msgstr ""
+msgstr "雑多なもの"
 
 #: eeschema/dialogs/dialog_color_config.cpp:203
 msgid "White"
@@ -10424,27 +10429,25 @@ msgid "Apply"
 msgstr "適用"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:206
-#, fuzzy
 msgid "Print Schematic"
-msgstr "印刷(&P)\tCtrl+P"
+msgstr "回路図の印刷"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:211
 msgid "An error occurred attempting to print the schematic."
-msgstr ""
+msgstr "回路図の印刷中にエラーが発生しました。"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:212
 msgid "Printing"
 msgstr "印刷中"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "Print page %d"
-msgstr "ページ印刷"
+msgstr "ページの印刷 %d"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:51
-#, fuzzy
 msgid "Library Component Properties"
-msgstr "%s ライブラリの中から %s コンポーネントを削除しました"
+msgstr "ライブラリ コンポーネント プロパティ"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:55
 #, fuzzy
@@ -10459,30 +10462,28 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:337
 #, c-format
 msgid "Alias <%s> cannot be removed while it is being edited!"
-msgstr ""
+msgstr "エイリアス <%s> は編集中に削除できません！"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:275
 msgid "Remove all aliases from list?"
-msgstr ""
+msgstr "リストから全てのエイリアスを削除しますか？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:296
-#, fuzzy
 msgid "New alias:"
-msgstr "新規(&N)\tCtrl+N"
+msgstr "新規エイリアス:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:296
-#, fuzzy
 msgid "Component Alias"
-msgstr "コンポーネント ファイル(&C)"
+msgstr "コンポーネント エイリアス"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:311
 #, c-format
 msgid "Alias or component name <%s> already exists in library <%s>."
-msgstr ""
+msgstr "エイリアスかコンポーネント名 <%s> は既にライブラリ <%s> 中に存在します。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:368
 msgid "Delete extra parts from component?"
-msgstr ""
+msgstr "コンポーネントから余計なパーツを削除しますか？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:388
 msgid "Add new pins for alternate body style ( DeMorgan ) to component?"
@@ -10493,18 +10494,16 @@ msgid "Delete alternate body style (DeMorgan) draw items from component?"
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:415
-#, fuzzy
 msgid "Doc Files"
-msgstr "DXFファイル (.dxf)|*.dxf"
+msgstr "ドキュメント ファイル"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:449
 msgid "Ok to Delete FootprintFilter LIST"
-msgstr ""
+msgstr "フットプリントフィルタ リストを削除しても良い"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:469
-#, fuzzy
 msgid "Add Footprint Filter"
-msgstr "フットプリント アーカイブの作成"
+msgstr "フットプリント フィルタの追加"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:469
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:222
@@ -10514,21 +10513,19 @@ msgstr "フットプリント フィルター"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:486
 #, c-format
 msgid "Foot print filter <%s> is already defined."
-msgstr ""
+msgstr "フットプリント フィルタ <%s> は既に定義されています。"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:22
 msgid "Schematic size"
 msgstr "回路図の大きさ"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:22
-#, fuzzy
 msgid "Force size A4"
-msgstr "ページ設定 (サイズ, テキスト)"
+msgstr "サイズを強制的にA4へ"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:22
-#, fuzzy
 msgid "Force size A"
-msgstr "ユーザー グリッドのサイズ"
+msgstr "サイズを強制的にAへ"
 
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:24
 #, fuzzy
@@ -10549,7 +10546,7 @@ msgstr "フィールドの追加"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:31
 msgid "Add a new custom field"
-msgstr ""
+msgstr "新規カスタム フィールドの追加"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:35
 msgid "Delete Field"
@@ -10557,11 +10554,11 @@ msgstr "フィールドの削除"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:36
 msgid "Delete one of the optional fields"
-msgstr ""
+msgstr "オプション フィールドの非取るを削除"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:41
 msgid "Move the selected optional fields up one position"
-msgstr ""
+msgstr "選択したオプション フィールドを一つ上に"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:51
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:104
@@ -10586,11 +10583,11 @@ msgstr "表示"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
 msgid "Check if you want this field visible"
-msgstr ""
+msgstr "このフィールドを可視化するならチェック"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:83
 msgid "Check if you want this field's text rotated 90 degrees"
-msgstr ""
+msgstr "このフィールドのテキストを90度回転させたいならチェック"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:91
 msgid "Style:"
@@ -10603,16 +10600,15 @@ msgstr "フィールド名"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:105
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
 msgid "The text (or value) of the currently selected field"
-msgstr ""
+msgstr "現在選択中のフィールドのテキスト (または値)"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
 msgid "Field Value"
 msgstr "フィールドの値"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
-#, fuzzy
 msgid "Size(\")"
-msgstr "サイズ"
+msgstr "サイズ(\")"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
 msgid "The vertical height of the currently selected field's text in the schematic"
@@ -10635,9 +10631,8 @@ msgid "General :"
 msgstr "一般:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:27
-#, fuzzy
 msgid "As Convert"
-msgstr "名前をつけて保存"
+msgstr "…としてコンバート"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
 msgid ""
@@ -10646,13 +10641,12 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:32
-#, fuzzy
 msgid "Show Pin Num"
-msgstr "%s ピン %s が見つかりません"
+msgstr "ピン番号を表示"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:34
 msgid "Show or hide pin numbers"
-msgstr ""
+msgstr "ピン番号を表示/非表示"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:38
 msgid "Show Pin Name"
@@ -10660,7 +10654,7 @@ msgstr "ピン名を表示"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:40
 msgid "Show or hide pin names"
-msgstr ""
+msgstr "ピン名の表示/非表示"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:44
 #, fuzzy
@@ -10682,6 +10676,8 @@ msgid ""
 "This is the number of parts in this component package.\n"
 "A 74LS00 gate has 4 parts per packages."
 msgstr ""
+"これはこのコンポーネント パッケージ内のパーツ数です。\n"
+"ある 74LS00 ゲートはパッケージごとに4つのパーツをもっています。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:75
 msgid "Skew:"
@@ -10714,7 +10710,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:109
 msgid "Description:"
-msgstr ""
+msgstr "説明:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:111
 msgid ""
@@ -10731,19 +10727,20 @@ msgid ""
 "Enter key words that can be used to select this component.\n"
 "Key words cannot have spaces and are separated by a space."
 msgstr ""
+"コンポーネントを選択するのに使うキーワードの入力。\n"
+"キーワーはスペース区切りで入力できます。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:127
 msgid "DocFileName:"
-msgstr ""
+msgstr "ドキュメント ファイル名:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:129
 msgid "Enter the documentation file (a .pdf document) associated to the component."
 msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:139
-#, fuzzy
 msgid "Copy Doc"
-msgstr "ライター"
+msgstr "ドキュメントのコピー"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:142
 #, fuzzy
@@ -10751,9 +10748,8 @@ msgid "Browse DocFiles"
 msgstr "シェイプを見る"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:158
-#, fuzzy
 msgid "Alias List:"
-msgstr "ネットのリスト(&L)"
+msgstr "エイリアス リスト:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:160
 msgid ""
@@ -10780,11 +10776,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr ""
+msgstr "シートのリファレンスとタイトルブロックの印刷 (&r)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:29
 msgid "Print in &black and white only"
-msgstr ""
+msgstr "モノクロ印刷 (&b)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:38
 msgid "Page Setup"
@@ -10801,31 +10797,31 @@ msgstr "フットプリントの検索"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 msgid "Replace &with:"
-msgstr ""
+msgstr "交換 (&w):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:47
 msgid "Direction:"
-msgstr ""
+msgstr "向き:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:56
 msgid "F&orward"
-msgstr ""
+msgstr "前へ (&o)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "&Backward"
-msgstr ""
+msgstr "後ろへ (&B)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:70
 msgid "Match &whole word"
-msgstr ""
+msgstr "全文一致 (&w)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:73
 msgid "&Match case"
-msgstr ""
+msgstr "マッチ ケース (&M)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:76
 msgid "Search &using simple wildcard matching"
-msgstr ""
+msgstr "シンプルなワイルドカード マッチングを使った検索 (&u)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:79
 msgid "Wrap around &end of search list"
@@ -10833,19 +10829,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:83
 msgid "Search all component &fields"
-msgstr ""
+msgstr "全てのコンポーネント フィールドを検索 (&f)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:86
 msgid "Search all pin names and numbers"
-msgstr ""
+msgstr "全てのピン名と番号を検索"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 msgid "Search the current sheet on&ly"
-msgstr ""
+msgstr "現在のシートのみから検索 (&l)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "&Replace"
-msgstr ""
+msgstr "入れ替え (&R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:106
 #, fuzzy
@@ -10854,11 +10850,11 @@ msgstr "<< 全て選択"
 
 #: eeschema/dialogs/annotate_dialog.cpp:89
 msgid "Clear and annotate all of the components "
-msgstr ""
+msgstr "全てのコンポーネントのアノテーションをクリア"
 
 #: eeschema/dialogs/annotate_dialog.cpp:91
 msgid "Annotate only the unannotated components "
-msgstr ""
+msgstr "アノテーションされていないコンポーネントのみアノテーション"
 
 #: eeschema/dialogs/annotate_dialog.cpp:93
 #, fuzzy
@@ -10876,6 +10872,9 @@ msgid ""
 "\n"
 "This operation will change the current annotation and cannot be undone."
 msgstr ""
+"\n"
+"\n"
+"この操作は現在のアノテーションを変更し、やり直しできません。"
 
 #: eeschema/dialogs/annotate_dialog.cpp:114
 msgid "Clear the existing annotation for "
@@ -10897,6 +10896,9 @@ msgid ""
 "\n"
 "This operation will clear the existing annotation and cannot be undone."
 msgstr ""
+"\n"
+"\n"
+"この操作は既存のアノテーションをクリアし、やり直しできません。"
 
 #: eeschema/dialogs/dialog_SVG_print_base.cpp:25
 msgid "Default Pen Size"
@@ -10930,6 +10932,9 @@ msgid ""
 "An alias %s already exists!\n"
 "Cannot update this component"
 msgstr ""
+"コンポーネントに入力された新しい名前\n"
+"エイリアス %s は既に存在します！\n"
+"コンポーネントを更新できません"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:638
 msgid "Chip Name"
@@ -10948,6 +10953,8 @@ msgid ""
 "This is the component name in library,\n"
 "and also the default component value when loaded in the schematic."
 msgstr ""
+"これはライブラリ中のコンポーネント名であり、\n"
+"回路図に読込む際のデフォルトのコンポーネントの値でもあります。"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:57
 #, fuzzy
@@ -10959,10 +10966,12 @@ msgid ""
 "This is the reference used in schematic for annotation.\n"
 "Do not use digits in reference."
 msgstr ""
+"これは回路図をアノテーションする際に使用されるリファレンスです。\n"
+"リファレンスには数字を使わないでください。"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:80
 msgid "Number of &parts per package:"
-msgstr ""
+msgstr "パッケージごとのパーツ数 (&p)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:103
 msgid "Create component with &alternate body style (DeMorgan)"
@@ -10970,11 +10979,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:117
 msgid "Create component as power &symbol"
-msgstr ""
+msgstr "電源シンボルとしてコンポーネントを作成 (&s)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:131
 msgid "Parts in package locked (cannot be swapped)"
-msgstr ""
+msgstr "ロックされたパッケージ内のパーツ (交換できません)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:142
 msgid "Global Pin Settings"
@@ -10982,7 +10991,7 @@ msgstr "グローバル ピン設定"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:154
 msgid "Pin text position &offset:"
-msgstr ""
+msgstr "ピン テキスト位置のオフセット (&o):"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:166
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:43
@@ -10998,11 +11007,11 @@ msgstr "mils"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:178
 msgid "Show pin n&umber text"
-msgstr ""
+msgstr "ピン番号テキストの表示"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:191
 msgid "Show pin name te&xt"
-msgstr ""
+msgstr "ピン名テキストの表示 (&x)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:204
 #, fuzzy
@@ -11015,7 +11024,7 @@ msgstr "ファイル名 (&F):"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:37
 msgid "Si&ze:"
-msgstr ""
+msgstr "サイズ (&z):"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:48
 msgid "&Sheet name:"
@@ -11032,7 +11041,7 @@ msgstr "テキスト (&T):"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:27
 msgid "Enter the text to be used within the schematic"
-msgstr ""
+msgstr "回路図内で使用されるテキストの入力"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:67
 msgid "O&rientation"
@@ -11040,7 +11049,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:73
 msgid "St&yle"
-msgstr ""
+msgstr "スタイル (&y)"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:77
 msgid "Tri-State"
@@ -11048,11 +11057,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:79
 msgid "S&hape"
-msgstr ""
+msgstr "シェイプ (&h)"
 
 #: eeschema/dialogs/dialog_erc.cpp:423
 msgid "Annotation required!"
-msgstr ""
+msgstr "アノテーションが必要です！"
 
 #: eeschema/dialogs/dialog_erc.cpp:546
 msgid "ERC File"
@@ -11060,7 +11069,7 @@ msgstr "ERC ファイル"
 
 #: eeschema/dialogs/dialog_erc.cpp:547
 msgid "Electronic rule check file (.erc)|*.erc"
-msgstr ""
+msgstr "電気的ルール チェック ファイル (.erc)|*.erc"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:38
 #, fuzzy
@@ -11069,13 +11078,13 @@ msgstr "リポート ファイル \"%s\" が作成されました"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:43
 msgid "Total Errors Count:  "
-msgstr ""
+msgstr "総合エラー数:"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:47
 #: eeschema/dialogs/dialog_erc_base.cpp:55
 #: eeschema/dialogs/dialog_erc_base.cpp:63
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:51
 msgid "Warnings Count:"
@@ -11109,7 +11118,7 @@ msgstr "マーカー:"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:120
 msgid "ERC"
-msgstr ""
+msgstr "ERC"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:124
 msgid "Reset"
@@ -11204,7 +11213,7 @@ msgstr "幅 (&W):"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:56
 msgid "Apply changes to all &parts in component"
-msgstr ""
+msgstr "コンポーネント内の全てのパーツの変更を適用 (&p)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:68
 msgid "Apply changes to all body &styles (DeMorgan)"
@@ -11311,11 +11320,11 @@ msgstr "%s ピン %s が見つかりません"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:108
 msgid "Current pin name size:"
-msgstr ""
+msgstr "現在のピン名サイズ:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:119
 msgid "Current pin number size:"
-msgstr ""
+msgstr "現在のピン番号サイズ:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:130
 msgid "&Repeat pin number increment:"
@@ -11327,7 +11336,7 @@ msgstr "デフォルトとして保存"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:22
 msgid "Scope"
-msgstr ""
+msgstr "スコープ"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:31
 #, fuzzy
@@ -11336,7 +11345,7 @@ msgstr "EESchema (回路図エディタ)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:34
 msgid "Use the current &page only"
-msgstr ""
+msgstr "現在のページでのみ使用 (&p)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #, fuzzy
@@ -11350,11 +11359,11 @@ msgstr "既存のプロジェクトを読み込む"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
 msgid "Annotation Order"
-msgstr ""
+msgstr "アノテーションの順番"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:63
 msgid "Sort components by &X position"
-msgstr ""
+msgstr "コンポーネントを X位置でソート (&X)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:77
 msgid "Sort components by X position and use sheet &number"
@@ -11362,7 +11371,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:91
 msgid "Sort components by &Y position"
-msgstr ""
+msgstr "コンポーネントを Y位置でソート (&Y)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:105
 msgid "Sort components by Y position and use &sheet number"
@@ -11370,15 +11379,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:119
 msgid "Sort components by &value"
-msgstr ""
+msgstr "コンポーネントを値でソート (&v)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:141
 msgid "Clear Annotation"
-msgstr ""
+msgstr "アノテーション クリア"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:144
 msgid "Annotation"
-msgstr ""
+msgstr "アノテーション"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:76
 #, fuzzy
@@ -11387,7 +11396,7 @@ msgstr "広域パッドの編集"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:80
 msgid "Hierarchal Label Properties"
-msgstr ""
+msgstr "階層ラベルのプロパティ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:84
 msgid "Label Properties"
@@ -11399,11 +11408,11 @@ msgstr "テキスト プロパティ"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:143
 msgid "H"
-msgstr ""
+msgstr "縦"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:143
 msgid " x W"
-msgstr ""
+msgstr "x 横"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:206
 msgid "Empty Text!"
@@ -11435,7 +11444,7 @@ msgstr "グリッドの表示"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:130
 msgid "Show hi&dden pins"
-msgstr ""
+msgstr "非表示ピンの表示 (&d)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:134
 #, fuzzy
@@ -11458,7 +11467,7 @@ msgstr "ページ オプション"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:158
 msgid "User defined field names for schematic components. "
-msgstr ""
+msgstr "回路図コンポーネントに定義されたフィールド名を使用"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:166
 msgid "Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."
@@ -11498,7 +11507,7 @@ msgstr "カスタム フィールド 8"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:244
 msgid "Template Field Names"
-msgstr ""
+msgstr "テンプレート フィールド名"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
 msgid "3"
@@ -11588,7 +11597,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:82
 msgid "Reset to Library Defaults"
-msgstr ""
+msgstr "ライブラリのデフォルト値にリセット"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:83
 msgid ""
@@ -11605,6 +11614,8 @@ msgid ""
 "The name of the currently selected field\n"
 "Some fixed fields names are not editable"
 msgstr ""
+"現在選択中のフォールドの名前\n"
+"いくつかのフィックスしたフィールド名は編集不可"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:201
 msgid "The size of the currently selected field's text in the schematic"
@@ -11672,7 +11683,7 @@ msgstr "%s モジュール (value %s)を削除しますか？"
 
 #: cvpcb/listlib.cpp:62
 msgid "No PCB foot print libraries are listed in the current project file."
-msgstr ""
+msgstr "現在のプロジェクトファイル中にリストされたPCBフットプリント ライブラリがありません。"
 
 #: cvpcb/listlib.cpp:63
 msgid "Project File Error"
@@ -11680,7 +11691,7 @@ msgstr "プロジェクト ファイルのエラー"
 
 #: cvpcb/listlib.cpp:86
 msgid " (file cannot be opened)"
-msgstr ""
+msgstr "(ファイルが開けません)"
 
 #: cvpcb/listlib.cpp:94
 msgid " (Not a Kicad file)"
@@ -11693,16 +11704,16 @@ msgstr "エラー: 予期しないファイル終端文字です！"
 
 #: cvpcb/listlib.cpp:138
 msgid "Some files could not be found!"
-msgstr ""
+msgstr "いくつかのフィールドが見つかりません！"
 
 #: cvpcb/listlib.cpp:147
 msgid "Some files are invalid!"
-msgstr ""
+msgstr "いくつかのフィールドが不正です！"
 
 #: cvpcb/init.cpp:81
 #, c-format
 msgid "File <%s> does not appear to be a valid Kicad net list file."
-msgstr ""
+msgstr "<%s> ファイルは正常なKicadのネットリスト ファイルではないようです。"
 
 #: cvpcb/init.cpp:83
 msgid "File Error"
@@ -11714,7 +11725,7 @@ msgstr ""
 
 #: cvpcb/init.cpp:136
 msgid "Save Net and Component List"
-msgstr ""
+msgstr "ネットとコンポーネントのリストを保存"
 
 #: cvpcb/init.cpp:145
 #, fuzzy
@@ -11772,7 +11783,7 @@ msgstr "ズーム アウト (F2)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:233
 msgid "Redraw view (F3)"
-msgstr ""
+msgstr "ビューの再描画 (F3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:237
 msgid "Zoom auto (Home)"
@@ -11823,7 +11834,7 @@ msgstr "名前をつけて保存 (&S)"
 
 #: cvpcb/menubar.cpp:53
 msgid "Save new net list and footprint list files"
-msgstr ""
+msgstr "新規リストとフットプリントリスト ファイルの保存"
 
 #: cvpcb/menubar.cpp:61
 msgid "Quit CvPCB"
@@ -11831,11 +11842,11 @@ msgstr "CvPCBの終了"
 
 #: cvpcb/menubar.cpp:68
 msgid "&Configuration"
-msgstr ""
+msgstr "コンフィグレーション (&C)"
 
 #: cvpcb/menubar.cpp:69
 msgid "Set libraries and library search paths"
-msgstr ""
+msgstr "ライブラリとライブラリ検索パスの設定"
 
 #: cvpcb/menubar.cpp:76
 msgid "Keep Open On Save"
@@ -11851,7 +11862,7 @@ msgstr "プロジェクト ファイルの保存 (&S)"
 
 #: cvpcb/menubar.cpp:83
 msgid "Save changes to the project file"
-msgstr ""
+msgstr "プロジェクト ファイルの変更を保存"
 
 #: cvpcb/menubar.cpp:93
 msgid "Open the cvpcb manual"
@@ -11868,17 +11879,17 @@ msgstr "コンポーネント ライブラリ エラー"
 #: cvpcb/savecmp.cpp:86
 #, c-format
 msgid "Cannot open component library <%s>."
-msgstr ""
+msgstr "コンポーネント ライブラリ <%s> を開けません"
 
 #: cvpcb/savecmp.cpp:95
 #, c-format
 msgid " <%s> does not appear to be a valid Kicad component library."
-msgstr ""
+msgstr "<%s> は正常なKicadのコンポーネント ライブラリではないようです。"
 
 #: cvpcb/savecmp.cpp:104
 #, c-format
 msgid "<%s> is an old version component file."
-msgstr ""
+msgstr "<%s> は古いバージョンのコンポーネント ファイルです。"
 
 #: cvpcb/autosel.cpp:93
 #, c-format
@@ -11888,7 +11899,7 @@ msgstr ""
 #: cvpcb/autosel.cpp:104
 #, c-format
 msgid "Error opening alias library <%s>."
-msgstr ""
+msgstr "エイリアス ライブラリ <%s> を開き中にエラー。"
 
 #: cvpcb/autosel.cpp:136
 #, fuzzy, c-format
@@ -11912,12 +11923,12 @@ msgstr ""
 #: cvpcb/loadcmp.cpp:58
 #, c-format
 msgid "Could not open PCB foot print library file <%s>."
-msgstr ""
+msgstr "PCBフットプリント ライブラリ ファイル <%s> が開けません。"
 
 #: cvpcb/loadcmp.cpp:71
 #, c-format
 msgid "<%s> is not a valid Kicad PCB foot print library."
-msgstr ""
+msgstr "<%s> は正常なKicadのフットプリント ライブラリではありません。"
 
 #: cvpcb/loadcmp.cpp:132
 #, c-format
@@ -11930,7 +11941,7 @@ msgstr ""
 
 #: cvpcb/cvpcb.cpp:34
 msgid "Kicad footprint alias files (*.equ)|*.equ"
-msgstr ""
+msgstr "Kicadフットプリント エイリアス ファイル (*.equ)|*.equ"
 
 #: cvpcb/cvpcb.cpp:103
 msgid "Cvpcb is already running, Continue?"
@@ -11946,10 +11957,12 @@ msgid ""
 "Net and component list modified.\n"
 "Save before exit ?"
 msgstr ""
+"ネットとコンポーネント リストは編集されています。\n"
+"終了前に保存しますか？"
 
 #: cvpcb/cvframe.cpp:284
 msgid "Problem when saving files, exit anyway ?"
-msgstr ""
+msgstr "ファイル保存中に問題が発生しました。それでも終了しますか？"
 
 #: cvpcb/cvframe.cpp:407
 msgid "Delete selections"
@@ -11977,11 +11990,11 @@ msgstr "フットプリントのアーカイブ"
 
 #: cvpcb/tool_cvpcb.cpp:32
 msgid "Save net list and footprint files"
-msgstr ""
+msgstr "ネットリストとフットプリント ファイルの保存"
 
 #: cvpcb/tool_cvpcb.cpp:37
 msgid "Configuration"
-msgstr ""
+msgstr "コンフィグレーション"
 
 #: cvpcb/tool_cvpcb.cpp:42
 #, fuzzy
@@ -11994,11 +12007,11 @@ msgstr ""
 
 #: cvpcb/tool_cvpcb.cpp:51
 msgid "Select previous free component"
-msgstr ""
+msgstr "前のフリー コンポーネントを選択"
 
 #: cvpcb/tool_cvpcb.cpp:55
 msgid "Select next free component"
-msgstr ""
+msgstr "後のフリー コンポーネントを選択"
 
 #: cvpcb/tool_cvpcb.cpp:60
 #, fuzzy
@@ -12011,15 +12024,15 @@ msgstr ""
 
 #: cvpcb/tool_cvpcb.cpp:71
 msgid "Display footprints list documentation"
-msgstr ""
+msgstr "フットプリント リスト ドキュメントの表示"
 
 #: cvpcb/tool_cvpcb.cpp:79
 msgid "Display the filtered footprint list for the current component"
-msgstr ""
+msgstr "現在のコンポーネントのフィルタされたフットプリント リストの表示"
 
 #: cvpcb/tool_cvpcb.cpp:83
 msgid "Display the full footprint list (without filtering)"
-msgstr ""
+msgstr "(フィルタされていない)全てのフットプリント リストの表示"
 
 #: cvpcb/genorcad.cpp:127
 #, fuzzy, c-format
@@ -12099,7 +12112,7 @@ msgstr "%s ピン %s が見つかりません"
 
 #: gerbview/files.cpp:111
 msgid "Gerber files (.g* .lgr .pho)"
-msgstr ""
+msgstr "ガーバーファイル (.g*, .lgr, .pho)"
 
 #: gerbview/files.cpp:117
 #, fuzzy
@@ -12113,43 +12126,43 @@ msgstr "レイヤー アラインメント ターゲット"
 
 #: gerbview/files.cpp:119
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr ""
+msgstr "裏面ハンダレジスト (*.GBS)|*.GBS;*.gbs|"
 
 #: gerbview/files.cpp:120
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr ""
+msgstr "表面ハンダレジスト (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:121
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr ""
+msgstr "裏面オーバーレイ (*.GBO)|*.GBO;*.gbo|"
 
 #: gerbview/files.cpp:122
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr ""
+msgstr "表面オーバーレイ (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:123
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr ""
+msgstr "裏面ペースト (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:124
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr ""
+msgstr "表面ペースト (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:125
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr ""
+msgstr "キープアウト レイヤー (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:126
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr ""
+msgstr "メカニカル レイヤー (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:127
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
-msgstr ""
+msgstr "表面パッド マスター (*.GPT)|*.GPT;*.gpt|"
 
 #: gerbview/files.cpp:128
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
-msgstr ""
+msgstr "裏面パッド マスター (*.GPB)|*.GPB;*.gpb|"
 
 #: gerbview/files.cpp:140
 msgid "Open Gerber File"
@@ -12173,7 +12186,7 @@ msgstr "ネットのリスト(&L)"
 #: gerbview/gerberframe.cpp:550
 #, c-format
 msgid "Layer %d not in use"
-msgstr ""
+msgstr "レイヤー %d は使用されていません"
 
 #: gerbview/gerberframe.cpp:556
 msgid "File:"
@@ -12186,7 +12199,7 @@ msgstr "レイヤー アラインメント ターゲット"
 
 #: gerbview/class_gerbview_layer_widget.cpp:65
 msgid "DCodes"
-msgstr ""
+msgstr "Dコード"
 
 #: gerbview/class_gerbview_layer_widget.cpp:65
 #, fuzzy
@@ -12228,7 +12241,7 @@ msgstr "PCBnewは既に起動しています。続けますか？"
 
 #: gerbview/initpcb.cpp:25
 msgid "Current data will be lost?"
-msgstr ""
+msgstr "現在のデータを失いますか？"
 
 #: gerbview/initpcb.cpp:60
 #, c-format
@@ -12247,15 +12260,15 @@ msgstr "ガーバー ファイルを読み込む"
 #: gerbview/menubar.cpp:32
 #: gerbview/toolbars_gerber.cpp:45
 msgid "Load a new Gerber file on the current layer. Previous data will be deleted"
-msgstr ""
+msgstr "現在のレイヤーに新規ガーバーファイルを読込み。前のデータが削除されます"
 
 #: gerbview/menubar.cpp:36
 msgid "Inc Layer and load Gerber file"
-msgstr ""
+msgstr "レイヤーをインクリメントしてガーバーファイルを読込む"
 
 #: gerbview/menubar.cpp:37
 msgid "Increment layer number, and Load Gerber file"
-msgstr ""
+msgstr "レイヤー番号をインクリメントして、ガーバーファイルを読込みます"
 
 #: gerbview/menubar.cpp:40
 #, fuzzy
@@ -12283,7 +12296,7 @@ msgstr "全てクリア (&C)"
 
 #: gerbview/menubar.cpp:48
 msgid "Clear all layers. All data will be deleted"
-msgstr ""
+msgstr "全てのレイヤーをクリア。全てのデータが削除されます"
 
 #: gerbview/menubar.cpp:51
 msgid "&Export to Pcbnew"
@@ -12291,7 +12304,7 @@ msgstr "PCBbewへエクスポート (&E)"
 
 #: gerbview/menubar.cpp:52
 msgid "Export data in pcbnew format"
-msgstr ""
+msgstr "pcbnewフォーマットでデータのエクスポート"
 
 #: gerbview/menubar.cpp:57
 msgid "Print gerber"
@@ -12299,7 +12312,7 @@ msgstr "ガーバー印刷"
 
 #: gerbview/menubar.cpp:60
 msgid "E&xit"
-msgstr ""
+msgstr "終了 (&x)"
 
 #: gerbview/menubar.cpp:60
 msgid "Quit Gerbview"
@@ -12318,11 +12331,11 @@ msgstr "プロジェクトをアーカイブする"
 #: gerbview/menubar.cpp:70
 #: gerbview/toolbars_gerber.cpp:218
 msgid "Show/hide the layers manager toolbar"
-msgstr ""
+msgstr "レイヤー マネージャー ツールバーの表示/非表示"
 
 #: gerbview/menubar.cpp:75
 msgid "Set options to draw items"
-msgstr ""
+msgstr "アイテム描画オプションの設定"
 
 #: gerbview/menubar.cpp:84
 msgid "&Save Setup"
@@ -12343,7 +12356,7 @@ msgstr "ソースの表示 (&S)"
 
 #: gerbview/menubar.cpp:94
 msgid "Show source file for the current layer"
-msgstr ""
+msgstr "現在のレイヤーのソースファイルを表示"
 
 #: gerbview/menubar.cpp:98
 msgid "&Clear Layer"
@@ -12369,7 +12382,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:112
 msgid "&Miscellaneous"
-msgstr ""
+msgstr "雑多なもの (&M)"
 
 #: gerbview/block.cpp:283
 msgid "Ok to delete block ?"
@@ -12407,11 +12420,11 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:167
 msgid "Set units to inches"
-msgstr ""
+msgstr "単位をインチに設定"
 
 #: gerbview/toolbars_gerber.cpp:171
 msgid "Set units to millimeters"
-msgstr ""
+msgstr "単位をミリメーターに設定"
 
 #: gerbview/toolbars_gerber.cpp:180
 msgid "Show spots in sketch mode"
@@ -12452,7 +12465,7 @@ msgstr ""
 
 #: gerbview/rs274x.cpp:517
 msgid "Too many include files!!"
-msgstr ""
+msgstr "含まれるファイルが多過ぎます!!"
 
 #: gerbview/export_to_pcbnew.cpp:40
 msgid "None of the Gerber layers contain any data"
@@ -12483,11 +12496,11 @@ msgstr "回転"
 
 #: gerbview/class_gerber_draw_item.cpp:610
 msgid "Clear"
-msgstr ""
+msgstr "クリア"
 
 #: gerbview/class_gerber_draw_item.cpp:610
 msgid "Dark"
-msgstr ""
+msgstr "ダーク"
 
 #: gerbview/class_gerber_draw_item.cpp:621
 #, fuzzy
@@ -12516,7 +12529,7 @@ msgstr "モジュール ポジション ファイル(&M)"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:81
 msgid "Choose if you want to print sheets in color, or force the black and white mode."
-msgstr ""
+msgstr "カラーか、強制的にモノクロで印刷したい場合に選択"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
 msgid "millimeters"
@@ -12536,7 +12549,7 @@ msgstr "線:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:56
 msgid "Spots:"
-msgstr ""
+msgstr "スポット:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:62
 msgid "Polygons:"
@@ -12641,15 +12654,16 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr ""
 
 #: common/hotkeys_basic.cpp:336
-#, fuzzy
 msgid ""
 "Current hotkey list:\n"
 "\n"
-msgstr "現在の検索パスのリスト"
+msgstr ""
+"現在のホットキーのリスト:\n"
+"\n"
 
 #: common/hotkeys_basic.cpp:344
 msgid "key "
-msgstr ""
+msgstr "キー"
 
 #: common/hotkeys_basic.cpp:586
 #: common/hotkeys_basic.cpp:615
@@ -12657,9 +12671,8 @@ msgid "Read Hotkey Configuration File:"
 msgstr "ホットキー設定ファイルの読込み:"
 
 #: common/hotkeys_basic.cpp:644
-#, fuzzy
 msgid "List Current Keys"
-msgstr "現在の検索パスのリスト"
+msgstr "現在のキーをリスト"
 
 #: common/hotkeys_basic.cpp:645
 msgid "Displays the current hotkeys list and corresponding commands"
@@ -12683,23 +12696,23 @@ msgstr ""
 
 #: common/hotkeys_basic.cpp:669
 msgid "Import Hotkeys Config"
-msgstr ""
+msgstr "ホットキーのコンフィグをインポート"
 
 #: common/hotkeys_basic.cpp:670
 msgid "Load an existing hotkey configuration file"
-msgstr ""
+msgstr "既存のホットキー コンフィグレーション ファイルを読込む"
 
 #: common/hotkeys_basic.cpp:676
 msgid "Hotkeys"
-msgstr ""
+msgstr "ホットキー"
 
 #: common/hotkeys_basic.cpp:677
 msgid "Hotkeys configuration and preferences"
-msgstr ""
+msgstr "ホットキーの設定と詳細"
 
 #: common/selcolor.cpp:68
 msgid "Colors"
-msgstr ""
+msgstr "カラー"
 
 #: common/basicframe.cpp:227
 msgid " file <"
@@ -12717,20 +12730,19 @@ msgstr "ヘルプ ファイル %s が見つかりません。"
 #: common/basicframe.cpp:269
 #, c-format
 msgid "Help file %s could not be found."
-msgstr ""
+msgstr "ヘルプファイル %s が見つかりません"
 
 #: common/basicframe.cpp:300
-#, fuzzy
 msgid "Copy &Version Information"
-msgstr "選択したアイテムをコピー"
+msgstr "バージョン情報をコピー (&V)"
 
 #: common/basicframe.cpp:301
 msgid "Copy the version string to clipboard to send with bug reports"
-msgstr ""
+msgstr "バグレポートを送るためにクリップボードにバージョン文字列をコピーする"
 
 #: common/basicframe.cpp:371
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "バージョン情報を書き込むためのクリップボードが開けません"
 
 #: common/basicframe.cpp:372
 msgid "Clipboard Error"
@@ -12746,7 +12758,7 @@ msgstr "不可視か埋没したビア"
 
 #: common/pcbcommon.cpp:82
 msgid "Kicad footprint library files (*.mod)|*.mod"
-msgstr ""
+msgstr "Kicadフットプリント らいぶらり ファイル (*.mod)|*.mod"
 
 #: common/base_struct.cpp:446
 msgid "Bold+Italic"
@@ -12758,11 +12770,11 @@ msgstr "Kicad プロジェクト ファイル (*.pro)|*.pro"
 
 #: common/common.cpp:65
 msgid "Kicad schematic files (*.sch)|*.sch"
-msgstr ""
+msgstr "Kicad回路図ファイル (*.sch)|*.sch"
 
 #: common/common.cpp:66
 msgid "Kicad netlist files (*.net)|*.net"
-msgstr ""
+msgstr "Kicadネットリスト ファイル (*.net)|*.net"
 
 #: common/common.cpp:67
 msgid "Gerber files (*.pho)|*.pho"
@@ -12770,11 +12782,11 @@ msgstr "ガーバー ファイル (.pho)|*.pho)"
 
 #: common/common.cpp:68
 msgid "Kicad printed circuit board files (*.brd)|*.brd"
-msgstr ""
+msgstr "Kicadプリント基板ファイル (*.brd)|*.brd"
 
 #: common/common.cpp:69
 msgid "Portable document format files (*.pdf)|*.pdf"
-msgstr ""
+msgstr "PDFファイル (*.pdf)|*.pdf"
 
 #: common/common.cpp:70
 msgid "All files (*)|*"
@@ -12782,7 +12794,7 @@ msgstr "全てのファイル (*)|*"
 
 #: common/common.cpp:234
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #: common/common.cpp:261
 msgid "inches"
@@ -12795,16 +12807,16 @@ msgstr "ズーム イン"
 
 #: common/common.cpp:367
 msgid " \""
-msgstr ""
+msgstr "\""
 
 #: common/gestfich.cpp:449
 #, c-format
 msgid "Command <%s> could not found"
-msgstr ""
+msgstr "コマンド <%s> は見つかりません"
 
 #: common/gestfich.cpp:548
 msgid "No default editor found, you must choose it"
-msgstr ""
+msgstr "デフォルトのエディタが見つかりません。選択する必要があります"
 
 #: common/gestfich.cpp:554
 msgid "Preferred Editor:"
@@ -12812,18 +12824,19 @@ msgstr "お好みのエディタ:"
 
 #: common/gestfich.cpp:649
 msgid "Problem while running the PDF viewer"
-msgstr ""
+msgstr "PDFビューワー実行中の問題"
 
 #: common/gestfich.cpp:650
-#, fuzzy
 msgid ""
 "\n"
 " command is "
-msgstr "このテキストはリファレンスです！"
+msgstr ""
+"\n"
+"コマンドは"
 
 #: common/gestfich.cpp:656
 msgid "Unable to find a PDF viewer for"
-msgstr ""
+msgstr "PDFビューワーが見つかりません"
 
 #: common/confirm.cpp:83
 msgid "Error"
@@ -12836,15 +12849,15 @@ msgstr "Doc ファイル"
 #: common/eda_doc.cpp:191
 #, c-format
 msgid "Unknown MIME type for doc file <%s>"
-msgstr ""
+msgstr "ドキュメント ファイル <%s> の不明なMIMEタイプ"
 
 #: common/hotkey_grid_table.cpp:152
 msgid "Command"
-msgstr ""
+msgstr "コマンド"
 
 #: common/hotkey_grid_table.cpp:152
 msgid "Hotkey"
-msgstr ""
+msgstr "ホットキー"
 
 #: common/zoom.cpp:205
 msgid "Zoom select"
@@ -12860,31 +12873,30 @@ msgstr "グリッドの選択:"
 
 #: common/dsnlexer.cpp:82
 msgid "clipboard"
-msgstr ""
+msgstr "クリップボード"
 
 #: common/dsnlexer.cpp:254
 #: common/dsnlexer.cpp:262
 msgid "Expecting"
-msgstr ""
+msgstr "望ましい"
 
 #: common/dsnlexer.cpp:270
 #: common/dsnlexer.cpp:285
 msgid "Unexpected"
-msgstr ""
+msgstr "望ましくない"
 
 #: common/dsnlexer.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "%s is a duplicate"
-msgstr "このテキストはリファレンスです！"
+msgstr "%s は重複しています"
 
 #: common/dsnlexer.cpp:320
-#, fuzzy
 msgid "symbol|number"
-msgstr "ペン ナンバー"
+msgstr "シンボル|ナンバー"
 
 #: common/dsnlexer.cpp:395
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
+msgstr "分割文字は', \", か $の1文字にしてください"
 
 #: common/dsnlexer.cpp:510
 #: common/dsnlexer.cpp:523
@@ -13056,18 +13068,16 @@ msgid "Lib Version Info"
 msgstr "ライブラリ バージョン情報"
 
 #: common/dialogs/dialog_get_component_base.cpp:29
-#, fuzzy
 msgid "History list:"
-msgstr "ネットのリスト(&L)"
+msgstr "履歴リスト:"
 
 #: common/dialogs/dialog_get_component_base.cpp:47
 msgid "Search by Keyword"
 msgstr "キーワードで検索"
 
 #: common/dialogs/dialog_get_component_base.cpp:53
-#, fuzzy
 msgid "List All"
-msgstr "<< 全て選択"
+msgstr "全てをリスト"
 
 #: common/dialogs/dialog_get_component_base.cpp:56
 msgid "Select by Browser"
@@ -13139,7 +13149,7 @@ msgstr "リビジョン:"
 #: common/dialogs/dialog_page_settings_base.cpp:180
 #: common/dialogs/dialog_page_settings_base.cpp:194
 msgid "Export to other sheets"
-msgstr ""
+msgstr "他のシートへエクスポート"
 
 #: common/dialogs/dialog_page_settings_base.cpp:131
 msgid "Company:"
@@ -13298,31 +13308,27 @@ msgstr "3D軸線 ON/OFF"
 
 #: 3d-viewer/3d_toolbar.cpp:148
 msgid "3D Footprints Shapes On/Off"
-msgstr ""
+msgstr "3Dフットプリント シェイプ On/Off"
 
 #: 3d-viewer/3d_toolbar.cpp:151
-#, fuzzy
 msgid "Zone Filling On/Off"
-msgstr "警告: ゾーンの表示がOFFになっています!!!"
+msgstr "ゾーン塗りつぶしを On/Off"
 
 #: 3d-viewer/3d_toolbar.cpp:154
 msgid "Comments Layer On/Off"
 msgstr "コメント レイヤーの ON/OFF"
 
 #: 3d-viewer/3d_toolbar.cpp:157
-#, fuzzy
 msgid "Drawings Layer On/Off"
-msgstr "レイヤーの線を全て削除する"
+msgstr "絵レイヤーのOn/Off"
 
 #: 3d-viewer/3d_toolbar.cpp:160
-#, fuzzy
 msgid "Eco1 Layer On/Off"
-msgstr "レイヤーの線を全て削除する"
+msgstr "Eco1レイヤーのOn/Off"
 
 #: 3d-viewer/3d_toolbar.cpp:163
-#, fuzzy
 msgid "Eco2 Layer On/Off"
-msgstr "レイヤーの線を全て削除する"
+msgstr "Eco2レイヤーのOn/Off"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -13330,26 +13336,23 @@ msgstr ""
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit the board on the screen"
-msgstr ""
+msgstr "スクリーンに合わせてボードをズーム"
 
 #: pcbnew/help_common_strings.h:22
-#, fuzzy
 msgid "Redraw the screen of the board"
-msgstr "ボードのラッツネストを非表示"
+msgstr "ボードのスクリーンを再描画"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.h:63
-#, fuzzy
 msgid "Footprint text properties"
-msgstr "フットプリント アーカイブの作成"
+msgstr "フットプリント テキストのプロパティ"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:59
 msgid "Non Copper Zones Properties"
-msgstr ""
+msgstr "銅箔ゾーンのプロパティではありません"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.h:65
-#, fuzzy
 msgid "Text item properties"
-msgstr "選択したアイテムをコピー"
+msgstr "テキスト アイテムのプロパティ"
 
 #: pcbnew/dialogs/dialog_display_options_base.h:69
 msgid "Display options"
@@ -13408,7 +13411,7 @@ msgstr "DRC コントロール"
 
 #: pcbnew/dialogs/dialog_set_grid_base.h:61
 msgid "Grid Origin and User Grid Size"
-msgstr ""
+msgstr "グリッド基準とユーザ グリッド サイズ"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.h:262
 msgid "Layer Setup"
@@ -13424,7 +13427,7 @@ msgstr "配線パターンとビアのグローバル設定"
 
 #: eeschema/help_common_strings.h:21
 msgid "Fit the schematic sheet on the screen"
-msgstr ""
+msgstr "スクリーンに回路図シートを合わせる"
 
 #: eeschema/help_common_strings.h:22
 msgid "Redraw the schematic view"
@@ -13432,7 +13435,7 @@ msgstr "回路図ビューの再描画"
 
 #: eeschema/help_common_strings.h:27
 msgid "Find components and texts"
-msgstr ""
+msgstr "コンポーネントとテキストを検索"
 
 #: eeschema/help_common_strings.h:29
 msgid "Place a component"
@@ -13452,25 +13455,27 @@ msgstr "バスの配置"
 
 #: eeschema/help_common_strings.h:33
 msgid "Place a wire to bus entry"
-msgstr ""
+msgstr "バス エントリにワイヤを配置"
 
 #: eeschema/help_common_strings.h:34
 msgid "Place a bus to bus entry"
-msgstr ""
+msgstr "バス エントリにバスを配置"
 
 #: eeschema/help_common_strings.h:35
 msgid "Place a no connect flag"
-msgstr ""
+msgstr "接続しないフラグを配置"
 
 #: eeschema/help_common_strings.h:37
 msgid "Place a net name (local label)"
-msgstr ""
+msgstr "ネット名の配置 (ローカル ラベル)"
 
 #: eeschema/help_common_strings.h:40
 msgid ""
 "Place a global label.\n"
 "Warning: all global labels with the same name are connected in whole hierarchy"
 msgstr ""
+"グローバル ラベルの配置。\n"
+"警告: 全て同名のグローバル ラベルは全ての階層内で接続されます"
 
 #: eeschema/help_common_strings.h:42
 msgid "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol"
@@ -13481,9 +13486,8 @@ msgid "Place a junction"
 msgstr "中継点の配置"
 
 #: eeschema/help_common_strings.h:45
-#, fuzzy
 msgid "Create a hierarchical sheet"
-msgstr "フットプリント アーカイブの作成"
+msgstr "階層シートの作成"
 
 #: eeschema/help_common_strings.h:47
 msgid "Place a pin sheet, imported from the corresponding hierarchical label in sheet"
@@ -13491,19 +13495,19 @@ msgstr ""
 
 #: eeschema/help_common_strings.h:48
 msgid "Place a hierarchical pin to sheet"
-msgstr ""
+msgstr "シートに階層ピンを配置"
 
 #: eeschema/help_common_strings.h:49
 msgid "Place graphic lines or polygons"
-msgstr ""
+msgstr "グラフィック線かポリゴンを配置"
 
 #: eeschema/help_common_strings.h:50
 msgid "Place graphic text (comment)"
-msgstr ""
+msgstr "グラフィカル テキスト (コメント)を配置"
 
 #: eeschema/help_common_strings.h:54
 msgid "Add pins to the component"
-msgstr ""
+msgstr "コンポーネントにピンを追加"
 
 #: eeschema/help_common_strings.h:55
 msgid "Add graphic texts to the component body"
@@ -13540,9 +13544,8 @@ msgid "Lib Component Properties"
 msgstr "コンポーネント面に配置されたファイル: "
 
 #: eeschema/dialogs/dialog_annotate_base.h:84
-#, fuzzy
 msgid "Annotate Schematic"
-msgstr "EESchema (回路図エディタ)"
+msgstr "回路図のアノテーション"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:83
 #: eeschema/dialogs/dialog_lib_new_component_base.h:77
@@ -13575,9 +13578,8 @@ msgid "EESchema Plot HPGL"
 msgstr "HPGLプロット ファイル (.plt)|*.plt"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.h:53
-#, fuzzy
 msgid "Schematic Sheet Properties"
-msgstr "EESchema (回路図エディタ)"
+msgstr "回路図 シート プロパティ"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:55
 msgid "Sheet Pin Properties"
@@ -13610,9 +13612,8 @@ msgid "Gerbview Options"
 msgstr "Gerbview オプション"
 
 #: common/dialog_about/dialog_about_base.h:56
-#, fuzzy
 msgid "About..."
-msgstr "このソフトウェアについて(&A)"
+msgstr "これについて"
 
 #: common/dialogs/dialog_page_settings_base.h:92
 msgid "Page Settings"
