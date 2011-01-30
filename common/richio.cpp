@@ -305,7 +305,7 @@ std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERRO
                 break;
             case '\r':
                 ret += '\\';
-                ret += 'n';
+                ret += 'r';
                 break;
             case '\\':
                 ret += '\\';
