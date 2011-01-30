@@ -308,7 +308,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
     int format = getFormat();
 
-    switch( format  )
+    switch( format )
     {
     case PLOT_FORMAT_POST:
     default:
@@ -394,8 +394,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotPSNegativeOpt->Enable( false );
         break;
     }
-
-    g_PcbPlotOptions.m_PlotFormat = format;
 }
 
 
