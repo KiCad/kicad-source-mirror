@@ -2650,7 +2650,7 @@ void SPECCTRA_DB::doFROMTO( FROMTO* growth ) throw( IO_ERROR )
     // split apart the <pin_reference>s into 3 separate tokens.  Do this by
     // turning off the string delimiter in the lexer.
 
-    int old = SetStringDelimiter( 0 );
+    char old = SetStringDelimiter( 0 );
 
     if( !IsSymbol(NextTok() ) )
     {

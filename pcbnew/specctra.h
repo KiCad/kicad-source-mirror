@@ -3798,6 +3798,8 @@ public:
         session = 0;
         quote_char += '"';
         modulesAreFlipped = false;
+
+        SetSpecctraMode( true );
     }
 
     virtual ~SPECCTRA_DB()

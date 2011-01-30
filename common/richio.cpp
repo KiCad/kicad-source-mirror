@@ -282,43 +282,50 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IO_ERRO
 
 std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERROR )
 {
-    // derived class's notion of what a quote character is
-    char quote          = *GetQuoteChar( "(" );
+    static const char quoteThese[] = "\t ()\n\r";
 
-    // Will the string be wrapped based on its interior content?
-    const char* squote  = GetQuoteChar( aWrapee.c_str() );
-
-    std::string wrapee  = aWrapee;  // return this
-
-    // Search the interior of the string for 'quote' chars
-    // and replace them as found with duplicated quotes.
-    // Note that necessarily any string which has internal quotes will
-    // also be wrapped in quotes later in this function.
-    for( unsigned i=0;  i<wrapee.size();  ++i )
+    if( !aWrapee.size() ||  // quote null string as ""
+        aWrapee[0]=='#' ||  // quote a potential s-expression comment, so it is not a comment
+        aWrapee[0]=='"' ||  // NextTok() will travel through DSN_STRING path anyway, then must apply escapes
+        aWrapee.find_first_of( quoteThese ) != std::string::npos )
     {
-        if( wrapee[i] == quote )
+        std::string ret;
+
+        ret.reserve( aWrapee.size()*2 + 2 );
+
+        ret += '"';
+
+        for( std::string::const_iterator it = aWrapee.begin(); it!=aWrapee.end(); ++it )
         {
-            wrapee.insert( wrapee.begin()+i, quote );
-            ++i;
+            switch( *it )
+            {
+            case '\n':
+                ret += '\\';
+                ret += 'n';
+                break;
+            case '\r':
+                ret += '\\';
+                ret += 'n';
+                break;
+            case '\\':
+                ret += '\\';
+                ret += '\\';
+                break;
+            case '"':
+                ret += '\\';
+                ret += '"';
+                break;
+            default:
+                ret += *it;
+            }
         }
-        else if( wrapee[i]=='\r' || wrapee[i]=='\n' )
-        {
-            // In a desire to maintain accurate line number reporting within DSNLEXER
-            // a decision was made to make all S-expression strings be on a single
-            // line.  You can embed \n (human readable) in the text but not
-            // '\n' which is 0x0a.
-            THROW_IO_ERROR( _( "S-expression string has newline" ) );
-        }
+
+        ret += '"';
+
+        return ret;
     }
 
-    if( *squote || strchr( wrapee.c_str(), quote ) )
-    {
-        // wrap the beginning and end of the string in a quote.
-        wrapee.insert( wrapee.begin(), quote );
-        wrapee.insert( wrapee.end(), quote );
-    }
-
-    return wrapee;
+    return aWrapee;
 }
 
 

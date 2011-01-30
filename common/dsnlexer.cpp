@@ -54,7 +54,8 @@ void DSNLEXER::init()
     curTok = DSN_NONE;
     stringDelimiter = '"';
 
-    space_in_quoted_tokens = true;
+    specctraMode = false;
+    space_in_quoted_tokens = false;
 
     commentsAreTokens = false;
 }
@@ -107,6 +108,20 @@ DSNLEXER::~DSNLEXER()
     }
 }
 
+void DSNLEXER::SetSpecctraMode( bool aMode )
+{
+    specctraMode = aMode;
+    if( aMode )
+    {
+        // specctra mode defaults, some of which can still be changed in this mode.
+        space_in_quoted_tokens = true;
+    }
+    else
+    {
+        space_in_quoted_tokens = false;
+        stringDelimiter = '"';
+    }
+}
 
 void DSNLEXER::PushReader( LINE_READER* aLineReader )
 {
@@ -479,74 +494,119 @@ L_read:
             // else it was something like +5V, fall through below
         }
 
-        // a quoted string
+        // a quoted string, will return DSN_STRING
         if( *cur == stringDelimiter )
         {
-            // New code, understands nested quotes, and deliberately restricts
-            // strings to a single line. Still strips off leading and trailing
-            // quotes, and now removes internal doubled up quotes
-#if 1
-            head = cur;
-
-            // copy the token, character by character so we can remove doubled up quotes.
-            curText.clear();
-
-            while( head < limit )
+            // Non-specctraMode, understands and deciphers escaped \, \r, \n, and \".
+            // Strips off leading and trailing double quotes
+            if( !specctraMode )
             {
-                if( *head==stringDelimiter )
+                // copy the token, character by character so we can remove doubled up quotes.
+                curText.clear();
+
+                ++cur;  // skip over the leading delimiter, which is always " in non-specctraMode
+
+                head = cur;
+
+                while( head<limit )
                 {
-                    if( head+1<limit && head[1]==stringDelimiter )
+                    // ESCAPE SEQUENCES:
+                    if( *head =='\\' )
                     {
-                        // include only one of the doubled-up stringDelimiters
-                        curText += *head;
-                        head    += 2;
-                        continue;
+                        char    tbuf[8];
+                        char    c;
+                        int     i;
+
+                        if( ++head >= limit )
+                            break;  // throw exception at L_unterminated
+
+                        switch( *head++ )
+                        {
+                        case '"':
+                        case '\\':  c = head[-1];   break;
+                        case 'a':   c = '\x07';     break;
+                        case 'b':   c = '\x08';     break;
+                        case 'f':   c = '\x0c';     break;
+                        case 'n':   c = '\n';       break;
+                        case 'r':   c = '\r';       break;
+                        case 't':   c = '\x09';     break;
+                        case 'v':   c = '\x0b';     break;
+
+                        case 'x':   // 1 or 2 byte hex escape sequence
+                            for( i=0; i<2; ++i )
+                            {
+                                if( !isxdigit( head[i] ) )
+                                    break;
+                                tbuf[i] = head[i];
+                            }
+                            tbuf[i] = '\0';
+                            if( i > 0 )
+                                c = (char) strtoul( tbuf, NULL, 16 );
+                            else
+                                c = 'x';   // a goofed hex escape sequence, interpret as 'x'
+                            head += i;
+                            break;
+
+                        default:    // 1-3 byte octal escape sequence
+                            --head;
+                            for( i=0; i<3; ++i )
+                            {
+                                if( head[i] < '0' || head[i] > '7' )
+                                    break;
+                                tbuf[i] = head[i];
+                            }
+                            tbuf[i] = '\0';
+                            if( i > 0 )
+                                c = (char) strtoul( tbuf, NULL, 8 );
+                            else
+                                c = '\\';   // a goofed octal escape sequence, interpret as '\'
+                            head += i;
+                            break;
+                        }
+
+                        curText += c;
                     }
-                    else if( head == cur )
+
+                    else if( *head == '"' )     // end of the non-specctraMode DSN_STRING
                     {
-                        ++head;     // skip the leading quote
-                        continue;
+                        curTok = DSN_STRING;
+                        ++head;                 // omit this trailing double quote
+                        goto exit;
                     }
 
-                    // fall thru
-                }
+                    else
+                        curText += *head++;
 
-                // check for a terminator
-                if( isStringTerminator( *head ) )
-                {
-                    curTok = DSN_STRING;
-                    ++head;
-                    goto exit;
-                }
+                }   // while
 
-                curText += *head++;
-            }
-
-            wxString errtxt(_("Un-terminated delimited string") );
-            THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-
-#else   // old code, did not understand nested quotes
-            ++cur;  // skip over the leading delimiter: ",', or $
-
-            head = cur;
-
-            while( head<limit  &&  !isStringTerminator( *head ) )
-                ++head;
-
-            if( head >= limit )
-            {
+                // L_unterminated:
                 wxString errtxt(_("Un-terminated delimited string") );
                 THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
-            curText.clear();
-            curText.append( cur, head );
+            else    // specctraMode DSN_STRING
+            {
+                ++cur;  // skip over the leading delimiter: ",', or $
 
-            ++head;     // skip over the trailing delimiter
+                head = cur;
 
-            curTok  = DSN_STRING;
-            goto exit;
-#endif
+                while( head<limit  &&  !isStringTerminator( *head ) )
+                    ++head;
+
+                if( head >= limit )
+                {
+                    wxString errtxt(_("Un-terminated delimited string") );
+                    THROW_PARSE_ERROR( errtxt, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+                }
+
+                curText.clear();
+                curText.append( cur, head );
+
+                ++head;     // skip over the trailing delimiter
+
+                curTok  = DSN_STRING;
+                goto exit;
+            }
         }
 
         // Maybe it is a token we will find in the token table.
@@ -1413,7 +1473,6 @@ static const KEYWORD keywords[] = {
 
 class DSNTEST : public wxApp
 {
-
     DSNLEXER*   lexer;
     int         nestLevel;
 

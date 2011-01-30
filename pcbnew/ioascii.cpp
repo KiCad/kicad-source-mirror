@@ -327,7 +327,7 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
             }
             catch( IO_ERROR& e )
             {
-#if 0
+#if 1
                 wxString msg;
                 msg.Printf( wxT( "Error reading PcbPlotParams from %s:\n%s" ),
                             aReader->GetSource().GetData(),

@@ -89,8 +89,16 @@ protected:
 
     READER_STACK        readerStack;            ///< all the LINE_READERs by pointer.
     LINE_READER*        reader;                 ///< no ownership. ownership is via readerStack, maybe, if iOwnReaders
-    int                 stringDelimiter;
+
+    bool                specctraMode;           ///< if true, then:
+                                                ///< 1) stringDelimiter can be changed
+                                                ///< 2) Kicad quoting protocol is not in effect
+                                                ///< 3) space_in_quoted_tokens is functional
+                                                ///< else not.
+
+    char                stringDelimiter;
     bool                space_in_quoted_tokens; ///< blank spaces within quoted strings
+
     bool                commentsAreTokens;      ///< true if should return comments as tokens
 
     int                 prevTok;        ///< curTok from previous NextTok() call.
@@ -206,6 +214,20 @@ public:
     virtual ~DSNLEXER();
 
     /**
+     * Function SetSpecctraMode
+     * changes the behavior of this lexer into or out of "specctra mode".  If
+     * specctra mode, then:
+     * 1) stringDelimiter can be changed
+     * 2) Kicad quoting protocol is not in effect
+     * 3) space_in_quoted_tokens is functional
+     * else none of the above are true.  The default mode is non-specctra mode, meaning:
+     * 1) stringDelimiter cannot be changed
+     * 2) Kicad quoting protocol is in effect
+     * 3) space_in_quoted_tokens is not functional
+     */
+    void SetSpecctraMode( bool aMode );
+
+    /**
      * Function PushReader
      * manages a stack of LINE_READERs in order to handle nested file inclusion.
      * This function pushes aLineReader onto the top of a stack of LINE_READERs and makes
@@ -298,10 +320,11 @@ public:
      * @param aStringDelimiter The character in lowest 8 bits.
      * @return int - The old delimiter in the lowest 8 bits.
      */
-    int SetStringDelimiter( int aStringDelimiter )
+    char SetStringDelimiter( char aStringDelimiter )
     {
         int old = stringDelimiter;
-        stringDelimiter = aStringDelimiter;
+        if( specctraMode )
+            stringDelimiter = aStringDelimiter;
         return old;
     }
 
@@ -314,7 +337,8 @@ public:
     bool SetSpaceInQuotedTokens( bool val )
     {
         bool old = space_in_quoted_tokens;
-        space_in_quoted_tokens = val;
+        if( specctraMode )
+            space_in_quoted_tokens = val;
         return old;
     }
 

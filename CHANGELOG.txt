@@ -4,6 +4,18 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Jan-30 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * DSNLEXER::NextTok() now uses two separate modes to parse quoted strings.
+    This gives us the freedom to control our own destiny separate from the
+    constraints put on us by the Specctra DSN spec.
+  * Added Documentation/s-expressions.txt to explain all this.
+  * Enhanced our quoting protocol by moving away from doubling up double quotes
+    to a C line escape mechanism.
+  * Now support multi-line strings, which when properly escaped, can still be
+    read in as a token originating on a single line.
+
 2011-Jan-21 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
   EESchema code refactoring and coding policy naming fixes.
