@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-29 11:00+0100\n"
-"PO-Revision-Date: 2011-01-29 11:16+0100\n"
+"POT-Creation-Date: 2011-01-30 21:33+0100\n"
+"PO-Revision-Date: 2011-01-30 21:34+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -177,23 +177,6 @@ msgid ""
 msgstr ""
 "Bitmap2Component (Narzędzie do tworzenia logotypów z map biotowych)\n"
 "Tworzy elementy (dla EEschema) lub moduły (dla PCBnew) pokazywane jako czarno-białe obrazy"
-
-#: kicad/mainframe.cpp:68
-#, c-format
-msgid ""
-"Ready\n"
-"Working dir: %s\n"
-msgstr ""
-"Gotowy\n"
-"Katalog roboczy: %s\n"
-
-#: kicad/mainframe.cpp:233
-msgid "Text file ("
-msgstr "Plik tekstowy ("
-
-#: kicad/mainframe.cpp:235
-msgid "Load File to Edit"
-msgstr "Załaduj plik do edycji"
 
 #: kicad/menubar.cpp:91
 msgid "&Open\tCtrl+O"
@@ -370,15 +353,15 @@ msgstr "Plik wykonywalny ("
 msgid "Select Prefered Editor"
 msgstr "Wybierz preferowany edytor"
 
-#: kicad/files-io.cpp:33
+#: kicad/files-io.cpp:34
 msgid "Printed circuit board"
 msgstr "Wydrukuj obwód drukowany"
 
-#: kicad/files-io.cpp:50
+#: kicad/files-io.cpp:51
 msgid "Unzip Project"
 msgstr "Rozpakuj projekt"
 
-#: kicad/files-io.cpp:57
+#: kicad/files-io.cpp:58
 msgid ""
 "\n"
 "Open "
@@ -386,42 +369,57 @@ msgstr ""
 "\n"
 "Otwórz "
 
-#: kicad/files-io.cpp:59
+#: kicad/files-io.cpp:60
 msgid "Target Directory"
 msgstr "Katalog docelowy"
 
-#: kicad/files-io.cpp:66
+#: kicad/files-io.cpp:67
 msgid "Unzipping project in "
 msgstr "Rozpakuj projekt w"
 
-#: kicad/files-io.cpp:86
+#: kicad/files-io.cpp:87
 msgid "Extract file "
 msgstr "Wypakuj plik "
 
-#: kicad/files-io.cpp:95
+#: kicad/files-io.cpp:96
 msgid " OK\n"
 msgstr " OK\n"
 
-#: kicad/files-io.cpp:98
+#: kicad/files-io.cpp:99
 msgid " *ERROR*\n"
 msgstr " *BŁĄD*\n"
 
-#: kicad/files-io.cpp:119
+#: kicad/files-io.cpp:120
 msgid "Archive Project Files"
 msgstr "Zarchiwizuj pliki projektu"
 
-#: kicad/files-io.cpp:158
+#: kicad/files-io.cpp:159
 msgid "Archive file "
 msgstr "Plik archiwum"
 
-#: kicad/files-io.cpp:171
-#, c-format
+#: kicad/files-io.cpp:173
+#, fuzzy, c-format
 msgid ""
 "\n"
-"Create Zip Archive <%s>"
+"Zip archive <%s> created"
+msgstr "Plik rysunkowy \"%s\" został utworzony"
+
+#: kicad/mainframe.cpp:68
+#, c-format
+msgid ""
+"Ready\n"
+"Working dir: %s\n"
 msgstr ""
-"\n"
-"Utwórz archiwum ZIP <%s>"
+"Gotowy\n"
+"Katalog roboczy: %s\n"
+
+#: kicad/mainframe.cpp:234
+msgid "Text file ("
+msgstr "Plik tekstowy ("
+
+#: kicad/mainframe.cpp:236
+msgid "Load File to Edit"
+msgstr "Załaduj plik do edycji"
 
 #: eeschema/backanno.cpp:126
 msgid "Load Stuff File"
@@ -6276,7 +6274,7 @@ msgstr "Czyści starą płytkę i odtwarza z ostatniego pliku kopii zapasowej"
 
 #: pcbnew/menubar_pcbframe.cpp:106
 msgid "&Modules Position File"
-msgstr "Plik położeń &Modułów"
+msgstr "Plik położeń &modułów"
 
 #: pcbnew/menubar_pcbframe.cpp:107
 msgid "Generate modules position file for pick and place"
@@ -6552,7 +6550,7 @@ msgstr "W&czytaj ustawienia"
 
 #: pcbnew/menubar_pcbframe.cpp:575
 msgid "Design Rules"
-msgstr "Reguły projektowe"
+msgstr "Edytor reguł projektowych"
 
 #: pcbnew/menubar_pcbframe.cpp:576
 msgid "Open the design rules editor"
@@ -6897,14 +6895,6 @@ msgstr "Biblioteka istnieje "
 #: pcbnew/librairi.cpp:830
 msgid "Create error "
 msgstr "Błąd tworzenia "
-
-#: pcbnew/specctra.cpp:235
-#: pcbnew/specctra.cpp:260
-#: pcbnew/specctra.cpp:3401
-#: pcbnew/specctra.cpp:3422
-#, c-format
-msgid "Unable to open file \"%s\""
-msgstr "Nie mogę otworzyć pliku \"%s\""
 
 #: pcbnew/build_BOM_from_board.cpp:33
 msgid "Comma separated value files (*.csv)|*.csv"
@@ -7515,6 +7505,7 @@ msgstr "Status"
 
 #: pcbnew/class_module.cpp:854
 #: pcbnew/class_pad.cpp:758
+#: pcbnew/class_pcb_text.cpp:247
 msgid "Orient"
 msgstr "Orientacja"
 
@@ -7571,10 +7562,12 @@ msgid "internal"
 msgstr "wewnętrzne"
 
 #: pcbnew/class_pad.cpp:731
+#: pcbnew/class_pcb_text.cpp:253
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
 #: pcbnew/class_pad.cpp:734
+#: pcbnew/class_pcb_text.cpp:256
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
@@ -7603,7 +7596,6 @@ msgid "PCB Text"
 msgstr "Tekst PCB"
 
 #: pcbnew/class_pcb_text.cpp:250
-#: pcbnew/class_text_mod.cpp:510
 msgid "Thickness"
 msgstr "Grubość"
 
@@ -8446,48 +8438,43 @@ msgstr "Linie kreskowe"
 msgid "Corners in DrawList"
 msgstr "Narożniki w liście rysunkowej"
 
-#: pcbnew/ioascii.cpp:185
-msgid "Error: Unexpected end of file !"
-msgstr "Błąd: Nieoczekiwany koniec pliku!"
-
 #: pcbnew/pcbnew_config.cpp:102
 #, c-format
 msgid "File %s not found"
 msgstr "Nie znaleziono pliku %s"
 
-#: pcbnew/pcbplot.cpp:299
+#: pcbnew/ioascii.cpp:185
+msgid "Error: Unexpected end of file !"
+msgstr "Błąd: Nieoczekiwany koniec pliku!"
+
+#: pcbnew/pcbplot.cpp:283
 msgid "Select Output Directory"
 msgstr "Wybierz katalog wyjściowy"
 
-#: pcbnew/pcbplot.cpp:500
-#, c-format
-msgid "Directory %s created.\n"
-msgstr "Katalog %s sotał utworzony.\n"
-
-#: pcbnew/pcbplot.cpp:505
-msgid "Cannot create output directory!"
-msgstr "Nie można utworzyć katalogu wyjściowego!"
-
-#: pcbnew/pcbplot.cpp:505
-msgid "Plot"
-msgstr "Rysuj"
-
-#: pcbnew/pcbplot.cpp:570
+#: pcbnew/pcbplot.cpp:582
 msgid "Warning: Scale option set to a very small value"
 msgstr "Ostrzeżenie: skala została ustawiona na bardzo małą wartość"
 
-#: pcbnew/pcbplot.cpp:573
+#: pcbnew/pcbplot.cpp:585
 msgid "Warning: Scale option set to a very large value"
 msgstr "Ostrzeżenie: Skala została ustawiona na bardzo dużą wartość"
 
-#: pcbnew/pcbplot.cpp:700
+#: pcbnew/pcbplot.cpp:712
 #, c-format
 msgid "Plot file <%s> created"
 msgstr "Plik rysunkowy \"%s\" został utworzony"
 
-#: pcbnew/pcbplot.cpp:712
+#: pcbnew/pcbplot.cpp:724
 msgid "No layer selected"
 msgstr "Nie wybrano warstwy"
+
+#: pcbnew/specctra.cpp:235
+#: pcbnew/specctra.cpp:260
+#: pcbnew/specctra.cpp:3401
+#: pcbnew/specctra.cpp:3422
+#, c-format
+msgid "Unable to open file \"%s\""
+msgstr "Nie mogę otworzyć pliku \"%s\""
 
 #: pcbnew/dialogs/dialog_block_options_base.cpp:22
 msgid "Include Modules"
@@ -8881,7 +8868,7 @@ msgstr "Na ścieżkach"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:51
 msgid "On pads and tracks"
-msgstr "Na padach i ścieżkach"
+msgstr "Na polach i ścieżkach"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "Show Net Names:"
@@ -9066,7 +9053,7 @@ msgstr "Użytkownika"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:63
 msgid "Orientation (in 0.1 degrees)"
-msgstr "Orientacja (0.1 stopnia)"
+msgstr "Orientacja (co 0.1 stopnia)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:73
 msgid "Position"
@@ -11085,7 +11072,7 @@ msgstr "Klasa"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:206
 msgid "<b>Current general settings:</b><br>"
-msgstr "<b>Główne ustawienia bieżące:</b><br>"
+msgstr "<b>Bieżące ustawienia główne:</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:213
 #, c-format
@@ -11220,7 +11207,7 @@ msgstr "Przesuń zaznaczoną klasę sieci o jedną pozycję w górę"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:94
 msgid "Membership:"
-msgstr "Przynależność:"
+msgstr "Lista powiązań:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:114
 msgid "<<<"
@@ -11408,43 +11395,45 @@ msgstr "Ścieżka 7"
 msgid "Global Design Rules"
 msgstr "Reguły globalne"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:32
+#: pcbnew/dialogs/dialog_plot_base.cpp:22
+msgid "HPGL"
+msgstr "HPGL"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:22
+msgid "Gerber"
+msgstr "Gerbera"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:22
+msgid "Postscript"
+msgstr "Postscript"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:22
+msgid "Postscript A4"
+msgstr "Postscript A4"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:22
+msgid "DXF"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:24
+#, fuzzy
+msgid "Format"
+msgstr "Format rysunku"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:38
 msgid "Technical Layers"
 msgstr "Warstwy Techniczne"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:38
-msgid "Use proper Gerber extensions"
-msgstr "Użyj właściwych rozszerzeń dla plików Gerber"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:39
-msgid "Use Proper Gerber Extensions - .GBL, .GTL, etc..."
-msgstr "Użyj właściwych rozszerzeń dla plików Gerber - .GBL, .GTL, itd..."
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:43
-msgid "Exclude pcb edge layer"
-msgstr "Pomiń warstwę krawędzi PCB"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:44
-msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr "Pomiń zawartość warstwy krawędzi PCB na pozostałych warstwach"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:48
-msgid "Subtract mask from silk"
-msgstr "Odejmij maskę od warstwy opisowej"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:49
-msgid "Remove silkscreen from areas without soldermask"
-msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:53
-msgid "Plot sheet reference"
+#: pcbnew/dialogs/dialog_plot_base.cpp:50
+#, fuzzy
+msgid "Plot sheet reference on all layers"
 msgstr "Rysuj oznaczenia arkusza"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:56
+#: pcbnew/dialogs/dialog_plot_base.cpp:53
 msgid "Plot pads on silkscreen"
 msgstr "Rysuj pola lutownicze na warstwie opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:57
+#: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid ""
 "Enable/disable print/plot pads on silkscreen layers\n"
 "When disable, pads are never potted on silkscreen layers\n"
@@ -11454,153 +11443,194 @@ msgstr ""
 "Gdy wyłączone, pola lutownicze nie są wbite na warstwach opisowych\n"
 "Gdy włączone, pola lutownicze są wbite tylko jesli występują na warstwach opisowych"
 
+#: pcbnew/dialogs/dialog_plot_base.cpp:58
+#, fuzzy
+msgid "Plot module value on silkscreen"
+msgstr "Rysuj pola lutownicze na warstwie opisowej"
+
 #: pcbnew/dialogs/dialog_plot_base.cpp:61
-msgid "Plot module value"
-msgstr "Rysuj wartość modułu"
+msgid "Plot module reference on silkscreen"
+msgstr "Rysuj oznacznik modułu na warstwie opisowej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:64
-msgid "Plot module reference"
-msgstr "Rysuj oznacznik modułu"
+msgid "Plot other module texts on silkscreen"
+msgstr "Rysuj pozostałe teksty modułu na warstwie opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:67
-msgid "Plot other module texts"
-msgstr "Rysuj pozostałe teksty modułu"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:68
+#: pcbnew/dialogs/dialog_plot_base.cpp:65
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr "Włącz/wyłącz drukowanie/rysowanie pola tekstowego modułu na warstwach opisu"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:72
-msgid "Force plot invisible texts"
-msgstr "Wymuś rysowanie niewidocznych tekstów"
+#: pcbnew/dialogs/dialog_plot_base.cpp:69
+msgid "Plot invisible texts on silkscreen"
+msgstr "Rysuj ukryty tekst na warstwie opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:73
+#: pcbnew/dialogs/dialog_plot_base.cpp:70
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Włącz/wyłącz drukowanie/rysowanie ukrytego tekstu modułu na warstwach opisu"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:82
-msgid "Actual hole"
-msgstr "Otwór aktualny"
+#: pcbnew/dialogs/dialog_plot_base.cpp:74
+msgid "Do not tent vias"
+msgstr "Nie otaczaj przelotek"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:84
-msgid "Hole Options"
-msgstr "Opcje Owiertów"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:88
-msgid "Auto scale"
-msgstr "Autodopasowanie"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:88
-msgid "Scale 1.5"
-msgstr "Skala 1,5"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:90
-msgid "Scale"
-msgstr "Skala"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:96
-msgid "Plot Mode"
-msgstr "Tryb rysunku"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
-msgid "Plot Origin"
-msgstr "Punk zerowy rysowania"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "HPGL"
-msgstr "HPGL"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "Gerber"
-msgstr "Gerbera"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "Postscript"
-msgstr "Postscript"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "Postscript A4"
-msgstr "Postscript A4"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:111
-msgid "DXF export"
-msgstr "Eksportuj jako DXF"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:113
-msgid "Plot Format"
-msgstr "Format rysunku"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:118
-msgid "HPGL Options"
-msgstr "Opcje HPGL"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:120
-msgid "Pen size"
-msgstr "Rozmiar pisaka"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
-msgid "Pen speed (cm/s)"
-msgstr "Szybkość pisaka (cm/s)"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:132
-msgid "Set pen speed in cm/s"
-msgstr "Ustaw szybkość pisaka w cm/s"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:136
-msgid "Pen overlay"
-msgstr "Pokrycie pisaka"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:141
-msgid "Set plot overlay for filling"
-msgstr "Ustaw pokrycie rysunku do wypełnienia"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
-msgid "Plot Options"
-msgstr "Opcje Rysowania"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:155
-msgid "Plot negative"
-msgstr "Rysuj negatyw"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:158
-msgid "Plot mirror"
-msgstr "Rysuj odbicie"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:161
-msgid "Vias on mask"
-msgstr "Przelotki na masce"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:162
+#: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Drukuj/rysuj przelotki na warstwach maski. W tym przypadku nie są one chronione"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:168
-msgid "Default Pen Size:"
-msgstr "Domyślny rozmiar pisaka:"
+#: pcbnew/dialogs/dialog_plot_base.cpp:79
+msgid "Mirrored plot"
+msgstr "Rysowanie lustrzane"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:180
-msgid "X Scale Adjust:"
-msgstr "Dostosuj skalę X:"
+#: pcbnew/dialogs/dialog_plot_base.cpp:88
+msgid "Drill marks:"
+msgstr "Znaczniki wierceń:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:189
-msgid "Y Scale Adjust:"
-msgstr "Dostosuj skalę Y:"
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
+msgid "Small"
+msgstr "Mały"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:203
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
+msgid "Actual size"
+msgstr "Rozmiar rzeczywisty"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:98
+msgid "Scaling:"
+msgstr "Skala:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
+msgid "1:1"
+msgstr "1:1"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
+msgid "3:2"
+msgstr "3:2"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
+msgid "2:1"
+msgstr "2:1"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
+msgid "3:1"
+msgstr "3:1"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:113
+msgid "Plot mode:"
+msgstr "Tryb rysowania:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:123
+msgid ""
+"Default\n"
+"linewidth"
+msgstr ""
+"Domyślna\n"
+"szerokość linii"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:130
+msgid "Line width for, e.g., sheet references."
+msgstr "Szerokość lini dla, przykładowo: odnośników arkusza."
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
+msgid "Gerber Options"
+msgstr "Opcje Gerber"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:148
+msgid "Use proper file extensions"
+msgstr "Użyj właściwych rozszerzeń plików"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:149
+msgid "Use proper Gerber extensions - .GBL, .GTL, etc..."
+msgstr "Użyj właściwych rozszerzeń dla plików Gerber - .GBL, .GTL, itd..."
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:153
+msgid ""
+"Exclude PCB edge layer\n"
+"from other layers"
+msgstr ""
+"Pomiń zawartość warstwy krawędzi PCB\n"
+"z pozostałych warstw"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:154
+msgid "Exclude contents of the pcb edge layer from all other layers"
+msgstr "Pomiń zawartość warstwy krawędzi PCB na pozostałych warstwach"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:158
+msgid ""
+"Subtract mask from\n"
+"silkscren"
+msgstr ""
+"Odejmij maskę od\n"
+"warstwy opisowej"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:160
+msgid "Remove silkscreen from areas without soldermask"
+msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:164
+msgid "Use auxiliary origin"
+msgstr "Użyj zewnętrznego punku odniesienia"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:170
+msgid "HPGL Options"
+msgstr "Opcje HPGL"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:178
+msgid "Pen size"
+msgstr "Rozmiar pisaka"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:185
+msgid "Pen overlay"
+msgstr "Pokrycie pisaka"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:190
+msgid "Set plot overlay for filling"
+msgstr "Ustaw pokrycie rysunku do wypełnienia"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:199
+msgid "Pen speed (cm/s):"
+msgstr "Szybkość pisaka (cm/s):"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:204
+msgid "Set pen speed in cm/s"
+msgstr "Ustaw szybkość pisaka w cm/s"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:215
+msgid "Postscript Options"
+msgstr "Opcje PostScript"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:223
+msgid "X scale:"
+msgstr "Skala X:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:237
+msgid "Y scale:"
+msgstr "Skala Y:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:248
+msgid "Negative plot"
+msgstr "Rysuj negatyw"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:260
+msgid "Output directory:"
+msgstr "Katalog wyjściowy:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:268
+msgid "Target directory for plot files. Can be relative or absolute."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:272
+msgid "Browse..."
+msgstr "Przeglądaj..."
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:293
+msgid "Plot"
+msgstr "Rysuj"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:297
 msgid "Apply Settings"
 msgstr "Zastosuj Ustawienia"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:206
+#: pcbnew/dialogs/dialog_plot_base.cpp:300
 msgid "Generate Drill File"
 msgstr "Generuj plik wierceń"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:219
-msgid "Output Directory:"
-msgstr "Katalog docelowy:"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:229
-msgid "Browse..."
-msgstr "Przeglądaj..."
 
 #: cvpcb/autosel.cpp:93
 #, c-format
@@ -12411,10 +12441,6 @@ msgid "millimeters"
 msgstr "Milimetry"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
-msgid "Small"
-msgstr "Mały"
-
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 msgid "Large"
 msgstr "Duże"
 
@@ -12701,7 +12727,7 @@ msgstr "Francuski"
 
 #: common/edaappl.cpp:116
 msgid "Finnish"
-msgstr "Zakończ"
+msgstr "Suomi (Fiński)"
 
 #: common/edaappl.cpp:124
 msgid "Spanish"
@@ -12766,34 +12792,6 @@ msgstr "Język"
 #: common/edaappl.cpp:842
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
-
-#: common/dsnlexer.cpp:82
-msgid "clipboard"
-msgstr "schowek"
-
-#: common/dsnlexer.cpp:266
-#: common/dsnlexer.cpp:274
-msgid "Expecting"
-msgstr "Spodziewano się"
-
-#: common/dsnlexer.cpp:282
-#: common/dsnlexer.cpp:299
-msgid "Unexpected"
-msgstr "Niespodziewany"
-
-#: common/dsnlexer.cpp:292
-#, c-format
-msgid "%s is a duplicate"
-msgstr "%s jest zdublowany"
-
-#: common/dsnlexer.cpp:410
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
-
-#: common/dsnlexer.cpp:525
-#: common/dsnlexer.cpp:538
-msgid "Un-terminated delimited string"
-msgstr "Niezakończony separator tekstu"
 
 #: common/base_struct.cpp:446
 msgid "Bold+Italic"
@@ -12990,16 +12988,40 @@ msgstr "Powiększenie: "
 msgid "Grid Select"
 msgstr "Wybór siatki"
 
+#: common/dsnlexer.cpp:83
+msgid "clipboard"
+msgstr "schowek"
+
+#: common/dsnlexer.cpp:281
+#: common/dsnlexer.cpp:289
+msgid "Expecting"
+msgstr "Spodziewano się"
+
+#: common/dsnlexer.cpp:297
+#: common/dsnlexer.cpp:314
+msgid "Unexpected"
+msgstr "Niespodziewany"
+
+#: common/dsnlexer.cpp:307
+#, c-format
+msgid "%s is a duplicate"
+msgstr "%s jest zdublowany"
+
+#: common/dsnlexer.cpp:425
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
+
+#: common/dsnlexer.cpp:583
+#: common/dsnlexer.cpp:598
+msgid "Un-terminated delimited string"
+msgstr "Niezakończony separator tekstu"
+
 #: common/richio.cpp:116
 #: common/richio.cpp:168
 msgid "Line length exceeded"
 msgstr "Przekroczona długość linii"
 
-#: common/richio.cpp:310
-msgid "S-expression string has newline"
-msgstr "Ciąg S-expression posiada nową linię"
-
-#: common/richio.cpp:368
+#: common/richio.cpp:375
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER błąd zapisu"
 
@@ -13596,6 +13618,64 @@ msgstr "Ustawienia strony"
 msgid "Bitmap to Component Converter"
 msgstr "Konwerter obrazów"
 
+#~ msgid ""
+#~ "\n"
+#~ "Create Zip Archive <%s>"
+#~ msgstr ""
+#~ "\n"
+#~ "Utwórz archiwum ZIP <%s>"
+
+#~ msgid "Directory %s created.\n"
+#~ msgstr "Katalog %s sotał utworzony.\n"
+
+#~ msgid "Cannot create output directory!"
+#~ msgstr "Nie można utworzyć katalogu wyjściowego!"
+
+#~ msgid "Exclude pcb edge layer"
+#~ msgstr "Pomiń warstwę krawędzi PCB"
+
+#~ msgid "Plot module value"
+#~ msgstr "Rysuj wartość modułu"
+
+#~ msgid "Force plot invisible texts"
+#~ msgstr "Wymuś rysowanie niewidocznych tekstów"
+
+#~ msgid "Hole Options"
+#~ msgstr "Opcje Owiertów"
+
+#~ msgid "Scale 1.5"
+#~ msgstr "Skala 1,5"
+
+#~ msgid "Plot Mode"
+#~ msgstr "Tryb rysunku"
+
+#~ msgid "Plot Origin"
+#~ msgstr "Punk zerowy rysowania"
+
+#~ msgid "DXF export"
+#~ msgstr "Eksportuj jako DXF"
+
+#~ msgid "Plot negative"
+#~ msgstr "Rysuj negatyw"
+
+#~ msgid "Plot mirror"
+#~ msgstr "Rysuj odbicie"
+
+#~ msgid "Vias on mask"
+#~ msgstr "Przelotki na masce"
+
+#~ msgid "Default Pen Size:"
+#~ msgstr "Domyślny rozmiar pisaka:"
+
+#~ msgid "X Scale Adjust:"
+#~ msgstr "Dostosuj skalę X:"
+
+#~ msgid "Y Scale Adjust:"
+#~ msgstr "Dostosuj skalę Y:"
+
+#~ msgid "S-expression string has newline"
+#~ msgstr "Ciąg S-expression posiada nową linię"
+
 #~ msgid "Compress file "
 #~ msgstr "Kompresuj plik "
 
@@ -13993,9 +14073,6 @@ msgstr "Konwerter obrazów"
 #~ msgid "&3D Display"
 #~ msgstr "Widok &3D"
 
-#~ msgid "3:2"
-#~ msgstr "3:2"
-
 #~ msgid "3:3"
 #~ msgstr "3:3"
 
@@ -14088,8 +14165,6 @@ msgstr "Konwerter obrazów"
 #~ msgstr "Shape delta Y"
 #~ msgid "absolute"
 #~ msgstr "Bezwzględny"
-#~ msgid "auxiliary axis"
-#~ msgstr "Oś zewnętrzna"
 #~ msgid "If checked, the EXCELLON header is minimal"
 #~ msgstr "Jeśli zaznaczone, nagłówek EXCELLON jest minimalny"
 #~ msgid "Board Modified: Continue ?"
