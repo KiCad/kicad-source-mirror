@@ -99,7 +99,6 @@ public:
     void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const throw( IO_ERROR );
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR );
 
-    PCB_PLOT_PARAMS& operator=( const PCB_PLOT_PARAMS &aPcbPlotParams);
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 

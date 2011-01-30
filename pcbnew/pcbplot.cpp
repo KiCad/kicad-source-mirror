@@ -118,14 +118,13 @@ void DIALOG_PLOT::Init_Dialog()
     m_Config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
 
     m_plotFormatOpt->SetSelection( g_PcbPlotOptions.m_PlotFormat );
-    g_PcbPlotOptions.m_PlotLineWidth = g_DrawDefaultLineThickness;
 
-    // Set units and value for HPGL pen speed.
+    // Set units and value for HPGL pen size.
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.m_HPGLPenDiam, UNITS_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
-    // Set units to cm for standard HPGL pen speed.
+    // Set units to cm/s for standard HPGL pen speed.
     msg = ReturnStringFromValue( UNSCALED_UNITS, g_PcbPlotOptions.m_HPGLPenSpeed, 1 );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
@@ -136,15 +135,13 @@ void DIALOG_PLOT::Init_Dialog()
                                  UNITS_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
+    AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
                                  g_PcbPlotOptions.m_PlotLineWidth,
                                  PCB_INTERNAL_UNIT );
     m_linesWidth->AppendText( msg );
 
-    if( g_PcbPlotOptions.GetUseAuxOrigin() )
-        m_choicePlotOffset->SetSelection( 1 );
-    else
-        m_choicePlotOffset->SetSelection( 0 );
+    m_useAuxOriginCheckBox->SetValue( g_PcbPlotOptions.GetUseAuxOrigin() );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < MIN_SCALE || m_YScaleAdjust < MIN_SCALE
@@ -159,9 +156,8 @@ void DIALOG_PLOT::Init_Dialog()
 
     m_plotPSNegativeOpt->SetValue( g_PcbPlotOptions.m_PlotPSNegative );
 
-
     // Create layer list.
-    int      layer;
+    int layer;
     for( layer = 0; layer < NB_LAYERS; ++layer )
     {
         if( !board->IsLayerEnabled( layer ) )
@@ -175,7 +171,8 @@ void DIALOG_PLOT::Init_Dialog()
     //  List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
-    for( int layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    int layer_idx;
+    for( layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
     {
         layer = layersOrder[layer_idx];
 
@@ -191,11 +188,9 @@ void DIALOG_PLOT::Init_Dialog()
             m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer],
                                             0, wxGROW | wxALL, 1 );
 
-        long mask = 1 << layer;
-        if( g_PcbPlotOptions.GetLayerSelection() & mask )
+        if( g_PcbPlotOptions.GetLayerSelection() & ( 1 << layer ) )
             m_BoxSelectLayer[layer]->SetValue( true );
     }
-
 
     // Option for using proper Gerber extensions
     m_useGerberExtensions->SetValue( g_PcbPlotOptions.GetUseGerberExtensions() );
@@ -213,7 +208,7 @@ void DIALOG_PLOT::Init_Dialog()
     else
     {
         m_plotSheetRef->Enable( false );
-        g_PcbPlotOptions.m_PlotFrameRef = false;
+        m_plotSheetRef->SetValue( false );
     }
 
     // Option to plot pads on silkscreen layers or all layers
@@ -241,15 +236,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_plotNoViaOnMaskOpt->SetValue( g_PcbPlotOptions.m_PlotViaOnMaskLayer );
 
     // Output directory
-    if( g_PcbPlotOptions.GetOutputDirectory().IsEmpty() )
-    {
-        fileName = m_Parent->GetScreen()->GetFileName();
-        m_outputDirectoryName->SetValue( fileName.GetPath() );
-    }
-    else
-    {
-        m_outputDirectoryName->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
-    }
+    m_outputDirectoryName->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
 
     // Update options values:
     wxCommandEvent cmd_event;
@@ -293,13 +280,27 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    wxString    currentDir;
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ),
+                           m_outputDirectoryName->GetValue() );
 
-    currentDir = m_outputDirectoryName->GetValue();
-    wxDirDialog dirDialog( this, _( "Select Output Directory" ), currentDir );
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
-    m_outputDirectoryName->SetValue( dirDialog.GetPath() );
+
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
+
+    wxMessageDialog dialog( this, wxT( "Use a relative path? "),
+                            wxT( "Plot Output Directory" ),
+                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+    if( dialog.ShowModal() == wxID_YES ) {
+        wxString boardFilePath = ( (wxFileName) m_Parent->GetScreen()->GetFileName()).GetPath();
+
+        if( !dirName.MakeRelativeTo( boardFilePath ) )
+            wxMessageBox( wxT( "Cannot make path relative (target volume different from board file volume)!" ),
+                          wxT( "Plot Output Directory" ), wxICON_ERROR );
+    }
+
+    m_outputDirectoryName->SetValue( dirName.GetFullPath() );
 }
 
 
@@ -314,7 +315,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( true );
-        m_choicePlotOffset->Enable( false );
+        m_useAuxOriginCheckBox->Enable( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
@@ -335,7 +336,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotModeOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_plotMirrorOpt->Enable( false );
-        m_choicePlotOffset->Enable( true );
+        m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
@@ -355,7 +356,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->Enable( true );
         m_drillShapeOpt->Enable( false );
         m_plotModeOpt->Enable( true );
-        m_choicePlotOffset->Enable( false );
+        m_useAuxOriginCheckBox->Enable( false );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
         m_HPGLPenSpeedOpt->Enable( true );
@@ -376,7 +377,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotMirrorOpt->SetValue( false );
         m_drillShapeOpt->Enable( false );
         m_plotModeOpt->Enable( true );
-        m_choicePlotOffset->Enable( false );
+        m_useAuxOriginCheckBox->Enable( false );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
@@ -411,10 +412,7 @@ void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
 
     tempOptions.m_PlotPadsOnSilkLayer = m_plotPads_on_Silkscreen->GetValue();
 
-    if( m_choicePlotOffset->GetSelection() == 0 )
-        tempOptions.SetUseAuxOrigin( false );
-    else
-        tempOptions.SetUseAuxOrigin( true );
+    tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
 
     tempOptions.m_PlotValue     = m_plotModuleValueOpt->GetValue();
     tempOptions.m_PlotReference = m_plotModuleRefOpt->GetValue();
@@ -444,16 +442,15 @@ void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
     msg = m_linesWidth->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
     tempOptions.m_PlotLineWidth = tmp;
-    g_DrawDefaultLineThickness = tempOptions.m_PlotLineWidth;
 
     msg = m_fineAdjustXscaleOpt->GetValue();
     msg.ToDouble( &m_XScaleAdjust );
     msg = m_fineAdjustYscaleOpt->GetValue();
     msg.ToDouble( &m_YScaleAdjust );
-
-    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
     m_Config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
     m_Config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
+
+    tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
     tempOptions.m_PlotFormat = m_plotFormatOpt->GetSelection();
 
@@ -471,7 +468,11 @@ void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
 
     tempOptions.m_PlotPSNegative = m_plotPSNegativeOpt->GetValue();
 
-    tempOptions.SetOutputDirectory( m_outputDirectoryName->GetValue() );
+    // Set output directory and replace backslashes with forward ones
+    wxString dirStr;
+    dirStr = m_outputDirectoryName->GetValue();
+    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+    tempOptions.SetOutputDirectory( dirStr );
 
     if( g_PcbPlotOptions != tempOptions )
     {
@@ -492,17 +493,30 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     applyPlotSettings( event );
 
     // Create output directory if it does not exist
-    if( !wxFileName::DirExists( m_outputDirectoryName->GetValue() ) )
+    wxFileName outputDir = wxFileName::DirName( m_outputDirectoryName->GetValue() );
+    wxString boardFilePath = ( (wxFileName) m_Parent->GetScreen()->GetFileName()).GetPath();
+
+    if( !outputDir.MakeAbsolute( boardFilePath ) )
     {
-        if( wxMkdir( m_outputDirectoryName->GetValue() ) )
+        wxString msg;
+        msg.Printf( wxT( " Cannot make %s absolute with respect to %s!" ),
+                    GetChars( outputDir.GetPath() ),
+                    GetChars( boardFilePath ) );
+        wxMessageBox( msg, wxT( "Plot" ), wxICON_ERROR );
+        return;
+    }
+
+    if( !wxFileName::DirExists( outputDir.GetPath() ) )
+    {
+        if( wxMkdir( outputDir.GetPath() ) )
         {
             wxString msg;
-            msg.Printf( _( "Directory %s created.\n" ), GetChars( m_outputDirectoryName->GetValue() ) );
+            msg.Printf( wxT( "Directory %s created.\n" ), GetChars( outputDir.GetPath() ) );
             m_messagesBox->AppendText( msg );
         }
         else
         {
-            wxMessageBox( _( "Cannot create output directory!" ), _( "Plot" ), wxICON_INFORMATION );
+            wxMessageBox( wxT( "Cannot create output directory!" ), wxT( "Plot" ), wxICON_ERROR );
             return;
         }
     }
@@ -581,7 +595,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_BoxSelectLayer[layer]->GetValue() )
         {
             fn = m_Parent->GetScreen()->GetFileName();
-            fn.SetPath( m_outputDirectoryName->GetValue() );
+            fn.SetPath( outputDir.GetPath() );
 
             // Create file name.
             wxString layername = board->GetLayerName( layer );

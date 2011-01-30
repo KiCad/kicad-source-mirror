@@ -145,37 +145,6 @@ void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, 
 }
 
 
-PCB_PLOT_PARAMS& PCB_PLOT_PARAMS::operator=( const PCB_PLOT_PARAMS &aPcbPlotParams )
-{
-    layerSelection = aPcbPlotParams.layerSelection;
-    useGerberExtensions = aPcbPlotParams.useGerberExtensions;
-    m_ExcludeEdgeLayer = aPcbPlotParams.m_ExcludeEdgeLayer;
-    m_PlotLineWidth = aPcbPlotParams.m_PlotLineWidth;
-    m_PlotFrameRef = aPcbPlotParams.m_PlotFrameRef;
-    m_PlotViaOnMaskLayer = aPcbPlotParams.m_PlotViaOnMaskLayer;
-    m_PlotMode = aPcbPlotParams.m_PlotMode;
-    useAuxOrigin = aPcbPlotParams.useAuxOrigin;
-    m_HPGLPenNum = aPcbPlotParams.m_HPGLPenNum;
-    m_HPGLPenSpeed = aPcbPlotParams.m_HPGLPenSpeed;
-    m_HPGLPenDiam = aPcbPlotParams.m_HPGLPenDiam;
-    m_HPGLPenOvr = aPcbPlotParams.m_HPGLPenOvr;
-    m_PlotPSColorOpt = aPcbPlotParams.m_PlotPSColorOpt;
-    m_PlotPSNegative = aPcbPlotParams.m_PlotPSNegative;
-    m_PlotReference = aPcbPlotParams.m_PlotReference;
-    m_PlotValue = aPcbPlotParams.m_PlotValue;
-    m_PlotTextOther = aPcbPlotParams.m_PlotTextOther;
-    m_PlotInvisibleTexts = aPcbPlotParams.m_PlotInvisibleTexts;
-    m_PlotPadsOnSilkLayer = aPcbPlotParams.m_PlotPadsOnSilkLayer;
-    subtractMaskFromSilk = aPcbPlotParams.subtractMaskFromSilk;
-    m_PlotFormat = aPcbPlotParams.m_PlotFormat;
-    m_PlotMirror = aPcbPlotParams.m_PlotMirror;
-    m_DrillShapeOpt = aPcbPlotParams.m_DrillShapeOpt;
-    scaleSelection = aPcbPlotParams.scaleSelection;
-    outputDirectory = aPcbPlotParams.outputDirectory;
-    return *this;
-}
-
-
 bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 {
     if( layerSelection != aPcbPlotParams.layerSelection )
@@ -345,9 +314,6 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             break;
         case T_outputdirectory:
             NeedSYMBOL();
-            // token = NextTok();
-            // if( token != T_STRING )
-            //     Expecting( T_STRING );
             aPcbPlotParams->outputDirectory = CONV_FROM_UTF8( CurText() );
             break;
         default:
