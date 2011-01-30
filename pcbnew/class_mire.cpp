@@ -118,11 +118,7 @@ void MIREPCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxPoi
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
-#ifdef USE_WX_ZOOM
     if( DC->LogicalToDeviceXRel( width ) < 2 )
-#else
-    if( panel->GetScreen()->Scale( width ) < 2 )
-#endif
         typeaff = FILAIRE;
 
     rayon = m_Size / 4;

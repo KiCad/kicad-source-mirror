@@ -25,7 +25,6 @@
 // Keys for configuration
 #define PLOTSVGMODECOLOR_KEY wxT( "PlotSVGModeColor" )
 
-extern BASE_SCREEN* ActiveScreen;
 #define WIDTH_MAX_VALUE 100
 #define WIDTH_MIN_VALUE 1
 
@@ -125,7 +124,6 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
                 schframe->m_CurrentSheet->UpdateAllScreenReferences();
                 schframe->SetSheetNumberAndCount();
                 schscreen      = schframe->m_CurrentSheet->LastScreen();
-                ActiveScreen   = schscreen;
             }
             else  // Should not happen
                 return;
@@ -169,8 +167,6 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
         msg += wxT( "\n" );
         m_MessagesBox->AppendText( msg );
     }
-
-    ActiveScreen = oldscreen;
 }
 
 

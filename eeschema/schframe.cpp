@@ -346,23 +346,12 @@ void SCH_EDIT_FRAME::CreateScreens()
 
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    SCH_SHEET_PATH* sheet;
-
-    if( m_LibeditFrame ) // Can close component editor ?
-    {
-        if( !m_LibeditFrame->Close() )
-            return;
-    }
+    if( m_LibeditFrame && !m_LibeditFrame->Close() )   // Can close component editor?
+        return;
 
     SCH_SHEET_LIST SheetList;
 
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
-    {
-        if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
-            break;
-    }
-
-    if( sheet )
+    if( SheetList.IsModified() )
     {
         wxMessageDialog dialog( this,
                                 _( "Schematic modified, Save before exit ?" ),
@@ -385,15 +374,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
-    {
-        if( sheet->LastScreen() )
-        {
-            sheet->LastScreen()->ClrModify();
-        }
-    }
+    SheetList.ClearModifyStatus();
 
     if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty()
        && (g_RootSheet->GetScreen()->GetDrawItems() != NULL) )
@@ -733,7 +714,6 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
                                              wxT( "Library Editor" ),
                                              wxPoint( -1, -1 ),
                                              wxSize( 600, 400 ) );
-        ActiveScreen = GetBaseScreen();
         m_LibeditFrame->AdjustScrollBars();
     }
 }

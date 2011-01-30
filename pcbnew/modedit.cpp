@@ -164,7 +164,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint    pos;
     bool       redraw = false;
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 

@@ -365,7 +365,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         {
         case SCH_JUNCTION_T:
         case SCH_LINE_T:
-            DrawPanel->PostDirtyRect( item->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( item->GetBoundingBox() );
             break;
 
         default:

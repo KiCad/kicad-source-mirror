@@ -208,6 +208,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenWidth( )
                                                            EESCHEMA_INTERNAL_UNIT);
     if( g_HPGL_Pen_Descr.m_Pen_Diam > 100 )
         g_HPGL_Pen_Descr.m_Pen_Diam = 100;
+
     if( g_HPGL_Pen_Descr.m_Pen_Diam < 1 )
         g_HPGL_Pen_Descr.m_Pen_Diam = 1;
 }
@@ -216,8 +217,10 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenWidth( )
 void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenSpeed(  )
 {
     g_HPGL_Pen_Descr.m_Pen_Speed = m_penSpeedCtrl->GetValue();
+
     if( g_HPGL_Pen_Descr.m_Pen_Speed > 40 )
         g_HPGL_Pen_Descr.m_Pen_Speed = 40;
+
     if( g_HPGL_Pen_Descr.m_Pen_Speed < 1 )
         g_HPGL_Pen_Descr.m_Pen_Speed = 1;
 }
@@ -226,8 +229,10 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenSpeed(  )
 void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenNum(  )
 {
     g_HPGL_Pen_Descr.m_Pen_Num = m_penNumCtrl->GetValue();
+
     if( g_HPGL_Pen_Descr.m_Pen_Num > 8 )
         g_HPGL_Pen_Descr.m_Pen_Num = 8;
+
     if( g_HPGL_Pen_Descr.m_Pen_Num < 1 )
         g_HPGL_Pen_Descr.m_Pen_Num = 1;
 }
@@ -258,8 +263,8 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::HPGL_Plot( bool aPlotAll )
  * selected sheet
  */
 void DIALOG_PLOT_SCHEMATIC_HPGL::ReturnSheetDims( BASE_SCREEN* screen,
-                                            wxSize&      SheetSize,
-                                            wxPoint&     SheetOffset )
+                                                  wxSize&      SheetSize,
+                                                  wxPoint&     SheetOffset )
 {
     Ki_PageDescr* PlotSheet;
 
@@ -277,7 +282,6 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
 {
     wxString               PlotFileName;
     SCH_SCREEN*            screen    = m_Parent->GetScreen();
-    SCH_SCREEN*            oldscreen = screen;
     SCH_SHEET_PATH*        sheetpath, * oldsheetpath = m_Parent->GetSheet();
     Ki_PageDescr*          PlotSheet;
     wxSize                 SheetSize;
@@ -300,46 +304,47 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
         {
             if( sheetpath == NULL )
                 break;
+
             list.Clear();
+
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 m_Parent->m_CurrentSheet = &list;
                 m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
                 m_Parent->SetSheetNumberAndCount();
                 screen = m_Parent->m_CurrentSheet->LastScreen();
-                ActiveScreen = screen;
             }
             else  // Should not happen
                 return;
+
             sheetpath = SheetList.GetNext();
         }
+
         ReturnSheetDims( screen, SheetSize, SheetOffset );
+
         /* Calculation of conversion scales. */
         if( HPGL_SheetSize )
             PlotSheet = Plot_sheet_list[HPGL_SheetSize];
         else
             PlotSheet = screen->m_CurrentSheetDesc;
+
         /* 10x because eeschema works in mils, not decimals */
-        double plot_scale = 10 * (double) PlotSheet->m_Size.x /
-                            (double) SheetSize.x;
+        double plot_scale = 10 * (double) PlotSheet->m_Size.x / (double) SheetSize.x;
 
         /* Calculate offsets */
         PlotOffset.x = -SheetOffset.x;
         PlotOffset.y = -SheetOffset.y;
 
-        PlotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() +
-            wxT( ".plt" );
+        PlotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT( ".plt" );
 
         SetLocaleTo_C_standard();
-        Plot_1_Page_HPGL( PlotFileName, screen, PlotSheet, PlotOffset,
-                          plot_scale );
+        Plot_1_Page_HPGL( PlotFileName, screen, PlotSheet, PlotOffset, plot_scale );
         SetLocaleTo_Default();
 
         if( !aPlotAll )
             break;
     }
 
-    ActiveScreen = oldscreen;
     m_Parent->m_CurrentSheet = oldsheetpath;
     m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     m_Parent->SetSheetNumberAndCount();
@@ -347,10 +352,10 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
 
 
 void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
-                                             SCH_SCREEN*     screen,
-                                             Ki_PageDescr*   sheet,
-                                             wxPoint&        offset,
-                                             double          plot_scale )
+                                                   SCH_SCREEN*     screen,
+                                                   Ki_PageDescr*   sheet,
+                                                   wxPoint&        offset,
+                                                   double          plot_scale )
 {
     wxString msg;
 
@@ -383,6 +388,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
     plotter->start_plot( output_file );
 
     plotter->set_color( BLACK );
+
     if( m_plot_Sheet_Ref )
         m_Parent->PlotWorkSheet( plotter, screen );
 

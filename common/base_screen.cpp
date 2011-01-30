@@ -102,23 +102,6 @@ void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
 
 
 /**
- * Function CursorRealPosition
- * @return the position in user units of location ScreenPos
- * @param ScreenPos = the screen (in pixel) position co convert
-*/
-wxPoint BASE_SCREEN::CursorRealPosition( const wxPoint& ScreenPos )
-{
-    wxPoint curpos = ScreenPos;
-    Unscale( curpos );
-
-#ifndef USE_WX_ZOOM
-    curpos += m_DrawOrg;
-#endif
-
-    return curpos;
-}
-
-/**
  * Function SetScalingFactor
  * calculates the .m_Zoom member to have a given scaling factor
  * @param aScale - the the current scale used to draw items on screen
@@ -131,112 +114,14 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
     // Limit zoom to max and min allowed values:
     if (zoom < m_ZoomList[0])
         zoom = m_ZoomList[0];
+
     int idxmax = m_ZoomList.GetCount() - 1;
+
     if (zoom > m_ZoomList[idxmax])
         zoom = m_ZoomList[idxmax];
 
     SetZoom( zoom );
 }
-
-/**
- * Calculate coordinate value for zooming.
- *
- * Call this method when drawing on the device context.  It scales the
- * coordinate using the current zoom settings.  Zooming in Kicad occurs
- * by actually scaling the entire drawing using the zoom setting.
- *
- * FIXME: We should probably use wxCoord instead of int here but that would
- *        require using wxCoord in all of the other code that makes device
- *        context calls as well.
- */
-int BASE_SCREEN::Scale( int coord )
-{
-#ifdef USE_WX_ZOOM
-    return coord;
-#else
-    if( !m_ZoomScalar || !m_Zoom )
-        return coord;
-
-    return wxRound( (double) ( coord * m_ZoomScalar ) / (double) m_Zoom );
-#endif
-}
-
-
-double BASE_SCREEN::Scale( double coord )
-{
-#ifdef USE_WX_ZOOM
-    return coord;
-#else
-    if( !m_Zoom )
-        return 0;
-
-    if( !m_ZoomScalar || !m_Zoom )
-        return 0;
-
-    return ( coord * (double) m_ZoomScalar ) / (double) m_Zoom;
-#endif
-}
-
-
-void BASE_SCREEN::Scale( wxPoint& pt )
-{
-    pt.x = Scale( pt.x );
-    pt.y = Scale( pt.y );
-}
-
-
-void BASE_SCREEN::Scale( wxRealPoint& pt )
-{
-#ifdef USE_WX_ZOOM
-    // No change
-#else
-    if( !m_ZoomScalar || !m_Zoom )
-        return;
-
-    pt.x = pt.x * m_ZoomScalar / (double) m_Zoom;
-    pt.y = pt.y  * m_ZoomScalar / (double) m_Zoom;
-#endif
-}
-
-
-void BASE_SCREEN::Scale( wxSize& sz )
-{
-    sz.SetHeight( Scale( sz.GetHeight() ) );
-    sz.SetWidth( Scale( sz.GetWidth() ) );
-}
-
-
-/**
- * Calculate the physical (unzoomed) location of a coordinate.
- *
- * Call this method when you want to find the unzoomed (physical) location
- * of a coordinate on the drawing.
- */
-int BASE_SCREEN::Unscale( int coord )
-{
-#ifdef USE_WX_ZOOM
-    return coord;
-#else
-    if( !m_Zoom || !m_ZoomScalar )
-        return 0;
-
-    return wxRound( (double) ( coord * m_Zoom ) / (double) m_ZoomScalar );
-#endif
-}
-
-void BASE_SCREEN::Unscale( wxPoint& pt )
-{
-    pt.x = Unscale( pt.x );
-    pt.y = Unscale( pt.y );
-}
-
-
-void BASE_SCREEN::Unscale( wxSize& sz )
-{
-    sz.SetHeight( Unscale( sz.GetHeight() ) );
-    sz.SetWidth( Unscale( sz.GetWidth() ) );
-}
-
 
 void BASE_SCREEN::SetZoomList( const wxArrayInt& zoomlist )
 {

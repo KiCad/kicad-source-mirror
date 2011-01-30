@@ -61,13 +61,12 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
         {
             sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheetFoundIn;
-            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
         sheetFoundIn->LastScreen()->m_Curseur = lastMarker->m_Pos;
 
-        Recadre_Trace( TRUE );
+        RedrawScreen( TRUE );
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
@@ -184,7 +183,6 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
             DoCenterAndRedraw = TRUE;
         }
@@ -215,10 +213,10 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         #undef MARGIN
 
         if( DoCenterAndRedraw )
-            Recadre_Trace( mouseWarp );
+            RedrawScreen( mouseWarp );
         else
         {
-            INSTALL_DC( dc, DrawPanel );
+            INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
             DrawPanel->CursorOff( &dc );
@@ -329,13 +327,12 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
         {
             sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheetFoundIn;
-            ActiveScreen    = m_CurrentSheet->LastScreen();
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
 //        sheetFoundIn->LastScreen()->m_Curseur = lastItem->GetBoundingBox().Centre();
         sheetFoundIn->LastScreen()->m_Curseur = lastItemPosition;
-        Recadre_Trace( true );
+        RedrawScreen( true );
 
         msg = event.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
         SetStatusText( msg );

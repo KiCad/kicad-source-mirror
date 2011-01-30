@@ -448,23 +448,22 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
 }
 
 
-bool SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
+SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
 {
+    if( this == &d1 )     // Self assignment is bad!
+        return *this;
+
     m_numSheets = d1.m_numSheets;
 
     unsigned i;
 
     for( i = 0; i < m_numSheets; i++ )
-    {
         m_sheets[i] = d1.m_sheets[i];
-    }
 
     for( ; i < DSLSZ; i++ )
-    {
         m_sheets[i] = 0;
-    }
 
-    return true;
+    return *this;
 }
 
 
@@ -480,29 +479,6 @@ bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
     }
 
     return true;
-}
-
-
-bool SCH_SHEET_PATH::operator!=( const SCH_SHEET_PATH& d1 ) const
-{
-    if( m_numSheets != d1.m_numSheets )
-        return true;
-
-    for( unsigned i = 0; i < m_numSheets; i++ )
-    {
-        if( m_sheets[i] != d1.m_sheets[i] )
-        {
-            /*
-            printf( "micompare this:'%s' d1:'%s'\n",
-                CONV_TO_UTF8( PathHumanReadable() ),
-                CONV_TO_UTF8( d1.PathHumanReadable() ) );
-            */
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 
@@ -632,6 +608,28 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     }
 
     m_currList.Pop();
+}
+
+
+bool SCH_SHEET_LIST::IsModified()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet != NULL; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
+            return true;
+    }
+
+    return false;
+}
+
+
+void SCH_SHEET_LIST::ClearModifyStatus()
+{
+    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet != NULL; sheet = GetNext() )
+    {
+        if( sheet->LastScreen() )
+            sheet->LastScreen()->ClrModify();
+    }
 }
 
 

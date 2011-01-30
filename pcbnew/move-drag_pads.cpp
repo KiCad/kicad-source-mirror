@@ -128,7 +128,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aDraw )
     {
         aPad->m_Flags |= DO_NOT_DRAW;
-        DrawPanel->PostDirtyRect( aPad->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( aPad->GetBoundingBox() );
         aPad->m_Flags &= ~DO_NOT_DRAW;
     }
 
@@ -166,7 +166,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->ComputeShapeMaxRadius();
 
     if( aDraw )
-        DrawPanel->PostDirtyRect( aPad->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( aPad->GetBoundingBox() );
 
     ( (MODULE*) aPad->GetParent() )->m_LastEdit_Time = time( NULL );
 }
@@ -220,7 +220,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
     Module->Set_Rectangle_Encadrement();
     Pad->DisplayInfo( this );
     if( draw )
-        DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
 }
 
 
@@ -254,7 +254,7 @@ void WinEDA_BasePcbFrame::DeletePad( D_PAD* aPad, bool aQuery )
 
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
-    DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+    DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
     Module->Set_Rectangle_Encadrement();
 
     OnModify();

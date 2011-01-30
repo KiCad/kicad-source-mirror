@@ -236,6 +236,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_DRAG:    /* Drag */
             GetScreen()->BreakSegmentsOnJunctions();
             // fall through
+
         case BLOCK_ROTATE:
         case BLOCK_MIRROR_X:
         case BLOCK_MIRROR_Y:
@@ -243,6 +244,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_COPY:    /* Copy */
             GetScreen()->UpdatePickList();
             // fall through
+
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
             if( block->GetCount() )
             {
@@ -297,7 +299,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_FLIP: /* pcbnew only! */
             break;
 
-
         case BLOCK_ZOOM: /* Window Zoom */
             zoom_command = true;
             break;
@@ -308,9 +309,10 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         }
     }
 
-    if( block->m_Command  == BLOCK_ABORT )
+    if( block->m_Command == BLOCK_ABORT )
     {
         GetScreen()->ClearDrawingState();
+        DrawPanel->Refresh();
     }
 
     if( ! nextcmd )
@@ -327,7 +329,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     if( zoom_command )
         Window_Zoom( GetScreen()->m_BlockLocate );
 
-    return nextcmd ;
+    return nextcmd;
 }
 
 

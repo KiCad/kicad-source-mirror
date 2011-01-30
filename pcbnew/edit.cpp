@@ -35,7 +35,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     wxPoint     pos;
 
     int         itmp;
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
     BOARD_ITEM* DrawStruct = GetCurItem();
     MODULE* module;
 

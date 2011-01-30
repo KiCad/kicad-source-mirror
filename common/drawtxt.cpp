@@ -287,10 +287,10 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     if( aPanel )
     {
         int xm, ym, ll, xc, yc;
-        ll = aPanel->GetScreen()->Scale( ABS( dx ) );
+        ll = ABS( dx );
 
-        xc = GRMapX( current_char_pos.x );
-        yc = GRMapY( current_char_pos.y );
+        xc = current_char_pos.x;
+        yc = current_char_pos.y;
 
         x0 = aPanel->m_ClipBox.GetX() - ll;
         y0 = aPanel->m_ClipBox.GetY() - ll;
@@ -343,11 +343,12 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     }
 
     // Note: if aPanel == NULL, we are using a GL Canvas that handle scaling
-    if( aPanel && aPanel->GetScreen()->Scale( aSize.x ) == 0 )
+    if( aSize.x == 0 )
         return;
 
-    /* if a text size is too small, the text cannot be drawn, and it is drawn as a single graphic line */
-    if( aPanel && ABS( ( aPanel->GetScreen()->Scale( aSize.x ) ) ) < 3 )
+    /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
+     * graphic line */
+    if( aSize.x < 3 )
     {
         /* draw the text as a line always vertically centered */
         wxPoint end( current_char_pos.x + dx, current_char_pos.y );

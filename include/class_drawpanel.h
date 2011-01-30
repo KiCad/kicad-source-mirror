@@ -89,7 +89,6 @@ public:
     }
 
     void         OnPaint( wxPaintEvent& event );
-    void         OnSize( wxSizeEvent& event );
 
     /**
      * Function DrawBackGround
@@ -128,7 +127,7 @@ public:
      */
     void         DrawGridAxis( wxDC* aDC, int aDrawMode );
 
-    void         OnEraseBackground( wxEraseEvent& event );
+    void         OnEraseBackground( wxEraseEvent& event ) { }
 
     void         OnActivate( wxActivateEvent& event );
 
@@ -141,7 +140,7 @@ public:
      * update the boundary box.  If wxDC coordinate manipulation is used, then
      * the scale factor and drawing logical offset is set.  Then the base
      * method is called to set the DC device origin and user scale.  This
-     * connects everything together to acheive the appropiate coordinate
+     * connects everything together to achieve the appropriate coordinate
      * manipulation using wxDC LogicalToDeviceXXX and DeviceToLogixalXXX
      * methods.  This gets called automatically for a paint event.  If you do
      * any drawing outside the paint event, you must call DoPrepareDC manually.
@@ -149,6 +148,18 @@ public:
      * @param dc - The device context to prepare.
      */
     virtual void DoPrepareDC(wxDC& dc);
+
+    /**
+     * Function DeviceToLogical
+     * converts \a aRect from device to drawing (logical) coordinates.
+     * <p>
+     * \a aRect must be in scrolled device units.
+     * <\p>
+     * @param aRect The rectangle to convert.
+     * @param aDC The device context used for the conversion.
+     * @return A rectangle converted to drawing units.
+     */
+    wxRect DeviceToLogical( const wxRect& aRect, wxDC& aDC );
 
     /* Mouse and keys events */
     void         OnMouseWheel( wxMouseEvent& event );
@@ -171,7 +182,22 @@ public:
     void         Process_Special_Functions( wxCommandEvent& event );
 
     bool         IsPointOnDisplay( wxPoint ref_pos );
-    void         SetBoundaryBox( wxDC* dc );
+
+    /**
+     * Function SetClipBox
+     * sets the clip box in drawing (logical) units from \a aRect in device units.
+     * <p>
+     * If \a aRect is NULL, then the entire visible area of the screen is used as the clip
+     * area.  The clip box is used when drawing to determine which objects are not visible
+     * and do not need to be drawn.
+     * </p>
+     * @param aDc The device context use for drawing with the correct scale and
+     *            offsets already configured.  See DoPrepareDC().
+     * @param aRect The clip rectangle in device units or NULL for the entire visible area
+     *              of the screen.
+     */
+    void         SetClipBox( wxDC& dc, const wxRect* aRect = NULL );
+
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
 
     /**
@@ -183,40 +209,18 @@ public:
 
     /**
      * Function CursorScreenPosition
-     * @return the curseur current position in pixels in the screen draw area
+     * @return the cursor current position in pixels in the screen draw area
      */
     wxPoint      CursorScreenPosition();
 
     /**
-     * Function PostDirtyRect
-     * appends the given rectangle in pcb units to the DrawPanel's invalid
-     * region list so that very soon (but not immediately), this rectangle
-     * along with any other recently posted rectangles is redrawn.  Conversion
-     * to pixels is done in here.
-     * @param aRect The rectangle to append, it must be orthogonal
-     *   (vertical and horizontal edges only), and it must be [,) in nature,
-     *   i.e. [pos, dim) == [inclusive, exclusive)
+     * Function RefreshDrawingRect
+     * redraws the contents of \a aRect in drawing units.  \a aRect is converted to
+     * screen coordinates and wxWindow::RefreshRect() is called to repaint the region.
+     * @param aRect The rectangle to repaint.
+     * @param aEraseBackground Erases the background if true.
      */
-    void         PostDirtyRect( EDA_Rect aRect );
-
-    /**
-     * Function ConvertPcbUnitsToPixelsUnits
-     * converts pos and size of the given EDA_Rect to pos and size in pixels,
-     * relative to the current draw area (origin 0,0 is the left top visible
-     * corner of draw area) according to the current scroll and zoom.
-     * @param aRect = the rectangle to convert
-     */
-    void         ConvertPcbUnitsToPixelsUnits( EDA_Rect* aRect );
-
-    /**
-     * Function ConvertPcbUnitsToPixelsUnits
-     * converts a given wxPoint position (in internal units) to units of
-     * pixels, relative to the current draw area (origin 0,0 is the left
-     * top visible
-     * corner of draw area) according to the current scroll and zoom.
-     * @param aPosition = the position to convert
-     */
-    void         ConvertPcbUnitsToPixelsUnits( wxPoint* aPosition );
+    void         RefreshDrawingRect( const EDA_Rect& aRect, bool aEraseBackground = true );
 
     wxPoint      GetScreenCenterRealPosition( void );
     void         MouseToCursorSchema();

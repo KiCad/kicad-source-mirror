@@ -37,9 +37,6 @@ PAD_DRAWINFO::PAD_DRAWINFO()
     m_Display_netname = true;
     m_ShowPadFilled   = true;
     m_ShowNCMark      = true;
-#ifndef USE_WX_ZOOM
-    m_Scale = 1.0;
-#endif
     m_IsPrinting = false;
 }
 
@@ -319,9 +316,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     drawInfo.m_Mask_margin = mask_margin;
     drawInfo.m_ShowNCMark  = brd->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) );
     drawInfo.m_IsPrinting  = screen->m_IsPrinting;
-#ifndef USE_WX_ZOOM
-    drawInfo.m_Scale = (double) screen->Scale( 1000 ) / 1000;
-#endif
     SetAlpha( &color, 170 );
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
@@ -467,11 +461,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
         case PAD_CIRCLE:
 
-#ifdef USE_WX_ZOOM
             if( aDC->LogicalToDeviceXRel( hole ) > 1 )
-#else
-            if( aDrawInfo.m_Scale * hole > 1 ) /* draw hole if its size is enough */
-#endif
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 aDrawInfo.m_Color, aDrawInfo.m_HoleColor );
             break;
@@ -579,11 +569,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         tsize = min( AreaSize.y, AreaSize.x / numpad_len );
         #define CHAR_SIZE_MIN 5
 
-#ifdef USE_WX_ZOOM
-        if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )     // Not drawable when size too small.
-#else
-        if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )            // Not drawable when size too small.
-#endif
+        if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN ) // Not drawable when size too small.
         {
             // tsize reserve room for marges and segments thickness
             tsize = (int) ( tsize * 0.8 );
@@ -600,11 +586,7 @@ void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
     tsize = min( AreaSize.y, AreaSize.x / shortname_len );
 
-#ifdef USE_WX_ZOOM
-    if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )         // Not drawable in size too small.
-#else
-    if( aDrawInfo.m_Scale * tsize >= CHAR_SIZE_MIN )                // Not drawable in size too small.
-#endif
+    if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.
     {
         tpos = tpos0;
         if( aDrawInfo.m_Display_padnum )

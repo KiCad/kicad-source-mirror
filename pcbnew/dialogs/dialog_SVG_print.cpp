@@ -259,9 +259,9 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     int bg_color = g_DrawBgColor;
     g_DrawBgColor = WHITE;
- 
+
     if( aPrint_Frame_Ref )
-        m_Parent->TraceWorkSheet( &dc, ActiveScreen, s_Parameters.m_PenDefaultSize );
+        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize );
 
     m_Parent->PrintPage( &dc,  m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;

@@ -110,7 +110,7 @@ void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
 
     if( Text->m_Type == TEXT_is_DIVERS )
     {
-        DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DeleteStructure();
         OnModify();
         Module->m_LastEdit_Time = time( NULL );
@@ -146,7 +146,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Text->m_Orient = TextInitialOrientation;
 
     /* Redraw the text */
-    Panel->PostDirtyRect( Text->GetBoundingBox() );
+    Panel->RefreshDrawingRect( Text->GetBoundingBox() );
 
     // leave it at (0,0) so we can use it Rotate when not moving.
     MoveVector.x = MoveVector.y = 0;
@@ -200,7 +200,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
     {
-        DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DrawUmbilical( DrawPanel, DC, GR_XOR, -MoveVector );
 
         /* Update the coordinates for anchor. */
@@ -226,7 +226,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             OnModify();
 
             /* Redraw text. */
-            DrawPanel->PostDirtyRect( Text->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         }
         else
             Text->m_Pos = GetScreen()->m_Curseur;

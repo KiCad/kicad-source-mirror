@@ -138,7 +138,7 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         Place_Ancre( module );      // set the new relatives internal
                                     // coordinates of items
         GetScreen()->m_Curseur = wxPoint( 0, 0 );
-        Recadre_Trace( TRUE );
+        RedrawScreen( TRUE );
 
         // Replace the module in position 0, to recalculate absolutes
         // coordinates of items

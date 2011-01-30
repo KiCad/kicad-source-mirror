@@ -640,7 +640,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     switch( id )
     {
@@ -928,6 +928,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     if( m_ID_current_state == 0 )
         m_lastDrawItem = NULL;
+
 }
 
 
@@ -1072,7 +1073,7 @@ void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
     wxCHECK_RET( m_component != NULL,
                  wxT( "Cannot create new part from non-existant current part." ) );
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
     DrawPanel->CursorOff( &dc );
     EditField( &dc, &m_component->GetValueField() );
     DrawPanel->MouseToCursorSchema();

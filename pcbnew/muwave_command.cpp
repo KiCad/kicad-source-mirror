@@ -21,7 +21,7 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     wxGetMousePosition( &pos.x, &pos.y );
 

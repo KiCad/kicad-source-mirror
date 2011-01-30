@@ -43,7 +43,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
     if( m_HToolBar == NULL )
         return;
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     switch( id )
     {

@@ -49,9 +49,6 @@
 #define strnicmp _strnicmp
 #endif
 
-/* Warning!!!  Using wxDC for zooming is experimental. */
-#cmakedefine USE_WX_ZOOM 1
-
 /* Warning!!!  Using wxGraphicContext for rendering is experimental. */
 #cmakedefine USE_WX_GRAPHICS_CONTEXT 1
 

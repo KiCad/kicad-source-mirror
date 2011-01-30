@@ -156,7 +156,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
     switch( id )
     {
     case ID_HIERARCHY:
@@ -403,7 +404,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SaveCopyInUndoList( sheet, UR_CHANGED );
             sheet->CleanupSheet();
             OnModify();
-            DrawPanel->PostDirtyRect( sheet->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( sheet->GetBoundingBox() );
         }
         break;
 

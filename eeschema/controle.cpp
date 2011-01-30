@@ -243,8 +243,6 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
     int         hotkey = 0;
     double      scalar = screen->GetScalingFactor();
 
-    ActiveScreen = screen;
-
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
@@ -339,8 +337,6 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
     int         hotkey = 0;
     double      scalar = screen->GetScalingFactor();
 
-    ActiveScreen = screen;
-
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;
 
@@ -433,8 +429,6 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
     wxPoint     curpos, oldpos;
     int         hotkey = 0;
     double      scalar = screen->GetScalingFactor();
-
-    ActiveScreen = screen;
 
     curpos = screen->m_MousePosition;
     oldpos = screen->m_Curseur;

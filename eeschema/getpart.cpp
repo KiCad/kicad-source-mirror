@@ -259,7 +259,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
         else
         {
-            DrawPanel->PostDirtyRect( DrawComponent->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( DrawComponent->GetBoundingBox() );
         }
     }
 
@@ -441,11 +441,11 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
 
     // switch from normal mode to xor mode for the duration of the move, first
     // by erasing fully any "normal drawing mode" primitives with the
-    // PostDirtyRect(), then by drawing the first time in xor mode so that
+    // RefreshDrawingRect(), then by drawing the first time in xor mode so that
     // subsequent xor drawing modes will fully erase this first copy.
 
     Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
-    DrawPanel->PostDirtyRect( Component->GetBoundingBox() );
+    DrawPanel->RefreshDrawingRect( Component->GetBoundingBox() );
 
     Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 

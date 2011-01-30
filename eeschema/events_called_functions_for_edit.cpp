@@ -27,7 +27,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     if( !curr_item || curr_item->m_Flags )
         return;
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     switch( curr_item->Type() )
     {

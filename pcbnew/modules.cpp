@@ -104,7 +104,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     {
         int tmp = module->m_Flags;
         module->m_Flags |= DO_NOT_DRAW;
-        DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( module->GetBoundingBox() );
         module->m_Flags = tmp;
     }
 
@@ -328,7 +328,7 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
         {
             int tmp = Module->m_Flags;
             Module->m_Flags |= DO_NOT_DRAW;
-            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
             Module->m_Flags = tmp;
         }
 
@@ -482,7 +482,7 @@ void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
         {
             int tmp = module->m_Flags;
             module->m_Flags |= DO_NOT_DRAW;
-            DrawPanel->PostDirtyRect( module->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( module->GetBoundingBox() );
             module->m_Flags = tmp;
 
             if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )

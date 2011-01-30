@@ -173,7 +173,6 @@ void DIALOG_PLOT_SCHEMATIC_PS::initOptVars()
 void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 {
     SCH_SCREEN*     screen    = m_Parent->GetScreen();
-    SCH_SCREEN*     oldscreen = screen;
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH* oldsheetpath = m_Parent->GetSheet();        // sheetpath is saved here
     wxString        plotFileName;
@@ -198,20 +197,24 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         {
             if( sheetpath == NULL )
                 break;
+
             list.Clear();
+
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 m_Parent->m_CurrentSheet = &list;
                 m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
                 m_Parent->SetSheetNumberAndCount();
                 screen = m_Parent->m_CurrentSheet->LastScreen();
-                ActiveScreen = screen;
             }
             else  // Should not happen
                 return;
+
             sheetpath = SheetList.GetNext();
         }
+
         actualPage = screen->m_CurrentSheetDesc;
+
         switch( m_pageSizeSelect )
         {
         case PAGE_SIZE_A:
@@ -243,7 +246,6 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
             break;
     }
 
-    ActiveScreen = oldscreen;
     m_Parent->m_CurrentSheet = oldsheetpath;
     m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     m_Parent->SetSheetNumberAndCount();

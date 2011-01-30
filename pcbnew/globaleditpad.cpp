@@ -199,7 +199,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         if( aDraw )
         {
             Module->m_Flags |= DO_NOT_DRAW;
-            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
             Module->m_Flags &= ~DO_NOT_DRAW;
         }
 
@@ -273,7 +273,7 @@ void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
         Module->Set_Rectangle_Encadrement();
         if( aDraw )
-            DrawPanel->PostDirtyRect( Module->GetBoundingBox() );
+            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
     }
 
     OnModify();

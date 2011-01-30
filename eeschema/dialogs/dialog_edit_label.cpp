@@ -197,7 +197,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( m_CurrentText->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
-    m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
 
     text = m_textLabel->GetValue();
     if( !text.IsEmpty() )
@@ -235,7 +235,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
         g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
-    m_Parent->DrawPanel->PostDirtyRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->DrawPanel->MouseToCursorSchema();
     EndModal( wxID_OK );
 }

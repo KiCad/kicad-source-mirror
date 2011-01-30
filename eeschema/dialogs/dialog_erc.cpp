@@ -172,12 +172,11 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
     {
         sheet->LastScreen()->SetZoom( m_Parent->GetScreen()->GetZoom() );
         *m_Parent->m_CurrentSheet = *sheet;
-        ActiveScreen = m_Parent->m_CurrentSheet->LastScreen();
         m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     }
 
     sheet->LastScreen()->m_Curseur = pos;
-    m_Parent->Recadre_Trace( true );
+    m_Parent->RedrawScreen( true );
 }
 
 

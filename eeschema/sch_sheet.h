@@ -531,6 +531,6 @@ private:
 };
 
 
-typedef boost::ptr_vector< SCH_SHEET > SCH_SHEETS;
+typedef std::vector< SCH_SHEET* > SCH_SHEETS;
 
 #endif /* CLASS_DRAWSHEET_H */

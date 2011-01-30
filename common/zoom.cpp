@@ -17,33 +17,30 @@
 #include "kicad_device_context.h"
 #include "hotkeys_basic.h"
 
-/** Compute draw offset (scroll bars and draw parameters)
- *  in order to have the current graphic cursor position at the screen center
- *  @param ToMouse if TRUE, the mouse cursor is moved
- *  to the graphic cursor position (which is usually on grid)
- *
- *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
- */
-void EDA_DRAW_FRAME::Recadre_Trace( bool ToMouse )
+
+void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
 {
+
     PutOnGrid( &(GetBaseScreen()->m_Curseur) );
     AdjustScrollBars();
 
-#if !(defined(__WXMAC__) && defined(USE_WX_ZOOM))
-    /* We do not use here DrawPanel->Refresh() because
-     * the redraw is delayed and the mouse events (from MouseToCursorSchema ot others)
-     * during this delay create problems: the mouse cursor position is false in calculations.
-     * TODO: see exactly how the mouse creates problems when moving during refresh
-     * use Refresh() and update() do not change problems
+#if !defined(__WXMAC__)
+    /* DrawPanel->Refresh() is not used here because the redraw is delayed and the mouse
+     * events (from MouseToCursorSchema ot others) during this delay create problems: the
+     * mouse cursor position is false in calculations.  TODO: see exactly how the mouse
+     * creates problems when moving during refresh use Refresh() and update() do not change
+     * problems
      */
     INSTALL_DC( dc, DrawPanel );
+    DrawPanel->SetClipBox( dc );
     DrawPanel->ReDraw( &dc, DrawPanel->m_DisableEraseBG ? false : true );
 #else
     DrawPanel->Refresh();
     DrawPanel->Update();
 #endif
+
     /* Move the mouse cursor to the on grid graphic cursor position */
-    if( ToMouse == TRUE )
+    if( aWarpPointer )
         DrawPanel->MouseToCursorSchema();
  }
 
@@ -77,7 +74,7 @@ void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 void EDA_DRAW_FRAME::Zoom_Automatique( bool move_mouse_cursor )
 {
     GetBaseScreen()->SetZoom( BestZoom() ); // Set the best zoom
-    Recadre_Trace( move_mouse_cursor );     // Set the best centering and refresh the screen
+    RedrawScreen( move_mouse_cursor );     // Set the best centering and refresh the screen
 }
 
 
@@ -101,7 +98,7 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_Rect& Rect )
 
     GetBaseScreen()->SetScalingFactor( bestscale );
     GetBaseScreen()->m_Curseur = Rect.Centre();
-    Recadre_Trace( TRUE );
+    RedrawScreen( TRUE );
 }
 
 
@@ -130,7 +127,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         if( id == ID_ZOOM_IN )
             screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
         if( screen->SetPreviousZoom() )
-            Recadre_Trace( zoom_at_cursor );
+            RedrawScreen( zoom_at_cursor );
         break;
 
     case ID_POPUP_ZOOM_OUT:
@@ -142,7 +139,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         if( id == ID_ZOOM_OUT )
             screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
         if( screen->SetNextZoom() )
-            Recadre_Trace( zoom_at_cursor );
+            RedrawScreen( zoom_at_cursor );
         break;
 
     case ID_ZOOM_REDRAW:
@@ -150,7 +147,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_CENTER:
-        Recadre_Trace( true );
+        RedrawScreen( true );
         break;
 
     case ID_ZOOM_PAGE:
@@ -174,7 +171,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
             return;
         }
         if( screen->SetZoom( screen->m_ZoomList[i] ) )
-            Recadre_Trace( true );
+            RedrawScreen( true );
     }
 
     UpdateStatusBar();

@@ -78,7 +78,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 
     if( found )
     {
-        INSTALL_DC( dc, DrawPanel );
+        INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
         if( g_HighLight_Status )
             High_Light( &dc );

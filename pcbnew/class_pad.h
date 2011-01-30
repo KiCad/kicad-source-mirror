@@ -42,9 +42,7 @@ public:
     bool m_ShowNCMark;          // true to show pad not connected mark
     bool m_IsPrinting;          // true to print, false to display on screen.
     wxPoint m_Offset;           // general draw offset
-#ifndef USE_WX_ZOOM
-    double m_Scale;             // Draw scaling factor
-#endif
+
     PAD_DRAWINFO( );
 };
 

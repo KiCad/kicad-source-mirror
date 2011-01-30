@@ -366,11 +366,8 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
 
     /* Enable this to draw the anchor of the component. */
 #if 0
-#ifdef USE_WX_ZOOM
     int len = aDc->DeviceToLogicalXRel( 3 );
-#else
-    int len = aPanel->GetScreen()->Unscale( 3 );
-#endif
+
     GRLine( &aPanel->m_ClipBox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
             aOffset.y + len, 0, aColor );
     GRLine( &aPanel->m_ClipBox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,

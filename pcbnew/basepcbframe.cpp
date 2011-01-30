@@ -135,7 +135,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
         screen->m_Curseur = aPos;
-        Recadre_Trace( true );
+        RedrawScreen( true );
     }
     else
     {

@@ -597,11 +597,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         rayon = (int) hypot( (double) ( m_End.x - m_Start.x ),
                              (double) ( m_End.y - m_Start.y ) );
 
-#ifdef USE_WX_ZOOM
         if( DC->LogicalToDeviceXRel( l_piste ) < L_MIN_DESSIN )
-#else
-        if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
-#endif
         {
             GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
                       m_Start.y + aOffset.y, rayon, color );
@@ -609,11 +605,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         else
         {
 
-#ifdef USE_WX_ZOOM
             if( DC->LogicalToDeviceXRel( l_piste ) <= 1 ) /* Sketch mode if l_piste/zoom <= 1 */
-#else
-            if( panel->GetScreen()->Scale( l_piste ) <= 1 ) /* Sketch mode if l_piste/zoom <= 1 */
-#endif
             {
                 GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
                           m_Start.y + aOffset.y, rayon, color );
@@ -635,11 +627,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         return;
     }
 
-#ifdef USE_WX_ZOOM
     if( DC->LogicalToDeviceXRel( l_piste ) < L_MIN_DESSIN )
-#else
-    if( panel->GetScreen()->Scale( l_piste ) < L_MIN_DESSIN )
-#endif
     {
         GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
                 m_Start.y + aOffset.y,
@@ -695,11 +683,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
     if( len < THRESHOLD * m_Width )
         return;
 
-#ifdef USE_WX_ZOOM
     if( DC->LogicalToDeviceXRel( m_Width ) < 6 )     // no room to display a text inside track
-#else
-    if( panel->GetScreen()->Scale( m_Width ) < 6 )     // no room to display a text inside track
-#endif
         return;
 
     if( GetNet() == 0 )
@@ -722,11 +706,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         if( (m_End.x - m_Start.x) == 0 )    // Vertical segment
             angle = 900;                    // angle is in 0.1 degree
 
-#ifdef USE_WX_ZOOM
         if( DC->LogicalToDeviceXRel( tsize ) >= 6 )
-#else
-        if( panel->GetScreen()->Scale( tsize ) >= 6 )
-#endif
         {
             if( !(!IsOnLayer( curr_layer )&& DisplayOpt.ContrastModeDisplay) )
             {
@@ -791,22 +771,14 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
     rayon = m_Width >> 1;
     // for small via size on screen (rayon < 4 pixels) draw a simplified shape
 
-#ifdef USE_WX_ZOOM
     int radius_in_pixels = DC->LogicalToDeviceXRel( rayon );
-#else
-    int radius_in_pixels = panel->GetScreen()->Scale( rayon );
-#endif
 
     bool fast_draw = false;
 
     // Vias are drawn as a filled circle or a double circle. The hole will be drawn later
     int drill_rayon = GetDrillValue() / 2;
 
-#ifdef USE_WX_ZOOM
     int inner_rayon = rayon - DC->DeviceToLogicalXRel( 2 );
-#else
-    int inner_rayon = rayon - panel->GetScreen()->Unscale( 2 );
-#endif
 
     if( radius_in_pixels < 3 )
     {
@@ -852,11 +824,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
                 else
                     GRSetDrawMode( DC, GR_XOR );
 
-#ifdef USE_WX_ZOOM
-                if( DC->LogicalToDeviceXRel( drill_rayon ) > 1 )  /* draw hole if its size is enought */
-#else
-                if( screen->Scale( drill_rayon ) > 1 )     /* draw hole if its size is enought */
-#endif
+                if( DC->LogicalToDeviceXRel( drill_rayon ) > 1 )  // Draw hole if large enough.
                     GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
                                     m_Start.y + aOffset.y, drill_rayon, 0, color, color );
 
@@ -960,11 +928,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
         // calculate a good size for the text
         int tsize = m_Width / len;
 
-#ifdef USE_WX_ZOOM
         if( DC->LogicalToDeviceXRel( tsize ) >= 6 )
-#else
-        if( panel->GetScreen()->Scale( tsize ) >= 6 )
-#endif
         {
             tsize = (tsize * 8) / 10;           // small reduction to give a better look, inside via
             DrawGraphicText( panel, DC, m_Start,

@@ -550,11 +550,7 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
     typeaff = DisplayOpt.DisplayDrawItems;
     width   = m_Width;
 
-#ifdef USE_WX_ZOOM
     if( DC->LogicalToDeviceXRel( width ) < 2 )
-#else
-    if( panel->GetScreen()->Scale( width ) < 2 )
-#endif
         typeaff = FILAIRE;
 
     switch( typeaff )

@@ -96,8 +96,6 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
-    ActiveScreen = GetScreen();
-
     if( ! filename.IsOk() )
     {
         /* Standard gerber filetypes
@@ -197,13 +195,10 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
  *   0 if file not read (cancellation of order ...)
  *   1 if OK
  */
-static void LoadDCodeFile( WinEDA_GerberFrame* frame,
-                           const wxString&     FullFileName )
+static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileName )
 {
     wxString   wildcard;
     wxFileName fn = FullFileName;
-
-    ActiveScreen = frame->GetScreen();
 
     if( !fn.IsOk() )
     {

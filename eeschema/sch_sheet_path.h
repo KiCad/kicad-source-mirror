@@ -240,11 +240,11 @@ public:
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData, SCH_ITEM* aLastItem,
                              wxPoint * aFindLocation  );
 
-    bool operator=( const SCH_SHEET_PATH& d1 );
+    SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
-    bool operator!=( const SCH_SHEET_PATH& d1 ) const;
+    bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
 };
 
 
@@ -335,6 +335,15 @@ public:
      * @param aIndex = index in sheet list to get the sheet
      */
     SCH_SHEET_PATH* GetSheet( int aIndex );
+
+    /**
+     * Function IsModified
+     * checks the entire hierachy for any modifications.
+     * @returns True if the hierarchy is modified otherwise false.
+     */
+    bool IsModified();
+
+    void ClearModifyStatus();
 
     /**
      * Function AnnotatePowerSymbols

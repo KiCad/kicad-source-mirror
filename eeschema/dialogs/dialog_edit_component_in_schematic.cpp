@@ -820,8 +820,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
-    INSTALL_DC( dc, m_Parent->DrawPanel );
-
+    INSTALL_UNBUFFERED_DC( dc, m_Parent->DrawPanel );
     m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     // Initialize field values to default values found in library:

@@ -78,11 +78,10 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     wxBusyCursor dummy;
 
-    ActiveScreen = screen;
-
     GRSetDrawMode( DC, GR_COPY );
 
     int drawMode = -1;
+
     switch ( GetDisplayMode() )
     {
         default:

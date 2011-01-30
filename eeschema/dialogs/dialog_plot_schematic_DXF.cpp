@@ -145,7 +145,6 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 {
     SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_Parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
-    SCH_SCREEN*     oldscreen = screen;
     SCH_SHEET_PATH* sheetpath, * oldsheetpath = schframe->GetSheet();
     wxString        PlotFileName;
     Ki_PageDescr*   PlotSheet;
@@ -168,27 +167,29 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
         {
             if( sheetpath == NULL )
                 break;
+
             list.Clear();
+
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
                 schframe->m_CurrentSheet = &list;
                 schframe->m_CurrentSheet->UpdateAllScreenReferences();
                 schframe->SetSheetNumberAndCount();
                 screen = schframe->m_CurrentSheet->LastScreen();
-                ActiveScreen = screen;
             }
             else  // Should not happen
                 return;
+
             sheetpath = SheetList.GetNext();
         }
+
         PlotSheet = screen->m_CurrentSheetDesc;
         double scale = 10;
 
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        PlotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT(
-            ".dxf" );
+        PlotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
 
         PlotOneSheetDXF( PlotFileName, screen, PlotSheet, plot_offset, scale );
 
@@ -196,7 +197,6 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
             break;
     }
 
-    ActiveScreen = oldscreen;
     schframe->m_CurrentSheet = oldsheetpath;
     schframe->m_CurrentSheet->UpdateAllScreenReferences();
     schframe->SetSheetNumberAndCount();
@@ -204,10 +204,10 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 
 
 void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
-                                           SCH_SCREEN*     screen,
-                                           Ki_PageDescr*   sheet,
-                                           wxPoint         plot_offset,
-                                           double          scale )
+                                                 SCH_SCREEN*     screen,
+                                                 Ki_PageDescr*   sheet,
+                                                 wxPoint         plot_offset,
+                                                 double          scale )
 {
     wxString msg;
 

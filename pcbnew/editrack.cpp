@@ -548,13 +548,10 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef )
 {
     int     net   = aTrack->GetNet();
     int     width = aTrack->m_Width;
-    int     layer = ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer;
-
-    wxPoint ref = ActiveScreen->RefPos( true );
 
     TRACK*  found = NULL;
 
@@ -565,17 +562,16 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
             if( track->GetState( BUSY | DELETED ) )
                 continue;
 
-            if( layer != track->GetLayer() )
+            if( aLayer != track->GetLayer() )
                 continue;
 
             if( track->GetNet() == net )
                 continue;
 
             /* TRACK::HitTest */
-            int     dist = (width + track->m_Width) / 2 + aTrack->GetClearance(
-                track );
+            int     dist = (width + track->m_Width) / 2 + aTrack->GetClearance( track );
 
-            wxPoint pos = ref - track->m_Start;
+            wxPoint pos = aRef - track->m_Start;
             wxPoint vec = track->m_End - track->m_Start;
 
             if( !DistanceTest( dist, vec.x, vec.y, pos.x, pos.y ) )
@@ -585,8 +581,8 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
 
             /* prefer intrusions from the side, not the end */
             double tmp = (double) pos.x * vec.x + (double) pos.y * vec.y;
-            if( tmp >= 0 && tmp <= (double) vec.x * vec.x + (double) vec.y *
-                vec.y )
+
+            if( tmp >= 0 && tmp <= (double) vec.x * vec.x + (double) vec.y * vec.y )
                 break;
         }
     }
@@ -613,8 +609,9 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack )
  */
 static void PushTrack( EDA_DRAW_PANEL* panel )
 {
+    PCB_SCREEN* screen = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetScreen();
     BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
-    wxPoint cursor = ActiveScreen->m_Curseur;
+    wxPoint cursor = screen->m_Curseur;
     wxPoint cv, vec, n;
     TRACK*  track = g_CurrentTrackSegment;
     TRACK*  other;
@@ -622,7 +619,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
     int     dist;
     double  f;
 
-    other = LocateIntrusion( pcb->m_Track, track );
+    other = LocateIntrusion( pcb->m_Track, track, screen->m_Active_Layer, screen->RefPos( true ) );
 
     /* are we currently pointing into a conflicting trace ? */
     if( !other )
@@ -740,7 +737,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     {
         if( g_TwoSegmentTrackBuild )
         {
-            g_CurrentTrackSegment->m_End = ActiveScreen->m_Curseur;
+            g_CurrentTrackSegment->m_End = screen->m_Curseur;
 
             if( Drc_On )
                 PushTrack( panel );

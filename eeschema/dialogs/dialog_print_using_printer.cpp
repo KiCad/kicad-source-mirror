@@ -40,7 +40,7 @@ public:
     bool HasPage( int page );
     bool OnBeginDocument( int startPage, int endPage );
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
-    void DrawPage();
+    void DrawPage( SCH_SCREEN* aScreen );
 };
 
 
@@ -227,7 +227,6 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
 
     SCH_SCREEN*     screen       = parent->GetScreen();
-    SCH_SCREEN*     oldscreen    = screen;
     SCH_SHEET_PATH* oldsheetpath = parent->GetSheet();
     SCH_SHEET_PATH  list;
     SCH_SHEET_LIST  SheetList( NULL );
@@ -248,9 +247,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     if( screen == NULL )
         return false;
 
-    ActiveScreen = screen;
-    DrawPage();
-    ActiveScreen = oldscreen;
+    DrawPage( screen );
     parent->m_CurrentSheet = oldsheetpath;
     parent->m_CurrentSheet->UpdateAllScreenReferences();
     parent->SetSheetNumberAndCount();
@@ -259,8 +256,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 }
 
 
-void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage,
-                                int* selPageFrom, int* selPageTo )
+void SCH_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo )
 {
     *minPage = *selPageFrom = 1;
     *maxPage = *selPageTo   = g_RootSheet->CountSheets();
@@ -306,7 +302,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 /*
  * This is the real print function: print the active screen
  */
-void SCH_PRINTOUT::DrawPage()
+void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 {
     int      oldZoom;
     wxPoint  tmp_startvisu;
@@ -321,15 +317,12 @@ void SCH_PRINTOUT::DrawPage()
     wxBusyCursor dummy;
 
     /* Save current scale factor, offsets, and clip box. */
-    tmp_startvisu = ActiveScreen->m_StartVisu;
-    oldZoom = ActiveScreen->GetZoom();
-    old_org = ActiveScreen->m_DrawOrg;
+    tmp_startvisu = aScreen->m_StartVisu;
+    oldZoom = aScreen->GetZoom();
+    old_org = aScreen->m_DrawOrg;
     oldClipBox = panel->m_ClipBox;
 
     /* Change scale factor, offsets, and clip box to print the whole page. */
-    ActiveScreen->SetScalingFactor( 1.0 );
-    ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
-    ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
 
@@ -343,8 +336,9 @@ void SCH_PRINTOUT::DrawPage()
         wxBitmap psuedoBitmap( 1, 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( psuedoBitmap );
-        ( (SCH_SCREEN*) ActiveScreen )->Draw( panel, &memDC, GR_DEFAULT_DRAWMODE );
-        parent->TraceWorkSheet( &memDC, ActiveScreen, g_DrawDefaultLineThickness );
+        aScreen->Draw( panel, &memDC, GR_DEFAULT_DRAWMODE );
+        parent->TraceWorkSheet( &memDC, aScreen, g_DrawDefaultLineThickness );
+
         wxLogDebug( wxT( "MinX = %d, MaxX = %d, MinY = %d, MaxY = %d" ),
                     memDC.MinX(), memDC.MaxX(), memDC.MinY(), memDC.MaxY() );
 
@@ -356,7 +350,7 @@ void SCH_PRINTOUT::DrawPage()
     }
     else
     {
-        SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;
+        SheetSize = aScreen->m_CurrentSheetDesc->m_Size;
         FitThisSizeToPaper( SheetSize );
         fitRect = GetLogicalPaperRect();
     }
@@ -369,21 +363,22 @@ void SCH_PRINTOUT::DrawPage()
     if( parent->GetPrintMonochrome() )
         GRForceBlackPen( true );
 
-    ActiveScreen->m_IsPrinting = true;
+    aScreen->m_IsPrinting = true;
+
     int bg_color = g_DrawBgColor;
 
-    ( ( SCH_SCREEN* ) ActiveScreen )->Draw( panel, dc, GR_DEFAULT_DRAWMODE );
+    aScreen->Draw( panel, dc, GR_DEFAULT_DRAWMODE );
 
     if( printReference )
-        parent->TraceWorkSheet( dc, ActiveScreen, g_DrawDefaultLineThickness );
+        parent->TraceWorkSheet( dc, aScreen, g_DrawDefaultLineThickness );
 
     g_DrawBgColor = bg_color;
-    ActiveScreen->m_IsPrinting = false;
+    aScreen->m_IsPrinting = false;
     panel->m_ClipBox = oldClipBox;
 
     GRForceBlackPen( false );
 
-    ActiveScreen->m_StartVisu = tmp_startvisu;
-    ActiveScreen->m_DrawOrg   = old_org;
-    ActiveScreen->SetZoom( oldZoom );
+    aScreen->m_StartVisu = tmp_startvisu;
+    aScreen->m_DrawOrg   = old_org;
+    aScreen->SetZoom( oldZoom );
 }

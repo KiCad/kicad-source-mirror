@@ -167,7 +167,7 @@ void DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct )
     {
         screen->RemoveFromDrawList( DrawStruct );
 
-        panel->PostDirtyRect( DrawStruct->GetBoundingBox() );
+        panel->RefreshDrawingRect( DrawStruct->GetBoundingBox() );
 
         /* Unlink the structure */
         DrawStruct->SetNext( 0 );

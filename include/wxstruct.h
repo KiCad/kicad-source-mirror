@@ -372,7 +372,17 @@ public:
     void             SetToolbarBgColor( int color_num );
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
-    void             Recadre_Trace( bool ToMouse );
+
+    /**
+     * Function RedrawScreen
+     * redraws the entire screen area by updating the scroll bars and mouse pointer in
+     * order to have the current graphic cursor position at the center of the screen.
+     *  @param aWarpPointer Moves the mouse cursor is to the drawing position ( which
+     * is usually on grid) if true.
+     *
+     *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
+     */
+    void             RedrawScreen( bool aWarpPointer );
 
     /** Adjust the coordinate to the nearest grid value
      * @param aCoord = coordinate to adjust

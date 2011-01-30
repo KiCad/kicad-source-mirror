@@ -93,7 +93,6 @@ bool WinEDA_App::OnInit()
     }
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
-    ActiveScreen = ScreenPcb;
 
     // read current setup and reopen last directory if no filename to open in
     // command line

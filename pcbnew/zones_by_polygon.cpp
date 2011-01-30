@@ -329,7 +329,7 @@ void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_contain
 
     if( zone_container->m_Poly->GetNumCorners() <= 3 )
     {
-        DrawPanel->PostDirtyRect( zone_container->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( zone_container->GetBoundingBox() );
         if( DC )
         {  // Remove the full zone because this is no more an area
             Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
@@ -864,7 +864,7 @@ void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contai
         zone_container->m_Poly->RemoveContour( ncont );
     }
 
-    DrawPanel->PostDirtyRect( dirty );
+    DrawPanel->RefreshDrawingRect( dirty );
 
     OnModify();
 }

@@ -67,11 +67,7 @@ MODULE::~MODULE()
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, int draw_mode )
 {
-#ifdef USE_WX_ZOOM
     int anchor_size = DC->DeviceToLogicalXRel( dim_ancre );
-#else
-    int anchor_size = panel->GetScreen()->Unscale( dim_ancre );
-#endif
 
     GRSetDrawMode( DC, draw_mode );
 

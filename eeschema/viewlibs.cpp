@@ -259,8 +259,6 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     wxString       msg;
     wxString       tmp;
 
-    ActiveScreen = GetScreen();
-
     lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
     if( lib == NULL )

@@ -260,16 +260,14 @@ void SCH_EDIT_FRAME::InstallPreviousSheet()
     ClearMsgPanel();
 
     //make a copy for testing purposes.
-    SCH_SHEET_PATH listtemp = *m_CurrentSheet;
-    listtemp.Pop();
+    m_CurrentSheet->Pop();
 
-    if( listtemp.LastScreen() == NULL )
+    if( m_CurrentSheet->LastScreen() == NULL )
     {
         DisplayError( this, wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
         return;
     }
 
-    m_CurrentSheet->Pop();
     UpdateScreenFromSheet( this );
 }
 
@@ -286,6 +284,7 @@ void SCH_EDIT_FRAME::InstallNextScreen( SCH_SHEET* Sheet )
     {
         DisplayError( this, wxT( "InstallNextScreen() error" ) ); return;
     }
+
     m_CurrentSheet->Push( Sheet );
     m_itemToRepeat = NULL;
     ClearMsgPanel();
@@ -298,41 +297,33 @@ void SCH_EDIT_FRAME::InstallNextScreen( SCH_SHEET* Sheet )
  */
 static bool UpdateScreenFromSheet( SCH_EDIT_FRAME* frame )
 {
-    SCH_SCREEN* NewScreen;
-
-    NewScreen = frame->m_CurrentSheet->LastScreen();
-    if( !NewScreen )
+    if( !frame->m_CurrentSheet->LastScreen() )
     {
         DisplayError( frame, wxT( "Screen not found for this sheet" ) );
         return false;
     }
 
+    SCH_SCREEN* screen = frame->m_CurrentSheet->LastScreen();
+
     // Reset display settings of the new screen
     // Assumes m_CurrentSheet has already been updated.
     frame->ClearMsgPanel();
-    frame->DrawPanel->SetScrollbars( NewScreen->m_ScrollPixelsPerUnitX,
-                                     NewScreen->m_ScrollPixelsPerUnitY,
-                                     NewScreen->m_ScrollbarNumber.x,
-                                     NewScreen->m_ScrollbarNumber.y,
-                                     NewScreen->m_ScrollbarPos.x,
-                                     NewScreen->m_ScrollbarPos.y, TRUE );
 
     // update the References
     frame->m_CurrentSheet->UpdateAllScreenReferences();
     frame->SetSheetNumberAndCount();
     frame->DrawPanel->m_CanStartBlock = -1;
-    ActiveScreen = frame->m_CurrentSheet->LastScreen();
 
-    if( NewScreen->m_FirstRedraw )
+    if( screen->m_FirstRedraw )
     {
-        NewScreen->m_FirstRedraw = FALSE;
-        frame->Zoom_Automatique( TRUE );
+        screen->m_FirstRedraw = false;
+        frame->Zoom_Automatique( true );
     }
     else
     {
         frame->DrawPanel->MouseToCursorSchema();
+        frame->RedrawScreen( true );
     }
 
-    frame->DrawPanel->Refresh();
     return true;
 }

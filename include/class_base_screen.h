@@ -62,7 +62,6 @@ public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
     wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user units. */
     wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
-    wxPoint m_MousePositionInPixels;
     wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
                                  * in user units.
                                  * (coordinates from last reset position)*/
@@ -164,13 +163,6 @@ public:
     void         SetPageSize( wxSize& aPageSize );
     wxSize       ReturnPageSize( void );
     virtual int  GetInternalUnits( void );
-
-    /**
-     * Function CursorRealPosition
-     * @return the position in user units of location ScreenPos
-     * @param ScreenPos = the screen (in pixel) position co convert
-     */
-    wxPoint      CursorRealPosition( const wxPoint& ScreenPos );
 
     /**
      * Return the current cursor position in drawing coordinates.
@@ -300,16 +292,6 @@ public:
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
     void        SetZoomList( const wxArrayInt& aZoomList );
-
-    int         Scale( int coord );
-    double      Scale( double coord );
-    void        Scale( wxPoint& pt );
-    void        Scale( wxSize& sz );
-    void        Scale( wxRealPoint& sz );
-
-    int         Unscale( int coord );
-    void        Unscale( wxPoint& pt );
-    void        Unscale( wxSize& sz );
 
     bool        SetNextZoom();
     bool        SetPreviousZoom();

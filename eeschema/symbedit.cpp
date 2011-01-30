@@ -237,6 +237,6 @@ void LIB_EDIT_FRAME::PlaceAncre()
 
     /* Redraw the symbol */
     GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
-    Recadre_Trace( TRUE );
+    RedrawScreen( TRUE );
     DrawPanel->Refresh();
 }

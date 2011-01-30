@@ -271,7 +271,7 @@ void SCH_EDIT_FRAME::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelT
     parent->RemoveLabel( aSheetLabelToDel );
 
     if( aRedraw )
-        DrawPanel->PostDirtyRect( parent->GetBoundingBox() );
+        DrawPanel->RefreshDrawingRect( parent->GetBoundingBox() );
 
 
 #if 0 && defined(DEBUG)

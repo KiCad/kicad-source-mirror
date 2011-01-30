@@ -289,7 +289,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
             return;
         GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
         GetBaseScreen()->SetZoom( selectedZoom );
-        Recadre_Trace( false );
+        RedrawScreen( false );
     }
 }
 

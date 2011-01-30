@@ -258,11 +258,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
 
-#ifdef USE_WX_ZOOM
     if( l_piste < DC->DeviceToLogicalXRel( L_MIN_DESSIN ) )
-#else
-    if( l_piste < panel->GetScreen()->Unscale( L_MIN_DESSIN ) )
-#endif
         mode = FILAIRE;
 
     switch( m_Shape )

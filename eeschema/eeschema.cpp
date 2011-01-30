@@ -159,7 +159,6 @@ bool WinEDA_App::OnInit()
         SetupServerFunction( RemoteCommand );
     }
 
-    ActiveScreen = frame->GetScreen();
     frame->Zoom_Automatique( TRUE );
 
     /* Load file specified in the command line. */

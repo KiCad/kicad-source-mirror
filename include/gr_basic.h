@@ -45,9 +45,6 @@ typedef enum {
 } GRLineStypeType;
 
 
-int  GRMapX( int x );
-int  GRMapY( int y );
-
 class EDA_DRAW_PANEL;
 
 void GRSetDrawMode( wxDC* DC, int mode );
@@ -67,8 +64,6 @@ void GRForceBlackPen( bool flagforce );
  * @return ForceBlackPen (True if a black pen was forced)
  */
 bool GetGRForceBlackPenState( void );
-
-void GRSPutPixel( EDA_Rect* ClipBox, wxDC* DC, int x, int y, int color );
 
 void GRLine( EDA_Rect* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth, int aColor );
 void GRLine( EDA_Rect* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width, int Color );

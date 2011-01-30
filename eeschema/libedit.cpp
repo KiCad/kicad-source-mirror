@@ -198,8 +198,6 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( GetScreen() == NULL )
         return;
 
-    ActiveScreen = GetScreen();
-
     DrawPanel->DrawBackGround( DC );
 
     if( m_component )

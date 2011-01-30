@@ -492,7 +492,7 @@ void WinEDA_CvpcbFrame::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
     DrawFrame->AdjustScrollBars();
-    DrawFrame->Recadre_Trace( FALSE );
+    DrawFrame->RedrawScreen( FALSE );
 }
 
 

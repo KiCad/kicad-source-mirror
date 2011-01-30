@@ -211,7 +211,7 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 /* EDITRACK.C : */
 /****************/
 
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack );
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef );
 
 void   ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 

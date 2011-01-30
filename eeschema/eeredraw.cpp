@@ -50,8 +50,6 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( GetScreen() == NULL )
         return;
 
-    ActiveScreen = GetScreen();
-
     DrawPanel->DrawBackGround( DC );
 
     GetScreen()->Draw( DrawPanel, DC, GR_DEFAULT_DRAWMODE );

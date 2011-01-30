@@ -117,6 +117,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     INSTALL_DC( dc, DrawPanel );
+
     switch( id )
     {
     case ID_EXIT:

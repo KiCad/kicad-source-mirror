@@ -22,8 +22,6 @@ option(KICAD_GOST "enable/disable building using GOST notation for multiple gate
 #for those who bored with uppercase
 option(KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected")
 
-option(USE_WX_ZOOM "Use wxDC to perform zooming (default ON)." ON)
-
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF). Warning, this is experimental")
 
@@ -61,18 +59,12 @@ if(KICAD_KEEPCASE)
     add_definitions(-DKICAD_KEEPCASE)
 endif(KICAD_KEEPCASE)
 
-if(USE_WX_ZOOM)
-    add_definitions(-DUSE_WX_ZOOM)
-endif(USE_WX_ZOOM)
-
 if(USE_WX_OVERLAY OR APPLE)
     add_definitions(-DUSE_WX_OVERLAY)
 endif(USE_WX_OVERLAY OR APPLE)
 
 
 if(USE_WX_GRAPHICS_CONTEXT)
-    set( USE_WX_ZOOM ON )
-    add_definitions(-DUSE_WX_ZOOM)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
 endif(USE_WX_GRAPHICS_CONTEXT)
 

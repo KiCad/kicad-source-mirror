@@ -96,16 +96,15 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 }
 
 
-void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                           const wxPoint& aOffset,
-                           int aDrawMode,
-                           int aColor )
+void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                           int aDrawMode, int aColor )
 {
 
-    int w = aPanel->GetScreen()->Scale( GetWidth() );
-    int h = aPanel->GetScreen()->Scale( GetHeight() );
+    int w = GetWidth();
+    int h = GetHeight();
 
     GRSetDrawMode( aDC, aDrawMode );
+
     if(  w == 0 || h == 0 )
         GRLine( &aPanel->m_ClipBox, aDC, GetX() + aOffset.x, GetY() + aOffset.y,
                 GetRight() + aOffset.x, GetBottom() + aOffset.y, 0, aColor );

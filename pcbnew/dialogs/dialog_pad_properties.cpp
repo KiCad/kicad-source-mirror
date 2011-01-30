@@ -133,26 +133,8 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     scale *= 0.7;
     dc.SetUserScale( scale, scale );
 
-#ifndef USE_WX_ZOOM
-    drawInfo.m_Scale = scale;
-    wxPoint org   = ActiveScreen->m_DrawOrg;
-    wxPoint strt  = ActiveScreen->m_StartVisu;
-    int     pzoom = ActiveScreen->GetZoom();
-    ActiveScreen->m_DrawOrg   = wxPoint( 0, 0 );
-    ActiveScreen->m_StartVisu = wxPoint( 0, 0 );
-
-    // Actual scaling factor is 10/Zoom
-    // We need a scale 1 , and therefore zoom = 10
-    ActiveScreen->SetZoom( 10 );
-#endif
-
     m_dummyPad->DrawShape( NULL, &dc, drawInfo );
 
-#ifndef USE_WX_ZOOM
-    ActiveScreen->m_DrawOrg   = org;
-    ActiveScreen->m_StartVisu = strt;
-    ActiveScreen->SetZoom( pzoom );
-#endif
     event.Skip();
 }
 
@@ -582,7 +564,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         // redraw the area where the pad was, without pad (delete pad on screen)
         m_CurrentPad->m_Flags |= DO_NOT_DRAW;
-        m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
+        m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
         m_CurrentPad->m_Flags &= ~DO_NOT_DRAW;
 
         // Update values
@@ -651,7 +633,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->DisplayInfo( m_Parent );
 
         // redraw the area where the pad was
-        m_Parent->DrawPanel->PostDirtyRect( m_CurrentPad->GetBoundingBox() );
+        m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
         m_Parent->OnModify();
     }
 
