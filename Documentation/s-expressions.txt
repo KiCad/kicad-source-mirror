@@ -11,7 +11,7 @@ corresponds to a string, while a list corresponds to an s-expression. The
 following grammar represents our definition of an s-expression:
 
 sexpr   ::= ( sx )
-sx      ::= atom sxtail | sexptr sxtail | NULL
+sx      ::= atom sxtail | sexpr sxtail | NULL
 sxtail  ::= sx | NULL
 atom    :: quoted | value
 quoted  :: "ws_string"
@@ -62,23 +62,23 @@ Any null string is wrapped in quotes, and so is any string which starts with
 Kicad S-expression Syntax and Quoting Protocol (non-specctraMode):
 ==================================================================
 
-*) All Kicad s-expression files are saved using a UTF8 encoding and should
-support any international characters in the atoms. Some atoms are considered
-keywords, and constitute a grammar superimposed on the s-expressions.
+*) Some atoms are considered keywords, and constitute a grammar superimposed on
+the s-expressions.  All keywords are ASCII and lowercase. International characters
+are not to be used here.
 
-*) All keywords are ASCII and lowercase. International characters are not to be
-used here.
+*) All Kicad s-expression files are saved using a UTF8 encoding and should
+support any international characters in the atoms which are not keywords.
 
 *) DSNLEXER::NextTok() requires that any token be on a single line of input. If
 you want to save a multi-line string, Quoted() will automatically escape the \n
 or \r for you and put the output on a single line.  It should round-trip fine.
 
-*) There can be escape sequences in a quoted string only.  Escape sequences allow
-foreign tools to generate byte patterns in the input stream.  C style 2 byte hex
-codes are supported, and so are 3 byte octal escape sequences.  See DSNLEXER::NextTok()
-for the full list of escape sequences, by searching file dsnlexer.cpp for the
-string "ESCAPE SEQUENCES".  Any use of the escape mechanism must still produce
-UTF-8 encoded text after the escape handling is applied.
+*) There can be escape sequences in a quoted string only. Escape sequences allow
+foreign tools to generate byte patterns in the input stream. C style 2 byte hex
+codes are supported, and so are 3 byte octal escape sequences. See
+DSNLEXER::NextTok() for the full list of escape sequences, by searching file
+dsnlexer.cpp for the string "ESCAPE SEQUENCES". Any use of the escape mechanism
+must still produce UTF-8 encoded text after the escape handling is applied.
 
 *) Just because an escape sequence is supported on input, does not mean that
 OUTPUTFORMATTER::Quoted() must generate such an escape sequence for output. For

@@ -12,7 +12,7 @@ email address.
     constraints put on us by the Specctra DSN spec.
   * Added Documentation/s-expressions.txt to explain all this.
   * Enhanced our quoting protocol by moving away from doubling up double quotes
-    to a C line escape mechanism.
+    to a C like escape mechanism.
   * Now support multi-line strings, which when properly escaped, can still be
     read in as a token originating on a single line.
 
