@@ -154,7 +154,7 @@ public:
      * converts \a aRect from device to drawing (logical) coordinates.
      * <p>
      * \a aRect must be in scrolled device units.
-     * <\p>
+     * </p>
      * @param aRect The rectangle to convert.
      * @param aDC The device context used for the conversion.
      * @return A rectangle converted to drawing units.
@@ -191,12 +191,12 @@ public:
      * area.  The clip box is used when drawing to determine which objects are not visible
      * and do not need to be drawn.
      * </p>
-     * @param aDc The device context use for drawing with the correct scale and
+     * @param aDC The device context use for drawing with the correct scale and
      *            offsets already configured.  See DoPrepareDC().
      * @param aRect The clip rectangle in device units or NULL for the entire visible area
      *              of the screen.
      */
-    void         SetClipBox( wxDC& dc, const wxRect* aRect = NULL );
+    void         SetClipBox( wxDC& aDC, const wxRect* aRect = NULL );
 
     void         ReDraw( wxDC* DC, bool erasebg = TRUE );
 
@@ -222,7 +222,12 @@ public:
      */
     void         RefreshDrawingRect( const EDA_Rect& aRect, bool aEraseBackground = true );
 
-    wxPoint      GetScreenCenterRealPosition( void );
+    /**
+     * Function GetScreenCenterLogicalPosition
+     * @return The current screen center position in logical (drawing) units.
+     */
+    wxPoint      GetScreenCenterLogicalPosition();
+
     void         MouseToCursorSchema();
     void         MouseTo( const wxPoint& Mouse );
 

@@ -750,8 +750,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, boo
     {
         // calculate the new position as allowed
         wxPoint StartPoint = zone->GetCornerPosition( icorner - 1 );
-        Calcule_Coord_Extremite_45( StartPoint.x, StartPoint.y,
-            &c_pos.x, &c_pos.y );
+        Calcule_Coord_Extremite_45( c_pos, StartPoint.x, StartPoint.y, &c_pos.x, &c_pos.y );
     }
 
     zone->SetCornerPosition( icorner, c_pos );

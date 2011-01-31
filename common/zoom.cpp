@@ -125,7 +125,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 
     case ID_ZOOM_IN:
         if( id == ID_ZOOM_IN )
-            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+            screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         if( screen->SetPreviousZoom() )
             RedrawScreen( zoom_at_cursor );
         break;
@@ -137,7 +137,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 
     case ID_ZOOM_OUT:
         if( id == ID_ZOOM_OUT )
-            screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+            screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         if( screen->SetNextZoom() )
             RedrawScreen( zoom_at_cursor );
         break;

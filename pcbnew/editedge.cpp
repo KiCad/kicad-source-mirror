@@ -295,8 +295,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
  */
 static void Montre_Position_NewSegment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 {
-    DRAWSEGMENT* Segment = (DRAWSEGMENT*)
-                           panel->GetScreen()->GetCurItem();
+    DRAWSEGMENT* Segment = (DRAWSEGMENT*) panel->GetScreen()->GetCurItem();
     int          t_fill = DisplayOpt.DisplayDrawItems;
 
     if( Segment == NULL )
@@ -309,7 +308,8 @@ static void Montre_Position_NewSegment( EDA_DRAW_PANEL* panel, wxDC* DC, bool er
 
     if( Segments_45_Only && ( Segment->m_Shape == S_SEGMENT ) )
     {
-        Calcule_Coord_Extremite_45( Segment->m_Start.x, Segment->m_Start.y,
+        Calcule_Coord_Extremite_45( panel->GetScreen()->m_Curseur,
+                                    Segment->m_Start.x, Segment->m_Start.y,
                                     &Segment->m_End.x, &Segment->m_End.y );
     }
     else    /* here the angle is arbitrary */

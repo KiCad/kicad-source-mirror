@@ -272,26 +272,12 @@ wxPoint EDA_DRAW_PANEL::CursorScreenPosition()
 }
 
 
-/**
- * Function GetScreenCenterRealPosition
- * @return position (in internal units) of the current area center showed
- *         on screen
- */
-wxPoint EDA_DRAW_PANEL::GetScreenCenterRealPosition( void )
+wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
 {
-    int x, y, ppuX, ppuY;
-    wxPoint pos;
-    double  scalar = GetScreen()->GetScalingFactor();
+    wxSize size = GetClientSize() / 2;
+    INSTALL_UNBUFFERED_DC( dc, this );
 
-    GetViewStart( &x, &y );
-    GetScrollPixelsPerUnit( &ppuX, &ppuY );
-    x *= ppuX;
-    y *= ppuY;
-    pos.x = wxRound( ( (double) GetClientSize().x / 2.0 + (double) x ) / scalar );
-    pos.y = wxRound( ( (double) GetClientSize().y / 2.0 + (double) y ) / scalar );
-    pos += GetScreen()->m_DrawOrg;
-
-    return pos;
+    return wxPoint( dc.DeviceToLogicalX( size.x ), dc.DeviceToLogicalY( size.y ) );
 }
 
 
@@ -649,6 +635,15 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* DC )
         return;
 
     m_Parent->PutOnGrid( &org, &gridSize );
+
+    // Setting the nearest grid position can select grid points outside the clip box.
+    // Incrementing the start point by one grid step should prevent drawing grid points
+    // outside the clip box.
+    if( org.x < m_ClipBox.GetX() )
+        org.x += wxRound( gridSize.x );
+
+    if( org.y < m_ClipBox.GetY() )
+        org.y += wxRound( gridSize.y );
 
 #if ( defined( __WXMAC__ ) || defined( __WXGTK__ ) || 1 )
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is high

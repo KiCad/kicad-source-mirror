@@ -146,6 +146,7 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
     m_FrameIsActive = event.GetActive();
+
     if( DrawPanel )
         DrawPanel->m_CanStartBlock = -1;
 
@@ -157,6 +158,7 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
     if( DrawPanel )
         DrawPanel->m_CanStartBlock = -1;
+
     event.Skip();
 }
 
@@ -196,6 +198,7 @@ void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask,
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error"));
 }
+
 
 // Virtual function
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
@@ -253,7 +256,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
      * index returned by GetSelection().
      */
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
-    screen->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+    screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
     screen->SetGrid( id );
     Refresh();
 }
@@ -285,9 +288,11 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     {
         id--;
         int selectedZoom = GetBaseScreen()->m_ZoomList[id];
+
         if( GetBaseScreen()->GetZoom() == selectedZoom )
             return;
-        GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterRealPosition();
+
+        GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         GetBaseScreen()->SetZoom( selectedZoom );
         RedrawScreen( false );
     }
@@ -382,12 +387,14 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
+
     // Change Cursor in DrawPanel only
     if( DrawPanel )
     {
         DrawPanel->m_PanelDefaultCursor = aCursor;
         DrawPanel->SetCursor( aCursor );
     }
+
     DisplayToolMsg( aToolMsg );
 
     if( aId < 0 )
@@ -428,6 +435,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
         m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_ID_current_state = aId;
+
     if( m_VToolBar )
         m_VToolBar->Refresh( );
 }
@@ -527,6 +535,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars()
 
     if( posX < 0 )
         posX = 0;
+
     if( posY < 0 )
         posY = 0;
 
@@ -562,6 +571,7 @@ void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
     EDA_BASE_FRAME::SetLanguage( event );
 }
 
+
 /**
  * Round to the nearest precision.
  *
@@ -575,6 +585,7 @@ double RoundTo0( double x, double precision )
     assert( precision != 0 );
 
     long long ix = wxRound( x * precision );
+
     if ( x < 0.0 )
         NEGATE( ix );
 
@@ -613,15 +624,14 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     if ( (screen->GetZoom() % screen->m_ZoomScalar) == 0 )
         Line.Printf( wxT( "Z %d" ), screen->GetZoom() / screen->m_ZoomScalar );
     else
-        Line.Printf( wxT( "Z %.1f" ),
-                     (float)screen->GetZoom() / screen->m_ZoomScalar );
+        Line.Printf( wxT( "Z %.1f" ), (float)screen->GetZoom() / screen->m_ZoomScalar );
+
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    double dXpos = To_User_Unit( g_UserUnit, screen->m_Curseur.x,
-                                 m_InternalUnits );
-    double dYpos = To_User_Unit( g_UserUnit, screen->m_Curseur.y,
-                                 m_InternalUnits );
+    double dXpos = To_User_Unit( g_UserUnit, screen->m_Curseur.x, m_InternalUnits );
+    double dYpos = To_User_Unit( g_UserUnit, screen->m_Curseur.y, m_InternalUnits );
+
     /*
      * Converting from inches to mm can give some coordinates due to
      * float point precision rounding errors, like 1.999 or 2.001 so
@@ -678,6 +688,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
     dXpos = To_User_Unit( g_UserUnit, dx, m_InternalUnits );
     dYpos = To_User_Unit( g_UserUnit, dy, m_InternalUnits );
+
     if( g_UserUnit == MILLIMETRES )
     {
         dXpos = RoundTo0( dXpos, (double) ( m_InternalUnits / 10 ) );
@@ -704,11 +715,15 @@ void EDA_DRAW_FRAME::LoadSettings()
     EDA_BASE_FRAME::LoadSettings();
     cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_CursorShape, ( long )0 );
     bool btmp;
+
     if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp);
+
     int itmp;
+
     if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
         SetGridColor(itmp);
+
     cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
 }
 

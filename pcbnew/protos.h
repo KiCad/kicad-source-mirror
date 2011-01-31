@@ -216,10 +216,9 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoi
 void   ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 /* Determine coordinate for a segment direction of 0, 90 or 45 degrees,
- * depending on it's position from the origin (ox, oy) and the current
- * cursor position.
+ * depending on it's position from the origin (ox, oy) and \a aPosiition..
  */
-void   Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy );
+void   Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
 
 /*****************/

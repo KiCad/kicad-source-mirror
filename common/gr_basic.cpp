@@ -93,7 +93,7 @@ static wxDC* s_DC_lastDC = NULL;
  *
  * Please note that this is only accurate for lines that are one pixel wide.
  *
- * @param aRect - The rectangle to test.
+ * @param aClipBox - The rectangle to test.
  * @param x1 - X coordinate of one end of a line.
  * @param y1 - Y coordinate of one end of a line.
  * @param x2 - X coordinate of the other end of a line.

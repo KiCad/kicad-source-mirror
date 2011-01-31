@@ -751,7 +751,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
             /* Calculate of the end of the path for the permitted directions:
              * horizontal, vertical or 45 degrees.
              */
-            Calcule_Coord_Extremite_45( g_CurrentTrackSegment->m_Start.x,
+            Calcule_Coord_Extremite_45( screen->m_Curseur,
+                                        g_CurrentTrackSegment->m_Start.x,
                                         g_CurrentTrackSegment->m_Start.y,
                                         &g_CurrentTrackSegment->m_End.x,
                                         &g_CurrentTrackSegment->m_End.y );
@@ -815,15 +816,14 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
 
 /* Determine the coordinate to advanced the the current segment
- * in 0, 90, or 45 degrees, depending on position of  origin and
- * cursor position.
+ * in 0, 90, or 45 degrees, depending on position of origin and \a aPosition.
  */
-void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
+void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy )
 {
     int deltax, deltay, angle;
 
-    deltax = ActiveScreen->m_Curseur.x - ox;
-    deltay = ActiveScreen->m_Curseur.y - oy;
+    deltax = aPosition.x - ox;
+    deltay = aPosition.y - oy;
 
     deltax = abs( deltax );
     deltay = abs( deltay );
@@ -849,7 +849,7 @@ void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
     switch( angle )
     {
     case 0:
-        *fx = ActiveScreen->m_Curseur.x;
+        *fx = aPosition.x;
         *fy = oy;
         break;
 
@@ -858,9 +858,9 @@ void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
         deltay = deltax;
 
         /* Recalculate the signs fo deltax and deltaY. */
-        if( ( ActiveScreen->m_Curseur.x - ox ) < 0 )
+        if( ( aPosition.x - ox ) < 0 )
             deltax = -deltax;
-        if( ( ActiveScreen->m_Curseur.y - oy ) < 0 )
+        if( ( aPosition.y - oy ) < 0 )
             deltay = -deltay;
 
         *fx = ox + deltax;
@@ -869,7 +869,7 @@ void Calcule_Coord_Extremite_45( int ox, int oy, int* fx, int* fy )
 
     case 90:
         *fx = ox;
-        *fy = ActiveScreen->m_Curseur.y;
+        *fy = aPosition.y;
         break;
     }
 }
