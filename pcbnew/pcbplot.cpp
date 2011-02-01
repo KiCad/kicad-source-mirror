@@ -280,8 +280,16 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
-    wxDirDialog dirDialog( this, _( "Select Output Directory" ),
-                           m_outputDirectoryName->GetValue() );
+    // Build the absolute path of current output plot directory
+    // to preselect it when opening the Di Dialog.
+    wxFileName fn( m_outputDirectoryName->GetValue() );
+    wxString path;
+    if( fn.IsRelative() )
+        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
+    else
+        path = m_outputDirectoryName->GetValue();
+
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
