@@ -1039,12 +1039,14 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
     for( MODULE* module = Pcb->m_Modules; module; module = module->Next() )
     {
         D_PAD* pad = Locate_Pads( module, pos, LayerMask );
+
         if( pad )
             return pad;
     }
 
     /* No pad has been located so check for a segment of the trace. */
     TRACK* ptsegm = Fast_Locate_Piste( Pcb->m_Track, NULL, pos, LayerMask );
+
     if( ptsegm == NULL )
         ptsegm = Locate_Pistes( Pcb, Pcb->m_Track, pos, LayerMask );
 

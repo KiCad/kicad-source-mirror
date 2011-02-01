@@ -176,7 +176,6 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     if( s_screenModule == NULL )
         s_screenModule = new PCB_SCREEN();
     SetBaseScreen( s_screenModule );
-    ActiveScreen = GetScreen();
     GetBoard()->SetBoardDesignSettings( &s_ModuleEditorDesignSetting );
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
@@ -249,7 +248,6 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
     frame->m_ModuleEditFrame = NULL;
-    ActiveScreen = frame->GetScreen();
 }
 
 
@@ -457,11 +455,12 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
+void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
 {
-    wxRealPoint delta;
-    wxPoint     curpos, oldpos;
+    wxRealPoint gridSize;
+    wxPoint     oldpos;
     int         hotkey = 0;
+    wxPoint     pos = aPosition;
 
     if( GetScreen()->IsRefreshReq() )
     {
@@ -477,45 +476,34 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         return;
     }
 
-    double scalar = GetScreen()->GetScalingFactor();
-
-    curpos = DrawPanel->CursorRealPosition( Mouse );
+    PutOnGrid( &pos );
     oldpos = GetScreen()->m_Curseur;
-
-    delta = GetScreen()->GetGridSize();
-
-    delta.x *= scalar;
-    delta.y *= scalar;
-
-    if( delta.x == 0 )
-        delta.x = 1;
-    if( delta.y == 0 )
-        delta.y = 1;
+    gridSize = GetScreen()->GetGridSize();
 
     switch( g_KeyPressed )
     {
     case WXK_NUMPAD8:
     case WXK_UP:
-        Mouse.y -= wxRound( delta.y );
-        DrawPanel->MouseTo( Mouse );
+        pos.y -= wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        Mouse.y += wxRound( delta.y );
-        DrawPanel->MouseTo( Mouse );
+        pos.y += wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        Mouse.x -= wxRound( delta.x );
-        DrawPanel->MouseTo( Mouse );
+        pos.x -= wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        Mouse.x += wxRound( delta.x );
-        DrawPanel->MouseTo( Mouse );
+        pos.x += wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     default:
@@ -523,27 +511,25 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         break;
     }
 
-    GetScreen()->m_Curseur = curpos;
-    PutOnGrid( &GetScreen()->m_Curseur );
+    GetScreen()->m_Curseur = pos;
 
     if( oldpos != GetScreen()->m_Curseur )
     {
-        curpos = GetScreen()->m_Curseur;
+        pos = GetScreen()->m_Curseur;
         GetScreen()->m_Curseur = oldpos;
-        DrawPanel->CursorOff( DC );
-
-        GetScreen()->m_Curseur = curpos;
-        DrawPanel->CursorOn( DC );
+        DrawPanel->CursorOff( aDC );
+        GetScreen()->m_Curseur = pos;
+        DrawPanel->CursorOn( aDC );
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, DC, true );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, true );
         }
     }
 
     if( hotkey )
     {
-        OnHotKey( DC, hotkey, NULL );
+        OnHotKey( aDC, hotkey, NULL );
     }
 
     if( GetScreen()->IsRefreshReq() )
@@ -551,6 +537,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* DC, wxPoint Mouse )
         DrawPanel->Refresh();
         wxSafeYield();
     }
+
     SetToolbars();
     UpdateStatusBar();
 }

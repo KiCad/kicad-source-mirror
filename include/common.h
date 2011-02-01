@@ -190,9 +190,6 @@ extern UserUnitType g_UserUnit;     ///< display units
 /* Draw color for moving objects: */
 extern int          g_GhostColor;
 
-/* Current used screen: (not used in eeshema)*/
-extern BASE_SCREEN* ActiveScreen;
-
 
 /* COMMON.CPP */
 

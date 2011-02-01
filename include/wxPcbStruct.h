@@ -160,7 +160,7 @@ public:
     /**
      * Function PrintPage , virtual
      * used to print a page
-     * Print the page pointed by ActiveScreen, set by the calling print function
+     * Print the page pointed by the current screen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
      * @param aPrintMirrorMode = true to plot mirrored

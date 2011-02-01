@@ -48,11 +48,12 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
     SCH_COMPONENT* LibItem = NULL;
 
     DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
+
     if( !DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
     {
-        DrawStruct = SchematicGeneralLocateAndDisplay( GetScreen()->m_Curseur,
-                                                       IncludePin );
+        DrawStruct = SchematicGeneralLocateAndDisplay( GetScreen()->m_Curseur, IncludePin );
     }
+
     if( !DrawStruct )
         return NULL;
 
@@ -235,26 +236,17 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
 }
 
 
-void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 {
-    wxRealPoint delta;
+    wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
-    wxPoint     curpos, oldpos;
+    wxPoint     oldpos;
     int         hotkey = 0;
-    double      scalar = screen->GetScalingFactor();
+    wxPoint     pos = aPosition;
 
-    curpos = screen->m_MousePosition;
+    PutOnGrid( &pos );
     oldpos = screen->m_Curseur;
-
-    delta = screen->GetGridSize();
-
-    delta.x *= scalar;
-    delta.y *= scalar;
-
-    if( delta.x <= 0 )
-        delta.x = 1;
-    if( delta.y <= 0 )
-        delta.y = 1;
+    gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
     {
@@ -263,26 +255,26 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y -= wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y += wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x -= wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x += wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     default:
@@ -290,11 +282,8 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
         break;
     }
 
-    /* Update cursor position. */
-    screen->m_Curseur = curpos;
-
-    /* Snap cursor to grid. */
-    PutOnGrid( &(screen->m_Curseur) );
+    // Update cursor position.
+    screen->m_Curseur = pos;
 
     if( screen->IsRefreshReq() )
     {
@@ -304,24 +293,24 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     if( oldpos != screen->m_Curseur )
     {
-        curpos = screen->m_Curseur;
+        pos = screen->m_Curseur;
         screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( DC );
-        screen->m_Curseur = curpos;
-        DrawPanel->CursorOn( DC );
+        DrawPanel->CursorOff( aDC );
+        screen->m_Curseur = pos;
+        DrawPanel->CursorOn( aDC );
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
         }
     }
 
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( DC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, screen->GetCurItem() );
         else
-            OnHotKey( DC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, NULL );
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
@@ -329,26 +318,17 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 }
 
 
-void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 {
-    wxRealPoint delta;
+    wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
-    wxPoint     curpos, oldpos;
+    wxPoint     oldpos;
     int         hotkey = 0;
-    double      scalar = screen->GetScalingFactor();
+    wxPoint     pos = aPosition;
 
-    curpos = screen->m_MousePosition;
+    PutOnGrid( &pos );
     oldpos = screen->m_Curseur;
-
-    delta = screen->GetGridSize();
-
-    delta.x *= scalar;
-    delta.y *= scalar;
-
-    if( delta.x <= 0 )
-        delta.x = 1;
-    if( delta.y <= 0 )
-        delta.y = 1;
+    gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
     {
@@ -357,26 +337,26 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y -= wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y += wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x -= wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x += wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     default:
@@ -384,11 +364,8 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
         break;
     }
 
-    /* Update the cursor position. */
-    screen->m_Curseur = curpos;
-
-    /* Snap cursor to grid. */
-    PutOnGrid( &(screen->m_Curseur) );
+    // Update the cursor position.
+    screen->m_Curseur = pos;
 
     if( screen->IsRefreshReq() )
     {
@@ -398,50 +375,41 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     if( oldpos != screen->m_Curseur )
     {
-        curpos = screen->m_Curseur;
+        pos = screen->m_Curseur;
         screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( DC );
-        screen->m_Curseur = curpos;
-        DrawPanel->CursorOn( DC );
+        DrawPanel->CursorOff( aDC );
+        screen->m_Curseur = pos;
+        DrawPanel->CursorOn( aDC );
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
         }
     }
 
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( DC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, screen->GetCurItem() );
         else
-            OnHotKey( DC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, NULL );
     }
 
     UpdateStatusBar();
 }
 
 
-void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
+void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 {
-    wxRealPoint delta;
+    wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
-    wxPoint     curpos, oldpos;
+    wxPoint     oldpos;
     int         hotkey = 0;
-    double      scalar = screen->GetScalingFactor();
+    wxPoint     pos = aPosition;
 
-    curpos = screen->m_MousePosition;
+    PutOnGrid( &pos );
     oldpos = screen->m_Curseur;
-
-    delta = screen->GetGridSize();
-
-    delta.x *= scalar;
-    delta.y *= scalar;
-
-    if( delta.x <= 0 )
-        delta.x = 1;
-    if( delta.y <= 0 )
-        delta.y = 1;
+    gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
     {
@@ -450,26 +418,26 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        MousePositionInPixels.y -= wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y -= wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        MousePositionInPixels.y += wxRound( delta.y );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.y += wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        MousePositionInPixels.x -= wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x -= wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        MousePositionInPixels.x += wxRound( delta.x );
-        DrawPanel->MouseTo( MousePositionInPixels );
+        pos.x += wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     default:
@@ -477,11 +445,8 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
         break;
     }
 
-    /* Update cursor position. */
-    screen->m_Curseur = curpos;
-
-    /* Snap cursor to grid. */
-    PutOnGrid( &screen->m_Curseur );
+    // Update cursor position.
+    screen->m_Curseur = pos;
 
     if( screen->IsRefreshReq() )
     {
@@ -491,24 +456,24 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* DC, wxPoint MousePositionInPixels )
 
     if( oldpos != screen->m_Curseur )
     {
-        curpos = screen->m_Curseur;
+        pos = screen->m_Curseur;
         screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( DC );
-        screen->m_Curseur = curpos;
-        DrawPanel->CursorOn( DC );
+        DrawPanel->CursorOff( aDC );
+        screen->m_Curseur = pos;
+        DrawPanel->CursorOn( aDC );
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
         }
     }
 
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( DC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, screen->GetCurItem() );
         else
-            OnHotKey( DC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, NULL );
     }
 
     UpdateStatusBar();

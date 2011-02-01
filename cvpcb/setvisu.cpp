@@ -91,12 +91,11 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !GetBoard() )
         return;
 
-    ActiveScreen = (PCB_SCREEN*) GetScreen();
-
     DrawPanel->DrawBackGround( DC );
     GetBoard()->Draw( DrawPanel, DC, GR_COPY );
 
     MODULE* Module = GetBoard()->m_Modules;
+
     if ( Module )
         Module->DisplayInfo( this );
 

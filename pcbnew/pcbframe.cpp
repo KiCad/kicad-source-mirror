@@ -465,7 +465,6 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event
     Show( false );
-    ActiveScreen = ScreenPcb;
     Destroy();
 }
 

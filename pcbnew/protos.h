@@ -77,23 +77,20 @@ TRACK*       Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
  * @param aLayer The layer to match, pass -1 for a don't care.
  * @return TRACK* - actually a SEGVIA* if found, else NULL.
  */
-TRACK*       Locate_Via_Area( TRACK*         aStart,
-                              const wxPoint& aPos,
-                              int            aLayer = -1 );
+TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& aPos, int aLayer = ALL_LAYERS );
 
 /* Locates the center through the point x, y, on layer data
  * by masquelayer.
  * Search is done to address start_adr has end_adr (not included)
  */
-TRACK*       Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
-                              const wxPoint& pos, int masquelayer );
+TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int masquelayer );
 
 /* Locates the center through the point x, y, on layer data
  * by masquelayer.
  * Search is done to address start_adr has end_adr (not included)
  */
-TRACK*       Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
-                                const wxPoint& ref_pos, int masquelayer );
+TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
+                          const wxPoint& ref_pos, int masquelayer );
 
 /* Search for segment connected to the segment edge by
  * Ptr_piste:
@@ -102,8 +99,7 @@ TRACK*       Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
  * The search is done only on the ends of segments
  * The search is limited to the area [... pt_base] pt_lim.
  */
-TRACK*       Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base,
-                                     TRACK* pt_lim, int extr );
+TRACK* Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base, TRACK* pt_lim, int extr );
 
 /*
  * 1 - Locate segment of track leading from the mouse.
@@ -114,9 +110,7 @@ TRACK*       Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base,
  *
  * The search begins to address start_adresse
  */
-TRACK*       Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, int layer, int typeloc );
-TRACK*       Locate_Pistes( BOARD* aPcb, TRACK* start_adresse,
-                            const wxPoint& ref_pos, int layer );
+TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 
 /* Locate pad connected to the beginning or end of a segment
  * Input: pointer to the segment, and flag = START or END
@@ -124,8 +118,7 @@ TRACK*       Locate_Pistes( BOARD* aPcb, TRACK* start_adresse,
  * A pointer to the description of the patch if pad was found.
  * NULL pointer if pad was not found.
  */
-D_PAD*       Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
-
+D_PAD* Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
 
 /*
  * Locate pad pointed to by the coordinate ref_pX,, ref_pY or the current
@@ -137,12 +130,7 @@ D_PAD*       Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
  * Pointer to the pad if found
  * NULL pointer if pad not found
  */
-D_PAD*       Locate_Any_Pad( BOARD* aPcb,
-                             int    typeloc,
-                             bool   OnlyCurrentLayer = FALSE );
-D_PAD*       Locate_Any_Pad( BOARD*         aPcb,
-                             const wxPoint& ref_pos,
-                             bool           OnlyCurrentLayer = FALSE );
+D_PAD* Locate_Any_Pad( BOARD* aPcb, const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
 
 /* Locate pad pointed to by the coordinate ref_pX,, ref_pY or the cursor
  * position of the current footprint.
@@ -152,11 +140,11 @@ D_PAD*       Locate_Any_Pad( BOARD*         aPcb,
  * Returns:
  * A pointer to the pad if found otherwise NULL.
  */
-D_PAD*       Locate_Pads( MODULE* Module, int layer, int typeloc );
-D_PAD*       Locate_Pads( MODULE* Module, const wxPoint& ref_pos, int layer );
+D_PAD* Locate_Pads( MODULE* Module, const wxPoint& ref_pos, int layer );
 
 /* Locate a footprint by its bounding rectangle. */
-MODULE*      Locate_Prefered_Module( BOARD* Pcb, int typeloc );
+MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
+                                bool aVisibleOnly, bool aIgnoreLocked = false );
 
 /* Locate a pad pointed to by the cursor on the footprint.
  * Module.
@@ -165,12 +153,12 @@ MODULE*      Locate_Prefered_Module( BOARD* Pcb, int typeloc );
  * Returns:
  * A pointer to the pad if found otherwise NULL.
  */
-D_PAD*       Locate_Pads( MODULE* Module, int typeloc );
+D_PAD* Locate_Pads( MODULE* Module, int typeloc );
 
 /* Locate a trace segment at the current cursor position.
  * The search begins to address start_adresse.
  */
-TRACK*       Locate_Pistes( TRACK* start_adresse, int typeloc );
+TRACK* Locate_Pistes( TRACK* start_adresse, int typeloc );
 
 DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
 
@@ -181,9 +169,7 @@ DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
  * Returns:
  * Pointer to the pad if found, otherwise NULL.
  */
-D_PAD*       Fast_Locate_Pad_Connecte( BOARD*         Pcb,
-                                       const wxPoint& ref_pos,
-                                       int            layer );
+D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int layer );
 
 /*
  * 1 - Locate trace segment at the current cursor position.
@@ -193,16 +179,13 @@ D_PAD*       Fast_Locate_Pad_Connecte( BOARD*         Pcb,
  *
  * The search begins to address start_adresse
  */
-TRACK*       Locate_Zone( TRACK* start_adresse, int layer, int typeloc );
-TRACK*       Locate_Zone( TRACK*         start_adresse,
-                          const wxPoint& ref_pos,
-                          int            layer );
+TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 
 
 /*************/
 /* MODULES.C */
 /*************/
-int  ChangeSideNumLayer( int oldlayer );
+int ChangeSideNumLayer( int oldlayer );
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
 void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
@@ -213,12 +196,12 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef );
 
-void   ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 /* Determine coordinate for a segment direction of 0, 90 or 45 degrees,
  * depending on it's position from the origin (ox, oy) and \a aPosiition..
  */
-void   Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
+void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
 
 /*****************/

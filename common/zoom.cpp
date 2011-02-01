@@ -52,17 +52,18 @@ void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
 void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 {
     wxRealPoint grid_size;
+
     if( aGridSize )
         grid_size = *aGridSize;
     else
-       grid_size = GetBaseScreen()->GetGridSize();
+        grid_size = GetBaseScreen()->GetGridSize();
 
     const wxPoint& grid_origin = GetBaseScreen()->GetGridOrigin();
-    double offset = fmod(grid_origin.x, grid_size.x);
+    double offset = fmod( grid_origin.x, grid_size.x );
     int tmp = wxRound( (aCoord->x - offset) / grid_size.x );
     aCoord->x = wxRound( tmp * grid_size.x + offset );
 
-    offset = fmod(grid_origin.y, grid_size.y);
+    offset = fmod( grid_origin.y, grid_size.y );
     tmp = wxRound( (aCoord->y - offset) / grid_size.y );
     aCoord->y = wxRound ( tmp * grid_size.y + offset );
 }

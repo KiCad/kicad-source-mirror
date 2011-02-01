@@ -70,8 +70,6 @@ static void GRSRect( EDA_Rect* aClipBox, wxDC* aDC, int x1, int y1,
 
 /**/
 
-extern BASE_SCREEN* ActiveScreen;
-
 static int          GRLastMoveToX, GRLastMoveToY;
 static bool         s_ForceBlackPen;   /* if true: draws in black instead of
                                         * color for printing. */

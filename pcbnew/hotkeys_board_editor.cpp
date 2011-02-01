@@ -32,10 +32,11 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem )
     if( aHotkeyCode == 0 )
         return;
 
+    wxPoint pos;
     bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
-
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    PCB_SCREEN* screen = GetScreen();
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
@@ -156,8 +157,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem )
     case HK_REDO:
         if( !itemCurrentlyEdited )
         {
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
         }
         break;
@@ -244,9 +244,9 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem )
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
         if( m_ID_current_state != ID_TRACK_BUTT )
             return;
-        if( !itemCurrentlyEdited )                              // no track in progress: nothing to do
+        if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
-        if( GetCurItem()->Type() != TYPE_TRACK )                // Should not occur
+        if( GetCurItem()->Type() != TYPE_TRACK )           // Should not occur
             return;
         if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
             return;
@@ -318,10 +318,15 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem )
     case HK_LOCK_UNLOCK_FOOTPRINT: // toggle module "MODULE_is_LOCKED" status:
         // get any module, locked or not locked and toggle its locked status
         if( !itemCurrentlyEdited )
-            module = Locate_Prefered_Module( GetBoard(), CURSEUR_OFF_GRILLE
-                                             | VISIBLE_ONLY );
+        {
+            pos = screen->RefPos( true );
+            module = Locate_Prefered_Module( GetBoard(), pos, screen->m_Active_Layer, true );
+        }
         else if( GetCurItem()->Type() == TYPE_MODULE )
+        {
             module = (MODULE*) GetCurItem();
+        }
+
         if( module )
         {
             SetCurItem( module );
@@ -400,11 +405,15 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
     case ID_COMPONENT_BUTT:
         if( ItemFree )
         {
-            MODULE* module = Locate_Prefered_Module( GetBoard(), CURSEUR_ON_GRILLE );
+            wxPoint pos = GetScreen()->RefPos( false );
+            MODULE* module = Locate_Prefered_Module( GetBoard(), pos, ALL_LAYERS, false );
+
             if( module == NULL )
                 return false;
+
             if( !IsOK( this, _( "Delete module?" ) ) )
                 return false;
+
             RemoveStruct( module, aDC );
         }
         else

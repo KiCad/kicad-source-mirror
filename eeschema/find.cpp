@@ -222,7 +222,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
             DrawPanel->CursorOff( &dc );
 
             if( mouseWarp )
-                DrawPanel->MouseTo( curpos );
+                DrawPanel->MoveCursor( curpos );
 
             EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
 

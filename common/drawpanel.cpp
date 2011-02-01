@@ -285,22 +285,19 @@ wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
  */
 void EDA_DRAW_PANEL::MouseToCursorSchema()
 {
-    wxPoint Mouse = CursorScreenPosition();
-
-    MouseTo( Mouse );
+    MoveCursor( GetScreen()->m_Curseur );
 }
 
 
-/** Move the mouse cursor to the position "Mouse"
- * @param Mouse = mouse cursor position, in pixels units
- */
-void EDA_DRAW_PANEL::MouseTo( const wxPoint& Mouse )
+void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
 {
     int     x, y, xPpu, yPpu;
     wxPoint screenPos, drawingPos;
     wxRect  clientRect( wxPoint( 0, 0 ), GetClientSize() );
 
-    CalcScrolledPosition( Mouse.x, Mouse.y, &screenPos.x, &screenPos.y );
+    INSTALL_UNBUFFERED_DC( dc, this );
+    screenPos.x = dc.LogicalToDeviceX( aPosition.x );
+    screenPos.y = dc.LogicalToDeviceY( aPosition.y );
 
     // Scroll if the requested mouse position cursor is outside the drawing area.
     if( !clientRect.Contains( screenPos ) )
@@ -309,7 +306,7 @@ void EDA_DRAW_PANEL::MouseTo( const wxPoint& Mouse )
         GetScrollPixelsPerUnit( &xPpu, &yPpu );
         CalcUnscrolledPosition( screenPos.x, screenPos.y, &drawingPos.x, &drawingPos.y );
 
-        wxLogDebug( wxT( "MouseTo() initial screen position(%d, %d) " ) \
+        wxLogDebug( wxT( "MoveCursor() initial screen position(%d, %d) " ) \
                     wxT( "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, clientRect.x, clientRect.y,
                     clientRect.width, clientRect.height, x, y );
@@ -326,7 +323,7 @@ void EDA_DRAW_PANEL::MouseTo( const wxPoint& Mouse )
         Scroll( x, y );
         CalcScrolledPosition( drawingPos.x, drawingPos.y, &screenPos.x, &screenPos.y );
 
-        wxLogDebug( wxT( "MouseTo() scrolled screen position(%d, %d) view(%d, %d)" ),
+        wxLogDebug( wxT( "MoveCursor() scrolled screen position(%d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, x, y );
     }
 
@@ -1007,7 +1004,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     }
 
     /* Calling the general function on mouse changes (and pseudo key commands) */
-    m_Parent->GeneralControle( &DC, pos );
+    m_Parent->GeneralControle( &DC, event.GetLogicalPosition( DC ) );
 
     /*******************************/
     /* Control of block commands : */
@@ -1221,10 +1218,11 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     }
 
     /* Some key commands use the current mouse position: refresh it */
-    pos = CalcUnscrolledPosition( wxGetMousePosition() - GetScreenPosition() );
+    pos = wxGetMousePosition() - GetScreenPosition();
 
     // Compute the cursor position in drawing units.  Also known as logical units to wxDC.
-    Screen->m_MousePosition = CursorRealPosition( pos );
+    pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
+    Screen->m_MousePosition = pos;
 
     m_Parent->GeneralControle( &DC, pos );
 

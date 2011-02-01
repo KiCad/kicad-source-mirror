@@ -13,8 +13,6 @@
 #include "id.h"
 
 
-BASE_SCREEN* ActiveScreen = NULL;
-
 #define CURSOR_SIZE 12  /* size of the cross cursor. */
 
 

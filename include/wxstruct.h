@@ -365,7 +365,18 @@ public:
     virtual void     OnSelectGrid( wxCommandEvent& event );
     virtual void     OnSelectZoom( wxCommandEvent& event );
 
-    virtual void     GeneralControle( wxDC* DC, wxPoint Mouse ) { /* dummy */ }
+    /**
+     * Function GeneralControle
+     * performs application specific control using \a aDC at \a aPosition in logical units.
+     * <p>
+     * Override this function for application specific control.  This function gets
+     * called on every mouse and key event.
+     *</p>
+     * @param aDC A device context.
+     * @param aPosition The cursor position in logical (drawing) units.
+     */
+    virtual void     GeneralControle( wxDC* aDC, wxPoint aPosition ) { /* dummy */ }
+
     virtual void     OnSize( wxSizeEvent& event );
     void             OnEraseBackground( wxEraseEvent& SizeEvent );
 
@@ -515,7 +526,7 @@ public:
 
     /** Virtual function PrintPage
      * used to print a page
-     * Print the page pointed by ActiveScreen, set by the calling print function
+     * Print the page pointed by current screen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)

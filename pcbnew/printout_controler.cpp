@@ -106,13 +106,10 @@ void BOARD_PRINTOUT_CONTROLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-/****************************************/
-void BOARD_PRINTOUT_CONTROLER::DrawPage()
-/****************************************/
-
 /*
  * This is the real print function: print the active screen
  */
+void BOARD_PRINTOUT_CONTROLER::DrawPage()
 {
     int          tmpzoom;
     wxPoint      tmp_startvisu;
@@ -122,21 +119,21 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     double       userscale;
     double       DrawZoom = 1;
     wxDC*        dc = GetDC();
-
+    BASE_SCREEN* screen = m_Parent->GetBaseScreen();
     bool         printMirror = m_PrintParams.m_PrintMirror;
 
     wxBusyCursor dummy;
 
     /* Save old draw scale and draw offset */
-    tmp_startvisu = ActiveScreen->m_StartVisu;
-    tmpzoom = ActiveScreen->GetZoom();
-    old_org = ActiveScreen->m_DrawOrg;
+    tmp_startvisu = screen->m_StartVisu;
+    tmpzoom = screen->GetZoom();
+    old_org = screen->m_DrawOrg;
     /* Change draw scale and offset to draw the whole page */
-    ActiveScreen->SetScalingFactor( DrawZoom );
-    ActiveScreen->m_DrawOrg.x   = ActiveScreen->m_DrawOrg.y = 0;
-    ActiveScreen->m_StartVisu.x = ActiveScreen->m_StartVisu.y = 0;
+    screen->SetScalingFactor( DrawZoom );
+    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
+    screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
-    SheetSize = ActiveScreen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
+    SheetSize = screen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in internal units
 
@@ -153,8 +150,10 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         mv_offset.y = SheetSize.y / 2;
         brd_BBox.Move( mv_offset );
     }
+
     /* Compute the PCB size in internal units*/
     userscale = m_PrintParams.m_PrintScale;
+
     if( userscale == 0 )            //  fit in page
     {
         int extra_margin = 4000*2;    // Margin = 4000 units pcb = 0.4 inch
@@ -228,7 +227,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         DrawOffset.y -= PlotAreaSizeInUserUnits.y / 2;
     }
 
-    ActiveScreen->m_DrawOrg = DrawOffset;
+    screen->m_DrawOrg = DrawOffset;
 
     GRResetPenAndBrush( dc );
     if( m_PrintParams.m_Print_Black_and_White )
@@ -248,7 +247,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     int bg_color = g_DrawBgColor;
 
     if( m_PrintParams.m_Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( dc, ActiveScreen, m_PrintParams.m_PenDefaultSize );
+        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize );
 
     if( printMirror )
     {
@@ -279,7 +278,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         if( userscale <= 1.0 )
             DrawOffset.y += pcb_centre.y - (ysize / 2);
 
-        dc->SetLogicalOrigin( ActiveScreen->m_DrawOrg.x, ActiveScreen->m_DrawOrg.y );
+        dc->SetLogicalOrigin( screen->m_DrawOrg.x, screen->m_DrawOrg.y );
         panel->m_ClipBox.SetOrigin( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ) );
     }
 
@@ -306,7 +305,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     GRForceBlackPen( false );
 
-    ActiveScreen->m_StartVisu = tmp_startvisu;
-    ActiveScreen->m_DrawOrg   = old_org;
-    ActiveScreen->SetZoom( tmpzoom );
+    screen->m_StartVisu = tmp_startvisu;
+    screen->m_DrawOrg   = old_org;
+    screen->SetZoom( tmpzoom );
 }

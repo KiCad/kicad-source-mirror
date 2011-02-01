@@ -229,7 +229,13 @@ public:
     wxPoint      GetScreenCenterLogicalPosition();
 
     void         MouseToCursorSchema();
-    void         MouseTo( const wxPoint& Mouse );
+
+    /**
+     * Function MoveCursor
+     * moves the mouse pointer to \a aPosition in logical (drawing) units.
+     * @param aPosition The position in logical units to move the cursor.
+     */
+    void         MoveCursor( const wxPoint& aPosition );
 
     /* Cursor functions */
     /**

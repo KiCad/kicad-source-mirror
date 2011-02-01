@@ -390,27 +390,19 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     SetToolbars();
 }
 
-void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
+void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 {
-    wxRealPoint  delta;
-    int     flagcurseur = 0;
-    wxPoint curpos, oldpos;
-    double scalar = GetScreen()->GetScalingFactor();
+    wxRealPoint gridSize;
+    int         flagcurseur = 0;
+    wxPoint     oldpos;
+    wxPoint     pos = aPosition;
+
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    curpos = DrawPanel->CursorRealPosition( Mouse );
+    PutOnGrid( &pos );
     oldpos = GetScreen()->m_Curseur;
-
-    delta = GetScreen()->GetGridSize();
-
-    delta.x *= scalar;
-    delta.y *= scalar;
-
-    if( delta.x <= 0 )
-        delta.x = 1;
-    if( delta.y <= 0 )
-        delta.y = 1;
+    gridSize = GetScreen()->GetGridSize();
 
     switch( g_KeyPressed )
     {
@@ -418,14 +410,14 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
         cmd.SetId( ID_POPUP_ZOOM_IN );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        curpos = GetScreen()->m_Curseur;
+        pos = GetScreen()->m_Curseur;
         break;
 
     case WXK_F2:
         cmd.SetId( ID_POPUP_ZOOM_OUT );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        curpos = GetScreen()->m_Curseur;
+        pos = GetScreen()->m_Curseur;
         break;
 
     case WXK_F3:
@@ -438,14 +430,14 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        curpos = GetScreen()->m_Curseur;
+        pos = GetScreen()->m_Curseur;
         break;
 
     case WXK_HOME:
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        curpos = GetScreen()->m_Curseur;
+        pos = GetScreen()->m_Curseur;
         break;
 
     case ' ':
@@ -454,32 +446,30 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
 
     case WXK_NUMPAD8:       /* cursor moved up */
     case WXK_UP:
-        Mouse.y -= wxRound(delta.y);
-        DrawPanel->MouseTo( Mouse );
+        pos.y -= wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:       /* cursor moved down */
     case WXK_DOWN:
-        Mouse.y += wxRound(delta.y);
-        DrawPanel->MouseTo( Mouse );
+        pos.y += wxRound( gridSize.y );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:       /*  cursor moved left */
     case WXK_LEFT:
-        Mouse.x -= wxRound(delta.x);
-        DrawPanel->MouseTo( Mouse );
+        pos.x -= wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:      /*  cursor moved right */
     case WXK_RIGHT:
-        Mouse.x += wxRound(delta.x);
-        DrawPanel->MouseTo( Mouse );
+        pos.x += wxRound( gridSize.x );
+        DrawPanel->MoveCursor( pos );
         break;
     }
 
-    GetScreen()->m_Curseur = curpos;
-    /* Put cursor on grid */
-    PutOnGrid( &GetScreen()->m_Curseur );
+    GetScreen()->m_Curseur = pos;
 
     if( GetScreen()->IsRefreshReq() )
     {
@@ -491,17 +481,16 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* DC, wxPoint Mouse )
     {
         if( flagcurseur != 2 )
         {
-            curpos = GetScreen()->m_Curseur;
+            pos = GetScreen()->m_Curseur;
             GetScreen()->m_Curseur = oldpos;
-            DrawPanel->CursorOff( DC );
-
-            GetScreen()->m_Curseur = curpos;
-            DrawPanel->CursorOn( DC );
+            DrawPanel->CursorOff( aDC );
+            GetScreen()->m_Curseur = pos;
+            DrawPanel->CursorOn( aDC );
         }
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, DC, 0 );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, 0 );
         }
     }
 

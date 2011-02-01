@@ -271,9 +271,10 @@ void WinEDA_PcbFrame::Affiche_Status_Net( wxDC* DC )
 {
     TRACK* pt_segm;
     int    masquelayer = (1 << getActiveLayer());
+    wxPoint pos = GetScreen()->RefPos( true );
 
-    pt_segm = Locate_Pistes( GetBoard(), GetBoard()->m_Track, masquelayer,
-                             CURSEUR_OFF_GRILLE );
+    pt_segm = Locate_Pistes( GetBoard(), GetBoard()->m_Track, pos, masquelayer );
+
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );
     else

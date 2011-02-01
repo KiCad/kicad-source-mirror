@@ -13,21 +13,6 @@
 
 
 
-/**
- * Function RefPos
- * returns the reference position, coming from either the mouse position or the
- * the cursor position, based on whether the typeloc has the CURSEUR_OFF_GRILLE
- * flag ORed in or not.
- * @param typeloc int with possible CURSEUR_OFF_GRILLE bit on.
- * @return wxPoint - The reference point, either the mouse position or
- *   the cursor position.
- */
-wxPoint inline RefPos( int typeloc )
-{
-    return ActiveScreen->RefPos( (typeloc & CURSEUR_OFF_GRILLE) != 0 );
-}
-
-
 /* Locates a via point pX, pY
  * If layer < 0 will be located via whatever layer
  * If layer = 0 .. 15 Via will be located according to its type:
@@ -46,12 +31,16 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
     {
         if( track->Type() != TYPE_VIA )
             continue;
+
         if( track->m_Start != pos )
             continue;
+
         if( track->GetState( BUSY | DELETED ) )
             continue;
+
         if( layer < 0 )
             break;
+
         if( track->IsOnLayer( layer ) )
             break;
     }
@@ -68,12 +57,16 @@ TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
     {
         if( track->Type() != TYPE_VIA )
             continue;
+
         if( !track->HitTest(pos) )
             continue;
+
         if( track->GetState( BUSY | DELETED ) )
             continue;
+
         if( layer < 0 )
             break;
+
         if( track->IsOnLayer( layer ) )
             break;
     }
@@ -109,6 +102,7 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
     for( MODULE* module = Pcb->m_Modules;  module;  module = module->Next() )
     {
         ptr_pad = Locate_Pads( module, ref_pos, masque_layer );
+
         if( ptr_pad != NULL )
             break;
     }
@@ -129,36 +123,19 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
  *
  * Priority is the active layer
  */
-D_PAD* Locate_Any_Pad( BOARD* Pcb, int typeloc, bool OnlyCurrentLayer )
+D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, int aLayerMask )
 {
-    wxPoint ref_pos = RefPos( typeloc );
-    return Locate_Any_Pad( Pcb, ref_pos, OnlyCurrentLayer );
-}
+    D_PAD* pad = NULL;
 
-
-D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos,
-                       bool OnlyCurrentLayer )
-{
-    int layer_mask =
-        g_TabOneLayerMask[ ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer];
-
-    for( MODULE* module=Pcb->m_Modules;  module;   module = module->Next() )
+    for( MODULE* module=Pcb->m_Modules;   module && ( pad == NULL );   module = module->Next() )
     {
-        D_PAD*  pt_pad;
-
-        /* First: Search a pad on the active layer: */
-        if( ( pt_pad = Locate_Pads( module, ref_pos, layer_mask ) ) != NULL )
-            return pt_pad;
-
-        /* If not found, search on other layers: */
-        if( !OnlyCurrentLayer )
-        {
-            if( ( pt_pad = Locate_Pads( module, ref_pos, ALL_LAYERS ) ) != NULL )
-                return pt_pad;
-        }
+        if( aLayerMask )
+            pad = Locate_Pads( module, ref_pos, aLayerMask );
+        else
+            pad = Locate_Pads( module, ref_pos, ALL_LAYERS );
     }
 
-    return NULL;
+    return pad;
 }
 
 
@@ -171,13 +148,6 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos,
  * A pointer to the pad if found
  * NULL pointer if pad NOT FOUND
  */
-D_PAD* Locate_Pads( MODULE* module, int masque_layer, int typeloc )
-{
-    wxPoint ref_pos = RefPos( typeloc );
-    return Locate_Pads( module, ref_pos, masque_layer );
-}
-
-
 D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 {
     for( D_PAD* pt_pad = module->m_Pads;   pt_pad;   pt_pad = pt_pad->Next() )
@@ -204,11 +174,14 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
  * distance is calculated via manhattan distance from the center of the
  * bounding rectangle to the cursor position.
  *
- * @param Pcb The BOARD to search within.
- * @param typeloc Flag bits, tuning the search, see pcbnew.h
- * @return MODULE* - the best module or NULL if none.
+ * @param aPcb The BOARD to search within.
+ * @param aPosition Flag bits, tuning the search, see pcbnew.h
+ * @param aActiveLayer Layer to test.
+ * @param aVisibleOnly Search only the visible layers if true.
+ * @return MODULE* The best module or NULL if none.
  */
-MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
+MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
+                                bool aVisibleOnly, bool aIgnoreLocked )
 {
     MODULE* pt_module;
     int     lx, ly;
@@ -217,20 +190,17 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
     int     min_dim     = 0x7FFFFFFF;
     int     alt_min_dim = 0x7FFFFFFF;
     int     layer;
-    wxPoint ref_pos;
 
-    ref_pos = RefPos( typeloc );
+    pt_module = aPcb->m_Modules;
 
-    pt_module = Pcb->m_Modules;
     for(  ;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
     {
         // is the ref point within the module's bounds?
-        if( !pt_module->HitTest( ref_pos ) )
+        if( !pt_module->HitTest( aPosition ) )
             continue;
 
-        // if caller wants to ignore locked modules, and this one is locked,
-        // skip it.
-        if( (typeloc & IGNORE_LOCKED) && pt_module->IsLocked() )
+        // if caller wants to ignore locked modules, and this one is locked, skip it.
+        if( aIgnoreLocked && pt_module->IsLocked() )
             continue;
 
         /* Calculate priority: the priority is given to the layer of the
@@ -242,7 +212,6 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
 
         if( layer==ADHESIVE_N_BACK || layer==SILKSCREEN_N_BACK )
             layer = LAYER_N_BACK;
-
         else if( layer==ADHESIVE_N_FRONT || layer==SILKSCREEN_N_FRONT )
             layer = LAYER_N_FRONT;
 
@@ -251,17 +220,20 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
         int offx = pt_module->m_BoundaryBox.m_Size.x / 2 +
             pt_module->m_BoundaryBox.m_Pos.x +
             pt_module->m_Pos.x;
+
         int offy = pt_module->m_BoundaryBox.m_Size.y / 2
             + pt_module->m_BoundaryBox.m_Pos.y
             + pt_module->m_Pos.y;
+
         //off x & offy point to the middle of the box.
-        int dist = abs( ref_pos.x - offx ) + abs( ref_pos.y - offy );
+        int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );
         lx = pt_module->m_BoundaryBox.GetWidth();
         ly = pt_module->m_BoundaryBox.GetHeight();
+
         //int dist = MIN(lx, ly);  // to pick the smallest module (kinda
         // screwy with same-sized modules -- this is bad!)
 
-        if( ( (PCB_SCREEN*) ActiveScreen )->m_Active_Layer == layer )
+        if( aActiveLayer == layer )
         {
             if( dist <= min_dim )
             {
@@ -270,9 +242,7 @@ MODULE* Locate_Prefered_Module( BOARD* Pcb, int typeloc )
                 min_dim = dist;
             }
         }
-        else if( !( typeloc & MATCH_LAYER )
-            && ( !( typeloc & VISIBLE_ONLY )
-                 || Pcb->IsModuleLayerVisible( layer ) ) )
+        else if( aVisibleOnly && aPcb->IsModuleLayerVisible( layer ) )
         {
             if( dist <= alt_min_dim )
             {
@@ -338,8 +308,7 @@ int dist;
  *  @param pt_lim = upper limit for search (can be NULL)
  *  @param extr = START or END = end of ref track segment to use in tests
  */
-TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
-                               TRACK* pt_lim, int extr )
+TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base, TRACK* pt_lim, int extr )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;
 
@@ -367,6 +336,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base,
         {
             if( PtSegmN->GetState( BUSY | DELETED ) )
                 goto suite;
+
             if( PtSegmN == PtRefSegm )
                 goto suite;
 
@@ -396,6 +366,7 @@ suite:
         {
             if( PtSegmB->GetState( BUSY | DELETED ) )
                 goto suite1;
+
             if( PtSegmB == PtRefSegm )
                 goto suite1;
 
@@ -429,12 +400,14 @@ suite1:
         {
             if( PtSegmN == pt_lim )
                 break;
+
             continue;
         }
         if( PtSegmN == PtRefSegm )
         {
             if( PtSegmN == pt_lim )
                 break;
+
             continue;
         }
 
@@ -466,16 +439,7 @@ suite1:
  *
  * The search begins to address start_adresse
  */
-TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, int MasqueLayer, int typeloc )
-{
-    wxPoint ref_pos = RefPos( typeloc );
-
-    return Locate_Pistes( aPcb, start_adresse, ref_pos, MasqueLayer );
-}
-
-
-TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
-                      int MasqueLayer )
+TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLayer )
 {
     for( TRACK* track = start_adresse;   track;  track =  track->Next() )
     {
@@ -510,6 +474,7 @@ TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
     return NULL;
 }
 
+
 /*
  * 1 - Locate zone area by the mouse.
  * 2 - Locate zone area by point
@@ -519,14 +484,6 @@ TRACK* Locate_Pistes(BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
  *
  * The search begins to address start_adresse
  */
-TRACK* Locate_Zone( TRACK* start_adresse, int layer, int typeloc )
-{
-    wxPoint ref_pos = RefPos( typeloc );
-
-    return Locate_Zone( start_adresse, ref_pos, layer );
-}
-
-
 TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 {
     for( TRACK* Zone = start_adresse;  Zone;   Zone =  Zone->Next() )
@@ -552,8 +509,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
  *   Pointer to the structure corresponding descr_pad if pad found
  * (Good position and good layer).
  */
-D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos,
-                                 int masque_layer )
+D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_layer )
 {
     for( unsigned i=0; i<Pcb->GetPadsCount();  ++i )
     {
@@ -578,8 +534,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos,
  * The segments of track marks with the flag are not DELETED or taken
  * into account
  */
-TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
-                          const wxPoint& ref_pos, int MaskLayer )
+TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int MaskLayer )
 {
     TRACK* PtSegm;
 
@@ -602,6 +557,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
                     return PtSegm;
             }
         }
+
         if( PtSegm == end_adr )
             break;
     }
@@ -615,8 +571,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
  * If end_adr = NULL, end search list
  * Vias whose parameter has the State or DELETED bit BUSY = 1 are ignored
  */
-TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
-                        const wxPoint& pos, int MaskLayer )
+TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int MaskLayer )
 {
     TRACK* PtSegm;
 
@@ -633,6 +588,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr,
                 }
             }
         }
+
         if( PtSegm == end_adr )
             break;
     }

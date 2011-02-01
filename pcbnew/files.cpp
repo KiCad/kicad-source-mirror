@@ -139,8 +139,6 @@ bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
     FILE*    source;
     wxString msg;
 
-    ActiveScreen = GetScreen();
-
     if( GetScreen()->IsModify() && !aAppend )
     {
         if( !IsOK( this, _( "The current board has been modified.  Do you wish to discard \

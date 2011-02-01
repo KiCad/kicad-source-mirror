@@ -1230,19 +1230,17 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
     int dx0, dy0, dx1, dy1;
     int marge, via_marge;
     EDA_DRAW_PANEL* panel = pcbframe->DrawPanel;
+    PCB_SCREEN* screen = pcbframe->GetScreen();
 
-    marge = s_Clearance +
-            ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
+    marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
     via_marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentViaSize() / 2 );
 
     dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
     dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
 
     /* Place on center of pad if off grid. */
-    dx0 = pt_cur_ch->m_PadStart->GetPosition().x -
-          g_CurrentTrackSegment->m_Start.x;
-    dy0 = pt_cur_ch->m_PadStart->GetPosition().y -
-          g_CurrentTrackSegment->m_Start.y;
+    dx0 = pt_cur_ch->m_PadStart->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
+    dy0 = pt_cur_ch->m_PadStart->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
 
     /* If aligned, change the origin point. */
     if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )
@@ -1259,13 +1257,15 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = Locate_Pad_Connecte(
-        pcbframe->GetBoard(), g_FirstTrackSegment, START );
+    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->GetBoard(),
+                                                      g_FirstTrackSegment, START );
+
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
 
-    g_CurrentTrackSegment->end = Locate_Pad_Connecte(
-        pcbframe->GetBoard(), g_CurrentTrackSegment, END );
+    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->GetBoard(),
+                                                      g_CurrentTrackSegment, END );
+
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
 
@@ -1284,8 +1284,7 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
     // Put entire new current segment list in BOARD
     TRACK* track;
-    TRACK* insertBeforeMe =
-        g_CurrentTrackSegment->GetBestInsertPoint( pcbframe->GetBoard() );
+    TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( pcbframe->GetBoard() );
 
     while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
     {
@@ -1296,5 +1295,5 @@ static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
     pcbframe->test_1_net_connexion( DC, netcode );
 
-    ActiveScreen->SetModify();
+    screen->SetModify();
 }

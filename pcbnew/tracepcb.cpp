@@ -42,7 +42,6 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !GetBoard() || !screen )
         return;
 
-    ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
     DrawPanel->DrawBackGround( DC );
@@ -82,7 +81,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !GetBoard() || !screen )
         return;
 
-    ActiveScreen = screen;
     GRSetDrawMode( DC, GR_COPY );
 
     DrawPanel->DrawBackGround( DC );
