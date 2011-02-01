@@ -348,7 +348,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
      * graphic line */
-    if( aSize.x < 3 )
+    if( ABS( aSize.x ) < 3 )
     {
         /* draw the text as a line always vertically centered */
         wxPoint end( current_char_pos.x + dx, current_char_pos.y );
