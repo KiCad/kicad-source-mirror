@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-31 13:13+0300\n"
-"PO-Revision-Date: 2011-01-31 13:13+0300\n"
+"POT-Creation-Date: 2011-02-01 08:59+0300\n"
+"PO-Revision-Date: 2011-02-01 09:00+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -2136,7 +2136,7 @@ msgstr " создан в старой версии EESchema. При сохран
 
 #: eeschema/load_one_schematic_file.cpp:226
 msgid "Done Loading "
-msgstr "Загрузка завершена"
+msgstr "Загрузка завершена "
 
 #: eeschema/netlist.cpp:96
 msgid "Building net list:"
@@ -8481,11 +8481,11 @@ msgstr "Глобальное удаления на медном слое не д
 msgid "Delete Layer "
 msgstr "Удалить слой"
 
-#: pcbnew/editrack.cpp:803
+#: pcbnew/editrack.cpp:804
 msgid "Track Len"
 msgstr "Длина"
 
-#: pcbnew/editrack.cpp:807
+#: pcbnew/editrack.cpp:808
 msgid "Segs Count"
 msgstr "Сегментов"
 
@@ -12961,43 +12961,55 @@ msgstr "Позиция Y"
 msgid "Select the layer on which text should lay."
 msgstr "Выбор слоя, на котором нужно разместить текст."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:22
+#: pcbnew/dialogs/dialog_plot_base.cpp:25
 msgid "HPGL"
 msgstr "HPGL"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:22
+#: pcbnew/dialogs/dialog_plot_base.cpp:25
 msgid "Gerber"
 msgstr "Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:22
+#: pcbnew/dialogs/dialog_plot_base.cpp:25
 msgid "Postscript"
 msgstr "Postscript"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:22
+#: pcbnew/dialogs/dialog_plot_base.cpp:25
 msgid "Postscript A4"
 msgstr "Postscript A4"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:22
+#: pcbnew/dialogs/dialog_plot_base.cpp:25
 msgid "DXF"
 msgstr "DXF"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:24
+#: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Format"
 msgstr "Формат"
 
+#: pcbnew/dialogs/dialog_plot_base.cpp:34
+msgid "Plot"
+msgstr "Чертить"
+
 #: pcbnew/dialogs/dialog_plot_base.cpp:38
+msgid "Apply Settings"
+msgstr "Применить"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:41
+msgid "Generate Drill File"
+msgstr "Создать файл сверловки"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:61
 msgid "Technical Layers"
 msgstr "Технические слои"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:50
+#: pcbnew/dialogs/dialog_plot_base.cpp:73
 msgid "Plot sheet reference on all layers"
 msgstr "Чертить форматную рамку на всех слоях"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:53
+#: pcbnew/dialogs/dialog_plot_base.cpp:76
 msgid "Plot pads on silkscreen"
 msgstr "Чертить конт.пл. на слое шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:54
+#: pcbnew/dialogs/dialog_plot_base.cpp:77
 msgid ""
 "Enable/disable print/plot pads on silkscreen layers\n"
 "When disable, pads are never potted on silkscreen layers\n"
@@ -13007,99 +13019,95 @@ msgstr ""
 "Когда запрещено, конт.площадки не отображаются на слое шелкографии\n"
 "Когда, разрешено, конт.площадки отображаются (если они есть) на слое шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:58
+#: pcbnew/dialogs/dialog_plot_base.cpp:81
 msgid "Plot module value on silkscreen"
 msgstr "Чертить значения модулей на слое шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:61
+#: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot module reference on silkscreen"
 msgstr "Чертить обозначение модуля на шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:64
+#: pcbnew/dialogs/dialog_plot_base.cpp:87
 msgid "Plot other module texts on silkscreen"
 msgstr "Чертить другие тексты модуля на шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:65
+#: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr "Вкл/выкл печать/черчение текстовых полей модулей на слоях шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:69
+#: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Plot invisible texts on silkscreen"
 msgstr "Чертить скрытый текст на слое шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:70
+#: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr "Принудительно печатать/чертить скрытый текст на слое шелкографии"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:74
+#: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Do not tent vias"
 msgstr "Не закрывать переходные отв."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:75
+#: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Print/plot vias on mask layers. They are in this case not protected"
 msgstr "Печать/черчение перех.отв. на слоях маски. При вкл перех.отв. открыты."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:79
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Mirrored plot"
 msgstr "Чертить зеркально"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:88
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Drill marks:"
 msgstr "Метки отверстий:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:92
+#: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Actual size"
 msgstr "Истинный размер"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "Scaling:"
 msgstr "Масштаб:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "1:1"
 msgstr "1:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "2:1"
 msgstr "2:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:102
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "3:1"
 msgstr "3:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:113
+#: pcbnew/dialogs/dialog_plot_base.cpp:136
 msgid "Plot mode:"
 msgstr "Режим черчения:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:123
-msgid ""
-"Default\n"
-"linewidth"
-msgstr ""
-"Ширина линии\n"
-"по умолчанию"
+#: pcbnew/dialogs/dialog_plot_base.cpp:146
+msgid "Default linewidth"
+msgstr "Толщина линии по умолчанию"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:130
+#: pcbnew/dialogs/dialog_plot_base.cpp:153
 msgid "Line width for, e.g., sheet references."
 msgstr "Ширина линии, например, для рамки листа"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:146
+#: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Gerber Options"
 msgstr "Параметры Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:148
+#: pcbnew/dialogs/dialog_plot_base.cpp:171
 msgid "Use proper file extensions"
 msgstr "Использовать \"правильные\" расширения файлов"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:149
+#: pcbnew/dialogs/dialog_plot_base.cpp:172
 msgid "Use proper Gerber extensions - .GBL, .GTL, etc..."
 msgstr "Использовать правильные расширения файлов GERBER - .GBL, .GTL и т.п."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:153
+#: pcbnew/dialogs/dialog_plot_base.cpp:176
 msgid ""
 "Exclude PCB edge layer\n"
 "from other layers"
@@ -13107,11 +13115,11 @@ msgstr ""
 "Исключить содержимое слоя контура платы\n"
 "со всех остальных слоев"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:154
+#: pcbnew/dialogs/dialog_plot_base.cpp:177
 msgid "Exclude contents of the pcb edge layer from all other layers"
 msgstr "Исключить содержимое слоя контура платы со всех остальных слоев"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:158
+#: pcbnew/dialogs/dialog_plot_base.cpp:181
 msgid ""
 "Subtract mask from\n"
 "silkscren"
@@ -13119,77 +13127,65 @@ msgstr ""
 "Маскировать\n"
 "шелкографию"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:160
+#: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Удалить шелкографию из областей, открытых паяльной маской"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:164
+#: pcbnew/dialogs/dialog_plot_base.cpp:187
 msgid "Use auxiliary origin"
 msgstr "Использовать вспомогательные оси"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:170
+#: pcbnew/dialogs/dialog_plot_base.cpp:193
 msgid "HPGL Options"
 msgstr "Параметры HPGL"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:178
+#: pcbnew/dialogs/dialog_plot_base.cpp:201
 msgid "Pen size"
 msgstr "Размер пера"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:185
+#: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid "Pen overlay"
 msgstr "Перекрыть"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:190
+#: pcbnew/dialogs/dialog_plot_base.cpp:213
 msgid "Set plot overlay for filling"
 msgstr "Установить перекрытие при черчении заливки"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:199
+#: pcbnew/dialogs/dialog_plot_base.cpp:222
 msgid "Pen speed (cm/s):"
 msgstr "Скорость пера (см/с):"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:204
+#: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Set pen speed in cm/s"
 msgstr "Установить скорость пера в см/с"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:215
+#: pcbnew/dialogs/dialog_plot_base.cpp:238
 msgid "Postscript Options"
 msgstr "Параметры Postscript"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:223
+#: pcbnew/dialogs/dialog_plot_base.cpp:246
 msgid "X scale:"
 msgstr "X масштаб:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:237
+#: pcbnew/dialogs/dialog_plot_base.cpp:260
 msgid "Y scale:"
 msgstr "Y масштаб:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:248
+#: pcbnew/dialogs/dialog_plot_base.cpp:271
 msgid "Negative plot"
 msgstr "Чертить негативно"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:260
+#: pcbnew/dialogs/dialog_plot_base.cpp:283
 msgid "Output directory:"
 msgstr "Директория назначения:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:268
+#: pcbnew/dialogs/dialog_plot_base.cpp:291
 msgid "Target directory for plot files. Can be relative or absolute."
 msgstr "Путь для файлов черчения. Может быть относительным или абсолютным."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:272
+#: pcbnew/dialogs/dialog_plot_base.cpp:295
 msgid "Browse..."
 msgstr "Обзор..."
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:293
-msgid "Plot"
-msgstr "Чертить"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:297
-msgid "Apply Settings"
-msgstr "Применить"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:300
-msgid "Generate Drill File"
-msgstr "Создать файл сверловки"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:79
 msgid "Select Netlist"
@@ -13600,6 +13596,13 @@ msgstr "Начальные координаты и пользовательск�
 #: pcbnew/dialogs/dialog_design_rules_base.h:113
 msgid "Design Rules Editor"
 msgstr "Правка правил проектирования"
+
+#~ msgid ""
+#~ "Default\n"
+#~ "linewidth"
+#~ msgstr ""
+#~ "Ширина линии\n"
+#~ "по умолчанию"
 
 #~ msgid "Compress file "
 #~ msgstr "Сжать файл "
