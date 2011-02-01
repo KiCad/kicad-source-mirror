@@ -336,6 +336,11 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
         m_plotPSNegativeOpt->Enable( true );
+        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
+        m_PlotOptionsSizer->Show( m_PSOptionsSizer );
+        Layout();
+        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_GERBER:
@@ -358,6 +363,11 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
+        m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
+        Layout();
+        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_HPGL:
@@ -378,6 +388,11 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
+        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Show( m_HPGLOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
+        Layout();
+        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_DXF:
@@ -400,6 +415,11 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_fineAdjustYscaleOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
+        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
+        m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
+        Layout();
+        m_MainSizer->SetSizeHints( this );
         break;
     }
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,18 +11,17 @@
 #include <wx/intl.h>
 
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/checkbox.h>
-#include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
+#include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,9 +43,15 @@ class DIALOG_PLOT_BASE : public wxDialog
 			ID_CREATE_DRILL_FILE,
 		};
 		
-		wxRadioBox* m_plotFormatOpt;
+		wxBoxSizer* m_MainSizer;
+		wxStaticText* m_staticText121;
+		wxChoice* m_plotFormatOpt;
+		wxStaticText* m_staticTextDir;
+		wxTextCtrl* m_outputDirectoryName;
+		wxButton* m_browseButton;
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
 		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
+		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
 		wxCheckBox* m_plotPads_on_Silkscreen;
 		wxCheckBox* m_plotModuleValueOpt;
@@ -63,24 +68,24 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxChoice* m_plotModeOpt;
 		wxStaticText* m_textDefaultPenSize;
 		wxTextCtrl* m_linesWidth;
+		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_subtractMaskFromSilk;
 		wxCheckBox* m_useAuxOriginCheckBox;
+		wxStaticBoxSizer* m_HPGLOptionsSizer;
 		wxStaticText* m_textPenSize;
 		wxTextCtrl* m_HPGLPenSizeOpt;
 		wxStaticText* m_textPenOvr;
 		wxTextCtrl* m_HPGLPenOverlayOpt;
 		wxStaticText* m_textPenSpeed;
 		wxTextCtrl* m_HPGLPenSpeedOpt;
+		wxStaticBoxSizer* m_PSOptionsSizer;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_fineAdjustXscaleOpt;
 		wxStaticText* m_staticText8;
 		wxTextCtrl* m_fineAdjustYscaleOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxStaticText* m_staticTextDir;
-		wxTextCtrl* m_outputDirectoryName;
-		wxButton* m_browseButton;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_messagesBox;
 		
@@ -93,8 +98,8 @@ class DIALOG_PLOT_BASE : public wxDialog
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applyPlotSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
@@ -103,7 +108,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 	
 };
