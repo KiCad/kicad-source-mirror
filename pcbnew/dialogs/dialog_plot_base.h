@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,13 +16,13 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -37,18 +37,14 @@ class DIALOG_PLOT_BASE : public wxDialog
 	protected:
 		enum
 		{
-			ID_SAVE_OPT_PLOT = 1000,
-			ID_CREATE_DRILL_FILE,
-			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN,
+			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN = 1000,
 			ID_PRINT_REF,
 			ID_MIROR_OPT,
+			ID_SAVE_OPT_PLOT,
+			ID_CREATE_DRILL_FILE,
 		};
 		
 		wxRadioBox* m_plotFormatOpt;
-		wxButton* m_plotButton;
-		wxButton* m_buttonSaveOpt;
-		wxButton* m_buttonDrill;
-		wxButton* m_buttonQuit;
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
 		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
 		wxCheckBox* m_plotSheetRef;
@@ -88,21 +84,26 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_messagesBox;
 		
+		wxButton* m_plotButton;
+		wxButton* m_buttonSaveOpt;
+		wxButton* m_buttonDrill;
+		wxButton* m_buttonQuit;
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applyPlotSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,616 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 	
 };
