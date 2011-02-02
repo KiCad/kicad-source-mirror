@@ -100,9 +100,10 @@ public:
     void        OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
-    void        OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
-    void        GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+    void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+
+    void GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
     void        LoadSettings();
     void        SaveSettings();

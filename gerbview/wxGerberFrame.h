@@ -370,7 +370,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     bool              Read_GERBER_File( const wxString& GERBER_FullFileName,
                                         const wxString& D_Code_FullFileName );
 
-    void              GeneralControle( wxDC* DC, wxPoint Mouse );
+    void              GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
 
     /**

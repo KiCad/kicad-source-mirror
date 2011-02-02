@@ -27,51 +27,46 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
-void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* aComponent )
+void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
 {
     if( aComponent == NULL )    // Null component not accepted
         return;
 
-    parent->DrawPanel->m_IgnoreMouseEvents = TRUE;
+    aParent->DrawPanel->m_IgnoreMouseEvents = TRUE;
 
     if( aComponent->Type() != SCH_COMPONENT_T )
     {
-        DisplayError( parent,
+        DisplayError( aParent,
                       wxT( "InstallCmpeditFrame() error: This item is not a component" ) );
+        return;
     }
-    else
+
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dialog( aParent );
+
+    dialog.InitBuffers( aComponent );
+
+    wxSize sizeNow = dialog.GetSize();
+
+    // this relies on wxDefaultSize being -1,-1, be careful here.
+    if( sizeNow.GetWidth() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
+        || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
     {
-        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dialog =
-            new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( parent );
-
-        dialog->InitBuffers( aComponent );
-
-        wxSize sizeNow = dialog->GetSize();
-
-        // this relies on wxDefaultSize being -1,-1, be careful here.
-        if( sizeNow.GetWidth() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
-            || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
-        {
-            dialog->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
-        }
-
-        // make sure the chipnameTextCtrl is wide enough to hold any
-        // unusually long chip names:
-        EnsureTextCtrlWidth( dialog->chipnameTextCtrl );
-
-        dialog->ShowModal();
-
-        // Some of the field values are long and are not always fully visible
-        // because the window comes up too narrow.
-        // Remember user's manual window resizing efforts here so it comes up
-        // wide enough next time.
-        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dialog->GetSize();
-
-        dialog->Destroy();
+        dialog.SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
     }
 
-    parent->DrawPanel->MouseToCursorSchema();
-    parent->DrawPanel->m_IgnoreMouseEvents = false;
+    // make sure the chipnameTextCtrl is wide enough to hold any
+    // unusually long chip names:
+    EnsureTextCtrlWidth( dialog.chipnameTextCtrl );
+
+    dialog.ShowModal();
+
+    // Some of the field values are long and are not always fully visible because the
+    // window comes up too narrow.  Remember user's manual window resizing efforts here
+    // so it comes up wide enough next time.
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dialog.GetSize();
+
+    aParent->DrawPanel->MouseToCursorSchema();
+    aParent->DrawPanel->m_IgnoreMouseEvents = false;
 }
 
 

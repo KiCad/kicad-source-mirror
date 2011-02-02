@@ -390,6 +390,39 @@ int BASE_SCREEN::GetGridId()
 }
 
 
+wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize )
+{
+    wxPoint pt;
+    wxRealPoint gridSize;
+
+    if( aGridSize )
+        gridSize = *aGridSize;
+    else
+        gridSize = GetGridSize();
+
+    wxPoint gridOrigin = m_GridOrigin;
+
+    double offset = fmod( gridOrigin.x, gridSize.x );
+    int x = wxRound( (aPosition.x - offset) / gridSize.x );
+    pt.x = wxRound( x * gridSize.x + offset );
+
+    offset = fmod( gridOrigin.y, gridSize.y );
+    int y = wxRound( (aPosition.y - offset) / gridSize.y );
+    pt.y = wxRound ( y * gridSize.y + offset );
+
+    return pt;
+}
+
+
+wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize )
+{
+    if( aOnGrid )
+        return GetNearestGridPosition( m_Curseur, aGridSize );
+
+    return m_Curseur;
+}
+
+
 /* free the undo and the redo lists
  */
 void BASE_SCREEN::ClearUndoRedoList()

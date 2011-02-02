@@ -267,11 +267,12 @@ public:
      * Function OnHotKey.
      *  ** Commands are case insensitive **
      *  Some commands are relatives to the item under the mouse cursor
-     *  @param aDC = current device context
-     *  @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
-     *  @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
+     * @param aDC = current device context
+     * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
+     * @param aPosition The cursor position in logical (drawing) units.
+     * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    void             OnHotKey( wxDC* aDC, int aHotkeyCode, EDA_ITEM* aItem );
+    void OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     /**
      * Function OnHotkeyDeleteItem
@@ -366,7 +367,7 @@ public:
     void             ReFillLayerWidget();
 
     void             Show3D_Frame( wxCommandEvent& event );
-    void             GeneralControle( wxDC* DC, wxPoint Mouse );
+    void             GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
     /**
      * Function ShowDesignRulesEditor

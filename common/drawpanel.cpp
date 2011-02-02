@@ -778,14 +778,17 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
     wxPoint pos;
     wxMenu  MasterMenu;
 
-    pos = event.GetPosition();
+    INSTALL_UNBUFFERED_DC( dc, this );
+
+    pos = event.GetLogicalPosition( dc );
 
     if( !m_Parent->OnRightClick( pos, &MasterMenu ) )
         return false;
 
     m_Parent->AddMenuZoomAndGrid( &MasterMenu );
 
-    m_IgnoreMouseEvents = TRUE;
+    pos = event.GetPosition();
+    m_IgnoreMouseEvents = true;
     PopupMenu( &MasterMenu, pos );
     MouseToCursorSchema();
     m_IgnoreMouseEvents = false;
@@ -940,14 +943,14 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     localrealbutt |= localbutt;     /* compensation default wxGTK */
 
+    INSTALL_UNBUFFERED_DC( DC, this );
+    DC.SetBackground( *wxBLACK_BRUSH );
+
     /* Compute the cursor position in screen (device) units. */
     wxPoint pos = CalcUnscrolledPosition( event.GetPosition() );
 
     /* Compute the cursor position in drawing (logical) units. */
-    screen->m_MousePosition = CursorRealPosition( pos );
-
-    INSTALL_UNBUFFERED_DC( DC, this );
-    DC.SetBackground( *wxBLACK_BRUSH );
+    screen->m_MousePosition = event.GetLogicalPosition( DC );
 
     int kbstat = 0;
 
@@ -967,7 +970,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        m_Parent->OnLeftDClick( &DC, pos );
+        m_Parent->OnLeftDClick( &DC, screen->m_MousePosition );
 
         // inhibit a response to the mouse left button release,
         // because we have a double click, and we do not want a new
@@ -979,7 +982,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
         if( screen->m_BlockLocate.m_State==STATE_NO_BLOCK && !s_IgnoreNextLeftButtonRelease )
-            m_Parent->OnLeftClick( &DC, pos );
+            m_Parent->OnLeftClick( &DC, screen->m_MousePosition );
 
         s_IgnoreNextLeftButtonRelease = false;
     }
@@ -1217,7 +1220,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         }
     }
 
-    /* Some key commands use the current mouse position: refresh it */
+    // Some key commands use the current mouse position: refresh it.
     pos = wxGetMousePosition() - GetScreenPosition();
 
     // Compute the cursor position in drawing units.  Also known as logical units to wxDC.

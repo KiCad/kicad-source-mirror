@@ -16,9 +16,7 @@
  */
 class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
 {
-    friend void InstallCmpeditFrame( SCH_EDIT_FRAME* parent,
-                                     wxPoint&        pos,
-                                     SCH_COMPONENT*  aComponent );
+    friend void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, SCH_COMPONENT* aComponent );
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_COMPONENT*  m_Cmp;

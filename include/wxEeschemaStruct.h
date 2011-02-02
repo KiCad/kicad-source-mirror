@@ -109,7 +109,7 @@ public:
     void             OnColorConfig( wxCommandEvent& aEvent );
     void             Process_Config( wxCommandEvent& event );
 
-    void             GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+    void             GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
     void             SaveProjectFile( wxWindow* displayframe, bool askoverwrite = true );
@@ -172,7 +172,8 @@ public:
     void             ReCreateVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
-    void             OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void             OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                               EDA_ITEM* aItem = NULL );
 
     SCH_FIELD* GetCurrentField() { return m_CurrentField; }
 
@@ -200,15 +201,14 @@ public:
 
     void             InstallConfigFrame( wxCommandEvent& event );
 
-    void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool             OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    void             OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
+    void             OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
+    bool             OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );
     void             OnSelectOptionToolbar( wxCommandEvent& event );
     int              BestZoom();
 
-    SCH_ITEM*        SchematicGeneralLocateAndDisplay( bool IncludePin = TRUE );
-    SCH_ITEM*        SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
-                                                       bool           IncludePin );
+    SCH_ITEM*        LocateAndShowItem( const wxPoint& aPosition, bool aIncludePin = true );
+    SCH_ITEM*        LocateItem( const wxPoint& aPosition, bool aIncludePin );
 
     /**
      * Function FillFootprintFieldForAllInstancesofComponent

@@ -69,7 +69,7 @@ public:
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
 
-    void GeneralControle( wxDC* DC, wxPoint MousePositionInPixels );
+    void GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
     void LoadSettings();
     void SaveSettings();

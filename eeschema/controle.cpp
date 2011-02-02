@@ -23,55 +23,60 @@
 
 
 /**
- * Function SchematicGeneralLocateAndDisplay
- * Overlaid function
- *  Find the schematic item at cursor position
- *  the priority order is:
- *  - marker
- *  - noconnect
- *  - junction
- *  - wire/bus/entry
- *  - label
- *  - pin
- *  - component
- * @return  an EDA_ITEM pointer on the item or NULL if no item found
- * @param IncludePin = true to search for pins, false to ignore them
+ * Function LocateAndShowItem
+ * search the schematic at \a aPosition in logical (drawing) units for any item.
+ * <p>
+ * The search is first performed at \a aPosition which may be off grid.  If no item is
+ * found at \a aPosition, the search is repeated for the nearest grid position to \a
+ * aPosition.
  *
- *  For some items, characteristics are displayed on the screen.
+ * The search order is as follows:
+ * <ul>
+ * <li>Marker</li>
+ * <li>No Connect</li>
+ * <li>Junction</li>
+ * <li>Wire, bus, or entry</li>
+ * <li>Label</li>
+ * <li>Pin</li>
+ * <li>Component</li>
+ * </ul></p>
+ * @param aPosition The wxPoint on the schematic to search.
+ * @param aIncludePin = true to search for pins, false to ignore them
+ * @return A SCH_ITEM pointer on the item or NULL if no item found
  */
-SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aIncludePin )
 {
-    SCH_ITEM*      DrawStruct;
+    SCH_ITEM*      item;
     wxString       msg;
-    wxPoint        mouse_position = GetScreen()->m_MousePosition;
     LIB_PIN*       Pin     = NULL;
     SCH_COMPONENT* LibItem = NULL;
+    wxPoint        gridPosition = GetScreen()->GetNearestGridPosition( aPosition );
 
-    DrawStruct = SchematicGeneralLocateAndDisplay( mouse_position, IncludePin );
+    item = LocateItem( aPosition, aIncludePin );
 
-    if( !DrawStruct && ( mouse_position != GetScreen()->m_Curseur) )
-    {
-        DrawStruct = SchematicGeneralLocateAndDisplay( GetScreen()->m_Curseur, IncludePin );
-    }
+    if( !item && aPosition != gridPosition )
+        item = LocateItem( gridPosition, aIncludePin );
 
-    if( !DrawStruct )
+    if( !item )
         return NULL;
 
     /* Cross probing to pcbnew if a pin or a component is found */
-    switch( DrawStruct->Type() )
+    switch( item->Type() )
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-        LibItem = (SCH_COMPONENT*) DrawStruct->GetParent();
-        SendMessageToPCBNEW( DrawStruct, LibItem );
+        LibItem = (SCH_COMPONENT*) item->GetParent();
+        SendMessageToPCBNEW( item, LibItem );
         break;
 
     case SCH_COMPONENT_T:
         Pin = GetScreen()->GetPin( GetScreen()->m_Curseur, &LibItem );
+
         if( Pin )
             break;  // Priority is probing a pin first
-        LibItem = (SCH_COMPONENT*) DrawStruct;
-        SendMessageToPCBNEW( DrawStruct, LibItem );
+
+        LibItem = (SCH_COMPONENT*) item;
+        SendMessageToPCBNEW( item, LibItem );
         break;
 
     default:
@@ -79,85 +84,71 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( bool IncludePin )
         break;
 
     case LIB_PIN_T:
-        Pin = (LIB_PIN*) DrawStruct;
+        Pin = (LIB_PIN*) item;
         break;
     }
 
     if( Pin )
     {
-        /* Force display pin information (the previous display could be a
-         * component info) */
+        // Force display pin information (the previous display could be a component info)
         Pin->DisplayInfo( this );
 
         if( LibItem )
             AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
 
-        // Cross probing:2 - pin found, and send a locate pin command to
-        // pcbnew (highlight net)
+        // Cross probing:2 - pin found, and send a locate pin command to pcbnew (highlight net)
         SendMessageToPCBNEW( Pin, LibItem );
     }
-    return DrawStruct;
+
+    return item;
 }
 
 
 /**
- * Function SchematicGeneralLocateAndDisplay
- * Overlaid function
- *  Find the schematic item at a given position
- *  the priority order is:
- *  - marker
- *  - noconnect
- *  - junction
- *  - wire/bus/entry
- *  - label
- *  - pin
- *  - component
- * @return  an EDA_ITEM pointer on the item or NULL if no item found
- * @param refpoint = the wxPoint location where to search
- * @param IncludePin = true to search for pins, false to ignore them
- *
- *  For some items, characteristics are displayed on the screen.
+ * Function LocateItem
+ * searches for an item at \a aPosition.
+ * @param aPosition The wxPoint location where to search.
+ * @param aIncludePin True to search for pins, false to ignore them.
+ * @return The SCH_ITEM pointer of the item or NULL if no item found.
  */
-SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpoint,
-                                                            bool           IncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin )
 {
-    SCH_ITEM*      DrawStruct;
+    SCH_ITEM*      item;
     LIB_PIN*       Pin;
     SCH_COMPONENT* LibItem;
     wxString       Text;
     wxString       msg;
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), MARKER_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), MARKER_T );
 
-    if( DrawStruct )
+    if( item )
     {
-        DrawStruct->DisplayInfo( this );
-        return DrawStruct;
+        item->DisplayInfo( this );
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NO_CONNECT_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), NO_CONNECT_T );
 
-    if( DrawStruct )
+    if( item )
     {
         ClearMsgPanel();
-        return DrawStruct;
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), JUNCTION_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), JUNCTION_T );
 
-    if( DrawStruct )
+    if( item )
     {
         ClearMsgPanel();
-        return DrawStruct;
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(),
-                                         WIRE_T | BUS_T | BUS_ENTRY_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), WIRE_T | BUS_T | BUS_ENTRY_T );
 
-    if( DrawStruct )  // We have found a wire: Search for a connected pin at the same location
+    if( item )  // We have found a wire: Search for a connected pin at the same location
     {
-        Pin = GetScreen()->GetPin( refpoint, &LibItem );
+        Pin = GetScreen()->GetPin( aPosition, &LibItem );
 
         if( Pin )
         {
@@ -170,30 +161,30 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         else
             ClearMsgPanel();
 
-        return DrawStruct;
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), FIELD_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), FIELD_T );
 
-    if( DrawStruct )
+    if( item )
     {
-        SCH_FIELD* Field = (SCH_FIELD*) DrawStruct;
+        SCH_FIELD* Field = (SCH_FIELD*) item;
         LibItem = (SCH_COMPONENT*) Field->GetParent();
         LibItem->DisplayInfo( this );
 
-        return DrawStruct;
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), LABEL_T | TEXT_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), LABEL_T | TEXT_T );
 
-    if( DrawStruct )
+    if( item )
     {
         ClearMsgPanel();
-        return DrawStruct;
+        return item;
     }
 
     /* search for a pin */
-    Pin = GetScreen()->GetPin( refpoint, &LibItem );
+    Pin = GetScreen()->GetPin( aPosition, &LibItem );
 
     if( Pin )
     {
@@ -202,41 +193,39 @@ SCH_ITEM* SCH_EDIT_FRAME::SchematicGeneralLocateAndDisplay( const wxPoint& refpo
         if( LibItem )
             AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
-        if( IncludePin )
+        if( aIncludePin )
             return LibItem;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), COMPONENT_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), COMPONENT_T );
 
-    if( DrawStruct )
+    if( item )
     {
-        DrawStruct = LocateSmallestComponent( GetScreen() );
-        LibItem    = (SCH_COMPONENT*) DrawStruct;
+        item = LocateSmallestComponent( GetScreen() );
+        LibItem    = (SCH_COMPONENT*) item;
         LibItem->DisplayInfo( this );
-        return DrawStruct;
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), SHEET_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), SHEET_T );
 
-    if( DrawStruct )
+    if( item )
     {
-        ( (SCH_SHEET*) DrawStruct )->DisplayInfo( this );
-        return DrawStruct;
+        ( (SCH_SHEET*) item )->DisplayInfo( this );
+        return item;
     }
 
-    DrawStruct = (SCH_ITEM*) PickStruct( refpoint, GetScreen(), NO_FILTER_T );
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), NO_FILTER_T );
 
-    if( DrawStruct )
-    {
-        return DrawStruct;
-    }
+    if( item )
+        return item;
 
     ClearMsgPanel();
     return NULL;
 }
 
 
-void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
@@ -308,9 +297,9 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, aPosition, NULL );
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
@@ -318,7 +307,7 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 }
 
 
-void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
@@ -390,16 +379,16 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, aPosition, NULL );
     }
 
     UpdateStatusBar();
 }
 
 
-void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
@@ -471,9 +460,9 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
     if( hotkey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, screen->GetCurItem() );
+            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, NULL );
+            OnHotKey( aDC, hotkey, aPosition, NULL );
     }
 
     UpdateStatusBar();

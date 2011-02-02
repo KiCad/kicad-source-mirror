@@ -269,7 +269,8 @@ public:
 
     void             OnMenuOpen( wxMenuEvent& event );
     void             OnMouseEvent( wxMouseEvent& event );
-    virtual void     OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    virtual void     OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                               EDA_ITEM* aItem = NULL );
 
     /**
      * Function AddMenuZoomAndGrid (virtual)
@@ -373,9 +374,9 @@ public:
      * called on every mouse and key event.
      *</p>
      * @param aDC A device context.
-     * @param aPosition The cursor position in logical (drawing) units.
+     * @param aPosition The current cursor position in logical (drawing) units.
      */
-    virtual void     GeneralControle( wxDC* aDC, wxPoint aPosition ) { /* dummy */ }
+    virtual void     GeneralControle( wxDC* aDC, const wxPoint& aPosition ) { /* dummy */ }
 
     virtual void     OnSize( wxSizeEvent& event );
     void             OnEraseBackground( wxEraseEvent& SizeEvent );

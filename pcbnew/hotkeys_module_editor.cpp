@@ -20,14 +20,13 @@
  */
 
 
-/*****************************************************************************************/
-void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStruct )
-{
-/*****************************************************************************************/
 /* Hot keys. Some commands are relative to the item under the mouse cursor
  *  Commands are case insensitive
  */
-    if( hotkey == 0 )
+void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                                       EDA_ITEM* aItem )
+{
+    if( aHotKey == 0 )
         return;
 
     bool           blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
@@ -37,13 +36,13 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int hotkey, EDA_ITEM* DrawStru
     cmd.SetEventObject( this );
 
     /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
-    if( (hotkey >= 'a') && (hotkey <= 'z') )
-        hotkey += 'A' - 'a';
+    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
+        aHotKey += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( hotkey, common_Hotkey_List );
+    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
 
     if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( hotkey, module_edit_Hotkey_List );
+        HK_Descr = GetDescriptorFromHotkey( aHotKey, module_edit_Hotkey_List );
 
     if( HK_Descr == NULL )
         return;

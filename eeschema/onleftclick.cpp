@@ -26,21 +26,18 @@ static wxArrayString s_CmpNameList;
 static wxArrayString s_PowerNameList;
 
 
-/* Process the command triggers by the left button of the mouse when a tool
- * is already selected.
- */
-void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
-    SCH_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    SCH_ITEM* item = GetScreen()->GetCurItem();
 
-    if( ( m_ID_current_state == 0 ) || ( DrawStruct && DrawStruct->m_Flags ) )
+    if( ( m_ID_current_state == 0 ) || ( item && item->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = FALSE;
         m_itemToRepeat = NULL;
 
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( item && item->m_Flags )
         {
-            switch( DrawStruct->Type() )
+            switch( item->Type() )
             {
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
@@ -52,7 +49,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             case SCH_JUNCTION_T:
             case SCH_COMPONENT_T:
             case SCH_FIELD_T:
-                DrawStruct->Place( this, DC );
+                item->Place( this, aDC );
                 GetScreen()->SetCurItem( NULL );
                 GetScreen()->TestDanglingEnds();
                 DrawPanel->Refresh( TRUE );
@@ -60,7 +57,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             case SCH_SCREEN_T:
                 DisplayError( this, wxT( "OnLeftClick err: unexpected type for Place" ) );
-                DrawStruct->m_Flags = 0;
+                item->m_Flags = 0;
                 break;
 
             case SCH_LINE_T: // May already be drawing segment.
@@ -70,16 +67,16 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 wxString msg;
                 msg.Printf( wxT( "SCH_EDIT_FRAME::OnLeftClick err: m_Flags != 0, itmetype %d" ),
-                            DrawStruct->Type());
+                            item->Type());
                 DisplayError( this, msg );
-                DrawStruct->m_Flags = 0;
+                item->m_Flags = 0;
                 break;
             }
             }
         }
         else
         {
-            DrawStruct = SchematicGeneralLocateAndDisplay( true );
+            item = LocateAndShowItem( aPosition );
         }
     }
 
@@ -92,114 +89,115 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( item && item->m_Flags )
             break;
-        DrawStruct = SchematicGeneralLocateAndDisplay();
-        if( DrawStruct && ( DrawStruct->Type() == SCH_SHEET_T ) )
-        {
-            InstallNextScreen( (SCH_SHEET*) DrawStruct );
-        }
+
+        item = LocateAndShowItem( aPosition );
+
+        if( item && ( item->Type() == SCH_SHEET_T ) )
+            InstallNextScreen( (SCH_SHEET*) item );
         else
             InstallPreviousSheet();
         break;
 
     case ID_NOCONN_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            m_itemToRepeat = CreateNewNoConnectStruct( DC );
+            m_itemToRepeat = CreateNewNoConnectStruct( aDC );
             GetScreen()->SetCurItem( m_itemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
+
         GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
     case ID_JUNCTION_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            m_itemToRepeat = CreateNewJunctionStruct( DC, GetScreen()->m_Curseur, TRUE );
+            m_itemToRepeat = CreateNewJunctionStruct( aDC, GetScreen()->m_Curseur, TRUE );
             GetScreen()->SetCurItem( m_itemToRepeat );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
+
         GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
     case ID_BUSTOBUS_ENTRY_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            DrawStruct = CreateBusEntry( DC,
-                                         (m_ID_current_state == ID_WIRETOBUS_ENTRY_BUTT) ?
-                                         WIRE_TO_BUS : BUS_TO_BUS );
-            GetScreen()->SetCurItem( DrawStruct );
+            item = CreateBusEntry( aDC, ( m_ID_current_state == ID_WIRETOBUS_ENTRY_BUTT ) ?
+                                   WIRE_TO_BUS : BUS_TO_BUS );
+            GetScreen()->SetCurItem( item );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             GetScreen()->SetCurItem( NULL );
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
         break;
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        LocateAndDeleteItem( this, DC );
-        OnModify( );
+        LocateAndDeleteItem( this, aDC );
+        OnModify();
         GetScreen()->SetCurItem( NULL );
         GetScreen()->TestDanglingEnds();
         DrawPanel->Refresh( TRUE );
         break;
 
     case ID_WIRE_BUTT:
-        BeginSegment( DC, LAYER_WIRE );
+        BeginSegment( aDC, LAYER_WIRE );
         DrawPanel->m_AutoPAN_Request = TRUE;
         break;
 
     case ID_BUS_BUTT:
-        BeginSegment( DC, LAYER_BUS );
+        BeginSegment( aDC, LAYER_BUS );
         DrawPanel->m_AutoPAN_Request = TRUE;
         break;
 
     case ID_LINE_COMMENT_BUTT:
-        BeginSegment( DC, LAYER_NOTES );
+        BeginSegment( aDC, LAYER_NOTES );
         DrawPanel->m_AutoPAN_Request = TRUE;
         break;
 
     case ID_TEXT_COMMENT_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateNewText( DC, LAYER_NOTES ) );
+            GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
         }
         break;
 
     case ID_LABEL_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateNewText( DC, LAYER_LOCLABEL ) );
+            GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_LOCLABEL ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
@@ -208,17 +206,19 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_GLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (item == NULL) || (item->m_Flags == 0) )
         {
             if(m_ID_current_state == ID_GLABEL_BUTT)
-                GetScreen()->SetCurItem( CreateNewText( DC, LAYER_GLOBLABEL ) );
+                GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_GLOBLABEL ) );
+
             if(m_ID_current_state == ID_HIERLABEL_BUTT)
-                GetScreen()->SetCurItem( CreateNewText( DC, LAYER_HIERLABEL ) );
+                GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_HIERLABEL ) );
+
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
@@ -226,14 +226,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateSheet( DC ) );
+            GetScreen()->SetCurItem( CreateSheet( aDC ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
@@ -242,37 +242,36 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_IMPORT_HLABEL_BUTT:
     case ID_SHEET_LABEL_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
-            DrawStruct = SchematicGeneralLocateAndDisplay();
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+            item = LocateAndShowItem( aPosition );
 
-        if( DrawStruct == NULL )
+        if( item == NULL )
             break;
 
-        if( (DrawStruct->Type() == SCH_SHEET_T)
-           && (DrawStruct->m_Flags == 0) )
+        if( (item->Type() == SCH_SHEET_T) && (item->m_Flags == 0) )
         {
             if( m_ID_current_state == ID_IMPORT_HLABEL_BUTT )
-                GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) DrawStruct, DC ) );
+                GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, aDC ) );
             else
-                GetScreen()->SetCurItem( Create_PinSheet( (SCH_SHEET*) DrawStruct, DC ) );
+                GetScreen()->SetCurItem( Create_PinSheet( (SCH_SHEET*) item, aDC ) );
         }
-        else if( (DrawStruct->Type() == SCH_SHEET_LABEL_T) && (DrawStruct->m_Flags != 0) )
+        else if( (item->Type() == SCH_SHEET_LABEL_T) && (item->m_Flags != 0) )
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
         }
         break;
 
     case ID_COMPONENT_BUTT:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (item == NULL) || (item->m_Flags == 0) )
         {
-            GetScreen()->SetCurItem( Load_Component( DC, wxEmptyString, s_CmpNameList, TRUE ) );
+            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, TRUE ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
@@ -280,14 +279,15 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_PLACE_POWER_BUTT:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            GetScreen()->SetCurItem( Load_Component( DC, wxT( "power" ), s_PowerNameList, FALSE ) );
+            GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
+                                                     s_PowerNameList, FALSE ) );
             DrawPanel->m_AutoPAN_Request = TRUE;
         }
         else
         {
-            DrawStruct->Place( this, DC );
+            item->Place( this, aDC );
             DrawPanel->m_AutoPAN_Request = FALSE;
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( TRUE );
@@ -315,31 +315,31 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  Id a create command is in progress:
  *      validate and finish the command
  */
-void SCH_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
 {
-    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
-    wxPoint   pos = GetPosition();
+    EDA_ITEM* item = GetScreen()->GetCurItem();
+    wxPoint   pos = aPosition;
 
     switch( m_ID_current_state )
     {
     case 0:
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            DrawStruct = SchematicGeneralLocateAndDisplay();
+            item = LocateAndShowItem( aPosition );
         }
 
-        if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags != 0 ) )
+        if( ( item == NULL ) || ( item->m_Flags != 0 ) )
             break;
 
-        switch( DrawStruct->Type() )
+        switch( item->Type() )
         {
         case SCH_SHEET_T:
-            InstallNextScreen( (SCH_SHEET*) DrawStruct );
+            InstallNextScreen( (SCH_SHEET*) item );
             break;
 
         case SCH_COMPONENT_T:
-            InstallCmpeditFrame( this, pos, (SCH_COMPONENT*) DrawStruct );
+            InstallCmpeditFrame( this, (SCH_COMPONENT*) item );
             DrawPanel->MouseToCursorSchema();
             break;
 
@@ -347,16 +347,16 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIERARCHICAL_LABEL_T:
-            EditSchematicText( (SCH_TEXT*) DrawStruct );
+            EditSchematicText( (SCH_TEXT*) item );
             break;
 
         case SCH_FIELD_T:
-            EditCmpFieldText( (SCH_FIELD*) DrawStruct, DC );
+            EditCmpFieldText( (SCH_FIELD*) item, aDC );
             DrawPanel->MouseToCursorSchema();
             break;
 
         case SCH_MARKER_T:
-            ( (SCH_MARKER*) DrawStruct )->DisplayMarkerInfo( this );
+            ( (SCH_MARKER*) item )->DisplayMarkerInfo( this );
             break;
 
         default:
@@ -368,8 +368,9 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     case ID_BUS_BUTT:
     case ID_WIRE_BUTT:
     case ID_LINE_COMMENT_BUTT:
-        if( DrawStruct && ( DrawStruct->m_Flags & IS_NEW ) )
-            EndSegment( DC );
+        if( item && ( item->m_Flags & IS_NEW ) )
+            EndSegment( aDC );
+
         break;
     }
 }

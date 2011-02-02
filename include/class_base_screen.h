@@ -57,48 +57,45 @@ class BASE_SCREEN : public EDA_ITEM
     GRIDS     m_grids;          ///< List of valid grid sizes.
     EDA_ITEM* m_drawList;       ///< Object list for the screen.
     wxString  m_fileName;       ///< File used to load the screen.
+    char      m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
+    char      m_FlagModified;   ///< Indicates current drawing has been modified.
+    char      m_FlagSave;       ///< Indicates automatic file save.
+    EDA_ITEM* m_CurrentItem;    ///< Currently selected object
+    GRID_TYPE m_Grid;           ///< Current grid selection.
 
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
     wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user units. */
     wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
-                                 * in user units.
-                                 * (coordinates from last reset position)*/
+                                 * in user units. (coordinates from last reset position)*/
+
     // Scrollbars management:
     int     m_ScrollPixelsPerUnitX; /* Pixels per scroll unit in the horizontal direction. */
     int     m_ScrollPixelsPerUnitY; /* Pixels per scroll unit in the vertical direction. */
-    wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll
-                                     * units.
-                                     * m_ScrollbarNumber * m_ScrollPixelsPerUnit = virtual draw area size in pixels
-                                     */
-    wxPoint m_ScrollbarPos;         /* Current scroll bar position in scroll
-                                     * units. */
+    wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll units.
+                                     * m_ScrollbarNumber * m_ScrollPixelsPerUnit =
+                                     * virtual draw area size in pixels */
+    wxPoint m_ScrollbarPos;     /* Current scroll bar position in scroll units. */
 
-    wxPoint m_StartVisu;       /* Coordinates in drawing units of the current
-                                * view position (upper left corner of device)
-                                */
+    wxPoint m_StartVisu;        /* Coordinates in drawing units of the current
+                                 * view position (upper left corner of device)
+                                 */
 
-    wxSize m_SizeVisu;         /* taille en pixels de l'ecran (fenetre de visu
-                                * Utile pour recadrer les affichages lors de la
-                                * navigation dans la hierarchie */
-    bool   m_Center;           /* Center on screen.  If TRUE (0.0) is centered
-                                * on screen coordinates can be < 0 and
-                                * > 0 except for schematics.
-                                * FALSE: when coordinates can only be >= 0
-                                * Schematic */
+    bool   m_Center;             /* Center on screen.  If TRUE (0.0) is centered
+                                  * on screen coordinates can be < 0 and
+                                  * > 0 except for schematics.
+                                  * FALSE: when coordinates can only be >= 0
+                                  * Schematic */
     bool m_FirstRedraw;
 
     // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList;             /* Objects list for the undo
-                                                 * command (old data) */
-    UNDO_REDO_CONTAINER m_RedoList;             /* Objects list for the redo
-                                                 * command (old data) */
-    unsigned            m_UndoRedoCountMax;     // undo/Redo command Max depth
+    UNDO_REDO_CONTAINER m_UndoList;          /* Objects list for the undo command (old data) */
+    UNDO_REDO_CONTAINER m_RedoList;          /* Objects list for the redo command (old data) */
+    unsigned            m_UndoRedoCountMax;  // undo/Redo command Max depth
 
     /* block control */
-    BLOCK_SELECTOR      m_BlockLocate;       /* Block description for block
-                                              * commands */
+    BLOCK_SELECTOR      m_BlockLocate;       /* Block description for block commands */
 
     /* Page description */
     Ki_PageDescr*       m_CurrentSheetDesc;
@@ -114,23 +111,12 @@ public:
     wxString        m_Commentaire3;
     wxString        m_Commentaire4;
 
-private:
-    char            m_FlagRefreshReq;       /* indicates that the screen should
-                                             * be redrawn */
-    char            m_FlagModified;         // indicates current drawing has
-                                            // been modified
-    char            m_FlagSave;             // Perform automatica file save.
-    EDA_ITEM* m_CurrentItem;          ///< Currently selected object
-    GRID_TYPE       m_Grid;                 ///< Current grid selection.
-
     /* Grid and zoom values. */
-public:
     wxPoint	m_GridOrigin;
 
     wxArrayInt m_ZoomList;          /* Array of standard zoom coefficients. */
     int        m_Zoom;              /* Current zoom coefficient. */
-    int        m_ZoomScalar;        /* Allow zooming to non-integer increments.
-                                     */
+    int        m_ZoomScalar;        /* Allow zooming to non-integer increments. */
     bool       m_IsPrinting;
 
 public:
@@ -369,6 +355,25 @@ public:
         return useMouse ? m_MousePosition : m_Curseur;
     }
 
+    /**
+     * Function GetCursorPosition
+     * returns the current cursor position in logical (drawing) units.
+     * @param aOnGrid Returns the nearest grid position at the current cursor position.
+     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
+     *        if \a aOnGrid is true.
+     * @return The current cursor position.
+     */
+    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL );
+
+    /**
+     * Function GetNearestGridPosition
+     * returns the nearest \a aGridSize location to \a aPosition.
+     * @param aPosition The position to check.
+     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
+     *                  grid size is used.
+     * @return The nearst grid position.
+     */
+    wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL );
 
     /**
      * Function GetClass

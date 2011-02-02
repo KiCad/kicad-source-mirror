@@ -226,7 +226,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 }
 
 
-void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
@@ -370,7 +370,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
 
     if( hotkey )
     {
-        OnHotKey( aDC, hotkey, NULL );
+        OnHotKey( aDC, hotkey, aPosition );
     }
 
     if( GetScreen()->IsRefreshReq() )

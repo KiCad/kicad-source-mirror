@@ -484,7 +484,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem() == NULL )
             break;
 
-        InstallCmpeditFrame( this, pos, (SCH_COMPONENT*) screen->GetCurItem() );
+        InstallCmpeditFrame( this, (SCH_COMPONENT*) screen->GetCurItem() );
         break;
 
     case ID_POPUP_SCH_MIROR_X_CMP:

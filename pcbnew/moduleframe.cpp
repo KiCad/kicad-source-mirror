@@ -455,7 +455,7 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
@@ -529,7 +529,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
 
     if( hotkey )
     {
-        OnHotKey( aDC, hotkey, NULL );
+        OnHotKey( aDC, hotkey, aPosition );
     }
 
     if( GetScreen()->IsRefreshReq() )

@@ -48,7 +48,7 @@ static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_
  *
  * This menu is then added to the list of zoom commands.
  */
-bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
     bool      BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
@@ -66,7 +66,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     // Try to locate items at cursor position.
     if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
     {
-        DrawStruct = SchematicGeneralLocateAndDisplay( false );
+        DrawStruct = LocateAndShowItem( aPosition, false );
 
         if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {

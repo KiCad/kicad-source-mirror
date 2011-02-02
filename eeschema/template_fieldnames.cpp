@@ -153,8 +153,8 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
     {
         if( m_Fields[i].m_Name == aFieldName.m_Name )
         {
-            D(printf("inserting template fieldname:'%s' at %d\n",
-                aFieldName.m_Name.utf8_str(), i );)
+            // D(printf("inserting template fieldname:'%s' at %d\n",
+            //     aFieldName.m_Name.utf8_str(), i );)
 
             m_Fields[i] = aFieldName;
             return i;   // return the container index

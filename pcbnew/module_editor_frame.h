@@ -40,13 +40,14 @@ public:
     void         ReCreateMenuBar();
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
-    void         OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void         OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                           EDA_ITEM* aItem = NULL );
     bool         OnHotkeyEditItem( int aIdCommand );
     bool         OnHotkeyDeleteItem( int aIdCommand );
     bool         OnHotkeyMoveItem( int aIdCommand );
     bool         OnHotkeyRotateItem( int aIdCommand );
     void         Show3D_Frame( wxCommandEvent& event );
-    void         GeneralControle( wxDC* DC, wxPoint Mouse );
+    void         GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
     /**
      * Function LoadModuleFromBoard

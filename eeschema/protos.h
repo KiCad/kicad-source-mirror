@@ -40,7 +40,7 @@ void IncrementLabelMember( wxString& name );
 /****************/
 /* EDITPART.CPP */
 /****************/
-void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, wxPoint& pos, SCH_COMPONENT* m_Cmp );
+void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
 
 void SnapLibItemPoint( int            OrigX,
                        int            OrigY,

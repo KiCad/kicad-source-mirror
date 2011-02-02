@@ -176,7 +176,7 @@ void EDA_DRAW_FRAME::ReCreateMenuBar()
 
 
 // Virtual function
-void EDA_DRAW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
+void EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
 }
 

@@ -13,7 +13,7 @@ GERBER_DRAW_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
 }
 
 
-void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, wxPoint aPosition )
+void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
