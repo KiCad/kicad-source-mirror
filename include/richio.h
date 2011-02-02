@@ -486,7 +486,7 @@ public:
     }
 
     /**
-     * Function Quoted
+     * Function Quotes
      * checks \a aWrapee input string for a need to be quoted
      * (e.g. contains a ')' character or a space), and for \" double quotes
      * within the string that need to be escaped such that the DSNLEXER
@@ -500,13 +500,9 @@ public:
      *
      * @throw IO_ERROR, if there is any kind of problem with the input string.
      */
-     virtual std::string Quoted( const std::string& aWrapee ) throw( IO_ERROR );
+     virtual std::string Quotes( const std::string& aWrapee ) throw( IO_ERROR );
 
-     std::string Quoted( const wxString& aWrapee ) throw( IO_ERROR )
-     {
-         // s-expressions atoms are always encoded as UTF-8
-         return Quoted( (const char*) aWrapee.utf8_str() );
-     }
+     std::string Quotew( const wxString& aWrapee ) throw( IO_ERROR );
 
     //-----</interface functions>-----------------------------------------
 };

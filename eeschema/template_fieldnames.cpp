@@ -32,10 +32,10 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(field (name %s)",  out->Quoted( m_Name ).c_str() );
+    out->Print( nestLevel, "(field (name %s)",  out->Quotew( m_Name ).c_str() );
 
     if( !m_Value.IsEmpty() )
-        out->Print( 0, "(value %s)", out->Quoted( m_Value ).c_str() );
+        out->Print( 0, "(value %s)", out->Quotew( m_Value ).c_str() );
 
     if( m_Visible )
         out->Print( 0, " visible" );

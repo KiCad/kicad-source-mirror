@@ -280,7 +280,7 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IO_ERRO
 }
 
 
-std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERROR )
+std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) throw( IO_ERROR )
 {
     static const char quoteThese[] = "\t ()\n\r";
 
@@ -326,6 +326,17 @@ std::string OUTPUTFORMATTER::Quoted( const std::string& aWrapee ) throw( IO_ERRO
     }
 
     return aWrapee;
+}
+
+
+std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) throw( IO_ERROR )
+{
+    // s-expressions atoms are always encoded as UTF-8.
+    // The non-virutal function calls the virtual workhorse function, and if
+    // a different quoting or escaping strategy is desired from the standard,
+    // a derived class can overload Quotes() above, but
+    // should never be a reason to overload this Quotew() here.
+    return Quotes( (const char*) aWrapee.utf8_str() );
 }
 
 

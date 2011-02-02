@@ -157,10 +157,10 @@ void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
     out->Print( nestLevel, "(lib (logical %s)(type %s)(full_uri %s)(options %s))\n",
-        out->Quoted( logicalName ).c_str(),
-        out->Quoted( libType ).c_str(),
-        out->Quoted( fullURI ).c_str(),
-        out->Quoted( options ).c_str()
+        out->Quotes( logicalName ).c_str(),
+        out->Quotes( libType ).c_str(),
+        out->Quotes( fullURI ).c_str(),
+        out->Quotes( options ).c_str()
         );
 }
 
