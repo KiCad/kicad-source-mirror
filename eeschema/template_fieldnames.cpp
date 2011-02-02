@@ -32,12 +32,10 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(field (name %s)",
-        out->Quoted( CONV_TO_UTF8(m_Name) ).c_str() );
+    out->Print( nestLevel, "(field (name %s)",  out->Quoted( m_Name ).c_str() );
 
     if( !m_Value.IsEmpty() )
-        out->Print( 0, "(value %s)",
-            out->Quoted( CONV_TO_UTF8(m_Value) ).c_str() );
+        out->Print( 0, "(value %s)", out->Quoted( m_Value ).c_str() );
 
     if( m_Visible )
         out->Print( 0, " visible" );
@@ -57,7 +55,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR 
 
     in->NeedSYMBOLorNUMBER();
 
-    m_Name = CONV_FROM_UTF8( in->CurText() );
+    m_Name = FROM_UTF8( in->CurText() );
 
     in->NeedRIGHT();    // end (name ...)
 
@@ -71,7 +69,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR 
         {
         case T_value:
             in->NeedSYMBOLorNUMBER();
-            m_Value = CONV_FROM_UTF8( in->CurText() );
+            m_Value = FROM_UTF8( in->CurText() );
             in->NeedRIGHT();
             break;
 
@@ -156,14 +154,14 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
         if( m_Fields[i].m_Name == aFieldName.m_Name )
         {
             D(printf("inserting template fieldname:'%s' at %d\n",
-                CONV_TO_UTF8(aFieldName.m_Name), i );)
+                aFieldName.m_Name.utf8_str(), i );)
 
             m_Fields[i] = aFieldName;
             return i;   // return the container index
         }
     }
 
-    // D(printf("appending template fieldname:'%s'\n", CONV_TO_UTF8(aFieldName.m_Name) );)
+    // D(printf("appending template fieldname:'%s'\n", aFieldName.m_Name.utf8_str() );)
 
     // the name is legal and not previously added to the config container, append
     // it and return its index within the container.

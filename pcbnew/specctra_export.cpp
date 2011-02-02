@@ -221,7 +221,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
         DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
         printf( "type=%s, GetStart()=%d,%d  GetEnd()=%d,%d\n",
-                CONV_TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape ) ),
+                TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape ) ),
                 graphic->GetStart().x,
                 graphic->GetStart().y,
                 graphic->GetEnd().x,
@@ -509,7 +509,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
     IMAGE*  image = new IMAGE(0);
 
-    image->image_id = CONV_TO_UTF8( aModule->m_LibRef );
+    image->image_id = TO_UTF8( aModule->m_LibRef );
 
     // from the pads, and make an IMAGE using collated padstacks.
     for( int p=0;  p<moduleItems.GetCount();  ++p )
@@ -558,7 +558,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             PIN*    pin = new PIN(image);
 
             padName = pad->ReturnStringPadName();
-            pin->pin_id  = CONV_TO_UTF8( padName );
+            pin->pin_id  = TO_UTF8( padName );
 
             if( padName!=wxEmptyString && pinmap.find( padName )==pinmap.end() )
             {
@@ -659,7 +659,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_ARC:
         default:
             D( printf("makeIMAGE(): unsupported shape %s\n",
-                      CONV_TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape))  );)
+                      TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape))  );)
             continue;
         }
     }
@@ -932,7 +932,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
-            STRINGSET_PAIR refpair = refs.insert( CONV_TO_UTF8( module->GetReference() ) );
+            STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
                 ThrowIOError( _("Multiple components have identical reference IDs of \"%s\"."),
@@ -1096,7 +1096,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             PATH*           mainPolygon = new PATH( plane, T_polygon );
             plane->SetShape( mainPolygon );
 
-            plane->name = CONV_TO_UTF8( item->m_Netname );
+            plane->name = TO_UTF8( item->m_Netname );
 
             if( plane->name.size() == 0 )
             {
@@ -1181,7 +1181,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             NETINFO_ITEM* net = aBoard->m_NetInfo->GetNetItem(ii);
             int netcode = net->GetNet();
             if( netcode > 0 )
-                nets[ netcode ]->net_id = CONV_TO_UTF8( net->GetNetname() );
+                nets[ netcode ]->net_id = TO_UTF8( net->GetNetname() );
         }
 
         items.Collect( aBoard, scanMODULEs );
@@ -1194,7 +1194,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             IMAGE*  image  = makeIMAGE( aBoard, module );
 
-            componentId = CONV_TO_UTF8( module->GetReference() );
+            componentId = TO_UTF8( module->GetReference() );
 
             // create a net list entry for all the actual pins in the image
             // for the current module.  location of this code is critical
@@ -1241,7 +1241,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             place->SetRotation( module->m_Orient/10.0 );
             place->SetVertex( mapPt( module->m_Pos ) );
             place->component_id = componentId;
-            place->part_number  = CONV_TO_UTF8( module->GetValue() );
+            place->part_number  = TO_UTF8( module->GetValue() );
 
             // module is flipped from bottom side, set side to T_back
             if( module->flag )
@@ -1373,7 +1373,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
                     old_netcode = netcode;
                     NETINFO_ITEM* net = aBoard->FindNet( netcode );
                     wxASSERT( net );
-                    netname = CONV_TO_UTF8( net->GetNetname() );
+                    netname = TO_UTF8( net->GetNetname() );
                 }
 
                 WIRE* wire = new WIRE( wiring );
@@ -1435,7 +1435,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             NETINFO_ITEM* net = aBoard->FindNet( netcode );
             wxASSERT( net );
 
-            dsnVia->net_id = CONV_TO_UTF8( net->GetNetname() );
+            dsnVia->net_id = TO_UTF8( net->GetNetname() );
 
             dsnVia->via_type = T_protect;     // @todo, this should be configurable
         }
@@ -1512,10 +1512,10 @@ void SPECCTRA_DB::exportNETCLASS( NETCLASS* aNetClass, BOARD* aBoard )
     // freerouter creates a class named 'default' anyway, and if we
     // try and use that, we end up with two 'default' via rules so use
     // something else as the name of our default class.
-    clazz->class_id = CONV_TO_UTF8( aNetClass->GetName() );
+    clazz->class_id = TO_UTF8( aNetClass->GetName() );
 
     for( NETCLASS::iterator net = aNetClass->begin();  net != aNetClass->end();  ++net )
-        clazz->net_ids.push_back( CONV_TO_UTF8( *net ) );
+        clazz->net_ids.push_back( TO_UTF8( *net ) );
 
     clazz->rules = new RULE( clazz, T_rule );
 

@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Feb-2 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common:
+  * macros.h now has TO_UTF8() and FROM_UTF8() which are working converters
+    to and from UTF-8 encoding for any wxWidgets build mode.  We can switch to
+    them at any time.  I am using them now for specctra conversions and
+    elsewhere where I wanted gauranteed UTF8 encoding.
+  * added OUTPUTFORMATTER::Quoted( const wxString& ) to simplify converting
+    to UTF8 encoded s-expression atoms.  The recommended technique is now simply:
+        out->Quoted( wxString ).c_str()
+
 2011-Jan-30 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++all:

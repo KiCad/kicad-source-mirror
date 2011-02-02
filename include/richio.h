@@ -489,19 +489,24 @@ public:
      * Function Quoted
      * checks \a aWrapee input string for a need to be quoted
      * (e.g. contains a ')' character or a space), and for \" double quotes
-     * within the string that need to be doubled up such that the DSNLEXER
+     * within the string that need to be escaped such that the DSNLEXER
      * will correctly parse the string from a file later.
      *
      * @param aWrapee is a string that might need wraping in double quotes,
-     *  and it might need to have its internal quotes doubled up, or not.
+     *  and it might need to have its internal content escaped, or not.
      *
      * @return std::string - whose c_str() function can be called for passing
-     *   to printf() style functions that must output utf8 encoded s-expression streams.
-     * @throw IO_ERROR, if aWrapee has any \r or \n bytes in it which is
-     *        illegal according to the DSNLEXER who does not ever want them
-     *        within a string.
+     *   to printf() style functions that output UTF8 encoded s-expression streams.
+     *
+     * @throw IO_ERROR, if there is any kind of problem with the input string.
      */
      virtual std::string Quoted( const std::string& aWrapee ) throw( IO_ERROR );
+
+     std::string Quoted( const wxString& aWrapee ) throw( IO_ERROR )
+     {
+         // s-expressions atoms are always encoded as UTF-8
+         return Quoted( (const char*) aWrapee.utf8_str() );
+     }
 
     //-----</interface functions>-----------------------------------------
 };

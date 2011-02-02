@@ -34,7 +34,7 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
     switch( GetType() )
     {
     case wxXML_ELEMENT_NODE:
-        out->Print( nestLevel, "(%s", CONV_TO_UTF8( GetName() ) );
+        out->Print( nestLevel, "(%s", out->Quoted( GetName() ).c_str() );
         FormatContents( out, nestLevel );
         if( GetNext() )
             out->Print( 0, ")\n" );
@@ -55,8 +55,8 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERRO
     {
         out->Print( 0, " (%s %s)",
             // attr names should never need quoting, no spaces, we designed the file.
-            CONV_TO_UTF8( attr->GetName() ),
-            out->Quoted( CONV_TO_UTF8( attr->GetValue() ) ).c_str()
+            out->Quoted( attr->GetName()  ).c_str(),
+            out->Quoted( attr->GetValue() ).c_str()
             );
     }
 
@@ -82,9 +82,7 @@ void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERRO
         break;
 
     case wxXML_TEXT_NODE:
-        out->Print( 0, " %s",
-            out->Quoted( CONV_TO_UTF8( GetContent() ) ).c_str()
-            );
+        out->Print( 0, " %s", out->Quoted( GetContent() ).c_str() );
         break;
 
     default:

@@ -88,7 +88,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
         kicadLayer2pcb[kilayer] = pcbNdx;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( CONV_TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
+        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( kilayer ) ) );
     }
 }
 
@@ -3404,7 +3404,7 @@ void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IO_ERR
         STREAM_OUTPUTFORMATTER  outputFormatter( os, quote_char[0] );
 
         if( aNameChange )
-            pcb->pcbname = CONV_TO_UTF8(filename);
+            pcb->pcbname = TO_UTF8(filename);
 
         pcb->Format( &outputFormatter, 0 );
     }
@@ -3600,7 +3600,7 @@ PARSER::PARSER( ELEM* aParent ) :
 
     host_cad = "Kicad's PCBNEW";
     wxString msg = GetBuildVersion();
-    host_version = CONV_TO_UTF8(msg);
+    host_version = TO_UTF8(msg);
 }
 
 

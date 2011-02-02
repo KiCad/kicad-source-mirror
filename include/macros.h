@@ -11,7 +11,7 @@
 // in order to use UTF8 in Kicad files.
 // But this change break compatibility with older files under Windows,
 // if some non ASCII characters are found in strings.
-// So this is a TODO change.
+// So this is a TODO change.  Simply switch to TO_UTF8() and FROM_UTF() then.
 #if wxUSE_UNICODE
 #define CONV_TO_UTF8( wxstring )     ( (const char*) wxConvCurrent->cWX2MB( wxstring ) )
 #define CONV_FROM_UTF8( utf8string ) ( wxConvCurrent->cMB2WC( utf8string ) )
@@ -21,6 +21,19 @@
 #define CONV_FROM_UTF8( utf8string ) (utf8string)
 #endif
 
+/**
+ * Macro TO_UTF8
+ * converts a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ * wxstring is a wxString, not a wxT() or _().  The scope of the return value
+ * is very limited and volatile, but can be used with printf() style functions well.
+ */
+#define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
+
+/**
+ * Macro FROM_UTF8
+ * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
+ */
+#define FROM_UTF8( cstring )    wxString::FromUTF8( cstring )
 
 /**
  * Function GetChars
