@@ -152,7 +152,8 @@ bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame, int aCurrentTool, wxSize g
 
     if( doPad )
     {
-        D_PAD* pad = Locate_Any_Pad( m_Pcb, pos, screen->m_Active_Layer );
+        int layer_mask = g_TabOneLayerMask[screen->m_Active_Layer];
+        D_PAD* pad = Locate_Any_Pad( m_Pcb, pos, layer_mask );
 
         if( pad )
         {

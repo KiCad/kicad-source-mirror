@@ -112,22 +112,16 @@ D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
 
 
 /*
- * Locate pad pointed to by the coordinates ref_pos.x,, ref_pos.y or
- * the mouse, search done on all tracks.
- * Input:
- * - mouse coord or ref_pos
+ * Locate a pad pointed to by the coordinates ref_pos.x, ref_pos.y
+ * aLayerMask is allowed layers ( bitmap mask)
  * Returns:
- * Pointer to the pad if found.
- * NULL pointer if pad NOT FOUND
- * Num_empr = number of fingerprint pad
- *
- * Priority is the active layer
+ * Pointer to a pad if found or NULL
  */
 D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, int aLayerMask )
 {
     D_PAD* pad = NULL;
 
-    for( MODULE* module=Pcb->m_Modules;   module && ( pad == NULL );   module = module->Next() )
+    for( MODULE* module=Pcb->m_Modules; module && ( pad == NULL ); module = module->Next() )
     {
         if( aLayerMask )
             pad = Locate_Pads( module, ref_pos, aLayerMask );
@@ -139,14 +133,12 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, int aLayerMask )
 }
 
 
-/* Locate pad pointed to by the coordinate ref_pos.x,, ref_pos.y or
- * the mouse on the current footprint.
+/* Locate the pad pointed to by the coordinate ref_pos.x,, ref_pos.y
  * Input:
- * - General parameters of the footprint update by characters()
- * - = Masque_layer layer(s) (bit_masque) which must be the pad
+ * - the footprint to test
+ * - masque_layer layer(s) (bit_masque) which must be the pad
  * Returns:
- * A pointer to the pad if found
- * NULL pointer if pad NOT FOUND
+ * A pointer to the pad if found or NULL
  */
 D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
 {
