@@ -78,6 +78,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype,
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;   // hide/Show grid. default = show
     m_GridColor           = DARKGRAY;   // Grid color
+    m_snapToGrid          = true;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
     m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
@@ -447,6 +448,17 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
 void EDA_DRAW_FRAME::OnGrid( int grid_type )
 {
+}
+
+
+wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition )
+{
+    wxPoint pos = aPosition;
+
+    if( m_CurrentScreen != NULL && m_snapToGrid )
+        pos = m_CurrentScreen->GetNearestGridPosition( aPosition );
+
+    return pos;
 }
 
 

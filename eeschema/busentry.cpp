@@ -50,22 +50,23 @@ static void ExitBusEntry( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase )
 {
     // Draws the bus entry while moving the cursor
-    BASE_SCREEN*   screen   = panel->GetScreen();
+    BASE_SCREEN*   screen   = aPanel->GetScreen();
     SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) screen->GetCurItem();
 
     if( BusEntry == NULL )
         return;
 
     /* Erase the last segment position. */
-    if( erase )
-        BusEntry->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    if( aErase )
+        BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     /* Redraw at the new position. */
     BusEntry->m_Pos = screen->m_Curseur;
-    BusEntry->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 

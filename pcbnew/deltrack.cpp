@@ -31,8 +31,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
         return NULL;
     }
 
-    if( aTrack->m_Flags & IS_NEW )  // Trace in progress, erase the last
-                                    // segment
+    if( aTrack->m_Flags & IS_NEW )  // Trace in progress, erase the last segment
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {
@@ -41,7 +40,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
             D( g_CurrentTrackList.VerifyListIntegrity(); )
 
             // Delete the current trace
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, FALSE );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, FALSE );
 
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
@@ -98,7 +97,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
             else
             {
                 if( DrawPanel->ManageCurseur )
-                    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
                 return g_CurrentTrackSegment;
             }

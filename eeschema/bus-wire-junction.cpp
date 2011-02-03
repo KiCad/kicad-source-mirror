@@ -73,7 +73,8 @@ static void RestoreOldWires( SCH_SCREEN* screen )
 /**
  * Mouse capture callback for drawing line segments.
  */
-static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
+static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                         bool aErase )
 {
     SCH_LINE* CurrentLine = (SCH_LINE*) aPanel->GetScreen()->GetCurItem();
     SCH_LINE* segment;
@@ -149,7 +150,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     if( !newsegment )  /* first point : Create first wire or bus */
     {
         s_ConnexionStartPoint = cursorpos;
-        s_OldWiresList = GetScreen()->ExtractWires( TRUE );
+        s_OldWiresList = GetScreen()->ExtractWires( true );
         GetScreen()->SchematicCleanUp( DrawPanel );
 
         switch( type )
@@ -203,7 +204,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
                 return;
         }
 
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         /* Creates the new segment, or terminates the command
          * if the end point is on a pin, junction or an other wire or bus */
@@ -239,7 +240,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         oldsegment->m_Flags = SELECTED;
         newsegment->m_Flags = IS_NEW;
         GetScreen()->SetCurItem( newsegment );
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         /* This is the first segment: Now we know the start segment position.
          * Create a junction if needed. Note: a junction can be needed later,
@@ -479,11 +480,11 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
     /* Cancel trace in progress */
     if( GetScreen()->GetCurItem()->Type() == SCH_POLYLINE_T )
     {
-        Show_Polyline_in_Ghost( DrawPanel, DC, FALSE );
+        Show_Polyline_in_Ghost( DrawPanel, DC, false );
     }
     else
     {
-        DrawSegment( DrawPanel, DC, FALSE );
+        DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
     }
 
     EraseStruct( (SCH_ITEM*) GetScreen()->GetCurItem(), GetScreen() );
@@ -519,17 +520,16 @@ SCH_JUNCTION* SCH_EDIT_FRAME::CreateNewJunctionStruct( wxDC*          DC,
 }
 
 
-/* Routine to create new NoConnect struct. */
-SCH_NO_CONNECT* SCH_EDIT_FRAME::CreateNewNoConnectStruct( wxDC* DC )
+SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPosition )
 {
     SCH_NO_CONNECT* NewNoConnect;
 
-    NewNoConnect   = new SCH_NO_CONNECT( GetScreen()->m_Curseur );
+    NewNoConnect   = new SCH_NO_CONNECT( aPosition );
     m_itemToRepeat = NewNoConnect;
 
-    DrawPanel->CursorOff( DC );     // Erase schematic cursor
-    NewNoConnect->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CursorOn( DC );      // Display schematic cursor
+    DrawPanel->CursorOff( aDC );     // Erase schematic cursor
+    NewNoConnect->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    DrawPanel->CursorOn( aDC );      // Display schematic cursor
 
     NewNoConnect->SetNext( GetScreen()->GetDrawItems() );
     GetScreen()->SetDrawItems( NewNoConnect );
@@ -645,7 +645,7 @@ void IncrementLabelMember( wxString& name )
 }
 
 
-/* Return TRUE if pos can be a terminal point for a wire or a bus
+/* Return true if pos can be a terminal point for a wire or a bus
  * i.e. :
  *  for a WIRE, if at pos is found:
  *      - a junction
@@ -669,7 +669,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         item = PickStruct( pos, screen, BUS_T );
 
         if( item )
-            return TRUE;
+            return true;
 
         pinsheet = screen->GetSheetLabel( pos );
 
@@ -678,21 +678,21 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             itempos = pinsheet->m_Pos;
 
             if( (itempos.x == pos.x) && (itempos.y == pos.y) )
-                return TRUE;
+                return true;
         }
         break;
 
     case LAYER_NOTES:
         item = PickStruct( pos, screen, DRAW_ITEM_T );
         if( item )
-            return TRUE;
+            return true;
         break;
 
     case LAYER_WIRE:
         item = PickStruct( pos, screen, BUS_ENTRY_T | JUNCTION_T );
 
         if( item )
-            return TRUE;
+            return true;
 
         pin = screen->GetPin( pos, &LibItem );
 
@@ -705,19 +705,19 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             itempos.y += LibItem->m_Pos.y;
 
             if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )
-                return TRUE;
+                return true;
         }
 
         item = PickStruct( pos, screen, WIRE_T );
 
         if( item )
-            return TRUE;
+            return true;
 
         item = PickStruct( pos, screen, LABEL_T );
         if( item && (item->Type() != SCH_TEXT_T)
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
-            return TRUE;
+            return true;
 
         pinsheet = screen->GetSheetLabel( pos );
 
@@ -726,7 +726,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
             itempos = pinsheet->m_Pos;
 
             if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )
-                return TRUE;
+                return true;
         }
 
         break;
@@ -735,7 +735,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -750,16 +750,16 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
 bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos )
 {
     if( PickStruct( pos, frame->GetScreen(), JUNCTION_T ) )
-        return FALSE;
+        return false;
 
     if( PickStruct( pos, frame->GetScreen(), WIRE_T | EXCLUDE_ENDPOINTS_T ) )
     {
         if( PickStruct( pos, frame->GetScreen(), WIRE_T | ENDPOINTS_ONLY_T ) )
-            return TRUE;
+            return true;
 
         if( frame->GetScreen()->GetPin( pos, NULL, true ) )
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }

@@ -83,7 +83,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, true );
         }
     }
 

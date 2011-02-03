@@ -18,7 +18,8 @@
 #include "sch_text.h"
 
 
-static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase );
 static void ExitMoveTexte( EDA_DRAW_PANEL* panel, wxDC* DC );
 
 
@@ -69,7 +70,7 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
     DrawPanel->ManageCurseur = ShowWhileMoving;
     DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
     GetScreen()->SetCurItem( TextStruct );
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 
     DrawPanel->CursorOn( DC );
 }
@@ -184,13 +185,14 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
 /************************************/
 /*		Redraw a Text while moving	*/
 /************************************/
-static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase )
 {
-    SCH_ITEM* TextStruct = (SCH_ITEM*) panel->GetScreen()->GetCurItem();
+    SCH_ITEM* TextStruct = (SCH_ITEM*) aPanel->GetScreen()->GetCurItem();
 
     /* "Undraw" the current text at its old position*/
-    if( erase )
-        TextStruct->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    if( aErase )
+        TextStruct->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     /* redraw the text */
     switch( TextStruct->Type() )
@@ -199,14 +201,14 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        ( (SCH_TEXT*) TextStruct )->m_Pos = panel->GetScreen()->m_Curseur;
+        ( (SCH_TEXT*) TextStruct )->m_Pos = aPanel->GetScreen()->m_Curseur;
         break;
 
     default:
         break;
     }
 
-    TextStruct->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    TextStruct->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 

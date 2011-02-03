@@ -290,7 +290,7 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 
@@ -372,7 +372,7 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 
@@ -453,7 +453,7 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 

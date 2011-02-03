@@ -15,7 +15,8 @@
 #include "libeditframe.h"
 
 
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                     bool aErase );
 
 
 /*
@@ -107,12 +108,12 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             nextCmd = true;
             if( DrawPanel->ManageCurseur != NULL )
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
                 DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
             }
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -184,7 +185,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
         SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
     }
 
 
@@ -200,12 +201,12 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
  */
 void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    bool err = FALSE;
+    bool err = false;
     wxPoint pt;
 
     if( DrawPanel->ManageCurseur == NULL )
     {
-        err = TRUE;
+        err = true;
         DisplayError( this, wxT( "HandleBlockPLace : ManageCurseur = NULL" ) );
     }
 
@@ -214,7 +215,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
-        err = TRUE;
+        err = true;
         break;
 
     case BLOCK_DRAG:                /* Drag */
@@ -227,7 +228,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         pt.y *= -1;
         if ( m_component )
             m_component->MoveSelectedItems( pt );
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
@@ -270,7 +271,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
-    DrawPanel->Refresh( TRUE );
+    DrawPanel->Refresh( true );
 
     SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
 }
@@ -280,14 +281,15 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
  * Traces the outline of the search block structures
  * The entire block follows the cursor
  */
-void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                              bool aErase )
 {
     BLOCK_SELECTOR* PtBlock;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     wxPoint move_offset;
     PtBlock = &screen->m_BlockLocate;
 
-    LIB_EDIT_FRAME* parent = ( LIB_EDIT_FRAME* ) panel->GetParent();
+    LIB_EDIT_FRAME* parent = ( LIB_EDIT_FRAME* ) aPanel->GetParent();
     wxASSERT( parent != NULL );
 
     LIB_COMPONENT* component = parent->GetComponent();
@@ -298,11 +300,11 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     int unit = parent->GetUnit();
     int convert = parent->GetConvert();
 
-    if( erase )
+    if( aErase )
     {
-        PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
+        PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
-        component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
+        component->Draw( aPanel, aDC, PtBlock->m_MoveVector, unit, convert,
                          g_XorMode, -1, DefaultTransform, true, true, true );
     }
 
@@ -310,9 +312,9 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     PtBlock->m_MoveVector.x = screen->m_Curseur.x - PtBlock->m_BlockLastCursorPosition.x;
     PtBlock->m_MoveVector.y = screen->m_Curseur.y - PtBlock->m_BlockLastCursorPosition.y;
 
-    GRSetDrawMode( DC, g_XorMode );
-    PtBlock->Draw( panel, DC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
+    GRSetDrawMode( aDC, g_XorMode );
+    PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 
-    component->Draw( panel, DC, PtBlock->m_MoveVector, unit, convert,
+    component->Draw( aPanel, aDC, PtBlock->m_MoveVector, unit, convert,
                      g_XorMode, -1, DefaultTransform, true, true, true );
 }

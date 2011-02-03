@@ -22,7 +22,8 @@
 #include <boost/foreach.hpp>
 
 
-static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase );
 static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 static TRANSFORM OldTransform;
@@ -221,22 +222,21 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 /**
  * Move a component.
  */
-static void ShowWhileMoving( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase )
 {
     wxPoint        move_vector;
-
-    SCH_SCREEN*    screen = (SCH_SCREEN*) panel->GetScreen();
-
+    SCH_SCREEN*    screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
 
-    if( erase )
+    if( aErase )
     {
-        Component->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     }
 
     move_vector = screen->m_Curseur - Component->m_Pos;
     Component->Move( move_vector );
-    Component->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 }
 
 

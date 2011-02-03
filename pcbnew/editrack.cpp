@@ -18,7 +18,8 @@
 
 
 static void Exit_Editrack( EDA_DRAW_PANEL* panel, wxDC* DC );
-void        ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+void        ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                          const wxPoint& aPosition, bool aErase );
 static void ComputeBreakPoint( TRACK* track, int n, wxPoint end );
 static void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList );
 
@@ -41,7 +42,7 @@ static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( track && ( track->Type()==TYPE_VIA || track->Type()==TYPE_TRACK ) )
     {
         /* Erase the current drawing */
-        ShowNewTrackWhenMovingCursor( Panel, DC, false );
+        ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
         if( g_HighLight_Status )
             frame->High_Light( DC );
 
@@ -192,7 +193,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         g_CurrentTrackSegment->DisplayInfoBase( this );
         SetCurItem( g_CurrentTrackSegment, false );
-        DrawPanel->ManageCurseur( DrawPanel, DC, false );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         if( Drc_On )
         {
@@ -203,8 +204,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             }
         }
     }
-    else    /* Track in progress : segment coordinates are updated by
-             * ShowNewTrackWhenMovingCursor*/
+    else   // Track in progress : segment coordinates are updated by ShowNewTrackWhenMovingCursor.
     {
         /* Tst for a D.R.C. error: */
         if( Drc_On )
@@ -241,7 +241,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             /* Erase old track on screen */
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -280,7 +280,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             /* Show the new position */
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
         }
     }
 
@@ -440,8 +440,8 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
     if( Begin_Route( aTrack, DC ) == NULL )
         return;
 
-    ShowNewTrackWhenMovingCursor( DrawPanel, DC, true );
-    ShowNewTrackWhenMovingCursor( DrawPanel, DC, false );
+    ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, true );
+    ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
     trace_ratsnest_pad( DC );
 
     /* cleanup
@@ -669,18 +669,19 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
 
 /* Redraw the current track beiing created when the mouse cursor is moved
  */
-void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                   bool aErase )
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-    PCB_SCREEN*          screen = (PCB_SCREEN*) panel->GetScreen();
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
+    PCB_SCREEN*          screen = (PCB_SCREEN*) aPanel->GetScreen();
+    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) aPanel->GetParent();
 
     bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.DisplayPcbTrackFill = true;
     int       showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
 
-    if (g_FirstTrackSegment == NULL)
+    if ( g_FirstTrackSegment == NULL )
         return;
 
     NETCLASS* netclass = g_FirstTrackSegment->GetNetClass();
@@ -689,22 +690,17 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
     /* Erase old track */
-    if( erase )
+    if( aErase )
     {
-        Trace_Une_Piste( panel,
-                         DC,
-                         g_FirstTrackSegment,
-                         g_CurrentTrackList.GetCount(),
-                         GR_XOR );
+        Trace_Une_Piste( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
-        frame->trace_ratsnest_pad( DC );
+        frame->trace_ratsnest_pad( aDC );
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
-            int color =
-                g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
+            int color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
-            GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
+            GRCircle( &aPanel->m_ClipBox, aDC, g_CurrentTrackSegment->m_End.x,
                       g_CurrentTrackSegment->m_End.y,
                       ( netclass->GetViaDiameter() / 2 ) + netclass->GetClearance(),
                       color );
@@ -717,19 +713,20 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
     // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
+
     if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         g_CurrentTrackSegment->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
 
     if( g_TwoSegmentTrackBuild )
     {
         TRACK* previous_track = g_CurrentTrackSegment->Back();
+
         if( previous_track  &&  previous_track->Type()==TYPE_TRACK )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
 
             if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
-                previous_track->m_Width =
-                    frame->GetBoard()->GetCurrentTrackWidth();
+                previous_track->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
         }
     }
 
@@ -740,7 +737,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
             g_CurrentTrackSegment->m_End = screen->m_Curseur;
 
             if( Drc_On )
-                PushTrack( panel );
+                PushTrack( aPanel );
 
             ComputeBreakPoint( g_CurrentTrackSegment,
                                g_CurrentTrackList.GetCount(),
@@ -765,18 +762,13 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
     /* Redraw the new track */
     D( g_CurrentTrackList.VerifyListIntegrity(); );
-    Trace_Une_Piste( panel,
-                     DC,
-                     g_FirstTrackSegment,
-                     g_CurrentTrackList.GetCount(),
-                     GR_XOR );
+    Trace_Une_Piste( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
-        int color =
-            g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
+        int color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
-        GRCircle( &panel->m_ClipBox, DC, g_CurrentTrackSegment->m_End.x,
+        GRCircle( &aPanel->m_ClipBox, aDC, g_CurrentTrackSegment->m_End.x,
                   g_CurrentTrackSegment->m_End.y,
                   ( netclass->GetViaDiameter() / 2 ) + netclass->GetClearance(),
                   color );
@@ -811,7 +803,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;
 
     frame->build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, false );
-    frame->trace_ratsnest_pad( DC );
+    frame->trace_ratsnest_pad( aDC );
 }
 
 

@@ -108,7 +108,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         module->m_Flags = tmp;
     }
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
@@ -231,24 +231,25 @@ MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
 
 /* Redraw the footprint when moving the mouse.
  */
-void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                bool aErase )
 {
-    MODULE* module = (MODULE*) panel->GetScreen()->GetCurItem();
+    MODULE* module = (MODULE*) aPanel->GetScreen()->GetCurItem();
 
-    if(  module == NULL )
+    if( module == NULL )
         return;
 
     /* Erase current footprint. */
-    if( erase )
+    if( aErase )
     {
-        DrawModuleOutlines( panel, DC, module );
+        DrawModuleOutlines( aPanel, aDC, module );
     }
 
     /* Redraw the module at the new position. */
-    g_Offset_Module = module->m_Pos - panel->GetScreen()->m_Curseur;
-    DrawModuleOutlines( panel, DC, module );
+    g_Offset_Module = module->m_Pos - aPanel->GetScreen()->m_Curseur;
+    DrawModuleOutlines( aPanel, aDC, module );
 
-    Dessine_Segments_Dragges( panel, DC );
+    Dessine_Segments_Dragges( aPanel, aDC );
 }
 
 

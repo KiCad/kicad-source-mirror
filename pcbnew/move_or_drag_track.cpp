@@ -19,10 +19,12 @@
 #include "protos.h"
 
 
-static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
-static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
-                                                    wxDC*           DC,
-                                                    bool            erase );
+static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase );
+static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel,
+                                                    wxDC*           aDC,
+                                                    const wxPoint&  aPosition,
+                                                    bool            aErase );
 static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static bool InitialiseDragParameters();
 
@@ -59,7 +61,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     Panel->GetScreen()->m_Curseur = PosInit;
 
     if( Panel->ManageCurseur )
-        Panel->ManageCurseur( Panel, DC, true );
+        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, true );
 
     Panel->GetScreen()->m_Curseur = oldpos;
     g_HighLight_Status = false;
@@ -134,24 +136,25 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 
 /* Redraw the moved node according to the mouse cursor position */
-static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase )
 {
     int          ii;
     wxPoint      moveVector;
     TRACK*       Track;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     int          draw_mode = GR_XOR | GR_SURBRILL;
 
     DisplayOpt.DisplayPcbTrackFill = false;
 
-    erase = true;
+    aErase = true;
 
     /* erase the current moved track segments from screen */
-    if( erase )
+    if( aErase )
     {
         if( NewTrack )
-            Trace_Une_Piste( panel, DC, NewTrack, NbPtNewTrack, draw_mode );
+            Trace_Une_Piste( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
     }
 
     /* set the new track coordinates */
@@ -162,22 +165,25 @@ static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
     ii    = NbPtNewTrack;
     Track = NewTrack;
+
     for( ; (ii > 0) && (Track != NULL); ii--, Track = Track->Next() )
     {
         if( Track->m_Flags & STARTPOINT )
             Track->m_Start += moveVector;
+
         if( Track->m_Flags & ENDPOINT )
             Track->m_End += moveVector;
     }
 
     /* Redraw the current moved track segments */
-    Trace_Une_Piste( panel, DC, NewTrack, NbPtNewTrack, draw_mode );
+    Trace_Une_Piste( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Segm;
-        if( erase )
-            Track->Draw( panel, DC, draw_mode );
+
+        if( aErase )
+            Track->Draw( aPanel, aDC, draw_mode );
 
         if( Track->m_Flags & STARTPOINT )
             Track->m_Start += moveVector;
@@ -185,13 +191,13 @@ static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
         if( Track->m_Flags & ENDPOINT )
             Track->m_End += moveVector;
 
-        Track->Draw( panel, DC, draw_mode );
+        Track->Draw( aPanel, aDC, draw_mode );
     }
 
     DisplayOpt.DisplayPcbTrackFill = track_fill_copy;
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
     Track->DisplayInfo( frame );
 }
 
@@ -236,15 +242,15 @@ static void Show_MoveNode( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
  * when moving segments
  *  (i.e. when a segment length is 0) and we want keep them constant
  */
-static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
-                                                    wxDC* DC, bool erase )
+static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                                    const wxPoint& aPosition, bool aErase )
 {
     double       xi1 = 0, yi1 = 0, xi2 = 0, yi2 = 0;    // calculated
                                                         // intersection points
     double       tx1, tx2, ty1, ty2;                    // temporary storage of
                                                         // points
     int          dx, dy;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     bool         update = true;
     TRACK*       Track;
     TRACK*       tSegmentToStart = NULL, * tSegmentToEnd = NULL;
@@ -260,17 +266,21 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
      */
     int ii = g_DragSegmentList.size() - 1;
     Track = g_DragSegmentList[ii].m_Segm;
+
     if( Track == NULL )
         return;
+
     ii--;
+
     if( ii >= 0)
     {
-         if( s_EndSegmentPresent )
+        if( s_EndSegmentPresent )
         {
             // Get the segment connected to the end point
             tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;
             ii--;
         }
+
         if( s_StartSegmentPresent )
         {
             // Get the segment connected to the start point
@@ -280,16 +290,18 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
     }
 
     int draw_mode = GR_XOR | GR_SURBRILL;
+
     /* Undraw the current moved track segments before modification*/
 
 //	if( erase )
     {
-        Track->Draw( panel, DC, draw_mode );
+        Track->Draw( aPanel, aDC, draw_mode );
+
         if( tSegmentToStart )
-            tSegmentToStart->Draw( panel, DC, draw_mode );
+            tSegmentToStart->Draw( aPanel, aDC, draw_mode );
 
         if( tSegmentToEnd )
-            tSegmentToEnd->Draw( panel, DC, draw_mode );
+            tSegmentToEnd->Draw( aPanel, aDC, draw_mode );
     }
 
     /* Compute the new track segment position */
@@ -431,6 +443,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
         Track->m_Start.y = wxRound( yi1 );
         Track->m_End.x   = wxRound( xi2 );
         Track->m_End.y   = wxRound( yi2 );
+
         if( tSegmentToEnd )
         {
             if( tSegmentToEnd->m_Flags & STARTPOINT )
@@ -438,6 +451,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
             else
                 tSegmentToEnd->m_End = Track->m_End;
         }
+
         if( tSegmentToStart )
         {
             if( tSegmentToStart->m_Flags & STARTPOINT )
@@ -447,14 +461,16 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* panel,
         }
     }
 
-    Track->Draw( panel, DC, draw_mode );
+    Track->Draw( aPanel, aDC, draw_mode );
+
     if( tSegmentToStart )
-        tSegmentToStart->Draw( panel, DC, draw_mode );
+        tSegmentToStart->Draw( aPanel, aDC, draw_mode );
+
     if( tSegmentToEnd )
-        tSegmentToEnd->Draw( panel, DC, draw_mode );
+        tSegmentToEnd->Draw( aPanel, aDC, draw_mode );
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
+    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
     Track->DisplayInfo( frame );
 }
 
@@ -731,7 +747,7 @@ void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
     g_HighLight_Status   = true;
 
     GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
-    DrawPanel->ManageCurseur( DrawPanel, DC, true );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 

@@ -35,9 +35,11 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
  * handles drawing of a moving block
  * @param aPanel = Current draw panel
  * @param aDC = Current device context
+ * @param aPosition The cursor position in logical (drawing) units.
  * @param aErase = Erase block at current position
  **/
-static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase );
+static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase );
 
 
 static bool blockIncludeModules     = true;
@@ -219,14 +221,14 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -285,19 +287,20 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         return false;
     }
 
-    // Show dialog if there are no selected items and
-    // we're not zooming
+    // Show dialog if there are no selected items and we're not zooming
     if( !GetScreen()->m_BlockLocate.GetCount()
         && GetScreen()->m_BlockLocate.m_Command != BLOCK_ZOOM )
     {
         if( !InstallBlockCmdFrame( this, _( "Block Operation" ) ) )
         {
             cancelCmd = true;
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );   // undraw block outline
+
+            // undraw block outline
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         }
         else
         {
-            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
+            DrawAndSizingBlockOutlines( DrawPanel, DC, wxDefaultPosition, false );
             Block_SelectItems();
 
             // Exit if no items found
@@ -323,7 +326,7 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
             DrawPanel->ManageCurseur = drawMovingBlock;
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
@@ -566,14 +569,14 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
 }
 
 
-static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
+static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                             bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
 
     if( aErase )
     {
-        if( screen->m_BlockLocate.m_MoveVector.x
-            || screen->m_BlockLocate.m_MoveVector.y )
+        if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
         {
             screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
                                         GR_XOR, BLOCK_OUTLINE_COLOR );

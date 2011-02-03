@@ -174,6 +174,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
 
     Block->m_Flags   = 0;
     Block->m_Command = (CmdBlockType) ReturnBlockCommand( key );
+
     if( Block->m_Command == 0 )
         return FALSE;
 
@@ -216,7 +217,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
             return TRUE;
         }
         Block->m_State = STATE_BLOCK_MOVE;
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, startpos, FALSE );
         break;
 
     default:
@@ -240,21 +241,22 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
  *  by Initm_BlockLocateDatas().
  *  The other point of the rectangle is the mouse cursor
  */
-void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                 bool aErase )
 {
     BLOCK_SELECTOR* PtBlock;
 
-    PtBlock = &panel->GetScreen()->m_BlockLocate;
+    PtBlock = &aPanel->GetScreen()->m_BlockLocate;
 
     PtBlock->m_MoveVector = wxPoint( 0, 0 );
 
-    if( erase )
-        PtBlock->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
+    if( aErase )
+        PtBlock->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
 
-    PtBlock->m_BlockLastCursorPosition = panel->GetScreen()->m_Curseur;
-    PtBlock->SetEnd( panel->GetScreen()->m_Curseur );
+    PtBlock->m_BlockLastCursorPosition = aPanel->GetScreen()->m_Curseur;
+    PtBlock->SetEnd( aPanel->GetScreen()->m_Curseur );
 
-    PtBlock->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
+    PtBlock->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
 
     if( PtBlock->m_State == STATE_BLOCK_INIT )
     {
@@ -275,7 +277,7 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Panel->ManageCurseur )                     /* Erase current drawing
                                                     * on screen */
     {
-        Panel->ManageCurseur( Panel, DC, FALSE );  /* Clear block outline. */
+        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, false );  /* Clear block outline. */
         Panel->ManageCurseur = NULL;
         Panel->ForceCloseManageCurseur = NULL;
         screen->SetCurItem( NULL );

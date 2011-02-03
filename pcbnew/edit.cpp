@@ -351,10 +351,13 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
          * If a track is in progress, it will be redrawn
         */
         if( DrawPanel->ManageCurseur == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
+            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, wxDefaultPosition, false );
+
         g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
+
         if( DrawPanel->ManageCurseur == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, false );
+            ShowNewTrackWhenMovingCursor( DrawPanel, &dc, wxDefaultPosition, false );
+
         break;
 
     case ID_POPUP_PCB_PLACE_MICROVIA:

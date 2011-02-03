@@ -14,7 +14,8 @@
 #include "protos.h"
 
 
-static void Move_Texte_Pcb( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                            bool aErase );
 static void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
@@ -111,24 +112,25 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     DrawPanel->ManageCurseur = Move_Texte_Pcb;
     DrawPanel->ForceCloseManageCurseur = Abort_Edit_Pcb_Text;
     SetCurItem( TextePcb );
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
 /* Move  PCB text following the cursor. */
-static void Move_Texte_Pcb( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                            bool aErase )
 {
-    TEXTE_PCB* TextePcb = (TEXTE_PCB*) panel->GetScreen()->GetCurItem();
+    TEXTE_PCB* TextePcb = (TEXTE_PCB*) aPanel->GetScreen()->GetCurItem();
 
     if( TextePcb == NULL )
         return;
 
-    if( erase )
-        TextePcb->Draw( panel, DC, GR_XOR );
+    if( aErase )
+        TextePcb->Draw( aPanel, aDC, GR_XOR );
 
-    TextePcb->m_Pos = panel->GetScreen()->m_Curseur;
+    TextePcb->m_Pos = aPanel->GetScreen()->m_Curseur;
 
-    TextePcb->Draw( panel, DC, GR_XOR );
+    TextePcb->Draw( aPanel, aDC, GR_XOR );
 }
 
 

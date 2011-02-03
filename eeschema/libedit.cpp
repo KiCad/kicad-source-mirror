@@ -217,7 +217,7 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetScreen()->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, false );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
     DrawPanel->DrawCursor( DC );
 

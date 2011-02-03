@@ -243,6 +243,7 @@ protected:
 
 private:
     BASE_SCREEN* m_CurrentScreen;           ///< current used SCREEN
+    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
 
 protected:
     void            SetBaseScreen( BASE_SCREEN* aScreen )
@@ -284,6 +285,7 @@ public:
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
     virtual void     SetToolbars();
+
     /**
      * Function SetLanguage
      * called on a language menu selection
@@ -352,6 +354,15 @@ public:
         m_GridColor = aColor;
     }
 
+    /**
+     * Function GetGridPosition
+     * returns the nearest grid position to \a aPosition if a screen is defined and snap to
+     * grid is enabled.  Otherwise, the origianl positions is returned.
+     * @see m_snapToGrid and m_BaseScreen members.
+     * @param aPosition The position to test.
+     * @return The wxPoint of the appropriate cursor position.
+     */
+    wxPoint GetGridPosition( const wxPoint& aPosition );
 
     /**
      * Command event handler for selecting grid sizes.

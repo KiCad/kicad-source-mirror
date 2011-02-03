@@ -41,7 +41,8 @@
 #define BLOCK_COLOR BROWN
 
 
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                     bool erase );
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
@@ -106,14 +107,14 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         Block_Move( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         Block_Duplicate( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -180,14 +181,14 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
             DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
             Block_Delete( DC );
             break;
 
@@ -228,29 +229,29 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
 /* Traces the outline of the block structures of a repositioning move
  */
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositon,
+                                     bool aErase )
 {
     int          Color;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
 
     Color = YELLOW;
 
-    if( erase )
+    if( aErase )
     {
-        screen->m_BlockLocate.Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode,
-                                    Color );
-        if( screen->m_BlockLocate.m_MoveVector.x
-            || screen->m_BlockLocate.m_MoveVector.y )
+        screen->m_BlockLocate.Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, Color );
+
+        if( screen->m_BlockLocate.m_MoveVector.x|| screen->m_BlockLocate.m_MoveVector.y )
         {
-            screen->m_BlockLocate.Draw( panel,
-                                        DC,
+            screen->m_BlockLocate.Draw( aPanel,
+                                        aDC,
                                         screen->m_BlockLocate.m_MoveVector,
                                         g_XorMode,
                                         Color );
         }
     }
 
-    if( panel->GetScreen()->m_BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
         screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x -
                                                screen->m_BlockLocate.GetRight();
@@ -258,12 +259,12 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase
                                                screen->m_BlockLocate.GetBottom();
     }
 
-    screen->m_BlockLocate.Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, Color );
-    if( screen->m_BlockLocate.m_MoveVector.x
-        || screen->m_BlockLocate.m_MoveVector.y )
+    screen->m_BlockLocate.Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, Color );
+
+    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
     {
-        screen->m_BlockLocate.Draw( panel,
-                                    DC,
+        screen->m_BlockLocate.Draw( aPanel,
+                                    aDC,
                                     screen->m_BlockLocate.m_MoveVector,
                                     g_XorMode,
                                     Color );

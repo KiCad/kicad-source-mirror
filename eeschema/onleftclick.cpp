@@ -29,10 +29,11 @@ static wxArrayString s_PowerNameList;
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     SCH_ITEM* item = GetScreen()->GetCurItem();
+    wxPoint gridPosition = GetGridPosition( aPosition );
 
     if( ( m_ID_current_state == 0 ) || ( item && item->m_Flags ) )
     {
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        DrawPanel->m_AutoPAN_Request = false;
         m_itemToRepeat = NULL;
 
         if( item && item->m_Flags )
@@ -52,7 +53,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 item->Place( this, aDC );
                 GetScreen()->SetCurItem( NULL );
                 GetScreen()->TestDanglingEnds();
-                DrawPanel->Refresh( TRUE );
+                DrawPanel->Refresh( true );
                 return;
 
             case SCH_SCREEN_T:
@@ -103,35 +104,35 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_NOCONN_BUTT:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            m_itemToRepeat = CreateNewNoConnectStruct( aDC );
+            m_itemToRepeat = AddNoConnect( aDC, gridPosition );
             GetScreen()->SetCurItem( m_itemToRepeat );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
 
         GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_JUNCTION_BUTT:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            m_itemToRepeat = CreateNewJunctionStruct( aDC, GetScreen()->m_Curseur, TRUE );
+            m_itemToRepeat = CreateNewJunctionStruct( aDC, GetScreen()->m_Curseur, true );
             GetScreen()->SetCurItem( m_itemToRepeat );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
 
         GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
@@ -141,7 +142,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             item = CreateBusEntry( aDC, ( m_ID_current_state == ID_WIRETOBUS_ENTRY_BUTT ) ?
                                    WIRE_TO_BUS : BUS_TO_BUS );
             GetScreen()->SetCurItem( item );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
@@ -149,7 +150,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             GetScreen()->SetCurItem( NULL );
             GetScreen()->TestDanglingEnds();
             DrawPanel->Refresh( true );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
         break;
 
@@ -158,34 +159,34 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         OnModify();
         GetScreen()->SetCurItem( NULL );
         GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_WIRE_BUTT:
         BeginSegment( aDC, LAYER_WIRE );
-        DrawPanel->m_AutoPAN_Request = TRUE;
+        DrawPanel->m_AutoPAN_Request = true;
         break;
 
     case ID_BUS_BUTT:
         BeginSegment( aDC, LAYER_BUS );
-        DrawPanel->m_AutoPAN_Request = TRUE;
+        DrawPanel->m_AutoPAN_Request = true;
         break;
 
     case ID_LINE_COMMENT_BUTT:
         BeginSegment( aDC, LAYER_NOTES );
-        DrawPanel->m_AutoPAN_Request = TRUE;
+        DrawPanel->m_AutoPAN_Request = true;
         break;
 
     case ID_TEXT_COMMENT_BUTT:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
         }
         break;
 
@@ -193,14 +194,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_LOCLABEL ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -214,14 +215,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if(m_ID_current_state == ID_HIERLABEL_BUTT)
                 GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_HIERLABEL ) );
 
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -229,14 +230,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             GetScreen()->SetCurItem( CreateSheet( aDC ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -259,22 +260,22 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             item->Place( this, aDC );
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
     case ID_COMPONENT_BUTT:
         if( (item == NULL) || (item->m_Flags == 0) )
         {
-            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, TRUE ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+            GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, true ) );
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -282,15 +283,15 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
-                                                     s_PowerNameList, FALSE ) );
-            DrawPanel->m_AutoPAN_Request = TRUE;
+                                                     s_PowerNameList, false ) );
+            DrawPanel->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = FALSE;
+            DrawPanel->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 

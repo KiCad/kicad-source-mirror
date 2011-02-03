@@ -523,7 +523,7 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPositio
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, true );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, true );
         }
     }
 

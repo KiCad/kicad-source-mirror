@@ -76,7 +76,6 @@ private:
     wxString              m_DefaultSchematicFileName;
     SCH_FIELD*            m_CurrentField;
     int m_TextFieldSize;
-    bool                  m_ShowGrid;
     PARAM_CFG_ARRAY       m_projectFileParams;
     PARAM_CFG_ARRAY       m_configSettings;
     wxPageSetupDialogData m_pageSetupData;
@@ -448,8 +447,14 @@ private:
     void            StartMoveBusEntry( SCH_BUS_ENTRY* DrawLibItem,
                                        wxDC*          DC );
 
-    // NoConnect
-    SCH_NO_CONNECT* CreateNewNoConnectStruct( wxDC* DC );
+    /**
+     * Function AddNoConnect
+     * add a no connect item to the current schematic sheet at \a aPosition.
+     * @param aDC The device context to draw the no connect to.
+     * @param aPosition The position in logical (drawing) units to add the no connect.
+     * @return The no connect item added.
+     */
+    SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
     // Junction
     SCH_JUNCTION*   CreateNewJunctionStruct( wxDC*          DC,

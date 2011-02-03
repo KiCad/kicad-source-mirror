@@ -57,17 +57,18 @@ static void Exit_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 /* Draw in drag mode when moving a pad.
  */
-static void Show_Pad_Move( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase )
 {
     TRACK*       Track;
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     D_PAD*       pad    = s_CurrentSelectedPad;
 
-    if( erase )
-        pad->Draw( panel, DC, GR_XOR );
+    if( aErase )
+        pad->Draw( aPanel, aDC, GR_XOR );
 
     pad->m_Pos = screen->m_Curseur;
-    pad->Draw( panel, DC, GR_XOR );
+    pad->Draw( aPanel, aDC, GR_XOR );
 
     if( !g_Drag_Pistes_On )
         return;
@@ -75,17 +76,21 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Segm;
-        if( erase )
-            Track->Draw( panel, DC, GR_XOR );
+
+        if( aErase )
+            Track->Draw( aPanel, aDC, GR_XOR );
+
         if( g_DragSegmentList[ii].m_Pad_Start )
         {
             Track->m_Start = pad->m_Pos;
         }
+
         if( g_DragSegmentList[ii].m_Pad_End )
         {
             Track->m_End = pad->m_Pos;
         }
-        Track->Draw( panel, DC, GR_XOR );
+
+        Track->Draw( aPanel, aDC, GR_XOR );
     }
 }
 

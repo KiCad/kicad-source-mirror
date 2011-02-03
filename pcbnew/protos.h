@@ -187,7 +187,8 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 /*************/
 int ChangeSideNumLayer( int oldlayer );
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
-void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                bool aErase );
 
 
 /****************/
@@ -196,7 +197,8 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 
 TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef );
 
-void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                   bool aErase );
 
 /* Determine coordinate for a segment direction of 0, 90 or 45 degrees,
  * depending on it's position from the origin (ox, oy) and \a aPosiition..

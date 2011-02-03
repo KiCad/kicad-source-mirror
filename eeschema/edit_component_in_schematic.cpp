@@ -17,7 +17,8 @@
 
 
 static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                          bool aErase );
 
 
 /******************************************************************************/
@@ -178,12 +179,13 @@ modified!\nYou must create a new power"  ) );
 /*
  * Move standard text field.  This routine is normally attached to the cursor.
  */
-static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                          bool aErase )
 {
     wxPoint pos;
     int fieldNdx;
 
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) panel->GetParent();
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
     SCH_FIELD*      currentField = frame->GetCurrentField();
 
     if( currentField == NULL )
@@ -193,9 +195,10 @@ static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     fieldNdx = currentField->m_FieldId;
 
     currentField->m_AddExtraText = frame->m_Multiflag;
-    if( erase )
+
+    if( aErase )
     {
-        currentField->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     }
 
     pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
@@ -204,12 +207,12 @@ static void MoveCmpField( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     // But here we want the relative position of the moved field
     // and we know the actual position.
     // So we are using the inverse rotation/mirror transform.
-    wxPoint pt( panel->GetScreen()->m_Curseur - pos );
+    wxPoint pt( aPanel->GetScreen()->m_Curseur - pos );
 
     TRANSFORM itrsfm = component->GetTransform().InverseTransform();
     currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
 
-    currentField->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 

@@ -20,7 +20,8 @@
 
 
 static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Move_PinSheet( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Move_PinSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase );
 
 
 static int     s_CurrentTypeLabel = NET_INPUT;
@@ -103,23 +104,24 @@ void SCH_EDIT_FRAME::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
 
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
-static void Move_PinSheet( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Move_PinSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase )
 {
-    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) panel->GetScreen()->GetCurItem();
+    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
 
     if( SheetLabel == NULL )
         return;
 
-    if( erase )
-        SheetLabel->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    if( aErase )
+        SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    SheetLabel->ConstraintOnEdge( panel->GetScreen()->m_Curseur );
+    SheetLabel->ConstraintOnEdge( aPanel->GetScreen()->m_Curseur );
 
-    SheetLabel->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode );
+    SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
@@ -189,7 +191,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 
     OnModify();
     return NewSheetLabel;
@@ -243,7 +245,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
     GetScreen()->SetCurItem( NewSheetLabel );
     DrawPanel->ManageCurseur = Move_PinSheet;
     DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
-    Move_PinSheet( DrawPanel, DC, FALSE );
+    Move_PinSheet( DrawPanel, DC, wxDefaultPosition, false );
 
     return NewSheetLabel;
 }

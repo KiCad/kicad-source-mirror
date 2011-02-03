@@ -30,9 +30,10 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
                      wxPoint                aStartPoint,
                      wxPoint                aCenter,
                      int                    a_ArcAngle );
-static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel,
-                                              wxDC*           DC,
-                                              bool            erase );
+static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* apanel,
+                                              wxDC*           aDC,
+                                              const wxPoint&  aPosition,
+                                              bool            aErase );
 
 
 int         BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
@@ -57,13 +58,14 @@ static int     Self_On;
 /* This function shows on screen the bounding box of the inductor that will be
  * created at the end of the build inductor process
  */
-static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                              const wxPoint& aPosition, bool aErase )
 {
     /* Calculate the orientation and size of the box containing the inductor:
      * the box is a rectangle with height = lenght/2
      * the shape is defined by a rectangle, nor necessary horizontal or vertical
      */
-    GRSetDrawMode( DC, GR_XOR );
+    GRSetDrawMode( aDC, GR_XOR );
 
     wxPoint poly[5];
     wxPoint pt    = Mself.m_End - Mself.m_Start;
@@ -81,12 +83,12 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel, wxDC* DC, b
     poly[3] = Mself.m_Start + pt;
     poly[4] = poly[0];
 
-    if( erase )
+    if( aErase )
     {
-        GRPoly( &panel->m_ClipBox, DC, 5, poly, false, 0, YELLOW, YELLOW );
+        GRPoly( &aPanel->m_ClipBox, aDC, 5, poly, false, 0, YELLOW, YELLOW );
     }
 
-    Mself.m_End = panel->GetScreen()->m_Curseur;
+    Mself.m_End = aPanel->GetScreen()->m_Curseur;
     pt    = Mself.m_End - Mself.m_Start;
     angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
     len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
@@ -102,7 +104,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* panel, wxDC* DC, b
     poly[3] = Mself.m_Start + pt;
     poly[4] = poly[0];
 
-    GRPoly( &panel->m_ClipBox, DC, 5, poly, false, 0, YELLOW, YELLOW );
+    GRPoly( &aPanel->m_ClipBox, aDC, 5, poly, false, 0, YELLOW, YELLOW );
 }
 
 
@@ -111,7 +113,7 @@ void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Self_On )
     {
         Self_On = 0;
-        Panel->ManageCurseur( Panel, DC, 0 );
+        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, 0 );
         Panel->ManageCurseur = NULL;
         Panel->ForceCloseManageCurseur = NULL;
     }
@@ -137,7 +139,7 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
 
     DrawPanel->ManageCurseur = ShowBoundingBoxMicroWaveInductor;
     DrawPanel->ForceCloseManageCurseur = Exit_Self;
-    DrawPanel->ManageCurseur( DrawPanel, DC, 0 );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -181,7 +183,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     int      ll;
     wxString msg;
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
     DrawPanel->ManageCurseur = NULL;
     DrawPanel->ForceCloseManageCurseur = NULL;
 

@@ -199,14 +199,14 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }
 
-        /* @todo: rather than assignment to TRUE, these should be increment and decrement
+        /* @todo: rather than assignment to true, these should be increment and decrement
          * operators throughout _everywhere_.
          *  That way we can handle nesting.
-         *  But I tried that and found there cases where the assignment to TRUE (converted to
+         *  But I tried that and found there cases where the assignment to true (converted to
          * a m_IgnoreMouseEvents++ )
-         *  was not balanced with the -- (now m_IgnoreMouseEvents=FALSE), so I had to revert.
+         *  was not balanced with the -- (now m_IgnoreMouseEvents=false), so I had to revert.
          *  Somebody should track down these and make them balanced.
-         *  DrawPanel->m_IgnoreMouseEvents = TRUE;
+         *  DrawPanel->m_IgnoreMouseEvents = true;
          */
 
         // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
@@ -216,7 +216,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         DrawPanel->MouseToCursorSchema();
 
-//        DrawPanel->m_IgnoreMouseEvents = FALSE;
+//        DrawPanel->m_IgnoreMouseEvents = false;
 
         // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();
@@ -303,19 +303,19 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     /* Put cursor on grid or a pad centre if requested. If the tool DELETE is active the
      * cursor is left off grid this is better to reach items to delete off grid,
      */
-    bool   keep_on_grid = TRUE;
+    bool   keep_on_grid = true;
 
     if( m_ID_current_state == ID_PCB_DELETE_ITEM_BUTT )
-        keep_on_grid = FALSE;
+        keep_on_grid = false;
 
     /* Cursor is left off grid if no block in progress and no moving object */
     if( GetScreen()->m_BlockLocate.m_State != STATE_NO_BLOCK )
-        keep_on_grid = TRUE;
+        keep_on_grid = true;
 
     EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
 
     if( DrawStruct && DrawStruct->m_Flags )
-        keep_on_grid = TRUE;
+        keep_on_grid = true;
 
     if( keep_on_grid )
     {
@@ -357,9 +357,9 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 #ifdef USE_WX_OVERLAY
             wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            DrawPanel->ManageCurseur( DrawPanel, aDC, FALSE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, false );
 #else
-            DrawPanel->ManageCurseur( DrawPanel, aDC, TRUE );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY

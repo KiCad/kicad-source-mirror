@@ -490,7 +490,7 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
 
         if( DrawPanel->ManageCurseur )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, 0 );
+            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, 0 );
         }
     }
 

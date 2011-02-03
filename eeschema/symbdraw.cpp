@@ -23,8 +23,10 @@
 #include "dialogs/dialog_lib_edit_draw_item.h"
 
 
-static void SymbolDisplayDraw( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
-static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                               bool aErase );
+static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                     bool aErase );
 
 
 /*
@@ -192,7 +194,7 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC*
             m_drawItem->SetConvert( m_convert );
 
         // Draw initial symbol:
-        DrawPanel->ManageCurseur( DrawPanel, DC, false );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
     }
     else
     {
@@ -230,29 +232,31 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 /*
  * Redraw the graphic shape while moving
  */
-static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                     bool aErase )
 {
     LIB_DRAW_ITEM* item;
 
-    item = ( (LIB_EDIT_FRAME*) panel->GetParent() )->GetDrawItem();
+    item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
 
-    BASE_SCREEN* Screen = panel->GetScreen();
+    BASE_SCREEN* Screen = aPanel->GetScreen();
 
-    item->SetEraseLastDrawItem( erase );
+    item->SetEraseLastDrawItem( aErase );
+
     // if item is the reference field, we must add the current unit id
     if( item->Type() == LIB_FIELD_T )
     {
-        int unit = ((LIB_EDIT_FRAME*)panel->GetParent())->GetUnit();
+        int unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
         wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
-        item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, &text,
+        item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, &text,
                     DefaultTransform );
     }
     else
-        item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
-                DefaultTransform );
+        item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
+                    DefaultTransform );
 }
 
 
@@ -267,7 +271,7 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
     m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCursorDrawPosition() );
     DrawPanel->ManageCurseur = RedrawWhileMovingCursor;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
-    DrawPanel->ManageCurseur( DrawPanel, DC, true );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
@@ -281,21 +285,22 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
     m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCursorDrawPosition() );
     DrawPanel->ManageCurseur = SymbolDisplayDraw;
     DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
-    DrawPanel->ManageCurseur( DrawPanel, DC, true );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
 //! @brief Manage mouse events when creating new graphic object or modifying an graphic object.
-static void SymbolDisplayDraw( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                               bool aErase )
 {
-    BASE_SCREEN*   Screen   = panel->GetScreen();
-    LIB_DRAW_ITEM* item = ( (LIB_EDIT_FRAME*) panel->GetParent() )->GetDrawItem();
+    BASE_SCREEN*   Screen   = aPanel->GetScreen();
+    LIB_DRAW_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
 
-    item->SetEraseLastDrawItem( erase );
-    item->Draw( panel, DC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
+    item->SetEraseLastDrawItem( aErase );
+    item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
                 DefaultTransform );
 }
 

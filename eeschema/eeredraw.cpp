@@ -59,7 +59,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetScreen()->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     DrawPanel->DrawCursor( DC );
 

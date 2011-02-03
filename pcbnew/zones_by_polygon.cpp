@@ -21,13 +21,15 @@ bool s_Verbose = false;       // false if zone outline diags must not be shown
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                            const wxPoint& aPosition, bool aErase );
 
 // Corner moving
 static void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* panel,
-                                                          wxDC*           DC,
-                                                          bool            erase );
+static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel,
+                                                          wxDC*           aDC,
+                                                          const wxPoint&  aPosition,
+                                                          bool            aErase );
 
 /* Local variables */
 static wxPoint         s_CornerInitialPosition;     // Used to abort a move corner command
@@ -116,8 +118,9 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
     if( zone->GetNumCorners() > 2 )
     {
         zone->m_Poly->DeleteCorner( zone->GetNumCorners() - 1 );
+
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
     }
     else
     {
@@ -425,22 +428,21 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/*************************************************************************************************/
-void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* Panel, wxDC* DC, bool erase )
-/*************************************************************************************************/
-
 /* Redraws the zone outline when moving a corner according to the cursor position
  */
+void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                                   const wxPoint& aPosition, bool aErase )
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) aPanel->GetParent();
     ZONE_CONTAINER*  zone = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
-    if( erase )    /* Undraw edge in old position*/
+    if( aErase )    /* Undraw edge in old position*/
     {
-        zone->Draw( Panel, DC, GR_XOR );
+        zone->Draw( aPanel, aDC, GR_XOR );
     }
 
     wxPoint          pos = pcbframe->GetScreen()->m_Curseur;
+
     if( zone->m_Flags == IS_MOVED )
     {
         wxPoint offset;
@@ -458,7 +460,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* Panel, wxDC* 
     else
         zone->m_Poly->MoveCorner( zone->m_CornerSelection, pos.x, pos.y );
 
-    zone->Draw( Panel, DC, GR_XOR );
+    zone->Draw( aPanel, aDC, GR_XOR );
 }
 
 
@@ -722,14 +724,12 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 }
 
 
-/******************************************************************************************/
-static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
-/******************************************************************************************/
-
 /* Redraws the zone outlines when moving mouse
  */
+static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                            const wxPoint& aPosition, bool aErase )
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) panel->GetParent();
+    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) aPanel->GetParent();
     wxPoint          c_pos    = pcbframe->GetScreen()->m_Curseur;
     ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
@@ -737,12 +737,13 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, boo
         return;
 
     int icorner = zone->GetNumCorners() - 1;
+
     if ( icorner < 1 )
         return;     // We must have 2 (or more) corners
 
-    if( erase )    /* Undraw edge in old position*/
+    if( aErase )    /* Undraw edge in old position*/
     {
-        zone->DrawWhileCreateOutline( panel, DC );
+        zone->DrawWhileCreateOutline( aPanel, aDC );
     }
 
     /* Redraw the curent edge in its new position */
@@ -755,7 +756,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* panel, wxDC* DC, boo
 
     zone->SetCornerPosition( icorner, c_pos );
 
-    zone->DrawWhileCreateOutline( panel, DC );
+    zone->DrawWhileCreateOutline( aPanel, aDC );
 }
 
 

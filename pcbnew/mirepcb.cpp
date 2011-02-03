@@ -16,9 +16,10 @@
 
 /* Routines Locales */
 static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* panel,
-                                             wxDC*           DC,
-                                             bool            erase );
+static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel,
+                                             wxDC*           aDC,
+                                             const wxPoint&  aPosition,
+                                             bool            aErase );
 
 /* Local variables : */
 static int     MireDefaultSize = 5000;
@@ -279,18 +280,19 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
 
 
 /* Redraw the contour of the track while moving the mouse */
-static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                             const wxPoint& aPosition, bool aErase )
 {
-    BASE_SCREEN* screen  = panel->GetScreen();
+    BASE_SCREEN* screen  = aPanel->GetScreen();
     MIREPCB*     MirePcb = (MIREPCB*) screen->GetCurItem();
 
     if( MirePcb == NULL )
         return;
 
-    if( erase )
-        MirePcb->Draw( panel, DC, GR_XOR );
+    if( aErase )
+        MirePcb->Draw( aPanel, aDC, GR_XOR );
 
     MirePcb->m_Pos = screen->m_Curseur;
 
-    MirePcb->Draw( panel, DC, GR_XOR );
+    MirePcb->Draw( aPanel, aDC, GR_XOR );
 }

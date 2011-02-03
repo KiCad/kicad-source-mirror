@@ -14,7 +14,8 @@
 
 /* Loca functions */
 static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                           const wxPoint& aPosition, bool aErase );
 
 /* Local variables : */
 static int status_dimension; /* Used in cimension creation:
@@ -295,25 +296,24 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
 }
 
 
-/************************************************************************************/
-static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
-/************************************************************************************/
-/* redessin du contour de la piste  lors des deplacements de la souris */
+static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                           const wxPoint& aPosition, bool aErase )
 {
-    PCB_SCREEN* screen   = (PCB_SCREEN*) panel->GetScreen();
-    DIMENSION*   Dimension = (DIMENSION*) screen->GetCurItem();
+    PCB_SCREEN* screen   = (PCB_SCREEN*) aPanel->GetScreen();
+    DIMENSION*  Dimension = (DIMENSION*) screen->GetCurItem();
     wxPoint     pos = screen->m_Curseur;
 
     if( Dimension == NULL )
         return;
 
-    /* efface ancienne position */
-    if( erase )
+    // Erase previous dimension.
+    if( aErase )
     {
-        Dimension->Draw( panel, DC, GR_XOR );
+        Dimension->Draw( aPanel, aDC, GR_XOR );
     }
 
     Dimension->SetLayer( screen->m_Active_Layer );
+
     if( status_dimension == 1 )
     {
         Dimension->TraitD_ox = pos.x;
@@ -346,7 +346,7 @@ static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* panel, wxDC* DC, bool
         Dimension->AdjustDimensionDetails( );
     }
 
-    Dimension->Draw( panel, DC, GR_XOR );
+    Dimension->Draw( aPanel, aDC, GR_XOR );
 }
 
 

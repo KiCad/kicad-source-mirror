@@ -144,7 +144,8 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC );
  *  by InitBlockLocateDatas().
  *  The other point of the rectangle is the mouse cursor
  */
-void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                 bool aErase );
 
 
 #endif /* __INCLUDE__BLOCK_COMMANDE_H__ */

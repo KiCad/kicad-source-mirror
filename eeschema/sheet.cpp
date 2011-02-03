@@ -221,7 +221,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 /* Move selected sheet with the cursor.
  * Callback function use by ManageCurseur.
  */
-static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
+static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                               bool aErase )
 {
     wxPoint        moveVector;
     BASE_SCREEN*   screen = aPanel->GetScreen();
@@ -264,7 +265,7 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     {
         wxPoint curspos = screen->m_Curseur;
         aPanel->GetScreen()->m_Curseur = s_OldPos;
-        MoveOrResizeSheet( aPanel, aDC, true );
+        MoveOrResizeSheet( aPanel, aDC, wxDefaultPosition, true );
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         sheet->m_Flags = 0;
         screen->m_Curseur = curspos;
@@ -307,8 +308,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 
     DrawPanel->ManageCurseur = MoveOrResizeSheet;
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
-
-    DrawPanel->ManageCurseur( DrawPanel, aDC, false );
+    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, false );
 
     return sheet;
 }
@@ -343,7 +343,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     DrawPanel->ManageCurseur = MoveOrResizeSheet;
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
-    DrawPanel->ManageCurseur( DrawPanel, aDC, true );
+    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, true );
 
     if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
     {
@@ -366,7 +366,7 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     aSheet->m_Flags |= IS_MOVED;
     DrawPanel->ManageCurseur = MoveOrResizeSheet;
     DrawPanel->ForceCloseManageCurseur = ExitSheet;
-    DrawPanel->ManageCurseur( DrawPanel, aDC, true );
+    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, true );
     DrawPanel->CursorOn( aDC );
 
     if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo

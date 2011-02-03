@@ -52,30 +52,30 @@ SCH_ITEM::~SCH_ITEM()
  * for an "old" item, saving it in undo list must be done before editiing,
  * and not here!
  */
-void SCH_ITEM::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
+void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
 {
+    SCH_SCREEN* screen = aFrame->GetScreen();
+
     if( m_Flags & IS_NEW )
     {
-        SCH_SCREEN* screen = frame->GetScreen();
-
-        if( !screen->CheckIfOnDrawList( this ) )  //don't want a loop!
+        if( !screen->CheckIfOnDrawList( this ) )  // don't want a loop!
             screen->AddToDrawList( this );
 
-        frame->SetRepeatItem( this );
-        frame->SaveCopyInUndoList( this, UR_NEW );
+        aFrame->SetRepeatItem( this );
+        aFrame->SaveCopyInUndoList( this, UR_NEW );
     }
 
     m_Flags = 0;
-    frame->GetScreen()->SetModify();
-    frame->GetScreen()->SetCurItem( NULL );
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
+    screen->SetModify();
+    screen->SetCurItem( NULL );
+    aFrame->DrawPanel->ManageCurseur = NULL;
+    aFrame->DrawPanel->ForceCloseManageCurseur = NULL;
 
-    if( DC )
+    if( aDC )
     {
-        frame->DrawPanel->CursorOff( DC );      // Erase schematic cursor
-        Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        frame->DrawPanel->CursorOn( DC );       // Display schematic cursor
+        aFrame->DrawPanel->CursorOff( aDC );      // Erase schematic cursor
+        Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        aFrame->DrawPanel->CursorOn( aDC );       // Display schematic cursor
     }
 }
 

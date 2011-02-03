@@ -22,7 +22,7 @@
 
 static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan );
 static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void DrawMovePin( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositon, bool aErase );
 
 
 static wxPoint OldPos;
@@ -336,9 +336,10 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
 /* Move pin to the current mouse position.  This function is called by the
  * cursor management code. */
-static void DrawMovePin( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                         bool aErase )
 {
-    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) panel->GetParent();
+    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
 
     if( parent == NULL )
         return;
@@ -352,16 +353,16 @@ static void DrawMovePin( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     bool    showPinText = true;
 
     /* Erase pin in old position */
-    if( erase )
+    if( aErase )
     {
         CurrentPin->SetPosition( PinPreviousPos );
-        CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+        CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode,
                           &showPinText, DefaultTransform );
     }
 
     /* Redraw pin in new position */
-    CurrentPin->SetPosition( panel->GetScreen()->GetCursorDrawPosition() );
-    CurrentPin->Draw( panel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
+    CurrentPin->SetPosition( aPanel->GetScreen()->GetCursorDrawPosition() );
+    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
     PinPreviousPos = CurrentPin->GetPosition();
 

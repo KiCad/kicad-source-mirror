@@ -13,7 +13,8 @@
 #include "protos.h"
 
 
-static void Show_MoveTexte_Module( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                   bool aErase );
 static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 
@@ -190,7 +191,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     DrawPanel->ManageCurseur = Show_MoveTexte_Module;
     DrawPanel->ForceCloseManageCurseur = AbortMoveTextModule;
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, TRUE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, TRUE );
 }
 
 
@@ -240,28 +241,30 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 }
 
 
-static void Show_MoveTexte_Module( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                   bool aErase )
 {
-    BASE_SCREEN*  screen = panel->GetScreen();
+    BASE_SCREEN*  screen = aPanel->GetScreen();
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
 
     if( Text == NULL )
         return;
 
     // Erase umbilical and text if necessary
-    if( erase )
+    if( aErase )
     {
-        Text->DrawUmbilical( panel, DC, GR_XOR, -MoveVector );
-        Text->Draw( panel, DC, GR_XOR, MoveVector );
+        Text->DrawUmbilical( aPanel, aDC, GR_XOR, -MoveVector );
+        Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
     MoveVector = TextInitialPosition - screen->m_Curseur;
 
     // Draw umbilical if text moved
     if( MoveVector.x || MoveVector.y )
-        Text->DrawUmbilical( panel, DC, GR_XOR, -MoveVector );
+        Text->DrawUmbilical( aPanel, aDC, GR_XOR, -MoveVector );
+
     // Redraw text
-    Text->Draw( panel, DC, GR_XOR, MoveVector );
+    Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
 }
 
 void WinEDA_BasePcbFrame::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )

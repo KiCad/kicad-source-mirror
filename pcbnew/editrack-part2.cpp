@@ -142,7 +142,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     itmp = g_CurrentTrackList.GetCount();
     Begin_Route( g_CurrentTrackSegment, DC );
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     /* create the via */
     SEGVIA* via    = new SEGVIA( GetBoard() );
@@ -200,7 +200,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
 
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
         // delete the track(s) added in Begin_Route()
         while( g_CurrentTrackList.GetCount() > itmp )
@@ -253,7 +253,7 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackList.PushBack( g_CurrentTrackSegment->Copy() );
     }
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
     via->DisplayInfo( this );
 
     UpdateStatusBar();

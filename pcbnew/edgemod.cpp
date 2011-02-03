@@ -19,9 +19,11 @@
 #include "module_editor_frame.h"
 
 
-static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void ShowEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                            bool erase );
 static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                          bool aErase );
 
 int            ArcValue = 900;
 static wxPoint MoveVector;              // Move vector for move edge
@@ -43,7 +45,7 @@ void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     DrawPanel->ManageCurseur = Move_Segment;
     DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
     SetCurItem( Edge );
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
@@ -72,9 +74,9 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge )
 
 
 /* Move and redraw the current edited graphic item when mouse is moving */
-static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
 
     if( Edge == NULL )
@@ -82,14 +84,14 @@ static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
     MODULE* Module = (MODULE*) Edge->GetParent();
 
-    if( erase )
+    if( aErase )
     {
-        Edge->Draw( panel, DC, GR_XOR, MoveVector );
+        Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
     MoveVector = -(screen->m_Curseur - CursorInitialPosition);
 
-    Edge->Draw( panel, DC, GR_XOR, MoveVector );
+    Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
 
     Module->Set_Rectangle_Encadrement();
 }
@@ -97,9 +99,10 @@ static void Move_Segment( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
 /* Redraw the current edited (moved) graphic item
  */
-static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void ShowEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                            bool aErase )
 {
-    BASE_SCREEN* screen = panel->GetScreen();
+    BASE_SCREEN* screen = aPanel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
 
     if( Edge == NULL )
@@ -109,7 +112,7 @@ static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
 
     //	if( erase )
     {
-        Edge->Draw( panel, DC, GR_XOR );
+        Edge->Draw( aPanel, aDC, GR_XOR );
     }
 
     Edge->m_End = screen->m_Curseur;
@@ -118,7 +121,7 @@ static void ShowEdgeModule( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
     Edge->m_End0 = Edge->m_End - Module->m_Pos;
     RotatePoint( &Edge->m_End0, -Module->m_Orient );
 
-    Edge->Draw( panel, DC, GR_XOR );
+    Edge->Draw( aPanel, aDC, GR_XOR );
 
     Module->Set_Rectangle_Encadrement();
 }

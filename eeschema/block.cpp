@@ -38,7 +38,8 @@ extern void DuplicateItemsInList( SCH_SCREEN*        screen,
                                   PICKED_ITEMS_LIST& aItemsList,
                                   const wxPoint      aMoveVector );
 
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                     const wxPoint& aPosition, bool aErase );
 
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
@@ -130,7 +131,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
         MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
@@ -140,7 +141,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_COPY:                /* Copy */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         DuplicateItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
 
@@ -152,7 +153,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_PASTE:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         PasteListOfItems( DC );
         block->ClearItemsList();
         break;
@@ -250,14 +251,14 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                DrawPanel->ManageCurseur( DrawPanel, DC, false );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
                 DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, false );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
                 block->m_State = STATE_BLOCK_MOVE;
             }
             else
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, false );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
                 DrawPanel->ManageCurseur = NULL;
                 DrawPanel->ForceCloseManageCurseur = NULL;
             }
@@ -265,7 +266,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
+            DrawAndSizingBlockOutlines( DrawPanel, DC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
@@ -280,7 +281,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_SAVE:  /* Save */
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( DrawPanel, DC, false );
+            DrawAndSizingBlockOutlines( DrawPanel, DC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
@@ -370,7 +371,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DRAG:     /* move to Drag */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
@@ -384,7 +385,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             GetScreen()->SelectBlockItems();
 
             if( DrawPanel->ManageCurseur )
-                DrawPanel->ManageCurseur( DrawPanel, DC, false );
+                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
             block->m_State = STATE_BLOCK_MOVE;
         }
@@ -392,7 +393,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DELETE:     /* move to Delete */
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -406,7 +407,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_SAVE:     /* Save list in paste buffer*/
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -425,7 +426,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_ROTATE:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
         if( block->GetCount() )
         {
             /* Compute the rotation center and put it on grid */
@@ -442,7 +443,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_X:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -459,7 +460,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_Y:
         if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, false );
+            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -496,33 +497,33 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 /* Traces the outline of the search block structures
  * The entire block follows the cursor
  */
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                                     bool aErase )
 {
-    BLOCK_SELECTOR* block = &panel->GetScreen()->m_BlockLocate;;
-    BASE_SCREEN*    screen = panel->GetScreen();
+    BASE_SCREEN*    screen = aPanel->GetScreen();
+    BLOCK_SELECTOR* block = &screen->m_BlockLocate;;
     SCH_ITEM*       schitem;
 
     /* Erase old block contents. */
-    if( erase )
+    if( aErase )
     {
-        block->Draw( panel, DC, block->m_MoveVector, g_XorMode, block->m_Color );
+        block->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, block->m_Color );
 
         for( unsigned ii = 0; ii < block->GetCount(); ii++ )
         {
             schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
-            schitem->Draw( panel, DC, block->m_MoveVector, g_XorMode, g_GhostColor );
+            schitem->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, g_GhostColor );
         }
     }
 
     /* Repaint new view. */
     block->m_MoveVector = screen->m_Curseur - block->m_BlockLastCursorPosition;
-
-    block->Draw( panel, DC, block->m_MoveVector, g_XorMode, block->m_Color );
+    block->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, block->m_Color );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
-        schitem->Draw( panel, DC, block->m_MoveVector, g_XorMode, g_GhostColor );
+        schitem->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, g_GhostColor );
     }
 }
 

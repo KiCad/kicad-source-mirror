@@ -97,12 +97,12 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
             break;
     }
     GetBoard()->Draw( DrawPanel, DC,
-                drawMode,                  // this needs to be GR_COPY or GR_OR, set from a toggle button.
-                wxPoint( 0, 0 ) );
+                      drawMode,     // this needs to be GR_COPY or GR_OR, set from a toggle button.
+                      wxPoint( 0, 0 ) );
 
     // Draw the "background" now, i.e. grid and axis after gerber layers
-    // because most of time the actual background is erased by succesive drawings of each gerber layer
-    // mainly in COPY mode
+    // because most of time the actual background is erased by succesive drawings of each gerber
+    // layer mainly in COPY mode
     DrawPanel->DrawBackGround( DC );
 
     if( IsElementVisible( DCODES_VISIBLE ) )
@@ -111,7 +111,7 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, screen, 0 );
 
     if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
 
     DrawPanel->DrawCursor( DC );
 

@@ -71,10 +71,11 @@ public:
     /* Cursor management (used in editing functions) */
 
     /* Mouse capture move callback function prototype. */
-    void (*ManageCurseur)( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
+    void (*ManageCurseur)( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase );
 
     /* Abort managed cursor callback function prototype. */
-    void (*ForceCloseManageCurseur)( EDA_DRAW_PANEL* panel, wxDC* DC );
+    void (*ForceCloseManageCurseur)( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
 public:
 

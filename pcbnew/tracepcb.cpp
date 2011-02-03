@@ -56,8 +56,8 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #ifdef USE_WX_OVERLAY
     if(IsShown())
     {
-        DrawPanel->m_overlay.Reset(); 
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
+        DrawPanel->m_overlay.Reset();
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
@@ -65,7 +65,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     screen->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     /* Redraw the cursor */
     DrawPanel->DrawCursor( DC );
@@ -94,8 +94,8 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #ifdef USE_WX_OVERLAY
     if(IsShown())
     {
-        DrawPanel->m_overlay.Reset(); 
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC ); 
+        DrawPanel->m_overlay.Reset();
+        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
@@ -103,7 +103,7 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetScreen()->ClrRefreshReq();
 
     if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     // Redraw the cursor
     DrawPanel->DrawCursor( DC );
