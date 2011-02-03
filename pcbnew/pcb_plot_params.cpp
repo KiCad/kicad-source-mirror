@@ -29,15 +29,41 @@
 #include "plot_common.h"
 #include "macros.h"
 
+#define PLOT_LINEWIDTH_MIN        40
+#define PLOT_LINEWIDTH_MAX        200
+#define HPGL_PEN_DIAMETER_MIN     0
+#define HPGL_PEN_DIAMETER_MAX     100
+#define HPGL_PEN_SPEED_MIN        0
+#define HPGL_PEN_SPEED_MAX        1000
+#define HPGL_PEN_NUMBER_MIN       1
+#define HPGL_PEN_NUMBER_MAX       16
+#define HPGL_PEN_OVERLAY_MIN      0
+#define HPGL_PEN_OVERLAY_MAX      0x100
+
 extern int g_DrawDefaultLineThickness;
 
 PCB_PLOT_PARAMS g_PcbPlotOptions;
 
 using namespace PCBPLOTPARAMS_T;
 
-static const char* GetTokenName( T aTok )
+
+static const char* getTokenName( T aTok )
 {
     return PCB_PLOT_PARAMS_LEXER::TokenName( aTok );
+}
+
+
+static bool setInt( int* aInt, int aValue, int aMin, int aMax )
+{
+    int temp = aValue;
+
+    if( aValue < aMin )
+        temp = aMin;
+    else if( aValue > aMax )
+        temp = aMax;
+
+    *aInt = temp;
+    return (temp == aValue);
 }
 
 
@@ -81,59 +107,59 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                               int aNestLevel ) const throw( IO_ERROR )
 {
-    const char* falseStr = GetTokenName( T_false );
-    const char* trueStr = GetTokenName( T_true );
+    const char* falseStr = getTokenName( T_false );
+    const char* trueStr = getTokenName( T_true );
 
-    aFormatter->Print( aNestLevel, "(%s", GetTokenName( T_pcbplotparams ) );
-    aFormatter->Print( aNestLevel+1, "(%s %ld)\n", GetTokenName( T_layerselection ),
+    aFormatter->Print( aNestLevel, "(%s", getTokenName( T_pcbplotparams ) );
+    aFormatter->Print( aNestLevel+1, "(%s %ld)\n", getTokenName( T_layerselection ),
                        layerSelection );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_usegerberextensions ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        useGerberExtensions ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_excludeedgelayer ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
                        m_ExcludeEdgeLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_linewidth ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_linewidth ),
                        m_PlotLineWidth );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_plotframeref ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotframeref ),
                        m_PlotFrameRef ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_viasonmask ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
                        m_PlotViaOnMaskLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_mode ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_mode ),
                        m_PlotMode );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_useauxorigin ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_useauxorigin ),
                        useAuxOrigin ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_hpglpennumber ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
                        m_HPGLPenNum );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_hpglpenspeed ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
                        m_HPGLPenSpeed );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_hpglpendiameter ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpendiameter ),
                        m_HPGLPenDiam );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_hpglpenoverlay ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenoverlay ),
                        m_HPGLPenOvr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_pscolor ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_pscolor ),
                        m_PlotPSColorOpt ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_psnegative ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
                        m_PlotPSNegative ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_plotreference ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotreference ),
                        m_PlotReference ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_plotvalue ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotvalue ),
                        m_PlotValue ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_plotothertext ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotothertext ),
                        m_PlotTextOther ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_plotinvisibletext ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotinvisibletext ),
                        m_PlotInvisibleTexts ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_padsonsilk ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_padsonsilk ),
                        m_PlotPadsOnSilkLayer ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_subtractmaskfromsilk ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_subtractmaskfromsilk ),
                        subtractMaskFromSilk ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_outputformat ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_outputformat ),
                        m_PlotFormat );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_mirror ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_mirror ),
                        m_PlotMirror ? trueStr : falseStr );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_drillshape ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_drillshape ),
                        m_DrillShapeOpt );
-    aFormatter->Print( aNestLevel+1, "(%s %d)\n", GetTokenName( T_scaleselection ),
+    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
                        scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", GetTokenName( T_outputdirectory ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_outputdirectory ),
                        aFormatter->Quotew( outputDirectory ).c_str() );
     aFormatter->Print( 0, ")\n" );
 }
@@ -207,6 +233,30 @@ bool PCB_PLOT_PARAMS::operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 }
 
 
+bool PCB_PLOT_PARAMS::SetHpglPenDiameter( int aValue )
+{
+    return setInt( &m_HPGLPenDiam, aValue, HPGL_PEN_DIAMETER_MIN, HPGL_PEN_DIAMETER_MAX );
+}
+
+
+bool PCB_PLOT_PARAMS::SetHpglPenSpeed( int aValue )
+{
+    return setInt( &m_HPGLPenSpeed, aValue, HPGL_PEN_SPEED_MIN, HPGL_PEN_SPEED_MAX );
+}
+
+
+bool PCB_PLOT_PARAMS::SetHpglPenOverlay( int aValue )
+{
+    return setInt( &m_HPGLPenOvr, aValue, HPGL_PEN_OVERLAY_MIN, HPGL_PEN_OVERLAY_MAX );
+}
+
+
+bool PCB_PLOT_PARAMS::SetPlotLineWidth( int aValue )
+{
+    return setInt( &m_PlotLineWidth, aValue, PLOT_LINEWIDTH_MIN, PLOT_LINEWIDTH_MAX );
+}
+
+
 // PCB_PLOT_PARAMS_PARSER
 
 PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader ) :
@@ -250,7 +300,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             aPcbPlotParams->m_ExcludeEdgeLayer = ParseBool();
             break;
         case T_linewidth:
-            aPcbPlotParams->m_PlotLineWidth = ParseInt( 40, 200 );
+            aPcbPlotParams->m_PlotLineWidth = ParseInt( PLOT_LINEWIDTH_MIN,
+                                                        PLOT_LINEWIDTH_MAX );
             break;
         case T_plotframeref:
             aPcbPlotParams->m_PlotFrameRef = ParseBool();
@@ -265,16 +316,20 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             aPcbPlotParams->useAuxOrigin = ParseBool();
             break;
         case T_hpglpennumber:
-            aPcbPlotParams->m_HPGLPenNum = ParseInt( 1, 16 );
+            aPcbPlotParams->m_HPGLPenNum = ParseInt( HPGL_PEN_NUMBER_MIN,
+                                                     HPGL_PEN_NUMBER_MAX );
             break;
         case T_hpglpenspeed:
-            aPcbPlotParams->m_HPGLPenSpeed = ParseInt( 0, 1000 );
+            aPcbPlotParams->m_HPGLPenSpeed = ParseInt( HPGL_PEN_SPEED_MIN,
+                                                       HPGL_PEN_SPEED_MAX );
             break;
         case T_hpglpendiameter:
-            aPcbPlotParams->m_HPGLPenDiam = ParseInt( 0, 100 );
+            aPcbPlotParams->m_HPGLPenDiam = ParseInt( HPGL_PEN_DIAMETER_MIN,
+                                                      HPGL_PEN_DIAMETER_MAX );
             break;
         case T_hpglpenoverlay:
-            aPcbPlotParams->m_HPGLPenOvr = ParseInt( 0, 0x100 );
+            aPcbPlotParams->m_HPGLPenOvr = ParseInt( HPGL_PEN_OVERLAY_MIN,
+                                                     HPGL_PEN_OVERLAY_MIN );
             break;
         case T_pscolor:
             aPcbPlotParams->m_PlotPSColorOpt = ParseBool();

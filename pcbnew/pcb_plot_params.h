@@ -114,6 +114,15 @@ public:
     bool        GetUseAuxOrigin() const { return useAuxOrigin; };
     void        SetScaleSelection( int aSelection ) { scaleSelection = aSelection; };
     int         GetScaleSelection() const { return scaleSelection; };
+
+    int         GetHpglPenDiameter() const { return m_HPGLPenDiam; };
+    bool        SetHpglPenDiameter( int aValue );
+    int         GetHpglPenSpeed() const { return m_HPGLPenSpeed; };
+    bool        SetHpglPenSpeed( int aValue );
+    int         GetHpglPenOverlay() const { return m_HPGLPenOvr; };
+    bool        SetHpglPenOverlay( int aValue );
+    int         GetPlotLineWidth() const { return m_PlotLineWidth; };
+    bool        SetPlotLineWidth( int aValue );
 };
 
 

@@ -19,11 +19,10 @@
 #include "dialog_plot_base.h"
 #include "pcb_plot_params.h"
 
-#define PLOT_DEFAULT_MARGE 300      // mils
 
 /* Keywords to r/w options in m_Config */
-#define OPTKEY_XFINESCALE_ADJ    wxT( "PlotXFineScaleAdj" )
-#define OPTKEY_YFINESCALE_ADJ    wxT( "PlotYFineScaleAdj" )
+#define CONFIG_XFINESCALE_ADJ    wxT( "PlotXFineScaleAdj" )
+#define CONFIG_YFINESCALE_ADJ    wxT( "PlotYFineScaleAdj" )
 
 // Define min and max reasonable values for print scale
 #define MIN_SCALE 0.01
@@ -31,6 +30,23 @@
 
 extern int g_DrawDefaultLineThickness;
 
+
+static bool setDouble( double* aDouble, double aValue, double aMin, double aMax )
+{
+    if( aValue < aMin )
+    {
+        *aDouble = aMin;
+        return false;
+    }
+    else if( aValue > aMax )
+    {
+        *aDouble = aMax;
+        return false;
+    }
+
+    *aDouble = aValue;
+    return true;
+}
 
 /*******************************/
 /* Dialog box for plot control */
@@ -114,30 +130,27 @@ void DIALOG_PLOT::Init_Dialog()
 
     BOARD*     board = m_Parent->GetBoard();
 
-    m_Config->Read( OPTKEY_XFINESCALE_ADJ, &m_XScaleAdjust );
-    m_Config->Read( OPTKEY_YFINESCALE_ADJ, &m_YScaleAdjust );
+    m_Config->Read( CONFIG_XFINESCALE_ADJ, &m_XScaleAdjust );
+    m_Config->Read( CONFIG_YFINESCALE_ADJ, &m_YScaleAdjust );
 
     m_plotFormatOpt->SetSelection( g_PcbPlotOptions.m_PlotFormat );
 
     // Set units and value for HPGL pen size.
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.m_HPGLPenDiam, UNITS_MILS );
+    msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.GetHpglPenDiameter(), UNITS_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units to cm/s for standard HPGL pen speed.
-    msg = ReturnStringFromValue( UNSCALED_UNITS, g_PcbPlotOptions.m_HPGLPenSpeed, 1 );
+    msg = ReturnStringFromValue( UNSCALED_UNITS, g_PcbPlotOptions.GetHpglPenSpeed(), 1 );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay.
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
-                                 g_PcbPlotOptions.m_HPGLPenOvr,
-                                 UNITS_MILS );
+    msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.GetHpglPenOverlay(), UNITS_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
-                                 g_PcbPlotOptions.m_PlotLineWidth,
+    msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.GetPlotLineWidth(),
                                  PCB_INTERNAL_UNIT );
     m_linesWidth->AppendText( msg );
 
@@ -453,28 +466,83 @@ void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
     tempOptions.m_PlotMode   = (GRTraceMode) m_plotModeOpt->GetSelection();
     tempOptions.m_PlotViaOnMaskLayer = m_plotNoViaOnMaskOpt->GetValue();
 
+    // Update settings from text fields. Rewrite values back to the fields,
+    // since the values may have been constrained by the setters.
+    // HPLG pen size
     wxString msg = m_HPGLPenSizeOpt->GetValue();
     int      tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
-    tempOptions.m_HPGLPenDiam = tmp;
 
+    if( !tempOptions.SetHpglPenDiameter( tmp ) )
+    {
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter(), UNITS_MILS );
+        m_HPGLPenSizeOpt->SetValue( msg );
+        msg.Printf( wxT( "HPGL pen size constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+
+    // HPGL pen speed
     msg = m_HPGLPenSpeedOpt->GetValue();
     tmp = ReturnValueFromString( UNSCALED_UNITS, msg, 1 );
-    tempOptions.m_HPGLPenSpeed = tmp;
 
+    if( !tempOptions.SetHpglPenSpeed( tmp ) )
+    {
+        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed(), 1 );
+        m_HPGLPenSpeedOpt->SetValue( msg );
+        msg.Printf( wxT( "HPGL pen speed constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+
+    // HPGL pen overlay
     msg = m_HPGLPenOverlayOpt->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
-    tempOptions.m_HPGLPenOvr = tmp;
 
+    if( !tempOptions.SetHpglPenOverlay( tmp ) )
+    {
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenOverlay(), UNITS_MILS );
+        m_HPGLPenOverlayOpt->SetValue( msg );
+        msg.Printf( wxT( "HPGL pen overlay constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+
+    // Default linewidth
     msg = m_linesWidth->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
-    tempOptions.m_PlotLineWidth = tmp;
 
+    if( !tempOptions.SetPlotLineWidth( tmp ) )
+    {
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetPlotLineWidth(),
+                                     PCB_INTERNAL_UNIT );
+        m_linesWidth->SetValue( msg );
+        msg.Printf( wxT( "Default linewidth constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+
+    // X scale
+    double tmpDouble;
     msg = m_fineAdjustXscaleOpt->GetValue();
-    msg.ToDouble( &m_XScaleAdjust );
+    msg.ToDouble( &tmpDouble );
+
+    if( !setDouble( &m_XScaleAdjust, tmpDouble, MIN_SCALE, MAX_SCALE ) )
+    {
+        msg.Printf( wxT( "%f" ), m_XScaleAdjust );
+        m_fineAdjustXscaleOpt->SetValue( msg );
+        msg.Printf( wxT( "X scale constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+    m_Config->Write( CONFIG_XFINESCALE_ADJ, m_XScaleAdjust );
+
+    // Y scale
     msg = m_fineAdjustYscaleOpt->GetValue();
-    msg.ToDouble( &m_YScaleAdjust );
-    m_Config->Write( OPTKEY_XFINESCALE_ADJ, m_XScaleAdjust );
-    m_Config->Write( OPTKEY_YFINESCALE_ADJ, m_YScaleAdjust );
+    msg.ToDouble( &tmpDouble );
+
+    if( !setDouble( &m_YScaleAdjust, tmpDouble, MIN_SCALE, MAX_SCALE ) )
+    {
+        msg.Printf( wxT( "%f" ), m_YScaleAdjust );
+        m_fineAdjustYscaleOpt->SetValue( msg );
+        msg.Printf( wxT( "Y scale constrained!\n" ) );
+        m_messagesBox->AppendText( msg );
+    }
+    m_Config->Write( CONFIG_YFINESCALE_ADJ, m_YScaleAdjust );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
