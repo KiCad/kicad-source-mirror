@@ -316,7 +316,7 @@ public:
 
     //----</read accessors>---------------------------------------------------
 
-#if defined(DEBUG)
+#if 1 || defined(DEBUG)
     /// implement the tests in here so we can honor the priviledge levels of the
     /// accessors, something difficult to do from int main(int, char**)
     void Test();

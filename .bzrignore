@@ -17,6 +17,8 @@ install_manifest.txt
 Documentation/doxygen
 *.cmake
 *.bak
+pcbnew/pcb_plot_params_keywords.cpp
+pcbnew/pcb_plot_params_lexer.h
 pcbnew/specctra_keywords.cpp
 pcbnew/specctra_lexer.h
 new/html

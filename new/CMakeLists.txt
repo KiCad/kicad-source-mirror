@@ -108,6 +108,9 @@ add_library( sweet SHARED
     )
 target_link_libraries( sweet ${wxWidgets_LIBRARIES} )
 
+add_executable( test_sch_lib_table test_sch_lib_table.cpp )
+target_link_libraries( test_sch_lib_table sweet )
+
 
 #=====<USE_SWIG>============================================================
 # if you want a Python scripting layer on top for unit testing or driving.
