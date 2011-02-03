@@ -42,12 +42,13 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
     SCH_SHEET_PATH*    sheetFoundIn = NULL;
     bool               wrap = ( event.GetFlags() & FR_SEARCH_WRAP ) != 0;
     wxRect             clientRect( wxPoint( 0, 0 ), GetClientSize() );
+    bool               warpCursor = ( ( event.GetId() == wxEVT_COMMAND_FIND_CLOSE ) ||
+                                      !( event.GetFlags() & FR_NO_WARP_CURSOR ) );
 
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
         sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T,
-                                                                 lastMarker, wrap );
+        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T, lastMarker, wrap );
     }
     else
     {
@@ -66,7 +67,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 
         sheetFoundIn->LastScreen()->m_Curseur = lastMarker->m_Pos;
 
-        RedrawScreen( TRUE );
+        RedrawScreen( warpCursor );
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
@@ -109,69 +110,71 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
     SCH_COMPONENT*  Component    = NULL;
     wxSize          DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint         pos, curpos;
-    bool            DoCenterAndRedraw = FALSE;
+    bool            DoCenterAndRedraw = false;
     bool            NotFound = true;
     wxString        msg;
     LIB_PIN*        pin;
     SCH_SHEET_LIST  SheetList;
 
     sheet = SheetList.GetFirst();
+
     if( !Find_in_hierarchy )
         sheet = m_CurrentSheet;
 
     for( ; sheet != NULL; sheet = SheetList.GetNext() )
     {
         DrawList = (SCH_ITEM*) sheet->LastDrawList();
-        for( ; ( DrawList != NULL ) && ( NotFound == true );
-             DrawList = DrawList->Next() )
+
+        for( ; ( DrawList != NULL ) && ( NotFound == true ); DrawList = DrawList->Next() )
         {
-            if( DrawList->Type() == SCH_COMPONENT_T )
+            if( DrawList->Type() != SCH_COMPONENT_T )
+                continue;
+
+            SCH_COMPONENT* pSch = (SCH_COMPONENT*) DrawList;
+
+            if( component_reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
             {
-                SCH_COMPONENT* pSch;
-                pSch = (SCH_COMPONENT*) DrawList;
-                if( component_reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
+                Component = pSch;
+                SheetWithComponentFound = sheet;
+
+                switch( SearchType )
                 {
-                    Component = pSch;
-                    SheetWithComponentFound = sheet;
+                default:
+                case 0:             // Find component only
+                    NotFound = false;
+                    pos = pSch->m_Pos;
+                    break;
 
-                    switch( SearchType )
-                    {
-                    default:
-                    case 0:             // Find component only
-                        NotFound = FALSE;
-                        pos = pSch->m_Pos;
+                case 1:                 // find a pin
+                    pos = pSch->m_Pos;  /* temporary: will be changed if the pin is found */
+                    pin = pSch->GetPin( text_to_find );
+
+                    if( pin == NULL )
                         break;
 
-                    case 1:                 // find a pin
-                        pos = pSch->m_Pos;  /* temporary: will be changed if
-                                             * the pin is found */
-                        pin = pSch->GetPin( text_to_find );
+                    NotFound = false;
+                    pos += pin->GetPosition();
+                    break;
 
-                        if( pin == NULL )
-                            break;
+                case 2:     // find reference
+                    NotFound = false;
+                    pos = pSch->GetField( REFERENCE )->m_Pos;
+                    break;
 
-                        NotFound = FALSE;
-                        pos += pin->GetPosition();
+                case 3:     // find value
+                    pos = pSch->m_Pos;
+
+                    if( text_to_find.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
                         break;
 
-                    case 2:     // find reference
-                        NotFound = FALSE;
-                        pos = pSch->GetField( REFERENCE )->m_Pos;
-                        break;
-
-                    case 3:     // find value
-                        pos = pSch->m_Pos;
-                        if( text_to_find.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
-                            break;
-                        NotFound = FALSE;
-                        pos = pSch->GetField( VALUE )->m_Pos;
-                        break;
-                    }
+                    NotFound = false;
+                    pos = pSch->GetField( VALUE )->m_Pos;
+                    break;
                 }
             }
         }
 
-        if( (Find_in_hierarchy == FALSE) || (NotFound == FALSE) )
+        if( (Find_in_hierarchy == false) || (NotFound == false) )
             break;
     }
 
@@ -184,8 +187,9 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
-            DoCenterAndRedraw = TRUE;
+            DoCenterAndRedraw = true;
         }
+
         wxPoint delta;
         pos  -= Component->m_Pos;
         delta = Component->GetTransform().TransformCoordinate( pos );
@@ -196,9 +200,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 
         curpos = DrawPanel->CursorScreenPosition();
 
-        DrawPanel->GetViewStart(
-            &( GetScreen()->m_StartVisu.x ),
-            &( GetScreen()->m_StartVisu.y ) );
+        DrawPanel->GetViewStart( &( GetScreen()->m_StartVisu.x ),
+                                 &( GetScreen()->m_StartVisu.y ) );
 
         // Calculating cursor position with original screen.
         curpos -= GetScreen()->m_StartVisu;
@@ -299,18 +302,24 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
                                          * note: the actual matched item can be a
                                          * part of lastItem (for instance a field in a component
                                          */
-    static wxPoint  lastItemPosition;   // the actual position of the matched sub item
+    static wxPoint    lastItemPosition; // the actual position of the matched sub item
 
     SCH_SHEET_LIST    schematic;
     wxString          msg;
     SCH_SHEET_PATH*   sheetFoundIn = NULL;
     wxFindReplaceData searchCriteria;
+    bool              warpCursor = !( event.GetFlags() & FR_NO_WARP_CURSOR );
 
     searchCriteria.SetFlags( event.GetFlags() );
     searchCriteria.SetFindString( event.GetFindString() );
     searchCriteria.SetReplaceString( event.GetReplaceString() );
 
-    if( event.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+    if( event.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+    {
+        sheetFoundIn = m_CurrentSheet;
+        warpCursor = true;
+    }
+    else if( event.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
     {
         sheetFoundIn = m_CurrentSheet;
         lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem, &lastItemPosition );
@@ -330,9 +339,9 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-//        sheetFoundIn->LastScreen()->m_Curseur = lastItem->GetBoundingBox().Centre();
         sheetFoundIn->LastScreen()->m_Curseur = lastItemPosition;
-        RedrawScreen( true );
+
+        RedrawScreen( warpCursor );
 
         msg = event.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
         SetStatusText( msg );

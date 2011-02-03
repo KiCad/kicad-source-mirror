@@ -609,6 +609,10 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
 {
+    // If the user dismissed the dialog with the mouse, this will send the cursor back
+    // to the last item found.
+    OnFindSchematicItem( event );
+
     if( m_dlgFindReplace )
     {
         m_findDialogPosition = m_dlgFindReplace->GetPosition();
@@ -619,7 +623,7 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
         m_dlgFindReplace = NULL;
     }
 
-    this->DrawPanel->m_IgnoreMouseEvents = FALSE;
+    DrawPanel->m_IgnoreMouseEvents = false;
 }
 
 

@@ -25,6 +25,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     m_radioBackward->SetValue( ( flags & wxFR_DOWN ) == 0 );
     m_checkMatchCase->SetValue( flags & wxFR_MATCHCASE );
     m_checkWholeWord->SetValue( flags & wxFR_WHOLEWORD );
+    m_checkNoWarpCursor->SetValue( flags & FR_NO_WARP_CURSOR );
 
     /* Whole word and wild card searches are mutually exclusive. */
     if( !( flags & wxFR_WHOLEWORD ) )
@@ -130,6 +131,9 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
 
     if( m_checkCurrentSheetOnly->GetValue() )
         flags |= FR_CURRENT_SHEET_ONLY;
+
+    if( m_checkNoWarpCursor->GetValue() )
+        flags |= FR_NO_WARP_CURSOR;
 
     m_findReplaceData->SetFindString( event.GetFindString() );
 

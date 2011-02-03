@@ -38,7 +38,10 @@ enum SchematicFindReplaceFlags
     FR_MATCH_WILDCARD        = wxFR_MATCHCASE << 4,
 
     /* Wrap around the beginning or end of search list. */
-    FR_SEARCH_WRAP           = wxFR_MATCHCASE << 5
+    FR_SEARCH_WRAP           = wxFR_MATCHCASE << 5,
+
+    /* Don't warp cursor to found item until the dialog is closed. */
+    FR_NO_WARP_CURSOR        = wxFR_MATCHCASE << 6
 };
 
 

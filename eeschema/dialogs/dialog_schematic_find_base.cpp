@@ -89,6 +89,9 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current sheet on&ly"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
+	m_checkNoWarpCursor = new wxCheckBox( this, wxID_ANY, _("Do not warp cursor to found item"), wxDefaultPosition, wxDefaultSize, 0 );
+	leftSizer->Add( m_checkNoWarpCursor, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
+	
 	mainSizer->Add( leftSizer, 1, wxALL|wxEXPAND, 6 );
 	
 	wxBoxSizer* rightSizer;
