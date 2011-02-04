@@ -37,7 +37,7 @@
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.
 #include <wx/wx.h>
-#include <cstdio>
+#include <stdio.h>
 
 
 /**
@@ -56,7 +56,7 @@
 
 // use one of the following __LOC__ defs, depending on whether your
 // compiler supports __func__ or not, and how it handles __LINE__
-#define __LOC__         ((std::string(__func__) + " : ") + TOSTRING(__LINE__)).c_str()
+#define __LOC__         ((std::string(__func__) + "() : line ") + TOSTRING(__LINE__)).c_str()
 //#define __LOC__         TOSTRING(__LINE__)
 
 /// macro which captures the "call site" values of __FILE_ & __LOC__

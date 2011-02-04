@@ -24,6 +24,10 @@ if( STAND_ALONE )
 
     check_find_package_result( wxWidgets_FOUND "wxWidgets" )
 
+    # make config.h
+    include(PerformFeatureChecks)
+    perform_feature_checks()
+
     # Include wxWidgets macros.
     include( ${wxWidgets_USE_FILE} )
 
@@ -59,6 +63,7 @@ endif()
 
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+include_directories( ${CMAKE_BINARY_DIR} )
 
 #=====<on standby for possible C++ unit testing>================================
 if( false )
@@ -95,6 +100,7 @@ make_lexer(
     PR
     )
 
+
 add_library( sweet SHARED
     sch_lib_table.cpp
     sch_lib_table_keywords.cpp
@@ -108,7 +114,17 @@ add_library( sweet SHARED
     )
 target_link_libraries( sweet ${wxWidgets_LIBRARIES} )
 
+# talk to import_export.h
+set_target_properties( sweet PROPERTIES
+    DEFINE_SYMBOL COMPILING_DLL
+    )
+
 add_executable( test_sch_lib_table test_sch_lib_table.cpp )
+if( MINGW )
+    set_target_properties( test_sch_lib_table PROPERTIES
+        LINK_FLAGS -Wl,--enable-auto-import
+    )
+endif()
 target_link_libraries( test_sch_lib_table sweet )
 
 
@@ -116,7 +132,7 @@ target_link_libraries( test_sch_lib_table sweet )
 # if you want a Python scripting layer on top for unit testing or driving.
 # reference: http://www.swig.org/Doc1.3/Introduction.html#Introduction_build_system
 
-option( USE_SWIG "Use SWIG to build a python scripting interface (default ON)." ON)
+option( USE_SWIG "Use SWIG to build a python scripting interface (default OFF)." OFF)
 if( USE_SWIG )
 
     find_package( SWIG REQUIRED )

@@ -26,6 +26,7 @@ namespace SCH {
 %ignore PART::operator=( const PART& other );
 }
 
+%include "import_export.h"
 %include "richio.h"
 %include "dsnlexer.h"
 //%include "sch_lib_table_lexer.h"

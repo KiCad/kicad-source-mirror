@@ -25,7 +25,7 @@
 #ifndef DSNLEXER_H_
 #define DSNLEXER_H_
 
-#include <cstdio>
+#include <stdio.h>
 #include <string>
 #include <vector>
 

@@ -27,6 +27,7 @@
 
 #include <utf8.h>
 #include <richio.h>
+#include <import_export.h>
 
 
 namespace SCH {
@@ -199,7 +200,7 @@ class PARTS;
  *
  * @author Dick Hollenbeck
  */
-class LIB
+class MY_API LIB
 {
     friend class LIB_TABLE;    ///< protected constructor, LIB_TABLE may construct
 

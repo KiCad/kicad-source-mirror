@@ -28,10 +28,12 @@
 #include <string>
 #include <boost/ptr_container/ptr_map.hpp>
 
+#include <import_export.h>
 #include <sch_lib.h>
 
-class SCH_LIB_TABLE_LEXER;      // outside namespace SCH, since make_lexer() Functions.cmake can't do namespace
 class OUTPUTFORMATTER;
+class SCH_LIB_TABLE_LEXER;
+
 
 namespace SCH {
 
@@ -80,7 +82,7 @@ class PART;
  *
  * @author Dick Hollenbeck
  */
-class LIB_TABLE
+class MY_API LIB_TABLE
 {
 public:
 
@@ -213,7 +215,7 @@ public:
 
     /**
      * Function Parse
-     * fills this table fragment from information in the input stream \a aLexer, which
+     * fills this table fragment from information in the input stream \a aParser, which
      * is a DSNLEXER customized for the grammar needed to describe instances of this object.
      * The entire textual element spec is <br>
      *
@@ -225,14 +227,15 @@ public:
      *  )
      * </pre>
      *
-     * When this function is called, the input token stream given by \a aLexer
-     * is assumed to be positioned at the '^' in the following example, i.e. just after the
-     * identifying keyword and before the content specifying stuff.<br>
+     * When this function is called, the input token stream given by \a aParser
+     * is assumed to be positioned at the '^' in the following example, i.e. just
+     * after the identifying keyword and before the content specifying stuff.
+     * <br>
      * (lib_table ^ (....) )
      *
-     * @param aLexer is the input token stream of keywords and symbols.
+     * @param aParser is the input token stream of keywords and symbols.
      */
-    void Parse( SCH_LIB_TABLE_LEXER* aLexer ) throw( IO_ERROR );
+    void Parse( SCH_LIB_TABLE_LEXER* aParser ) throw( IO_ERROR, PARSE_ERROR );
 
     /**
      * Function Format

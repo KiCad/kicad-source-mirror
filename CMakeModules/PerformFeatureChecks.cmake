@@ -50,7 +50,10 @@ macro(perform_feature_checks)
     #        mean won't fail somewhere down the line.
     check_include_file("iso646.h" HAVE_ISO646_H)
 
-    check_include_file("strings.h" HAVE_STRINGS_H)
+    # no place is this used, and "HAVE_STRINGS_H", if present in config.h then
+    # conflicts with /usr/include/python2.6/Python.h.  Please rename the macro if
+    # re-introduce this.
+    # check_include_file("strings.h" HAVE_STRINGS_H)
 
     include(CheckSymbolExists)
     check_symbol_exists(strcasecmp "string.h" HAVE_STRCASECMP)
@@ -68,7 +71,7 @@ macro(perform_feature_checks)
     check_symbol_exists(_hypot "math.h" HAVE_ISO_HYPOT)
 
     # Generate config.h.
-    configure_file(${CMAKE_SOURCE_DIR}/CMakeModules/config.h.cmake
+    configure_file(${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake
                    ${CMAKE_BINARY_DIR}/config.h)
 
 endmacro(perform_feature_checks)

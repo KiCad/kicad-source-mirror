@@ -14,7 +14,7 @@ set( CMAKE_SYSTEM_NAME Linux )
 # configure only the lines within this <configure> block, typically
 
 # default is specific to Dick's machine, again for testing only:
-set( WX_MINGW_BASE /opt/wx2.8-mingw )
+set( WX_MINGW_BASE /opt/wx2.9-mingw )
 
 # specify the cross compiler
 set( CMAKE_C_COMPILER   i586-mingw32msvc-gcc )

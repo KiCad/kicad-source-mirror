@@ -44,7 +44,7 @@ LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
 }
 
 
-void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR )
+void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 {
     /*  grammar:
 
