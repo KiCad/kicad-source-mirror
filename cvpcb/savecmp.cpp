@@ -13,7 +13,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 
 #include "build_version.h"
 
@@ -30,7 +30,7 @@ const wxString titleComponentLibErr( _( "Component Library Error" ) );
  * @param NetlistFullFileName - Name of net list file to save.
  * @returns - 1 if OK, 0 if error.
  */
-int WinEDA_CvpcbFrame::SaveComponentList( const wxString& NetlistFullFileName )
+int CVPCB_MAINFRAME::SaveComponentList( const wxString& NetlistFullFileName )
 {
     FILE*       dest;
     wxFileName  fn( NetlistFullFileName );

@@ -8,6 +8,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
 
@@ -15,7 +16,7 @@
 /* ListBox handling the schematic components list */
 /**************************************************/
 
-COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( WinEDA_CvpcbFrame* parent, wxWindowID id,
+COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
                                         const wxPoint& loc, const wxSize& size,
                                         int nbitems, wxString choice[] ) :
     ITEMS_LISTBOX_BASE( parent, id, loc, size )

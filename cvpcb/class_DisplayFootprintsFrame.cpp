@@ -12,7 +12,7 @@
 #include "cvpcb.h"
 #include "bitmaps.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "cvpcb_id.h"
 
@@ -46,7 +46,7 @@ END_EVENT_TABLE()
 /* DISPLAY_FOOTPRINTS_FRAME: the frame to display the current focused footprint */
 /***************************************************************************/
 
-DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
+DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
                                           const wxString& title,
                                           const wxPoint& pos,
                                           const wxSize& size, long style ) :
@@ -129,7 +129,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
     delete GetScreen();
     SetScreen( NULL );
 
-    ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
+    ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }
 
 /* Called when the frame is closed

@@ -148,6 +148,14 @@ static struct LANGUAGE_DESCR s_Language_List[] =
         _( "German" )
     },
 
+    /* Greek language */
+    {
+        wxLANGUAGE_GREEK,
+        ID_LANGUAGE_GREEK,
+        lang_gr_xpm,
+        _( "Greek" )
+    },
+
     /* Slovenian language */
     {
         wxLANGUAGE_SLOVENIAN,

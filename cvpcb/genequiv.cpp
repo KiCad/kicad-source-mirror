@@ -10,10 +10,10 @@
 
 #include "cvpcb.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 
 
-void WinEDA_CvpcbFrame::WriteStuffList( wxCommandEvent& event )
+void CVPCB_MAINFRAME::WriteStuffList( wxCommandEvent& event )
 {
     FILE*      FileEquiv;
     wxString   Line;

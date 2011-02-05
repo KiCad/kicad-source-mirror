@@ -10,7 +10,7 @@ class DISPLAY_FOOTPRINTS_FRAME : public WinEDA_BasePcbFrame
 public:
 
 public:
-    DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
+    DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
                          const wxString& title,
                          const wxPoint& pos, const wxSize& size,
                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );

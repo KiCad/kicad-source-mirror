@@ -3,8 +3,6 @@
 /****************************/
 
 /* Read a nelist type Eeschema or OrcadPCB2 and build the component list
- * Manages the lines like :
- * ( XXXXXX VALEUR|(pin1,pin2,...=newalim) ID VALEUR
  */
 
 #include "fctsys.h"
@@ -16,7 +14,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 
 #include "richio.h"
 
@@ -86,7 +84,7 @@ static int ReadFootprintFilterList( FILE_LINE_READER& aNetlistReader, COMPONENT_
  * $endfootprintlist
  * }
  */
-int WinEDA_CvpcbFrame::ReadSchematicNetlist()
+int CVPCB_MAINFRAME::ReadSchematicNetlist()
 {
     char       alim[1024];
     int        idx, jj, k, l;

@@ -11,6 +11,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
 #include "build_version.h"
@@ -19,7 +20,7 @@
  * Set the module to the selected component
  * Selects the next component
  */
-void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
+void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
 {
     COMPONENT* Component;
     bool       isUndefined = false;
@@ -69,7 +70,7 @@ void WinEDA_CvpcbFrame::SetNewPkg( const wxString& package )
 /*
  * Read the netlist format and file components.
  */
-bool WinEDA_CvpcbFrame::ReadNetList()
+bool CVPCB_MAINFRAME::ReadNetList()
 {
     wxString   msg;
     int        error_level;
@@ -90,7 +91,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
         return false;
 
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
-    LoadFootprintFiles( m_ModuleLibNames, m_footprints );
+    LoadFootprintFiles( );
     BuildFOOTPRINTS_LISTBOX();
 
     m_ListCmp->Clear();
@@ -124,7 +125,7 @@ bool WinEDA_CvpcbFrame::ReadNetList()
  * The full name of the netlist file must be in FFileName.
  * The file name is deducted in cmp
  */
-int WinEDA_CvpcbFrame::SaveNetList( const wxString& fileName )
+int CVPCB_MAINFRAME::SaveNetList( const wxString& fileName )
 {
     wxFileName fn;
 

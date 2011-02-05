@@ -12,14 +12,14 @@
 #include "gestfich.h"
 
 #include "cvpcb.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 
 #include "protos.h"
 
 #include "dialog_cvpcb_config.h"
 
 
-DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( WinEDA_CvpcbFrame* parent ) :
+DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
     DIALOG_CVPCB_CONFIG_FBP( parent )
 {
     wxString title;
@@ -121,8 +121,7 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
         for( unsigned ii = 0; ii < m_ListEquiv->GetCount(); ii++ )
             m_Parent->m_AliasLibNames.Add( m_ListEquiv->GetString( ii ) );
 
-        LoadFootprintFiles( m_Parent->m_ModuleLibNames,
-                            m_Parent->m_footprints );
+        m_Parent->LoadFootprintFiles();
         m_Parent->BuildFOOTPRINTS_LISTBOX();
     }
 

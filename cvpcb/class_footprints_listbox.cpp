@@ -8,6 +8,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
 
@@ -15,7 +16,7 @@
 /* ListBox handling the footprint list */
 /***************************************/
 
-FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( WinEDA_CvpcbFrame* parent,
+FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
                                         wxWindowID id, const wxPoint& loc,
                                         const wxSize& size,
                                         int nbitems, wxString choice[] ) :
