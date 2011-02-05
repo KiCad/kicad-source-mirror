@@ -160,6 +160,16 @@ void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
 }
 
 
+void BLOCK_SELECTOR::Clear()
+{
+    if( m_Command != BLOCK_IDLE )
+    {
+        m_Command = BLOCK_IDLE;
+        m_State   = STATE_NO_BLOCK;
+        ClearItemsList();
+    }
+}
+
 
 /*  First command block function:
  *  Init the Block infos: command type, initial position, and other variables..
@@ -201,6 +211,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         Block->m_BlockLastCursorPosition.x = 0;
         Block->m_BlockLastCursorPosition.y = 0;
         InitBlockPasteInfos();
+
         if( Block->m_ItemsSelection.GetCount() == 0 )      /* No data to paste */
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
@@ -208,6 +219,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
             DrawPanel->ManageCurseur = NULL;
             return true;
         }
+
         if( DrawPanel->ManageCurseur == NULL )
         {
             Block->m_ItemsSelection.ClearItemsList();
@@ -215,6 +227,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
                           wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: ManageCurseur NULL" ) );
             return true;
         }
+
         Block->m_State = STATE_BLOCK_MOVE;
         DrawPanel->ManageCurseur( DrawPanel, DC, startpos, false );
         break;

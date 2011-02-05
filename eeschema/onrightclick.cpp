@@ -51,7 +51,7 @@ static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_
 bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
-    bool      BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
+    bool      BlockActive = GetScreen()->IsBlockActive();
 
     // Do not start a block command  on context menu.
     DrawPanel->m_CanStartBlock = -1;
@@ -83,11 +83,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         if( DrawStruct && DrawStruct->m_Flags )
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+            ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
         }
         else
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ), cancel_tool_xpm );
+            ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "End Tool" ), cancel_tool_xpm );
         }
         PopMenu->AppendSeparator();
     }
@@ -95,7 +95,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         if( DrawStruct && DrawStruct->m_Flags )
         {
-            ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+            ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
             PopMenu->AppendSeparator();
         }
     }

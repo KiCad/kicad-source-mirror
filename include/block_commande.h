@@ -130,6 +130,19 @@ public:
      * returns true if the current block command is a drag operation.
      */
     bool IsDragging() const { return m_Command == BLOCK_DRAG; }
+
+    /**
+     * Function IsIdle
+     * returns true if there is currently no block operation in progress.
+     */
+    inline bool IsIdle() const { return m_Command == BLOCK_IDLE; }
+
+    /**
+     * Function Clear
+     * clears the block selector by setting the command to idle, the state to no block,
+     * and clears the selected item list.
+     */
+    void Clear();
 };
 
 

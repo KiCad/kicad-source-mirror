@@ -1043,8 +1043,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
     {
-        if( ( screen->m_BlockLocate.m_Command == BLOCK_IDLE )
-           || ( screen->m_BlockLocate.m_State == STATE_NO_BLOCK ) )
+        if( !screen->IsBlockActive() )
         {
             screen->m_BlockLocate.SetOrigin( m_CursorStartPos );
         }
@@ -1138,7 +1137,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // To avoid an unwanted block move command if the mouse is moved while double clicking
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
+        if( !screen->IsBlockActive() )
         {
             if( ForceCloseManageCurseur )
             {

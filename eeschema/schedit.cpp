@@ -124,23 +124,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
          */
         break;
 
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
-            DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
-                                            DrawPanel->m_PanelDefaultCursor ) );
-
-        // Stop the current command (if any) but keep the current tool
-        DrawPanel->UnManageCursor();
-
-        /* Should not be executed, except bug. */
-        if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
-        {
-            screen->m_BlockLocate.m_Command = BLOCK_IDLE;
-            screen->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-            screen->m_BlockLocate.ClearItemsList();
-        }
-        break;
-
     case ID_POPUP_SCH_DELETE_CMP:
     case ID_POPUP_SCH_DELETE:
 
@@ -253,10 +236,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
         DrawPanel->MouseToCursorSchema();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '\\' );
-        break;
-
-    case ID_NO_SELECT_BUTT:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -805,5 +784,26 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
                     DrawStruct->Type() );
         DisplayError( this, msg );
         break;
+    }
+}
+
+
+void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
+{
+    SCH_SCREEN* screen = GetScreen();
+
+    if( screen->IsBlockActive() )
+    {
+        DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
+                                        DrawPanel->m_PanelDefaultCursor ) );
+        screen->ClearBlockCommand();
+
+        // Stop the current command (if any) but keep the current tool
+        DrawPanel->UnManageCursor();
+    }
+    else
+    {
+        // Stop the current command (if any) but keep the current tool
+        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
     }
 }

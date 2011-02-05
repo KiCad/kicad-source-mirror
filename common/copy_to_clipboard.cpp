@@ -30,11 +30,11 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 
     if(  event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
-        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->IsBlockActive() )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
-                        DrawPanel->m_PanelDefaultCursor ) );
+                                            DrawPanel->m_PanelDefaultCursor ) );
 
-        DrawPanel->UnManageCursor(  );
+        DrawPanel->UnManageCursor();
     }
 }
 
@@ -60,7 +60,7 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
     /* scale is the ratio resolution/internal units */
     float   scale = 82.0 / aFrame->m_InternalUnits;
 
-    if( screen->m_BlockLocate.m_Command != BLOCK_IDLE )
+    if( screen->IsBlockActive() )
     {
         DrawBlock = TRUE;
         DrawArea.SetX( screen->m_BlockLocate.GetX() );

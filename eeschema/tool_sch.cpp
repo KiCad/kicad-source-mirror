@@ -148,9 +148,8 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_CANCEL_CURRENT_COMMAND, wxEmptyString,
                          wxBitmap( cursor_xpm ), wxEmptyString, wxITEM_CHECK );
-    m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
 
     m_VToolBar->AddTool( ID_HIERARCHY_PUSH_POP_BUTT, wxEmptyString,
                          wxBitmap( hierarchy_cursor_xpm ),

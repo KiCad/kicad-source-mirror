@@ -393,6 +393,14 @@ public:
     virtual void AddItem( EDA_ITEM* aItem );
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, EDA_ITEM* aItem );
 
+    /**
+     * Function IsBlockActive
+     * returns true if a block command is in progress.
+     */
+    inline bool IsBlockActive() const { return !m_BlockLocate.IsIdle(); }
+
+    void ClearBlockCommand() { m_BlockLocate.Clear(); }
+
 #if defined(DEBUG)
 
     /**

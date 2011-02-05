@@ -31,7 +31,7 @@ static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame
 bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
-    bool BlockActive = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE );
+    bool BlockActive = GetScreen()->IsBlockActive();
 
     if( m_component == NULL )
         return true;

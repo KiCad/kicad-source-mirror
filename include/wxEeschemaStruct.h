@@ -418,6 +418,7 @@ private:
     void            OnOpenLibraryViewer( wxCommandEvent& event );
     void            OnOpenLibraryEditor( wxCommandEvent& event );
     void            OnSetOptions( wxCommandEvent& event );
+    void            OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     /* edition events functions */
     void            OnCopySchematicItemRequest( wxCommandEvent& event );
