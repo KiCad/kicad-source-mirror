@@ -324,6 +324,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     if( g_RootSheet->GetScreen() == NULL )
     {
         g_RootSheet->SetScreen( new SCH_SCREEN() );
+        SetScreen( g_RootSheet->GetScreen() );
     }
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );

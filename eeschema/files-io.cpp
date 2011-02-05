@@ -297,6 +297,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     // load the project.
     g_RootSheet->SetScreen( NULL );
     bool diag = g_RootSheet->Load( this );
+    SetScreen( m_CurrentSheet->LastScreen() );
 
     /* Redraw base screen (ROOT) if necessary. */
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
