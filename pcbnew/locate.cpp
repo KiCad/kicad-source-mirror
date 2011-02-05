@@ -170,6 +170,7 @@ D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
  * @param aPosition Flag bits, tuning the search, see pcbnew.h
  * @param aActiveLayer Layer to test.
  * @param aVisibleOnly Search only the visible layers if true.
+ * @param aIgnoreLocked Ignore locked modules when true.
  * @return MODULE* The best module or NULL if none.
  */
 MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,

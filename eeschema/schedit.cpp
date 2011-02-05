@@ -653,17 +653,19 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ENTER_SHEET:
     {
-        EDA_ITEM* DrawStruct = screen->GetCurItem();
+        EDA_ITEM* item = screen->GetCurItem();
 
-        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
+        if( item && (item->Type() == SCH_SHEET_T) )
         {
-            InstallNextScreen( (SCH_SHEET*) DrawStruct );
+            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            DisplayCurrentSheet();
         }
     }
     break;
 
     case ID_POPUP_SCH_LEAVE_SHEET:
-        InstallPreviousSheet();
+        m_CurrentSheet->Pop();
+        DisplayCurrentSheet();
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
@@ -717,7 +719,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ADD_JUNCTION:
         DrawPanel->MouseToCursorSchema();
-        screen->SetCurItem( CreateNewJunctionStruct( &dc, screen->m_Curseur, true ) );
+        screen->SetCurItem( AddJunction( &dc, screen->m_Curseur, true ) );
         screen->TestDanglingEnds( DrawPanel, &dc );
         screen->SetCurItem( NULL );
         break;

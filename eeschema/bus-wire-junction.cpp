@@ -24,8 +24,6 @@
 #include "sch_sheet.h"
 
 
-/* Routines Locales */
-static void Show_Polyline_in_Ghost( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase );
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer );
 static bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos );
@@ -33,41 +31,6 @@ static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
 SCH_ITEM* s_OldWiresList;
 wxPoint   s_ConnexionStartPoint;
-
-
-/* Replace the wires in screen->GetDrawItems() by s_OldWiresList wires.
- */
-static void RestoreOldWires( SCH_SCREEN* screen )
-{
-    SCH_ITEM* item;
-    SCH_ITEM* next_item;
-
-    for( item = screen->GetDrawItems(); item != NULL; item = next_item )
-    {
-        next_item = item->Next();
-
-        switch( item->Type() )
-        {
-        case SCH_JUNCTION_T:
-        case SCH_LINE_T:
-            screen->RemoveFromDrawList( item );
-            delete item;
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    while( s_OldWiresList )
-    {
-        next_item = s_OldWiresList->Next();
-
-        s_OldWiresList->SetNext( screen->GetDrawItems() );
-        screen->SetDrawItems( s_OldWiresList );
-        s_OldWiresList     = next_item;
-    }
-}
 
 
 /**
@@ -249,7 +212,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         if( oldsegment->m_Start == s_ConnexionStartPoint )
         {
             if( IsJunctionNeeded( this, s_ConnexionStartPoint ) )
-                CreateNewJunctionStruct( DC, s_ConnexionStartPoint );
+                AddJunction( DC, s_ConnexionStartPoint );
         }
     }
 }
@@ -344,15 +307,15 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     if( lastsegment )
     {
         if( IsJunctionNeeded( this, end_point ) )
-            CreateNewJunctionStruct( DC, end_point );
+            AddJunction( DC, end_point );
         else if( IsJunctionNeeded( this, alt_end_point ) )
-            CreateNewJunctionStruct( DC, alt_end_point );
+            AddJunction( DC, alt_end_point );
     }
 
     /* Automatic place of a junction on the start point if necessary because
      * the cleanup can suppress intermediate points by merging wire segments */
     if( IsJunctionNeeded( this, s_ConnexionStartPoint ) )
-        CreateNewJunctionStruct( DC, s_ConnexionStartPoint );
+        AddJunction( DC, s_ConnexionStartPoint );
 
     GetScreen()->TestDanglingEnds( DrawPanel, DC );
 
@@ -431,92 +394,73 @@ static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos )
 }
 
 
-/*  Drawing Polyline phantom at the displacement of the cursor
- */
-static void Show_Polyline_in_Ghost( EDA_DRAW_PANEL* panel, wxDC* DC, bool erase )
-{
-    SCH_POLYLINE* NewPoly = (SCH_POLYLINE*) panel->GetScreen()->GetCurItem();
-    int           color;
-    wxPoint       endpos;
-
-    endpos = panel->GetScreen()->m_Curseur;
-    color  = ReturnLayerColor( NewPoly->GetLayer() );
-
-    GRSetDrawMode( DC, g_XorMode );
-
-    int idx = NewPoly->GetCornerCount() - 1;
-
-    if( g_HVLines )
-    {
-        /* Coerce the line to vertical or horizontal one: */
-        if( ABS( endpos.x - NewPoly->m_PolyPoints[idx].x ) <
-           ABS( endpos.y - NewPoly->m_PolyPoints[idx].y ) )
-            endpos.x = NewPoly->m_PolyPoints[idx].x;
-        else
-            endpos.y = NewPoly->m_PolyPoints[idx].y;
-    }
-
-    if( erase )
-        NewPoly->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, color );
-
-    NewPoly->m_PolyPoints[idx] = endpos;
-    NewPoly->Draw( panel, DC, wxPoint( 0, 0 ), g_XorMode, color );
-}
-
-
 /*
  *  Erase the last trace or the element at the current mouse position.
  */
 void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 {
+    SCH_SCREEN* screen = GetScreen();
+
     m_itemToRepeat = NULL;
 
-    if( ( GetScreen()->GetCurItem() == NULL )
-       || ( ( GetScreen()->GetCurItem()->m_Flags & IS_NEW ) == 0 ) )
-    {
+    if( ( screen->GetCurItem() == NULL ) || !screen->GetCurItem()->IsNew() )
         return;
-    }
 
     /* Cancel trace in progress */
-    if( GetScreen()->GetCurItem()->Type() == SCH_POLYLINE_T )
+    if( screen->GetCurItem()->Type() == SCH_POLYLINE_T )
     {
-        Show_Polyline_in_Ghost( DrawPanel, DC, false );
+        SCH_POLYLINE* polyLine = (SCH_POLYLINE*) screen->GetCurItem();
+        wxPoint       endpos;
+
+        endpos = screen->m_Curseur;
+
+        int idx = polyLine->GetCornerCount() - 1;
+
+        if( g_HVLines )
+        {
+            /* Coerce the line to vertical or horizontal one: */
+            if( ABS( endpos.x - polyLine->m_PolyPoints[idx].x ) <
+                ABS( endpos.y - polyLine->m_PolyPoints[idx].y ) )
+                endpos.x = polyLine->m_PolyPoints[idx].x;
+            else
+                endpos.y = polyLine->m_PolyPoints[idx].y;
+        }
+
+        polyLine->m_PolyPoints[idx] = endpos;
+        polyLine->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     }
     else
     {
         DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
     }
 
-    EraseStruct( (SCH_ITEM*) GetScreen()->GetCurItem(), GetScreen() );
+    screen->RemoveFromDrawList( screen->GetCurItem() );
     DrawPanel->ManageCurseur = NULL;
-    GetScreen()->SetCurItem( NULL );
+    screen->SetCurItem( NULL );
 }
 
 
 /* Routine to create new connection struct.
  */
-SCH_JUNCTION* SCH_EDIT_FRAME::CreateNewJunctionStruct( wxDC*          DC,
-                                                       const wxPoint& pos,
-                                                       bool           PutInUndoList )
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
+                                           bool aPutInUndoList )
 {
-    SCH_JUNCTION* NewJunction;
+    SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
 
-    NewJunction = new SCH_JUNCTION( pos );
+    m_itemToRepeat = junction;
 
-    m_itemToRepeat = NewJunction;
+    DrawPanel->CursorOff( aDC );     // Erase schematic cursor
+    junction->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    DrawPanel->CursorOn( aDC );      // Display schematic cursor
 
-    DrawPanel->CursorOff( DC );     // Erase schematic cursor
-    NewJunction->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CursorOn( DC );      // Display schematic cursor
-
-    NewJunction->SetNext( GetScreen()->GetDrawItems() );
-    GetScreen()->SetDrawItems( NewJunction );
+    junction->SetNext( GetScreen()->GetDrawItems() );
+    GetScreen()->SetDrawItems( junction );
     OnModify();
 
-    if( PutInUndoList )
-        SaveCopyInUndoList( NewJunction, UR_NEW );
+    if( aPutInUndoList )
+        SaveCopyInUndoList( junction, UR_NEW );
 
-    return NewJunction;
+    return junction;
 }
 
 
@@ -543,15 +487,15 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
  */
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    SCH_SCREEN* Screen = (SCH_SCREEN*) Panel->GetScreen();
+    SCH_SCREEN* screen = (SCH_SCREEN*) Panel->GetScreen();
 
-    if( Screen->GetCurItem() )
+    if( screen->GetCurItem() )
     {
         Panel->ManageCurseur = NULL;
         Panel->ForceCloseManageCurseur = NULL;
-        EraseStruct( (SCH_ITEM*) Screen->GetCurItem(), (SCH_SCREEN*) Screen );
-        Screen->SetCurItem( NULL );
-        RestoreOldWires( Screen );
+        screen->RemoveFromDrawList( (SCH_ITEM*) screen->GetCurItem() );
+        screen->SetCurItem( NULL );
+        screen->ReplaceWires( s_OldWiresList );
         Panel->Refresh();
     }
     else
@@ -562,7 +506,7 @@ static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
     /* Clear m_Flags which is used in edit functions: */
-    SCH_ITEM* item = Screen->GetDrawItems();
+    SCH_ITEM* item = screen->GetDrawItems();
 
     while( item )
     {
@@ -596,13 +540,8 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 
     m_itemToRepeat->Move( wxPoint( g_RepeatStep.GetWidth(), g_RepeatStep.GetHeight() ) );
 
-    if( m_itemToRepeat->Type() == SCH_TEXT_T
-        || m_itemToRepeat->Type() == SCH_LABEL_T
-        || m_itemToRepeat->Type() == SCH_HIERARCHICAL_LABEL_T
-        || m_itemToRepeat->Type() == SCH_GLOBAL_LABEL_T )
-    {
+    if( m_itemToRepeat->CanIncrementLabel() )
         ( (SCH_TEXT*) m_itemToRepeat )->IncrementLabel();
-    }
 
     if( m_itemToRepeat )
     {

@@ -68,7 +68,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
 
-    if( GetBaseScreen()->IsModify()
+    if( GetScreen()->IsModify()
         && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
         return;
 
@@ -84,7 +84,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     if( i == 0 )
         return;
 
-    GetBaseScreen()->ClrModify();
+    GetScreen()->ClrModify();
     m_lastDrawItem = m_drawItem = NULL;
 
     // Delete previous library component, if any
@@ -179,7 +179,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
     if( m_component->HasConversion() )
         m_showDeMorgan = true;
 
-    GetBaseScreen()->ClrModify();
+    GetScreen()->ClrModify();
     DisplayLibInfos();
     UpdateAliasSelectList();
     UpdatePartSelectList();
@@ -586,7 +586,7 @@ void LIB_EDIT_FRAME::SaveOnePartInMemory()
         return;
     }
 
-    GetBaseScreen()->ClrModify();
+    GetScreen()->ClrModify();
 
     oldComponent = m_library->FindComponent( m_component->GetName() );
 

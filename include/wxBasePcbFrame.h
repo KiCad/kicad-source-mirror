@@ -12,6 +12,7 @@
 #include "wxstruct.h"
 #include "base_struct.h"
 #include "richio.h"
+#include "class_pcb_screen.h"
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -19,7 +20,6 @@
 
 
 /*  Forward declarations of classes. */
-class PCB_SCREEN;
 class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
 class WinEDA_PcbFrame;
@@ -108,12 +108,10 @@ public:
     virtual void    SetToolID( int aId, int aCursor, const wxString& aToolMsg );
     virtual void    UpdateStatusBar();
 
-    PCB_SCREEN*     GetScreen() const
+    virtual PCB_SCREEN* GetScreen() const
     {
-        return (PCB_SCREEN*) EDA_DRAW_FRAME::GetBaseScreen();
+        return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
-
-    BASE_SCREEN*    GetBaseScreen() const;
 
     int             BestZoom();
 

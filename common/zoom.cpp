@@ -21,7 +21,7 @@
 void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
 {
 
-    PutOnGrid( &(GetBaseScreen()->m_Curseur) );
+    PutOnGrid( &(GetScreen()->m_Curseur) );
     AdjustScrollBars();
 
 #if !defined(__WXMAC__)
@@ -53,7 +53,7 @@ void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
 {
     wxCHECK_RET( aCoord != NULL, wxT( "Cannot pull NULL coordinate pointer on grid." ) );
 
-    *aCoord = GetBaseScreen()->GetNearestGridPosition( *aCoord, aGridSize );
+    *aCoord = GetScreen()->GetNearestGridPosition( *aCoord, aGridSize );
 }
 
 
@@ -62,7 +62,7 @@ void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
  */
 void EDA_DRAW_FRAME::Zoom_Automatique( bool move_mouse_cursor )
 {
-    GetBaseScreen()->SetZoom( BestZoom() ); // Set the best zoom
+    GetScreen()->SetZoom( BestZoom() ); // Set the best zoom
     RedrawScreen( move_mouse_cursor );     // Set the best centering and refresh the screen
 }
 
@@ -85,8 +85,8 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_Rect& Rect )
     bestscale = (double) Rect.GetSize().y / size.y;
     bestscale = MAX( bestscale, scalex );
 
-    GetBaseScreen()->SetScalingFactor( bestscale );
-    GetBaseScreen()->m_Curseur = Rect.Centre();
+    GetScreen()->SetScalingFactor( bestscale );
+    GetScreen()->m_Curseur = Rect.Centre();
     RedrawScreen( TRUE );
 }
 
@@ -103,7 +103,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     int          i;
     int          id = event.GetId();
     bool         zoom_at_cursor = false;
-    BASE_SCREEN* screen = GetBaseScreen();
+    BASE_SCREEN* screen = GetScreen();
 
     switch( id )
     {

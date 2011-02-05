@@ -183,7 +183,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
-    SetBaseScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;
     LoadSettings();
 

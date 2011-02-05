@@ -154,7 +154,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
 
     SetPenWidth();
 
-    BASE_SCREEN* screen = m_Parent->GetBaseScreen();
+    PCB_SCREEN* screen = m_Parent->GetScreen();
 
     if( aPrintAll )
         m_PrintMaskLayer = 0xFFFFFFFF;

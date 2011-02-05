@@ -243,16 +243,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-    SAFE_DELETE( g_RootSheet );
+    SetScreen( NULL );
     SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
+    SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_findReplaceData );
     CMP_LIBRARY::RemoveAllLibraries();
-}
-
-
-BASE_SCREEN* SCH_EDIT_FRAME::GetBaseScreen() const
-{
-    return GetScreen();
 }
 
 
@@ -336,11 +331,11 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
-    if( GetBaseScreen() == NULL )
-        SetBaseScreen( new SCH_SCREEN() );
+    if( GetScreen() == NULL )
+        SetScreen( new SCH_SCREEN() );
 
-    GetBaseScreen()->SetZoom( 4 * GetBaseScreen()->m_ZoomScalar );
-    GetBaseScreen()->m_UndoRedoCountMax = 10;
+    GetScreen()->SetZoom( 4 * GetScreen()->m_ZoomScalar );
+    GetScreen()->m_UndoRedoCountMax = 10;
 }
 
 

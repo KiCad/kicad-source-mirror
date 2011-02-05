@@ -146,6 +146,13 @@ public:
     SCH_ITEM* ExtractWires( bool aCreateCopy );
 
     /**
+     * Function ReplaceWires
+     * replaces all of the wires and junction in the screen with \a aWireList.
+     * @param aWireList List of wire to replace the existing wires with.
+     */
+    void ReplaceWires( SCH_ITEM* aWireList );
+
+    /**
      * Function BreakSegment
      * checks every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.

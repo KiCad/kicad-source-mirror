@@ -10,11 +10,11 @@
 #include "class_undoredo_container.h"
 #include "template_fieldnames.h"
 #include "block_commande.h"
+#include "class_sch_screen.h"
 
 
 class LIB_EDIT_FRAME;
 class LIB_VIEW_FRAME;
-class SCH_SCREEN;
 class DRAWSEGMENT;
 class DrawPickedStruct;
 class SCH_ITEM;
@@ -194,8 +194,6 @@ public:
 
     SCH_SCREEN*      GetScreen() const;
 
-    BASE_SCREEN*     GetBaseScreen() const;
-
     virtual wxString GetScreenDesc();
 
     void             InstallConfigFrame( wxCommandEvent& event );
@@ -305,12 +303,15 @@ public:
      *      for each sheet annotation starts from sheet number * 100
      *      ( the first sheet uses 100 to 199, the second 200 to 299 ... )
      */
-    void AnnotateComponents(bool aAnnotateSchematic, int aSortOption,
-                            int aAlgoOption,
-                            bool aResetAnnotation, bool aRepairsTimestamps );
+    void AnnotateComponents( bool aAnnotateSchematic, int aSortOption, int aAlgoOption,
+                             bool aResetAnnotation, bool aRepairsTimestamps );
+
     // Functions used for hierarchy handling
-    void         InstallPreviousSheet();
-    void         InstallNextScreen( SCH_SHEET* Sheet );
+    /**
+     * Function DisplayCurrentSheet
+     * draws the current sheet on the display.
+     */
+    void         DisplayCurrentSheet();
 
     /**
      * Function GetUniqueFilenameForCurrentSheet
@@ -457,9 +458,7 @@ private:
     SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
     // Junction
-    SCH_JUNCTION*   CreateNewJunctionStruct( wxDC*          DC,
-                                             const wxPoint& pos,
-                                             bool           PutInUndoList = FALSE );
+    SCH_JUNCTION*   AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
 
     // Text ,label, glabel
     SCH_TEXT*       CreateNewText( wxDC* DC, int type );

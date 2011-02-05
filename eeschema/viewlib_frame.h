@@ -67,7 +67,7 @@ public:
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     void GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 

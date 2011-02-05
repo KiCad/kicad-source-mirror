@@ -102,8 +102,7 @@ private:
     void Plot_1_Page_HPGL( const wxString& FileName,
                            SCH_SCREEN* screen, Ki_PageDescr* sheet,
                            wxPoint& offset, double plot_scale );
-    void ReturnSheetDims( BASE_SCREEN* screen, wxSize& SheetSize,
-                          wxPoint&    SheetOffset );
+    void ReturnSheetDims( SCH_SCREEN* screen, wxSize& SheetSize, wxPoint& SheetOffset );
 };
 /* static members (static to remember last state): */
 PageFormatReq DIALOG_PLOT_SCHEMATIC_HPGL:: m_pageSizeSelect = PAGE_DEFAULT;
@@ -262,14 +261,14 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::HPGL_Plot( bool aPlotAll )
 /* Function calculates the offsets and dimensions of any trace of the
  * selected sheet
  */
-void DIALOG_PLOT_SCHEMATIC_HPGL::ReturnSheetDims( BASE_SCREEN* screen,
-                                                  wxSize&      SheetSize,
-                                                  wxPoint&     SheetOffset )
+void DIALOG_PLOT_SCHEMATIC_HPGL::ReturnSheetDims( SCH_SCREEN* screen,
+                                                  wxSize&     SheetSize,
+                                                  wxPoint&    SheetOffset )
 {
     Ki_PageDescr* PlotSheet;
 
     if( screen == NULL )
-        screen = m_Parent->GetBaseScreen();
+        screen = m_Parent->GetScreen();
 
     PlotSheet = screen->m_CurrentSheetDesc;
 

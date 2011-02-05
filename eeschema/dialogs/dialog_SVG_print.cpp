@@ -99,8 +99,8 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     g_DrawDefaultLineThickness =
         ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    BASE_SCREEN*    screen     = m_Parent->GetBaseScreen();
-    BASE_SCREEN*    oldscreen  = screen;
+    SCH_SCREEN* screen     = (SCH_SCREEN*) m_Parent->GetScreen();
+    SCH_SCREEN* oldscreen  = screen;
 
     if( aPrintAll && m_Parent->m_Ident == SCHEMATIC_FRAME )
     {

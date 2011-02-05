@@ -242,13 +242,13 @@ protected:
     int          m_GridColor;               // Grid color
 
 private:
-    BASE_SCREEN* m_CurrentScreen;           ///< current used SCREEN
+    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
     bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
 
 protected:
-    void            SetBaseScreen( BASE_SCREEN* aScreen )
+    void SetScreen( BASE_SCREEN* aScreen )
     {
-        m_CurrentScreen = aScreen;
+        m_currentScreen = aScreen;
     }
 
 public:
@@ -266,7 +266,7 @@ public:
      * is virtual and returns a pointer to a BASE_SCREEN or one of its
      * derivatives.  It may be overloaded by derived classes.
      */
-    virtual BASE_SCREEN* GetBaseScreen() const { return m_CurrentScreen; }
+    virtual BASE_SCREEN* GetScreen() const { return m_currentScreen; }
 
     void             OnMenuOpen( wxMenuEvent& event );
     void             OnMouseEvent( wxMouseEvent& event );

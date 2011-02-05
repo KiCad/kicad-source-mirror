@@ -65,7 +65,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype,
 
     DrawPanel             = NULL;
     MsgPanel              = NULL;
-    m_CurrentScreen       = NULL;
+    m_currentScreen       = NULL;
     m_ID_current_state    = 0;
     m_ID_last_state       = 0;
     m_HTOOL_current_state = 0;
@@ -121,8 +121,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype,
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
-    if( m_CurrentScreen != NULL )
-        delete m_CurrentScreen;
+    SAFE_DELETE( m_currentScreen );
 
     m_auimgr.UnInit();
 }
@@ -246,7 +245,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         }
     }
 
-    BASE_SCREEN* screen = GetBaseScreen();
+    BASE_SCREEN* screen = GetScreen();
 
     if( screen->GetGridId() == id )
         return;
@@ -288,13 +287,13 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     else
     {
         id--;
-        int selectedZoom = GetBaseScreen()->m_ZoomList[id];
+        int selectedZoom = GetScreen()->m_ZoomList[id];
 
-        if( GetBaseScreen()->GetZoom() == selectedZoom )
+        if( GetScreen()->GetZoom() == selectedZoom )
             return;
 
-        GetBaseScreen()->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
-        GetBaseScreen()->SetZoom( selectedZoom );
+        GetScreen()->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
+        GetScreen()->SetZoom( selectedZoom );
         RedrawScreen( false );
     }
 }
@@ -303,7 +302,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 /* Return the current zoom level */
 int EDA_DRAW_FRAME::GetZoom(void)
 {
-    return GetBaseScreen()->GetZoom();
+    return GetScreen()->GetZoom();
 }
 
 
@@ -455,8 +454,8 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition )
 {
     wxPoint pos = aPosition;
 
-    if( m_CurrentScreen != NULL && m_snapToGrid )
-        pos = m_CurrentScreen->GetNearestGridPosition( aPosition );
+    if( m_currentScreen != NULL && m_snapToGrid )
+        pos = m_currentScreen->GetNearestGridPosition( aPosition );
 
     return pos;
 }
@@ -470,7 +469,7 @@ int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
 
 void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
-    GetBaseScreen()->m_BlockLocate.ClearItemsList();
+    GetScreen()->m_BlockLocate.ClearItemsList();
     DrawPanel->ManageCurseur = NULL;
 }
 
@@ -490,7 +489,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars()
 {
     int     unitsX, unitsY, posX, posY;
     wxSize  drawingSize, clientSize;
-    BASE_SCREEN* screen = GetBaseScreen();
+    BASE_SCREEN* screen = GetScreen();
     bool noRefresh = true;
 
     if( screen == NULL || DrawPanel == NULL )
@@ -627,7 +626,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;
     int             dx, dy;
-    BASE_SCREEN*    screen = GetBaseScreen();
+    BASE_SCREEN*    screen = GetScreen();
 
     if( !screen )
         return;

@@ -176,7 +176,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     wxArrayString units;
     GRIDS grid_list;
 
-    GetBaseScreen()->GetGrids( grid_list );
+    GetScreen()->GetGrids( grid_list );
 
     DIALOG_EESCHEMA_OPTIONS dlg( this );
 
@@ -184,7 +184,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     units.Add( GetUnitsLabel( MILLIMETRES ) );
 
     dlg.SetUnits( units, g_UserUnit );
-    dlg.SetGridSizes( grid_list, GetBaseScreen()->GetGridId() );
+    dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
     dlg.SetLineWidth( g_DrawDefaultLineThickness );
     dlg.SetTextSize( g_DefaultTextLabelSize );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
@@ -213,7 +213,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     g_UserUnit = (UserUnitType)dlg.GetUnitsSelection();
 
-    GetBaseScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
+    GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 
     g_DrawDefaultLineThickness = dlg.GetLineWidth();
     g_DefaultTextLabelSize = dlg.GetTextSize();
@@ -384,7 +384,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRer
         m_ComponentLibFiles.Add( wxT( "power" ) );
 
     LoadLibraries();
-    GetBaseScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     return IsRead;
 }

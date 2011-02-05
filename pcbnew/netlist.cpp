@@ -142,7 +142,7 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
  * only the netlist will be used
  *
  *  the format of the netlist is something like:
- # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
+ * \# EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
  *  (
  *  ( 40C08647 $noname R20 4,7K {Lib=R}
  *  (    1 VCC )
@@ -153,7 +153,7 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
  *  (    2 MODA_1 )
  *  )
  *  }
- * #End
+ * \#End
  */
 bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
                                       const wxString&  aCmpFullFileName,

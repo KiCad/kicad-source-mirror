@@ -99,7 +99,7 @@ public:
     int         BestZoom();         // Returns the best zoom
     void        OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) GetBaseScreen(); }
+    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 

@@ -19,8 +19,6 @@
 #include "wx/treectrl.h"
 
 
-static bool UpdateScreenFromSheet( SCH_EDIT_FRAME* frame );
-
 enum
 {
     ID_TREECTRL_HIERARCHY = 1600
@@ -60,8 +58,7 @@ IMPLEMENT_DYNAMIC_CLASS( WinEDA_Tree, wxTreeCtrl )
 
 
 WinEDA_Tree::WinEDA_Tree( WinEDA_HierFrame* parent ) :
-    wxTreeCtrl( (wxWindow*)parent, ID_TREECTRL_HIERARCHY,
-                wxDefaultPosition, wxDefaultSize,
+    wxTreeCtrl( (wxWindow*)parent, ID_TREECTRL_HIERARCHY, wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
 {
     m_Parent = parent;
@@ -103,8 +100,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE( WinEDA_HierFrame, wxDialog )
-    EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY,
-                             WinEDA_HierFrame::OnSelect )
+    EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY, WinEDA_HierFrame::OnSelect )
 END_EVENT_TABLE()
 
 
@@ -179,8 +175,7 @@ void WinEDA_HierFrame::OnQuit( wxCommandEvent& event )
  * Schematic
  * This routine is re-entrant!
  */
-void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
-                                        wxTreeItemId*  previousmenu )
+void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  previousmenu )
 
 {
     wxTreeItemId menu;
@@ -194,11 +189,13 @@ void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
             DisplayError( this, msg );
             m_nbsheets++;
         }
+
         return;
     }
 
     maxposx += m_Tree->GetIndent();
     SCH_ITEM* schitem = list->LastDrawList();
+
     while( schitem && m_nbsheets < NB_MAX_SHEET )
     {
         if( schitem->Type() == SCH_SHEET_T )
@@ -209,6 +206,7 @@ void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
             list->Push( sheet );
             m_Tree->SetItemData( menu, new TreeItemData( *list ) );
             int ll = m_Tree->GetItemText( menu ).Len();
+
 #ifdef __WINDOWS__
             ll *= 9;    //  * char width
 #else
@@ -217,15 +215,18 @@ void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list,
             ll += maxposx + 20;
             m_TreeSize.x  = MAX( m_TreeSize.x, ll );
             m_TreeSize.y += 1;
+
             if( *list == *( m_Parent->GetSheet() ) )
             {
                 m_Tree->EnsureVisible( menu );
                 m_Tree->SelectItem( menu );
             }
+
             BuildSheetsTree( list, &menu );
             m_Tree->Expand( menu );
             list->Pop();
         }
+
         schitem = schitem->Next();
     }
 
@@ -241,89 +242,35 @@ void WinEDA_HierFrame::OnSelect( wxTreeEvent& event )
 {
     wxTreeItemId ItemSel = m_Tree->GetSelection();
 
-    *(m_Parent->m_CurrentSheet) =
-        ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath;
-    UpdateScreenFromSheet( m_Parent );
-    Close( TRUE );
+    SCH_SHEET* sheet = ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath.Last();
+    m_Parent->m_CurrentSheet->Push( sheet );
+    m_Parent->DisplayCurrentSheet();
+    Close( true );
 }
 
 
-/* Set the current screen to display the parent sheet of the current
- * displayed sheet
- */
-void SCH_EDIT_FRAME::InstallPreviousSheet()
+void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
-    if( m_CurrentSheet->Last() == g_RootSheet )
-        return;
-
     m_itemToRepeat = NULL;
     ClearMsgPanel();
 
-    //make a copy for testing purposes.
-    m_CurrentSheet->Pop();
+    SCH_SCREEN* screen = m_CurrentSheet->LastScreen();
 
-    if( m_CurrentSheet->LastScreen() == NULL )
-    {
-        DisplayError( this, wxT( "InstallPreviousScreen() Error: Sheet not found" ) );
-        return;
-    }
-
-    UpdateScreenFromSheet( this );
-}
-
-
-/* Routine installation of the screen corresponding to the symbol edge Sheet
- * Be careful here because the SCH_SHEETs within the GetDrawItems()
- * don't actually have a valid m_AssociatedScreen (on purpose -- you need the
- * m_SubSheet hierarchy to maintain path info (well, this is but one way to
- * maintain path info..)
- */
-void SCH_EDIT_FRAME::InstallNextScreen( SCH_SHEET* Sheet )
-{
-    if( Sheet == NULL )
-    {
-        DisplayError( this, wxT( "InstallNextScreen() error" ) ); return;
-    }
-
-    m_CurrentSheet->Push( Sheet );
-    m_itemToRepeat = NULL;
-    ClearMsgPanel();
-    UpdateScreenFromSheet( this );
-}
-
-
-/* Find and install the screen on the sheet symbol Sheet.
- * If Sheet == NULL installation of the screen base (Root).
- */
-static bool UpdateScreenFromSheet( SCH_EDIT_FRAME* frame )
-{
-    if( !frame->m_CurrentSheet->LastScreen() )
-    {
-        DisplayError( frame, wxT( "Screen not found for this sheet" ) );
-        return false;
-    }
-
-    SCH_SCREEN* screen = frame->m_CurrentSheet->LastScreen();
-
-    // Reset display settings of the new screen
-    // Assumes m_CurrentSheet has already been updated.
-    frame->ClearMsgPanel();
+    SetScreen( screen );
 
     // update the References
-    frame->m_CurrentSheet->UpdateAllScreenReferences();
-    frame->SetSheetNumberAndCount();
-    frame->DrawPanel->m_CanStartBlock = -1;
+    m_CurrentSheet->UpdateAllScreenReferences();
+    SetSheetNumberAndCount();
+    DrawPanel->m_CanStartBlock = -1;
 
     if( screen->m_FirstRedraw )
     {
         screen->m_FirstRedraw = false;
-        frame->Zoom_Automatique( true );
+        Zoom_Automatique( true );
     }
     else
     {
-        frame->DrawPanel->MouseToCursorSchema();
-        frame->RedrawScreen( true );
+        DrawPanel->MouseToCursorSchema();
+        RedrawScreen( true );
     }
-
-    return true;
 }

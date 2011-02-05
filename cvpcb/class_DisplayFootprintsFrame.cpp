@@ -65,7 +65,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
     SetTitle( title );
 
     SetBoard( new BOARD( NULL, this ) );
-    SetBaseScreen( new PCB_SCREEN() );
+    SetScreen( new PCB_SCREEN() );
 
     LoadSettings();
     // Initialize grid id to a default value if not found in config or bad:
@@ -126,9 +126,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( WinEDA_CvpcbFrame* father,
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetBoard();
-
-    delete GetBaseScreen();
-    SetBaseScreen( 0 );
+    delete GetScreen();
+    SetScreen( NULL );
 
     ( (WinEDA_CvpcbFrame*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
 }

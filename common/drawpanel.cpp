@@ -110,7 +110,7 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 {
     EDA_DRAW_FRAME* parentFrame = m_Parent;
 
-    return parentFrame->GetBaseScreen();
+    return parentFrame->GetScreen();
 }
 
 

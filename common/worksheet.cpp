@@ -1576,7 +1576,7 @@ wxString EDA_DRAW_FRAME::GetScreenDesc()
 {
     wxString msg;
 
-    msg << GetBaseScreen()->m_ScreenNumber << wxT( "/" )
-        << GetBaseScreen()->m_NumberOfScreen;
+    msg << GetScreen()->m_ScreenNumber << wxT( "/" )
+        << GetScreen()->m_NumberOfScreen;
     return msg;
 }

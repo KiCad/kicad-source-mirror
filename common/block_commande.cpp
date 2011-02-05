@@ -166,17 +166,16 @@ void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
  */
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpos )
 {
-    BLOCK_SELECTOR* Block = &GetBaseScreen()->m_BlockLocate;
+    BLOCK_SELECTOR* Block = &GetScreen()->m_BlockLocate;
 
-    if( ( Block->m_Command != BLOCK_IDLE )
-       || ( Block->m_State != STATE_NO_BLOCK ) )
-        return FALSE;
+    if( ( Block->m_Command != BLOCK_IDLE ) || ( Block->m_State != STATE_NO_BLOCK ) )
+        return false;
 
     Block->m_Flags   = 0;
     Block->m_Command = (CmdBlockType) ReturnBlockCommand( key );
 
     if( Block->m_Command == 0 )
-        return FALSE;
+        return false;
 
     switch( Block->m_Command )
     {
@@ -205,19 +204,19 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         if( Block->m_ItemsSelection.GetCount() == 0 )      /* No data to paste */
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
-            GetBaseScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
             DrawPanel->ManageCurseur = NULL;
-            return TRUE;
+            return true;
         }
         if( DrawPanel->ManageCurseur == NULL )
         {
             Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
                           wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: ManageCurseur NULL" ) );
-            return TRUE;
+            return true;
         }
         Block->m_State = STATE_BLOCK_MOVE;
-        DrawPanel->ManageCurseur( DrawPanel, DC, startpos, FALSE );
+        DrawPanel->ManageCurseur( DrawPanel, DC, startpos, false );
         break;
 
     default:
@@ -231,7 +230,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
     }
 
     Block->SetMessageBlock( this );
-    return TRUE;
+    return true;
 }
 
 

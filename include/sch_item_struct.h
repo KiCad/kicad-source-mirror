@@ -315,6 +315,8 @@ public:
         return doHitTest( aRect, aContained, aAccuracy );
     }
 
+    virtual bool CanIncrementLabel() const { return false; }
+
     /**
      * @note - The DoXXX() functions below are used to enforce the interface while retaining
      *         the ability of change the implementation behavior of derived classes.  See

@@ -175,7 +175,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
 
     if( s_screenModule == NULL )
         s_screenModule = new PCB_SCREEN();
-    SetBaseScreen( s_screenModule );
+    SetScreen( s_screenModule );
     GetBoard()->SetBoardDesignSettings( &s_ModuleEditorDesignSetting );
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
@@ -241,10 +241,9 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
      * here, because if we reopen the Footprint editor, we expect to find
      * the last edited item
      */
-    SetBaseScreen( NULL );  /* Do not delete (by the destructor of
-                             * EDA_DRAW_FRAME) the PCB_SCREEN handling
-                             * g_ModuleEditor_Pcb
-                             */
+    SetScreen( NULL );  /* Do not delete (by the destructor of EDA_DRAW_FRAME) the
+                         * PCB_SCREEN handling g_ModuleEditor_Pcb
+                         */
 
     WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
     frame->m_ModuleEditFrame = NULL;

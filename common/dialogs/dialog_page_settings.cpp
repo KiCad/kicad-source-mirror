@@ -50,7 +50,7 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ):
     DIALOG_PAGES_SETTINGS_BASE( parent )
 {
     m_Parent = parent;
-    m_Screen = m_Parent->GetBaseScreen();
+    m_Screen = m_Parent->GetScreen();
     m_Modified = 0;
     m_SelectedSheet = NULL;
     m_CurrentSelection = 0;
@@ -276,10 +276,12 @@ void DIALOG_PAGES_SETTINGS::SearchPageSizeSelection()
     int ii;
 
     m_CurrentSelection = NB_ITEMS - 1;
+
     for( ii = 0; ii < NB_ITEMS; ii++ )
     {
         sheet = SheetList[ii];
-        if( m_Parent->GetBaseScreen()->m_CurrentSheetDesc == sheet )
+
+        if( m_Parent->GetScreen()->m_CurrentSheetDesc == sheet )
             m_CurrentSelection = ii;
     }
 }

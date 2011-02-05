@@ -104,7 +104,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     if( m_Semaphore )
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
 
-    SetBaseScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
 

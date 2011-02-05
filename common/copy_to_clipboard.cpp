@@ -30,7 +30,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 
     if(  event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
-        if( GetBaseScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
             DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
                         DrawPanel->m_PanelDefaultCursor ) );
 

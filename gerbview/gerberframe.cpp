@@ -151,7 +151,7 @@ END_EVENT_TABLE() WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father
     SetIcon( wxICON( icon_gerbview ) );
 #endif
 
-    SetBaseScreen( ScreenPcb );
+    SetScreen( ScreenPcb );
 
     SetBoard( new BOARD( NULL, this ) );
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
@@ -233,7 +233,7 @@ END_EVENT_TABLE() WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father
 
 WinEDA_GerberFrame::~WinEDA_GerberFrame()
 {
-    SetBaseScreen( ScreenPcb );
+    SetScreen( ScreenPcb );
     extern PARAM_CFG_BASE* ParamCfgList[];
     wxGetApp().SaveCurrentSetupValues( ParamCfgList );
 }

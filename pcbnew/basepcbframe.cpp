@@ -76,16 +76,11 @@ WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame()
 }
 
 
-BASE_SCREEN* WinEDA_BasePcbFrame::GetBaseScreen() const
-{
-    return GetScreen();
-}
-
-
 void WinEDA_BasePcbFrame::SetBoard( BOARD* aBoard )
 {
     if( m_Pcb != g_ModuleEditor_Pcb )
         delete m_Pcb;
+
     m_Pcb = aBoard;
 }
 
@@ -320,12 +315,13 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
 
     if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
     {
-        BASE_SCREEN*    screen = GetBaseScreen();
+        PCB_SCREEN* screen = GetScreen();
+
         if( !screen )
             return;
 
-        wxString        Line;
-        double          theta, ro;
+        wxString     Line;
+        double       theta, ro;
 
         int dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
         int dy = screen->m_Curseur.y - screen->m_O_Curseur.y;

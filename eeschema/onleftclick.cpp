@@ -96,9 +96,19 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         item = LocateAndShowItem( aPosition );
 
         if( item && ( item->Type() == SCH_SHEET_T ) )
-            InstallNextScreen( (SCH_SHEET*) item );
+        {
+            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            DisplayCurrentSheet();
+        }
         else
-            InstallPreviousSheet();
+        {
+            wxCHECK_RET( m_CurrentSheet->Last() != g_RootSheet,
+                         wxT( "Cannot leave root sheet.  Bad Programmer!" ) );
+
+            m_CurrentSheet->Pop();
+            DisplayCurrentSheet();
+        }
+
         break;
 
     case ID_NOCONN_BUTT:
@@ -121,7 +131,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_JUNCTION_BUTT:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            m_itemToRepeat = CreateNewJunctionStruct( aDC, GetScreen()->m_Curseur, true );
+            m_itemToRepeat = AddJunction( aDC, gridPosition, true );
             GetScreen()->SetCurItem( m_itemToRepeat );
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -336,7 +346,8 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         switch( item->Type() )
         {
         case SCH_SHEET_T:
-            InstallNextScreen( (SCH_SHEET*) item );
+            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            DisplayCurrentSheet();
             break;
 
         case SCH_COMPONENT_T:

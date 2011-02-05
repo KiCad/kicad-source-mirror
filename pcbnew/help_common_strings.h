@@ -9,7 +9,7 @@
  * at run time, on the fly.
  * So they cannot be static.
  *
- * Therefore they are defined by #define, used inside menu constructors
+ * Therefore they are defined by \#define, used inside menu constructors
  */
 
 #define HELP_UNDO _( "Undo last edition" )

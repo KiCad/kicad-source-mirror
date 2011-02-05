@@ -137,6 +137,7 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
                 DrawList->SetNext( DrawList->Next()->Next() );
                 break;
             }
+
             DrawList = DrawList->Next();
         }
     }
@@ -207,6 +208,39 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
     }
 
     return List;
+}
+
+
+void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
+{
+    SCH_ITEM* item;
+    SCH_ITEM* next_item;
+
+    for( item = GetDrawItems(); item != NULL; item = next_item )
+    {
+        next_item = item->Next();
+
+        switch( item->Type() )
+        {
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
+            RemoveFromDrawList( item );
+            delete item;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    while( aWireList )
+    {
+        next_item = aWireList->Next();
+
+        aWireList->SetNext( GetDrawItems() );
+        SetDrawItems( aWireList );
+        aWireList = next_item;
+    }
 }
 
 

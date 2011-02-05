@@ -200,6 +200,8 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual bool CanIncrementLabel() const { return true; }
+
 #if defined(DEBUG)
     void         Show( int nestLevel, std::ostream& os );
 #endif

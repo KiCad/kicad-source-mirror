@@ -119,7 +119,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     double       userscale;
     double       DrawZoom = 1;
     wxDC*        dc = GetDC();
-    BASE_SCREEN* screen = m_Parent->GetBaseScreen();
+    PCB_SCREEN*  screen = (PCB_SCREEN*) m_Parent->GetScreen();
     bool         printMirror = m_PrintParams.m_PrintMirror;
 
     wxBusyCursor dummy;
@@ -243,7 +243,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
     panel->m_ClipBox.SetSize( wxSize( MAX_VALUE, MAX_VALUE ) );
 
-    m_Parent->GetBaseScreen()->m_IsPrinting = true;
+    m_Parent->GetScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
 
     if( m_PrintParams.m_Print_Sheet_Ref )
@@ -300,7 +300,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     m_Parent->PrintPage( dc, m_PrintParams.m_PrintMaskLayer, printMirror, &m_PrintParams );
 
     g_DrawBgColor = bg_color;
-    m_Parent->GetBaseScreen()->m_IsPrinting = false;
+    m_Parent->GetScreen()->m_IsPrinting = false;
     panel->m_ClipBox = tmp;
 
     GRForceBlackPen( false );

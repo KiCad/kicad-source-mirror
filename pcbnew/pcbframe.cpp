@@ -287,7 +287,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* parent,
     SetIcon( wxICON( a_icon_pcbnew ) );
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
-    SetBaseScreen( ScreenPcb );
+    SetScreen( ScreenPcb );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
