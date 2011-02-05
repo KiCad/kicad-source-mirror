@@ -22,6 +22,7 @@
 #include "3d_struct.h"
 #include "protos.h"
 #include "richio.h"
+#include "filter_reader.h"
 
 
 /*********************************************/

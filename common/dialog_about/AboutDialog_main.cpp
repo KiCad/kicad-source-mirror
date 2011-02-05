@@ -250,8 +250,11 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                         wxT( "rafael.sokolowski@web.de" ), wxT( "German (DE)" ),
                                         new wxBitmap( lang_de_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Kenta Yonekura" ),
-                                        wxT( "midpika@hotmail.com" ), wxT( "Japanese (JP)" ),
+                                        wxT( "midpika@hotmail.com" ), wxT( "Japanese (JA)" ),
                                         new wxBitmap( lang_jp_xpm ) ) );
+    info.AddTranslator( new Contributor( wxT( "Milonas Kostas" ),
+                                        wxT( "milonas.ko@gmail.com" ), wxT( "Greek (el_GR)" ),
+                                        new wxBitmap( lang_gr_xpm ) ) );
 
     /* TODO: are these all russian translators, placed them here now, or else align them below other language maintainer with mail adress */
     info.AddTranslator( new Contributor( wxT( "Remy Halvick" ), wxEmptyString, wxT( "Others" ) ) );

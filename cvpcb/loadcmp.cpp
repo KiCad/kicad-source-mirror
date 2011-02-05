@@ -13,7 +13,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "richio.h"
 #include "filter_reader.h"
@@ -36,7 +36,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
     wxString   tmp, msg;
     wxFileName fn;
     MODULE*    Module = NULL;
-    WinEDA_CvpcbFrame* parent = ( WinEDA_CvpcbFrame* ) GetParent();
+    CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
 
     for( ii = 0; ii < parent->m_ModuleLibNames.GetCount(); ii++ )
     {

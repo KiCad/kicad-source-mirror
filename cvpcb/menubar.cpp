@@ -9,13 +9,13 @@
 #include "gestfich.h"
 
 #include "cvpcb.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 #include "cvpcb_id.h"
 
 #include "bitmaps.h"
 
 
-void WinEDA_CvpcbFrame::ReCreateMenuBar()
+void CVPCB_MAINFRAME::ReCreateMenuBar()
 {
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();

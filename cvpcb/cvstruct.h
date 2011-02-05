@@ -6,99 +6,10 @@
 #define CVSTRUCT_H
 
 #include "wx/listctrl.h"
-#include <wx/filename.h>
-#include "param_config.h"
 #include "cvpcb.h"
 
 /*  Forward declarations of all top-level window classes. */
-class FOOTPRINTS_LISTBOX;
-class COMPONENTS_LISTBOX;
-class DISPLAY_FOOTPRINTS_FRAME;
-
-
-
-/**
- * The CVPcb application main window.
- */
-class WinEDA_CvpcbFrame : public EDA_BASE_FRAME
-{
-public:
-
-    bool m_KeepCvpcbOpen;
-    FOOTPRINTS_LISTBOX*  m_FootprintList;
-    COMPONENTS_LISTBOX*  m_ListCmp;
-    DISPLAY_FOOTPRINTS_FRAME* DrawFrame;
-    WinEDA_Toolbar*      m_HToolBar;
-    wxFileName           m_NetlistFileName;
-    wxArrayString        m_ModuleLibNames;
-    wxArrayString        m_AliasLibNames;
-    wxString             m_UserLibraryPath;
-    wxString             m_NetlistFileExtension;
-    wxString             m_DocModulesFileName;
-    FOOTPRINT_LIST       m_footprints;
-    COMPONENT_LIST       m_components;
-
-protected:
-    int             m_undefinedComponentCnt;
-    bool            m_modified;
-    bool            m_rightJustify;
-    bool            m_isEESchemaNetlist;
-    PARAM_CFG_ARRAY m_projectFileParams;
-
-public:
-    WinEDA_CvpcbFrame( const wxString& title,
-                       long            style = KICAD_DEFAULT_DRAWFRAME_STYLE );
-    ~WinEDA_CvpcbFrame();
-
-    void             OnLeftClick( wxListEvent& event );
-    void             OnLeftDClick( wxListEvent& event );
-    void             OnSelectComponent( wxListEvent& event );
-
-    void             Update_Config( wxCommandEvent& event );
-    void             OnQuit( wxCommandEvent& event );
-    void             OnCloseWindow( wxCloseEvent& Event );
-    void             OnSize( wxSizeEvent& SizeEvent );
-    void             OnChar( wxKeyEvent& event );
-    void             ReCreateHToolbar();
-    virtual void     ReCreateMenuBar();
-    void             SetLanguage( wxCommandEvent& event );
-
-    void             ToFirstNA( wxCommandEvent& event );
-    void             ToPreviousNA( wxCommandEvent& event );
-    void             DelAssociations( wxCommandEvent& event );
-    void             SaveQuitCvpcb( wxCommandEvent& event );
-    void             LoadNetList( wxCommandEvent& event );
-    void             ConfigCvpcb( wxCommandEvent& event );
-    void             OnKeepOpenOnSave( wxCommandEvent& event );
-    void             DisplayModule( wxCommandEvent& event );
-    void             AssocieModule( wxCommandEvent& event );
-    void             WriteStuffList( wxCommandEvent& event );
-    void             DisplayDocFile( wxCommandEvent& event );
-    void             OnSelectFilteringFootprint( wxCommandEvent& event );
-
-    void             OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
-
-    void             SetNewPkg( const wxString& package );
-    void             BuildCmpListBox();
-    void             BuildFOOTPRINTS_LISTBOX();
-    void             CreateScreenCmp();
-    int              SaveNetList( const wxString& FullFileName );
-    int              SaveComponentList( const wxString& FullFileName );
-    bool             ReadNetList();
-    int              ReadSchematicNetlist();
-    void             LoadProjectFile( const wxString& FileName );
-    void             SaveProjectFile( const wxString& fileName );
-    virtual void     LoadSettings();
-    virtual void     SaveSettings();
-    /** DisplayStatus()
-     * Displays info to the status line at bottom of the main frame
-     */
-    void             DisplayStatus();
-
-    PARAM_CFG_ARRAY& GetProjectFileParameters( void );
-
-    DECLARE_EVENT_TABLE()
-};
+class CVPCB_MAINFRAME;
 
 
 /*********************************************************************/
@@ -107,7 +18,7 @@ public:
 class ITEMS_LISTBOX_BASE : public wxListView
 {
 public:
-    ITEMS_LISTBOX_BASE( WinEDA_CvpcbFrame* aParent, wxWindowID aId,
+    ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                         const wxPoint& aLocation, const wxSize& aSize );
 
     ~ITEMS_LISTBOX_BASE();
@@ -115,7 +26,7 @@ public:
     int                        GetSelection();
     void                       OnSize( wxSizeEvent& event );
 
-    virtual WinEDA_CvpcbFrame* GetParent();
+    virtual CVPCB_MAINFRAME* GetParent();
 };
 
 /******************************************/
@@ -132,7 +43,7 @@ public:
     bool           m_UseFootprintFullList;
 
 public:
-    FOOTPRINTS_LISTBOX( WinEDA_CvpcbFrame* parent, wxWindowID id,
+    FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
                         const wxPoint& loc, const wxSize& size,
                         int nbitems, wxString choice[] );
     ~FOOTPRINTS_LISTBOX();
@@ -165,11 +76,11 @@ class COMPONENTS_LISTBOX : public ITEMS_LISTBOX_BASE
 {
 public:
     wxArrayString      m_ComponentList;
-    WinEDA_CvpcbFrame* m_Parent;
+    CVPCB_MAINFRAME* m_Parent;
 
 public:
 
-    COMPONENTS_LISTBOX( WinEDA_CvpcbFrame* parent, wxWindowID id,
+    COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
                         const wxPoint& loc, const wxSize& size,
                         int nbitems, wxString choice[] );
 

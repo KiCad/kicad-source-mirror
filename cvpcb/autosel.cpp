@@ -13,6 +13,7 @@
 
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
 
@@ -68,7 +69,7 @@ char * ReadQuotedText(wxString & aTarget, char * aText)
  * format of a line:
  * 'cmp_ref' 'footprint_name'
  */
-void WinEDA_CvpcbFrame::AssocieModule( wxCommandEvent& event )
+void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 {
     FOOTPRINT_ALIAS_LIST aliases;
     FOOTPRINT_ALIAS*     alias;

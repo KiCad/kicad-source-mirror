@@ -9,6 +9,7 @@
 #include "bitmaps.h"
 #include "cvpcb.h"
 #include "protos.h"
+#include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 #include "class_DisplayFootprintsFrame.h"
 
@@ -25,7 +26,7 @@
  * Create or Update the frame showing the current highlighted footprint
  * and (if showed) the 3D display frame
  */
-void WinEDA_CvpcbFrame::CreateScreenCmp()
+void CVPCB_MAINFRAME::CreateScreenCmp()
 {
     wxString msg, FootprintName;
     bool     IsNew = FALSE;

@@ -187,6 +187,7 @@ set(BITMAP_SRCS
     Lang_Es.xpm
     Lang_Fr.xpm
     Lang_Fi.xpm
+    Lang_Gr.xpm
     Lang_Hu.xpm
     Lang_It.xpm
     Lang_Jp.xpm

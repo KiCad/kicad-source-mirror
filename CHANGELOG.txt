@@ -4,6 +4,16 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Feb-05, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+CvPcb:
+    Code cleanup. Rename WinEDA_CvpcbFrame to CVPCB_MAINFRAME,
+        according to coding style policy.
+    Change in CvPcb:
+        CvPcb does not use now .dcm files, only .mod files,
+        to read modules keywords and doc
+
+
 2011-Feb-2 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++common:

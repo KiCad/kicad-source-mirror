@@ -10,11 +10,11 @@
 #include "bitmaps.h"
 #include "cvpcb.h"
 #include "protos.h"
-#include "cvstruct.h"
+#include "cvpcb_mainframe.h"
 #include "cvpcb_id.h"
 
 
-void WinEDA_CvpcbFrame::ReCreateHToolbar()
+void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 

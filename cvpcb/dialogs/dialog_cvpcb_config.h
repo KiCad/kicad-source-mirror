@@ -13,7 +13,7 @@
 class DIALOG_CVPCB_CONFIG : public DIALOG_CVPCB_CONFIG_FBP
 {
 private:
-    WinEDA_CvpcbFrame* m_Parent;
+    CVPCB_MAINFRAME* m_Parent;
     wxConfig * m_Config;
     wxString             m_UserLibDirBufferImg;
     bool m_LibListChanged;
@@ -36,7 +36,7 @@ private:
 
 
 public:
-    DIALOG_CVPCB_CONFIG( WinEDA_CvpcbFrame* parent );
+    DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent );
     ~DIALOG_CVPCB_CONFIG() {};
 };
 
