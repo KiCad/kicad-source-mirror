@@ -79,22 +79,20 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles( )
             continue;
         }
 
-        FILE_LINE_READER fileReader( file, libname );
-
-        FILTER_READER reader( fileReader );
+        FILE_LINE_READER    fileReader( file, libname );
+        FILTER_READER       reader( fileReader );
 
         /* Read header. */
         reader.ReadLine();
-        char * Line = reader.Line();
-        StrPurge( Line );
+        char * line = reader.Line();
+        StrPurge( line );
 
-        if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
+        if( strnicmp( line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
             wxString msg;
             msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library." ),
                         GetChars( libname ) );
             files_invalid << msg << wxT("\n");
-            fclose( file );
             continue;
         }
 
@@ -102,47 +100,46 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles( )
         bool end = false;
         while( !end && reader.ReadLine() )
         {
-            Line = reader.Line();
-            StrPurge( Line );
-            if( strnicmp( Line, "$EndLIBRARY", 11 ) == 0 )
+            line = reader.Line();
+            StrPurge( line );
+            if( strnicmp( line, "$EndLIBRARY", 11 ) == 0 )
             {
                 end = true;
                 break;
             }
-            if( strnicmp( Line, "$MODULE", 7 ) == 0 )
+            if( strnicmp( line, "$MODULE", 7 ) == 0 )
             {
 
-                Line += 7;
+                line += 7;
                 FOOTPRINT*  ItemLib = new FOOTPRINT();
-                ItemLib->m_Module = CONV_FROM_UTF8( StrPurge( Line ) );
+                ItemLib->m_Module = CONV_FROM_UTF8( StrPurge( line ) );
                 ItemLib->m_LibName = libname;
                 m_footprints.push_back( ItemLib );
 
                 while( reader.ReadLine() )
                 {
-                    Line = reader.Line();
-                    StrPurge( Line );
-                    if( strnicmp( Line, "$EndMODULE", 10 ) == 0 )
+                    line = reader.Line();
+                    StrPurge( line );
+                    if( strnicmp( line, "$EndMODULE", 10 ) == 0 )
                         break;
 
-                    int id = ((Line[0] & 0xFF) << 8) + (Line[1] & 0xFF);
+                    int id = ((line[0] & 0xFF) << 8) + (line[1] & 0xFF);
                     switch( id )
                     {
                     /* KeyWords */
                     case (('K'<<8) + 'w'):
-                        ItemLib->m_KeyWord = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
+                        ItemLib->m_KeyWord = CONV_FROM_UTF8( StrPurge( line + 3 ) );
                     break;
 
                     /* Doc */
                     case (('C'<<8) + 'd'):
-                        ItemLib->m_Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
+                        ItemLib->m_Doc = CONV_FROM_UTF8( StrPurge( line + 3 ) );
                     break;
                     }
                 }
             }
         }
 
-        fclose( file );
         if( !end )
         {
             files_invalid << libname << _(" (Unexpected end of file)") << wxT("\n");
