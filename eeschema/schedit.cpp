@@ -134,8 +134,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     default:
 
         // Stop the current command and deselect the current tool
-        DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor = wxCURSOR_ARROW;
-        DrawPanel->UnManageCursor( 0, DrawPanel->m_PanelCursor );
+        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
         break;
     }
 
@@ -794,8 +793,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-        DrawPanel->SetCursor( wxCursor( DrawPanel->m_PanelCursor =
-                                        DrawPanel->m_PanelDefaultCursor ) );
+        DrawPanel->SetCursor( wxCursor( DrawPanel->GetDefaultCursor() ) );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool

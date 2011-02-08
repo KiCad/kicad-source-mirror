@@ -58,8 +58,7 @@ END_EVENT_TABLE()
 
 EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
                                 const wxPoint& pos, const wxSize& size ) :
-    wxScrolledWindow( parent, id, pos, size,
-                      wxBORDER | wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE )
+    wxScrolledWindow( parent, id, pos, size, wxBORDER | wxHSCROLL | wxVSCROLL )
 {
     m_Parent = parent;
     wxASSERT( m_Parent );
@@ -82,7 +81,6 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_AbortEnable       = m_AbortRequest = false;
     m_AutoPAN_Enable    = TRUE;
     m_IgnoreMouseEvents = 0;
-    m_DisableEraseBG    = false;
 
     ManageCurseur = NULL;
     ForceCloseManageCurseur = NULL;
@@ -92,11 +90,11 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     m_AutoPAN_Request    = false;
     m_Block_Enable       = false;
-    m_PanelDefaultCursor = m_PanelCursor = wxCURSOR_ARROW;
+    m_defaultCursor = m_cursor = wxCURSOR_ARROW;
     m_CursorLevel     = 0;
     m_PrintIsMirrored = false;
 
-    wxLog::AddTraceMask( KICAD_TRACE_COORDS );
+//    wxLog::AddTraceMask( KICAD_TRACE_COORDS );
 }
 
 
@@ -517,8 +515,7 @@ void EDA_DRAW_PANEL::OnPaint( wxPaintEvent& event )
 
     wxRect region = GetUpdateRegion().GetBox();
     SetClipBox( paintDC, &region );
-    wxDCClipper dcclip( paintDC, m_ClipBox );
-    ReDraw( &paintDC, m_DisableEraseBG ? false : true );
+    ReDraw( &paintDC, true );
 }
 
 
@@ -549,8 +546,15 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
     GRResetPenAndBrush( DC );
 
     DC->SetBackground( *wxBLACK_BRUSH );
-    DC->SetBackgroundMode( wxTRANSPARENT );
+    DC->SetBackgroundMode( wxSOLID );
     m_Parent->RedrawActiveWindow( DC, erasebg );
+
+    // Verfies that the clipping is working correctly.  If these two sets of numbers are
+    // not the same or really close.  The clipping algorithms are broken.
+    wxLogTrace( KICAD_TRACE_COORDS,
+                wxT( "Clip box: (%d, %d, %d, %d), Draw extents (%d, %d, %d, %d)" ),
+                m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
+                DC->MinX(), DC->MinY(), DC->MaxX(), DC->MaxY() );
 }
 
 
@@ -1088,7 +1092,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     else
                     {
                         m_AutoPAN_Request = TRUE;
-                        SetCursor( m_PanelCursor = wxCURSOR_SIZING );
+                        SetCursor( m_cursor = wxCURSOR_SIZING );
                     }
                 }
             }
@@ -1116,18 +1120,18 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     m_AutoPAN_Request = false;
                 }
 
-                SetCursor( m_PanelCursor = m_PanelDefaultCursor );
+                SetCursor( m_cursor = m_defaultCursor );
             }
             else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
                 m_AutoPAN_Request = false;
                 m_Parent->HandleBlockEnd( &DC );
-                SetCursor( m_PanelCursor = m_PanelDefaultCursor );
+                SetCursor( m_cursor = m_defaultCursor );
 
                 if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
                 {
                     m_AutoPAN_Request = TRUE;
-                    SetCursor( m_PanelCursor = wxCURSOR_HAND );
+                    SetCursor( wxCURSOR_HAND );
                 }
             }
         }
@@ -1163,7 +1167,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
     long key, localkey;
-    bool escape = false;
     wxPoint pos;
 
     key = localkey = event.GetKeyCode();
@@ -1180,7 +1183,13 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         return;
 
     case WXK_ESCAPE:
-        escape = m_AbortRequest = TRUE;
+        m_AbortRequest = true;
+
+        if( ManageCurseur && ForceCloseManageCurseur )
+            UnManageCursor( -1, m_defaultCursor );
+        else
+            UnManageCursor( 0, m_cursor, wxEmptyString );
+
         break;
     }
 
@@ -1203,21 +1212,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     BASE_SCREEN* Screen = GetScreen();
 
     g_KeyPressed = localkey;
-
-    if( escape )
-    {
-        if( ManageCurseur && ForceCloseManageCurseur )
-        {
-            SetCursor( m_PanelCursor = m_PanelDefaultCursor );
-            ForceCloseManageCurseur( this, &DC );
-            SetCursor( m_PanelCursor = m_PanelDefaultCursor );
-        }
-        else
-        {
-            m_PanelCursor = m_PanelDefaultCursor = wxCURSOR_ARROW;
-            m_Parent->SetToolID( 0, m_PanelCursor, wxEmptyString );
-        }
-    }
 
     // Some key commands use the current mouse position: refresh it.
     pos = wxGetMousePosition() - GetScreenPosition();
@@ -1293,6 +1287,8 @@ void EDA_DRAW_PANEL::UnManageCursor( int id, int cursor, const wxString& title )
     {
         INSTALL_UNBUFFERED_DC( dc, this );
         ForceCloseManageCurseur( this, &dc );
+        ManageCurseur = NULL;
+        ForceCloseManageCurseur = NULL;
         m_AutoPAN_Request = false;
     }
 

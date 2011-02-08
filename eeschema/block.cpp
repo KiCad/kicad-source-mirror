@@ -187,7 +187,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
     }
 
-    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     DrawPanel->Refresh();
 }
 
@@ -324,7 +324,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 
     if( zoom_command )
@@ -419,7 +419,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_ZOOM:     /* Window Zoom */
         DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
-        DrawPanel->SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+        DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
         Window_Zoom( GetScreen()->m_BlockLocate );
         break;
 
@@ -489,7 +489,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 }
 

@@ -133,7 +133,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( m_ID_current_state == 0 )
             SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
         else
-            SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+            SetCursor( DrawPanel->GetDefaultCursor() );
         break;
 
     default:        // Finish (abort) the command

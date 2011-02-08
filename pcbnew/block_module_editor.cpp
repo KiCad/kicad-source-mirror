@@ -195,8 +195,7 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor,
-                   wxEmptyString );
+        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
         DrawPanel->Refresh( TRUE );
     }
 
@@ -281,9 +280,7 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     SetCurItem( NULL );
     DrawPanel->Refresh( TRUE );
 
-    SetToolID( m_ID_current_state,
-               DrawPanel->m_PanelDefaultCursor,
-               wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
 }
 
 

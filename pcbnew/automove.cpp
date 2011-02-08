@@ -98,7 +98,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     default:   // Abort a current command (if any)
-        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
         break;
     }
 

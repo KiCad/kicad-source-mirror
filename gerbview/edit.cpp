@@ -108,7 +108,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         if( m_ID_current_state == 0 )
             SetToolID( 0, 0, wxEmptyString );
         else
-            DrawPanel->SetCursor( DrawPanel->m_PanelCursor = DrawPanel->m_PanelDefaultCursor );
+            DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
         break;
 
     default:

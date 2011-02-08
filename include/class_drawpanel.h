@@ -19,6 +19,8 @@ class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
     EDA_DRAW_FRAME* m_Parent;
+    int m_cursor;                   ///< Current mouse cursor shape id.
+    int m_defaultCursor;            ///< The default mouse cursor shape id.
 
 public:
     EDA_Rect          m_ClipBox;            // the clipbox used in screen
@@ -34,10 +36,6 @@ public:
     bool m_AbortRequest;                    // Flag to abort long commands
     bool m_AbortEnable;                     // TRUE if abort button or menu to
                                             // be displayed
-
-    bool m_DisableEraseBG;                  // if true: do not allow background erasure
-                                            // (used to reduce flicker in Gerbview )
-
 
     bool m_AutoPAN_Enable;                  // TRUE to allow auto pan
     bool m_AutoPAN_Request;                 // TRUE to request an auto pan
@@ -57,10 +55,6 @@ public:
                                             // because arcs are oriented, and
                                             // in mirror mode, orientations are
                                             // reversed
-    int  m_PanelDefaultCursor;              // Current mouse cursor default
-                                            // shape id for this window
-    int  m_PanelCursor;                     // Current mouse cursor shape id
-                                            // for this window
     int  m_CursorLevel;                     // Index for cursor redraw in XOR
                                             // mode
 
@@ -190,7 +184,10 @@ public:
      * <p>
      * If \a aRect is NULL, then the entire visible area of the screen is used as the clip
      * area.  The clip box is used when drawing to determine which objects are not visible
-     * and do not need to be drawn.
+     * and do not need to be drawn.  Note that this is not the same as setting the device
+     * context clipping with wxDC::SetClippingRegion().  This is the rectangle used by the
+     * drawing functions in gr_basic.cpp used to determine if the item to draw is off screen
+     * and therefore not drawn.
      * </p>
      * @param aDC The device context use for drawing with the correct scale and
      *            offsets already configured.  See DoPrepareDC().
@@ -255,17 +252,25 @@ public:
 
     // remove the grid cursor from the display
     void         CursorOff( wxDC* DC );
+
     // display the grid cursor
     void         CursorOn( wxDC* DC );
 
     /**
      * Release managed cursor.
      *
-     * Check to see if the cursor is being managed for block or editing
-     * commands and release it.
+     * Check to see if the cursor is being managed for block or editing commands and release it.
+     * @param aId The command ID to restore or -1 to keep the current command ID.
+     * @param aCursorId The wxWidgets stock cursor ID to set the cursor to or -1 to keep the
+     *                  current cursor.
+     * @param aTitle The tool message to display in the status bar or wxEmptyString to clear
+     *               the message.
      */
-    void         UnManageCursor( int id = -1, int cursor = -1,
-                                 const wxString& title = wxEmptyString );
+    void         UnManageCursor( int aId = -1, int aCursorId = -1,
+                                 const wxString& aTitle = wxEmptyString );
+
+    int GetDefaultCursor() const { return m_defaultCursor; }
+
 
     DECLARE_EVENT_TABLE()
 };

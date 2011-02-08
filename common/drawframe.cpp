@@ -388,10 +388,9 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
 
-    // Change Cursor in DrawPanel only
-    if( DrawPanel )
+    // Change DrawPanel cursor if requested.
+    if( DrawPanel && aCursor >= 0 )
     {
-        DrawPanel->m_PanelDefaultCursor = aCursor;
         DrawPanel->SetCursor( aCursor );
     }
 

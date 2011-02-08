@@ -175,7 +175,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
         }
     }
 
-    Zoom_Automatique( false );
+    Zoom_Automatique( true );
     GetScreen()->SetRefreshReq();
     g_SaveTime = time( NULL );
 

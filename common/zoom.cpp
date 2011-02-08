@@ -33,7 +33,7 @@ void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
      */
     INSTALL_DC( dc, DrawPanel );
     DrawPanel->SetClipBox( dc );
-    DrawPanel->ReDraw( &dc, DrawPanel->m_DisableEraseBG ? false : true );
+    DrawPanel->ReDraw( &dc, true );
 #else
     DrawPanel->Refresh();
     DrawPanel->Update();

@@ -27,7 +27,7 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString )
     {
-        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
         ReCreateAuxiliaryToolbar();
@@ -45,7 +45,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     wxString   msg;
 
     // If an edition is in progress, stop it
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {

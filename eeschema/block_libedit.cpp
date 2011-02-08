@@ -184,7 +184,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DrawPanel->ManageCurseur = NULL;
         DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
         DrawPanel->Refresh( true );
     }
 
@@ -273,7 +273,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->SetCurItem( NULL );
     DrawPanel->Refresh( true );
 
-    SetToolID( m_ID_current_state, DrawPanel->m_PanelDefaultCursor, wxEmptyString );
+    SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
 }
 
 

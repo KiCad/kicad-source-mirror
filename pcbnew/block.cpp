@@ -93,12 +93,9 @@ static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent, const wxString& t
     nocmd = dlg.ShowModal();
 
     parent->GetScreen()->m_Curseur = oldpos;
-
     parent->DrawPanel->MouseToCursorSchema();
     parent->DrawPanel->m_IgnoreMouseEvents = false;
-
-    parent->DrawPanel->SetCursor( parent->DrawPanel->m_PanelCursor =
-                                      parent->DrawPanel->m_PanelDefaultCursor );
+    parent->DrawPanel->SetCursor( parent->DrawPanel->GetDefaultCursor() );
 
     return nocmd ? false : true;
 }
@@ -255,8 +252,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     }
 
     DisplayToolMsg( wxEmptyString );
-    DrawPanel->SetCursor( DrawPanel->m_PanelCursor =
-                                      DrawPanel->m_PanelDefaultCursor );
+    DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
 }
 
 
