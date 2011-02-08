@@ -564,7 +564,7 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 
     do
     {
-        WinEDA_NetlistFrame* dlg = new WinEDA_NetlistFrame( this );
+        NETLIST_DIALOG* dlg = new NETLIST_DIALOG( this );
         i = dlg->ShowModal();
         dlg->Destroy();
     } while( i == NET_PLUGIN_CHANGE );
