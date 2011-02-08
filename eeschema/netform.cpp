@@ -31,7 +31,6 @@
 #include "fctsys.h"
 
 
-#include "gr_basic.h"
 #include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
@@ -54,6 +53,8 @@
 #include "xnode.h"      // also nests: <wx/xml/xml.h>
 
 #include "build_version.h"
+
+#define INTERMEDIATE_NETLIST_EXT wxT("xml")
 
 #include <set>
 
@@ -406,7 +407,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     default:
         {
             wxFileName  tmpFile = aFullFileName;
-            tmpFile.SetExt( wxT( "tmp" ) );
+            tmpFile.SetExt( INTERMEDIATE_NETLIST_EXT );
 
             D(printf("tmpFile:'%s'\n", CONV_TO_UTF8( tmpFile.GetFullPath() ) );)
 
@@ -611,6 +612,9 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aI
         // Remove duplicate Pins in m_SortedComponentPinList
         eraseDuplicatePins( m_SortedComponentPinList );
 
+        // record the usage of this library component entry.
+        m_LibParts.insert( entry );     // rejects non-unique pointers
+
         return comp;
     }
 
@@ -705,9 +709,10 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
     wxString    sLibpart  = wxT( "libpart" );
     wxString    sLib      = wxT( "lib" );
     wxString    sPart     = wxT( "part" );
-    wxString    sPins     = wxT( "pins" );
-    wxString    sPin      = wxT( "pin" );
-    wxString    sNum      = wxT( "num" );
+    wxString    sPins     = wxT( "pins" );      // key for library component pins list
+    wxString    sPin      = wxT( "pin" );       // key for one library component pin descr
+    wxString    sNum      = wxT( "num" );       // key for one library component pin num
+    wxString    sPinType  = wxT( "type" );      // key for one library component pin electrical type
     wxString    sName     = wxT( "name" );
     wxString    sField    = wxT( "field" );
     wxString    sFields   = wxT( "fields" );
@@ -765,7 +770,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
             {
                 XNODE*     xfield;
                 xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
-                xfield->AddAttribute( sName, fieldList[i].GetName() );
+                xfield->AddAttribute( sName, fieldList[i].GetName(false) );
             }
         }
 
@@ -786,6 +791,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
 
                 pins->AddChild( pin = node( sPin ) );
                 pin->AddAttribute( sNum, pinList[i]->GetNumberString() );
+                pin->AddAttribute( sPinType, pinList[i]->GetTypeString() );
 
                 // caution: construction work site here, drive slowly
             }

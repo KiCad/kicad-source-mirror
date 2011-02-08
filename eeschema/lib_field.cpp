@@ -569,31 +569,48 @@ void LIB_FIELD::Rotate()
 }
 
 
-wxString LIB_FIELD::GetName() const
+wxString LIB_FIELD::GetName(bool aTranslate) const
 {
     wxString name;
 
     switch( m_id )
     {
     case REFERENCE:
-        name = _( "Reference" );
+        if( aTranslate )
+            name = _( "Reference" );
+        else
+            name = wxT( "Reference" );
         break;
 
     case VALUE:
-        name = _( "Value" );
+        if( aTranslate )
+            name = _( "Value" );
+        else
+            name = wxT( "Value" );
         break;
 
     case FOOTPRINT:
-        name = _( "Footprint" );
+        if( aTranslate )
+            name = _( "Footprint" );
+        else
+            name = wxT( "Footprint" );
         break;
 
     case DATASHEET:
-        name = _( "Datasheet" );
+        if( aTranslate )
+           name = _( "Datasheet" );
+        else
+           name = wxT( "Datasheet" );
         break;
 
     default:
         if( m_name.IsEmpty() )
+        {
+        if( aTranslate )
             name.Printf( _( "Field%d" ), m_id );
+        else
+            name.Printf( wxT( "Field%d" ), m_id );
+        }
         else
             name = m_name;
     }

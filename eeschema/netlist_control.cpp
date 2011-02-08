@@ -372,7 +372,11 @@ void WinEDA_NetlistFrame::SetupPluginData( wxCommandEvent& event )
     if( CurrPage == NULL )
         return;
 
-    CurrPage->m_CommandStringCtrl->SetValue( FullFileName );
+    // Creates a default command line, suitable for external tool xslproc:
+    // TODO: build better default command lines depending on plugin extension
+    wxString cmdLine;
+    cmdLine.Printf(wxT("xsltproc -o %%O %s %%I"), GetChars(FullFileName) );
+    CurrPage->m_CommandStringCtrl->SetValue( cmdLine );
 
     /* Get a title for this page */
     wxString title = CurrPage->m_TitleStringCtrl->GetValue();

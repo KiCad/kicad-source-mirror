@@ -254,7 +254,19 @@ public:
      */
     void SetShape( int aShape );
 
+    /**
+     * Get the electrical type of the pin.
+     *
+     * @return The electrical type of the pin (see enun ElectricPinType for values).
+     */
     int GetType() const { return m_type; }
+
+    /**
+     * return a string giving the electrical type of the pin.
+     *
+     * @return The electrical name of the pin (see enun MsgPinElectricType for names).
+     */
+    wxString GetTypeString() const { return MsgPinElectricType[m_type]; }
 
     /**
      * Set the electrical type of the pin.
@@ -262,7 +274,7 @@ public:
      * This will also update the electrical type of the pins marked by
      * EnableEditMode().
      *
-     * @param aType - The electrical type of the pin.
+     * @param aType - The electrical type of the pin(see enun ElectricPinType for values).
      */
     void SetType( int aType );
 
