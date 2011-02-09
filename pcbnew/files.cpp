@@ -44,8 +44,12 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     int        id = event.GetId();
     wxString   msg;
 
-    // If an edition is in progress, stop it
-    DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
+    // If an edition is in progress, stop it.
+    // For something else than save, get rid of current tool.
+    if( id == ID_SAVE_BOARD )
+        DrawPanel->UnManageCursor( -1, DrawPanel->GetDefaultCursor() );
+    else
+        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {
