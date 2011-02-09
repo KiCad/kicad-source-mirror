@@ -1149,8 +1149,7 @@ bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1,
 }
 
 
-/* Comparison routine for sorting by NumSheet table of elements
- * connected (TabPinSort) by qsort ()
+/* Comparison routine for sorting items by Sheet Number ( used by qsort )
  */
 
 bool SortItemsBySheet( const NETLIST_OBJECT* Objet1,

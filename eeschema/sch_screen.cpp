@@ -548,7 +548,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 }
 
 
-void SCH_SCREEN::GetHierarchicalItems( std::vector <SCH_ITEM*> aItems )
+void SCH_SCREEN::GetHierarchicalItems( std::vector <SCH_ITEM*>& aItems )
 {
     SCH_ITEM* item = GetDrawItems();
 
@@ -786,7 +786,7 @@ static bool SortByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
     int ii = item1->m_TimeStamp - item2->m_TimeStamp;
 
     /* If the time stamps are the same, compare type in order to have component objects
-     * before sheet object. This is done because the changing the sheet time stamp
+     * before sheet object. This is done because changing the sheet time stamp
      * before the component time stamp could cause the current annotation to be lost.
      */
     if( ( ii == 0 && ( item1->Type() != item2->Type() ) ) && ( item1->Type() == SCH_SHEET_T ) )
@@ -918,7 +918,6 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
         item = items[ii];
 
         SCH_ITEM* nextItem = items[ii + 1];
-
         if( item->m_TimeStamp == nextItem->m_TimeStamp )
         {
             count++;

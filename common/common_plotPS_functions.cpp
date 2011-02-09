@@ -426,16 +426,17 @@ void PS_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
                                    GRTraceMode modetrace )
 {
     wxASSERT( output_file );
+
+    set_current_line_width( -1 );
+    if( current_pen_width >= diametre )
+        set_current_line_width( diametre );
+
     if( modetrace == FILLED )
-    {
-        set_current_line_width( -1 );
         circle( pos, diametre - current_pen_width, FILLED_SHAPE );
-    }
     else
-    {
-        set_current_line_width( -1 );
         circle( pos, diametre - current_pen_width, NO_FILL );
-    }
+
+    set_current_line_width( -1 );
 }
 
 

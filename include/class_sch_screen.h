@@ -251,9 +251,9 @@ public:
     /**
      * Function GetHierarchicalItems
      * adds all schematic sheet and component object in the screen to \a aItems.
-     * @param aItems Hierarchical item list.
+     * @param aItems Hierarchical item list to fill.
      */
-    void GetHierarchicalItems( std::vector <SCH_ITEM*> aItems );
+    void GetHierarchicalItems( std::vector <SCH_ITEM*>& aItems );
 
     /**
      * Function SelectBlockItems

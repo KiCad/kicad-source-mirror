@@ -20,19 +20,19 @@
 #include "richio.h"
 #include "filter_reader.h"
 
-class ModList
+class FOOTPRINT_ITEM
 {
 public:
-    ModList* Next;
+    FOOTPRINT_ITEM* Next;
     wxString m_Name, m_Doc, m_KeyWord;
 
 public:
-    ModList()
+    FOOTPRINT_ITEM()
     {
         Next = NULL;
     }
 
-    ~ModList()
+    ~FOOTPRINT_ITEM()
     {
     }
 };
@@ -42,7 +42,7 @@ static void DisplayCmpDoc( wxString& Name );
 static void ReadDocLib( const wxString& ModLibName );
 
 
-static ModList* MList;
+static FOOTPRINT_ITEM* MList;
 
 /**
  * Function Load_Module_From_BOARD
@@ -373,7 +373,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
     char*           Line;
     wxFileName      fn;
     static wxString OldName;    /* Save the name of the last module loaded. */
-    wxString        CmpName, tmp;
+    wxString        CmpName;
+    wxString        libFullName;
     FILE*           file;
     wxString        msg;
     wxArrayString   itemslist;
@@ -392,9 +393,9 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
         else
             fn = aLibraryFullFilename;
 
-        tmp = wxGetApp().FindLibraryPath( fn );
+        libFullName = wxGetApp().FindLibraryPath( fn );
 
-        if( !tmp )
+        if( libFullName.IsEmpty() )
         {
             msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
                         GetChars( fn.GetFullName() ) );
@@ -403,7 +404,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
             continue;
         }
 
-        ReadDocLib( tmp );
+        ReadDocLib( libFullName );
 
         if( !aKeyWord.IsEmpty() ) /* Don't read the library if selection
                                    * by keywords, already read. */
@@ -413,7 +414,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
             continue;
         }
 
-        file = wxFopen( tmp, wxT( "rt" ) );
+        file = wxFopen( libFullName, wxT( "rt" ) );
 
         if( file  == NULL )
         {
@@ -422,7 +423,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
             continue;
         }
 
-        FILE_LINE_READER fileReader( file, tmp );
+        FILE_LINE_READER fileReader( file, libFullName );
 
         FILTER_READER reader( fileReader );
 
@@ -437,9 +438,8 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
         if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
         {
             msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
-                        GetChars( tmp ) );
-            wxMessageBox( msg, _( "Library Load Error" ),
-                          wxOK | wxICON_ERROR, this );
+                        GetChars( libFullName ) );
+            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             continue;
         }
 
@@ -478,7 +478,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
     /* Create list of modules if search by keyword. */
     if( !aKeyWord.IsEmpty() )
     {
-        ModList* ItemMod = MList;
+        FOOTPRINT_ITEM* ItemMod = MList;
         while( ItemMod != NULL )
         {
             if( KeyWordOk( aKeyWord, ItemMod->m_KeyWord ) )
@@ -502,7 +502,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
 
     while( MList != NULL )
     {
-        ModList* NewMod = MList->Next;
+        FOOTPRINT_ITEM* NewMod = MList->Next;
         delete MList;
         MList = NewMod;
     }
@@ -519,7 +519,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
  */
 static void DisplayCmpDoc( wxString& Name )
 {
-    ModList* Mod = MList;
+    FOOTPRINT_ITEM* Mod = MList;
 
     if( !Mod )
     {
@@ -551,7 +551,7 @@ static void DisplayCmpDoc( wxString& Name )
  */
 static void ReadDocLib( const wxString& ModLibName )
 {
-    ModList*   NewMod;
+    FOOTPRINT_ITEM*   NewMod;
     char*      Line;
     FILE*      LibDoc;
     wxFileName fn = ModLibName;
@@ -579,7 +579,7 @@ static void ReadDocLib( const wxString& ModLibName )
             break; ;
         if( Line[1] == 'M' ) /* Debut decription 1 module */
         {
-            NewMod = new ModList();
+            NewMod = new FOOTPRINT_ITEM();
             NewMod->Next = MList;
             MList = NewMod;
             while( reader.ReadLine() )

@@ -18,14 +18,6 @@
 #include "class_gerber_draw_item.h"
 #include "class_GERBER.h"
 
-#ifdef __WINDOWS__
-// Blit function seems have problems when scale != 1 and/or offsets
-#define AVOID_BLIT_SCALE_BUG    true
-#else
-#define AVOID_BLIT_SCALE_BUG    false   // not needed on Linux
-#endif
-
-
 
 /**
  * Function PrintPage (virtual)
@@ -130,23 +122,10 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     int         bitmapWidth, bitmapHeight;
     wxDC*       plotDC = aDC;
 
-#if AVOID_BLIT_SCALE_BUG
-    // Blit function used below seems to work OK only with scale = 1 and no offsets
-    // at least under Windows
-    // Store device context scale and origins:
-    double      dc_scalex, dc_scaley;
-    wxPoint     dev_org;
-    wxPoint     logical_org;
-
-    aDC->GetDeviceOrigin( &dev_org.x, &dev_org.y );
-    aDC->GetLogicalOrigin( &logical_org.x, &logical_org.y );
-    aDC->GetUserScale( &dc_scalex, &dc_scaley );
-#endif
-
     aPanel->GetClientSize( &bitmapWidth, &bitmapHeight );
 
-    wxBitmap*   layerBitmap;
-    wxBitmap*   screenBitmap;
+    wxBitmap*   layerBitmap = NULL;
+    wxBitmap*   screenBitmap = NULL;
     wxMemoryDC  layerDC;        // used sequentially for each gerber layer
     wxMemoryDC  screenDC;
 
@@ -185,12 +164,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
             // layers are drawn in background color.
             if( gerber->HasNegativeItems() &&  doBlit )
             {
-
-#if AVOID_BLIT_SCALE_BUG
-                layerDC.SetUserScale( 1.0, 1.0 );
-                layerDC.SetDeviceOrigin( 0, 0 );
-                layerDC.SetLogicalOrigin( 0, 0 );
-#endif
                 if( aDrawMode == GR_COPY )
                 {
                     // Use the layer bitmap itself as a mask when blitting.  The bitmap
@@ -216,12 +189,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
             doBlit = false;
             layerDC.Clear();
         }
-
-#if AVOID_BLIT_SCALE_BUG
-        layerDC.SetUserScale( dc_scalex, dc_scaley );
-        layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
-        layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
-#endif
 
         if( gerber->m_ImageNegative )
         {
@@ -271,15 +238,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     {
         // this is the last transfert to screenDC.  If there are no negative items, this is
         // the only one
-
-#if AVOID_BLIT_SCALE_BUG
-        if( aDrawMode != -1 )
-        {
-            layerDC.SetUserScale( 1.0, 1.0 );
-            layerDC.SetDeviceOrigin( 0, 0 );
-            layerDC.SetLogicalOrigin( 0, 0 );
-        }
-#endif
         if( aDrawMode == GR_COPY )
         {
             layerDC.SelectObject( wxNullBitmap );
@@ -296,14 +254,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     if( aDrawMode != -1 )
     {
         aDC->Blit( 0, 0, bitmapWidth, bitmapHeight, &screenDC, 0, 0, wxCOPY );
-
-#if AVOID_BLIT_SCALE_BUG
-        // Restore scale and offsets values:
-        aDC->SetUserScale( dc_scalex, dc_scaley );
-        aDC->SetDeviceOrigin( dev_org.x, dev_org.y );
-        aDC->SetLogicalOrigin( logical_org.x, logical_org.y );
-#endif
-
         layerDC.SelectObject( wxNullBitmap );
         screenDC.SelectObject( wxNullBitmap );
         delete layerBitmap;
