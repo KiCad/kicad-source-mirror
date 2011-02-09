@@ -423,6 +423,18 @@ wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize )
 }
 
 
+wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
+{
+    wxPoint pos = m_Curseur - m_DrawOrg;
+    double scalar = GetScalingFactor();
+
+    pos.x = wxRound( (double) pos.x * scalar );
+    pos.y = wxRound( (double) pos.y * scalar );
+
+    return pos;
+}
+
+
 /* free the undo and the redo lists
  */
 void BASE_SCREEN::ClearUndoRedoList()

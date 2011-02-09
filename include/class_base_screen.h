@@ -244,7 +244,7 @@ public:
      * @return the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
-    double  GetScalingFactor()
+    double  GetScalingFactor() const
     {
         return (double) m_ZoomScalar / (double) GetZoom();
     }
@@ -364,6 +364,13 @@ public:
      * @return The current cursor position.
      */
     wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL );
+
+    /**
+     * Function GetCursorScreenPosition
+     * returns the cross hair position in device (display) units.b
+     * @return The current cross hair position.
+     */
+    wxPoint GetCrossHairScreenPosition() const;
 
     /**
      * Function GetNearestGridPosition

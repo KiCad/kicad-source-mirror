@@ -86,6 +86,55 @@ private:
 };
 
 
+/**
+ * Class EDA_BLIT_NORMALIZER
+ * is a helper class for clearing a device context scale and offset parameters before
+ * performing a Blit operation.
+ * <p>
+ * This class keeps a temporary copy of the scale and offset parameters of a device
+ * context and then restores them when it goes out of scope.
+ * </p>
+ */
+class EDA_BLIT_NORMALIZER
+{
+public:
+    EDA_BLIT_NORMALIZER( wxDC* aDC )
+        : m_dc( aDC )
+    {
+        if( aDC )
+        {
+            aDC->GetUserScale( &m_userScaleX, &m_userScaleY );
+            aDC->GetLogicalOrigin( &m_logicalOriginX, &m_logicalOriginY );
+            aDC->GetDeviceOrigin( &m_deviceOriginX, &m_deviceOriginY );
+            aDC->SetUserScale( 1.0, 1.0 );
+            aDC->SetLogicalOrigin( 0, 0 );
+            aDC->SetDeviceOrigin( 0, 0 );
+        }
+    }
+
+    ~EDA_BLIT_NORMALIZER()
+    {
+        if( m_dc )
+        {
+            m_dc->SetUserScale( m_userScaleX, m_userScaleY );
+            m_dc->SetLogicalOrigin( m_logicalOriginX, m_logicalOriginY );
+            m_dc->SetDeviceOrigin( m_deviceOriginX, m_deviceOriginY );
+        }
+    }
+
+private:
+    wxDC* m_dc;
+    double m_userScaleX;
+    double m_userScaleY;
+    int m_logicalOriginX;
+    int m_logicalOriginY;
+    int m_deviceOriginX;
+    int m_deviceOriginY;
+
+    DECLARE_NO_COPY_CLASS( EDA_BLIT_NORMALIZER )
+};
+
+
 #if USE_WX_GRAPHICS_CONTEXT
     #include <wx/dcgraph.h>
 #endif

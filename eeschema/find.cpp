@@ -198,7 +198,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;
         sheet->LastScreen()->m_Curseur = pos;
 
-        curpos = DrawPanel->CursorScreenPosition();
+        curpos = GetScreen()->GetCrossHairScreenPosition();
 
         DrawPanel->GetViewStart( &( GetScreen()->m_StartVisu.x ),
                                  &( GetScreen()->m_StartVisu.y ) );

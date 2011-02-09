@@ -134,7 +134,9 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
         layerBitmap = new wxBitmap( bitmapWidth, bitmapHeight );
         screenBitmap = new wxBitmap( bitmapWidth, bitmapHeight );
         layerDC.SelectObject( *layerBitmap );
+        EDA_Rect tmpRect = aPanel->m_ClipBox;
         aPanel->DoPrepareDC( layerDC );
+        aPanel->m_ClipBox = tmpRect;
         layerDC.SetBackground( bgBrush );
         layerDC.SetBackgroundMode( wxSOLID );
         layerDC.Clear();

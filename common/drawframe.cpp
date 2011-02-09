@@ -727,12 +727,12 @@ void EDA_DRAW_FRAME::LoadSettings()
     bool btmp;
 
     if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
-        SetGridVisibility( btmp);
+        SetGridVisibility( btmp );
 
     int itmp;
 
     if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
-        SetGridColor(itmp);
+        SetGridColor( itmp );
 
     cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
 }
