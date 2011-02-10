@@ -127,7 +127,7 @@ class EXPORT_HELP
      *  <ul>
      * <li> "?" if pin not connected
      * <li> "netname" for global net (like gnd, vcc ..
-     * <li> "netname_sheetnumber" for the usual nets
+     * <li> "/path/netname" for the usual nets
      * </ul>
      */
     static void sprintPinNetName( wxString* aResult, const wxString& aNetNameFormat, NETLIST_OBJECT* aPin );
@@ -135,11 +135,11 @@ class EXPORT_HELP
     /**
      * Function findNextComponentAndCreatePinList
      * finds a "suitable" component from the DrawList and optionally builds
-     * its pin list int m_SortedComponentPinList. The list is sorted by pin num.
-     * A suitable component is a "new" real component (power symbols are not
-     * considered).
+     * its pin list in m_SortedComponentPinList. The list is sorted by pin num.
+     * A suitable component is a "new" real component
+     * (power symbols and virtual components that have their reference starting by '#'are skipped).
      */
-    SCH_COMPONENT* findNextComponentAndCreatPinList( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextComponentAndCreatePinList( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
@@ -158,9 +158,9 @@ class EXPORT_HELP
     void eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
 
     /**
-     * Function addPintToComponentPinList
+     * Function addPinToComponentPinList
      * adds a new pin description to the pin list m_SortedComponentPinList.
-     * A.a pin description is a pointer to the corresponding structure
+     * A pin description is a pointer to the corresponding structure
      * created by BuildNetList() in the table g_NetObjectslist.
      */
     bool addPinToComponentPinList( SCH_COMPONENT*  Component,
@@ -191,7 +191,7 @@ class EXPORT_HELP
      * writes a net list (ranked by Netcode), and
      * Pins connected to it
      * Format:
-     *. ADD_TER RR2 6 "$ 42"
+     *. ADD_TER RR2 6 "$42"
      *. B U1 100
      * 6 CA
      */
@@ -242,22 +242,20 @@ public:
     /**
      * Function WriteGENERICNetList
      * creates a generic netlist, now in XML.
-     * @param frame = the parent SCH_EDIT_FRAME frame
      * @param aOutFileName = the full filename of the file to create
      * @return bool - true if there were no errors, else false.
      */
-    bool WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName );
+    bool WriteGENERICNetList( const wxString& aOutFileName );
 
     /**
      * Function WriteNetListPCBNEW
      * generates a net list file (Format 2 improves ORCAD PCB)
      *
-     * @param frame = the parent SCH_EDIT_FRAME frame
      * @param f = the file to write to
-     * @param with_pcbnew if true, then format Pcbnew (OrcadPcb2 + reviews and lists of net),<p>
-     *                    else output ORCADPCB2 strict format.
+     * @param with_pcbnew if true, then use Pcbnew format (OrcadPcb2 + a list of net),<p>
+     *                    else use ORCADPCB2 basic format.
      */
-    bool WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew );
+    bool WriteNetListPCBNEW( FILE* f, bool with_pcbnew );
 
     /**
      * Function WriteNetListCADSTAR
@@ -287,22 +285,21 @@ public:
      * .. B * T3 1
      *U1 * 14
      */
-    void WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f );
+    void WriteNetListCADSTAR( FILE* f );
 
     /**
      * Function WriteNetListPspice
      * generates a netlist file in PSPICE format.
      * <p>
-     * All graphics text commentary by a [.-+] PSpice or [.-+] gnucap
-     * Are considered in placing orders in the netlist
-     * [.-] Or PSpice gnucap are beginning
-     * + + Gnucap and PSpice are ultimately NetList
-     * @param frame = the parent SCH_EDIT_FRAME frame
+     * All graphics text starting by  [.-+] PSpice or [.-+] gnucap
+     * are seen as spice directives and put in netlist
+     * .-PSpice or .-gnucap put at beginning of the netlist
+     * .+PSpice or .-genucap are put at end of the netList
      * @param f = the file to write to
-     * @param use_netnames if true, then nodes are identified by the netname,
-     *          else by net number.
+     * @param use_netnames = true, to use netnames in netlist,
+     *                      false to use net number.
      */
-    bool WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames );
+    bool WriteNetListPspice( FILE* f, bool use_netnames );
 
     /**
      * Function MakeCommandLine
@@ -385,22 +382,22 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        ret = helper.WriteNetListPCBNEW( this, f, true );
+        ret = helper.WriteNetListPCBNEW( f, true );
         fclose( f );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        ret = helper.WriteNetListPCBNEW( this, f, false );
+        ret = helper.WriteNetListPCBNEW( f, false );
         fclose( f );
         break;
 
     case NET_TYPE_CADSTAR:
-        helper.WriteNetListCADSTAR( this, f );
+        helper.WriteNetListCADSTAR( f );
         fclose( f );
         break;
 
     case NET_TYPE_SPICE:
-        ret = helper.WriteNetListPspice( this, f, aUse_netnames );
+        ret = helper.WriteNetListPspice( f, aUse_netnames );
         fclose( f );
         break;
 
@@ -411,7 +408,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
             D(printf("tmpFile:'%s'\n", CONV_TO_UTF8( tmpFile.GetFullPath() ) );)
 
-            ret = helper.WriteGENERICNetList( this, tmpFile.GetFullPath() );
+            ret = helper.WriteGENERICNetList( tmpFile.GetFullPath() );
             if( !ret )
                 break;
 
@@ -542,7 +539,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* 
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatPinList( EDA_ITEM*       aItem,
+SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatePinList( EDA_ITEM*       aItem,
                                                               SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
@@ -863,6 +860,9 @@ XNODE* EXPORT_HELP::makeGenericListOfNets()
         if( nitem->m_Type != NET_PIN )
             continue;
 
+        if( nitem->m_Flag != 0 )     // Redundant pin, skip it
+            continue;
+
         comp = (SCH_COMPONENT*) nitem->m_Link;
 
         // Get the reference for the net name and the main parent component
@@ -953,7 +953,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
     {
         for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = findNextComponent( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponentAndCreatePinList( schItem, path );
             if( !comp )
                 break;  // No component left
 
@@ -1025,8 +1025,12 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 #include <wx/wfstream.h>        // wxFFileOutputStream
 
-bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aOutFileName )
+bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
 {
+    // Prepare list of nets generation
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_Flag = 0;
+
 #if 0
 
     // this code seems to work now, for S-expression support.
@@ -1038,7 +1042,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
     {
     L_error:
         wxString msg = _( "Failed to create file " ) + aOutFileName;
-        DisplayError( frame, msg );
+        DisplayError( NULL, msg );
     }
     else
     {
@@ -1080,7 +1084,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
     if( ( out = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg = _( "Failed to create file " ) + aOutFileName;
-        DisplayError( frame, msg );
+        DisplayError( NULL, msg );
         return false;
     }
 
@@ -1097,7 +1101,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
     {
         for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponentAndCreatePinList( schItem, path );
             if( !comp )
                 break;  // No component left
 
@@ -1163,7 +1167,7 @@ bool EXPORT_HELP::WriteGENERICNetList( SCH_EDIT_FRAME* frame, const wxString& aO
 }
 
 
-bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_netnames )
+bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
 {
     int             ret = 0;
     char            Line[1024];
@@ -1180,6 +1184,10 @@ bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_n
     DateAndTime( Line );
 
     ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n", NETLIST_HEAD_STRING, Line );
+
+    // Prepare list of nets generation (not used here, but...
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_Flag = 0;
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
@@ -1255,7 +1263,7 @@ bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_n
     {
         for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, sheet );
+            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, sheet );
             if( !comp )
                 break;
 
@@ -1316,7 +1324,7 @@ bool EXPORT_HELP::WriteNetListPspice( SCH_EDIT_FRAME* frame, FILE* f, bool use_n
 }
 
 
-bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_pcbnew )
+bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
@@ -1333,8 +1341,11 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
     else
         ret |= fprintf( f, "( { %s created  %s }\n", NETLIST_HEAD_STRING, dateBuf );
 
-    // Create netlist module section
+    // Prepare list of nets generation
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_Flag = 0;
 
+    // Create netlist module section
     m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList;
@@ -1343,7 +1354,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( SCH_EDIT_FRAME* frame, FILE* f, bool with_
     {
         for( EDA_ITEM* item = path->LastDrawList();  item;  item = item->Next() )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatPinList( item, path );
+            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, path );
 
             if( !comp )
                 break;
@@ -1494,7 +1505,11 @@ bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
     return false;
 }
 
-
+/*
+ * remove duplicate pins from aPinList (list of pins relative to a given component)
+ * (i.e. set pointer to duplicate pins to NULL in this list).
+ * also set .m_Flag member of "removed" NETLIST_OBJECT pins to 1
+ */
 void EXPORT_HELP::eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
 {
     if( aPinList.size() == 0 )  // Trivial case: component with no pin
@@ -1519,23 +1534,30 @@ void EXPORT_HELP::eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
             if(  aPinList[jj] == NULL )   // Already removed
                 continue;
 
-            // other pin num end of duplicate list.
+            // if other pin num, stop search,
+            // because all pins having the same number are consecutive in list.
             if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
                 break;
 
             if( aPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
+            {
+                aPinList[jj]->m_Flag = 1;
                 aPinList[jj] = NULL;
+            }
             else /* the reference pin is not connected: remove this pin if the
                   * other pin is connected */
             {
                 if( aPinList[jj]->m_FlagOfConnection == PAD_CONNECT )
                 {
+                    aPinList[idxref]->m_Flag = 1;
                     aPinList[idxref] = NULL;
                     idxref = jj;
                 }
                 else    // the 2 pins are not connected: remove the tested pin,
-                        // and continue ...
+                {       // and continue ...
+                    aPinList[jj]->m_Flag = 1;
                     aPinList[jj] = NULL;
+                }
             }
         }
     }
@@ -1634,6 +1656,9 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
         if( aObjectsList[ii]->m_Type != NET_PIN )
             continue;
 
+        if( aObjectsList[ii]->m_Flag != 0 )     // Redundant pin, skip it
+            continue;
+
         comp = (SCH_COMPONENT*) aObjectsList[ii]->m_Link;
 
         // Get the reference for the net name and the main parent component
@@ -1674,7 +1699,7 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
 static wxString StartLine( wxT( "." ) );
 
 
-void EXPORT_HELP::WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f )
+void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
 {
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
@@ -1692,6 +1717,10 @@ void EXPORT_HELP::WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f )
     fprintf( f, "\"%s\"\n", CONV_TO_UTF8( Title ) );
     fprintf( f, "\n" );
 
+    // Prepare list of nets generation
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_Flag = 0;
+
     // Create netlist module section
     m_ReferencesAlreadyFound.Clear();
 
@@ -1701,7 +1730,7 @@ void EXPORT_HELP::WriteNetListCADSTAR( SCH_EDIT_FRAME* frame, FILE* f )
     {
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = Component = findNextComponentAndCreatPinList( DrawList, sheet );
+            DrawList = Component = findNextComponentAndCreatePinList( DrawList, sheet );
             if( Component == NULL )
                 break;
 
@@ -1747,9 +1776,6 @@ void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjects
     int NetCode, lastNetCode = -1;
     SCH_COMPONENT* Cmp;
     wxString NetName;
-
-    for( ii = 0; ii < aObjectsList.size(); ii++ )
-        aObjectsList[ii]->m_Flag = 0;
 
     for( ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
@@ -1829,24 +1855,5 @@ void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjects
         }
 
         aObjectsList[ii]->m_Flag = 1;
-
-        // Search for redundant pins to avoid generation of the same connection
-        // more than once.
-        for( unsigned jj = ii + 1; jj < aObjectsList.size(); jj++ )
-        {
-            if( aObjectsList[jj]->GetNet() != NetCode )
-                break;
-            if( aObjectsList[jj]->m_Type != NET_PIN )
-                continue;
-            SCH_COMPONENT* tstcmp =
-                (SCH_COMPONENT*) aObjectsList[jj]->m_Link;
-            wxString p    = Cmp->GetPath( &( aObjectsList[ii]->m_SheetList ) );
-            wxString tstp = tstcmp->GetPath( &( aObjectsList[jj]->m_SheetList ) );
-            if( p.Cmp( tstp ) != 0 )
-                continue;
-
-            if( aObjectsList[jj]->m_PinNum == aObjectsList[ii]->m_PinNum )
-                aObjectsList[jj]->m_Flag = 1;
-        }
     }
 }

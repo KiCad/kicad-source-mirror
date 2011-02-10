@@ -126,10 +126,10 @@
             <pin num="1" type="passive"/>
             <pin num="2" type="passive"/>
           </pins>
-    Output pin list is ( pin num = net name )
+    Output pin list is ( <pin num> <net name> )
     something like
-            ( 1 = VCC )
-            ( 2 = GND )
+            ( 1 VCC )
+            ( 2 GND )
 -->
 <xsl:template name="build_pin_list" match="pin">
     <xsl:param name="cmp_ref" select="0" />
@@ -137,7 +137,7 @@
     <!-- write pin numner and separator -->
     <xsl:text>  ( </xsl:text>
     <xsl:value-of select="@num"/>
-    <xsl:text> = </xsl:text>
+    <xsl:text> </xsl:text>
 
     <!-- search net name in nets section and write it: -->
     <xsl:variable name="pinNum" select="@num" />
