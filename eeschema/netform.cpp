@@ -134,9 +134,9 @@ class EXPORT_HELP
 
     /**
      * Function findNextComponentAndCreatePinList
-     * finds a "suitable" component from the DrawList and optionally builds
-     * its pin list in m_SortedComponentPinList. The list is sorted by pin num.
-     * A suitable component is a "new" real component
+     * finds a component from the DrawList and builds
+     * its pin list in m_SortedComponentPinList. This list is sorted by pin num.
+     * the component is the next actual component after aItem
      * (power symbols and virtual components that have their reference starting by '#'are skipped).
      */
     SCH_COMPONENT* findNextComponentAndCreatePinList( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
@@ -145,17 +145,16 @@ class EXPORT_HELP
 
     /**
      * Function eraseDuplicatePins
-     * removes duplicate Pins from the pin list, m_SortedComponentPinList.
+     * erase duplicate Pins from m_SortedComponentPinList (i.e. set pointer in this list to NULL).
      * (This is a list of pins found in the whole schematic, for a single
      * component.) These duplicate pins were put in list because some pins (powers... )
      * are found more than one time when we have a multiple parts per package
      * component. For instance, a 74ls00 has 4 parts, and therefore the VCC pin
      * and GND pin appears 4 times in the list.
-     * @param aPinList = a NETLIST_OBJECT_LIST that contains the list of pins for a
-     * given component.
      * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
+     * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
      */
-    void eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList );
+    void eraseDuplicatePins( );
 
     /**
      * Function addPinToComponentPinList
@@ -607,7 +606,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatePinList( EDA_ITEM*       a
               m_SortedComponentPinList.end(), sortPinsByNum );
 
         // Remove duplicate Pins in m_SortedComponentPinList
-        eraseDuplicatePins( m_SortedComponentPinList );
+        eraseDuplicatePins( );
 
         // record the usage of this library component entry.
         m_LibParts.insert( entry );     // rejects non-unique pointers
@@ -1510,14 +1509,14 @@ bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
  * (i.e. set pointer to duplicate pins to NULL in this list).
  * also set .m_Flag member of "removed" NETLIST_OBJECT pins to 1
  */
-void EXPORT_HELP::eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
+void EXPORT_HELP::eraseDuplicatePins( )
 {
-    if( aPinList.size() == 0 )  // Trivial case: component with no pin
+    if( m_SortedComponentPinList.size() == 0 )  // Trivial case: component with no pin
         return;
 
-    for( unsigned ii = 0; ii < aPinList.size(); ii++ )
+    for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
     {
-        if( aPinList[ii] == NULL ) /* already deleted */
+        if( m_SortedComponentPinList[ii] == NULL ) /* already deleted */
             continue;
 
         /* Search for duplicated pins
@@ -1529,34 +1528,34 @@ void EXPORT_HELP::eraseDuplicatePins( NETLIST_OBJECT_LIST& aPinList )
          * are necessary successive in list
          */
         int idxref = ii;
-        for( unsigned jj = ii + 1; jj < aPinList.size(); jj++ )
+        for( unsigned jj = ii + 1; jj < m_SortedComponentPinList.size(); jj++ )
         {
-            if(  aPinList[jj] == NULL )   // Already removed
+            if(  m_SortedComponentPinList[jj] == NULL )   // Already removed
                 continue;
 
             // if other pin num, stop search,
             // because all pins having the same number are consecutive in list.
-            if( aPinList[idxref]->m_PinNum != aPinList[jj]->m_PinNum )
+            if( m_SortedComponentPinList[idxref]->m_PinNum != m_SortedComponentPinList[jj]->m_PinNum )
                 break;
 
-            if( aPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
+            if( m_SortedComponentPinList[idxref]->m_FlagOfConnection == PAD_CONNECT )
             {
-                aPinList[jj]->m_Flag = 1;
-                aPinList[jj] = NULL;
+                m_SortedComponentPinList[jj]->m_Flag = 1;
+                m_SortedComponentPinList[jj] = NULL;
             }
             else /* the reference pin is not connected: remove this pin if the
                   * other pin is connected */
             {
-                if( aPinList[jj]->m_FlagOfConnection == PAD_CONNECT )
+                if( m_SortedComponentPinList[jj]->m_FlagOfConnection == PAD_CONNECT )
                 {
-                    aPinList[idxref]->m_Flag = 1;
-                    aPinList[idxref] = NULL;
+                    m_SortedComponentPinList[idxref]->m_Flag = 1;
+                    m_SortedComponentPinList[idxref] = NULL;
                     idxref = jj;
                 }
                 else    // the 2 pins are not connected: remove the tested pin,
                 {       // and continue ...
-                    aPinList[jj]->m_Flag = 1;
-                    aPinList[jj] = NULL;
+                    m_SortedComponentPinList[jj]->m_Flag = 1;
+                    m_SortedComponentPinList[jj] = NULL;
                 }
             }
         }

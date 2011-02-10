@@ -164,6 +164,13 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
+    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), DRAW_ITEM_T );
+    if( item )
+    {
+        ClearMsgPanel();
+        return item;
+    }
+
     item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), FIELD_T );
 
     if( item )

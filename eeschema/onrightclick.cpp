@@ -178,15 +178,13 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             AddMenusForComponent( PopMenu, Component );
         }
     }
-    break;
+        break;
 
     case SCH_COMPONENT_T:
         AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
         break;
 
     case SCH_LINE_T:
-
-//      if( !flags ) PopMenu->Append(ID_POPUP_SCH_MOVE_ITEM_REQUEST, "Move");
         switch( DrawStruct->GetLayer() )
         {
         case LAYER_WIRE:
@@ -203,7 +201,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Drawing" ), delete_xpm );
             break;
         }
-
         break;
 
     case SCH_SHEET_T:
