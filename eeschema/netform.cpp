@@ -941,10 +941,6 @@ XNODE* EXPORT_HELP::makeGenericComponents()
     wxString    sLib        = wxT( "lib" );
     wxString    sPart       = wxT( "part" );
     wxString    sNames      = wxT( "names" );
-    wxString    sPinNum     = wxT( "num" );
-    wxString    sPinNetname = wxT( "netname" );
-    wxString    sPinNetcode = wxT( "netcode" );
-
 
     m_ReferencesAlreadyFound.Clear();
 
@@ -957,7 +953,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
     {
         for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = findNextComponentAndCreatPinList( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponent( schItem, path );
             if( !comp )
                 break;  // No component left
 
@@ -1021,26 +1017,6 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
             timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
-
-            // Add pins list for this component.
-            // Useful to build netlist which have pads connection inside the footprint description
-            // (Spice, OrcadPCB2 ...)
-            XNODE* xpinslist;
-            xcomp->AddChild( xpinslist = node( sPins ) );
-            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
-            {
-                NETLIST_OBJECT* Pin = m_SortedComponentPinList[ii];
-                if( !Pin )
-                    continue;
-                XNODE* xpin;
-                xpinslist->AddChild( xpin = node( sPin ) );
-                wxString text;
-                xpin->AddAttribute( sPinNum, Pin->GetPinNumText() );
-                sprintPinNetName( &text, wxT( "N-%.6d" ), Pin );
-                xpin->AddAttribute( sPinNetname, text );
-                text.Printf( wxT( "%d" ), Pin->GetNet() );
-                xpin->AddAttribute( sPinNetcode, text );
-            }
         }
     }
 

@@ -377,9 +377,9 @@ void NETLIST_DIALOG::AddNewPluginPanel( wxCommandEvent& event )
     wxFileName fn( FullFileName );
     wxString ext = fn.GetExt();
     if( ext == wxT("xsl" ) )
-        cmdLine.Printf(wxT("xsltproc -o %%O \"%s\" %%I"), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars(FullFileName) );
     else if( ext == wxT("exe" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("\"%s\" > %%O < %%I"), GetChars(FullFileName) );
+        cmdLine.Printf(wxT("\"%s\" > \"%%O\" < \"%%I\""), GetChars(FullFileName) );
     else
         cmdLine.Printf(wxT("\"%s\""), GetChars(FullFileName) );
 
