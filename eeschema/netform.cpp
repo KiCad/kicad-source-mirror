@@ -107,6 +107,8 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
  */
 class EXPORT_HELP
 {
+    /// Used to temporary store and filter the list of pins of a schematic component
+    /// when generating schematic component data in netlist (comp section)
     NETLIST_OBJECT_LIST m_SortedComponentPinList;
 
     /// Used for "multi parts per package" components, avoids processing a lib component more than once.
@@ -707,7 +709,8 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
     wxString    sPart     = wxT( "part" );
     wxString    sPins     = wxT( "pins" );      // key for library component pins list
     wxString    sPin      = wxT( "pin" );       // key for one library component pin descr
-    wxString    sNum      = wxT( "num" );       // key for one library component pin num
+    wxString    sPinNum   = wxT( "num" );       // key for one library component pin num
+    wxString    sPinName  = wxT( "name" );      // key for one library component pin name
     wxString    sPinType  = wxT( "type" );      // key for one library component pin electrical type
     wxString    sName     = wxT( "name" );
     wxString    sField    = wxT( "field" );
@@ -774,7 +777,23 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
         pinList.clear();
         lcomp->GetPins( pinList, 0, 0 );
 
+        /* we must erase redundant Pins references in pinList
+         * These redundant pins exist because some pins
+         * are found more than one time when we have a component
+         * multiple parts per package or have 2 representations (DeMorgan conversion)
+         * For instance, a 74ls00 has DeMorgan conversion, with different pin shapes,
+         * and therefore each pin  appears 2 times in the list.
+         * Common pins (VCC, GND) can also be found more than once.
+         */
         sort( pinList.begin(), pinList.end(), sortPinsByNumber );
+        for( unsigned ii = 0; ii < pinList.size()-1; ii++ )
+        {
+            if( pinList[ii]->GetNumber() == pinList[ii+1]->GetNumber() )
+            {   // 2 pins have the same number, remove the redundant pin at index i+1
+                pinList.erase(pinList.begin() + ii + 1);
+                ii--;
+            }
+        }
 
         if( pinList.size() )
         {
@@ -786,7 +805,8 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( sPin ) );
-                pin->AddAttribute( sNum, pinList[i]->GetNumberString() );
+                pin->AddAttribute( sPinNum, pinList[i]->GetNumberString() );
+                pin->AddAttribute( sPinName, pinList[i]->GetName() );
                 pin->AddAttribute( sPinType, pinList[i]->GetTypeString() );
 
                 // caution: construction work site here, drive slowly
