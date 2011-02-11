@@ -45,8 +45,6 @@ static void ExitBusEntry( EDA_DRAW_PANEL* Panel, wxDC* DC )
     SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
 
     parent->SetRepeatItem( NULL );
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
 }
 
 
@@ -65,7 +63,7 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     /* Redraw at the new position. */
-    BusEntry->m_Pos = screen->m_Curseur;
+    BusEntry->m_Pos = screen->GetCrossHairPosition();
     BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
@@ -73,7 +71,8 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
 {
     // Create and place a new bus entry at cursor position
-    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->m_Curseur, s_LastShape, entry_type );
+    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->GetCrossHairPosition(), s_LastShape,
+                                                 entry_type );
     BusEntry->m_Flags = IS_NEW;
     BusEntry->Place( this, DC );;
     OnModify();
@@ -96,15 +95,15 @@ void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
 
     ItemInitialPosition = BusEntry->m_Pos;
 
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = BusEntry->m_Pos;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( BusEntry->m_Pos );
+    DrawPanel->MoveCursorToCrossHair();
 
     GetScreen()->SetCurItem( BusEntry );
-    DrawPanel->ManageCurseur = ShowWhileMoving;
-    DrawPanel->ForceCloseManageCurseur = ExitBusEntry;
+    DrawPanel->m_mouseCaptureCallback = ShowWhileMoving;
+    DrawPanel->m_endMouseCaptureCallback = ExitBusEntry;
 
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }
 
 

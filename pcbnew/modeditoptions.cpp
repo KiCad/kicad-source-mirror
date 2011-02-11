@@ -38,7 +38,7 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        Affiche_Message( wxEmptyString );
+        SetStatusText( wxEmptyString );
         DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
         UpdateStatusBar();
         break;

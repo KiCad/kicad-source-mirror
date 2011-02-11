@@ -65,7 +65,7 @@ void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
     // so it comes up wide enough next time.
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dialog.GetSize();
 
-    aParent->DrawPanel->MouseToCursorSchema();
+    aParent->DrawPanel->MoveCursorToCrossHair();
     aParent->DrawPanel->m_IgnoreMouseEvents = false;
 }
 

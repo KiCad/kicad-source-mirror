@@ -175,8 +175,7 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
         m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     }
 
-    sheet->LastScreen()->m_Curseur = pos;
-    m_Parent->RedrawScreen( true );
+    m_Parent->RedrawScreen( pos, true );
 }
 
 

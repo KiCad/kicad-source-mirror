@@ -90,15 +90,14 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         return;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( DrawPanel->ManageCurseur
-            && DrawPanel->ForceCloseManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+            DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
         }
         break;
 
     default:   // Abort a current command (if any)
-        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
         break;
     }
 
@@ -211,10 +210,8 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
      */
     if( PlaceModulesHorsPcb && edgesExists )
     {
-        if( GetScreen()->m_Curseur.y <
-           (GetBoard()->m_BoundaryBox.GetBottom() + 2000) )
-            GetScreen()->m_Curseur.y = GetBoard()->m_BoundaryBox.GetBottom() +
-                                       2000;
+        if( GetScreen()->GetCrossHairPosition().y < (GetBoard()->m_BoundaryBox.GetBottom() + 2000) )
+            GetScreen()->GetCrossHairPosition().y = GetBoard()->m_BoundaryBox.GetBottom() + 2000;
     }
 
     /* calculate the area needed by footprints */
@@ -232,7 +229,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
     Xsize_allowed = (int) ( sqrt( surface ) * 4.0 / 3.0 );
 
-    start     = current = GetScreen()->m_Curseur;
+    start     = current = GetScreen()->GetCrossHairPosition();
     Ymax_size = 0;
 
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
@@ -254,13 +251,9 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
             Ymax_size  = 0;
         }
 
-        GetScreen()->m_Curseur.x =
-            current.x + Module->m_Pos.x - Module->m_RealBoundaryBox.GetX();
-        GetScreen()->m_Curseur.y =
-            current.y + Module->m_Pos.y - Module->m_RealBoundaryBox.GetY();
+        GetScreen()->SetCrossHairPosition( current + Module->m_Pos -
+                                           Module->m_RealBoundaryBox.GetPosition() );
         Ymax_size = MAX( Ymax_size, Module->m_RealBoundaryBox.GetHeight() );
-
-        PutOnGrid( &GetScreen()->m_Curseur );
 
         Place_Module( Module, NULL, true );
 

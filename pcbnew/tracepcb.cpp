@@ -64,11 +64,11 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     screen->ClrRefreshReq();
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    if( DrawPanel->IsMouseCaptured() )
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     /* Redraw the cursor */
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 }
 
 
@@ -102,11 +102,11 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    if( DrawPanel->IsMouseCaptured() )
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 
     // Redraw the cursor
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 }
 
 

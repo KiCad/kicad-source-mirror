@@ -417,9 +417,9 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     if( IsNew() )
     {
         // fix size and position of the new sheet
-        // using the last values set by the ManageCurseur function
-        frame->DrawPanel->ManageCurseur = NULL;
-        frame->DrawPanel->ForceCloseManageCurseur = NULL;
+        // using the last values set by the m_mouseCaptureCallback function
+        frame->DrawPanel->SetMouseCapture( NULL, NULL );
+
         if( !frame->EditSheet( this, DC ) )
         {
             frame->GetScreen()->SetCurItem( NULL );

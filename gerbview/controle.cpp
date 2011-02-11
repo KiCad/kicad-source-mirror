@@ -20,7 +20,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     int         hotkey = 0;
     wxPoint     pos = aPosition;
 
-    PutOnGrid( &pos );
+    pos = GetScreen()->GetNearestGridPosition( pos );
 
     if( GetScreen()->IsRefreshReq() )
     {
@@ -37,7 +37,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         return;
     }
 
-    oldpos = GetScreen()->m_Curseur;
+    oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
     switch( g_KeyPressed )
@@ -71,19 +71,19 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
     }
 
-    GetScreen()->m_Curseur = pos;
+    GetScreen()->SetCrossHairPosition( pos );
 
-    if( oldpos != GetScreen()->m_Curseur )
+    if( oldpos != GetScreen()->GetCrossHairPosition() )
     {
-        pos = GetScreen()->m_Curseur;
-        GetScreen()->m_Curseur = oldpos;
-        DrawPanel->CursorOff( aDC );
-        GetScreen()->m_Curseur = pos;
-        DrawPanel->CursorOn( aDC );
+        pos = GetScreen()->GetCrossHairPosition();
+        GetScreen()->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        GetScreen()->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, true );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
         }
     }
 

@@ -165,7 +165,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
         break;
 
     case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case HK_SWITCH_UNITS:
@@ -218,7 +218,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
            && ( (GetCurItem()->m_Flags & IS_NEW) != 0 ) )
         {
             // A new track is in progress: call to End_Route()
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             End_Route( (TRACK*) GetCurItem(), aDC );
         }
         break;

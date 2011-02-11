@@ -49,11 +49,11 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
                                                g_ModuleTextSize.y ), true );
     Text->m_Size  = g_ModuleTextSize;
     Text->m_Thickness = g_ModuleTextWidth;
-    Text->m_Pos   = GetScreen()->m_Curseur;
+    Text->m_Pos   = GetScreen()->GetCrossHairPosition();
     Text->SetLocalCoord();
 
     InstallTextModOptionsFrame( Text, NULL );
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
 
     Text->m_Flags = 0;
     if( DC )
@@ -130,9 +130,6 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
     MODULE*       Module;
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
-
     if( Text == NULL )
         return;
 
@@ -175,23 +172,21 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
-    DrawPanel->CursorOff( DC );
+    DrawPanel->CrossHairOff( DC );
 
     TextInitialPosition    = Text->m_Pos;
     TextInitialOrientation = Text->m_Orient;
 
     // Center cursor on initial position of text
-    GetScreen()->m_Curseur = TextInitialPosition;
-    DrawPanel->MouseToCursorSchema();
-    DrawPanel->CursorOn( DC );
+    GetScreen()->SetCrossHairPosition( TextInitialPosition );
+    DrawPanel->MoveCursorToCrossHair();
+    DrawPanel->CrossHairOn( DC );
 
     Text->DisplayInfo( this );
 
     SetCurItem( Text );
-    DrawPanel->ManageCurseur = Show_MoveTexte_Module;
-    DrawPanel->ForceCloseManageCurseur = AbortMoveTextModule;
-
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, TRUE );
+    DrawPanel->SetMouseCapture( Show_MoveTexte_Module, AbortMoveTextModule );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, TRUE );
 }
 
 
@@ -217,7 +212,7 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             EXCHG( Text->m_Orient, TextInitialOrientation );
 
             // Set the new position for text.
-            Text->m_Pos = GetScreen()->m_Curseur;
+            Text->m_Pos = GetScreen()->GetCrossHairPosition();
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
             Text->m_Pos0    = textRelPos;
@@ -230,14 +225,13 @@ void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         }
         else
-            Text->m_Pos = GetScreen()->m_Curseur;
+            Text->m_Pos = GetScreen()->GetCrossHairPosition();
     }
 
     // leave it at (0,0) so we can use it Rotate when not moving.
     MoveVector.x = MoveVector.y = 0;
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
 }
 
 
@@ -257,7 +251,7 @@ static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
-    MoveVector = TextInitialPosition - screen->m_Curseur;
+    MoveVector = TextInitialPosition - screen->GetCrossHairPosition();
 
     // Draw umbilical if text moved
     if( MoveVector.x || MoveVector.y )

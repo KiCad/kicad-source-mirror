@@ -183,7 +183,7 @@ void DialogLabelEditor::OnOkClick( wxCommandEvent& aEvent )
 
 void DialogLabelEditor::OnCancelClick( wxCommandEvent& aEvent )
 {
-    m_Parent->DrawPanel->MouseToCursorSchema();
+    m_Parent->DrawPanel->MoveCursorToCrossHair();
     EndModal( wxID_CANCEL );
 }
 
@@ -236,6 +236,6 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
         g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
     m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
-    m_Parent->DrawPanel->MouseToCursorSchema();
+    m_Parent->DrawPanel->MoveCursorToCrossHair();
     EndModal( wxID_OK );
 }

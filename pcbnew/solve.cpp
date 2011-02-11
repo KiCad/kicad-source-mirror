@@ -475,7 +475,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
     }
 
     /* Placing the bit to remove obstacles on 2 pads to a link. */
-    pcbframe->Affiche_Message( wxT( "Gen Cells" ) );
+    pcbframe->SetStatusText( wxT( "Gen Cells" ) );
 
     Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->m_PadStart,
                        CURRENT_PAD, marge, WRITE_OR_CELL );
@@ -605,7 +605,7 @@ static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
             lastmove = MoveNodes;
             msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d" ),
                         OpenNodes, ClosNodes, MoveNodes );
-            pcbframe->Affiche_Message( msg );
+            pcbframe->SetStatusText( msg );
         }
 
         _self = 0;
@@ -767,7 +767,7 @@ end_of_route:
 
     msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d"),
                 OpenNodes, ClosNodes, MoveNodes );
-    pcbframe->Affiche_Message( msg );
+    pcbframe->SetStatusText( msg );
 
     return result;
 }

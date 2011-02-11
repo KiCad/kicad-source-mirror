@@ -166,7 +166,7 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor()
 
         if( m_drawItem == NULL )
             m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                      GetScreen()->m_Curseur );
+                                                      GetScreen()->GetCrossHairPosition() );
     }
 
     return m_drawItem;

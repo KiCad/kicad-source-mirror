@@ -57,8 +57,6 @@ static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
     Panel->GetScreen()->SetCurItem( NULL );
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
 }
 
 
@@ -86,11 +84,10 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
         m_Pos = tmp;
     }
 
-    ConstraintOnEdge( frame->GetScreen()->m_Curseur );
+    ConstraintOnEdge( frame->GetScreen()->GetCrossHairPosition() );
 
     Sheet->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
+    frame->DrawPanel->EndMouseCapture();
 }
 
 
@@ -102,9 +99,8 @@ void SCH_EDIT_FRAME::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
     s_InitialPosition    = SheetLabel->m_Pos;
     s_InitialEdge = SheetLabel->GetEdge();
 
-    DrawPanel->ManageCurseur = Move_PinSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
+    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
@@ -119,7 +115,7 @@ static void Move_PinSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
         SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    SheetLabel->ConstraintOnEdge( aPanel->GetScreen()->m_Curseur );
+    SheetLabel->ConstraintOnEdge( aPanel->GetScreen()->GetCrossHairPosition() );
 
     SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
@@ -189,9 +185,8 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
     GetScreen()->SetCurItem( NewSheetLabel );
     s_CurrentTypeLabel = NewSheetLabel->m_Shape;
 
-    DrawPanel->ManageCurseur = Move_PinSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
+    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 
     OnModify();
     return NewSheetLabel;
@@ -243,8 +238,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
     s_CurrentTypeLabel     = NewSheetLabel->m_Shape = HLabel->m_Shape;
 
     GetScreen()->SetCurItem( NewSheetLabel );
-    DrawPanel->ManageCurseur = Move_PinSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitPinSheet;
+    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
     Move_PinSheet( DrawPanel, DC, wxDefaultPosition, false );
 
     return NewSheetLabel;

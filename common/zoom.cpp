@@ -18,15 +18,13 @@
 #include "hotkeys_basic.h"
 
 
-void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
+void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
-
-    PutOnGrid( &(GetScreen()->m_Curseur) );
-    AdjustScrollBars();
+    AdjustScrollBars( aCenterPoint );
 
 #if !defined(__WXMAC__)
     /* DrawPanel->Refresh() is not used here because the redraw is delayed and the mouse
-     * events (from MouseToCursorSchema ot others) during this delay create problems: the
+     * events (from MoveCursorToCrossHair ot others) during this delay create problems: the
      * mouse cursor position is false in calculations.  TODO: see exactly how the mouse
      * creates problems when moving during refresh use Refresh() and update() do not change
      * problems
@@ -41,29 +39,17 @@ void EDA_DRAW_FRAME::RedrawScreen( bool aWarpPointer )
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( aWarpPointer )
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
  }
-
-
-/** Adjust the coordinate to the nearest grid value
- * @param aCoord = coordinate to adjust
- * @param aGridSize = pointer to a grid value. if NULL uses the current grid size
- */
-void EDA_DRAW_FRAME::PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize )
-{
-    wxCHECK_RET( aCoord != NULL, wxT( "Cannot pull NULL coordinate pointer on grid." ) );
-
-    *aCoord = GetScreen()->GetNearestGridPosition( *aCoord, aGridSize );
-}
 
 
 /** Redraw the screen with best zoom level and the best centering
  * that shows all the page or the board
  */
-void EDA_DRAW_FRAME::Zoom_Automatique( bool move_mouse_cursor )
+void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    GetScreen()->SetZoom( BestZoom() ); // Set the best zoom
-    RedrawScreen( move_mouse_cursor );     // Set the best centering and refresh the screen
+    GetScreen()->SetZoom( BestZoom() ); // Set the best zoom and get center point.
+    RedrawScreen( GetScreen()->GetScrollCenterPosition(), aWarpPointer );
 }
 
 
@@ -86,8 +72,7 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_Rect& Rect )
     bestscale = MAX( bestscale, scalex );
 
     GetScreen()->SetScalingFactor( bestscale );
-    GetScreen()->m_Curseur = Rect.Centre();
-    RedrawScreen( TRUE );
+    RedrawScreen( Rect.Centre(), true );
 }
 
 
@@ -104,31 +89,29 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     int          id = event.GetId();
     bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetScreen();
+    wxPoint      center = screen->GetScrollCenterPosition();
 
     switch( id )
     {
     case ID_POPUP_ZOOM_IN:
         zoom_at_cursor = true;
+        center = screen->GetCrossHairPosition();
 
     // fall thru
-
     case ID_ZOOM_IN:
-        if( id == ID_ZOOM_IN )
-            screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         if( screen->SetPreviousZoom() )
-            RedrawScreen( zoom_at_cursor );
+            RedrawScreen( center, zoom_at_cursor );
         break;
 
     case ID_POPUP_ZOOM_OUT:
         zoom_at_cursor = true;
+        center = screen->GetCrossHairPosition();
 
     // fall thru
 
     case ID_ZOOM_OUT:
-        if( id == ID_ZOOM_OUT )
-            screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         if( screen->SetNextZoom() )
-            RedrawScreen( zoom_at_cursor );
+            RedrawScreen( center, zoom_at_cursor );
         break;
 
     case ID_ZOOM_REDRAW:
@@ -136,7 +119,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_CENTER:
-        RedrawScreen( true );
+        RedrawScreen( center, true );
         break;
 
     case ID_ZOOM_PAGE:
@@ -147,7 +130,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         break;
 
     default:
@@ -160,7 +143,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
             return;
         }
         if( screen->SetZoom( screen->m_ZoomList[i] ) )
-            RedrawScreen( true );
+            RedrawScreen( center, true );
     }
 
     UpdateStatusBar();
@@ -207,8 +190,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
                         screen->m_ZoomList[i] / screen->m_ZoomScalar );
         else
             msg.Printf( wxT( "%.1f" ),
-                        (float) screen->m_ZoomList[i] /
-                        screen->m_ZoomScalar );
+                        (float) screen->m_ZoomList[i] / screen->m_ZoomScalar );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );

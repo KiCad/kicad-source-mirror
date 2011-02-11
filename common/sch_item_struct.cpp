@@ -56,7 +56,7 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
 {
     SCH_SCREEN* screen = aFrame->GetScreen();
 
-    if( m_Flags & IS_NEW )
+    if( IsNew() )
     {
         if( !screen->CheckIfOnDrawList( this ) )  // don't want a loop!
             screen->AddToDrawList( this );
@@ -68,14 +68,12 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     m_Flags = 0;
     screen->SetModify();
     screen->SetCurItem( NULL );
-    aFrame->DrawPanel->ManageCurseur = NULL;
-    aFrame->DrawPanel->ForceCloseManageCurseur = NULL;
+    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
 
     if( aDC )
     {
-        aFrame->DrawPanel->CursorOff( aDC );      // Erase schematic cursor
+        EDA_CROSS_HAIR_MANAGER( aFrame->DrawPanel, aDC );  // Erase schematic cursor
         Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        aFrame->DrawPanel->CursorOn( aDC );       // Display schematic cursor
     }
 }
 

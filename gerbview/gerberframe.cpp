@@ -247,7 +247,7 @@ int WinEDA_GerberFrame::BestZoom()
 
     x = (double) bbox.GetWidth() / (double) size.x;
     y = (double) bbox.GetHeight() / (double) size.y;
-    GetScreen()->m_Curseur = bbox.Centre();
+    GetScreen()->SetScrollCenterPosition( bbox.Centre() );
 
     int best_zoom = wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
     return best_zoom;

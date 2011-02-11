@@ -97,10 +97,10 @@ void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, screen, 0 );
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+    if( DrawPanel->IsMouseCaptured() )
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 
     // Display the filename and the layer name (found in the gerber files, if any)
     // relative to the active layer

@@ -210,10 +210,8 @@ static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
         }
     }
 
-    status_dimension      = 0;
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
-    ((WinEDA_PcbFrame*)Panel->GetParent())->SetCurItem(NULL);
+    status_dimension = 0;
+    ((WinEDA_PcbFrame*)Panel->GetParent())->SetCurItem( NULL );
 }
 
 
@@ -226,7 +224,7 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
     if( Dimension == NULL )       /* debut reel du trace */
     {
         status_dimension = 1;
-        pos = GetScreen()->m_Curseur;
+        pos = GetScreen()->GetCrossHairPosition();
 
         Dimension = new DIMENSION( GetBoard() );
         Dimension->m_Flags = IS_NEW;
@@ -267,8 +265,7 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
 
         Dimension->Draw( DrawPanel, DC, GR_XOR );
 
-        DrawPanel->ManageCurseur = Montre_Position_New_Dimension;
-        DrawPanel->ForceCloseManageCurseur = Exit_EditDimension;
+        DrawPanel->SetMouseCapture( Montre_Position_New_Dimension, Exit_EditDimension );
         return Dimension;
     }
 
@@ -289,8 +286,7 @@ DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
     SaveCopyInUndoList( Dimension, UR_NEW );
 
     OnModify();
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
 
     return NULL;
 }
@@ -301,7 +297,7 @@ static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 {
     PCB_SCREEN* screen   = (PCB_SCREEN*) aPanel->GetScreen();
     DIMENSION*  Dimension = (DIMENSION*) screen->GetCurItem();
-    wxPoint     pos = screen->m_Curseur;
+    wxPoint     pos = screen->GetCrossHairPosition();
 
     if( Dimension == NULL )
         return;

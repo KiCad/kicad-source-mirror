@@ -492,8 +492,7 @@ void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
-    DrawFrame->AdjustScrollBars();
-    DrawFrame->RedrawScreen( FALSE );
+    DrawFrame->RedrawScreen( wxPoint( 0, 0 ), false );
 }
 
 

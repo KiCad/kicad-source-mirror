@@ -52,9 +52,9 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
 
     newpos = comp->GetTransform().TransformCoordinate( newpos ) + pos;
 
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = newpos;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( newpos );
+    DrawPanel->MoveCursorToCrossHair();
 
     m_OldPos    = aField->m_Pos;
     m_Multiflag = 0;
@@ -69,11 +69,11 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
         }
     }
 
-    DrawPanel->ForceCloseManageCurseur = AbortMoveCmpField;
-    DrawPanel->ManageCurseur = MoveCmpField;
+    DrawPanel->m_endMouseCaptureCallback = AbortMoveCmpField;
+    DrawPanel->m_mouseCaptureCallback = MoveCmpField;
     aField->m_Flags = IS_MOVED;
 
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }
 
 
@@ -133,7 +133,7 @@ modified!\nYou must create a new power"  ) );
     newtext.Trim( true );
     newtext.Trim( false );
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
     if ( diag != wxID_OK )
         return;  // cancelled by user
@@ -207,7 +207,7 @@ static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
     // But here we want the relative position of the moved field
     // and we know the actual position.
     // So we are using the inverse rotation/mirror transform.
-    wxPoint pt( aPanel->GetScreen()->m_Curseur - pos );
+    wxPoint pt( aPanel->GetScreen()->GetCrossHairPosition() - pos );
 
     TRANSFORM itrsfm = component->GetTransform().InverseTransform();
     currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
@@ -218,9 +218,6 @@ static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 
 static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    Panel->ForceCloseManageCurseur = NULL;
-    Panel->ManageCurseur = NULL;
-
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) Panel->GetParent();
     SCH_FIELD*      currentField = frame->GetCurrentField();
 

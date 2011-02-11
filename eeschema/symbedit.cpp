@@ -52,8 +52,8 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    GetScreen()->m_Curseur = wxPoint( 0, 0 );
-    DrawPanel->MouseToCursorSchema();
+    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
     wxFileName fn = dlg.GetPath();
@@ -229,14 +229,13 @@ void LIB_EDIT_FRAME::PlaceAncre()
     if( m_component == NULL )
         return;
 
-    wxPoint offset( -GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y );
+    wxPoint offset( -GetScreen()->GetCrossHairPosition().x, GetScreen()->GetCrossHairPosition().y );
 
     OnModify( );
 
     m_component->SetOffset( offset );
 
     /* Redraw the symbol */
-    GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
-    RedrawScreen( TRUE );
+    RedrawScreen( wxPoint( 0 , 0 ), true );
     DrawPanel->Refresh();
 }

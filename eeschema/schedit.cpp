@@ -128,13 +128,13 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE:
 
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->UnManageCursor();
+        DrawPanel->EndMouseCapture();
         break;
 
     default:
 
         // Stop the current command and deselect the current tool
-        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
         break;
     }
 
@@ -156,7 +156,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_PASTE:
-        HandleBlockBegin( &dc, BLOCK_PASTE, screen->m_Curseur );
+        HandleBlockBegin( &dc, BLOCK_PASTE, screen->GetCrossHairPosition() );
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
@@ -228,12 +228,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '/' );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '\\' );
         break;
 
@@ -243,7 +243,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_END_LINE:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         EndSegment( &dc );
         break;
 
@@ -252,27 +252,27 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_ROTATE_TEXT:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ChangeTextOrient( (SCH_TEXT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_GLOBAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_HIERARCHICAL_LABEL_T );
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_TEXT_T );
         break;
 
@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_ROTATE_FIELD:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         RotateCmpField( (SCH_FIELD*) screen->GetCurItem(), &dc );
         break;
 
@@ -292,7 +292,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
@@ -302,9 +302,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_BREAK_WIRE:
     {
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         SCH_ITEM* oldWiresList = screen->ExtractWires( true );
-        screen->BreakSegment( screen->m_Curseur );
+        screen->BreakSegment( screen->GetCrossHairPosition() );
 
         if( oldWiresList )
             SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
@@ -343,12 +343,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_END_SHEET:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         screen->GetCurItem()->Place( this, &dc );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ReSizeSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
         screen->TestDanglingEnds( DrawPanel, &dc );
         break;
@@ -391,7 +391,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_MOVE_PINSHEET:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         StartMove_PinSheet( (SCH_SHEET_PIN*) screen->GetCurItem(), &dc );
         break;
 
@@ -413,7 +413,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     // fall through
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
 
         if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
         {
@@ -421,7 +421,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // is to simulate a block drag command
             if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
             {
-                if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->m_Curseur ) )
+                if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
                     break;
 
                 // Give a non null size to the search block:
@@ -434,12 +434,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         // The easiest way to handle a drag component is to simulate a
         // block drag command
         if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
-            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->m_Curseur ) )
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
                 break;
 
             // Ensure the block selection contains the segment, or one end of
@@ -500,7 +500,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 option = CMP_NORMAL; break;
             }
 
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
 
             if( screen->GetCurItem()->m_Flags == 0 )
                 SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(), UR_CHANGED );
@@ -510,7 +510,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
     case ID_POPUP_SCH_INIT_CMP:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_SCH_EDIT_VALUE_CMP:
@@ -563,7 +563,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem() == NULL )
             break;
 
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ConvertPart( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
@@ -602,7 +602,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem() == NULL )
             break;
 
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         SelPartUnit( (SCH_COMPONENT*) screen->GetCurItem(),
                      id + 1 - ID_POPUP_SCH_SELECT_UNIT1, &dc );
         break;
@@ -656,7 +656,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         DrawPanel->m_AutoPAN_Request = FALSE;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
@@ -665,39 +665,39 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
         SetSheetNumberAndCount();
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );
         break;
 
     case ID_POPUP_MIRROR_Y_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_MIRROR_Y, &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_COPY, &dc );
         break;
 
     case ID_POPUP_DRAG_BLOCK:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_DRAG, &dc );
         break;
 
     case ID_POPUP_SCH_ADD_JUNCTION:
-        DrawPanel->MouseToCursorSchema();
-        screen->SetCurItem( AddJunction( &dc, screen->m_Curseur, true ) );
+        DrawPanel->MoveCursorToCrossHair();
+        screen->SetCurItem( AddJunction( &dc, screen->GetCrossHairPosition(), true ) );
         screen->TestDanglingEnds( DrawPanel, &dc );
         screen->SetCurItem( NULL );
         break;
@@ -739,7 +739,7 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
     if( DrawStruct == NULL )
         return;
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
 
     switch( DrawStruct->Type() )
     {
@@ -797,11 +797,11 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->UnManageCursor();
+        DrawPanel->EndMouseCapture();
     }
     else
     {
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
     }
 }

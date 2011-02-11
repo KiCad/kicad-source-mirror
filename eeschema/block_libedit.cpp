@@ -80,14 +80,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BlockState state     = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
-        DrawPanel->ManageCurseur = DrawAndSizingBlockOutlines;
-        DrawPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
-        GetScreen()->m_Curseur.x = GetScreen()->m_BlockLocate.GetRight();
-        GetScreen()->m_Curseur.y = GetScreen()->m_BlockLocate.GetBottom();
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        GetScreen()->SetCrossHairPosition( wxPoint( GetScreen()->m_BlockLocate.GetRight(),
+                                                    GetScreen()->m_BlockLocate.GetBottom() ) );
+        DrawPanel->MoveCursorToCrossHair();
     }
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -106,12 +105,14 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if( ItemCount )
         {
             nextCmd = true;
-            if( DrawPanel->ManageCurseur != NULL )
+
+            if( DrawPanel->IsMouseCaptured() )
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
             }
+
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             DrawPanel->Refresh( true );
         }
@@ -119,7 +120,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextCmd = true;
-        DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
+        DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
@@ -174,20 +175,17 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextCmd )
     {
-        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY )
-            if ( m_component )
-                m_component->ClearSelectedItems();
+        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY &&  m_component )
+            m_component->ClearSelectedItems();
 
         GetScreen()->m_BlockLocate.m_Flags   = 0;
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
+        DrawPanel->SetMouseCapture( NULL, NULL );
         SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
         DrawPanel->Refresh( true );
     }
-
 
     return nextCmd;
 }
@@ -204,10 +202,10 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     bool err = false;
     wxPoint pt;
 
-    if( DrawPanel->ManageCurseur == NULL )
+    if( !DrawPanel->IsMouseCaptured() )
     {
         err = true;
-        DisplayError( this, wxT( "HandleBlockPLace : ManageCurseur = NULL" ) );
+        DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
@@ -265,14 +263,12 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->ManageCurseur             = NULL;
-    DrawPanel->ForceCloseManageCurseur   = NULL;
     GetScreen()->m_BlockLocate.m_Flags   = 0;
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
+    DrawPanel->SetMouseCapture( NULL, NULL );
     DrawPanel->Refresh( true );
-
     SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
 }
 
@@ -309,8 +305,7 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     }
 
     /* Repaint new view */
-    PtBlock->m_MoveVector.x = screen->m_Curseur.x - PtBlock->m_BlockLastCursorPosition.x;
-    PtBlock->m_MoveVector.y = screen->m_Curseur.y - PtBlock->m_BlockLastCursorPosition.y;
+    PtBlock->m_MoveVector = screen->GetCrossHairPosition() - PtBlock->m_BlockLastCursorPosition;
 
     GRSetDrawMode( aDC, g_XorMode );
     PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );

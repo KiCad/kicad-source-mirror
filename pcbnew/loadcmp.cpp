@@ -83,10 +83,12 @@ bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 
     GetBoard()->m_NetInfo->BuildListOfNets();
 
-    GetScreen()->m_Curseur.x = GetScreen()->m_Curseur.y = 0;
+    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
     Place_Module( Module, NULL );
+
     if( Module->GetLayer() != LAYER_N_FRONT )
         Module->Flip( Module->m_Pos );
+
     Rotate_Module( NULL, Module, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( TRUE );
@@ -99,7 +101,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
                                                        wxDC*           DC )
 {
     MODULE* module;
-    wxPoint curspos = GetScreen()->m_Curseur;
+    wxPoint curspos = GetScreen()->GetCrossHairPosition();
     wxString             ModuleName, keys;
     static wxArrayString HistoryList;
     static wxString      lastCommponentName;
@@ -118,7 +120,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
 
     if( ModuleName.IsEmpty() )  /* Cancel command */
     {
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -132,7 +134,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
                                                 keys );
         if( ModuleName.IsEmpty() )  /* Cancel command */
         {
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -144,7 +146,7 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
                                                     wxEmptyString );
         if( ModuleName.IsEmpty() )
         {
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
     }
@@ -160,15 +162,15 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
                                                 wxEmptyString );
         if( ModuleName.IsEmpty() )
         {
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
         else
             module = Get_Librairie_Module( library, ModuleName, TRUE );
     }
 
-    GetScreen()->m_Curseur = curspos;
-    DrawPanel->MouseToCursorSchema();
+    GetScreen()->SetCrossHairPosition( curspos );
+    DrawPanel->MoveCursorToCrossHair();
 
     if( module )
     {
@@ -263,7 +265,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
         FILTER_READER reader( fileReader );
 
         msg.Printf( _( "Scan Lib: %s" ), GetChars( tmp ) );
-        Affiche_Message( msg );
+        SetStatusText( msg );
 
         /* Reading header ENTETE_LIBRAIRIE */
         reader.ReadLine();
@@ -331,7 +333,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
                 NewModule->ReadDescr( &reader );
                 SetLocaleTo_Default();         // revert to the current locale
                 GetBoard()->Add( NewModule, ADD_APPEND );
-                Affiche_Message( wxEmptyString );
+                SetStatusText( wxEmptyString );
                 return NewModule;
             }
         }
@@ -429,7 +431,7 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
 
         // Statusbar library loaded message
         msg = _( "Library " ) + fn.GetFullPath() + _( " loaded" );
-        Affiche_Message( msg );
+        SetStatusText( msg );
 
         /* Read header. */
         reader.ReadLine();

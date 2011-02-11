@@ -66,7 +66,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     wxString   CmpName;
     LIB_ALIAS* LibEntry = NULL;
 
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     if( GetScreen()->IsModify()
         && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
@@ -216,10 +216,10 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+    if( DrawPanel->IsMouseCaptured() )
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 
     DisplayLibInfos();
     UpdateStatusBar();
@@ -235,7 +235,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     wxFileName fn;
     wxString   msg;
 
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     if( GetScreen()->IsModify() )
     {
@@ -373,7 +373,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     wxArrayString ListNames;
     wxString      msg;
 
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     m_lastDrawItem = NULL;
     m_drawItem = NULL;
@@ -472,7 +472,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 lost!\n\nClear the current component from the screen?" ) ) )
         return;
 
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     m_drawItem = NULL;
 

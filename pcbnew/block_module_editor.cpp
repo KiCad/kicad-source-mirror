@@ -103,14 +103,13 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     {
         BlockState   state   = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
-        DrawPanel->ManageCurseur = DrawAndSizingBlockOutlines;
-        DrawPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
-        GetScreen()->m_Curseur.x = GetScreen()->m_BlockLocate.GetRight();
-        GetScreen()->m_Curseur.y = GetScreen()->m_BlockLocate.GetBottom();
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        GetScreen()->SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
+                                                     GetScreen()->m_BlockLocate.GetBottom() ) );
+        DrawPanel->MoveCursorToCrossHair();
     }
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -127,12 +126,14 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
         if( itemsCount )
         {
             nextcmd = true;
-            if( DrawPanel->ManageCurseur != NULL )
+
+            if( DrawPanel->IsMouseCaptured() )
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
-                DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
             }
+
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             DrawPanel->Refresh( TRUE );
         }
@@ -140,7 +141,7 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextcmd = true;
-        DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
+        DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
@@ -189,16 +190,13 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
         {
             ClearMarkItems( currentModule );
         }
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
-        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
-        SetCurItem( NULL );
-        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
-        DrawPanel->Refresh( TRUE );
-    }
 
+        GetScreen()->ClearBlockCommand();
+        SetCurItem( NULL );
+        DrawPanel->SetMouseCapture( NULL, NULL );
+        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        DrawPanel->Refresh( true );
+    }
 
     return nextcmd;
 }
@@ -217,10 +215,10 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     bool    err = FALSE;
     MODULE* currentModule = GetBoard()->m_Modules;
 
-    if( DrawPanel->ManageCurseur == NULL )
+    if( !DrawPanel->IsMouseCaptured() )
     {
         err = TRUE;
-        DisplayError( this, wxT( "HandleBlockPLace : ManageCurseur = NULL" ) );
+        DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
@@ -272,14 +270,12 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
     GetScreen()->m_BlockLocate.m_Flags   = 0;
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     SetCurItem( NULL );
-    DrawPanel->Refresh( TRUE );
-
+    DrawPanel->SetMouseCapture( NULL, NULL );
+    DrawPanel->Refresh( true );
     SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
 }
 
@@ -339,7 +335,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     }
 
     /* Repaint new view. */
-    PtBlock->m_MoveVector = screen->m_Curseur - PtBlock->m_BlockLastCursorPosition;
+    PtBlock->m_MoveVector = screen->GetCrossHairPosition() - PtBlock->m_BlockLastCursorPosition;
 
     PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
 

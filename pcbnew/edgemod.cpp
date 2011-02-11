@@ -38,14 +38,14 @@ void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 {
     if( Edge == NULL )
         return;
+
     Edge->Draw( DrawPanel, DC, GR_XOR );
     Edge->m_Flags |= IS_MOVED;
     MoveVector.x   = MoveVector.y = 0;
-    CursorInitialPosition    = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = Move_Segment;
-    DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
+    CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
+    DrawPanel->SetMouseCapture( Move_Segment, Exit_EditEdge_Module );
     SetCurItem( Edge );
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
@@ -63,8 +63,7 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge )
     Edge->m_End0   -= MoveVector;
 
     Edge->m_Flags = 0;
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
     MODULE* Module = (MODULE*) Edge->GetParent();
@@ -89,7 +88,7 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
         Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
-    MoveVector = -(screen->m_Curseur - CursorInitialPosition);
+    MoveVector = -(screen->GetCrossHairPosition() - CursorInitialPosition);
 
     Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
 
@@ -115,7 +114,7 @@ static void ShowEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
         Edge->Draw( aPanel, aDC, GR_XOR );
     }
 
-    Edge->m_End = screen->m_Curseur;
+    Edge->m_End = screen->GetCrossHairPosition();
 
     /* Update relative coordinate. */
     Edge->m_End0 = Edge->m_End - Module->m_Pos;
@@ -185,8 +184,7 @@ void WinEDA_ModuleEditFrame::Edit_Edge_Layer( EDGE_MODULE* Edge )
         /* an edge is put on a copper layer, and it is very dangerous. a
          *confirmation is requested */
         if( !IsOK( this,
-                  _(
-                      "The graphic item will be on a copper layer.  It is very dangerous. Are you sure?" ) ) )
+                   _( "The graphic item will be on a copper layer.  It is very dangerous. Are you sure?" ) ) )
             return;
     }
 
@@ -223,13 +221,15 @@ void WinEDA_ModuleEditFrame::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, g_ModuleSegmentWidth, GetScreen()->GetInternalUnits() );
+    buffer = ReturnStringFromValue( g_UserUnit, g_ModuleSegmentWidth,
+                                    GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
     buffer = dlg.GetValue( );
-    g_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer, GetScreen()->GetInternalUnits() );
+    g_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer,
+                                                  GetScreen()->GetInternalUnits() );
 
     if( aEdge )
     {
@@ -289,8 +289,7 @@ static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC )
             Edge->Draw( Panel, DC, GR_OR );
         }
     }
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
+
     Panel->GetScreen()->SetCurItem( NULL );
 }
 
@@ -339,7 +338,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
             Edge->SetLayer( SILKSCREEN_N_BACK );
 
         /* Initialise the starting point of the new segment or arc */
-        Edge->m_Start = GetScreen()->m_Curseur;
+        Edge->m_Start = GetScreen()->GetCrossHairPosition();
 
         /* Initialise the ending point of the new segment or arc */
         Edge->m_End = Edge->m_Start;
@@ -351,9 +350,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
         Edge->m_End0 = Edge->m_Start0;
         module->Set_Rectangle_Encadrement();
-
-        DrawPanel->ManageCurseur = ShowEdgeModule;
-        DrawPanel->ForceCloseManageCurseur = Exit_EditEdge_Module;
+        DrawPanel->SetMouseCapture( ShowEdgeModule, Exit_EditEdge_Module );
     }
     /* Segment creation in progress.
      * The ending coordinate are updated by the function
@@ -380,7 +377,7 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
                 Edge->m_Flags = IS_NEW;
                 Edge->m_Width = g_ModuleSegmentWidth;
-                Edge->m_Start = GetScreen()->m_Curseur;
+                Edge->m_Start = GetScreen()->GetCrossHairPosition();
                 Edge->m_End   = Edge->m_Start;
 
                 /* Update relative coordinate. */
@@ -418,6 +415,5 @@ void WinEDA_ModuleEditFrame::End_Edge_Module( EDGE_MODULE* Edge )
     Module->Set_Rectangle_Encadrement();
     Module->m_LastEdit_Time = time( NULL );
     OnModify();
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
 }

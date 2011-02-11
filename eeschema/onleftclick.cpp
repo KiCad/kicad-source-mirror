@@ -352,7 +352,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_COMPONENT_T:
             InstallCmpeditFrame( this, (SCH_COMPONENT*) item );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             break;
 
         case SCH_TEXT_T:
@@ -364,7 +364,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_FIELD_T:
             EditCmpFieldText( (SCH_FIELD*) item, aDC );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             break;
 
         case SCH_MARKER_T:

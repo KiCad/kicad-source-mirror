@@ -125,7 +125,7 @@ void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
     */
     //Compile_Ratsnest( NULL, true );
 
-    Affiche_Message( wxString( _("Session file imported and merged OK.")) );
+    SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
 
     DrawPanel->Refresh( true );
 }

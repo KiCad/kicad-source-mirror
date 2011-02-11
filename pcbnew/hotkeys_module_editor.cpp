@@ -60,7 +60,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
 
     case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
         if( !blockActive )
-            GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+            GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case HK_SWITCH_UNITS:

@@ -85,8 +85,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             if( g_CurrentTrackList.GetCount() == 0 )
             {
-                DrawPanel->ManageCurseur = NULL;
-                DrawPanel->ForceCloseManageCurseur = NULL;
+                DrawPanel->SetMouseCapture( NULL, NULL );
 
                 if( g_HighLight_Status )
                     High_Light( DC );
@@ -96,8 +95,8 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
             }
             else
             {
-                if( DrawPanel->ManageCurseur )
-                    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+                if( DrawPanel->IsMouseCaptured() )
+                    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 
                 return g_CurrentTrackSegment;
             }

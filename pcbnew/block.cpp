@@ -85,15 +85,15 @@ private:
 static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent, const wxString& title )
 {
     int     nocmd;
-    wxPoint oldpos = parent->GetScreen()->m_Curseur;
+    wxPoint oldpos = parent->GetScreen()->GetCrossHairPosition();
 
     parent->DrawPanel->m_IgnoreMouseEvents = true;
     DIALOG_BLOCK_OPTIONS dlg( parent, title );
 
     nocmd = dlg.ShowModal();
 
-    parent->GetScreen()->m_Curseur = oldpos;
-    parent->DrawPanel->MouseToCursorSchema();
+    parent->GetScreen()->SetCrossHairPosition( oldpos );
+    parent->DrawPanel->MoveCursorToCrossHair();
     parent->DrawPanel->m_IgnoreMouseEvents = false;
     parent->DrawPanel->SetCursor( parent->DrawPanel->GetDefaultCursor() );
 
@@ -201,11 +201,12 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 {
     bool err = false;
 
-    if( DrawPanel->ManageCurseur == NULL )
+    if( !DrawPanel->IsMouseCaptured() )
     {
         err = true;
-        DisplayError( this, wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
+        DisplayError( this, wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
+
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -217,15 +218,17 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -240,11 +243,9 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur   = NULL;
-    GetScreen()->m_BlockLocate.m_Flags   = 0;
-    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+    DrawPanel->SetMouseCapture( NULL, NULL );
+    GetScreen()->ClearBlockCommand();
+
     if( GetScreen()->m_BlockLocate.GetCount() )
     {
         DisplayError( this, wxT( "Error in HandleBlockPLace some items left in list" ) );
@@ -274,11 +275,8 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
     // If coming here after cancel block, clean up and exit
     if( GetScreen()->m_BlockLocate.m_State == STATE_NO_BLOCK )
     {
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur   = NULL;
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-        GetScreen()->m_BlockLocate.ClearItemsList();
+        DrawPanel->SetMouseCapture( NULL, NULL );
+        GetScreen()->ClearBlockCommand();
         DisplayToolMsg( wxEmptyString );
         return false;
     }
@@ -292,7 +290,7 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
             cancelCmd = true;
 
             // undraw block outline
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
         }
         else
         {
@@ -307,7 +305,7 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         }
     }
 
-    if( !cancelCmd && DrawPanel->ManageCurseur )
+    if( !cancelCmd && DrawPanel->IsMouseCaptured() )
     {
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
@@ -321,24 +319,24 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            DrawPanel->ManageCurseur = drawMovingBlock;
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+            DrawPanel->m_mouseCaptureCallback = drawMovingBlock;
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
-            DrawPanel->ManageCurseur = NULL;
+            DrawPanel->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Delete();
             break;
 
         case BLOCK_ROTATE: /* Rotation */
-            DrawPanel->ManageCurseur = NULL;
+            DrawPanel->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Rotate();
             break;
 
         case BLOCK_FLIP: /* Flip */
-            DrawPanel->ManageCurseur = NULL;
+            DrawPanel->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Flip();
             break;
@@ -358,7 +356,7 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
             // Turn off the redraw block routine now so it is not displayed
             // with one corner at the new center of the screen
-            DrawPanel->ManageCurseur = NULL;
+            DrawPanel->m_mouseCaptureCallback = NULL;
             Window_Zoom( GetScreen()->m_BlockLocate );
             break;
 
@@ -369,12 +367,8 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
-        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-        GetScreen()->m_BlockLocate.ClearItemsList();
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        GetScreen()->ClearBlockCommand();
+        DrawPanel->SetMouseCapture( NULL, NULL );
         DisplayToolMsg( wxEmptyString );
     }
 
@@ -583,7 +577,7 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector = screen->m_Curseur -
+        screen->m_BlockLocate.m_MoveVector = screen->GetCrossHairPosition() -
                                              screen->m_BlockLocate.m_BlockLastCursorPosition;
     }
 
@@ -671,7 +665,7 @@ void WinEDA_PcbFrame::Block_Rotate()
     wxPoint centre;         // rotation cent-re for the rotation transform
     int     rotAngle = 900; // rotation angle in 0.1 deg.
 
-    oldpos = GetScreen()->m_Curseur;
+    oldpos = GetScreen()->GetCrossHairPosition();
     centre = GetScreen()->m_BlockLocate.Centre();
 
     OnModify();
@@ -740,7 +734,7 @@ void WinEDA_PcbFrame::Block_Flip()
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     itemsList->m_Status = UR_FLIPPED;
 
-    memo = GetScreen()->m_Curseur;
+    memo = GetScreen()->GetCrossHairPosition();
 
     center = GetScreen()->m_BlockLocate.Centre();
 

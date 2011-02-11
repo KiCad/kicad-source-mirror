@@ -210,7 +210,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( aSheet->m_SheetName.IsEmpty() )
         aSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ), GetTimeStamp() );
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = false;
     aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
@@ -219,7 +219,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
 
 /* Move selected sheet with the cursor.
- * Callback function use by ManageCurseur.
+ * Callback function use by m_mouseCaptureCallback.
  */
 static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                bool aErase )
@@ -233,13 +233,13 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     if( sheet->m_Flags & IS_RESIZED )
     {
-        wxSize newSize( MAX( s_PreviousSheetWidth, screen->m_Curseur.x - sheet->m_Pos.x ),
-                        MAX( s_PreviousSheetHeight, screen->m_Curseur.y - sheet->m_Pos.y ) );
+        wxSize newSize( MAX( s_PreviousSheetWidth, screen->GetCrossHairPosition().x - sheet->m_Pos.x ),
+                        MAX( s_PreviousSheetHeight, screen->GetCrossHairPosition().y - sheet->m_Pos.y ) );
         sheet->Resize( newSize );
     }
     else             /* Move Sheet */
     {
-        moveVector = screen->m_Curseur - sheet->m_Pos;
+        moveVector = screen->GetCrossHairPosition() - sheet->m_Pos;
         sheet->Move( moveVector );
     }
 
@@ -263,12 +263,12 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     }
     else if( (sheet->m_Flags & (IS_RESIZED|IS_MOVED)) )
     {
-        wxPoint curspos = screen->m_Curseur;
-        aPanel->GetScreen()->m_Curseur = s_OldPos;
+        wxPoint curspos = screen->GetCrossHairPosition();
+        aPanel->GetScreen()->SetCrossHairPosition( s_OldPos );
         MoveOrResizeSheet( aPanel, aDC, wxDefaultPosition, true );
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         sheet->m_Flags = 0;
-        screen->m_Curseur = curspos;
+        screen->SetCrossHairPosition( curspos );
     }
     else
     {
@@ -276,8 +276,6 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     }
 
     screen->SetCurItem( NULL );
-    aPanel->ManageCurseur = NULL;
-    aPanel->ForceCloseManageCurseur = NULL;
     SAFE_DELETE( g_ItemToUndoCopy );
 }
 
@@ -292,7 +290,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     m_itemToRepeat = NULL;
     SAFE_DELETE( g_ItemToUndoCopy );
 
-    SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->m_Curseur );
+    SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->GetCrossHairPosition() );
 
     sheet->m_Flags     = IS_NEW | IS_RESIZED;
     sheet->m_TimeStamp = GetTimeStamp();
@@ -305,10 +303,8 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     // also need to update the hierarchy, if we are adding
     // a sheet to a screen that already has multiple instances (!)
     GetScreen()->SetCurItem( sheet );
-
-    DrawPanel->ManageCurseur = MoveOrResizeSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitSheet;
-    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, false );
+    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, false );
 
     return sheet;
 }
@@ -341,9 +337,8 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
                                      sheetLabel.m_Pos.y - aSheet->m_Pos.y );
     }
 
-    DrawPanel->ManageCurseur = MoveOrResizeSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitSheet;
-    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, true );
+    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 
     if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
     {
@@ -358,16 +353,15 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( ( aSheet == NULL ) || ( aSheet->Type() != SCH_SHEET_T ) )
         return;
 
-    DrawPanel->CursorOff( aDC );
-    GetScreen()->m_Curseur = aSheet->m_Pos;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( aSheet->m_Pos );
+    DrawPanel->MoveCursorToCrossHair();
 
     s_OldPos = aSheet->m_Pos;
     aSheet->m_Flags |= IS_MOVED;
-    DrawPanel->ManageCurseur = MoveOrResizeSheet;
-    DrawPanel->ForceCloseManageCurseur = ExitSheet;
-    DrawPanel->ManageCurseur( DrawPanel, aDC, wxDefaultPosition, true );
-    DrawPanel->CursorOn( aDC );
+    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
+    DrawPanel->CrossHairOn( aDC );
 
     if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
     {

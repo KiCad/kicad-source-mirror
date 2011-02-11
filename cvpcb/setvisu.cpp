@@ -100,7 +100,7 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if ( Module )
         Module->DisplayInfo( this );
 
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 }
 
 

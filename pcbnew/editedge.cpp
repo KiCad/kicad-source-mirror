@@ -32,12 +32,11 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
         return;
     drawitem->Draw( DrawPanel, DC, GR_XOR );
     drawitem->m_Flags |= IS_MOVED;
-    s_InitialPosition = s_LastPosition = GetScreen()->m_Curseur;
+    s_InitialPosition = s_LastPosition = GetScreen()->GetCrossHairPosition();
     drawitem->DisplayInfo( this );
-    DrawPanel->ManageCurseur = Move_Segment;
-    DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
+    DrawPanel->SetMouseCapture( Move_Segment, Exit_EditEdge );
     SetCurItem( drawitem );
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -51,8 +50,7 @@ void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 
     SaveCopyInUndoList(drawitem, UR_MOVED, s_LastPosition - s_InitialPosition);
     drawitem->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
     drawitem->m_Flags = 0;
@@ -76,10 +74,10 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
         Segment->Draw( aPanel, aDC, GR_XOR );
 
     wxPoint delta;
-    delta = aPanel->GetScreen()->m_Curseur - s_LastPosition;
+    delta = aPanel->GetScreen()->GetCrossHairPosition() - s_LastPosition;
     Segment->m_Start += delta;
     Segment->m_End   += delta;
-    s_LastPosition = aPanel->GetScreen()->m_Curseur;
+    s_LastPosition = aPanel->GetScreen()->GetCrossHairPosition();
 
     Segment->Draw( aPanel, aDC, GR_XOR );
     DisplayOpt.DisplayDrawItems = t_fill;
@@ -180,21 +178,20 @@ static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     if( Segment->m_Flags & IS_NEW )
     {
-        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, false );
+        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, false );
         Segment ->DeleteStructure();
         Segment = NULL;
     }
     else
     {
-        wxPoint pos = Panel->GetScreen()->m_Curseur;
-        Panel->GetScreen()->m_Curseur = s_InitialPosition;
-        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, true );
-        Panel->GetScreen()->m_Curseur = pos;
+        wxPoint pos = Panel->GetScreen()->GetCrossHairPosition();
+        Panel->GetScreen()->SetCrossHairPosition( s_InitialPosition );
+        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, true );
+        Panel->GetScreen()->SetCrossHairPosition( pos );
         Segment->m_Flags = 0;
         Segment->Draw( Panel, DC, GR_OR );
     }
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
+
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 }
 
@@ -225,9 +222,8 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
         Segment->m_Width = s_large;
         Segment->m_Shape = shape;
         Segment->m_Angle = 900;
-        Segment->m_Start = Segment->m_End = GetScreen()->m_Curseur;
-        DrawPanel->ManageCurseur = Montre_Position_NewSegment;
-        DrawPanel->ForceCloseManageCurseur = Exit_EditEdge;
+        Segment->m_Start = Segment->m_End = GetScreen()->GetCrossHairPosition();
+        DrawPanel->SetMouseCapture( Montre_Position_NewSegment, Exit_EditEdge );
     }
     else    /* The ending point ccordinate Segment->m_End was updated by he function
              * Montre_Position_NewSegment() called on a move mouse event
@@ -288,8 +284,7 @@ void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         SaveCopyInUndoList( Segment, UR_NEW );
     }
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 
@@ -312,13 +307,13 @@ static void Montre_Position_NewSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( Segments_45_Only && ( Segment->m_Shape == S_SEGMENT ) )
     {
-        Calcule_Coord_Extremite_45( aPanel->GetScreen()->m_Curseur,
+        Calcule_Coord_Extremite_45( aPanel->GetScreen()->GetCrossHairPosition(),
                                     Segment->m_Start.x, Segment->m_Start.y,
                                     &Segment->m_End.x, &Segment->m_End.y );
     }
     else    /* here the angle is arbitrary */
     {
-        Segment->m_End = aPanel->GetScreen()->m_Curseur;
+        Segment->m_End = aPanel->GetScreen()->GetCrossHairPosition();
     }
 
     Segment->Draw( aPanel, aDC, GR_XOR );

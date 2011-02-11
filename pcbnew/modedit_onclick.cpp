@@ -25,7 +25,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->CursorOff( DC );
+    DrawPanel->CrossHairOff( DC );
     if( m_ID_current_state == 0 )
     {
         if( item && item->m_Flags ) // Command in progress
@@ -135,13 +135,10 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
             break;
         module->m_Flags = 0;
         SaveCopyInUndoList( module, UR_MODEDIT );
-        Place_Ancre( module );      // set the new relatives internal
-                                    // coordinates of items
-        GetScreen()->m_Curseur = wxPoint( 0, 0 );
-        RedrawScreen( TRUE );
+        Place_Ancre( module );      // set the new relatives internal coordinates of items
+        RedrawScreen( wxPoint( 0, 0 ), true );
 
-        // Replace the module in position 0, to recalculate absolutes
-        // coordinates of items
+        // Replace the module in position 0, to recalculate absolutes coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
         SetToolID( 0, 0, wxEmptyString );
         SetCurItem( NULL );
@@ -151,7 +148,7 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
         DrawPanel->DrawGridAxis( DC, GR_XOR );
-        GetScreen()->m_GridOrigin = GetScreen()->m_Curseur;
+        GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
         DrawPanel->DrawGridAxis( DC, GR_COPY );
         GetScreen()->SetModify();
         break;
@@ -172,13 +169,12 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
+        DisplayError( this, wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
         SetToolID( 0, 0, wxEmptyString );
         break;
     }
 
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }
 
 
@@ -186,8 +182,7 @@ m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
  * Create the pull up menu
  * After this menu is built, the standard ZOOM menu is added
  */
-bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos,
-                                           wxMenu*        PopMenu )
+bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     BOARD_ITEM* item = GetCurItem();
     wxString    msg;
@@ -432,7 +427,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
         case TYPE_PAD:
             InstallPadOptionsFrame( (D_PAD*) item );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             break;
 
         case TYPE_MODULE:
@@ -440,7 +435,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->m_Flags = 0;
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             if( ret > 0 )
                 DrawPanel->Refresh();
         }
@@ -448,7 +443,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         case TYPE_TEXTE_MODULE:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             break;
 
         default:

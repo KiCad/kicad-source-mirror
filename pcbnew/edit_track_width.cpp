@@ -126,10 +126,10 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
     {
         TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItemLink( 0 );
         wxASSERT( oldsegm );
-        DrawPanel->CursorOff( aDC );                     // Erase cursor shape
+        DrawPanel->CrossHairOff( aDC );                     // Erase cursor shape
         oldsegm->Draw( DrawPanel, aDC, GR_XOR );         // Erase old track shape
         aTrackItem->Draw( DrawPanel, aDC, GR_OR );       // Display new track shape
-        DrawPanel->CursorOn( aDC );                      // Display cursor shape
+        DrawPanel->CrossHairOn( aDC );                      // Display cursor shape
     }
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
@@ -167,7 +167,8 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     // Some segment have changed: redraw them and save in undo list
     if( aDC )
     {
-        DrawPanel->CursorOff( aDC );                     // Erase cursor shape
+        DrawPanel->CrossHairOff( aDC );                     // Erase cursor shape
+
         for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
         {
             TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
@@ -176,7 +177,7 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
             segm->Draw( DrawPanel, aDC, GR_OR );             // Display new track shape
         }
 
-        DrawPanel->CursorOn( aDC );                   // Display cursor shape
+        DrawPanel->CrossHairOn( aDC );                   // Display cursor shape
     }
 
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );

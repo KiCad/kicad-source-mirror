@@ -124,8 +124,7 @@ void BLOCK_SELECTOR::InitData( EDA_DRAW_PANEL* aPanel, const wxPoint& startpos )
     SetOrigin( startpos );
     SetSize( wxSize( 0, 0 ) );
     m_ItemsSelection.ClearItemsList();
-    aPanel->ManageCurseur = DrawAndSizingBlockOutlines;
-    aPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
+    aPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
 }
 
 
@@ -164,6 +163,7 @@ void BLOCK_SELECTOR::Clear()
 {
     if( m_Command != BLOCK_IDLE )
     {
+        m_Flags   = 0;
         m_Command = BLOCK_IDLE;
         m_State   = STATE_NO_BLOCK;
         ClearItemsList();
@@ -216,20 +216,20 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            DrawPanel->ManageCurseur = NULL;
+            DrawPanel->m_mouseCaptureCallback = NULL;
             return true;
         }
 
-        if( DrawPanel->ManageCurseur == NULL )
+        if( !DrawPanel->IsMouseCaptured() )
         {
             Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
-                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: ManageCurseur NULL" ) );
+                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
             return true;
         }
 
         Block->m_State = STATE_BLOCK_MOVE;
-        DrawPanel->ManageCurseur( DrawPanel, DC, startpos, false );
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, startpos, false );
         break;
 
     default:
@@ -265,8 +265,8 @@ void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoin
     if( aErase )
         PtBlock->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
 
-    PtBlock->m_BlockLastCursorPosition = aPanel->GetScreen()->m_Curseur;
-    PtBlock->SetEnd( aPanel->GetScreen()->m_Curseur );
+    PtBlock->m_BlockLastCursorPosition = aPanel->GetScreen()->GetCrossHairPosition();
+    PtBlock->SetEnd( aPanel->GetScreen()->GetCrossHairPosition() );
 
     PtBlock->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, PtBlock->m_Color );
 
@@ -286,12 +286,11 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     BASE_SCREEN* screen = Panel->GetScreen();
 
-    if( Panel->ManageCurseur )                     /* Erase current drawing
-                                                    * on screen */
+    if( Panel->IsMouseCaptured() )      /* Erase current drawing on screen */
     {
-        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, false );  /* Clear block outline. */
-        Panel->ManageCurseur = NULL;
-        Panel->ForceCloseManageCurseur = NULL;
+        /* Clear block outline. */
+        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, false );
+        Panel->SetMouseCapture( NULL, NULL );
         screen->SetCurItem( NULL );
 
         /* Delete the picked wrapper if this is a picked list. */
@@ -301,7 +300,6 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     screen->m_BlockLocate.m_Flags = 0;
     screen->m_BlockLocate.m_State = STATE_NO_BLOCK;
-
     screen->m_BlockLocate.m_Command = BLOCK_ABORT;
     Panel->GetParent()->HandleBlockEnd( DC );
 

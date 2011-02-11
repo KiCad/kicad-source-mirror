@@ -97,7 +97,8 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        DrawPanel->UnManageCursor( );
+        DrawPanel->EndMouseCapture( );
+
         /* Should not be executed, except bug */
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
@@ -105,14 +106,16 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
+
         if( m_ID_current_state == 0 )
             SetToolID( 0, 0, wxEmptyString );
         else
             DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
+
         break;
 
     default:
-        DrawPanel->UnManageCursor( );
+        DrawPanel->EndMouseCapture( );
         break;
     }
 

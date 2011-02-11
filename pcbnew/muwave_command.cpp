@@ -33,7 +33,7 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
         break;
 
     default:        // End block command in progress.
-        DrawPanel->UnManageCursor( );
+        DrawPanel->EndMouseCapture( );
         break;
     }
 
@@ -106,5 +106,6 @@ void WinEDA_PcbFrame::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
     {
         StartMove_Module( module, DC );
     }
-    DrawPanel->MouseToCursorSchema();
+
+    DrawPanel->MoveCursorToCrossHair();
 }

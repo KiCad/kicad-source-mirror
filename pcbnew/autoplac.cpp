@@ -276,10 +276,10 @@ end_of_tst:
             break;
 
         /* Place module. */
-        CurrPosition = GetScreen()->m_Curseur;
-        GetScreen()->m_Curseur = PosOK;
+        CurrPosition = GetScreen()->GetCrossHairPosition();
+        GetScreen()->SetCrossHairPosition( PosOK );
         Place_Module( Module, DC );
-        GetScreen()->m_Curseur = CurrPosition;
+        GetScreen()->SetCrossHairPosition( CurrPosition );
 
         Module->Set_Rectangle_Encadrement();
         Module->SetRectangleExinscrit();
@@ -616,7 +616,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     DrawModuleOutlines( DrawPanel, DC, Module );
 
     mincout = -1.0;
-    Affiche_Message( wxT( "Score ??, pos ??" ) );
+    SetStatusText( wxT( "Score ??, pos ??" ) );
 
     for( ; CurrPosition.x < GetBoard()->m_BoundaryBox.GetRight() - fx;
          CurrPosition.x += g_GridRoutingSize )
@@ -674,7 +674,7 @@ int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
                                 (int) mincout,
                                 (float) LastPosOK.x / 10000,
                                 (float) LastPosOK.y / 10000 );
-                    Affiche_Message( msg );
+                    SetStatusText( msg );
                 }
             }
             if( DisplayChevelu )

@@ -64,7 +64,7 @@ void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, DC );
     dlg.ShowModal();
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 

@@ -299,7 +299,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case HK_ZOOM_IN:
@@ -724,7 +724,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) aItem;
                 // If it's a sheet, then check if a pinsheet is under the cursor
-                SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->m_Curseur );
+                SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->GetCrossHairPosition() );
 
                 if( slabel )
                     aItem = slabel;
@@ -733,7 +733,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             if( aItem->Type() == SCH_JUNCTION_T )
             {
                 // If it's a junction, pick the underlying wire instead
-                aItem = PickStruct( GetScreen()->m_Curseur, GetScreen(), WIRE_T );
+                aItem = PickStruct( GetScreen()->GetCrossHairPosition(), GetScreen(), WIRE_T );
             }
 
             if( aItem == NULL )
@@ -813,7 +813,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem == NULL )
         {
-            aItem = PickStruct( GetScreen()->m_Curseur, GetScreen(),
+            aItem = PickStruct( GetScreen()->GetCrossHairPosition(), GetScreen(),
                                 COMPONENT_T | TEXT_T | LABEL_T | SHEET_T );
             if( aItem == NULL )
                 break;
@@ -928,7 +928,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_RESET_LOCAL_COORD:         /* Reset the relative coord */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case HK_ZOOM_IN:

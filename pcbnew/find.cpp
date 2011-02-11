@@ -113,7 +113,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
         else
             msg.Printf( _( "<%s> Found" ), GetChars( s_OldStringFound ) );
 
-        m_Parent->Affiche_Message( msg );
+        m_Parent->SetStatusText( msg );
 
         m_Parent->CursorGoto( locate_pos );
 
@@ -121,7 +121,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     }
     else
     {
-        m_Parent->Affiche_Message( wxEmptyString );
+        m_Parent->SetStatusText( wxEmptyString );
 
         if( FindMarker )
             msg = _( "Marker not found" );

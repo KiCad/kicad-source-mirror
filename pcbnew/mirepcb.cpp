@@ -175,8 +175,6 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
     BASE_SCREEN* screen  = Panel->GetScreen();
     MIREPCB*     MirePcb = (MIREPCB*) screen->GetCurItem();
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
     if( MirePcb == NULL )
@@ -218,7 +216,7 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
     MirePcb->SetLayer( EDGE_N );
     MirePcb->m_Width = GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth;
     MirePcb->m_Size  = MireDefaultSize;
-    MirePcb->m_Pos  = DrawPanel->GetScreen()->m_Curseur;
+    MirePcb->m_Pos  = DrawPanel->GetScreen()->GetCrossHairPosition();
 
     Place_Mire( MirePcb, DC );
 
@@ -235,8 +233,7 @@ void WinEDA_PcbFrame::StartMove_Mire( MIREPCB* MirePcb, wxDC* DC )
 
     s_TargetCopy      = *MirePcb;
     MirePcb->m_Flags |= IS_MOVED;
-    DrawPanel->ManageCurseur = ShowTargetShapeWhileMovingMouse;
-    DrawPanel->ForceCloseManageCurseur = AbortMoveAndEditTarget;
+    DrawPanel->SetMouseCapture( ShowTargetShapeWhileMovingMouse, AbortMoveAndEditTarget );
     SetCurItem( MirePcb );
 }
 
@@ -247,8 +244,7 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
         return;
 
     MirePcb->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
 
@@ -259,12 +255,9 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
         return;
     }
 
-
     if( MirePcb->m_Flags == IS_MOVED )
     {
-        SaveCopyInUndoList( MirePcb,
-                            UR_MOVED,
-                            MirePcb->m_Pos - s_TargetCopy.m_Pos );
+        SaveCopyInUndoList( MirePcb, UR_MOVED, MirePcb->m_Pos - s_TargetCopy.m_Pos );
         MirePcb->m_Flags = 0;
         return;
     }
@@ -275,6 +268,7 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
         SaveCopyInUndoList( MirePcb, UR_CHANGED );
         SwapData( MirePcb, &s_TargetCopy );
     }
+
     MirePcb->m_Flags = 0;
 }
 
@@ -292,7 +286,7 @@ static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aErase )
         MirePcb->Draw( aPanel, aDC, GR_XOR );
 
-    MirePcb->m_Pos = screen->m_Curseur;
+    MirePcb->m_Pos = screen->GetCrossHairPosition();
 
     MirePcb->Draw( aPanel, aDC, GR_XOR );
 }

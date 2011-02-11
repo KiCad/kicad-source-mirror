@@ -88,7 +88,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         GRPoly( &aPanel->m_ClipBox, aDC, 5, poly, false, 0, YELLOW, YELLOW );
     }
 
-    Mself.m_End = aPanel->GetScreen()->m_Curseur;
+    Mself.m_End = aPanel->GetScreen()->GetCrossHairPosition();
     pt    = Mself.m_End - Mself.m_Start;
     angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
     len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
@@ -113,9 +113,7 @@ void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Self_On )
     {
         Self_On = 0;
-        Panel->ManageCurseur( Panel, DC, wxDefaultPosition, 0 );
-        Panel->ManageCurseur = NULL;
-        Panel->ForceCloseManageCurseur = NULL;
+        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, 0 );
     }
 }
 
@@ -128,18 +126,17 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
         return;
     }
 
-    Mself.m_Start = GetScreen()->m_Curseur;
+    Mself.m_Start = GetScreen()->GetCrossHairPosition();
     Mself.m_End   = Mself.m_Start;
 
     Self_On = 1;
 
     /* Update the initial coordinates. */
-    GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
     UpdateStatusBar();
 
-    DrawPanel->ManageCurseur = ShowBoundingBoxMicroWaveInductor;
-    DrawPanel->ForceCloseManageCurseur = Exit_Self;
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+    DrawPanel->SetMouseCapture( ShowBoundingBoxMicroWaveInductor, Exit_Self );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -183,9 +180,8 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
     int      ll;
     wxString msg;
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    DrawPanel->SetMouseCapture( NULL, NULL );
 
     if( Self_On == 0 )
     {
@@ -195,7 +191,7 @@ MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
 
     Self_On = 0;
 
-    Mself.m_End = GetScreen()->m_Curseur;
+    Mself.m_End = GetScreen()->GetCrossHairPosition();
 
     wxPoint pt = Mself.m_End - Mself.m_Start;
     int     min_len = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
@@ -613,7 +609,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
     wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
     if( dlg.ShowModal() != wxID_OK )
     {
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         return NULL; // cancelled by user
     }
 
@@ -629,7 +625,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
                                         "Create microwave module" ), msg );
         if( angledlg.ShowModal() != wxID_OK )
         {
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL; // cancelled by user
         }
         msg = angledlg.GetValue();
@@ -645,7 +641,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
 
     if( abort )
     {
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -953,7 +949,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
 
     frame->Destroy();
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
 
     if( ok != 1 )
     {

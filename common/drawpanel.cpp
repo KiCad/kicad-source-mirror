@@ -32,14 +32,6 @@
 #define KICAD_TRACE_COORDS wxT( "kicad_dump_coords" )
 
 
-/* Used to inhibit a response to a mouse left button release, after a
- * double click (when releasing the left button at the end of the second
- * click.  Used in eeschema to inhibit a mouse left release command when
- * switching between hierarchical sheets on a double click.
- */
-static bool s_IgnoreNextLeftButtonRelease = false;
-
-
 // Events used by EDA_DRAW_PANEL
 BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
@@ -82,8 +74,8 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_AutoPAN_Enable    = true;
     m_IgnoreMouseEvents = 0;
 
-    ManageCurseur = NULL;
-    ForceCloseManageCurseur = NULL;
+    m_mouseCaptureCallback = NULL;
+    m_endMouseCaptureCallback = NULL;
 
     if( wxGetApp().m_EDA_Config )
         wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable, true );
@@ -124,12 +116,12 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 }
 
 
-void EDA_DRAW_PANEL::DrawCursor( wxDC* aDC, int aColor )
+void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, int aColor )
 {
     if( m_cursorLevel != 0 || aDC == NULL || !m_showCrossHair )
         return;
 
-    wxPoint Cursor = GetScreen()->m_Curseur;
+    wxPoint Cursor = GetScreen()->GetCrossHairPosition();
 
     GRSetDrawMode( aDC, GR_XOR );
 
@@ -155,17 +147,17 @@ void EDA_DRAW_PANEL::DrawCursor( wxDC* aDC, int aColor )
 }
 
 
-void EDA_DRAW_PANEL::CursorOff( wxDC* DC )
+void EDA_DRAW_PANEL::CrossHairOff( wxDC* DC )
 {
-    DrawCursor( DC );
+    DrawCrossHair( DC );
     --m_cursorLevel;
 }
 
 
-void EDA_DRAW_PANEL::CursorOn( wxDC* DC )
+void EDA_DRAW_PANEL::CrossHairOn( wxDC* DC )
 {
     ++m_cursorLevel;
-    DrawCursor( DC );
+    DrawCrossHair( DC );
 
     if( m_cursorLevel > 0 )  // Shouldn't happen, but just in case ..
         m_cursorLevel = 0;
@@ -237,9 +229,9 @@ wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
 }
 
 
-void EDA_DRAW_PANEL::MouseToCursorSchema()
+void EDA_DRAW_PANEL::MoveCursorToCrossHair()
 {
-    MoveCursor( GetScreen()->m_Curseur );
+    MoveCursor( GetScreen()->GetCrossHairPosition() );
 }
 
 
@@ -260,7 +252,8 @@ void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
         GetScrollPixelsPerUnit( &xPpu, &yPpu );
         CalcUnscrolledPosition( screenPos.x, screenPos.y, &drawingPos.x, &drawingPos.y );
 
-        wxLogDebug( wxT( "MoveCursor() initial screen position(%d, %d) " ) \
+        wxLogTrace( KICAD_TRACE_COORDS,
+                    wxT( "MoveCursor() initial screen position(%d, %d) " ) \
                     wxT( "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, clientRect.x, clientRect.y,
                     clientRect.width, clientRect.height, x, y );
@@ -277,7 +270,8 @@ void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
         Scroll( x, y );
         CalcScrolledPosition( drawingPos.x, drawingPos.y, &screenPos.x, &screenPos.y );
 
-        wxLogDebug( wxT( "MoveCursor() scrolled screen position(%d, %d) view(%d, %d)" ),
+        wxLogTrace( KICAD_TRACE_COORDS,
+                    wxT( "MoveCursor() scrolled screen position(%d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, x, y );
     }
 
@@ -567,7 +561,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     if( screenGridSize.x < MIN_GRID_SIZE || screenGridSize.y < MIN_GRID_SIZE )
         return;
 
-    GetParent()->PutOnGrid( &org, &gridSize );
+    org = screen->GetNearestGridPosition( org, &gridSize );
 
     // Setting the nearest grid position can select grid points outside the clip box.
     // Incrementing the start point by one grid step should prevent drawing grid points
@@ -730,7 +724,7 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
     pos = event.GetPosition();
     m_IgnoreMouseEvents = true;
     PopupMenu( &MasterMenu, pos );
-    MouseToCursorSchema();
+    MoveCursorToCrossHair();
     m_IgnoreMouseEvents = false;
 
     return true;
@@ -739,7 +733,7 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 {
-    if( ManageCurseur == NULL )          // No command in progress.
+    if( m_mouseCaptureCallback == NULL )          // No command in progress.
         m_AutoPAN_Request = false;
 
     if( !m_AutoPAN_Enable || !m_AutoPAN_Request || m_IgnoreMouseEvents )
@@ -778,7 +772,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     }
 
     INSTALL_UNBUFFERED_DC( dc, this );
-    GetScreen()->m_Curseur = event.GetLogicalPosition( dc );
+    GetScreen()->SetCrossHairPosition( event.GetLogicalPosition( dc ) );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -810,9 +804,16 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 {
+    /* Used to inhibit a response to a mouse left button release, after a double click
+     * (when releasing the left button at the end of the second click.  Used in eeschema
+     * to inhibit a mouse left release command when switching between hierarchical sheets
+     * on a double click.
+     */
+    static bool ignoreNextLeftButtonRelease = false;
+    static EDA_DRAW_PANEL* LastPanel = NULL;
+
     int                    localrealbutt = 0, localbutt = 0, localkey = 0;
     BASE_SCREEN*           screen = GetScreen();
-    static EDA_DRAW_PANEL* LastPanel;
 
     if( !screen )
         return;
@@ -835,7 +836,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_CanStartBlock = -1;
     }
 
-    if( ManageCurseur == NULL )  // No command in progress
+    if( !IsMouseCaptured() )          // No mouse capture in progress.
         m_AutoPAN_Request = false;
 
     if( GetParent()->m_FrameIsActive )
@@ -906,16 +907,16 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // inhibit a response to the mouse left button release,
         // because we have a double click, and we do not want a new
         // OnLeftClick command at end of this Double Click
-        s_IgnoreNextLeftButtonRelease = true;
+        ignoreNextLeftButtonRelease = true;
     }
     else if( event.LeftUp() )
     {
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
-        if( screen->m_BlockLocate.m_State==STATE_NO_BLOCK && !s_IgnoreNextLeftButtonRelease )
+        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
             GetParent()->OnLeftClick( &DC, screen->m_MousePosition );
 
-        s_IgnoreNextLeftButtonRelease = false;
+        ignoreNextLeftButtonRelease = false;
     }
 
     if( !event.LeftIsDown() )
@@ -925,7 +926,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
          * double click opens a dialog box, and the release mouse button
          * is made when the dialog box is open.
          */
-        s_IgnoreNextLeftButtonRelease = false;
+        ignoreNextLeftButtonRelease = false;
     }
 
     if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
@@ -969,7 +970,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
          * (a filter creates a delay for the real block command start, and
          * we must remember this point)
          */
-        m_CursorStartPos = screen->m_Curseur;
+        m_CursorStartPos = screen->GetCrossHairPosition();
     }
 
     if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
@@ -985,13 +986,12 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             {
                 m_AutoPAN_Request = false;
                 GetParent()->HandleBlockPlace( &DC );
-                s_IgnoreNextLeftButtonRelease = true;
+                ignoreNextLeftButtonRelease = true;
             }
         }
         else if( ( m_CanStartBlock >= 0 )
                 && ( event.LeftIsDown() || event.MiddleIsDown() )
-                && ManageCurseur == NULL
-                && ForceCloseManageCurseur == NULL )
+                && !IsMouseCaptured() )
         {
             // Mouse is dragging: if no block in progress,  start a block command.
             if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
@@ -1041,9 +1041,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
             if( (screen->m_BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
             {
-                if( ForceCloseManageCurseur )
+                if( m_endMouseCaptureCallback )
                 {
-                    ForceCloseManageCurseur( this, &DC );
+                    m_endMouseCaptureCallback( this, &DC );
                     m_AutoPAN_Request = false;
                 }
 
@@ -1068,13 +1068,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // To avoid an unwanted block move command if the mouse is moved while double clicking
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        if( !screen->IsBlockActive() )
+        if( !screen->IsBlockActive() && IsMouseCaptured() )
         {
-            if( ForceCloseManageCurseur )
-            {
-                ForceCloseManageCurseur( this, &DC );
-                m_AutoPAN_Request = false;
-            }
+            m_endMouseCaptureCallback( this, &DC );
         }
     }
 
@@ -1111,10 +1107,10 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     case WXK_ESCAPE:
         m_AbortRequest = true;
 
-        if( ManageCurseur && ForceCloseManageCurseur )
-            UnManageCursor( -1, m_defaultCursor );
+        if( IsMouseCaptured() )
+            EndMouseCapture( -1, m_defaultCursor );
         else
-            UnManageCursor( 0, m_cursor, wxEmptyString );
+            EndMouseCapture( 0, m_cursor, wxEmptyString );
 
         break;
     }
@@ -1207,14 +1203,14 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
 }
 
 
-void EDA_DRAW_PANEL::UnManageCursor( int id, int cursor, const wxString& title )
+void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title )
 {
-    if( ManageCurseur && ForceCloseManageCurseur )
+    if( m_mouseCaptureCallback && m_endMouseCaptureCallback )
     {
         INSTALL_UNBUFFERED_DC( dc, this );
-        ForceCloseManageCurseur( this, &dc );
-        ManageCurseur = NULL;
-        ForceCloseManageCurseur = NULL;
+        m_endMouseCaptureCallback( this, &dc );
+        m_mouseCaptureCallback = NULL;
+        m_endMouseCaptureCallback = NULL;
         m_AutoPAN_Request = false;
     }
 

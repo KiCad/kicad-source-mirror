@@ -22,10 +22,10 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
         return;
 
     OnModify();
-    DrawPanel->CursorOff( DC );   // Erase cursor shape
+    DrawPanel->CrossHairOff( DC );   // Erase cursor shape
     track->SetState( SEGM_FIXE, Flag_On );
     track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
-    DrawPanel->CursorOn( DC );    // Display cursor shape
+    DrawPanel->CrossHairOn( DC );    // Display cursor shape
     track->DisplayInfo( this );
 }
 
@@ -39,7 +39,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     if( (track == NULL ) || (track->Type() == TYPE_ZONE) )
         return;
 
-    DrawPanel->CursorOff( DC );   // Erase cursor shape
+    DrawPanel->CrossHairOff( DC );   // Erase cursor shape
     Track = Marque_Une_Piste( GetBoard(), track, &nb_segm, NULL, true );
     Trace_Une_Piste( DrawPanel, DC, Track, nb_segm, GR_OR | GR_SURBRILL );
 
@@ -50,7 +50,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
         Track = Track->Next();
     }
 
-    DrawPanel->CursorOn( DC );    // Display cursor shape
+    DrawPanel->CrossHairOn( DC );    // Display cursor shape
 
     OnModify();
 }
@@ -74,7 +74,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
         }
     }
 
-    DrawPanel->CursorOff( DC );     // Erase cursor shape
+    DrawPanel->CrossHairOff( DC );     // Erase cursor shape
     while( Track )                  /* Flag change */
     {
         if( (net_code >= 0 ) && (net_code != Track->GetNet()) )
@@ -86,6 +86,6 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
         Track = Track->Next();
     }
 
-    DrawPanel->CursorOn( DC );    // Display cursor shape
+    DrawPanel->CrossHairOn( DC );    // Display cursor shape
     OnModify();
 }

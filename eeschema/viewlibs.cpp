@@ -296,7 +296,7 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
 
     /* Redraw the cursor */
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 
     if( !tmp.IsEmpty() )
         component->SetName( tmp );

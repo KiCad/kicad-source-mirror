@@ -366,8 +366,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     int            fieldNdx;
     LIB_COMPONENT* Entry;
 
-    frame->DrawPanel->ManageCurseur = NULL;
-    frame->DrawPanel->ForceCloseManageCurseur = NULL;
+    frame->DrawPanel->SetMouseCapture( NULL, NULL );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 

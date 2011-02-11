@@ -30,12 +30,13 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 /* Note: none of these events require aborting the current command (if any)
  * (like move, edit or block command)
  * so we do not test for a current command in progress and call
- *  DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+ *  DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
  */
     switch( id )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = not GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth;
+        GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth =
+            not GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth;
         AuxiliaryToolBar_Update_UI( );
         break;
 
@@ -47,7 +48,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = true;
         AuxiliaryToolBar_Update_UI( );
         break;
@@ -60,7 +61,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH6:
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetBoard()->m_TrackWidthSelector = ii;
@@ -75,7 +76,7 @@ void WinEDA_PcbFrame::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_VIASIZE6:
     case ID_POPUP_PCB_SELECT_VIASIZE7:
     case ID_POPUP_PCB_SELECT_VIASIZE8:      // select the new current value for via size (via diameter)
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
         GetBoard()->m_ViaSizeSelector = ii;
         AuxiliaryToolBar_Update_UI( );

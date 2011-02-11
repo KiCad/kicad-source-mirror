@@ -112,7 +112,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     else
         jj = 31;
     bestzoom = MAX( ii, jj ) + 1;
-    GetScreen()->m_Curseur = m_Pcb->m_BoundaryBox.Centre();
+    GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
 
     return bestzoom * GetScreen()->m_ZoomScalar;
 }
@@ -129,16 +129,15 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     /* There may be need to reframe the drawing. */
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
-        screen->m_Curseur = aPos;
-        RedrawScreen( true );
+        RedrawScreen( aPos, true );
     }
     else
     {
         // Put cursor on item position
-        DrawPanel->CursorOff( &dc );
-        screen->m_Curseur = aPos;
-        DrawPanel->MouseToCursorSchema();
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->CrossHairOff( &dc );
+        screen->SetCrossHairPosition( aPos );
+        DrawPanel->MoveCursorToCrossHair();
+        DrawPanel->CrossHairOn( &dc );
     }
 }
 
@@ -323,8 +322,8 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
         wxString     Line;
         double       theta, ro;
 
-        int dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
-        int dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
+        int dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        int dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
         if( dx==0 && dy==0 )
             theta = 0.0;

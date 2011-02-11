@@ -127,15 +127,6 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 }
 
 
-/*
- *  Display the message in the first pane of the status bar.
- */
-void EDA_DRAW_FRAME::Affiche_Message( const wxString& message )
-{
-    SetStatusText( message, 0 );
-}
-
-
 void EDA_DRAW_FRAME::EraseMsgBox()
 {
     if( MsgPanel )
@@ -193,10 +184,9 @@ void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
  * because EDA_DRAW_FRAME does not know how to print a page
  * This is the reason it is a virtual function
  */
-void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask,
-                                  bool aPrintMirrorMode, void* aData )
+void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
-    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error"));
+    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
 
 
@@ -256,7 +246,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
      * index returned by GetSelection().
      */
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
-    screen->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
+    screen->SetCrossHairPosition( DrawPanel->GetScreenCenterLogicalPosition() );
     screen->SetGrid( id );
     Refresh();
 }
@@ -292,15 +282,14 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
         if( GetScreen()->GetZoom() == selectedZoom )
             return;
 
-        GetScreen()->m_Curseur = DrawPanel->GetScreenCenterLogicalPosition();
         GetScreen()->SetZoom( selectedZoom );
-        RedrawScreen( false );
+        RedrawScreen( GetScreen()->GetScrollCenterPosition(), false );
     }
 }
 
 
 /* Return the current zoom level */
-int EDA_DRAW_FRAME::GetZoom(void)
+int EDA_DRAW_FRAME::GetZoom( void )
 {
     return GetScreen()->GetZoom();
 }
@@ -469,7 +458,7 @@ int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
 void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
     GetScreen()->m_BlockLocate.ClearItemsList();
-    DrawPanel->ManageCurseur = NULL;
+    DrawPanel->m_mouseCaptureCallback = NULL;
 }
 
 
@@ -484,7 +473,7 @@ bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 }
 
 
-void EDA_DRAW_FRAME::AdjustScrollBars()
+void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
 {
     int     unitsX, unitsY, posX, posY;
     wxSize  drawingSize, clientSize;
@@ -537,8 +526,9 @@ void EDA_DRAW_FRAME::AdjustScrollBars()
     unitsY = wxRound( (double) drawingSize.y * scalar );
 
     // Calculate the position, place the cursor at the center of screen.
-    posX = screen->m_Curseur.x - screen->m_DrawOrg.x;
-    posY = screen->m_Curseur.y - screen->m_DrawOrg.y;
+    screen->SetScrollCenterPosition( aCenterPosition );
+    posX = aCenterPosition.x - screen->m_DrawOrg.x;
+    posY = aCenterPosition.y - screen->m_DrawOrg.y;
 
     posX -= wxRound( (double) clientSize.x / 2.0 );
     posY -= wxRound( (double) clientSize.y / 2.0 );
@@ -612,6 +602,7 @@ double RoundTo0( double x, double precision )
     return (double) ix / precision;
 }
 
+
 /**
  * Function UpdateStatusBar
  * Displays in the bottom of the main window a stust:
@@ -639,8 +630,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    double dXpos = To_User_Unit( g_UserUnit, screen->m_Curseur.x, m_InternalUnits );
-    double dYpos = To_User_Unit( g_UserUnit, screen->m_Curseur.y, m_InternalUnits );
+    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_InternalUnits );
+    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_InternalUnits );
 
     /*
      * Converting from inches to mm can give some coordinates due to
@@ -694,8 +685,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     SetStatusText( Line, 2 );
 
     /* Display relative coordinates:  */
-    dx = screen->m_Curseur.x - screen->m_O_Curseur.x;
-    dy = screen->m_Curseur.y - screen->m_O_Curseur.y;
+    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
     dXpos = To_User_Unit( g_UserUnit, dx, m_InternalUnits );
     dYpos = To_User_Unit( g_UserUnit, dy, m_InternalUnits );
 
@@ -709,6 +700,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     Line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( Line, 3 );
 }
+
 
 /**
  * Load draw frame specific configuration settings.

@@ -158,7 +158,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
         return;
     }
 
-    Affiche_Message( _( "Place Cells" ) );
+    SetStatusText( _( "Place Cells" ) );
     PlaceCells( GetBoard(), -1, FORCE_PADS );
 
     /* Construction of the track list for router. */
@@ -176,9 +176,8 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
     InitWork();             /* Free memory for the list of router connections. */
     Board.UnInitBoard();
     stop = time( NULL ) - start;
-    msg.Printf( wxT( "time = %d second%s" ), stop,
-                ( stop == 1 ) ? wxT( "" ) : wxT( "s" ) );
-    Affiche_Message( msg );
+    msg.Printf( wxT( "time = %d second%s" ), stop, ( stop == 1 ) ? wxT( "" ) : wxT( "s" ) );
+    SetStatusText( msg );
 }
 
 

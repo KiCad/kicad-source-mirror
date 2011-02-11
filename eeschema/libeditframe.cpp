@@ -347,13 +347,13 @@ int LIB_EDIT_FRAME::BestZoom()
         BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
-        GetScreen()->m_Curseur = BoundaryBox.Centre();
+        GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
     }
     else
     {
         dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
         dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
-        GetScreen()->m_Curseur = wxPoint( 0, 0 );
+        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
 
     /*
@@ -375,6 +375,7 @@ int LIB_EDIT_FRAME::BestZoom()
     {
         if( m_clientSize == wxSize( -1, -1 ) )
             m_clientSize = DrawPanel->GetClientSize();
+
         size = m_clientSize;
     }
 
@@ -582,7 +583,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
-    DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     if( event.GetId() == ID_DE_MORGAN_NORMAL_BUTT )
         m_convert = 1;
@@ -625,18 +626,18 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_LIBEDIT_CANCEL_EDITING:
-        if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-            DrawPanel->UnManageCursor();
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->EndMouseCapture();
         else
-            DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW );
+            DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
         break;
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
-        DrawPanel->UnManageCursor();
+        DrawPanel->EndMouseCapture();
         break;
 
     default:
-        DrawPanel->UnManageCursor( 0, wxCURSOR_ARROW, wxEmptyString );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
 
@@ -715,7 +716,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         if( m_drawItem )
         {
             EndDrawGraphicItem( &dc );
@@ -725,7 +726,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
         if( m_drawItem )
         {
-            DrawPanel->CursorOff( &dc );
+            DrawPanel->CrossHairOff( &dc );
 
             switch( m_drawItem->Type() )
             {
@@ -744,7 +745,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 ;
             }
 
-            DrawPanel->CursorOn( &dc );
+            DrawPanel->CrossHairOn( &dc );
         }
         break;
 
@@ -765,11 +766,11 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem == NULL )
             break;
 
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         int oldFlags = m_drawItem->GetFlags();
         m_drawItem->SetFlags( 0 );
         m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
-        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCursorDrawPosition() );
+        ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
         m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
         m_drawItem->SetFlags( oldFlags );
         break;
@@ -778,30 +779,31 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
         if( m_drawItem == NULL )
             break;
-        DrawPanel->MouseToCursorSchema();
-        DrawPanel->CursorOff( &dc );
+        DrawPanel->MoveCursorToCrossHair();
+        DrawPanel->CrossHairOff( &dc );
         SaveCopyInUndoList( m_component );
+
         if( m_drawItem->Type() == LIB_PIN_T )
         {
             DeletePin( &dc, m_component, (LIB_PIN*) m_drawItem );
         }
         else
         {
-            if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
-                DrawPanel->ForceCloseManageCurseur( DrawPanel, &dc );
+            if( DrawPanel->IsMouseCaptured() )
+                DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
             else
                 m_component->RemoveDrawItem( m_drawItem, DrawPanel, &dc );
         }
 
         m_drawItem = NULL;
         OnModify( );
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->CrossHairOn( &dc );
         break;
 
     case ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST:
         if( m_drawItem == NULL )
             break;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         if( m_drawItem->Type() == LIB_PIN_T )
             StartMovePin( &dc );
         else
@@ -813,7 +815,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_drawItem == NULL )
             break;
 
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         if( m_drawItem->Type() == LIB_RECTANGLE_T
             || m_drawItem->Type() == LIB_CIRCLE_T
             || m_drawItem->Type() == LIB_POLYLINE_T
@@ -828,7 +830,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
         if( m_drawItem == NULL && m_drawItem->Type() != LIB_TEXT_T )
             break;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         if( !m_drawItem->InEditMode() )
         {
             SaveCopyInUndoList( m_component );
@@ -843,7 +845,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         if( m_drawItem == NULL || ( m_drawItem->Type() != LIB_FIELD_T ) )
             break;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
 
         if( !m_drawItem->InEditMode() )
         {
@@ -859,13 +861,13 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
         if( m_drawItem == NULL )
             break;
-        DrawPanel->CursorOff( &dc );
+        DrawPanel->CrossHairOff( &dc );
         if( m_drawItem->Type() == LIB_FIELD_T )
         {
             EditField( &dc, (LIB_FIELD*) m_drawItem );
         }
-        DrawPanel->MouseToCursorSchema();
-        DrawPanel->CursorOn( &dc );
+        DrawPanel->MoveCursorToCrossHair();
+        DrawPanel->CrossHairOn( &dc );
         break;
 
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
@@ -876,7 +878,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         SaveCopyInUndoList( m_component );
         GlobalSetPins( &dc, (LIB_PIN*) m_drawItem, id );
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
@@ -888,34 +890,34 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_SELECT_ITEMS_ONLY;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_Y_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_Y;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
@@ -1074,8 +1076,8 @@ void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
                  wxT( "Cannot create new part from non-existant current part." ) );
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
-    DrawPanel->CursorOff( &dc );
+    DrawPanel->CrossHairOff( &dc );
     EditField( &dc, &m_component->GetValueField() );
-    DrawPanel->MouseToCursorSchema();
-    DrawPanel->CursorOn( &dc );
+    DrawPanel->MoveCursorToCrossHair();
+    DrawPanel->CrossHairOn( &dc );
 }

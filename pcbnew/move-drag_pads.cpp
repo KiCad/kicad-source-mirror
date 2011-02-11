@@ -26,8 +26,6 @@ static void Exit_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     D_PAD* pad = s_CurrentSelectedPad;
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     if( pad == NULL )
         return;
 
@@ -67,7 +65,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
         pad->Draw( aPanel, aDC, GR_XOR );
 
-    pad->m_Pos = screen->m_Curseur;
+    pad->m_Pos = screen->GetCrossHairPosition();
     pad->Draw( aPanel, aDC, GR_XOR );
 
     if( !g_Drag_Pistes_On )
@@ -196,7 +194,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
     Import_Pad_Settings( Pad, false );
     Pad->SetNetname( wxEmptyString );
 
-    Pad->m_Pos = GetScreen()->m_Curseur;
+    Pad->m_Pos = GetScreen()->GetCrossHairPosition();
 
     rX = Pad->m_Pos.x - Module->m_Pos.x;
     rY = Pad->m_Pos.y - Module->m_Pos.y;
@@ -279,8 +277,7 @@ void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
     s_CurrentSelectedPad = Pad;
     Pad_OldPos = Pad->m_Pos;
     Pad->DisplayInfo( this );
-    DrawPanel->ManageCurseur = Show_Pad_Move;
-    DrawPanel->ForceCloseManageCurseur = Exit_Move_Pad;
+    DrawPanel->SetMouseCapture( Show_Pad_Move, Exit_Move_Pad );
 
     /* Draw the pad  (SKETCH mode) */
     Pad->Draw( DrawPanel, DC, GR_XOR );
@@ -379,8 +376,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
     EraseDragList();
 
     OnModify();
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
 }
 

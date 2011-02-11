@@ -426,10 +426,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
 /***********************************************************************/
 {
-    wxPoint tmp = m_Parent->GetScreen()->m_Curseur;
-    m_Parent->GetScreen()->m_Curseur = m_ReferenceCopy->m_Pos;
+    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
+    m_Parent->GetScreen()->SetCrossHairPosition( m_ReferenceCopy->m_Pos );
     m_Parent->InstallTextModOptionsFrame( m_ReferenceCopy, NULL );
-    m_Parent->GetScreen()->m_Curseur = tmp;
+    m_Parent->GetScreen()->SetCrossHairPosition( tmp );
     m_ReferenceCtrl->SetValue(m_ReferenceCopy->m_Text);
 }
 
@@ -437,10 +437,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
 void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
 /***********************************************************/
 {
-    wxPoint tmp = m_Parent->GetScreen()->m_Curseur;
-    m_Parent->GetScreen()->m_Curseur = m_ValueCopy->m_Pos;
+    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
+    m_Parent->GetScreen()->SetCrossHairPosition( m_ValueCopy->m_Pos );
     m_Parent->InstallTextModOptionsFrame( m_ValueCopy, NULL );
-    m_Parent->GetScreen()->m_Curseur = tmp;
+    m_Parent->GetScreen()->SetCrossHairPosition( tmp);
     m_ValueCtrl->SetValue(m_ValueCopy->m_Text);
 }
 

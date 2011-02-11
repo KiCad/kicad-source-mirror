@@ -32,9 +32,6 @@ static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
  */
 void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
-
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
@@ -61,8 +58,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 
     if( TextePcb == NULL )
@@ -79,8 +75,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     }
 
     if( TextePcb->m_Flags == IS_MOVED ) // If moved only
-        SaveCopyInUndoList( TextePcb, UR_MOVED,
-                            TextePcb->m_Pos - s_TextCopy.m_Pos );
+        SaveCopyInUndoList( TextePcb, UR_MOVED, TextePcb->m_Pos - s_TextCopy.m_Pos );
     else
     {
         // Restore initial params
@@ -109,10 +104,9 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
     TextePcb->m_Flags |= IS_MOVED;
     TextePcb->DisplayInfo( this );
-    DrawPanel->ManageCurseur = Move_Texte_Pcb;
-    DrawPanel->ForceCloseManageCurseur = Abort_Edit_Pcb_Text;
+    DrawPanel->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
     SetCurItem( TextePcb );
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
@@ -128,7 +122,7 @@ static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
     if( aErase )
         TextePcb->Draw( aPanel, aDC, GR_XOR );
 
-    TextePcb->m_Pos = aPanel->GetScreen()->m_Curseur;
+    TextePcb->m_Pos = aPanel->GetScreen()->GetCrossHairPosition();
 
     TextePcb->Draw( aPanel, aDC, GR_XOR );
 }
@@ -143,8 +137,7 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     SaveCopyInUndoList( TextePcb, UR_DELETED );
     TextePcb->UnLink();
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 
@@ -166,7 +159,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
         TextePcb->m_Mirror = true;
 
     TextePcb->m_Size  = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
-    TextePcb->m_Pos   = GetScreen()->m_Curseur;
+    TextePcb->m_Pos   = GetScreen()->GetCrossHairPosition();
     TextePcb->m_Thickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
 
     InstallTextPCBOptionsFrame( TextePcb, DC );

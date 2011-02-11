@@ -452,20 +452,17 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     if( m_DC )
     {
-        m_Parent->DrawPanel->CursorOff( m_DC );
+        m_Parent->DrawPanel->CrossHairOff( m_DC );
         m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
     // Initialize masks clearances
     m_CurrentModule->m_LocalClearance =
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl,
-                                 m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->m_InternalUnits );
     m_CurrentModule->m_LocalSolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl,
-                                 m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
     m_CurrentModule->m_LocalSolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl,
-                                 m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->m_InternalUnits );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -579,30 +576,30 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     if( m_DC )
     {
         m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
-        m_Parent->DrawPanel->CursorOn( m_DC );
+        m_Parent->DrawPanel->CrossHairOn( m_DC );
     }
 }
 
 
 void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 {
-    wxPoint tmp = m_Parent->GetScreen()->m_Curseur;
+    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
 
-    m_Parent->GetScreen()->m_Curseur = m_ReferenceCopy->m_Pos;
+    m_Parent->GetScreen()->SetCrossHairPosition( m_ReferenceCopy->m_Pos );
     m_ReferenceCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ReferenceCopy, NULL );
-    m_Parent->GetScreen()->m_Curseur = tmp;
+    m_Parent->GetScreen()->SetCrossHairPosition( tmp );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->m_Text );
 }
 
 
 void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 {
-    wxPoint tmp = m_Parent->GetScreen()->m_Curseur;
+    wxPoint tmp = m_Parent->GetScreen()->GetCrossHairPosition();
 
-    m_Parent->GetScreen()->m_Curseur = m_ValueCopy->m_Pos;
+    m_Parent->GetScreen()->SetCrossHairPosition( m_ValueCopy->m_Pos );
     m_ValueCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ValueCopy, NULL );
-    m_Parent->GetScreen()->m_Curseur = tmp;
+    m_Parent->GetScreen()->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
 }

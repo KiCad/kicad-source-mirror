@@ -15,6 +15,18 @@ class BASE_SCREEN;
 class PCB_SCREEN;
 
 
+/**
+ * Mouse capture callback function prototype.
+ */
+typedef void ( *MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                        const wxPoint& aPosition, bool aErase );
+
+/**
+ * End mouse capture callback function prototype.
+ */
+typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
+
+
 class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
@@ -53,12 +65,11 @@ public:
 
     /* Cursor management (used in editing functions) */
 
-    /* Mouse capture move callback function prototype. */
-    void (*ManageCurseur)( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                           bool aErase );
+    /* Mouse capture move callback function. */
+    MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
 
-    /* Abort managed cursor callback function prototype. */
-    void (*ForceCloseManageCurseur)( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
+    /* Abort mouse capture callback function. */
+    END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
 public:
 
@@ -123,10 +134,10 @@ public:
     void OnActivate( wxActivateEvent& event );
 
     /**
-     * Fucntion DoPrepareDC
+     * Function DoPrepareDC
      * sets up the device context \a aDC for drawing.
      * <p>
-     * This overrides wxScrolledWindow::DoPrepareDC() for settting up the the device context
+     * This overrides wxScrolledWindow::DoPrepareDC() for setting up the the device context
      * used for drawing.   The scale factor and drawing logical offset are set and the base
      * method is called to set the DC device origin (scroll bar position).  This connects
      * everything together to achieve the appropriate coordinate manipulation using wxDC
@@ -153,7 +164,7 @@ public:
     /* Mouse and keys events */
 
     /**
-     * Funtion OnMouseWheel
+     * Function OnMouseWheel
      * handles mouse wheel events.
      * <p>
      * The mouse wheel is used to provide support for zooming and panning.  This
@@ -188,7 +199,7 @@ public:
      * Function IsPointOnDisplay
      * @param aPosition The position to test in logical (drawing) units.
      * @return true if \a aPosition is visible on the screen.
-     *         false if \a aPosition is not visiable on the screen.
+     *         false if \a aPosition is not visible on the screen.
      */
     bool IsPointOnDisplay( const wxPoint& aPosition );
 
@@ -227,7 +238,11 @@ public:
      */
     wxPoint GetScreenCenterLogicalPosition();
 
-    void MouseToCursorSchema();
+    /**
+     * Function MoveCursorToCrossHair
+     * warps the cursor to the current cross hair position.
+     */
+    void MoveCursorToCrossHair();
 
     /**
      * Function MoveCursor
@@ -238,27 +253,40 @@ public:
 
     /* Cursor functions */
     /**
-     * Draw the user cursor.
-     *
-     * The user cursor is not the mouse cursor although they may be at the
-     * same screen position.  The mouse cursor is still render by the OS.
-     * This is a drawn cross hair that is used to snap to grid when grid snapping
-     * is enabled.  This is required because OSX does not allow moving the
-     * cursor programmatically.
-     *
+     * Function DrawCrossHair
+     * draws the user cross hair.
+     * <p>
+     * The user cross hair is not the mouse cursor although they may be at the same screen
+     * position.  The mouse cursor is still render by the OS.  This is a drawn cross hair
+     * that is used to snap to grid when grid snapping is enabled.  This is as an indicator
+     * to where the next user action will take place.
+     * </p>
      * @param aDC - the device context to draw the cursor
      * @param aColor - the color to draw the cursor
      */
-    void DrawCursor( wxDC* aDC, int aColor = WHITE );
+    void DrawCrossHair( wxDC* aDC, int aColor = WHITE );
 
-    // remove the grid cursor from the display
-    void CursorOff( wxDC* DC );
+    // Hide the cross hair.
+    void CrossHairOff( wxDC* DC );
 
-    // display the grid cursor
-    void CursorOn( wxDC* DC );
+    // Show the cross hair.
+    void CrossHairOn( wxDC* DC );
 
     /**
-     * Release managed cursor.
+     * Function SetMouseCapture
+     * sets the mouse capture and end mouse capture callbacks to \a aMouseCaptureCallback
+     * and \a aEndMouseCaptureCallback respectively.
+     */
+    void SetMouseCapture( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback,
+                          END_MOUSE_CAPTURE_CALLBACK aEndMouseCaptureCallback )
+    {
+        m_mouseCaptureCallback = aMouseCaptureCallback;
+        m_endMouseCaptureCallback = aEndMouseCaptureCallback;
+    }
+
+    /**
+     * Function EndMouseCapture
+     * ends mouse a capture.
      *
      * Check to see if the cursor is being managed for block or editing commands and release it.
      * @param aId The command ID to restore or -1 to keep the current command ID.
@@ -267,12 +295,45 @@ public:
      * @param aTitle The tool message to display in the status bar or wxEmptyString to clear
      *               the message.
      */
-    void UnManageCursor( int aId = -1, int aCursorId = -1, const wxString& aTitle = wxEmptyString );
+    void EndMouseCapture( int aId = -1, int aCursorId = -1,
+                          const wxString& aTitle = wxEmptyString );
+
+    inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
 
     int GetDefaultCursor() const { return m_defaultCursor; }
 
 
     DECLARE_EVENT_TABLE()
 };
+
+
+/**
+ * Class EDA_CROSS_HAIR_MANAGER
+ * is used to hide the cross hair and restore it when the class goes out of scope.
+ */
+class EDA_CROSS_HAIR_MANAGER
+{
+public:
+    EDA_CROSS_HAIR_MANAGER( EDA_DRAW_PANEL* aPanel, wxDC* aDC ) :
+        m_panel( aPanel ),
+        m_dc( aDC )
+    {
+        if( aPanel && aDC )
+            aPanel->CrossHairOff( aDC );
+    }
+
+    ~EDA_CROSS_HAIR_MANAGER()
+    {
+        if( m_panel && m_dc )
+            m_panel->CrossHairOn( m_dc );
+    }
+
+private:
+    EDA_DRAW_PANEL* m_panel;
+    wxDC* m_dc;
+
+    DECLARE_NO_COPY_CLASS( EDA_CROSS_HAIR_MANAGER )
+};
+
 
 #endif  /* #ifndef PANEL_WXSTRUCT_H */

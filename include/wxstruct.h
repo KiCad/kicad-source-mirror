@@ -281,7 +281,6 @@ public:
      */
     virtual void     AddMenuZoomAndGrid( wxMenu* aMasterMenu );
 
-    void             Affiche_Message( const wxString& message );
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
     virtual void     SetToolbars();
@@ -297,6 +296,7 @@ public:
     virtual void     ReCreateVToolbar() = 0;
     virtual void     ReCreateMenuBar();
     virtual void     ReCreateAuxiliaryToolbar();
+
     /**
      * Function SetToolID
      * Enables the icon of the selected tool in the vertical toolbar.
@@ -392,28 +392,19 @@ public:
     virtual void     OnSize( wxSizeEvent& event );
     void             OnEraseBackground( wxEraseEvent& SizeEvent );
 
-    void             SetToolbarBgColor( int color_num );
     virtual void     OnZoom( wxCommandEvent& event );
     void             OnGrid( int grid_type );
 
     /**
      * Function RedrawScreen
      * redraws the entire screen area by updating the scroll bars and mouse pointer in
-     * order to have the current graphic cursor position at the center of the screen.
-     *  @param aWarpPointer Moves the mouse cursor is to the drawing position ( which
-     * is usually on grid) if true.
-     *
-     *  Note: Mac OS ** does not ** allow moving mouse cursor by program.
+     * order to have \a aCenterPoint at the center of the screen.
+     * @param aCenterPoint The position in logical units to center the scroll bars.
+     * @param aWarpPointer Moves the mouse cursor to \a aCenterPoint if true.
      */
-    void             RedrawScreen( bool aWarpPointer );
+    void             RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
-    /** Adjust the coordinate to the nearest grid value
-     * @param aCoord = coordinate to adjust
-     * @param aGridSize = pointer to a grid value. if NULL uses the current grid size
-     */
-    void             PutOnGrid( wxPoint* aCoord , wxRealPoint* aGridSize = NULL );
-
-    void             Zoom_Automatique( bool move_mouse_cursor );
+    void             Zoom_Automatique( bool aWarpPointer );
 
     /* Set the zoom level to show the area Rect */
     void             Window_Zoom( EDA_Rect& Rect );
@@ -438,14 +429,12 @@ public:
     wxString         GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
 
     void             DisplayToolMsg( const wxString& msg );
-    void             Process_Zoom( wxCommandEvent& event );
-    void             Process_Grid( wxCommandEvent& event );
     virtual void     RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void     OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
     virtual void     OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     virtual bool     OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void     ToolOnRightClick( wxCommandEvent& event );
-    void             AdjustScrollBars();
+    void             AdjustScrollBars( const wxPoint& aCenterPosition );
 
     /**
      * Function OnActivate (virtual)
@@ -544,9 +533,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC,
-                            int aPrintMask, bool aPrintMirrorMode,
-                            void * aData = NULL);
+    virtual void PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData = NULL );
 
     DECLARE_EVENT_TABLE()
 };

@@ -71,7 +71,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
-            SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->m_Curseur );
+            SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->GetCrossHairPosition() );
 
             if( slabel )
                 DrawStruct = slabel;
@@ -494,7 +494,7 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
 
     if( !is_new )
     {
-        if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
+        if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(),
                         WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
@@ -502,7 +502,7 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
     msg = AddHotkeyName( _( "Delete Junction" ), s_Schematic_Hokeys_Descr, HK_DELETE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_xpm );
 
-    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(), WIRE_T | BUS_T ) )
+    if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(), WIRE_T | BUS_T ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
@@ -514,7 +514,7 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
     bool     is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
-    wxPoint  pos    = frame->GetScreen()->m_Curseur;
+    wxPoint  pos    = frame->GetScreen()->GetCrossHairPosition();
     wxString msg;
 
     if( is_new )
@@ -532,7 +532,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
                   delete_connection_xpm );
 
-    if( PickStruct( frame->GetScreen()->m_Curseur, frame->GetScreen(),
+    if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(),
                     WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
 
@@ -552,7 +552,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
     bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
-    wxPoint pos    = frame->GetScreen()->m_Curseur;
+    wxPoint pos    = frame->GetScreen()->GetCrossHairPosition();
     wxString msg;
     if( is_new )
     {

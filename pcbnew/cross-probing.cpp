@@ -41,6 +41,7 @@ void RemoteCommand(  const char* cmdline )
     char*            text;
     MODULE*          module = 0;
     WinEDA_PcbFrame* frame  = (WinEDA_PcbFrame*)wxGetApp().GetTopWindow();
+    wxPoint          pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
@@ -61,9 +62,10 @@ void RemoteCommand(  const char* cmdline )
         else
             msg.Printf( _( "%s not found" ), GetChars( modName ) );
 
-        frame->Affiche_Message( msg );
+        frame->SetStatusText( msg );
+
         if( module )
-            frame->GetScreen()->m_Curseur = module->GetPosition();
+            pos = module->GetPosition();
     }
     else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
@@ -80,6 +82,7 @@ void RemoteCommand(  const char* cmdline )
         modName = CONV_FROM_UTF8( text );
 
         module = frame->GetBoard()->FindModuleByReference( modName );
+
         if( module )
             pad = module->FindPadByName( pinName );
 
@@ -88,7 +91,7 @@ void RemoteCommand(  const char* cmdline )
             netcode = pad->GetNet();
 
             // put cursor on the pad:
-            frame->GetScreen()->m_Curseur = pad->GetPosition();
+            pos = pad->GetPosition();
         }
 
         if( netcode > 0 )               /* highlight the pad net*/
@@ -106,22 +109,20 @@ void RemoteCommand(  const char* cmdline )
             msg.Printf( _( "%s not found" ), GetChars( modName ) );
         else if( pad == NULL )
         {
-            msg.Printf( _( "%s pin %s not found" ),
-                        GetChars( modName ), GetChars( pinName ) );
+            msg.Printf( _( "%s pin %s not found" ), GetChars( modName ), GetChars( pinName ) );
             frame->SetCurItem( module );
         }
         else
         {
-            msg.Printf( _( "%s pin %s found" ),
-                        GetChars( modName ), GetChars( pinName ) );
+            msg.Printf( _( "%s pin %s found" ), GetChars( modName ), GetChars( pinName ) );
             frame->SetCurItem( pad );
         }
 
-        frame->Affiche_Message( msg );
+        frame->SetStatusText( msg );
     }
 
     if( module )  // if found, center the module on screen, and redraw the screen.
-        frame->RedrawScreen( false );
+        frame->RedrawScreen( pos, false );
 }
 
 

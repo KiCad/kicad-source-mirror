@@ -301,7 +301,7 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
-    GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+    GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
     UpdateStatusBar();
 }
 
@@ -313,8 +313,7 @@ int LIB_VIEW_FRAME::BestZoom()
     LIB_COMPONENT* component;
     CMP_LIBRARY* lib;
 
-    GetScreen()->m_Curseur.x = 0;
-    GetScreen()->m_Curseur.y = 0;
+    GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     bestzoom = 16;
 
     lib = CMP_LIBRARY::FindLibrary( m_libraryName );
@@ -360,7 +359,7 @@ int LIB_VIEW_FRAME::BestZoom()
                     (double) GetScreen()->m_ZoomScalar );
     bestzoom = MAX( ii, jj ) + 1;
 
-    GetScreen()->m_Curseur = BoundaryBox.Centre();
+    GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
 
     return bestzoom;
 }

@@ -54,7 +54,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        Affiche_Message( wxEmptyString );
+        SetStatusText( wxEmptyString );
         DisplayOpt.DisplayPolarCood = state;
         UpdateStatusBar();
         break;

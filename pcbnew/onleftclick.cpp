@@ -28,7 +28,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( DrawStruct && DrawStruct->m_Flags ) // "POPUP" in progress
         {
             DrawPanel->m_IgnoreMouseEvents = true;
-            DrawPanel->CursorOff( aDC );
+            DrawPanel->CrossHairOff( aDC );
 
             switch( DrawStruct->Type() )
             {
@@ -102,7 +102,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             }
 
             DrawPanel->m_IgnoreMouseEvents = false;
-            DrawPanel->CursorOn( aDC );
+            DrawPanel->CrossHairOn( aDC );
+
             if( exit )
                 return;
         }
@@ -177,7 +178,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             SetCurItem( Create_Mire( aDC ) );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
         }
         else if( DrawStruct->Type() == TYPE_MIRE )
         {
@@ -266,7 +267,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             }
             if( hit_on_corner )
             {
-                DrawPanel->MouseToCursorSchema();
+                DrawPanel->MoveCursorToCrossHair();
                 ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
                 DrawPanel->m_AutoPAN_Request = true;
                 Start_Move_Zone_Corner( aDC,
@@ -298,7 +299,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             SetCurItem( Create_Texte_Pcb( aDC ) );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct->Type() == TYPE_TEXTE )
@@ -313,7 +314,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_COMPONENT_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             DrawStruct = Load_Module_From_Library( wxEmptyString, aDC );
             SetCurItem( DrawStruct );
             if( DrawStruct )
@@ -366,14 +367,14 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
         DrawPanel->DrawAuxiliaryAxis( aDC, GR_XOR );
-        m_Auxiliary_Axis_Position = GetScreen()->m_Curseur;
+        m_Auxiliary_Axis_Position = GetScreen()->GetCrossHairPosition();
         DrawPanel->DrawAuxiliaryAxis( aDC, GR_COPY );
         OnModify();
         break;
 
     case ID_PCB_PLACE_GRID_COORD_BUTT:
         DrawPanel->DrawGridAxis( aDC, GR_XOR );
-        GetScreen()->m_GridOrigin = GetScreen()->m_Curseur;
+        GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
         DrawPanel->DrawGridAxis( aDC, GR_COPY );
         break;
 
@@ -430,7 +431,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         case TYPE_DIMENSION:
         case TYPE_TEXTE_MODULE:
             OnEditItemRequest( aDC, DrawStruct );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             break;
 
         case TYPE_DRAWSEGMENT:

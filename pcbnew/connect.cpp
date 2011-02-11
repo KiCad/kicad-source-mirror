@@ -370,7 +370,7 @@ void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
                 m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
                 nb_net_noconnect );
 
-    Affiche_Message( msg );
+    SetStatusText( msg );
     return;
 }
 

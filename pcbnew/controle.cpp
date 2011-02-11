@@ -214,7 +214,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
         PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
 
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
 
 //        DrawPanel->m_IgnoreMouseEvents = false;
 
@@ -231,9 +231,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     wxRealPoint gridSize;
     wxPoint     oldpos;
     int         hotkey = 0;
-    wxPoint     pos = aPosition;
-
-    PutOnGrid( &pos );
+    wxPoint     pos = GetScreen()->GetNearestGridPosition( aPosition );
 
     // Save the board after the time out :
     int CurrentTime = time( NULL );
@@ -262,7 +260,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         SetTitle( GetScreen()->GetFileName() );
     }
 
-    oldpos = GetScreen()->m_Curseur;
+    oldpos = GetScreen()->GetCrossHairPosition();
 
     gridSize = GetScreen()->GetGridSize();
 
@@ -298,7 +296,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     // Put cursor in new position, according to the zoom keys (if any).
-    GetScreen()->m_Curseur = pos;
+    GetScreen()->SetCrossHairPosition( pos );
 
     /* Put cursor on grid or a pad centre if requested. If the tool DELETE is active the
      * cursor is left off grid this is better to reach items to delete off grid,
@@ -319,16 +317,15 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
     if( keep_on_grid )
     {
-        wxPoint on_grid = pos;
+        wxPoint on_grid = GetScreen()->GetNearestGridPosition( pos );
 
-        PutOnGrid( &on_grid );
         wxSize grid;
         grid.x = (int) GetScreen()->GetGridSize().x;
         grid.y = (int) GetScreen()->GetGridSize().y;
 
         if( Magnetize( m_Pcb, this, m_ID_current_state, grid, on_grid, &pos ) )
         {
-            GetScreen()->m_Curseur = pos;
+            GetScreen()->SetCrossHairPosition( pos );
         }
         else
         {
@@ -339,27 +336,27 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
                 || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
                                      GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
             {
-                GetScreen()->m_Curseur = on_grid;
+                GetScreen()->SetCrossHairPosition( on_grid );
             }
         }
     }
 
-    if( oldpos != GetScreen()->m_Curseur )
+    if( oldpos != GetScreen()->GetCrossHairPosition() )
     {
-        pos = GetScreen()->m_Curseur;
-        GetScreen()->m_Curseur = oldpos;
-        DrawPanel->CursorOff( aDC );
-        GetScreen()->m_Curseur = pos;
-        DrawPanel->CursorOn( aDC );
+        pos = GetScreen()->GetCrossHairPosition();
+        GetScreen()->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        GetScreen()->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
             wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, false );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, false );
 #else
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, true );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY

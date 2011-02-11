@@ -119,13 +119,12 @@ int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
     {
         zone->m_Poly->DeleteCorner( zone->GetNumCorners() - 1 );
 
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
     }
     else
     {
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        DrawPanel->SetMouseCapture( NULL, NULL );
         SetCurItem( NULL );
         zone->RemoveAllContours();
         zone->m_Flags = 0;
@@ -153,8 +152,6 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
         zone->RemoveAllContours();
     }
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     pcbframe->SetCurItem( NULL );
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -201,8 +198,8 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
         zone_container->m_Poly->InsertCorner(corner_id-1, cx, cy );
 
     zone_container->m_Flags  = IN_EDIT;
-    DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
-    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
+    DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
+                                  Abort_Zone_Move_Corner_Or_Outlines );
     s_CornerInitialPosition = zone_container->GetCornerPosition( corner_id );
     s_CornerIsNew = IsNewCorner;
     s_AddCutoutToCurrentZone = false;
@@ -223,16 +220,16 @@ void WinEDA_PcbFrame::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
 {
     zone_container->m_Flags = IS_DRAGGED;
     zone_container->m_CornerSelection = corner_id;
-    DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
-    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
-    s_CursorLastPosition     = s_CornerInitialPosition = GetScreen()->m_Curseur;
+    DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
+                                  Abort_Zone_Move_Corner_Or_Outlines );
+    s_CursorLastPosition     = s_CornerInitialPosition = GetScreen()->GetCrossHairPosition();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 
     s_PickedList.ClearListAndDeleteItems();
     _AuxiliaryList.ClearListAndDeleteItems();
-    SaveCopyOfZones(s_PickedList, GetBoard(), zone_container->GetNet(), zone_container->GetLayer() );
-
+    SaveCopyOfZones(s_PickedList, GetBoard(), zone_container->GetNet(),
+                    zone_container->GetLayer() );
 }
 
 
@@ -262,9 +259,9 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
     SaveCopyOfZones(s_PickedList, GetBoard(), zone_container->GetNet(), zone_container->GetLayer() );
 
     zone_container->m_Flags  = IS_MOVED;
-    DrawPanel->ManageCurseur = Show_Zone_Corner_Or_Outline_While_Move_Mouse;
-    DrawPanel->ForceCloseManageCurseur = Abort_Zone_Move_Corner_Or_Outlines;
-    s_CursorLastPosition = s_CornerInitialPosition = GetScreen()->m_Curseur;
+    DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
+                                  Abort_Zone_Move_Corner_Or_Outlines );
+    s_CursorLastPosition = s_CornerInitialPosition = GetScreen()->GetCrossHairPosition();
     s_CornerIsNew = false;
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -283,10 +280,11 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
  */
 {
     zone_container->m_Flags  = 0;
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
+
     if( DC )
         zone_container->Draw( DrawPanel, DC, GR_OR );
+
     OnModify();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
@@ -419,8 +417,6 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
     s_PickedList. ClearListAndDeleteItems();
     Panel->Refresh();
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     pcbframe->SetCurItem( NULL );
     zone_container->m_Flags  = 0;
     s_AddCutoutToCurrentZone = false;
@@ -441,7 +437,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
         zone->Draw( aPanel, aDC, GR_XOR );
     }
 
-    wxPoint          pos = pcbframe->GetScreen()->m_Curseur;
+    wxPoint          pos = pcbframe->GetScreen()->GetCrossHairPosition();
 
     if( zone->m_Flags == IS_MOVED )
     {
@@ -531,7 +527,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                 diag = InstallDialogNonCopperZonesEditor( zone );
                 g_Zone_Default_Setting.m_NetcodeSelection = 0;     // No net for non copper zones
             }
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             DrawPanel->m_IgnoreMouseEvents = FALSE;
 
             if( diag ==  ZONE_ABORT )
@@ -571,9 +567,10 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         zone->m_TimeStamp     = GetTimeStamp();
         g_Zone_Default_Setting.ExportSetting( *zone );
         zone->m_Poly->Start( g_Zone_Default_Setting.m_CurrentZone_Layer,
-            GetScreen()->m_Curseur.x, GetScreen()->m_Curseur.y,
-            zone->GetHatchStyle() );
-        zone->AppendCorner( GetScreen()->m_Curseur );
+                             GetScreen()->GetCrossHairPosition().x,
+                             GetScreen()->GetCrossHairPosition().y,
+                             zone->GetHatchStyle() );
+        zone->AppendCorner( GetScreen()->GetCrossHairPosition() );
         if( Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
             zone->m_Flags = 0;
@@ -589,8 +586,8 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
         }
 
         SetCurItem( zone );
-        DrawPanel->ManageCurseur = Show_New_Edge_While_Move_Mouse;
-        DrawPanel->ForceCloseManageCurseur = Abort_Zone_Create_Outline;
+        DrawPanel->SetMouseCapture( Show_New_Edge_While_Move_Mouse,
+                                      Abort_Zone_Create_Outline );
     }
     // edge in progress:
     else
@@ -604,7 +601,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
                 || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC )
                 )
             {   // Ok, we can add a new corner
-                zone->AppendCorner( GetScreen()->m_Curseur );
+                zone->AppendCorner( GetScreen()->GetCrossHairPosition() );
                 SetCurItem( zone );     // calls DisplayInfo().
             }
         }
@@ -649,7 +646,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
         {
             DisplayError( this,
                 _( "DRC error: closing this area creates a drc error with an other area" ) );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return false;
         }
     }
@@ -658,8 +655,7 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 
     zone->DrawWhileCreateOutline( DrawPanel, DC, GR_XOR );
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
 
     // Undraw old drawings, because they can have important changes
     int layer = zone->GetLayer();
@@ -730,7 +726,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                             const wxPoint& aPosition, bool aErase )
 {
     WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) aPanel->GetParent();
-    wxPoint          c_pos    = pcbframe->GetScreen()->m_Curseur;
+    wxPoint          c_pos    = pcbframe->GetScreen()->GetCrossHairPosition();
     ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone == NULL )
@@ -789,7 +785,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
     else   // edit a zone on a non copper layer (technical layer)
         diag = InstallDialogNonCopperZonesEditor( zone_container );
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
     if( diag == ZONE_ABORT )

@@ -133,12 +133,12 @@ void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
 
     if( ok )
     {
-        Affiche_Message( wxString( _("BOARD exported OK.")) );
+        SetStatusText( wxString( _( "BOARD exported OK." ) ) );
     }
     else
     {
         errorText += '\n';
-        errorText += _("Unable to export, please fix and try again.");
+        errorText += _( "Unable to export, please fix and try again." );
         DisplayError( this, errorText );
     }
 }

@@ -49,7 +49,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return true;
     }
 
-    DrawPanel->CursorOff( &dc );
+    DrawPanel->CrossHairOff( &dc );
 
     if( m_ID_current_state )
     {
@@ -78,10 +78,10 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     /* Select a proper item */
 
-    wxPoint cursorPos = GetScreen()->m_Curseur;
+    wxPoint cursorPos = GetScreen()->GetCrossHairPosition();
     wxPoint selectPos = m_Collector->GetRefPos();
 
-    PutOnGrid( &selectPos );
+    selectPos = GetScreen()->GetNearestGridPosition( selectPos );
 
     /*  We can reselect another item only if there are no item being edited
      * because ALL moving functions use GetCurItem(), therefore GetCurItem()
@@ -101,7 +101,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             item = PcbGeneralLocateAndDisplay();
             if( DrawPanel->m_AbortRequest )
             {
-                DrawPanel->CursorOn( &dc );
+                DrawPanel->CrossHairOn( &dc );
                 return false;
             }
         }
@@ -365,7 +365,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
     }
 
-    DrawPanel->CursorOn( &dc );
+    DrawPanel->CrossHairOn( &dc );
     return true;
 }
 
@@ -403,7 +403,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
  * also update Netclass selection
  */
 {
-    wxPoint  cursorPosition = GetScreen()->m_Curseur;
+    wxPoint  cursorPosition = GetScreen()->GetCrossHairPosition();
     wxString msg;
 
     GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );

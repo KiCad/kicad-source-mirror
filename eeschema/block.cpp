@@ -88,7 +88,7 @@ void SCH_EDIT_FRAME::InitBlockPasteInfos()
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     block->m_ItemsSelection.CopyList( m_blockItems.m_ItemsSelection );
-    DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
+    DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
 }
 
 
@@ -102,10 +102,10 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     bool            err   = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
-    if( DrawPanel->ManageCurseur == NULL )
+    if( !DrawPanel->IsMouseCaptured() )
     {
         err = true;
-        DisplayError( this, wxT( "HandleBlockPLace() : ManageCurseur = NULL" ) );
+        DisplayError( this, wxT( "HandleBlockPLace() : m_mouseCaptureCallback = NULL" ) );
     }
 
     if( block->GetCount() == 0 )
@@ -130,8 +130,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MIRROR_Y:
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
         MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
@@ -140,8 +140,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_COPY:                /* Copy */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         DuplicateItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
 
@@ -152,8 +152,9 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_PASTE:
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         PasteListOfItems( DC );
         block->ClearItemsList();
         break;
@@ -171,14 +172,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     // clear struct.m_Flags.
     GetScreen()->ClearDrawingState();
-
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
-    block->m_Flags   = 0;
-    block->m_State   = STATE_NO_BLOCK;
-    block->m_Command = BLOCK_IDLE;
+    GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
-
     GetScreen()->TestDanglingEnds( DrawPanel, DC );
 
     if( block->GetCount() )
@@ -187,6 +182,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
     }
 
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     DrawPanel->Refresh();
 }
@@ -213,20 +209,19 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         BlockState   state   = block->m_State;
         CmdBlockType command = block->m_Command;
 
-        if( DrawPanel->ForceCloseManageCurseur )
-            DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+        if( DrawPanel->m_endMouseCaptureCallback )
+            DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
 
         block->m_State   = state;
         block->m_Command = command;
-        DrawPanel->ManageCurseur = DrawAndSizingBlockOutlines;
-        DrawPanel->ForceCloseManageCurseur = AbortBlockCurrentCommand;
-        GetScreen()->m_Curseur = block->GetEnd();
+        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        GetScreen()->SetCrossHairPosition( block->GetEnd() );
 
         if( block->m_Command != BLOCK_ABORT )
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
     }
 
-    if( DrawPanel->ManageCurseur != NULL )
+    if( DrawPanel->IsMouseCaptured() )
     {
         switch( block->m_Command )
         {
@@ -251,16 +246,15 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
                 block->m_State = STATE_BLOCK_MOVE;
             }
             else
             {
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->ManageCurseur = NULL;
-                DrawPanel->ForceCloseManageCurseur = NULL;
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                DrawPanel->SetMouseCapture( NULL, NULL );
             }
             break;
 
@@ -321,9 +315,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         block->m_Flags   = 0;
         block->m_State   = STATE_NO_BLOCK;
         block->m_Command = BLOCK_IDLE;
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
         GetScreen()->SetCurItem( NULL );
+        DrawPanel->SetMouseCapture( NULL, NULL );
         SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 
@@ -370,8 +363,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_DRAG:     /* move to Drag */
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
@@ -384,16 +377,16 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             blockCmdFinished = false;
             GetScreen()->SelectBlockItems();
 
-            if( DrawPanel->ManageCurseur )
-                DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+            if( DrawPanel->IsMouseCaptured() )
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
             block->m_State = STATE_BLOCK_MOVE;
         }
         break;
 
     case BLOCK_DELETE:     /* move to Delete */
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -406,8 +399,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_SAVE:     /* Save list in paste buffer*/
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -418,20 +411,21 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
-        DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
         DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
         Window_Zoom( GetScreen()->m_BlockLocate );
         break;
 
 
     case BLOCK_ROTATE:
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         if( block->GetCount() )
         {
             /* Compute the rotation center and put it on grid */
             wxPoint rotationPoint = block->Centre();
-            PutOnGrid( &rotationPoint );
+            GetScreen()->SetCrossHairPosition( rotationPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_ROTATED, rotationPoint );
             RotateListOfItems( block->m_ItemsSelection, rotationPoint );
             OnModify();
@@ -442,14 +436,14 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_MIRROR_X:
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
-            PutOnGrid( &mirrorPoint );
+            GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_X, mirrorPoint );
             Mirror_X_ListOfItems( block->m_ItemsSelection, mirrorPoint );
             OnModify();
@@ -459,14 +453,14 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_MIRROR_Y:
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
-            PutOnGrid( &mirrorPoint );
+            GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_Y, mirrorPoint );
             MirrorListOfItems( block->m_ItemsSelection, mirrorPoint );
             OnModify();
@@ -482,13 +476,9 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     if( blockCmdFinished )
     {
-        block->ClearItemsList();
-        block->m_Flags   = 0;
-        block->m_State   = STATE_NO_BLOCK;
-        block->m_Command = BLOCK_IDLE;
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        block->Clear();
         GetScreen()->SetCurItem( NULL );
+        DrawPanel->SetMouseCapture( NULL, NULL );
         SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 }
@@ -517,7 +507,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     }
 
     /* Repaint new view. */
-    block->m_MoveVector = screen->m_Curseur - block->m_BlockLastCursorPosition;
+    block->m_MoveVector = screen->GetCrossHairPosition() - block->m_BlockLastCursorPosition;
     block->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, block->m_Color );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )

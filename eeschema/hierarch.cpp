@@ -270,7 +270,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
     else
     {
-        DrawPanel->MouseToCursorSchema();
-        RedrawScreen( true );
+        DrawPanel->MoveCursorToCrossHair();
+        RedrawScreen( screen->GetScrollCenterPosition(), true );
     }
 }

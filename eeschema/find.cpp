@@ -65,9 +65,9 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->m_Curseur = lastMarker->m_Pos;
+        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastMarker->m_Pos );
 
-        RedrawScreen( warpCursor );
+        RedrawScreen( lastMarker->m_Pos, warpCursor );
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
@@ -195,8 +195,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->m_Pos;
 
-        wxPoint old_cursor_position    = sheet->LastScreen()->m_Curseur;
-        sheet->LastScreen()->m_Curseur = pos;
+        wxPoint old_cursor_position    = sheet->LastScreen()->GetCrossHairPosition();
+        sheet->LastScreen()->SetCrossHairPosition( pos );
 
         curpos = GetScreen()->GetCrossHairScreenPosition();
 
@@ -216,20 +216,20 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         #undef MARGIN
 
         if( DoCenterAndRedraw )
-            RedrawScreen( mouseWarp );
+            RedrawScreen( curpos, mouseWarp );
         else
         {
             INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-            EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
-            DrawPanel->CursorOff( &dc );
+            EXCHG( old_cursor_position, sheet->LastScreen()->GetCrossHairPosition() );
+            DrawPanel->CrossHairOff( &dc );
 
             if( mouseWarp )
                 DrawPanel->MoveCursor( curpos );
 
-            EXCHG( old_cursor_position, sheet->LastScreen()->m_Curseur );
+            EXCHG( old_cursor_position, sheet->LastScreen()->GetCrossHairPosition() );
 
-            DrawPanel->CursorOn( &dc );
+            DrawPanel->CrossHairOn( &dc );
         }
     }
 
@@ -339,9 +339,9 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->m_Curseur = lastItemPosition;
+        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastItemPosition );
 
-        RedrawScreen( warpCursor );
+        RedrawScreen( lastItemPosition, warpCursor );
 
         msg = event.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
         SetStatusText( msg );

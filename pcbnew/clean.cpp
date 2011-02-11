@@ -74,7 +74,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
 
     if( aCleanVias )       // delete redundant vias
     {
-        frame->Affiche_Message( _( "Clean vias" ) );
+        frame->SetStatusText( _( "Clean vias" ) );
         clean_vias( frame->GetBoard() );
     }
 
@@ -83,7 +83,7 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
     but is not on the pad  or the via center */
     if( aConnectToPads )
     {
-        frame->Affiche_Message( _( "Reconnect pads" ) );
+        frame->SetStatusText( _( "Reconnect pads" ) );
         /* Create missing segments when a track end covers a pad, but is not on the pad center */
         ConnectDanglingEndToPad( frame, DC );
 
@@ -98,18 +98,18 @@ void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
     /* Remove null segments and intermediate points on aligned segments */
     if( aMergeSegments )
     {
-        frame->Affiche_Message( _( "Merge track segments" ) );
+        frame->SetStatusText( _( "Merge track segments" ) );
         clean_segments( frame );
     }
 
     /* Delete dangling tracks */
     if( aDeleteUnconnectedSegm )
     {
-        frame->Affiche_Message( _( "Delete unconnected tracks" ) );
+        frame->SetStatusText( _( "Delete unconnected tracks" ) );
         DeleteUnconnectedTracks( frame, DC );
     }
 
-    frame->Affiche_Message( _( "Cleanup finished" ) );
+    frame->SetStatusText( _( "Cleanup finished" ) );
 
     frame->Compile_Ratsnest( DC, true );
 

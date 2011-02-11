@@ -58,10 +58,10 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->ClrRefreshReq();
 
-    if( DrawPanel->ManageCurseur )
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    if( DrawPanel->IsMouseCaptured() )
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 
-    DrawPanel->DrawCursor( DC );
+    DrawPanel->DrawCrossHair( DC );
 
     // Display the sheet filename, and the sheet path, for non root sheets
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )

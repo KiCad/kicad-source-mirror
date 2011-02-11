@@ -27,12 +27,12 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString )
     {
-        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
         ReCreateAuxiliaryToolbar();
         SetToolbars();
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
     }
 }
 
@@ -47,9 +47,9 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     // If an edition is in progress, stop it.
     // For something else than save, get rid of current tool.
     if( id == ID_SAVE_BOARD )
-        DrawPanel->UnManageCursor( -1, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( -1, DrawPanel->GetDefaultCursor() );
     else
-        DrawPanel->UnManageCursor( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {

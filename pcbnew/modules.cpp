@@ -95,8 +95,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
     }
 
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
-    DrawPanel->ManageCurseur  = Montre_Position_Empreinte;
-    DrawPanel->ForceCloseManageCurseur = Abort_MoveOrCopyModule;
+    DrawPanel->SetMouseCapture( Montre_Position_Empreinte, Abort_MoveOrCopyModule );
     DrawPanel->m_AutoPAN_Request = true;
 
     // Erase the module.
@@ -108,7 +107,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         module->m_Flags = tmp;
     }
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
 
 
@@ -173,13 +172,14 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
                                      module,
                                      s_ModuleInitialCopy->m_Orient,
                                      FALSE );
+
         if( s_ModuleInitialCopy->GetLayer() != module->GetLayer() )
             pcbframe->Change_Side_Module( module, NULL );
+
         module->Draw( Panel, DC, GR_OR );
     }
+
     g_Drag_Pistes_On     = FALSE;
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     pcbframe->SetCurItem( NULL );
 
     delete s_ModuleInitialCopy;
@@ -188,6 +188,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     // Display ratsnest is allowed
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
+
     if( pcbframe->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
         pcbframe->DrawGeneralRatsnest( DC );
 
@@ -246,7 +247,7 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     }
 
     /* Redraw the module at the new position. */
-    g_Offset_Module = module->m_Pos - aPanel->GetScreen()->m_Curseur;
+    g_Offset_Module = module->m_Pos - aPanel->GetScreen()->GetCrossHairPosition();
     DrawModuleOutlines( aPanel, aDC, module );
 
     Dessine_Segments_Dragges( aPanel, aDC );
@@ -421,7 +422,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         && DC )
         trace_ratsnest_module( DC );
 
-    newpos = GetScreen()->m_Curseur;
+    newpos = GetScreen()->GetCrossHairPosition();
     module->SetPosition( newpos );
     module->m_Flags = 0;
 
@@ -438,6 +439,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         {
             pt_segm = g_DragSegmentList[ii].m_Segm;
             pt_segm->SetState( EDIT, OFF );
+
             if( DC )
                 pt_segm->Draw( DrawPanel, DC, GR_OR );
         }
@@ -446,13 +448,11 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         EraseDragList();
     }
 
-    g_Drag_Pistes_On = FALSE;
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    g_Drag_Pistes_On = false;
+    DrawPanel->SetMouseCapture( NULL, NULL );
 
-    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
-        if( !aDoNotRecreateRatsnest )
-            Compile_Ratsnest( DC, true );
+    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) && !aDoNotRecreateRatsnest )
+        Compile_Ratsnest( DC, true );
 
     if( DC )
         DrawPanel->Refresh();

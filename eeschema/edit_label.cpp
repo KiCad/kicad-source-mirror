@@ -62,24 +62,23 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
         break;
     }
 
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = ItemInitialPosition;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( ItemInitialPosition );
+    DrawPanel->MoveCursorToCrossHair();
 
     OnModify( );
-    DrawPanel->ManageCurseur = ShowWhileMoving;
-    DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
+    DrawPanel->SetMouseCapture( ShowWhileMoving,ExitMoveTexte );
     GetScreen()->SetCurItem( TextStruct );
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }
 
 
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 {
     if( TextStruct == NULL )
-        TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->m_Curseur,
+        TextStruct = (SCH_TEXT*) PickStruct( GetScreen()->GetCrossHairPosition(),
                                              GetScreen(), TEXT_T | LABEL_T );
     if( TextStruct == NULL )
         return;
@@ -89,7 +88,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
         SaveCopyInUndoList( TextStruct, UR_CHANGED );
 
     /* Erase old text */
-    DrawPanel->CursorOff( DC );
+    DrawPanel->CrossHairOff( DC );
     TextStruct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
     int orient;
@@ -111,7 +110,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC )
 
     OnModify( );
     TextStruct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }
 
 
@@ -126,20 +125,20 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
     switch( type )
     {
     case LAYER_NOTES:
-        NewText = new SCH_TEXT( GetScreen()->m_Curseur );
+        NewText = new SCH_TEXT( GetScreen()->GetCrossHairPosition() );
         break;
 
     case LAYER_LOCLABEL:
-        NewText = new SCH_LABEL( GetScreen()->m_Curseur );
+        NewText = new SCH_LABEL( GetScreen()->GetCrossHairPosition() );
         break;
 
     case LAYER_HIERLABEL:
-        NewText = new SCH_HIERLABEL( GetScreen()->m_Curseur );
+        NewText = new SCH_HIERLABEL( GetScreen()->GetCrossHairPosition() );
         NewText->m_Shape = lastGlobalLabelShape;
         break;
 
     case LAYER_GLOBLABEL:
-        NewText = new SCH_GLOBALLABEL( GetScreen()->m_Curseur );
+        NewText = new SCH_GLOBALLABEL( GetScreen()->GetCrossHairPosition() );
         NewText->m_Shape = lastGlobalLabelShape;
         break;
 
@@ -173,9 +172,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* DC, int type )
     }
 
     NewText->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->ManageCurseur = ShowWhileMoving;
-    DrawPanel->ForceCloseManageCurseur = ExitMoveTexte;
-
+    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitMoveTexte );
     GetScreen()->SetCurItem( NewText );
 
     return NewText;
@@ -201,7 +198,7 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        ( (SCH_TEXT*) TextStruct )->m_Pos = aPanel->GetScreen()->m_Curseur;
+        ( (SCH_TEXT*) TextStruct )->m_Pos = aPanel->GetScreen()->GetCrossHairPosition();
         break;
 
     default:
@@ -220,8 +217,6 @@ static void ExitMoveTexte( EDA_DRAW_PANEL* Panel, wxDC* DC )
     SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
 
     parent->SetRepeatItem( NULL );
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
 
     if( Struct == NULL )  /* no current item */
     {
@@ -323,12 +318,12 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
     }
 
     /* now delete the old text
-     *  If it is a text flagged IS_NEW it will be deleted by ForceCloseManageCurseur()
+     *  If it is a text flagged IS_NEW it will be deleted by m_endMouseCaptureCallback()
      *  If not, we must delete it.
      */
-    if( DrawPanel->ManageCurseur && DrawPanel->ForceCloseManageCurseur )
+    if( DrawPanel->m_mouseCaptureCallback && DrawPanel->m_endMouseCaptureCallback )
     {
-        DrawPanel->ForceCloseManageCurseur( DrawPanel, DC );
+        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
     }
 
     if( (flags & IS_NEW) == 0 )    // Remove old text from current list and
@@ -346,7 +341,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
     delete g_ItemToUndoCopy;
     g_ItemToUndoCopy = NULL;
 
-    DrawPanel->CursorOff( DC );   // Erase schematic cursor
+    DrawPanel->CrossHairOff( DC );   // Erase schematic cursor
 
     /* Save the new text in undo list if the old text was not itself a "new created text"
      * In this case, the old text is already in undo list as a deleted item.
@@ -371,5 +366,5 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype )
     }
 
     newtext->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CursorOn( DC );    // redraw schematic cursor
+    DrawPanel->CrossHairOn( DC );    // redraw schematic cursor
 }

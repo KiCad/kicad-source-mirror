@@ -89,11 +89,11 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
 {
     bool err = false;
 
-    if( DrawPanel->ManageCurseur == NULL )
+    if( !DrawPanel->IsMouseCaptured() )
     {
         err = true;
         DisplayError( this,
-                     wxT( "Error in HandleBlockPLace : ManageCurseur = NULL" ) );
+                      wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
@@ -106,15 +106,17 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         Block_Move( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
-        if( DrawPanel->ManageCurseur )
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+
         Block_Duplicate( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
@@ -134,13 +136,10 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
         break;
     }
 
+    DrawPanel->SetMouseCapture( NULL, NULL );
     GetScreen()->SetModify();
+    GetScreen()->ClearBlockCommand();
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur   = NULL;
-    GetScreen()->m_BlockLocate.m_Flags   = 0;
-    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     if( GetScreen()->m_BlockLocate.GetCount() )
     {
         DisplayError( this, wxT( "HandleBlockPLace error: some items left" ) );
@@ -166,7 +165,7 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
     bool nextcmd  = false;
     bool zoom_command = false;
 
-    if( DrawPanel->ManageCurseur )
+    if( DrawPanel->IsMouseCaptured() )
 
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
@@ -181,14 +180,14 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
-            DrawPanel->ManageCurseur = DrawMovingBlockOutlines;
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+            DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
             Block_Delete( DC );
             break;
 
@@ -211,12 +210,8 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
-        GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-        GetScreen()->m_BlockLocate.ClearItemsList();
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        GetScreen()->ClearBlockCommand();
+        DrawPanel->SetMouseCapture( NULL, NULL );
         DisplayToolMsg( wxEmptyString );
     }
 
@@ -253,9 +248,9 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector.x = screen->m_Curseur.x -
+        screen->m_BlockLocate.m_MoveVector.x = screen->GetCrossHairPosition().x -
                                                screen->m_BlockLocate.GetRight();
-        screen->m_BlockLocate.m_MoveVector.y = screen->m_Curseur.y -
+        screen->m_BlockLocate.m_MoveVector.y = screen->GetCrossHairPosition().y -
                                                screen->m_BlockLocate.GetBottom();
     }
 
@@ -306,11 +301,11 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
     wxPoint delta;
     wxPoint oldpos;
 
-    oldpos = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = NULL;
+    oldpos = GetScreen()->GetCrossHairPosition();
+    DrawPanel->m_mouseCaptureCallback = NULL;
 
-    GetScreen()->m_Curseur = oldpos;
-    DrawPanel->MouseToCursorSchema();
+    GetScreen()->SetCrossHairPosition( oldpos );
+    DrawPanel->MoveCursorToCrossHair();
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();
 
@@ -338,11 +333,11 @@ void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
     wxPoint delta;
     wxPoint oldpos;
 
-    oldpos = GetScreen()->m_Curseur;
-    DrawPanel->ManageCurseur = NULL;
+    oldpos = GetScreen()->GetCrossHairPosition();
+    DrawPanel->m_mouseCaptureCallback = NULL;
 
-    GetScreen()->m_Curseur = oldpos;
-    DrawPanel->MouseToCursorSchema();
+    GetScreen()->SetCrossHairPosition( oldpos );
+    DrawPanel->MoveCursorToCrossHair();
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();
 

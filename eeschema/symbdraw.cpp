@@ -107,11 +107,8 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( item == NULL )
         return;
 
-    Panel->ManageCurseur  = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
-
     bool newItem = item->IsNew();
-    item->EndEdit( parent->GetScreen()->GetCursorDrawPosition(), true );
+    item->EndEdit( parent->GetScreen()->GetCrossHairPosition( true ), true );
 
     if( newItem )
     {
@@ -127,9 +124,8 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
-    DrawPanel->ManageCurseur = SymbolDisplayDraw;
-    DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
-    wxPoint drawPos = GetScreen()->GetCursorDrawPosition();
+    DrawPanel->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    wxPoint drawPos = GetScreen()->GetCrossHairPosition( true );
 
     // no temp copy -> the current version of component will be used for Undo
     // This is normal when adding new items to the current component
@@ -164,7 +160,7 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC*
         DrawPanel->m_IgnoreMouseEvents = true;
         EditSymbolText( NULL, Text );
         DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
 
         if( Text->m_Text.IsEmpty() )
         {
@@ -194,16 +190,15 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC*
             m_drawItem->SetConvert( m_convert );
 
         // Draw initial symbol:
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
     }
     else
     {
-        DrawPanel->ManageCurseur = NULL;
-        DrawPanel->ForceCloseManageCurseur = NULL;
+        DrawPanel->EndMouseCapture();
         return NULL;
     }
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 
     return m_drawItem;
@@ -217,7 +212,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
     if( m_drawItem == NULL )
         return;
 
-    wxPoint pos = GetScreen()->GetCursorDrawPosition();
+    wxPoint pos = GetScreen()->GetCrossHairPosition( true );
 
     if( m_drawItem->ContinueEdit( pos ) )
     {
@@ -251,11 +246,11 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     {
         int unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
         wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
-        item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, &text,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, &text,
                     DefaultTransform );
     }
     else
-        item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, NULL,
                     DefaultTransform );
 }
 
@@ -268,10 +263,9 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
     SetCursor( wxCURSOR_HAND );
 
     TempCopyComponent();
-    m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCursorDrawPosition() );
-    DrawPanel->ManageCurseur = RedrawWhileMovingCursor;
-    DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
+    m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCrossHairPosition( true ) );
+    DrawPanel->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
@@ -282,10 +276,9 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
         return;
 
     TempCopyComponent();
-    m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCursorDrawPosition() );
-    DrawPanel->ManageCurseur = SymbolDisplayDraw;
-    DrawPanel->ForceCloseManageCurseur = AbortSymbolTraceOn;
-    DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, true );
+    m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCrossHairPosition( true ) );
+    DrawPanel->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
@@ -300,7 +293,7 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
         return;
 
     item->SetEraseLastDrawItem( aErase );
-    item->Draw( aPanel, aDC, Screen->GetCursorDrawPosition(), -1, g_XorMode, NULL,
+    item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, NULL,
                 DefaultTransform );
 }
 
@@ -328,13 +321,12 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
     if( m_drawItem->IsNew() )
         m_component->AddDrawItem( m_drawItem );
 
-    m_drawItem->EndEdit( GetScreen()->GetCursorDrawPosition() );
+    m_drawItem->EndEdit( GetScreen()->GetCrossHairPosition( true ) );
 
     m_drawItem = NULL;
 
     OnModify();
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     DrawPanel->Refresh();
 }

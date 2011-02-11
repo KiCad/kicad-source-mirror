@@ -123,7 +123,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         if( pin->IsNew() )
         {
             pin->m_Flags |= IS_CANCELLED;
-            DrawPanel->UnManageCursor();
+            DrawPanel->EndMouseCapture();
         }
         return;
     }
@@ -194,8 +194,6 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
         parent->RestoreComponent();
 
     /* clear edit flags */
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     parent->SetDrawItem( NULL );
     parent->SetLastDrawItem( NULL );
     Panel->Refresh( true );
@@ -216,12 +214,11 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
     // Some tests
     if( (CurrentPin == NULL) || (CurrentPin->Type() != LIB_PIN_T) )
     {
-        wxMessageBox( wxT("LIB_EDIT_FRAME::PlacePin() error") );
+        wxMessageBox( wxT( "LIB_EDIT_FRAME::PlacePin() error" ) );
         return;
     }
 
-    newpos.x = GetScreen()->m_Curseur.x;
-    newpos.y = -GetScreen()->m_Curseur.y;
+    newpos = GetScreen()->GetCrossHairPosition( true );
 
     // Tst for an other pin in same new position:
     for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
@@ -235,7 +232,7 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
             status =
                 IsOK( this, _( "This position is already occupied by \
 another pin. Continue?" ) );
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             DrawPanel->m_IgnoreMouseEvents = false;
 
             if( !status )
@@ -252,8 +249,7 @@ another pin. Continue?" ) );
     else
         SaveCopyInUndoList( m_component );
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->EndMouseCapture();
     OnModify();
     CurrentPin->SetPosition( newpos );
 
@@ -280,11 +276,11 @@ another pin. Continue?" ) );
         Pin->m_Flags = 0;
     }
 
-    DrawPanel->CursorOff( DC );
+    DrawPanel->CrossHairOff( DC );
     bool showPinText = true;
     CurrentPin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
                       &showPinText, DefaultTransform );
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 
     m_drawItem = NULL;
 }
@@ -322,15 +318,13 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = startPos;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( startPos );
+    DrawPanel->MoveCursorToCrossHair();
 
     CurrentPin->DisplayInfo( this );
-    DrawPanel->ManageCurseur = DrawMovePin;
-    DrawPanel->ForceCloseManageCurseur = AbortPinMove;
-
-    DrawPanel->CursorOn( DC );
+    DrawPanel->SetMouseCapture( DrawMovePin, AbortPinMove );
+    DrawPanel->CrossHairOn( DC );
 }
 
 
@@ -361,7 +355,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     }
 
     /* Redraw pin in new position */
-    CurrentPin->SetPosition( aPanel->GetScreen()->GetCursorDrawPosition() );
+    CurrentPin->SetPosition( aPanel->GetScreen()->GetCrossHairPosition( true ) );
     CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
     PinPreviousPos = CurrentPin->GetPosition();
@@ -435,7 +429,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     if( g_EditPinByPinIsOn == false )
         pin->m_Flags |= IS_LINKED;
 
-    pin->SetPosition( GetScreen()->GetCursorDrawPosition() );
+    pin->SetPosition( GetScreen()->GetCrossHairPosition( true ) );
     pin->SetLength( LastPinLength );
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
@@ -451,7 +445,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetId( ID_LIBEDIT_EDIT_PIN );
     GetEventHandler()->ProcessEvent( cmd );
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = false;
 
     if( pin->m_Flags & IS_CANCELLED )
@@ -462,8 +456,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     else
     {
         ClearTempCopyComponent();
-        DrawPanel->ManageCurseur = DrawMovePin;
-        DrawPanel->ForceCloseManageCurseur = AbortPinMove;
+        DrawPanel->SetMouseCapture( DrawMovePin, AbortPinMove );
 
         if( DC )
             pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
@@ -607,10 +600,9 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     if( g_EditPinByPinIsOn == false )
         Pin->m_Flags |= IS_LINKED;
 
-    wxPoint savepos = GetScreen()->m_Curseur;
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur.x = Pin->GetPosition().x;
-    GetScreen()->m_Curseur.y = -Pin->GetPosition().y;
+    wxPoint savepos = GetScreen()->GetCrossHairPosition();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( wxPoint( Pin->GetPosition().x, -Pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
     m_drawItem = Pin;
@@ -618,8 +610,8 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     PlacePin( DC );
     m_lastDrawItem = Pin;
 
-    GetScreen()->m_Curseur = savepos;
-    DrawPanel->CursorOn( DC );
+    GetScreen()->SetCrossHairPosition( savepos );
+    DrawPanel->CrossHairOn( DC );
 
     Pin->DisplayInfo( this );
     OnModify( );

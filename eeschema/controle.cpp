@@ -70,7 +70,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aInc
         break;
 
     case SCH_COMPONENT_T:
-        Pin = GetScreen()->GetPin( GetScreen()->m_Curseur, &LibItem );
+        Pin = GetScreen()->GetPin( GetScreen()->GetCrossHairPosition(), &LibItem );
 
         if( Pin )
             break;  // Priority is probing a pin first
@@ -80,7 +80,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aInc
         break;
 
     default:
-        Pin = GetScreen()->GetPin( GetScreen()->m_Curseur, &LibItem );
+        Pin = GetScreen()->GetPin( GetScreen()->GetCrossHairPosition(), &LibItem );
         break;
 
     case LIB_PIN_T:
@@ -240,8 +240,8 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     int         hotkey = 0;
     wxPoint     pos = aPosition;
 
-    PutOnGrid( &pos );
-    oldpos = screen->m_Curseur;
+    pos = screen->GetNearestGridPosition( pos );
+    oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
@@ -279,7 +279,7 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     // Update cursor position.
-    screen->m_Curseur = pos;
+    screen->SetCrossHairPosition( pos );
 
     if( screen->IsRefreshReq() )
     {
@@ -287,17 +287,17 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         wxSafeYield();
     }
 
-    if( oldpos != screen->m_Curseur )
+    if( oldpos != screen->GetCrossHairPosition() )
     {
-        pos = screen->m_Curseur;
-        screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( aDC );
-        screen->m_Curseur = pos;
-        DrawPanel->CursorOn( aDC );
+        pos = screen->GetCrossHairPosition();
+        screen->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        screen->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 
@@ -322,8 +322,8 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     int         hotkey = 0;
     wxPoint     pos = aPosition;
 
-    PutOnGrid( &pos );
-    oldpos = screen->m_Curseur;
+    pos = screen->GetNearestGridPosition( pos );
+    oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
@@ -361,7 +361,7 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     // Update the cursor position.
-    screen->m_Curseur = pos;
+    screen->SetCrossHairPosition( pos );
 
     if( screen->IsRefreshReq() )
     {
@@ -369,17 +369,17 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         wxSafeYield();
     }
 
-    if( oldpos != screen->m_Curseur )
+    if( oldpos != screen->GetCrossHairPosition() )
     {
-        pos = screen->m_Curseur;
-        screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( aDC );
-        screen->m_Curseur = pos;
-        DrawPanel->CursorOn( aDC );
+        pos = screen->GetCrossHairPosition();
+        screen->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        screen->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 
@@ -403,8 +403,8 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     int         hotkey = 0;
     wxPoint     pos = aPosition;
 
-    PutOnGrid( &pos );
-    oldpos = screen->m_Curseur;
+    pos = screen->GetNearestGridPosition( pos );
+    oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
@@ -442,7 +442,7 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     // Update cursor position.
-    screen->m_Curseur = pos;
+    screen->SetCrossHairPosition( pos );
 
     if( screen->IsRefreshReq() )
     {
@@ -450,17 +450,17 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         wxSafeYield();
     }
 
-    if( oldpos != screen->m_Curseur )
+    if( oldpos != screen->GetCrossHairPosition() )
     {
-        pos = screen->m_Curseur;
-        screen->m_Curseur = oldpos;
-        DrawPanel->CursorOff( aDC );
-        screen->m_Curseur = pos;
-        DrawPanel->CursorOn( aDC );
+        pos = screen->GetCrossHairPosition();
+        screen->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        screen->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
         }
     }
 

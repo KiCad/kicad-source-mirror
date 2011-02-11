@@ -49,7 +49,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( DrawEntry == NULL )
             {
                 DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                         GetScreen()->m_Curseur );
+                                                         GetScreen()->GetCrossHairPosition() );
             }
 
             if( DrawEntry )
@@ -103,7 +103,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             if( DrawEntry == NULL )
             {
                 DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                         GetScreen()->m_Curseur );
+                                                         GetScreen()->GetCrossHairPosition() );
             }
             if( DrawEntry == NULL )
             {
@@ -156,7 +156,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         if( m_drawItem == NULL )
         {
             m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                      GetScreen()->m_Curseur );
+                                                      GetScreen()->GetCrossHairPosition() );
         }
         if( m_drawItem == NULL )
         {
@@ -227,6 +227,6 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         break;
     }
 
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }

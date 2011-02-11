@@ -1119,7 +1119,7 @@ int WinEDA_PcbFrame::ReadPcbFile( LINE_READER* aReader, bool Append )
     board->SynchronizeNetsAndNetClasses();
 
     m_TrackAndViasSizesList_Changed = true;
-    Affiche_Message( wxEmptyString );
+    SetStatusText( wxEmptyString );
     BestZoom();
     SetToolbars();
     return 1;
@@ -1173,7 +1173,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     if( !rc )
         DisplayError( this, wxT( "Unable to save PCB file" ) );
     else
-        Affiche_Message( wxEmptyString );
+        SetStatusText( wxEmptyString );
 
     return rc;
 }

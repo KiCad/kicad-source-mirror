@@ -398,8 +398,7 @@ int SCH_EDIT_FRAME::BestZoom()
     size = DrawPanel->GetClientSize();
     zoom = MAX( (double) dx / (double) size.x, (double) dy / (double) size.y );
 
-    GetScreen()->m_Curseur.x = dx / 2;
-    GetScreen()->m_Curseur.y = dy / 2;
+    GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
 
     return wxRound( zoom * (double) GetScreen()->m_ZoomScalar );
 }
@@ -693,12 +692,12 @@ void SCH_EDIT_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
     if( m_ViewlibFrame )
     {
-        m_ViewlibFrame->Show( TRUE );
+        m_ViewlibFrame->Show( true );
     }
     else
     {
         m_ViewlibFrame = new LIB_VIEW_FRAME( this );
-        m_ViewlibFrame->AdjustScrollBars();
+        m_ViewlibFrame->AdjustScrollBars( wxPoint( 0 , 0 ) );
     }
 }
 
@@ -707,7 +706,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
     if( m_LibeditFrame )
     {
-        m_LibeditFrame->Show( TRUE );
+        m_LibeditFrame->Show( true );
     }
     else
     {
@@ -715,7 +714,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
                                              wxT( "Library Editor" ),
                                              wxPoint( -1, -1 ),
                                              wxSize( 600, 400 ) );
-        m_LibeditFrame->AdjustScrollBars();
+        m_LibeditFrame->AdjustScrollBars( wxPoint( 0, 0 ) );
     }
 }
 

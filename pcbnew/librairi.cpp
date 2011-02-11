@@ -388,7 +388,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
 
     msg.Printf( _( "Component %s deleted in library %s" ), GetChars( CmpName ),
                GetChars( oldFileName.GetFullPath() ) );
-    Affiche_Message( msg );
+    SetStatusText( msg );
 
     CreateDocLibrary( oldFileName.GetFullPath() );
 }
@@ -583,7 +583,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
                 {
                     msg = _( "Module exists\n Line: " );
                     msg << LineNum;
-                    Affiche_Message( msg );
+                    SetStatusText( msg );
                 }
                 if( !aOverwrite )    /* Do not save the given footprint: an old
                                       * one exists */
@@ -714,7 +714,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         msg  = _( "Component " ); msg += Name_Cmp;
         msg += added ? _( " added in " ) : _( " replaced in " );
         msg += aLibName;
-        Affiche_Message( msg );
+        SetStatusText( msg );
     }
 
     return 1;
@@ -763,7 +763,7 @@ MODULE* WinEDA_BasePcbFrame::Create_1_Module( const wxString& aModuleName )
     GetBoard()->Add( Module );
 
     /* Update parameters: position, timestamp ... */
-    newpos = GetScreen()->m_Curseur;
+    newpos = GetScreen()->GetCrossHairPosition();
     Module->SetPosition( newpos );
     Module->m_LastEdit_Time = time( NULL );
 

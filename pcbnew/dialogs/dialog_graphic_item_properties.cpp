@@ -68,7 +68,7 @@ void WinEDA_PcbFrame::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wx
     DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this,
         aItem, aDC );
     dialog->ShowModal(); dialog->Destroy();
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
 

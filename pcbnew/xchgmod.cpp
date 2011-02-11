@@ -473,14 +473,14 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*            aOldModule,
     aNewModule->SetParent( GetBoard() );
 
     GetBoard()->m_Status_Pcb = 0;
-    oldpos = GetScreen()->m_Curseur;
-    GetScreen()->m_Curseur = aOldModule->m_Pos;
+    oldpos = GetScreen()->GetCrossHairPosition();
+    GetScreen()->SetCrossHairPosition( aOldModule->m_Pos );
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
     Place_Module( aNewModule, NULL, true );
-    GetScreen()->m_Curseur = oldpos;
+    GetScreen()->SetCrossHairPosition( oldpos );
 
     /* Flip footprint if needed */
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )

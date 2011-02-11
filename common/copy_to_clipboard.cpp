@@ -33,7 +33,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
         if( GetScreen()->IsBlockActive() )
             DrawPanel->SetCursor( wxCursor( DrawPanel->GetDefaultCursor() ) );
 
-        DrawPanel->UnManageCursor();
+        DrawPanel->EndMouseCapture();
     }
 }
 

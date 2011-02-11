@@ -79,7 +79,7 @@ static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE
 void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 {
     SCH_SCREEN* screen = GetScreen();
-    wxPoint refpos = screen->m_Curseur;
+    wxPoint refpos = screen->GetCrossHairPosition();
     SCH_ITEM* DelStruct;
     PICKED_ITEMS_LIST pickList;
 
@@ -97,7 +97,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
     DelStruct = screen->GetDrawItems();
 
     while( DelStruct
-           && ( DelStruct = PickStruct( screen->m_Curseur, screen,
+           && ( DelStruct = PickStruct( screen->GetCrossHairPosition(), screen,
                                         JUNCTION_T | WIRE_T | BUS_T ) ) != NULL )
     {
         DelStruct->m_Flags = SELECTEDNODE | STRUCT_DELETED;
@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
         }
 
         // Delete labels attached to wires
-        wxPoint pos = screen->m_Curseur;
+        wxPoint pos = screen->GetCrossHairPosition();
 
         for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
              DelStruct = DelStruct->Next() )
@@ -245,8 +245,9 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             if( DelStruct->Type() != SCH_LABEL_T )
                 continue;
 
-            GetScreen()->m_Curseur = ( (SCH_TEXT*) DelStruct )->m_Pos;
-            EDA_ITEM* TstStruct = PickStruct( screen->m_Curseur, GetScreen(), WIRE_T | BUS_T );
+            GetScreen()->SetCrossHairPosition( ( (SCH_TEXT*) DelStruct )->m_Pos );
+            EDA_ITEM* TstStruct = PickStruct( screen->GetCrossHairPosition(), GetScreen(),
+                                              WIRE_T | BUS_T );
 
             if( TstStruct && TstStruct->m_Flags & STRUCT_DELETED )
             {
@@ -259,7 +260,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             }
         }
 
-        screen->m_Curseur = pos;
+        screen->SetCrossHairPosition( pos );
     }
 
     screen->ClearDrawingState();
@@ -292,23 +293,23 @@ bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
     SCH_SCREEN* screen = (SCH_SCREEN*) ( frame->GetScreen() );
     bool item_deleted  = FALSE;
 
-    DelStruct = PickStruct( screen->m_Curseur, screen, MARKER_T );
+    DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, MARKER_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, JUNCTION_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, JUNCTION_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, NO_CONNECT_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, NO_CONNECT_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, BUS_ENTRY_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, BUS_ENTRY_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, WIRE_T | BUS_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, WIRE_T | BUS_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, DRAW_ITEM_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, DRAW_ITEM_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, TEXT_T | LABEL_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, TEXT_T | LABEL_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, COMPONENT_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, COMPONENT_T );
     if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->m_Curseur, screen, SHEET_T );
+        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, SHEET_T );
 
     if( DelStruct )
     {

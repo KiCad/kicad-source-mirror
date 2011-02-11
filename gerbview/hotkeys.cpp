@@ -126,7 +126,7 @@ void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         break;
 
     case HK_RESET_LOCAL_COORD:         /*Reset the relative coord  */
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case HK_SWITCH_UNITS:

@@ -62,10 +62,18 @@ class BASE_SCREEN : public EDA_ITEM
     char      m_FlagSave;       ///< Indicates automatic file save.
     EDA_ITEM* m_CurrentItem;    ///< Currently selected object
     GRID_TYPE m_Grid;           ///< Current grid selection.
+    wxPoint   m_scrollCenter;   ///< Current scroll center point in logical units.
+
+    /**
+     * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
+     * position.  It is an addition indicator typically drawn on grid to indicate to the
+     * user where the current action will be performed.
+     */
+    wxPoint m_crossHairPosition;
 
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
-    wxPoint m_Curseur;          /* Screen cursor coordinate (on grid) in user units. */
+
     wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
                                  * in user units. (coordinates from last reset position)*/
@@ -151,14 +159,28 @@ public:
     virtual int  GetInternalUnits( void );
 
     /**
-     * Return the current cursor position in drawing coordinates.
-     *
-     * This call inverts the Y axis coordinated of m_Curseur to correct for the difference
-     * between the wxWidgets GDI and the Kicad drawing coordinates.
-     *
-     * @return - The cursor position in drawing coordinates.
+     * Function GetCrossHairPosition
+     * return the current cross hair position in logical (drawing) coordinates.
+     * @param aInvertY Inverts the Y axis position.
+     * @return The cross hair position in drawing coordinates.
      */
-    wxPoint      GetCursorDrawPosition() { return wxPoint( m_Curseur.x, -m_Curseur.y ); }
+    wxPoint GetCrossHairPosition( bool aInvertY = false ) const
+    {
+        if( aInvertY )
+            return wxPoint( m_crossHairPosition.x, -m_crossHairPosition.y );
+
+        return wxPoint( m_crossHairPosition.x, m_crossHairPosition.y );
+    }
+
+    /**
+     * Function SetCrossHairPosition
+     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
+     * @param aPosition The new cross hair position.
+     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
+     *                    \a aPosition.
+     *
+     */
+    void SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid = true );
 
     /* general Undo/Redo command control */
 
@@ -352,7 +374,7 @@ public:
      */
     wxPoint RefPos( bool useMouse )
     {
-        return useMouse ? m_MousePosition : m_Curseur;
+        return useMouse ? m_MousePosition : m_crossHairPosition;
     }
 
     /**
@@ -407,6 +429,12 @@ public:
     inline bool IsBlockActive() const { return !m_BlockLocate.IsIdle(); }
 
     void ClearBlockCommand() { m_BlockLocate.Clear(); }
+
+    wxPoint GetScrollCenterPosition() const { return m_scrollCenter; }
+    void SetScrollCenterPosition( const wxPoint& aCenterPosition )
+    {
+        m_scrollCenter = aCenterPosition;
+    }
 
 #if defined(DEBUG)
 

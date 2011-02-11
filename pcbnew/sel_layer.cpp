@@ -234,7 +234,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
 
     int result = frame->ShowModal();
     frame->Destroy();
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
     SetToolbars();
 
     // if user changed colors and we are in high contrast mode, then redraw

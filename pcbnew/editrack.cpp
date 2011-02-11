@@ -61,8 +61,6 @@ static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
         g_CurrentTrackList.DeleteAll();
     }
 
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
     frame->SetCurItem( NULL );
 }
 
@@ -86,10 +84,9 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
     int         masquelayer =
         g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
     BOARD_ITEM* LockPoint;
-    wxPoint     pos = GetScreen()->m_Curseur;
+    wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
-    DrawPanel->ManageCurseur = ShowNewTrackWhenMovingCursor;
-    DrawPanel->ForceCloseManageCurseur = Exit_Editrack;
+    DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Exit_Editrack );
 
     if( aTrack == NULL )  /* Starting a new track  */
     {
@@ -193,7 +190,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         g_CurrentTrackSegment->DisplayInfoBase( this );
         SetCurItem( g_CurrentTrackSegment, false );
-        DrawPanel->ManageCurseur( DrawPanel, DC, wxDefaultPosition, false );
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
         if( Drc_On )
         {
@@ -539,11 +536,11 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
         High_Light( DC );
 
     g_HighLight_NetCode = OldNetCodeSurbrillance;
+
     if( OldEtatSurbrillance )
         High_Light( DC );
 
-    DrawPanel->ManageCurseur = NULL;
-    DrawPanel->ForceCloseManageCurseur = NULL;
+    DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 
@@ -611,7 +608,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
 {
     PCB_SCREEN* screen = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetScreen();
     BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
-    wxPoint cursor = screen->m_Curseur;
+    wxPoint cursor = screen->GetCrossHairPosition();
     wxPoint cv, vec, n;
     TRACK*  track = g_CurrentTrackSegment;
     TRACK*  other;
@@ -734,7 +731,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     {
         if( g_TwoSegmentTrackBuild )
         {
-            g_CurrentTrackSegment->m_End = screen->m_Curseur;
+            g_CurrentTrackSegment->m_End = screen->GetCrossHairPosition();
 
             if( Drc_On )
                 PushTrack( aPanel );
@@ -748,7 +745,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
             /* Calculate of the end of the path for the permitted directions:
              * horizontal, vertical or 45 degrees.
              */
-            Calcule_Coord_Extremite_45( screen->m_Curseur,
+            Calcule_Coord_Extremite_45( screen->GetCrossHairPosition(),
                                         g_CurrentTrackSegment->m_Start.x,
                                         g_CurrentTrackSegment->m_Start.y,
                                         &g_CurrentTrackSegment->m_End.x,
@@ -757,7 +754,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     }
     else    /* Here the angle is arbitrary */
     {
-        g_CurrentTrackSegment->m_End = screen->m_Curseur;
+        g_CurrentTrackSegment->m_End = screen->GetCrossHairPosition();
     }
 
     /* Redraw the new track */

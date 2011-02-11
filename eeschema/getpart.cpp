@@ -34,8 +34,7 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
 
-    /* Close the current Lib browser, if open, and open a new one, in
-     * "modal" mode */
+    /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
     if( m_ViewlibFrame )
     {
         m_ViewlibFrame->Destroy();
@@ -43,7 +42,7 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
     }
 
     m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
-    m_ViewlibFrame->AdjustScrollBars();
+    m_ViewlibFrame->AdjustScrollBars( wxPoint( 0 , 0 ) );
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
@@ -105,7 +104,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     if ( dlg.ShowModal() == wxID_CANCEL )
     {
         DrawPanel->m_IgnoreMouseEvents = FALSE;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -123,7 +122,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     if( Name.IsEmpty() )
     {
         DrawPanel->m_IgnoreMouseEvents = FALSE;
-        DrawPanel->MouseToCursorSchema();
+        DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -140,7 +139,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
         if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -151,7 +150,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
         if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -162,7 +161,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
         if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -182,13 +181,13 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
         if( Entry == NULL )
         {
             DrawPanel->m_IgnoreMouseEvents = FALSE;
-            DrawPanel->MouseToCursorSchema();
+            DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
 
     DrawPanel->m_IgnoreMouseEvents = FALSE;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->MoveCursorToCrossHair();
 
     if( Entry == NULL )
     {
@@ -199,12 +198,10 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     lastCommponentName = Name;
     AddHistoryComponentName( HistoryList, Name );
-
-    DrawPanel->ManageCurseur = ShowWhileMoving;
-    DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
+    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitPlaceCmp );
 
     Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
-                                   GetScreen()->m_Curseur, true );
+                                   GetScreen()->GetCrossHairPosition(), true );
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if Entry is found, and if Name is an alias of a component,
     // alias exists because its root component was found
@@ -234,7 +231,7 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     }
 
-    move_vector = screen->m_Curseur - Component->m_Pos;
+    move_vector = screen->GetCrossHairPosition() - Component->m_Pos;
     Component->Move( move_vector );
     Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 }
@@ -253,7 +250,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
     /* Deletes the previous component. */
     if( DC )
     {
-        DrawPanel->CursorOff( DC );
+        DrawPanel->CrossHairOff( DC );
 
         if( DrawComponent->m_Flags )
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
@@ -272,7 +269,7 @@ void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, 
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
         else
             DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        DrawPanel->CursorOn( DC );
+        DrawPanel->CrossHairOn( DC );
     }
 
     GetScreen()->TestDanglingEnds( DrawPanel, DC );
@@ -302,9 +299,7 @@ static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Component->m_Flags = 0;
     }
 
-    Panel->Refresh( TRUE );
-    Panel->ManageCurseur = NULL;
-    Panel->ForceCloseManageCurseur = NULL;
+    Panel->Refresh( true );
     screen->SetCurItem( NULL );
 }
 
@@ -427,12 +422,11 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
         g_ItemToUndoCopy = Component->Clone();
     }
 
-    DrawPanel->CursorOff( DC );
-    GetScreen()->m_Curseur = Component->m_Pos;
-    DrawPanel->MouseToCursorSchema();
+    DrawPanel->CrossHairOff( DC );
+    GetScreen()->SetCrossHairPosition( Component->m_Pos );
+    DrawPanel->MoveCursorToCrossHair();
 
-    DrawPanel->ManageCurseur = ShowWhileMoving;
-    DrawPanel->ForceCloseManageCurseur = ExitPlaceCmp;
+    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitPlaceCmp );
     GetScreen()->SetCurItem( Component );
     OldPos = Component->m_Pos;
     OldTransform = Component->GetTransform();
@@ -455,10 +449,10 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
 
     Component->m_Flags |= IS_MOVED;
 
-    DrawPanel->ManageCurseur( DrawPanel, DC, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, FALSE );
 #endif
 
     DrawPanel->m_AutoPAN_Request = TRUE;
 
-    DrawPanel->CursorOn( DC );
+    DrawPanel->CrossHairOn( DC );
 }

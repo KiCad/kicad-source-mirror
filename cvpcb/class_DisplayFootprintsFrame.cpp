@@ -351,7 +351,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        Affiche_Message( wxEmptyString );
+        SetStatusText( wxEmptyString );
         DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
         UpdateStatusBar();
         break;
@@ -399,8 +399,8 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    PutOnGrid( &pos );
-    oldpos = GetScreen()->m_Curseur;
+    GetScreen()->SetCrossHairPosition( pos );
+    oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
     switch( g_KeyPressed )
@@ -409,14 +409,14 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
         cmd.SetId( ID_POPUP_ZOOM_IN );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        pos = GetScreen()->m_Curseur;
+        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_F2:
         cmd.SetId( ID_POPUP_ZOOM_OUT );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        pos = GetScreen()->m_Curseur;
+        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_F3:
@@ -429,18 +429,18 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        pos = GetScreen()->m_Curseur;
+        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_HOME:
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         flagcurseur = 2;
-        pos = GetScreen()->m_Curseur;
+        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case ' ':
-        GetScreen()->m_O_Curseur = GetScreen()->m_Curseur;
+        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_NUMPAD8:       /* cursor moved up */
@@ -468,7 +468,7 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
         break;
     }
 
-    GetScreen()->m_Curseur = pos;
+    GetScreen()->SetCrossHairPosition( pos );
 
     if( GetScreen()->IsRefreshReq() )
     {
@@ -476,20 +476,20 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
         Refresh();
     }
 
-    if( oldpos != GetScreen()->m_Curseur )
+    if( oldpos != GetScreen()->GetCrossHairPosition() )
     {
         if( flagcurseur != 2 )
         {
-            pos = GetScreen()->m_Curseur;
-            GetScreen()->m_Curseur = oldpos;
-            DrawPanel->CursorOff( aDC );
-            GetScreen()->m_Curseur = pos;
-            DrawPanel->CursorOn( aDC );
+            pos = GetScreen()->GetCrossHairPosition();
+            GetScreen()->SetCrossHairPosition( oldpos );
+            DrawPanel->CrossHairOff( aDC );
+            GetScreen()->SetCrossHairPosition( pos );
+            DrawPanel->CrossHairOn( aDC );
         }
 
-        if( DrawPanel->ManageCurseur )
+        if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->ManageCurseur( DrawPanel, aDC, aPosition, 0 );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, 0 );
         }
     }
 

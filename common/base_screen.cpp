@@ -47,15 +47,15 @@ void BASE_SCREEN::InitDatas()
 {
     if( m_Center )
     {
-        m_Curseur.x = m_Curseur.y = 0;
+        m_crossHairPosition.x = m_crossHairPosition.y = 0;
         m_DrawOrg.x = -ReturnPageSize().x / 2;
         m_DrawOrg.y = -ReturnPageSize().y / 2;
     }
     else
     {
         m_DrawOrg.x = m_DrawOrg.y = 0;
-        m_Curseur.x = ReturnPageSize().x / 2;
-        m_Curseur.y = ReturnPageSize().y / 2;
+        m_crossHairPosition.x = ReturnPageSize().x / 2;
+        m_crossHairPosition.y = ReturnPageSize().y / 2;
     }
 
     m_O_Curseur.x = m_O_Curseur.y = 0;
@@ -417,21 +417,29 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoi
 wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize )
 {
     if( aOnGrid )
-        return GetNearestGridPosition( m_Curseur, aGridSize );
+        return GetNearestGridPosition( m_crossHairPosition, aGridSize );
 
-    return m_Curseur;
+    return m_crossHairPosition;
 }
 
 
 wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
 {
-    wxPoint pos = m_Curseur - m_DrawOrg;
+    wxPoint pos = m_crossHairPosition - m_DrawOrg;
     double scalar = GetScalingFactor();
 
     pos.x = wxRound( (double) pos.x * scalar );
     pos.y = wxRound( (double) pos.y * scalar );
 
     return pos;
+}
+
+void BASE_SCREEN::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
+{
+    if( aSnapToGrid )
+        m_crossHairPosition = GetNearestGridPosition( aPosition );
+    else
+        m_crossHairPosition = aPosition;
 }
 
 

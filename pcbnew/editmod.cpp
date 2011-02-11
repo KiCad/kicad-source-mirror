@@ -66,9 +66,9 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
     if( pt_mod == NULL )
         return;
 
-    moveVector = pt_mod->m_Pos - GetScreen()->m_Curseur;
+    moveVector = pt_mod->m_Pos - GetScreen()->GetCrossHairPosition();
 
-    pt_mod->m_Pos = GetScreen()->m_Curseur;
+    pt_mod->m_Pos = GetScreen()->GetCrossHairPosition();
 
     /* Update the relative coordinates:
      * The coordinates are relative to the anchor point.

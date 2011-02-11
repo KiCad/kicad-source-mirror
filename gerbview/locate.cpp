@@ -15,12 +15,13 @@ GERBER_DRAW_ITEM* WinEDA_GerberFrame::Locate( int aTypeloc )
     MsgPanel->EraseMsgBox();
     wxPoint ref;
     bool found = false;
+
     if( aTypeloc == CURSEUR_ON_GRILLE )
-        ref = GetScreen()->m_Curseur;
+        ref = GetScreen()->GetCrossHairPosition();
     else
         ref = GetScreen()->m_MousePosition;
 
-    int         layer = GetScreen()->m_Active_Layer;
+    int layer = GetScreen()->m_Active_Layer;
 
     // Search first on active layer
     BOARD_ITEM* item = GetBoard()->m_Drawings;
