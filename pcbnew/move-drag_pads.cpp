@@ -22,7 +22,7 @@ static wxPoint Pad_OldPos;
 
 /* Cancel move pad command.
  */
-static void Exit_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     D_PAD* pad = s_CurrentSelectedPad;
 
@@ -61,6 +61,9 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     TRACK*       Track;
     BASE_SCREEN* screen = aPanel->GetScreen();
     D_PAD*       pad    = s_CurrentSelectedPad;
+
+    if( pad == NULL )       // Should not occur
+        return;
 
     if( aErase )
         pad->Draw( aPanel, aDC, GR_XOR );
@@ -277,7 +280,7 @@ void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
     s_CurrentSelectedPad = Pad;
     Pad_OldPos = Pad->m_Pos;
     Pad->DisplayInfo( this );
-    DrawPanel->SetMouseCapture( Show_Pad_Move, Exit_Move_Pad );
+    DrawPanel->SetMouseCapture( Show_Pad_Move, Abort_Move_Pad );
 
     /* Draw the pad  (SKETCH mode) */
     Pad->Draw( DrawPanel, DC, GR_XOR );
