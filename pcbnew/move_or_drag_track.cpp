@@ -114,7 +114,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     {
         TRACK* Track = g_DragSegmentList[jj].m_Segm;
         g_DragSegmentList[jj].SetInitialValues();
-        Track->SetState( EDIT, OFF );
+        Track->SetState( IN_EDIT, OFF );
         Track->m_Flags = 0;
         Track->Draw( Panel, DC, GR_OR );
     }
@@ -997,14 +997,14 @@ bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 
     // DRC Ok: place track segments
     Track->m_Flags = 0;
-    Track->SetState( EDIT, OFF );
+    Track->SetState( IN_EDIT, OFF );
     Track->Draw( DrawPanel, DC, draw_mode );
 
     /* Draw dragged tracks */
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Segm;
-        Track->SetState( EDIT, OFF );
+        Track->SetState( IN_EDIT, OFF );
         Track->m_Flags = 0;
         Track->Draw( DrawPanel, DC, draw_mode );
 

@@ -35,7 +35,7 @@ TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
         if( track->m_Start != pos )
             continue;
 
-        if( track->GetState( BUSY | DELETED ) )
+        if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
         if( layer < 0 )
@@ -61,7 +61,7 @@ TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
         if( !track->HitTest(pos) )
             continue;
 
-        if( track->GetState( BUSY | DELETED ) )
+        if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
         if( layer < 0 )
@@ -327,7 +327,7 @@ TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base, TRACK* pt_lim, 
 
         if( PtSegmN )
         {
-            if( PtSegmN->GetState( BUSY | DELETED ) )
+            if( PtSegmN->GetState( BUSY | IS_DELETED ) )
                 goto suite;
 
             if( PtSegmN == PtRefSegm )
@@ -357,7 +357,7 @@ suite:
 
         if( PtSegmB )
         {
-            if( PtSegmB->GetState( BUSY | DELETED ) )
+            if( PtSegmB->GetState( BUSY | IS_DELETED ) )
                 goto suite1;
 
             if( PtSegmB == PtRefSegm )
@@ -389,7 +389,7 @@ suite1:
     /* General search. */
     for( PtSegmN = pt_base; PtSegmN != NULL; PtSegmN =  PtSegmN->Next() )
     {
-        if( PtSegmN->GetState( DELETED | BUSY ) )
+        if( PtSegmN->GetState( IS_DELETED | BUSY ) )
         {
             if( PtSegmN == pt_lim )
                 break;
@@ -438,11 +438,11 @@ TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
     {
         int layer = track->GetLayer();
 
-        if( track->GetState( BUSY | DELETED ) )
+        if( track->GetState( BUSY | IS_DELETED ) )
         {
-            // D( printf( "track %p is BUSY | DELETED. BUSY=%d DELETED=%d\n",
+            // D( printf( "track %p is BUSY | IS_DELETED. BUSY=%d IS_DELETED=%d\n",
             //            track, track->GetState( BUSY ),
-            //            track->GetState( DELETED ) );)
+            //            track->GetState( IS_DELETED ) );)
             continue;
         }
 
@@ -524,7 +524,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
  * Data on layers by masklayer
  * Research is done to address start_adr has end_adr
  * If end_adr = NULL, end search list
- * The segments of track marks with the flag are not DELETED or taken
+ * The segments of track marks with the flag are not IS_DELETED or taken
  * into account
  */
 TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int MaskLayer )
@@ -536,7 +536,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_p
 
     for( PtSegm = start_adr; PtSegm != NULL; PtSegm =  PtSegm->Next() )
     {
-        if( PtSegm->GetState( DELETED | BUSY ) == 0 )
+        if( PtSegm->GetState( IS_DELETED | BUSY ) == 0 )
         {
             if( ref_pos == PtSegm->m_Start )
             {
@@ -562,7 +562,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_p
 /* Locates via through the point x, y, on layer data by masklayer.
  * Search is done to address start_adr has end_adr.
  * If end_adr = NULL, end search list
- * Vias whose parameter has the State or DELETED bit BUSY = 1 are ignored
+ * Vias whose parameter has the State or IS_DELETED bit BUSY = 1 are ignored
  */
 TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int MaskLayer )
 {
@@ -574,7 +574,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, in
         {
             if( pos == PtSegm->m_Start )
             {
-                if( PtSegm->GetState( BUSY | DELETED ) == 0 )
+                if( PtSegm->GetState( BUSY | IS_DELETED ) == 0 )
                 {
                     if( MaskLayer & PtSegm->ReturnMaskLayer() )
                         return PtSegm;

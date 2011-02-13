@@ -94,9 +94,6 @@ void ZONE_CONTAINER::SetNet( int anet_code )
 bool ZONE_CONTAINER::Save( FILE* aFile ) const
 /********************************************/
 {
-    if( GetState( DELETED ) )
-        return true;
-
     unsigned item_pos;
     int      ret;
     unsigned corners_count = m_Poly->corner.size();

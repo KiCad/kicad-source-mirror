@@ -1,6 +1,6 @@
-/****************************/
-/* Footprint edges editing. */
-/****************************/
+/*******************************/
+/* Footprint outlines editing. */
+/*******************************/
 
 /**
  * Functions to edit graphic items used to draw footprint edges.
@@ -19,10 +19,10 @@
 #include "module_editor_frame.h"
 
 
-static void ShowEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                             bool erase );
-static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                           bool aErase );
 
 int            ArcValue = 900;
@@ -43,7 +43,7 @@ void WinEDA_ModuleEditFrame::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     Edge->m_Flags |= IS_MOVED;
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
-    DrawPanel->SetMouseCapture( Move_Segment, Exit_EditEdge_Module );
+    DrawPanel->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
     SetCurItem( Edge );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 }
@@ -72,8 +72,10 @@ void WinEDA_ModuleEditFrame::Place_EdgeMod( EDGE_MODULE* Edge )
 }
 
 
-/* Move and redraw the current edited graphic item when mouse is moving */
-static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
+/* Redraw the current moved graphic item when mouse is moving
+ * Use this function to show an existing outline, in move command
+*/
+static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
     EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
@@ -96,9 +98,10 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 }
 
 
-/* Redraw the current edited (moved) graphic item
+/* Redraw the current graphic item during its creation
+ * Use this function to show a new outline, in begin command
  */
-static void ShowEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                             bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
@@ -267,22 +270,24 @@ void WinEDA_ModuleEditFrame::Delete_Edge_Module( EDGE_MODULE* Edge )
 }
 
 
-/* abort function in moving edge.
+/* abort function in moving outline.
  */
-static void Exit_EditEdge_Module( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 
+    Panel->SetMouseCapture( NULL, NULL );
+
     if( Edge && ( Edge->Type() == TYPE_EDGE_MODULE ) )
     {
-        if( Edge->m_Flags & IS_NEW )   /* Delete if new module. */
+        if( Edge->m_Flags & IS_NEW )   // On aborting, delete new outline.
         {
             MODULE* Module = (MODULE*) Edge->GetParent();
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge->DeleteStructure();
             Module->Set_Rectangle_Encadrement();
         }
-        else
+        else   // On aborting, move existing outline to its initial position.
         {
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge->m_Flags = 0;
@@ -350,11 +355,11 @@ EDGE_MODULE* WinEDA_ModuleEditFrame::Begin_Edge_Module( EDGE_MODULE* Edge,
 
         Edge->m_End0 = Edge->m_Start0;
         module->Set_Rectangle_Encadrement();
-        DrawPanel->SetMouseCapture( ShowEdgeModule, Exit_EditEdge_Module );
+        DrawPanel->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
     }
     /* Segment creation in progress.
-     * The ending coordinate are updated by the function
-     * Montre_Position_New_Edge_Module() called on move mouse event
+     * The ending coordinate is updated by the function
+     * ShowNewEdgeModule() called on move mouse event
      * during the segment craetion
      */
     else

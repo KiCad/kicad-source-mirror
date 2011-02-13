@@ -89,7 +89,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
             TRACK* segm = g_DragSegmentList[ii].m_Segm;
             itemWrapper.m_PickedItem = segm;
             itemWrapper.m_Link = segm->Copy();
-            itemWrapper.m_Link->SetState( EDIT, OFF );
+            itemWrapper.m_Link->SetState( IN_EDIT, OFF );
             s_PickedList.PushItem( itemWrapper );
         }
     }
@@ -147,7 +147,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
             for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
             {
                 pt_segm = g_DragSegmentList[ii].m_Segm;
-                pt_segm->SetState( EDIT, OFF );
+                pt_segm->SetState( IN_EDIT, OFF );
                 g_DragSegmentList[ii].SetInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
             }
@@ -290,7 +290,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
 
     /* Remove module from list, and put it in undo command list */
     m_Pcb->m_Modules.Remove( aModule );
-    aModule->SetState( DELETED, ON );
+    aModule->SetState( IS_DELETED, ON );
     SaveCopyInUndoList( aModule, UR_DELETED );
 
     if( aDC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
@@ -439,7 +439,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
             pt_segm = g_DragSegmentList[ii].m_Segm;
-            pt_segm->SetState( EDIT, OFF );
+            pt_segm->SetState( IN_EDIT, OFF );
 
             if( DC )
                 pt_segm->Draw( DrawPanel, DC, GR_OR );

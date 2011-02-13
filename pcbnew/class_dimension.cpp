@@ -348,9 +348,6 @@ void DIMENSION::Mirror(const wxPoint& axis_pos)
 
 bool DIMENSION::Save( FILE* aFile ) const
 {
-    if( GetState( DELETED ) )
-        return true;
-
     bool rc = false;
     // note: COTATION was the previous name of DIMENSION
     // this old keyword is used here for compatibility

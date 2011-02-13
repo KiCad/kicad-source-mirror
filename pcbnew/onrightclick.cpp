@@ -525,7 +525,7 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, true );
     track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, true );
 
-    if( Track->GetState( SEGM_FIXE ) )
+    if( Track->GetState( TRACK_LOCKED ) )
         track_mnu->Check( ID_POPUP_PCB_LOCK_ON_TRACKSEG, true );
     else
         track_mnu->Check( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, true );

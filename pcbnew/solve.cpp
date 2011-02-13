@@ -1115,7 +1115,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackList.PushBack( newTrack );
 
-        g_CurrentTrackSegment->SetState( SEGM_AR, ON );
+        g_CurrentTrackSegment->SetState( TRACK_AR, ON );
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
         g_CurrentTrackSegment->m_Start.x   =
@@ -1141,7 +1141,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         if( side == TOP )
             g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
 
-        g_CurrentTrackSegment->SetState( SEGM_AR, ON );
+        g_CurrentTrackSegment->SetState( TRACK_AR, ON );
         g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x +
                                          ( g_GridRoutingSize * row );
         g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y +

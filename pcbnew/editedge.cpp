@@ -14,7 +14,7 @@
 #include "protos.h"
 
 
-static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC );
+static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void Montre_Position_NewSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                         const wxPoint& aPosition, bool aErase );
 static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -34,7 +34,7 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     drawitem->m_Flags |= IS_MOVED;
     s_InitialPosition = s_LastPosition = GetScreen()->GetCrossHairPosition();
     drawitem->DisplayInfo( this );
-    DrawPanel->SetMouseCapture( Move_Segment, Exit_EditEdge );
+    DrawPanel->SetMouseCapture( Move_Segment, Abort_EditEdge );
     SetCurItem( drawitem );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
@@ -48,12 +48,12 @@ void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     if( drawitem == NULL )
         return;
 
+    drawitem->m_Flags = 0;
     SaveCopyInUndoList(drawitem, UR_MOVED, s_LastPosition - s_InitialPosition);
     drawitem->Draw( DrawPanel, DC, GR_OR );
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
-    drawitem->m_Flags = 0;
 }
 
 /*
@@ -63,12 +63,9 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
                           bool aErase )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
-    int          t_fill = DisplayOpt.DisplayDrawItems;
 
     if( Segment == NULL )
         return;
-
-    DisplayOpt.DisplayDrawItems = SKETCH;
 
     if( aErase )
         Segment->Draw( aPanel, aDC, GR_XOR );
@@ -80,7 +77,6 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
     s_LastPosition = aPanel->GetScreen()->GetCrossHairPosition();
 
     Segment->Draw( aPanel, aDC, GR_XOR );
-    DisplayOpt.DisplayDrawItems = t_fill;
 }
 
 
@@ -169,12 +165,15 @@ void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
 }
 
 
-static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) Panel->GetScreen()->GetCurItem();
 
     if( Segment == NULL )
+    {
+        Panel->SetMouseCapture( NULL, NULL );
         return;
+    }
 
     if( Segment->m_Flags & IS_NEW )
     {
@@ -192,6 +191,7 @@ static void Exit_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Segment->Draw( Panel, DC, GR_OR );
     }
 
+    Panel->SetMouseCapture( NULL, NULL );
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 }
 
@@ -223,7 +223,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
         Segment->m_Shape = shape;
         Segment->m_Angle = 900;
         Segment->m_Start = Segment->m_End = GetScreen()->GetCrossHairPosition();
-        DrawPanel->SetMouseCapture( Montre_Position_NewSegment, Exit_EditEdge );
+        DrawPanel->SetMouseCapture( Montre_Position_NewSegment, Abort_EditEdge );
     }
     else    /* The ending point ccordinate Segment->m_End was updated by he function
              * Montre_Position_NewSegment() called on a move mouse event

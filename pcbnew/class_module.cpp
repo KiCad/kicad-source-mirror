@@ -261,9 +261,6 @@ bool MODULE::Save( FILE* aFile ) const
     char        statusTxt[8];
     BOARD_ITEM* item;
 
-    if( GetState( DELETED ) )
-        return true;
-
     bool rc = false;
 
     fprintf( aFile, "$MODULE %s\n", CONV_TO_UTF8( m_LibRef ) );

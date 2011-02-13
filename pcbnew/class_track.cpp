@@ -532,9 +532,6 @@ bool TRACK::Save( FILE* aFile ) const
     if( Type() == TYPE_VIA )
         type = 1;
 
-    if( GetState( DELETED ) )
-        return true;
-
     fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
              m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
 
@@ -1020,10 +1017,10 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 
     /* Display the State member */
     msg = wxT( ". . " );
-    if( GetState( SEGM_FIXE ) )
+    if( GetState( TRACK_LOCKED ) )
         msg[0] = 'F';
 
-    if( GetState( SEGM_AR ) )
+    if( GetState( TRACK_AR ) )
         msg[2] = 'A';
 
     frame->AppendMsgPanel( _( "Status" ), msg, MAGENTA );
@@ -1224,22 +1221,20 @@ wxString TRACK::ShowState( int stateBits )
 {
     wxString ret;
 
-    if( stateBits & CHAIN )
-        ret << wxT( " | CHAIN" );
-    if( stateBits & SEGM_AR )
-        ret << wxT( " | SEGM_AR" );
-    if( stateBits & SEGM_FIXE )
-        ret << wxT( " | SEGM_FIXE" );
-    if( stateBits & EDIT )
-        ret << wxT( " | EDIT" );
-    if( stateBits & DRAG )
-        ret << wxT( " | DRAG" );
-    if( stateBits & SURBRILL )
-        ret << wxT( " | SURBRILL" );
-    if( stateBits & NO_TRACE )
-        ret << wxT( " | NO_TRACE" );
-    if( stateBits & DELETED )
-        ret << wxT( " | DELETED" );
+    if( stateBits & IS_LINKED )
+        ret << wxT( " | IS_LINKED" );
+    if( stateBits & TRACK_AR )
+        ret << wxT( " | TRACK_AR" );
+    if( stateBits & TRACK_LOCKED )
+        ret << wxT( " | TRACK_LOCKED" );
+    if( stateBits & IN_EDIT )
+        ret << wxT( " | IN_EDIT" );
+    if( stateBits & IS_DRAGGED )
+        ret << wxT( " | IS_DRAGGED" );
+    if( stateBits & DO_NOT_DRAW )
+        ret << wxT( " | DO_NOT_DRAW" );
+    if( stateBits & IS_DELETED )
+        ret << wxT( " | IS_DELETED" );
     if( stateBits & BUSY )
         ret << wxT( " | BUSY" );
     if( stateBits & END_ONPAD )

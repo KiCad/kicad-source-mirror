@@ -143,7 +143,7 @@ void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Tra
         wrapper.m_Flag |= 2;
 
     Track->Draw( panel, DC, GR_XOR );
-    Track->SetState( EDIT, ON );
+    Track->SetState( IN_EDIT, ON );
 
     if( (flag & STARTPOINT) )
         Track->m_Flags |= STARTPOINT;

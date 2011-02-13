@@ -70,9 +70,6 @@ bool MIREPCB::ReadMirePcbDescr( LINE_READER* aReader )
 
 bool MIREPCB::Save( FILE* aFile ) const
 {
-    if( GetState( DELETED ) )
-        return true;
-
     bool rc = false;
 
     if( fprintf( aFile, "$MIREPCB\n" ) != sizeof("$MIREPCB\n")-1 )

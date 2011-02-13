@@ -292,13 +292,13 @@ class DHEAD;
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
-#define IS_CHANGED     (1 << 0)
-#define IS_LINKED      (1 << 1)
-#define IN_EDIT        (1 << 2)
-#define IS_MOVED       (1 << 3)
-#define IS_NEW         (1 << 4)
-#define IS_RESIZED     (1 << 5)
-#define IS_DRAGGED     (1 << 6)
+#define IS_CHANGED     (1 << 0)   ///< Item was edited, and modified
+#define IS_LINKED      (1 << 1)   ///< Used in calculation to mark linked items (temporary use)
+#define IN_EDIT        (1 << 2)   ///< Item currently edited
+#define IS_MOVED       (1 << 3)   ///< Item being moved
+#define IS_NEW         (1 << 4)   ///< New item, just created
+#define IS_RESIZED     (1 << 5)   ///< Item being resized
+#define IS_DRAGGED     (1 << 6)   ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 #define IS_WIRE_IMAGE  (1 << 8)
 #define STARTPOINT     (1 << 9)
@@ -311,6 +311,14 @@ class DHEAD;
 #define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
 #define IS_CANCELLED   (1 << 17)   ///< flag set when edit dialogs are canceled when editing a
                                    ///< new object
+#define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
+#define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
+#define FLAG1          (1 << 20)   ///< Pcbnew: flag used in local computations
+#define FLAG0          (1 << 21)   ///< Pcbnew: flag used in local computations
+#define BEGIN_ONPAD    (1 << 22)   ///< Pcbnew: flag set for track segment starting on a pad
+#define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
+#define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
+                                   // already been edited, in some functions
 
 class EDA_ITEM
 {

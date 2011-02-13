@@ -31,22 +31,11 @@
 #define DIM_ANCRE_TEXTE  2      /* Anchor size (Text centre) */
 
 #define TEXTS_MIN_SIZE  50      // Min size in pcbnew units value (50 * 0.0001 mils)
-#define TEXTS_MAX_SIZE  100000  // Min size in pcbnew units value (1 inch) )
+#define TEXTS_MAX_SIZE  10000  // Min size in pcbnew units value (1 inch) )
 #define TEXTS_MAX_WIDTH 5000    // Max width in pcbnew units value (0.5 inches)
 
-/* Used in Zoom menu */
-#define ZOOM_PLUS   -1
-#define ZOOM_MOINS  -2
-#define ZOOM_AUTO   -3
-#define ZOOM_CENTER -4
-#define ZOOM_REDRAW -5
-
-/* Flag to force the SKETCH mode to display items (.flags member) */
-#define FORCE_SKETCH (DRAG | EDIT )
-
-/* Flags used in read board file */
-#define APPEND_PCB 1    /* used to append the new board to the existing board */
-#define NEWPCB     0    /* used for normal load file */
+/* Flag to force the SKETCH mode to display items (.m_Flags member) */
+#define FORCE_SKETCH ( IS_DRAGGED | IN_EDIT )
 
 /* variables */
 extern bool Drc_On;

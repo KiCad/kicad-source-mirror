@@ -610,7 +610,7 @@ void WinEDA_BasePcbFrame::RecalculateAllTracksNetcode( )
     pt_piste = m_Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
-        pt_piste->SetState( BUSY | EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
+        pt_piste->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
         pt_piste->SetZoneSubNet( 0 );
         pt_piste->SetNet( 0 );  // net code = 0 means not connected
     }

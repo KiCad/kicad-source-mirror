@@ -16,24 +16,6 @@
 #define L_ENTETE_LIB            18
 #define EXT_DOC                 wxT( "mdc" )
 
-
-#define FLAG1                   (1 << 13)   // flag for free local computations
-#define FLAG0                   (1 << 12)   // flag for free local computations
-#define BEGIN_ONPAD             (1 << 11)   // flag indicating a start of segment pad
-#define END_ONPAD               (1 << 10)   // flag indicating an end of segment pad
-#define BUSY                    (1 << 9)    // flag indicating that the structure has
-                                            // already been edited, in some routines
-#define DELETED                 (1 << 8)    // structures erased and set string "DELETED"
-#define NO_TRACE                (1 << 7)    // The element must not be displayed
-
-#define SURBRILL                (1 << 5)    // element highlighted
-#define DRAG                    (1 << 4)    // segment in drag mode
-#define EDIT                    (1 << 3)    // element being edited
-#define SEGM_FIXE               (1 << 2)    // segment fixed (not erase global)
-#define SEGM_AR                 (1 << 1)    // segment marked for auto routing
-#define CHAIN                   (1 << 0)    // mark segment
-
-
 class NETINFO_ITEM;
 class MARKER_PCB;
 class RATSNEST_ITEM;

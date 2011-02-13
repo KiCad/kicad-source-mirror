@@ -110,13 +110,13 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         {
             int track_mask_filter = 0;
             if( !m_TrackFilterLocked->GetValue() )
-                track_mask_filter |= SEGM_FIXE;
+                track_mask_filter |= TRACK_LOCKED;
             if( !m_TrackFilterAR->GetValue() )
-                track_mask_filter |= SEGM_AR;
+                track_mask_filter |= TRACK_AR;
             for( item = pcb->m_Track; item != NULL; item = nextitem )
             {
                 nextitem = item->Next();
-                if( (item->GetState( SEGM_FIXE | SEGM_AR ) & track_mask_filter) != 0 )
+                if( (item->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter) != 0 )
                     continue;
                 itemPicker.m_PickedItem = item;
                 pickersList.PushItem( itemPicker );

@@ -148,9 +148,6 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
 
 bool TEXTE_PCB::Save( FILE* aFile ) const
 {
-    if( GetState( DELETED ) )
-        return true;
-
     if( m_Text.IsEmpty() )
         return true;
 

@@ -13,8 +13,8 @@
 
 /* Attribute change for 1 track segment.
  *  Attributes are
- *  SEGM_FIXE       protection against global delete
- *  SEGM_AR         AutoRouted segment
+ *  TRACK_LOCKED       protection against global delete
+ *  TRACK_AR           AutoRouted segment
  */
 void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 {
@@ -23,7 +23,7 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 
     OnModify();
     DrawPanel->CrossHairOff( DC );   // Erase cursor shape
-    track->SetState( SEGM_FIXE, Flag_On );
+    track->SetState( TRACK_LOCKED, Flag_On );
     track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
     DrawPanel->CrossHairOn( DC );    // Display cursor shape
     track->DisplayInfo( this );
@@ -45,7 +45,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )
     {
-        Track->SetState( SEGM_FIXE, Flag_On );
+        Track->SetState( TRACK_LOCKED, Flag_On );
         Track->SetState( BUSY, OFF );
         Track = Track->Next();
     }
@@ -56,7 +56,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 }
 
 
-/* Modify the flag SEGM_FIXE according to Flag_On value,
+/* Modify the flag TRACK_LOCKED according to Flag_On value,
  *  for all the segments related to net_code.
  *  if net_code < 0 all the segments are modified.
  */
@@ -81,7 +81,7 @@ void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
             break;
 
         OnModify();
-        Track->SetState( SEGM_FIXE, Flag_On );
+        Track->SetState( TRACK_LOCKED, Flag_On );
         Track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
         Track = Track->Next();
     }

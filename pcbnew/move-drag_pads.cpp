@@ -43,7 +43,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
         {
             TRACK* Track = g_DragSegmentList[ii].m_Segm;
             Track->Draw( Panel, DC, GR_XOR );
-            Track->SetState( EDIT, OFF );
+            Track->SetState( IN_EDIT, OFF );
             g_DragSegmentList[ii].SetInitialValues();
             Track->Draw( Panel, DC, GR_OR );
         }
@@ -356,7 +356,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
         if( g_DragSegmentList[ii].m_Pad_End )
             Track->m_End = Pad->m_Pos;
 
-        Track->SetState( EDIT, OFF );
+        Track->SetState( IN_EDIT, OFF );
         if( DC )
             Track->Draw( DrawPanel, DC, GR_OR );
     }

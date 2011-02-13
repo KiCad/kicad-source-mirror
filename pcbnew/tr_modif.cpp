@@ -87,9 +87,9 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     /* Flags for cleaning the net. */
     for( pt_del = BufDeb;  pt_del;  pt_del = pt_del->Next() )
     {
-        //D( printf( "track %p turning off BUSY | EDIT | CHAIN\n", pt_del ); )
-        D( std::cout<<"track "<<pt_del<<" turning off BUSY | EDIT | CHAIN"<<std::endl; )
-        pt_del->SetState( BUSY | EDIT | CHAIN, OFF );
+        //D( printf( "track %p turning off BUSY | IN_EDIT | IS_LINKED\n", pt_del ); )
+        D( std::cout<<"track "<<pt_del<<" turning off BUSY | IN_EDIT | IS_LINKED"<<std::endl; )
+        pt_del->SetState( BUSY | IN_EDIT | IS_LINKED, OFF );
         if( pt_del == BufEnd )  // Last segment reached
             break;
     }
@@ -137,7 +137,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     /* Mark as deleted a new track (which is not involved in the search for
      * other connections)
      */
-    ListSetState( aNewTrack, aNewTrackSegmentsCount, DELETED, ON );
+    ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, ON );
 
     /* A segment must be connected to the starting point, otherwise
      * it is unnecessary to analyze the other point
@@ -147,7 +147,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     if( pt_segm == NULL )     /* Not connected to the track starting point. */
     {
         /* Clear the delete flag. */
-        ListSetState( aNewTrack, aNewTrackSegmentsCount, DELETED, OFF );
+        ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, OFF );
         return 0;
     }
 
@@ -163,9 +163,9 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
 
         if( pt_segm->Type() != TYPE_VIA )
         {
-            if( pt_segm->GetState( CHAIN ) == 0 )
+            if( pt_segm->GetState( IS_LINKED ) == 0 )
             {
-                pt_segm->SetState( CHAIN, ON );
+                pt_segm->SetState( IS_LINKED, ON );
                 nbconnect++;
             }
         }
@@ -180,7 +180,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
         /* Clear used flags */
         for( pt_del = BufDeb; pt_del; pt_del = pt_del->Next() )
         {
-            pt_del->SetState( BUSY | DELETED | EDIT | CHAIN, OFF );
+            pt_del->SetState( BUSY | IS_DELETED | IN_EDIT | IS_LINKED, OFF );
             if( pt_del == BufEnd )  // Last segment reached
                 break;
         }
@@ -191,22 +191,22 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     /* Mark trace as edited (which does not involve searching for other
      * tracks)
      */
-    ListSetState( aNewTrack, aNewTrackSegmentsCount, DELETED, OFF );
-    ListSetState( aNewTrack, aNewTrackSegmentsCount, EDIT, ON );
+    ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, OFF );
+    ListSetState( aNewTrack, aNewTrackSegmentsCount, IN_EDIT, ON );
 
     /* Test all marked segments. */
     while( nbconnect )
     {
         for( pt_del = BufDeb; pt_del; pt_del = pt_del->Next() )
         {
-            if( pt_del->GetState( CHAIN ) )
+            if( pt_del->GetState( IS_LINKED ) )
                 break;
             if( pt_del == BufEnd )  // Last segment reached
                 break;
         }
 
         nbconnect--;
-        pt_del->SetState( CHAIN, OFF );
+        pt_del->SetState( IS_LINKED, OFF );
 
         pt_del = Marque_Une_Piste( GetBoard(), pt_del, &nb_segm, NULL, true );
 
@@ -246,13 +246,13 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
                 for( pt_del = m_Pcb->m_Track; pt_del != NULL;
                      pt_del = pt_del->Next() )
                 {
-                    if( pt_del->GetState( EDIT ) )
+                    if( pt_del->GetState( IN_EDIT ) )
                     {
-                        pt_del->SetState( EDIT, OFF );
+                        pt_del->SetState( IN_EDIT, OFF );
                         if( aDC )
                             pt_del->Draw( DrawPanel, aDC, GR_OR );
                     }
-                    pt_del->SetState( EDIT | CHAIN, OFF );
+                    pt_del->SetState( IN_EDIT | IS_LINKED, OFF );
                 }
 
                 return 1;
@@ -267,7 +267,7 @@ int WinEDA_PcbFrame::EraseRedundantTrack(
     /* Clear used flags */
     for( pt_del = m_Pcb->m_Track; pt_del; pt_del = pt_del->Next() )
     {
-        pt_del->SetState( BUSY | DELETED | EDIT | CHAIN, OFF );
+        pt_del->SetState( BUSY | IS_DELETED | IN_EDIT | IS_LINKED, OFF );
         if( pt_del == BufEnd )  // Last segment reached
             break;
     }

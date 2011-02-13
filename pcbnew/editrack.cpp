@@ -473,7 +473,7 @@ void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
             g_HighLight_NetCode = adr_buf->GetNet();
 
             /* Possible establishment of a hanging point. */
-            LockPoint = CreateLockPoint( GetBoard(), 
+            LockPoint = CreateLockPoint( GetBoard(),
                                          g_CurrentTrackSegment->m_End,
                                          adr_buf,
                                          &s_ItemsListPicker );
@@ -556,7 +556,7 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoi
     {
         if( track->Type() == TYPE_TRACK )    // skip vias
         {
-            if( track->GetState( BUSY | DELETED ) )
+            if( track->GetState( BUSY | IS_DELETED ) )
                 continue;
 
             if( aLayer != track->GetLayer() )

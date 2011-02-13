@@ -79,9 +79,6 @@ void DRAWSEGMENT::Flip(const wxPoint& aCentre )
 
 bool DRAWSEGMENT::Save( FILE* aFile ) const
 {
-    if( GetState( DELETED ) )
-        return true;
-
     bool rc = false;
 
     if( fprintf( aFile, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
