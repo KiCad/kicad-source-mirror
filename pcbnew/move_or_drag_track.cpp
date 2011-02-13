@@ -129,6 +129,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
             Panel, DC, g_HighLight_NetCode );
 
     EraseDragList();
+    Panel->SetMouseCapture( NULL, NULL );
 }
 
 

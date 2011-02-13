@@ -26,6 +26,8 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     D_PAD* pad = s_CurrentSelectedPad;
 
+    Panel->SetMouseCapture( NULL, NULL );
+
     if( pad == NULL )
         return;
 

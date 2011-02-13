@@ -130,6 +130,8 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     TEXTE_MODULE* Text   = (TEXTE_MODULE*) screen->GetCurItem();
     MODULE*       Module;
 
+    Panel->SetMouseCapture( NULL, NULL );
+
     if( Text == NULL )
         return;
 

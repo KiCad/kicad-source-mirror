@@ -177,6 +177,8 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
+    Panel->SetMouseCapture( NULL, NULL );
+
     if( MirePcb == NULL )
         return;
 

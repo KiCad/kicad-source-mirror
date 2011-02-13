@@ -155,6 +155,7 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
     pcbframe->SetCurItem( NULL );
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
+    Panel->SetMouseCapture( NULL, NULL );
 }
 
 
@@ -413,6 +414,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
         }
     }
 
+    Panel->SetMouseCapture( NULL, NULL );
     _AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList. ClearListAndDeleteItems();
     Panel->Refresh();

@@ -35,6 +35,8 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
     ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
 
+    Panel->SetMouseCapture( NULL, NULL );
+
     if( TextePcb == NULL )  // Should not occur
         return;
 

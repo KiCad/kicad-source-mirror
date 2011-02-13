@@ -121,6 +121,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
+    Panel->SetMouseCapture( NULL, NULL );
 
     if( module )
     {
