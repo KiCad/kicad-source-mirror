@@ -29,7 +29,7 @@
 #include <sch_lib.h>
 #include <sch_lpid.h>
 #include <sch_part.h>
-#include <sweet_lexer.h>
+#include <sch_sweet_parser.h>
 #include <sch_lib_table.h>
 
 
@@ -253,9 +253,9 @@ PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR
 #endif
 
         // @todo consider changing ReadPart to return a "source"
-        SWEET_LEXER sw( part->body, wxString::FromUTF8( aLPID.Format().c_str() ) );
+        SWEET_PARSER sp( part->body, wxString::FromUTF8( aLPID.Format().c_str() ) );
 
-        part->Parse( &sw, aLibTable );
+        part->Parse( &sp, aLibTable );
     }
 
     return part;

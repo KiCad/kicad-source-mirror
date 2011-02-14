@@ -108,6 +108,7 @@ add_library( sweet SHARED
     sch_lpid.cpp
     sch_dir_lib_source.cpp
     sch_part.cpp
+    sch_sweet_parser.cpp
     sweet_keywords.cpp
     ${PROJECT_SOURCE_DIR}/common/richio.cpp
     ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp

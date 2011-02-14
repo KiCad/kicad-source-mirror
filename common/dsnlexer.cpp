@@ -351,6 +351,20 @@ int DSNLEXER::NeedSYMBOLorNUMBER() throw( IO_ERROR )
 }
 
 
+int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
+{
+    int tok = NextTok();
+    if( tok != DSN_NUMBER )
+    {
+        wxString    errText;
+
+        errText.Printf( _("need a NUMBER for '%s'"), wxString::FromUTF8( aExpectation ).GetData() );
+        THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+    return tok;
+}
+
+
 /**
  * Function isspace
  * strips the upper bits of the int to ensure the value passed to ::isspace() is

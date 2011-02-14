@@ -293,6 +293,15 @@ public:
     int NeedSYMBOLorNUMBER() throw( IO_ERROR );
 
     /**
+     * Function NeedNUMBER
+     * calls NextTok() and then verifies that the token read is type DSN_NUMBER.
+     * If not, and IO_ERROR is thrown using text from aExpectation.
+     * @return int - the actual token read in.
+     * @throw IO_ERROR, if the next token does not satisfy the above test
+     */
+    int NeedNUMBER( const char* aExpectation ) throw( IO_ERROR );
+
+    /**
      * Function CurTok
      * returns whatever NextTok() returned the last time it was called.
      */
