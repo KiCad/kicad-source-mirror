@@ -249,7 +249,7 @@ another pin. Continue?" ) );
     else
         SaveCopyInUndoList( m_component );
 
-    DrawPanel->EndMouseCapture();
+    DrawPanel->SetMouseCapture( NULL, NULL );
     OnModify();
     CurrentPin->SetPosition( newpos );
 
