@@ -37,6 +37,7 @@ DIALOG_GET_COMPONENT::DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
 #endif
     initDialog( HistoryList );
 
+    m_textCmpNameCtrl->SetFocus();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
