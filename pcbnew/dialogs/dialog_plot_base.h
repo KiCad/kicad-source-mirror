@@ -39,7 +39,6 @@ class DIALOG_PLOT_BASE : public wxDialog
 			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN = 1000,
 			ID_PRINT_REF,
 			ID_MIROR_OPT,
-			ID_SAVE_OPT_PLOT,
 			ID_CREATE_DRILL_FILE,
 		};
 		
@@ -49,8 +48,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
 		wxButton* m_browseButton;
-		wxStaticBoxSizer* m_CopperLayersBoxSizer;
-		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
+		wxStaticBoxSizer* m_LayersSizer;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
 		wxCheckBox* m_plotPads_on_Silkscreen;
@@ -90,7 +88,6 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxTextCtrl* m_messagesBox;
 		
 		wxButton* m_plotButton;
-		wxButton* m_buttonSaveOpt;
 		wxButton* m_buttonDrill;
 		wxButton* m_buttonQuit;
 		
@@ -101,7 +98,6 @@ class DIALOG_PLOT_BASE : public wxDialog
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
-		virtual void applyPlotSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		

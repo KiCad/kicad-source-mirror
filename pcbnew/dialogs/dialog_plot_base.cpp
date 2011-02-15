@@ -26,13 +26,13 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_staticText121 = new wxStaticText( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText121->Wrap( -1 );
-	bSizer27->Add( m_staticText121, 0, wxALL, 5 );
+	bSizer27->Add( m_staticText121, 0, wxTOP, 5 );
 	
 	wxString m_plotFormatOptChoices[] = { _("HPGL"), _("Gerber"), _("Postscript"), _("Postscript A4"), _("DXF") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
-	bSizer27->Add( m_plotFormatOpt, 0, wxALL, 5 );
+	bSizer27->Add( m_plotFormatOpt, 0, 0, 5 );
 	
 	bSizer26->Add( bSizer27, 0, wxEXPAND, 5 );
 	
@@ -41,7 +41,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bSizer28->Add( m_staticTextDir, 0, wxALL|wxEXPAND, 5 );
+	bSizer28->Add( m_staticTextDir, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 	
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
@@ -63,18 +63,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxStaticBoxSizer* sbLayersSizer;
-	sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxHORIZONTAL );
+	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxHORIZONTAL );
 	
-	m_CopperLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Copper Layers") ), wxVERTICAL );
-	
-	sbLayersSizer->Add( m_CopperLayersBoxSizer, 1, wxALL, 5 );
-	
-	m_TechnicalLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Technical Layers") ), wxVERTICAL );
-	
-	sbLayersSizer->Add( m_TechnicalLayersBoxSizer, 1, wxALL, 5 );
-	
-	bUpperSizer->Add( sbLayersSizer, 1, wxALL, 3 );
+	bUpperSizer->Add( m_LayersSizer, 1, wxALL, 3 );
 	
 	m_PlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -135,7 +126,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_drillShapeOptNChoices = sizeof( m_drillShapeOptChoices ) / sizeof( wxString );
 	m_drillShapeOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_drillShapeOptNChoices, m_drillShapeOptChoices, 0 );
 	m_drillShapeOpt->SetSelection( 0 );
-	bSizer15->Add( m_drillShapeOpt, 0, wxEXPAND, 5 );
+	bSizer15->Add( m_drillShapeOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
 	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Scaling:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
@@ -145,7 +136,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_scaleOptNChoices = sizeof( m_scaleOptChoices ) / sizeof( wxString );
 	m_scaleOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_scaleOptNChoices, m_scaleOptChoices, 0 );
 	m_scaleOpt->SetSelection( 0 );
-	bSizer15->Add( m_scaleOpt, 0, wxEXPAND, 5 );
+	bSizer15->Add( m_scaleOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
 	m_staticText13 = new wxStaticText( this, wxID_ANY, _("Plot mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
@@ -155,7 +146,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	int m_plotModeOptNChoices = sizeof( m_plotModeOptChoices ) / sizeof( wxString );
 	m_plotModeOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotModeOptNChoices, m_plotModeOptChoices, 0 );
 	m_plotModeOpt->SetSelection( 0 );
-	bSizer15->Add( m_plotModeOpt, 0, wxEXPAND, 5 );
+	bSizer15->Add( m_plotModeOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
 	m_textDefaultPenSize = new wxStaticText( this, wxID_ANY, _("Default linewidth"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textDefaultPenSize->Wrap( -1 );
@@ -166,7 +157,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_linesWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_linesWidth->SetToolTip( _("Line width for, e.g., sheet references.") );
 	
-	bSizer15->Add( m_linesWidth, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer15->Add( m_linesWidth, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 	
 	bSizer14->Add( bSizer15, 1, wxALL, 3 );
 	
@@ -316,9 +307,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotButton->SetDefault(); 
 	bSizer191->Add( m_plotButton, 0, wxALL, 5 );
 	
-	m_buttonSaveOpt = new wxButton( this, ID_SAVE_OPT_PLOT, _("Apply Settings"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer191->Add( m_buttonSaveOpt, 0, wxALL, 5 );
-	
 	m_buttonDrill = new wxButton( this, ID_CREATE_DRILL_FILE, _("Generate Drill File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer191->Add( m_buttonDrill, 0, wxALL, 5 );
 	
@@ -340,7 +328,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_scaleOpt->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_plotButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
-	m_buttonSaveOpt->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::applyPlotSettings ), NULL, this );
 	m_buttonDrill->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 }
@@ -354,7 +341,6 @@ DIALOG_PLOT_BASE::~DIALOG_PLOT_BASE()
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_scaleOpt->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnSetScaleOpt ), NULL, this );
 	m_plotButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::Plot ), NULL, this );
-	m_buttonSaveOpt->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::applyPlotSettings ), NULL, this );
 	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::CreateDrillFile ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLOT_BASE::OnQuit ), NULL, this );
 	

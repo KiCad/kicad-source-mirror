@@ -57,7 +57,8 @@ class DIALOG_PLOT : public DIALOG_PLOT_BASE
 public:
     WinEDA_PcbFrame* m_Parent;
     wxConfig*        m_Config;
-    wxCheckBox*      m_BoxSelectLayer[LAYER_COUNT];     // wxCheckBox list to select/deselec layers to plot
+    std::vector<int> layerList;           // List to hold CheckListBox layer numbers
+    wxCheckListBox*  layerCheckListBox;
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
 
@@ -102,7 +103,7 @@ private:
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
     void SetPlotFormat( wxCommandEvent& event );
     void OnSetScaleOpt( wxCommandEvent& event );
-    void applyPlotSettings( wxCommandEvent& event );
+    void applyPlotSettings();
     void CreateDrillFile( wxCommandEvent& event );
 };
 
@@ -114,6 +115,10 @@ DIALOG_PLOT::DIALOG_PLOT( WinEDA_PcbFrame* parent ) :
 {
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
+
+    layerCheckListBox = new wxCheckListBox( this, wxID_ANY );
+
+    m_LayersSizer->Add( layerCheckListBox, 0, wxGROW | wxALL, 1 );
 
     Init_Dialog();
 
@@ -169,40 +174,24 @@ void DIALOG_PLOT::Init_Dialog()
 
     m_plotPSNegativeOpt->SetValue( g_PcbPlotOptions.m_PlotPSNegative );
 
-    // Create layer list.
-    int layer;
-    for( layer = 0; layer < NB_LAYERS; ++layer )
-    {
-        if( !board->IsLayerEnabled( layer ) )
-            m_BoxSelectLayer[layer] = NULL;
-        else
-            m_BoxSelectLayer[layer] =
-                new wxCheckBox( this, -1, board->GetLayerName( layer ) );
-    }
-
-    // Add wxCheckBoxes in layers lists dialog
     //  List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
-    int layer_idx;
-    for( layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    int layerIndex, checkIndex, layer;
+    for( layerIndex = 0; layerIndex < NB_LAYERS; layerIndex++ )
     {
-        layer = layersOrder[layer_idx];
+        layer = layersOrder[layerIndex];
 
         wxASSERT( layer < NB_LAYERS );
 
-        if( m_BoxSelectLayer[layer] == NULL )
+        if( !board->IsLayerEnabled( layer ) )
             continue;
 
-        if( layer < NB_COPPER_LAYERS )
-            m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer],
-                                         0, wxGROW | wxALL, 1 );
-        else
-            m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer],
-                                            0, wxGROW | wxALL, 1 );
+        layerList.push_back( layer );
+        checkIndex = layerCheckListBox->Append( board->GetLayerName( layer ) );
 
         if( g_PcbPlotOptions.GetLayerSelection() & ( 1 << layer ) )
-            m_BoxSelectLayer[layer]->SetValue( true );
+            layerCheckListBox->Check( checkIndex );
     }
 
     // Option for using proper Gerber extensions
@@ -269,6 +258,7 @@ void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnClose( wxCloseEvent& event )
 {
+    applyPlotSettings();
     EndModal( 0 );
 }
 
@@ -438,7 +428,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
+void DIALOG_PLOT::applyPlotSettings()
 {
     PCB_PLOT_PARAMS tempOptions;
 
@@ -549,14 +539,11 @@ void DIALOG_PLOT::applyPlotSettings( wxCommandEvent& event )
     tempOptions.m_PlotFormat = m_plotFormatOpt->GetSelection();
 
     long selectedLayers = 0;
-    long mask = 1;
-    int layer;
-    for( layer = 0; layer < NB_LAYERS; layer++, mask <<= 1 )
+    unsigned int i;
+    for( i = 0; i < layerList.size(); i++ )
     {
-        if( m_BoxSelectLayer[layer] == NULL )
-            continue;
-        if( m_BoxSelectLayer[layer]->GetValue() )
-            selectedLayers |= mask;
+        if( layerCheckListBox->IsChecked( i ) )
+            selectedLayers |= (1 << layerList[i]);
     }
     tempOptions.SetLayerSelection( selectedLayers );
 
@@ -584,7 +571,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     BOARD*     board = m_Parent->GetBoard();
 
-    applyPlotSettings( event );
+    applyPlotSettings();
 
     // Create output directory if it does not exist
     wxFileName outputDir = wxFileName::DirName( m_outputDirectoryName->GetValue() );
@@ -680,14 +667,13 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         DisplayInfoMessage( this,
                            _( "Warning: Scale option set to a very large value" ) );
 
-    long mask = 1;
-    for( layer = 0; layer < NB_LAYERS; layer++, mask <<= 1 )
+    unsigned int i;
+    for( i = 0; i < layerList.size(); i++ )
     {
-        if( m_BoxSelectLayer[layer] == NULL )
-            continue;
         bool success = false;
-        if( m_BoxSelectLayer[layer]->GetValue() )
+        if( layerCheckListBox->IsChecked( i ) )
         {
+            layer = layerList[i];
             fn = m_Parent->GetScreen()->GetFileName();
             fn.SetPath( outputDir.GetPath() );
 
