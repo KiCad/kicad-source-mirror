@@ -661,6 +661,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     /* Draw module shape: 3D shape if exists (or module outlines if not exists) */
     S3D_MASTER* Struct3D  = m_3D_Drawings;
     bool        As3dShape = FALSE;
+
     if( g_Parm_3D_Visu.m_Draw3DModule )
     {
         glPushMatrix();
@@ -673,6 +674,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         {
             glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
         }
+
         if( m_Layer == LAYER_N_BACK )
         {
             glRotatef( 180.0, 0.0, 1.0, 0.0 );
@@ -692,26 +694,29 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         glPopMatrix();
     }
 
-    if( !As3dShape )
+    EDA_ITEM* Struct = m_Drawings;
+    glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
+
+    for( ; Struct != NULL; Struct = Struct->Next() )
     {
-        // The footprint does not have a 3D shape, draw its 2D shape instead
-        EDA_ITEM* Struct = m_Drawings;
-        glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
-
-        for( ; Struct != NULL; Struct = Struct->Next() )
+        switch( Struct->Type() )
         {
-            switch( Struct->Type() )
-            {
-            case TYPE_TEXTE_MODULE:
-                break;
+        case TYPE_TEXTE_MODULE:
+            break;
 
-            case TYPE_EDGE_MODULE:
-                ( (EDGE_MODULE*) Struct )->Draw3D( glcanvas );
-                break;
+        case TYPE_EDGE_MODULE:
+        {
+            EDGE_MODULE* edge = (EDGE_MODULE*) Struct;
 
-            default:
-                break;
-            }
+            // Draw module edges when no 3d shape exists.
+            // Always draw pcb edges.
+            if( !As3dShape || edge->GetLayer() == EDGE_N )
+                edge->Draw3D( glcanvas );
+        }
+        break;
+
+        default:
+            break;
         }
     }
 }
