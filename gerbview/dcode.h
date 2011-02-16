@@ -66,7 +66,7 @@ enum APERTURE_DEF_HOLETYPE {
 #define LAST_DCODE      999
 #define TOOLS_MAX_COUNT (LAST_DCODE + 1)
 
-class APERTURE_MACRO;
+struct APERTURE_MACRO;
 
 
 /**

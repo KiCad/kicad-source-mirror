@@ -211,7 +211,11 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( PlaceModulesHorsPcb && edgesExists )
     {
         if( GetScreen()->GetCrossHairPosition().y < (GetBoard()->m_BoundaryBox.GetBottom() + 2000) )
-            GetScreen()->GetCrossHairPosition().y = GetBoard()->m_BoundaryBox.GetBottom() + 2000;
+        {
+            wxPoint pos = GetScreen()->GetCrossHairPosition();
+            pos.y = GetBoard()->m_BoundaryBox.GetBottom() + 2000;
+            GetScreen()->SetCrossHairPosition( pos );
+        }
     }
 
     /* calculate the area needed by footprints */

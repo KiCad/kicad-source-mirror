@@ -353,8 +353,8 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     }
 
     wxLogTrace( KICAD_TRACE_COORDS,
-                wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d," \
-                     "posX=%d, posY=%d" ), ppux, ppuy, unitsX, unitsY, x, y );
+                wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d, posX=%d, posY=%d" ),
+                ppux, ppuy, unitsX, unitsY, x, y );
 
     Scroll( x/ppux, y/ppuy );
     event.Skip();

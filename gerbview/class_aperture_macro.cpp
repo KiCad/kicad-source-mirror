@@ -458,7 +458,8 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        int angle = wxRound( atan2( delta.y, delta.x ) * 1800.0 / M_PI );
+        int angle = wxRound( atan2( (double) delta.y, (double) delta.x ) * 1800.0 / M_PI );
+
         for( unsigned ii = 0; ii < 4; ii++ )
         {
             RotatePoint( &aBuffer[ii], -angle );
