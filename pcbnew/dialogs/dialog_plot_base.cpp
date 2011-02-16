@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,14 +34,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotFormatOpt->SetSelection( 0 );
 	bSizer27->Add( m_plotFormatOpt, 0, 0, 5 );
 	
-	bSizer26->Add( bSizer27, 0, wxEXPAND, 5 );
+	bSizer26->Add( bSizer27, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
-	bSizer28->Add( m_staticTextDir, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizer28->Add( m_staticTextDir, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
@@ -49,7 +49,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	
-	bSizer29->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer29->Add( m_outputDirectoryName, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_browseButton = new wxButton( this, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer29->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
@@ -65,7 +65,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxHORIZONTAL );
 	
-	bUpperSizer->Add( m_LayersSizer, 1, wxALL, 3 );
+	bUpperSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
 	
 	m_PlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -319,7 +319,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnClose ) );

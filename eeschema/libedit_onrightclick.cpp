@@ -33,36 +33,30 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
     LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor();
     bool BlockActive = GetScreen()->IsBlockActive();
 
+    if( BlockActive )
+    {
+        AddMenusForBlock( PopMenu, this );
+        PopMenu->AppendSeparator();
+        return true;
+    }
+
     if( m_component == NULL )
         return true;
 
-    //  If Command in progresss: put the menu "cancel" and "end tool"
-    if( m_ID_current_state )
+    //  If Command in progress, put menu "cancel"
+    if( DrawEntry && DrawEntry->m_Flags )
     {
-        if( DrawEntry && DrawEntry->m_Flags )
-        {
-            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
-                          _( "Cancel" ), cancel_xpm );
-        }
-        else
-        {
-            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
-                          _( "End Tool" ), cancel_tool_xpm );
-        }
+        ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
+                      _( "Cancel" ), cancel_xpm );
         PopMenu->AppendSeparator();
     }
-    else
-    {
-        if( (DrawEntry && DrawEntry->m_Flags) || BlockActive )
-        {
-            if( BlockActive )
-                AddMenusForBlock( PopMenu, this );
-            else
-                ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
-                              _( "Cancel" ), cancel_xpm );
-            PopMenu->AppendSeparator();
-        }
+    else if( m_ID_current_state )
+    {   // If a tool is active, put menu "end tool"
+        ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
+                      _( "End Tool" ), cancel_tool_xpm );
+        PopMenu->AppendSeparator();
     }
+    
 
     if( DrawEntry )
         DrawEntry->DisplayInfo( this );

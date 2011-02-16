@@ -336,7 +336,9 @@ void LIB_PIN::SetShape( int aShape )
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_shape == aShape )
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+            || pinList[i]->m_Convert != m_Convert
+            || pinList[i]->m_shape == aShape )
             continue;
 
         pinList[i]->m_shape = aShape;
