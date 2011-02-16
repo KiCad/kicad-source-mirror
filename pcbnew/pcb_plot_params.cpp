@@ -356,7 +356,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             aPcbPlotParams->subtractMaskFromSilk = ParseBool();
             break;
         case T_outputformat:
-            aPcbPlotParams->m_PlotFormat = ParseInt( 0, 4 );
+            aPcbPlotParams->m_PlotFormat = ParseInt( 0, 3 );
             break;
         case T_mirror:
             aPcbPlotParams->m_PlotMirror = ParseBool();

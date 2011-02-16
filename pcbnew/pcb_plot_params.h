@@ -102,6 +102,8 @@ public:
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
+    void        SetPlotFormat( int aFormat ) { m_PlotFormat = aFormat; };
+    int         GetPlotFormat() const { return m_PlotFormat; };
     void        SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
     wxString    GetOutputDirectory() const { return outputDirectory; };
     void        SetUseGerberExtensions( bool aUse ) { useGerberExtensions = aUse; };

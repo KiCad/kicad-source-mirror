@@ -62,38 +62,6 @@ public:
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
 
-    bool useA4()
-    {
-        return m_plotFormatOpt->GetSelection() == 3;
-    }
-
-
-    /**
-     * Function getFormat
-     * returns one of the values from the m_PlotFormat enum.  If the 4th
-     * radio button is selected, map this back to postscript.
-     */
-    PlotFormat getFormat()
-    {
-        int radioNdx = m_plotFormatOpt->GetSelection();
-
-        // change the A4 to the simple postscript, according to the
-        // m_PlotFormat enum
-        switch( radioNdx )
-        {
-        case 3:
-            radioNdx = PLOT_FORMAT_POST;
-            break;
-
-        case 4:
-            radioNdx = PLOT_FORMAT_DXF;
-            break;
-        }
-
-        return PlotFormat( radioNdx );
-    }
-
-
 public: DIALOG_PLOT( WinEDA_PcbFrame* parent );
 private:
     void Init_Dialog();
@@ -138,7 +106,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_Config->Read( CONFIG_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( CONFIG_YFINESCALE_ADJ, &m_YScaleAdjust );
 
-    m_plotFormatOpt->SetSelection( g_PcbPlotOptions.m_PlotFormat );
+    m_plotFormatOpt->SetSelection( g_PcbPlotOptions.GetPlotFormat() );
 
     // Set units and value for HPGL pen size.
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
@@ -317,9 +285,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
-    int format = getFormat();
-
-    switch( format )
+    switch( m_plotFormatOpt->GetSelection() )
     {
     case PLOT_FORMAT_POST:
     default:
@@ -536,7 +502,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
-    tempOptions.m_PlotFormat = m_plotFormatOpt->GetSelection();
+    tempOptions.SetPlotFormat( m_plotFormatOpt->GetSelection() );
 
     long selectedLayers = 0;
     unsigned int i;
@@ -574,7 +540,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     applyPlotSettings();
 
     // Create output directory if it does not exist
-    wxFileName outputDir = wxFileName::DirName( m_outputDirectoryName->GetValue() );
+    wxFileName outputDir = wxFileName::DirName( g_PcbPlotOptions.GetOutputDirectory() );
     wxString boardFilePath = ( (wxFileName) m_Parent->GetScreen()->GetFileName()).GetPath();
 
     if( !outputDir.MakeAbsolute( boardFilePath ) )
@@ -636,9 +602,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustY = m_YScaleAdjust;
 
-    int format = getFormat();
-
-    switch( format )
+    switch( g_PcbPlotOptions.GetPlotFormat() )
     {
     case PLOT_FORMAT_POST:
         ext = wxT( "ps" );
@@ -667,13 +631,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         DisplayInfoMessage( this,
                            _( "Warning: Scale option set to a very large value" ) );
 
-    unsigned int i;
-    for( i = 0; i < layerList.size(); i++ )
+    long layerMask = 1;
+    for( layer = 0; layer < NB_LAYERS; layer++, layerMask <<= 1 )
     {
         bool success = false;
-        if( layerCheckListBox->IsChecked( i ) )
+        if( g_PcbPlotOptions.GetLayerSelection() & layerMask )
         {
-            layer = layerList[i];
             fn = m_Parent->GetScreen()->GetFileName();
             fn.SetPath( outputDir.GetPath() );
 
@@ -684,7 +647,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
             // Use Gerber Extensions based on layer number
             // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( (format == PLOT_FORMAT_GERBER) && m_useGerberExtensions->GetValue() )
+            if( ( g_PcbPlotOptions.GetPlotFormat() == PLOT_FORMAT_GERBER )
+                && m_useGerberExtensions->GetValue() )
             {
                 switch( layer )
                 {
@@ -764,10 +728,11 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
                 fn.SetExt( ext );
             }
 
-            switch( format )
+            switch( g_PcbPlotOptions.GetPlotFormat() )
             {
             case PLOT_FORMAT_POST:
-                success = m_Parent->Genere_PS( fn.GetFullPath(), layer, useA4(),
+                success = m_Parent->Genere_PS( fn.GetFullPath(), layer,
+                                               m_usePsA4Opt->GetValue(),
                                                g_PcbPlotOptions.m_PlotMode );
                 break;
 
