@@ -728,13 +728,10 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     int color = g_ColorsSettings.GetLayerColor( m_Layer );
 
-
     SetGLColor( color );
-    glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
 
     dx   = m_End.x;
     dy   = m_End.y;
-    zpos = g_Parm_3D_Visu.m_LayerZcoord[m_Layer];
     w    = m_Width * g_Parm_3D_Visu.m_BoardScale;
     x    = m_Start.x * g_Parm_3D_Visu.m_BoardScale;
     y    = m_Start.y * g_Parm_3D_Visu.m_BoardScale;
@@ -742,44 +739,102 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
     fy   = dy * g_Parm_3D_Visu.m_BoardScale;
 
 
-    switch( m_Shape )
+    if( m_Layer == EDGE_N )
     {
-    case S_SEGMENT:
-        Draw3D_FilledSegment( x, -y, fx, -fy, w, zpos );
-        break;
-
-    case S_CIRCLE:
-        Draw3D_CircleSegment( x, -y, fx, -fy, w, zpos );
-        break;
-
-    case S_ARC:
-        Draw3D_ArcSegment( x, -y, fx, -fy, (double) m_Angle, w, zpos );
-        break;
-
-    case S_POLYGON:
-    {
-        // We must compute true coordinates from m_PolyPoints
-        // which are relative to module position and module orientation = 0
-        std::vector<wxPoint> points = m_PolyPoints;
-        MODULE* module = (MODULE*) m_Parent;
-        if( module == NULL )
-            break;
-        for( unsigned ii = 0; ii < points.size(); ii++ )
+        for( int layer = 0; layer < g_Parm_3D_Visu.m_Layers; layer++ )
         {
-            wxPoint& pt = points[ii];
+            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+            zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
-            RotatePoint( &pt.x, &pt.y, module->m_Orient );
-            pt += module->m_Pos;
+            switch( m_Shape )
+            {
+            case S_SEGMENT:
+                Draw3D_FilledSegment( x, -y, fx, -fy, w, zpos );
+                break;
+
+            case S_CIRCLE:
+                Draw3D_CircleSegment( x, -y, fx, -fy, w, zpos );
+                break;
+
+            case S_ARC:
+                Draw3D_ArcSegment( x, -y, fx, -fy, (double) m_Angle, w, zpos );
+                break;
+
+            case S_POLYGON:
+            {
+                // We must compute true coordinates from m_PolyPoints
+                // which are relative to module position and module orientation = 0
+                std::vector<wxPoint> points = m_PolyPoints;
+                MODULE* module = (MODULE*) m_Parent;
+
+                if( module == NULL )
+                    break;
+
+                for( unsigned ii = 0; ii < points.size(); ii++ )
+                {
+                    wxPoint& pt = points[ii];
+
+                    RotatePoint( &pt.x, &pt.y, module->m_Orient );
+                    pt += module->m_Pos;
+                }
+
+                glcanvas->Draw3D_Polygon( points, zpos );
+            }
+            break;
+
+            default:
+                s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
+                D( printf( "%s", CONV_TO_UTF8( s ) ); )
+                    break;
+            }
         }
-
-        glcanvas->Draw3D_Polygon( points, zpos );
     }
-    break;
+    else
+    {
+        glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+        zpos = g_Parm_3D_Visu.m_LayerZcoord[m_Layer];
 
-    default:
-        s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
-        D( printf( "%s", CONV_TO_UTF8( s ) ); )
+        switch( m_Shape )
+        {
+        case S_SEGMENT:
+            Draw3D_FilledSegment( x, -y, fx, -fy, w, zpos );
+            break;
+
+        case S_CIRCLE:
+            Draw3D_CircleSegment( x, -y, fx, -fy, w, zpos );
+            break;
+
+        case S_ARC:
+            Draw3D_ArcSegment( x, -y, fx, -fy, (double) m_Angle, w, zpos );
+            break;
+
+        case S_POLYGON:
+        {
+            // We must compute true coordinates from m_PolyPoints
+            // which are relative to module position and module orientation = 0
+            std::vector<wxPoint> points = m_PolyPoints;
+            MODULE* module = (MODULE*) m_Parent;
+
+            if( module == NULL )
+                break;
+
+            for( unsigned ii = 0; ii < points.size(); ii++ )
+            {
+                wxPoint& pt = points[ii];
+
+                RotatePoint( &pt.x, &pt.y, module->m_Orient );
+                pt += module->m_Pos;
+            }
+
+            glcanvas->Draw3D_Polygon( points, zpos );
+        }
         break;
+
+        default:
+            s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
+            D( printf( "%s", CONV_TO_UTF8( s ) ); )
+                break;
+        }
     }
 }
 
