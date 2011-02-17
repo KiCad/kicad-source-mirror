@@ -175,6 +175,7 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
         m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     }
 
+    m_Parent->GetScreen()->SetCrossHairPosition(pos);
     m_Parent->RedrawScreen( pos, true );
 }
 

@@ -3,7 +3,6 @@
 /******************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -25,7 +24,7 @@ enum
 };
 
 
-class WinEDA_HierFrame;
+class HIERARCHY_NAVIG_DLG;
 
 /* This class derived from wxTreeItemData stores the SCH_SHEET_PATH of each
  * sheet in hierarchy in each TreeItem, in its associated data buffer
@@ -41,23 +40,23 @@ public:
 };
 
 /* Class to handle hierarchy tree. */
-class WinEDA_Tree : public wxTreeCtrl
+class HIERARCHY_TREE : public wxTreeCtrl
 {
 private:
-    WinEDA_HierFrame* m_Parent;
+    HIERARCHY_NAVIG_DLG* m_Parent;
     wxImageList*      imageList;
 
 public:
-    WinEDA_Tree() { }
-    WinEDA_Tree( WinEDA_HierFrame* parent );
+    HIERARCHY_TREE() { }
+    HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
 
-    DECLARE_DYNAMIC_CLASS( WinEDA_Tree )
+    DECLARE_DYNAMIC_CLASS( HIERARCHY_TREE )
 };
 
-IMPLEMENT_DYNAMIC_CLASS( WinEDA_Tree, wxTreeCtrl )
+IMPLEMENT_DYNAMIC_CLASS( HIERARCHY_TREE, wxTreeCtrl )
 
 
-WinEDA_Tree::WinEDA_Tree( WinEDA_HierFrame* parent ) :
+HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     wxTreeCtrl( (wxWindow*)parent, ID_TREECTRL_HIERARCHY, wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
 {
@@ -73,11 +72,11 @@ WinEDA_Tree::WinEDA_Tree( WinEDA_HierFrame* parent ) :
 }
 
 
-class WinEDA_HierFrame : public wxDialog
+class HIERARCHY_NAVIG_DLG : public wxDialog
 {
 public:
     SCH_EDIT_FRAME* m_Parent;
-    WinEDA_Tree*    m_Tree;
+    HIERARCHY_TREE*    m_Tree;
     int             m_nbsheets;
     wxDC*           m_DC;
 
@@ -86,10 +85,10 @@ private:
     int    maxposx;
 
 public:
-    WinEDA_HierFrame( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
+    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
     void BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId* previousmenu );
 
-    ~WinEDA_HierFrame();
+    ~HIERARCHY_NAVIG_DLG();
 
     void OnSelect( wxTreeEvent& event );
 
@@ -99,28 +98,28 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE( WinEDA_HierFrame, wxDialog )
-    EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY, WinEDA_HierFrame::OnSelect )
+BEGIN_EVENT_TABLE( HIERARCHY_NAVIG_DLG, wxDialog )
+    EVT_TREE_ITEM_ACTIVATED( ID_TREECTRL_HIERARCHY, HIERARCHY_NAVIG_DLG::OnSelect )
 END_EVENT_TABLE()
 
 
 void SCH_EDIT_FRAME::InstallHierarchyFrame( wxDC* DC, wxPoint& pos )
 {
-    WinEDA_HierFrame* treeframe = new WinEDA_HierFrame( this, DC, pos );
+    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this, DC, pos );
 
     treeframe->ShowModal();
     treeframe->Destroy();
 }
 
 
-WinEDA_HierFrame::WinEDA_HierFrame( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos ) :
+HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos ) :
     wxDialog( parent, -1, _( "Navigator" ), pos, wxSize( 110, 50 ), DIALOG_STYLE )
 {
     wxTreeItemId cellule;
 
     m_Parent = parent;
     m_DC   = DC;
-    m_Tree = new WinEDA_Tree( this );
+    m_Tree = new HIERARCHY_TREE( this );
 
     m_nbsheets = 1;
 
@@ -159,23 +158,22 @@ WinEDA_HierFrame::WinEDA_HierFrame( SCH_EDIT_FRAME* parent, wxDC* DC, const wxPo
 }
 
 
-WinEDA_HierFrame::~WinEDA_HierFrame()
+HIERARCHY_NAVIG_DLG::~HIERARCHY_NAVIG_DLG()
 {
 }
 
 
-void WinEDA_HierFrame::OnQuit( wxCommandEvent& event )
+void HIERARCHY_NAVIG_DLG::OnQuit( wxCommandEvent& event )
 {
     // true is to force the frame to close
     Close( true );
 }
 
 
-/* Routine to create the tree in the navigation hierarchy
- * Schematic
+/* Routine to create the hierarchical tree of the schematic
  * This routine is re-entrant!
  */
-void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  previousmenu )
+void HIERARCHY_NAVIG_DLG::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  previousmenu )
 
 {
     wxTreeItemId menu;
@@ -237,13 +235,13 @@ void WinEDA_HierFrame::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  pre
 /* Called on a double-click on a tree item:
  * Open the selected sheet, and display the corresponding screen
  */
-void WinEDA_HierFrame::OnSelect( wxTreeEvent& event )
+void HIERARCHY_NAVIG_DLG::OnSelect( wxTreeEvent& event )
 
 {
     wxTreeItemId ItemSel = m_Tree->GetSelection();
 
-    SCH_SHEET* sheet = ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath.Last();
-    m_Parent->m_CurrentSheet->Push( sheet );
+    *(m_Parent->m_CurrentSheet) =
+        ( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath;
     m_Parent->DisplayCurrentSheet();
     Close( true );
 }
