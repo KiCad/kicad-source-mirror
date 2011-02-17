@@ -90,6 +90,7 @@ private:
     bool        useGerberExtensions;
     bool        useAuxOrigin;
     bool        subtractMaskFromSilk;
+    bool        psA4Output;
     int         scaleSelection;
     wxString    outputDirectory;
 
@@ -116,6 +117,8 @@ public:
     bool        GetUseAuxOrigin() const { return useAuxOrigin; };
     void        SetScaleSelection( int aSelection ) { scaleSelection = aSelection; };
     int         GetScaleSelection() const { return scaleSelection; };
+    void        SetPsA4Output( int aForce ) { psA4Output = aForce; };
+    bool        GetPsA4Output() const { return psA4Output; };
 
     int         GetHpglPenDiameter() const { return m_HPGLPenDiam; };
     bool        SetHpglPenDiameter( int aValue );

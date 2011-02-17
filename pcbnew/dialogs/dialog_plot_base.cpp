@@ -272,8 +272,8 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotPSNegativeOpt = new wxCheckBox( this, wxID_ANY, _("Negative plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PSOptionsSizer->Add( m_plotPSNegativeOpt, 0, wxALL, 2 );
 	
-	m_usePsA4Opt = new wxCheckBox( this, wxID_ANY, _("Force A4 paper size"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSOptionsSizer->Add( m_usePsA4Opt, 0, wxALL, 2 );
+	m_forcePSA4OutputOpt = new wxCheckBox( this, wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxALL, 2 );
 	
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	

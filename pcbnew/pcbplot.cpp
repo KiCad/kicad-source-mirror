@@ -141,6 +141,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_fineAdjustYscaleOpt->AppendText( msg );
 
     m_plotPSNegativeOpt->SetValue( g_PcbPlotOptions.m_PlotPSNegative );
+    m_forcePSA4OutputOpt->SetValue( g_PcbPlotOptions.GetPsA4Output() );
 
     //  List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
@@ -514,6 +515,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetLayerSelection( selectedLayers );
 
     tempOptions.m_PlotPSNegative = m_plotPSNegativeOpt->GetValue();
+    tempOptions.SetPsA4Output( m_forcePSA4OutputOpt->GetValue() );
 
     // Set output directory and replace backslashes with forward ones
     wxString dirStr;
@@ -732,7 +734,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             {
             case PLOT_FORMAT_POST:
                 success = m_Parent->Genere_PS( fn.GetFullPath(), layer,
-                                               m_usePsA4Opt->GetValue(),
+                                               g_PcbPlotOptions.GetPsA4Output(),
                                                g_PcbPlotOptions.m_PlotMode );
                 break;
 

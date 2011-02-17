@@ -84,7 +84,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxStaticText* m_staticText8;
 		wxTextCtrl* m_fineAdjustYscaleOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxCheckBox* m_usePsA4Opt;
+		wxCheckBox* m_forcePSA4OutputOpt;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_messagesBox;
 		

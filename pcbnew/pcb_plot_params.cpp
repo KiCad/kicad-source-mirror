@@ -86,6 +86,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_HPGLPenOvr           = 2;
     m_PlotPSColorOpt       = true;
     m_PlotPSNegative       = false;
+    psA4Output             = false;
     m_PlotReference        = true;
     m_PlotValue            = true;
     m_PlotTextOther        = true;
@@ -139,6 +140,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_PlotPSColorOpt ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
                        m_PlotPSNegative ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psa4output ),
+                       psA4Output ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotreference ),
                        m_PlotReference ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotvalue ),
@@ -200,6 +203,8 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_PlotPSColorOpt != aPcbPlotParams.m_PlotPSColorOpt )
         return false;
     if( m_PlotPSNegative != aPcbPlotParams.m_PlotPSNegative )
+        return false;
+    if( psA4Output != aPcbPlotParams.psA4Output )
         return false;
     if( m_PlotReference != aPcbPlotParams.m_PlotReference )
         return false;
@@ -295,6 +300,9 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             break;
         case T_usegerberextensions:
             aPcbPlotParams->useGerberExtensions = ParseBool();
+            break;
+        case T_psa4output:
+            aPcbPlotParams->psA4Output = ParseBool();
             break;
         case T_excludeedgelayer:
             aPcbPlotParams->m_ExcludeEdgeLayer = ParseBool();
