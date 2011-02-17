@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2010-03-14 11:57-0300\n"
-"Last-Translator: Renie S. Marquet <reniemarquet@uol.com.br>\n"
+"PO-Revision-Date: 2011-02-17 15:34+0100\n"
+"Last-Translator: \n"
 "Language-Team: kicad team\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -371,7 +371,7 @@ msgstr "Eco2     "
 
 #: pcbnew/class_board.cpp:243
 msgid "PCB_Edges"
-msgstr "Bordas:"
+msgstr "Bordas"
 
 #: pcbnew/class_board.cpp:244
 msgid "BAD INDEX"
