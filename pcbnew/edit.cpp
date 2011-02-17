@@ -120,7 +120,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
+            DrawPanel->EndMouseCapture();
         }
 
         /* Should not be executed, just in case */

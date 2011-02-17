@@ -252,7 +252,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator( new Contributor( wxT( "Kenta Yonekura" ),
                                         wxT( "midpika@hotmail.com" ), wxT( "Japanese (JA)" ),
                                         new wxBitmap( lang_jp_xpm ) ) );
-    info.AddTranslator( new Contributor( wxT( "Milonas Kostas" ),
+    info.AddTranslator( new Contributor( wxT( "Manolis Stefanis and Milonas Kostas" ),
                                         wxT( "milonas.ko@gmail.com" ), wxT( "Greek (el_GR)" ),
                                         new wxBitmap( lang_gr_xpm ) ) );
 

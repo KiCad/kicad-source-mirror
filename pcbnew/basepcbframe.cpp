@@ -129,6 +129,7 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
     /* There may be need to reframe the drawing. */
     if( !DrawPanel->IsPointOnDisplay( aPos ) )
     {
+        screen->SetCrossHairPosition( aPos );
         RedrawScreen( aPos, true );
     }
     else

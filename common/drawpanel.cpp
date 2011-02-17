@@ -1209,10 +1209,10 @@ void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title 
     {
         INSTALL_UNBUFFERED_DC( dc, this );
         m_endMouseCaptureCallback( this, &dc );
-        m_mouseCaptureCallback = NULL;
-        m_endMouseCaptureCallback = NULL;
-        m_AutoPAN_Request = false;
     }
+    m_mouseCaptureCallback = NULL;
+    m_endMouseCaptureCallback = NULL;
+    m_AutoPAN_Request = false;
 
     if( id != -1 && cursor != -1 )
     {

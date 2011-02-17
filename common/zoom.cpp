@@ -119,6 +119,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_CENTER:
+        center = screen->GetCrossHairPosition();
         RedrawScreen( center, true );
         break;
 

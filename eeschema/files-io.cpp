@@ -89,7 +89,12 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
     if( !success )
         DisplayError( this, _( "File write operation failed." ) );
     else
+    {
         screen->ClrModify();
+        wxString msg;
+        msg.Printf( wxT("File %s saved"), GetChars(screen->GetFileName() ) );
+        SetStatusText(msg, 0);
+    }
 
 
     fclose( f );
