@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,17 +11,17 @@
 #include <wx/intl.h>
 
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/button.h>
 #include <wx/listbox.h>
+#include <wx/choice.h>
+#include <wx/textctrl.h>
+#include <wx/button.h>
+#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,71 +35,82 @@ class dialog_copper_zone_base : public wxDialog
 	private:
 		
 		// Private event handlers
+		void _wxFB_OnClose( wxCloseEvent& event ){ OnClose( event ); }
+		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
+		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
 		void _wxFB_OnPadsInZoneClick( wxCommandEvent& event ){ OnPadsInZoneClick( event ); }
 		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
 		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
-		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
-		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
 		
 	
 	protected:
 		enum
 		{
-			 ID_RADIOBOX_FILL_MODE_SELECTION = 1000,
-			wxID_ARC_APPROX,
-			wxID_PADS_IN_ZONE_OPTIONS,
+			ID_NETNAME_SELECTION = 1000,
+			ID_M_NETDISPLAYOPTION,
+			ID_TEXTCTRL_NETNAMES_FILTER,
+			wxID_APPLY_FILTERS,
+			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
 			wxID_COPPER_BRIDGE_VALUE,
-			ID_RADIOBOX_OUTLINES_OPTION,
+			ID_M_FILLMODECTRL,
+			ID_M_ARCAPPROXIMATIONOPT,
+			ID_M_ORIENTEDGESOPT,
+			ID_M_OUTLINEAPPEARANCECTRL,
 			wxID_BUTTON_EXPORT,
-			ID_NET_SORTING_OPTION,
-			ID_TEXTCTRL_NETNAMES_FILTER,
-			ID_NETNAME_SELECTION,
-			ID_LAYER_CHOICE,
 		};
 		
-		wxRadioBox* m_FillModeCtrl;
-		wxRadioBox* m_ArcApproximationOpt;
-		wxRadioBox* m_PadInZoneOpt;
-		wxStaticText* m_AntipadSizeText;
-		wxTextCtrl* m_AntipadSizeValue;
-		wxStaticText* m_CopperBridgeWidthText;
-		wxTextCtrl* m_CopperWidthValue;
-		
-		wxRadioBox* m_OrientEdgesOpt;
-		wxRadioBox* m_OutlineAppearanceCtrl;
-		wxStaticText* m_ClearanceValueTitle;
-		wxTextCtrl* m_ZoneClearanceCtrl;
-		wxStaticText* m_MinThicknessValueTitle;
-		wxTextCtrl* m_ZoneMinThicknessCtrl;
-		
-		wxButton* m_ExportSetupButton;
-		wxButton* m_OkButton;
-		wxButton* m_ButtonCancel;
-		
-		wxRadioBox* m_NetDisplayOption;
+		wxBoxSizer* m_layerSizer;
+		wxStaticText* m_staticText17;
+		wxStaticText* m_staticText2;
+		wxListBox* m_ListNetNameSelection;
+		wxStaticText* m_staticText16;
+		wxChoice* m_NetDisplayOption;
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_DoNotShowNetNameFilter;
 		wxStaticText* m_staticText51;
 		wxTextCtrl* m_ShowNetNameFilter;
 		wxButton* m_buttonRunFilter;
-		wxStaticText* m_staticText2;
-		wxListBox* m_ListNetNameSelection;
-		wxStaticText* m_staticText3;
-		wxListBox* m_LayerSelectionCtrl;
+		wxStaticText* m_ClearanceValueTitle;
+		wxTextCtrl* m_ZoneClearanceCtrl;
+		wxStaticText* m_MinThicknessValueTitle;
+		wxTextCtrl* m_ZoneMinThicknessCtrl;
+		wxStaticText* m_staticText151;
+		wxChoice* m_choice7;
+		wxStaticText* m_staticText161;
+		wxTextCtrl* m_textCtrl7;
+		wxStaticText* m_staticText13;
+		wxChoice* m_PadInZoneOpt;
+		wxStaticText* m_AntipadSizeText;
+		wxTextCtrl* m_AntipadSizeValue;
+		wxStaticText* m_CopperBridgeWidthText;
+		wxTextCtrl* m_CopperWidthValue;
+		wxStaticText* m_staticText11;
+		wxChoice* m_FillModeCtrl;
+		wxStaticText* m_staticText12;
+		wxChoice* m_ArcApproximationOpt;
+		wxStaticText* m_staticText14;
+		wxChoice* m_OrientEdgesOpt;
+		wxStaticText* m_staticText15;
+		wxChoice* m_OutlineAppearanceCtrl;
+		wxButton* m_ExportSetupButton;
+		wxButton* m_OkButton;
+		wxButton* m_ButtonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnPadsInZoneClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnRunFiltersButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnNetSortingOptionSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunFiltersButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPadsInZoneClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fill Zones Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 566,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~dialog_copper_zone_base();
 	
 };

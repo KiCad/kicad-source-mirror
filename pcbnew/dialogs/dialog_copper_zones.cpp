@@ -6,6 +6,8 @@
 /// Licence:     GNU License
 /////////////////////////////////////////////////////////////////////////////
 
+#include <wx/wx.h>
+#include <wx/imaglist.h>
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -17,6 +19,9 @@
 #include "zones.h"
 
 #include "dialog_copper_zones.h"
+
+#define LAYER_BITMAP_SIZE_X 20
+#define LAYER_BITMAP_SIZE_Y 10
 
 /* the filter to show nets (default * "*").
  *  static to keep this pattern for an entire pcbnew session
@@ -37,6 +42,16 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
     m_OnExitCode = ZONE_ABORT;
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
+
+    m_LayerSelectionCtrl = new wxListView( this, wxID_ANY,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxLC_NO_HEADER | wxLC_REPORT
+                                           | wxLC_SINGLE_SEL | wxRAISED_BORDER );
+    wxListItem col0;
+    col0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
+    m_layerSizer->Add( m_LayerSelectionCtrl, 1,
+                       wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     initDialog();
 
@@ -89,7 +104,6 @@ void dialog_copper_zone::initDialog()
         break;
     }
 
-
     if( m_Zone_Setting->m_Zone_Pad_Options != THERMAL_PAD )
     {
         m_AntipadSizeValue->Enable( false );
@@ -128,25 +142,33 @@ void dialog_copper_zone::initDialog()
     m_ArcApproximationOpt->SetSelection(
         m_Zone_Setting->m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
-    /* build copper layers list */
-    int layer_cnt = board->GetCopperLayerCount();
-    for( int ii = 0; ii < board->GetCopperLayerCount(); ii++ )
+    // Build copper layer list and append to layer widget
+    int layerCount = board->GetCopperLayerCount();
+    int layerNumber, itemIndex, layerColor;
+    wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
+    m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
+    for( int ii = 0; ii < layerCount; ii++ )
     {
-        int layer_number = LAYER_N_BACK;
+        layerNumber = LAYER_N_BACK;
 
-        if( layer_cnt <= 1 || ii < layer_cnt - 1 )
-            layer_number = ii;
-        else if( ii == layer_cnt - 1 )
-            layer_number = LAYER_N_FRONT;
+        if( layerCount <= 1 || ii < layerCount - 1 )
+            layerNumber = ii;
+        else if( ii == layerCount - 1 )
+            layerNumber = LAYER_N_FRONT;
 
-        m_LayerId[ii] = layer_number;
+        m_LayerId.insert( m_LayerId.begin(), layerNumber );
 
-        msg = board->GetLayerName( layer_number ).Trim();
-        m_LayerSelectionCtrl->InsertItems( 1, &msg, ii );
+        msg = board->GetLayerName( layerNumber ).Trim();
+        layerColor = board->GetLayerColor( layerNumber );
+        imageList->Add( makeLayerBitmap( layerColor ) );
+        itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
-        if( m_Zone_Setting->m_CurrentZone_Layer == layer_number )
-            m_LayerSelectionCtrl->SetSelection( ii );
+        if( m_Zone_Setting->m_CurrentZone_Layer == layerNumber )
+            m_LayerSelectionCtrl->Select( itemIndex );
     }
+
+    // Set layer list column width to widget width
+    m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x );
 
     wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
@@ -170,6 +192,12 @@ void dialog_copper_zone::initDialog()
 /********************************************************************/
 void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
 /********************************************************************/
+{
+    Close( true );
+}
+
+
+void dialog_copper_zone::OnClose( wxCloseEvent& event )
 {
     EndModal( m_OnExitCode );
 }
@@ -240,7 +268,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
     if( m_Zone_Setting->m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {
-        DisplayError( this, _( "Error : Zone clearance is set to an unreasonnable value" ) );
+        DisplayError( this, _( "Clearance must be smaller than 0.5\" / 12.7 mm." ) );
         return false;
     }
 
@@ -250,8 +278,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-                     _(
-                         "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
+                     _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
         return false;
     }
 
@@ -275,8 +302,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( m_Zone_Setting->m_ThermalReliefCopperBridgeValue <= m_Zone_Setting->m_ZoneMinThickness )
     {
         DisplayError( this,
-                     _(
-                         "Error :\nyou must choose a copper bridge value for thermal reliefs bigger than the min zone thickness" ) );
+                     _( "Thermal relief spoke width is larger than the minimum width." ) );
         return false;
     }
 
@@ -285,22 +311,20 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         return true;
 
     /* Get the layer selection for this zone */
-    int ii = m_LayerSelectionCtrl->GetSelection();
+    int ii = m_LayerSelectionCtrl->GetFirstSelected();
     if( ii < 0 && aPromptForErrors )
     {
-        DisplayError( this, _( "Error : you must choose a layer" ) );
+        DisplayError( this, _( "No layer selected." ) );
         return false;
     }
 
-
     m_Zone_Setting->m_CurrentZone_Layer = m_LayerId[ii];
-
 
     /* Get the net name selection for this zone */
     ii = m_ListNetNameSelection->GetSelection();
     if( ii < 0 && aPromptForErrors )
     {
-        DisplayError( this, _( "Error : you must choose a net name" ) );
+        DisplayError( this, _( "No net selected." ) );
         return false;
     }
 
@@ -488,4 +512,22 @@ void dialog_copper_zone::buildAvailableListOfNets()
             }
         }
     }
+}
+
+
+wxBitmap dialog_copper_zone::makeLayerBitmap( int aColor )
+{
+    wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
+    wxBrush     brush;
+    wxMemoryDC  iconDC;
+
+    iconDC.SelectObject( bitmap );
+
+    brush.SetColour( MakeColour( aColor ) );
+    brush.SetStyle( wxSOLID );
+    iconDC.SetBrush( brush );
+
+    iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
+
+    return bitmap;
 }

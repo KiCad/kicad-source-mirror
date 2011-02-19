@@ -3,6 +3,7 @@
 #ifndef DIALOG_COPPER_ZONES
 #define DIALOG_COPPER_ZONES
 
+#include <wx/wx.h>
 #include "dialog_copper_zones_base.h"
 
 /* here is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
@@ -22,10 +23,12 @@ private:
                                                *  true = pad count sort.
                                                */
     long            m_NetFiltering;
-    int             m_LayerId[LAYER_COUNT]; // Handle the real layer number from layer name position in m_LayerSelectionCtrl
+    std::vector<int> m_LayerId;               // Handle the real layer number from layer
+                                              // name position in m_LayerSelectionCtrl
     static wxString m_netNameShowFilter;    /* the filter to show nets (default * "*").
                                              *  static to keep this pattern for an entire pcbnew session
                                              */
+    wxListView*     m_LayerSelectionCtrl;
 
 public:
     dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting );
@@ -33,6 +36,7 @@ private:
     void initDialog();
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
+    void OnClose( wxCloseEvent& event );
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
     void ExportSetupToOtherCopperZones( wxCommandEvent& event );
@@ -40,5 +44,6 @@ private:
     void OnRunFiltersButtonClick( wxCommandEvent& event );
     void buildAvailableListOfNets();
     void initListNetsParams();
+    wxBitmap makeLayerBitmap( int aColor );
 };
 #endif      // #ifndef DIALOG_COPPER_ZONES
