@@ -4,6 +4,7 @@
 #define DIALOG_COPPER_ZONES
 
 #include <wx/wx.h>
+#include <wx/listctrl.h>
 #include "dialog_copper_zones_base.h"
 
 /* here is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
