@@ -104,7 +104,6 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             setActiveLayer(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM );
 
         UpdateStatusBar();
-        SetToolbars();
         return true;
     }
 
@@ -257,7 +256,6 @@ bool WinEDA_PcbFrame::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->DisplayInfo( this );
 
     UpdateStatusBar();
-    SetToolbars();
 
     return true;
 }

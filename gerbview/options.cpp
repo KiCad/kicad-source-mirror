@@ -38,32 +38,6 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_SHOW_GRID:
-        SetGridVisibility( state );
-        DrawPanel->Refresh( TRUE );
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UserUnit = MILLIMETRES;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        g_UserUnit = INCHES;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        SetStatusText( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = state;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = state;
-        DrawPanel->Refresh( TRUE );
-        break;
-
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
         if( state )
         {
@@ -73,21 +47,21 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         {
             DisplayOpt.DisplayPadFill = m_DisplayPadFill = true;
         }
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
         if(state )
         {
-            m_DisplayPcbTrackFill = FALSE;
-            DisplayOpt.DisplayPcbTrackFill = FALSE;
+            m_DisplayPcbTrackFill = false;
+            DisplayOpt.DisplayPcbTrackFill = false;
         }
         else
         {
-            m_DisplayPcbTrackFill = TRUE;
-            DisplayOpt.DisplayPcbTrackFill = TRUE;
+            m_DisplayPcbTrackFill = true;
+            DisplayOpt.DisplayPcbTrackFill = true;
         }
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
@@ -95,12 +69,12 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
             g_DisplayPolygonsModeSketch = 1;
         else
             g_DisplayPolygonsModeSketch = 0;
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
         SetElementVisibility( DCODES_VISIBLE, state );
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
@@ -111,11 +85,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
+        DisplayError( this, wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
         break;
     }
-
-    SetToolbars();
 }
-

@@ -20,7 +20,7 @@
 /* Process the command triggered by the left button of the mouse when a tool
  * is already selected.
  */
-void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
@@ -36,7 +36,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawStruct = GerberGeneralLocateAndDisplay();
+            DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
             GetScreen()->SetCurItem( DrawStruct );
             if( DrawStruct == NULL )
             {
@@ -50,14 +50,13 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     switch( m_ID_current_state )
     {
     case 0:
-        break;
-
-    case ID_NO_SELECT_BUTT:
+    case ID_GERBVIEW_NO_TOOL:
         break;
 
 
     case ID_GERBVIEW_DELETE_ITEM_BUTT:
-        DrawStruct = GerberGeneralLocateAndDisplay();
+        DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
+
         if( DrawStruct == NULL )
             break;
         /* TODO:
@@ -132,7 +131,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         ClearMsgPanel();
         break;
 
-    case ID_NO_SELECT_BUTT:
+    case ID_GERBVIEW_NO_TOOL:
         SetToolID( 0, 0, wxEmptyString );
         break;
 
@@ -209,14 +208,12 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         wxMessageBox( wxT( "WinEDA_GerberFrame::Process_Special_Functions error" ) );
         break;
     }
-
-    SetToolbars();
 }
 
 
 /* Called on a double click of left mouse button.
  */
-void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
     // Currently: no nothing
 }

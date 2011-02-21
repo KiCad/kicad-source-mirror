@@ -509,7 +509,7 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 
         if( ( pinList[i]->m_position == m_position )
             && ( pinList[i]->m_orientation == m_orientation )
-            && ( !( m_Flags & IS_NEW ) )
+            && !IsNew()
             && editPinByPin == false
             && enable )
             pinList[i]->m_Flags |= IS_LINKED | IN_EDIT;

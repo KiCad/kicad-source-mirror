@@ -72,7 +72,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     UserUnitType ii;
 
     DisplayOpt.DisplayPolarCood =
-        ( m_PolarDisplay->GetSelection() == 0 ) ? FALSE : true;
+        ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
     if( ii != g_UserUnit )
@@ -114,43 +114,16 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_DRC_OFF:
-        Drc_On = state ? FALSE : true;
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GRID:
-        SetElementVisibility(GRID_VISIBLE, state);
-        DrawPanel->Refresh();
+        Drc_On = !state;
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
-        SetElementVisibility(RATSNEST_VISIBLE, state);
-        DrawPanel->Refresh( );
+        SetElementVisibility( RATSNEST_VISIBLE, state );
+        DrawPanel->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
         g_Show_Module_Ratsnest = state; // TODO: use the visibility list
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UserUnit = MILLIMETRES;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
-            g_UserUnit = INCHES;
-        m_TrackAndViasSizesList_Changed = true;
-        UpdateStatusBar();
-        ReCreateAuxiliaryToolbar();
-        DisplayUnitsMsg();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        SetStatusText( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = state;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = state;
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:
@@ -172,27 +145,8 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh();
         break;
 
-    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        if( state )
-        {
-            m_DisplayPadFill = DisplayOpt.DisplayPadFill = false;
-        }
-        else
-        {
-            m_DisplayPadFill = DisplayOpt.DisplayPadFill = true;
-        }
-        DrawPanel->Refresh();
-        break;
-
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        if( state )
-        {
-            m_DisplayViaFill = DisplayOpt.DisplayViaFill = false;
-        }
-        else
-        {
-            m_DisplayViaFill = DisplayOpt.DisplayViaFill = true;
-        }
+        m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
         DrawPanel->Refresh();
         break;
 
@@ -217,12 +171,13 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         m_show_layer_manager_tools = state;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
+
         if( m_show_layer_manager_tools )
-            GetMenuBar()->SetLabel(ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                _("Hide &Layers Manager" ) );
+            GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Hide &Layers Manager" ) );
         else
-            GetMenuBar()->SetLabel(ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                _("Show &Layers Manager" ) );
+            GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                    _("Show &Layers Manager" ) );
         break;
 
     default:
@@ -230,6 +185,4 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
-
-    SetToolbars();
 }

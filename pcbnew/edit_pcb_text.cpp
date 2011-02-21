@@ -42,7 +42,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     TextePcb->Draw( Panel, DC, GR_XOR );
 
-    if( (TextePcb->m_Flags & IS_NEW) )  // If new: remove it
+    if( TextePcb->IsNew() )  // If new: remove it
     {
         TextePcb->DeleteStructure();
         return;
@@ -69,7 +69,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, GR_OR );
     OnModify();
 
-    if( (TextePcb->m_Flags & IS_NEW) )  // If new: prepare undo command
+    if( TextePcb->IsNew() )  // If new: prepare undo command
     {
         SaveCopyInUndoList( TextePcb, UR_NEW );
         TextePcb->m_Flags = 0;
@@ -100,7 +100,7 @@ void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     // if it is an existing item: prepare a copy to undo/abort command
-    if( (TextePcb->m_Flags & IS_NEW) == 0 )
+    if( !TextePcb->IsNew() )
         s_TextCopy.Copy( TextePcb );
 
     TextePcb->Draw( DrawPanel, DC, GR_XOR );

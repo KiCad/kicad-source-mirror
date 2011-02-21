@@ -63,6 +63,7 @@ class BASE_SCREEN : public EDA_ITEM
     EDA_ITEM* m_CurrentItem;    ///< Currently selected object
     GRID_TYPE m_Grid;           ///< Current grid selection.
     wxPoint   m_scrollCenter;   ///< Current scroll center point in logical units.
+    wxPoint   m_MousePosition;  ///< Mouse cursor coordinate in logical units.
 
     /**
      * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
@@ -74,7 +75,6 @@ class BASE_SCREEN : public EDA_ITEM
 public:
     wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
 
-    wxPoint m_MousePosition;    /* Mouse cursor coordinate (off grid) in user units. */
     wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
                                  * in user units. (coordinates from last reset position)*/
 
@@ -361,6 +361,8 @@ public:
      * @param aList - List to copy to.
      */
     void         GetGrids( GRIDS& aList );
+
+    void SetMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
 
     /**
      * Function RefPos

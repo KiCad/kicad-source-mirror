@@ -103,7 +103,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             scanList = GENERAL_COLLECTOR::Tracks;
             break;
 
-        case ID_COMPONENT_BUTT:
+        case ID_PCB_MODULE_BUTT:
             scanList = GENERAL_COLLECTOR::ModuleItems;
             break;
 
@@ -376,6 +376,5 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         wxSafeYield();
     }
 
-    SetToolbars();
     UpdateStatusBar();    /* Display new cursor coordinates */
 }

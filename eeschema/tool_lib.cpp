@@ -35,52 +35,37 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_SELECT_BUTT, wxEmptyString,
-                         wxBitmap( cursor_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_NO_TOOL, wxEmptyString, wxBitmap( cursor_xpm ),
                          _( "Deselect current tool" ), wxITEM_CHECK );
 
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString,
-                         wxBitmap( pin_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, wxBitmap( pin_xpm ),
                          HELP_ADD_PIN, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString,
-                         wxBitmap( add_text_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, wxBitmap( add_text_xpm ),
                          HELP_ADD_BODYTEXT, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString,
-                         wxBitmap( add_rectangle_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, wxBitmap( add_rectangle_xpm ),
                          HELP_ADD_BODYRECT, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString,
-                         wxBitmap( add_circle_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString, wxBitmap( add_circle_xpm ),
                          HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString,
-                         wxBitmap( add_arc_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString, wxBitmap( add_arc_xpm ),
                          HELP_ADD_BODYARC, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString,
-                         wxBitmap( add_polygon_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString, wxBitmap( add_polygon_xpm ),
                          HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
 
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString,
-                         wxBitmap( anchor_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, wxBitmap( anchor_xpm ),
                          _( "Move part anchor" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString,
-                         wxBitmap( import_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, wxBitmap( import_xpm ),
                          _( "Import existing drawings" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString,
-                         wxBitmap( export_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, wxBitmap( export_xpm ),
                          _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString,
-                         wxBitmap( delete_body_xpm ),
+    m_VToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, wxBitmap( delete_body_xpm ),
                          HELP_DELETE_ITEMS, wxITEM_CHECK  );
 
     m_VToolBar->Realize();

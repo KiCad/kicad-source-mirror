@@ -152,7 +152,6 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackSegment->SetNet( g_HighLight_NetCode );
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
         m_TrackAndViasSizesList_Changed = true;
-        AuxiliaryToolBar_Update_UI();
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = GetBoard()->GetCurrentTrackWidth();

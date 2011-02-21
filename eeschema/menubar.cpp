@@ -240,7 +240,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     /* Component */
     text = AddHotkeyName( _( "Component" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NEW_COMPONENT, false );    // add comment, not a shortcut
-    item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
+    item = new wxMenuItem( placeMenu, ID_SCH_PLACE_COMPONENT, text,
                            HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
     item->SetBitmap( add_component_xpm );
     placeMenu->Append( item );

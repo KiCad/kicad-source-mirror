@@ -7,11 +7,6 @@
 #include "class_drawpanel.h"
 #include "gerbview.h"
 
-GERBER_DRAW_ITEM* WinEDA_GerberFrame::GerberGeneralLocateAndDisplay()
-{
-    return Locate( CURSEUR_OFF_GRILLE );
-}
-
 
 void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {

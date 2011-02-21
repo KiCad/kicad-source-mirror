@@ -29,7 +29,7 @@ static void ExitBusEntry( EDA_DRAW_PANEL* Panel, wxDC* DC )
     {
         BusEntry->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-        if( BusEntry->m_Flags & IS_NEW )
+        if( BusEntry->IsNew() )
         {
             delete BusEntry;
             Panel->GetScreen()->SetCurItem( NULL );
@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
     if( BusEntry == NULL )
         return;
 
-    if( (BusEntry->m_Flags & IS_NEW) == 0 )    // not already in edit, save shape
+    if( !BusEntry->IsNew() )    // not already in edit, save shape
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = BusEntry->Clone();

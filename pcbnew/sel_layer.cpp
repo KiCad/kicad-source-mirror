@@ -235,7 +235,6 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
     int result = frame->ShowModal();
     frame->Destroy();
     DrawPanel->MoveCursorToCrossHair();
-    SetToolbars();
 
     // if user changed colors and we are in high contrast mode, then redraw
     // because the PAD_SMD pads may change color.

@@ -80,7 +80,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
     /* Main horizontal toolbar. */
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, LIB_EDIT_FRAME::OnZoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, LIB_EDIT_FRAME::OnZoom )
     EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::SaveActiveLibrary )
     EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_DELETE_PART, LIB_EDIT_FRAME::DeleteOnePart )
@@ -106,9 +106,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
 
     /* Right vertical toolbar. */
-    EVT_TOOL( ID_NO_SELECT_BUTT, LIB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
-                    LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_LIBEDIT_NO_TOOL, ID_LIBEDIT_DELETE_ITEM_BUTT,
+                    LIB_EDIT_FRAME::OnSelectTool )
 
     /* menubar commands */
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
@@ -158,7 +157,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnUpdateSelectAlias )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
-    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_EXPORT_BODY_BUTT,
+    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_NO_TOOL, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
 END_EVENT_TABLE()
 
@@ -180,6 +179,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_drawSpecificUnit    = false;
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
+    m_ID_current_state = ID_LIBEDIT_NO_TOOL;
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
@@ -251,8 +251,10 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 
     frame->m_LibeditFrame = NULL;
     m_drawItem = m_lastDrawItem = NULL;
+
     if ( m_tempCopyComponent )
         delete m_tempCopyComponent;
+
     m_tempCopyComponent = NULL;
 }
 
@@ -433,9 +435,18 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& event )
+void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
-    event.Enable( m_component != NULL );
+    aEvent.Enable( m_component != NULL );
+
+    if( m_component != NULL )
+    {
+        if( m_ID_current_state == 0 )
+            m_ID_current_state = ID_LIBEDIT_NO_TOOL;
+
+        if( aEvent.GetEventObject() == m_VToolBar )
+            aEvent.Check( m_ID_current_state == aEvent.GetId() );
+    }
 }
 
 
@@ -487,8 +498,7 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
     event.Enable( ( m_component != NULL )
                  && ( ( m_component->GetPartCount() > 1 ) || m_showDeMorgan ) );
 
-    if( m_HToolBar )
-        m_HToolBar->ToggleTool( event.GetId(), g_EditPinByPinIsOn );
+    event.Check( g_EditPinByPinIsOn );
 }
 
 
@@ -510,7 +520,7 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
         return;
 
     event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
-    m_HToolBar->ToggleTool( event.GetId(), m_convert <= 1 );
+    event.Check( m_convert <= 1 );
 }
 
 
@@ -520,7 +530,7 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
         return;
 
     event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
-    m_HToolBar->ToggleTool( event.GetId(), m_convert > 1 );
+    event.Check( m_convert > 1 );
 }
 
 
@@ -539,7 +549,7 @@ void LIB_EDIT_FRAME::OnUpdateSelectAlias( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnSelectAlias( wxCommandEvent& event )
 {
     if( m_SelAliasBox == NULL
-        || m_SelAliasBox->GetStringSelection().CmpNoCase( m_aliasName ) == 0 )
+        || ( m_SelAliasBox->GetStringSelection().CmpNoCase( m_aliasName ) == 0)  )
         return;
 
     m_lastDrawItem = NULL;
@@ -660,61 +670,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         g_EditPinByPinIsOn = m_HToolBar->GetToolState(ID_LIBEDIT_EDIT_PIN_BY_PIN);
         break;
 
-    case ID_LIBEDIT_PIN_BUTT:
-        if( m_component )
-        {
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add pin" ) );
-        }
-        else
-        {
-            SetToolID( id, wxCURSOR_ARROW, _( "Set pin options" ) );
-            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
-            GetEventHandler()->ProcessEvent( cmd );
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        }
-        break;
-
-    case ID_NO_SELECT_BUTT:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        break;
-
-    case ID_LIBEDIT_BODY_TEXT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_RECT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add rectangle" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add circle" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_ARC_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add arc" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_LINE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
-        break;
-
-    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Set anchor position" ) );
-        break;
-
-    case ID_LIBEDIT_IMPORT_BODY_BUTT:
-        SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
-        LoadOneSymbol();
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        break;
-
-    case ID_LIBEDIT_EXPORT_BODY_BUTT:
-        SetToolID( id, wxCURSOR_ARROW, _( "Export" ) );
-        SaveOneSymbol();
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        break;
-
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
         DrawPanel->MoveCursorToCrossHair();
         if( m_drawItem )
@@ -748,17 +703,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             DrawPanel->CrossHairOn( &dc );
         }
         break;
-
-
-    case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        if( m_component == NULL )
-        {
-            wxBell();
-            break;
-        }
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-        break;
-
 
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
     {
@@ -873,8 +817,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-        if( (m_drawItem == NULL )
-           || (m_drawItem->Type() != LIB_PIN_T) )
+        if( ( m_drawItem == NULL ) || ( m_drawItem->Type() != LIB_PIN_T ) )
             break;
         SaveCopyInUndoList( m_component );
         GlobalSetPins( &dc, (LIB_PIN*) m_drawItem, id );
@@ -1080,4 +1023,87 @@ void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
     EditField( &dc, &m_component->GetValueField() );
     DrawPanel->MoveCursorToCrossHair();
     DrawPanel->CrossHairOn( &dc );
+}
+
+void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+
+    if( m_ID_current_state == 0 )
+        m_lastDrawItem = NULL;
+
+    DrawPanel->EndMouseCapture( ID_LIBEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+
+    switch( id )
+    {
+    case ID_LIBEDIT_NO_TOOL:
+        SetToolID( id, wxCURSOR_ARROW, wxEmptyString );
+        break;
+
+    case ID_LIBEDIT_PIN_BUTT:
+        if( m_component )
+        {
+            SetToolID( id, wxCURSOR_PENCIL, _( "Add pin" ) );
+        }
+        else
+        {
+            SetToolID( id, wxCURSOR_ARROW, _( "Set pin options" ) );
+            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
+            GetEventHandler()->ProcessEvent( cmd );
+            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        }
+        break;
+
+    case ID_LIBEDIT_BODY_TEXT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
+
+    case ID_LIBEDIT_BODY_RECT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add rectangle" ) );
+        break;
+
+    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add circle" ) );
+        break;
+
+    case ID_LIBEDIT_BODY_ARC_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add arc" ) );
+        break;
+
+    case ID_LIBEDIT_BODY_LINE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
+        break;
+
+    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Set anchor position" ) );
+        break;
+
+    case ID_LIBEDIT_IMPORT_BODY_BUTT:
+        SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
+        LoadOneSymbol();
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        break;
+
+    case ID_LIBEDIT_EXPORT_BODY_BUTT:
+        SetToolID( id, wxCURSOR_ARROW, _( "Export" ) );
+        SaveOneSymbol();
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        break;
+
+    case ID_LIBEDIT_DELETE_ITEM_BUTT:
+        if( m_component == NULL )
+        {
+            wxBell();
+            break;
+        }
+
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        break;
+
+    default:
+        break;
+    }
+
+    DrawPanel->m_IgnoreMouseEvents = false;
 }

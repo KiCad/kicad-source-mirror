@@ -1121,7 +1121,6 @@ int WinEDA_PcbFrame::ReadPcbFile( LINE_READER* aReader, bool Append )
     m_TrackAndViasSizesList_Changed = true;
     SetStatusText( wxEmptyString );
     BestZoom();
-    SetToolbars();
     return 1;
 }
 
@@ -1156,10 +1155,8 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
 
     // Select default Netclass before writing file.
     // Useful to save default values in headers
-    GetBoard()->SetCurrentNetClass(
-         GetBoard()->m_NetClasses.GetDefault()->GetName() );
+    GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName() );
     m_TrackAndViasSizesList_Changed = true;
-    AuxiliaryToolBar_Update_UI();
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );

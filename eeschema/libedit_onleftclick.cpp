@@ -18,7 +18,7 @@
 #include "class_libentry.h"
 
 
-void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     LIB_DRAW_ITEM* DrawEntry = m_drawItem;
 
@@ -43,8 +43,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else
         {
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                     GetScreen()->m_MousePosition );
+            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
 
             if( DrawEntry == NULL )
             {
@@ -64,7 +63,8 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     {
         switch( m_ID_current_state )
         {
-        case ID_NO_SELECT_BUTT:
+        case 0:
+        case ID_LIBEDIT_NO_TOOL:
             break;
 
         case ID_LIBEDIT_PIN_BUTT:
@@ -89,7 +89,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             else if( m_drawItem )
             {
-                if( m_drawItem->m_Flags & IS_NEW )
+                if( m_drawItem->IsNew() )
                     GraphicItemBeginDraw( DC );
                 else
                     EndDrawGraphicItem( DC );
@@ -97,14 +97,14 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case ID_LIBEDIT_DELETE_ITEM_BUTT:
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                     GetScreen()->m_MousePosition );
+            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
 
             if( DrawEntry == NULL )
             {
                 DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
                                                          GetScreen()->GetCrossHairPosition() );
             }
+
             if( DrawEntry == NULL )
             {
                 DisplayCmpDoc();
@@ -142,7 +142,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
  *  If an editable item  (field, pin, graphic):
  *      Call the suitable dialog editor.
  */
-void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
     wxPoint pos = GetPosition();
 
@@ -151,8 +151,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
     if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
     {   // We can locate an item
-        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                  GetScreen()->m_MousePosition );
+        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
         if( m_drawItem == NULL )
         {
             m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
@@ -198,7 +197,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
             EditGraphicSymbol( DC, m_drawItem );
         }
-        else if( m_drawItem->m_Flags & IS_NEW )
+        else if( m_drawItem->IsNew() )
         {
             EndDrawGraphicItem( DC );
         }

@@ -328,7 +328,7 @@ int LIB_ARC::GetPenSize()
 void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
 {
     // The edit indicators only get drawn when a new arc is being drawn.
-    if( ( m_Flags & IS_NEW ) == 0 )
+    if( !IsNew() )
         return;
 
     // Use the last edit state so when the drawing switches from the end mode to the center
@@ -350,7 +350,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 {
     // Don't draw the arc until the end point is selected.  Only the edit indicators
     // get drawn at this time.
-    if( ( m_Flags & IS_NEW ) && m_lastEditState == 1 )
+    if( IsNew() && m_lastEditState == 1 )
         return;
 
     wxPoint pos1, pos2, posc;

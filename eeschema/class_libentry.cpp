@@ -204,7 +204,7 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
 
     BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, aComponent.GetDrawItemList() )
     {
-        if( ( oldItem.m_Flags & IS_NEW ) != 0 )
+        if( oldItem.IsNew() )
             continue;
 
         newItem = oldItem.GenCopy();

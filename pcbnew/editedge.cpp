@@ -88,7 +88,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     if( Segment == NULL )
         return;
 
-    if( Segment->m_Flags & IS_NEW )  // Trace in progress.
+    if( Segment->IsNew() )  // Trace in progress.
     {
         /* Delete current segment. */
         DisplayOpt.DisplayDrawItems = SKETCH;
@@ -175,7 +175,7 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
         return;
     }
 
-    if( Segment->m_Flags & IS_NEW )
+    if( Segment->IsNew() )
     {
         Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, false );
         Segment ->DeleteStructure();

@@ -280,7 +280,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     if( Edge && ( Edge->Type() == TYPE_EDGE_MODULE ) )
     {
-        if( Edge->m_Flags & IS_NEW )   // On aborting, delete new outline.
+        if( Edge->IsNew() )   // On aborting, delete new outline.
         {
             MODULE* Module = (MODULE*) Edge->GetParent();
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );

@@ -228,7 +228,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     if( firstsegment == NULL )
         return;
 
-    if( ( firstsegment->m_Flags & IS_NEW ) == 0 )
+    if( !firstsegment->IsNew() )
         return;
 
     /* Delete Null segments and Put line it in Drawlist */

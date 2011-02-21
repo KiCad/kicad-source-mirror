@@ -49,8 +49,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     {
     case wxID_CUT:
     case wxID_COPY:
-    case ID_ON_GRID_SELECT:
-    case ID_ON_ZOOM_SELECT:
     case ID_PCB_USER_GRID_SETUP:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -229,66 +227,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_FIND_ITEMS:
         InstallFindFrame( pos, &dc );
-        break;
-
-    case ID_TRACK_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Tracks" ) );
-        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-        {
-            Compile_Ratsnest( &dc, true );
-        }
-        break;
-
-    case ID_PCB_ZONES_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Zones" ) );
-        if( DisplayOpt.DisplayZonesMode != 0 )
-            DisplayInfoMessage( this, _( "Warning: Display Zone is OFF!!!" ) );
-        if( !g_HighLight_Status && (g_HighLight_NetCode > 0 ) )
-            High_Light( &dc );
-        break;
-
-    case ID_PCB_MIRE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Layer Alignment Target" ) );
-        break;
-
-    case ID_PCB_PLACE_OFFSET_COORD_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Zero" ) );
-        break;
-
-    case ID_PCB_PLACE_GRID_COORD_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Grid Origin" ) );
-        break;
-
-    case ID_PCB_ADD_LINE_BUTT:
-    case ID_PCB_ARC_BUTT:
-    case ID_PCB_CIRCLE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Graphic" ) );
-        break;
-
-    case ID_PCB_ADD_TEXT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Text" ) );
-        break;
-
-    case ID_COMPONENT_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Add Modules" ) );
-        break;
-
-    case ID_PCB_DIMENSION_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Dimension" ) );
-        break;
-
-    case ID_NO_SELECT_BUTT:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        break;
-
-    case ID_PCB_HIGHLIGHT_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Net Highlight" ) );
-        break;
-
-    case ID_PCB_SHOW_1_RATSNEST_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Local Ratsnest" ) );
-        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-            Compile_Ratsnest( &dc, true );
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
@@ -591,10 +529,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         test_1_net_connexion( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
         GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();
-        break;
-
-    case ID_PCB_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
     case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
@@ -952,7 +886,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
         DrawPanel->MoveCursorToCrossHair();
-        if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
+        if( GetCurItem() && (GetCurItem()->IsNew()) )
         {
             End_Edge( (DRAWSEGMENT*) GetCurItem(), &dc );
             SetCurItem( NULL );
@@ -961,7 +895,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
         DrawPanel->MoveCursorToCrossHair();
-        if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
+        if( GetCurItem() && (GetCurItem()->IsNew()) )
         {
             if( End_Zone( &dc ) )
                 SetCurItem( NULL );
@@ -971,7 +905,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
         DrawPanel->MoveCursorToCrossHair();
-        if( GetCurItem() && (GetCurItem()->m_Flags & IS_NEW) )
+        if( GetCurItem() && (GetCurItem()->IsNew()) )
         {
             if( Delete_LastCreatedCorner( &dc ) == 0 )  // No more segment in outline,
                 SetCurItem( NULL );
@@ -1060,7 +994,6 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    SetToolbars();
     DrawPanel->CrossHairOn( &dc );
     DrawPanel->m_IgnoreMouseEvents = false;
 }
@@ -1222,7 +1155,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         // See if we are drawing a segment; if so, add a via?
         if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )
         {
-            if( current->Type() == TYPE_TRACK && ( current->m_Flags & IS_NEW ) )
+            if( current->Type() == TYPE_TRACK && ( current->IsNew() ) )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working
@@ -1254,4 +1187,105 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 
     if( DisplayOpt.ContrastModeDisplay )
         GetScreen()->SetRefreshReq();
+}
+
+
+void WinEDA_PcbFrame::OnSelectTool( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+
+    if( m_ID_current_state == id )
+        return;
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
+    // Stop the current command and deselect the current tool.
+    DrawPanel->EndMouseCapture( ID_PCB_NO_TOOL, DrawPanel->GetDefaultCursor() );
+
+    switch( id )
+    {
+    case ID_PCB_NO_TOOL:
+        SetToolID( id, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        break;
+
+    case ID_TRACK_BUTT:
+        if( Drc_On )
+            SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
+        else
+            SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
+
+        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
+        {
+            Compile_Ratsnest( &dc, true );
+        }
+
+        break;
+
+    case ID_PCB_MODULE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add module" ) );
+        break;
+
+    case ID_PCB_ZONES_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
+
+        if( DisplayOpt.DisplayZonesMode != 0 )
+            DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
+
+        if( !g_HighLight_Status && (g_HighLight_NetCode > 0 ) )
+            High_Light( &dc );
+
+        break;
+
+    case ID_PCB_MIRE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
+        break;
+
+    case ID_PCB_PLACE_OFFSET_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust zero" ) );
+        break;
+
+    case ID_PCB_PLACE_GRID_COORD_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
+        break;
+
+    case ID_PCB_ADD_LINE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic line" ) );
+        break;
+
+    case ID_PCB_ARC_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
+        break;
+
+    case ID_PCB_CIRCLE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+        break;
+
+    case ID_PCB_ADD_TEXT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
+
+    case ID_COMPONENT_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Add module" ) );
+        break;
+
+    case ID_PCB_DIMENSION_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add dimension" ) );
+        break;
+
+    case ID_PCB_DELETE_ITEM_BUTT:
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        break;
+
+    case ID_PCB_HIGHLIGHT_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Highlight net" ) );
+        break;
+
+    case ID_PCB_SHOW_1_RATSNEST_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
+
+        if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
+            Compile_Ratsnest( &dc, true );
+
+        break;
+    }
 }

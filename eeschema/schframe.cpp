@@ -57,7 +57,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_SAVE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET_AS, SCH_EDIT_FRAME::Save_File )
     EVT_TOOL( ID_SAVE_PROJECT, SCH_EDIT_FRAME::Save_File )
-    EVT_MENU( wxID_PRINT, SCH_EDIT_FRAME::OnPrint )
     EVT_MENU( ID_GEN_PLOT_PS, SCH_EDIT_FRAME::ToPlot_PS )
     EVT_MENU( ID_GEN_PLOT_HPGL, SCH_EDIT_FRAME::ToPlot_HPGL )
     EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
@@ -71,8 +70,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_CONFIG_REQ, SCH_EDIT_FRAME::InstallConfigFrame )
     EVT_MENU( ID_CONFIG_SAVE, SCH_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, SCH_EDIT_FRAME::Process_Config )
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
-                    ID_PREFERENCES_HOTKEY_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     SCH_EDIT_FRAME::Process_Config )
 
     EVT_MENU( ID_COLORS_SETUP, SCH_EDIT_FRAME::OnColorConfig )
@@ -80,7 +78,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, SCH_EDIT_FRAME::SetLanguage )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, SCH_EDIT_FRAME::OnZoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, SCH_EDIT_FRAME::OnZoom )
 
     EVT_TOOL( ID_TO_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
@@ -102,16 +100,14 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_GET_TOOLS, SCH_EDIT_FRAME::OnCreateBillOfMaterials )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadStuffFile )
-    EVT_TOOL( ID_COMPONENT_BUTT, SCH_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.
     EVT_TOOL( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )
-    EVT_TOOL_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
-                    ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
-                    SCH_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
+                    SCH_EDIT_FRAME::OnSelectTool )
 
     EVT_MENU( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
@@ -128,15 +124,12 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( wxID_CUT, SCH_EDIT_FRAME::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_COPY, SCH_EDIT_FRAME::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
-    EVT_UPDATE_UI( wxID_UNDO, SCH_EDIT_FRAME::OnUpdateSchematicUndo )
-    EVT_UPDATE_UI( wxID_REDO, SCH_EDIT_FRAME::OnUpdateSchematicRedo )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRID, SCH_EDIT_FRAME::OnUpdateGrid )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SELECT_CURSOR, SCH_EDIT_FRAME::OnUpdateSelectCursor )
     EVT_UPDATE_UI( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnUpdateHiddenPins )
     EVT_UPDATE_UI( ID_TB_OPTIONS_BUS_WIRES_ORIENT, SCH_EDIT_FRAME::OnUpdateBusOrientation )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM,
-                         ID_TB_OPTIONS_SELECT_UNIT_INCH,
+    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
                          SCH_EDIT_FRAME::OnUpdateUnits )
+    EVT_UPDATE_UI_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
+                         SCH_EDIT_FRAME::OnUpdateSelectTool )
 
     /* Search dialog events. */
     EVT_FIND_CLOSE( wxID_ANY, SCH_EDIT_FRAME::OnFindDialogClose )
@@ -172,6 +165,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_HotkeysZoomAndGridList = s_Schematic_Hokeys_Descr;
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
+    m_ID_current_state = ID_SCH_NO_TOOL;
 
     CreateScreens();
 
@@ -452,6 +446,7 @@ void SCH_EDIT_FRAME::OnModify( )
     // >> change all sheets.
     // I believe all sheets in a project must have the same date
     SCH_SCREEN* screen = s_list.GetFirst();
+
     for( ; screen != NULL; screen = s_list.GetNext() )
         screen->m_Date = date;
 }
@@ -466,73 +461,33 @@ void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
     bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE );
 
     event.Enable( enable );
-    m_HToolBar->EnableTool( wxID_CUT, enable );
-    m_HToolBar->EnableTool( wxID_COPY, enable );
 }
 
 
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_blockItems.GetCount() > 0 );
-    m_HToolBar->EnableTool( wxID_PASTE, m_blockItems.GetCount() > 0 );
 }
 
 
-void SCH_EDIT_FRAME::OnUpdateSchematicUndo( wxUpdateUIEvent& event )
-{
-    if( GetScreen() )
-        event.Enable( GetScreen()->GetUndoCommandCount() > 0 );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateSchematicRedo( wxUpdateUIEvent& event )
-{
-    if( GetScreen() )
-        event.Enable( GetScreen()->GetRedoCommandCount() > 0 );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& event )
+void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& aEvent )
 {
     wxString tool_tip = g_HVLines ?
                         _( "Draw wires and buses in any direction" ) :
                         _( "Draw horizontal and vertical wires and buses only" );
 
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, g_HVLines );
+    aEvent.Check( g_HVLines );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT, tool_tip );
 }
 
 
-void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& event )
+void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 {
     wxString tool_tip = m_ShowAllPins ? _( "Do not show hidden pins" ) :
                         _( "Show hidden pins" );
 
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_HIDDEN_PINS, m_ShowAllPins );
+    aEvent.Check( m_ShowAllPins );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateSelectCursor( wxUpdateUIEvent& event )
-{
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, m_CursorShape );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateUnits( wxUpdateUIEvent& event )
-{
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, g_UserUnit == MILLIMETRES );
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, g_UserUnit == INCHES );
-    DisplayUnitsMsg();
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateGrid( wxUpdateUIEvent& event )
-{
-    wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
-
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
 }
 
 
@@ -630,10 +585,7 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
     fn = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
 
     if( fn != wxEmptyString )
-    {
         LoadOneEEProject( fn, false );
-        SetToolbars();
-    }
 }
 
 
@@ -724,10 +676,7 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
     Close( true );
 }
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- */
+
 void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );
@@ -757,8 +706,6 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 }
 
 
-/* Creates the SVG print file for the current edited component.
- */
 void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
     DIALOG_SVG_PRINT frame( this );

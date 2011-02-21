@@ -40,7 +40,7 @@ static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( SheetLabel == NULL )
         return;
 
-    if( SheetLabel->m_Flags & IS_NEW )
+    if( SheetLabel->IsNew() )
     {
         SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
         SAFE_DELETE( SheetLabel );

@@ -64,8 +64,6 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
                       wxT( "WinEDA_PcbFrame::ProcessMuWaveFunctions() id error" ) );
         break;
     }
-
-    SetToolbars();
 }
 
 

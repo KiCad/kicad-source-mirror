@@ -156,7 +156,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
             module->m_Flags = 0;
         }
 
-        if( (module->m_Flags & IS_NEW) )  // Copy command: delete new footprint
+        if( (module->IsNew()) )  // Copy command: delete new footprint
         {
             module->DeleteStructure();
             module = NULL;
@@ -396,7 +396,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
     OnModify();
     GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
 
-    if( module->m_Flags & IS_NEW )
+    if( module->IsNew() )
     {
         SaveCopyInUndoList( module, UR_NEW );
     }

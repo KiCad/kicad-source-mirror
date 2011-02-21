@@ -22,31 +22,6 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_SHOW_GRID:
-        SetGridVisibility( m_OptionsToolBar->GetToolState( id ) );
-        DrawPanel->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UserUnit = MILLIMETRES;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        if( id == ID_TB_OPTIONS_SELECT_UNIT_INCH )
-            g_UserUnit = INCHES;
-        UpdateStatusBar();
-        ReCreateAuxiliaryToolbar();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        SetStatusText( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = m_OptionsToolBar->GetToolState( id );
-        break;
-
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         m_DisplayPadFill = !m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( );
@@ -74,6 +49,4 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "WinEDA_ModuleEditFrame::OnSelectOptionToolbar error" ) );
         break;
     }
-
-    SetToolbars();
 }

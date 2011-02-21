@@ -39,7 +39,7 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC )
 
     m_itemToRepeat = NULL;
 
-    if( (TextStruct->m_Flags & IS_NEW) == 0 )
+    if( !TextStruct->IsNew() )
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = TextStruct->Clone();
@@ -227,7 +227,7 @@ static void ExitMoveTexte( EDA_DRAW_PANEL* Panel, wxDC* DC )
      * created)*/
     Struct->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
 
-    if( Struct->m_Flags & IS_NEW )
+    if( Struct->IsNew() )
     {
         SAFE_DELETE( Struct );
         screen->SetCurItem( NULL );

@@ -50,7 +50,6 @@ class GENERAL_COLLECTORS_GUIDE;
 class WinEDA_BasePcbFrame : public EDA_DRAW_FRAME
 {
 public:
-
     bool m_DisplayPadFill;          // How show pads
     bool m_DisplayViaFill;          // How show vias
     bool m_DisplayPadNum;           // show pads numbers
@@ -68,6 +67,9 @@ public:
 protected:
     BOARD*                  m_Pcb;
     GENERAL_COLLECTOR*      m_Collector;
+
+    void updateGridSelectBox();
+    void updateZoomSelectBox();
 
 public:
     WinEDA_BasePcbFrame( wxWindow* father, int idtype,
@@ -493,6 +495,15 @@ public:
      * application settings saved all over the place.
      */
     virtual void SaveSettings();
+
+    void OnTogglePolarCoords( wxCommandEvent& aEvent );
+    void OnTogglePadDrawMode( wxCommandEvent& aEvent );
+
+    /* User interface update event handlers. */
+    void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
+    void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     DECLARE_EVENT_TABLE()
 };

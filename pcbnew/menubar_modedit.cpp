@@ -132,7 +132,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Delete items */
     item = new wxMenuItem( editMenu,
-                           ID_MODEDIT_DELETE_ITEM_BUTT,
+                           ID_MODEDIT_DELETE_TOOL,
                            _( "Delete" ),
                            _( "Delete objects with the eraser" ) );
     item->SetBitmap( delete_body_xpm );
@@ -236,9 +236,9 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Pad */
     item = new wxMenuItem( placeMenu,
-                           ID_MODEDIT_ADD_PAD,
+                           ID_MODEDIT_PAD_TOOL,
                            _( "Pad" ),
-                           _( "Add Pads" ) );
+                           _( "Add pad" ) );
     item->SetBitmap( pad_xpm );
     placeMenu->Append( item );
 
@@ -247,7 +247,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Circle */
     item = new wxMenuItem( placeMenu,
-                           ID_PCB_CIRCLE_BUTT,
+                           ID_MODEDIT_CIRCLE_TOOL,
                            _( "Circle" ),
                            _( "Add graphic circle" ) );
     item->SetBitmap( add_circle_xpm );
@@ -255,7 +255,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Line or Polygon */
     item = new wxMenuItem( placeMenu,
-                           ID_PCB_ADD_LINE_BUTT,
+                           ID_MODEDIT_LINE_TOOL,
                            _( "Line or Polygon" ),
                            _( "Add graphic line or polygon" ) );
     item->SetBitmap( add_polygon_xpm );
@@ -263,7 +263,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Arc */
     item = new wxMenuItem( placeMenu,
-                           ID_PCB_ARC_BUTT,
+                           ID_MODEDIT_ARC_TOOL,
                            _( "Arc" ),
                            _( "Add graphic arc" ) );
     item->SetBitmap( add_arc_xpm );
@@ -271,7 +271,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Text */
     item = new wxMenuItem( placeMenu,
-                           ID_PCB_ADD_TEXT_BUTT,
+                           ID_MODEDIT_TEXT_TOOL,
                            _( "Text" ),
                            _( "Add graphic text" ) );
     item->SetBitmap( add_text_xpm );
@@ -280,7 +280,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     /* Anchor */
     placeMenu->AppendSeparator();
     item = new wxMenuItem( placeMenu,
-                           ID_MODEDIT_PLACE_ANCHOR,
+                           ID_MODEDIT_ANCHOR_TOOL,
                            _( "Anchor" ),
                            _( "Place the footprint module reference anchor" ) );
     item->SetBitmap( anchor_xpm );

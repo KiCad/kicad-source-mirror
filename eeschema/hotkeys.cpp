@@ -269,7 +269,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
     bool        notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
-    bool        RefreshToolBar = FALSE;
 
     if( aHotKey == 0 )
         return;
@@ -343,7 +342,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_DELETE:
         if( notBusy)
         {
-            RefreshToolBar = LocateAndDeleteItem( this, aDC );
+            LocateAndDeleteItem( this, aDC );
             OnModify();
             GetScreen()->SetCurItem( NULL );
             GetScreen()->TestDanglingEnds( DrawPanel, aDC );
@@ -390,8 +389,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( !itemInEdit )
         {
             // switch to m_ID_current_state = ID_COMPONENT_BUTT;
-            if( m_ID_current_state != ID_COMPONENT_BUTT )
-                SetToolID( ID_COMPONENT_BUTT, wxCURSOR_PENCIL, _( "Add Component" ) );
+            if( m_ID_current_state != ID_SCH_PLACE_COMPONENT )
+                SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Component" ) );
 
             OnLeftClick( aDC, aPosition );
         }
@@ -648,7 +647,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             if( aItem->m_Flags == 0 )
             {
                 SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-                RefreshToolBar = TRUE;
             }
 
             CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_MIRROR_Y );
@@ -670,7 +668,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             if( aItem->m_Flags == 0 )
             {
                 SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-                RefreshToolBar = TRUE;
             }
 
             CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_MIRROR_X );
@@ -686,7 +683,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             if( aItem->m_Flags == 0 )
             {
                 SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-                RefreshToolBar = TRUE;
             }
 
             CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_NORMAL );
@@ -880,9 +876,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
     }
-
-    if( RefreshToolBar )
-        SetToolbars();
 }
 
 
@@ -979,7 +972,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
          break;
 
     case HK_EDIT:
-        m_drawItem = LocateItemUsingCursor();
+        m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )
         {
@@ -1011,7 +1004,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:
-        m_drawItem = LocateItemUsingCursor();
+        m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )
         {
@@ -1047,7 +1040,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     }
 
     case HK_DELETE:
-        m_drawItem = LocateItemUsingCursor();
+        m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {
@@ -1058,7 +1051,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
-        m_drawItem = LocateItemUsingCursor();
+        m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {
@@ -1069,7 +1062,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DRAG:
-        m_drawItem = LocateItemUsingCursor();
+        m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {

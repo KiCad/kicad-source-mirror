@@ -30,8 +30,6 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
         DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
-        ReCreateAuxiliaryToolbar();
-        SetToolbars();
         DrawPanel->MoveCursorToCrossHair();
     }
 }
@@ -55,8 +53,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     {
     case ID_LOAD_FILE:
         LoadOnePcbFile( GetScreen()->GetFileName(), false, true );
-        ReCreateAuxiliaryToolbar();
-        SetToolbars();
         break;
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
@@ -91,8 +87,6 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
         fn.SetExt( PcbFileExtension );
         GetScreen()->SetFileName( fn.GetFullPath() );
         SetTitle( GetScreen()->GetFileName() );
-        ReCreateAuxiliaryToolbar();
-        SetToolbars();
         break;
     }
 
@@ -103,11 +97,10 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     case ID_NEW_BOARD:
         Clear_Pcb( true );
         GetScreen()->GetFileName().Printf( wxT( "%s%cnoname%s" ),
-                                        GetChars( wxGetCwd() ), DIR_SEP,
-                                        GetChars( PcbFileExtension ) );
+                                           GetChars( wxGetCwd() ), DIR_SEP,
+                                           GetChars( PcbFileExtension ) );
         SetTitle( GetScreen()->GetFileName() );
         ReCreateLayerBox( NULL );
-        SetToolbars();
         break;
 
     case ID_SAVE_BOARD:
@@ -286,7 +279,6 @@ this file again." ) );
     ReFillLayerWidget();
 
     ReCreateLayerBox( NULL );
-    AuxiliaryToolBar_Update_UI();
     syncLayerWidget();
 
     // Display the loaded board:

@@ -489,7 +489,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 
 void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAME* frame )
 {
-    bool     is_new = (Junction->m_Flags & IS_NEW) ? TRUE : FALSE;
+    bool     is_new = Junction->IsNew();
     wxString msg;
 
     if( !is_new )
@@ -513,7 +513,7 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
 
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
-    bool     is_new = (Wire->m_Flags & IS_NEW) ? TRUE : FALSE;
+    bool     is_new = Wire->IsNew();
     wxPoint  pos    = frame->GetScreen()->GetCrossHairPosition();
     wxString msg;
 
@@ -551,9 +551,10 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
-    bool    is_new = (Bus->m_Flags & IS_NEW) ? TRUE : FALSE;
+    bool    is_new = Bus->IsNew();
     wxPoint pos    = frame->GetScreen()->GetCrossHairPosition();
     wxString msg;
+
     if( is_new )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_END_LINE, _( "Bus End" ), apply_xpm );

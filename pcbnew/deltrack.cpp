@@ -25,7 +25,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
     if( aTrack == NULL )
         return NULL;
 
-    if( aTrack->m_Flags & IS_NEW )  // Trace in progress, erase the last segment
+    if( aTrack->IsNew() )  // Trace in progress, erase the last segment
     {
         if( g_CurrentTrackList.GetCount() > 0 )
         {

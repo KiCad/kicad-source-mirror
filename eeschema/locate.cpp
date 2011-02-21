@@ -45,7 +45,7 @@ SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 
     while( DrawList )
     {
-        if( !SnapPoint2( Screen->m_MousePosition, COMPONENT_T, DrawList ) )
+        if( !SnapPoint2( Screen->RefPos( true ), COMPONENT_T, DrawList ) )
         {
             if( !SnapPoint2( Screen->GetCrossHairPosition(), COMPONENT_T, DrawList ) )
                 break;

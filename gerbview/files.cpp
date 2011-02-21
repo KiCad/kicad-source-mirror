@@ -53,9 +53,9 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         {
             setActiveLayer(origLayer+1);
             Erase_Current_Layer( false );
+
             if( !LoadGerberFiles( wxEmptyString ) )
-                setActiveLayer(origLayer);
-            SetToolbars();
+                setActiveLayer( origLayer );
         }
         else
         {

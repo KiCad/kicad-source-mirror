@@ -159,74 +159,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockBegin( &dc, BLOCK_PASTE, screen->GetCrossHairPosition() );
         break;
 
-    case ID_HIERARCHY_PUSH_POP_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Push/Pop Hierarchy" ) );
-        break;
-
-    case ID_NOCONN_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add NoConnect Flag" ) );
-        break;
-
-    case ID_WIRE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Wire" ) );
-        break;
-
-    case ID_BUS_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Bus" ) );
-        break;
-
-    case ID_LINE_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Lines" ) );
-        break;
-
-    case ID_JUNCTION_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Junction" ) );
-        break;
-
-    case ID_LABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Label" ) );
-        break;
-
-    case ID_GLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Global label" ) );
-        break;
-
-    case ID_HIERLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Hierarchical label" ) );
-        break;
-
-    case ID_TEXT_COMMENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Text" ) );
-        break;
-
-    case ID_WIRETOBUS_ENTRY_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Wire to Bus entry" ) );
-        break;
-
-    case ID_BUSTOBUS_ENTRY_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Bus to Bus entry" ) );
-        break;
-
-    case ID_SHEET_SYMBOL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Sheet" ) );
-        break;
-
-    case ID_SHEET_LABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add PinSheet" ) );
-        break;
-
-    case ID_IMPORT_HLABEL_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Import PinSheet" ) );
-        break;
-
-    case ID_COMPONENT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Component" ) );
-        break;
-
-    case ID_PLACE_POWER_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Power" ) );
-        break;
-
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
         DrawPanel->MoveCursorToCrossHair();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '/' );
@@ -338,10 +270,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
     break;
 
-    case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-        break;
-
     case ID_POPUP_SCH_END_SHEET:
         DrawPanel->MoveCursorToCrossHair();
         screen->GetCurItem()->Place( this, &dc );
@@ -399,7 +327,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
 
         // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..) or a hierachical sheet
+        // component, like Field, text..) or a hierarchical sheet
         // or a label
         if( (screen->GetCurItem()->Type() != SCH_COMPONENT_T)
            && (screen->GetCurItem()->Type() != SCH_LABEL_T)
@@ -729,8 +657,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     if( m_ID_current_state == 0 )
         m_itemToRepeat = NULL;
-
-    SetToolbars();
 }
 
 
@@ -804,4 +730,105 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
         // Stop the current command (if any) but keep the current tool
         DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
     }
+}
+
+
+void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+
+    // Stop the current command and deselect the current tool.
+    DrawPanel->EndMouseCapture( ID_SCH_NO_TOOL, DrawPanel->GetDefaultCursor() );
+
+    switch( id )
+    {
+    case ID_SCH_NO_TOOL:
+        SetToolID( id, DrawPanel->GetDefaultCursor(), _( "No tool selected" ) );
+        break;
+
+    case ID_HIERARCHY_PUSH_POP_BUTT:
+        SetToolID( id, wxCURSOR_HAND, _( "Descend or ascend hierarchy" ) );
+        break;
+
+    case ID_NOCONN_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add no connect" ) );
+        break;
+
+    case ID_WIRE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add wire" ) );
+        break;
+
+    case ID_BUS_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add bus" ) );
+        break;
+
+    case ID_LINE_COMMENT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add lines" ) );
+        break;
+
+    case ID_JUNCTION_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add junction" ) );
+        break;
+
+    case ID_LABEL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add label" ) );
+        break;
+
+    case ID_GLABEL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add global label" ) );
+        break;
+
+    case ID_HIERLABEL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
+        break;
+
+    case ID_TEXT_COMMENT_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
+
+    case ID_WIRETOBUS_ENTRY_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
+        break;
+
+    case ID_BUSTOBUS_ENTRY_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
+        break;
+
+    case ID_SHEET_SYMBOL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet" ) );
+        break;
+
+    case ID_SHEET_LABEL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
+        break;
+
+    case ID_IMPORT_HLABEL_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
+        break;
+
+    case ID_SCH_PLACE_COMPONENT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add component" ) );
+        break;
+
+    case ID_PLACE_POWER_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add power" ) );
+        break;
+
+    case ID_SCHEMATIC_DELETE_ITEM_BUTT:
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        break;
+
+    default:
+        m_itemToRepeat = NULL;
+    }
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
+{
+    if( m_ID_current_state == 0 )
+        m_ID_current_state = ID_SCH_NO_TOOL;
+
+    if( aEvent.GetEventObject() == m_VToolBar )
+        aEvent.Check( m_ID_current_state == aEvent.GetId() );
 }

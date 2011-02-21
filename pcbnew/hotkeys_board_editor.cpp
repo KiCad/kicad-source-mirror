@@ -152,7 +152,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
         break;
 
     case HK_ADD_MODULE:
-        evt_type = ID_COMPONENT_BUTT;
+        evt_type = ID_PCB_MODULE_BUTT;
         break;
 
     case HK_UNDO:
@@ -214,8 +214,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
         break;
 
     case HK_END_TRACK:
-        if( itemCurrentlyEdited && (GetCurItem()->IsTrack() )
-           && ( (GetCurItem()->m_Flags & IS_NEW) != 0 ) )
+        if( itemCurrentlyEdited && GetCurItem()->IsTrack() && GetCurItem()->IsNew() )
         {
             // A new track is in progress: call to End_Route()
             DrawPanel->MoveCursorToCrossHair();
@@ -250,7 +249,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
             break;
         if( GetCurItem()->Type() != TYPE_TRACK )           // Should not occur
             return;
-        if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
+        if( !GetCurItem()->IsNew() )
             return;
 
         // place micro via and switch layer
@@ -268,7 +267,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
             return;
         if( GetCurItem()->Type() != TYPE_TRACK )
             return;
-        if( (GetCurItem()->m_Flags & IS_NEW) == 0 )
+        if( !GetCurItem()->IsNew() )
             return;
         evt_type = ID_POPUP_PCB_PLACE_VIA;
         break;
@@ -300,7 +299,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
             if( track )
                 DrawPanel->m_AutoPAN_Request = true;
         }
-        else if( GetCurItem()->m_Flags & IS_NEW )
+        else if( GetCurItem()->IsNew() )
         {
             TRACK* track = Begin_Route( (TRACK*) GetCurItem(), aDC );
 
@@ -404,7 +403,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
         }
         break;
 
-    case ID_COMPONENT_BUTT:
+    case ID_PCB_MODULE_BUTT:
         if( ItemFree )
         {
             wxPoint pos = GetScreen()->RefPos( false );

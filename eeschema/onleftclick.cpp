@@ -31,7 +31,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     SCH_ITEM* item = GetScreen()->GetCurItem();
     wxPoint gridPosition = GetGridPosition( aPosition );
 
-    if( ( m_ID_current_state == 0 ) || ( item && item->m_Flags ) )
+    if( ( m_ID_current_state == ID_SCH_NO_TOOL )
+        || ( m_ID_current_state == 0 )
+        || ( item && item->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
         m_itemToRepeat = NULL;
@@ -84,13 +86,11 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     switch( m_ID_current_state )
     {
     case 0:
-        break;
-
-    case ID_NO_SELECT_BUTT:
+    case ID_SCH_NO_TOOL:
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
-        if( item && item->m_Flags )
+        if( ( item && item->m_Flags ) || ( g_RootSheet->CountSheets() == 0 ) )
             break;
 
         item = LocateAndShowItem( aPosition );
@@ -274,7 +274,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         break;
 
-    case ID_COMPONENT_BUTT:
+    case ID_SCH_PLACE_COMPONENT:
         if( (item == NULL) || (item->m_Flags == 0) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, true ) );
@@ -334,6 +334,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
     switch( m_ID_current_state )
     {
+    case ID_SCH_NO_TOOL:
     case 0:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
@@ -380,7 +381,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_BUS_BUTT:
     case ID_WIRE_BUTT:
     case ID_LINE_COMMENT_BUTT:
-        if( item && ( item->m_Flags & IS_NEW ) )
+        if( item && item->IsNew() )
             EndSegment( aDC );
 
         break;

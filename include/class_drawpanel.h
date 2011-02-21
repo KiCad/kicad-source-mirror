@@ -19,7 +19,7 @@ class PCB_SCREEN;
  * Mouse capture callback function prototype.
  */
 typedef void ( *MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                        const wxPoint& aPosition, bool aErase );
+                                          const wxPoint& aPosition, bool aErase );
 
 /**
  * End mouse capture callback function prototype.
@@ -33,7 +33,7 @@ private:
     int m_cursor;                 ///< Current mouse cursor shape id.
     int m_defaultCursor;          ///< The default mouse cursor shape id.
     bool m_showCrossHair;         ///< Indicate if cross hair is to be shown.
-    int m_cursorLevel;            // Index for cursor redraw in XOR mode.
+    int m_cursorLevel;            ///< Index for cursor redraw in XOR mode.
 
 public:
     EDA_Rect m_ClipBox;           // the clipbox used in screen redraw (usually gives the
@@ -221,7 +221,7 @@ public:
      */
     void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL );
 
-    void ReDraw( wxDC* DC, bool erasebg = TRUE );
+    void ReDraw( wxDC* aDC, bool aEraseBackground = true );
 
     /**
      * Function RefreshDrawingRect

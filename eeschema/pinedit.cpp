@@ -188,7 +188,7 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( CurrentPin == NULL || CurrentPin->Type() != LIB_PIN_T )
         return;
 
-    if( CurrentPin->m_Flags & IS_NEW )
+    if( CurrentPin->IsNew() )
         delete CurrentPin;
     else
         parent->RestoreComponent();

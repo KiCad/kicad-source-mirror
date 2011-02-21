@@ -44,13 +44,23 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
                     EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     EDA_DRAW_FRAME::OnSelectGrid )
+
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnToggleGridState )
+    EVT_TOOL_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
+                    EDA_DRAW_FRAME::OnSelectUnits )
+    EVT_TOOL( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnToggleCrossHairStyle )
+
+    EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
+    EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnUpdateGrid )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnUpdateCrossHairStyle )
+    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
+                         EDA_DRAW_FRAME::OnUpdateUnits )
 END_EVENT_TABLE()
 
 
-EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype,
-                                    const wxString& title,
-                                    const wxPoint& pos, const wxSize& size,
-                                    long style ) :
+EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
+                                const wxPoint& pos, const wxSize& size, long style ) :
     EDA_BASE_FRAME( father, idtype, title, pos, size, style )
 {
     wxSize minsize;
@@ -154,6 +164,79 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 }
 
 
+void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
+{
+    SetGridVisibility( !IsGridVisible() );
+    DrawPanel->Refresh();
+}
+
+
+void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
+{
+
+    if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && g_UserUnit != MILLIMETRES )
+    {
+        g_UserUnit = MILLIMETRES;
+        UpdateStatusBar();
+    }
+    else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && g_UserUnit != INCHES )
+    {
+        g_UserUnit = INCHES;
+        UpdateStatusBar();
+    }
+}
+
+
+void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
+{
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    DrawPanel->CrossHairOff( &dc );
+    m_CursorShape = !m_CursorShape;
+    DrawPanel->CrossHairOn( &dc );
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateUndo( wxUpdateUIEvent& aEvent )
+{
+    if( GetScreen() )
+        aEvent.Enable( GetScreen()->GetUndoCommandCount() > 0 );
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
+{
+    if( GetScreen() )
+        aEvent.Enable( GetScreen()->GetRedoCommandCount() > 0 );
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateUnits( wxUpdateUIEvent& aEvent )
+{
+    bool enable;
+
+    enable = ( ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM) && (g_UserUnit == MILLIMETRES))
+            || ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH) && (g_UserUnit == INCHES)) );
+
+    aEvent.Check( enable );
+    DisplayUnitsMsg();
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
+{
+    wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
+
+    aEvent.Check( IsGridVisible() );
+    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
+}
+
+
+void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_CursorShape );
+}
+
+
 // Virtual function
 void EDA_DRAW_FRAME::ReCreateAuxiliaryToolbar()
 {
@@ -176,6 +259,7 @@ void EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {
 }
+
 
 /**
  * Function PrintPage (virtual)
@@ -307,15 +391,6 @@ void EDA_DRAW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-void EDA_DRAW_FRAME::SetToolbars()
-{
-    DisplayUnitsMsg();
-
-    if( m_auimgr.GetManagedWindow() )
-        m_auimgr.Update();
-}
-
-
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 5 );
@@ -379,53 +454,14 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // Change DrawPanel cursor if requested.
     if( DrawPanel && aCursor >= 0 )
-    {
         DrawPanel->SetCursor( aCursor );
-    }
 
     DisplayToolMsg( aToolMsg );
 
     if( aId < 0 )
         return;
 
-    // Old Tool ID_NO_SELECT_BUTT active or inactive if no new tool.
-    if( m_ID_current_state )
-    {
-        if( m_VToolBar )
-            m_VToolBar->ToggleTool( m_ID_current_state, FALSE );
-
-        if( m_AuxVToolBar )
-            m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
-    }
-    else
-    {
-        if( aId )
-        {
-            if( m_VToolBar )
-                m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, FALSE );
-
-            if( m_AuxVToolBar )
-                m_AuxVToolBar->ToggleTool( m_ID_current_state, FALSE );
-        }
-        else if( m_VToolBar )
-            m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
-    }
-
-    if( aId )
-    {
-        if( m_VToolBar )
-            m_VToolBar->ToggleTool( aId, TRUE );
-
-        if( m_AuxVToolBar )
-            m_AuxVToolBar->ToggleTool( aId, TRUE );
-    }
-    else if( m_VToolBar )
-        m_VToolBar->ToggleTool( ID_NO_SELECT_BUTT, TRUE );
-
     m_ID_current_state = aId;
-
-    if( m_VToolBar )
-        m_VToolBar->Refresh( );
 }
 
 

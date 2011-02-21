@@ -66,7 +66,6 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
 
     ReFillLayerWidget();
 
-    SetToolbars();
     Zoom_Automatique( true );
 
     return true;

@@ -46,10 +46,10 @@ protected:
 
 public:
     WinEDALayerChoiceBox* m_SelLayerBox;
-    DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to hightlight.
+    DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to highlight.
     wxTextCtrl*           m_TextInfo;       // a wxTextCtrl used to display some info about
                                             // gerber data (format..)
-    wxArrayString         m_DCodesList;     // an array string containint all decodes Id (10 to 999)
+    wxArrayString         m_DCodesList;     // an array string containing all decodes Id (10 to 999)
 
 private:
     int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
@@ -77,7 +77,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
      * Function ReportMessage
      * Add a message (a string) in message list
      * for instance when reading a Gerber file
-     * @param aMessage = the straing to add in list
+     * @param aMessage = the string to add in list
      */
     void ReportMessage( const wxString aMessage )
     {
@@ -121,7 +121,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     /**
      * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visiblity in configuration.
+     * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
     virtual void SetGridVisibility( bool aVisible );
@@ -277,15 +277,22 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     void              OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     GERBER_DRAW_ITEM* GerberGeneralLocateAndDisplay();
-    GERBER_DRAW_ITEM* Locate( int typeloc );
+    GERBER_DRAW_ITEM* Locate( const wxPoint& aPosition, int typeloc );
 
-
-    void              SetToolbars();
     void              Process_Settings( wxCommandEvent& event );
     void              Process_Config( wxCommandEvent& event );
     void              InstallConfigFrame( const wxPoint& pos );
     void              InstallGerberOptionsDialog( wxCommandEvent& event );
     void              InstallPcbGlobalDeleteFrame( const wxPoint& pos );
+
+    void              OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
+    void              OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent );
+    void              OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent );
+    void              OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent );
+    void              OnUpdateShowDCodes( wxUpdateUIEvent& aEvent );
+    void              OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
+    void              OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
+    void              OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     /* handlers for block commands */
     virtual int       ReturnBlockCommand( int key );

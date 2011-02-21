@@ -598,9 +598,6 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
     GetScreen()->PushCommandToRedoList( List );
 
     OnModify();
-    ReCreateHToolbar();
-    SetToolbars();
-
     DrawPanel->Refresh();
 }
 
@@ -629,9 +626,6 @@ void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
     GetScreen()->PushCommandToUndoList( List );
 
     OnModify();
-    ReCreateHToolbar();
-    SetToolbars();
-
     DrawPanel->Refresh();
 }
 

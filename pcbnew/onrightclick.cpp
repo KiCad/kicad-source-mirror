@@ -134,8 +134,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 }
                 else
                 {
-                    msg = AddHotkeyName( _(
-                                             "Unlock Module" ), g_Board_Editor_Hokeys_Descr,
+                    msg = AddHotkeyName( _( "Unlock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
                                   unlocked_xpm );
@@ -143,7 +142,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( !flags )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
-                                     _( "Auto Place Module" ) );
+                                      _( "Auto Place Module" ) );
             }
 
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_MODE_TRACKS )
@@ -311,7 +310,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         aPopMenu->AppendSeparator();
         break;
 
-    case ID_COMPONENT_BUTT:
+    case ID_PCB_MODULE_BUTT:
         ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC,
                       _( "Footprint Documentation" ), book_xpm );
         aPopMenu->AppendSeparator();
@@ -408,9 +407,9 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
     m_TrackAndViasSizesList_Changed = true;
-    AuxiliaryToolBar_Update_UI();
 
     int flags = Track->m_Flags;
+
     if( flags == 0 )
     {
         if( Track->Type() == TYPE_VIA )
@@ -737,7 +736,6 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 
     GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
     m_TrackAndViasSizesList_Changed = true;
-    AuxiliaryToolBar_Update_UI();
 
     wxString msg = Pad->MenuText( GetBoard() );
 

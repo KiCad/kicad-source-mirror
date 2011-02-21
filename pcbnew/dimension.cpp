@@ -199,7 +199,7 @@ static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     if( Dimension )
     {
-        if( Dimension->m_Flags & IS_NEW )
+        if( Dimension->IsNew() )
         {
             Dimension->Draw( Panel, DC, GR_XOR );
             Dimension->DeleteStructure();

@@ -602,9 +602,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
 void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
-    if( g_ItemToUndoCopy
-       && ( g_ItemToUndoCopy->Type() == Type() )
-       && ( ( m_Flags & IS_NEW ) == 0 ) )
+    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == Type() ) && !IsNew() )
     {
         /* restore old values and save new ones */
         SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );

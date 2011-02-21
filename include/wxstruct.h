@@ -283,7 +283,6 @@ public:
 
     void             EraseMsgBox();
     void             Process_PageSettings( wxCommandEvent& event );
-    virtual void     SetToolbars();
 
     /**
      * Function SetLanguage
@@ -376,6 +375,19 @@ public:
      */
     virtual void     OnSelectGrid( wxCommandEvent& event );
     virtual void     OnSelectZoom( wxCommandEvent& event );
+
+    // Command event handlers shared by all applications derived from EDA_DRAW_FRAME.
+    void OnToggleGridState( wxCommandEvent& aEvent );
+    void OnSelectUnits( wxCommandEvent& aEvent );
+    void OnToggleCrossHairStyle( wxCommandEvent& aEvent );
+
+    // Update user interface event handlers shared by all applications derived from
+    // EDA_DRAW_FRAME.
+    void OnUpdateUndo( wxUpdateUIEvent& aEvent );
+    void OnUpdateRedo( wxUpdateUIEvent& aEvent );
+    void OnUpdateGrid( wxUpdateUIEvent& aEvent );
+    void OnUpdateUnits( wxUpdateUIEvent& aEvent );
+    void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 
     /**
      * Function GeneralControle

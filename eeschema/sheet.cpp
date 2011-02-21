@@ -256,7 +256,7 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     if( sheet == NULL )
         return;
 
-    if( sheet->m_Flags & IS_NEW )
+    if( sheet->IsNew() )
     {
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
         SAFE_DELETE( sheet );
@@ -312,7 +312,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 
 void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    if( aSheet == NULL || aSheet->m_Flags & IS_NEW )
+    if( aSheet == NULL || aSheet->IsNew() )
         return;
 
     if( aSheet->Type() != SCH_SHEET_T )
@@ -340,7 +340,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 
-    if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
+    if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = DuplicateStruct( aSheet, true );
@@ -363,7 +363,7 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
     DrawPanel->CrossHairOn( aDC );
 
-    if( (aSheet->m_Flags & IS_NEW) == 0 )    // not already in edit, save a copy for undo/redo
+    if( !aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
     {
         delete g_ItemToUndoCopy;
         g_ItemToUndoCopy = DuplicateStruct( aSheet, true );

@@ -59,6 +59,7 @@ public:
     void        Process_Config( wxCommandEvent& event );
     void        OnPlotCurrentComponent( wxCommandEvent& event );
     void        Process_Special_Functions( wxCommandEvent& event );
+    void        OnSelectTool( wxCommandEvent& aEvent );
     void        OnImportPart( wxCommandEvent& event );
     void        OnExportPart( wxCommandEvent& event );
     void        OnSelectAlias( wxCommandEvent& event );
@@ -75,6 +76,7 @@ public:
     void        OnEditPin( wxCommandEvent& event );
     void        OnRotatePin( wxCommandEvent& event );
 
+    void        OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void        OnUpdateEditingPart( wxUpdateUIEvent& event );
     void        OnUpdateNotEditingPart( wxUpdateUIEvent& event );
     void        OnUpdateUndo( wxUpdateUIEvent& event );
@@ -248,7 +250,7 @@ private:
     void           SaveOneSymbol();
     void           EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
     void           EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
-    LIB_DRAW_ITEM* LocateItemUsingCursor();
+    LIB_DRAW_ITEM* LocateItemUsingCursor( const wxPoint& aPosition );
     void           EditField( wxDC* DC, LIB_FIELD* Field );
 
 public:

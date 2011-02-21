@@ -184,7 +184,7 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     MirePcb->Draw( Panel, DC, GR_XOR );
 
-    if( MirePcb->m_Flags & IS_NEW )     // If it is new, delete it
+    if( MirePcb->IsNew() )     // If it is new, delete it
     {
         MirePcb->Draw( Panel, DC, GR_XOR );
         MirePcb->DeleteStructure();
@@ -250,7 +250,7 @@ void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
     SetCurItem( NULL );
     OnModify();
 
-    if( (MirePcb->m_Flags & IS_NEW) )
+    if( MirePcb->IsNew() )
     {
         SaveCopyInUndoList( MirePcb, UR_NEW );
         MirePcb->m_Flags = 0;

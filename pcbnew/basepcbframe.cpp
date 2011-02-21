@@ -11,6 +11,8 @@
 #include "common.h"
 #include "confirm.h"
 #include "appl_wxstruct.h"
+#include "dialog_helpers.h"
+#include "kicad_device_context.h"
 
 #include "pcbnew.h"
 #include "bitmaps.h"
@@ -32,14 +34,25 @@ static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
 static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 
 
-/*******************************/
+/*****************************/
 /* class WinEDA_BasePcbFrame */
-/*******************************/
+/*****************************/
 
 BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, EDA_DRAW_FRAME )
-    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START,
-                    ID_POPUP_PCB_ITEM_SELECTION_END,
+    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
                     WinEDA_BasePcbFrame::ProcessItemSelection )
+
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, WinEDA_BasePcbFrame::OnTogglePolarCoords )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, WinEDA_BasePcbFrame::OnTogglePadDrawMode )
+
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, WinEDA_BasePcbFrame::OnUpdateCoordType )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, WinEDA_BasePcbFrame::OnUpdatePadDrawMode )
+    EVT_UPDATE_UI_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
+                         WinEDA_BasePcbFrame::OnUpdateSelectGrid )
+    EVT_UPDATE_UI_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
+                         WinEDA_BasePcbFrame::OnUpdateSelectZoom )
+    EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE,
+                         WinEDA_BasePcbFrame::OnUpdateSelectZoom )
 END_EVENT_TABLE()
 
 
@@ -101,16 +114,18 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 
     dx = m_Pcb->m_BoundaryBox.GetWidth();
     dy = m_Pcb->m_BoundaryBox.GetHeight();
+    size = DrawPanel->GetClientSize();
 
-    size     = DrawPanel->GetClientSize();
     if( size.x )
-        ii       = ( dx + (size.x / 2) ) / size.x;
+        ii = ( dx + (size.x / 2) ) / size.x;
     else
         ii = 31;
+
     if ( size.y )
-        jj       = ( dy + (size.y / 2) ) / size.y;
+        jj = ( dy + (size.y / 2) ) / size.y;
     else
         jj = 31;
+
     bestzoom = MAX( ii, jj ) + 1;
     GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
 
@@ -153,7 +168,6 @@ void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
 void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
 {
 }
-
 
 
 // Note: virtual, overridden in WinEDA_PcbFrame;
@@ -206,17 +220,99 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 }
 
 
-/**********************************************************************/
-void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& event )
-/**********************************************************************/
+void WinEDA_BasePcbFrame::OnTogglePolarCoords( wxCommandEvent& aEvent )
 {
-    int id = event.GetId();
+    SetStatusText( wxEmptyString );
+    DisplayOpt.DisplayPolarCood = !DisplayOpt.DisplayPolarCood;
+    UpdateStatusBar();
+}
+
+
+void WinEDA_BasePcbFrame::OnTogglePadDrawMode( wxCommandEvent& aEvent )
+{
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
+    DrawPanel->Refresh();
+}
+
+
+void WinEDA_BasePcbFrame::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( DisplayOpt.DisplayPolarCood );
+    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                                        DisplayOpt.DisplayPolarCood ?
+                                        _( "Display rectangular coordinates" ) :
+                                        _( "Display polar coordinates" ) );
+}
+
+
+void WinEDA_BasePcbFrame::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( !m_DisplayPadFill );
+    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                                        m_DisplayPadFill ?
+                                        _( "Show pads in outline mode" ) :
+                                        _( "Show pads in fill mode" ) );
+}
+
+
+void WinEDA_BasePcbFrame::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
+{
+    // No need to update the grid select box if it doesn't exist or the grid setting change
+    // was made using the select box.
+    if( m_SelGridBox == NULL || m_AuxiliaryToolBar == NULL )
+        return;
+
+    int select = wxNOT_FOUND;
+
+    if( aEvent.GetId() == ID_POPUP_GRID_USER )
+    {
+        select = 0;
+    }
+    else
+    {
+        for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+        {
+            if( aEvent.GetId() == GetScreen()->GetGrid( i ).m_Id )
+            {
+                select = (int) i;
+                break;
+            }
+        }
+    }
+
+    m_SelGridBox->SetSelection( select );
+}
+
+
+void WinEDA_BasePcbFrame::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
+{
+    if( m_SelZoomBox == NULL || m_AuxiliaryToolBar == NULL )
+        return;
+
+    int current = 0;
+
+    for( size_t i = 0; i < GetScreen()->m_ZoomList.GetCount(); i++ )
+    {
+        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+        {
+            current = i + 1;
+            break;
+        }
+    }
+
+    if( current != m_SelZoomBox->GetSelection() )
+        m_SelZoomBox->SetSelection( current );
+}
+
+
+void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
 
     // index into the collector list:
     int itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
 
-    if( id >= ID_POPUP_PCB_ITEM_SELECTION_START
-     && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
+    if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
         DrawPanel->m_AbortRequest = false;
@@ -350,19 +446,11 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
             break;
         }
 
-        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_InternalUnits ),
-                     theta );
+        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_InternalUnits ), theta );
 
         // overwrite the absolute cartesian coordinates
         SetStatusText( Line, 2 );
     }
-
-    /*  not this, because status field no. 0 is reserved for actual fleeting
-        status information.  If this is enabled, then that text is erased on
-        every DrawPanel redraw.  Field no. 0 is set with Affiche_Message() and it
-        should persist until called again.
-    SetStatusText( Line, 0 );
-    */
 }
 
 
@@ -379,6 +467,7 @@ void WinEDA_BasePcbFrame::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     EDA_DRAW_FRAME::LoadSettings();
+
     // Ensure grid id is an existent grid id:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
@@ -386,17 +475,17 @@ void WinEDA_BasePcbFrame::LoadSettings()
 
     cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
-    cfg->Read( m_FrameName + UserGridUnitsEntry, (long*)&m_UserGridUnit,
-               ( long )INCHES );
+    cfg->Read( m_FrameName + UserGridUnitsEntry, (long*)&m_UserGridUnit, ( long )INCHES );
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
-    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge,
-               ( long )FILLED );
+    cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
+
     if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
-    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText,
-               ( long )FILLED );
+
+    cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
+
     if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
 }
@@ -426,7 +515,6 @@ void WinEDA_BasePcbFrame::SaveSettings()
 }
 
 
-
 /**
  * Function OnModify
  * Must be called after a schematic change
@@ -441,4 +529,96 @@ void WinEDA_BasePcbFrame::OnModify( )
 
     wxString       date = GenDate();
     GetScreen()->m_Date = date;
+}
+
+
+void WinEDA_BasePcbFrame::updateGridSelectBox()
+{
+    UpdateStatusBar();
+    DisplayUnitsMsg();
+
+    if( m_SelGridBox == NULL )
+        return;
+
+    // Update grid values with the current units setting.
+    m_SelGridBox->Clear();
+
+    wxString msg;
+    wxString format = _( "Grid");
+
+    switch( g_UserUnit )
+    {
+    case INCHES:
+        format += wxT( " %.1f" );
+        break;
+
+    case MILLIMETRES:
+        format += wxT( " %.3f" );
+        break;
+
+    case UNSCALED_UNITS:
+        format += wxT( " %f" );
+        break;
+    }
+
+    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+    {
+        GRID_TYPE& grid = GetScreen()->GetGrid( i );
+        double value = To_User_Unit( g_UserUnit, grid.m_Size.x, m_InternalUnits );
+
+        if( grid.m_Id != ID_POPUP_GRID_USER )
+        {
+            switch( g_UserUnit )
+            {
+            case INCHES:
+                msg.Printf( format.GetData(), value * 1000 );
+                break;
+
+            case MILLIMETRES:
+            case UNSCALED_UNITS:
+                msg.Printf( format.GetData(), value );
+                break;
+            }
+        }
+        else
+            msg = _( "User Grid" );
+
+        m_SelGridBox->Append( msg, (void*) &grid.m_Id );
+
+        if( ( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) == GetScreen()->GetGrid( i ).m_Id )
+            m_SelGridBox->SetSelection( i );
+    }
+}
+
+
+void WinEDA_BasePcbFrame::updateZoomSelectBox()
+{
+    if( m_SelZoomBox == NULL )
+        return;
+
+    wxString msg;
+
+    m_SelZoomBox->Clear();
+    m_SelZoomBox->Append( _( "Auto" ) );
+    m_SelZoomBox->SetSelection( 0 );
+
+    for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
+    {
+        msg = _( "Zoom " );
+
+        if ( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
+            msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
+        else
+        {
+            wxString value;
+            value.Printf( wxT( "%.1f" ),
+                          (float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
+            msg += value;
+        }
+
+        m_SelZoomBox->Append( msg );
+
+        if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
+            m_SelZoomBox->SetSelection( i + 1 );
+    }
 }

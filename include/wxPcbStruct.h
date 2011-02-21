@@ -53,11 +53,15 @@ class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
 {
     friend class PCB_LAYER_WIDGET;
 
+    void updateTraceWidthSelectBox();
+    void updateViaSizeSelectBox();
+    void updateDesignRulesSelectBoxes();
+
 protected:
 
     PCB_LAYER_WIDGET* m_Layers;
 
-    DRC* m_drc;                     ///< the DRC controller, see drc.cpp
+    DRC* m_drc;                              ///< the DRC controller, see drc.cpp
 
     PARAM_CFG_ARRAY   m_projectFileParams;   ///< List of PCBNew project file settings.
     PARAM_CFG_ARRAY   m_configSettings;      ///< List of PCBNew configuration settings.
@@ -103,6 +107,7 @@ protected:
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
+     * </p>
      */
     void syncLayerWidget( );
 
@@ -156,6 +161,20 @@ public:
     void             ToPrinter( wxCommandEvent& event );
 
     void             SVG_Print( wxCommandEvent& event );
+
+    // User interface update command event handlers.
+    void OnUpdateSave( wxUpdateUIEvent& aEvent );
+    void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
+    void OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent );
+    void OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent );
+    void OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent );
+    void OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
+    void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
+    void OnUpdateAuxilaryToolbar( wxUpdateUIEvent& aEvent );
+    void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
 
     /**
      * Function PrintPage , virtual
@@ -310,6 +329,7 @@ public:
     void             OnCloseWindow( wxCloseEvent& Event );
     void             Process_Special_Functions( wxCommandEvent& event );
     void             Tracks_and_Vias_Size_Event( wxCommandEvent& event );
+    void             OnSelectTool( wxCommandEvent& aEvent );
 
     void             ProcessMuWaveFunctions( wxCommandEvent& event );
     void             MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
@@ -379,28 +399,13 @@ public:
 
     void             PrepareLayerIndicator();
 
-    /**
-     * Function AuxiliaryToolBar_Update_UI
-     * update the displayed values on auxiliary horizontal toolbar
-     * (track width, via sizes, clearance ...
-     */
-    void             AuxiliaryToolBar_Update_UI();
-
-    /**
-     * Function AuxiliaryToolBar_DesignRules_Update_UI
-     * update the displayed values: track width, via sizes, clearance
-     * used when a new netclass is selected
-     */
-    void             AuxiliaryToolBar_DesignRules_Update_UI();
-
     /* mouse functions events: */
     void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     /**
      * Function OnRightClick
-     * populates a popup menu with the choices appropriate for the current
-     *context.
+     * populates a popup menu with the choices appropriate for the current context.
      * The caller will add the ZOOM menu choices afterward.
      * @param aMousePos The current mouse position
      * @param aPopMenu The menu to add to.
@@ -417,7 +422,7 @@ public:
      * @param aItemToCopy = the board item modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation, for
-     *commands like move
+     *                          commands like move
      */
     virtual void     SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
                                          UndoRedoOpType aTypeCommand,
@@ -430,7 +435,7 @@ public:
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UndoRedoOpType)
      * @param aTransformPoint = the reference point of the transformation, for
-     *commands like move
+     *                          commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
                                      UndoRedoOpType aTypeCommand,
@@ -439,13 +444,10 @@ public:
     /**
      * Function PutDataInPreviousState
      * Used in undo or redo command.
-     * Put data pointed by List in the previous state, i.e. the state memorized
-     * by List
-     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to
-     *                undo/redo
+     * Put data pointed by List in the previous state, i.e. the state memorized by List
+     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
      * @param aRedoCommand = a bool: true for redo, false for undo
-     * @param aRebuildRatsnet = a bool: true to rebuild ratsnet (normal use),
-     *                          false
+     * @param aRebuildRatsnet = a bool: true to rebuild ratsnet (normal use), false
      * to just retrieve last state (used in abort commands that do not need to
      * rebuild ratsnest)
      */
@@ -554,8 +556,6 @@ public:
      */
     void Block_Duplicate();
 
-
-    void SetToolbars();
     void Process_Settings( wxCommandEvent& event );
     void OnConfigurePcbOptions( wxCommandEvent& aEvent );
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
@@ -582,7 +582,7 @@ public:
      *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
      *                            valid if true; Default = false.
      *
-     *  @return False if file load fails or is cancelled by the user, otherwise true.
+     *  @return False if file load fails or is canceled by the user, otherwise true.
      */
     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
@@ -606,8 +606,7 @@ public:
     /**
      * Function Clear_Pcb
      * delete all and reinitialize the current board
-     * @param aQuery = true to prompt user for confirmation, false to
-     *                 initialize silently
+     * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
     bool Clear_Pcb( bool aQuery );
 
@@ -1045,13 +1044,14 @@ public:
      * @param aNetlistFullFilename = netlist file name (*.net)
      * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
      * only the netlist will be used
-     * @param aMessageWindow = a reference to a wxTextCtrl where to dislay messages.
+     * @param aMessageWindow = a reference to a wxTextCtrl where to display messages.
      *                  can be NULL
      * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
      * @param aDeleteBadTracks if true, erroneous tracks will be deleted
      * @param aDeleteExtraFootprints if true, remove unlocked footprints that are not in netlist
-     * @param aSelect_By_Timestamp if true, use timestamp instead of reference to identify footprints
-     *    from components (use after reannotation of the chematic)
+     * @param aSelect_By_Timestamp if true, use timestamp instead of reference to identify
+     *                             footprints from components (use after reannotation of the
+     *                             schematic)
      * @return true if Ok
      *
      *  the format of the netlist is something like:

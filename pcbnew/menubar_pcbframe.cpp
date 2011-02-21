@@ -381,9 +381,8 @@ void WinEDA_PcbFrame::ReCreateMenuBar()
     wxMenu* placeMenu = new wxMenu;
 
     // Module
-    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_MODULE, false );
-    item = new wxMenuItem( placeMenu, ID_COMPONENT_BUTT, text,
+    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_MODULE, false );
+    item = new wxMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
                            _( "Add modules" ), wxITEM_NORMAL );
 
     item->SetBitmap( module_xpm );

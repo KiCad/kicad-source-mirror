@@ -283,7 +283,7 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
     if( screen->IsRefreshReq() )
     {
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         wxSafeYield();
     }
 
@@ -310,7 +310,6 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
-    SetToolbars();
 }
 
 
@@ -473,5 +472,4 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     }
 
     UpdateStatusBar();
-    SetToolbars();
 }

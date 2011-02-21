@@ -13,8 +13,7 @@
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
  */
-bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
-                                       wxMenu*        PopMenu )
+bool WinEDA_GerberFrame::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
@@ -27,7 +26,7 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& MousePos,
     // Simple location of elements where possible.
     if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
     {
-        DrawStruct = GerberGeneralLocateAndDisplay();
+        DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
     }
 
     // If command in progress, end command.

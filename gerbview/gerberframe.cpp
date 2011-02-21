@@ -29,7 +29,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_GerberFrame::OnSize )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA_GerberFrame::OnZoom )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, WinEDA_GerberFrame::OnZoom )
 
     EVT_TOOL( wxID_FILE, WinEDA_GerberFrame::Files_io )
     EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
@@ -51,8 +51,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     // menu Preferences
     EVT_MENU( ID_CONFIG_REQ, WinEDA_GerberFrame::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, WinEDA_GerberFrame::Process_Config )
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
-                    ID_PREFERENCES_HOTKEY_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     WinEDA_GerberFrame::Process_Config )
 
     EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
@@ -86,7 +85,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                       WinEDA_GerberFrame::Process_Special_Functions )
 
     // Vertical toolbar:
-    EVT_TOOL( ID_NO_SELECT_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_GERBVIEW_NO_TOOL, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_GERBVIEW_DELETE_ITEM_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
@@ -103,15 +102,30 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
               WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_0, WinEDA_GerberFrame::OnSelectDisplayMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_1, WinEDA_GerberFrame::OnSelectDisplayMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GBR_MODE_2, WinEDA_GerberFrame::OnSelectDisplayMode )
+    EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
+                    WinEDA_GerberFrame::OnSelectDisplayMode )
 
-END_EVENT_TABLE() WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
-                                                          const wxString& title,
-                                                          const wxPoint&  pos,
-                                                          const wxSize&   size,
-                                                          long            style ) :
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
+                   WinEDA_GerberFrame::OnUpdateFlashedItemsDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, WinEDA_GerberFrame::OnUpdateLinesDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
+                   WinEDA_GerberFrame::OnUpdatePolygonsDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, WinEDA_GerberFrame::OnUpdateShowDCodes )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                   WinEDA_GerberFrame::OnUpdateShowLayerManager )
+    EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, WinEDA_GerberFrame::OnUpdateSelectDCode )
+    EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_LAYER, WinEDA_GerberFrame::OnUpdateLayerSelectBox )
+    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
+                         WinEDA_GerberFrame::OnUpdateDrawMode )
+
+END_EVENT_TABLE()
+
+
+WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
+                                        const wxString& title,
+                                        const wxPoint&  pos,
+                                        const wxSize&   size,
+                                        long            style ) :
     WinEDA_BasePcbFrame( father, GERBER_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "GerberFrame" );
@@ -204,8 +218,6 @@ END_EVENT_TABLE() WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     ReFillLayerWidget();    // this is near end because contents establish size
-
-    SetToolbars();
     m_auimgr.Update();
 }
 
@@ -578,8 +590,6 @@ void WinEDA_GerberFrame::OnSelectDisplayMode( wxCommandEvent& event )
         SetDisplayMode( 2 );
         break;
     }
-
-    SetToolbars();
 
     if( GetDisplayMode() != oldMode )
         DrawPanel->Refresh();

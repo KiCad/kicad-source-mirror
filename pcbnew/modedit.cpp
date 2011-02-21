@@ -443,44 +443,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_MODEDIT_ADD_PAD:
-        if( GetBoard()->m_Modules )
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add Pad" ) );
-        else
-        {
-            SetToolID( id, wxCURSOR_ARROW, _( "Pad Settings" ) );
-            InstallPadOptionsFrame( NULL );
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        }
-        break;
-
-    case ID_PCB_ADD_LINE_BUTT:
-    case ID_PCB_ARC_BUTT:
-    case ID_PCB_CIRCLE_BUTT:
-    case ID_PCB_ADD_TEXT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add Drawing" ) );
-        break;
-
-    case ID_MODEDIT_PLACE_ANCHOR:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Place anchor" ) );
-        break;
-
-    case ID_PCB_PLACE_GRID_COORD_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust Grid Origin" ) );
-        break;
-
-    case ID_NO_SELECT_BUTT:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        break;
-
     case ID_POPUP_CLOSE_CURRENT_TOOL:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        break;
-
-    case ID_MODEDIT_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
@@ -708,8 +674,6 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    SetToolbars();
-
     if( redraw )
         DrawPanel->Refresh();
 }
@@ -835,4 +799,58 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 
     module->Set_Rectangle_Encadrement();
     OnModify();
+}
+
+
+void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+
+    SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+
+    switch( id )
+    {
+    case ID_MODEDIT_LINE_TOOL:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
+        break;
+
+    case ID_MODEDIT_ARC_TOOL:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add arc" ) );
+        break;
+
+    case ID_MODEDIT_CIRCLE_TOOL:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add circle" ) );
+        break;
+
+    case ID_MODEDIT_TEXT_TOOL:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
+
+    case ID_MODEDIT_ANCHOR_TOOL:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Place anchor" ) );
+        break;
+
+    case ID_MODEDIT_PLACE_GRID_COORD:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Set grid origin" ) );
+        break;
+
+    case ID_MODEDIT_PAD_TOOL:
+        if( GetBoard()->m_Modules )
+            SetToolID( id, wxCURSOR_PENCIL, _( "Add pad" ) );
+        else
+        {
+            SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );
+            InstallPadOptionsFrame( NULL );
+            SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        }
+        break;
+
+    case ID_MODEDIT_DELETE_TOOL:
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "Unknown command id." ) );
+        SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+    }
 }

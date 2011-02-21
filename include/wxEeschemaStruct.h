@@ -107,6 +107,7 @@ public:
     void             Process_Special_Functions( wxCommandEvent& event );
     void             OnColorConfig( wxCommandEvent& aEvent );
     void             Process_Config( wxCommandEvent& event );
+    void             OnSelectTool( wxCommandEvent& aEvent );
 
     void             GeneralControle( wxDC* aDC, const wxPoint& aPosition );
 
@@ -426,13 +427,9 @@ private:
     /* User interface update event handlers. */
     void            OnUpdateBlockSelected( wxUpdateUIEvent& event );
     void            OnUpdatePaste( wxUpdateUIEvent& event );
-    void            OnUpdateSchematicUndo( wxUpdateUIEvent& event );
-    void            OnUpdateSchematicRedo( wxUpdateUIEvent& event );
-    void            OnUpdateGrid( wxUpdateUIEvent& event );
-    void            OnUpdateUnits( wxUpdateUIEvent& event );
-    void            OnUpdateSelectCursor( wxUpdateUIEvent& event );
     void            OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void            OnUpdateBusOrientation( wxUpdateUIEvent& event );
+    void            OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
 
     /**
      * Function SetLanguage

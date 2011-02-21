@@ -36,7 +36,6 @@ public:
     void         OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void         OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    void         SetToolbars();
     void         ReCreateMenuBar();
     void         ToolOnRightClick( wxCommandEvent& event );
     void         OnSelectOptionToolbar( wxCommandEvent& event );
@@ -48,6 +47,15 @@ public:
     bool         OnHotkeyRotateItem( int aIdCommand );
     void         Show3D_Frame( wxCommandEvent& event );
     void         GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void         OnVerticalToolbar( wxCommandEvent& aEvent );
+
+    void         OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
+    void         OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
+    void         OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
+    void         OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent );
+    void         OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
+    void         OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
+    void         OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
 
     /**
      * Function LoadModuleFromBoard
@@ -78,9 +86,8 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC,
-                    int aPrintMaskLayer, bool aPrintMirrorMode,
-                    void * aData = NULL);
+    virtual void PrintPage( wxDC* aDC, int aPrintMaskLayer, bool aPrintMirrorMode,
+                            void * aData = NULL);
 
     // BOARD handling
 

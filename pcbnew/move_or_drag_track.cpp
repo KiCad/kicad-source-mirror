@@ -71,7 +71,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     if( NewTrack )
     {
-        if( NewTrack->m_Flags & IS_NEW )
+        if( NewTrack->IsNew() )
         {
             for( ii = 0; ii < NbPtNewTrack; ii++, NewTrack = NextS )
             {

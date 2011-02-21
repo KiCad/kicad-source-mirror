@@ -16,7 +16,7 @@
 
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
-#define CLIP_BOX_PADDING 1
+#define CLIP_BOX_PADDING 2
 
 /* Definitions for enabling and disabling debugging features in drawpanel.cpp.
  * Please don't forget to turn these off before making any commits to Launchpad.
@@ -749,6 +749,8 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
         cmd.SetEventObject( this );
         GetEventHandler()->ProcessEvent( cmd );
     }
+
+    event.Skip();
 }
 
 
@@ -882,7 +884,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     wxPoint pos = CalcUnscrolledPosition( event.GetPosition() );
 
     /* Compute the cursor position in drawing (logical) units. */
-    screen->m_MousePosition = event.GetLogicalPosition( DC );
+    screen->SetMousePosition( event.GetLogicalPosition( DC ) );
 
     int kbstat = 0;
 
@@ -902,7 +904,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        GetParent()->OnLeftDClick( &DC, screen->m_MousePosition );
+        GetParent()->OnLeftDClick( &DC, screen->RefPos( true ) );
 
         // inhibit a response to the mouse left button release,
         // because we have a double click, and we do not want a new
@@ -914,7 +916,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
         if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
-            GetParent()->OnLeftClick( &DC, screen->m_MousePosition );
+            GetParent()->OnLeftClick( &DC, screen->RefPos( true ) );
 
         ignoreNextLeftButtonRelease = false;
     }
@@ -1140,7 +1142,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     // Compute the cursor position in drawing units.  Also known as logical units to wxDC.
     pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
-    Screen->m_MousePosition = pos;
+    Screen->SetMousePosition( pos );
 
     GetParent()->GeneralControle( &DC, pos );
 
