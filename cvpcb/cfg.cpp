@@ -8,7 +8,6 @@
 #include "gestfich.h"
 #include "param_config.h"
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 
 

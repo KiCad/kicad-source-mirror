@@ -19,14 +19,6 @@
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
 
-/* Net list types. */
-#define TYPE_NON_SPECIFIE  0
-#define TYPE_ORCADPCB2     1
-#define TYPE_PCAD          2
-#define TYPE_VIEWLOGIC_WIR 3
-#define TYPE_VIEWLOGIC_NET 4
-
-
 class PIN
 {
 public:
@@ -75,23 +67,6 @@ typedef boost::ptr_vector< COMPONENT > COMPONENT_LIST;
 /* COMPONENT object list sort function. */
 extern bool operator<( const COMPONENT& item1, const COMPONENT& item2 );
 
-
-class FOOTPRINT
-{
-public:
-    wxString  m_Module;     /* Module name. */
-    wxString  m_LibName;    /* Name of the library containing this module. */
-    int       m_Num;        /* Order number in the display list. */
-    wxString  m_Doc;        /* Footprint description. */
-    wxString  m_KeyWord;    /* Footprint key words. */
-
-    FOOTPRINT();
-};
-
-typedef boost::ptr_vector< FOOTPRINT > FOOTPRINT_LIST;
-
-/* FOOTPRINT object list sort function. */
-extern bool operator<( const FOOTPRINT& item1, const FOOTPRINT& item2 );
 
 extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;

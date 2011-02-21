@@ -8,7 +8,6 @@
 
 #include "bitmaps.h"
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 #include "class_DisplayFootprintsFrame.h"
@@ -21,6 +20,7 @@
 #include "3d_viewer.h"
 
 
+extern FOOTPRINT_INFO* GetModuleDescrByName( const wxString& FootprintName, FOOTPRINT_LIST& list );
 
 /*
  * Create or Update the frame showing the current highlighted footprint
@@ -48,7 +48,7 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
     {
         msg = _( "Footprint: " ) + FootprintName;
         DrawFrame->SetTitle( msg );
-        FOOTPRINT* Module = GetModuleDescrByName( FootprintName, m_footprints );
+        FOOTPRINT_INFO* Module = GetModuleDescrByName( FootprintName, m_footprints );
         msg = _( "Lib: " );
 
         if( Module )

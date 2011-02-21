@@ -10,7 +10,6 @@
 #include "appl_wxstruct.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
@@ -85,7 +84,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
         return false;
     }
 
-    LoadComponentFile( m_NetlistFileName.GetFullPath(), m_components );
+    LoadComponentFile( m_NetlistFileName.GetFullPath() );
 
     if( m_ListCmp == NULL )
         return false;
@@ -155,8 +154,7 @@ int CVPCB_MAINFRAME::SaveNetList( const wxString& fileName )
         return 0;
     }
 
-    GenNetlistPcbnew( netlist, m_components, m_isEESchemaNetlist,
-                      m_rightJustify );
+    GenNetlistPcbnew( netlist, m_isEESchemaNetlist );
 
     return 1;
 }

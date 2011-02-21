@@ -12,7 +12,6 @@
 #include "appl_wxstruct.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "richio.h"

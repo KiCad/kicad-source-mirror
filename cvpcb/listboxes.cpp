@@ -7,7 +7,6 @@
 #include "common.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 #include "cvpcb_id.h"

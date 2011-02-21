@@ -9,6 +9,7 @@
 #include <wx/filename.h>
 #include "param_config.h"
 #include "cvpcb.h"
+#include "footprint_info.h"
 
 /*  Forward declarations of all top-level window classes. */
 class FOOTPRINTS_LISTBOX;
@@ -41,7 +42,6 @@ public:
 protected:
     int             m_undefinedComponentCnt;
     bool            m_modified;
-    bool            m_rightJustify;
     bool            m_isEESchemaNetlist;
     PARAM_CFG_ARRAY m_projectFileParams;
 
@@ -90,7 +90,9 @@ public:
     void             SaveProjectFile( const wxString& fileName );
     virtual void     LoadSettings();
     virtual void     SaveSettings();
-    /** DisplayStatus()
+
+    /**
+     * Function DisplayStatus()
      * Displays info to the status line at bottom of the main frame
      */
     void             DisplayStatus();
@@ -107,6 +109,20 @@ public:
      * @return true if libraries are found, false otherwise.
      */
     bool LoadFootprintFiles( );
+
+    /**
+     * function GenNetlistPcbnew
+     * writes the output netlist file
+     *
+     */
+    int GenNetlistPcbnew( FILE* f, bool isEESchemaNetlist = true );
+
+    /**
+     * Function LoadComponentFile
+     * Loads the .cmp file that stores the component/footprint association.
+     * @param aCmpFileName = the full filename of .cmp file to load
+     */
+    bool LoadComponentFile( const wxString& aCmpFileName );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 

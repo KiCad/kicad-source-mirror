@@ -12,7 +12,6 @@
 #include "appl_wxstruct.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 
 #include "build_version.h"
@@ -21,7 +20,7 @@
 /* File header. */
 char EnteteCmpMod[] = { "Cmp-Mod V01" };
 
-const wxString titleComponentLibErr( _( "Component Library Error" ) );
+#define titleComponentLibErr _( "Component Library Error" )
 
 
 /*
@@ -70,7 +69,7 @@ int CVPCB_MAINFRAME::SaveComponentList( const wxString& NetlistFullFileName )
 /*
  * Load list of associated components and footprints.
  */
-bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
+bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
 {
     wxString    timestamp, valeur, ilib, namecmp, msg;
     bool        read_cmp_data = FALSE, eof = FALSE;
@@ -173,7 +172,7 @@ bool LoadComponentFile( const wxString& fileName, COMPONENT_LIST& list )
 
         /* Search corresponding component and NetList
          * Update its parameters. */
-        BOOST_FOREACH( COMPONENT& component, list )
+        BOOST_FOREACH( COMPONENT& component, m_components )
         {
             if( namecmp != component.m_Reference )
                 continue;

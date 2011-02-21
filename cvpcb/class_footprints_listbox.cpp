@@ -1,16 +1,27 @@
-/*************************************************************************/
-/* listboxes.cpp: class for displaying footprint list and component list */
-/*************************************************************************/
+/**
+ * @file class_footprints_listbox.cpp
+ * class to display the list fo available footprints
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "common.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 
+
+FOOTPRINT_INFO* GetModuleDescrByName( const wxString& FootprintName, FOOTPRINT_LIST& list )
+{
+    BOOST_FOREACH( FOOTPRINT_INFO & footprint, list )
+    {
+        if( footprint.m_Module == FootprintName )
+            return &footprint;
+    }
+
+    return NULL;
+}
 
 /***************************************/
 /* ListBox handling the footprint list */
@@ -116,7 +127,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
 
     m_FullFootprintList.Clear();
 
-    BOOST_FOREACH( FOOTPRINT & footprint, list ) {
+    BOOST_FOREACH( FOOTPRINT_INFO & footprint, list ) {
         msg.Printf( wxT( "%3d %s" ), m_FullFootprintList.GetCount() + 1,
                    footprint.m_Module.GetData() );
         m_FullFootprintList.Add( msg );
@@ -142,7 +153,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      Component,
 
     m_FilteredFootprintList.Clear();
 
-    BOOST_FOREACH( FOOTPRINT & footprint, list ) {
+    BOOST_FOREACH( FOOTPRINT_INFO & footprint, list ) {
         /* Search for matching footprints */
         for( jj = 0; jj < Component->m_FootprintFilter.GetCount(); jj++ )
         {
@@ -236,7 +247,7 @@ END_EVENT_TABLE()
 void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 /********************************************************/
 {
-    FOOTPRINT* Module;
+    FOOTPRINT_INFO* Module;
     wxString   FootprintName = GetSelectedFootprint();
 
     Module = GetModuleDescrByName( FootprintName, GetParent()->m_footprints );
@@ -266,18 +277,6 @@ void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
     wxString FootprintName = GetSelectedFootprint();
 
     GetParent()->SetNewPkg( FootprintName );
-}
-
-
-FOOTPRINT* GetModuleDescrByName( const wxString& FootprintName,
-                                 FOOTPRINT_LIST& list )
-{
-    BOOST_FOREACH( FOOTPRINT & footprint, list ) {
-        if( footprint.m_Module == FootprintName )
-            return &footprint;
-    }
-
-    return NULL;
 }
 
 

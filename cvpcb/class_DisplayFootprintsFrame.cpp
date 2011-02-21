@@ -11,7 +11,6 @@
 
 #include "cvpcb.h"
 #include "bitmaps.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "cvpcb_id.h"

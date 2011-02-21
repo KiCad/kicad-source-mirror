@@ -11,7 +11,6 @@
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;
 
-
 /*********************************************************************/
 /* ListBox (base class) to display lists of components or footprints */
 /*********************************************************************/

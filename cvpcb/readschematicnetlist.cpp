@@ -13,9 +13,7 @@
 #include "macros.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
-
 #include "richio.h"
 
 

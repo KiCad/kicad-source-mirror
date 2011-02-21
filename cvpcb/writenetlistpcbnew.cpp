@@ -11,7 +11,7 @@
 #include "appl_wxstruct.h"
 
 #include "cvpcb.h"
-#include "protos.h"
+#include "cvpcb_mainframe.h"
 
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 
@@ -64,8 +64,7 @@ static void RemoveDuplicatePins( COMPONENT& component )
  *        a value less than zero.  Check all printf() return values and
  *        return a true(pass) or false(fail) to the caller.
  */
-int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
-                      bool rightJustify )
+int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
     char       Line[1024];
@@ -78,7 +77,7 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
         fprintf( file, "( { netlist created  %s }\n", Line );
 
 
-    BOOST_FOREACH( COMPONENT& component, list )
+    BOOST_FOREACH( COMPONENT& component, m_components )
     {
         fprintf( file, " ( %s ", CONV_TO_UTF8( component.m_TimeStamp ) );
 
@@ -111,7 +110,7 @@ int GenNetlistPcbnew( FILE* file, COMPONENT_LIST& list, bool isEESchemaNetlist,
     fprintf( file, ")\n*\n" );
 
     if( isEESchemaNetlist )
-        WriteFootprintFilterInfos( file, list );
+        WriteFootprintFilterInfos( file, m_components );
 
     fclose( file );
     return 0;

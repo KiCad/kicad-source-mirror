@@ -9,7 +9,6 @@
 
 #include "bitmaps.h"
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvpcb_id.h"
 

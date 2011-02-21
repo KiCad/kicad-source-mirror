@@ -12,7 +12,6 @@
 #include "bitmaps.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
@@ -110,7 +109,6 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     DrawFrame      = NULL;
     m_HToolBar     = NULL;
     m_modified     = false;
-    m_rightJustify = false;
     m_isEESchemaNetlist     = false;
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;

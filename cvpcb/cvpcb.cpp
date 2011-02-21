@@ -12,7 +12,6 @@
 #include "cvpcb.h"
 #include "zones.h"
 #include "bitmaps.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "colors_selection.h"
 #include "cvpcb_id.h"

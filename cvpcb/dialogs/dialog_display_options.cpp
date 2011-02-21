@@ -9,6 +9,7 @@
 #include "cvpcb.h"
 //#include "protos.h"
 #include "class_drawpanel.h"
+#include "footprint_info.h"
 #include "cvstruct.h"
 #include "class_DisplayFootprintsFrame.h"
 

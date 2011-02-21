@@ -18,11 +18,12 @@
 #include "cvpcb_mainframe.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "footprint_info.h"
 
 #include "dialog_load_error.h"
 
 /*
- * Read the list of libraries (*.mod files) and generate a m_footprints of modules.
+ * Read the list of libraries (*.mod files) and populates m_footprints ( list of availaible modules in libs ).
  * for each module are stored
  *      the module name
  *      documentation string
@@ -111,7 +112,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles( )
             {
 
                 line += 7;
-                FOOTPRINT*  ItemLib = new FOOTPRINT();
+                FOOTPRINT_INFO*  ItemLib = new FOOTPRINT_INFO();
                 ItemLib->m_Module = CONV_FROM_UTF8( StrPurge( line ) );
                 ItemLib->m_LibName = libname;
                 m_footprints.push_back( ItemLib );

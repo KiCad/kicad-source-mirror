@@ -6,6 +6,7 @@
 #include "kicad_string.h"
 
 #include "cvpcb.h"
+#include "footprint_info.h"
 
 
 PIN::PIN()
@@ -56,14 +57,3 @@ bool operator<( const COMPONENT& item1, const COMPONENT& item2 )
                          item2.m_Reference.GetData() ) < 0 );
 }
 
-
-FOOTPRINT::FOOTPRINT()
-{
-    m_Num = 0;
-}
-
-bool operator<( const FOOTPRINT& item1, const FOOTPRINT& item2 )
-{
-    return ( StrNumICmp( item1.m_Module.GetData(),
-                         item2.m_Module.GetData() ) < 0 );
-}

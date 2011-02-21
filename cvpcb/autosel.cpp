@@ -12,10 +12,8 @@
 #include "kicad_string.h"
 
 #include "cvpcb.h"
-#include "protos.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
-
 
 #define QUOTE '\''
 
@@ -151,7 +149,7 @@ found in the default search paths." ),
             if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
                 continue;
 
-            BOOST_FOREACH( FOOTPRINT& footprint, m_footprints )
+            BOOST_FOREACH( FOOTPRINT_INFO& footprint, m_footprints )
             {
                 if( alias.m_FootprintName.CmpNoCase( footprint.m_Module ) == 0 )
                 {
