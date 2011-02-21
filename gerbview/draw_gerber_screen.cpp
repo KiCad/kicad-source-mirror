@@ -261,8 +261,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
         delete layerBitmap;
         delete screenBitmap;
     }
-
-    m_PcbFrame->GetScreen()->ClrRefreshReq();
 }
 
 /* Function DrawItemsDCodeID

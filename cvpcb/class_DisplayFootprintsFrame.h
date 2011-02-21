@@ -8,12 +8,9 @@
 class DISPLAY_FOOTPRINTS_FRAME : public WinEDA_BasePcbFrame
 {
 public:
-
-public:
-    DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
-                         const wxString& title,
-                         const wxPoint& pos, const wxSize& size,
-                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father, const wxString& title,
+                              const wxPoint& pos, const wxSize& size,
+                              long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~DISPLAY_FOOTPRINTS_FRAME();
 
@@ -26,30 +23,32 @@ public:
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
 
+    void OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent );
+
     /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool     IsGridVisible();
+    virtual bool IsGridVisible();
 
     /**
      * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visiblity in configuration.
+     * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void     SetGridVisibility(bool aVisible);
+    virtual void SetGridVisibility( bool aVisible );
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int     GetGridColor();
+    virtual int GetGridColor();
 
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    void    SetToolbars();
-    void    GeneralControle( wxDC* DC, wxPoint Mouse );
+    void    GeneralControle( wxDC* DC, const wxPoint& aPosition );
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 
@@ -86,4 +85,3 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
-

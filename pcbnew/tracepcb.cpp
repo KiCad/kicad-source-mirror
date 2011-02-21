@@ -62,8 +62,6 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 #endif
 
-    screen->ClrRefreshReq();
-
     if( DrawPanel->IsMouseCaptured() )
         DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
 
@@ -99,8 +97,6 @@ void WinEDA_PcbFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         overlaydc.Clear();
     }
 #endif
-
-    GetScreen()->ClrRefreshReq();
 
     if( DrawPanel->IsMouseCaptured() )
         DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );

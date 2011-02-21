@@ -17,21 +17,6 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
     pos = GetScreen()->GetNearestGridPosition( pos );
 
-    if( GetScreen()->IsRefreshReq() )
-    {
-        DrawPanel->Refresh( );
-        wxSafeYield();
-
-        // We must return here, instead of proceeding.
-        // If we let the cursor move during a refresh request,
-        // the cursor be displayed in the wrong place
-        // during delayed repaint events that occur when
-        // you move the mouse when a message dialog is on
-        // the screen, and then you dismiss the dialog by
-        // typing the Enter key.
-        return;
-    }
-
     oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
@@ -85,12 +70,6 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     if( hotkey )
     {
         OnHotKey( aDC, hotkey, NULL );
-    }
-
-    if( GetScreen()->IsRefreshReq() )
-    {
-        DrawPanel->Refresh( );
-        wxSafeYield();
     }
 
     UpdateStatusBar();

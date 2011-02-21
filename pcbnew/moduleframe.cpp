@@ -39,8 +39,6 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
     EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_ModuleEditFrame::OnSelectZoom )
     EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_ModuleEditFrame::OnSelectGrid )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, WinEDA_ModuleEditFrame::OnZoom )
-
     EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_DELETE_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
@@ -339,20 +337,6 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPositio
     int         hotkey = 0;
     wxPoint     pos = aPosition;
 
-    if( GetScreen()->IsRefreshReq() )
-    {
-        DrawPanel->Refresh();
-
-        // We must return here, instead of proceeding.
-        // If we let the cursor move during a refresh request,
-        // the cursor be displayed in the wrong place
-        // during delayed repaint events that occur when
-        // you move the mouse when a message dialog is on
-        // the screen, and then you dismiss the dialog by
-        // typing the Enter key.
-        return;
-    }
-
     pos = GetScreen()->GetNearestGridPosition( aPosition );
     oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
@@ -407,12 +391,6 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPositio
     if( hotkey )
     {
         OnHotKey( aDC, hotkey, aPosition );
-    }
-
-    if( GetScreen()->IsRefreshReq() )
-    {
-        DrawPanel->Refresh();
-        wxSafeYield();
     }
 
     UpdateStatusBar();

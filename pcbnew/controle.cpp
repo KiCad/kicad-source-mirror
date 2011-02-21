@@ -370,11 +370,5 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         OnHotKey( aDC, hotkey, aPosition );
     }
 
-    if( GetScreen()->IsRefreshReq() )
-    {
-        DrawPanel->Refresh( );
-        wxSafeYield();
-    }
-
     UpdateStatusBar();    /* Display new cursor coordinates */
 }

@@ -251,7 +251,7 @@ void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
 bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
     SCH_ITEM* DrawList, * TstDrawList;
-    bool      Modify = FALSE;
+    bool      Modify = false;
 
     DrawList = GetDrawItems();
 
@@ -273,9 +273,9 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
                          * segment can be flagged */
                         DrawList->m_Flags |= TstDrawList->m_Flags;
                         EraseStruct( TstDrawList, this );
-                        SetRefreshReq();
+                        aCanvas->Refresh();
                         TstDrawList = GetDrawItems();
-                        Modify = TRUE;
+                        Modify = true;
                     }
                     else
                     {
@@ -308,18 +308,18 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
                  SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0
         || fprintf( aFile, "  date %s\n", CONV_TO_UTF8( DateAndTime() ) ) < 0 )
-        return FALSE;
+        return false;
 
     BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
         if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( lib.GetName() ) ) < 0 )
-            return FALSE;
+            return false;
     }
 
     if( fprintf( aFile, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers,
                  g_LayerDescr.CurrentLayer ) < 0
         || fprintf( aFile, "EELAYER END\n" ) < 0 )
-        return FALSE;
+        return false;
 
     /* Write page info, ScreenNumber and NumberOfScreen; not very meaningful for
      * SheetNumber and Sheet Count in a complex hierarchy, but useful in
@@ -339,18 +339,18 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
         || fprintf( aFile, "Comment3 \"%s\"\n", CONV_TO_UTF8( m_Commentaire3 ) ) < 0
         || fprintf( aFile, "Comment4 \"%s\"\n", CONV_TO_UTF8( m_Commentaire4 ) ) < 0
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
-        return FALSE;
+        return false;
 
     for( SCH_ITEM* item = GetDrawItems(); item; item = item->Next() )
     {
         if( !item->Save( aFile ) )
-            return FALSE;
+            return false;
     }
 
     if( fprintf( aFile, "$EndSCHEMATC\n" ) < 0 )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 

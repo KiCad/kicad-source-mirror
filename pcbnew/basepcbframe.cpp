@@ -216,7 +216,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
     GetScreen()->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
 }
 
 

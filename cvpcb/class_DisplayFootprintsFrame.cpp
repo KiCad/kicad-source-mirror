@@ -27,17 +27,17 @@
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, WinEDA_BasePcbFrame )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, DISPLAY_FOOTPRINTS_FRAME::OnZoom )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRID, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SELECT_UNIT_INCH, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SELECT_UNIT_MM, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SELECT_CURSOR, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+              DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+              DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar)
+
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+                   DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
+                   DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
 END_EVENT_TABLE()
 
 
@@ -46,14 +46,13 @@ END_EVENT_TABLE()
 /***************************************************************************/
 
 DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
-                                          const wxString& title,
-                                          const wxPoint& pos,
-                                          const wxSize& size, long style ) :
-    WinEDA_BasePcbFrame( father, CVPCB_DISPLAY_FRAME, title, pos,
-                         size, style )
+                                                    const wxString& title,
+                                                    const wxPoint& pos,
+                                                    const wxSize& size, long style ) :
+    WinEDA_BasePcbFrame( father, CVPCB_DISPLAY_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "CmpFrame" );
-    m_Draw_Axis = true;         // TRUE to draw axis.
+    m_Draw_Axis = true;         // true to draw axis.
 
     // Give an icon
 #ifdef __WINDOWS__
@@ -67,6 +66,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     SetScreen( new PCB_SCREEN() );
 
     LoadSettings();
+
     // Initialize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
@@ -77,7 +77,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
     DisplayOpt.ShowTrackClearanceMode = 0;  /* tracks and vias clearance has
                                              * no meaning here. */
-
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
@@ -100,12 +99,11 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     horiz.LeftDockable( false ).RightDockable( false );
 
     m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().
-                     Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
 
     if( m_VToolBar )    // Currently, no vertical right toolbar.
         m_auimgr.AddPane( m_VToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
@@ -118,7 +116,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 
     m_auimgr.Update();
 
-    Show( TRUE );
+    Show( true );
 }
 
 
@@ -160,17 +158,14 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
         return;
 
     // Create options tool bar.
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this,
-                                           ID_OPT_TOOLBAR, FALSE );
+    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
-                                wxBitmap( grid_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
-    m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,IsGridVisible() );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                wxBitmap( polar_coord_xpm ),
-                               _( "Display Polar Coord ON" ), wxITEM_CHECK );
+                               _( "Display polar coordinates" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                wxBitmap( unit_inch_xpm ),
@@ -182,26 +177,22 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                wxBitmap( cursor_shape_xpm ),
-                               _( "Change Cursor Shape" ), wxITEM_CHECK  );
+                               _( "Change cursor shape" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                wxBitmap( pad_sketch_xpm ),
-                               _( "Show Pads Sketch" ), wxITEM_CHECK  );
+                               _( "Show pads in outline mode" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                               wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
                                wxBitmap( text_sketch_xpm ),
-                               _( "Show Texts Sketch" ), wxITEM_CHECK  );
+                               _( "Show texts in line mode" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                               wxEmptyString,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
                                wxBitmap( show_mod_edge_xpm ),
-                               _( "Show Edges Sketch" ), wxITEM_CHECK  );
+                               _( "Show outlines in line mode" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->Realize();
-
-    SetToolbars();
 }
 
 
@@ -210,33 +201,27 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     if( m_HToolBar != NULL )
         return;
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
-    m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString,
-                         wxBitmap( display_options_xpm ),
-                         _( "Display Options" ) );
+    m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, wxBitmap( display_options_xpm ),
+                         _( "Display options" ) );
 
     m_HToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                         wxBitmap( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
                          _( "Zoom in (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                         wxBitmap( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
                          _( "Zoom out (F2)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                         wxBitmap( zoom_redraw_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ),
                          _( "Redraw view (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                         wxBitmap( zoom_auto_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
                          _( "Zoom auto (Home)" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString,
-                         wxBitmap( show_3d_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, wxBitmap( show_3d_xpm ),
                          _( "3D Display" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
@@ -245,70 +230,36 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::SetToolbars()
+void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
 {
-    if( m_OptionsToolBar )
-    {
-        m_OptionsToolBar->ToggleTool(
-            ID_TB_OPTIONS_SELECT_UNIT_MM,
-            g_UserUnit == MILLIMETRES );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                                      g_UserUnit == INCHES );
+    wxString msgTextsFill[3] = { _( "Show texts in line mode" ),
+                                 _( "Show texts in filled mode" ),
+                                 _( "Show texts in sketch mode" ) };
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                      DisplayOpt.DisplayPolarCood );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                            DisplayOpt.DisplayPolarCood ?
-                                            _( "Display rectangular coordinates" ) :
-                                            _( "Display polar coordinates" ) );
+    unsigned i = m_DisplayModText + 1;
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID,
-                                      IsGridVisible( ) );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID,
-                                            IsGridVisible( ) ?
-                                            _( "Hide grid" ) :
-                                            _( "Show grid" ) );
+    if ( i > 2 )
+        i = 0;
+
+    aEvent.Check( m_DisplayModText == 0 );
+    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
+
+}
 
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR,
-                                      m_CursorShape );
+void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
+{
+    wxString msgEdgesFill[3] = { _( "Show outlines in line mode" ),
+                                 _( "Show outlines in filled mode" ),
+                                 _( "Show outlines in sketch mode" ) };
 
+    int i = m_DisplayModEdge + 1;
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                      !m_DisplayPadFill );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                            m_DisplayPadFill ?
-                                            _( "Show pads in sketch mode" ) :
-                                            _( "Show pads in filled mode" ) );
+    if ( i > 2 )
+        i = 0;
 
-        wxString msgTextsFill[3] =
-        {_( "Show texts in line mode" ),
-         _( "Show texts in filled mode" ),
-         _( "Show texts in sketch mode" )
-        };
-        unsigned idx = m_DisplayModText+1;
-        if ( idx > 2 )
-            idx = 0;
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                                      m_DisplayModText == 0 );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                                            msgTextsFill[idx] );
-
-        wxString msgEdgesFill[3] =
-        {_( "Show outlines in line mode" ),
-         _( "Show outlines in filled mode" ),
-         _( "Show outlines in sketch mode" )
-        };
-        idx = m_DisplayModEdge+1;
-        if ( idx > 2 )
-            idx = 0;
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                                      m_DisplayModEdge == 0 );
-        m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                                            msgEdgesFill[idx] );
-
-        m_OptionsToolBar->Refresh();
-    }
+    aEvent.Check( m_DisplayModEdge == 0 );
+    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
 }
 
 
@@ -322,11 +273,11 @@ void DISPLAY_FOOTPRINTS_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos,
-                                        wxMenu* PopMenu )
+bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     return true;
 }
+
 
 void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
@@ -334,49 +285,22 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_SHOW_GRID:
-        SetGridVisibility( m_OptionsToolBar->GetToolState( id ) );
-        DrawPanel->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_MM:
-        g_UserUnit = MILLIMETRES;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
-        g_UserUnit = INCHES;
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
-        SetStatusText( wxEmptyString );
-        DisplayOpt.DisplayPolarCood = m_OptionsToolBar->GetToolState( id );
-        UpdateStatusBar();
-        break;
-
-    case ID_TB_OPTIONS_SELECT_CURSOR:
-        m_CursorShape = m_OptionsToolBar->GetToolState( id );
-        DrawPanel->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        m_DisplayPadFill = !m_OptionsToolBar->GetToolState( id );
-        DrawPanel->Refresh( );
-        break;
-
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
         m_DisplayModText++;
+
         if( m_DisplayModText > 2 )
             m_DisplayModText = 0;
+
         DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
         m_DisplayModEdge++;
+
         if( m_DisplayModEdge > 2 )
             m_DisplayModEdge = 0;
-        DrawPanel->Refresh( );
+
+        DrawPanel->Refresh();
         break;
 
     default:
@@ -384,62 +308,52 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                       wxT( "DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar error" ) );
         break;
     }
-
-    SetToolbars();
 }
 
-void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
+
+void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 {
     wxRealPoint gridSize;
-    int         flagcurseur = 0;
     wxPoint     oldpos;
+    PCB_SCREEN* screen = GetScreen();
     wxPoint     pos = aPosition;
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    GetScreen()->SetCrossHairPosition( pos );
-    oldpos = GetScreen()->GetCrossHairPosition();
-    gridSize = GetScreen()->GetGridSize();
+    pos = screen->GetNearestGridPosition( pos );
+    oldpos = screen->GetCrossHairPosition();
+    gridSize = screen->GetGridSize();
 
     switch( g_KeyPressed )
     {
     case WXK_F1:
         cmd.SetId( ID_POPUP_ZOOM_IN );
         GetEventHandler()->ProcessEvent( cmd );
-        flagcurseur = 2;
-        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_F2:
         cmd.SetId( ID_POPUP_ZOOM_OUT );
         GetEventHandler()->ProcessEvent( cmd );
-        flagcurseur = 2;
-        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_F3:
         cmd.SetId( ID_ZOOM_REDRAW );
         GetEventHandler()->ProcessEvent( cmd );
-        flagcurseur = 2;
         break;
 
     case WXK_F4:
         cmd.SetId( ID_POPUP_ZOOM_CENTER );
         GetEventHandler()->ProcessEvent( cmd );
-        flagcurseur = 2;
-        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case WXK_HOME:
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
-        flagcurseur = 2;
-        pos = GetScreen()->GetCrossHairPosition();
         break;
 
     case ' ':
-        GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
+        screen->m_O_Curseur = screen->GetCrossHairPosition();
         break;
 
     case WXK_NUMPAD8:       /* cursor moved up */
@@ -467,24 +381,15 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, wxPoint aPosition )
         break;
     }
 
-    GetScreen()->SetCrossHairPosition( pos );
+    screen->SetCrossHairPosition( pos );
 
-    if( GetScreen()->IsRefreshReq() )
+    if( oldpos != screen->GetCrossHairPosition() )
     {
-        flagcurseur = 2;
-        Refresh();
-    }
-
-    if( oldpos != GetScreen()->GetCrossHairPosition() )
-    {
-        if( flagcurseur != 2 )
-        {
-            pos = GetScreen()->GetCrossHairPosition();
-            GetScreen()->SetCrossHairPosition( oldpos );
-            DrawPanel->CrossHairOff( aDC );
-            GetScreen()->SetCrossHairPosition( pos );
-            DrawPanel->CrossHairOn( aDC );
-        }
+        pos = screen->GetCrossHairPosition();
+        screen->SetCrossHairPosition( oldpos );
+        DrawPanel->CrossHairOff( aDC );
+        screen->SetCrossHairPosition( pos );
+        DrawPanel->CrossHairOn( aDC );
 
         if( DrawPanel->IsMouseCaptured() )
         {
@@ -510,17 +415,19 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
     m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ),
                                             KICAD_DEFAULT_3D_DRAWFRAME_STYLE |
                                             wxFRAME_FLOAT_ON_PARENT );
-    m_Draw3DFrame->Show( TRUE );
+    m_Draw3DFrame->Show( true );
 }
+
 
 /* Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
 * this is a virtual pure function in BASE_SCREEN
 * do nothing in cvpcb
 * could be removed later
 */
-void PCB_SCREEN::ClearUndoORRedoList(UNDO_REDO_CONTAINER&, int )
+void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 {
 }
+
 
 /**
  * Function IsGridVisible() , virtual
@@ -531,16 +438,18 @@ bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible()
     return m_DrawGrid;
 }
 
+
 /**
  * Function SetGridVisibility() , virtual
  * It may be overloaded by derived classes
- * if you want to store/retrieve the grid visiblity in configuration.
+ * if you want to store/retrieve the grid visibility in configuration.
  * @param aVisible = true if the grid must be shown
  */
 void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
 {
     m_DrawGrid = aVisible;
 }
+
 
 /**
  * Function GetGridColor() , virtual
@@ -550,4 +459,3 @@ int DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 {
     return DARKGRAY;
 }
-

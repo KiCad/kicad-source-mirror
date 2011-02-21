@@ -194,7 +194,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         pcbframe->DrawGeneralRatsnest( DC );
 
 #ifdef __WXMAC__
-    pcbframe->GetScreen()->SetRefreshReq();
+    Panel->Refresh();
 #endif
 }
 

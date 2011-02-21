@@ -79,7 +79,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
     if( modify )
     {
         OnModify();
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
     }
 }
 

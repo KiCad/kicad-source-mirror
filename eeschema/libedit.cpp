@@ -214,8 +214,6 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         Field->m_Text = fieldText;
     }
 
-    GetScreen()->ClrRefreshReq();
-
     if( DrawPanel->IsMouseCaptured() )
         DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 

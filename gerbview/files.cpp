@@ -176,7 +176,6 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     Zoom_Automatique( true );
-    GetScreen()->SetRefreshReq();
     g_SaveTime = time( NULL );
 
     // Synchronize layers tools with actual active layer:
@@ -220,5 +219,5 @@ static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileNa
 
     frame->Read_D_Code_File( fn.GetFullPath() );
     frame->CopyDCodesSizeToItems();
-    frame->GetScreen()->SetRefreshReq();
+    frame->Refresh();
 }

@@ -62,10 +62,10 @@ void BASE_SCREEN::InitDatas()
 
     SetCurItem( NULL );
 
-    m_FlagRefreshReq = 0;   /* Redraw screen request flag */
     m_FlagModified   = 0;   // Set when any change is made on broad
     m_FlagSave = 1;         // Used in auto save: set when an auto save is made
 }
+
 
 /**
  * Get screen units scalar.

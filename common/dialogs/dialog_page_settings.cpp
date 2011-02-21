@@ -261,7 +261,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings(wxCommandEvent& event)
 #endif
 
     m_Screen->SetModify();
-    m_Screen->SetRefreshReq();
+    m_Parent->DrawPanel->Refresh();
 }
 
 

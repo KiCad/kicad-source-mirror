@@ -248,14 +248,11 @@ public:
     }
 
 
-    void    SetRefreshReq() { m_FlagRefreshReq = 1; }
-    void    ClrRefreshReq() { m_FlagRefreshReq = 0; }
     void    SetModify() { m_FlagModified = 1; m_FlagSave = 0; }
     void    ClrModify() { m_FlagModified = 0; m_FlagSave = 1; }
     void    SetSave() { m_FlagSave = 1; }
     void    ClrSave() { m_FlagSave = 0; }
     int     IsModify() { return m_FlagModified & 1;  }
-    int     IsRefreshReq() { return m_FlagRefreshReq & 1;  }
     int     IsSave() { return m_FlagSave & 1;  }
 
 

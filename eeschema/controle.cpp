@@ -281,12 +281,6 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     // Update cursor position.
     screen->SetCrossHairPosition( pos );
 
-    if( screen->IsRefreshReq() )
-    {
-        DrawPanel->Refresh();
-        wxSafeYield();
-    }
-
     if( oldpos != screen->GetCrossHairPosition() )
     {
         pos = screen->GetCrossHairPosition();
@@ -362,12 +356,6 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     // Update the cursor position.
     screen->SetCrossHairPosition( pos );
 
-    if( screen->IsRefreshReq() )
-    {
-        DrawPanel->Refresh( );
-        wxSafeYield();
-    }
-
     if( oldpos != screen->GetCrossHairPosition() )
     {
         pos = screen->GetCrossHairPosition();
@@ -442,12 +430,6 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
     // Update cursor position.
     screen->SetCrossHairPosition( pos );
-
-    if( screen->IsRefreshReq() )
-    {
-        DrawPanel->Refresh( );
-        wxSafeYield();
-    }
 
     if( oldpos != screen->GetCrossHairPosition() )
     {

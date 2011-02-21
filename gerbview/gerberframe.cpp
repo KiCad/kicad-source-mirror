@@ -29,8 +29,6 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
     EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_GerberFrame::OnSize )
 
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, WinEDA_GerberFrame::OnZoom )
-
     EVT_TOOL( wxID_FILE, WinEDA_GerberFrame::Files_io )
     EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
     EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, WinEDA_GerberFrame::Files_io )

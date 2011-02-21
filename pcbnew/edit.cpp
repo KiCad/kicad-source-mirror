@@ -317,8 +317,9 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
                 GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA; // place micro via and switch layer
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
             GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
+
             if( DisplayOpt.ContrastModeDisplay )
-                ( (PCB_SCREEN*) GetScreen() )->SetRefreshReq();
+                DrawPanel->Refresh();
         }
         break;
 
@@ -1168,7 +1169,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
                 if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
                 {
                     if( DisplayOpt.ContrastModeDisplay )
-                        GetScreen()->SetRefreshReq();
+                        DrawPanel->Refresh();
                 }
                 // if the via was allowed by DRC, then the layer swap has already
                 // been done by Other_Layer_Route(). if via not allowed, then
@@ -1186,7 +1187,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
     setActiveLayer( layer );
 
     if( DisplayOpt.ContrastModeDisplay )
-        GetScreen()->SetRefreshReq();
+        DrawPanel->Refresh();
 }
 
 
