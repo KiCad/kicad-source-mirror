@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -189,7 +189,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_FillModeCtrl->SetSelection( 0 );
 	m_MiddleBox->Add( m_FillModeCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Segments / 360°:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Segments / 360 deg:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	m_MiddleBox->Add( m_staticText12, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
@@ -208,7 +208,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_staticText14->Wrap( -1 );
 	bSizer81->Add( m_staticText14, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_OrientEdgesOptChoices[] = { _("Arbitrary"), _("H, V, and 45° only") };
+	wxString m_OrientEdgesOptChoices[] = { _("Arbitrary"), _("H, V, and 45 deg only") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
 	m_OrientEdgesOpt = new wxChoice( this, ID_M_ORIENTEDGESOPT, wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 0 );
 	m_OrientEdgesOpt->SetSelection( 0 );

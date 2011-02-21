@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -110,7 +110,7 @@ class dialog_copper_zone_base : public wxDialog
 	
 	public:
 		
-		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~dialog_copper_zone_base();
 	
 };
