@@ -19,6 +19,7 @@
 #include "zones.h"
 
 #include "dialog_copper_zones.h"
+#include "class_zone_setting.h"
 
 #define LAYER_BITMAP_SIZE_X 20
 #define LAYER_BITMAP_SIZE_Y 10
@@ -124,6 +125,13 @@ void dialog_copper_zone::initDialog()
                           m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
                           PCB_INTERNAL_UNIT );
 
+    m_cornerSmoothingChoice->SetSelection( m_Zone_Setting->GetCornerSmoothingType() );
+
+    AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
+    PutValueInLocalUnits( *m_cornerSmoothingCtrl,
+                          m_Zone_Setting->GetCornerRadius(),
+                          PCB_INTERNAL_UNIT );
+
     switch( m_Zone_Setting->m_Zone_HatchingStyle )
     {
     case CPolyLine::NO_HATCH:
@@ -186,6 +194,9 @@ void dialog_copper_zone::initDialog()
     // Build list of nets:
     m_DoNotShowNetNameFilter->SetValue( netNameDoNotShowFilter );
     buildAvailableListOfNets();
+
+    wxCommandEvent event;
+    OnCornerSmoothingModeChoice( event );
 }
 
 
@@ -200,6 +211,35 @@ void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
 void dialog_copper_zone::OnClose( wxCloseEvent& event )
 {
     EndModal( m_OnExitCode );
+}
+
+
+void dialog_copper_zone::OnCornerSmoothingModeChoice( wxCommandEvent& event )
+{
+    int selection = m_cornerSmoothingChoice->GetSelection();
+
+    switch( selection )
+    {
+    case ZONE_SETTING::SMOOTHING_NONE:
+        m_cornerSmoothingTitle->Enable( false );
+        m_cornerSmoothingCtrl->Enable( false );
+        break;
+    case ZONE_SETTING::SMOOTHING_CHAMFER:
+        m_cornerSmoothingTitle->Enable( true );
+        m_cornerSmoothingCtrl->Enable( true );
+        m_cornerSmoothingTitle->SetLabel( wxT( "Chamfer distance" ) );
+        AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
+        break;
+    case ZONE_SETTING::SMOOTHING_FILLET:
+        m_cornerSmoothingTitle->Enable( true );
+        m_cornerSmoothingCtrl->Enable( true );
+        m_cornerSmoothingTitle->SetLabel( wxT( "Fillet radius" ) );
+        AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
+        break;
+    }
+
+    Layout();
+    m_MainBoxSizer->SetSizeHints( this );
 }
 
 
@@ -281,6 +321,10 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
                      _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
         return false;
     }
+
+    m_Zone_Setting->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
+    txtvalue = m_cornerSmoothingCtrl->GetValue();
+    m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits ) );
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         g_Zone_45_Only = FALSE;
@@ -493,6 +537,7 @@ void dialog_copper_zone::buildAvailableListOfNets()
     m_ListNetNameSelection->Clear();
     listNetName.Insert( wxT( "<no net>" ), 0 );
     m_ListNetNameSelection->InsertItems( listNetName, 0 );
+    m_ListNetNameSelection->SetSelection( 0 );
 
     // Ensure current select net for the zone is visible:
     int net_select = m_Zone_Setting->m_NetcodeSelection;

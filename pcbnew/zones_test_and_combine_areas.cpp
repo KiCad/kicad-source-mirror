@@ -854,6 +854,8 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
+        CPolyLine* refSmoothedPoly = Area_Ref->GetSmoothedPoly();
+
         if( !Area_Ref->IsOnCopperLayer() )
             continue;
 
@@ -863,6 +865,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* Area_To_Test = GetArea( ia2 );
+            CPolyLine* testSmoothedPoly = Area_To_Test->GetSmoothedPoly();
 
             if( Area_Ref == Area_To_Test )
                 continue;
@@ -884,11 +887,11 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             zone2zoneClearance = MAX( zone2zoneClearance, Area_To_Test->m_ZoneClearance );
 
             // test for some corners of Area_Ref inside Area_To_Test
-            for( int ic = 0; ic < Area_Ref->m_Poly->GetNumCorners(); ic++ )
+            for( int ic = 0; ic < refSmoothedPoly->GetNumCorners(); ic++ )
             {
-                int x = Area_Ref->m_Poly->GetX( ic );
-                int y = Area_Ref->m_Poly->GetY( ic );
-                if( Area_To_Test->m_Poly->TestPointInside( x, y ) )
+                int x = refSmoothedPoly->GetX( ic );
+                int y = refSmoothedPoly->GetY( ic );
+                if( testSmoothedPoly->TestPointInside( x, y ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
                     if( aCreate_Markers )
@@ -905,11 +908,11 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
 
             // test for some corners of Area_To_Test inside Area_Ref
-            for( int ic2 = 0; ic2 < Area_To_Test->m_Poly->GetNumCorners(); ic2++ )
+            for( int ic2 = 0; ic2 < testSmoothedPoly->GetNumCorners(); ic2++ )
             {
-                int x = Area_To_Test->m_Poly->GetX( ic2 );
-                int y = Area_To_Test->m_Poly->GetY( ic2 );
-                if( Area_Ref->m_Poly->TestPointInside( x, y ) )
+                int x = testSmoothedPoly->GetX( ic2 );
+                int y = testSmoothedPoly->GetY( ic2 );
+                if( refSmoothedPoly->TestPointInside( x, y ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
                     if( aCreate_Markers )
@@ -926,46 +929,46 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
 
             // now test spacing between areas
-            for( int icont = 0; icont < Area_Ref->m_Poly->GetNumContours(); icont++ )
+            for( int icont = 0; icont < refSmoothedPoly->GetNumContours(); icont++ )
             {
-                int ic_start = Area_Ref->m_Poly->GetContourStart( icont );
-                int ic_end   = Area_Ref->m_Poly->GetContourEnd( icont );
+                int ic_start = refSmoothedPoly->GetContourStart( icont );
+                int ic_end   = refSmoothedPoly->GetContourEnd( icont );
                 for( int ic = ic_start; ic<=ic_end; ic++ )
                 {
-                    int ax1 = Area_Ref->m_Poly->GetX( ic );
-                    int ay1 = Area_Ref->m_Poly->GetY( ic );
+                    int ax1 = refSmoothedPoly->GetX( ic );
+                    int ay1 = refSmoothedPoly->GetY( ic );
                     int ax2, ay2;
                     if( ic == ic_end )
                     {
-                        ax2 = Area_Ref->m_Poly->GetX( ic_start );
-                        ay2 = Area_Ref->m_Poly->GetY( ic_start );
+                        ax2 = refSmoothedPoly->GetX( ic_start );
+                        ay2 = refSmoothedPoly->GetY( ic_start );
                     }
                     else
                     {
-                        ax2 = Area_Ref->m_Poly->GetX( ic + 1 );
-                        ay2 = Area_Ref->m_Poly->GetY( ic + 1 );
+                        ax2 = refSmoothedPoly->GetX( ic + 1 );
+                        ay2 = refSmoothedPoly->GetY( ic + 1 );
                     }
-                    int astyle = Area_Ref->m_Poly->GetSideStyle( ic );
-                    for( int icont2 = 0; icont2 < Area_To_Test->m_Poly->GetNumContours(); icont2++ )
+                    int astyle = refSmoothedPoly->GetSideStyle( ic );
+                    for( int icont2 = 0; icont2 < testSmoothedPoly->GetNumContours(); icont2++ )
                     {
-                        int ic_start2 = Area_To_Test->m_Poly->GetContourStart( icont2 );
-                        int ic_end2   = Area_To_Test->m_Poly->GetContourEnd( icont2 );
+                        int ic_start2 = testSmoothedPoly->GetContourStart( icont2 );
+                        int ic_end2   = testSmoothedPoly->GetContourEnd( icont2 );
                         for( int ic2 = ic_start2; ic2<=ic_end2; ic2++ )
                         {
-                            int bx1 = Area_To_Test->m_Poly->GetX( ic2 );
-                            int by1 = Area_To_Test->m_Poly->GetY( ic2 );
+                            int bx1 = testSmoothedPoly->GetX( ic2 );
+                            int by1 = testSmoothedPoly->GetY( ic2 );
                             int bx2, by2;
                             if( ic2 == ic_end2 )
                             {
-                                bx2 = Area_To_Test->m_Poly->GetX( ic_start2 );
-                                by2 = Area_To_Test->m_Poly->GetY( ic_start2 );
+                                bx2 = testSmoothedPoly->GetX( ic_start2 );
+                                by2 = testSmoothedPoly->GetY( ic_start2 );
                             }
                             else
                             {
-                                bx2 = Area_To_Test->m_Poly->GetX( ic2 + 1 );
-                                by2 = Area_To_Test->m_Poly->GetY( ic2 + 1 );
+                                bx2 = testSmoothedPoly->GetX( ic2 + 1 );
+                                by2 = testSmoothedPoly->GetY( ic2 + 1 );
                             }
-                            int bstyle = Area_To_Test->m_Poly->GetSideStyle( ic2 );
+                            int bstyle = testSmoothedPoly->GetSideStyle( ic2 );
                             int x, y;
 
                             int d = GetClearanceBetweenSegments(

@@ -37,6 +37,9 @@ ZONE_SETTING::ZONE_SETTING( void )
     m_ThermalReliefCopperBridgeValue = 200;                         // tickness of the copper bridge in thermal reliefs
 
     m_Zone_Pad_Options = THERMAL_PAD;                               // How pads are covered by copper in zone
+
+    cornerSmoothingType = SMOOTHING_NONE;
+    cornerRadius = 0;
 }
 
 
@@ -57,6 +60,8 @@ void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
     m_ThermalReliefGapValue = aSource.m_ThermalReliefGapValue;
     m_ThermalReliefCopperBridgeValue = aSource.m_ThermalReliefCopperBridgeValue;
     m_Zone_Pad_Options = aSource.m_PadOption;
+    cornerSmoothingType = aSource.GetCornerSmoothingType();
+    cornerRadius = aSource.GetCornerRadius();
 }
 
 
@@ -79,6 +84,8 @@ void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
     aTarget.m_ThermalReliefGapValue = m_ThermalReliefGapValue;
     aTarget.m_ThermalReliefCopperBridgeValue = m_ThermalReliefCopperBridgeValue;
     aTarget.m_PadOption = m_Zone_Pad_Options;
+    aTarget.SetCornerSmoothingType( cornerSmoothingType );
+    aTarget.SetCornerRadius( cornerRadius );
     if( aFullExport )
     {
         aTarget.SetNet( m_NetcodeSelection );

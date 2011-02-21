@@ -43,15 +43,35 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
     if( GetNumCorners() <= 2 )  // malformed zone. Kbool does not like it ...
         return 0;
 
-    m_Poly->MakeKboolPoly( -1, -1, NULL, true );
+    // Make a smoothed polygon out of the user-drawn polygon if required
+    if( smoothedPoly ) {
+        delete smoothedPoly;
+        smoothedPoly = NULL;
+    }
+
+    switch( cornerSmoothingType )
+    {
+    case ZONE_SETTING::SMOOTHING_CHAMFER:
+        smoothedPoly = m_Poly->Chamfer( cornerRadius );
+        break;
+    case ZONE_SETTING::SMOOTHING_FILLET:
+        smoothedPoly = m_Poly->Fillet( cornerRadius, m_ArcToSegmentsCount );
+        break;
+    default:
+        smoothedPoly = new CPolyLine;
+        smoothedPoly->Copy( m_Poly );
+        break;
+    }
+
+    smoothedPoly->MakeKboolPoly( -1, -1, NULL, true );
     int count = 0;
-    while( m_Poly->GetKboolEngine()->StartPolygonGet() )
+    while( smoothedPoly->GetKboolEngine()->StartPolygonGet() )
     {
         CPolyPt corner( 0, 0, false );
-        while( m_Poly->GetKboolEngine()->PolygonHasMorePoints() )
+        while( smoothedPoly->GetKboolEngine()->PolygonHasMorePoints() )
         {
-            corner.x = (int) m_Poly->GetKboolEngine()->GetPolygonXPoint();
-            corner.y = (int) m_Poly->GetKboolEngine()->GetPolygonYPoint();
+            corner.x = (int) smoothedPoly->GetKboolEngine()->GetPolygonXPoint();
+            corner.y = (int) smoothedPoly->GetKboolEngine()->GetPolygonYPoint();
             corner.end_contour = false;
             m_FilledPolysList.push_back( corner );
             count++;
@@ -60,10 +80,10 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
         corner.end_contour = true;
         m_FilledPolysList.pop_back();
         m_FilledPolysList.push_back( corner );
-        m_Poly->GetKboolEngine()->EndPolygonGet();
+        smoothedPoly->GetKboolEngine()->EndPolygonGet();
     }
 
-    m_Poly->FreeKboolEngine();
+    smoothedPoly->FreeKboolEngine();
 
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area

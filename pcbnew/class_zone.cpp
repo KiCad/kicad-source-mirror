@@ -18,6 +18,7 @@
 
 #include "protos.h"
 #include "richio.h"
+#include "class_zone_setting.h"
 
 /************************/
 /* class ZONE_CONTAINER */
@@ -30,6 +31,9 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
+    smoothedPoly = NULL;
+    cornerSmoothingType = ZONE_SETTING::SMOOTHING_NONE;
+    cornerRadius = 0;
     utility    = 0;                             // flags used in polygon calculations
     utility2   = 0;                             // flags used in polygon calculations
     m_Poly     = new CPolyLine();               // Outlines
@@ -170,6 +174,11 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 3 )
         return false;
 
+    ret = fprintf( aFile,
+                   "ZSmoothing %d %d\n",
+                   cornerSmoothingType, cornerRadius );
+    if( ret < 2 )
+        return false;
 
     // Save the corner list
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
@@ -319,6 +328,25 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
                 }
             }
             /* Set hatch mode later, after reading outlines corners data */
+        }
+        else if( strnicmp( Line, "ZSmoothing", 10 ) == 0 )
+        {
+            int tempSmoothingType;
+            int tempCornerRadius;
+            text = Line + 10;
+            ret  = sscanf( text, "%d %d", &tempSmoothingType, &tempCornerRadius );
+
+            if( ret < 2 )
+                return false;
+
+            if( tempSmoothingType >= ZONE_SETTING::SMOOTHING_LAST)
+                return false;
+
+            if( tempSmoothingType < 0 )
+                return false;
+
+            cornerSmoothingType = tempSmoothingType;
+            SetCornerRadius( tempCornerRadius );
         }
         else if( strnicmp( Line, "ZOptions", 8 ) == 0 )    // Options info found
         {

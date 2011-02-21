@@ -38,6 +38,7 @@ private:
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
+    void OnCornerSmoothingModeChoice( wxCommandEvent& event );
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
     void ExportSetupToOtherCopperZones( wxCommandEvent& event );

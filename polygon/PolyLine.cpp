@@ -907,6 +907,215 @@ void CPolyLine::RemoveContour( int icont )
 }
 
 
+int CPolyLine::Chamfer( unsigned int aIndex, unsigned int aDistance )
+{
+    int x1, y1;
+    long xa, ya, xb, yb, nx, ny;
+
+    if( !aDistance )
+        return 0;
+
+    x1 = corner[aIndex].x;
+    y1 = corner[aIndex].y;
+
+    if( aIndex == 0 )
+    {
+        xa = corner[corner.size()-1].x - x1;
+        ya = corner[corner.size()-1].y - y1;
+    }
+    else
+    {
+        xa = corner[aIndex-1].x - x1;
+        ya = corner[aIndex-1].y - y1;
+    }
+
+    if( aIndex == corner.size()-1 )
+    {
+        xb = corner[0].x - x1;
+        yb = corner[0].y - y1;
+    }
+    else
+    {
+        xb = corner[aIndex+1].x - x1;
+        yb = corner[aIndex+1].y - y1;
+    }
+
+    // Move the first vertex into new position
+    nx = (long)aDistance*xa/sqrt( xa*xa + ya*ya );
+    ny = (long)aDistance*ya/sqrt( xa*xa + ya*ya );
+    corner[aIndex].x = x1 + nx;
+    corner[aIndex].y = y1 + ny;
+
+    // Add one new vertex
+    nx = (long)aDistance*xb/sqrt( xb*xb + yb*yb );
+    ny = (long)aDistance*yb/sqrt( xb*xb + yb*yb );
+    InsertCorner( aIndex, x1 + nx, y1 + ny );
+
+    return 1; // Added one vertex
+}
+
+
+CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
+{
+    CPolyLine* newPoly = new CPolyLine;
+    unsigned int lena, lenb;
+    newPoly->Copy( this );
+
+    for( unsigned int i = 0, index = 0; i < corner.size(); i++, index++ )
+    {
+        if( i == 0 )
+            lena = GetEdgeLength( corner.size()-1 );
+        else
+            lena = GetEdgeLength( i - 1 );
+        lenb = GetEdgeLength( i );
+
+        unsigned int distance = aDistance;
+
+        // Chamfer one half of an edge at most
+        if( 0.5*lena < distance )
+            distance = 0.5*lena;
+
+        if( 0.5*lenb < distance )
+            distance = 0.5*lenb;
+
+        // Chamfer this corner and keep tract of added vertices
+        index += newPoly->Chamfer( index, distance );
+    }
+
+    return newPoly;
+}
+
+
+int CPolyLine::Fillet( unsigned int aIndex, unsigned int aRadius,
+                       unsigned int aSegments )
+{
+    int x1, y1; // Current vertex
+    int xa, ya; // Previous vertex
+    int xb, yb; // Next vertex
+    double nx, ny;
+
+    if( !aRadius )
+        return 0;
+
+    x1 = corner[aIndex].x;
+    y1 = corner[aIndex].y;
+
+    if( aIndex == 0 )
+    {
+        xa = corner[corner.size()-1].x - x1;
+        ya = corner[corner.size()-1].y - y1;
+    }
+    else
+    {
+        xa = corner[aIndex-1].x - x1;
+        ya = corner[aIndex-1].y - y1;
+    }
+
+    if( aIndex == corner.size()-1 )
+    {
+        xb = corner[0].x - x1;
+        yb = corner[0].y - y1;
+    }
+    else
+    {
+        xb = corner[aIndex+1].x - x1;
+        yb = corner[aIndex+1].y - y1;
+    }
+
+    double lena = sqrt( xa*xa + ya*ya );
+    double lenb = sqrt( xb*xb + yb*yb );
+    double cosine = ( xa*xb + ya*yb )/( lena*lenb );
+
+    // Calculate fillet arc absolute center point (xc, yx)
+    double k = aRadius / sqrt( .5*( 1-cosine ) );
+    double lenab = sqrt( ( xa/lena + xb/lenb )*( xa/lena + xb/lenb ) +
+                         ( ya/lena + yb/lenb )*( ya/lena + yb/lenb ) );
+    double xc = x1 + k*( xa/lena + xb/lenb )/lenab;
+    double yc = y1 + k*( ya/lena + yb/lenb )/lenab;
+
+    // Calculate arc start and end vectors
+    k = aRadius / sqrt( 2/( 1+cosine )-1 );
+    double xs = x1 + k*xa/lena - xc;
+    double ys = y1 + k*ya/lena - yc;
+    double xe = x1 + k*xb/lenb - xc;
+    double ye = y1 + k*yb/lenb - yc;
+
+    // Cosine of arc angle
+    double argument = ( xs*xe + ys*ye ) / ( aRadius*aRadius );
+
+    if( argument < -1 ) // Just in case...
+        argument = -1;
+    else if( argument > 1 )
+        argument = 1;
+
+    double arcAngle = acos( argument );
+
+    // Calculate the number of segments
+    double tempSegments = (double)aSegments * ( arcAngle / ( 2*M_PI ) );
+
+    if( tempSegments - (int)tempSegments > 0 )
+        tempSegments++;
+    aSegments = tempSegments;
+
+    double deltaAngle = arcAngle / aSegments;
+    double startAngle = atan2( -ys, xs );
+
+    // Flip arc for inner corners
+    if( xa*yb - ya*xb <= 0 )
+        deltaAngle *= -1;
+
+    // Move first vertex into new position
+    nx = xc + xs + 0.5;
+    ny = yc + ys + 0.5;
+    corner[aIndex].x = (int)nx;
+    corner[aIndex].y = (int)ny;
+
+    // Add new vertices
+    unsigned int nVertices = 0;
+    for( unsigned int j = 0; j < aSegments; j++ )
+    {
+        nx = xc + cos( startAngle + (j+1)*deltaAngle )*aRadius + 0.5;
+        ny = yc - sin( startAngle + (j+1)*deltaAngle )*aRadius + 0.5;
+        InsertCorner( aIndex + nVertices, (int)nx, (int)ny );
+        nVertices++;
+    }
+
+    return nVertices; // Return the number of added vertices
+}
+
+
+CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
+{
+    CPolyLine* newPoly = new CPolyLine;
+    unsigned int lena, lenb;
+    newPoly->Copy( this );
+
+    for( unsigned int i = 0, index = 0; i < corner.size(); i++, index++ )
+    {
+        if( i == 0 )
+            lena = GetEdgeLength( corner.size()-1 );
+        else
+            lena = GetEdgeLength( i - 1 );
+        lenb = GetEdgeLength( i );
+
+        unsigned int radius = aRadius;
+        double denom = sqrt( 2.0/( 1+GetCosine( i ) )-1 );
+
+        // Limit rounding distance to one half of an edge
+        if( 0.5*lena*denom < radius )
+            radius = 0.5*lena*denom;
+
+        if( 0.5*lenb*denom < radius )
+            radius = 0.5*lenb*denom;
+
+        // Round this corner and keep tract of added vertices
+        index += newPoly->Fillet( index, radius, aSegments );
+    }
+
+    return newPoly;
+}
+
+
 /******************************************/
 void CPolyLine::RemoveAllContours( void )
 /******************************************/
@@ -993,6 +1202,63 @@ int CPolyLine::GetY( int ic )
 int CPolyLine::GetEndContour( int ic )
 {
     return corner[ic].end_contour;
+}
+
+
+unsigned int CPolyLine::GetEdgeLength( unsigned int aIndex )
+{
+    long xa, ya, xb, yb;
+    xa = corner[aIndex].x;
+    ya = corner[aIndex].y;
+
+    if( aIndex == corner.size()-1 )
+    {
+        xb = corner[0].x;
+        yb = corner[0].y;
+    }
+    else
+    {
+        xb = corner[aIndex+1].x;
+        yb = corner[aIndex+1].y;
+    }
+
+    return sqrt( (xb-xa)*(xb-xa) + (yb-ya)*(yb-ya) );
+}
+
+
+double CPolyLine::GetCosine( unsigned int aIndex )
+{
+    int x1, y1;
+    long xa, ya, xb, yb;
+    x1 = corner[aIndex].x;
+    y1 = corner[aIndex].y;
+
+    if( aIndex == 0 )
+    {
+        xa = corner[corner.size()-1].x - x1;
+        ya = corner[corner.size()-1].y - y1;
+    }
+    else
+    {
+        xa = corner[aIndex-1].x - x1;
+        ya = corner[aIndex-1].y - y1;
+    }
+
+    if( aIndex == corner.size() - 1 )
+    {
+        xb = corner[0].x - x1;
+        yb = corner[0].y - y1;
+    }
+    else
+    {
+        xb = corner[aIndex+1].x - x1;
+        yb = corner[aIndex+1].y - y1;
+    }
+
+    double lena = sqrt( (double)xa*xa + ya*ya );
+    double lenb = sqrt( (double)xb*xb + yb*yb );
+
+    return ( xa*xb + ya*yb )/( lena*lenb );
 }
 
 

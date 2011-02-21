@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -15,6 +15,7 @@ BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 	EVT_BUTTON( wxID_APPLY_FILTERS, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
+	EVT_CHOICE( wxID_ANY, dialog_copper_zone_base::_wxFB_OnCornerSmoothingModeChoice )
 	EVT_CHOICE( ID_M_PADINZONEOPT, dialog_copper_zone_base::_wxFB_OnPadsInZoneClick )
 	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_base::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )
@@ -25,8 +26,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxBoxSizer* m_MainBoxSize;
-	m_MainBoxSize = new wxBoxSizer( wxVERTICAL );
+	m_MainBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -87,7 +87,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_OptionsBoxSizer->Add( m_NetSortOptSizer, 0, wxALL, 5 );
 	
-	m_MainBoxSize->Add( m_OptionsBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* m_ExportableSetupSizer;
 	m_ExportableSetupSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Settings") ), wxHORIZONTAL );
@@ -113,28 +113,20 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_staticText151 = new wxStaticText( this, wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText151->Wrap( -1 );
-	m_staticText151->Enable( false );
-	
 	bSizer9->Add( m_staticText151, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_choice7Choices[] = { _("None") };
-	int m_choice7NChoices = sizeof( m_choice7Choices ) / sizeof( wxString );
-	m_choice7 = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice7NChoices, m_choice7Choices, 0 );
-	m_choice7->SetSelection( 0 );
-	m_choice7->Enable( false );
+	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
+	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
+	m_cornerSmoothingChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
+	m_cornerSmoothingChoice->SetSelection( 0 );
+	bSizer9->Add( m_cornerSmoothingChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	bSizer9->Add( m_choice7, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_cornerSmoothingTitle = new wxStaticText( this, wxID_ANY, _("Chamfer distance (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerSmoothingTitle->Wrap( -1 );
+	bSizer9->Add( m_cornerSmoothingTitle, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_staticText161 = new wxStaticText( this, wxID_ANY, _("Chamfer distance (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText161->Wrap( -1 );
-	m_staticText161->Enable( false );
-	
-	bSizer9->Add( m_staticText161, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	m_textCtrl7 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrl7->Enable( false );
-	
-	bSizer9->Add( m_textCtrl7, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_cornerSmoothingCtrl = new wxTextCtrl( this, ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_cornerSmoothingCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_ExportableSetupSizer->Add( bSizer9, 0, wxEXPAND, 5 );
 	
@@ -226,7 +218,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	m_ExportableSetupSizer->Add( bSizer81, 0, wxEXPAND, 5 );
 	
-	m_MainBoxSize->Add( m_ExportableSetupSizer, 1, wxALL|wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_ExportableSetupSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -243,9 +235,9 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer10->Add( m_ButtonCancel, 0, wxALL|wxEXPAND, 5 );
 	
-	m_MainBoxSize->Add( bSizer10, 0, wxALIGN_RIGHT|wxALL, 5 );
+	m_MainBoxSizer->Add( bSizer10, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
-	this->SetSizer( m_MainBoxSize );
+	this->SetSizer( m_MainBoxSizer );
 	this->Layout();
 }
 

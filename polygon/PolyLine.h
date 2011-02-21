@@ -132,6 +132,43 @@ public:
     void       Close( int style = STRAIGHT, bool bDraw = false );
     void       RemoveContour( int icont );
 
+    /**
+     * Function Chamfer
+     * chamfers a corner.
+     * @param aIndex is the corner index.
+     * @param aDistance is the chamfering distance.
+     * @return int - The number of segments added.
+     */
+    int        Chamfer( unsigned int aIndex, unsigned int aDistance );
+
+    /**
+     * Function Chamfer
+     * returns a chamfered version of a polygon.
+     * @param aDistance is the chamfering distance.
+     * @return CPolyLine* - Pointer to new polygon.
+     */
+    CPolyLine* Chamfer( unsigned int aDistance );
+
+    /**
+     * Function Fillet
+     * rounds a corner.
+     * @param aIndex is the corner index.
+     * @param aDistance is the fillet radius.
+     * @param aSegments is the number of segments / 360 degrees.
+     * @return int - The number of segments added.
+     */
+    int        Fillet( unsigned int aIndex, unsigned int aRadius,
+                       unsigned int aSegments );
+
+    /**
+     * Function Fillet
+     * returns a filleted version of a polygon.
+     * @param aDistance is the fillet radius.
+     * @param aSegments is the number of segments / fillet.
+     * @return CPolyLine* - Pointer to new polygon.
+     */
+    CPolyLine* Fillet( unsigned int aRadius, unsigned int aSegments );
+
     void       RemoveAllContours( void );
 
     // drawing functions
@@ -149,9 +186,8 @@ public:
     bool       IsCutoutContour( int icont );
     void       AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
-
     // access functions
-    int GetLayer() { return m_layer; }
+    int        GetLayer() { return m_layer; }
     int        GetNumCorners();
     int        GetNumSides();
     int        GetClosed();
@@ -163,6 +199,22 @@ public:
     int        GetX( int ic );
     int        GetY( int ic );
     int        GetEndContour( int ic );
+
+    /**
+     * Function GetEdgeLength
+     * returns the length of the edge starting at given corner index.
+     * @param aIndex is the corner index.
+     * @return unsigned int - the length of the edge.
+     */
+    unsigned int GetEdgeLength( unsigned int aIndex );
+
+    /**
+     * Function GetCosine
+     * returns the cosine between the two edge vectors at a corner.
+     * @param aIndex is the corner index.
+     * @return double - the cosine value.
+     */
+    double     GetCosine( unsigned int aIndex );
 
     int GetUtility( int ic ) { return corner[ic].utility; };
     void SetUtility( int ic, int utility ) { corner[ic].utility = utility; };

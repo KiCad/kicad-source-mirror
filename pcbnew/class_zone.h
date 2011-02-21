@@ -9,6 +9,7 @@
 #include "gr_basic.h"
 #include "PolyLine.h"
 #include "richio.h"
+#include "class_zone_setting.h"
 
 /* a small class used when filling areas with segments */
 class SEGMENT
@@ -61,7 +62,10 @@ public:
                                                 *  ( m_FillMode == 1 )
                                                 *  in this case segments have m_ZoneMinThickness width
                                                 */
-
+private:
+    CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
+    int                   cornerSmoothingType;
+    unsigned int          cornerRadius;
 public:
     ZONE_CONTAINER( BOARD* parent );
     ~ZONE_CONTAINER();
@@ -366,6 +370,7 @@ public:
     {
         return m_Poly->GetHatchStyle();
     }
+
     /**
      * Function IsSame
      * test is 2 zones are equivalent:
@@ -374,6 +379,35 @@ public:
      * @param aZoneToCompare = zone to compare with "this"
      */
     bool IsSame( const ZONE_CONTAINER &aZoneToCompare);
+
+    /**
+     * Function GetSmoothedPoly
+     * returns a pointer to the corner-smoothed version of
+     * m_Poly if it exists, otherwise it returns m_Poly.
+     * @return CPolyLine* - pointer to the polygon.
+     */
+    CPolyLine* GetSmoothedPoly() const
+    {
+        if( smoothedPoly )
+            return smoothedPoly;
+        else
+            return m_Poly;
+    };
+
+    void SetCornerSmoothingType( int aType ) { cornerSmoothingType = aType; };
+    int  GetCornerSmoothingType() const { return cornerSmoothingType; };
+
+    void SetCornerRadius( unsigned int aRadius )
+    {
+        if( aRadius > MAX_ZONE_CORNER_RADIUS )
+            cornerRadius = MAX_ZONE_CORNER_RADIUS;
+        else if( aRadius < 0 )
+            cornerRadius = 0;
+        else
+            cornerRadius = aRadius;
+    };
+
+    unsigned int GetCornerRadius() const { return cornerRadius; };
 };
 
 
