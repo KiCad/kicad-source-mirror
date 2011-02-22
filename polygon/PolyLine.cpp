@@ -576,11 +576,11 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
         Another scaling with Grid is applied on top of it to create space in the integer number for
         even smaller numbers.
    */
-    int GRID = (int) 10000/DGRID;       // initial value = 10000 in kbool example
-                                        // But we use 10000/DGRID because the scalling is made
-                                        // by DGRID on integer pcbnew units and
-                                        // the global scalling ( GRID*DGRID) must be < 30000 to avoid
-                                        // overflow in calculations (made in long long in kbool)
+    int GRID = (int) ( 10000.0 / DGRID );  // initial value = 10000 in kbool example but we use
+                                           // 10000/DGRID because the scaling is made by DGRID
+                                           // on integer pcbnew units and the global scaling
+                                           // ( GRID*DGRID) must be < 30000 to avoid overflow
+                                           // in calculations (made in long long in kbool)
     if ( GRID <= 1 )    // Cannot be null!
         GRID = 1;
 
@@ -941,14 +941,14 @@ int CPolyLine::Chamfer( unsigned int aIndex, unsigned int aDistance )
     }
 
     // Move the first vertex into new position
-    nx = (long)aDistance*xa/sqrt( xa*xa + ya*ya );
-    ny = (long)aDistance*ya/sqrt( xa*xa + ya*ya );
+    nx = (long) ( (double) (aDistance*xa)/sqrt( (double) (xa*xa + ya*ya) ) );
+    ny = (long) ( (double) (aDistance*ya)/sqrt( (double) (xa*xa + ya*ya) ) );
     corner[aIndex].x = x1 + nx;
     corner[aIndex].y = y1 + ny;
 
     // Add one new vertex
-    nx = (long)aDistance*xb/sqrt( xb*xb + yb*yb );
-    ny = (long)aDistance*yb/sqrt( xb*xb + yb*yb );
+    nx = (long) ( (double) (aDistance*xb)/sqrt( (double) (xb*xb + yb*yb) ) );
+    ny = (long) ( (double) (aDistance*yb)/sqrt( (double) (xb*xb + yb*yb) ) );
     InsertCorner( aIndex, x1 + nx, y1 + ny );
 
     return 1; // Added one vertex
@@ -973,10 +973,10 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 
         // Chamfer one half of an edge at most
         if( 0.5*lena < distance )
-            distance = 0.5*lena;
+            distance = (unsigned int) 0.5*lena;
 
         if( 0.5*lenb < distance )
-            distance = 0.5*lenb;
+            distance = (unsigned int) 0.5*lenb;
 
         // Chamfer this corner and keep tract of added vertices
         index += newPoly->Chamfer( index, distance );
@@ -1022,8 +1022,8 @@ int CPolyLine::Fillet( unsigned int aIndex, unsigned int aRadius,
         yb = corner[aIndex+1].y - y1;
     }
 
-    double lena = sqrt( xa*xa + ya*ya );
-    double lenb = sqrt( xb*xb + yb*yb );
+    double lena = sqrt( (double) (xa*xa + ya*ya) );
+    double lenb = sqrt( (double) (xb*xb + yb*yb) );
     double cosine = ( xa*xb + ya*yb )/( lena*lenb );
 
     // Calculate fillet arc absolute center point (xc, yx)
@@ -1055,7 +1055,7 @@ int CPolyLine::Fillet( unsigned int aIndex, unsigned int aRadius,
 
     if( tempSegments - (int)tempSegments > 0 )
         tempSegments++;
-    aSegments = tempSegments;
+    aSegments = (unsigned int) tempSegments;
 
     double deltaAngle = arcAngle / aSegments;
     double startAngle = atan2( -ys, xs );
@@ -1103,10 +1103,10 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
 
         // Limit rounding distance to one half of an edge
         if( 0.5*lena*denom < radius )
-            radius = 0.5*lena*denom;
+            radius = (unsigned int) ( 0.5 * (double) lena * denom );
 
         if( 0.5*lenb*denom < radius )
-            radius = 0.5*lenb*denom;
+            radius = (unsigned int) ( 0.5 * (double) lenb * denom );
 
         // Round this corner and keep tract of added vertices
         index += newPoly->Fillet( index, radius, aSegments );
@@ -1222,7 +1222,7 @@ unsigned int CPolyLine::GetEdgeLength( unsigned int aIndex )
         yb = corner[aIndex+1].y;
     }
 
-    return sqrt( (xb-xa)*(xb-xa) + (yb-ya)*(yb-ya) );
+    return (unsigned int) sqrt( (double) (xb-xa)*(xb-xa) + (yb-ya)*(yb-ya) );
 }
 
 
