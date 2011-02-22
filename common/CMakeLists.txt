@@ -75,6 +75,7 @@ add_library(common ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
     pcbcommon.cpp
+    footprint_info.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp

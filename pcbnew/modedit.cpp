@@ -264,8 +264,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         wxFileName fn;
         fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
         wxString   full_filename = wxGetApp().FindLibraryPath( fn );
-        Save_Module_In_Library( full_filename, GetBoard()->m_Modules,
-                                true, true, true );
+        Save_Module_In_Library( full_filename, GetBoard()->m_Modules, true, true );
         GetScreen()->ClrModify();
         break;
     }

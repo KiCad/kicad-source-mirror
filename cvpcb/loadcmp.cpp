@@ -19,12 +19,11 @@
 
 
 /**
- * Analyze the libraries to find the module.
- * If this module is found, copy it into memory, and
- * string end of the list of modules.
+ * Read libraries to find a module.
+ * If this module is found, copy it into memory
  *
  * @param CmpName - Module name
- * @return - Module if found otherwise NULL.
+ * @return - a pointer to the loaded module or NULL.
  */
 MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
 {

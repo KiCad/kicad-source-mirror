@@ -1,5 +1,5 @@
 /**
- * @file listlib.cpp
+ * @file footprint_info.cpp
  */
 
 
@@ -13,9 +13,8 @@
 #include "kicad_string.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
-
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include "pcbstruct.h"
+#include "pcbcommon.h"
 #include "richio.h"
 #include "filter_reader.h"
 #include "footprint_info.h"

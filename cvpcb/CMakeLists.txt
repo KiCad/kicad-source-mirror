@@ -34,7 +34,6 @@ set(CVPCB_SRCS
     genequiv.cpp
     init.cpp
     listboxes.cpp
-    listlib.cpp
     loadcmp.cpp
     menubar.cpp
     readschematicnetlist.cpp

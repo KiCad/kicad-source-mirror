@@ -202,14 +202,12 @@ public:
      *                     abort an existing footprint is found
      * @param aDisplayDialog = true to display a dialog to enter or confirm the
      *                         footprint name
-     * @param aCreateDocFile = true to creates the associated doc file
-     * @return : 1 if OK,0 if abort
+     * @return : true if OK, false if abort
      */
-    int     Save_Module_In_Library( const wxString& aLibName,
+    bool    Save_Module_In_Library( const wxString& aLibName,
                                     MODULE*         aModule,
                                     bool            aOverwrite,
-                                    bool            aDisplayDialog,
-                                    bool            aCreateDocFile );
+                                    bool            aDisplayDialog );
 
     void    Archive_Modules( const wxString& LibName,
                              bool            NewModulesOnly );

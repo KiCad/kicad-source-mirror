@@ -19,30 +19,12 @@
 #include "dialog_helpers.h"
 #include "richio.h"
 #include "filter_reader.h"
-
-class FOOTPRINT_ITEM
-{
-public:
-    FOOTPRINT_ITEM* Next;
-    wxString m_Name, m_Doc, m_KeyWord;
-
-public:
-    FOOTPRINT_ITEM()
-    {
-        Next = NULL;
-    }
-
-    ~FOOTPRINT_ITEM()
-    {
-    }
-};
+#include "footprint_info.h"
 
 
 static void DisplayCmpDoc( wxString& Name );
-static void ReadDocLib( const wxString& ModLibName );
 
-
-static FOOTPRINT_ITEM* MList;
+static FOOTPRINT_LIST MList;
 
 /**
  * Function Load_Module_From_BOARD
@@ -371,143 +353,41 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
                                                          const wxString& aMask,
                                                          const wxString& aKeyWord )
 {
-    unsigned        ii;
-    char*           Line;
-    wxFileName      fn;
     static wxString OldName;    /* Save the name of the last module loaded. */
     wxString        CmpName;
-    wxString        libFullName;
-    FILE*           file;
     wxString        msg;
-    wxArrayString   itemslist;
+    wxArrayString   libnames_list;
 
-    wxBeginBusyCursor();
+    if( aLibraryFullFilename.IsEmpty() )
+        libnames_list = g_LibName_List;
+    else
+        libnames_list.Add( aLibraryFullFilename );
 
     /* Find modules in libraries. */
-    for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
-    {
-        /* Calculate the full file name of the library. */
-        if( aLibraryFullFilename.IsEmpty() )
-        {
-            fn = wxFileName( wxEmptyString, g_LibName_List[ii],
-                             ModuleFileExtension );
-        }
-        else
-            fn = aLibraryFullFilename;
+    MList.ReadFootprintFiles( libnames_list );
 
-        libFullName = wxGetApp().FindLibraryPath( fn );
-
-        if( libFullName.IsEmpty() )
-        {
-            msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
-                        GetChars( fn.GetFullName() ) );
-            wxMessageBox( msg, _( "Library Load Error" ),
-                          wxOK | wxICON_ERROR, this );
-            continue;
-        }
-
-        ReadDocLib( libFullName );
-
-        if( !aKeyWord.IsEmpty() ) /* Don't read the library if selection
-                                   * by keywords, already read. */
-        {
-            if( !aLibraryFullFilename.IsEmpty() )
-                break;
-            continue;
-        }
-
-        file = wxFopen( libFullName, wxT( "rt" ) );
-
-        if( file  == NULL )
-        {
-            if( !aLibraryFullFilename.IsEmpty() )
-                break;
-            continue;
-        }
-
-        FILE_LINE_READER fileReader( file, libFullName );
-
-        FILTER_READER reader( fileReader );
-
-        // Statusbar library loaded message
-        msg = _( "Library " ) + fn.GetFullPath() + _( " loaded" );
-        SetStatusText( msg );
-
-        /* Read header. */
-        reader.ReadLine();
-        Line = reader.Line();
-
-        if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
-        {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
-                        GetChars( libFullName ) );
-            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
-            continue;
-        }
-
-        /* Read library. */
-        while( reader.ReadLine() )
-        {
-            Line = reader.Line();
-            if( Line[0] != '$' )
-                continue;
-            if( strnicmp( Line, "$MODULE", 6 ) == 0 )
-                break;
-            if( strnicmp( Line, "$INDEX", 6 ) == 0 )
-            {
-                while( reader.ReadLine() )
-                {
-                    Line = reader.Line();
-                    if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
-                        break;
-                    strupper( Line );
-                    msg = CONV_FROM_UTF8( StrPurge( Line ) );
-                    if( aMask.IsEmpty() )
-                        itemslist.Add( msg );
-                    else if( WildCompareString( aMask, msg, false ) )
-                        itemslist.Add( msg );
-                }
-            } /* End read INDEX */
-        }
-
-        /* End read library. */
-        file = NULL;
-
-        if( !aLibraryFullFilename.IsEmpty() )
-            break;
-    }
-
+    wxArrayString footprint_names_list;
     /* Create list of modules if search by keyword. */
     if( !aKeyWord.IsEmpty() )
     {
-        FOOTPRINT_ITEM* ItemMod = MList;
-        while( ItemMod != NULL )
+        for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
         {
-            if( KeyWordOk( aKeyWord, ItemMod->m_KeyWord ) )
-                itemslist.Add( ItemMod->m_Name );
-            ItemMod = ItemMod->Next;
+            if( KeyWordOk( aKeyWord, MList.GetItem(ii).m_KeyWord ) )
+                footprint_names_list.Add( MList.GetItem(ii).m_Module );
         }
     }
+    else
+        for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
+            footprint_names_list.Add( MList.GetItem(ii).m_Module );
 
-    wxEndBusyCursor();
-
-    msg.Printf( _( "Modules [%d items]" ), itemslist.GetCount() );
-    WinEDAListBox dlg( aWindow, msg, itemslist, OldName,
+    msg.Printf( _( "Modules [%d items]" ), footprint_names_list.GetCount() );
+    WinEDAListBox dlg( aWindow, msg, footprint_names_list, OldName,
                        DisplayCmpDoc, GetComponentDialogPosition() );
-
-    dlg.SortList();
 
     if( dlg.ShowModal() == wxID_OK )
         CmpName = dlg.GetTextSelection();
     else
         CmpName.Empty();
-
-    while( MList != NULL )
-    {
-        FOOTPRINT_ITEM* NewMod = MList->Next;
-        delete MList;
-        MList = NewMod;
-    }
 
     if( CmpName != wxEmptyString )
         OldName = CmpName;
@@ -521,93 +401,17 @@ wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow
  */
 static void DisplayCmpDoc( wxString& Name )
 {
-    FOOTPRINT_ITEM* Mod = MList;
+    FOOTPRINT_INFO* module_info = MList.GetModuleInfo( Name );
 
-    if( !Mod )
+    if( !module_info )
     {
         Name.Empty();
         return;
     }
 
-    while( Mod )
-    {
-        if( !Mod->m_Name.IsEmpty() && ( Mod->m_Name.CmpNoCase( Name ) == 0 ) )
-            break;
-        Mod = Mod->Next;
-    }
-
-    if( Mod )
-    {
-        Name  = !Mod->m_Doc.IsEmpty() ? Mod->m_Doc  : wxT( "No Doc" );
-        Name += wxT( "\nKeyW: " );
-        Name += !Mod->m_KeyWord.IsEmpty() ? Mod->m_KeyWord : wxT( "No Keyword" );
-    }
-    else
-        Name = wxEmptyString;
-}
-
-
-/* Read the doc file and combine with a library ModLibName.
- * Load in memory the list of docs string pointed to by mlist
- * ModLibName = full file name of the library modules
- */
-static void ReadDocLib( const wxString& ModLibName )
-{
-    FOOTPRINT_ITEM*   NewMod;
-    char*      Line;
-    FILE*      LibDoc;
-    wxFileName fn = ModLibName;
-
-    fn.SetExt( EXT_DOC );
-
-    if( ( LibDoc = wxFopen( fn.GetFullPath(), wxT( "rt" ) ) ) == NULL )
-        return;
-
-    FILE_LINE_READER fileReader( LibDoc, fn.GetFullPath() );
-
-    FILTER_READER reader( fileReader );
-
-    reader.ReadLine();
-    Line = reader.Line();
-    if( strnicmp( Line, ENTETE_LIBDOC, L_ENTETE_LIB ) != 0 )
-        return;
-
-    while( reader.ReadLine() )
-    {
-        Line = reader.Line();
-        if( Line[0] != '$' )
-            continue;
-        if( Line[1] == 'E' )
-            break; ;
-        if( Line[1] == 'M' ) /* Debut decription 1 module */
-        {
-            NewMod = new FOOTPRINT_ITEM();
-            NewMod->Next = MList;
-            MList = NewMod;
-            while( reader.ReadLine() )
-            {
-                Line = reader.Line();
-                if( Line[0] ==  '$' ) /* $EndMODULE */
-                    break;
-
-                switch( Line[0] )
-                {
-                case 'L':       /* LibName */
-                    NewMod->m_Name = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-                    break;
-
-                case 'K':       /* KeyWords */
-                    NewMod->m_KeyWord = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-                    break;
-
-                case 'C':       /* Doc */
-                    NewMod->m_Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-                    break;
-                }
-            }
-        } /* End read 1 module. */
-    }
-
+    Name  = module_info->m_Doc.IsEmpty() ? wxT( "No Doc" ) : module_info->m_Doc;
+    Name += wxT( "\nKeyW: " );
+    Name += module_info->m_KeyWord.IsEmpty() ? wxT( "No Keyword" ) : module_info->m_KeyWord;
 }
 
 

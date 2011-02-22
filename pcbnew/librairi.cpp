@@ -35,9 +35,6 @@ static const wxString ModExportFileWildcard(
     _( "Kicad foot print export files (*.emp)|*.emp" ) );
 
 
-static bool CreateDocLibrary( const wxString& LibName );
-
-
 /*
  * Function Import_Module
  * Read a file containing only one footprint.
@@ -389,8 +386,6 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
     msg.Printf( _( "Component %s deleted in library %s" ), GetChars( CmpName ),
                GetChars( oldFileName.GetFullPath() ) );
     SetStatusText( msg );
-
-    CreateDocLibrary( oldFileName.GetFullPath() );
 }
 
 
@@ -473,15 +468,13 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
     {
         if( Save_Module_In_Library( fileName, Module,
                                     NewModulesOnly ? false : true,
-                                    false, false ) == 0 )
+                                    false ) == 0 )
             break;
         DisplayActivity( (int) ( ii * Pas ), wxEmptyString );
         /* Check for request to stop backup (ESCAPE key actuated) */
         if( DrawPanel->m_AbortRequest )
             break;
     }
-
-    CreateDocLibrary( fileName );
 }
 
 
@@ -494,14 +487,12 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
  * an existing footprint is found
  * @param aDisplayDialog = true to display a dialog to enter or confirm the
  * footprint name
- * @param aCreateDocFile = true to creates the associated doc file
- * @return :  1 if OK, 0 if abort
+ * @return : true if OK, false if abort
  */
-int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
+bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
                                                  MODULE*         aModule,
                                                  bool            aOverwrite,
-                                                 bool            aDisplayDialog,
-                                                 bool            aCreateDocFile )
+                                                 bool            aDisplayDialog )
 {
     wxFileName oldFileName;
     wxFileName newFileName;
@@ -519,7 +510,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     {
         msg.Printf( _( "Library %s not found" ), GetChars( aLibName ) );
         DisplayError( this, msg );
-        return 0;
+        return false;
     }
 
     /* Ask for the footprint name in lib */
@@ -542,7 +533,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     {
         msg.Printf( _( "Unable to open %s" ), GetChars( aLibName ) );
         DisplayError( this, msg );
-        return 0;
+        return false;
     }
 
     /* Read library file : library header */
@@ -553,7 +544,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         msg.Printf( _( "File %s is not a eeschema library" ),
                    GetChars( aLibName ) );
         DisplayError( this, msg );
-        return 0;
+        return false;
     }
 
     /* Read footprints in lib: - search for an existing footprint */
@@ -603,7 +594,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     if( ( lib_module = wxFopen( aLibName, wxT( "rt" ) ) )  == NULL )
     {
         DisplayError( this, wxT( "Librairi.cpp: Error oldlib not found" ) );
-        return 0;
+        return false;
     }
 
     newFileName = aLibName;
@@ -614,7 +605,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         fclose( lib_module );
         msg = _( "Unable to create " ) + newFileName.GetFullPath();
         DisplayError( this, msg );
-        return 0;
+        return false;
     }
 
     wxBeginBusyCursor();
@@ -702,12 +693,8 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
     if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
     {
         DisplayError( this, wxT( "Librairi.cpp: rename NewLib err" ) );
-        return 0;
+        return false;
     }
-
-    /* creates the new .dcm doc file corresponding to the new library */
-    if( aCreateDocFile )
-        CreateDocLibrary( aLibName );
 
     if( aDisplayDialog )
     {
@@ -717,7 +704,7 @@ int WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         SetStatusText( msg );
     }
 
-    return 1;
+    return true;
 }
 
 
@@ -839,108 +826,4 @@ int WinEDA_ModuleEditFrame::Create_Librairie( const wxString& LibName )
     fclose( lib_module );
 
     return 1;
-}
-
-
-/* Synch. Dcm combines a library Libname
- * (Full file name)
- */
-static bool CreateDocLibrary( const wxString& LibName )
-{
-    char       Line[1024];
-    char       cbuf[256];
-    wxString   Name, Doc, KeyWord;
-    wxFileName fn;
-    FILE*      LibMod, * LibDoc;
-
-    fn = LibName;
-    fn.SetExt( EXT_DOC );
-
-    LibMod = wxFopen( LibName, wxT( "rt" ) );
-    if( LibMod == NULL )
-        return false;
-
-    /* Read library header. */
-    GetLine( LibMod, Line, NULL, sizeof(Line) - 1 );
-    if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
-    {
-        fclose( LibMod );
-        return false;
-    }
-
-    LibDoc = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
-    if( LibDoc == NULL )
-    {
-        fclose( LibMod );
-        return false;
-    }
-    fprintf( LibDoc, ENTETE_LIBDOC );
-    fprintf( LibDoc, "  %s\n", DateAndTime( cbuf ) );
-
-    /* Read library. */
-    Name = Doc = KeyWord = wxEmptyString;
-    while( GetLine( LibMod, Line, NULL, sizeof(Line) - 1 ) )
-    {
-        if( Line[0] != '$' )
-            continue;
-        if( strnicmp( Line, "$MODULE", 6 ) == 0 )
-        {
-            while( GetLine( LibMod, Line, NULL, sizeof(Line) - 1 ) )
-            {
-                if( Line[0] == '$' )
-                {
-                    if( Line[1] == 'E' )
-                        break;
-                    if( Line[1] == 'P' ) /* Pad Descr */
-                    {
-                        while( GetLine( LibMod, Line, NULL, sizeof(Line) - 1 ) )
-                        {
-                            if( (Line[0] == '$') && (Line[1] == 'E') )
-                                break;
-                        }
-                    }
-                }
-                if( Line[0] == 'L' ) /* LibName */
-                    Name = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-
-                if( Line[0] == 'K' ) /* KeyWords */
-                    KeyWord = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-
-                if( Line[0] == 'C' ) /* Doc */
-                    Doc = CONV_FROM_UTF8( StrPurge( Line + 3 ) );
-            }
-
-            /* Generate the module the documentation. */
-            if( ( Name != wxEmptyString )
-               && ( ( Doc != wxEmptyString ) || ( KeyWord != wxEmptyString ) ) )
-            {
-                fprintf( LibDoc, "#\n$MODULE %s\n", CONV_TO_UTF8( Name ) );
-                fprintf( LibDoc, "Li %s\n", CONV_TO_UTF8( Name ) );
-                if( Doc != wxEmptyString )
-                    fprintf( LibDoc, "Cd %s\n", CONV_TO_UTF8( Doc ) );
-
-                if( KeyWord  != wxEmptyString )
-                    fprintf( LibDoc, "Kw %s\n", CONV_TO_UTF8( KeyWord ) );
-
-                fprintf( LibDoc, "$EndMODULE\n" );
-            }
-            Name = Doc = KeyWord = wxEmptyString;
-        }     /* End read 1 module */
-
-        if( strnicmp( Line, "$INDEX", 6 ) == 0 )
-        {
-            while( GetLine( LibMod, Line, NULL, sizeof(Line) - 1 ) )
-            {
-                if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
-                    break;
-            }
-
-            /* End read INDEX */
-        }
-    }
-
-    fclose( LibMod );
-    fprintf( LibDoc, "#\n$EndLIBDOC\n" );
-    fclose( LibDoc );
-    return true;
 }

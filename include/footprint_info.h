@@ -5,6 +5,9 @@
 #ifndef _FOOTPRINT_INFO_H_
 #define _FOOTPRINT_INFO_H_
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/foreach.hpp>
+
 #include "kicad_string.h"
 
 /*
