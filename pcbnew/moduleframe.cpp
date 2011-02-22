@@ -330,18 +330,17 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void WinEDA_ModuleEditFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = aPosition;
 
     pos = GetScreen()->GetNearestGridPosition( aPosition );
     oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case WXK_NUMPAD8:
     case WXK_UP:
@@ -368,7 +367,6 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPositio
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -388,9 +386,9 @@ void WinEDA_ModuleEditFrame::GeneralControle( wxDC* aDC, const wxPoint& aPositio
         }
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
-        OnHotKey( aDC, hotkey, aPosition );
+        OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();

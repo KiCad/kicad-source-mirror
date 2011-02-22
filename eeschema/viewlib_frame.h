@@ -69,7 +69,7 @@ public:
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
-    void GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     void LoadSettings();
     void SaveSettings();

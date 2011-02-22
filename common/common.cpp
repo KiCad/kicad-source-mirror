@@ -73,8 +73,6 @@ const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
 bool           g_ShowPageLimits = true;
 wxString       g_UserLibDirBuffer;
-int            g_MouseOldButtons;
-int            g_KeyPressed;
 
 wxString       g_Prj_Default_Config_FullFilename;
 wxString       g_Prj_Config_LocalFilename;

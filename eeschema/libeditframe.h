@@ -105,7 +105,7 @@ public:
 
     void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
-    void GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     void        LoadSettings();
     void        SaveSettings();

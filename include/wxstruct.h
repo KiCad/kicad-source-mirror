@@ -390,7 +390,7 @@ public:
     void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function GeneralControle
+     * Function GeneralControl
      * performs application specific control using \a aDC at \a aPosition in logical units.
      * <p>
      * Override this function for application specific control.  This function gets
@@ -398,8 +398,9 @@ public:
      *</p>
      * @param aDC A device context.
      * @param aPosition The current cursor position in logical (drawing) units.
+     * @param aHotKey A key event used for appication specific control if not zero.
      */
-    virtual void     GeneralControle( wxDC* aDC, const wxPoint& aPosition ) { /* dummy */ }
+    virtual void     GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 ) { }
 
     virtual void     OnSize( wxSizeEvent& event );
     void             OnEraseBackground( wxEraseEvent& SizeEvent );

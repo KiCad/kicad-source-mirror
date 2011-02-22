@@ -814,7 +814,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     static bool ignoreNextLeftButtonRelease = false;
     static EDA_DRAW_PANEL* LastPanel = NULL;
 
-    int                    localrealbutt = 0, localbutt = 0, localkey = 0;
+    int                    localrealbutt = 0, localbutt = 0;
     BASE_SCREEN*           screen = GetScreen();
 
     if( !screen )
@@ -846,7 +846,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     else
         return;
 
-    if( !event.IsButton() && !event.Moving() && !event.Dragging() && !localkey )
+    if( !event.IsButton() && !event.Moving() && !event.Dragging() )
     {
         return;
     }
@@ -888,8 +888,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     int kbstat = 0;
 
-    g_KeyPressed = localkey;
-
     if( event.ShiftDown() )
         kbstat |= GR_KB_SHIFT;
 
@@ -898,8 +896,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     if( event.AltDown() )
         kbstat |= GR_KB_ALT;
-
-    g_MouseOldButtons = localrealbutt;
 
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
@@ -941,7 +937,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     }
 
     /* Calling the general function on mouse changes (and pseudo key commands) */
-    GetParent()->GeneralControle( &DC, event.GetLogicalPosition( DC ) );
+    GetParent()->GeneralControl( &DC, event.GetLogicalPosition( DC ), 0 );
 
     /*******************************/
     /* Control of block commands : */
@@ -1090,10 +1086,10 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
-    long key, localkey;
+    int localkey;
     wxPoint pos;
 
-    key = localkey = event.GetKeyCode();
+    localkey = event.GetKeyCode();
 
     switch( localkey )
     {
@@ -1121,7 +1117,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         localkey |= GR_KB_CTRL;
     if( event.AltDown() )
         localkey |= GR_KB_ALT;
-    if( event.ShiftDown() && (key > 256) )
+    if( event.ShiftDown() && (event.GetKeyCode() > 256) )
         localkey |= GR_KB_SHIFT;
 
     /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
@@ -1135,8 +1131,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     BASE_SCREEN* Screen = GetScreen();
 
-    g_KeyPressed = localkey;
-
     // Some key commands use the current mouse position: refresh it.
     pos = wxGetMousePosition() - GetScreenPosition();
 
@@ -1144,7 +1138,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
     Screen->SetMousePosition( pos );
 
-    GetParent()->GeneralControle( &DC, pos );
+    GetParent()->GeneralControl( &DC, pos, localkey );
 
 #if 0
     event.Skip();   // Allow menu shortcut processing

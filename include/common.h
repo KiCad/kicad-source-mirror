@@ -156,9 +156,6 @@ extern wxString       g_ProductName;
 /* Default user lib path can be left void, if the standard lib path is used */
 extern wxString       g_UserLibDirBuffer;
 
-extern int            g_MouseOldButtons;
-extern int            g_KeyPressed;
-
 extern bool           g_ShowPageLimits; // TRUE to display the page limits
 
 /* File name extension definitions. */

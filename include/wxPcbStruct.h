@@ -387,7 +387,7 @@ public:
     void             ReFillLayerWidget();
 
     void             Show3D_Frame( wxCommandEvent& event );
-    void             GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function ShowDesignRulesEditor
@@ -590,7 +590,7 @@ public:
     /**
      * Function ReadPcbFile
      * reads a board file  &ltfile&gt.brd
-     * @param File - The file to read from.
+     * @param aReader The line reader object to read from.
      * @param Append if 0: a previously loaded board is deleted before loading
      *               the file else all items of the board file are added to the
      *               existing board
@@ -750,10 +750,10 @@ public:
     /**
      * Function OnEditItemRequest
      * Install the corresponding dialog editor for the given item
-     * @param DC = the current device context
+     * @param aDC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
-    void OnEditItemRequest( wxDC* DC, BOARD_ITEM* aItem );
+    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
 
 
     // Highlight functions:

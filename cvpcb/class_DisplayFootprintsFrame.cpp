@@ -311,7 +311,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
@@ -325,7 +325,7 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosit
     oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case WXK_F1:
         cmd.SetId( ID_POPUP_ZOOM_IN );

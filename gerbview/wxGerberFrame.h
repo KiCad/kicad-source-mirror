@@ -377,8 +377,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     bool              Read_GERBER_File( const wxString& GERBER_FullFileName,
                                         const wxString& D_Code_FullFileName );
 
-    void              GeneralControle( wxDC* aDC, const wxPoint& aPosition );
-
+    void              GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function Read_D_Code_File

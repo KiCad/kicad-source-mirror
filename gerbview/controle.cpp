@@ -8,11 +8,10 @@
 #include "gerbview.h"
 
 
-void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void WinEDA_GerberFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = aPosition;
 
     pos = GetScreen()->GetNearestGridPosition( pos );
@@ -20,7 +19,7 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
     oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case WXK_NUMPAD8:
     case WXK_UP:
@@ -47,7 +46,6 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -67,9 +65,9 @@ void WinEDA_GerberFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
-        OnHotKey( aDC, hotkey, NULL );
+        OnHotKey( aDC, aHotKey, NULL );
     }
 
     UpdateStatusBar();

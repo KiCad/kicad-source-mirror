@@ -232,19 +232,18 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
 }
 
 
-void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = aPosition;
 
     pos = screen->GetNearestGridPosition( pos );
     oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case 0:
         break;
@@ -274,7 +273,6 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -295,31 +293,30 @@ void SCH_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
+            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, aPosition, NULL );
+            OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
 }
 
 
-void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = aPosition;
 
     pos = screen->GetNearestGridPosition( pos );
     oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case 0:
         break;
@@ -349,7 +346,6 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -370,31 +366,30 @@ void LIB_EDIT_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
+            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, aPosition, NULL );
+            OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();
 }
 
 
-void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     SCH_SCREEN* screen = GetScreen();
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = aPosition;
 
     pos = screen->GetNearestGridPosition( pos );
     oldpos = screen->GetCrossHairPosition();
     gridSize = screen->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case 0:
         break;
@@ -424,7 +419,6 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -445,12 +439,12 @@ void LIB_VIEW_FRAME::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
         if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
-            OnHotKey( aDC, hotkey, aPosition, screen->GetCurItem() );
+            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            OnHotKey( aDC, hotkey, aPosition, NULL );
+            OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();

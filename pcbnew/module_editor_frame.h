@@ -46,7 +46,7 @@ public:
     bool         OnHotkeyMoveItem( int aIdCommand );
     bool         OnHotkeyRotateItem( int aIdCommand );
     void         Show3D_Frame( wxCommandEvent& event );
-    void         GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void         GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
     void         OnVerticalToolbar( wxCommandEvent& aEvent );
 
     void         OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );

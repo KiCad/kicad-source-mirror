@@ -109,7 +109,7 @@ public:
     void             Process_Config( wxCommandEvent& event );
     void             OnSelectTool( wxCommandEvent& aEvent );
 
-    void             GeneralControle( wxDC* aDC, const wxPoint& aPosition );
+    void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
     void             SaveProjectFile( wxWindow* displayframe, bool askoverwrite = true );

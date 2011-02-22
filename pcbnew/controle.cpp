@@ -226,11 +226,10 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 }
 
 
-void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
+void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
-    int         hotkey = 0;
     wxPoint     pos = GetScreen()->GetNearestGridPosition( aPosition );
 
     // Save the board after the time out :
@@ -264,7 +263,7 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 
     gridSize = GetScreen()->GetGridSize();
 
-    switch( g_KeyPressed )
+    switch( aHotKey )
     {
     case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
     case WXK_UP:
@@ -291,7 +290,6 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        hotkey = g_KeyPressed;
         break;
     }
 
@@ -365,9 +363,9 @@ void WinEDA_PcbFrame::GeneralControle( wxDC* aDC, const wxPoint& aPosition )
 #endif
     }
 
-    if( hotkey )
+    if( aHotKey )
     {
-        OnHotKey( aDC, hotkey, aPosition );
+        OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();    /* Display new cursor coordinates */

@@ -96,9 +96,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
 /**
  * Function ReadDescr
  * Read description from a given line in "*.brd" format.
- * @param aLine The current line which contains the first line of description.
- * @param aLine The FILE to read next lines (currently not used).
- * @param aLineNum a point to the line count (currently not used).
+ * @param aReader The line reader object which contains the first line of description.
  * @return int - > 0 if success reading else 0.
  */
 int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
