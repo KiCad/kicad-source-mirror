@@ -149,14 +149,8 @@ found in the default search paths." ),
             if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
                 continue;
 
-            BOOST_FOREACH( FOOTPRINT_INFO& footprint, m_footprints )
-            {
-                if( alias.m_FootprintName.CmpNoCase( footprint.m_Module ) == 0 )
-                {
-                    SetNewPkg( footprint.m_Module );
-                    break;
-                }
-            }
+            if( m_footprints.GetModuleInfo( alias.m_FootprintName ) )
+                    SetNewPkg( alias.m_FootprintName );
 
             if( component.m_Module.IsEmpty() )
             {

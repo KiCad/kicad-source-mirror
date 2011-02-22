@@ -20,8 +20,6 @@
 #include "3d_viewer.h"
 
 
-extern FOOTPRINT_INFO* GetModuleDescrByName( const wxString& FootprintName, FOOTPRINT_LIST& list );
-
 /*
  * Create or Update the frame showing the current highlighted footprint
  * and (if showed) the 3D display frame
@@ -48,7 +46,7 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
     {
         msg = _( "Footprint: " ) + FootprintName;
         DrawFrame->SetTitle( msg );
-        FOOTPRINT_INFO* Module = GetModuleDescrByName( FootprintName, m_footprints );
+        FOOTPRINT_INFO* Module = m_footprints.GetModuleInfo( FootprintName );
         msg = _( "Lib: " );
 
         if( Module )

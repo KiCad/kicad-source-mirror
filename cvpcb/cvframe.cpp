@@ -17,6 +17,8 @@
 #include "dialog_cvpcb_config.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "cvpcb_id.h"
+#include "dialog_load_error.h"
+
 
 #include "build_version.h"
 
@@ -602,4 +604,47 @@ void CVPCB_MAINFRAME::DisplayStatus()
     else
         msg.Empty();
     SetStatusText( msg, 2 );
+}
+
+/*
+ * Read the list of libraries (*.mod files) and populates m_footprints
+ * ( list of availaible modules in libs ).
+ * for each module are stored
+ *      the module name
+ *      documentation string
+ *      associated keywords
+ */
+bool CVPCB_MAINFRAME::LoadFootprintFiles( )
+{
+    /* Check if there are footprint libraries in project file */
+    if( m_ModuleLibNames.GetCount() == 0 )
+    {
+        wxMessageBox( _( "No PCB footprint libraries are listed in the current project file." ),
+                      _( "Project File Error" ), wxOK | wxICON_ERROR );
+        return false;
+    }
+
+    m_footprints.ReadFootprintFiles(m_ModuleLibNames);
+
+    /* Display error messages, if any */
+    if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
+    {
+        DIALOG_LOAD_ERROR dialog(NULL);
+        if( !m_footprints.m_filesNotFound.IsEmpty() )
+        {
+            wxString message = _("Some files could not be found!");
+            dialog.MessageSet(message);
+            dialog.ListSet(m_footprints.m_filesNotFound);
+        }
+
+        /* Display if there are invalid files */
+        if( !m_footprints.m_filesInvalid.IsEmpty() )
+        {
+            dialog.MessageSet( _("Some files are invalid!"));
+            dialog.ListSet(m_footprints.m_filesInvalid);
+        }
+        dialog.ShowModal();
+    }
+
+    return true;
 }

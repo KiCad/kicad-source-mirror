@@ -78,11 +78,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 break;
 
             case TYPE_DRAWSEGMENT:
-                if( m_ID_current_state == 0 )
-                {
-                    Place_DrawItem( (DRAWSEGMENT*) DrawStruct, aDC );
-                    exit = true;
-                }
+                Place_DrawItem( (DRAWSEGMENT*) DrawStruct, aDC );
+                exit = true;
                 break;
 
             case TYPE_DIMENSION:
