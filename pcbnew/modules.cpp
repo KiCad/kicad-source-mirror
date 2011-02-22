@@ -107,7 +107,7 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
         module->m_Flags = tmp;
     }
 
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -131,7 +131,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         /* If a move command: return to old position
          * If a copy command, delete the new footprint
          */
-        if( module->m_Flags & IS_MOVED ) // Move command
+        if( module->IsMoving() )
         {
             if( g_Drag_Pistes_On )
             {
@@ -153,10 +153,10 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
             }
 
             EraseDragList();
-            module->m_Flags = 0;
+            module->m_Flags &= ~IS_MOVED;
         }
 
-        if( (module->IsNew()) )  // Copy command: delete new footprint
+        if( module->IsNew() )  // Copy command: delete new footprint
         {
             module->DeleteStructure();
             module = NULL;
@@ -169,10 +169,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( module && s_ModuleInitialCopy )
     {
         if( s_ModuleInitialCopy->m_Orient != module->m_Orient )
-            pcbframe->Rotate_Module( NULL,
-                                     module,
-                                     s_ModuleInitialCopy->m_Orient,
-                                     FALSE );
+            pcbframe->Rotate_Module( NULL, module, s_ModuleInitialCopy->m_Orient, false );
 
         if( s_ModuleInitialCopy->GetLayer() != module->GetLayer() )
             pcbframe->Change_Side_Module( module, NULL );
@@ -180,7 +177,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         module->Draw( Panel, DC, GR_OR );
     }
 
-    g_Drag_Pistes_On     = FALSE;
+    g_Drag_Pistes_On     = false;
     pcbframe->SetCurItem( NULL );
 
     delete s_ModuleInitialCopy;
@@ -270,7 +267,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
     wxString msg;
 
     if( aModule == NULL )
-        return FALSE;
+        return false;
 
     aModule->DisplayInfo( this );
 
@@ -278,11 +275,11 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
     if( aAskBeforeDeleting )
     {
         msg.Printf( _( "Delete Module %s (value %s) ?" ),
-                   GetChars( aModule->m_Reference->m_Text ),
-                   GetChars( aModule->m_Value->m_Text ) );
+                    GetChars( aModule->m_Reference->m_Text ),
+                    GetChars( aModule->m_Value->m_Text ) );
         if( !IsOK( this, msg ) )
         {
-            return FALSE;
+            return false;
         }
     }
 
