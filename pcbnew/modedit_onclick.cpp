@@ -26,36 +26,33 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     BOARD_ITEM* item = GetCurItem();
 
     DrawPanel->CrossHairOff( DC );
-    if( m_ID_current_state == 0 )
+
+    if( item && item->m_Flags ) // Command in progress
     {
-        if( item && item->m_Flags ) // Command in progress
+        switch( item->Type() )
         {
-            switch( item->Type() )
-            {
-            case TYPE_TEXTE_MODULE:
-                PlaceTexteModule( (TEXTE_MODULE*) item, DC );
-                break;
+        case TYPE_TEXTE_MODULE:
+            PlaceTexteModule( (TEXTE_MODULE*) item, DC );
+            break;
 
-            case TYPE_EDGE_MODULE:
-                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-                Place_EdgeMod( (EDGE_MODULE*) item );
-                break;
+        case TYPE_EDGE_MODULE:
+            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+            Place_EdgeMod( (EDGE_MODULE*) item );
+            break;
 
-            case TYPE_PAD:
-                PlacePad( (D_PAD*) item, DC );
-                break;
+        case TYPE_PAD:
+            PlacePad( (D_PAD*) item, DC );
+            break;
 
-            default:
-            {
-                wxString msg;
-                msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err: \
-m_Flags != 0\nStruct @%p, type %d m_Flag %X" ),
-                            item, item->Type(), item->m_Flags );
-                DisplayError( this, msg );
-                item->m_Flags = 0;
-                break;
-            }
-            }
+        default:
+        {
+            wxString msg;
+            msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
+                        item->Type(), item->m_Flags );
+            DisplayError( this, msg );
+            item->m_Flags = 0;
+            break;
+        }
         }
     }
 
@@ -199,7 +196,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
     }
 
     // End command in progress.
-    if(  m_ID_current_state )
+    if(  m_ID_current_state && m_ID_current_state != ID_MODEDIT_NO_TOOL )
     {
         if( item && item->m_Flags )
             ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );

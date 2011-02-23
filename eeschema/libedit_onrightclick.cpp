@@ -50,13 +50,13 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                       _( "Cancel" ), cancel_xpm );
         PopMenu->AppendSeparator();
     }
-    else if( m_ID_current_state )
+    else if( m_ID_current_state && m_ID_current_state != ID_LIBEDIT_NO_TOOL )
     {   // If a tool is active, put menu "end tool"
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING,
                       _( "End Tool" ), cancel_tool_xpm );
         PopMenu->AppendSeparator();
     }
-    
+
 
     if( DrawEntry )
         DrawEntry->DisplayInfo( this );

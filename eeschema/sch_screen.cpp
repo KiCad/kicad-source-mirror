@@ -273,7 +273,6 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
                          * segment can be flagged */
                         DrawList->m_Flags |= TstDrawList->m_Flags;
                         EraseStruct( TstDrawList, this );
-                        aCanvas->Refresh();
                         TstDrawList = GetDrawItems();
                         Modify = true;
                     }
@@ -292,6 +291,8 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 
     TestDanglingEnds( aCanvas, aDC );
 
+    if( aCanvas && Modify )
+        aCanvas->Refresh();
     return Modify;
 }
 

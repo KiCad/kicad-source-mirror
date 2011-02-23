@@ -572,7 +572,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     if( org.y < m_ClipBox.GetY() )
         org.y += wxRound( gridSize.y );
 
-#if ( defined( __WXMAC__ ) || 0 )
+#if ( defined( __WXMAC__ ) || 1 )
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
     // high and grid is slowly drawn on some platforms.  Please note that this should
     // always be enabled until the bitmap based solution below is fixed.

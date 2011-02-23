@@ -51,7 +51,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     DrawPanel->CrossHairOff( &dc );
 
-    if( m_ID_current_state )
+    if( m_ID_current_state && m_ID_current_state != ID_PCB_NO_TOOL )
     {
         if( item && item->m_Flags )
         {

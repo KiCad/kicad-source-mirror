@@ -25,38 +25,35 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     if( m_component == NULL )   // No component loaded !
         return;
 
-    if( m_ID_current_state == 0 )
+    if( DrawEntry && DrawEntry->m_Flags )
     {
-        if( DrawEntry && DrawEntry->m_Flags )
+        switch( DrawEntry->Type() )
         {
-            switch( DrawEntry->Type() )
-            {
-            case LIB_PIN_T:
-                PlacePin( DC );
-                DrawEntry = NULL;
-                break;
+        case LIB_PIN_T:
+            PlacePin( DC );
+            DrawEntry = NULL;
+            break;
 
-            default:
-                EndDrawGraphicItem( DC );
-                break;
-            }
+        default:
+            EndDrawGraphicItem( DC );
+            break;
         }
+    }
+    else
+    {
+        DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
+
+        if( DrawEntry == NULL )
+        {
+            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                                     GetScreen()->GetCrossHairPosition() );
+        }
+
+        if( DrawEntry )
+            DrawEntry->DisplayInfo( this );
+
         else
-        {
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-
-            if( DrawEntry == NULL )
-            {
-                DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                         GetScreen()->GetCrossHairPosition() );
-            }
-
-            if( DrawEntry )
-                DrawEntry->DisplayInfo( this );
-
-            else
-                DisplayCmpDoc();
-        }
+            DisplayCmpDoc();
     }
 
     if( m_ID_current_state )
