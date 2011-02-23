@@ -58,23 +58,13 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 DrawPanel->Refresh( true );
                 return;
 
-            case SCH_SCREEN_T:
-                DisplayError( this, wxT( "OnLeftClick err: unexpected type for Place" ) );
-                item->m_Flags = 0;
-                break;
-
-            case SCH_LINE_T: // May already be drawing segment.
+            case SCH_LINE_T:    // May already be drawing segment.
                 break;
 
             default:
-            {
-                wxString msg;
-                msg.Printf( wxT( "SCH_EDIT_FRAME::OnLeftClick err: m_Flags != 0, itmetype %d" ),
-                            item->Type());
-                DisplayError( this, msg );
-                item->m_Flags = 0;
-                break;
-            }
+                wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick error.  Item type <" ) +
+                            item->GetClass() + wxT( "> is already being edited." ) );
+                item->SetFlags( 0 );
             }
         }
         else
@@ -306,14 +296,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-    {
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-        wxString msg( wxT( "SCH_EDIT_FRAME::OnLeftClick error state " ) );
-
-        msg << m_ID_current_state;
-        DisplayError( this, msg );
-        break;
-    }
+        SetToolID( ID_SCH_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick invalid tool ID <" ) +
+                    wxString::Format( wxT( "%d> selected." ), m_ID_current_state ) );
     }
 }
 
