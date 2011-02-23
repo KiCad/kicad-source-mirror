@@ -65,7 +65,7 @@ void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container
     // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
     evt.SetId( ID_PCB_ZONES_BUTT );
-    Process_Special_Functions( evt );
+    OnSelectTool( evt );
 }
 
 
@@ -91,7 +91,7 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
     // Use the general event handle to set others params (like toolbar) */
     wxCommandEvent evt;
     evt.SetId( ID_PCB_ZONES_BUTT );
-    Process_Special_Functions( evt );
+    OnSelectTool( evt );
 }
 
 

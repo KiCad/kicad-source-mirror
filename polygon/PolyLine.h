@@ -134,31 +134,11 @@ public:
 
     /**
      * Function Chamfer
-     * chamfers a corner.
-     * @param aIndex is the corner index.
-     * @param aDistance is the chamfering distance.
-     * @return int - The number of segments added.
-     */
-    int        Chamfer( unsigned int aIndex, unsigned int aDistance );
-
-    /**
-     * Function Chamfer
      * returns a chamfered version of a polygon.
      * @param aDistance is the chamfering distance.
      * @return CPolyLine* - Pointer to new polygon.
      */
     CPolyLine* Chamfer( unsigned int aDistance );
-
-    /**
-     * Function Fillet
-     * rounds a corner.
-     * @param aIndex is the corner index.
-     * @param aDistance is the fillet radius.
-     * @param aSegments is the number of segments / 360 degrees.
-     * @return int - The number of segments added.
-     */
-    int        Fillet( unsigned int aIndex, unsigned int aRadius,
-                       unsigned int aSegments );
 
     /**
      * Function Fillet
@@ -200,28 +180,12 @@ public:
     int        GetY( int ic );
     int        GetEndContour( int ic );
 
-    /**
-     * Function GetEdgeLength
-     * returns the length of the edge starting at given corner index.
-     * @param aIndex is the corner index.
-     * @return unsigned int - the length of the edge.
-     */
-    unsigned int GetEdgeLength( unsigned int aIndex );
-
-    /**
-     * Function GetCosine
-     * returns the cosine between the two edge vectors at a corner.
-     * @param aIndex is the corner index.
-     * @return double - the cosine value.
-     */
-    double     GetCosine( unsigned int aIndex );
-
-    int GetUtility( int ic ) { return corner[ic].utility; };
-    void SetUtility( int ic, int utility ) { corner[ic].utility = utility; };
+    int        GetUtility( int ic ) { return corner[ic].utility; };
+    void       SetUtility( int ic, int utility ) { corner[ic].utility = utility; };
     int        GetSideStyle( int is );
 
-    int GetHatchStyle() { return m_HatchStyle; }
-    void SetHatch( int hatch ) { Undraw(); m_HatchStyle = hatch; Draw(); };
+    int        GetHatchStyle() { return m_HatchStyle; }
+    void       SetHatch( int hatch ) { Undraw(); m_HatchStyle = hatch; Draw(); };
     void       SetX( int ic, int x );
     void       SetY( int ic, int y );
     void       SetEndContour( int ic, bool end_contour );
