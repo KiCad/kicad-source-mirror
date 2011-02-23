@@ -39,7 +39,7 @@
 /* Library editor wxConfig entry names. */
 const wxString lastLibExportPathEntry( wxT( "LastLibraryExportPath" ) );
 const wxString lastLibImportPathEntry( wxT( "LastLibraryImportPath" ) );
-const wxString showGridPathEntry( wxT( "ShowGrid" ) );
+
 
 /* This method guarantees unique IDs for the library this run of Eeschema
  * which prevents ID conflicts and eliminates the need to recompile every
@@ -122,8 +122,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_LIBEDIT_DIMENSIONS, LIB_EDIT_FRAME::InstallDimensionsDialog )
 
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
-                    ID_PREFERENCES_HOTKEY_END,
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     LIB_EDIT_FRAME::Process_Config )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, LIB_EDIT_FRAME::SetLanguage )
@@ -184,6 +183,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     SetIcon( wxIcon( libedit_xpm ) );
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;
+    GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+
     LoadSettings();
 
     // Initilialize grid id to a default value if not found in config or bad:
@@ -201,16 +202,11 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
+    CreateOptionToolbar();
     DisplayLibInfos();
     DisplayCmpDoc();
     UpdateAliasSelectList();
     UpdatePartSelectList();
-
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetZoom( BestZoom() );
-#else
-    Zoom_Automatique( false );
-#endif
 
     Show( true );
 
@@ -235,12 +231,19 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_auimgr.AddPane( m_VToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
+    m_auimgr.AddPane( m_OptionsToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( MsgPanel,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+
     m_auimgr.Update();
+
+    wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_ZOOM_PAGE );
+    wxPostEvent( this, evt );
 }
 
 
@@ -324,6 +327,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             wxString msg;
             msg.Printf( _( "Library \"%s\" was modified!\nDiscard changes?" ),
                         GetChars( lib.GetName() ) );
+
             if( !IsOK( this, msg ) )
             {
                 Event.Veto();
@@ -348,7 +352,7 @@ int LIB_EDIT_FRAME::BestZoom()
         BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
-        GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
+        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
     else
     {

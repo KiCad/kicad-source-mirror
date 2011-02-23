@@ -83,21 +83,17 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
-                         wxBitmap( save_library_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString, wxBitmap( save_library_xpm ),
                          _( "Save current library to disk" ) );
 
-    m_HToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString,
-                         wxBitmap( library_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString, wxBitmap( library_xpm ),
                          _( "Select working library" ) );
 
-    m_HToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString,
-                         wxBitmap( delete_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, wxBitmap( delete_xpm ),
                          _( "Delete component in current library" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
-                         wxBitmap( new_component_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, wxBitmap( new_component_xpm ),
                          _( "Create a new component" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
@@ -118,65 +114,48 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ExportPartId, wxEmptyString, wxBitmap( export_xpm ),
                          _( "Export component" ) );
 
-    m_HToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString,
-                         wxBitmap( new_library_xpm ),
+    m_HToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, wxBitmap( new_library_xpm ),
                          _( "Save current component to new library" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr,
-                         HK_UNDO, false );
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ),
-                         msg );
-    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr,
-                         HK_REDO, false );
-    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ),
-                         msg );
+    msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr, HK_UNDO, false );
+    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ), msg );
+    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO, false );
+    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                         wxBitmap( part_properties_xpm ),
-                         _( "Edit component properties" ) );
+                         wxBitmap( part_properties_xpm ), _( "Edit component properties" ) );
 
-    m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                         wxBitmap( add_text_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString, wxBitmap( add_text_xpm ),
                          _( "Add and remove fields and edit field properties" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString,
-                         wxBitmap( erc_xpm ),
+    m_HToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, wxBitmap( erc_xpm ),
                          _( "Test for duplicate pins and off grid pins" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_ZOOM_IN, s_Libedit_Hokeys_Descr, HK_ZOOM_IN, false );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
-                         msg );
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, false );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
-                         msg );
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr,
-                         HK_ZOOM_REDRAW, false );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                         wxBitmap( zoom_redraw_xpm ), msg );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, false );
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_FIT, s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, false );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                         wxBitmap( zoom_auto_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                         wxBitmap( morgan1_xpm ),
-                         _( "Show as \"De Morgan\" normal part" ),
-                         wxITEM_CHECK );
-    m_HToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                         wxBitmap( morgan2_xpm ),
-                         _( "Show as \"De Morgan\" convert part" ),
-                         wxITEM_CHECK );
+    m_HToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString, wxBitmap( morgan1_xpm ),
+                         _( "Show as \"De Morgan\" normal part" ), wxITEM_CHECK );
+    m_HToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString, wxBitmap( morgan2_xpm ),
+                         _( "Show as \"De Morgan\" convert part" ), wxITEM_CHECK );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString,
-                         wxBitmap( datasheet_xpm ), _( "Edit document file" ) );
+    m_HToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, wxBitmap( datasheet_xpm ),
+                         _( "Edit document file" ) );
 
     m_HToolBar->AddSeparator();
     m_SelpartBox = new WinEDAChoiceBox( m_HToolBar,
@@ -185,8 +164,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                         wxSize( LISTBOX_WIDTH, -1 ) );
     m_HToolBar->AddControl( m_SelpartBox );
 
-    m_SelAliasBox = new WinEDAChoiceBox( m_HToolBar, ID_LIBEDIT_SELECT_ALIAS,
-                                         wxDefaultPosition,
+    m_SelAliasBox = new WinEDAChoiceBox( m_HToolBar, ID_LIBEDIT_SELECT_ALIAS, wxDefaultPosition,
                                          wxSize( LISTBOX_WIDTH, -1 ) );
     m_HToolBar->AddControl( m_SelAliasBox );
 
@@ -196,12 +174,34 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     msg += _("Usual option = OFF when parts are not locked");
     msg << wxT("\n");
     msg += _("Usual option = ON when parts are locked");
-    m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString,
-                         wxBitmap( pin2pin_xpm ),
-                         msg,
-                         wxITEM_CHECK );
+    m_HToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, wxBitmap( pin2pin_xpm ),
+                         msg, wxITEM_CHECK );
 
-    // after adding the buttons to the toolbar, must call Realize() to reflect
-    // the changes
+    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();
+}
+
+
+void LIB_EDIT_FRAME::CreateOptionToolbar()
+{
+    if( m_OptionsToolBar )
+        return;
+
+    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
+                               _( "Turn grid off" ), wxITEM_CHECK );
+
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
+                               wxBitmap( unit_inch_xpm ), _( "Units in inches" ), wxITEM_CHECK );
+
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
+                               wxBitmap( unit_mm_xpm ),
+                               _( "Units in millimeters" ), wxITEM_CHECK );
+
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+                               wxBitmap( cursor_shape_xpm ),
+                               _( "Change cursor shape" ), wxITEM_CHECK );
+
+    m_OptionsToolBar->Realize();
 }

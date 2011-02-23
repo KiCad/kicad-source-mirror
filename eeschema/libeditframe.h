@@ -96,6 +96,7 @@ public:
     void        OnCloseWindow( wxCloseEvent& Event );
     void        ReCreateHToolbar();
     void        ReCreateVToolbar();
+    void        CreateOptionToolbar();
     void        OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     bool        OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     int         BestZoom();         // Returns the best zoom
@@ -328,7 +329,6 @@ protected:
      * @param aFmt_jpeg = true to use JPEG ffile format, false to use PNG file format
      */
     void         CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
-
 
     /** Virtual function PrintPage
      * used to print a page

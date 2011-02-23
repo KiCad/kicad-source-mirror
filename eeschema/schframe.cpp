@@ -124,8 +124,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnUpdateHiddenPins )
     EVT_UPDATE_UI( ID_TB_OPTIONS_BUS_WIRES_ORIENT, SCH_EDIT_FRAME::OnUpdateBusOrientation )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                         SCH_EDIT_FRAME::OnUpdateUnits )
     EVT_UPDATE_UI_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
                          SCH_EDIT_FRAME::OnUpdateSelectTool )
 
@@ -655,17 +653,12 @@ void SCH_EDIT_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
     if( m_LibeditFrame )
-    {
         m_LibeditFrame->Show( true );
-    }
     else
-    {
         m_LibeditFrame = new LIB_EDIT_FRAME( this,
                                              wxT( "Library Editor" ),
                                              wxPoint( -1, -1 ),
                                              wxSize( 600, 400 ) );
-        m_LibeditFrame->AdjustScrollBars( wxPoint( 0, 0 ) );
-    }
 }
 
 
