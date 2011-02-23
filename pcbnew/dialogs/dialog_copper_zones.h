@@ -31,6 +31,9 @@ private:
                                              */
     wxListView*     m_LayerSelectionCtrl;
 
+    static wxPoint  prevPosition;             // Dialog position & size
+    static wxSize   prevSize;
+
 public:
     dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting );
 private:
@@ -38,6 +41,7 @@ private:
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
+    void OnSize( wxSizeEvent& event );
     void OnCornerSmoothingModeChoice( wxCommandEvent& event );
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
     void OnNetSortingOptionSelected( wxCommandEvent& event );

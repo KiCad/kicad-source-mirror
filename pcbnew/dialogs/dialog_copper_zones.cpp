@@ -29,10 +29,12 @@
  */
 wxString dialog_copper_zone::m_netNameShowFilter( wxT( "*" ) );
 
-/************************************************************************************************/
+wxPoint dialog_copper_zone::prevPosition( -1, -1 );
+wxSize dialog_copper_zone::prevSize;
+
+
 dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting ) :
     dialog_copper_zone_base( parent )
-/************************************************************************************************/
 {
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
@@ -58,6 +60,10 @@ dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* z
 
     GetSizer()->SetSizeHints( this );
     Center();
+
+    if( prevPosition.x != -1 )
+        SetSize( prevPosition.x, prevPosition.y,
+                 prevSize.x, prevSize.y );
 }
 
 
@@ -127,7 +133,6 @@ void dialog_copper_zone::initDialog()
 
     m_cornerSmoothingChoice->SetSelection( m_Zone_Setting->GetCornerSmoothingType() );
 
-    AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
     PutValueInLocalUnits( *m_cornerSmoothingCtrl,
                           m_Zone_Setting->GetCornerRadius(),
                           PCB_INTERNAL_UNIT );
@@ -175,9 +180,6 @@ void dialog_copper_zone::initDialog()
             m_LayerSelectionCtrl->Select( itemIndex );
     }
 
-    // Set layer list column width to widget width
-    m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x );
-
     wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
     {
@@ -210,7 +212,18 @@ void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
 
 void dialog_copper_zone::OnClose( wxCloseEvent& event )
 {
+    prevPosition = GetPosition();
+    prevSize = GetSize();
     EndModal( m_OnExitCode );
+}
+
+
+void dialog_copper_zone::OnSize( wxSizeEvent& event )
+{
+    Layout();
+
+    // Set layer list column width to widget width minus a few pixels
+    m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x - 5 );
 }
 
 
@@ -418,6 +431,9 @@ void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
 /*****************************************************************/
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
+    prevPosition = GetPosition();
+    prevSize = GetSize();
+
     if( AcceptOptions( true ) )
         EndModal( ZONE_OK );
 }
@@ -427,6 +443,9 @@ void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
 void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 /******************************************************************************/
 {
+    prevPosition = GetPosition();
+    prevSize = GetSize();
+
     if( !AcceptOptions( true, true ) )
         return;
 

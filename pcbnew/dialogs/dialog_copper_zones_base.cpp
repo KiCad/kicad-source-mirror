@@ -11,6 +11,7 @@
 
 BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
 	EVT_CLOSE( dialog_copper_zone_base::_wxFB_OnClose )
+	EVT_SIZE( dialog_copper_zone_base::_wxFB_OnSize )
 	EVT_CHOICE( ID_M_NETDISPLAYOPTION, dialog_copper_zone_base::_wxFB_OnNetSortingOptionSelected )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
@@ -37,7 +38,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	m_staticText17->Wrap( -1 );
 	m_layerSizer->Add( m_staticText17, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptionsBoxSizer->Add( m_layerSizer, 0, wxEXPAND, 5 );
+	m_OptionsBoxSizer->Add( m_layerSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
