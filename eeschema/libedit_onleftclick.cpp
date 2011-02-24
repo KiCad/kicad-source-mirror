@@ -25,21 +25,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     if( m_component == NULL )   // No component loaded !
         return;
 
-    if( DrawEntry && DrawEntry->m_Flags )
-    {
-        switch( DrawEntry->Type() )
-        {
-        case LIB_PIN_T:
-            PlacePin( DC );
-            DrawEntry = NULL;
-            break;
-
-        default:
-            EndDrawGraphicItem( DC );
-            break;
-        }
-    }
-    else
+    if( DrawEntry == NULL || DrawEntry->m_Flags == 0 )
     {
         DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
 
@@ -56,80 +42,90 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
             DisplayCmpDoc();
     }
 
-    if( m_ID_current_state )
+    switch( m_ID_current_state )
     {
-        switch( m_ID_current_state )
+    case 0:
+    case ID_LIBEDIT_NO_TOOL:
+        if( DrawEntry && DrawEntry->m_Flags )   // moved object
         {
-        case 0:
-        case ID_LIBEDIT_NO_TOOL:
-            break;
-
-        case ID_LIBEDIT_PIN_BUTT:
-            if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
+            switch( DrawEntry->Type() )
             {
-                CreatePin( DC );
-            }
-            else
-            {
+            case LIB_PIN_T:
                 PlacePin( DC );
-            }
-            break;
+                break;
 
-        case ID_LIBEDIT_BODY_LINE_BUTT:
-        case ID_LIBEDIT_BODY_ARC_BUTT:
-        case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-        case ID_LIBEDIT_BODY_RECT_BUTT:
-        case ID_LIBEDIT_BODY_TEXT_BUTT:
-            if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
-            {
-                m_drawItem = CreateGraphicItem( m_component, DC );
-            }
-            else if( m_drawItem )
-            {
-                if( m_drawItem->IsNew() )
-                    GraphicItemBeginDraw( DC );
-                else
-                    EndDrawGraphicItem( DC );
-            }
-            break;
-
-        case ID_LIBEDIT_DELETE_ITEM_BUTT:
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-
-            if( DrawEntry == NULL )
-            {
-                DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                         GetScreen()->GetCrossHairPosition() );
-            }
-
-            if( DrawEntry == NULL )
-            {
-                DisplayCmpDoc();
+            default:
+                EndDrawGraphicItem( DC );
                 break;
             }
+         }
+        break;
 
-            SaveCopyInUndoList( m_component );
+    case ID_LIBEDIT_PIN_BUTT:
+        if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
+        {
+            CreatePin( DC );
+        }
+        else
+        {
+            PlacePin( DC );
+        }
+        break;
 
-            if( DrawEntry->Type() == LIB_PIN_T )
-                DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );
+    case ID_LIBEDIT_BODY_LINE_BUTT:
+    case ID_LIBEDIT_BODY_ARC_BUTT:
+    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
+    case ID_LIBEDIT_BODY_RECT_BUTT:
+    case ID_LIBEDIT_BODY_TEXT_BUTT:
+        if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
+        {
+            m_drawItem = CreateGraphicItem( m_component, DC );
+        }
+        else if( m_drawItem )
+        {
+            if( m_drawItem->IsNew() )
+                GraphicItemBeginDraw( DC );
             else
-                m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
+                EndDrawGraphicItem( DC );
+        }
+        break;
 
-            DrawEntry = NULL;
-            OnModify( );
-            break;
+    case ID_LIBEDIT_DELETE_ITEM_BUTT:
+        DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
 
-        case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-            SaveCopyInUndoList( m_component );
-            PlaceAncre();
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
-            break;
+        if( DrawEntry == NULL )
+        {
+            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                                     GetScreen()->GetCrossHairPosition() );
+        }
 
-        default:
-            DisplayError( this, wxT( "LIB_EDIT_FRAME::OnLeftClick error" ) );
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        if( DrawEntry == NULL )
+        {
+            DisplayCmpDoc();
             break;
         }
+
+        SaveCopyInUndoList( m_component );
+
+        if( DrawEntry->Type() == LIB_PIN_T )
+            DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );
+        else
+            m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
+
+        DrawEntry = NULL;
+        OnModify( );
+        break;
+
+    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
+        SaveCopyInUndoList( m_component );
+        PlaceAncre();
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        break;
+
+    default:
+        DisplayError( this, wxT( "LIB_EDIT_FRAME::OnLeftClick error" ) );
+        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        break;
     }
 }
 

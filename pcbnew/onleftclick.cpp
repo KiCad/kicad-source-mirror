@@ -20,84 +20,90 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     bool        exit = false;
+    bool no_tool = m_ID_current_state == 0 || m_ID_current_state == ID_PCB_NO_TOOL;
 
-    if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
+    if( no_tool || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
-        DrawPanel->m_IgnoreMouseEvents = true;
-        DrawPanel->CrossHairOff( aDC );
-
-        switch( DrawStruct->Type() )
+        if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
         {
-        case TYPE_ZONE_CONTAINER:
-            if( DrawStruct->IsNew() )
-            {
-                DrawPanel->m_AutoPAN_Request = true;
-                Begin_Zone( aDC );
-            }
-            else
-                End_Move_Zone_Corner_Or_Outlines( aDC, (ZONE_CONTAINER*) DrawStruct );
-            exit = true;
-            break;
+            DrawPanel->m_IgnoreMouseEvents = true;
+            DrawPanel->CrossHairOff( aDC );
 
-        case TYPE_TRACK:
-        case TYPE_VIA:
-            if( DrawStruct->m_Flags & IS_DRAGGED )
+            switch( DrawStruct->Type() )
             {
-                PlaceDraggedOrMovedTrackSegment( (TRACK*) DrawStruct, aDC );
+            case TYPE_ZONE_CONTAINER:
+                if( DrawStruct->IsNew() )
+                {
+                    DrawPanel->m_AutoPAN_Request = true;
+                    Begin_Zone( aDC );
+                }
+                else
+                    End_Move_Zone_Corner_Or_Outlines( aDC, (ZONE_CONTAINER*) DrawStruct );
                 exit = true;
+                break;
+
+            case TYPE_TRACK:
+            case TYPE_VIA:
+                if( DrawStruct->m_Flags & IS_DRAGGED )
+                {
+                    PlaceDraggedOrMovedTrackSegment( (TRACK*) DrawStruct, aDC );
+                    exit = true;
+                }
+                break;
+
+            case TYPE_TEXTE:
+                Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, aDC );
+                exit = true;
+                break;
+
+            case TYPE_TEXTE_MODULE:
+                PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, aDC );
+                exit = true;
+                break;
+
+            case TYPE_PAD:
+                PlacePad( (D_PAD*) DrawStruct, aDC );
+                exit = true;
+                break;
+
+            case TYPE_MODULE:
+                Place_Module( (MODULE*) DrawStruct, aDC );
+                exit = true;
+                break;
+
+            case TYPE_MIRE:
+                Place_Mire( (MIREPCB*) DrawStruct, aDC );
+                exit = true;
+                break;
+
+            case TYPE_DRAWSEGMENT:
+                if( no_tool )   // when no tools: existing item moving.
+                {
+                    Place_DrawItem( (DRAWSEGMENT*) DrawStruct, aDC );
+                    exit = true;
+                }
+                break;
+
+            case TYPE_DIMENSION:
+                // see above.
+                break;
+
+            default:
+                DisplayError( this,
+                             wxT(
+                                 "WinEDA_PcbFrame::OnLeftClick() err: DrawType %d m_Flags != 0" ),
+                             DrawStruct->Type() );
+                exit = true;
+                break;
             }
-            break;
 
-        case TYPE_TEXTE:
-            Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, aDC );
-            exit = true;
-            break;
+            DrawPanel->m_IgnoreMouseEvents = false;
+            DrawPanel->CrossHairOn( aDC );
 
-        case TYPE_TEXTE_MODULE:
-            PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, aDC );
-            exit = true;
-            break;
-
-        case TYPE_PAD:
-            PlacePad( (D_PAD*) DrawStruct, aDC );
-            exit = true;
-            break;
-
-        case TYPE_MODULE:
-            Place_Module( (MODULE*) DrawStruct, aDC );
-            exit = true;
-            break;
-
-        case TYPE_MIRE:
-            Place_Mire( (MIREPCB*) DrawStruct, aDC );
-            exit = true;
-            break;
-
-        case TYPE_DRAWSEGMENT:
-            Place_DrawItem( (DRAWSEGMENT*) DrawStruct, aDC );
-            exit = true;
-            break;
-
-        case TYPE_DIMENSION:
-            // see above.
-            break;
-
-        default:
-            DisplayError( this,
-                         wxT(
-                             "WinEDA_PcbFrame::OnLeftClick() err: DrawType %d m_Flags != 0" ),
-                         DrawStruct->Type() );
-            exit = true;
-            break;
+            if( exit )
+                return;
         }
-
-        DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->CrossHairOn( aDC );
-
-        if( exit )
-            return;
-
         else if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
                 && !wxGetKeyState( WXK_CONTROL ) )
         {

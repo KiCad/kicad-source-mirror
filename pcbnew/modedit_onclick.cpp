@@ -27,32 +27,35 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     DrawPanel->CrossHairOff( DC );
 
-    if( item && item->m_Flags ) // Command in progress
+    if( m_ID_current_state == 0 || m_ID_current_state == ID_MODEDIT_NO_TOOL )
     {
-        switch( item->Type() )
+        if( item && item->m_Flags ) // Move item command in progress
         {
-        case TYPE_TEXTE_MODULE:
-            PlaceTexteModule( (TEXTE_MODULE*) item, DC );
-            break;
+            switch( item->Type() )
+            {
+            case TYPE_TEXTE_MODULE:
+                PlaceTexteModule( (TEXTE_MODULE*) item, DC );
+                break;
 
-        case TYPE_EDGE_MODULE:
-            SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-            Place_EdgeMod( (EDGE_MODULE*) item );
-            break;
+            case TYPE_EDGE_MODULE:
+                SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+                Place_EdgeMod( (EDGE_MODULE*) item );
+                break;
 
-        case TYPE_PAD:
-            PlacePad( (D_PAD*) item, DC );
-            break;
+            case TYPE_PAD:
+                PlacePad( (D_PAD*) item, DC );
+                break;
 
-        default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
-                        item->Type(), item->m_Flags );
-            DisplayError( this, msg );
-            item->m_Flags = 0;
-            break;
-        }
+            default:
+            {
+                wxString msg;
+                msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
+                            item->Type(), item->m_Flags );
+                DisplayError( this, msg );
+                item->m_Flags = 0;
+                break;
+            }
+            }
         }
     }
 
@@ -79,9 +82,9 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             int shape = S_SEGMENT;
 
-            if( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
+            if( m_ID_current_state == ID_MODEDIT_CIRCLE_TOOL )
                 shape = S_CIRCLE;
-            if( m_ID_current_state == ID_PCB_ARC_BUTT )
+            if( m_ID_current_state == ID_MODEDIT_ARC_TOOL )
                 shape = S_ARC;
 
             SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );

@@ -134,10 +134,9 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC*
     switch( m_ID_current_state )
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
-    {
         m_drawItem = new LIB_ARC( LibEntry );
         break;
-    }
+
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
         m_drawItem = new LIB_CIRCLE( LibEntry );
         break;

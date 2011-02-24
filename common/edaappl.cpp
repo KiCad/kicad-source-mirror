@@ -48,6 +48,7 @@ static const wxChar* CommonConfigPath = wxT( "kicad_common" );
 /* Default font size */
 #define FONT_DEFAULT_SIZE 10    /* Default font size. */
 
+static wxString languageCfgKey( wxT( "LanguageID" ) );
 
 /**
  * The real font size will be computed at run time
@@ -336,8 +337,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     ReadPdfBrowserInfos();
 
     // Internationalization: loading the kicad suitable Dictionary
-    m_EDA_CommonConfig->Read( wxT( "Language" ), &m_LanguageId,
-                              wxLANGUAGE_DEFAULT );
+    m_EDA_CommonConfig->Read( languageCfgKey, &m_LanguageId, wxLANGUAGE_DEFAULT );
 
     bool succes = SetLanguage( TRUE );
     if( !succes )
@@ -627,8 +627,7 @@ void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
     m_HelpSize.x = 500;
     m_HelpSize.y = 400;
 
-    m_LanguageId = m_EDA_CommonConfig->Read( wxT( "Language" ),
-                                             wxLANGUAGE_DEFAULT );
+    m_LanguageId = m_EDA_CommonConfig->Read( languageCfgKey, wxLANGUAGE_DEFAULT );
     m_EditorName = m_EDA_CommonConfig->Read( wxT( "Editor" ) );
 
     m_fileHistory.Load( *m_EDA_Config );
@@ -718,10 +717,10 @@ bool WinEDA_App::SetLanguage( bool first_time )
 
     if( !first_time )
     {
-        m_EDA_CommonConfig->Write( wxT( "Language" ), m_LanguageId );
+        m_EDA_CommonConfig->Write( languageCfgKey, m_LanguageId );
     }
 
-    // Test if floating point notation is working (bug in cross compilation)
+    // Test if floating point notation is working (bug in cross compilation, using wine)
     // Make a conversion double <=> string
     double dtst = 0.5;
     wxString msg;
