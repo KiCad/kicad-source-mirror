@@ -712,12 +712,12 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         field.m_Orient = TEXT_ORIENT_HORIZ;
 
     // Copy the text justification
-    GRTextHorizJustifyType hjustify[3] = {
+    static const GRTextHorizJustifyType hjustify[3] = {
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
 
-    GRTextVertJustifyType vjustify[3] = {
+    static const GRTextVertJustifyType vjustify[3] = {
         GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };
@@ -734,7 +734,13 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     // FieldNameTextCtrl has a tricked value in it for VALUE index, do not copy it back.
     // It has the "Chip Name" appended.
     if( field.GetId() >= MANDATORY_FIELDS )
-        field.SetName( fieldNameTextCtrl->GetValue() );
+    {
+        wxString name = fieldNameTextCtrl->GetValue();
+        D( printf("name:%s\n", TO_UTF8( name ) ); )
+        field.SetName( name );
+    }
+
+    D( printf("setname:%s\n", TO_UTF8( field.GetName() ) ); )
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 

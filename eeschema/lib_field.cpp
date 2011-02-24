@@ -606,10 +606,10 @@ wxString LIB_FIELD::GetName(bool aTranslate) const
     default:
         if( m_name.IsEmpty() )
         {
-        if( aTranslate )
-            name.Printf( _( "Field%d" ), m_id );
-        else
-            name.Printf( wxT( "Field%d" ), m_id );
+            if( aTranslate )
+                name.Printf( _( "Field%d" ), m_id );
+            else
+                name.Printf( wxT( "Field%d" ), m_id );
         }
         else
             name = m_name;
