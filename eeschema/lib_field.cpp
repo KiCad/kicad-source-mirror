@@ -622,7 +622,9 @@ wxString LIB_FIELD::GetName(bool aTranslate) const
 void LIB_FIELD::SetName( const wxString& aName )
 {
     // Mandatory field names are fixed.
-    if( m_id > MANDATORY_FIELDS )
+
+    // So what?  Why should the low level code be in charge of such a policy issue?
+    if( m_id < MANDATORY_FIELDS )
         return;
 
     if( m_name != aName )
