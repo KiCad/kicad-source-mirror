@@ -666,7 +666,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        g_EditPinByPinIsOn = m_HToolBar->GetToolState(ID_LIBEDIT_EDIT_PIN_BY_PIN);
+        g_EditPinByPinIsOn = m_HToolBar->GetToolState( ID_LIBEDIT_EDIT_PIN_BY_PIN );
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
@@ -720,27 +720,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
-        if( m_drawItem == NULL )
-            break;
-        DrawPanel->MoveCursorToCrossHair();
-        DrawPanel->CrossHairOff( &dc );
-        SaveCopyInUndoList( m_component );
+        if( m_drawItem )
+            deleteItem( &dc );
 
-        if( m_drawItem->Type() == LIB_PIN_T )
-        {
-            DeletePin( &dc, m_component, (LIB_PIN*) m_drawItem );
-        }
-        else
-        {
-            if( DrawPanel->IsMouseCaptured() )
-                DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
-            else
-                m_component->RemoveDrawItem( m_drawItem, DrawPanel, &dc );
-        }
-
-        m_drawItem = NULL;
-        OnModify( );
-        DrawPanel->CrossHairOn( &dc );
         break;
 
     case ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST:
@@ -919,7 +901,9 @@ void LIB_EDIT_FRAME::TempCopyComponent()
 {
     if( m_tempCopyComponent )
         delete m_tempCopyComponent;
+
     m_tempCopyComponent = NULL;
+
     if( m_component )
         m_tempCopyComponent = new LIB_COMPONENT( *m_component );
 }
@@ -1037,7 +1021,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( id, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( id, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
@@ -1051,7 +1035,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
             GetEventHandler()->ProcessEvent( cmd );
-            SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         }
         break;
 
@@ -1080,15 +1064,15 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
-        SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
+        SetToolID( id, DrawPanel->GetDefaultCursor(), _( "Import" ) );
         LoadOneSymbol();
-        SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_LIBEDIT_EXPORT_BODY_BUTT:
-        SetToolID( id, wxCURSOR_ARROW, _( "Export" ) );
+        SetToolID( id, DrawPanel->GetDefaultCursor(), _( "Export" ) );
         SaveOneSymbol();
-        SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
@@ -1106,4 +1090,48 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     }
 
     DrawPanel->m_IgnoreMouseEvents = false;
+}
+
+
+void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
+{
+    wxCHECK_RET( m_drawItem != NULL, wxT( "No drawing item selected to delete." ) );
+
+    DrawPanel->CrossHairOff( aDC );
+    SaveCopyInUndoList( m_component );
+
+    if( m_drawItem->Type() == LIB_PIN_T )
+    {
+        LIB_PIN* pin = (LIB_PIN*) m_drawItem;
+        wxPoint pos = pin->GetPosition();
+
+        m_component->RemoveDrawItem( (LIB_DRAW_ITEM*) pin, DrawPanel, aDC );
+
+        if( g_EditPinByPinIsOn == false )
+        {
+            LIB_PIN* tmp = m_component->GetNextPin();
+
+            while( tmp != NULL )
+            {
+                pin = tmp;
+                tmp = m_component->GetNextPin( pin );
+
+                if( pin->GetPosition() != pos )
+                    continue;
+
+                m_component->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+            }
+        }
+    }
+    else
+    {
+        if( DrawPanel->IsMouseCaptured() )
+            DrawPanel->m_endMouseCaptureCallback( DrawPanel, aDC );
+        else
+            m_component->RemoveDrawItem( m_drawItem, DrawPanel, aDC );
+    }
+
+    m_drawItem = NULL;
+    OnModify();
+    DrawPanel->CrossHairOn( aDC );
 }

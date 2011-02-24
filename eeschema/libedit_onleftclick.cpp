@@ -70,23 +70,11 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        DrawEntry = LocateItemUsingCursor( aPosition );
-
-        if( DrawEntry == NULL )
-        {
-            DisplayCmpDoc();
-            break;
-        }
-
-        SaveCopyInUndoList( m_component );
-
-        if( DrawEntry->Type() == LIB_PIN_T )
-            DeletePin( DC, m_component, (LIB_PIN*) DrawEntry );
+        if( LocateItemUsingCursor( aPosition ) )
+            deleteItem( DC );
         else
-            m_component->RemoveDrawItem( DrawEntry, DrawPanel, DC );
+            DisplayCmpDoc();
 
-        DrawEntry = NULL;
-        OnModify( );
         break;
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
@@ -96,7 +84,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     default:
-        DisplayError( this, wxT( "LIB_EDIT_FRAME::OnLeftClick error" ) );
+        wxFAIL_MSG( wxString::Format( wxT( "Unhandled command ID %d" ), GetToolId() ) );
         SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
@@ -132,7 +120,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     else
         return;
 
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    DrawPanel->m_IgnoreMouseEvents = true;
 
     switch( m_drawItem->Type() )
     {
@@ -179,15 +167,11 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         }
         break;
 
-
     default:
-        wxString msg;
-        msg.Printf( wxT( "LIB_EDIT_FRAME::OnLeftDClick Error: unknown StructType %d" ),
-                    m_drawItem->Type() );
-        DisplayError( this, msg );
+        wxFAIL_MSG( wxT( "Unhandled item <" ) + m_drawItem->GetClass() + wxT( ">" ) );
         break;
     }
 
     DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    DrawPanel->m_IgnoreMouseEvents = false;
 }

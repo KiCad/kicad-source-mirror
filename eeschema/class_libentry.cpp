@@ -426,14 +426,15 @@ from component %s in library %s." ),
 
     LIB_DRAW_ITEM_LIST::iterator i;
 
-    if( aDc != NULL )
-        aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
-
     for( i = drawings.begin(); i < drawings.end(); i++ )
     {
         if( *i == aItem )
         {
+            if( aDc != NULL )
+                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+
             drawings.erase( i );
+            SetModified();
             break;
         }
     }

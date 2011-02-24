@@ -368,43 +368,6 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
 
 /*
- * Delete pin at the current mouse position.
- * If g_EditPinByPinIsOn == false:
- *    All pins at the same position will be erased.
- *    Otherwise only the pin of the current unit and convert will be  erased.
- */
-void LIB_EDIT_FRAME::DeletePin( wxDC* DC, LIB_COMPONENT* LibEntry, LIB_PIN* Pin )
-{
-    LIB_PIN* tmp;
-    wxPoint  PinPos;
-
-    if( LibEntry == NULL || Pin == NULL )
-        return;
-
-    PinPos = Pin->GetPosition();
-    LibEntry->RemoveDrawItem( (LIB_DRAW_ITEM*) Pin, DrawPanel, DC );
-
-    if( g_EditPinByPinIsOn == false )
-    {
-        tmp = LibEntry->GetNextPin();
-
-        while( tmp != NULL )
-        {
-            Pin = tmp;
-            tmp = LibEntry->GetNextPin( Pin );
-
-            if( Pin->GetPosition() != PinPos )
-                continue;
-
-            LibEntry->RemoveDrawItem( (LIB_DRAW_ITEM*) Pin );
-        }
-    }
-
-    OnModify( );
-}
-
-
-/*
  * Create a new pin.
  */
 void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
@@ -450,8 +413,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 
     if( pin->m_Flags & IS_CANCELLED )
     {
-        DeletePin( NULL, m_component, pin );
-        m_drawItem = NULL;
+        deleteItem( DC );
     }
     else
     {

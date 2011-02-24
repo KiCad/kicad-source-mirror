@@ -204,7 +204,7 @@ public:
      */
     void ClearTempCopyComponent();
 
-    bool           IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
+    bool IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
 
 private:
 
@@ -225,6 +225,13 @@ private:
 
     void           DisplayCmpDoc();
 
+    /**
+     * Function deleteItem
+     * deletes the currently selected draw item.
+     * @param aDC The device context to draw upon when removing item.
+     */
+    void deleteItem( wxDC* aDC );
+
     // General editing
 public:
     void           SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int flag_type_command = 0 );
@@ -235,7 +242,6 @@ private:
 
     // Editing pins
     void           CreatePin( wxDC* DC );
-    void           DeletePin( wxDC* DC, LIB_COMPONENT* LibEntry, LIB_PIN* Pin );
     void           StartMovePin( wxDC* DC );
 
     // Editing anchor
