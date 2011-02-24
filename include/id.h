@@ -74,7 +74,7 @@ enum main_id
     ID_KICAD_ABOUT,
 
     ID_EDIT,
-
+    ID_NO_TOOL_SELECTED,
     ID_SEL_BG_COLOR,
 
     ID_COLORS_SETUP,

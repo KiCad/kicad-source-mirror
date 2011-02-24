@@ -194,6 +194,8 @@ public:
 
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
+    int          m_toolId;             ///< Id of active button on the vertical toolbar.
+
 public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
     WinEDA_MsgPanel*  MsgPanel;             // Panel used to display some
@@ -211,8 +213,6 @@ public:
 
     int          m_CursorShape;             // shape for cursor (0 = default
                                             // cursor)
-    int          m_ID_current_state;        // Id of active button on the
-                                            // vertical toolbar
     int          m_ID_last_state;           // Id of previous active button
                                             // on the vertical toolbar
     int          m_HTOOL_current_state;     // Id of active button on
@@ -298,19 +298,19 @@ public:
 
     /**
      * Function SetToolID
-     * Enables the icon of the selected tool in the vertical toolbar.
-     * (Or tool ID_NO_SELECT_BUTT default if no new selection)
-     * @param aId = new m_ID_current_state value (if aId >= 0)
-     * @param aCursor = the new cursor shape
-     * @param aToolMsg = tool message in status bar
-     * if (aId >= 0)
-     * Updates all variables related:
-     *      m_ID_current_state, cursor shape and message in status bar
-     * If (aId < 0)
-     *      Only updates the cursor shape and message in status bar
-     *      (does not the current m_ID_current_state value
+     * sets the tool command ID to \a aId and sets the cursor to \a aCursor.  The
+     * command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command
+     * ID is less than ::ID_NO_TOOL_SELECTED, the tool command ID is set to
+     * ::ID_NO_TOOL_SELECTED.  On debug builds, an assertion will be raised when
+     * \a aId is invalid.
+     * @param aId New tool command ID if greater than or equal to ::ID_NO_TOOL_SELECTED.
+                  If less than zero, the current tool command ID is retained.
+     * @param aCursor Sets the cursor shape if greater than or equal to zero.
+     * @param aToolMsg The tool message to set in the status bar.
      */
-    virtual void     SetToolID( int aId, int aCursor, const wxString& aToolMsg );
+    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
+
+    int GetToolId() const { return m_toolId; }
 
     /* These 4 functions provide a basic way to show/hide grid
      * and /get/set grid color.

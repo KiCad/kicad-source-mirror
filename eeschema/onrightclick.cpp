@@ -79,7 +79,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
 
     // If Command in progress: add "cancel" and "end tool" menu
-    if(  m_ID_current_state && m_ID_current_state != ID_SCH_NO_TOOL)
+    if(  GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( DrawStruct && DrawStruct->m_Flags )
         {

@@ -146,9 +146,6 @@ void WinEDA_PcbFrame::OnUpdateSave( wxUpdateUIEvent& aEvent )
 
 void WinEDA_PcbFrame::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    if( m_ID_current_state == 0 )
-        m_ID_current_state = ID_PCB_NO_TOOL;
-
     if( aEvent.GetEventObject() == m_VToolBar )
-        aEvent.Check( m_ID_current_state == aEvent.GetId() );
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }

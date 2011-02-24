@@ -183,7 +183,9 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
               WinEDA_PcbFrame::OnSelectOptionToolbar )
 
     // Vertical toolbar:
-    EVT_TOOL_RANGE( ID_PCB_NO_TOOL, ID_PCB_PLACE_GRID_COORD_BUTT, WinEDA_PcbFrame::OnSelectTool )
+    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_PcbFrame::OnSelectTool )
+    EVT_TOOL_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_PLACE_GRID_COORD_BUTT,
+                    WinEDA_PcbFrame::OnSelectTool )
 
     EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                     WinEDA_PcbFrame::ProcessMuWaveFunctions )
@@ -217,7 +219,8 @@ BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
                    WinEDA_PcbFrame::OnUpdateHighContrastDisplayMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
                    WinEDA_PcbFrame::OnUpdateShowLayerManager )
-    EVT_UPDATE_UI_RANGE( ID_PCB_NO_TOOL, ID_PCB_PLACE_GRID_COORD_BUTT,
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, WinEDA_PcbFrame::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_PLACE_GRID_COORD_BUTT,
                          WinEDA_PcbFrame::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_AUX_TOOLBAR_PCB_VIA_SIZE, ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                          WinEDA_PcbFrame::OnUpdateAuxilaryToolbar )

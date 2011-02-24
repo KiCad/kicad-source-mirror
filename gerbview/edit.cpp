@@ -25,7 +25,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
 
-    if( m_ID_current_state == 0 )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
         if( DrawStruct && DrawStruct->m_Flags  )
         {
@@ -47,12 +47,10 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         }
     }
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case 0:
-    case ID_GERBVIEW_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         break;
-
 
     case ID_GERBVIEW_DELETE_ITEM_BUTT:
         DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
@@ -106,8 +104,8 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
 
-        if( m_ID_current_state == 0 )
-            SetToolID( 0, 0, wxEmptyString );
+        if( GetToolId() == ID_NO_TOOL_SELECTED )
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         else
             DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
 
@@ -131,12 +129,12 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         ClearMsgPanel();
         break;
 
-    case ID_GERBVIEW_NO_TOOL:
-        SetToolID( 0, 0, wxEmptyString );
+    case ID_NO_TOOL_SELECTED:
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( 0, 0, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:

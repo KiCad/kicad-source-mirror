@@ -77,8 +77,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     DrawPanel             = NULL;
     MsgPanel              = NULL;
     m_currentScreen       = NULL;
-    m_ID_current_state    = 0;
-    m_ID_last_state       = 0;
+    m_toolId              = ID_NO_TOOL_SELECTED;
+    m_ID_last_state       = ID_NO_TOOL_SELECTED;
     m_HTOOL_current_state = 0;
     m_Draw_Axis           = FALSE;  // TRUE to draw axis.
     m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
@@ -434,20 +434,6 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-/**
- * Function SetToolID
- * Enables the icon of the selected tool in the vertical toolbar.
- * (Or tool ID_NO_SELECT_BUTT default if no new selection)
- * @param aId = new m_ID_current_state value (if aId >= 0)
- * @param aCursor = the new cursor shape (0 = default cursor)
- * @param aToolMsg = tool message in status bar
- * if (aId >= 0)
- * Updates all variables related:
- *      m_ID_current_state, cursor shape and message in status bar
- * If (aId < 0)
- *      Only updates the cursor shape and message in status bar
- *      (does not the current m_ID_current_state value
- */
 void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
@@ -462,7 +448,10 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     if( aId < 0 )
         return;
 
-    m_ID_current_state = aId;
+    wxCHECK2_MSG( aId >= ID_NO_TOOL_SELECTED, aId = ID_NO_TOOL_SELECTED,
+                  wxString::Format( wxT( "Current tool ID cannot be set to %d." ), aId ) );
+
+    m_toolId = aId;
 }
 
 

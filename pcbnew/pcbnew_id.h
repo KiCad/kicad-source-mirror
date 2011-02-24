@@ -19,7 +19,6 @@ enum pcbnew_ids
     ID_READ_NETLIST,
 
     // Right vertical tool bar command IDs.
-    ID_PCB_NO_TOOL,
     ID_PCB_HIGHLIGHT_BUTT,
     ID_PCB_SHOW_1_RATSNEST_BUTT,
     ID_PCB_MODULE_BUTT,
@@ -264,7 +263,6 @@ enum pcbnew_ids
     ID_PCB_DISPLAY_OPTIONS_SETUP,
 
     // Module editor right vertical tool bar commands.
-    ID_MODEDIT_NO_TOOL,
     ID_MODEDIT_PAD_TOOL,
     ID_MODEDIT_LINE_TOOL,
     ID_MODEDIT_CIRCLE_TOOL,

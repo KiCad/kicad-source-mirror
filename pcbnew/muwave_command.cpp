@@ -71,7 +71,7 @@ void WinEDA_PcbFrame::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
 {
     MODULE* module = NULL;
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
     case ID_PCB_MUWAVE_TOOL_SELF_CMD:
         Begin_Self( DC );
@@ -96,7 +96,7 @@ void WinEDA_PcbFrame::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
     default:
         DrawPanel->SetCursor( wxCURSOR_ARROW );
         DisplayError( this, wxT( "WinEDA_PcbFrame::MuWaveCommand() id error" ) );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
 

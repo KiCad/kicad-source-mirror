@@ -1108,7 +1108,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         if( IsMouseCaptured() )
             EndMouseCapture( -1, m_defaultCursor );
         else
-            EndMouseCapture( 0, m_cursor, wxEmptyString );
+            EndMouseCapture( ID_NO_TOOL_SELECTED, m_cursor, wxEmptyString );
 
         break;
     }
@@ -1206,6 +1206,7 @@ void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title 
         INSTALL_UNBUFFERED_DC( dc, this );
         m_endMouseCaptureCallback( this, &dc );
     }
+
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
     m_AutoPAN_Request = false;

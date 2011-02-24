@@ -199,7 +199,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
        && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
-        if( frame && frame->m_ID_current_state == ID_TRACK_BUTT )
+        if( frame && frame->GetToolId() == ID_TRACK_BUTT )
         {
             int routeTop = screen->m_Route_Layer_TOP;
             int routeBot = screen->m_Route_Layer_BOTTOM;

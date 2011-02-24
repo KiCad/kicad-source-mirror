@@ -31,9 +31,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     SCH_ITEM* item = GetScreen()->GetCurItem();
     wxPoint gridPosition = GetGridPosition( aPosition );
 
-    if( ( m_ID_current_state == ID_SCH_NO_TOOL )
-        || ( m_ID_current_state == 0 )
-        || ( item && item->m_Flags ) )
+    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
         m_itemToRepeat = NULL;
@@ -73,10 +71,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case 0:
-    case ID_SCH_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
@@ -139,7 +136,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_BUSTOBUS_ENTRY_BUTT:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
-            item = CreateBusEntry( aDC, ( m_ID_current_state == ID_WIRETOBUS_ENTRY_BUTT ) ?
+            item = CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
                                    WIRE_TO_BUS : BUS_TO_BUS );
             GetScreen()->SetCurItem( item );
             DrawPanel->m_AutoPAN_Request = true;
@@ -209,10 +206,10 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_HIERLABEL_BUTT:
         if( (item == NULL) || (item->m_Flags == 0) )
         {
-            if(m_ID_current_state == ID_GLABEL_BUTT)
+            if( GetToolId() == ID_GLABEL_BUTT )
                 GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_GLOBLABEL ) );
 
-            if(m_ID_current_state == ID_HIERLABEL_BUTT)
+            if( GetToolId() == ID_HIERLABEL_BUTT )
                 GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_HIERLABEL ) );
 
             DrawPanel->m_AutoPAN_Request = true;
@@ -251,7 +248,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( (item->Type() == SCH_SHEET_T) && (item->m_Flags == 0) )
         {
-            if( m_ID_current_state == ID_IMPORT_HLABEL_BUTT )
+            if( GetToolId() == ID_IMPORT_HLABEL_BUTT )
                 GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, aDC ) );
             else
                 GetScreen()->SetCurItem( Create_PinSheet( (SCH_SHEET*) item, aDC ) );
@@ -296,9 +293,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        SetToolID( ID_SCH_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick invalid tool ID <" ) +
-                    wxString::Format( wxT( "%d> selected." ), m_ID_current_state ) );
+                    wxString::Format( wxT( "%d> selected." ), GetToolId() ) );
     }
 }
 
@@ -317,10 +314,9 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     EDA_ITEM* item = GetScreen()->GetCurItem();
     wxPoint   pos = aPosition;
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case ID_SCH_NO_TOOL:
-    case 0:
+    case ID_NO_TOOL_SELECTED:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             item = LocateAndShowItem( aPosition );

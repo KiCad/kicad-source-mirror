@@ -51,12 +51,11 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     DrawPanel->CrossHairOff( &dc );
 
-    if( m_ID_current_state && m_ID_current_state != ID_PCB_NO_TOOL )
+    if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( item && item->m_Flags )
         {
-            ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                          _( "Cancel" ), cancel_xpm );
+            ADD_MENUITEM( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
         }
         else
         {
@@ -270,7 +269,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     /* Display context sensitive comands: */
-    switch(  m_ID_current_state )
+    switch(  GetToolId() )
     {
     case ID_PCB_ZONES_BUTT:
         if(  GetBoard()->m_ZoneDescriptorList.size() > 0 )
@@ -316,13 +315,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         aPopMenu->AppendSeparator();
         break;
 
-    case 0:
+    case ID_NO_TOOL_SELECTED:
         if( m_HTOOL_current_state == ID_TOOLBARH_PCB_MODE_MODULE )
         {
             wxMenu* commands = new wxMenu;
-            ADD_MENUITEM_WITH_SUBMENU( aPopMenu, commands,
-                                       ID_POPUP_PCB_AUTOPLACE_COMMANDS, _(
-                                           "Glob Move and Place" ), move_xpm );
+            ADD_MENUITEM_WITH_SUBMENU( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
+                                       _( "Glob Move and Place" ), move_xpm );
             ADD_MENUITEM( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
                           _( "Unlock All Modules" ), unlocked_xpm );
             ADD_MENUITEM( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,

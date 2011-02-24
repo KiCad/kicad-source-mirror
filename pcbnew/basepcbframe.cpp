@@ -388,8 +388,8 @@ void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aTool
         return;
 
     // handle color changes for transitions in and out of ID_TRACK_BUTT
-    if( ( m_ID_current_state == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
-        || ( m_ID_current_state != ID_TRACK_BUTT && aId== ID_TRACK_BUTT ) )
+    if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
+        || ( GetToolId() != ID_TRACK_BUTT && aId== ID_TRACK_BUTT ) )
     {
         if( DisplayOpt.ContrastModeDisplay )
             redraw = true;

@@ -30,12 +30,13 @@ bool WinEDA_GerberFrame::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu
     }
 
     // If command in progress, end command.
-    if(  m_ID_current_state )
+    if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( DrawStruct && DrawStruct->m_Flags )
             PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ) );
         else
             PopMenu->Append( ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ) );
+
         PopMenu->AppendSeparator();
     }
     else

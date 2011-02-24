@@ -27,7 +27,7 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString )
     {
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
         DrawPanel->MoveCursorToCrossHair();
@@ -47,7 +47,7 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
     if( id == ID_SAVE_BOARD )
         DrawPanel->EndMouseCapture( -1, DrawPanel->GetDefaultCursor() );
     else
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {

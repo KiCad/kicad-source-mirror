@@ -210,7 +210,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         }
 
         if( id != ID_POPUP_CANCEL_CURRENT_COMMAND )
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
 
         break;
     }
@@ -805,10 +805,13 @@ void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+    SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
 
     switch( id )
     {
+    case ID_NO_TOOL_SELECTED:
+        break;
+
     case ID_MODEDIT_LINE_TOOL:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
         break;
@@ -840,7 +843,7 @@ void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );
             InstallPadOptionsFrame( NULL );
-            SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         }
         break;
 
@@ -850,6 +853,6 @@ void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
 
     default:
         wxFAIL_MSG( wxT( "Unknown command id." ) );
-        SetToolID( ID_MODEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 }

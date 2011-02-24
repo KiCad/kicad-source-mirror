@@ -76,7 +76,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         // @todo: add switch here and add calls to PcbGeneralLocateAndDisplay( int aHotKeyCode )
         // when searching is needed from a hotkey handler
     }
-    else if( m_ID_current_state == 0 )
+    else if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
         switch( m_HTOOL_current_state )
         {
@@ -93,7 +93,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     }
     else
     {
-        switch( m_ID_current_state )
+        switch( GetToolId() )
         {
         case ID_PCB_SHOW_1_RATSNEST_BUTT:
             scanList = GENERAL_COLLECTOR::PadsOrModules;
@@ -301,7 +301,7 @@ void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int a
      */
     bool   keep_on_grid = true;
 
-    if( m_ID_current_state == ID_PCB_DELETE_ITEM_BUTT )
+    if( GetToolId() == ID_PCB_DELETE_ITEM_BUTT )
         keep_on_grid = false;
 
     /* Cursor is left off grid if no block in progress and no moving object */
@@ -321,7 +321,7 @@ void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int a
         grid.x = (int) GetScreen()->GetGridSize().x;
         grid.y = (int) GetScreen()->GetGridSize().y;
 
-        if( Magnetize( m_Pcb, this, m_ID_current_state, grid, on_grid, &pos ) )
+        if( Magnetize( m_Pcb, this, GetToolId(), grid, on_grid, &pos ) )
         {
             GetScreen()->SetCrossHairPosition( pos );
         }

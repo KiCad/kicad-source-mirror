@@ -384,7 +384,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_PCB_NO_TOOL, wxEmptyString, wxBitmap( cursor_xpm ),
+    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ),
                          wxEmptyString, wxITEM_CHECK );
     m_VToolBar->AddSeparator();
 

@@ -388,8 +388,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_NEW_COMPONENT:      // Add component
         if( !itemInEdit )
         {
-            // switch to m_ID_current_state = ID_COMPONENT_BUTT;
-            if( m_ID_current_state != ID_SCH_PLACE_COMPONENT )
+            if( GetToolId() != ID_SCH_PLACE_COMPONENT )
                 SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Component" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -399,8 +398,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_NEW_POWER:      // Add power component
         if( !itemInEdit )
         {
-            // switch to m_ID_current_state = ID_PLACE_POWER_BUTT;
-            if( m_ID_current_state != ID_PLACE_POWER_BUTT )
+            if( GetToolId() != ID_PLACE_POWER_BUTT )
                 SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -410,8 +408,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_LABEL:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_LABEL_BUTT;
-            if( m_ID_current_state != ID_LABEL_BUTT )
+            if( GetToolId() != ID_LABEL_BUTT )
                 SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -421,8 +418,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_HLABEL:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_HIERLABEL_BUTT;
-            if( m_ID_current_state != ID_HIERLABEL_BUTT )
+            if( GetToolId() != ID_HIERLABEL_BUTT )
                 SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Hierarchical Label" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -432,8 +428,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_GLABEL:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_GLABEL_BUTT;
-            if( m_ID_current_state != ID_GLABEL_BUTT )
+            if( GetToolId() != ID_GLABEL_BUTT )
                 SetToolID( ID_GLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Global Label" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -443,8 +438,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_JUNCTION:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_JUNCTION_BUTT;
-            if( m_ID_current_state != ID_JUNCTION_BUTT )
+            if( GetToolId() != ID_JUNCTION_BUTT )
                 SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add Junction" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -454,8 +448,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_WIRE_ENTRY:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_WIRETOBUS_ENTRY_BUTT;
-            if( m_ID_current_state != ID_WIRETOBUS_ENTRY_BUTT )
+            if( GetToolId() != ID_WIRETOBUS_ENTRY_BUTT )
                 SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Wire to Bus entry" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -465,8 +458,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_BUS_ENTRY:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_BUSTOBUS_ENTRY_BUTT;
-            if( m_ID_current_state != ID_BUSTOBUS_ENTRY_BUTT )
+            if( GetToolId() != ID_BUSTOBUS_ENTRY_BUTT )
                 SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Bus to Bus entry" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -476,8 +468,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_HIER_SHEET:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_SHEET_SYMBOL_BUTT;
-            if( m_ID_current_state != ID_SHEET_SYMBOL_BUTT )
+            if( GetToolId() != ID_SHEET_SYMBOL_BUTT )
                 SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add Sheet" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -487,8 +478,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_GRAPHIC_TEXT:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_TEXT_COMMENT_BUTT;
-            if( m_ID_current_state != ID_TEXT_COMMENT_BUTT )
+            if( GetToolId() != ID_TEXT_COMMENT_BUTT )
                 SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Text" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -498,8 +488,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_GRAPHIC_POLYLINE:
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_LINE_COMMENT_BUTT;
-            if( m_ID_current_state != ID_LINE_COMMENT_BUTT )
+            if( GetToolId() != ID_LINE_COMMENT_BUTT )
                 SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Lines" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -510,15 +499,14 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         // An item can be selected. If not a Bus, a begin command is not possible
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_WIRE_BUTT;
-            if( m_ID_current_state != ID_BUS_BUTT )
+            if( GetToolId() != ID_BUS_BUTT )
                 SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add Bus" ) );
 
             OnLeftClick( aDC, aPosition );
             break;
         }
 
-        if( aItem && aItem->IsNew() && ( m_ID_current_state == ID_BUS_BUTT ) )
+        if( aItem && aItem->IsNew() && ( GetToolId() == ID_BUS_BUTT ) )
         {
             if( aItem->Type() == SCH_LINE_T )
             {
@@ -538,15 +526,14 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         // An item can be selected. If not a wire, a begin command is not possible
         if( notBusy )
         {
-            // switch to m_ID_current_state = ID_WIRE_BUTT;
-            if( m_ID_current_state != ID_WIRE_BUTT )
+            if( GetToolId() != ID_WIRE_BUTT )
                 SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add Wire" ) );
 
             OnLeftClick( aDC, aPosition );
             break;
         }
 
-        if( aItem && aItem->IsNew() && ( m_ID_current_state == ID_WIRE_BUTT ) )
+        if( aItem && aItem->IsNew() && ( GetToolId() == ID_WIRE_BUTT ) )
         {
             if( aItem->Type() == SCH_LINE_T )
             {
@@ -564,7 +551,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ADD_NOCONN_FLAG:      // Add a no connected flag
         if( notBusy )
         {
-            if( m_ID_current_state != ID_NOCONN_BUTT )
+            if( GetToolId() != ID_NOCONN_BUTT )
                 SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"NoNonnect\" Flags" ) );
 
             OnLeftClick( aDC, aPosition );
@@ -1032,12 +1019,9 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LIBEDIT_CREATE_PIN:
-    {
-        wxCommandEvent evt;
-        evt.SetId( ID_LIBEDIT_PIN_BUTT );
-        Process_Special_Functions( evt );
+        SetToolID( ID_LIBEDIT_PIN_BUTT, wxCURSOR_PENCIL, _( "Add pin" ) );
+        OnLeftClick( aDC, aPosition );
         break;
-    }
 
     case HK_DELETE:
         m_drawItem = LocateItemUsingCursor( aPosition );

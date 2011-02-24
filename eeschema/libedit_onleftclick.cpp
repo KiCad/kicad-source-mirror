@@ -27,38 +27,17 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     if( DrawEntry == NULL || DrawEntry->m_Flags == 0 )
     {
-        DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-
-        if( DrawEntry == NULL )
-        {
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                     GetScreen()->GetCrossHairPosition() );
-        }
+        DrawEntry = LocateItemUsingCursor( aPosition );
 
         if( DrawEntry )
             DrawEntry->DisplayInfo( this );
-
         else
             DisplayCmpDoc();
     }
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case 0:
-    case ID_LIBEDIT_NO_TOOL:
-        if( DrawEntry && DrawEntry->m_Flags )   // moved object
-        {
-            switch( DrawEntry->Type() )
-            {
-            case LIB_PIN_T:
-                PlacePin( DC );
-                break;
-
-            default:
-                EndDrawGraphicItem( DC );
-                break;
-            }
-         }
+    case ID_NO_TOOL_SELECTED:
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
@@ -91,13 +70,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-
-        if( DrawEntry == NULL )
-        {
-            DrawEntry = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                     GetScreen()->GetCrossHairPosition() );
-        }
+        DrawEntry = LocateItemUsingCursor( aPosition );
 
         if( DrawEntry == NULL )
         {
@@ -119,12 +92,12 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
         SaveCopyInUndoList( m_component );
         PlaceAncre();
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     default:
         DisplayError( this, wxT( "LIB_EDIT_FRAME::OnLeftClick error" ) );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
 }
@@ -144,12 +117,8 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 
     if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
     {   // We can locate an item
-        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-        if( m_drawItem == NULL )
-        {
-            m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                      GetScreen()->GetCrossHairPosition() );
-        }
+        m_drawItem = LocateItemUsingCursor( aPosition );
+
         if( m_drawItem == NULL )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );

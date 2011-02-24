@@ -10,6 +10,7 @@
 #include "confirm.h"
 #include "class_drawpanel.h"
 #include "wxEeschemaStruct.h"
+#include "id.h"
 
 #include "general.h"
 #include "protos.h"
@@ -109,7 +110,7 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
     if( m_component == NULL )
         return;
 
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_component );
 

@@ -129,8 +129,8 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
 
-        if( m_ID_current_state == 0 )
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        if( GetToolId() == ID_NO_TOOL_SELECTED )
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         else
             SetCursor( DrawPanel->GetDefaultCursor() );
 
@@ -140,12 +140,12 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         if( DrawPanel->IsMouseCaptured() )
             DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
 
-        if( m_ID_current_state != id )
+        if( GetToolId() != id )
         {
-            if( m_ID_last_state != m_ID_current_state )
-                m_ID_last_state = m_ID_current_state;
+            if( m_ID_last_state != GetToolId() )
+                m_ID_last_state = GetToolId();
 
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         }
         break;
     }
@@ -230,7 +230,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -1154,7 +1154,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
         EDA_ITEM* current = GetScreen()->GetCurItem();
 
         // See if we are drawing a segment; if so, add a via?
-        if( m_ID_current_state == ID_TRACK_BUTT && current != NULL )
+        if( GetToolId() == ID_TRACK_BUTT && current != NULL )
         {
             if( current->Type() == TYPE_TRACK && ( current->IsNew() ) )
             {
@@ -1195,17 +1195,17 @@ void WinEDA_PcbFrame::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    if( m_ID_current_state == id )
+    if( GetToolId() == id )
         return;
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     // Stop the current command and deselect the current tool.
-    DrawPanel->EndMouseCapture( ID_PCB_NO_TOOL, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {
-    case ID_PCB_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         SetToolID( id, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 

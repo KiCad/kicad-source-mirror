@@ -61,7 +61,8 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
     EVT_TOOL( wxID_REDO, WinEDA_ModuleEditFrame::GetComponentFromRedoList )
 
     // Vertical tool bar button click event handler.
-    EVT_TOOL_RANGE( ID_MODEDIT_NO_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
+    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_ModuleEditFrame::OnVerticalToolbar )
+    EVT_TOOL_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                     WinEDA_ModuleEditFrame::OnVerticalToolbar )
 
     // Options Toolbar
@@ -99,7 +100,8 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
                    WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard )
     EVT_UPDATE_UI( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
                    WinEDA_ModuleEditFrame::OnUpdateReplaceModuleInBoard )
-    EVT_UPDATE_UI_RANGE( ID_MODEDIT_NO_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
                          WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar )
 
 END_EVENT_TABLE()
@@ -225,13 +227,10 @@ void WinEDA_ModuleEditFrame::CloseModuleEditor( wxCommandEvent& Event )
 
 void WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    if( m_ID_current_state == 0 )
-        m_ID_current_state = ID_MODEDIT_NO_TOOL;
-
     aEvent.Enable( GetBoard()->m_Modules != NULL );
 
     if( aEvent.GetEventObject() == m_VToolBar )
-        aEvent.Check( m_ID_current_state == aEvent.GetId() );
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

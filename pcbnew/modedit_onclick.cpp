@@ -27,7 +27,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     DrawPanel->CrossHairOff( DC );
 
-    if( m_ID_current_state == 0 || m_ID_current_state == ID_MODEDIT_NO_TOOL )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
         if( item && item->m_Flags ) // Move item command in progress
         {
@@ -69,10 +69,9 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         SetCurItem( item );
     }
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case 0:
-    case ID_MODEDIT_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         break;
 
     case ID_MODEDIT_CIRCLE_TOOL:
@@ -82,9 +81,9 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             int shape = S_SEGMENT;
 
-            if( m_ID_current_state == ID_MODEDIT_CIRCLE_TOOL )
+            if( GetToolId() == ID_MODEDIT_CIRCLE_TOOL )
                 shape = S_CIRCLE;
-            if( m_ID_current_state == ID_MODEDIT_ARC_TOOL )
+            if( GetToolId() == ID_MODEDIT_ARC_TOOL )
                 shape = S_ARC;
 
             SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) NULL, DC, shape ) );
@@ -141,7 +140,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
         // Replace the module in position 0, to recalculate absolutes coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
-        SetToolID( 0, 0, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         SetCurItem( NULL );
         DrawPanel->Refresh();
     }
@@ -173,8 +172,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DisplayError( this, wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
-        SetToolID( 0, 0, wxEmptyString );
-        break;
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 
     DrawPanel->CrossHairOn( DC );
@@ -199,7 +197,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
     }
 
     // End command in progress.
-    if(  m_ID_current_state && m_ID_current_state != ID_MODEDIT_NO_TOOL )
+    if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( item && item->m_Flags )
             ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
@@ -375,13 +373,12 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
     PopMenu->AppendSeparator();
 
     if( append_set_width
-       || ( m_ID_current_state
-           && ( ( m_ID_current_state == ID_PCB_ADD_LINE_BUTT )
-               || ( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
-               || ( m_ID_current_state == ID_PCB_ARC_BUTT ) ) ) )
+        || ( ( GetToolId() != ID_NO_TOOL_SELECTED )
+           && ( ( GetToolId() == ID_PCB_ADD_LINE_BUTT )
+               || ( GetToolId() == ID_PCB_CIRCLE_BUTT )
+               || ( GetToolId() == ID_PCB_ARC_BUTT ) ) ) )
     {
-        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH,
-                      _("Set Width" ), width_segment_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH, _("Set Width" ), width_segment_xpm );
         PopMenu->AppendSeparator();
     }
 
@@ -397,10 +394,9 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     BOARD_ITEM* item = GetCurItem();
     wxPoint     pos = GetPosition();
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case 0:
-    case ID_MODEDIT_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         if( ( item == NULL ) || ( item->m_Flags == 0 ) )
         {
             item = ModeditLocateAndDisplay();

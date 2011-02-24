@@ -105,7 +105,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_KICAD_CHOICEBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
 
     /* Right vertical toolbar. */
-    EVT_TOOL_RANGE( ID_LIBEDIT_NO_TOOL, ID_LIBEDIT_DELETE_ITEM_BUTT,
+    EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
+    EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                     LIB_EDIT_FRAME::OnSelectTool )
 
     /* menubar commands */
@@ -155,7 +156,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnUpdateSelectAlias )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
-    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_NO_TOOL, ID_LIBEDIT_DELETE_ITEM_BUTT,
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
 END_EVENT_TABLE()
 
@@ -177,7 +179,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_drawSpecificUnit    = false;
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
-    m_ID_current_state = ID_LIBEDIT_NO_TOOL;
 
     // Give an icon
     SetIcon( wxIcon( libedit_xpm ) );
@@ -442,14 +443,8 @@ void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_component != NULL );
 
-    if( m_component != NULL )
-    {
-        if( m_ID_current_state == 0 )
-            m_ID_current_state = ID_LIBEDIT_NO_TOOL;
-
-        if( aEvent.GetEventObject() == m_VToolBar )
-            aEvent.Check( m_ID_current_state == aEvent.GetId() );
-    }
+    if( m_component != NULL && aEvent.GetEventObject() == m_VToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 
@@ -596,7 +591,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     if( event.GetId() == ID_DE_MORGAN_NORMAL_BUTT )
         m_convert = 1;
@@ -642,7 +637,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( DrawPanel->IsMouseCaptured() )
             DrawPanel->EndMouseCapture();
         else
-            DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+            DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
         break;
 
     case ID_POPUP_LIBEDIT_DELETE_ITEM:
@@ -650,7 +645,8 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(),
+                                    wxEmptyString );
         break;
     }
 
@@ -874,7 +870,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     DrawPanel->m_IgnoreMouseEvents = false;
 
-    if( m_ID_current_state == 0 )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
 
 }
@@ -1032,14 +1028,15 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    if( m_ID_current_state == 0 )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
 
-    DrawPanel->EndMouseCapture( ID_LIBEDIT_NO_TOOL, DrawPanel->GetDefaultCursor(), wxEmptyString );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(),
+                                wxEmptyString );
 
     switch( id )
     {
-    case ID_LIBEDIT_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         SetToolID( id, wxCURSOR_ARROW, wxEmptyString );
         break;
 
@@ -1054,7 +1051,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
             GetEventHandler()->ProcessEvent( cmd );
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
         }
         break;
 
@@ -1085,13 +1082,13 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
         SetToolID( id, wxCURSOR_ARROW, _( "Import" ) );
         LoadOneSymbol();
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
         break;
 
     case ID_LIBEDIT_EXPORT_BODY_BUTT:
         SetToolID( id, wxCURSOR_ARROW, _( "Export" ) );
         SaveOneSymbol();
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_ARROW, wxEmptyString );
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:

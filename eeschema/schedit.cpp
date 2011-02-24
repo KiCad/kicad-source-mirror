@@ -134,7 +134,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     default:
 
         // Stop the current command and deselect the current tool
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
         break;
     }
 
@@ -170,8 +170,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( m_ID_current_state == 0 )
-            SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_END_LINE:
@@ -575,7 +574,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case wxID_COPY:         // really this is a Save block for paste
@@ -655,7 +654,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     // End switch ( id )    (Command execution)
 
-    if( m_ID_current_state == 0 )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_itemToRepeat = NULL;
 }
 
@@ -728,7 +727,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
     else
     {
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
     }
 }
 
@@ -738,11 +737,11 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     int id = aEvent.GetId();
 
     // Stop the current command and deselect the current tool.
-    DrawPanel->EndMouseCapture( ID_SCH_NO_TOOL, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     switch( id )
     {
-    case ID_SCH_NO_TOOL:
+    case ID_NO_TOOL_SELECTED:
         SetToolID( id, DrawPanel->GetDefaultCursor(), _( "No tool selected" ) );
         break;
 
@@ -826,9 +825,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( m_ID_current_state == 0 )
-        m_ID_current_state = ID_SCH_NO_TOOL;
-
     if( aEvent.GetEventObject() == m_VToolBar )
-        aEvent.Check( m_ID_current_state == aEvent.GetId() );
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }

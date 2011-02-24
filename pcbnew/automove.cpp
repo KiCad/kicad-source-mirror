@@ -97,7 +97,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
         break;
 
     default:   // Abort a current command (if any)
-        DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
         break;
     }
 

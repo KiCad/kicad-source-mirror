@@ -23,7 +23,6 @@ enum id_eeschema_frm
 
     /* Schematic editor veritcal toolbar IDs */
     ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
-    ID_SCH_NO_TOOL,
     ID_HIERARCHY_PUSH_POP_BUTT,
     ID_SCH_PLACE_COMPONENT,
     ID_PLACE_POWER_BUTT,
@@ -156,7 +155,6 @@ enum id_eeschema_frm
 	ID_LIBEDIT_SELECT_ALIAS,
 
 	/* Library editor vertical toolbar IDs. */
-    ID_LIBEDIT_NO_TOOL,
 	ID_LIBEDIT_PIN_BUTT,
 	ID_LIBEDIT_BODY_LINE_BUTT,
 	ID_LIBEDIT_BODY_ARC_BUTT,

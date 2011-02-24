@@ -115,7 +115,7 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
     m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_GERBVIEW_NO_TOOL, wxEmptyString, wxBitmap( cursor_xpm ) );
+    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ) );
     m_VToolBar->AddSeparator();
     m_VToolBar->AddTool( ID_GERBVIEW_DELETE_ITEM_BUTT, wxEmptyString, wxBitmap( delete_body_xpm ),
                          _( "Delete items" ) );

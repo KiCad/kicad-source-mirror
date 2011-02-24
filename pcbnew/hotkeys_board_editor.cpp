@@ -243,7 +243,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
         break;
 
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
-        if( m_ID_current_state != ID_TRACK_BUTT )
+        if( GetToolId() != ID_TRACK_BUTT )
             return;
         if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
@@ -263,7 +263,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
             Other_Layer_Route( NULL, aDC );
             break;
         }
-        if( m_ID_current_state != ID_TRACK_BUTT )
+        if( GetToolId() != ID_TRACK_BUTT )
             return;
         if( GetCurItem()->Type() != TYPE_TRACK )
             return;
@@ -283,13 +283,13 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
         if( getActiveLayer() > LAYER_N_FRONT )
             break;
 
-        if( m_ID_current_state != ID_TRACK_BUTT && !itemCurrentlyEdited )
+        if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )
         {
             cmd.SetId( ID_TRACK_BUTT );
             GetEventHandler()->ProcessEvent( cmd );
         }
 
-        if( m_ID_current_state != ID_TRACK_BUTT )
+        if( GetToolId() != ID_TRACK_BUTT )
             break;
 
         if( !itemCurrentlyEdited )     // no track in progress:
@@ -380,7 +380,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
     BOARD_ITEM* item = GetCurItem();
     bool ItemFree = (item == NULL) || (item->m_Flags == 0);
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
     case ID_TRACK_BUTT:
         if( getActiveLayer() > LAYER_N_FRONT )

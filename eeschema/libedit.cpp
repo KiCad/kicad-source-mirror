@@ -66,7 +66,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     wxString   CmpName;
     LIB_ALIAS* LibEntry = NULL;
 
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     if( GetScreen()->IsModify()
         && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
@@ -233,7 +233,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     wxFileName fn;
     wxString   msg;
 
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     if( GetScreen()->IsModify() )
     {
@@ -371,7 +371,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     wxArrayString ListNames;
     wxString      msg;
 
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     m_lastDrawItem = NULL;
     m_drawItem = NULL;
@@ -470,7 +470,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 lost!\n\nClear the current component from the screen?" ) ) )
         return;
 
-    DrawPanel->EndMouseCapture( 0, DrawPanel->GetDefaultCursor() );
+    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
     m_drawItem = NULL;
 

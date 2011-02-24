@@ -83,7 +83,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
                       WinEDA_GerberFrame::Process_Special_Functions )
 
     // Vertical toolbar:
-    EVT_TOOL( ID_GERBVIEW_NO_TOOL, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_GerberFrame::Process_Special_Functions )
     EVT_TOOL( ID_GERBVIEW_DELETE_ITEM_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,

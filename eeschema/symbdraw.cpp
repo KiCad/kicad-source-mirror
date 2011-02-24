@@ -131,7 +131,7 @@ LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC*
     // This is normal when adding new items to the current component
     ClearTempCopyComponent();
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
         m_drawItem = new LIB_ARC( LibEntry );
@@ -306,10 +306,10 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
     if( m_component == NULL || m_drawItem == NULL )
         return;
 
-    if( m_ID_current_state )
+    if( GetToolId() != ID_NO_TOOL_SELECTED )
         SetCursor( wxCURSOR_PENCIL );
     else
-        SetCursor( wxCURSOR_ARROW );
+        SetCursor( DrawPanel->GetDefaultCursor() );
 
     if( GetTempCopyComponent() )    // used when editing an existing item
         SaveCopyInUndoList( GetTempCopyComponent() );

@@ -183,7 +183,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     }
 
     DrawPanel->SetMouseCapture( NULL, NULL );
-    SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
+    SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
     DrawPanel->Refresh();
 }
 
@@ -317,7 +317,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         block->m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
         DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 
     if( zoom_command )
@@ -479,7 +479,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         block->Clear();
         GetScreen()->SetCurItem( NULL );
         DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( m_ID_current_state, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 }
 

@@ -20,11 +20,12 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     bool        exit = false;
-    bool no_tool = m_ID_current_state == 0 || m_ID_current_state == ID_PCB_NO_TOOL;
+    bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
 
     if( no_tool || ( DrawStruct && DrawStruct->m_Flags ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
+
         if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
         {
             DrawPanel->m_IgnoreMouseEvents = true;
@@ -131,11 +132,10 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
     }
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
     case ID_MAIN_MENUBAR:
-    case ID_PCB_NO_TOOL:
-    case 0:
+    case ID_NO_TOOL_SELECTED:
         break;
 
     case ID_PCB_MUWAVE_TOOL_SELF_CMD:
@@ -187,9 +187,9 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_ADD_LINE_BUTT:
     {
         int shape = S_SEGMENT;
-        if( m_ID_current_state == ID_PCB_CIRCLE_BUTT )
+        if( GetToolId() == ID_PCB_CIRCLE_BUTT )
             shape = S_CIRCLE;
-        if( m_ID_current_state == ID_PCB_ARC_BUTT )
+        if( GetToolId() == ID_PCB_ARC_BUTT )
             shape = S_ARC;
 
         if( getActiveLayer() <= LAST_COPPER_LAYER )
@@ -373,9 +373,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        DrawPanel->SetCursor( wxCURSOR_ARROW );
         DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() id error" ) );
-        SetToolID( 0, wxCURSOR_ARROW, wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
 }
@@ -387,10 +386,9 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
 
-    switch( m_ID_current_state )
+    switch( GetToolId() )
     {
-    case ID_PCB_NO_TOOL:
-    case 0:
+    case ID_NO_TOOL_SELECTED:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
