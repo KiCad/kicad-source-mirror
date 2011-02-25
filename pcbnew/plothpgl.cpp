@@ -55,7 +55,7 @@ bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
     SheetSize.y = currentsheet->m_Size.y * U_PCB;
 
     /* Calculate the center of the PCB. */
-    m_Pcb->ComputeBoundaryBox();
+    m_Pcb->ComputeBoundingBox();
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
 

@@ -347,7 +347,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
 
-    GetBoard()->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundingBox();
     fputs( "\n$BOARD\n", rptfile );
     fputs( "unit INCH\n", rptfile );
     sprintf( line, "upper_left_corner %9.6f %9.6f\n",

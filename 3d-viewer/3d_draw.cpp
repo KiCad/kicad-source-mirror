@@ -121,7 +121,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 
     m_gllist = glGenLists( 1 );
 
-    pcb->ComputeBoundaryBox();
+    pcb->ComputeBoundingBox();
     g_Parm_3D_Visu.m_BoardSettings = pcb->GetBoardDesignSettings();
     g_Parm_3D_Visu.m_BoardSize     = pcb->m_BoundaryBox.GetSize();
     g_Parm_3D_Visu.m_BoardPos   = pcb->m_BoundaryBox.Centre();

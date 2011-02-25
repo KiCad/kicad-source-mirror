@@ -89,7 +89,7 @@ void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
     }
 
     /* Update some board data, to ensure a reliable gencad export: */
-    GetBoard()->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundingBox();
 
     offsetX = m_Auxiliary_Axis_Position.x;
     offsetY = m_Auxiliary_Axis_Position.y;

@@ -36,7 +36,7 @@ bool ComputeMatriceSize( WinEDA_BasePcbFrame* frame, int g_GridRoutingSize )
 {
     BOARD* pcb = frame->GetBoard();
 
-    pcb->ComputeBoundaryBox();
+    pcb->ComputeBoundingBox();
 
     /* The boundary box must have its start point on routing grid: */
     pcb->m_BoundaryBox.m_Pos.x -= pcb->m_BoundaryBox.m_Pos.x % g_GridRoutingSize;

@@ -87,6 +87,7 @@ public:
      */
     bool    HitTest( EDA_Rect& refArea );
 
+    EDA_Rect GetBoundingBox() const;
 };
 
 

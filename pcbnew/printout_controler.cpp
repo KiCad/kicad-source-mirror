@@ -138,8 +138,9 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in internal units
 
     WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
-    pcbframe->GetBoard()->ComputeBoundaryBox();
+    pcbframe->GetBoard()->ComputeBoundingBox();
     EDA_Rect brd_BBox = pcbframe->GetBoard()->m_BoundaryBox;
+
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to SheetSize.x/2, SheetSize.y/2.
     // So the equivalent board must be moved:

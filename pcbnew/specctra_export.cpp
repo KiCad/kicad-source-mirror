@@ -882,7 +882,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     }
     else
     {
-        aBoard->ComputeBoundaryBox();
+        aBoard->ComputeBoundingBox();
 
         RECTANGLE*  rect = new RECTANGLE( boundary );
         boundary->rectangle = rect;

@@ -132,6 +132,8 @@ public:
     {
         return wxT( "DIMENSION" );
     }
+
+    EDA_Rect GetBoundingBox() const;
 };
 
 #endif  // #define DIMENSION_H

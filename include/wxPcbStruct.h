@@ -1108,7 +1108,6 @@ public:
                                   bool include_fixe );
     void         FixeModule( MODULE* Module, bool Fixe );
     void         AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
-    bool         SetBoardBoundaryBoxFromEdgesOnly();
     void         AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
     int          RecherchePlacementModule( MODULE* Module, wxDC* DC );
     void         GenModuleOnBoard( MODULE* Module );

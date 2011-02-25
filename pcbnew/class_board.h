@@ -499,9 +499,13 @@ public:
         return m_NetInfo->GetPadsCount();
     }
 
-
-    bool          ComputeBoundaryBox();
-
+    /**
+     * Function ComputeBoundingBox
+     * calculates the bounding box containing all board items (or board edge segments).
+     * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
+     * @return bool - True if items (or board edge segments) were found.
+     */
+    bool          ComputeBoundingBox( bool aBoardEdgesOnly = false );
 
     /**
      * Function DisplayInfo

@@ -186,7 +186,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( !IsOK( this, _( "Move modules?" ) ) )
         return;
 
-    edgesExists = SetBoardBoundaryBoxFromEdgesOnly();
+    edgesExists = GetBoard()->ComputeBoundingBox( true );
 
     if( PlaceModulesHorsPcb && !edgesExists )
     {

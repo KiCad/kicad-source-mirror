@@ -1214,7 +1214,7 @@ bool WinEDA_PcbFrame::ExportVRML_File( const wxString & aFullFileName,
     /* Define the translation to have the board centre to the 2D axis origin
      * more easy for rotations...
      */
-    pcb->ComputeBoundaryBox();
+    pcb->ComputeBoundingBox();
     double dx = board_scaling_factor * pcb->m_BoundaryBox.Centre().x * aScale;
     double dy = board_scaling_factor * pcb->m_BoundaryBox.Centre().y * aScale;
     fprintf(output_file, "  translation %g %g 0.0\n", -dx, dy );

@@ -737,3 +737,43 @@ bool DIMENSION::HitTest( EDA_Rect& refArea )
         return true;
     return false;
 }
+
+
+EDA_Rect DIMENSION::GetBoundingBox() const
+{
+    EDA_Rect bBox;
+    int xmin, xmax, ymin, ymax;
+
+    bBox = m_Text->GetTextBox( -1 );
+    xmin = bBox.GetX();
+    xmax = bBox.GetRight();
+    ymin = bBox.GetY();
+    ymax = bBox.GetBottom();
+
+    xmin = MIN( xmin, Barre_ox );
+    xmin = MIN( xmin, Barre_fx );
+    ymin = MIN( ymin, Barre_oy );
+    ymin = MIN( ymin, Barre_fy );
+    xmax = MAX( xmax, Barre_ox );
+    xmax = MAX( xmax, Barre_fx );
+    ymax = MAX( ymax, Barre_oy );
+    ymax = MAX( ymax, Barre_fy );
+
+    xmin = MIN( xmin, TraitG_ox );
+    xmin = MIN( xmin, TraitG_fx );
+    ymin = MIN( ymin, TraitG_oy );
+    ymin = MIN( ymin, TraitG_fy );
+    xmax = MAX( xmax, TraitG_ox );
+    xmax = MAX( xmax, TraitG_fx );
+    ymax = MAX( ymax, TraitG_oy );
+    ymax = MAX( ymax, TraitG_fy );
+
+    bBox.SetX( xmin );
+    bBox.SetY( ymin );
+    bBox.SetWidth( xmax - xmin + 1 );
+    bBox.SetHeight( ymax - ymin + 1 );
+
+    bBox.Normalize();
+
+    return bBox;
+}

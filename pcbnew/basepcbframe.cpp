@@ -110,7 +110,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     if( m_Pcb == NULL )
         return 32 * GetScreen()->m_ZoomScalar;
 
-    m_Pcb->ComputeBoundaryBox();
+    m_Pcb->ComputeBoundingBox();
 
     dx = m_Pcb->m_BoundaryBox.GetWidth();
     dy = m_Pcb->m_BoundaryBox.GetHeight();

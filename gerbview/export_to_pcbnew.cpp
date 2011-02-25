@@ -107,7 +107,7 @@ static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
     fprintf( File, "LayerCount %d\n", NbLayers );
 
     /* Compute and print the board bounding box */
-    Pcb->ComputeBoundaryBox();
+    Pcb->ComputeBoundingBox();
     fprintf( File, "Di %d %d %d %d\n",
             Pcb->m_BoundaryBox.GetX(), Pcb->m_BoundaryBox.GetY(),
             Pcb->m_BoundaryBox.GetRight(),

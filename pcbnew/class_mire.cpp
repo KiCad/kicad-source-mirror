@@ -222,3 +222,15 @@ void MIREPCB::Flip(const wxPoint& aCentre )
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
 }
+
+
+EDA_Rect MIREPCB::GetBoundingBox() const
+{
+    EDA_Rect bBox;
+    bBox.SetX( m_Pos.x - m_Size/2 );
+    bBox.SetY( m_Pos.y - m_Size/2 );
+    bBox.SetWidth( m_Size );
+    bBox.SetHeight( m_Size );
+
+    return bBox;
+}

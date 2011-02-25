@@ -789,7 +789,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 
     /* Write Bounding box info */
-    GetBoard()->ComputeBoundaryBox();
+    GetBoard()->ComputeBoundingBox();
     fprintf( File, "Di %d %d %d %d\n",
              GetBoard()->m_BoundaryBox.GetX(),
              GetBoard()->m_BoundaryBox.GetY(),

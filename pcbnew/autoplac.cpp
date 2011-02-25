@@ -382,7 +382,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
     Board.UnInitBoard();
 
-    if( !SetBoardBoundaryBoxFromEdgesOnly() )
+    if( !GetBoard()->ComputeBoundingBox( true ) )
     {
         DisplayError( this, _( "No PCB edge found, unknown board size!" ) );
         return 0;
@@ -1083,73 +1083,6 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
         return bestModule;
     else
         return altModule;
-}
-
-
-/*
- * Determine the rectangle of the pcb, according to the contours
- * layer (EDGE) only
- * Output:
- *   GetBoard()->m_BoundaryBox updated
- * Returns FALSE if no contour
- */
-bool WinEDA_PcbFrame::SetBoardBoundaryBoxFromEdgesOnly()
-{
-    int          rayon, cx, cy, d;
-    int          xmax, ymax;
-    BOARD_ITEM*  PtStruct;
-    DRAWSEGMENT* ptr;
-    bool         succes = FALSE;
-
-    if( GetBoard() == NULL )
-        return FALSE;
-
-    GetBoard()->m_BoundaryBox.m_Pos.x = GetBoard()->m_BoundaryBox.m_Pos.y =
-        0x7FFFFFFFl;
-    xmax = ymax = -0x7FFFFFFFl;
-
-    PtStruct = GetBoard()->m_Drawings;
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
-    {
-        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
-            continue;
-        succes = TRUE;
-        ptr    = (DRAWSEGMENT*) PtStruct;
-        d = (ptr->m_Width / 2) + 1;
-        if( ptr->m_Shape == S_CIRCLE )
-        {
-            cx    = ptr->m_Start.x; cy = ptr->m_Start.y;
-            rayon =
-                (int) hypot( (double) ( ptr->m_End.x - cx ),
-                            (double) ( ptr->m_End.y - cy ) );
-            rayon += d;
-            GetBoard()->m_BoundaryBox.m_Pos.x = MIN(
-                GetBoard()->m_BoundaryBox.m_Pos.x, cx - rayon );
-            GetBoard()->m_BoundaryBox.m_Pos.y = MIN(
-                GetBoard()->m_BoundaryBox.m_Pos.y, cy - rayon );
-            xmax = MAX( xmax, cx + rayon );
-            ymax = MAX( ymax, cy + rayon );
-        }
-        else
-        {
-            cx = MIN( ptr->m_Start.x, ptr->m_End.x );
-            cy = MIN( ptr->m_Start.y, ptr->m_End.y );
-            GetBoard()->m_BoundaryBox.m_Pos.x = MIN(
-                GetBoard()->m_BoundaryBox.m_Pos.x, cx - d );
-            GetBoard()->m_BoundaryBox.m_Pos.y = MIN(
-                GetBoard()->m_BoundaryBox.m_Pos.y, cy - d );
-            cx   = MAX( ptr->m_Start.x, ptr->m_End.x );
-            cy   = MAX( ptr->m_Start.y, ptr->m_End.y );
-            xmax = MAX( xmax, cx + d );
-            ymax = MAX( ymax, cy + d );
-        }
-    }
-
-    GetBoard()->m_BoundaryBox.SetWidth(
-        xmax - GetBoard()->m_BoundaryBox.m_Pos.x );
-    GetBoard()->m_BoundaryBox.SetHeight(
-        ymax - GetBoard()->m_BoundaryBox.m_Pos.y );
-    return succes;
 }
 
 

@@ -1002,7 +1002,7 @@ void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
     ref = cmp = s_ModuleToLoad_List;
 
     // Calculate the footprint "best" position:
-    if( aPcbFrame->SetBoardBoundaryBoxFromEdgesOnly() )
+    if( aPcbFrame->GetBoard()->ComputeBoundingBox( true ) )
     {
         ModuleBestPosition.x =
             aPcbFrame->GetBoard()->m_BoundaryBox.GetRight() + 5000;

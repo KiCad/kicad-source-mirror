@@ -40,8 +40,9 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     PLOTTER*  plotter = NULL;
 
     SetLocaleTo_C_standard();  // Use the standard notation for float numbers
-    /* Calculate dimensions and center of PCB */
-    aPcb->ComputeBoundaryBox();
+
+    // Calculate dimensions and center of PCB
+    aPcb->ComputeBoundingBox();
 
     dX = aPcb->m_BoundaryBox.GetWidth();
     dY = aPcb->m_BoundaryBox.GetHeight();

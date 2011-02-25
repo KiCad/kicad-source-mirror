@@ -102,7 +102,8 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
     wxString msg;
 
     MsgPanel->EraseMsgBox();
-    if( GetBoard()->ComputeBoundaryBox() == false )
+
+    if( GetBoard()->ComputeBoundingBox() == false )
     {
         if( verbose )
             wxMessageBox( wxT( "Board is empty!" ) );

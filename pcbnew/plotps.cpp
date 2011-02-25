@@ -62,7 +62,7 @@ bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
         paperscale = 1;
     }
 
-    m_Pcb->ComputeBoundaryBox();
+    m_Pcb->ComputeBoundingBox();
     BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
     BoardCenter = m_Pcb->m_BoundaryBox.Centre();
 
