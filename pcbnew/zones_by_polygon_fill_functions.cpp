@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/progdlg.h>
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
@@ -110,25 +111,14 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
         return -1;
     }
 
-    /* Shows the Net */
+    // Shows the net
     g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+    msg = zone_container->GetNetName();
 
-    if( zone_container->GetNet() > 0 )
-    {
-        NETINFO_ITEM* net = GetBoard()->FindNet( zone_container->GetNet() );
-        if( net == NULL )
-        {
-            if( verbose )
-                wxMessageBox( wxT( "Unable to find Net name" ) );
-            return -2;
-        }
-        else
-            msg = net->GetNetname();
-    }
-    else
-        msg = _( "No Net" );
-
+    if( msg.IsEmpty() )
+        msg = wxT( "No net" );
     Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
+
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     zone_container->m_FilledPolysList.clear();
@@ -141,10 +131,7 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 }
 
 
-/************************************************************/
 int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
-/************************************************************/
-
 /**
  * Function Fill_All_Zones
  *  Fill all zones on the board
@@ -153,23 +140,43 @@ int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
  * @return error level (0 = no error)
  */
 {
-    ZONE_CONTAINER* zone_container;
-    int             error_level = 0;
+    int errorLevel = 0;
+    int areaCount = GetBoard()->GetAreaCount();
+    wxBusyCursor dummyCursor;
 
-    // Remove all zones :
+    wxProgressDialog progressDialog( wxT( "Fill All Zones" ),
+                                     wxT( "Starting zone fill..." ),
+                                     areaCount+2, this,
+                                     wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT );
+    progressDialog.SetMinSize( wxSize( 400, 100 ) );
+
+    // Remove segment zones
     GetBoard()->m_Zone.DeleteAll();
 
-    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
+    int ii;
+    for( ii = 0; ii < areaCount; ii++ )
     {
-        zone_container = GetBoard()->GetArea( ii );
-        error_level    = Fill_Zone( zone_container, verbose );
-        if( error_level && !verbose )
+        ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
+        wxString str;
+        str.Printf( wxT( "Filling zone %d out of %d (net %s)..." ),
+                    ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
+
+        if( !progressDialog.Update( ii+1, str ) )
+            break;
+
+        errorLevel = Fill_Zone( zoneContainer, verbose );
+
+        if( errorLevel && !verbose )
             break;
     }
+    progressDialog.Update( ii+2, wxT( "Updating ratsnest..." ) );
     test_connexions( NULL );
-    Tst_Ratsnest( NULL, 0 );    // Recalculate the active ratsnest, i.e. the unconnected links */
+
+    // Recalculate the active ratsnest, i.e. the unconnected links
+    Tst_Ratsnest( NULL, 0 );
     DrawPanel->Refresh( true );
-    return error_level;
+
+    return errorLevel;
 }
 
 

@@ -168,10 +168,17 @@ public:
 
     /**
      * Function SetNetNameFromNetCode
-     * Fin the nat name corresponding to the net code.
+     * Find the net name corresponding to the net code.
      * @return bool - true if net found, else false
      */
     bool SetNetNameFromNetCode( void );
+
+    /**
+     * Function GetNetName
+     * returns the net name.
+     * @return wxString - The net name.
+     */
+    wxString GetNetName() const { return m_Netname; };
 
     /**
      * Function HitTest
