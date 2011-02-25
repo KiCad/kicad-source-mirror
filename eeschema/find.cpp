@@ -105,10 +105,10 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
                                                 const wxString& text_to_find,
                                                 bool mouseWarp )
 {
-    SCH_SHEET_PATH* sheet, * SheetWithComponentFound = NULL;
+    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_PATH* sheetWithComponentFound = NULL;
     SCH_ITEM*       DrawList     = NULL;
     SCH_COMPONENT*  Component    = NULL;
-    wxSize          DrawAreaSize = DrawPanel->GetClientSize();
     wxPoint         pos, curpos;
     bool            DoCenterAndRedraw = false;
     bool            NotFound = true;
@@ -135,7 +135,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
             if( component_reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
             {
                 Component = pSch;
-                SheetWithComponentFound = sheet;
+                sheetWithComponentFound = sheet;
 
                 switch( SearchType )
                 {
@@ -180,9 +180,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 
     if( Component )
     {
-        sheet = SheetWithComponentFound;
-
-        if( sheet != GetSheet() )
+        sheet = sheetWithComponentFound;
+        if( *sheet != *GetSheet() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
@@ -195,46 +194,36 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->m_Pos;
 
-        wxPoint old_cursor_position    = sheet->LastScreen()->GetCrossHairPosition();
-        sheet->LastScreen()->SetCrossHairPosition( pos );
-
-        curpos = GetScreen()->GetCrossHairScreenPosition();
-
-        DrawPanel->GetViewStart( &( GetScreen()->m_StartVisu.x ),
-                                 &( GetScreen()->m_StartVisu.y ) );
-
-        // Calculating cursor position with original screen.
-        curpos -= GetScreen()->m_StartVisu;
 
         /* There may be need to reframe the drawing */
-        #define MARGIN 30
-        if( ( curpos.x <= MARGIN ) || ( curpos.x >= DrawAreaSize.x - MARGIN )
-           || ( curpos.y <= MARGIN ) || ( curpos.y >= DrawAreaSize.y - MARGIN ) )
+        if( ! DrawPanel->IsPointOnDisplay( pos ) )
         {
-            DoCenterAndRedraw = true;;
+            DoCenterAndRedraw = true;
         }
-        #undef MARGIN
 
         if( DoCenterAndRedraw )
-            RedrawScreen( curpos, mouseWarp );
+        {
+            GetScreen()->SetCrossHairPosition(pos);
+            RedrawScreen( pos, mouseWarp );
+        }
+
         else
         {
             INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-            EXCHG( old_cursor_position, sheet->LastScreen()->GetCrossHairPosition() );
             DrawPanel->CrossHairOff( &dc );
 
             if( mouseWarp )
-                DrawPanel->MoveCursor( curpos );
+                DrawPanel->MoveCursor( pos );
 
-            EXCHG( old_cursor_position, sheet->LastScreen()->GetCrossHairPosition() );
+            GetScreen()->SetCrossHairPosition(pos);
 
             DrawPanel->CrossHairOn( &dc );
         }
     }
 
 
-    /* Print diaq */
+    /* Print diag */
     wxString msg_item;
     msg = component_reference;
 

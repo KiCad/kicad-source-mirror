@@ -122,7 +122,10 @@ void RemoteCommand(  const char* cmdline )
     }
 
     if( module )  // if found, center the module on screen, and redraw the screen.
+    {
+        frame->GetScreen()->SetCrossHairPosition(pos);
         frame->RedrawScreen( pos, false );
+    }
 }
 
 
