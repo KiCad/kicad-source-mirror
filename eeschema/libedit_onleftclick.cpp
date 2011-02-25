@@ -38,6 +38,19 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
+        if( DrawEntry && DrawEntry->m_Flags )   // moved object
+        {
+            switch( DrawEntry->Type() )
+            {
+            case LIB_PIN_T:
+                PlacePin( DC );
+                break;
+
+            default:
+                EndDrawGraphicItem( DC );
+                break;
+            }
+        }
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
