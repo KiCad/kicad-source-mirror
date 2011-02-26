@@ -202,7 +202,7 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetProjectFileParameters()
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),&g_UserLibDirBuffer,
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
                                                            GROUPLIB ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ), &g_LibName_List,
                                                                GROUPLIB ) );

@@ -20,6 +20,7 @@ enum paramcfg_id
     PARAM_BOOL,
     PARAM_LIBNAME_LIST,
     PARAM_WXSTRING,
+    PARAM_FILENAME,
     PARAM_COMMAND_ERASE,
     PARAM_FIELDNAME_LIST
 };
@@ -173,6 +174,24 @@ public:
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );
 };
+
+/**
+ * Configuration parameter - PARAM_CFG_FILENAME Class
+ * Same as PARAM_CFG_WXSTRING, but stores "\" as "/".
+ * and replace "/" by "\" under Windows.
+ * Used to store paths and filenames in config files
+ */
+class PARAM_CFG_FILENAME     : public PARAM_CFG_BASE
+{
+public:
+    wxString* m_Pt_param;    ///<  Pointer to the parameter value
+
+public:
+    PARAM_CFG_FILENAME( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+    virtual void ReadParam( wxConfigBase* aConfig );
+    virtual void SaveParam( wxConfigBase* aConfig );
+};
+
 
 
 class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE

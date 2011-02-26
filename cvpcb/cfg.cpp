@@ -40,7 +40,7 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
                                                                GROUPEQU ) );
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetIExt" ),
                                                            &m_NetlistFileExtension ) );
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_UserLibraryPath,
                                                            GROUPLIB ) );
 

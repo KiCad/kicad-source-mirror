@@ -1,6 +1,6 @@
-/******************/
-/** eeconfig.cpp **/
-/******************/
+/**
+ * @file eeschema_config.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -265,7 +265,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters( void )
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
 
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LibDir" ),
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
                                                            &m_UserLibraryPath ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_ComponentLibFiles,
