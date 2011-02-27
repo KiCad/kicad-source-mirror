@@ -80,31 +80,31 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
  */
 int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
 {
-    char* Line;
+    char* line;
     char  text[1024];
     char  style[256];
 
     while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
-        if( strnicmp( Line, "$EndTEXTPCB", 11 ) == 0 )
+        line = aReader->Line();
+        if( strnicmp( line, "$EndTEXTPCB", 11 ) == 0 )
             return 0;
-        if( strncmp( Line, "Te", 2 ) == 0 ) /* Text line (first line for multi line texts */
+        if( strncmp( line, "Te", 2 ) == 0 ) /* Text line (first line for multi line texts */
         {
-            ReadDelimitedText( text, Line + 2, sizeof(text) );
+            ReadDelimitedText( text, line + 2, sizeof(text) );
             m_Text = CONV_FROM_UTF8( text );
             continue;
         }
-        if( strncmp( Line, "nl", 2 ) == 0 ) /* next line of the current text */
+        if( strncmp( line, "nl", 2 ) == 0 ) /* next line of the current text */
         {
-            ReadDelimitedText( text, Line + 2, sizeof(text) );
+            ReadDelimitedText( text, line + 2, sizeof(text) );
             m_Text.Append( '\n' );
             m_Text += CONV_FROM_UTF8( text );
             continue;
         }
-        if( strncmp( Line, "Po", 2 ) == 0 )
+        if( strncmp( line, "Po", 2 ) == 0 )
         {
-            sscanf( Line + 2, " %d %d %d %d %d %d",
+            sscanf( line + 2, " %d %d %d %d %d %d",
                     &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y,
                     &m_Thickness, &m_Orient );
 
@@ -115,11 +115,11 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
                 m_Size.y = 5;
             continue;
         }
-        if( strncmp( Line, "De", 2 ) == 0 )
+        if( strncmp( line, "De", 2 ) == 0 )
         {
             style[0] = 0;
             int normal_display = 1;
-            sscanf( Line + 2, " %d %d %lX %s\n", &m_Layer, &normal_display,
+            sscanf( line + 2, " %d %d %lX %s\n", &m_Layer, &normal_display,
                     &m_TimeStamp, style );
 
             m_Mirror = normal_display ? false : true;
@@ -157,18 +157,22 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     const char* style = m_Italic ? "Italic" : "Normal";
 
     wxArrayString* list = wxStringSplit( m_Text, '\n' );
+
     for( unsigned ii = 0; ii < list->Count(); ii++ )
     {
         wxString txt  = list->Item( ii );
+
         if ( ii == 0 )
-            fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( txt ) );
+            fprintf( aFile, "Te \"%s\"\n", EscapedUTF8( txt ).c_str() );
         else
             fprintf( aFile, "nl \"%s\"\n", CONV_TO_UTF8( txt ) );
     }
-    delete (list);
+
+    delete list;
 
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
+
     fprintf( aFile, "De %d %d %lX %s\n", m_Layer,
              m_Mirror ? 0 : 1,
              m_TimeStamp, style );

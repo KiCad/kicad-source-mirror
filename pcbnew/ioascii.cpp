@@ -327,13 +327,11 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
             }
             catch( IO_ERROR& e )
             {
-#if 1
                 wxString msg;
-                msg.Printf( wxT( "Error reading PcbPlotParams from %s:\n%s" ),
+                msg.Printf( _( "Error reading PcbPlotParams from %s:\n%s" ),
                             aReader->GetSource().GetData(),
                             e.errorText.GetData() );
-                wxMessageBox( msg, wxT( "Open Board File" ), wxICON_ERROR );
-#endif
+                wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
             }
 
             continue;

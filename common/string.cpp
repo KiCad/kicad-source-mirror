@@ -8,32 +8,74 @@
 #include "kicad_string.h"
 
 
-/* read a double-quote delimited text from source and put it in in dest,
- *  read NbMaxChar bytes max
- *  return the char count read from source
- */
-int ReadDelimitedText( char* dest, char* source, int NbMaxChar )
+int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 {
-    int ii, jj, flag = 0;
+    if( aDestSize <= 0 )
+        return 0;
 
-    for( ii = 0, jj = 0; ii < NbMaxChar - 1; jj++, source++ )
+    bool    inside = false;
+    char*   start = aDest;
+    char*   limit = aDest + aDestSize - 1;
+    char    cc;
+
+    while( (cc = *aSource++) != 0 && aDest < limit )
     {
-        if( *source == 0 )
-            break;                      /* E.O.L. */
-        if( *source == '"' )            /* delimiter is " */
+        if( cc == '\\' )
         {
-            if( flag )
-                break;                  /* End of delimited text */
-            flag = 1;                   /* First delimiter found. */
+            cc = *aSource++;
+
+            if( inside )
+                *aDest++ = cc;
         }
-        else if( flag )
+
+        else if( cc == '"' )
         {
-            *dest = *source; dest++; ii++;
+            if( inside )
+                break;          // 2nd double quote is end of delimited text
+
+            inside = true;      // first delimiter found, make note, do not copy
+        }
+
+        else if( inside )
+        {
+            *aDest++ = cc;
         }
     }
 
-    *dest = 0;  /* Null terminated */
-    return jj;
+    *aDest = 0;
+
+    return aDest - start;
+}
+
+
+std::string EscapedUTF8( const wxString& aString )
+{
+    std::string utf8 = TO_UTF8( aString );
+
+    std::string ret;
+
+    // ret += '"';
+
+    for( std::string::const_iterator it = utf8.begin();  it!=utf8.end();  ++it )
+    {
+        // this escaping strategy is designed to be compatible with ReadDelimitedText():
+        if( *it == '"' )
+        {
+            ret += '\\';
+            ret += '"';
+        }
+        else if( *it == '\\' )
+        {
+            ret += '\\';    // double it up
+            ret += '\\';
+        }
+        else
+            ret += *it;
+    }
+
+    // ret += '"';
+
+    return ret;
 }
 
 

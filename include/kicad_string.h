@@ -14,14 +14,32 @@
 char*    strupper( char* Text );
 char*    strlower( char* Text );
 
-/* Read string delimited with (") character.
- * Upload NbMaxChar max
- * Returns the number of codes read in source
- * dest is terminated by NULL
+
+/**
+ * Function ReadDelimitedText
+ * extracts bytes from @a aSource delimited string segment to @a aDest buffer.
+ * The extracted string will be null terminated even if truncation is necessary
+ * because aDestSize was not large enough.
+ *
+ * @param aDest is the destination byte buffer.
+ * @param aSource is the source bytes as a C string.
+ * @param aDestSize is the size of the destination byte buffer.
+ * @return int - the number of bytes extracted.
  */
-int      ReadDelimitedText( char* dest,
-                            char* source,
-                            int   NbMaxChar );
+int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
+
+
+/**
+ * Function EscapedUTF8
+ * returns an 8 bit UTF8 string given aString in unicode form.
+ * Any double quoted or back slashes are prefixed with a '\\' byte and the form
+ * of this UTF8 byte string is compatible with function ReadDelimitedText().
+ *
+ * @param aString is the input string to convert.
+ * @return std::string - the escaped input text, without the wrapping double quotes.
+ */
+std::string EscapedUTF8( const wxString& aString );
+
 
 /* Read one line line from a file.
  * Returns the first useful line read by eliminating blank lines and comments.

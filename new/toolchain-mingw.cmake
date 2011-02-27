@@ -7,7 +7,7 @@
 
 # It is here to assist Dick with verifying compilation of /new stuff with mingw (under linux)
 
-set( CMAKE_SYSTEM_NAME Linux )
+set( CMAKE_SYSTEM_NAME Windows )
 
 #-----<configuration>-----------------------------------------------
 
