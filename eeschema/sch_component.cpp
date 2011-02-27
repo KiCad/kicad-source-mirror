@@ -1031,28 +1031,31 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
 bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    int            ii;
-    char           Name1[256], Name2[256],
-                   Char1[256], Char2[256], Char3[256];
-    int            newfmt = 0;
-    char*          ptcar;
-    wxString       fieldName;
+    int         ii;
+    char        Name1[256], Name2[256],
+                Char1[256], Char2[256], Char3[256];
+    int         newfmt = 0;
+    char*       ptcar;
+    wxString    fieldName;
+    char*       line = aLine.Line();
 
     m_convert = 1;
 
-    if( ((char*)aLine)[0] == '$' )
+    if( line[0] == '$' )
     {
         newfmt = 1;
 
         if( !aLine.ReadLine() )
             return TRUE;
+
+        line = aLine.Line();
     }
 
-    if( sscanf( &((char*)aLine)[1], "%s %s", Name1, Name2 ) != 2 )
+    if( sscanf( &line[1], "%s %s", Name1, Name2 ) != 2 )
     {
         aErrorMsg.Printf( wxT( "EESchema Component descr error at line %d, aborted" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( ((char*)aLine) );
+        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( line );
         return false;
     }
 
@@ -1135,13 +1138,15 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         if( !aLine.ReadLine() )
             return false;
 
-        if( ((char*)aLine)[0] == 'U' )
+        line = aLine.Line();
+
+        if( line[0] == 'U' )
         {
-            sscanf( ((char*)aLine) + 1, "%d %d %lX", &m_unit, &m_convert, &m_TimeStamp );
+            sscanf( line + 1, "%d %d %lX", &m_unit, &m_convert, &m_TimeStamp );
         }
-        else if( ((char*)aLine)[0] == 'P' )
+        else if( line[0] == 'P' )
         {
-            sscanf( ((char*)aLine) + 1, "%d %d", &m_Pos.x, &m_Pos.y );
+            sscanf( line + 1, "%d %d", &m_Pos.x, &m_Pos.y );
 
             // Set fields position to a default position (that is the
             // component position.  For existing fields, the real position
@@ -1152,7 +1157,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                     GetField( i )->m_Pos = m_Pos;
             }
         }
-        else if( ((char*)aLine)[0] == 'A' && ((char*)aLine)[1] == 'R' )
+        else if( line[0] == 'A' && line[1] == 'R' )
         {
             /* format:
              * AR Path="/9086AF6E/67452AA0" Ref="C99" Part="1"
@@ -1161,7 +1166,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
              * C99 is the reference given this path.
              */
             int ii;
-            ptcar = ((char*)aLine) + 2;
+            ptcar = line + 2;
 
             //copy the path.
             ii     = ReadDelimitedText( Name1, ptcar, 255 );
@@ -1183,7 +1188,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             AddHierarchicalReference( path, ref, multi );
             GetField( REFERENCE )->m_Text = ref;
         }
-        else if( ((char*)aLine)[0] == 'F' )
+        else if( line[0] == 'F' )
         {
             int  fieldNdx;
 
@@ -1223,7 +1228,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 }
             }
 
-            fieldNdx = atoi( ((char*)aLine) + 2 );
+            fieldNdx = atoi( line + 2 );
 
             ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
 
@@ -1310,7 +1315,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             break;
     }
 
-    if( sscanf( ((char*)aLine), "%d %d %d", &m_unit, &m_Pos.x, &m_Pos.y ) != 3 )
+    if( sscanf( line, "%d %d %d", &m_unit, &m_Pos.x, &m_Pos.y ) != 3 )
     {
         aErrorMsg.Printf( wxT( "Component unit & pos error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1334,7 +1339,9 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         if( !aLine.ReadLine() )
             return false;
 
-        if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
+        line = aLine.Line();
+
+        if( strnicmp( "$End", line, 4 ) != 0 )
         {
             aErrorMsg.Printf( wxT( "Component End expected at line %d, aborted" ),
                               aLine.LineNumber() );

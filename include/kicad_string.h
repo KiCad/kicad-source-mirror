@@ -17,7 +17,7 @@ char*    strlower( char* Text );
 
 /**
  * Function ReadDelimitedText
- * extracts bytes from @a aSource delimited string segment to @a aDest buffer.
+ * copies bytes from @a aSource delimited string segment to @a aDest buffer.
  * The extracted string will be null terminated even if truncation is necessary
  * because aDestSize was not large enough.
  *

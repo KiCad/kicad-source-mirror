@@ -39,8 +39,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
     SCH_ITEM*       Pnext;
     SCH_ITEM*       item;
     wxString        MsgDiag;            // Error and log messages
-
-#define line        ((char*)reader)
+    char*           line;
 
     if( screen == NULL )
         return FALSE;
@@ -68,18 +67,22 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
     PrintMsg( MsgDiag );
 
     if( !reader.ReadLine()
-        || strncmp( line + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
+        || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
     {
         MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         return FALSE;
     }
 
+    line = reader.Line();
+
     // get the file version here.
     char *strversion = line + 9 + sizeof(SCHEMATIC_HEAD_STRING);
+
     // Skip blanks
     while( *strversion && *strversion < '0' )
         strversion++;
+
     int  version = atoi(strversion);
 
     if( version > EESCHEMA_VERSION )
@@ -101,7 +104,7 @@ again." );
     }
 #endif
 
-    if( !reader.ReadLine() || strncmp( line, "LIBS:", 5 ) != 0 )
+    if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
         MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
@@ -112,6 +115,8 @@ again." );
 
     while( reader.ReadLine() )
     {
+        line = reader.Line();
+
         item = NULL;
 
         char* sline = line;
@@ -264,18 +269,23 @@ static void LoadLayers( LINE_READER* aLine )
 /* Read the schematic header. */
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScreen )
 {
-    char Text[256], buf[1024];
-    int  ii;
-    Ki_PageDescr*        wsheet = &g_Sheet_A4;
+    char            Text[256];
+    char            buf[1024];
+    int             ii;
+    Ki_PageDescr*   wsheet = &g_Sheet_A4;
+    wxSize          PageSize;
+    char*           line;
+
     static Ki_PageDescr* SheetFormatList[] =
     {
         &g_Sheet_A4,   &g_Sheet_A3,   &g_Sheet_A2,   &g_Sheet_A1, &g_Sheet_A0,
         &g_Sheet_A,    &g_Sheet_B,    &g_Sheet_C,    &g_Sheet_D,  &g_Sheet_E,
         &g_Sheet_user, NULL
     };
-    wxSize               PageSize;
 
-    sscanf( ((char*)(*aLine)), "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
+    line = aLine->Line();
+
+    sscanf( line, "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
 
     wxString pagename = CONV_FROM_UTF8( Text );
 
@@ -300,7 +310,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScre
         aMsgDiag.Printf( wxT( "EESchema file dimension definition error \
 line %d, \aAbort reading file.\n" ),
                          aLine->LineNumber() );
-        aMsgDiag << CONV_FROM_UTF8( ((char*)(*aLine)) );
+        aMsgDiag << CONV_FROM_UTF8( line );
     }
 
     aScreen->m_CurrentSheetDesc = wsheet;
@@ -310,65 +320,67 @@ line %d, \aAbort reading file.\n" ),
         if( !aLine->ReadLine() )
             return TRUE;
 
-        if( strnicmp( ((char*)(*aLine)), "$End", 4 ) == 0 )
+        line = aLine->Line();
+
+        if( strnicmp( line, "$End", 4 ) == 0 )
             break;
 
-        if( strnicmp( ((char*)(*aLine)), "Sheet", 2 ) == 0 )
-            sscanf( ((char*)(*aLine)) + 5, " %d %d",
+        if( strnicmp( line, "Sheet", 2 ) == 0 )
+            sscanf( line + 5, " %d %d",
                     &aScreen->m_ScreenNumber, &aScreen->m_NumberOfScreen );
 
-        if( strnicmp( ((char*)(*aLine)), "Title", 2 ) == 0 )
+        if( strnicmp( line, "Title", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Title = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Date", 2 ) == 0 )
+        if( strnicmp( line, "Date", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Date = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Rev", 2 ) == 0 )
+        if( strnicmp( line, "Rev", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Revision = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Comp", 4 ) == 0 )
+        if( strnicmp( line, "Comp", 4 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Company = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Comment1", 8 ) == 0 )
+        if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Commentaire1 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Comment2", 8 ) == 0 )
+        if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Commentaire2 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Comment3", 8 ) == 0 )
+        if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Commentaire3 = CONV_FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( ((char*)(*aLine)), "Comment4", 8 ) == 0 )
+        if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, ((char*)(*aLine)), 256 );
+            ReadDelimitedText( buf, line, 256 );
             aScreen->m_Commentaire4 = CONV_FROM_UTF8( buf );
             continue;
         }
