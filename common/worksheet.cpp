@@ -825,9 +825,54 @@ Ki_WorkSheetData WS_Segm7_LU =
 Ki_WorkSheetData WS_Segm8_LU =
 {
     WS_SEGMENT_LU,
-    &WS_Podp1_LU,
+    &WS_Segm9_LU,
     STAMP_12,     0,
     0,            0,
+    NULL,         NULL
+};
+
+Ki_WorkSheetData WS_Segm9_LU =
+{
+    WS_SEGMENT_LU,
+    &WS_Segm10_LU,
+    STAMP_12,     STAMP_287,
+    STAMP_12,     STAMP_167,
+    NULL,         NULL
+};
+
+Ki_WorkSheetData WS_Segm10_LU =
+{
+    WS_SEGMENT_LU,
+    &WS_Segm11_LU,
+    STAMP_7,     STAMP_287,
+    STAMP_7,     STAMP_167,
+    NULL,         NULL
+};
+
+Ki_WorkSheetData WS_Segm11_LU =
+{
+    WS_SEGMENT_LU,
+    &WS_Segm12_LU,
+    STAMP_12,     STAMP_287,
+    0,            STAMP_287,
+    NULL,         NULL
+};
+
+Ki_WorkSheetData WS_Segm12_LU =
+{
+    WS_SEGMENT_LU,
+    &WS_Segm13_LU,
+    STAMP_12,     STAMP_227,
+    0,            STAMP_227,
+    NULL,         NULL
+};
+
+Ki_WorkSheetData WS_Segm13_LU =
+{
+    WS_SEGMENT_LU,
+    &WS_Podp1_LU,
+    STAMP_12,     STAMP_167,
+    0,            STAMP_167,
     NULL,         NULL
 };
 
@@ -870,10 +915,28 @@ Ki_WorkSheetData WS_Podp4_LU =
 Ki_WorkSheetData WS_Podp5_LU =
 {
     WS_PODPIS_LU,
-    NULL,
+    &WS_Podp6_LU,
     STAMP_7 + 90, STAMP_110 + 688,
     0,            0,
     wxT( "Подп. и дата" ),NULL
+};
+
+Ki_WorkSheetData WS_Podp6_LU =
+{
+    WS_PODPIS_LU,
+    &WS_Podp7_LU,
+    STAMP_7 + 90, STAMP_167 + 1180,
+    0,            0,
+    wxT( "Справ. N" ),NULL
+};
+
+Ki_WorkSheetData WS_Podp7_LU =
+{
+    WS_PODPIS_LU,
+    NULL,
+    STAMP_7 + 90, STAMP_227 + 1180,
+    0,            0,
+    wxT( "Перв. примен." ),NULL
 };
 
 Ki_WorkSheetData WS_Segm1_LT =

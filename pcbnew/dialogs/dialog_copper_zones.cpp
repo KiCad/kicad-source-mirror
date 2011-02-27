@@ -240,13 +240,13 @@ void dialog_copper_zone::OnCornerSmoothingModeChoice( wxCommandEvent& event )
     case ZONE_SETTING::SMOOTHING_CHAMFER:
         m_cornerSmoothingTitle->Enable( true );
         m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingTitle->SetLabel( wxT( "Chamfer distance" ) );
+        m_cornerSmoothingTitle->SetLabel( _( "Chamfer distance" ) );
         AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
         break;
     case ZONE_SETTING::SMOOTHING_FILLET:
         m_cornerSmoothingTitle->Enable( true );
         m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingTitle->SetLabel( wxT( "Fillet radius" ) );
+        m_cornerSmoothingTitle->SetLabel( _( "Fillet radius" ) );
         AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
         break;
     }

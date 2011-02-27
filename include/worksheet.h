@@ -64,6 +64,10 @@
 #define STAMP_85  85 * 10000 / 254
 #define STAMP_60  60 * 10000 / 254
 #define STAMP_25  25 * 10000 / 254
+
+#define STAMP_287 287 * 10000 / 254
+#define STAMP_227 227 * 10000 / 254
+#define STAMP_167 167 * 10000 / 254
 #endif
 
 /* The coordinates below are relative to the bottom right corner of page and
@@ -226,11 +230,18 @@ extern Ki_WorkSheetData WS_Segm5_LU;
 extern Ki_WorkSheetData WS_Segm6_LU;
 extern Ki_WorkSheetData WS_Segm7_LU;
 extern Ki_WorkSheetData WS_Segm8_LU;
+extern Ki_WorkSheetData WS_Segm9_LU;
+extern Ki_WorkSheetData WS_Segm10_LU;
+extern Ki_WorkSheetData WS_Segm11_LU;
+extern Ki_WorkSheetData WS_Segm12_LU;
+extern Ki_WorkSheetData WS_Segm13_LU;
 extern Ki_WorkSheetData WS_Podp1_LU;
 extern Ki_WorkSheetData WS_Podp2_LU;
 extern Ki_WorkSheetData WS_Podp3_LU;
 extern Ki_WorkSheetData WS_Podp4_LU;
 extern Ki_WorkSheetData WS_Podp5_LU;
+extern Ki_WorkSheetData WS_Podp6_LU;
+extern Ki_WorkSheetData WS_Podp7_LU;
 extern Ki_WorkSheetData WS_Segm1_LT;
 extern Ki_WorkSheetData WS_Segm2_LT;
 extern Ki_WorkSheetData WS_Segm3_LT;
