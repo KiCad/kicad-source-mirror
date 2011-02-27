@@ -11,8 +11,8 @@ class EDGE_MODULE : public BOARD_ITEM
 {
 public:
     int     m_Width;        // 0 = line, > 0 = tracks, bus ...
-    wxPoint m_Start;        // Line start point / circle and arc center
-    wxPoint m_End;          // Line end point / circle and arc starting point
+    wxPoint m_Start;        // Line start point and circle and arc center
+    wxPoint m_End;          // Line end point and circle and arc starting point
 
     int     m_Shape;        // enum Track_Shapes
     wxPoint m_Start0;       // Start point or centre, relative to module origin, orient 0.
@@ -44,6 +44,28 @@ public:
         return m_Start;
     }
 
+    /**
+     * Function GetStart
+     * returns the starting point of the graphic
+     */
+    wxPoint      GetStart() const;
+
+    /**
+     * Function GetEnd
+     * returns the ending point of the graphic
+     */
+    wxPoint      GetEnd() const;
+
+    /**
+     * Function GetRadius
+     * returns the radius of this item
+     * Has meaning only for arc and circle
+     */
+    int         GetRadius() const
+    {
+        double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
+        return wxRound(radius);
+    }
 
     void             Copy( EDGE_MODULE* source ); // copy structure
 
@@ -91,6 +113,15 @@ public:
      * @return bool - true if a hit, else false
      */
     bool             HitTest( const wxPoint& refPos );
+
+    /**
+     * Function HitTest (overlayed)
+     * tests if the given EDA_Rect intersect this object.
+     * For now, for segments and arcs, an ending point must be inside this rect.
+     * @param refArea the given EDA_Rect to test
+     * @return bool - true if a hit, else false
+     */
+    bool         HitTest( EDA_Rect& refArea );
 
     /**
      * Function GetClass

@@ -233,7 +233,27 @@ public:
 
     wxArrayString& GetFootPrints() { return m_FootprintList; }
 
+    /**
+     * Function GetBoundingBox
+     * @return the component boundary box ( in user coordinates )
+     * @param aUnit = unit selection = 0, or 1..n
+     * @param aConvert = 0, 1 or 2
+     *  If aUnit == 0, unit is not used
+     *  if aConvert == 0 Convert is non used
+     *  Invisible fields are not taken in account
+     **/
     EDA_Rect GetBoundingBox( int aUnit, int aConvert ) const;
+
+    /**
+     * Function GetBodyBoundingBox
+     * @return the component boundary box ( in user coordinates ) without fields
+     * @param aUnit = unit selection = 0, or 1..n
+     * @param aConvert = 0, 1 or 2
+     *  If aUnit == 0, unit is not used
+     *  if aConvert == 0 Convert is non used
+     *  Fields are not taken in account
+     **/
+    EDA_Rect GetBodyBoundingBox( int aUnit, int aConvert ) const;
 
     bool SaveDateAndTime( FILE* aFile );
     bool LoadDateAndTime( char* aLine );

@@ -204,19 +204,17 @@ wxPoint DRAWSEGMENT::GetStart() const
 
 wxPoint DRAWSEGMENT::GetEnd() const
 {
-    wxPoint center;        // center point of the arc
-    wxPoint start;         // start of arc
+    wxPoint endPoint;         // start of arc
 
     switch( m_Shape )
     {
     case S_ARC:
         // rotate the starting point of the arc, given by m_End, through the
         // angle m_Angle to get the ending point of the arc.
-        center = m_Start;       // center point of the arc
-        start  = m_End;         // start of arc
-        RotatePoint( &start.x, &start.y, center.x, center.y, -m_Angle );
-
-        return start;   // after rotation, the end of the arc.
+        // m_Start is the arc centre
+        endPoint  = m_End;         // m_End = start point of arc
+        RotatePoint( &endPoint, m_Start, -m_Angle );
+        return endPoint;   // after rotation, the end of the arc.
         break;
 
     case S_SEGMENT:
@@ -417,33 +415,25 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
  */
 bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 {
-    int ux0 = m_Start.x;
-    int uy0 = m_Start.y;
+    /* Calculate coordinates to test relative to segment origin. */
+    wxPoint relPos = aRefPos - m_Start;
 
-    /* Calculate coordinates with ux0, uy0 = origin. */
-    int dx = m_End.x - ux0;
-    int dy = m_End.y - uy0;
-
-    int spot_cX = aRefPos.x - ux0;
-    int spot_cY = aRefPos.y - uy0;
-
-    switch(m_Shape){
+    switch(m_Shape)
+    {
         case S_CIRCLE:
         case S_ARC:
-
-            int rayon, dist, stAngle, endAngle, mouseAngle;
-
-            rayon = (int) hypot( (double) (dx), (double) (dy) );
-            dist  = (int) hypot( (double) (spot_cX), (double) (spot_cY) );
+        {
+            int rayon = GetRadius();
+            int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
 
             if( abs( rayon - dist ) <= ( m_Width / 2 ) )
             {
                  if( m_Shape == S_CIRCLE )
                      return true;
 
-                    mouseAngle = (int) ArcTangente( spot_cY, spot_cX );
-                    stAngle    = (int) ArcTangente( dy, dx );
-                    endAngle   = stAngle + m_Angle;
+                int mouseAngle = ArcTangente( relPos.y, relPos.x );
+                int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
+                int endAngle   = stAngle + m_Angle;
 
                 if( endAngle > 3600 )
                 {
@@ -454,6 +444,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
                 if( mouseAngle >= stAngle && mouseAngle <= endAngle )
                     return true;
             }
+        }
             break;
 
         case S_CURVE:
@@ -464,8 +455,9 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
                     return true;
             }
             break;
+
         default:
-            if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+            if( TestSegmentHit( aRefPos, m_Start, m_End, m_Width / 2 ) )
                 return true;
     }
     return false;
@@ -475,16 +467,33 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 /**
  * Function HitTest (overlayed)
  * tests if the given EDA_Rect intersect this object.
- * For now, an ending point must be inside this rect.
+ * For now, for arcs and segments, an ending point must be inside this rect.
  * @param refArea : the given EDA_Rect
  * @return bool - true if a hit, else false
  */
 bool DRAWSEGMENT::HitTest( EDA_Rect& refArea )
 {
-    if( refArea.Contains( m_Start ) )
-        return true;
-    if( refArea.Contains( m_End ) )
-        return true;
+    switch(m_Shape)
+    {
+        case S_CIRCLE:
+        {
+            int radius = GetRadius();
+            // Text if area intersects the circle:
+            EDA_Rect area = refArea;
+            area.Inflate(radius);
+            if( area.Contains(m_Start) )
+                return true;
+        }
+            break;
+
+        case S_ARC:
+        case S_SEGMENT:
+            if( refArea.Contains( GetStart() ) )
+                return true;
+            if( refArea.Contains( GetEnd() ) )
+                return true;
+            break;
+    }
     return false;
 }
 

@@ -959,15 +959,13 @@ bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
     return true;
 }
 
-
-/**********************************************************************/
 /* Return the component boundary box ( in user coordinates )
- *  The unit aUnit, and the shape aConvert are considered.
+ * aUnit = unit selection = 0, or 1..n
+ * aConvert = 0, 1 or 2
  *  If aUnit == 0, unit is not used
  *  if aConvert == 0 Convert is non used
- *  Invisible fields are not take in account
+ *  Invisible fields are not taken in account
  **/
-/**********************************************************************/
 EDA_Rect LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
@@ -982,6 +980,36 @@ EDA_Rect LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
             continue;
 
         if ( ( item.Type() == LIB_FIELD_T ) && !( ( LIB_FIELD& ) item ).IsVisible() )
+            continue;
+
+        bBox.Merge( item.GetBoundingBox() );
+    }
+
+    return bBox;
+}
+
+
+/* Return the component boundary box ( in user coordinates )
+ * aUnit = unit selection = 0, or 1..n
+ * aConvert = 0, 1 or 2
+ *  If aUnit == 0, unit is not used
+ *  if aConvert == 0 Convert is non used
+ *  Fields are not take in account
+ **/
+EDA_Rect LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
+{
+    EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+
+    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
+    {
+        if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
+                                     && ( aUnit != item.m_Unit ) ) )
+            continue;
+
+        if( item.m_Convert > 0 && ( ( aConvert > 0 ) && ( aConvert != item.m_Convert ) ) )
+            continue;
+
+        if ( item.Type() == LIB_FIELD_T )
             continue;
 
         bBox.Merge( item.GetBoundingBox() );

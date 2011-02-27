@@ -1360,10 +1360,14 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
     int            x0, xm, y0, ym;
 
     if( Entry == NULL )
-        return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    {
+        if( DummyCmp == NULL )
+            CreateDummyCmp();
+        Entry = DummyCmp;
+    }
 
     /* Get the basic Boundary box */
-    bBox = Entry->GetBoundingBox( m_unit, m_convert );
+    bBox = Entry->GetBodyBoundingBox( m_unit, m_convert );
     x0 = bBox.GetX();
     xm = bBox.GetRight();
 

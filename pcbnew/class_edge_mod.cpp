@@ -26,7 +26,6 @@
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
     BOARD_ITEM( parent, TYPE_EDGE_MODULE )
 {
-    m_Width = 0;
     m_Shape = S_SEGMENT;
     m_Angle = 0;
     m_Width = 120;
@@ -77,16 +76,12 @@ EDA_Rect EDGE_MODULE::GetBoundingBox() const
         break;
 
     case S_CIRCLE:
-    {
-        int rayon = (int) hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
-        bbox.Inflate( rayon + 1 );
-    }
-    break;
+        bbox.Inflate( GetRadius() + 1 );
+        break;
 
     case S_ARC:
     {
-        int rayon = (int) hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
-        bbox.Inflate( rayon + 1 );
+        bbox.Inflate( GetRadius() + 1 );
     }
     break;
 
@@ -489,6 +484,42 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
 }
 
 
+wxPoint EDGE_MODULE::GetStart() const
+{
+    switch( m_Shape )
+    {
+    case S_ARC:
+        return m_End;  // the start of the arc is held in field m_End, center point is in m_Start.
+
+    case S_SEGMENT:
+    default:
+        return m_Start;
+    }
+}
+
+
+wxPoint EDGE_MODULE::GetEnd() const
+{
+    wxPoint endPoint;         // start of arc
+
+    switch( m_Shape )
+    {
+    case S_ARC:
+        // rotate the starting point of the arc, given by m_End, through the
+        // angle m_Angle to get the ending point of the arc.
+        // m_Start is the arc centre
+        endPoint  = m_End;         // m_End = start point of arc
+        RotatePoint( &endPoint, m_Start, -m_Angle );
+        return endPoint;   // after rotation, the end of the arc.
+        break;
+
+    case S_SEGMENT:
+    default:
+        return m_End;
+    }
+}
+
+
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
@@ -497,47 +528,31 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
  */
 bool EDGE_MODULE::HitTest( const wxPoint& refPos )
 {
-    int uxf, uyf;
     int rayon, dist;
-    int dx, dy, spot_cX, spot_cY;
-    int ux0, uy0;
-
-    ux0 = m_Start.x;
-    uy0 = m_Start.y;
-
-    uxf = m_End.x;
-    uyf = m_End.y;
 
     switch( m_Shape )
     {
     case S_SEGMENT:
-        spot_cX = refPos.x - ux0;
-        spot_cY = refPos.y - uy0;
-
-        dx = uxf - ux0;
-        dy = uyf - uy0;
-        if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        if( TestSegmentHit( refPos, m_Start, m_End, m_Width / 2 ) )
             return true;
         break;
 
     case S_CIRCLE:
-        rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (refPos.x - ux0),
-                            (double) (refPos.y - uy0) );
-        if( abs( rayon - dist ) <= m_Width )
+        rayon = GetRadius();
+        dist  = (int) hypot( (double) (refPos.x - m_Start.x), (double) (refPos.y - m_Start.y) );
+        if( abs( rayon - dist ) <= (m_Width/2) )
             return true;
         break;
 
     case S_ARC:
-        rayon = (int) hypot( (double) (uxf - ux0), (double) (uyf - uy0) );
-        dist  = (int) hypot( (double) (refPos.x - ux0),
-                            (double) (refPos.y - uy0) );
+        rayon = GetRadius();
+        dist  = (int) hypot( (double) (refPos.x - m_Start.x), (double) (refPos.y - m_Start.y) );
 
-        if( abs( rayon - dist ) > m_Width )
+        if( abs( rayon - dist ) > (m_Width/2) )
             break;
 
-        int mouseAngle = (int) ArcTangente( refPos.y - uy0, refPos.x - ux0 );
-        int stAngle    = (int) ArcTangente( uyf - uy0, uxf - ux0 );
+        int mouseAngle = ArcTangente( refPos.y - m_Start.y, refPos.x - m_Start.x );
+        int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
         int endAngle   = stAngle + m_Angle;
 
         if( endAngle > 3600 )
@@ -555,6 +570,39 @@ bool EDGE_MODULE::HitTest( const wxPoint& refPos )
     return false;       // an unknown m_Shape also returns false
 }
 
+
+/**
+ * Function HitTest (overlayed)
+ * tests if the given EDA_Rect intersect this object.
+ * For now, for arcs and segments, an ending point must be inside this rect.
+ * @param refArea : the given EDA_Rect
+ * @return bool - true if a hit, else false
+ */
+bool EDGE_MODULE::HitTest( EDA_Rect& refArea )
+{
+    switch(m_Shape)
+    {
+        case S_CIRCLE:
+        {
+            int radius = GetRadius();
+            // Test if area intersects the circle:
+            EDA_Rect area = refArea;
+            area.Inflate(radius);
+            if( area.Contains(m_Start) )
+                return true;
+        }
+            break;
+
+        case S_ARC:
+        case S_SEGMENT:
+            if( refArea.Contains( GetStart() ) )
+                return true;
+            if( refArea.Contains( GetEnd() ) )
+                return true;
+            break;
+    }
+    return false;
+}
 
 #if defined(DEBUG)
 

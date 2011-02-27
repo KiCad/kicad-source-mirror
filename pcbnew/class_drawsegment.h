@@ -53,6 +53,17 @@ public:
     wxPoint      GetEnd() const;
 
     /**
+     * Function GetRadius
+     * returns the radius of this item
+     * Has meaning only for arc and circle
+     */
+    int         GetRadius() const
+    {
+        double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
+        return wxRound(radius);
+    }
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.

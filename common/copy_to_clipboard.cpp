@@ -15,9 +15,6 @@
 #include "confirm.h"
 #include "wxstruct.h"
 
-static const bool   s_PlotBlackAndWhite = FALSE;
-static const bool   Print_Sheet_Ref = TRUE;
-
 static bool DrawPage( EDA_DRAW_FRAME* aFrame );
 
 
@@ -77,11 +74,12 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
 
     screen->SetZoom( 1 );
 
-    wxMetafileDC dc /*(wxT(""), DrawArea.GetWidth(), DrawArea.GetHeight())*/;
+    wxMetafileDC dc;
 
     EDA_Rect tmp = aFrame->DrawPanel->m_ClipBox;
     GRResetPenAndBrush( &dc );
-    GRForceBlackPen( s_PlotBlackAndWhite );
+    const bool plotBlackAndWhite = FALSE;
+    GRForceBlackPen( plotBlackAndWhite );
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
     ClipboardSizeX = dc.MaxX() + 10;
@@ -96,7 +94,8 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
         dc.SetClippingRegion( DrawArea );
     }
 
-    aFrame->PrintPage( &dc, Print_Sheet_Ref, -1, false );
+    const int maskLayer = 0xFFFFFFFF;
+    aFrame->PrintPage( &dc, maskLayer, false );
     screen->m_IsPrinting = false;
     aFrame->DrawPanel->m_ClipBox = tmp;
     wxMetafile* mf = dc.Close();

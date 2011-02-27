@@ -667,14 +667,7 @@ int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
         switch( item->Type() )
         {
         case TYPE_EDGE_MODULE:
-            pos = ( (EDGE_MODULE*) item )->m_Start;
-            if( Rect.Contains( pos ) )
-            {
-                item->m_Selected = IS_SELECTED;
-                ItemsCount++;
-            }
-            pos = ( (EDGE_MODULE*) item )->m_End;
-            if( Rect.Contains( pos ) )
+            if( ((EDGE_MODULE*)item )->HitTest( Rect ) )
             {
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;
