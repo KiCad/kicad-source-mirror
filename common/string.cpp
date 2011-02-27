@@ -13,10 +13,10 @@ int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
     if( aDestSize <= 0 )
         return 0;
 
-    bool    inside = false;
-    char*   start = aDest;
-    char*   limit = aDest + aDestSize - 1;
-    char    cc;
+    bool        inside = false;
+    const char* start = aSource;
+    char*       limit = aDest + aDestSize - 1;
+    char        cc;
 
     while( (cc = *aSource++) != 0 && aDest < limit )
     {
@@ -48,7 +48,7 @@ int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 
     *aDest = 0;
 
-    return aDest - start;
+    return aSource - start;
 }
 
 

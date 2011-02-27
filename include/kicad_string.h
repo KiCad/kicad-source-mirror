@@ -24,7 +24,8 @@ char*    strlower( char* Text );
  * @param aDest is the destination byte buffer.
  * @param aSource is the source bytes as a C string.
  * @param aDestSize is the size of the destination byte buffer.
- * @return int - the number of bytes extracted.
+ * @return int - the number of bytes read from source, which may be more than
+ *   the number copied, due to escaping of double quotes and the escape byte itself.
  */
 int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 
