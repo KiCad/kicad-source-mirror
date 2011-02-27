@@ -34,6 +34,7 @@ public:
     virtual ~BASE_GRAPHIC() {}
 };
 
+typedef std::vector<POINT>  POINTS;
 
 class POLY_LINE : BASE_GRAPHIC
 {
@@ -41,8 +42,8 @@ class POLY_LINE : BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    double              width;
-    std::vector<POINT>  pts;
+    double      lineWidth;
+    POINTS      pts;
 
 public:
     POLY_LINE( PART* aOwner ) :
@@ -51,7 +52,62 @@ public:
 };
 
 
+class RECTANGLE : BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    double      lineWidth;
+    int         fillType;       // T_none, T_filled, or T_transparent
+    POINT       start;
+    POINT       end;
+
+public:
+    RECTANGLE( PART* aOwner ) :
+        BASE_GRAPHIC( aOwner )
+    {}
 };
+
+
+class CIRCLE : BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    double      lineWidth;
+    int         fillType;       // T_none, T_filled, or T_transparent
+    POINT       center;
+    int         radius;
+
+public:
+    CIRCLE( PART* aOwner ) :
+        BASE_GRAPHIC( aOwner )
+    {}
+};
+
+
+class ARC : BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    double      lineWidth;
+    int         fillType;       // T_none, T_filled, or T_transparent
+    POINT       pos;
+    int         radius;
+    POINT       start;
+    POINT       end;
+
+public:
+    ARC( PART* aOwner ) :
+        BASE_GRAPHIC( aOwner )
+    {}
+};
+
+}  // namespace SCH
 
 
 //-----</temporary home for PART sub objects, move after stable>-----------------
@@ -133,7 +189,12 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// Alternate body forms.
     //ALTERNATES  alternates;
 
-    // lots of other stuff, like the mandatory properties, but no units, since we went with dimensionless
+    // mandatory properties
+    wxString        value;
+    wxString        footprint;
+    wxString        model;
+    wxString        keywords;
+
 
 public:
 
@@ -159,6 +220,33 @@ public:
      *  and comes from the big containing SCHEMATIC object.
      */
     void Parse( SWEET_PARSER* aParser, LIB_TABLE* aLibTable ) throw( IO_ERROR, PARSE_ERROR );
+
+    void SetValue( const wxString& aValue )
+    {
+        value = aValue;
+    }
+    const wxString& GetValue()
+    {
+        return value;
+    }
+
+    void SetFootprint( const wxString& aFootprint )
+    {
+        footprint = aFootprint;
+    }
+    const wxString& GetFootprint()
+    {
+        return footprint;
+    }
+
+    void SetModel( const wxString& aModel )
+    {
+        model = aModel;
+    }
+    const wxString& GetModel()
+    {
+        return model;
+    }
 
 /*
     void SetBody( const STR_UTF& aSExpression )

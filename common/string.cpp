@@ -20,15 +20,7 @@ int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 
     while( (cc = *aSource++) != 0 && aDest < limit )
     {
-        if( cc == '\\' )
-        {
-            cc = *aSource++;
-
-            if( inside )
-                *aDest++ = cc;
-        }
-
-        else if( cc == '"' )
+        if( cc == '"' )
         {
             if( inside )
                 break;          // 2nd double quote is end of delimited text
@@ -38,7 +30,19 @@ int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 
         else if( inside )
         {
-            *aDest++ = cc;
+            if( cc == '\\' )
+            {
+                cc = *aSource++;
+
+                // do no copy the escape byte if it is followed by \ or "
+                if( cc != '"' && cc != '\\' )
+                    *aDest++ = '\\';
+
+                if( aDest < limit )
+                    *aDest++ = cc;
+            }
+            else
+                *aDest++ = cc;
         }
     }
 

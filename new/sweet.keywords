@@ -14,6 +14,7 @@ end
 end_angle
 extends
 fill
+filled
 font
 footprint
 input
@@ -56,6 +57,7 @@ size
 start
 start_angle
 text
+transparent
 tristate
 unconnected
 units
