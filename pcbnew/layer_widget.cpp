@@ -217,7 +217,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
 
     wxString colorTxt = eventSource->GetName();
 
-    int oldColor = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
+    int oldColor = strtoul( TO_UTF8(colorTxt), NULL, 0 );
     int newColor = DisplayColorFrame( this, oldColor );
 
     if( newColor >= 0 )
@@ -252,7 +252,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
 
     wxString colorTxt = eventSource->GetName();
 
-    int oldColor = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
+    int oldColor = strtoul( TO_UTF8(colorTxt), NULL, 0 );
     int newColor = DisplayColorFrame( this, oldColor );
 
     if( newColor >= 0 )
@@ -747,7 +747,7 @@ int LAYER_WIDGET::GetLayerColor( int aLayer )
         wxASSERT( bmb );
 
         wxString colorTxt = bmb->GetName();
-        int color = strtoul( CONV_TO_UTF8(colorTxt), NULL, 0 );
+        int color = strtoul( TO_UTF8(colorTxt), NULL, 0 );
         return color;
     }
 

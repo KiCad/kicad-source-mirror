@@ -263,7 +263,7 @@ bool MODULE::Save( FILE* aFile ) const
 
     bool rc = false;
 
-    fprintf( aFile, "$MODULE %s\n", CONV_TO_UTF8( m_LibRef ) );
+    fprintf( aFile, "$MODULE %s\n", TO_UTF8( m_LibRef ) );
 
     memset( statusTxt, 0, sizeof(statusTxt) );
     if( IsLocked() )
@@ -281,20 +281,20 @@ bool MODULE::Save( FILE* aFile ) const
              m_Orient, m_Layer, m_LastEdit_Time,
              m_TimeStamp, statusTxt );
 
-    fprintf( aFile, "Li %s\n", CONV_TO_UTF8( m_LibRef ) );
+    fprintf( aFile, "Li %s\n", TO_UTF8( m_LibRef ) );
 
     if( !m_Doc.IsEmpty() )
     {
-        fprintf( aFile, "Cd %s\n", CONV_TO_UTF8( m_Doc ) );
+        fprintf( aFile, "Cd %s\n", TO_UTF8( m_Doc ) );
     }
 
     if( !m_KeyWord.IsEmpty() )
     {
-        fprintf( aFile, "Kw %s\n", CONV_TO_UTF8( m_KeyWord ) );
+        fprintf( aFile, "Kw %s\n", TO_UTF8( m_KeyWord ) );
     }
 
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
-    fprintf( aFile, "AR %s\n", CONV_TO_UTF8( m_Path ) );
+    fprintf( aFile, "AR %s\n", TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
     if( m_LocalSolderMaskMargin != 0 )
         fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
@@ -350,7 +350,7 @@ bool MODULE::Save( FILE* aFile ) const
 
     Write_3D_Descr( aFile );
 
-    fprintf( aFile, "$EndMODULE  %s\n", CONV_TO_UTF8( m_LibRef ) );
+    fprintf( aFile, "$EndMODULE  %s\n", TO_UTF8( m_LibRef ) );
 
     rc = true;
 out:
@@ -370,7 +370,7 @@ int MODULE::Write_3D_Descr( FILE* File ) const
         {
             fprintf( File, "$SHAPE3D\n" );
 
-            fprintf( File, "Na \"%s\"\n", CONV_TO_UTF8( t3D->m_Shape3DName ) );
+            fprintf( File, "Na \"%s\"\n", TO_UTF8( t3D->m_Shape3DName ) );
 
             sprintf( buf, "Sc %lf %lf %lf\n",
                      t3D->m_MatScale.x,
@@ -432,7 +432,7 @@ int MODULE::Read_3D_Descr( LINE_READER* aReader )
         {
             char buf[512];
             ReadDelimitedText( buf, text, 512 );
-            t3D->m_Shape3DName = CONV_FROM_UTF8( buf );
+            t3D->m_Shape3DName = FROM_UTF8( buf );
             break;
         }
 
@@ -525,7 +525,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
         case 'L':       /* Li = read the library name of the footprint */
             *BufLine = 0;
             sscanf( PtLine, " %s", BufLine );
-            m_LibRef = CONV_FROM_UTF8( BufLine );
+            m_LibRef = FROM_UTF8( BufLine );
             break;
 
         case 'S':
@@ -563,7 +563,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             {
                 // alternate reference, e.g. /478C2408/478AD1B6
                 sscanf( PtLine, " %s", BufLine );
-                m_Path = CONV_FROM_UTF8( BufLine );
+                m_Path = FROM_UTF8( BufLine );
             }
             break;
 
@@ -592,11 +592,11 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             break;
 
         case 'C':    /* read documentation data */
-            m_Doc = CONV_FROM_UTF8( StrPurge( PtLine ) );
+            m_Doc = FROM_UTF8( StrPurge( PtLine ) );
             break;
 
         case 'K':    /* Read key words */
-            m_KeyWord = CONV_FROM_UTF8( StrPurge( PtLine ) );
+            m_KeyWord = FROM_UTF8( StrPurge( PtLine ) );
             break;
 
         case '.':    /* Read specific data */
@@ -811,7 +811,7 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
         strcat( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, ", " );
         strtok( NULL, " \n\r" );
         strcat( bufcar, strtok( NULL, " \n\r" ) );
-        msg = CONV_FROM_UTF8( bufcar );
+        msg = FROM_UTF8( bufcar );
         frame->AppendMsgPanel( _( "Last Change" ), msg, BROWN );
     }
     else    // display time stamp in schematic

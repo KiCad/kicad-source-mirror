@@ -389,7 +389,7 @@ public:
  * The implementer only has to implement the write() function, but can
  * also optionally re-implement GetQuoteChar().
  * <p>
- * If you want to output a wxString, then use CONV_TO_UTF8() on it
+ * If you want to output a wxString, then use TO_UTF8() on it
  * before passing it as an argument to Print().
  * <p>
  * Since this is an abstract interface, only classes derived from

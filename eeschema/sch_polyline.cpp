@@ -100,7 +100,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
     }
 
@@ -120,7 +120,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
         {
             aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
                               aLine.LineNumber() );
-            aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+            aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
             return false;
         }
 

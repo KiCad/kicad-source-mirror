@@ -198,9 +198,10 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* aModule, bool aCreateSysLib 
     SetLocaleTo_C_standard();
 
     fprintf( file, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
+    fprintf( file, "# encoding utf-8\n");
     fputs( "$INDEX\n", file );
 
-    fprintf( file, "%s\n", CONV_TO_UTF8( aModule->m_LibRef ) );
+    fprintf( file, "%s\n", TO_UTF8( aModule->m_LibRef ) );
     fputs( "$EndINDEX\n", file );
 
     GetBoard()->m_Modules->Save( file );
@@ -269,7 +270,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
             while( GetLine( lib_module, Line, &LineNum ) )
             {
                 StrPurge( Line );
-                msg = CONV_FROM_UTF8( Line );
+                msg = FROM_UTF8( Line );
                 if( CmpName.CmpNoCase( msg ) == 0 ) /* New module? */
                 {
                     NoFound = 0; break;
@@ -307,7 +308,9 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
 
     /* Create header with new date. */
     fprintf( dest, ENTETE_LIBRAIRIE );
-    fprintf( dest, "  %s\n$INDEX\n", DateAndTime( Line ) );
+    fprintf( dest, "  %s\n$", DateAndTime( Line ) );
+    fprintf( dest, "# encoding utf-8\n");
+    fprintf( dest, "$INDEX\n" );
 
     fseek( lib_module, 0, 0 );
     GetLine( lib_module, Line, &ii );
@@ -323,7 +326,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
                 if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                     break;
                 StrPurge( Line );
-                msg = CONV_FROM_UTF8( Line );
+                msg = FROM_UTF8( Line );
                 if( CmpName.CmpNoCase( msg ) != 0 )
                     fprintf( dest, "%s\n", Line );
             }
@@ -341,7 +344,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
             sscanf( Line + 7, " %s", Name );
-            msg = CONV_FROM_UTF8( Name );
+            msg = FROM_UTF8( Name );
             if( msg.CmpNoCase( CmpName ) == 0 )
             {
                 /* Delete old module. */
@@ -449,6 +452,7 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
         }
         char Line[256];
         fprintf( lib_module, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( Line ) );
+        fprintf( lib_module, "# encoding utf-8\n");
         fputs( "$INDEX\n", lib_module );
         fputs( "$EndINDEX\n", lib_module );
         fputs( "$EndLIBRARY\n", lib_module );
@@ -564,7 +568,7 @@ bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
             }
 
             StrPurge( Line );
-            msg = CONV_FROM_UTF8( Line );
+            msg = FROM_UTF8( Line );
             if( Name_Cmp.CmpNoCase( msg ) == 0 ) /* an existing footprint is
                                                   * found */
             {
@@ -616,7 +620,9 @@ bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
 
     /* Create the library header with a new date */
     fprintf( dest, ENTETE_LIBRAIRIE );
-    fprintf( dest, "  %s\n$INDEX\n", DateAndTime( Line ) );
+    fprintf( dest, "  %s\n", DateAndTime( Line ) );
+    fprintf( dest, "# encoding utf-8\n");
+    fprintf( dest, "$INDEX\n" );
 
     LineNum = 0;
     GetLine( lib_module, Line, &LineNum );
@@ -635,7 +641,7 @@ bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
             }
         }
         if( newmodule )
-            fprintf( dest, "%s\n", CONV_TO_UTF8( Name_Cmp ) );
+            fprintf( dest, "%s\n", TO_UTF8( Name_Cmp ) );
         if( strnicmp( Line, "$EndINDEX", 0 ) == 0 )
             break;
     }
@@ -651,7 +657,7 @@ bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
             sscanf( Line + 7, " %s", Name );
-            msg = CONV_FROM_UTF8( Name );
+            msg = FROM_UTF8( Name );
             if( msg.CmpNoCase( Name_Cmp ) == 0 )
             {
                 /* skip old footprint descr (delete from the lib) */

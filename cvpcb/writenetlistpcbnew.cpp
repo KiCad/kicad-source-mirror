@@ -79,17 +79,17 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
 
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
-        fprintf( file, " ( %s ", CONV_TO_UTF8( component.m_TimeStamp ) );
+        fprintf( file, " ( %s ", TO_UTF8( component.m_TimeStamp ) );
 
         if( !component.m_Module.IsEmpty() )
-            fprintf( file, "%s", CONV_TO_UTF8( component.m_Module ) );
+            fprintf( file, "%s", TO_UTF8( component.m_Module ) );
 
         else
             fprintf( file, "$noname$" );
 
-        fprintf( file, " %s ", CONV_TO_UTF8( component.m_Reference ) );
+        fprintf( file, " %s ", TO_UTF8( component.m_Reference ) );
 
-        fprintf( file, "%s\n", CONV_TO_UTF8( component.m_Value ) );
+        fprintf( file, "%s\n", TO_UTF8( component.m_Value ) );
 
         component.m_Pins.sort();
         RemoveDuplicatePins( component );
@@ -98,10 +98,10 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
         {
             if( !pin.m_Net.IsEmpty() )
                 fprintf( file, "  ( %s %s )\n",
-                         CONV_TO_UTF8( pin.m_Number ),
-                         CONV_TO_UTF8( pin.m_Net ) );
+                         TO_UTF8( pin.m_Number ),
+                         TO_UTF8( pin.m_Net ) );
             else
-                fprintf( file, "  ( %s ? )\n", CONV_TO_UTF8( pin.m_Number ) );
+                fprintf( file, "  ( %s ? )\n", TO_UTF8( pin.m_Number ) );
         }
 
         fprintf( file, " )\n" );
@@ -136,12 +136,12 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
             WriteHeader = TRUE;
         }
         fprintf( file, "$component %s\n",
-                 CONV_TO_UTF8( component.m_Reference ) );
+                 TO_UTF8( component.m_Reference ) );
         /* Write the footprint list */
         for( unsigned int jj = 0; jj < FilterCount; jj++ )
         {
             fprintf( file, " %s\n",
-                     CONV_TO_UTF8( component.m_FootprintFilter[jj] ) );
+                     TO_UTF8( component.m_FootprintFilter[jj] ) );
         }
 
         fprintf( file, "$endlist\n" );

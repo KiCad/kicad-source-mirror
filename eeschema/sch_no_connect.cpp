@@ -76,7 +76,7 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema file No Connect load error at line %d" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( ((char*)aLine) );
+        aErrorMsg << wxT( "\n" ) << FROM_UTF8( ((char*)aLine) );
         return false;
     }
 

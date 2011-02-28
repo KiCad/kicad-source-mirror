@@ -128,12 +128,12 @@ public:
 
     void SetRef( const wxString& aReference )
     {
-        m_Ref =  CONV_TO_UTF8( aReference );
+        m_Ref =  TO_UTF8( aReference );
     }
 
     wxString GetRef() const
     {
-        return CONV_FROM_UTF8( m_Ref.c_str() );
+        return FROM_UTF8( m_Ref.c_str() );
     }
     void SetRefStr( const std::string& aReference )
     {

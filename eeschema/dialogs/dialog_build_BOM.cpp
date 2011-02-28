@@ -486,7 +486,7 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
 
         wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
-        fprintf( f, "%s  >> Creation date: %s\n", CONV_TO_UTF8( Title ), Line );
+        fprintf( f, "%s  >> Creation date: %s\n", TO_UTF8( Title ), Line );
 
         // sort component list
         cmplist.SortByReferenceOnly();
@@ -520,7 +520,7 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
 ( order = Sheet Number ) count = %d\n" ),
                         itemCount );
 
-            fprintf( f, "%s", CONV_TO_UTF8( msg ) );
+            fprintf( f, "%s", TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
 
@@ -532,13 +532,13 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
 order = Alphab. ) count = %d\n\n" ),
                         itemCount );
 
-            fprintf( f, "%s", CONV_TO_UTF8( msg ) );
+            fprintf( f, "%s", TO_UTF8( msg ) );
             PrintListeGLabel( f, listOfLabels );
         }
     }
 
     msg = _( "\n#End List\n" );
-    fprintf( f, "%s", CONV_TO_UTF8( msg ) );
+    fprintf( f, "%s", TO_UTF8( msg ) );
     fclose( f );
 }
 
@@ -553,12 +553,12 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
         if( CompactForm )
         {
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                     TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
         else
         {
             fprintf( f, "; %-12s",
-                     CONV_TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                     TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
         }
     }
 
@@ -569,10 +569,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
         if( CompactForm )
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                     TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
         else
             fprintf( f, "; %-12s",
-                     CONV_TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+                     TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
     }
 }
 
@@ -611,7 +611,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 
             msg = _( "Field" );
 
-            fprintf( f, "%c%s%d", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ), ii - FIELD1 + 1 );
+            fprintf( f, "%c%s%d", s_ExportSeparatorSymbol, TO_UTF8( msg ), ii - FIELD1 + 1 );
         }
 
         fprintf( f, "\n" );
@@ -623,7 +623,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
         if( aIncludeSubComponents )
             msg << _( " (with SubCmp)" );
 
-        fprintf( f, "%s\n", CONV_TO_UTF8( msg ) );
+        fprintf( f, "%s\n", TO_UTF8( msg ) );
     }
 
     std::string     CmpName;
@@ -656,26 +656,26 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
         CmpName = aList[ii].GetRefStr();
 
         if( !CompactForm )
-            CmpName += CONV_TO_UTF8(subRef);
+            CmpName += TO_UTF8(subRef);
 
         if( CompactForm )
 #if defined(KICAD_GOST)
             fprintf( f, "%s%c%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+                     TO_UTF8( comp->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
+                     TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
             fprintf( f, "%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
-                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                     TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
 
         else
 #if defined(KICAD_GOST)
             fprintf( f, "| %-10s %-12s %-20s", CmpName.c_str(),
-                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ),
-                     CONV_TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+                     TO_UTF8( comp->GetField( VALUE )->m_Text ),
+                     TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
 #else
             fprintf( f, "| %-10s %-12s", CmpName.c_str(),
-                     CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                     TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 #endif
 
         if( aIncludeSubComponents )
@@ -687,16 +687,16 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
             {
                 if( CompactForm )
                 {
-                    fprintf( f, "%c%s", s_ExportSeparatorSymbol, CONV_TO_UTF8( msg ) );
+                    fprintf( f, "%c%s", s_ExportSeparatorSymbol, TO_UTF8( msg ) );
                     msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
                     fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
-                             CONV_TO_UTF8( msg ) );
+                             TO_UTF8( msg ) );
                 }
                 else
                 {
-                    fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+                    fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
                     msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
-                    fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+                    fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
                 }
             }
         }
@@ -709,7 +709,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
     if( !CompactForm )
     {
         msg = _( "#End Cmp\n" );
-        fputs( CONV_TO_UTF8( msg ), f );
+        fputs( TO_UTF8( msg ), f );
     }
 
     return 0;
@@ -816,22 +816,22 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
             continue;
 
        // Print line for the current component value:
-        fprintf( f, "%15s%c%3d", CONV_TO_UTF8( valName ), s_ExportSeparatorSymbol, qty );
+        fprintf( f, "%15s%c%3d", TO_UTF8( valName ), s_ExportSeparatorSymbol, qty );
 
         if( IsFieldChecked(FOOTPRINT ) )
             fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
 #if defined(KICAD_GOST)
-                     CONV_TO_UTF8( footName ) );
+                     TO_UTF8( footName ) );
 #else
-                     CONV_TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
+                     TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
 #endif
 
 #if defined(KICAD_GOST)
-            fprintf( f, "%c%20s", s_ExportSeparatorSymbol,CONV_TO_UTF8( datsName ) );
+            fprintf( f, "%c%20s", s_ExportSeparatorSymbol,TO_UTF8( datsName ) );
 #endif
 
         // wrap the field in quotes, since it has commas in it.
-        fprintf( f, "%c\"%s\"", s_ExportSeparatorSymbol, CONV_TO_UTF8( refNames ) );
+        fprintf( f, "%c\"%s\"", s_ExportSeparatorSymbol, TO_UTF8( refNames ) );
 
         // print fields, on demand
         int last_nonempty_field_idx = 0;
@@ -844,7 +844,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
         {
             if ( IsFieldChecked( jj ) )
                 fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
-                         CONV_TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
+                         TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
         }
 
         fprintf( f, "\n" );
@@ -878,7 +878,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
 
     msg << wxT( "\n" );
 
-    fputs( CONV_TO_UTF8( msg ), f );
+    fputs( TO_UTF8( msg ), f );
 
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
@@ -906,10 +906,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             subRef.Empty();
 
         CmpName = aList[ii].GetRefStr();
-        CmpName += CONV_TO_UTF8(subRef);
+        CmpName += TO_UTF8(subRef);
 
         fprintf( f, "| %-12s %-10s",
-                 CONV_TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
+                 TO_UTF8( DrawLibItem->GetField( VALUE )->m_Text ),
                  CmpName.c_str() );
 
         // print the sheet path
@@ -919,9 +919,9 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             if( screen )
             {
                 msg = aList[ii].GetSheetPath().PathHumanReadable();
-                fprintf( f, "   (Sheet %s)", CONV_TO_UTF8( msg ) );
+                fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
                 msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->m_Pos );
-                fprintf( f, "   (loc %s)", CONV_TO_UTF8( msg ) );
+                fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
             }
         }
 
@@ -931,6 +931,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
     }
 
     msg = _( "#End Cmp\n" );
-    fputs( CONV_TO_UTF8( msg ), f );
+    fputs( TO_UTF8( msg ), f );
     return 0;
 }

@@ -600,7 +600,7 @@ bool LIB_PIN::Save( FILE* ExportFile )
 
     if( !m_name.IsEmpty() )
     {
-        if( fprintf( ExportFile, "X %s", CONV_TO_UTF8( m_name ) ) < 0 )
+        if( fprintf( ExportFile, "X %s", TO_UTF8( m_name ) ) < 0 )
             return false;
     }
     else
@@ -610,7 +610,7 @@ bool LIB_PIN::Save( FILE* ExportFile )
     }
 
     if( fprintf( ExportFile, " %s %d %d %d %c %d %d %d %d %c",
-                 CONV_TO_UTF8( StringPinNum ), m_position.x, m_position.y,
+                 TO_UTF8( StringPinNum ), m_position.x, m_position.y,
                  (int) m_length, (int) m_orientation, m_PinNumSize, m_PinNameSize,
                  m_Unit, m_Convert, Etype ) < 0 )
         return false;
@@ -674,7 +674,7 @@ bool LIB_PIN::Load( char* line, wxString& errorMsg )
 
     m_orientation = pinOrient[0] & 255;
     strncpy( (char*) &m_number, pinNum, 4 );
-    m_name = CONV_FROM_UTF8( pinName );
+    m_name = FROM_UTF8( pinName );
 
     switch( *pinType & 255 )
     {
@@ -1562,7 +1562,7 @@ wxString LIB_PIN::ReturnPinStringNum( long aPinNum )
     memcpy( ascii_buf, &aPinNum, 4 );
     ascii_buf[4] = 0;
 
-    wxString buffer = CONV_FROM_UTF8( ascii_buf );
+    wxString buffer = FROM_UTF8( ascii_buf );
 
     return buffer;
 }

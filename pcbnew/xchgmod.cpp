@@ -194,7 +194,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             char buf[1024];
             strcpy( buf, Line + 12 );
             strtok( buf, ";\n\r" );
-            if( stricmp( buf, CONV_TO_UTF8( reference ) ) == 0 )
+            if( stricmp( buf, TO_UTF8( reference ) ) == 0 )
             {
                 start_descr = true;
             }
@@ -208,7 +208,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
 
         if( start_descr && strnicmp( Line, "IdModule", 8 ) == 0 )
         {
-            sprintf( Line + 8, "  = %s;\n", CONV_TO_UTF8( new_name ) );
+            sprintf( Line + 8, "  = %s;\n", TO_UTF8( new_name ) );
 
             msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
             m_WinMessages->AppendText( msg );
@@ -606,15 +606,15 @@ void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );
-        fprintf( FichCmp, "Path = %s\n", CONV_TO_UTF8( Module->m_Path ) );
+        fprintf( FichCmp, "Path = %s\n", TO_UTF8( Module->m_Path ) );
         fprintf( FichCmp, "Reference = %s;\n",
                  !Module->m_Reference->m_Text.IsEmpty() ?
-                 CONV_TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );
+                 TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );
         fprintf( FichCmp, "ValeurCmp = %s;\n",
                  !Module->m_Value->m_Text.IsEmpty() ?
-                 CONV_TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
+                 TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
         fprintf( FichCmp, "IdModule  = %s;\n",
-                 CONV_TO_UTF8( Module->m_LibRef ) );
+                 TO_UTF8( Module->m_LibRef ) );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

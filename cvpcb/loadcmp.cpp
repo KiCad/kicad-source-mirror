@@ -96,7 +96,7 @@ found in the default search paths." ),
                         break;
 
                     StrPurge( Line );
-                    if( stricmp( Line, CONV_TO_UTF8( CmpName ) ) == 0 )
+                    if( stricmp( Line, TO_UTF8( CmpName ) ) == 0 )
                     {
                         Found = 1;
                         break;
@@ -119,7 +119,7 @@ found in the default search paths." ),
 
             /* Read component name. */
             sscanf( Line + 7, " %s", Name );
-            if( stricmp( Name, CONV_TO_UTF8( CmpName ) ) == 0 )
+            if( stricmp( Name, TO_UTF8( CmpName ) ) == 0 )
             {
                 Module = new MODULE( GetBoard() );
                 // Switch the locale to standard C (needed to print floating

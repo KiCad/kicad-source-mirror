@@ -50,7 +50,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
     screen->SetCurItem( NULL );
     screen->SetFileName( FullFileName );
 
-    // D(printf("LoadOneEEFile:%s\n", CONV_TO_UTF8( FullFileName ) ); )
+    // D(printf("LoadOneEEFile:%s\n", TO_UTF8( FullFileName ) ); )
 
     FILE*           f;
     if( ( f = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
@@ -184,7 +184,7 @@ again." );
             itemLoaded = false;
             MsgDiag.Printf( wxT( "EESchema file undefined object at line %d, aborted" ),
                             reader.LineNumber() );
-            MsgDiag << wxT( "\n" ) << CONV_FROM_UTF8( line );
+            MsgDiag << wxT( "\n" ) << FROM_UTF8( line );
         }
 
         if( item )
@@ -287,7 +287,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScre
 
     sscanf( line, "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
 
-    wxString pagename = CONV_FROM_UTF8( Text );
+    wxString pagename = FROM_UTF8( Text );
 
     for( ii = 0; SheetFormatList[ii] != NULL; ii++ )
     {
@@ -310,7 +310,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScre
         aMsgDiag.Printf( wxT( "EESchema file dimension definition error \
 line %d, \aAbort reading file.\n" ),
                          aLine->LineNumber() );
-        aMsgDiag << CONV_FROM_UTF8( line );
+        aMsgDiag << FROM_UTF8( line );
     }
 
     aScreen->m_CurrentSheetDesc = wsheet;
@@ -332,56 +332,56 @@ line %d, \aAbort reading file.\n" ),
         if( strnicmp( line, "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Title = CONV_FROM_UTF8( buf );
+            aScreen->m_Title = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Date = CONV_FROM_UTF8( buf );
+            aScreen->m_Date = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Revision = CONV_FROM_UTF8( buf );
+            aScreen->m_Revision = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Company = CONV_FROM_UTF8( buf );
+            aScreen->m_Company = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire1 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire1 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire2 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire2 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire3 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire3 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire4 = CONV_FROM_UTF8( buf );
+            aScreen->m_Commentaire4 = FROM_UTF8( buf );
             continue;
         }
     }

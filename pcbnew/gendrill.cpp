@@ -442,7 +442,7 @@ void EXCELLON_WRITER::WriteCoordinates( char * aLine, double aCoordX, double aCo
         while( ys[j] == '0' && j )
             ys.Truncate( j-- );
 
-        sprintf( aLine, "X%sY%s\n", CONV_TO_UTF8( xs ), CONV_TO_UTF8( ys ) );
+        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
     }
 
@@ -458,7 +458,7 @@ void EXCELLON_WRITER::WriteCoordinates( char * aLine, double aCoordX, double aCo
             ypad++;
         xs.Printf( wxT( "%0*d" ), xpad, wxRound( aCoordX ) );
         ys.Printf( wxT( "%0*d" ), ypad, wxRound( aCoordY ) );
-        sprintf( aLine, "X%sY%s\n", CONV_TO_UTF8( xs ), CONV_TO_UTF8( ys ) );
+        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
     }
 }
@@ -483,7 +483,7 @@ void EXCELLON_WRITER::WriteHeader( )
 
         // The next 2 lines in EXCELLON files are comments:
         wxString msg = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
-        fprintf( m_file, ";DRILL file {%s} date %s\n", CONV_TO_UTF8( msg ),
+        fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ),
                  Line );
         msg = wxT( ";FORMAT={" );
 
@@ -513,7 +513,7 @@ void EXCELLON_WRITER::WriteHeader( )
 
         msg << zero_fmt[m_zeroFormat];
         msg << wxT( "}\n" );
-        fputs( CONV_TO_UTF8( msg ), m_file );
+        fputs( TO_UTF8( msg ), m_file );
         fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }
 

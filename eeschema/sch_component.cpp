@@ -368,7 +368,7 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
             h_ref = tokenizer.GetNextToken();
 
             /* printf( "GetRef hpath: %s\n",
-             *       CONV_TO_UTF8( m_PathsAndReferences[ii] ) ); */
+             *       TO_UTF8( m_PathsAndReferences[ii] ) ); */
             return h_ref;
         }
     }
@@ -623,7 +623,7 @@ void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     wxString       defRef    = m_prefix;
-    bool           KeepMulti = false;
+    bool           keepMulti = false;
     LIB_COMPONENT* Entry;
     wxString       separators( wxT( " " ) );
     wxArrayString  reference_fields;
@@ -631,7 +631,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
     if( Entry && Entry->UnitsLocked() )
-        KeepMulti = true;
+        keepMulti = true;
 
     while( defRef.Last() == '?' )
         defRef.RemoveLast();
@@ -641,7 +641,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     wxString multi = wxT( "1" );
 
     // We cannot remove all annotations: part selection must be kept
-    if( KeepMulti )
+    if( keepMulti )
     {
         wxString NewHref;
         wxString path;
@@ -656,7 +656,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
             if( aSheetPath == NULL || reference_fields[0].Cmp( path ) == 0 )
             {
-                if( KeepMulti )  // Get and keep part selection
+                if( keepMulti )  // Get and keep part selection
                     multi = reference_fields[2];
 
                 NewHref = reference_fields[0];
@@ -862,9 +862,9 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " ref=\"" << CONV_TO_UTF8( ReturnFieldName( 0 ) )
+                                 << " ref=\"" << TO_UTF8( ReturnFieldName( 0 ) )
                                  << '"' << " chipName=\""
-                                 << CONV_TO_UTF8( m_ChipName ) << '"' << m_Pos
+                                 << TO_UTF8( m_ChipName ) << '"' << m_Pos
                                  << " layer=\"" << m_Layer
                                  << '"' << ">\n";
 
@@ -876,13 +876,13 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
         if( !value.IsEmpty() )
         {
             NestedSpace( nestLevel + 1, os ) << "<field" << " name=\""
-                                             << CONV_TO_UTF8( ReturnFieldName( i ) )
+                                             << TO_UTF8( ReturnFieldName( i ) )
                                              << '"' << " value=\""
-                                             << CONV_TO_UTF8( value ) << "\"/>\n";
+                                             << TO_UTF8( value ) << "\"/>\n";
         }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << CONV_TO_UTF8( GetClass().Lower() ) << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << TO_UTF8( GetClass().Lower() ) << ">\n";
 }
 
 #endif
@@ -902,14 +902,14 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     {
         reference_fields = wxStringTokenize( m_PathsAndReferences[0],
                                              delimiters );
-        strncpy( Name1, CONV_TO_UTF8( reference_fields[1] ), sizeof( Name1 ) );
+        strncpy( Name1, TO_UTF8( reference_fields[1] ), sizeof( Name1 ) );
     }
     else
     {
         if( GetField( REFERENCE )->m_Text.IsEmpty() )
-            strncpy( Name1, CONV_TO_UTF8( m_prefix ), sizeof( Name1 ) );
+            strncpy( Name1, TO_UTF8( m_prefix ), sizeof( Name1 ) );
         else
-            strncpy( Name1, CONV_TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
+            strncpy( Name1, TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
     }
 
     for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
@@ -925,7 +925,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 
     if( !m_ChipName.IsEmpty() )
     {
-        strncpy( Name2, CONV_TO_UTF8( m_ChipName ), sizeof( Name2 ) );
+        strncpy( Name2, TO_UTF8( m_ChipName ), sizeof( Name2 ) );
         for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
 #if defined(KICAD_GOST)
 
@@ -974,9 +974,9 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             reference_fields = wxStringTokenize( m_PathsAndReferences[ii], delimiters );
 
             if( fprintf( f, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
-                         CONV_TO_UTF8( reference_fields[0] ),
-                         CONV_TO_UTF8( reference_fields[1] ),
-                         CONV_TO_UTF8( reference_fields[2] ) ) == EOF )
+                         TO_UTF8( reference_fields[0] ),
+                         TO_UTF8( reference_fields[1] ),
+                         TO_UTF8( reference_fields[2] ) ) == EOF )
                 return false;
         }
     }
@@ -1055,7 +1055,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema Component descr error at line %d, aborted" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( line );
+        aErrorMsg << wxT( "\n" ) << FROM_UTF8( line );
         return false;
     }
 
@@ -1065,10 +1065,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             if( Name1[ii] == '~' )
                 Name1[ii] = ' ';
 
-        m_ChipName = CONV_FROM_UTF8( Name1 );
+        m_ChipName = FROM_UTF8( Name1 );
 
         if( !newfmt )
-            GetField( VALUE )->m_Text = CONV_FROM_UTF8( Name1 );
+            GetField( VALUE )->m_Text = FROM_UTF8( Name1 );
     }
     else
     {
@@ -1112,13 +1112,13 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
         else
         {
-            m_prefix = CONV_FROM_UTF8( &Name1[jj] );
+            m_prefix = FROM_UTF8( &Name1[jj] );
 
-            //printf("prefix: %s\n", CONV_TO_UTF8(component->m_prefix));
+            //printf("prefix: %s\n", TO_UTF8(component->m_prefix));
         }
 
         if( !newfmt )
-            GetField( REFERENCE )->m_Text = CONV_FROM_UTF8( Name2 );
+            GetField( REFERENCE )->m_Text = FROM_UTF8( Name2 );
     }
     else
     {
@@ -1171,12 +1171,12 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             //copy the path.
             ii     = ReadDelimitedText( Name1, ptcar, 255 );
             ptcar += ii + 1;
-            wxString path = CONV_FROM_UTF8( Name1 );
+            wxString path = FROM_UTF8( Name1 );
 
             // copy the reference
             ii     = ReadDelimitedText( Name1, ptcar, 255 );
             ptcar += ii + 1;
-            wxString ref = CONV_FROM_UTF8( Name1 );
+            wxString ref = FROM_UTF8( Name1 );
 
             // copy the multi, if exists
             ii = ReadDelimitedText( Name1, ptcar, 255 );
@@ -1235,7 +1235,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             if( !FieldUserName[0] )
                 fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
             else
-                fieldName = CONV_FROM_UTF8( FieldUserName );
+                fieldName = FROM_UTF8( FieldUserName );
 
             if( fieldNdx >= GetFieldCount() )
             {
@@ -1261,7 +1261,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 GetField( fieldNdx )->m_Name = fieldName;
             }
 
-            GetField( fieldNdx )->m_Text = CONV_FROM_UTF8( Name1 );
+            GetField( fieldNdx )->m_Text = FROM_UTF8( Name1 );
             memset( Char3, 0, sizeof(Char3) );
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
                                &GetField( fieldNdx )->m_Pos.x,

@@ -263,8 +263,8 @@ An alias %s already exists!\nCannot update this component" ),
     for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
         printf( "save[%d].name:'%s' value:'%s'\n", i,
-                CONV_TO_UTF8( m_FieldsBuf[i].GetName() ),
-                CONV_TO_UTF8( m_FieldsBuf[i].m_Text ) );
+                TO_UTF8( m_FieldsBuf[i].GetName() ),
+                TO_UTF8( m_FieldsBuf[i].m_Text ) );
     }
 #endif
 
@@ -456,7 +456,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
 #if defined(DEBUG)
     for( unsigned i=0; i<cmpFields.size();  ++i )
     {
-        printf( "cmpFields[%d].name:%s\n", i, CONV_TO_UTF8( cmpFields[i].GetName() ) );
+        printf( "cmpFields[%d].name:%s\n", i, TO_UTF8( cmpFields[i].GetName() ) );
     }
 #endif
 
@@ -484,7 +484,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
     // fixed fields:
     for( int i=0; i<MANDATORY_FIELDS; ++i )
     {
-        D( printf( "add fixed:%s\n", CONV_TO_UTF8( cmpFields[i].GetName() ) ); )
+        D( printf( "add fixed:%s\n", TO_UTF8( cmpFields[i].GetName() ) ); )
         m_FieldsBuf.push_back( cmpFields[i] );
     }
 
@@ -509,7 +509,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
         // values from the component will be set.
         if( !libField )
         {
-            D( printf( "add template:%s\n", CONV_TO_UTF8( it->m_Name ) ); )
+            D( printf( "add template:%s\n", TO_UTF8( it->m_Name ) ); )
 
                 fld.SetName( it->m_Name );
             fld.m_Text = it->m_Value;   // empty? ok too.
@@ -521,7 +521,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
         }
         else
         {
-            D( printf( "match template:%s\n", CONV_TO_UTF8( libField->GetName() ) ); )
+            D( printf( "match template:%s\n", TO_UTF8( libField->GetName() ) ); )
             fld = *libField;    // copy values from component, m_Name too
         }
 
@@ -537,7 +537,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
 
         if( !buf )
         {
-            D( printf( "add cmp:%s\n", CONV_TO_UTF8( cmp->GetName() ) ); )
+            D( printf( "add cmp:%s\n", TO_UTF8( cmp->GetName() ) ); )
             m_FieldsBuf.push_back( *cmp );
         }
     }

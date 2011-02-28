@@ -94,7 +94,7 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema file bus entry load error at line %d" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
     }
 
@@ -108,7 +108,7 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema file bus entry load error at line %d" ),
                           aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << CONV_FROM_UTF8( (char*) aLine );
+        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
     }
 

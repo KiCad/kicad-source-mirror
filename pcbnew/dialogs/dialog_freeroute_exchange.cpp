@@ -67,7 +67,7 @@ void DIALOG_FREEROUTE::OnHelpButtonClick( wxCommandEvent& event )
     DIALOG_DISPLAY_HTML_TEXT_BASE help_Dlg( this, wxID_ANY,
         _("Freeroute Help"),wxDefaultPosition, wxSize( 650,550 ) );
 
-    wxString msg = CONV_FROM_UTF8(s_FreeRouteHelpInfo);
+    wxString msg = FROM_UTF8(s_FreeRouteHelpInfo);
     help_Dlg.m_htmlWindow->AppendToPage( msg );
     help_Dlg.ShowModal();
 }

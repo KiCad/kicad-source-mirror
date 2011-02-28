@@ -620,7 +620,7 @@ void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " type=\"" << CONV_TO_UTF8( shape ) << "\">";
+    " type=\"" << TO_UTF8( shape ) << "\">";
 
     os << " <start" << m_Start0 << "/>";
     os << " <end" << m_End0 << "/>";

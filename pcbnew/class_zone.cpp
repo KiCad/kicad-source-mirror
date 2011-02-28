@@ -109,7 +109,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     // Save the outline main info
     ret = fprintf( aFile, "ZInfo %8.8lX %d \"%s\"\n",
                   m_TimeStamp, m_NetCode,
-                  CONV_TO_UTF8( m_Netname ) );
+                  TO_UTF8( m_Netname ) );
     if( ret < 3 )
         return false;
 
@@ -282,7 +282,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
                 m_TimeStamp = ts;
                 m_NetCode   = netcode;
                 ReadDelimitedText( netname_buffer, netname_buffer, 1024 );
-                m_Netname = CONV_FROM_UTF8( netname_buffer );
+                m_Netname = FROM_UTF8( netname_buffer );
             }
         }
         else if( strnicmp( Line, "ZLayer", 6 ) == 0 )  // layer found

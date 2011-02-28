@@ -60,7 +60,7 @@ int NETINFO_ITEM::ReadDescr( LINE_READER* aReader )
             SetNet( tmp );
 
             ReadDelimitedText( Ltmp, Line + 2, sizeof(Ltmp) );
-            m_Netname = CONV_FROM_UTF8( Ltmp );
+            m_Netname = FROM_UTF8( Ltmp );
             continue;
         }
     }
@@ -78,10 +78,10 @@ bool NETINFO_ITEM::Save( FILE* aFile ) const
     bool success = false;
 
     fprintf( aFile, "$EQUIPOT\n" );
-    fprintf( aFile, "Na %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
+    fprintf( aFile, "Na %d \"%s\"\n", GetNet(), TO_UTF8( m_Netname ) );
     fprintf( aFile, "St %s\n", "~" );
 
-    // fprintf( aFile, "NetClass \"%s\"\n", CONV_TO_UTF8(m_NetClassName) );
+    // fprintf( aFile, "NetClass \"%s\"\n", TO_UTF8(m_NetClassName) );
 
     if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
         goto out;

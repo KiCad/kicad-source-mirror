@@ -277,7 +277,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
                     StrPurge( Line );
-                    msg = CONV_FROM_UTF8( Line );
+                    msg = FROM_UTF8( Line );
                     if( msg.CmpNoCase( aModuleName ) == 0 )
                     {
                         Found = 1;
@@ -303,7 +303,7 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
             StrPurge( Line + 8 );
 
             // Read module name.
-            Name = CONV_FROM_UTF8( Line + 8 );
+            Name = FROM_UTF8( Line + 8 );
 
             if( Name.CmpNoCase( aModuleName ) == 0 )
             {

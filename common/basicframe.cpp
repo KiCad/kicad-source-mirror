@@ -379,7 +379,7 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp = wxT( "Application: " ) + wxGetApp().GetTitle() + wxT( "\n" );
     tmp += wxT( "Version: " ) + GetBuildVersion() + wxT( "\n" );
     tmp << wxT( "Build: " ) << wxVERSION_STRING
-        << CONV_FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
+        << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
         << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
         << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
         << info.GetPortIdName();

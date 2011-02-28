@@ -407,7 +407,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             wxFileName  tmpFile = aFullFileName;
             tmpFile.SetExt( INTERMEDIATE_NETLIST_EXT );
 
-            D(printf("tmpFile:'%s'\n", CONV_TO_UTF8( tmpFile.GetFullPath() ) );)
+            D(printf("tmpFile:'%s'\n", TO_UTF8( tmpFile.GetFullPath() ) );)
 
             ret = helper.WriteGENERICNetList( tmpFile.GetFullPath() );
             if( !ret )
@@ -426,7 +426,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
                                         tmpFile.GetFullPath(),
                                         aFullFileName );
 
-            D(printf("commandLine:'%s'\n", CONV_TO_UTF8( commandLine ) );)
+            D(printf("commandLine:'%s'\n", TO_UTF8( commandLine ) );)
 
             ProcessExecute( commandLine, wxEXEC_SYNC );
 
@@ -650,7 +650,7 @@ XNODE* EXPORT_HELP::makeGenericDesignHeader()
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "date" ), CONV_FROM_UTF8( date )) );
+    xdesign->AddChild( node( wxT( "date" ), FROM_UTF8( date )) );
 
     // which eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') + GetBuildVersion() ) );
@@ -1135,19 +1135,19 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
 
             ret |= fprintf( out, "\n$BeginComponent\n" );
             ret |= fprintf( out, "TimeStamp=%8.8lX\n", comp->m_TimeStamp );
-            ret |= fprintf( out, "Footprint=%s\n", CONV_TO_UTF8( footprint ) );
+            ret |= fprintf( out, "Footprint=%s\n", TO_UTF8( footprint ) );
 
             field = wxT( "Reference=" ) + comp->GetRef( path ) + wxT( "\n" );
             field.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fputs( CONV_TO_UTF8( field ), out );
+            ret |= fputs( TO_UTF8( field ), out );
 
             field = comp->GetField( VALUE )->m_Text;
             field.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fprintf( out, "Value=%s\n", CONV_TO_UTF8( field ) );
+            ret |= fprintf( out, "Value=%s\n", TO_UTF8( field ) );
 
             field = comp->GetLibName();
             field.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fprintf( out, "Libref=%s\n", CONV_TO_UTF8( field ) );
+            ret |= fprintf( out, "Libref=%s\n", TO_UTF8( field ) );
 
             // Write pin list:
             ret |= fprintf( out, "$BeginPinList\n" );
@@ -1161,7 +1161,7 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
                 if( netname.IsEmpty() )
                     netname = wxT( "?" );
 
-                ret |= fprintf( out, "%.4s=%s\n", (char*) &Pin->m_PinNum, CONV_TO_UTF8( netname ) );
+                ret |= fprintf( out, "%.4s=%s\n", (char*) &Pin->m_PinNum, TO_UTF8( netname ) );
             }
 
             ret |= fprintf( out, "$EndPinList\n" );
@@ -1269,7 +1269,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
             spiceCommandAtBeginFile[ii].Remove( 0, BUFYPOS_LEN );
             spiceCommandAtBeginFile[ii].Trim( true );
             spiceCommandAtBeginFile[ii].Trim( false );
-            ret |= fprintf( f, "%s\n", CONV_TO_UTF8( spiceCommandAtBeginFile[ii] ) );
+            ret |= fprintf( f, "%s\n", TO_UTF8( spiceCommandAtBeginFile[ii] ) );
         }
     }
     ret |= fprintf( f, "\n" );
@@ -1288,7 +1288,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
 
             item = comp;
 
-            ret |= fprintf( f, "%s ", CONV_TO_UTF8( comp->GetRef( sheet ) ) );
+            ret |= fprintf( f, "%s ", TO_UTF8( comp->GetRef( sheet ) ) );
 
             // Write pin list:
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
@@ -1303,7 +1303,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
                     netName = wxT( "?" );
 
                 if( use_netnames )
-                    ret |= fprintf( f, " %s", CONV_TO_UTF8( netName ) );
+                    ret |= fprintf( f, " %s", TO_UTF8( netName ) );
 
                 else    // Use number for net names (net number = 0 for "GND")
                 {
@@ -1316,7 +1316,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
             }
 
             ret |= fprintf( f, " %s\n",
-                    CONV_TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                    TO_UTF8( comp->GetField( VALUE )->m_Text ) );
         }
     }
 
@@ -1333,7 +1333,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
             spiceCommandAtEndFile[ii].Remove( 0, +BUFYPOS_LEN );
             spiceCommandAtEndFile[ii].Trim( true );
             spiceCommandAtEndFile[ii].Trim( false );
-            ret |= fprintf( f, "%s\n", CONV_TO_UTF8( spiceCommandAtEndFile[ii] ) );
+            ret |= fprintf( f, "%s\n", TO_UTF8( spiceCommandAtEndFile[ii] ) );
         }
     }
 
@@ -1403,20 +1403,20 @@ bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
             field = comp->GetRef( path );
 
             ret |= fprintf( f, " ( %s %s",
-                            CONV_TO_UTF8( comp->GetPath( path ) ),
-                            CONV_TO_UTF8( footprint ) );
+                            TO_UTF8( comp->GetPath( path ) ),
+                            TO_UTF8( footprint ) );
 
-            ret |= fprintf( f, "  %s", CONV_TO_UTF8( field ) );
+            ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
             field = comp->GetField( VALUE )->m_Text;
             field.Replace( wxT( " " ), wxT( "_" ) );
-            ret |= fprintf( f, " %s", CONV_TO_UTF8( field ) );
+            ret |= fprintf( f, " %s", TO_UTF8( field ) );
 
             if( with_pcbnew )  // Add the lib name for this component
             {
                 field = comp->GetLibName();
                 field.Replace( wxT( " " ), wxT( "_" ) );
-                ret |= fprintf( f, " {Lib=%s}", CONV_TO_UTF8( field ) );
+                ret |= fprintf( f, " {Lib=%s}", TO_UTF8( field ) );
             }
             ret |= fprintf( f, "\n" );
 
@@ -1434,7 +1434,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
                 netName.Replace( wxT( " " ), wxT( "_" ) );
 
                 ret |= fprintf( f, "  ( %4.4s %s )\n", (char*) &pin->m_PinNum,
-                                CONV_TO_UTF8( netName ) );
+                                TO_UTF8( netName ) );
             }
 
             ret |= fprintf( f, " )\n" );
@@ -1460,12 +1460,12 @@ bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
             ref.Replace( wxT( " " ), wxT( "_" ) );
 
-            ret |= fprintf( f, "$component %s\n", CONV_TO_UTF8( ref ) );
+            ret |= fprintf( f, "$component %s\n", TO_UTF8( ref ) );
 
             // Write the footprint list
             for( unsigned jj = 0; jj < entry->GetFootPrints().GetCount(); jj++ )
             {
-                ret |= fprintf( f, " %s\n", CONV_TO_UTF8( entry->GetFootPrints()[jj] ) );
+                ret |= fprintf( f, " %s\n", TO_UTF8( entry->GetFootPrints()[jj] ) );
             }
 
             ret |= fprintf( f, "$endlist\n" );
@@ -1693,7 +1693,7 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
         if( ++sameNetcodeCount == 1 )
         {
             snprintf( firstItemInNet, sizeof(firstItemInNet), " %s %.4s\n",
-                      CONV_TO_UTF8( ref ),
+                      TO_UTF8( ref ),
                       (const char*) &aObjectsList[ii]->m_PinNum );
         }
 
@@ -1701,12 +1701,12 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
         // first item
         if( sameNetcodeCount == 2 )
         {
-            ret |= fprintf( f, "%s\n", CONV_TO_UTF8( netcodeName ) );
+            ret |= fprintf( f, "%s\n", TO_UTF8( netcodeName ) );
             ret |= fputs( firstItemInNet, f );
         }
 
         if( sameNetcodeCount >= 2 )
-            ret |= fprintf( f, " %s %.4s\n", CONV_TO_UTF8( ref ),
+            ret |= fprintf( f, " %s %.4s\n", TO_UTF8( ref ),
                      (const char*) &aObjectsList[ii]->m_PinNum );
     }
 
@@ -1729,11 +1729,11 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
-    fprintf( f, "%sHEA\n", CONV_TO_UTF8( StartLine ) );
+    fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
     DateAndTime( Line );
-    fprintf( f, "%sTIM %s\n", CONV_TO_UTF8( StartLine ), Line );
-    fprintf( f, "%sAPP ", CONV_TO_UTF8( StartLine ) );
-    fprintf( f, "\"%s\"\n", CONV_TO_UTF8( Title ) );
+    fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), Line );
+    fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
+    fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
     fprintf( f, "\n" );
 
     // Prepare list of nets generation
@@ -1765,12 +1765,12 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
             */
 
             msg = Component->GetRef( sheet );
-            fprintf( f, "%s     ", CONV_TO_UTF8( StartCmpDesc ) );
-            fprintf( f, "%s", CONV_TO_UTF8( msg ) );
+            fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
+            fprintf( f, "%s", TO_UTF8( msg ) );
 
             msg = Component->GetField( VALUE )->m_Text;
             msg.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( f, "     \"%s\"", CONV_TO_UTF8( msg ) );
+            fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             fprintf( f, "\n" );
         }
     }
@@ -1781,7 +1781,7 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
 
     writeListOfNetsCADSTAR( f, g_NetObjectslist );
 
-    fprintf( f, "\n%sEND\n", CONV_TO_UTF8( StartLine ) );
+    fprintf( f, "\n%sEND\n", TO_UTF8( StartLine ) );
 }
 
 
@@ -1847,7 +1847,7 @@ void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjects
             wxString str_pinnum;
             strncpy( buf, (char*) &aObjectsList[ii]->m_PinNum, 4 );
             buf[4]     = 0;
-            str_pinnum = CONV_FROM_UTF8( buf );
+            str_pinnum = FROM_UTF8( buf );
             InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
                                    GetChars( InitNetDesc ),
                                    GetChars( refstr ),
@@ -1858,17 +1858,17 @@ void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjects
             break;
 
         case 1:
-            fprintf( f, "%s\n", CONV_TO_UTF8( InitNetDescLine ) );
+            fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
             fprintf( f, "%s       %s   %.4s\n",
-                     CONV_TO_UTF8( StartNetDesc ),
-                     CONV_TO_UTF8( refstr ),
+                     TO_UTF8( StartNetDesc ),
+                     TO_UTF8( refstr ),
                      (char*) &aObjectsList[ii]->m_PinNum );
             print_ter++;
             break;
 
         default:
             fprintf( f, "            %s   %.4s\n",
-                     CONV_TO_UTF8( refstr ),
+                     TO_UTF8( refstr ),
                      (char*) &aObjectsList[ii]->m_PinNum );
             break;
         }

@@ -241,7 +241,7 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
     }
 
     if( fprintf( aFile, "F%d \"%s\" %c %c %-3d %-3d %-3d\n", m_Number,
-                 CONV_TO_UTF8( m_Text ), type, side, m_Pos.x, m_Pos.y,
+                 TO_UTF8( m_Text ), type, side, m_Pos.x, m_Pos.y,
                  m_Size.x ) == EOF )
     {
         return false;
@@ -265,11 +265,11 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "EESchema file sheet hierarchical label error at line %d.\n" ),
                           aLine.LineNumber() );
-        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        aErrorMsg << FROM_UTF8( ((char*)aLine) );
         return false;
     }
 
-    m_Text = CONV_FROM_UTF8( name );
+    m_Text = FROM_UTF8( name );
 
     m_Text = m_Text.AfterFirst( wxChar( '"' ) );
     m_Text = m_Text.BeforeLast( wxChar( '"' ) );
@@ -442,7 +442,7 @@ void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " pin_name=\"" << CONV_TO_UTF8( m_Text )
+                                 << " pin_name=\"" << TO_UTF8( m_Text )
                                  << '"' << "/>\n" << std::flush;
 
 //    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";

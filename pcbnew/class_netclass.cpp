@@ -286,8 +286,8 @@ bool NETCLASS::Save( FILE* aFile ) const
     bool result = true;
 
     fprintf( aFile, "$" BRD_NETCLASS "\n" );
-    fprintf( aFile, "Name \"%s\"\n", CONV_TO_UTF8( m_Name ) );
-    fprintf( aFile, "Desc \"%s\"\n", CONV_TO_UTF8( GetDescription() ) );
+    fprintf( aFile, "Name \"%s\"\n", TO_UTF8( m_Name ) );
+    fprintf( aFile, "Desc \"%s\"\n", TO_UTF8( GetDescription() ) );
 
     // Write parameters
 
@@ -302,7 +302,7 @@ bool NETCLASS::Save( FILE* aFile ) const
 
     // Write members:
     for( const_iterator i = begin();  i!=end();  ++i )
-        fprintf( aFile, "AddNet \"%s\"\n", CONV_TO_UTF8( *i ) );
+        fprintf( aFile, "AddNet \"%s\"\n", TO_UTF8( *i ) );
 
     fprintf( aFile, "$End" BRD_NETCLASS "\n" );
 
@@ -322,7 +322,7 @@ void NETCLASS::Show( int nestLevel, std::ostream& os )
     for( const_iterator i = begin();  i!=end();  ++i )
     {
         // NestedSpace( nestLevel+1, os ) << *i;
-        os << CONV_TO_UTF8( *i );
+        os << TO_UTF8( *i );
     }
 
     // NestedSpace( nestLevel, os )
@@ -346,7 +346,7 @@ bool NETCLASS::ReadDescr( LINE_READER* aReader )
         if( strnicmp( Line, "AddNet", 6 ) == 0 )
         {
             ReadDelimitedText( Buffer, Line + 6, sizeof(Buffer) );
-            netname = CONV_FROM_UTF8( Buffer );
+            netname = FROM_UTF8( Buffer );
             Add( netname );
             continue;
         }
@@ -392,13 +392,13 @@ bool NETCLASS::ReadDescr( LINE_READER* aReader )
         if( strnicmp( Line, "Name", 4 ) == 0 )
         {
             ReadDelimitedText( Buffer, Line + 4, sizeof(Buffer) );
-            m_Name = CONV_FROM_UTF8( Buffer );
+            m_Name = FROM_UTF8( Buffer );
             continue;
         }
         if( strnicmp( Line, "Desc", 4 ) == 0 )
         {
             ReadDelimitedText( Buffer, Line + 4, sizeof(Buffer) );
-            SetDescription( CONV_FROM_UTF8( Buffer ) );
+            SetDescription( FROM_UTF8( Buffer ) );
             continue;
         }
     }

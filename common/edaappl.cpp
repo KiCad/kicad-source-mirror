@@ -411,7 +411,7 @@ bool WinEDA_App::SetBinDir()
     native_str = new char[len];
 
     CFStringGetCString( str, native_str, len, kCFStringEncodingUTF8 );
-    m_BinDir = CONV_FROM_UTF8( native_str );
+    m_BinDir = FROM_UTF8( native_str );
     delete[] native_str;
 
 /* Linux and Unix */
@@ -431,7 +431,7 @@ bool WinEDA_App::SetBinDir()
     str_arg0    = argv[0];
     if( strchr( (const char*) argv[0], '/' ) == NULL ) // no path
     {
-        sprintf( FileName, "which %s > %s", CONV_TO_UTF8( str_arg0 ), TMP_FILE );
+        sprintf( FileName, "which %s > %s", TO_UTF8( str_arg0 ), TMP_FILE );
         ii = system( FileName );
 
         if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
@@ -440,7 +440,7 @@ bool WinEDA_App::SetBinDir()
             fclose( ftmp );
             remove( TMP_FILE );
         }
-        m_BinDir = CONV_FROM_UTF8( Line );
+        m_BinDir = FROM_UTF8( Line );
     }
     else
         m_BinDir = argv[0];

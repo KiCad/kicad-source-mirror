@@ -424,7 +424,7 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl,
     int r = 0;
     for( PNETCUPS::iterator i = ptrList.begin();  i!=ptrList.end();  ++i, ++r )
     {
-        printf( "[%d]: %s  %s\n", r, CONV_TO_UTF8( (*i)->net ), CONV_TO_UTF8( (*i)->clazz ) );
+        printf( "[%d]: %s  %s\n", r, TO_UTF8( (*i)->net ), TO_UTF8( (*i)->clazz ) );
     }
 
 #endif

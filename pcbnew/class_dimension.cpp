@@ -137,7 +137,7 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
         if( Line[0] == 'T' )
         {
             ReadDelimitedText( Text, Line + 2, sizeof(Text) );
-            m_Text->m_Text = CONV_FROM_UTF8( Text );
+            m_Text->m_Text = FROM_UTF8( Text );
             continue;
         }
 
@@ -362,7 +362,7 @@ bool DIMENSION::Save( FILE* aFile ) const
     fprintf( aFile, "Va %d\n", m_Value );
 
     if( !m_Text->m_Text.IsEmpty() )
-        fprintf( aFile, "Te \"%s\"\n", CONV_TO_UTF8( m_Text->m_Text ) );
+        fprintf( aFile, "Te \"%s\"\n", TO_UTF8( m_Text->m_Text ) );
     else
         fprintf( aFile, "Te \"?\"\n" );
 

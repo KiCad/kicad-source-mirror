@@ -114,7 +114,7 @@ bool LIB_FIELD::Save( FILE* ExportFile )
         text = wxT( "~" );
 
     if( fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
-                 m_id, CONV_TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
+                 m_id, TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
                  m_Orient == 0 ? 'H' : 'V',
                  (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
                  hjustify, vjustify,
@@ -131,7 +131,7 @@ bool LIB_FIELD::Save( FILE* ExportFile )
 
     if( m_id >= FIELD1 && !m_name.IsEmpty()
         && m_name != defName
-        && fprintf( ExportFile, " \"%s\"", CONV_TO_UTF8( m_name ) ) < 0 )
+        && fprintf( ExportFile, " \"%s\"", TO_UTF8( m_name ) ) < 0 )
         return false;
 
     if( fprintf( ExportFile, "\n" ) < 0 )
@@ -196,7 +196,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
         return false;
     }
 
-    m_Text = CONV_FROM_UTF8( text );
+    m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y;
 
     if( textOrient == 'H' )
@@ -271,7 +271,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
     else
     {
         ReadDelimitedText( fieldUserName, line, sizeof( fieldUserName ) );
-        m_name = CONV_FROM_UTF8( fieldUserName );
+        m_name = FROM_UTF8( fieldUserName );
     }
 
     return true;

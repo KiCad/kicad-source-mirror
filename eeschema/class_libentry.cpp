@@ -106,19 +106,19 @@ bool LIB_ALIAS::SaveDoc( FILE* aFile )
     if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
         return true;
 
-    if( fprintf( aFile, "#\n$CMP %s\n", CONV_TO_UTF8( name ) ) < 0 )
+    if( fprintf( aFile, "#\n$CMP %s\n", TO_UTF8( name ) ) < 0 )
         return false;
 
     if( ! description.IsEmpty()
-        && fprintf( aFile, "D %s\n", CONV_TO_UTF8( description ) ) < 0 )
+        && fprintf( aFile, "D %s\n", TO_UTF8( description ) ) < 0 )
         return false;
 
     if( ! keyWords.IsEmpty()
-        && fprintf( aFile, "K %s\n", CONV_TO_UTF8( keyWords ) ) < 0 )
+        && fprintf( aFile, "K %s\n", TO_UTF8( keyWords ) ) < 0 )
         return false;
 
     if( ! docFileName.IsEmpty()
-        && fprintf( aFile, "F %s\n", CONV_TO_UTF8( docFileName ) ) < 0 )
+        && fprintf( aFile, "F %s\n", TO_UTF8( docFileName ) ) < 0 )
         return false;
 
     if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
@@ -539,7 +539,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     LIB_FIELD&  value = GetValueField();
 
     /* First line: it s a comment (component name for readers) */
-    if( fprintf( aFile, "#\n# %s\n#\n", CONV_TO_UTF8( value.m_Text ) ) < 0 )
+    if( fprintf( aFile, "#\n# %s\n#\n", TO_UTF8( value.m_Text ) ) < 0 )
         return false;
 
     /* Save data */
@@ -548,12 +548,12 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
     if( value.IsVisible() )
     {
-        if( fprintf( aFile, " %s", CONV_TO_UTF8( value.m_Text ) ) < 0 )
+        if( fprintf( aFile, " %s", TO_UTF8( value.m_Text ) ) < 0 )
             return false;
     }
     else
     {
-        if( fprintf( aFile, " ~%s", CONV_TO_UTF8( value.m_Text ) ) < 0 )
+        if( fprintf( aFile, " ~%s", TO_UTF8( value.m_Text ) ) < 0 )
             return false;
     }
 
@@ -561,7 +561,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
     if( !reference.m_Text.IsEmpty() )
     {
-        if( fprintf( aFile, " %s", CONV_TO_UTF8( reference.m_Text ) ) < 0 )
+        if( fprintf( aFile, " %s", TO_UTF8( reference.m_Text ) ) < 0 )
             return false;
     }
     else
@@ -623,7 +623,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
         for( i = 1; i < m_aliases.size(); i++ )
         {
-            if( fprintf( aFile, " %s", CONV_TO_UTF8( m_aliases[i]->GetName() ) ) < 0 )
+            if( fprintf( aFile, " %s", TO_UTF8( m_aliases[i]->GetName() ) ) < 0 )
                 return false;
         }
 
@@ -639,7 +639,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 
         for( i = 0; i < m_FootprintList.GetCount(); i++ )
         {
-            if( fprintf( aFile, " %s\n", CONV_TO_UTF8( m_FootprintList[i] ) ) < 0 )
+            if( fprintf( aFile, " %s\n", TO_UTF8( m_FootprintList[i] ) ) < 0 )
                 return false;
         }
 
@@ -736,11 +736,11 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
     strupper( componentName );
     if( componentName[0] != '~' )
     {
-        m_name = value.m_Text = CONV_FROM_UTF8( componentName );
+        m_name = value.m_Text = FROM_UTF8( componentName );
     }
     else
     {
-        m_name = value.m_Text = CONV_FROM_UTF8( &componentName[1] );
+        m_name = value.m_Text = FROM_UTF8( &componentName[1] );
         value.m_Attributs |= TEXT_NO_VISIBLE;
     }
 
@@ -756,7 +756,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
     }
     else
     {
-        reference.m_Text = CONV_FROM_UTF8( prefix );
+        reference.m_Text = FROM_UTF8( prefix );
     }
 
     // Copy optional infos
@@ -896,7 +896,7 @@ bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
 
     while( text )
     {
-        m_aliases.push_back( new LIB_ALIAS( CONV_FROM_UTF8( text ), this ) );
+        m_aliases.push_back( new LIB_ALIAS( FROM_UTF8( text ), this ) );
         text = strtok( NULL, " \t\r\n" );
     }
 
@@ -953,7 +953,7 @@ bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
         if( stricmp( aLine, "$ENDFPLIST" ) == 0 )
             break;
 
-        m_FootprintList.Add( CONV_FROM_UTF8( aLine + 1 ) );
+        m_FootprintList.Add( FROM_UTF8( aLine + 1 ) );
     }
 
     return true;

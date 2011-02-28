@@ -331,7 +331,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c%c%c",
                  m_FieldId,
-                 CONV_TO_UTF8( m_Text ),
+                 TO_UTF8( m_Text ),
                  m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
                  m_Pos.x, m_Pos.y,
                  m_Size.x,
@@ -346,7 +346,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
     // Save field name, if the name is user definable
     if( m_FieldId >= FIELD1 )
     {
-        if( fprintf( aFile, " \"%s\"", CONV_TO_UTF8( m_Name ) ) == EOF )
+        if( fprintf( aFile, " \"%s\"", TO_UTF8( m_Name ) ) == EOF )
         {
             return false;
         }

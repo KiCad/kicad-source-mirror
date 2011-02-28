@@ -394,7 +394,7 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
 
             if( data )
             {
-                wxString layerName = CONV_FROM_UTF8( data );
+                wxString layerName = FROM_UTF8( data );
                 GetBoard()->SetLayerName( layer, layerName );
 
                 data = strtok( NULL, " \n\r" );
@@ -660,7 +660,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
         if( layerMask & 1 )
         {
             fprintf( aFile, "Layer[%d] %s %s\n", layer,
-                     CONV_TO_UTF8( aBoard->GetLayerName( layer ) ),
+                     TO_UTF8( aBoard->GetLayerName( layer ) ),
                      LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
         }
     }
@@ -754,10 +754,10 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 
     g_PcbPlotOptions.Format( &sf, 0 );
 
-    wxString record = CONV_FROM_UTF8( sf.GetString().c_str() );
+    wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );
     record.Replace( wxT("  "), wxT(" "), true);
-    fprintf( aFile, "PcbPlotParams %s\n", CONV_TO_UTF8( record ) );
+    fprintf( aFile, "PcbPlotParams %s\n", TO_UTF8( record ) );
 
     fprintf( aFile, "$EndSETUP\n\n" );
     return 1;
@@ -775,6 +775,7 @@ bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
     /* Write copper layer count */
     NbLayers = GetBoard()->GetCopperLayerCount();
     fprintf( File, "$GENERAL\n" );
+    fprintf( File, "encoding utf-8\n");
     fprintf( File, "LayerCount %d\n", NbLayers );
 
     // Write old format for Layer count (for compatibility with old versions of
@@ -829,15 +830,15 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d\n",
-             CONV_TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );
-    fprintf( File, "Title \"%s\"\n", CONV_TO_UTF8( screen->m_Title ) );
-    fprintf( File, "Date \"%s\"\n", CONV_TO_UTF8( screen->m_Date ) );
-    fprintf( File, "Rev \"%s\"\n", CONV_TO_UTF8( screen->m_Revision ) );
-    fprintf( File, "Comp \"%s\"\n", CONV_TO_UTF8( screen->m_Company ) );
-    fprintf( File, "Comment1 \"%s\"\n", CONV_TO_UTF8( screen->m_Commentaire1 ) );
-    fprintf( File, "Comment2 \"%s\"\n", CONV_TO_UTF8( screen->m_Commentaire2 ) );
-    fprintf( File, "Comment3 \"%s\"\n", CONV_TO_UTF8( screen->m_Commentaire3 ) );
-    fprintf( File, "Comment4 \"%s\"\n", CONV_TO_UTF8( screen->m_Commentaire4 ) );
+             TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );
+    fprintf( File, "Title \"%s\"\n", TO_UTF8( screen->m_Title ) );
+    fprintf( File, "Date \"%s\"\n", TO_UTF8( screen->m_Date ) );
+    fprintf( File, "Rev \"%s\"\n", TO_UTF8( screen->m_Revision ) );
+    fprintf( File, "Comp \"%s\"\n", TO_UTF8( screen->m_Company ) );
+    fprintf( File, "Comment1 \"%s\"\n", TO_UTF8( screen->m_Commentaire1 ) );
+    fprintf( File, "Comment2 \"%s\"\n", TO_UTF8( screen->m_Commentaire2 ) );
+    fprintf( File, "Comment3 \"%s\"\n", TO_UTF8( screen->m_Commentaire3 ) );
+    fprintf( File, "Comment4 \"%s\"\n", TO_UTF8( screen->m_Commentaire4 ) );
 
     fprintf( File, "$EndSHEETDESCR\n\n" );
     return TRUE;
@@ -862,7 +863,7 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
             int           ii;
             for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
             {
-                if( stricmp( CONV_TO_UTF8( sheet->m_Name ), text ) == 0 )
+                if( stricmp( TO_UTF8( sheet->m_Name ), text ) == 0 )
                 {
                     screen->m_CurrentSheetDesc = sheet;
                     if( sheet == &g_Sheet_user )
@@ -884,56 +885,56 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
         if( strnicmp( Line, "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Title = CONV_FROM_UTF8( buf );
+            screen->m_Title = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Date = CONV_FROM_UTF8( buf );
+            screen->m_Date = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Revision = CONV_FROM_UTF8( buf );
+            screen->m_Revision = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Company = CONV_FROM_UTF8( buf );
+            screen->m_Company = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Commentaire1 = CONV_FROM_UTF8( buf );
+            screen->m_Commentaire1 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Commentaire2 = CONV_FROM_UTF8( buf );
+            screen->m_Commentaire2 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Commentaire3 = CONV_FROM_UTF8( buf );
+            screen->m_Commentaire3 = FROM_UTF8( buf );
             continue;
         }
 
         if( strnicmp( Line, "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, Line, 256 );
-            screen->m_Commentaire4 = CONV_FROM_UTF8( buf );
+            screen->m_Commentaire4 = FROM_UTF8( buf );
             continue;
         }
     }
@@ -1147,7 +1148,7 @@ int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
              DateAndTime( line ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n",
-             CONV_TO_UTF8( GetBuildVersion() ) );
+             TO_UTF8( GetBuildVersion() ) );
 
     GetBoard()->SynchronizeNetsAndNetClasses();
 

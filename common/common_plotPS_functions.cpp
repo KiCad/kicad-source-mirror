@@ -293,12 +293,12 @@ bool PS_PLOTTER::start_plot( FILE* fout )
 
     fputs( "%!PS-Adobe-3.0\n", output_file );    // Print header
 
-    fprintf( output_file, "%%%%Creator: %s\n", CONV_TO_UTF8( creator ) );
+    fprintf( output_file, "%%%%Creator: %s\n", TO_UTF8( creator ) );
 
     // A "newline" character ("\n") is not included in the following string,
     // because it is provided by the ctime() function.
     fprintf( output_file, "%%%%CreationDate: %s", ctime( &time1970 ) );
-    fprintf( output_file, "%%%%Title: %s\n", CONV_TO_UTF8( filename ) );
+    fprintf( output_file, "%%%%Title: %s\n", TO_UTF8( filename ) );
     fprintf( output_file, "%%%%Pages: 1\n" );
     fprintf( output_file, "%%%%PageOrder: Ascend\n" );
 
@@ -333,7 +333,7 @@ bool PS_PLOTTER::start_plot( FILE* fout )
 
     else  // ( if sheet->m_Name does not equal "User" )
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
-                 CONV_TO_UTF8( sheet->m_Name ),
+                 TO_UTF8( sheet->m_Name ),
                  wxRound( sheet->m_Size.y * 10 * CONV_SCALE ),
                  wxRound( sheet->m_Size.x * 10 * CONV_SCALE ) );
 

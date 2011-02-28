@@ -265,10 +265,10 @@ wxString EDA_FileSelector( const wxString& Title,
 
 #if 0 && defined (DEBUG)
     printf( "defaultpath=\"%s\" defaultname=\"%s\" Ext=\"%s\" Mask=\"%s\" flag=%d keep_working_directory=%d\n",
-            CONV_TO_UTF8( defaultpath ),
-            CONV_TO_UTF8( defaultname ),
-            CONV_TO_UTF8( Ext ),
-            CONV_TO_UTF8( Mask ),
+            TO_UTF8( defaultpath ),
+            TO_UTF8( defaultname ),
+            TO_UTF8( Ext ),
+            TO_UTF8( Mask ),
             flag,
             keep_working_directory );
 #endif

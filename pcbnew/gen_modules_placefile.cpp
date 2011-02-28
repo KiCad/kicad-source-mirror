@@ -99,7 +99,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         if( module->m_Attributs & MOD_VIRTUAL )
         {
             D( printf( "skipping module %s because it's virtual\n",
-                       CONV_TO_UTF8( module->GetReference() ) );)
+                       TO_UTF8( module->GetReference() ) );)
             continue;
         }
 
@@ -114,7 +114,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
             else
             {
                 printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
-                        CONV_TO_UTF8(module->GetReference()) );
+                        TO_UTF8(module->GetReference()) );
                 continue;
             }
 #else
@@ -217,7 +217,7 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         fputs( line, fpBack );
 
     Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "### Printed by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
+    sprintf( line, "### Printed by PcbNew version %s\n", TO_UTF8( Title ) );
     fputs( line, fpFront );
 
     if( doBoardBack )
@@ -229,12 +229,12 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( line, fpBack );
 
-    sprintf( line, "## Side : %s\n", CONV_TO_UTF8( frontLayerName ) );
+    sprintf( line, "## Side : %s\n", TO_UTF8( frontLayerName ) );
     fputs( line, fpFront );
 
     if( doBoardBack )
     {
-        sprintf( line, "## Side : %s\n", CONV_TO_UTF8( backLayerName ) );
+        sprintf( line, "## Side : %s\n", TO_UTF8( backLayerName ) );
         fputs( line, fpBack );
     }
 
@@ -249,8 +249,8 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
         wxPoint  module_pos;
         wxString ref = Liste[ii].m_Reference;
         wxString val = Liste[ii].m_Value;
-        sprintf( line, "%-8.8s %-16.16s ", CONV_TO_UTF8( ref ),
-                 CONV_TO_UTF8( val ) );
+        sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ),
+                 TO_UTF8( val ) );
 
         module_pos    = Liste[ii].m_Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
@@ -268,13 +268,13 @@ void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
 
         if( layer == LAYER_N_FRONT )
         {
-            strcat( line, CONV_TO_UTF8( frontLayerName ) );
+            strcat( line, TO_UTF8( frontLayerName ) );
             strcat( line, "\n" );
             fputs( line, fpFront );
         }
         else if( layer == LAYER_N_BACK )
         {
-            strcat( line, CONV_TO_UTF8( backLayerName ) );
+            strcat( line, TO_UTF8( backLayerName ) );
             strcat( line, "\n" );
             fputs( line, fpBack );
         }
@@ -361,7 +361,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     fputs( line, rptfile );
 
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "## Created by PcbNew version %s\n", CONV_TO_UTF8( Title ) );
+    sprintf( line, "## Created by PcbNew version %s\n", TO_UTF8( Title ) );
     fputs( line, rptfile );
     fputs( "## Unit = inches, Angle = deg.\n", rptfile );
 
@@ -387,16 +387,16 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
     for( ; Module != NULL; Module = Module->Next() )
     {
         sprintf( line, "$MODULE \"%s\"\n",
-                 CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+                 TO_UTF8( Module->m_Reference->m_Text ) );
         fputs( line, rptfile );
 
         sprintf( line, "reference \"%s\"\n",
-                 CONV_TO_UTF8( Module->m_Reference->m_Text ) );
+                 TO_UTF8( Module->m_Reference->m_Text ) );
         fputs( line, rptfile );
         sprintf( line, "value \"%s\"\n",
-                 CONV_TO_UTF8( Module->m_Value->m_Text ) );
+                 TO_UTF8( Module->m_Value->m_Text ) );
         fputs( line, rptfile );
-        sprintf( line, "footprint \"%s\"\n", CONV_TO_UTF8( Module->m_LibRef ) );
+        sprintf( line, "footprint \"%s\"\n", TO_UTF8( Module->m_LibRef ) );
         fputs( line, rptfile );
 
         msg = wxT( "attribut" );
@@ -407,7 +407,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         if( ( Module->m_Attributs & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
             msg += wxT( " none" );
         msg += wxT( "\n" );
-        fputs( CONV_TO_UTF8( msg ), rptfile );
+        fputs( TO_UTF8( msg ), rptfile );
 
         module_pos    = Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
@@ -468,7 +468,7 @@ void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
         }
 
         fprintf( rptfile, "$EndMODULE  %s\n\n",
-                 CONV_TO_UTF8(Module->m_Reference->m_Text ) );
+                 TO_UTF8(Module->m_Reference->m_Text ) );
     }
 
     /* Write board Edges */

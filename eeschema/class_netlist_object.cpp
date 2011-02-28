@@ -77,7 +77,7 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
     out << "<netItem ndx=\"" << ndx << '"' <<
     " type=\"" << ShowType( m_Type ) << '"' <<
     " netCode=\"" << GetNet() << '"' <<
-    " sheet=\"" << CONV_TO_UTF8( path ) << '"' <<
+    " sheet=\"" << TO_UTF8( path ) << '"' <<
     ">\n";
 
     out << " <start " << m_Start << "/> <end " << m_End << "/>\n";

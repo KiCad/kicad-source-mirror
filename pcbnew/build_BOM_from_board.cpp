@@ -90,7 +90,7 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     msg << _("Quantity") << wxT("\";\"");
     msg << _("Designation") << wxT("\";\"");
     msg << _("Supplier and ref") << wxT("\";\n" );
-    fprintf( FichBom, "%s", CONV_TO_UTF8( msg ) );
+    fprintf( FichBom, "%s", TO_UTF8( msg ) );
 
     // Build list
     CmpList           list;
@@ -127,7 +127,7 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
             comp->m_CmpCount = 1;
             list.Append( comp );
         }
-        
+
         // increment module
         Module = Module->Next();
     }
@@ -144,7 +144,7 @@ void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         msg << current->m_Pkg << wxT( "\";" );
         msg << current->m_CmpCount << wxT( ";\"" );
         msg << current->m_Val << wxT( "\";;;\n" );
-        fprintf( FichBom, "%s", CONV_TO_UTF8( msg ) );
+        fprintf( FichBom, "%s", TO_UTF8( msg ) );
 
         list.DeleteObject( current );
         delete (current);

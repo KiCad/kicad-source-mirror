@@ -718,7 +718,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             if( !pam )
             {
                 msg.Printf( wxT( "RS274X: aperture macro %s not found\n" ),
-                           CONV_TO_UTF8( am_lookup.name ) );
+                           TO_UTF8( am_lookup.name ) );
                 ReportMessage( msg );
                 ok = false;
                 break;
@@ -858,7 +858,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         else if( !isdigit(*text)  )     // Ill. symbol
         {
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": ill. symbol, line: \"%s\"" ),
-                        GetChars( am.name ), GetChars( CONV_FROM_UTF8( buff ) ) );
+                        GetChars( am.name ), GetChars( FROM_UTF8( buff ) ) );
             ReportMessage( msg );
             primitive_type = AMP_COMMENT;
         }
@@ -911,7 +911,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         default:
             // @todo, there needs to be a way of reporting the line number
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line: \"%s\"" ),
-                        GetChars( am.name ), primitive_type,  GetChars( CONV_FROM_UTF8( buff ) ) );
+                        GetChars( am.name ), primitive_type,  GetChars( FROM_UTF8( buff ) ) );
             ReportMessage( msg );
             return false;
         }

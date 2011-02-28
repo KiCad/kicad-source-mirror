@@ -271,7 +271,7 @@ void Diagnose( EDA_DRAW_PANEL* aPanel,
     char     ascii_buf[5];
     ascii_buf[4] = 0;
     memcpy( ascii_buf, &aNetItemRef->m_PinNum, 4 );
-    string_pinnum = CONV_FROM_UTF8( ascii_buf );
+    string_pinnum = FROM_UTF8( ascii_buf );
     cmp_ref = wxT( "?" );
 
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
@@ -330,7 +330,7 @@ void Diagnose( EDA_DRAW_PANEL* aPanel,
 
         wxString alt_string_pinnum, alt_cmp;
         memcpy( ascii_buf, &aNetItemTst->m_PinNum, 4 );
-        alt_string_pinnum = CONV_FROM_UTF8( ascii_buf );
+        alt_string_pinnum = FROM_UTF8( ascii_buf );
         alt_cmp = wxT( "?" );
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
             alt_cmp = ( (SCH_COMPONENT*) aNetItemTst->m_Link )->GetRef(
@@ -511,7 +511,7 @@ bool WriteDiagnosticERC( const wxString& FullFileName )
     DateAndTime( Line );
     msg = _( "ERC report" );
 
-    fprintf( OutErc, "%s (%s)\n", CONV_TO_UTF8( msg ), Line );
+    fprintf( OutErc, "%s (%s)\n", TO_UTF8( msg ), Line );
 
     SCH_SHEET_LIST SheetList;
 
@@ -527,7 +527,7 @@ bool WriteDiagnosticERC( const wxString& FullFileName )
             msg.Printf( _( "\n***** Sheet %s\n" ), GetChars( str ) );
         }
 
-        fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
+        fprintf( OutErc, "%s", TO_UTF8( msg ) );
 
         DrawStruct = Sheet->LastDrawList();
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
@@ -539,12 +539,12 @@ bool WriteDiagnosticERC( const wxString& FullFileName )
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
             msg = Marker->GetReporter().ShowReport();
-            fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
+            fprintf( OutErc, "%s", TO_UTF8( msg ) );
         }
     }
 
     msg.Printf( _( "\n >> Errors ERC: %d\n" ), g_EESchemaVar.NbErrorErc );
-    fprintf( OutErc, "%s", CONV_TO_UTF8( msg ) );
+    fprintf( OutErc, "%s", TO_UTF8( msg ) );
     fclose( OutErc );
 
     return TRUE;

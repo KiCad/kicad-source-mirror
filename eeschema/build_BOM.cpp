@@ -154,7 +154,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
                         (float) label->m_Pos.x / 1000,
                         (float) label->m_Pos.y / 1000 );
 
-            fputs( CONV_TO_UTF8( msg ), f );
+            fputs( TO_UTF8( msg ), f );
             break;
 
         case SCH_SHEET_LABEL_T:
@@ -168,7 +168,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
             if( jj > NET_TMAX )
                 jj = 4;
 
-            wxString labtype = CONV_FROM_UTF8( SheetLabelType[jj] );
+            wxString labtype = FROM_UTF8( SheetLabelType[jj] );
 
             msg.Printf( _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
                         GetChars( pinsheet->m_Text ),
@@ -177,7 +177,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
                         (float) pinsheet->m_Pos.x / 1000,
                         (float) pinsheet->m_Pos.y / 1000 );
 
-            fputs( CONV_TO_UTF8( msg ), f );
+            fputs( TO_UTF8( msg ), f );
         }
         break;
 
@@ -187,6 +187,6 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
     }
 
     msg = _( "#End labels\n" );
-    fputs( CONV_TO_UTF8( msg ), f );
+    fputs( TO_UTF8( msg ), f );
     return 0;
 }

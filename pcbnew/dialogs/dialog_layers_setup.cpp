@@ -370,7 +370,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
         {
             wxString lname = m_Pcb->GetLayerName( layer );
 
-            //D(printf("layerName[%d]=%s\n", layer, CONV_TO_UTF8( lname ) );)
+            //D(printf("layerName[%d]=%s\n", layer, TO_UTF8( lname ) );)
 
             if( ctl->IsKindOf( CLASSINFO(wxTextCtrl) ) )
                 ((wxTextCtrl*)ctl)->SetValue( lname );     // wxTextCtrl
@@ -647,7 +647,7 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 
         wxString name = getLayerName( layer );
 
-        //D(printf("name[%d]=%s\n", layer, CONV_TO_UTF8(name) );)
+        //D(printf("name[%d]=%s\n", layer, TO_UTF8(name) );)
 
         ctl = (wxTextCtrl*) getName( layer );
 

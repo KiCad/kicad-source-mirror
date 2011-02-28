@@ -39,7 +39,7 @@ bool DXF_PLOTTER::start_plot( FILE* fout )
     {
         wxString cname = ColorRefs[i].m_Name;
         fprintf( output_file, "0\nLAYER\n2\n%s\n70\n0\n62\n%d\n6\nCONTINUOUS\n",
-                 CONV_TO_UTF8( cname ), i + 1 );
+                 TO_UTF8( cname ), i + 1 );
     }
 
     /* End of layer table, begin entities */
@@ -97,17 +97,17 @@ void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
         wxString cname = ColorRefs[current_color].m_Name;
         if (!fill) {
           fprintf( output_file, "0\nCIRCLE\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%g\n",
-                  CONV_TO_UTF8( cname ),
+                  TO_UTF8( cname ),
                   centre.x, centre.y, radius );
         }
         if (fill == FILLED_SHAPE) {
             int r = (int)(radius*0.5);
             fprintf( output_file, "0\nPOLYLINE\n");
-            fprintf( output_file, "8\n%s\n66\n1\n70\n1\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
             fprintf( output_file, "40\n%g\n41\n%g\n", radius,radius);
-            fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
             fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x-r,centre.y);
-            fprintf( output_file, "0\nVERTEX\n8\n%s\n", CONV_TO_UTF8( cname ));
+            fprintf( output_file, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
             fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x+r,centre.y);
             fprintf( output_file, "0\nSEQEND\n");
     }
@@ -160,7 +160,7 @@ void DXF_PLOTTER::pen_to( wxPoint pos, char plume )
         /* DXF LINE */
         wxString cname = ColorRefs[current_color].m_Name;
         fprintf( output_file, "0\nLINE\n8\n%s\n10\n%d.0\n20\n%d.0\n11\n%d.0\n21\n%d.0\n",
-                 CONV_TO_UTF8( cname ),
+                 TO_UTF8( cname ),
                  pen_lastpos.x, pen_lastpos.y, pos.x, pos.y );
     }
     pen_lastpos = pos;
@@ -214,7 +214,7 @@ void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
     wxString cname = ColorRefs[current_color].m_Name;
     fprintf( output_file,
              "0\nARC\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%d.0\n50\n%d.0\n51\n%d.0\n",
-             CONV_TO_UTF8( cname ),
+             TO_UTF8( cname ),
              centre.x, centre.y, radius,
              StAngle / 10, EndAngle / 10 );
 }

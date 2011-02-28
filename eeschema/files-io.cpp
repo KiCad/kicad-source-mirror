@@ -326,7 +326,7 @@ void SCH_EDIT_FRAME::SaveProject()
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        D( printf( "SaveEEFile, %s\n", CONV_TO_UTF8( screen->GetFileName() ) ); )
+        D( printf( "SaveEEFile, %s\n", TO_UTF8( screen->GetFileName() ) ); )
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 

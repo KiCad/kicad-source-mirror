@@ -55,7 +55,7 @@ int main( int argc, char** argv )
 
     if( argc == 2 )
     {
-        filename = CONV_FROM_UTF8( argv[1] );
+        filename = FROM_UTF8( argv[1] );
     }
 
     try
@@ -65,7 +65,7 @@ int main( int argc, char** argv )
     }
     catch( IO_ERROR ioe )
     {
-        fprintf( stderr, "%s\n", CONV_TO_UTF8(ioe.errorText) );
+        fprintf( stderr, "%s\n", TO_UTF8(ioe.errorText) );
         failed = true;
     }
 

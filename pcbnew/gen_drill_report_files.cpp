@@ -203,7 +203,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             sprintf( line, "%2.2fmm / %2.3f\" ",
                      double (aToolListBuffer[ii].m_Diameter) * 0.00254,
                      double (aToolListBuffer[ii].m_Diameter) * 0.0001 );
-        msg = CONV_FROM_UTF8( line );
+        msg = FROM_UTF8( line );
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( aToolListBuffer[ii].m_TotalCount == 1 )
@@ -222,7 +222,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                      aToolListBuffer[ii].m_TotalCount -
                      aToolListBuffer[ii].m_OvalCount,
                      aToolListBuffer[ii].m_OvalCount );
-        msg += CONV_FROM_UTF8( line );
+        msg += FROM_UTF8( line );
         plotter->text( wxPoint( plotX, y ), BLACK,
                        msg,
                        0, wxSize( (int) ( CharSize * CharScale ), (int) ( CharSize * CharScale ) ),
@@ -301,7 +301,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
     bool     gen_through_holes = true;
 
 
-    fprintf( aFile, "Drill report for %s\n", CONV_TO_UTF8( aBoardFilename ) );
+    fprintf( aFile, "Drill report for %s\n", TO_UTF8( aBoardFilename ) );
     fprintf( aFile, "Created on %s\n", DateAndTime( line ) );
 
     // List which Drill Unit option had been selected for the associated
@@ -340,8 +340,8 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             }
 
             sprintf( line, "Drill report for holes from layer %s to layer %s\n",
-                    CONV_TO_UTF8( aPcb->GetLayerName( layer1 ) ),
-                    CONV_TO_UTF8( aPcb->GetLayerName( layer2 ) ) );
+                    TO_UTF8( aPcb->GetLayerName( layer1 ) ),
+                    TO_UTF8( aPcb->GetLayerName( layer2 ) ) );
         }
 
         fputs( line, aFile );

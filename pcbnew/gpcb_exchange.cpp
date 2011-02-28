@@ -348,7 +348,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Read pad number:
             if( params.GetCount() > 10 )
             {
-                strncpy( Pad->m_Padname, CONV_TO_UTF8( params[10] ), 4 );
+                strncpy( Pad->m_Padname, TO_UTF8( params[10] ), 4 );
             }
             Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
             Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
@@ -399,7 +399,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Read pad number:
             if( params.GetCount() > 9 )
             {
-                strncpy( Pad->m_Padname, CONV_TO_UTF8( params[9] ), 4 );
+                strncpy( Pad->m_Padname, TO_UTF8( params[9] ), 4 );
             }
             Pad->m_Pos.x   = ibuf[0];
             Pad->m_Pos.y   = ibuf[1];

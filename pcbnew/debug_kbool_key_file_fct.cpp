@@ -32,7 +32,7 @@ void CreateKeyFile()
     datetimestr = datetime.FormatISODate( )
                 + wxT("  ")
                 + datetime.FormatISOTime( );
-    strcpy(sDate_Time, CONV_TO_UTF8(datetimestr) );
+    strcpy(sDate_Time, TO_UTF8(datetimestr) );
 
     kdebugFile = fopen( KEYFILE_FILENAME, "wt" );
     if( kdebugFile )

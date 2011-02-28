@@ -60,7 +60,7 @@ bool GERBER_PLOTTER::start_plot( FILE* aFile )
     DateAndTime( Line );
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
     fprintf( output_file, "G04 (created by %s) date %s*\n",
-             CONV_TO_UTF8( Title ), Line );
+             TO_UTF8( Title ), Line );
 
     // Specify linear interpol (G01), unit = INCH (G70), abs format (G90):
     fputs( "G01*\nG70*\nG90*\n", output_file );

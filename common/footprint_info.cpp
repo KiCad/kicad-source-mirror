@@ -101,7 +101,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
 
                 line += 7;
                 FOOTPRINT_INFO*  ItemLib = new FOOTPRINT_INFO();
-                ItemLib->m_Module = CONV_FROM_UTF8( StrPurge( line ) );
+                ItemLib->m_Module = FROM_UTF8( StrPurge( line ) );
                 ItemLib->m_LibName = libname;
                 AddItem( ItemLib );
 
@@ -117,12 +117,12 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
                     {
                     /* KeyWords */
                     case (('K'<<8) + 'w'):
-                        ItemLib->m_KeyWord = CONV_FROM_UTF8( StrPurge( line + 3 ) );
+                        ItemLib->m_KeyWord = FROM_UTF8( StrPurge( line + 3 ) );
                     break;
 
                     /* Doc */
                     case (('C'<<8) + 'd'):
-                        ItemLib->m_Doc = CONV_FROM_UTF8( StrPurge( line + 3 ) );
+                        ItemLib->m_Doc = FROM_UTF8( StrPurge( line + 3 ) );
                     break;
                     }
                 }

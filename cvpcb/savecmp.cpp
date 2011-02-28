@@ -43,20 +43,20 @@ int CVPCB_MAINFRAME::SaveComponentList( const wxString& NetlistFullFileName )
         return 0;
 
     fprintf( dest, "%s", EnteteCmpMod );
-    fprintf( dest, " Created by %s", CONV_TO_UTF8( Title ) );
+    fprintf( dest, " Created by %s", TO_UTF8( Title ) );
     fprintf( dest, " date = %s\n", DateAndTime( Line ) );
 
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
         fprintf( dest, "\nBeginCmp\n" );
         fprintf( dest, "TimeStamp = %s;\n",
-                 CONV_TO_UTF8( component.m_TimeStamp ) );
+                 TO_UTF8( component.m_TimeStamp ) );
         fprintf( dest, "Reference = %s;\n",
-                 CONV_TO_UTF8( component.m_Reference ) );
+                 TO_UTF8( component.m_Reference ) );
         fprintf( dest, "ValeurCmp = %s;\n",
-                 CONV_TO_UTF8( component.m_Value ) );
+                 TO_UTF8( component.m_Value ) );
         fprintf( dest, "IdModule  = %s;\n",
-                 CONV_TO_UTF8( component.m_Module ) );
+                 TO_UTF8( component.m_Module ) );
         fprintf( dest, "EndCmp\n" );
     }
 
@@ -139,7 +139,7 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
 
             if( strnicmp( ident, "TimeStamp", 9 ) == 0 )
             {
-                timestamp = CONV_FROM_UTF8( data );
+                timestamp = FROM_UTF8( data );
                 timestamp.Trim( TRUE );
                 timestamp.Trim( FALSE );
                 continue;
@@ -147,7 +147,7 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
 
             if( strnicmp( ident, "Reference", 9 ) == 0 )
             {
-                namecmp = CONV_FROM_UTF8( data );
+                namecmp = FROM_UTF8( data );
                 namecmp.Trim( TRUE );
                 namecmp.Trim( FALSE );
                 continue;
@@ -155,7 +155,7 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
 
             if( strnicmp( ident, "ValeurCmp", 9 ) == 0 )
             {
-                valeur = CONV_FROM_UTF8( data );
+                valeur = FROM_UTF8( data );
                 valeur.Trim( TRUE );
                 valeur.Trim( FALSE );
                 continue;
@@ -163,7 +163,7 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
 
             if( strnicmp( ident, "IdModule", 8 ) == 0 )
             {
-                ilib = CONV_FROM_UTF8( data );
+                ilib = FROM_UTF8( data );
                 ilib.Trim( TRUE );
                 ilib.Trim( FALSE );
                 continue;

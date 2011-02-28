@@ -691,9 +691,9 @@ void SCH_REFERENCE::Annotate()
     if( m_NumRef < 0 )
         m_Ref += wxChar( '?' );
     else
-        m_Ref = CONV_TO_UTF8( GetRef() << m_NumRef );
+        m_Ref = TO_UTF8( GetRef() << m_NumRef );
 
-    m_RootCmp->SetRef( &m_SheetPath, CONV_FROM_UTF8( m_Ref.c_str() ) );
+    m_RootCmp->SetRef( &m_SheetPath, FROM_UTF8( m_Ref.c_str() ) );
     m_RootCmp->SetUnit( m_Unit );
     m_RootCmp->SetUnitSelection( &m_SheetPath, m_Unit );
 }

@@ -97,7 +97,7 @@ int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
 
     command  = strtok( NULL, " \t\n\r" );
     text     = strtok( NULL, " \t\n\r" );
-    mat_name = CONV_FROM_UTF8( text );
+    mat_name = FROM_UTF8( text );
     if( stricmp( command, "USE" ) == 0 )
     {
         for( material = m_Materials; material; material = material->Next() )

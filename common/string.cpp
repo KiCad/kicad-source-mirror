@@ -133,7 +133,7 @@ char* DateAndTime( char* aBuffer )
     wxString datetime;
 
     datetime = DateAndTime();
-    strcpy( aBuffer, CONV_TO_UTF8( datetime ) );
+    strcpy( aBuffer, TO_UTF8( datetime ) );
 
     return aBuffer;
 }

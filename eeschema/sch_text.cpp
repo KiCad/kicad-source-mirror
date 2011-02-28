@@ -424,7 +424,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 shape, m_Thickness, CONV_TO_UTF8( text ) ) == EOF )
+                 shape, m_Thickness, TO_UTF8( text ) ) == EOF )
     {
         success = false;
     }
@@ -477,7 +477,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    wxString val = CONV_FROM_UTF8( text );
+    wxString val = FROM_UTF8( text );
     for( ;; )
     {
         int i = val.find( wxT( "\\n" ) );
@@ -646,7 +646,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os )
                                  << " shape=\"" << m_Shape << '"'
                                  << " dangling=\"" << m_IsDangling << '"'
                                  << '>'
-                                 << CONV_TO_UTF8( m_Text )
+                                 << TO_UTF8( m_Text )
                                  << "</" << s.Lower().mb_str() << ">\n";
 }
 
@@ -719,7 +719,7 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x, shape,
-                 m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -772,7 +772,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    m_Text = CONV_FROM_UTF8( text );
+    m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
     SetSchematicTextOrientation( orient );
 
@@ -886,7 +886,7 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 SheetLabelType[m_Shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -938,7 +938,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    m_Text = CONV_FROM_UTF8( text );
+    m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
     SetSchematicTextOrientation( orient );
     m_Shape  = NET_INPUT;
@@ -1312,7 +1312,7 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Thickness, CONV_TO_UTF8( m_Text ) ) == EOF )
+                 SheetLabelType[m_Shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1364,7 +1364,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    m_Text = CONV_FROM_UTF8( text );
+    m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
     SetSchematicTextOrientation( orient );
     m_Shape  = NET_INPUT;

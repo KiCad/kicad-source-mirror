@@ -134,7 +134,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
 
     if( idx != 0 )
     {
-        wxString msg, Lineconv = CONV_FROM_UTF8( Line );
+        wxString msg, Lineconv = FROM_UTF8( Line );
         msg.Printf( _( "Unknown file format <%s>" ), Lineconv.GetData() );
         DisplayError( this, msg );
         return -3;
@@ -185,7 +185,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         while( Line[idx] != ' ' && Line[idx] )
             cbuffer[jj++] = Line[idx++];
         cbuffer[jj] = 0;
-        Cmp->m_TimeStamp = CONV_FROM_UTF8(cbuffer);
+        Cmp->m_TimeStamp = FROM_UTF8(cbuffer);
 
         /* search val/ref.lib */
         while( Line[idx] == ' ' )
@@ -197,7 +197,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         if( ptchar == 0 )
         {
             wxString msg = _( "Netlist error: " );
-            msg << CONV_FROM_UTF8( Line );
+            msg << FROM_UTF8( Line );
             DisplayError( this, msg );
             k = 0;
         }
@@ -213,7 +213,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         cbuffer[jj] = 0;
         // Copy footprint name:
         if( m_isEESchemaNetlist &&  strnicmp( cbuffer, "$noname", 7 ) != 0 )
-            Cmp->m_Module = CONV_FROM_UTF8(cbuffer);
+            Cmp->m_Module = FROM_UTF8(cbuffer);
 
         if( (Line[++idx] == '(') && (Line[k - 1] == ')' ) )
         {
@@ -240,7 +240,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
             cbuffer[jj++] = Line[idx];
         }
         cbuffer[jj] = 0;
-        Cmp->m_Reference = CONV_FROM_UTF8(cbuffer);
+        Cmp->m_Reference = FROM_UTF8(cbuffer);
 
         /* Search component value */
         while( Line[idx] == ' ' && Line[idx] )
@@ -255,7 +255,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
             cbuffer[jj++] = Line[idx];
         }
         cbuffer[jj] = 0;
-        Cmp->m_Value = CONV_FROM_UTF8(cbuffer);
+        Cmp->m_Value = FROM_UTF8(cbuffer);
 
         m_components.push_back( Cmp );
 
@@ -288,7 +288,7 @@ int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& 
 
         if( strnicmp( Line, "$component", 10 ) == 0 ) // New component ref found
         {
-            CmpRef = CONV_FROM_UTF8( Line + 11 );
+            CmpRef = FROM_UTF8( Line + 11 );
             CmpRef.Trim( true );
             CmpRef.Trim( false );
 
@@ -302,7 +302,7 @@ int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& 
         }
         else if( Cmp )
         {
-            wxString fp = CONV_FROM_UTF8( Line + 1 );
+            wxString fp = FROM_UTF8( Line + 1 );
             fp.Trim( false );
             fp.Trim( true );
             Cmp->m_FootprintFilter.Add( fp );
@@ -355,7 +355,7 @@ int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* Cmp )
                 cbuffer[jj++] = Line[i];
             }
             cbuffer[jj] =  0;
-            Pin->m_Number = CONV_FROM_UTF8(cbuffer);
+            Pin->m_Number = FROM_UTF8(cbuffer);
 
             /* Read netname */
             while( Line[i] == ' ' )
@@ -368,7 +368,7 @@ int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* Cmp )
                 cbuffer[jj++] = Line[i];
             }
             cbuffer[jj] =  0;
-            Pin->m_Net = CONV_FROM_UTF8(cbuffer);
+            Pin->m_Net = FROM_UTF8(cbuffer);
 
             Cmp->m_Pins.push_back( Pin );
         }

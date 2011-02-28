@@ -29,7 +29,7 @@
 #include "plot_common.h"
 #include "macros.h"
 
-#define PLOT_LINEWIDTH_MIN        40
+#define PLOT_LINEWIDTH_MIN        0
 #define PLOT_LINEWIDTH_MAX        200
 #define HPGL_PEN_DIAMETER_MIN     0
 #define HPGL_PEN_DIAMETER_MAX     100
@@ -377,7 +377,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             break;
         case T_outputdirectory:
             NeedSYMBOL();
-            aPcbPlotParams->outputDirectory = CONV_FROM_UTF8( CurText() );
+            aPcbPlotParams->outputDirectory = FROM_UTF8( CurText() );
             break;
         default:
             Unexpected( CurText() );

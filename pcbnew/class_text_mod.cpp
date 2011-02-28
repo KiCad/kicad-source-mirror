@@ -87,7 +87,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
                       m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
                       GetLayer(),
                       m_Italic ? 'I' : 'N',
-                      CONV_TO_UTF8( m_Text ) );
+                      TO_UTF8( m_Text ) );
 
     return ret > 20;
 }
@@ -158,7 +158,7 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
     SetDrawCoord();
     /* Read the "text" string. */
     ReadDelimitedText( BufLine, aLine, sizeof(BufLine) );
-    m_Text = CONV_FROM_UTF8( BufLine );
+    m_Text = FROM_UTF8( BufLine );
 
     // Test for a reasonable size:
     if( m_Size.x < TEXTS_MIN_SIZE )

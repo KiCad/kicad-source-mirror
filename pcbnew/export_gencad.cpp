@@ -375,7 +375,7 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
             orient = pad->m_Orient - module->m_Orient;
             NORMALIZE_ANGLE_POS( orient );
             fprintf( file, "PIN %s PAD%d %d %d %s %d %s",
-                     CONV_TO_UTF8( pinname ), pad->GetSubRatsnest(),
+                     TO_UTF8( pinname ), pad->GetSubRatsnest(),
                      pad->m_Pos0.x, -pad->m_Pos0.y,
                      layer, orient / 10, mirror );
             if( orient % 10 )
@@ -422,9 +422,9 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
         }
 
         fprintf( file, "COMPONENT %s\n",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ) );
+                 TO_UTF8( module->m_Reference->m_Text ) );
         fprintf( file, "DEVICE %s\n",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ) );
+                 TO_UTF8( module->m_Reference->m_Text ) );
         fprintf( file, "PLACE %d %d\n", mapXto( module->m_Pos.x ),
                  mapYto( module->m_Pos.y ) );
         fprintf( file, "LAYER %s\n", (module->flag) ? "BOTTOM" : "TOP" );
@@ -435,7 +435,7 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
         fputs( "\n", file );
 
         fprintf( file, "SHAPE %s %s %s\n",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ), mirror, flip );
+                 TO_UTF8( module->m_Reference->m_Text ), mirror, flip );
 
         /* creates texts (ref and value) */
         PtTexte = module->m_Reference;
@@ -448,8 +448,8 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
                      PtTexte->m_Size.x,
                      orient / 10, orient % 10,
                      mirror,
-                     CONV_TO_UTF8( layer ),
-                     CONV_TO_UTF8( PtTexte->m_Text )
+                     TO_UTF8( layer ),
+                     TO_UTF8( PtTexte->m_Text )
                      );
 
             fprintf( file, " 0 0 %d %d\n",
@@ -461,8 +461,8 @@ void CreateComponentsSection( FILE* file, BOARD* pcb )
 
         //put a comment:
         fprintf( file, "SHEET Part %s %s\n",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ),
-                 CONV_TO_UTF8( module->m_Value->m_Text ) );
+                 TO_UTF8( module->m_Reference->m_Text ),
+                 TO_UTF8( module->m_Value->m_Text ) );
     }
 
     fputs( "$ENDCOMPONENTS\n\n", file );
@@ -502,7 +502,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
         msg = wxT( "SIGNAL " ) + net->GetNetname();
 
-        fputs( CONV_TO_UTF8( msg ), file );
+        fputs( TO_UTF8( msg ), file );
         fputs( "\n", file );
 
         for( module = pcb->m_Modules; module != NULL; module = module->Next() )
@@ -518,7 +518,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
                             GetChars( module->m_Reference->m_Text ),
                             GetChars( padname ) );
 
-                fputs( CONV_TO_UTF8( msg ), file );
+                fputs( TO_UTF8( msg ), file );
                 fputs( "\n", file );
             }
         }
@@ -539,18 +539,18 @@ bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
     fputs( "GENCAD 1.4\n", file );
     msg = wxT( "USER " ) + wxGetApp().GetAppName() + wxT( " " ) +
           GetBuildVersion();
-    fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+    fputs( TO_UTF8( msg ), file ); fputs( "\n", file );
     msg = wxT( "DRAWING " ) + screen->GetFileName();
-    fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+    fputs( TO_UTF8( msg ), file ); fputs( "\n", file );
     msg = wxT( "REVISION " ) + screen->m_Revision + wxT( " " ) +
           screen->m_Date;
-    fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+    fputs( TO_UTF8( msg ), file ); fputs( "\n", file );
     msg.Printf( wxT( "UNITS USER %d" ), PCB_INTERNAL_UNIT );
-    fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+    fputs( TO_UTF8( msg ), file ); fputs( "\n", file );
     msg.Printf( wxT( "ORIGIN %d %d" ),
                 mapXto( frame->m_Auxiliary_Axis_Position.x ),
                 mapYto( frame->m_Auxiliary_Axis_Position.y ) );
-    fputs( CONV_TO_UTF8( msg ), file ); fputs( "\n", file );
+    fputs( TO_UTF8( msg ), file ); fputs( "\n", file );
     fputs( "INTERTRACK 0\n", file );
     fputs( "$ENDHEADER\n\n", file );
 
@@ -638,7 +638,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
                 netname = net->GetNetname();
             else
                 netname = wxT( "_noname_" );
-            fprintf( file, "ROUTE %s\n", CONV_TO_UTF8( netname ) );
+            fprintf( file, "ROUTE %s\n", TO_UTF8( netname ) );
         }
 
         if( old_width != track->m_Width )
@@ -653,7 +653,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             {
                 old_layer = track->GetLayer();
                 fprintf( file, "LAYER %s\n",
-                         CONV_TO_UTF8( GenCAD_Layer_Name[track->GetLayer() &
+                         TO_UTF8( GenCAD_Layer_Name[track->GetLayer() &
                                                          0x1F] ) );
             }
 
@@ -690,8 +690,8 @@ void CreateDevicesSection( FILE* file, BOARD* pcb )
     for( module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
         fprintf( file, "DEVICE %s\n",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ) );
-        fprintf( file, "PART %s\n", CONV_TO_UTF8( module->m_LibRef ) );
+                 TO_UTF8( module->m_Reference->m_Text ) );
+        fprintf( file, "PART %s\n", TO_UTF8( module->m_LibRef ) );
         fprintf( file, "TYPE %s\n", "UNKNOWN" );
         for( pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
@@ -703,7 +703,7 @@ void CreateDevicesSection( FILE* file, BOARD* pcb )
         }
 
         fprintf( file, "ATTRIBUTE %s\n",
-                 CONV_TO_UTF8( module->m_Value->m_Text ) );
+                 TO_UTF8( module->m_Value->m_Text ) );
     }
 
     fputs( "$ENDDEVICES\n\n", file );
@@ -824,7 +824,7 @@ void FootprintWriteShape( FILE* file, MODULE* module )
                                    // module / mirror axis and conventions)
 
     /* creates header: */
-    fprintf( file, "SHAPE %s\n", CONV_TO_UTF8( module->m_Reference->m_Text ) );
+    fprintf( file, "SHAPE %s\n", TO_UTF8( module->m_Reference->m_Text ) );
     fprintf( file, "INSERT %s\n",
              (module->m_Attributs & MOD_CMS) ? "SMD" : "TH" );
 

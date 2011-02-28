@@ -308,12 +308,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     // Creates header
     if( fprintf( aFile, "%s %s %d", EESCHEMA_FILE_STAMP,
                  SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0
-        || fprintf( aFile, "  date %s\n", CONV_TO_UTF8( DateAndTime() ) ) < 0 )
+        || fprintf( aFile, "  date %s\n", TO_UTF8( DateAndTime() ) ) < 0 )
         return false;
 
     BOOST_FOREACH( const CMP_LIBRARY& lib, CMP_LIBRARY::GetLibraryList() )
     {
-        if( fprintf( aFile, "LIBS:%s\n", CONV_TO_UTF8( lib.GetName() ) ) < 0 )
+        if( fprintf( aFile, "LIBS:%s\n", TO_UTF8( lib.GetName() ) ) < 0 )
             return false;
     }
 
@@ -328,17 +328,18 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
      * sheet ( ScreenNumber = 1 ) within the files
      */
 
-    if( fprintf( aFile, "$Descr %s %d %d\n", CONV_TO_UTF8( m_CurrentSheetDesc->m_Name ),
+    if( fprintf( aFile, "$Descr %s %d %d\n", TO_UTF8( m_CurrentSheetDesc->m_Name ),
                  m_CurrentSheetDesc->m_Size.x, m_CurrentSheetDesc->m_Size.y ) < 0
+        || fprintf( aFile, "encoding utf-8\n") < 0
         || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
-        || fprintf( aFile, "Title \"%s\"\n", CONV_TO_UTF8( m_Title ) ) < 0
-        || fprintf( aFile, "Date \"%s\"\n", CONV_TO_UTF8( m_Date ) ) < 0
-        || fprintf( aFile, "Rev \"%s\"\n", CONV_TO_UTF8( m_Revision ) ) < 0
-        || fprintf( aFile, "Comp \"%s\"\n", CONV_TO_UTF8( m_Company ) ) < 0
-        || fprintf( aFile, "Comment1 \"%s\"\n", CONV_TO_UTF8( m_Commentaire1 ) ) < 0
-        || fprintf( aFile, "Comment2 \"%s\"\n", CONV_TO_UTF8( m_Commentaire2 ) ) < 0
-        || fprintf( aFile, "Comment3 \"%s\"\n", CONV_TO_UTF8( m_Commentaire3 ) ) < 0
-        || fprintf( aFile, "Comment4 \"%s\"\n", CONV_TO_UTF8( m_Commentaire4 ) ) < 0
+        || fprintf( aFile, "Title \"%s\"\n", TO_UTF8( m_Title ) ) < 0
+        || fprintf( aFile, "Date \"%s\"\n", TO_UTF8( m_Date ) ) < 0
+        || fprintf( aFile, "Rev \"%s\"\n", TO_UTF8( m_Revision ) ) < 0
+        || fprintf( aFile, "Comp \"%s\"\n", TO_UTF8( m_Company ) ) < 0
+        || fprintf( aFile, "Comment1 \"%s\"\n", TO_UTF8( m_Commentaire1 ) ) < 0
+        || fprintf( aFile, "Comment2 \"%s\"\n", TO_UTF8( m_Commentaire2 ) ) < 0
+        || fprintf( aFile, "Comment3 \"%s\"\n", TO_UTF8( m_Commentaire3 ) ) < 0
+        || fprintf( aFile, "Comment4 \"%s\"\n", TO_UTF8( m_Commentaire4 ) ) < 0
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
         return false;
 

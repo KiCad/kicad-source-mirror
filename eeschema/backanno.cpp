@@ -102,8 +102,8 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeT
                 if( *cp == '"' )
                     *cp = 0;
 
-            wxString reference = CONV_FROM_UTF8( Ref );
-            wxString Footprint = CONV_FROM_UTF8( FootPrint );
+            wxString reference = FROM_UTF8( Ref );
+            wxString Footprint = FROM_UTF8( FootPrint );
             FillFootprintFieldForAllInstancesofComponent( reference,
                                                           Footprint,
                                                           aSetFieldAttributeToVisible );

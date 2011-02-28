@@ -431,7 +431,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
     {
         wxString tmp;
 
-        header = CONV_FROM_UTF8( line );
+        header = FROM_UTF8( line );
 
         wxStringTokenizer tkn( header );
 
@@ -628,7 +628,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
         /* Read one $CMP/$ENDCMP part entry from library: */
         name = strtok( line + 5, "\n\r" );
 
-        wxString cmpname = CONV_FROM_UTF8( name );
+        wxString cmpname = FROM_UTF8( name );
 
         entry = FindEntry( cmpname );
 
@@ -643,15 +643,15 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
                 switch( line[0] )
                 {
                 case 'D':
-                    entry->SetDescription( CONV_FROM_UTF8( text ) );
+                    entry->SetDescription( FROM_UTF8( text ) );
                     break;
 
                 case 'K':
-                    entry->SetKeyWords( CONV_FROM_UTF8( text ) );
+                    entry->SetKeyWords( FROM_UTF8( text ) );
                     break;
 
                 case 'F':
-                    entry->SetDocFileName( CONV_FROM_UTF8( text ) );
+                    entry->SetDocFileName( FROM_UTF8( text ) );
                     break;
                 }
             }
@@ -795,6 +795,10 @@ bool CMP_LIBRARY::SaveHeader( FILE* aFile )
     if( fprintf( aFile, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
                  LIB_VERSION_MAJOR, LIB_VERSION_MINOR, BufLine ) < 0 )
         succes = false;
+
+    if( fprintf( aFile, "#encoding utf-8\n") < 0 )
+        succes = false;
+
 #if 0
     if( ( fprintf( aFile, "$HEADER\n" ) < 0 )
         || ( fprintf( aFile, "TimeStamp %8.8lX\n", m_TimeStamp ) < 0 )

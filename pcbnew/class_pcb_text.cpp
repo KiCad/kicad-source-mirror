@@ -92,14 +92,14 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
         if( strncmp( line, "Te", 2 ) == 0 ) /* Text line (first line for multi line texts */
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
-            m_Text = CONV_FROM_UTF8( text );
+            m_Text = FROM_UTF8( text );
             continue;
         }
         if( strncmp( line, "nl", 2 ) == 0 ) /* next line of the current text */
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
             m_Text.Append( '\n' );
-            m_Text += CONV_FROM_UTF8( text );
+            m_Text += FROM_UTF8( text );
             continue;
         }
         if( strncmp( line, "Po", 2 ) == 0 )
@@ -165,7 +165,7 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
         if ( ii == 0 )
             fprintf( aFile, "Te \"%s\"\n", EscapedUTF8( txt ).c_str() );
         else
-            fprintf( aFile, "nl \"%s\"\n", CONV_TO_UTF8( txt ) );
+            fprintf( aFile, "nl \"%s\"\n", TO_UTF8( txt ) );
     }
 
     delete list;

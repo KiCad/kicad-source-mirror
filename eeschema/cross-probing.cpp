@@ -53,7 +53,7 @@ void RemoteCommand( const char* cmdline )
     if( strcmp( idcmd, "$PART:" ) != 0 )
         return;
 
-    part_ref = CONV_FROM_UTF8( text );
+    part_ref = FROM_UTF8( text );
 
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
@@ -69,7 +69,7 @@ void RemoteCommand( const char* cmdline )
     if( text == NULL )
         return;
 
-    msg = CONV_FROM_UTF8( text );
+    msg = FROM_UTF8( text );
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
@@ -112,14 +112,14 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
         if( LibItem == NULL )
             break;
 
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
     }
     break;
 
     case SCH_COMPONENT_T:
         LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
 
@@ -133,12 +133,12 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
         {
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );
-            sprintf( Line, "$PIN: %s $PART: %s", CONV_TO_UTF8( pinnum ),
-                     CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+            sprintf( Line, "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
+                     TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         }
         else
         {
-            sprintf( Line, "$PART: %s", CONV_TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
         }
 
         SendCommand( MSG_TO_PCB, Line );

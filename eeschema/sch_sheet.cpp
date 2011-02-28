@@ -131,14 +131,14 @@ bool SCH_SHEET::Save( FILE* aFile ) const
     /* Save schematic sheetname and filename. */
     if( !m_SheetName.IsEmpty() )
     {
-        if( fprintf( aFile, "F0 \"%s\" %d\n", CONV_TO_UTF8( m_SheetName ),
+        if( fprintf( aFile, "F0 \"%s\" %d\n", TO_UTF8( m_SheetName ),
                      m_SheetNameSize ) == EOF )
             return false;
     }
 
     if( !m_FileName.IsEmpty() )
     {
-        if( fprintf( aFile, "F1 \"%s\" %d\n", CONV_TO_UTF8( m_FileName ),
+        if( fprintf( aFile, "F1 \"%s\" %d\n", TO_UTF8( m_FileName ),
                      m_FileNameSize ) == EOF )
             return false;
     }
@@ -191,7 +191,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         aErrorMsg.Printf( wxT( " ** EESchema file sheet struct error at line %d, aborted\n" ),
                           aLine.LineNumber() );
 
-        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        aErrorMsg << FROM_UTF8( ((char*)aLine) );
         return false;
     }
 
@@ -227,7 +227,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         {
             aErrorMsg.Printf( wxT( "EESchema file sheet label F%d at line %d, aborted\n" ),
                               fieldNdx, aLine.LineNumber() );
-            aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+            aErrorMsg << FROM_UTF8( (char*) aLine );
             return false;
         }
 
@@ -239,7 +239,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
             {
                 aErrorMsg.Printf( wxT( "EESchema file sheet field F at line %d, aborted\n" ),
                                   aLine.LineNumber() );
-                aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+                aErrorMsg << FROM_UTF8( (char*) aLine );
                 return false;
             }
 
@@ -258,19 +258,19 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 aErrorMsg.Printf( wxT( "EESchema file sheet Label error line %d, aborted\n" ),
                                   aLine.LineNumber() );
 
-                aErrorMsg << CONV_FROM_UTF8( (char*) aLine );
+                aErrorMsg << FROM_UTF8( (char*) aLine );
             }
             if( size == 0 )
                 size = DEFAULT_SIZE_TEXT;
 
             if( fieldNdx == 0 )
             {
-                m_SheetName     = CONV_FROM_UTF8( Name1 );
+                m_SheetName     = FROM_UTF8( Name1 );
                 m_SheetNameSize = size;
             }
             else
             {
-                SetFileName( CONV_FROM_UTF8( Name1 ) );
+                SetFileName( FROM_UTF8( Name1 ) );
 
                 //printf( "in ReadSheetDescr : m_FileName = %s \n", Name1 );
                 m_FileNameSize = size;
@@ -296,7 +296,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         aErrorMsg.Printf( wxT( "**EESchema file end_sheet struct error at line %d, aborted\n" ),
                           aLine.LineNumber() );
-        aErrorMsg << CONV_FROM_UTF8( ((char*)aLine) );
+        aErrorMsg << FROM_UTF8( ((char*)aLine) );
         return false;
     }
 
@@ -999,7 +999,7 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os )
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">" << " sheet_name=\""
-                                 << CONV_TO_UTF8( m_SheetName ) << '"' << ">\n";
+                                 << TO_UTF8( m_SheetName ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )

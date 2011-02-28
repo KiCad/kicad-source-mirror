@@ -53,7 +53,7 @@ void RemoteCommand(  const char* cmdline )
 
     if( strcmp( idcmd, "$PART:" ) == 0 )
     {
-        modName = CONV_FROM_UTF8( text );
+        modName = FROM_UTF8( text );
 
         module = frame->GetBoard()->FindModuleByReference( modName );
 
@@ -73,13 +73,13 @@ void RemoteCommand(  const char* cmdline )
         D_PAD*   pad     = NULL;
         int      netcode = -1;
 
-        pinName = CONV_FROM_UTF8( text );
+        pinName = FROM_UTF8( text );
 
         text = strtok( NULL, " \n\r" );
         if( text && strcmp( text, "$PART:" ) == 0 )
             text = strtok( NULL, "\n\r" );
 
-        modName = CONV_FROM_UTF8( text );
+        modName = FROM_UTF8( text );
 
         module = frame->GetBoard()->FindModuleByReference( modName );
 
@@ -158,7 +158,7 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     case TYPE_MODULE:
         module = (MODULE*) objectToSync;
         sprintf( cmd, "$PART: \"%s\"",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ) );
+                 TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
     case TYPE_PAD:
@@ -166,8 +166,8 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
         sprintf( cmd, "$PART: \"%s\" $PAD: \"%s\"",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ),
-                 CONV_TO_UTF8( msg ) );
+                 TO_UTF8( module->m_Reference->m_Text ),
+                 TO_UTF8( msg ) );
         break;
 
     case TYPE_TEXTE_MODULE:
@@ -183,9 +183,9 @@ void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
             break;
 
         sprintf( cmd, "$PART: \"%s\" %s \"%s\"",
-                 CONV_TO_UTF8( module->m_Reference->m_Text ),
+                 TO_UTF8( module->m_Reference->m_Text ),
                  text_key,
-                 CONV_TO_UTF8( text_mod->m_Text ) );
+                 TO_UTF8( text_mod->m_Text ) );
         break;
 
     default:

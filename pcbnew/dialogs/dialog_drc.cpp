@@ -555,25 +555,25 @@ void DIALOG_DRC_CONTROL::writeReport( FILE* fp )
     int count;
 
     fprintf( fp, "** Drc report for %s **\n",
-             CONV_TO_UTF8( m_Parent->GetScreen()->GetFileName() ) );
+             TO_UTF8( m_Parent->GetScreen()->GetFileName() ) );
 
     wxDateTime now = wxDateTime::Now();
 
-    fprintf( fp, "** Created on %s **\n", CONV_TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
+    fprintf( fp, "** Created on %s **\n", TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
 
     count = m_ClearanceListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d DRC errors **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, "%s", CONV_TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport()) );
+        fprintf( fp, "%s", TO_UTF8( m_ClearanceListBox->GetItem( i )->ShowReport()) );
 
     count = m_UnconnectedListBox->GetItemCount();
 
     fprintf( fp, "\n** Found %d unconnected pads **\n", count );
 
     for( int i = 0;  i<count;  ++i )
-        fprintf( fp, "%s", CONV_TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport() ) );
+        fprintf( fp, "%s", TO_UTF8( m_UnconnectedListBox->GetItem( i )->ShowReport() ) );
 
     fprintf( fp, "\n** End of Report **\n" );
 }

@@ -422,7 +422,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
     {
         FILE* file = wxFopen( *aFullFileName, wxT( "wt" ) );
         if( file )
-            fputs( CONV_TO_UTF8( msg ), file );
+            fputs( TO_UTF8( msg ), file );
         else
         {
             msg.Printf( wxT( "Unable to write file %s" ), GetChars( *aFullFileName ) );

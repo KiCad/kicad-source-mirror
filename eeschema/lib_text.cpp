@@ -44,7 +44,7 @@ bool LIB_TEXT::Save( FILE* ExportFile )
     text.Replace( wxT( " " ), wxT( "~" ) );
 
     if( fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient, m_Pos.x, m_Pos.y,
-                 m_Size.x, m_Attributs, m_Unit, m_Convert, CONV_TO_UTF8( text ) ) < 0 )
+                 m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) ) < 0 )
         return false;
     if( fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
                  ( m_Bold > 0 ) ? 1 : 0 ) < 0 )
@@ -130,7 +130,7 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
     }
 
     /* Convert '~' to spaces. */
-    m_Text = CONV_FROM_UTF8( buf );
+    m_Text = FROM_UTF8( buf );
     m_Text.Replace( wxT( "~" ), wxT( " " ) );
 
     return true;

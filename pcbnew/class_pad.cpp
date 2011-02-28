@@ -467,7 +467,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
 
             /* read Netname */
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
-            SetNetname( CONV_FROM_UTF8( StrPurge( BufLine ) ) );
+            SetNetname( FROM_UTF8( StrPurge( BufLine ) ) );
         break;
 
         case 'P':
@@ -558,7 +558,7 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "At %s N %8.8X\n", texttype, m_Masque_Layer );
 
-    fprintf( aFile, "Ne %d \"%s\"\n", GetNet(), CONV_TO_UTF8( m_Netname ) );
+    fprintf( aFile, "Ne %d \"%s\"\n", GetNet(), TO_UTF8( m_Netname ) );
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 

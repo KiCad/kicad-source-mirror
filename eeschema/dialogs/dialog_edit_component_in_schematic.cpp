@@ -342,7 +342,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     D( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
-               CONV_TO_UTF8( tmp.m_Text ), CONV_TO_UTF8( tmp.m_Name ) ); )
+               TO_UTF8( tmp.m_Text ), TO_UTF8( tmp.m_Name ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -495,7 +495,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
         printf( "m_FieldsBuf[%d] (x=%-3d, y=%-3d) name:%s\n", i, m_FieldsBuf[i].m_Pos.x,
-                m_FieldsBuf[i].m_Pos.y, CONV_TO_UTF8(m_FieldsBuf[i].m_Name) );
+                m_FieldsBuf[i].m_Pos.y, TO_UTF8(m_FieldsBuf[i].m_Name) );
     }
 #endif
 

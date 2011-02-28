@@ -189,7 +189,7 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     GetScreen()->ClearUndoRedoList();
 
     OnModify();
-    
+
     // Clear flags and pointeurs to avoid inconsistencies
     GetBoard()->m_Status_Pcb = 0;
     SetCurItem( NULL );
@@ -430,22 +430,22 @@ MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
     if( ( text = strtok( Line, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
-        TimeStampPath = CONV_FROM_UTF8( text );
+        TimeStampPath = FROM_UTF8( text );
 
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
-        TextNameLibMod = CONV_FROM_UTF8( text );
+        TextNameLibMod = FROM_UTF8( text );
 
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = 1;
     else
-        TextCmpName = CONV_FROM_UTF8( text );
+        TextCmpName = FROM_UTF8( text );
 
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
         Error = -1;
     else
-        TextValeur = CONV_FROM_UTF8( text );
+        TextValeur = FROM_UTF8( text );
 
     if( Error > 0 )
         return NULL;
@@ -612,7 +612,7 @@ int SetPadNetName( char*       Text,
         {
             trouve = true;
             if( *TextNetName != '?' )
-                pad->SetNetname( CONV_FROM_UTF8( TextNetName ) );
+                pad->SetNetname( FROM_UTF8( TextNetName ) );
             else
                 pad->SetNetname( wxEmptyString );
         }
@@ -622,7 +622,7 @@ int SetPadNetName( char*       Text,
     {
         if( aMessageWindow )
         {
-            wxString pin_name = CONV_FROM_UTF8( TextPinName );
+            wxString pin_name = FROM_UTF8( TextPinName );
             Msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
                         GetChars( Module->m_Reference->m_Text ),
                         GetChars( pin_name ) );
@@ -838,7 +838,7 @@ int BuildFootprintsListFromNetlistFile( const wxString& aNetlistFullFilename,
             if( ( Text = strtok( NULL, " ()\t\n" ) ) == NULL )
                 Error = 1;
             nb_modules_lus++;
-            aBufName.Add( CONV_FROM_UTF8( Text ) );
+            aBufName.Add( FROM_UTF8( Text ) );
             continue;
         }
 
@@ -925,7 +925,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
                 ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
-                    refcurrcmp = CONV_FROM_UTF8( ptcar );
+                    refcurrcmp = FROM_UTF8( ptcar );
                 continue;
             }
 
@@ -934,7 +934,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
                 ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
-                    idmod = CONV_FROM_UTF8( ptcar );
+                    idmod = FROM_UTF8( ptcar );
                 continue;
             }
             if( strnicmp( Line, "TimeStamp =", 11 ) == 0 )
@@ -942,7 +942,7 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
                 ptcar = Line + 11;
                 ptcar = strtok( ptcar, " =;\t\n" );
                 if( ptcar )
-                    timestamp = CONV_FROM_UTF8( ptcar );
+                    timestamp = FROM_UTF8( ptcar );
             }
         }
 
