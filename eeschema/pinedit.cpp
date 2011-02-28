@@ -38,42 +38,6 @@ static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
 
 
-void LIB_EDIT_FRAME::OnRotatePin( wxCommandEvent& event )
-{
-
-	// Check, if the item is a pin, else return
-	if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
-		return;
-
-	// save flags to restore them after rotating
-	int item_flags = m_drawItem->m_Flags;
-	LIB_PIN* pin = (LIB_PIN*) m_drawItem;
-
-	// Save old pin orientation
-	LastPinOrient = pin->GetOrientation();
-
-    if( !pin->InEditMode() )
-        SaveCopyInUndoList( pin->GetParent() );
-
-	// Get the actual pin orientation index
-	int orientationIndex = pin->GetOrientationCodeIndex( pin->GetOrientation() );
-
-	// Compute the next orientation, swap lower two bits for the right order
-	orientationIndex = ((orientationIndex & 2) >> 1) | ((orientationIndex & 1) << 1);
-	orientationIndex = orientationIndex + 1;
-	orientationIndex = ((orientationIndex & 2) >> 1) | ((orientationIndex & 1) << 1);
-
-	// Set the new orientation
-	pin->SetOrientation( pin->GetOrientationCode( orientationIndex ) );
-
-	OnModify( );
-	pin->DisplayInfo( this );
-	DrawPanel->Refresh();
-
-	// Restore pin flags
-	pin->m_Flags = item_flags;
-}
-
 void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 {
     if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
@@ -129,12 +93,8 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     }
 
     /* Save the pin properties to use for the next new pin. */
-    LastPinNameSize = ReturnValueFromString( g_UserUnit,
-                                             dlg.GetNameTextSize(),
-                                             m_InternalUnits );
-    LastPinNumSize = ReturnValueFromString( g_UserUnit,
-                                            dlg.GetNumberTextSize(),
-                                            m_InternalUnits );
+    LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize(), m_InternalUnits );
+    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetNumberTextSize(), m_InternalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
     LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(), m_InternalUnits );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
@@ -220,7 +180,7 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
 
     newpos = GetScreen()->GetCrossHairPosition( true );
 
-    // Tst for an other pin in same new position:
+    // Test for an other pin in same new position:
     for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin == CurrentPin || newpos != Pin->GetPosition() || Pin->m_Flags )
@@ -302,11 +262,14 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
     /* Mark pins for moving. */
     Pin = m_component->GetNextPin();
+
     for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
         Pin->m_Flags = 0;
+
         if( Pin == CurrentPin )
             continue;
+
         if( ( Pin->GetPosition() == CurrentPin->GetPosition() )
             && ( Pin->GetOrientation() == CurrentPin->GetOrientation() )
             && ( g_EditPinByPinIsOn == false ) )
@@ -483,7 +446,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
 
 /*  Depending on "id":
  * - Change pin text size (name or num) (range 10 .. 1000 mil)
- * - Change pin lenght.
+ * - Change pin length.
  *
  * If Pin is selected ( .m_flag == IS_SELECTED ) only the other selected
  * pins are modified
@@ -531,8 +494,8 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
             break;
         }
 
-        ( ( LIB_DRAW_ITEM* )Pin )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
-                                         &showPinText, DefaultTransform );
+        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, &showPinText,
+                   DefaultTransform );
     }
 }
 
@@ -690,7 +653,7 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
             ( (Pin->GetPosition().y % MIN_GRID_SIZE) == 0 ) )
             continue;
 
-        // A pin is foun here off grid
+        // A pin is found here off grid
         offgrid_error++;
         wxString stringPinNum;
         Pin->ReturnPinStringNum( stringPinNum );

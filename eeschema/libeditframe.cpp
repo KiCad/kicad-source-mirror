@@ -128,12 +128,12 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, LIB_EDIT_FRAME::SetLanguage )
 
-  /* Context menu events and commands. */
+    /* Context menu events and commands. */
     EVT_MENU( ID_LIBEDIT_EDIT_PIN, LIB_EDIT_FRAME::OnEditPin )
-    EVT_MENU( ID_LIBEDIT_ROTATE_PIN, LIB_EDIT_FRAME::OnRotatePin )
+    EVT_MENU( ID_LIBEDIT_ROTATE_ITEM, LIB_EDIT_FRAME::OnRotateItem )
 
     EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
-                    ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT,
+                    ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
                     LIB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
@@ -618,7 +618,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
-    case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
@@ -630,7 +629,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-    case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
         break;
 
     case ID_POPUP_LIBEDIT_CANCEL_EDITING:
@@ -752,37 +750,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         break;
 
-    case ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT:
-        if( m_drawItem == NULL && m_drawItem->Type() != LIB_TEXT_T )
-            break;
-        DrawPanel->MoveCursorToCrossHair();
-        if( !m_drawItem->InEditMode() )
-        {
-            SaveCopyInUndoList( m_component );
-            m_drawItem->SetUnit( m_unit );
-        }
-
-        m_drawItem->Rotate();
-        DrawPanel->Refresh();
-        break;
-
-    case ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM:
-    {
-        if( m_drawItem == NULL || ( m_drawItem->Type() != LIB_FIELD_T ) )
-            break;
-        DrawPanel->MoveCursorToCrossHair();
-
-        if( !m_drawItem->InEditMode() )
-        {
-            SaveCopyInUndoList( m_component );
-            m_drawItem->SetUnit( m_unit );
-        }
-
-        m_drawItem->Rotate();
-        DrawPanel->Refresh();
-        break;
-    }
-
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
         if( m_drawItem == NULL )
             break;
@@ -854,7 +821,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
-
 }
 
 
@@ -1090,6 +1056,43 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     }
 
     DrawPanel->m_IgnoreMouseEvents = false;
+}
+
+
+void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
+{
+    if( m_drawItem == NULL )
+        return;
+
+    if( !m_drawItem->InEditMode() )
+    {
+        SaveCopyInUndoList( m_component );
+        m_drawItem->SetUnit( m_unit );
+    }
+
+    m_drawItem->Rotate();
+	OnModify();
+    DrawPanel->Refresh();
+
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
+        m_lastDrawItem = NULL;
+}
+
+
+LIB_DRAW_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition )
+{
+    if( m_component == NULL )
+        return NULL;
+
+    LIB_DRAW_ITEM* item = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
+                                                       aPosition );
+
+    wxPoint pos = GetScreen()->GetNearestGridPosition( aPosition );
+
+    if( item == NULL && aPosition != pos )
+        item = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, pos );
+
+    return item;
 }
 
 

@@ -1798,6 +1798,21 @@ int LIB_PIN::GetOrientationCodeIndex( int code )
 }
 
 
+void LIB_PIN::Rotate()
+{
+	// Get the actual pin orientation index
+	int i = GetOrientationCodeIndex( GetOrientation() );
+
+	// Compute the next orientation, swap lower two bits for the right order
+	i = ((i & 2) >> 1) | ((i & 1) << 1);
+	i = i + 1;
+	i = ((i & 2) >> 1) | ((i & 1) << 1);
+
+	// Set the new orientation
+	SetOrientation( GetOrientationCode( i ) );
+}
+
+
 wxArrayString LIB_PIN::GetStyleNames( void )
 {
     wxArrayString tmp;

@@ -151,7 +151,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, edit_text_xpm );
 
         msg = AddHotkeyName( _( "Rotate Text" ), s_Libedit_Hokeys_Descr, HK_ROTATE );
-        ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT, msg, edit_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, edit_text_xpm );
 
         if( DrawEntry->m_Flags == 0 )
         {
@@ -203,7 +203,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST,  msg, move_field_xpm );
         }
         msg = AddHotkeyName( _( "Field Rotate" ), s_Libedit_Hokeys_Descr, HK_ROTATE );
-        ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM, msg, rotate_field_xpm );
+        ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, rotate_field_xpm );
         msg = AddHotkeyName( _( "Field Edit" ), s_Libedit_Hokeys_Descr, HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM, msg, edit_text_xpm );
         break;
@@ -240,7 +240,7 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
     ADD_MENUITEM( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, edit_xpm );
 
     msg = AddHotkeyName( _( "Rotate Pin " ), s_Libedit_Hokeys_Descr, HK_ROTATE );
-    ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_PIN, msg, rotate_pin_xpm );
+    ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, rotate_pin_xpm );
 
     if( not_in_move )
     {

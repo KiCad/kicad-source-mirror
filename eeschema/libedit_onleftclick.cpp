@@ -83,7 +83,9 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        if( LocateItemUsingCursor( aPosition ) )
+        m_drawItem = LocateItemUsingCursor( aPosition );
+
+        if( m_drawItem )
             deleteItem( DC );
         else
             DisplayCmpDoc();

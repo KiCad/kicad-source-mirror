@@ -74,7 +74,6 @@ public:
     void        OnCheckComponent( wxCommandEvent& event );
     void        OnSelectBodyStyle( wxCommandEvent& event );
     void        OnEditPin( wxCommandEvent& event );
-    void        OnRotatePin( wxCommandEvent& event );
 
     void        OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void        OnUpdateEditingPart( wxUpdateUIEvent& event );
@@ -224,6 +223,12 @@ private:
     bool           LoadOneLibraryPartAux( LIB_ALIAS* LibEntry, CMP_LIBRARY* Library );
 
     void           DisplayCmpDoc();
+
+    /**
+     * Function OnRotateItem
+     * rotates the current item.
+     */
+    void OnRotateItem( wxCommandEvent& aEvent );
 
     /**
      * Function deleteItem

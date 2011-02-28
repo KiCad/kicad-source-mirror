@@ -158,12 +158,12 @@ public:
 
     wxPoint ReturnPinEndPoint() const;
 
-/**
- * Function ReturnPinDrawOrient
- * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
- *  according to its orientation and the matrix transform (rot, mirror) \a aTransform
- * @param aTransform = transform matrix
- */
+    /**
+     * Function ReturnPinDrawOrient
+     * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
+     * according to its orientation and the matrix transform (rot, mirror) \a aTransform
+     * @param aTransform = transform matrix
+     */
     int ReturnPinDrawOrient( const TRANSFORM& aTransform );
 
     /**
@@ -189,7 +189,7 @@ public:
      */
     static wxString ReturnPinStringNum( long aPinNum );
 
-    void         SetPinNumFromString( wxString& aBuffer );
+    void SetPinNumFromString( wxString& aBuffer );
 
     wxString GetName() const { return m_name; }
 
@@ -242,6 +242,8 @@ public:
      * @param aOrientation - The orientation of the pin.
      */
     void SetOrientation( int aOrientation );
+
+    void Rotate();
 
     int GetShape() const { return m_shape; }
 

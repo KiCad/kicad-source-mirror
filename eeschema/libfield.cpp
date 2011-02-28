@@ -152,22 +152,3 @@ this component?" ),
     OnModify();
     UpdateAliasSelectList();
 }
-
-
-LIB_DRAW_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition )
-{
-    if( m_component == NULL )
-        return NULL;
-
-    if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
-    {
-        m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, aPosition );
-
-        wxPoint pos = GetScreen()->GetNearestGridPosition( aPosition );
-
-        if( m_drawItem == NULL && aPosition != pos )
-            m_drawItem = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, pos );
-    }
-
-    return m_drawItem;
-}

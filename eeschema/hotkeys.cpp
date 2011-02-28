@@ -959,7 +959,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
          break;
 
     case HK_EDIT:
-        m_drawItem = LocateItemUsingCursor( aPosition );
+        if( itemInEdit )
+            m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )
         {
@@ -991,30 +992,13 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:
-        m_drawItem = LocateItemUsingCursor( aPosition );
+        if( m_drawItem == NULL )
+            m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )
         {
-            switch( m_drawItem->Type() )
-            {
-            case LIB_PIN_T:
-                cmd.SetId( ID_LIBEDIT_ROTATE_PIN );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            case LIB_TEXT_T:
-                cmd.SetId( ID_POPUP_LIBEDIT_ROTATE_GRAPHIC_TEXT );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            case LIB_FIELD_T:
-                cmd.SetId( ID_POPUP_LIBEDIT_FIELD_ROTATE_ITEM );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            default:
-                break;
-            }
+            cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 
@@ -1024,7 +1008,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DELETE:
-        m_drawItem = LocateItemUsingCursor( aPosition );
+        if( !itemInEdit )
+            m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {
@@ -1035,13 +1020,16 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
-        m_drawItem = LocateItemUsingCursor( aPosition );
-
-        if( m_drawItem && !m_drawItem->InEditMode() )
+        if( !itemInEdit )
         {
-            wxCommandEvent evt;
-            evt.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
-            Process_Special_Functions( evt );
+            m_drawItem = LocateItemUsingCursor( aPosition );
+
+            if( m_drawItem )
+            {
+                wxCommandEvent evt;
+                evt.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
+                Process_Special_Functions( evt );
+            }
         }
         break;
 
