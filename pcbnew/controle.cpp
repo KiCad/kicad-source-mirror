@@ -323,7 +323,7 @@ void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int a
 
         if( Magnetize( m_Pcb, this, GetToolId(), grid, on_grid, &pos ) )
         {
-            GetScreen()->SetCrossHairPosition( pos );
+            GetScreen()->SetCrossHairPosition( pos, false );
         }
         else
         {
@@ -342,9 +342,9 @@ void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int a
     if( oldpos != GetScreen()->GetCrossHairPosition() )
     {
         pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos );
+        GetScreen()->SetCrossHairPosition( oldpos, false );
         DrawPanel->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos );
+        GetScreen()->SetCrossHairPosition( pos, false );
         DrawPanel->CrossHairOn( aDC );
 
         if( DrawPanel->IsMouseCaptured() )
