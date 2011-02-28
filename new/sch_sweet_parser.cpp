@@ -180,6 +180,9 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
         if( tok == T_LEFT )
             tok = NextTok();
 
+        // because exceptions are thrown, any 'new' allocation has to be stored
+        // somewhere other than on the stack, ASAP.
+
         switch( tok )
         {
         default:
@@ -233,6 +236,20 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             parseArc( arc );
             break;
 
+        case T_bezier:
+            BEZIER* bezier;
+            bezier = new BEZIER( me );
+            me->graphics.push_back( bezier );
+            parseBezier( bezier );
+            break;
+
+        case T_text:
+            GR_TEXT* text;
+            text = new GR_TEXT( me );
+            me->graphics.push_back( text );
+            parseText( text );
+            break;
+
         case T_value:
             if( contains & PB(VALUE) )
                 Duplicate( tok );
@@ -262,7 +279,6 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             // @todo handle optional (effects..) here
             NeedRIGHT();
             break;
-
 
     /*
         case T_keywords:
@@ -295,11 +311,6 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
         case T_route_pin_swap:
             break;
 
-        case T_bezier:
-            break;
-
-        case T_text:
-            break;
     */
 
         // Not sure about reference in a PART, comes in at COMPONENT object.
@@ -321,7 +332,9 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
 void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
 {
     T       tok;
-    int     count;
+    int     count = 0;
+    bool    sawWidth = false;
+    bool    sawFill  = false;
 
     NeedLEFT();
     while( ( tok = NextTok() ) != T_RIGHT )
@@ -332,13 +345,18 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
         switch( tok )
         {
         case T_line_width:
+            if( sawWidth )
+                Duplicate( tok );
             NeedNUMBER( "line_width" );
             me->lineWidth = strtod( CurText(), NULL );
             NeedRIGHT();
+            sawWidth = true;
             break;
 
         case T_pts:
-            for( count=0;  ( tok = NextTok() ) != T_RIGHT;  ++count )
+            if( count )
+                Duplicate( tok );
+            for(  ;  ( tok = NextTok() ) != T_RIGHT;  ++count )
             {
                 if( tok != T_LEFT )
                     Expecting( T_LEFT );
@@ -357,16 +375,38 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
 
                 NeedRIGHT();
             }
+            if( count < 2 )
+                Expecting( ">= 2 pts" );
             break;
 
         case T_fill:
-            // @todo figure this out, maybe spit into polygon
+            if( sawFill )
+                Duplicate( tok );
+            tok = NeedSYMBOL();
+            switch( tok )
+            {
+            case T_none:
+            case T_filled:
+            case T_transparent:
+                me->fillType = tok;
+                break;
+            default:
+                Expecting( "none|filled|transparent" );
+            }
+            NeedRIGHT();
+            sawFill = true;
             break;
 
         default:
             Expecting( "pts|line_width|fill" );
         }
     }
+}
+
+
+void SWEET_PARSER::parseBezier( BEZIER* me )
+{
+    parsePolyLine( me );
 }
 
 
@@ -391,8 +431,8 @@ void SWEET_PARSER::parseRectangle( RECTANGLE* me )
                 Duplicate( tok );
             NeedNUMBER( "line_width" );
             me->lineWidth = strtod( CurText(), NULL );
-            sawWidth = true;
             NeedRIGHT();
+            sawWidth = true;
             break;
 
         case T_fill:
@@ -463,8 +503,8 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
                 Duplicate( tok );
             NeedNUMBER( "line_width" );
             me->lineWidth = strtod( CurText(), NULL );
-            sawWidth = true;
             NeedRIGHT();
+            sawWidth = true;
             break;
 
         case T_fill:
@@ -535,8 +575,8 @@ void SWEET_PARSER::parseArc( ARC* me )
                 Duplicate( tok );
             NeedNUMBER( "line_width" );
             me->lineWidth = strtod( CurText(), NULL );
-            sawWidth = true;
             NeedRIGHT();
+            sawWidth = true;
             break;
 
         case T_fill:
@@ -604,3 +644,121 @@ void SWEET_PARSER::parseArc( ARC* me )
         }
     }
 }
+
+
+void SWEET_PARSER::parseText( GR_TEXT* me )
+{
+    T       tok;
+    bool    sawAt   = false;
+    bool    sawFill = false;
+    bool    sawFont = false;
+    bool    sawVis  = false;
+    bool    sawJust = false;
+
+    NeedSYMBOLorNUMBER();
+    me->text = FROM_UTF8( CurText() );
+
+    NeedLEFT();
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+            tok = NextTok();
+
+        switch( tok )
+        {
+        case T_at:
+            if( sawAt )
+                Duplicate( tok );
+            NeedNUMBER( "at x" );
+            me->pos.x = internal( CurText() );
+            NeedNUMBER( "at y" );
+            me->pos.y = internal( CurText() );
+
+            tok = NextTok();
+            if( tok == T_NUMBER )
+            {
+                me->angle = strtod( CurText(), NULL );
+                tok = NextTok();
+            }
+            if( tok != T_RIGHT )
+                Expecting( T_RIGHT );
+            sawAt = true;
+            break;
+
+        case T_fill:
+            if( sawFill )
+                Duplicate( tok );
+            tok = NeedSYMBOL();
+            switch( tok )
+            {
+            case T_none:
+            case T_filled:
+            case T_transparent:
+                me->fillType = tok;
+                break;
+            default:
+                Expecting( "none|filled|transparent" );
+            }
+            NeedRIGHT();
+            sawFill = true;
+            break;
+
+        case T_justify:
+            if( sawJust )
+                Duplicate( tok );
+            tok = NeedSYMBOL();
+            switch( tok )
+            {
+            case T_center:
+            case T_right:
+            case T_left:
+                me->hjustify = tok;
+                break;
+            default:
+                Expecting( "center|right|left" );
+            }
+
+            tok = NeedSYMBOL();
+            switch( tok )
+            {
+            case T_center:
+            case T_top:
+            case T_bottom:
+                me->vjustify = tok;
+                break;
+            default:
+                Expecting( "center|top|bottom" );
+            }
+            NeedRIGHT();
+            sawJust = true;
+            break;
+
+        case T_visible:
+            if( sawVis )
+                Duplicate( tok );
+            tok = NeedSYMBOL();
+            switch( tok )
+            {
+            case T_yes:
+            case T_no:
+                me->isVisible = (tok == T_yes);
+                break;
+            default:
+                Expecting( "yes|no" );
+            }
+            NeedRIGHT();
+            sawVis = true;
+            break;
+
+        case T_font:
+            // @todo
+            sawFont = true;
+            break;
+
+        default:
+            Expecting( "at|justify|font|visible|fill" );
+        }
+    }
+}
+

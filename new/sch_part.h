@@ -10,7 +10,7 @@
 typedef     wxPoint     POINT;
 
 #include <wx/gdicmn.h>
-#include <vector>
+#include <deque>
 
 namespace SCH {
 
@@ -34,7 +34,7 @@ public:
     virtual ~BASE_GRAPHIC() {}
 };
 
-typedef std::vector<POINT>  POINTS;
+typedef std::deque<POINT>  POINTS;
 
 class POLY_LINE : BASE_GRAPHIC
 {
@@ -43,6 +43,7 @@ class POLY_LINE : BASE_GRAPHIC
 
 protected:
     double      lineWidth;
+    int         fillType;       // T_none, T_filled, or T_transparent
     POINTS      pts;
 
 public:
@@ -51,6 +52,16 @@ public:
     {}
 };
 
+class BEZIER : POLY_LINE
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+public:
+    BEZIER( PART* aOwner ) :
+        POLY_LINE( aOwner )
+    {}
+};
 
 class RECTANGLE : BASE_GRAPHIC
 {
@@ -107,6 +118,36 @@ public:
     {}
 };
 
+
+class GR_TEXT : BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    POINT       pos;
+    float       angle;
+    int         fillType;       // T_none, T_filled, or T_transparent
+    int         hjustify;       // T_center, T_right, or T_left
+    int         vjustify;       // T_center, T_top, or T_bottom
+    bool        isVisible;
+    wxString    text;
+//    FONT        font;
+
+public:
+    GR_TEXT( PART* aOwner ) :
+        BASE_GRAPHIC( aOwner )
+/*
+        ,
+        fillType( T_filled ),
+        hjustify( T_left ),
+        vjustify( T_bottom ),
+        angle( 0 ),
+        isVisible( true )
+*/
+    {}
+};
+
 }  // namespace SCH
 
 
@@ -115,7 +156,7 @@ public:
 
 namespace SCH {
 
-typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
+typedef std::deque< BASE_GRAPHIC* >    GRAPHICS;
 
 class LPID;
 class SWEET_PARSER;
@@ -180,7 +221,10 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// A property list.
     //PROPERTIES    properties;
 
-    /// A drawing list for graphics
+    /**
+     * Member graphics
+     * owns : POLY_LINE, RECTANGLE, CIRCLE, ARC, BEZIER, and GR_TEXT objects.
+     */
     GRAPHICS        graphics;
 
     /// A pin list

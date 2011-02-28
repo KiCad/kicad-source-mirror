@@ -53,6 +53,7 @@ void PART::clear()
         extends = 0;
     }
 
+    // graphics objects I own, and the container will not destroy them:
     for( GRAPHICS::iterator it = graphics.begin();  it != graphics.end();  ++it )
         delete *it;
     graphics.clear();

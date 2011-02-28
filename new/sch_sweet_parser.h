@@ -33,10 +33,14 @@ namespace SCH {
 
 class LIB_TABLE;
 class PART;
+
+// GRAPHICS
 class POLY_LINE;
 class RECTANGLE;
 class CIRCLE;
 class ARC;
+class BEZIER;
+class GR_TEXT;
 
 
 /**
@@ -57,9 +61,11 @@ class SWEET_PARSER : public SWEET_LEXER
     void parseExtends( PART* me );
 
     void parsePolyLine( POLY_LINE* me );
+    void parseBezier( BEZIER* me );
     void parseRectangle( RECTANGLE* me );
     void parseCircle( CIRCLE* me );
     void parseArc( ARC* me );
+    void parseText( GR_TEXT* me );
 
 public:
 
