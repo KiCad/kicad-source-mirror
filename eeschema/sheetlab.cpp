@@ -87,6 +87,7 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     ConstraintOnEdge( frame->GetScreen()->GetCrossHairPosition() );
 
     Sheet->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    frame->DrawPanel->SetMouseCapture( NULL, NULL );
     frame->DrawPanel->EndMouseCapture();
 }
 
