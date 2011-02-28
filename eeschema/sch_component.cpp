@@ -625,7 +625,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     wxString       defRef    = m_prefix;
     bool           keepMulti = false;
     LIB_COMPONENT* Entry;
-    wxString       separators( wxT( " " ) );
+    static const wxString separators( wxT( " " ) );
     wxArrayString  reference_fields;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
@@ -640,8 +640,11 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
     wxString multi = wxT( "1" );
 
-    // We cannot remove all annotations: part selection must be kept
-    if( keepMulti )
+    // For components with units locked,
+    // we cannot remove all annotations: part selection must be kept
+    // For all components: if aSheetPath is not NULL,
+    // remove annotation only for the given path
+    if( keepMulti || aSheetPath )
     {
         wxString NewHref;
         wxString path;
@@ -667,7 +670,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     }
     else
     {
-        // Empty strings, but does not free memory because a new annotation
+        // Clear reference strings, but does not free memory because a new annotation
         // will reuse it
         m_PathsAndReferences.Empty();
         m_unit = 1;
