@@ -256,7 +256,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 // We have a hit under mouse (a zone outline corner or segment)
                 // test for a corner only because want to move corners only.
                 ZONE_CONTAINER* edge_zone = (ZONE_CONTAINER*) DrawStruct;
-                if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) >= 0 ) // corner located!
+                if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) // corner located!
                     hit_on_corner = true;
             }
             if( hit_on_corner )

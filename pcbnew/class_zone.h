@@ -242,19 +242,21 @@ public:
 
     /**
      * Function HitTestForCorner
-     * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none, corner index in .corner &ltvector&gt
+     * tests if the given wxPoint near a corner
+     * Set m_CornerSelection to -1 if nothing found, or index of corner
+     * @return true if found
      * @param refPos : A wxPoint to test
      */
-    int  HitTestForCorner( const wxPoint& refPos );
+    bool  HitTestForCorner( const wxPoint& refPos );
 
     /**
      * Function HitTestForEdge
-     * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
-     * @return -1 if none,  or index of the starting corner in .corner &ltvector&gt
+     * tests if the given wxPoint is near a segment defined by 2 corners.
+     * Set m_CornerSelection to -1 if nothing found, or index of the starting corner of vertice
+     * @return true if found
      * @param refPos : A wxPoint to test
      */
-    int  HitTestForEdge( const wxPoint& refPos );
+    bool  HitTestForEdge( const wxPoint& refPos );
 
     /**
      * Function HitTest (overlayed)
