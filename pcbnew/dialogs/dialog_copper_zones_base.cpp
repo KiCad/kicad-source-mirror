@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,21 +9,21 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
-	EVT_CLOSE( dialog_copper_zone_base::_wxFB_OnClose )
-	EVT_SIZE( dialog_copper_zone_base::_wxFB_OnSize )
-	EVT_CHOICE( ID_M_NETDISPLAYOPTION, dialog_copper_zone_base::_wxFB_OnNetSortingOptionSelected )
-	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
-	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
-	EVT_BUTTON( wxID_APPLY_FILTERS, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
-	EVT_CHOICE( ID_CORNER_SMOOTHING, dialog_copper_zone_base::_wxFB_OnCornerSmoothingModeChoice )
-	EVT_CHOICE( ID_M_PADINZONEOPT, dialog_copper_zone_base::_wxFB_OnPadsInZoneClick )
-	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_base::_wxFB_ExportSetupToOtherCopperZones )
-	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )
-	EVT_BUTTON( wxID_CANCEL, dialog_copper_zone_base::_wxFB_OnButtonCancelClick )
+BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, wxDialog )
+	EVT_CLOSE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnClose )
+	EVT_SIZE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnSize )
+	EVT_CHOICE( ID_M_NETDISPLAYOPTION, DIALOG_COPPER_ZONE_BASE::_wxFB_OnNetSortingOptionSelected )
+	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
+	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
+	EVT_BUTTON( wxID_APPLY_FILTERS, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
+	EVT_CHOICE( ID_CORNER_SMOOTHING, DIALOG_COPPER_ZONE_BASE::_wxFB_OnCornerSmoothingModeChoice )
+	EVT_CHOICE( ID_M_PADINZONEOPT, DIALOG_COPPER_ZONE_BASE::_wxFB_OnPadsInZoneClick )
+	EVT_BUTTON( wxID_BUTTON_EXPORT, DIALOG_COPPER_ZONE_BASE::_wxFB_ExportSetupToOtherCopperZones )
+	EVT_BUTTON( wxID_OK, DIALOG_COPPER_ZONE_BASE::_wxFB_OnButtonOkClick )
+	EVT_BUTTON( wxID_CANCEL, DIALOG_COPPER_ZONE_BASE::_wxFB_OnButtonCancelClick )
 END_EVENT_TABLE()
 
-dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -242,6 +242,6 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	this->Layout();
 }
 
-dialog_copper_zone_base::~dialog_copper_zone_base()
+DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 {
 }

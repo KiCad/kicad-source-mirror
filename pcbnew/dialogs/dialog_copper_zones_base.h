@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,9 +27,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class dialog_copper_zone_base
+/// Class DIALOG_COPPER_ZONE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class dialog_copper_zone_base : public wxDialog 
+class DIALOG_COPPER_ZONE_BASE : public wxDialog 
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -49,7 +49,8 @@ class dialog_copper_zone_base : public wxDialog
 	protected:
 		enum
 		{
-			ID_NETNAME_SELECTION = 1000,
+			ID_DIALOG_COPPER_ZONE_BASE = 1000,
+			ID_NETNAME_SELECTION,
 			ID_M_NETDISPLAYOPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
 			wxID_APPLY_FILTERS,
@@ -117,8 +118,8 @@ class dialog_copper_zone_base : public wxDialog
 	
 	public:
 		
-		dialog_copper_zone_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~dialog_copper_zone_base();
+		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_COPPER_ZONE_BASE();
 	
 };
 

@@ -54,15 +54,16 @@ static bool setDouble( double* aDouble, double aValue, double aMin, double aMax 
 
 class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
-public:
+private:
     PCB_EDIT_FRAME*  m_Parent;
     wxConfig*        m_Config;
     std::vector<int> layerList;           // List to hold CheckListBox layer numbers
-    wxCheckListBox*  layerCheckListBox;
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
-
-public: DIALOG_PLOT( PCB_EDIT_FRAME* parent );
+    static wxPoint   prevPosition;        // Dialog position & size
+    static wxSize    prevSize;
+public:
+    DIALOG_PLOT( PCB_EDIT_FRAME* parent );
 private:
     void Init_Dialog();
     void Plot( wxCommandEvent& event );
@@ -75,6 +76,9 @@ private:
     void CreateDrillFile( wxCommandEvent& event );
 };
 
+wxPoint DIALOG_PLOT::prevPosition( -1, -1 );
+wxSize DIALOG_PLOT::prevSize;
+
 const int UNITS_MILS = 1000;
 
 
@@ -84,15 +88,16 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* parent ) :
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
 
-    layerCheckListBox = new wxCheckListBox( this, wxID_ANY );
-
-    m_LayersSizer->Add( layerCheckListBox, 0, wxGROW | wxALL, 1 );
-
     Init_Dialog();
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
-    Centre();
+
+    if( prevPosition.x != -1 )
+        SetSize( prevPosition.x, prevPosition.y,
+                 prevSize.x, prevSize.y );
+    else
+        Center();
 }
 
 
@@ -157,10 +162,10 @@ void DIALOG_PLOT::Init_Dialog()
             continue;
 
         layerList.push_back( layer );
-        checkIndex = layerCheckListBox->Append( board->GetLayerName( layer ) );
+        checkIndex = m_layerCheckListBox->Append( board->GetLayerName( layer ) );
 
         if( g_PcbPlotOptions.GetLayerSelection() & ( 1 << layer ) )
-            layerCheckListBox->Check( checkIndex );
+            m_layerCheckListBox->Check( checkIndex );
     }
 
     // Option for using proper Gerber extensions
@@ -227,6 +232,8 @@ void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 
 void DIALOG_PLOT::OnClose( wxCloseEvent& event )
 {
+    prevPosition = GetPosition();
+    prevSize = GetSize();
     applyPlotSettings();
     EndModal( 0 );
 }
@@ -509,7 +516,7 @@ void DIALOG_PLOT::applyPlotSettings()
     unsigned int i;
     for( i = 0; i < layerList.size(); i++ )
     {
-        if( layerCheckListBox->IsChecked( i ) )
+        if( m_layerCheckListBox->IsChecked( i ) )
             selectedLayers |= (1 << layerList[i]);
     }
     tempOptions.SetLayerSelection( selectedLayers );

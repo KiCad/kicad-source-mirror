@@ -65,6 +65,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxHORIZONTAL );
 	
+	wxArrayString m_layerCheckListBoxChoices;
+	m_layerCheckListBox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 5 );
+	
 	bUpperSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
 	
 	m_PlotOptionsSizer = new wxBoxSizer( wxVERTICAL );

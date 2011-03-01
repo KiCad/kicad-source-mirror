@@ -24,24 +24,19 @@
 #define LAYER_BITMAP_SIZE_X 20
 #define LAYER_BITMAP_SIZE_Y 10
 
-/* the filter to show nets (default * "*").
- *  static to keep this pattern for an entire pcbnew session
- */
-wxString dialog_copper_zone::m_netNameShowFilter( wxT( "*" ) );
-
-wxPoint dialog_copper_zone::prevPosition( -1, -1 );
-wxSize dialog_copper_zone::prevSize;
+// Initialize static member variables
+wxString DIALOG_COPPER_ZONE::m_netNameShowFilter( wxT( "*" ) );
+wxPoint DIALOG_COPPER_ZONE::prevPosition( -1, -1 );
+wxSize DIALOG_COPPER_ZONE::prevSize;
 
 
-dialog_copper_zone::dialog_copper_zone( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting ) :
-    dialog_copper_zone_base( parent )
+DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting ) :
+    DIALOG_COPPER_ZONE_BASE( parent )
 {
     m_Parent = parent;
     m_Config = wxGetApp().m_EDA_Config;
     m_Zone_Setting = zone_setting;
-    m_NetSortingByPadCount = true;     /* false = alphabetic sort.
-                                        *  true = pad count sort.
-                                        */
+    m_NetSortingByPadCount = true;     // false = alphabetic sort, true = pad count sort
     m_OnExitCode = ZONE_ABORT;
 
     SetReturnCode( ZONE_ABORT ); // Will be changed on buttons click
@@ -56,22 +51,24 @@ dialog_copper_zone::dialog_copper_zone( PCB_EDIT_FRAME* parent, ZONE_SETTING* zo
     m_layerSizer->Add( m_LayerSelectionCtrl, 1,
                        wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
+    // Fix static text widget minimum width to a suitable value so that
+    // resizing the dialog is not necessary when changing the corner smoothing type.
+    // Depends on the default text in the widget.
+    m_cornerSmoothingTitle->SetMinSize( m_cornerSmoothingTitle->GetSize() );
+
     initDialog();
 
     GetSizer()->SetSizeHints( this );
-    Center();
 
     if( prevPosition.x != -1 )
         SetSize( prevPosition.x, prevPosition.y,
                  prevSize.x, prevSize.y );
+    else
+        Center();
 }
 
 
-/*****************************************************************/
-void dialog_copper_zone::initDialog()
-/*****************************************************************/
-
-// Initialise all dialog options and values in wxTextCtrl
+void DIALOG_COPPER_ZONE::initDialog()
 {
     BOARD* board = m_Parent->GetBoard();
 
@@ -202,15 +199,13 @@ void dialog_copper_zone::initDialog()
 }
 
 
-/********************************************************************/
-void dialog_copper_zone::OnButtonCancelClick( wxCommandEvent& event )
-/********************************************************************/
+void DIALOG_COPPER_ZONE::OnButtonCancelClick( wxCommandEvent& event )
 {
     Close( true );
 }
 
 
-void dialog_copper_zone::OnClose( wxCloseEvent& event )
+void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 {
     prevPosition = GetPosition();
     prevSize = GetSize();
@@ -218,7 +213,7 @@ void dialog_copper_zone::OnClose( wxCloseEvent& event )
 }
 
 
-void dialog_copper_zone::OnSize( wxSizeEvent& event )
+void DIALOG_COPPER_ZONE::OnSize( wxSizeEvent& event )
 {
     Layout();
 
@@ -228,7 +223,7 @@ void dialog_copper_zone::OnSize( wxSizeEvent& event )
 }
 
 
-void dialog_copper_zone::OnCornerSmoothingModeChoice( wxCommandEvent& event )
+void DIALOG_COPPER_ZONE::OnCornerSmoothingModeChoice( wxCommandEvent& event )
 {
     int selection = m_cornerSmoothingChoice->GetSelection();
 
@@ -254,16 +249,7 @@ void dialog_copper_zone::OnCornerSmoothingModeChoice( wxCommandEvent& event )
 }
 
 
-/********************************************************************************************/
-bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly )
-/********************************************************************************************/
-
-/**
- * Function AcceptOptions(
- * @return false if incorrect options, true if Ok.
- * @param aPromptForErrors = true to prompt user on incorrectparams
- * @param aUseExportableSetupOnly = true to use exportable parametres only (used to export this setup to other zones)
- */
+bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly )
 {
     switch( m_PadInZoneOpt->GetSelection() )
     {
@@ -365,8 +351,9 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     if( aUseExportableSetupOnly )
         return true;
 
-    /* Get the layer selection for this zone */
+    // Get the layer selection for this zone
     int ii = m_LayerSelectionCtrl->GetFirstSelected();
+
     if( ii < 0 && aPromptForErrors )
     {
         DisplayError( this, _( "No layer selected." ) );
@@ -375,8 +362,9 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_Zone_Setting->m_CurrentZone_Layer = m_LayerId[ii];
 
-    /* Get the net name selection for this zone */
+    // Get the net name selection for this zone
     ii = m_ListNetNameSelection->GetSelection();
+
     if( ii < 0 && aPromptForErrors )
     {
         DisplayError( this, _( "No net selected." ) );
@@ -395,7 +383,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     g_Zone_Default_Setting.m_NetcodeSelection = 0;
 
-    /* Search net_code for this net, if a net was selected */
+    // Search net_code for this net, if a net was selected
     if( m_ListNetNameSelection->GetSelection() > 0 )
     {
         NETINFO_ITEM* net = m_Parent->GetBoard()->FindNet( net_name );
@@ -407,9 +395,7 @@ bool dialog_copper_zone::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 }
 
 
-/***************************************************************************/
-void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
-/***************************************************************************/
+void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 {
     initListNetsParams();
     buildAvailableListOfNets();
@@ -424,9 +410,7 @@ void dialog_copper_zone::OnNetSortingOptionSelected( wxCommandEvent& event )
 }
 
 
-/*****************************************************************/
-void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
-/*****************************************************************/
+void DIALOG_COPPER_ZONE::OnButtonOkClick( wxCommandEvent& event )
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
     prevPosition = GetPosition();
@@ -437,9 +421,7 @@ void dialog_copper_zone::OnButtonOkClick( wxCommandEvent& event )
 }
 
 
-/******************************************************************************/
-void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
-/******************************************************************************/
+void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 {
     prevPosition = GetPosition();
     prevSize = GetSize();
@@ -460,9 +442,7 @@ void dialog_copper_zone::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 }
 
 
-/******************************************************************/
-void dialog_copper_zone::OnPadsInZoneClick( wxCommandEvent& event )
-/******************************************************************/
+void DIALOG_COPPER_ZONE::OnPadsInZoneClick( wxCommandEvent& event )
 {
     switch( m_PadInZoneOpt->GetSelection() )
     {
@@ -479,10 +459,7 @@ void dialog_copper_zone::OnPadsInZoneClick( wxCommandEvent& event )
 }
 
 
-/** init m_NetSortingByPadCount and m_NetFiltering values
- * according to m_NetDisplayOption selection
- */
-void dialog_copper_zone::initListNetsParams()
+void DIALOG_COPPER_ZONE::initListNetsParams()
 {
     switch( m_NetDisplayOption->GetSelection() )
     {
@@ -509,15 +486,11 @@ void dialog_copper_zone::initListNetsParams()
 }
 
 
-/* Called when clicking on Apply Filter button
- * Rebuild the list of nets with the currents filters settings.
- * If the net display options is not a filtered option, force this option
- */
-void dialog_copper_zone::OnRunFiltersButtonClick( wxCommandEvent& event )
+void DIALOG_COPPER_ZONE::OnRunFiltersButtonClick( wxCommandEvent& event )
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
-    // Ensure filtered option for nets:
+    // Ensure filtered option for nets
     if( m_NetDisplayOption->GetSelection() == 0 )
         m_NetDisplayOption->SetSelection( 2 );
     else if( m_NetDisplayOption->GetSelection() == 1 )
@@ -527,7 +500,7 @@ void dialog_copper_zone::OnRunFiltersButtonClick( wxCommandEvent& event )
 }
 
 
-void dialog_copper_zone::buildAvailableListOfNets()
+void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 {
     wxArrayString listNetName;
 
@@ -577,18 +550,16 @@ void dialog_copper_zone::buildAvailableListOfNets()
 }
 
 
-wxBitmap dialog_copper_zone::makeLayerBitmap( int aColor )
+wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( int aColor )
 {
     wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     wxBrush     brush;
     wxMemoryDC  iconDC;
 
     iconDC.SelectObject( bitmap );
-
     brush.SetColour( MakeColour( aColor ) );
     brush.SetStyle( wxSOLID );
     iconDC.SetBrush( brush );
-
     iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
 
     return bitmap;

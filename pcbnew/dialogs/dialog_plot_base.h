@@ -20,6 +20,7 @@
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
+#include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
@@ -49,6 +50,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxTextCtrl* m_outputDirectoryName;
 		wxButton* m_browseButton;
 		wxStaticBoxSizer* m_LayersSizer;
+		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
 		wxCheckBox* m_plotPads_on_Silkscreen;

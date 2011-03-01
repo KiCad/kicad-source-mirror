@@ -520,7 +520,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     &g_Zone_Default_Setting.m_ThermalReliefCopperBridgeValue );
 
                 g_Zone_Default_Setting.m_CurrentZone_Layer = zone->GetLayer();
-                dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting  );
+                DIALOG_COPPER_ZONE* frame = new DIALOG_COPPER_ZONE( this, &g_Zone_Default_Setting  );
                 diag = frame->ShowModal();
                 frame->Destroy();
             }
@@ -780,7 +780,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container 
     if( zone_container->GetLayer() < FIRST_NO_COPPER_LAYER )
     {   // edit a zone on a copper layer
         g_Zone_Default_Setting.ImportSetting(*zone_container);
-        dialog_copper_zone* frame = new dialog_copper_zone( this, &g_Zone_Default_Setting );
+        DIALOG_COPPER_ZONE* frame = new DIALOG_COPPER_ZONE( this, &g_Zone_Default_Setting );
         diag = frame->ShowModal();
         frame->Destroy();
     }

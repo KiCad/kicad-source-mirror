@@ -9,7 +9,7 @@
 
 /* here is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
  */
-class dialog_copper_zone : public dialog_copper_zone_base
+class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE
 {
 private:
     PCB_EDIT_FRAME*  m_Parent;
@@ -35,21 +35,43 @@ private:
     static wxSize   prevSize;
 
 public:
-    dialog_copper_zone( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting );
+    DIALOG_COPPER_ZONE( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting );
 private:
+
+    /** Function initDialog
+     * fills in the dialog controls using the current settings.
+     */
     void initDialog();
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
     void OnSize( wxSizeEvent& event );
     void OnCornerSmoothingModeChoice( wxCommandEvent& event );
+
+    /**
+     * Function AcceptOptions
+     * @param aPromptForErrors is true to prompt user on incorrect params.
+     * @param aUseExportableSetupOnly is true to use exportable parametres only (used to export this setup to other zones).
+     * @return bool - false if incorrect options, true if ok.
+     */
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
     void OnNetSortingOptionSelected( wxCommandEvent& event );
     void ExportSetupToOtherCopperZones( wxCommandEvent& event );
     void OnPadsInZoneClick( wxCommandEvent& event );
     void OnRunFiltersButtonClick( wxCommandEvent& event );
     void buildAvailableListOfNets();
+
+    /** Function initListNetsParams
+     * initializes m_NetSortingByPadCount and m_NetFiltering values
+     * according to m_NetDisplayOption selection.
+     */
     void initListNetsParams();
+
+    /**
+     * Function makeLayerBitmap
+     * creates the colored rectangle bitmaps used in the layer selection widget.
+     * @param aColor is the color to fill the rectangle with.
+     */
     wxBitmap makeLayerBitmap( int aColor );
 };
 #endif      // #ifndef DIALOG_COPPER_ZONES
