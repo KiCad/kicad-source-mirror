@@ -21,7 +21,7 @@
 /*****************************************************************************
 * Routine to save an EESchema file.                                          *
 * FileSave controls how the file is to be saved - under what name.           *
-* Returns TRUE if the file has been saved.                                   *
+* Returns true if the file has been saved.                                   *
 *****************************************************************************/
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 {
@@ -212,8 +212,8 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
         screen->m_Commentaire2.Empty();
         screen->m_Commentaire3.Empty();
         screen->m_Commentaire4.Empty();
-        LoadProjectFile( wxEmptyString, TRUE );
-        Zoom_Automatique( TRUE );
+        LoadProjectFile( wxEmptyString, true );
+        Zoom_Automatique( false );
         SetSheetNumberAndCount();
         DrawPanel->Refresh();
         return true;
@@ -223,7 +223,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     msg = _( "Ready\nWorking dir: \n" ) + wxGetCwd();
     PrintMsg( msg );
 
-    LoadProjectFile( wxEmptyString, FALSE );
+    LoadProjectFile( wxEmptyString, false );
 
     // Clear (if needed) the current active library in libedit because it could be
     // removed from memory
@@ -292,7 +292,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 
     if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) && !LibCacheExist )
     {
-        Zoom_Automatique( FALSE );
+        Zoom_Automatique( false );
         msg.Printf( _( "File <%s> not found." ),
                     GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
         DisplayInfoMessage( this, msg, 0 );
@@ -306,7 +306,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 
     /* Redraw base screen (ROOT) if necessary. */
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    Zoom_Automatique( FALSE );
+    Zoom_Automatique( false );
     SetSheetNumberAndCount();
     DrawPanel->Refresh( true );
     return diag;

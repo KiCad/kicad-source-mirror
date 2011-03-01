@@ -66,7 +66,7 @@ bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
 
     ReFillLayerWidget();
 
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
 
     return true;
 }
@@ -109,7 +109,7 @@ bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
     GetScreen()->Init();
     GetScreen()->SetGrid( gridsize );
 
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
 
     return true;
 }

@@ -122,8 +122,9 @@ bool WinEDA_App::OnInit()
                                             // meaning here
 
     SetTopWindow( frame );                  // Set GerbView mainframe on top
-    frame->Show( TRUE );                    // Show GerbView mainframe
-    frame->Zoom_Automatique( TRUE );        // Zoomfit drawing in frame
+    frame->Show( true );                    // Show GerbView mainframe
+    frame->Zoom_Automatique( true );        // Zoom fit in frame
+    frame->GetScreen()->m_FirstRedraw = false;
 
     Read_Config();
 

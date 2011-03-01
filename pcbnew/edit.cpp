@@ -164,7 +164,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
                                            wxPoint( -1, -1 ),
                                            wxSize( 600, 400 ) );
             m_ModuleEditFrame->Show( true );
-            m_ModuleEditFrame->Zoom_Automatique( true );
+            m_ModuleEditFrame->Zoom_Automatique( false );
         }
         else
             m_ModuleEditFrame->Iconize( false );

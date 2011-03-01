@@ -254,7 +254,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             module->SetPosition( wxPoint( 0, 0 ) );
             if( GetBoard()->m_Modules )
                 GetBoard()->m_Modules->m_Flags = 0;
-            Zoom_Automatique( true );
+            Zoom_Automatique( false );
         }
         break;
     }
@@ -360,7 +360,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
         GetScreen()->ClrModify();
-        Zoom_Automatique( true );
+        Zoom_Automatique( false );
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
         break;
@@ -416,7 +416,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         GetScreen()->ClrModify();
-        Zoom_Automatique( true );
+        Zoom_Automatique( false );
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
         break;

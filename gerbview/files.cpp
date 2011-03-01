@@ -175,7 +175,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
         }
     }
 
-    Zoom_Automatique( true );
+    Zoom_Automatique( false );
     g_SaveTime = time( NULL );
 
     // Synchronize layers tools with actual active layer:

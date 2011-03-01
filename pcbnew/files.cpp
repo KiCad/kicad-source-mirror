@@ -30,7 +30,6 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
         DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
-        DrawPanel->MoveCursorToCrossHair();
     }
 }
 

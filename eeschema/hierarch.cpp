@@ -263,12 +263,22 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     if( screen->m_FirstRedraw )
     {
+        Zoom_Automatique( false );
         screen->m_FirstRedraw = false;
-        Zoom_Automatique( true );
+        screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
+        DrawPanel->MoveCursorToCrossHair();
     }
     else
     {
-        DrawPanel->MoveCursorToCrossHair();
         RedrawScreen( screen->GetScrollCenterPosition(), true );
     }
+
+    // Now refresh DrawPanel. Should be not necessary, but because screen has changed
+    // the previous refresh has set all new draw parameters (scroll position ..)
+    // but most of time there were some inconsitencies about cursor parameters
+    // ( previous position of cursor ...) and artefacts can happen
+    // mainly when sheet size has changed
+    // This second refresh clears artefacts because at this point,
+    // all parameters are now updated
+    DrawPanel->Refresh();
 }

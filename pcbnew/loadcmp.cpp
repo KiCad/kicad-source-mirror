@@ -73,7 +73,7 @@ bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 
     Rotate_Module( NULL, Module, 0, false );
     GetScreen()->ClrModify();
-    Zoom_Automatique( TRUE );
+    Zoom_Automatique( false );
 
     return true;
 }

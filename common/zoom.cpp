@@ -48,8 +48,11 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
  */
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    GetScreen()->SetZoom( BestZoom() ); // Set the best zoom and get center point.
-    RedrawScreen( GetScreen()->GetScrollCenterPosition(), aWarpPointer );
+    BASE_SCREEN * screen = GetScreen();
+    screen->SetZoom( BestZoom() ); // Set the best zoom and get center point.
+    if( screen->m_FirstRedraw )
+        screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
+    RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
 }
 
 
