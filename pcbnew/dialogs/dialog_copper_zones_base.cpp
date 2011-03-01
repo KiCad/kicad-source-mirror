@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,7 +16,7 @@ BEGIN_EVENT_TABLE( dialog_copper_zone_base, wxDialog )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
 	EVT_BUTTON( wxID_APPLY_FILTERS, dialog_copper_zone_base::_wxFB_OnRunFiltersButtonClick )
-	EVT_CHOICE( wxID_ANY, dialog_copper_zone_base::_wxFB_OnCornerSmoothingModeChoice )
+	EVT_CHOICE( ID_CORNER_SMOOTHING, dialog_copper_zone_base::_wxFB_OnCornerSmoothingModeChoice )
 	EVT_CHOICE( ID_M_PADINZONEOPT, dialog_copper_zone_base::_wxFB_OnPadsInZoneClick )
 	EVT_BUTTON( wxID_BUTTON_EXPORT, dialog_copper_zone_base::_wxFB_ExportSetupToOtherCopperZones )
 	EVT_BUTTON( wxID_OK, dialog_copper_zone_base::_wxFB_OnButtonOkClick )
@@ -118,7 +118,7 @@ dialog_copper_zone_base::dialog_copper_zone_base( wxWindow* parent, wxWindowID i
 	
 	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
 	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
-	m_cornerSmoothingChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
+	m_cornerSmoothingChoice = new wxChoice( this, ID_CORNER_SMOOTHING, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
 	m_cornerSmoothingChoice->SetSelection( 0 );
 	bSizer9->Add( m_cornerSmoothingChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	

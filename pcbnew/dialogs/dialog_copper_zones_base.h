@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -53,6 +53,7 @@ class dialog_copper_zone_base : public wxDialog
 			ID_M_NETDISPLAYOPTION,
 			ID_TEXTCTRL_NETNAMES_FILTER,
 			wxID_APPLY_FILTERS,
+			ID_CORNER_SMOOTHING,
 			ID_M_CORNERSMOOTHINGCTRL,
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,

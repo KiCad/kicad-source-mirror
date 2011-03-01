@@ -224,6 +224,7 @@ void dialog_copper_zone::OnSize( wxSizeEvent& event )
 
     // Set layer list column width to widget width minus a few pixels
     m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x - 5 );
+    event.Skip();
 }
 
 
@@ -250,9 +251,6 @@ void dialog_copper_zone::OnCornerSmoothingModeChoice( wxCommandEvent& event )
         AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
         break;
     }
-
-    Layout();
-    m_MainBoxSizer->SetSizeHints( this );
 }
 
 
