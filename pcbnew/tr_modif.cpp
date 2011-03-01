@@ -22,11 +22,10 @@
  * @param aItemsListPicker = the list picker to use for an undo command (can
  *                           be NULL)
  */
-int WinEDA_PcbFrame::EraseRedundantTrack(
-    wxDC*              aDC,
-    TRACK*             aNewTrack,
-    int                aNewTrackSegmentsCount,
-    PICKED_ITEMS_LIST* aItemsListPicker )
+int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
+                                         TRACK*             aNewTrack,
+                                         int                aNewTrackSegmentsCount,
+                                         PICKED_ITEMS_LIST* aItemsListPicker )
 {
     TRACK*  StartTrack, * EndTrack;
     TRACK*  pt_segm;

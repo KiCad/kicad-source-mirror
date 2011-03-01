@@ -13,27 +13,27 @@
 #include "protos.h"
 
 /* local functions : */
-static void      clean_segments( WinEDA_PcbFrame* frame );
+static void      clean_segments( PCB_EDIT_FRAME* frame );
 static void      clean_vias( BOARD* aPcb );
-static void     DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC );
+static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC );
 static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite );
-static void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
-                              bool aCleanVias, bool aMergeSegments,
-                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
+static void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
+                             bool aCleanVias, bool aMergeSegments,
+                             bool aDeleteUnconnectedSegm, bool aConnectToPads );
 
 #include "dialog_cleaning_options.h"
 
 #define CONN2PAD_ENBL
 
 #ifdef CONN2PAD_ENBL
-static void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC );
+static void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC );
 static void ConnectDanglingEndToVia( BOARD* pcb );
-//static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC );
+//static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC );
 #endif
 
 
 /*****************************************/
-void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
+void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
 /*****************************************/
 /* Install the track operation dialog frame
 */
@@ -56,7 +56,7 @@ void WinEDA_PcbFrame::Clean_Pcb( wxDC* DC )
  *  Create segments when track ends are incorrecty connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
-void Clean_Pcb_Items( WinEDA_PcbFrame* frame, wxDC* DC,
+void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
                       bool aCleanVias, bool aMergeSegments,
                       bool aDeleteUnconnectedSegm, bool aConnectToPads )
 {
@@ -162,7 +162,7 @@ void clean_vias( BOARD * aPcb )
 
 
 /*****************************************************************************/
-static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
+static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 /*****************************************************************************/
 
 /*
@@ -361,7 +361,7 @@ static void DeleteUnconnectedTracks( WinEDA_PcbFrame* frame, wxDC* DC )
 
 
 /************************************************************/
-static void clean_segments( WinEDA_PcbFrame* frame )
+static void clean_segments( PCB_EDIT_FRAME* frame )
 /************************************************************/
 /* Delete null lenght segments, and intermediate points .. */
 {
@@ -631,7 +631,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
  * @param aDC = the current device context (can be NULL)
  * @return true if any change is made
  */
-bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC )
+bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
 {
     TRACK*          segment;
     TRACK*          other;
@@ -708,7 +708,7 @@ bool WinEDA_PcbFrame::RemoveMisConnectedTracks( wxDC* aDC )
 #if 0
 
 /***************************************************************/
-static void Gen_Raccord_Track( WinEDA_PcbFrame* frame, wxDC* DC )
+static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
 /***************************************************************/
 
 /**
@@ -934,7 +934,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
 
 
 /***************************************************************/
-void ConnectDanglingEndToPad( WinEDA_PcbFrame* frame, wxDC* DC )
+void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
 /**************************************************************/
 
 /**

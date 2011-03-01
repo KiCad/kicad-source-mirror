@@ -18,7 +18,7 @@
 #include "dialog_display_options_base.h"
 
 
-void WinEDA_PcbFrame::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 {
     Dialog_Display_Options* DisplayOptionsDialog =
         new Dialog_Display_Options( this );
@@ -29,7 +29,7 @@ void WinEDA_PcbFrame::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 
 
 /*******************************************************************************/
-Dialog_Display_Options::Dialog_Display_Options( WinEDA_PcbFrame* parent ) :
+Dialog_Display_Options::Dialog_Display_Options( PCB_EDIT_FRAME* parent ) :
     DialogDisplayOptions_base(parent)
 /*******************************************************************************/
 {

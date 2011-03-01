@@ -80,8 +80,8 @@ IMPLEMENT_APP( WinEDA_App )
  */
 void WinEDA_App::MacOpenFile( const wxString& fileName )
 {
-    wxFileName       filename = fileName;
-    WinEDA_PcbFrame* frame    = ( (WinEDA_PcbFrame*) GetTopWindow() );
+    wxFileName      filename = fileName;
+    PCB_EDIT_FRAME* frame    = ( (PCB_EDIT_FRAME*) GetTopWindow() );
 
     if( !filename.FileExists() )
         return;
@@ -100,8 +100,8 @@ bool WinEDA_App::OnInit()
 #endif /* __WXMAC__ */
 
 
-    wxFileName       fn;
-    WinEDA_PcbFrame* frame = NULL;
+    wxFileName      fn;
+    PCB_EDIT_FRAME* frame = NULL;
 
     InitEDA_Appl( wxT( "PCBnew" ), APP_TYPE_PCBNEW );
 
@@ -138,7 +138,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT("PcbFrame"), g_Board_Editor_Hokeys_Descr );
 
-    frame = new WinEDA_PcbFrame( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame = new PCB_EDIT_FRAME( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
 
     SetTopWindow( frame );

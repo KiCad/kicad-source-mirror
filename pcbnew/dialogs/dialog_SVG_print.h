@@ -7,17 +7,17 @@
 
 
 class BASE_SCREEN;
-class WinEDA_BasePcbFrame;
+class PCB_BASE_FRAME;
 class wxConfig;
 
 
 class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxConfig*            m_Config;
-    long                 m_PrintMaskLayer;
-    wxCheckBox*          m_BoxSelectLayer[32];
+    PCB_BASE_FRAME*  m_Parent;
+    wxConfig*        m_Config;
+    long             m_PrintMaskLayer;
+    wxCheckBox*      m_BoxSelectLayer[32];
 
 public:
     DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent );

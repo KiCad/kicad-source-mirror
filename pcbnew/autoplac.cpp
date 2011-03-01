@@ -60,16 +60,14 @@ static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    marge,
                                     int    Penalite,
                                     int    masque_layer );
-static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC );
+static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
 /* Routine to automatically place components in the contour of the PCB
  * The components with the FIXED status are not moved.  If the menu is
  * calling the placement of 1 module, it will be replaced.
  */
-void WinEDA_PcbFrame::AutoPlaceModule( MODULE* Module,
-                                       int     place_mode,
-                                       wxDC*   DC )
+void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 {
     int      ii, activ;
     MODULE*  ThisModule = NULL;
@@ -311,7 +309,7 @@ end_of_tst:
 }
 
 
-void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
+void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 {
     int       color, ii, jj;
     int       ox, oy;
@@ -373,7 +371,7 @@ void WinEDA_PcbFrame::DrawInfoPlace( wxDC* DC )
  * Bitmap of the penalty is set to 0
  * Occupation cell is a 0 leaves
  */
-int WinEDA_PcbFrame::GenPlaceBoard()
+int PCB_EDIT_FRAME::GenPlaceBoard()
 {
     int       jj, ii;
     int       NbCells;
@@ -489,7 +487,7 @@ int WinEDA_PcbFrame::GenPlaceBoard()
 
 /* Place module on board.
  */
-void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
+void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 {
     int    ox, oy, fx, fy, Penalite;
     int    marge = g_GridRoutingSize / 2;
@@ -558,7 +556,7 @@ void WinEDA_PcbFrame::GenModuleOnBoard( MODULE* Module )
  * 1 if placement impossible, 0 if OK
  * = MinCout and external variable = cost of best placement
  */
-int WinEDA_PcbFrame::RecherchePlacementModule( MODULE* Module, wxDC* DC )
+int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 {
     int     cx, cy;
     int     ox, oy, fx, fy; /* occupying part of the module focuses on the
@@ -842,7 +840,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
  * The cost is the longest ratsnest distance with penalty for connections
  * approaching 45 degrees.
  */
-float WinEDA_PcbFrame::Compute_Ratsnest_PlaceModule( wxDC* DC )
+float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 {
     double cout, icout;
     int    ox, oy;
@@ -1024,7 +1022,7 @@ static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
  * - Maximum ratsnet with modules already placed
  * - Max size, and number of pads max
  */
-static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
+static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 {
     MODULE*  Module;
     std::vector <MODULE*> moduleList;
@@ -1087,7 +1085,7 @@ static MODULE* PickModule( WinEDA_PcbFrame* pcbframe, wxDC* DC )
 
 
 /********************************************/
-int Propagation( WinEDA_PcbFrame* frame )
+int Propagation( PCB_EDIT_FRAME* frame )
 /********************************************/
 
 /**

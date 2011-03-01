@@ -251,6 +251,15 @@ protected:
         m_currentScreen = aScreen;
     }
 
+    /**
+     * Function unitsChangeRefresh
+     * is called when when the units setting has changed to allow for any derived classes
+     * to handle refreshing and controls that have units based measurements in them.  The
+     * default version only updates the status bar.  Don't forget to call the default
+     * in your derived class or the status bar will not get updated properly.
+     */
+    virtual void unitsChangeRefresh() { UpdateStatusBar(); }
+
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype,
                     const wxString& title,

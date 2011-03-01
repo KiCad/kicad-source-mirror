@@ -148,11 +148,11 @@ void EDGE_MODULE::SetDrawCoord()
  */
 void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 {
-    int                  ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
-    int                  color, type_trace;
-    int                  typeaff;
-    PCB_SCREEN*          screen;
-    WinEDA_BasePcbFrame* frame;
+    int             ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
+    int             color, type_trace;
+    int             typeaff;
+    PCB_SCREEN*     screen;
+    PCB_BASE_FRAME* frame;
     MODULE* module = (MODULE*) m_Parent;
 
     if( module == NULL )
@@ -164,7 +164,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
 
     color = brd->GetLayerColor(m_Layer);
 
-    frame = (WinEDA_BasePcbFrame*) panel->GetParent();
+    frame = (PCB_BASE_FRAME*) panel->GetParent();
 
     screen = frame->GetScreen();
 

@@ -55,14 +55,14 @@ static bool setDouble( double* aDouble, double aValue, double aMin, double aMax 
 class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
 public:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME*  m_Parent;
     wxConfig*        m_Config;
     std::vector<int> layerList;           // List to hold CheckListBox layer numbers
     wxCheckListBox*  layerCheckListBox;
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
 
-public: DIALOG_PLOT( WinEDA_PcbFrame* parent );
+public: DIALOG_PLOT( PCB_EDIT_FRAME* parent );
 private:
     void Init_Dialog();
     void Plot( wxCommandEvent& event );
@@ -78,7 +78,7 @@ private:
 const int UNITS_MILS = 1000;
 
 
-DIALOG_PLOT::DIALOG_PLOT( WinEDA_PcbFrame* parent ) :
+DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* parent ) :
     DIALOG_PLOT_BASE( parent )
 {
     m_Parent = parent;
@@ -234,7 +234,7 @@ void DIALOG_PLOT::OnClose( wxCloseEvent& event )
 
 void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 {
-    ( (WinEDA_PcbFrame*) m_Parent )->InstallDrillFrame( event );
+    ( (PCB_EDIT_FRAME*) m_Parent )->InstallDrillFrame( event );
 }
 
 
@@ -774,7 +774,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 }
 
 
-void WinEDA_PcbFrame::ToPlotter( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     DIALOG_PLOT dlg( this );
     dlg.ShowModal();

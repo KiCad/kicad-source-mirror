@@ -16,7 +16,7 @@
  *  TRACK_LOCKED       protection against global delete
  *  TRACK_AR           AutoRouted segment
  */
-void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
+void PCB_EDIT_FRAME::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 {
     if( track == NULL )
         return;
@@ -31,7 +31,7 @@ void WinEDA_PcbFrame::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
 
 
 /* Attribute change for an entire track */
-void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
+void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 {
     TRACK* Track;
     int    nb_segm;
@@ -60,7 +60,7 @@ void WinEDA_PcbFrame::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
  *  for all the segments related to net_code.
  *  if net_code < 0 all the segments are modified.
  */
-void WinEDA_PcbFrame::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
+void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
 {
     TRACK* Track = GetBoard()->m_Track;
 

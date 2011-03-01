@@ -20,39 +20,62 @@
 #include "dialog_helpers.h"
 
 
-/**
- * Function OnUpdateAuxilaryToolbar
- * update the displayed values on auxiliary horizontal toolbar
- * (track width, via sizes, clearance ...
- * Display format for track and via lists
- *    first item = current selected class value
- *    next items (if any) = ordered list of sizes (extra sizes).
- *    So the current selected class value can be same as an other extra value
- */
-void WinEDA_PcbFrame::OnUpdateAuxilaryToolbar( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )
 {
-    wxString msg;
-
-    if( m_AuxiliaryToolBar == NULL )
-        return;
-
-    aEvent.Check( GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth );
-
-    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthList.size() )
-        GetBoard()->m_TrackWidthSelector = 0;
-
-    if( m_SelTrackWidthBox->GetSelection() != (int) GetBoard()->m_TrackWidthSelector )
-        m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
-
-    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
-        GetBoard()->m_ViaSizeSelector = 0;
-
-    if( m_SelViaSizeBox->GetSelection() != (int) GetBoard()->m_ViaSizeSelector )
-        m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
+    PrepareLayerIndicator();
 }
 
 
-void WinEDA_PcbFrame::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_TRACK_WIDTH )
+    {
+        if( m_SelTrackWidthBox->GetSelection() != (int) GetBoard()->m_TrackWidthSelector )
+            m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
+    }
+    else
+    {
+        bool check = ( ( ( ID_POPUP_PCB_SELECT_WIDTH1 +
+                           (int) GetBoard()->m_TrackWidthSelector ) == aEvent.GetId() ) &&
+                       !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth );
+        aEvent.Check( check );
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth );
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
+{
+    wxString msg;
+
+    if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_VIA_SIZE )
+    {
+        if( m_SelViaSizeBox->GetSelection() != (int) GetBoard()->m_ViaSizeSelector )
+            m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
+    }
+    else
+    {
+        bool check = ( ( ( ID_POPUP_PCB_SELECT_VIASIZE1 +
+                           (int) GetBoard()->m_ViaSizeSelector ) == aEvent.GetId() ) &&
+                       !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth );
+
+        aEvent.Check( check );
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
+{
+    m_SelLayerBox->SetLayerSelection( getActiveLayer() );
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 {
     int selected = aEvent.GetId() - ID_TB_OPTIONS_SHOW_ZONES;
 
@@ -63,7 +86,7 @@ void WinEDA_PcbFrame::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !Drc_On );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
@@ -72,7 +95,7 @@ void WinEDA_PcbFrame::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
                                         _( "Enable design rule checking" ) );
 }
 
-void WinEDA_PcbFrame::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
@@ -82,7 +105,7 @@ void WinEDA_PcbFrame::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( g_Show_Module_Ratsnest );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
@@ -92,7 +115,7 @@ void WinEDA_PcbFrame::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( g_AutoDeleteOldTrack );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
@@ -102,7 +125,7 @@ void WinEDA_PcbFrame::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayViaFill );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
@@ -112,7 +135,7 @@ void WinEDA_PcbFrame::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPcbTrackFill );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
@@ -122,7 +145,7 @@ void WinEDA_PcbFrame::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( DisplayOpt.ContrastModeDisplay );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
@@ -132,19 +155,19 @@ void WinEDA_PcbFrame::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_PcbFrame::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).IsShown() );
 }
 
 
-void WinEDA_PcbFrame::OnUpdateSave( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetScreen()->IsModify() );
 }
 
 
-void WinEDA_PcbFrame::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
+void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetEventObject() == m_VToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );

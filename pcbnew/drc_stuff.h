@@ -178,7 +178,7 @@ private:
     int                 m_xcliphi;
     int                 m_ycliphi;
 
-    WinEDA_PcbFrame*    m_mainWindow;
+    PCB_EDIT_FRAME*     m_mainWindow;
     BOARD*              m_pcb;
     DIALOG_DRC_CONTROL* m_ui;
 
@@ -354,7 +354,7 @@ private:
     //-----</single tests>---------------------------------------------
 
 public:
-    DRC( WinEDA_PcbFrame* aPcbWindow );
+    DRC( PCB_EDIT_FRAME* aPcbWindow );
 
     ~DRC();
 

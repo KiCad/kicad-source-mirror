@@ -26,7 +26,7 @@ static wxPoint s_LastPosition;     // Current cursor position.
 
 
 /* Start move of a graphic element type DRAWSEGMENT */
-void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
+void PCB_EDIT_FRAME::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 {
     if( drawitem == NULL )
         return;
@@ -43,7 +43,7 @@ void WinEDA_PcbFrame::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 /*
  * Place graphic element of type DRAWSEGMENT.
  */
-void WinEDA_PcbFrame::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
+void PCB_EDIT_FRAME::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 {
     if( drawitem == NULL )
         return;
@@ -80,7 +80,7 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 }
 
 
-void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
+void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
     EDA_ITEM* PtStruct;
     int       track_fill_copy = DisplayOpt.DisplayDrawItems;
@@ -112,7 +112,7 @@ void WinEDA_PcbFrame::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 }
 
 
-void WinEDA_PcbFrame::Delete_Drawings_All_Layer( int aLayer )
+void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
 {
     if( aLayer <= LAST_COPPER_LAYER )
     {
@@ -192,13 +192,13 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
     Panel->SetMouseCapture( NULL, NULL );
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
+    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->SetCurItem( NULL );
 }
 
 
 /* Initialize the drawing of a segment of type other than trace.
  */
-DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
+DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment,
                                                  int shape, wxDC* DC )
 {
     int          s_large;
@@ -266,7 +266,7 @@ DRAWSEGMENT* WinEDA_PcbFrame::Begin_DrawSegment( DRAWSEGMENT* Segment,
 }
 
 
-void WinEDA_PcbFrame::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
+void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
     if( Segment == NULL )
         return;

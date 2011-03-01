@@ -43,7 +43,7 @@ static PICKED_ITEMS_LIST _AuxiliaryList;             // a picked list to store z
 #include "dialog_copper_zones.h"
 
 /**********************************************************************************/
-void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container )
 /**********************************************************************************/
 
 /**
@@ -70,7 +70,7 @@ void WinEDA_PcbFrame::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container
 
 
 /**********************************************************************************/
-void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container )
 /**********************************************************************************/
 
 /**
@@ -96,7 +96,7 @@ void WinEDA_PcbFrame::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container 
 
 
 /*******************************************************/
-int WinEDA_PcbFrame::Delete_LastCreatedCorner( wxDC* DC )
+int PCB_EDIT_FRAME::Delete_LastCreatedCorner( wxDC* DC )
 /*******************************************************/
 
 /** Used **only** while creating a new zone outline
@@ -142,8 +142,8 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
  * cancels the Begin_Zone command if at least one EDGE_ZONE was created.
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
-    ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
+    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Panel->GetParent();
+    ZONE_CONTAINER* zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone )
     {
@@ -160,8 +160,8 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 
 /*******************************************************************************************************/
-void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container,
-                                              int corner_id, bool IsNewCorner )
+void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container,
+                                             int corner_id, bool IsNewCorner )
 /*******************************************************************************************************/
 
 /**
@@ -209,9 +209,9 @@ void WinEDA_PcbFrame::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_con
 
 
 /**************************************************************************************/
-void WinEDA_PcbFrame::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
-                                                         ZONE_CONTAINER* zone_container,
-                                                         int             corner_id )
+void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
+                                                        ZONE_CONTAINER* zone_container,
+                                                        int             corner_id )
 /**************************************************************************************/
 
 /**
@@ -235,7 +235,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
 
 
 /*******************************************************************************************************/
-void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
 /*******************************************************************************************************/
 
 /**
@@ -270,7 +270,7 @@ void WinEDA_PcbFrame::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_c
 
 
 /*************************************************************************************************/
-void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
 /*************************************************************************************************/
 
 /**
@@ -315,7 +315,7 @@ void WinEDA_PcbFrame::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER
 
 
 /*************************************************************************************/
-void WinEDA_PcbFrame::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container )
 /*************************************************************************************/
 
 /**
@@ -386,7 +386,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
  * cancels the Begin_Zone state if at least one EDGE_ZONE has been created.
  */
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
+    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Panel->GetParent();
     ZONE_CONTAINER*  zone_container = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
     if( zone_container->m_Flags == IS_MOVED )
@@ -431,8 +431,8 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
 void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                                    const wxPoint& aPosition, bool aErase )
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) aPanel->GetParent();
-    ZONE_CONTAINER*  zone = (ZONE_CONTAINER*) pcbframe->GetCurItem();
+    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) aPanel->GetParent();
+    ZONE_CONTAINER* zone = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
     if( aErase )    /* Undraw edge in old position*/
     {
@@ -463,7 +463,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
 
 
 /*************************************************/
-int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
+int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 /*************************************************/
 
 /**
@@ -580,7 +580,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
             // use the form of SetCurItem() which does not write to the msg panel,
             // SCREEN::SetCurItem(), so the DRC error remains on screen.
-            // WinEDA_PcbFrame::SetCurItem() calls DisplayInfo().
+            // PCB_EDIT_FRAME::SetCurItem() calls DisplayInfo().
             GetScreen()->SetCurItem( NULL );
             DisplayError( this,
                 _( "DRC error: this start point is inside or too close an other area" ) );
@@ -614,7 +614,7 @@ int WinEDA_PcbFrame::Begin_Zone( wxDC* DC )
 
 
 /*********************************************/
-bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
+bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
 /*********************************************/
 
 /**
@@ -727,9 +727,9 @@ bool WinEDA_PcbFrame::End_Zone( wxDC* DC )
 static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                             const wxPoint& aPosition, bool aErase )
 {
-    WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) aPanel->GetParent();
-    wxPoint          c_pos    = pcbframe->GetScreen()->GetCrossHairPosition();
-    ZONE_CONTAINER*  zone = pcbframe->GetBoard()->m_CurrentZoneContour;
+    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) aPanel->GetParent();
+    wxPoint         c_pos    = pcbframe->GetScreen()->GetCrossHairPosition();
+    ZONE_CONTAINER* zone = pcbframe->GetBoard()->m_CurrentZoneContour;
 
     if( zone == NULL )
         return;
@@ -759,7 +759,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 
 /***********************************************************************************/
-void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container )
 /***********************************************************************************/
 
 /**
@@ -831,7 +831,7 @@ void WinEDA_PcbFrame::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container
 
 
 /************************************************************************************/
-void WinEDA_PcbFrame::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container )
+void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container )
 /************************************************************************************/
 
 /**

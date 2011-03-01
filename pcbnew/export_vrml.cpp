@@ -26,7 +26,7 @@
 class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
 {
 private:
-    WinEDA_PcbFrame* m_parent;
+    PCB_EDIT_FRAME* m_parent;
     wxConfig* m_config;
     int m_unitsOpt;          // to remember last option
     int m_3DFilesOpt;        // to remember last option
@@ -34,7 +34,7 @@ private:
     virtual void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
 
 public:
-    DIALOG_EXPORT_3DFILE( WinEDA_PcbFrame* parent ) :
+    DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
         DIALOG_EXPORT_3DFILE_BASE( parent )
     {
         m_parent = parent;
@@ -1126,7 +1126,7 @@ static void write_and_empty_triangle_bag( FILE* output_file,
  * Function OnExportVRML
  * will export the current BOARD to a VRML file.
  */
-void WinEDA_PcbFrame::OnExportVRML( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 {
     wxFileName fn;
     static wxString subDirFor3Dshapes = wxT("shapes3D");
@@ -1175,9 +1175,9 @@ wxBusyCursor dummy;
  * the full path name, changing the separators by underscore.
  * this is needed because files with the same shortname can exist in different directories
  */
-bool WinEDA_PcbFrame::ExportVRML_File( const wxString & aFullFileName,
-                    double aScale, bool aExport3DFiles,
-                    const wxString & a3D_Subdir )
+bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
+                                      double aScale, bool aExport3DFiles,
+                                      const wxString & a3D_Subdir )
 {
     wxString   msg;
     FILE*      output_file;

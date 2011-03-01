@@ -18,7 +18,7 @@
 class DIALOG_GLOBAL_PADS_EDITION : public DIALOG_GLOBAL_PADS_EDITION_BASE
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
+    PCB_BASE_FRAME* m_Parent;
     D_PAD*      m_CurrentPad;
 
 public:
@@ -27,7 +27,7 @@ public:
     static bool m_Pad_Orient_Filter;
 
 public:
-    DIALOG_GLOBAL_PADS_EDITION( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
+    DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* parent, D_PAD* Pad );
     ~DIALOG_GLOBAL_PADS_EDITION() { }
 
 private:
@@ -37,9 +37,7 @@ private:
 };
 
 
-DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION(
-    WinEDA_BasePcbFrame* parent,
-    D_PAD*               Pad ) :
+DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* parent, D_PAD* Pad ) :
     DIALOG_GLOBAL_PADS_EDITION_BASE( parent )
 {
     m_Parent     = parent;
@@ -110,7 +108,7 @@ void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
  *             this pad
  * @param aDraw: if true: redraws the footprint
  */
-void WinEDA_BasePcbFrame::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
+void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 {
     MODULE* Module_Ref, * Module;
     int     diag;

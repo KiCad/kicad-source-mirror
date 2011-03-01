@@ -47,15 +47,15 @@ static PRINT_PARAMETERS  s_Parameters;
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
-    wxConfig*         m_Config;
-    wxCheckBox*       m_BoxSelectLayer[32];
-    static bool       m_ExcludeEdgeLayer;
-    static wxPoint      s_LastPos;
-    static wxSize       s_LastSize;
+    PCB_EDIT_FRAME* m_Parent;
+    wxConfig*       m_Config;
+    wxCheckBox*     m_BoxSelectLayer[32];
+    static bool     m_ExcludeEdgeLayer;
+    static wxPoint  s_LastPos;
+    static wxSize   s_LastSize;
 
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_PcbFrame* parent );
+    DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent );
     ~DIALOG_PRINT_USING_PRINTER() {};
 
 private:
@@ -88,7 +88,7 @@ wxSize  DIALOG_PRINT_USING_PRINTER::s_LastSize;
 
 
 /*******************************************************/
-void WinEDA_PcbFrame::ToPrinter( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 /*******************************************************/
 
 /* Virtual function:
@@ -114,7 +114,7 @@ void WinEDA_PcbFrame::ToPrinter( wxCommandEvent& event )
 
 
 /*************************************************************************************/
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_PcbFrame* parent ) :
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent ) :
     DIALOG_PRINT_USING_PRINTER_base( parent )
 /*************************************************************************************/
 {

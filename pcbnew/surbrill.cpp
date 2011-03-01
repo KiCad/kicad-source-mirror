@@ -24,7 +24,7 @@
  * displays the sorted list of nets in a dialog frame
  * If a net is selected, it is highlighted
  */
-void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 {
     NETINFO_ITEM* net;
     wxString      netFilter;
@@ -92,7 +92,7 @@ void WinEDA_PcbFrame::ListNetsAndSelect( wxCommandEvent& event )
 /* Locate track or pad and highlight the corresponding net
  * Returns the Netcode, or -1 if no net located.
  */
-int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
+int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
 {
     if( g_HighLight_Status )
         High_Light( DC );
@@ -150,7 +150,7 @@ int WinEDA_PcbFrame::Select_High_Light( wxDC* DC )
  *
  * Show or removes the net at the current cursor position.
  */
-void WinEDA_PcbFrame::High_Light( wxDC* DC )
+void PCB_EDIT_FRAME::High_Light( wxDC* DC )
 {
     g_HighLight_Status = !g_HighLight_Status;
 

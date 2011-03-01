@@ -42,7 +42,7 @@
  * @param aZone = zone segment within the zone to delete. Can be NULL
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
  */
-void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
+void PCB_EDIT_FRAME::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 {
     bool          modify  = false;
     unsigned long TimeStamp;
@@ -86,7 +86,7 @@ void WinEDA_PcbFrame::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 
 
 /***************************************************************************************/
-int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
+int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 /***************************************************************************************/
 
 /**
@@ -131,7 +131,7 @@ int WinEDA_PcbFrame::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 }
 
 
-int WinEDA_PcbFrame::Fill_All_Zones( bool verbose )
+int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
 /**
  * Function Fill_All_Zones
  *  Fill all zones on the board

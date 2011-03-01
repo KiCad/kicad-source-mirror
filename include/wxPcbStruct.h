@@ -42,14 +42,14 @@ class PCB_LAYER_WIDGET;
 
 
 /**
- * See also class WinEDA_BasePcbFrame(): Basic class for pcbnew and gerbview.
+ * See also class PCB_BASE_FRAME(): Basic class for pcbnew and gerbview.
  */
 
 
 /*****************************************************/
-/* class WinEDA_PcbFrame: the main frame for Pcbnew  */
+/* class PCB_EDIT_FRAME: the main frame for Pcbnew  */
 /*****************************************************/
-class WinEDA_PcbFrame : public WinEDA_BasePcbFrame
+class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 {
     friend class PCB_LAYER_WIDGET;
 
@@ -111,14 +111,7 @@ protected:
      */
     void syncLayerWidget( );
 
-    /**
-     * Function syncLayerBox
-     * updates the currently "selected" layer within m_SelLayerBox
-     * The currently active layer, as defined by the return value of
-     * getActiveLayer().  And updates the colored icon in the toolbar.
-     */
-    void syncLayerBox();
-
+    virtual void unitsChangeRefresh();
 
 public:
     WinEDALayerChoiceBox* m_SelLayerBox;    // a combo box to display and
@@ -139,11 +132,11 @@ public:
 
 
 public:
-    WinEDA_PcbFrame( wxWindow* father, const wxString& title,
-                     const wxPoint& pos, const wxSize& size,
-                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    PCB_EDIT_FRAME( wxWindow* father, const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_PcbFrame();
+    ~PCB_EDIT_FRAME();
 
     void             OnQuit( wxCommandEvent& event );
 
@@ -164,6 +157,8 @@ public:
 
     // User interface update command event handlers.
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
+    void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
+    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
     void OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent );
     void OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent );
@@ -173,8 +168,10 @@ public:
     void OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent );
     void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
-    void OnUpdateAuxilaryToolbar( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
 
     /**
      * Function PrintPage , virtual
@@ -243,7 +240,7 @@ public:
     /**
      * Load applications settings specific to PCBNew.
      *
-     * This overrides the base class WinEDA_BasePcbFrame::LoadSettings() to
+     * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
      * calls down to the base class to load settings common to all PCB type
      * drawing frames.  Please put your application settings for PCBNew here
@@ -254,7 +251,7 @@ public:
     /**
      * Save applications settings common to PCBNew.
      *
-     * This overrides the base class WinEDA_BasePcbFrame::SaveSettings() to
+     * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
      * save settings specific to the PCB layout application main window.  It
      * calls down to the base class to save settings common to all PCB type
      * drawing frames.  Please put your application settings for PCBNew here
@@ -710,7 +707,7 @@ public:
     void       Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
     void       InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
 
-    // Footprint edition (see also WinEDA_BasePcbFrame)
+    // Footprint edition (see also PCB_BASE_FRAME)
     void       InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
     void       StartMove_Module( MODULE* module, wxDC* DC );
 
@@ -742,7 +739,7 @@ public:
                                 MODULE*            aNewModule,
                                 PICKED_ITEMS_LIST* aUndoPickList );
 
-    // loading modules: see WinEDA_BasePcbFrame
+    // loading modules: see PCB_BASE_FRAME
 
     // Board handling
     void   RemoveStruct( BOARD_ITEM* Item, wxDC* DC );

@@ -16,8 +16,8 @@
 /* Generate a PostScript file (*. ps) of the circuit layer.
  * If layer < 0: all layers are plotted.
  */
-bool WinEDA_BasePcbFrame::Genere_PS( const wxString& FullFileName, int Layer,
-                                     bool useA4, GRTraceMode trace_mode )
+bool PCB_BASE_FRAME::Genere_PS( const wxString& FullFileName, int Layer,
+                                bool useA4, GRTraceMode trace_mode )
 {
     wxSize        SheetSize;
     wxSize        PaperSize;

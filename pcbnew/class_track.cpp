@@ -727,8 +727,8 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     int fillvia = 0;
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
-    PCB_SCREEN*          screen = frame->GetScreen();
+    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
+    PCB_SCREEN*     screen = frame->GetScreen();
 
     if( frame->m_DisplayViaFill == FILLED )
         fillvia = 1;
@@ -941,7 +941,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
 void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
-    BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
+    BOARD*   board = ( (PCB_BASE_FRAME*) frame )->GetBoard();
 
     // Display basic infos
     DisplayInfoBase( frame );
@@ -967,7 +967,7 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
-    BOARD*   board = ( (WinEDA_BasePcbFrame*) frame )->GetBoard();
+    BOARD*   board = ( (PCB_BASE_FRAME*) frame )->GetBoard();
 
     frame->ClearMsgPanel();
 

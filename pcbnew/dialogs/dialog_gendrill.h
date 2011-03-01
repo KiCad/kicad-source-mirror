@@ -45,13 +45,13 @@ public:
     wxPoint          m_FileDrillOffset; // Drill offset: 0,0 for absolute coordiantes, or auxialry axis origin
 
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     int m_PadsHoleCount;
     int m_ThroughViasCount;
     int m_MicroViasCount;
     int m_BlindOrBuriedViasCount;
 
-public: DIALOG_GENDRILL( WinEDA_PcbFrame* parent );
+public: DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
     ~DIALOG_GENDRILL();
 
 private:

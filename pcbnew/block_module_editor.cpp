@@ -291,7 +291,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     BOARD_ITEM*      item;
     wxPoint          move_offset;
     MODULE*          currentModule =
-        ( (WinEDA_BasePcbFrame*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->GetBoard()->m_Modules;
+        ( (PCB_BASE_FRAME*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->GetBoard()->m_Modules;
 
     PtBlock = &screen->m_BlockLocate;
     GRSetDrawMode( aDC, g_XorMode );

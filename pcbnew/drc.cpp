@@ -87,7 +87,7 @@ void DRC::DestroyDialog( int aReason )
 }
 
 
-DRC::DRC( WinEDA_PcbFrame* aPcbWindow )
+DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
 {
     m_mainWindow = aPcbWindow;
     m_pcb = aPcbWindow->GetBoard();

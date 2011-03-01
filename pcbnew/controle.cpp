@@ -15,7 +15,7 @@
 #include "collectors.h"
 
 //external funtions used here:
-extern bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame,
+extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,
                        int aCurrentTool, wxSize grid, wxPoint on_grid, wxPoint* curpos );
 
 
@@ -60,7 +60,7 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
 }
 
 
-BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
+BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 {
     BOARD_ITEM* item;
 
@@ -209,7 +209,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
          *  DrawPanel->m_IgnoreMouseEvents = true;
          */
 
-        // this menu's handler is void WinEDA_BasePcbFrame::ProcessItemSelection()
+        // this menu's handler is void PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the item.
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
         PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
@@ -226,7 +226,7 @@ BOARD_ITEM* WinEDA_BasePcbFrame::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 }
 
 
-void WinEDA_PcbFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;

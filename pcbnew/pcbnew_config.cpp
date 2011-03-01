@@ -27,7 +27,7 @@
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
 
-void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
+void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -127,7 +127,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_PcbFrame::Process_Config internal error" ) );
+        DisplayError( this, wxT( "PCB_EDIT_FRAME::Process_Config internal error" ) );
     }
 }
 
@@ -140,7 +140,7 @@ void WinEDA_PcbFrame::Process_Config( wxCommandEvent& event )
  *                           and initialize setting to their default value.
  * @return Always returns true.
  */
-bool WinEDA_PcbFrame::LoadProjectSettings( const wxString& aProjectFileName )
+bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 {
     wxFileName fn = aProjectFileName;
 
@@ -171,7 +171,7 @@ bool WinEDA_PcbFrame::LoadProjectSettings( const wxString& aProjectFileName )
 }
 
 
-void WinEDA_PcbFrame::SaveProjectSettings()
+void PCB_EDIT_FRAME::SaveProjectSettings()
 {
     wxFileName fn;
 
@@ -197,7 +197,7 @@ void WinEDA_PcbFrame::SaveProjectSettings()
  * to define local variables.  The old method of statically building the array
  * at compile time requiring global variable definitions by design.
  */
-PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetProjectFileParameters()
+PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;
@@ -266,7 +266,7 @@ PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetProjectFileParameters()
  *        global variables or move them to the object class where they are
  *        used.
  */
-PARAM_CFG_ARRAY& WinEDA_PcbFrame::GetConfigurationSettings()
+PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
     if( !m_configSettings.empty() )
         return m_configSettings;

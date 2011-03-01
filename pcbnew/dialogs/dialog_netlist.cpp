@@ -18,7 +18,7 @@ extern void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       fram
 
 
 
-void WinEDA_PcbFrame::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
+void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
 {
     /* Setup the netlist file name to the last net list file read or the board file
      * name if no last file read is not set.
@@ -37,7 +37,7 @@ void WinEDA_PcbFrame::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
 }
 
 
-DIALOG_NETLIST::DIALOG_NETLIST( WinEDA_PcbFrame* aParent, wxDC * aDC,
+DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
                                 const wxString & aNetlistFull_Filename )
     : DIALOG_NETLIST_FBP( aParent )
 {

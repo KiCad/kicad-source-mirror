@@ -31,7 +31,7 @@ private:
 
     static const wxString wildCard;     ///< the name of a ficticious netclass which includes all NETs
 
-    WinEDA_PcbFrame*        m_Parent;
+    PCB_EDIT_FRAME*         m_Parent;
     BOARD*                  m_Pcb;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
@@ -100,7 +100,7 @@ private:
 
 
 public:
-    DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent );
+    DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent );
     ~DIALOG_DESIGN_RULES( ) { };
 
 };

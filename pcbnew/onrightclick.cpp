@@ -23,9 +23,7 @@
 static wxMenu* Append_Track_Width_List( BOARD* aBoard );
 
 
-/******************************************************************************/
-bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
-/******************************************************************************/
+bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 {
     wxString    msg;
     int         flags = 0;
@@ -62,6 +60,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             ADD_MENUITEM( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
                           _( "End Tool" ), cancel_tool_xpm );
         }
+
         aPopMenu->AppendSeparator();
     }
     else
@@ -73,7 +72,6 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             aPopMenu->AppendSeparator();
         }
     }
-
 
     /* Select a proper item */
 
@@ -98,6 +96,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
             DrawPanel->m_AbortRequest = false;
             item = PcbGeneralLocateAndDisplay();
+
             if( DrawPanel->m_AbortRequest )
             {
                 DrawPanel->CrossHairOn( &dc );
@@ -125,8 +124,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( !( (MODULE*) item )->IsLocked() )
                 {
-                    msg = AddHotkeyName( _(
-                                             "Lock Module" ), g_Board_Editor_Hokeys_Descr,
+                    msg = AddHotkeyName( _("Lock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
                                   locked_xpm );
@@ -165,14 +163,17 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
                               _( "End Drawing" ), apply_xpm );
             }
+
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Move Drawing" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _( "Move Drawing" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_MOVE_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_DRAWING_REQUEST,
                               msg, move_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING, _(
                                   "Delete Drawing" ), delete_xpm );
+
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
                                   _( "Delete All Drawing on Layer" ), delete_body_xpm );
@@ -213,9 +214,9 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_DIMENSION:
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION,
-                              msg, edit_xpm );
+                msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_EDIT_ITEM );
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION, msg, edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
                               _( "Delete Dimension" ), delete_xpm );
             }
@@ -224,11 +225,12 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_MIRE:
             if( !flags )
             {
-                msg = AddHotkeyName( _( "Move Target" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
+                msg = AddHotkeyName( _( "Move Target" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_MOVE_ITEM );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST, msg, move_xpm );
-                msg = AddHotkeyName( _( "Edit Target" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_MIRE,
-                              msg, edit_xpm );
+                msg = AddHotkeyName( _( "Edit Target" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_EDIT_ITEM );
+                ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_EDIT_MIRE, msg, edit_xpm );
                 ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
                               _( "Delete Target" ), delete_xpm );
             }
@@ -239,7 +241,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case TYPE_NOT_INIT:
         case TYPE_PCB:
             msg.Printf(
-                wxT( "WinEDA_PcbFrame::OnRightClick() Error: unexpected DrawType %d" ),
+                wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unexpected DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
             SetCurItem( NULL );
@@ -247,7 +249,7 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
         default:
             msg.Printf(
-                wxT( "WinEDA_PcbFrame::OnRightClick() Error: unknown DrawType %d" ),
+                wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unknown DrawType %d" ),
                 item->Type() );
             DisplayError( this, msg );
 
@@ -367,44 +369,32 @@ bool WinEDA_PcbFrame::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 }
 
 
-/*********************************************************/
-void WinEDA_PcbFrame::createPopUpBlockMenu( wxMenu* menu )
-/*********************************************************/
-
 /* Create Pop sub menu for block commands
  */
+void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
 {
-    ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                  _( "Cancel Block" ), cancel_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK,
-                  _( "Zoom Block" ), zoom_selected_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), cancel_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), zoom_selected_xpm );
     menu->AppendSeparator();
-    ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK,
-                  _( "Place Block" ), apply_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK,
-                  _( "Copy Block" ), copyblock_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_FLIP_BLOCK,
-                  _( "Flip Block" ), invert_module_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK,
-                  _( "Rotate Block" ), rotate_pos_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_DELETE_BLOCK,
-                  _( "Delete Block" ), delete_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), copyblock_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), invert_module_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), rotate_pos_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
 }
 
-
-/******************************************************************************/
-void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
-/******************************************************************************/
 
 /* Create command lines for a popup menu, for track and via editing
  * also update Netclass selection
  */
+void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 {
     wxPoint  cursorPosition = GetScreen()->GetCrossHairPosition();
     wxString msg;
 
     GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
     m_TrackAndViasSizesList_Changed = true;
+    updateDesignRulesSelectBoxes();
 
     int flags = Track->m_Flags;
 
@@ -426,7 +416,8 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             {
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
                               _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
-                msg = AddHotkeyName( _( "Drag Segment" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
+                msg = AddHotkeyName( _( "Drag Segment" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_DRAG_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
                               msg, drag_track_segment_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
@@ -450,14 +441,14 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
         PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
 
-        msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr, HK_SWITCH_TRACK_POSTURE );
+        msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr,
+                             HK_SWITCH_TRACK_POSTURE );
         PopMenu->Append( ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
         if( IsMicroViaAcceptable() )
         {
-            msg = AddHotkeyName( _(
-                                     "Place Micro Via" ), g_Board_Editor_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Place Micro Via" ), g_Board_Editor_Hokeys_Descr,
                                  HK_ADD_MICROVIA );
             PopMenu->Append( ID_POPUP_PCB_PLACE_MICROVIA, msg );
         }
@@ -468,12 +459,14 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == TYPE_VIA )
         {
-            msg = AddHotkeyName( _( "Change Via Size and Drill" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            msg = AddHotkeyName( _( "Change Via Size and Drill" ), g_Board_Editor_Hokeys_Descr,
+                                 HK_EDIT_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
         }
         else
         {
-            msg = AddHotkeyName( _( "Change Segment Width" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+            msg = AddHotkeyName( _( "Change Segment Width" ), g_Board_Editor_Hokeys_Descr,
+                                 HK_EDIT_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
             ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_TRACK,
                           _( "Change Track Width" ), width_track_xpm );
@@ -488,22 +481,20 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     // Delete control:
     PopMenu->AppendSeparator();
     wxMenu* track_mnu = new wxMenu;
-    ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu,
-                               ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
+    ADD_MENUITEM_WITH_SUBMENU( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU,
+                               _( "Delete" ), delete_xpm );
 
     msg = AddHotkeyName( Track->Type()==TYPE_VIA ?
                         _( "Delete Via" ) : _( "Delete Segment" ),
                          g_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
-    ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG,
-                  msg, delete_line_xpm );
+    ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG, msg, delete_line_xpm );
+
     if( !flags )
     {
         msg = AddHotkeyName( _( "Delete Track" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK,
-                      msg, delete_track_xpm );
-        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET,
-                      _( "Delete Net" ), delete_net_xpm );
+        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, delete_track_xpm );
+        ADD_MENUITEM( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ), delete_net_xpm );
     }
 
     // Add global edition command
@@ -538,12 +529,9 @@ void WinEDA_PcbFrame::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 }
 
 
-/********************************************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu )
-/********************************************************************************************/
-
 /* Create the wxMenuitem list for zone outlines editing and zone filling
  */
+void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu )
 {
     wxString msg;
 
@@ -578,7 +566,8 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         {
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                           _( "Create Corner" ), add_corner_xpm );
-            msg = AddHotkeyName( _( "Drag Outline Segment" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM );
+            msg = AddHotkeyName( _( "Drag Outline Segment" ), g_Board_Editor_Hokeys_Descr,
+                                 HK_DRAG_ITEM );
             ADD_MENUITEM( zones_menu, ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT,
                           msg, drag_outline_segment_xpm );
         }
@@ -591,8 +580,7 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
                       _( "Add Cutout Area" ), add_zone_cutout );
         zones_menu->AppendSeparator();
 
-        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE,
-                      _( "Fill Zone" ), fill_zone_xpm );
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ), fill_zone_xpm );
 
         if( edge_zone->m_FilledPolysList.size() > 0 )
         {
@@ -601,8 +589,7 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
         }
 
         msg = AddHotkeyName( _( "Move Zone" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
-        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES,
-                      msg, move_xpm );
+        ADD_MENUITEM( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES, msg, move_xpm );
 
         msg = AddHotkeyName( _( "Edit Zone Params" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
@@ -620,12 +607,9 @@ void WinEDA_PcbFrame::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu
 }
 
 
-/*********************************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu )
-/*********************************************************************************/
-
 /* Create the wxMenuitem list for footprint editing
  */
+void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu )
 {
     wxMenu*  sub_menu_footprint;
     int      flags = aModule->m_Flags;
@@ -635,6 +619,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
 
     msg = aModule->MenuText( GetBoard() );
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
+
     if( !flags )
     {
         msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
@@ -644,6 +629,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
                       msg, drag_module_xpm );
     }
+
     msg = AddHotkeyName( _( "Rotate +" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
                   msg, rotate_module_pos_xpm );
@@ -656,8 +642,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
     if( !flags )
     {
         msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-        ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE,
-                      msg, edit_module_xpm );
+        ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE, msg, edit_module_xpm );
         sub_menu_footprint->AppendSeparator();
         ADD_MENUITEM( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
                       _( "Delete Module" ), delete_module_xpm );
@@ -665,12 +650,9 @@ void WinEDA_PcbFrame::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* men
 }
 
 
-/********************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
-/********************************************************************/
-
 /* Create the wxMenuitem list for editing texts on footprints
  */
+void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
 {
     wxMenu*  sub_menu_Fp_text;
     int      flags = FpText->m_Flags;
@@ -700,7 +682,8 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
                       _( "Reset Size" ), reset_text_xpm );
     }
 
-    if( !flags && FpText->m_Type == TEXT_is_DIVERS )    // Graphic texts can be deleted only if are not currently edited
+    // Graphic texts can be deleted only if are not currently edited.
+    if( !flags && FpText->m_Type == TEXT_is_DIVERS )
     {
         ADD_MENUITEM( sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
                       _( "Delete" ), delete_xpm );
@@ -709,6 +692,7 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
     if( !flags )
     {
         MODULE* module = (MODULE*) FpText->GetParent();
+
         if( module )
         {
             menu->AppendSeparator();
@@ -718,13 +702,10 @@ void WinEDA_PcbFrame::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* m
 }
 
 
-/************************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
-/************************************************************************/
-
 /* Create pop menu for pads
  * also update Netclass selection
  */
+void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 {
     wxMenu* sub_menu_Pad;
     int     flags = Pad->m_Flags;
@@ -734,19 +715,17 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 
     GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
     m_TrackAndViasSizesList_Changed = true;
+    updateDesignRulesSelectBoxes();
 
     wxString msg = Pad->MenuText( GetBoard() );
 
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
 
-    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST,
-                  _( "Move" ), move_pad_xpm );
-    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST,
-                  _( "Drag" ), drag_pad_xpm );
+    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST, _( "Move" ), move_pad_xpm );
+    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST, _( "Drag" ), drag_pad_xpm );
 
-    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD,
-                  _( "Edit" ), options_pad_xpm );
+    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, _( "Edit" ), options_pad_xpm );
     sub_menu_Pad->AppendSeparator();
 
     ADD_MENUITEM_WITH_HELP( sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
@@ -764,15 +743,16 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
                             global_options_pad_xpm );
     sub_menu_Pad->AppendSeparator();
 
-    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD,
-                  _( "Delete" ), delete_pad_xpm );
+    ADD_MENUITEM( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD, _( "Delete" ), delete_pad_xpm );
 
     if( m_HTOOL_current_state == ID_TOOLBARH_PCB_MODE_TRACKS )
     {
         menu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Autoroute Pad" ) );
         menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Autoroute Net" ) );
     }
+
     MODULE* module = (MODULE*) Pad->GetParent();
+
     if( module )
     {
         menu->AppendSeparator();
@@ -781,10 +761,8 @@ void WinEDA_PcbFrame::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 }
 
 
-/*****************************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
-/*****************************************************************************/
 /* Create pop menu for pcb texts */
+void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 {
     wxMenu*  sub_menu_Text;
     int      flags = Text->m_Flags;
@@ -802,38 +780,30 @@ void WinEDA_PcbFrame::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
                       msg, move_text_xpm );
     }
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
-    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB,
-                  msg, rotate_pos_xpm );
+    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, rotate_pos_xpm );
     msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB,
-                  msg, edit_text_xpm );
+    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB, msg, edit_text_xpm );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_RESET_TEXT_SIZE,
                   _( "Reset Size" ), reset_text_xpm );
 
     sub_menu_Text->AppendSeparator();
-    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB,
-                  _( "Delete" ), delete_text_xpm );
+    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB, _( "Delete" ), delete_text_xpm );
 }
 
 
-/**********************************************************************/
-void WinEDA_PcbFrame::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu )
-/**********************************************************************/
+void PCB_EDIT_FRAME::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu )
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_DELETE_MARKER, _( "Delete Marker" ), delete_xpm );
     ADD_MENUITEM( aPopMenu, ID_POPUP_PCB_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );
 }
 
 
-/*******************************************************/
-static wxMenu* Append_Track_Width_List( BOARD* aBoard )
-/*******************************************************/
-
 /**
  * Function Append_Track_Width_List
  * creates a wxMenu * which shows the last used track widths and via diameters
  * @return a pointeur to the menu
  */
+static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 {
     wxString msg;
     wxMenu*  trackwidth_menu;
@@ -841,10 +811,8 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     trackwidth_menu = new wxMenu;
 
-    trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH,
-                             _( "Auto Width" ),
-                             _(
-                                 "Use the track width when starting on a track, otherwise the current track width" ),
+    trackwidth_menu->Append( ID_POPUP_PCB_SELECT_AUTO_WIDTH, _( "Auto Width" ),
+                             _( "Use the track width when starting on a track, otherwise the current track width" ),
                              true );
 
     if( aBoard->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
@@ -863,21 +831,15 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii],
                                        PCB_INTERNAL_UNIT, true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
+
         if( ii == 0 )
             msg << _( " (use NetClass)" );
+
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
     }
 
-    if( aBoard->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
-        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
-    else
-    {
-        if( aBoard->m_TrackWidthSelector < aBoard->m_TrackWidthList.size() )
-            trackwidth_menu->Check( ID_POPUP_PCB_SELECT_WIDTH1 + aBoard->m_TrackWidthSelector,
-                                    true );
-    }
-
     trackwidth_menu->AppendSeparator();
+
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
         value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
@@ -885,6 +847,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         wxString drill = ReturnStringFromValue( g_UserUnit,
                                                 aBoard->m_ViasDimensionsList[ii].m_Drill,
                                                 PCB_INTERNAL_UNIT,  true );
+
         if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
             msg.Printf( _( "Via %s" ), GetChars( value ) );
         else
@@ -893,11 +856,9 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         }
         if( ii == 0 )
             msg << _( " (use NetClass)" );
+
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }
-
-    if( aBoard->m_ViaSizeSelector < aBoard->m_ViasDimensionsList.size() )
-        trackwidth_menu->Check( ID_POPUP_PCB_SELECT_VIASIZE1 + aBoard->m_ViaSizeSelector, true );
 
     return trackwidth_menu;
 }

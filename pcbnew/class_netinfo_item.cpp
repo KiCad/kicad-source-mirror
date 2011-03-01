@@ -139,7 +139,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Net Code" ), txt, RED );
 
     count  = 0;
-    module = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Modules;
+    module = ( (PCB_BASE_FRAME*) frame )->GetBoard()->m_Modules;
     for( ; module != 0; module = module->Next() )
     {
         for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
@@ -153,7 +153,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Pads" ), txt, DARKGREEN );
 
     count  = 0;
-    Struct = ( (WinEDA_BasePcbFrame*) frame )->GetBoard()->m_Track;
+    Struct = ( (PCB_BASE_FRAME*) frame )->GetBoard()->m_Track;
     for( ; Struct != NULL; Struct = Struct->Next() )
     {
         if( Struct->Type() == TYPE_VIA )

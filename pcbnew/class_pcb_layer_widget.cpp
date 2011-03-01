@@ -46,12 +46,12 @@
 /**
  * Class PCB_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
- * may be tied into the WinEDA_PcbFrame's data and so we can add a popup
+ * may be tied into the PCB_EDIT_FRAME's data and so we can add a popup
  * menu which is specific to PCBNEW's needs.
  */
 
 
-PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( WinEDA_PcbFrame* aParent, wxWindow* aFocusOwner, int aPointSize ) :
+PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
@@ -298,7 +298,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
-    myframe->syncLayerBox();
+
     if(DisplayOpt.ContrastModeDisplay)
         myframe->DrawPanel->Refresh();
 

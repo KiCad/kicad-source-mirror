@@ -137,7 +137,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     SheetSize.x *= m_Parent->m_InternalUnits / 1000;
     SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in internal units
 
-    WinEDA_BasePcbFrame* pcbframe = (WinEDA_BasePcbFrame*) m_Parent;
+    PCB_BASE_FRAME* pcbframe = (PCB_BASE_FRAME*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundingBox();
     EDA_Rect brd_BBox = pcbframe->GetBoard()->m_BoundaryBox;
 

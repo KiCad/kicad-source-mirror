@@ -106,7 +106,7 @@ int WinEDALayerChoiceBox::SetLayerSelection( int layer )
 // Reload the Layers
 void WinEDALayerChoiceBox::Resync()
 {
-    WinEDA_BasePcbFrame* pcbFrame = (WinEDA_BasePcbFrame*) GetParent()->GetParent();
+    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
 
     wxASSERT( board != NULL );
@@ -152,7 +152,7 @@ void WinEDALayerChoiceBox::Resync()
 
 void WinEDALayerChoiceBox::ResyncBitmapOnly()
 {
-    WinEDA_BasePcbFrame* pcbFrame = (WinEDA_BasePcbFrame*) GetParent()->GetParent();
+    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
 
     int elements = GetCount();

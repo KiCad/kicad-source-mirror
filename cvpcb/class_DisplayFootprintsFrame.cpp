@@ -24,7 +24,7 @@
 
 
 
-BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, WinEDA_BasePcbFrame )
+BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_SIZE( DISPLAY_FOOTPRINTS_FRAME::OnSize )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
@@ -49,7 +49,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
                                                     const wxString& title,
                                                     const wxPoint& pos,
                                                     const wxSize& size, long style ) :
-    WinEDA_BasePcbFrame( father, CVPCB_DISPLAY_FRAME, title, pos, size, style )
+    PCB_BASE_FRAME( father, CVPCB_DISPLAY_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "CmpFrame" );
     m_Draw_Axis = true;         // true to draw axis.

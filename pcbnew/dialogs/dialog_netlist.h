@@ -15,12 +15,13 @@
 class DIALOG_NETLIST : public DIALOG_NETLIST_FBP
 {
 	private:
-    WinEDA_PcbFrame * m_Parent;
+    PCB_EDIT_FRAME * m_Parent;
     wxDC * m_DC;
 
 
 	public:
-		DIALOG_NETLIST( WinEDA_PcbFrame* aParent, wxDC * aDC, const wxString & aNetlistFull_Filename );
+		DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
+                        const wxString & aNetlistFull_Filename );
 		~DIALOG_NETLIST() {};
 
         void Init();

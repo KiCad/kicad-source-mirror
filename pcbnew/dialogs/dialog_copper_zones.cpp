@@ -33,7 +33,7 @@ wxPoint dialog_copper_zone::prevPosition( -1, -1 );
 wxSize dialog_copper_zone::prevSize;
 
 
-dialog_copper_zone::dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting ) :
+dialog_copper_zone::dialog_copper_zone( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting ) :
     dialog_copper_zone_base( parent )
 {
     m_Parent = parent;

@@ -23,7 +23,7 @@ BOARD_DESIGN_SETTINGS boardDesignSettings;
 /* Class BOARD: */
 /*****************/
 
-BOARD::BOARD( EDA_ITEM* parent, WinEDA_BasePcbFrame* frame ) :
+BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
     m_NetClasses( this )
 {

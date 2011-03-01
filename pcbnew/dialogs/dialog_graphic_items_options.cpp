@@ -17,7 +17,7 @@
 extern int g_DrawDefaultLineThickness;
 
 
-void WinEDA_PcbFrame::OnConfigurePcbOptions( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::OnConfigurePcbOptions( wxCommandEvent& aEvent )
 {
     DIALOG_GRAPHIC_ITEMS_OPTIONS dlg( this );
 
@@ -36,7 +36,7 @@ void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
  * DIALOG_GRAPHIC_ITEMS_OPTIONS constructor
  */
 
-DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( WinEDA_BasePcbFrame* parent )
+DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* parent )
     : DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( parent )
 {
     m_Parent = parent;

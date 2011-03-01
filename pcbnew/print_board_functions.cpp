@@ -114,10 +114,10 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (NULL if not used)
  */
-void WinEDA_PcbFrame::PrintPage( wxDC* aDC,
-                                  int   aPrintMaskLayer,
-                                  bool  aPrintMirrorMode,
-                                  void * aData)
+void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
+                                int   aPrintMaskLayer,
+                                bool  aPrintMirrorMode,
+                                void* aData)
 {
     MODULE* Module;
     int drawmode = GR_COPY;

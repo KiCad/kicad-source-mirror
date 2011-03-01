@@ -35,7 +35,7 @@ wxString ModulesMaskSelection = wxT( "*" );
 
 /* Called on events (popup menus) relative to automove and autoplace footprints
  */
-void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
+void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
 {
     int        id = event.GetId();
     bool       on_state;
@@ -167,7 +167,7 @@ void WinEDA_PcbFrame::AutoPlace( wxCommandEvent& event )
  * starting from the mouse cursor
  * The components with the FIXED status set are not moved
  */
-void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
+void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 {
     std::vector <MODULE*> moduleList;
     wxPoint  start, current;
@@ -271,7 +271,7 @@ void WinEDA_PcbFrame::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 /* Update (TRUE or FALSE) FIXED attribute on the module Module
  * or all the modules if Module == NULL
  */
-void WinEDA_PcbFrame::FixeModule( MODULE* Module, bool Fixe )
+void PCB_EDIT_FRAME::FixeModule( MODULE* Module, bool Fixe )
 {
     if( Module )
     {

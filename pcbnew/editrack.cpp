@@ -36,8 +36,8 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
  */
 static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    WinEDA_PcbFrame* frame = (WinEDA_PcbFrame*) Panel->GetParent();
-    TRACK*           track = (TRACK*) frame->GetCurItem();
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
+    TRACK*          track = (TRACK*) frame->GetCurItem();
 
     if( track && ( track->Type()==TYPE_VIA || track->Type()==TYPE_TRACK ) )
     {
@@ -77,7 +77,7 @@ static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
  * - Control DRC
  * - OK if DRC: adding a new track.
  */
-TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
+TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 {
     D_PAD*      pt_pad = NULL;
     TRACK*      TrackOnStartPoint = NULL;
@@ -132,10 +132,9 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         else    // no starting point, but a filled zone area can exist. This is
                 // also a good starting point.
         {
-            ZONE_CONTAINER* zone =
-                GetBoard()->HitTestForAnyFilledArea( pos,
-                                                     GetScreen()->
-                                                     m_Active_Layer );
+            ZONE_CONTAINER* zone;
+            zone = GetBoard()->HitTestForAnyFilledArea( pos, GetScreen()-> m_Active_Layer );
+
             if( zone )
                 g_HighLight_NetCode = zone->GetNet();
         }
@@ -152,6 +151,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackSegment->SetNet( g_HighLight_NetCode );
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
         m_TrackAndViasSizesList_Changed = true;
+        updateDesignRulesSelectBoxes();
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = GetBoard()->GetCurrentTrackWidth();
@@ -295,7 +295,7 @@ TRACK* WinEDA_PcbFrame::Begin_Route( TRACK* aTrack, wxDC* DC )
  *   1 if ok
  *   0 if not
  */
-bool WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC )
+bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
 {
     int pas_45;
     int dx0, dy0, dx1, dy1;
@@ -416,7 +416,7 @@ bool WinEDA_PcbFrame::Add_45_degrees_Segment( wxDC* DC )
 /*
  * End trace route in progress.
  */
-void WinEDA_PcbFrame::End_Route( TRACK* aTrack, wxDC* DC )
+void PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
 {
     int masquelayer =
         g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
@@ -605,8 +605,8 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoi
  */
 static void PushTrack( EDA_DRAW_PANEL* panel )
 {
-    PCB_SCREEN* screen = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetScreen();
-    BOARD*  pcb    = ( (WinEDA_BasePcbFrame*) (panel->GetParent()) )->GetBoard();
+    PCB_SCREEN* screen = ( (PCB_BASE_FRAME*) (panel->GetParent()) )->GetScreen();
+    BOARD*  pcb    = ( (PCB_BASE_FRAME*) (panel->GetParent()) )->GetBoard();
     wxPoint cursor = screen->GetCrossHairPosition();
     wxPoint cv, vec, n;
     TRACK*  track = g_CurrentTrackSegment;
@@ -670,8 +670,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 {
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-    PCB_SCREEN*          screen = (PCB_SCREEN*) aPanel->GetScreen();
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+    PCB_SCREEN*     screen = (PCB_SCREEN*) aPanel->GetScreen();
+    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
 
     bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.DisplayPcbTrackFill = true;

@@ -26,13 +26,12 @@ void DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay( wxCommandEvent& event )
 }
 
 
-DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS(
-    WinEDA_BasePcbFrame* parent )
-    : DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( parent)
+DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( PCB_BASE_FRAME* parent )
+    : DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
 
-    initDialog( );
+    initDialog();
     GetSizer()->SetSizeHints( this );
 
     Centre();

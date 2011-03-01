@@ -34,12 +34,12 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS :
     public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     int m_Netcode;
     int m_OptionID;
 
 public:
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( WinEDA_PcbFrame* aParent, int aNetcode );
+    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent, int aNetcode );
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
 
     // Virtual event handlers, overided here

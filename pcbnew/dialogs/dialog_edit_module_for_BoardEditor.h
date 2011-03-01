@@ -13,7 +13,7 @@ class DIALOG_MODULE_BOARD_EDITOR: public DIALOG_MODULE_BOARD_EDITOR_BASE
 {
 private:
 
-    WinEDA_PcbFrame * m_Parent;
+    PCB_EDIT_FRAME * m_Parent;
     wxDC * m_DC;
     MODULE* m_CurrentModule;
     TEXTE_MODULE* m_ReferenceCopy;
@@ -27,7 +27,7 @@ private:
 public:
 
     // Constructor and destructor
-    DIALOG_MODULE_BOARD_EDITOR( WinEDA_PcbFrame* aParent, MODULE* aModule, wxDC* aDC );
+    DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
     ~DIALOG_MODULE_BOARD_EDITOR();
 
 private:

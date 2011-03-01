@@ -277,7 +277,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int  Fill_Zone( WinEDA_PcbFrame* frame, wxDC* DC, bool verbose = TRUE );
+    int  Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = TRUE );
 
     /**
      * Function Fill_Zone_Areas_With_Segments

@@ -8,7 +8,7 @@
 #define _MODULE_EDITOR_FRAME_H_
 
 
-class WinEDA_ModuleEditFrame : public WinEDA_BasePcbFrame
+class WinEDA_ModuleEditFrame : public PCB_BASE_FRAME
 {
 public:
     MODULE*  CurrentModule;

@@ -19,7 +19,7 @@
 #define BACKUP_FILE_EXT wxT( "000" )
 
 
-void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
 
@@ -36,7 +36,7 @@ void WinEDA_PcbFrame::OnFileHistory( wxCommandEvent& event )
 
 /* Handle the read/write file commands
  */
-void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
+void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxString   msg;
@@ -129,8 +129,8 @@ void WinEDA_PcbFrame::Files_io( wxCommandEvent& event )
  *
  *  @return False if file load fails or is cancelled by the user, otherwise true.
  */
-bool WinEDA_PcbFrame::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
-                                      bool aForceFileDialog )
+bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
+                                     bool aForceFileDialog )
 {
     FILE*    source;
     wxString msg;
@@ -280,6 +280,10 @@ this file again." ) );
     ReCreateLayerBox( NULL );
     syncLayerWidget();
 
+    updateDesignRulesSelectBoxes();
+    updateTraceWidthSelectBox();
+    updateViaSizeSelectBox();
+
     // Display the loaded board:
     Zoom_Automatique( false );
     wxSafeYield();      // Needed if we want to see the board now.
@@ -312,7 +316,7 @@ this file again." ) );
 
 /* Write the board file
  */
-bool WinEDA_PcbFrame::SavePcbFile( const wxString& FileName )
+bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
 {
     wxFileName  backupFileName;
     wxFileName  pcbFileName;

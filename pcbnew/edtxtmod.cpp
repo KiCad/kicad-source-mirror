@@ -30,7 +30,7 @@ static int     TextInitialOrientation;  // module text initial orientation for
  *  Note there always are 2 texts: reference and value.
  *  New texts have the member TEXTE_MODULE.m_Type set to TEXT_is_DIVERS
  */
-TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
+TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 {
     TEXTE_MODULE* Text;
 
@@ -67,7 +67,7 @@ TEXTE_MODULE* WinEDA_BasePcbFrame::CreateTextModule( MODULE* Module, wxDC* DC )
 
 /* Rotate text 90 degrees.
  */
-void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
+void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text == NULL )
         return;
@@ -100,7 +100,7 @@ void WinEDA_BasePcbFrame::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 /*
  * Deletes text in module (if not the reference or value)
  */
-void WinEDA_BasePcbFrame::DeleteTextModule( TEXTE_MODULE* Text )
+void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
 {
     MODULE* Module;
 
@@ -160,7 +160,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 /* Start a text move.
  */
-void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
+void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     MODULE* Module;
 
@@ -194,7 +194,7 @@ void WinEDA_BasePcbFrame::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
 /* Place the text a the cursor position when the left mouse button is clicked.
  */
-void WinEDA_BasePcbFrame::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
+void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
     {
@@ -263,7 +263,7 @@ static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     Text->Draw( aPanel, aDC, GR_XOR, MoveVector );
 }
 
-void WinEDA_BasePcbFrame::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
+void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
 {
     wxSize newSize;
     int newThickness;
@@ -319,7 +319,7 @@ void WinEDA_BasePcbFrame::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     OnModify();
 }
 
-void WinEDA_BasePcbFrame::ResetModuleTextSizes( int aType, wxDC* aDC )
+void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
 {
     MODULE* module;
     BOARD_ITEM* boardItem;

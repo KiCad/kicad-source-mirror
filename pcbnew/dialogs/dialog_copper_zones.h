@@ -12,7 +12,7 @@
 class dialog_copper_zone : public dialog_copper_zone_base
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME*  m_Parent;
     wxConfig*        m_Config;      // Current config
     int m_OnExitCode;               /* exit code: ZONE_ABORT if no change,
                                      *  ZONE_OK if new values accepted
@@ -35,7 +35,7 @@ private:
     static wxSize   prevSize;
 
 public:
-    dialog_copper_zone( WinEDA_PcbFrame* parent, ZONE_SETTING* zone_setting );
+    dialog_copper_zone( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting );
 private:
     void initDialog();
     void OnButtonOkClick( wxCommandEvent& event );

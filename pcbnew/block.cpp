@@ -58,12 +58,11 @@ static bool blockDrawItems = true;
 class DIALOG_BLOCK_OPTIONS : public DIALOG_BLOCK_OPTIONS_BASE
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
+    PCB_BASE_FRAME* m_Parent;
 
 public:
 
-    DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* parent,
-                          const wxString&      title );
+    DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* parent, const wxString& title );
     ~DIALOG_BLOCK_OPTIONS()
     {
     }
@@ -82,7 +81,7 @@ private:
 };
 
 
-static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent, const wxString& title )
+static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title )
 {
     int     nocmd;
     wxPoint oldpos = parent->GetScreen()->GetCrossHairPosition();
@@ -101,8 +100,7 @@ static bool InstallBlockCmdFrame( WinEDA_BasePcbFrame* parent, const wxString& t
 }
 
 
-DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( WinEDA_BasePcbFrame* aParent,
-                                            const wxString&      aTitle ) :
+DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent, const wxString& aTitle ) :
     DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle )
 {
     m_Parent = aParent;
@@ -151,7 +149,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
  * @param aKey = the key modifiers (Alt, Shift ...)
  * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
  */
-int WinEDA_PcbFrame::ReturnBlockCommand( int aKey )
+int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
 {
     int cmd = 0;
 
@@ -197,7 +195,7 @@ int WinEDA_PcbFrame::ReturnBlockCommand( int aKey )
  * (bloc move, drag, copy .. )
  * Parameters must be initialized in GetScreen()->m_BlockLocate
  */
-void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
+void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     bool err = false;
 
@@ -267,7 +265,7 @@ void WinEDA_PcbFrame::HandleBlockPlace( wxDC* DC )
  * @return false if no item selected, or command finished,
  * true if some items found and HandleBlockPlace must be called later
  */
-bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
+bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool nextcmd = false;       // Will be set to true if a block place is needed
     bool cancelCmd = false;
@@ -384,7 +382,7 @@ bool WinEDA_PcbFrame::HandleBlockEnd( wxDC* DC )
  * select items within the selected block.
  * selected items are put in the pick list
  */
-void WinEDA_PcbFrame::Block_SelectItems()
+void PCB_EDIT_FRAME::Block_SelectItems()
 {
     int masque_layer;
 
@@ -521,8 +519,8 @@ void WinEDA_PcbFrame::Block_SelectItems()
 
 static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset )
 {
-    PICKED_ITEMS_LIST*   itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
-    WinEDA_BasePcbFrame* frame     = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+    PICKED_ITEMS_LIST* itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
 
     g_Offset_Module = -aOffset;
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
@@ -595,7 +593,7 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 /*
  * Erase selected block.
  */
-void WinEDA_PcbFrame::Block_Delete()
+void PCB_EDIT_FRAME::Block_Delete()
 {
     OnModify();
     SetCurItem( NULL );
@@ -642,7 +640,7 @@ void WinEDA_PcbFrame::Block_Delete()
             break;
 
         default:
-            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Delete( ) error: unexpected type" ) );
+            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Delete( ) error: unexpected type" ) );
             break;
         }
     }
@@ -659,7 +657,7 @@ void WinEDA_PcbFrame::Block_Delete()
  * Rotate all items within the selected block.
  * The rotation center is the center of the block
  */
-void WinEDA_PcbFrame::Block_Rotate()
+void PCB_EDIT_FRAME::Block_Rotate()
 {
     wxPoint oldpos;
     wxPoint centre;         // rotation cent-re for the rotation transform
@@ -706,7 +704,7 @@ void WinEDA_PcbFrame::Block_Rotate()
             break;
 
         default:
-            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Rotate( ) error: unexpected type" ) );
+            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Rotate( ) error: unexpected type" ) );
             break;
         }
     }
@@ -723,7 +721,7 @@ void WinEDA_PcbFrame::Block_Rotate()
  * flips items within the selected block.
  * The flip center is the center of the block
  */
-void WinEDA_PcbFrame::Block_Flip()
+void PCB_EDIT_FRAME::Block_Flip()
 {
 #define INVERT( pos ) (pos) = center.y - ( (pos) - center.y )
     wxPoint memo;
@@ -772,7 +770,7 @@ void WinEDA_PcbFrame::Block_Flip()
 
 
         default:
-            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Flip( ) error: unexpected type" ) );
+            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Flip( ) error: unexpected type" ) );
             break;
         }
     }
@@ -789,7 +787,7 @@ void WinEDA_PcbFrame::Block_Flip()
  * New location is determined by the current offset from the selected block's
  * original location.
  */
-void WinEDA_PcbFrame::Block_Move()
+void PCB_EDIT_FRAME::Block_Move()
 {
     OnModify();
 
@@ -831,7 +829,7 @@ void WinEDA_PcbFrame::Block_Move()
             break;
 
         default:
-            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Move( ) error: unexpected type" ) );
+            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Move( ) error: unexpected type" ) );
             break;
         }
     }
@@ -849,7 +847,7 @@ void WinEDA_PcbFrame::Block_Move()
  * New location is determined by the current offset from the selected block's
  * original location.
  */
-void WinEDA_PcbFrame::Block_Duplicate()
+void PCB_EDIT_FRAME::Block_Duplicate()
 {
     wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
 
@@ -944,7 +942,7 @@ void WinEDA_PcbFrame::Block_Duplicate()
             break;
 
         default:
-            wxMessageBox( wxT( "WinEDA_PcbFrame::Block_Duplicate( ) error: unexpected type" ) );
+            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Duplicate( ) error: unexpected type" ) );
             break;
         }
 

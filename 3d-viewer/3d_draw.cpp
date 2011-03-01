@@ -111,7 +111,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
  */
 GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 {
-    WinEDA_BasePcbFrame* pcbframe = m_Parent->m_Parent;
+    PCB_BASE_FRAME* pcbframe = m_Parent->m_Parent;
     BOARD* pcb = pcbframe->GetBoard();
     TRACK* track;
     SEGZONE*             segzone;

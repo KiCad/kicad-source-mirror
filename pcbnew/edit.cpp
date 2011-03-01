@@ -25,11 +25,11 @@
 // Uncomment following line to enable wxBell() command (which beeps speaker)
 // #include <wx/utils.h>
 
-static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxDC* DC );
+static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC* DC );
 
 
 /* Handles the selection of command events. */
-void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
+void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
     wxPoint     pos;
@@ -988,7 +988,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
     default:
         wxString msg;
         msg.Printf(
-            wxT( "WinEDA_PcbFrame::Process_Special_Functions() id %d error" ),
+            wxT( "PCB_EDIT_FRAME::Process_Special_Functions() id %d error" ),
             DrawStruct->Type() );
         DisplayError( this, msg );
 
@@ -1000,7 +1000,7 @@ void WinEDA_PcbFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxDC* DC )
+static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC* DC )
 {
     if( DrawStruct == NULL )
         return;
@@ -1016,7 +1016,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxD
     default:
         wxString msg;
         msg.Printf(
-            wxT( "WinEDA_PcbFrame::Move_Item Error: Bad DrawType %d" ),
+            wxT( "PCB_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),
             DrawStruct->Type() );
         DisplayError( frame, msg );
         break;
@@ -1024,7 +1024,7 @@ static void Process_Move_Item( WinEDA_PcbFrame* frame, EDA_ITEM* DrawStruct, wxD
 }
 
 
-void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
+void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 {
     if( Item == NULL )
         return;
@@ -1106,7 +1106,7 @@ void WinEDA_PcbFrame::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
+void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
 {
     int curLayer = getActiveLayer();
 
@@ -1191,7 +1191,7 @@ void WinEDA_PcbFrame::SwitchLayer( wxDC* DC, int layer )
 }
 
 
-void WinEDA_PcbFrame::OnSelectTool( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 

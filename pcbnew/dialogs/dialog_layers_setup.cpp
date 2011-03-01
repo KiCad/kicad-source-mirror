@@ -75,7 +75,7 @@ private:
     static wxPoint      s_LastPos;
     static wxSize       s_LastSize;
 
-    WinEDA_PcbFrame*    m_Parent;
+    PCB_EDIT_FRAME*     m_Parent;
 
     int                 m_CopperLayerCount;
     int                 m_EnabledLayers;
@@ -154,7 +154,7 @@ private:
 
 
 public:
-    DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent );
+    DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent );
     ~DIALOG_LAYERS_SETUP( ) { };
 
     bool Show( bool show );     // overload stock function
@@ -271,7 +271,7 @@ CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
 
 
 /***********************************************************************************/
-DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( WinEDA_PcbFrame* parent ) :
+DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
     DIALOG_LAYERS_SETUP_BASE( parent )
 /***********************************************************************************/
 {
@@ -560,7 +560,7 @@ void DIALOG_LAYERS_SETUP::OnCopperLayersChoice( wxCommandEvent& event )
 void DIALOG_LAYERS_SETUP::OnCancelButtonClick( wxCommandEvent& event )
 /*****************************************************************/
 {
-    EndModal( 0 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -698,8 +698,36 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 }
 
 
-void WinEDA_PcbFrame::InstallDialogLayerSetup()
+void PCB_EDIT_FRAME::InstallDialogLayerSetup()
 {
     DIALOG_LAYERS_SETUP dlg( this );
-    dlg.ShowModal();
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxLogDebug( wxT( "Current layer selected %d." ), getActiveLayer() );
+
+    // If the current active layer was removed, find the next avaiable layer to set as the
+    // active layer.
+    if( ( ( 1 << getActiveLayer() ) & GetBoard()->GetEnabledLayers() ) == 0 )
+    {
+        for( int i = 0;  i < LAYER_COUNT;  i++ )
+        {
+            int tmp = i;
+
+            if( i >= LAYER_COUNT )
+                tmp = i - LAYER_COUNT;
+
+            if( ( 1 << tmp ) & GetBoard()->GetEnabledLayers() )
+            {
+                wxLogDebug( wxT( "Setting current layer to  %d." ), getActiveLayer() );
+                setActiveLayer( tmp, true );
+                break;
+            }
+        }
+    }
+    else
+    {
+        setActiveLayer( getActiveLayer(), true );
+    }
 }

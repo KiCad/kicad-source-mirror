@@ -24,7 +24,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
- 
+
 #ifndef _DIALOG_GRAPHIC_ITEMS_OPTIONS_H_
 #define _DIALOG_GRAPHIC_ITEMS_OPTIONS_H_
 
@@ -38,11 +38,11 @@ class DIALOG_GRAPHIC_ITEMS_OPTIONS: public DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE
 {
 public:
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
-	WinEDA_BasePcbFrame * m_Parent;
+	PCB_BASE_FRAME * m_Parent;
 
 public:
-    DIALOG_GRAPHIC_ITEMS_OPTIONS( WinEDA_BasePcbFrame* parent );
-    ~DIALOG_GRAPHIC_ITEMS_OPTIONS(  );
+    DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* parent );
+    ~DIALOG_GRAPHIC_ITEMS_OPTIONS();
 
 private:
     void initValues( );

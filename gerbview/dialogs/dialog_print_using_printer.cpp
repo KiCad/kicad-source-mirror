@@ -198,7 +198,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     }
 
     // Disable checkboxes if the corresponding layer is not enabled
-    BOARD* board = ((WinEDA_BasePcbFrame*)m_Parent)->GetBoard();
+    BOARD* board = ((PCB_BASE_FRAME*)m_Parent)->GetBoard();
     for( int layer = 0; layer<NB_LAYERS; layer++, mask <<= 1 )
     {
        if( ! board->IsLayerEnabled( layer ) )

@@ -10,10 +10,10 @@
 class DIALOG_GLOBAL_DELETION: public DIALOG_GLOBAL_DELETION_BASE
 {
 private:
-	WinEDA_PcbFrame * m_Parent;
+	PCB_EDIT_FRAME * m_Parent;
 
 public:
-    DIALOG_GLOBAL_DELETION( WinEDA_PcbFrame* parent );
+    DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent );
 
 private:
     void OnOkClick( wxCommandEvent& event )

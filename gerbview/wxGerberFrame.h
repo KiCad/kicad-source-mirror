@@ -37,7 +37,7 @@ class DCODE_SELECTION_BOX;
 *   class WinEDA_GerberFrame: this is the main window used in gerbview
 ******************************************************************/
 
-class WinEDA_GerberFrame : public WinEDA_BasePcbFrame
+class WinEDA_GerberFrame : public PCB_BASE_FRAME
 {
     friend class PCB_LAYER_WIDGET;
 
@@ -230,7 +230,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     /**
      * Load applications settings specific to the PCBNew.
      *
-     * This overrides the base class WinEDA_BasePcbFrame::LoadSettings() to
+     * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
      * calls down to the base class to load settings common to all PCB type
      * drawing frames.  Please put your application settings for PCBNew here
@@ -241,7 +241,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     /**
      * Save applications settings common to PCB draw frame objects.
      *
-     * This overrides the base class WinEDA_BasePcbFrame::SaveSettings() to
+     * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
      * save settings specific to the PCB layout application main window.  It
      * calls down to the base class to save settings common to all PCB type
      * drawing frames.  Please put your application settings for PCBNew here
@@ -416,7 +416,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in gerbview.
-     * but must be defined because it is a pure virtual in WinEDA_BasePcbFrame
+     * but must be defined because it is a pure virtual in PCB_BASE_FRAME
      */
     virtual void SaveCopyInUndoList(
         BOARD_ITEM* aItemToCopy,

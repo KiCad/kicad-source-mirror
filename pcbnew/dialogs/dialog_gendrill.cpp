@@ -56,7 +56,7 @@ static DRILL_PRECISION precisionListForMetric[] =
 };
 
 
-DIALOG_GENDRILL::DIALOG_GENDRILL( WinEDA_PcbFrame* parent ) :
+DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENDRILL_BASE( parent )
 {
     m_Parent = parent;

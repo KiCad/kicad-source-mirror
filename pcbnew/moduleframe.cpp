@@ -28,9 +28,9 @@ static BOARD_DESIGN_SETTINGS s_ModuleEditorDesignSetting;
 /********************************/
 /* class WinEDA_ModuleEditFrame */
 /********************************/
-BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
+BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
-                    WinEDA_BasePcbFrame::ProcessItemSelection )
+                    PCB_BASE_FRAME::ProcessItemSelection )
     EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
     EVT_MENU( wxID_EXIT, WinEDA_ModuleEditFrame::CloseModuleEditor )
 
@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, WinEDA_BasePcbFrame )
 
     EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame )
@@ -112,7 +112,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
                                                 const wxPoint&  pos,
                                                 const wxSize&   size,
                                                 long            style ) :
-    WinEDA_BasePcbFrame( father, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
+    PCB_BASE_FRAME( father, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName = wxT( "ModEditFrame" );
     m_Draw_Sheet_Ref = false;   // true to show the frame references
@@ -199,7 +199,7 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
                          * PCB_SCREEN handling g_ModuleEditor_Pcb
                          */
 
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
     frame->m_ModuleEditFrame = NULL;
 }
 
@@ -254,7 +254,7 @@ void WinEDA_ModuleEditFrame::OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEve
 
 void WinEDA_ModuleEditFrame::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent )
 {
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
     aEvent.Enable( frame->GetBoard()->m_Modules != NULL );
 }
@@ -262,7 +262,7 @@ void WinEDA_ModuleEditFrame::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEven
 
 void WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent )
 {
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
     bool canInsert = ( module_in_edit && !module_in_edit->m_Link );
@@ -289,7 +289,7 @@ void WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEven
 
 void WinEDA_ModuleEditFrame::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent )
 {
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
     bool canReplace = ( module_in_edit && module_in_edit->m_Link );
@@ -403,7 +403,7 @@ void WinEDA_ModuleEditFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition
  */
 void WinEDA_ModuleEditFrame::OnModify()
 {
-    WinEDA_BasePcbFrame::OnModify();
+    PCB_BASE_FRAME::OnModify();
 
     if( m_Draw3DFrame )
         m_Draw3DFrame->ReloadRequest();

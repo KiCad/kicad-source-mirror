@@ -22,7 +22,7 @@
 /*  Forward declarations of classes. */
 class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
-class WinEDA_PcbFrame;
+class PCB_EDIT_FRAME;
 class WinEDA_ModuleEditFrame;
 class BOARD;
 class TEXTE_PCB;
@@ -44,10 +44,10 @@ class GENERAL_COLLECTORS_GUIDE;
 
 
 /******************************************************************/
-/* class WinEDA_BasePcbFrame: Basic class for pcbnew and gerbview */
+/* class PCB_BASE_FRAME: Basic class for pcbnew and gerbview */
 /******************************************************************/
 
-class WinEDA_BasePcbFrame : public EDA_DRAW_FRAME
+class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
     bool m_DisplayPadFill;          // How show pads
@@ -70,14 +70,14 @@ protected:
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
+    virtual void unitsChangeRefresh();
 
 public:
-    WinEDA_BasePcbFrame( wxWindow* father, int idtype,
-                         const wxString& title,
-                         const wxPoint& pos, const wxSize& size,
-                         long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    PCB_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_BasePcbFrame();
+    ~PCB_BASE_FRAME();
 
     /**
      * Function SetBoard

@@ -174,16 +174,15 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 {
-
     if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && g_UserUnit != MILLIMETRES )
     {
         g_UserUnit = MILLIMETRES;
-        UpdateStatusBar();
+        unitsChangeRefresh();
     }
     else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && g_UserUnit != INCHES )
     {
         g_UserUnit = INCHES;
-        UpdateStatusBar();
+        unitsChangeRefresh();
     }
 }
 

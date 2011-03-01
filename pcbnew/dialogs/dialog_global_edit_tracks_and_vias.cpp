@@ -21,8 +21,8 @@
  *  automatically created by wxFormBuilder
  */
 
-DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS(
-    WinEDA_PcbFrame* aParent, int aNetcode ) :
+DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent,
+                                                                        int             aNetcode ) :
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( aParent )
 {
     m_Parent  = aParent;

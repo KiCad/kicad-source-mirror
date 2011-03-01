@@ -398,8 +398,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
  * All new modules (ie modules not found in this lib) (if NewModulesOnly == true)
  * all modules (if NewModulesOnly == false)
  */
-void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
-                                           bool            NewModulesOnly )
+void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOnly )
 {
     int      ii, NbModules = 0;
     float    Pas;
@@ -493,10 +492,10 @@ void WinEDA_BasePcbFrame::Archive_Modules( const wxString& LibName,
  * footprint name
  * @return : true if OK, false if abort
  */
-bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
-                                                 MODULE*         aModule,
-                                                 bool            aOverwrite,
-                                                 bool            aDisplayDialog )
+bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
+                                             MODULE*         aModule,
+                                             bool            aOverwrite,
+                                             bool            aDisplayDialog )
 {
     wxFileName oldFileName;
     wxFileName newFileName;
@@ -724,7 +723,7 @@ bool WinEDA_BasePcbFrame::Save_Module_In_Library( const wxString& aLibName,
  *   (will the component reference in board)
  * @return a pointer to the new module
  */
-MODULE* WinEDA_BasePcbFrame::Create_1_Module( const wxString& aModuleName )
+MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 {
     MODULE*  Module;
     wxString moduleName;

@@ -100,7 +100,7 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
  * @param curpos The initial position, and what to adjust if a change is needed.
  * @return bool - true if the position was adjusted magnetically, else false.
  */
-bool Magnetize( BOARD* m_Pcb, WinEDA_PcbFrame* frame, int aCurrentTool, wxSize grid,
+bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize grid,
                 wxPoint on_grid, wxPoint* curpos )
 {
     bool    doCheckNet = g_MagneticPadOption != capture_always && Drc_On;

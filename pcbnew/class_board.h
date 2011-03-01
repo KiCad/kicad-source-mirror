@@ -99,7 +99,7 @@ public:
 #define HISTORY_MAX_COUNT 8
 class BOARD : public BOARD_ITEM
 {
-    friend class WinEDA_PcbFrame;
+    friend class PCB_EDIT_FRAME;
 
 private:
     typedef std::vector<MARKER_PCB*> MARKERS;               // @todo: switch to boost:ptr_vector, and change ~BOARD()
@@ -111,7 +111,7 @@ private:
     LAYER                m_Layer[NB_COPPER_LAYERS];
 
 public:
-    WinEDA_BasePcbFrame* m_PcbFrame;                        // Window of visualization
+    PCB_BASE_FRAME*      m_PcbFrame;                        // Window of visualization
     EDA_Rect             m_BoundaryBox;                     // Board size and position
     int m_Status_Pcb;                                       // Flags used in ratsnet calculation and update
     int m_NbNodes;                                          // Active pads (pads attached to a net ) count
@@ -153,7 +153,7 @@ private:
 
     /**********************************/
 public:
-    BOARD( EDA_ITEM* aParent, WinEDA_BasePcbFrame* frame );
+    BOARD( EDA_ITEM* aParent, PCB_BASE_FRAME* frame );
     ~BOARD();
 
     /**

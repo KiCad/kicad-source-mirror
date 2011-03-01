@@ -338,9 +338,9 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
  *      UR_FLIPPED
  *      UR_ROTATED
  */
-void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                          UndoRedoOpType aCommandType,
-                                          const wxPoint& aTransformPoint )
+void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
+                                         UndoRedoOpType aCommandType,
+                                         const wxPoint& aTransformPoint )
 {
     if( aItem == NULL )     // Nothing to save
         return;
@@ -398,9 +398,9 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  * @param aTypeCommand = type of comand ( UR_CHANGED, UR_NEW, UR_DELETED ...
  * @param aTransformPoint - Transform items around this point.
  */
-void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                          UndoRedoOpType     aTypeCommand,
-                                          const wxPoint&     aTransformPoint )
+void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+                                         UndoRedoOpType     aTypeCommand,
+                                         const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
@@ -475,7 +475,8 @@ void WinEDA_PcbFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
  * @param aRebuildRatsnet = a bool: true to rebuid ratsnet (normal use, and default), false
  * to just retrieve las state (used in abort commands that do not need to rebuild ratsnest)
  */
-void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand, bool aRebuildRatsnet )
+void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
+                                             bool aRebuildRatsnet )
 {
     BOARD_ITEM* item;
     bool        not_found = false;
@@ -574,7 +575,7 @@ void WinEDA_PcbFrame::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRe
 
 
 /**********************************************************/
-void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
 /**********************************************************/
 
 /**
@@ -609,7 +610,7 @@ void WinEDA_PcbFrame::GetBoardFromUndoList( wxCommandEvent& event )
  *  - Get an old version of the board from Redo list
  *  @return none
  */
-void WinEDA_PcbFrame::GetBoardFromRedoList( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;

@@ -44,13 +44,13 @@
 class DIALOG_ORIENT_FOOTPRINTS: public DIALOG_ORIENT_FOOTPRINTS_BASE
 {
 private:
-    WinEDA_PcbFrame * m_Parent;
+    PCB_EDIT_FRAME * m_Parent;
     static int newOrientation;
 
 public:
-    DIALOG_ORIENT_FOOTPRINTS( WinEDA_PcbFrame* parent );
+    DIALOG_ORIENT_FOOTPRINTS( PCB_EDIT_FRAME* parent );
     ~DIALOG_ORIENT_FOOTPRINTS() {}
-    
+
     bool ApplyToLockedModules()
     {
         return m_ApplyToLocked->IsChecked();
@@ -73,7 +73,7 @@ private:
 int DIALOG_ORIENT_FOOTPRINTS::newOrientation = 0;
 
 
-DIALOG_ORIENT_FOOTPRINTS::DIALOG_ORIENT_FOOTPRINTS( WinEDA_PcbFrame* parent )
+DIALOG_ORIENT_FOOTPRINTS::DIALOG_ORIENT_FOOTPRINTS( PCB_EDIT_FRAME* parent )
     : DIALOG_ORIENT_FOOTPRINTS_BASE( parent )
 {
     m_Parent = parent;
@@ -87,7 +87,7 @@ DIALOG_ORIENT_FOOTPRINTS::DIALOG_ORIENT_FOOTPRINTS( WinEDA_PcbFrame* parent )
 
 
 /****************************************************************/
-void WinEDA_PcbFrame::OnOrientFootprints( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnOrientFootprints( wxCommandEvent& event )
 /****************************************************************/
 /**
  * Function OnOrientFootprints
@@ -108,8 +108,8 @@ void WinEDA_PcbFrame::OnOrientFootprints( wxCommandEvent& event )
 
 
 /*******************************************************************/
-bool WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
-                                       int Orient, bool include_fixe )
+bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask,
+                                      int Orient, bool include_fixe )
 /*******************************************************************/
 /**
  * Function ReOrientModules
@@ -141,7 +141,7 @@ bool WinEDA_PcbFrame::ReOrientModules( const wxString& ModuleMask,
 
     if ( modified )
         OnModify();
-    
+
     return modified;
 }
 

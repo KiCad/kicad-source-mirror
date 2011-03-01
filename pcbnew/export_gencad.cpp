@@ -15,7 +15,7 @@
 
 #include "build_version.h"
 
-bool        CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame );
+bool        CreateHeaderInfoData( FILE* file, PCB_EDIT_FRAME* frame );
 static void CreateTracksInfoData( FILE* file, BOARD* pcb );
 static void CreateBoardSection( FILE* file, BOARD* pcb );
 static void CreateComponentsSection( FILE* file, BOARD* pcb );
@@ -65,7 +65,7 @@ static int mapYto( int y )
 /*
  *  Creates an Export file (format GenCAD 1.4) from the current board.
  */
-void WinEDA_PcbFrame::ExportToGenCAD( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& event )
 {
     wxFileName fn = GetScreen()->GetFileName();
     wxString   msg, ext, wildcard;
@@ -530,7 +530,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
 
 /* Creates the section $HEADER ... $ENDHEADER
  */
-bool CreateHeaderInfoData( FILE* file, WinEDA_PcbFrame* frame )
+bool CreateHeaderInfoData( FILE* file, PCB_EDIT_FRAME* frame )
 {
     wxString    msg;
     PCB_SCREEN* screen = (PCB_SCREEN*) ( frame->GetScreen() );

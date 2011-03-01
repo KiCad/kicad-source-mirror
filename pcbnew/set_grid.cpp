@@ -35,7 +35,7 @@ private:
     void        OnOkClick( wxCommandEvent& event );
 };
 
-void WinEDA_BasePcbFrame::InstallGridFrame( const wxPoint& pos )
+void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
 {
     DIALOG_SET_GRID dlg( this, pos );
 

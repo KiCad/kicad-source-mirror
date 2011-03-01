@@ -43,7 +43,7 @@
 
 using namespace DSN;
 
-void WinEDA_PcbFrame::ImportSpecctraDesign( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ImportSpecctraDesign( wxCommandEvent& event )
 {
     /* @todo write this someday
 
@@ -53,7 +53,7 @@ void WinEDA_PcbFrame::ImportSpecctraDesign( wxCommandEvent& event )
 }
 
 
-void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 {
 /*
     if( GetScreen()->IsModify() )
@@ -350,7 +350,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
 
 // no UI code in this function, throw exception to report problems to the
-// UI handler: void WinEDA_PcbFrame::ImportSpecctraSession( wxCommandEvent& event )
+// UI handler: void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
 void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 {

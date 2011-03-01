@@ -13,7 +13,7 @@
 #include "pcbnew_id.h"
 
 
-void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {
     wxPoint pos;
     int     id = event.GetSelection();
@@ -25,7 +25,13 @@ void WinEDA_PcbFrame::ToolOnRightClick( wxCommandEvent& event )
     case ID_TRACK_BUTT:
     {
         DIALOG_DESIGN_RULES dlg( this );
-        dlg.ShowModal();
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            updateDesignRulesSelectBoxes();
+            updateTraceWidthSelectBox();
+            updateViaSizeSelectBox();
+        }
+
         break;
     }
 

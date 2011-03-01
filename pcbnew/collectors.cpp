@@ -27,7 +27,7 @@
 
 
 /*  This module contains out of line member functions for classes given in
-  * collectors.h.  Those classes augment the functionality of class WinEDA_PcbFrame.
+  * collectors.h.  Those classes augment the functionality of class PCB_EDIT_FRAME.
  */
 
 

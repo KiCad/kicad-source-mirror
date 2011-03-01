@@ -28,8 +28,8 @@
  * @param aPosition The current cursor position in logical (drawing) units.
  * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
  */
-void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
-                                EDA_ITEM* aItem )
+void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
+                               EDA_ITEM* aItem )
 {
     if( aHotkeyCode == 0 )
         return;
@@ -375,7 +375,7 @@ void WinEDA_PcbFrame::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosi
  * @param aDC = current device context
  * @return true if an item was deleted
  */
-bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
+bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
     bool ItemFree = (item == NULL) || (item->m_Flags == 0);
@@ -440,7 +440,7 @@ bool WinEDA_PcbFrame::OnHotkeyDeleteItem( wxDC* aDC )
     return true;
 }
 
-bool WinEDA_PcbFrame::OnHotkeyEditItem( int aIdCommand )
+bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool itemCurrentlyEdited = item && item->m_Flags;
@@ -533,7 +533,7 @@ bool WinEDA_PcbFrame::OnHotkeyEditItem( int aIdCommand )
  * @param aIdCommand = the hotkey command id
  * @return true if an item was moved
  */
-bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
+bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool itemCurrentlyEdited = item && item->m_Flags;
@@ -633,7 +633,7 @@ bool WinEDA_PcbFrame::OnHotkeyMoveItem( int aIdCommand )
  * @param aIdCommand = the hotkey command id
  * @return true if an item was moved
  */
-bool WinEDA_PcbFrame::OnHotkeyRotateItem( int aIdCommand )
+bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;

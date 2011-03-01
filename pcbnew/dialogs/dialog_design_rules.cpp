@@ -143,7 +143,7 @@ void EnsureGridColumnWidths( wxGrid* aGrid )
 
 
 /***********************************************************************************/
-DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( WinEDA_PcbFrame* parent ) :
+DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     DIALOG_DESIGN_RULES_BASE( parent )
 /***********************************************************************************/
 {

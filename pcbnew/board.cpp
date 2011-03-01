@@ -32,7 +32,7 @@ void        SetDir( int, int, int, int );
  * Calculates nrows and ncols, dimensions of the matrix representation of BOARD
  * for routing and automatic calculation of area.
  */
-bool ComputeMatriceSize( WinEDA_BasePcbFrame* frame, int g_GridRoutingSize )
+bool ComputeMatriceSize( PCB_BASE_FRAME* frame, int g_GridRoutingSize )
 {
     BOARD* pcb = frame->GetBoard();
 

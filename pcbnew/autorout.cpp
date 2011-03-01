@@ -31,7 +31,7 @@ BOARDHEAD Board;     /* 2-sided board */
 
 
 /* init board, route traces*/
-void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
+void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 {
     int      start, stop;
     MODULE*  Module = NULL;
@@ -185,7 +185,7 @@ void WinEDA_PcbFrame::Autoroute( wxDC* DC, int mode )
  * When a ratsnets has not been routed.
  * If this flag is 1 it is not reroute
  */
-void WinEDA_PcbFrame::Reset_Noroutable( wxDC* DC )
+void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 {
     if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK )== 0 )
         Compile_Ratsnest( DC, TRUE );

@@ -35,7 +35,7 @@ static FOOTPRINT_LIST MList;
 bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 {
     MODULE* NewModule;
-    WinEDA_BasePcbFrame* parent = (WinEDA_BasePcbFrame*) GetParent();
+    PCB_BASE_FRAME* parent = (PCB_BASE_FRAME*) GetParent();
 
     if( Module == NULL )
     {
@@ -79,8 +79,7 @@ bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
 }
 
 
-MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
-                                                       wxDC*           DC )
+MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC* DC )
 {
     MODULE* module;
     wxPoint curspos = GetScreen()->GetCrossHairPosition();
@@ -194,10 +193,9 @@ MODULE* WinEDA_BasePcbFrame::Load_Module_From_Library( const wxString& library,
  *  @return a MODULE * pointer to the new module, or NULL
  *
  */
-MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
-    const wxString& aLibraryFullFilename,
-    const wxString& aModuleName,
-    bool            aDisplayMessageError )
+MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilename,
+                                              const wxString& aModuleName,
+                                              bool            aDisplayMessageError )
 {
     int        Found = 0;
     wxFileName fn;
@@ -348,10 +346,10 @@ MODULE* WinEDA_BasePcbFrame::Get_Librairie_Module(
  *
  * @return wxEmptyString if abort or fails, or the selected module name if Ok
  */
-wxString WinEDA_BasePcbFrame::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
-                                                         const wxString& aLibraryFullFilename,
-                                                         const wxString& aMask,
-                                                         const wxString& aKeyWord )
+wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
+                                                    const wxString& aLibraryFullFilename,
+                                                    const wxString& aMask,
+                                                    const wxString& aKeyWord )
 {
     static wxString OldName;    /* Save the name of the last module loaded. */
     wxString        CmpName;

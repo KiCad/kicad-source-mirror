@@ -12,7 +12,7 @@
 class DIALOG_PCBNEW_CONFIG_LIBS : public DIALOG_PCBNEW_CONFIG_LIBS_FBP
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     wxConfig * m_Config;
     bool m_LibListChanged;
     bool m_LibPathChanged;
@@ -36,7 +36,7 @@ private:
 
 
 public:
-    DIALOG_PCBNEW_CONFIG_LIBS( WinEDA_PcbFrame * parent );
+    DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME * parent );
     ~DIALOG_PCBNEW_CONFIG_LIBS() {};
 };
 

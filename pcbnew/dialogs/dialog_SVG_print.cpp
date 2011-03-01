@@ -42,7 +42,7 @@ static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
 DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
-    m_Parent = (WinEDA_BasePcbFrame*) parent;
+    m_Parent = (PCB_BASE_FRAME*) parent;
     m_Config = wxGetApp().m_EDA_Config;
     initDialog( );
     GetSizer()->SetSizeHints( this );

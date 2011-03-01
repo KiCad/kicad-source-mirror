@@ -3885,7 +3885,7 @@ public:
      * the BOARD given to this function must have all the MODULEs on the component
      * side of the BOARD.
      *
-     * See void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
+     * See void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
      * for how this can be done before calling this function.
      *
      * @param aBoard The BOARD to convert to a PCB.

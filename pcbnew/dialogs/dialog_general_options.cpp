@@ -19,7 +19,7 @@
 #include "pcbnew_id.h"
 
 
-Dialog_GeneralOptions::Dialog_GeneralOptions( WinEDA_PcbFrame* parent ) :
+Dialog_GeneralOptions::Dialog_GeneralOptions( PCB_EDIT_FRAME* parent ) :
     DialogGeneralOptionsBoardEditor_base( parent )
 {
     m_Parent = parent;
@@ -106,7 +106,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 /* Must be called on a click on the left toolbar (options toolbar
  * Update variables according to tools states
  */
-void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = m_OptionsToolBar->GetToolState( id );
@@ -182,7 +182,7 @@ void WinEDA_PcbFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     default:
         DisplayError( this,
-                      wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error \n (event not handled!)" ) );
+                      wxT( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
         break;
     }
 }

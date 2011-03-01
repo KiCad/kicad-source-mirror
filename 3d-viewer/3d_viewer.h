@@ -203,7 +203,7 @@ public:
 class WinEDA3D_DrawFrame : public wxFrame
 {
 public:
-    WinEDA_BasePcbFrame* m_Parent;
+    PCB_BASE_FRAME* m_Parent;
 private:
     wxString m_FrameName;       // name used for writing and reading setup
                                 // It is "Frame3D"
@@ -217,7 +217,7 @@ private:
     bool         m_reloadRequest;
 
 public:
-    WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent, const wxString& title,
+    WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent, const wxString& title,
                         long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
     ~WinEDA3D_DrawFrame()
     {

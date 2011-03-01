@@ -13,8 +13,7 @@
 #include "protos.h"
 
 
-bool WinEDA_BasePcbFrame::Genere_HPGL( const wxString& FullFileName, int Layer,
-                                       GRTraceMode trace_mode )
+bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTraceMode trace_mode )
 {
     wxSize        SheetSize;
     wxSize        BoardSize;

@@ -8,13 +8,13 @@ class Dialog_GeneralOptions : public DialogGeneralOptionsBoardEditor_base
 /***********************************************************************/
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     BOARD * m_Board;
 
     void init();
 
 public:
-    Dialog_GeneralOptions( WinEDA_PcbFrame* parent );
+    Dialog_GeneralOptions( PCB_EDIT_FRAME* parent );
     ~Dialog_GeneralOptions() {};
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );

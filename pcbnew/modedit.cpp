@@ -109,7 +109,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         }
 
         // this menu's handler is void
-        // WinEDA_BasePcbFrame::ProcessItemSelection()
+        // PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the
         // item.
         DrawPanel->m_AbortRequest = true;   // changed in false if an item
@@ -274,10 +274,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     {
         // update module in the current board,
         // not just add it to the board with total disregard for the netlist...
-        WinEDA_PcbFrame* pcbframe = (WinEDA_PcbFrame*) GetParent();
-        BOARD*           mainpcb  = pcbframe->GetBoard();
-        MODULE*          source_module  = NULL;
-        MODULE*          module_in_edit = GetBoard()->m_Modules;
+        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) GetParent();
+        BOARD*          mainpcb  = pcbframe->GetBoard();
+        MODULE*         source_module  = NULL;
+        MODULE*         module_in_edit = GetBoard()->m_Modules;
 
         // Search the old module (source) if exists
         // Because this source could be deleted when editing the main board...

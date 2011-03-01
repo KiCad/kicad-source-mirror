@@ -18,16 +18,16 @@
 #include "cell.h"
 
 
-static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
-                                wxDC*            DC,
-                                int              two_sides,
-                                int              row_source,
-                                int              col_source,
-                                int              row_target,
-                                int              col_target,
-                                RATSNEST_ITEM*   pt_chevelu );
-static int Retrace( WinEDA_PcbFrame* pcbframe,
-                    wxDC*            DC,
+static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
+                                wxDC*           DC,
+                                int             two_sides,
+                                int             row_source,
+                                int             col_source,
+                                int             row_target,
+                                int             col_target,
+                                RATSNEST_ITEM*  pt_chevelu );
+static int Retrace( PCB_EDIT_FRAME* pcbframe,
+                    wxDC*           DC,
                     int,
                     int,
                     int,
@@ -40,7 +40,7 @@ static void OrCell_Trace( BOARD* pcb,
                           int    side,
                           int    orient,
                           int    current_net_code );
-static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC );
+static void Place_Piste_en_Buffer( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
 static int            segm_oX, segm_oY;
@@ -227,7 +227,7 @@ static long newmask[8] =
  * -1 if escape (stop being routed) request
  * -2 if default memory allocation
  */
-int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
+int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
 {
     int           current_net_code;
     int           row_source, col_source, row_target, col_target;
@@ -367,14 +367,14 @@ int WinEDA_PcbFrame::Solve( wxDC* DC, int two_sides )
  * Escape STOP_FROM_ESC if demand
  * ERR_MEMORY if memory allocation failed.
  */
-static int Autoroute_One_Track( WinEDA_PcbFrame* pcbframe,
-                                wxDC*            DC,
-                                int              two_sides,
-                                int              row_source,
-                                int              col_source,
-                                int              row_target,
-                                int              col_target,
-                                RATSNEST_ITEM*   pt_chevelu )
+static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
+                                wxDC*           DC,
+                                int             two_sides,
+                                int             row_source,
+                                int             col_source,
+                                int             row_target,
+                                int             col_target,
+                                RATSNEST_ITEM*  pt_chevelu )
 {
     int          r, c, side, d, apx_dist, nr, nc;
     int          result, skip;
@@ -890,7 +890,7 @@ static long bit[8][9] =
  * 0 if error
  * > 0 if Ok
  */
-static int Retrace( WinEDA_PcbFrame* pcbframe, wxDC* DC,
+static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                     int row_source, int col_source,
                     int row_target, int col_target, int target_side,
                     int current_net_code )
@@ -1222,7 +1222,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
  * connected
  * Center on pads even if they are off grid.
  */
-static void Place_Piste_en_Buffer( WinEDA_PcbFrame* pcbframe, wxDC* DC )
+static void Place_Piste_en_Buffer( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 {
     if( g_FirstTrackSegment == NULL )
         return;

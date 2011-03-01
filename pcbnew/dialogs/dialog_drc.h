@@ -41,7 +41,7 @@ public:
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
     /// Constructors
-    DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent );
+    DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent );
     ~DIALOG_DRC_CONTROL(){};
 
     /**
@@ -116,7 +116,7 @@ private:
 
 
     DRC*                m_tester;
-    WinEDA_PcbFrame*    m_Parent;
+    PCB_EDIT_FRAME*     m_Parent;
     int                 m_UnconnectedCount;
 };
 

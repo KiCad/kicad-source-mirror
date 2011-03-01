@@ -42,7 +42,7 @@ class DIMENSION_EDITOR_DIALOG : public wxDialog
 {
 private:
 
-    WinEDA_PcbFrame*  m_Parent;
+    PCB_EDIT_FRAME*   m_Parent;
     wxDC*             m_DC;
     DIMENSION*         CurrentDimension;
     WinEDA_EnterText* m_Name;
@@ -54,8 +54,7 @@ private:
 public:
 
     // Constructor and destructor
-    DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
-                             DIMENSION* Dimension, wxDC* DC );
+    DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent, DIMENSION* Dimension, wxDC* DC );
     ~DIMENSION_EDITOR_DIALOG()
     {
     }
@@ -74,7 +73,7 @@ BEGIN_EVENT_TABLE( DIMENSION_EDITOR_DIALOG, wxDialog )
 END_EVENT_TABLE()
 
 
-DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( WinEDA_PcbFrame* parent,
+DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent,
                                                   DIMENSION* Dimension, wxDC* DC
                                                   ) :
     wxDialog( parent, -1, wxString( _( "Dimension properties" ) ) )
@@ -211,12 +210,12 @@ static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
     status_dimension = 0;
-    ((WinEDA_PcbFrame*)Panel->GetParent())->SetCurItem( NULL );
+    ((PCB_EDIT_FRAME*)Panel->GetParent())->SetCurItem( NULL );
 }
 
 
 /*************************************************************************/
-DIMENSION* WinEDA_PcbFrame::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
+DIMENSION* PCB_EDIT_FRAME::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
 /*************************************************************************/
 {
     wxPoint pos;
@@ -347,7 +346,7 @@ static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 
 /***************************************************************/
-void WinEDA_PcbFrame::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
+void PCB_EDIT_FRAME::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
 /***************************************************************/
 {
     if( Dimension == NULL )
@@ -360,7 +359,7 @@ void WinEDA_PcbFrame::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
 
 
 /*******************************************************************/
-void WinEDA_PcbFrame::Delete_Dimension( DIMENSION* Dimension, wxDC* DC )
+void PCB_EDIT_FRAME::Delete_Dimension( DIMENSION* Dimension, wxDC* DC )
 /*******************************************************************/
 {
     if( Dimension == NULL )

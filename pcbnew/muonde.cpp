@@ -118,7 +118,7 @@ void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
+void PCB_EDIT_FRAME::Begin_Self( wxDC* DC )
 {
     if( Self_On )
     {
@@ -174,7 +174,7 @@ void WinEDA_PcbFrame::Begin_Self( wxDC* DC )
  * (Radius decreases if necessary)
  *
  */
-MODULE* WinEDA_PcbFrame::Genere_Self( wxDC* DC )
+MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 {
     D_PAD*   PtPad;
     int      ll;
@@ -516,8 +516,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
  *  This footprint has pad_count pads:
  *  PAD_SMD, rectangular, H size = V size = current track width.
  */
-MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
-                                                  int             pad_count )
+MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_count )
 {
     MODULE*  Module;
     int      pad_num = 1;
@@ -568,7 +567,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWaveBasicShape( const wxString& name,
  *  PAD_SMD, rectangular, H size = V size = current track width.
  *  the "gap" is isolation created between this 2 pads
  */
-MODULE* WinEDA_PcbFrame::Create_MuWaveComponent(  int shape_type )
+MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
 {
     int      oX;
     D_PAD*   pad;
@@ -723,11 +722,11 @@ enum id_mw_cmd {
 class WinEDA_SetParamShapeFrame : public wxDialog
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME*  m_Parent;
     wxRadioBox*      m_ShapeOptionCtrl;
     WinEDA_SizeCtrl* m_SizeCtrl;
 
-public: WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent, const wxPoint& pos );
+public: WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~WinEDA_SetParamShapeFrame() { };
 
 private:
@@ -747,8 +746,8 @@ EVT_BUTTON( ID_READ_SHAPE_FILE,
             WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
 END_EVENT_TABLE()
 
-WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( WinEDA_PcbFrame* parent,
-                                                      const wxPoint&   framepos ) :
+WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
+                                                      const wxPoint&  framepos ) :
     wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ),
               DIALOG_STYLE )
 {
@@ -933,7 +932,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
 }
 
 
-MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
+MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 {
     D_PAD*       pad1, * pad2;
     MODULE*      Module;
@@ -1059,7 +1058,7 @@ MODULE* WinEDA_PcbFrame::Create_MuWavePolygonShape()
  * Edit the GAP module, if it has changed the position and/or size
  * Pads that form the gap to get a new value of the gap.
  */
-void WinEDA_PcbFrame::Edit_Gap( wxDC* DC, MODULE* Module )
+void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
 {
     int      gap_size, oX;
     D_PAD*   pad, * next_pad;

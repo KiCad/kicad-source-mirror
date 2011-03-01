@@ -24,9 +24,9 @@
  * @param aUseNetclassValue = true to use NetClass value, false to use g_DesignSettings value
  * @return  true if done, false if no not change (because DRC error)
  */
-bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
-                                            PICKED_ITEMS_LIST* aItemsListPicker,
-                                            bool               aUseNetclassValue )
+bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
+                                           PICKED_ITEMS_LIST* aItemsListPicker,
+                                           bool               aUseNetclassValue )
 {
     int           initial_width, new_width;
     int           initial_drill = -1,new_drill = -1;
@@ -113,7 +113,7 @@ bool WinEDA_PcbFrame::SetTrackSegmentWidth( TRACK*             aTrackItem,
  * @param aDC = the curred device context (can be NULL)
  * @param aTrackItem = the track segment or via to modify
  */
-void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
+void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
 {
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
@@ -142,7 +142,7 @@ void WinEDA_PcbFrame::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
  * @param aDC = the curred device context (can be NULL)
  * @param aTrackSegment = a segment or via on the track to change
  */
-void WinEDA_PcbFrame::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
+void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 {
     TRACK* pt_track;
     int    nb_segm;
@@ -192,8 +192,7 @@ void WinEDA_PcbFrame::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
  * @param aUseNetclassValue : bool. True to use netclass values, false to use current values
  */
 /***********************************************************/
-bool WinEDA_PcbFrame::Change_Net_Tracks_And_Vias_Sizes(
-    int aNetcode, bool aUseNetclassValue )
+bool PCB_EDIT_FRAME::Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNetclassValue )
 /***********************************************************/
 {
     TRACK* pt_segm;
@@ -223,8 +222,7 @@ bool WinEDA_PcbFrame::Change_Net_Tracks_And_Vias_Sizes(
 
 
 /*************************************************************************/
-bool WinEDA_PcbFrame::Reset_All_Tracks_And_Vias_To_Netclass_Values(
-    bool aTrack, bool aVia )
+bool PCB_EDIT_FRAME::Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia )
 /*************************************************************************/
 {
     TRACK* pt_segm;

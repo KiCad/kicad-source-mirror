@@ -21,7 +21,7 @@
 
 
 /*****************************************************************/
-void WinEDA_PcbFrame::InstallConfigFrame( const wxPoint& pos )
+void PCB_EDIT_FRAME::InstallConfigFrame( const wxPoint& pos )
 /*****************************************************************/
 {
     DIALOG_PCBNEW_CONFIG_LIBS dialog( this );
@@ -29,7 +29,7 @@ void WinEDA_PcbFrame::InstallConfigFrame( const wxPoint& pos )
 }
 
 
-DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( WinEDA_PcbFrame* parent ):
+DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME* parent ):
     DIALOG_PCBNEW_CONFIG_LIBS_FBP(parent)
 {
     m_Parent = parent;

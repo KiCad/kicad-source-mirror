@@ -14,7 +14,7 @@
 class DIALOG_FREEROUTE : public DIALOG_FREEROUTE_BASE
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     bool m_FreeRouteSetupChanged;
 
 private:
@@ -31,7 +31,7 @@ private:
 
 
 public:
-    DIALOG_FREEROUTE( WinEDA_PcbFrame* parent );
+    DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent );
     ~DIALOG_FREEROUTE() {};
 
 };

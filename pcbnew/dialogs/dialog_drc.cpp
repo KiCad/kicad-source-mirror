@@ -23,7 +23,7 @@ wxSize  DIALOG_DRC_CONTROL::s_LastSize;
  * and run DRC tests
  */
 
-DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, WinEDA_PcbFrame* parent ) :
+DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
     DIALOG_DRC_CONTROL_BASE( parent )
 {
     m_tester = aTester;

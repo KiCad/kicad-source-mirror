@@ -27,7 +27,7 @@
 
 
 /*  This module contains a number of COLLECTOR implementations which are used
-    to augment the functionality of class WinEDA_PcbFrame.
+    to augment the functionality of class PCB_EDIT_FRAME.
 */
 
 
@@ -182,7 +182,7 @@ public:
  * Class GENERAL_COLLECTOR
  * is intended for use when the right click button is pressed, or when the
  * plain "arrow" tool is in effect.  This class can be used by window classes
- * such as WinEDA_PcbFrame.
+ * such as PCB_EDIT_FRAME.
  *
  * Philosophy: this class knows nothing of the context in which a BOARD is used
  * and that means it knows nothing about which layers are visible or current,

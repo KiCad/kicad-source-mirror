@@ -33,7 +33,7 @@ static TEXTE_PCB s_TextCopy( (BOARD_ITEM*) NULL ); /* copy of the edited text
 void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     TEXTE_PCB* TextePcb = (TEXTE_PCB*) Panel->GetScreen()->GetCurItem();
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
+    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->SetCurItem( NULL );
 
     Panel->SetMouseCapture( NULL, NULL );
 
@@ -58,7 +58,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /*
  *  Place the current text being moving
  */
-void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
+void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
@@ -94,7 +94,7 @@ void WinEDA_PcbFrame::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
 /* Initialize parameters to move a pcb text
  */
-void WinEDA_PcbFrame::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
+void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     if( TextePcb == NULL )
         return;
@@ -130,7 +130,7 @@ static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
 }
 
 
-void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
+void PCB_EDIT_FRAME::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     if( TextePcb == NULL )
         return;
@@ -144,7 +144,7 @@ void WinEDA_PcbFrame::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 }
 
 
-TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
+TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
 {
     TEXTE_PCB* TextePcb;
 
@@ -177,7 +177,7 @@ TEXTE_PCB* WinEDA_PcbFrame::Create_Texte_Pcb( wxDC* DC )
 }
 
 
-void WinEDA_PcbFrame::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
+void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     int angle    = 900;
     int drawmode = GR_XOR;

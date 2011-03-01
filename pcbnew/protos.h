@@ -252,7 +252,7 @@ void ListSetState( EDA_ITEM* Start, int Nbitem, int State, int onoff );
 /************/
 /* ZONES.CPP */
 /************/
-int Propagation( WinEDA_PcbFrame* frame );
+int Propagation( PCB_EDIT_FRAME* frame );
 
 
 /***************/

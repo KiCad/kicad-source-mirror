@@ -30,7 +30,7 @@ static PICKED_ITEMS_LIST s_PickedList;                  /* a picked list to
 
 /* Get a module name from user and return a pointer to the corresponding module
  */
-MODULE* WinEDA_BasePcbFrame::GetModuleByName()
+MODULE* PCB_BASE_FRAME::GetModuleByName()
 {
     wxString          moduleName;
     MODULE*           module = NULL;
@@ -56,7 +56,7 @@ MODULE* WinEDA_BasePcbFrame::GetModuleByName()
 }
 
 
-void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
+void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
 {
     if( module == NULL )
         return;
@@ -115,9 +115,9 @@ void WinEDA_PcbFrame::StartMove_Module( MODULE* module, wxDC* DC )
  */
 void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    TRACK*                pt_segm;
-    MODULE*               module;
-    WinEDA_PcbFrame*      pcbframe = (WinEDA_PcbFrame*) Panel->GetParent();
+    TRACK*               pt_segm;
+    MODULE*              module;
+    PCB_EDIT_FRAME*      pcbframe = (PCB_EDIT_FRAME*) Panel->GetParent();
 
     module = (MODULE*) pcbframe->GetScreen()->GetCurItem();
     pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
@@ -202,7 +202,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
  * @param module = footprint to copy
  * @return a pointer on the new footprint (the copy of the existing footprint)
  */
-MODULE* WinEDA_BasePcbFrame::Copie_Module( MODULE* module )
+MODULE* PCB_BASE_FRAME::Copie_Module( MODULE* module )
 {
     MODULE* newmodule;
 
@@ -260,9 +260,7 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
  * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
  * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
  */
-bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
-                                     wxDC*   aDC,
-                                     bool    aAskBeforeDeleting )
+bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting )
 {
     wxString msg;
 
@@ -310,7 +308,7 @@ bool WinEDA_PcbFrame::Delete_Module( MODULE* aModule,
  * @param Module the footprint to flip
  * @param  DC Current Device Context. if NULL, no redraw
  */
-void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
+void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
         return;
@@ -380,9 +378,7 @@ void WinEDA_PcbFrame::Change_Side_Module( MODULE* Module, wxDC* DC )
  * DC (if NULL: no display screen has the output.
  * Update module coordinates with the new position.
  */
-void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
-                                        wxDC*   DC,
-                                        bool    aDoNotRecreateRatsnest )
+void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest )
 {
     TRACK*  pt_segm;
     wxPoint newpos;
@@ -466,8 +462,7 @@ void WinEDA_BasePcbFrame::Place_Module( MODULE* module,
  * If DC == NULL, the component does not redraw.
  * Otherwise, it erases and redraws turns
  */
-void WinEDA_BasePcbFrame::Rotate_Module( wxDC* DC, MODULE* module,
-                                         int angle, bool incremental )
+void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental )
 {
     if( module == NULL )
         return;
@@ -556,7 +551,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
 
     if( g_Show_Module_Ratsnest && panel )
     {
-        WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) panel->GetParent();
+        PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
         frame->build_ratsnest_module( module );
         frame->trace_ratsnest_module( DC );
     }

@@ -6,12 +6,12 @@
 class Dialog_Display_Options : public DialogDisplayOptions_base
 {
 private:
-   WinEDA_PcbFrame* m_Parent;
+   PCB_EDIT_FRAME* m_Parent;
 
    void init();
 
 public:
-   Dialog_Display_Options( WinEDA_PcbFrame* parent );
+   Dialog_Display_Options( PCB_EDIT_FRAME* parent );
    ~Dialog_Display_Options( ) { };
    void OnOkClick( wxCommandEvent& event );
    void OnCancelClick( wxCommandEvent& event );

@@ -22,9 +22,9 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
 
 /* Creates the plot for silkscreen layers
  */
-void WinEDA_BasePcbFrame::Plot_Serigraphie( PLOTTER*    plotter,
-                                            int         masque_layer,
-                                            GRTraceMode trace_mode )
+void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
+                                       int         masque_layer,
+                                       GRTraceMode trace_mode )
 {
     bool          trace_val, trace_ref;
     TEXTE_MODULE* pt_texte;
@@ -690,8 +690,7 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
 }
 
 
-void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
-                                      GRTraceMode trace_mode )
+void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_mode )
 {
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
@@ -772,10 +771,10 @@ void WinEDA_BasePcbFrame::Plot_Layer( PLOTTER* plotter, int Layer,
 /* Plot a copper layer or mask in HPGL format.
  * HPGL unit = 0.98 mils (1 mil = 1.02041 unit HPGL).
  */
-void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
-                                               int         aLayerMask,
-                                               bool        aPlotVia,
-                                               GRTraceMode aPlotMode )
+void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
+                                              int         aLayerMask,
+                                              bool        aPlotVia,
+                                              GRTraceMode aPlotMode )
 {
     wxPoint  pos;
     wxSize   size;
@@ -991,9 +990,9 @@ void WinEDA_BasePcbFrame::Plot_Standard_Layer( PLOTTER*    aPlotter,
  * @param aSmallDrillShape = true to plot a small drill shape, false to plot
  * the actual drill shape
  */
-void WinEDA_BasePcbFrame::PlotDrillMark( PLOTTER*    aPlotter,
-                                         GRTraceMode aTraceMode,
-                                         bool        aSmallDrillShape )
+void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*    aPlotter,
+                                    GRTraceMode aTraceMode,
+                                    bool        aSmallDrillShape )
 {
     wxPoint   pos;
     wxSize    diam;

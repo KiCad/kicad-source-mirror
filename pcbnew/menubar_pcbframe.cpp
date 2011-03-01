@@ -17,7 +17,7 @@
 /**
  * PCBNew mainframe menubar
  */
-void WinEDA_PcbFrame::ReCreateMenuBar()
+void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
     wxMenuItem* item;

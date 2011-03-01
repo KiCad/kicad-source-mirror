@@ -20,7 +20,7 @@
  * delete all and reinitialize the current board
  * @param aQuery = true to prompt user for confirmation, false to initialize silently
  */
-bool WinEDA_PcbFrame::Clear_Pcb( bool aQuery )
+bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
         return FALSE;

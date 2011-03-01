@@ -100,7 +100,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
 /* Load list of features for default pad selection.
  */
-void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
+void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* pt_pad )
 {
     MODULE* Module;
 
@@ -131,7 +131,7 @@ void WinEDA_BasePcbFrame::Export_Pad_Settings( D_PAD* pt_pad )
  * - Measurements are modified
  * - The position, names, and keys are not.
  */
-void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
+void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 {
     if( aDraw )
     {
@@ -182,7 +182,7 @@ void WinEDA_BasePcbFrame::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
 /* Add a pad on the selected module.
  */
-void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
+void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 {
     D_PAD* Pad;
     int    rX, rY;
@@ -240,7 +240,7 @@ void WinEDA_BasePcbFrame::AddPad( MODULE* Module, bool draw )
  * @param aPad = the pad to delete
  * @param aQuery = true to promt for confirmation, false to delete silently
  */
-void WinEDA_BasePcbFrame::DeletePad( D_PAD* aPad, bool aQuery )
+void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 {
     MODULE*  Module;
 
@@ -270,7 +270,7 @@ void WinEDA_BasePcbFrame::DeletePad( D_PAD* aPad, bool aQuery )
 
 
 /* Function to initialize the "move pad" command */
-void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
+void PCB_BASE_FRAME::StartMovePad( D_PAD* Pad, wxDC* DC )
 {
     MODULE* Module;
 
@@ -298,7 +298,7 @@ void WinEDA_BasePcbFrame::StartMovePad( D_PAD* Pad, wxDC* DC )
 
 
 /* Routine to place a moved pad. */
-void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
+void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
 {
     int     dX, dY;
     TRACK*  Track;
@@ -388,7 +388,7 @@ void WinEDA_BasePcbFrame::PlacePad( D_PAD* Pad, wxDC* DC )
 
 /* Rotate selected pad 90 degrees.
  */
-void WinEDA_BasePcbFrame::RotatePad( D_PAD* Pad, wxDC* DC )
+void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
 {
     MODULE* Module;
 

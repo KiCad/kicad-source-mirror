@@ -102,8 +102,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
         return;
 
 
-    WinEDA_BasePcbFrame* frame  = (WinEDA_BasePcbFrame*) aPanel->GetParent();
-    PCB_SCREEN*          screen = frame->GetScreen();
+    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+    PCB_SCREEN*     screen = frame->GetScreen();
     if( frame->m_DisplayPadFill == FILLED )
         drawInfo.m_ShowPadFilled = true;
     else

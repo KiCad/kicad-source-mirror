@@ -12,8 +12,7 @@
 
 #include "protos.h"
 
-bool WinEDA_BasePcbFrame::Genere_DXF( const wxString& FullFileName, int Layer,
-                                      GRTraceMode trace_mode )
+bool PCB_BASE_FRAME::Genere_DXF( const wxString& FullFileName, int Layer, GRTraceMode trace_mode )
 {
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
 

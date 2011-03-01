@@ -25,7 +25,7 @@
 /* class WinEDA_GerberFrame for GerbView*/
 /****************************************/
 
-BEGIN_EVENT_TABLE( WinEDA_GerberFrame, WinEDA_BasePcbFrame )
+BEGIN_EVENT_TABLE( WinEDA_GerberFrame, PCB_BASE_FRAME )
     EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
     EVT_SIZE( WinEDA_GerberFrame::OnSize )
 
@@ -124,7 +124,7 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
                                         const wxPoint&  pos,
                                         const wxSize&   size,
                                         long            style ) :
-    WinEDA_BasePcbFrame( father, GERBER_FRAME, title, pos, size, style )
+    PCB_BASE_FRAME( father, GERBER_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "GerberFrame" );
     m_show_layer_manager_tools = true;
@@ -271,7 +271,7 @@ void WinEDA_GerberFrame::LoadSettings()
     if( config == NULL )
         return;
 
-    WinEDA_BasePcbFrame::LoadSettings();
+    PCB_BASE_FRAME::LoadSettings();
     config->Read( GerbviewDrawModeOption, &m_displayMode, 0l );
     long pageSize_opt;
     config->Read( GerbviewShowPageSizeOption, &pageSize_opt, 0l );
@@ -303,7 +303,7 @@ void WinEDA_GerberFrame::SaveSettings()
     if( config == NULL )
         return;
 
-    WinEDA_BasePcbFrame::SaveSettings();
+    PCB_BASE_FRAME::SaveSettings();
 
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 

@@ -19,7 +19,7 @@
 /*
  * Show module property dialog.
  */
-void WinEDA_PcbFrame::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
+void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
         return;

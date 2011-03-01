@@ -328,21 +328,21 @@ EDA_Rect TEXTE_MODULE::GetBoundingBox() const
  */
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 {
-    int                  width, color, orient;
-    wxSize               size;
-    wxPoint              pos;      // Center of text
-    PCB_SCREEN*          screen;
-    WinEDA_BasePcbFrame* frame;
-    MODULE*              Module = (MODULE*) m_Parent;   /* parent must *not* be null
-                                                         *  (a module text without a footprint parent has no sense)
-                                                         */
+    int             width, color, orient;
+    wxSize          size;
+    wxPoint         pos;      // Center of text
+    PCB_SCREEN*     screen;
+    PCB_BASE_FRAME* frame;
+    MODULE*         Module = (MODULE*) m_Parent;   /* parent must *not* be null
+                                                    *  (a module text without a footprint
+                                                    * parent has no sense) */
 
 
     if( panel == NULL )
         return;
 
     screen = (PCB_SCREEN*) panel->GetScreen();
-    frame  = (WinEDA_BasePcbFrame*) panel->GetParent();
+    frame  = (PCB_BASE_FRAME*) panel->GetParent();
 
     pos.x = m_Pos.x - offset.x;
     pos.y = m_Pos.y - offset.y;

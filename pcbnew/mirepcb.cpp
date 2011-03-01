@@ -37,7 +37,7 @@ class TARGET_PROPERTIES_DIALOG_EDITOR : public wxDialog
 {
 private:
 
-    WinEDA_PcbFrame*  m_Parent;
+    PCB_EDIT_FRAME*   m_Parent;
     wxDC*             m_DC;
     MIREPCB*          m_MirePcb;
     WinEDA_ValueCtrl* m_MireWidthCtrl;
@@ -45,7 +45,7 @@ private:
     wxRadioBox*       m_MireShape;
 
 public:
-    TARGET_PROPERTIES_DIALOG_EDITOR( WinEDA_PcbFrame* parent, MIREPCB* Mire, wxDC* DC );
+    TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME* parent, MIREPCB* Mire, wxDC* DC );
     ~TARGET_PROPERTIES_DIALOG_EDITOR() { }
 
 private:
@@ -61,7 +61,7 @@ BEGIN_EVENT_TABLE( TARGET_PROPERTIES_DIALOG_EDITOR, wxDialog )
 END_EVENT_TABLE()
 
 
-void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC )
+void PCB_EDIT_FRAME::InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC )
 {
     TARGET_PROPERTIES_DIALOG_EDITOR* frame =
         new TARGET_PROPERTIES_DIALOG_EDITOR( this, MirePcb, DC );
@@ -72,7 +72,7 @@ void WinEDA_PcbFrame::InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC )
 
 
 TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
-    WinEDA_PcbFrame* parent,
+    PCB_EDIT_FRAME* parent,
     MIREPCB* Mire, wxDC* DC ) :
     wxDialog( parent, wxID_ANY, wxString( _( "Target Properties" ) ) )
 {
@@ -159,7 +159,7 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 }
 
 
-void WinEDA_PcbFrame::Delete_Mire( MIREPCB* MirePcb, wxDC* DC )
+void PCB_EDIT_FRAME::Delete_Mire( MIREPCB* MirePcb, wxDC* DC )
 {
     if( MirePcb == NULL )
         return;
@@ -175,7 +175,7 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
     BASE_SCREEN* screen  = Panel->GetScreen();
     MIREPCB*     MirePcb = (MIREPCB*) screen->GetCurItem();
 
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
+    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->SetCurItem( NULL );
 
     Panel->SetMouseCapture( NULL, NULL );
 
@@ -207,7 +207,7 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 /* Draw Symbol PCB type MIRE.
  */
-MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
+MIREPCB* PCB_EDIT_FRAME::Create_Mire( wxDC* DC )
 {
     MIREPCB* MirePcb = new MIREPCB( GetBoard() );
 
@@ -228,7 +228,7 @@ MIREPCB* WinEDA_PcbFrame::Create_Mire( wxDC* DC )
 
 /* Routine to initialize the displacement of a focal
  */
-void WinEDA_PcbFrame::StartMove_Mire( MIREPCB* MirePcb, wxDC* DC )
+void PCB_EDIT_FRAME::StartMove_Mire( MIREPCB* MirePcb, wxDC* DC )
 {
     if( MirePcb == NULL )
         return;
@@ -240,7 +240,7 @@ void WinEDA_PcbFrame::StartMove_Mire( MIREPCB* MirePcb, wxDC* DC )
 }
 
 
-void WinEDA_PcbFrame::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
+void PCB_EDIT_FRAME::Place_Mire( MIREPCB* MirePcb, wxDC* DC )
 {
     if( MirePcb == NULL )
         return;

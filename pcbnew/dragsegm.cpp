@@ -98,7 +98,7 @@ void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
     int     net_code = PtPad->GetNet();
     int     MasqueLayer;
     wxPoint pos;
-    BOARD*  pcb = ( (WinEDA_BasePcbFrame*)( panel->GetParent() ) )->GetBoard();
+    BOARD*  pcb = ( (PCB_BASE_FRAME*)( panel->GetParent() ) )->GetBoard();
 
     Track = pcb->m_Track->GetStartNetCode( net_code );
 
@@ -166,7 +166,7 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
  * @param aRefPos = reference point of connection
  */
 {
-    BOARD* pcb = ( (WinEDA_BasePcbFrame*)( panel->GetParent() ) )->GetBoard();
+    BOARD* pcb = ( (PCB_BASE_FRAME*)( panel->GetParent() ) )->GetBoard();
 
     TRACK* track = pcb->m_Track->GetStartNetCode( net_code );
 

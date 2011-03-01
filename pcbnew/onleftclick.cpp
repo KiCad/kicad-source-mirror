@@ -16,7 +16,7 @@
 
 /* Handle the left buttom mouse click, when a tool is active
  */
-void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
+void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
     bool        exit = false;
@@ -92,9 +92,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
             default:
                 DisplayError( this,
-                             wxT(
-                                 "WinEDA_PcbFrame::OnLeftClick() err: DrawType %d m_Flags != 0" ),
-                             DrawStruct->Type() );
+                              wxT( "PCB_EDIT_FRAME::OnLeftClick() err: DrawType %d m_Flags != 0" ),
+                              DrawStruct->Type() );
                 exit = true;
                 break;
             }
@@ -109,6 +108,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 && !wxGetKeyState( WXK_CONTROL ) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
+
             if( DrawStruct )
                 SendMessageToEESCHEMA( DrawStruct );
         }
@@ -125,6 +125,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             GetBoard()->SetCurrentNetClass(
                 ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
             m_TrackAndViasSizesList_Changed = true;
+            updateDesignRulesSelectBoxes();
             break;
 
         default:
@@ -286,7 +287,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             GetScreen()->SetCurItem( DrawStruct );
         }
         else
-            DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() zone internal error" ) );
+            DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() zone internal error" ) );
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
@@ -344,7 +345,8 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = true;
         }
         else
-            DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() error item is not a DIMENSION" ) );
+            DisplayError( this,
+                          wxT( "PCB_EDIT_FRAME::OnLeftClick() error item is not a DIMENSION" ) );
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
@@ -373,7 +375,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_PcbFrame::OnLeftClick() id error" ) );
+        DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() id error" ) );
         SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }
@@ -382,7 +384,7 @@ void WinEDA_PcbFrame::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
 /* handle the double click on the mouse left button
  */
-void WinEDA_PcbFrame::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
+void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetCurItem();
 
@@ -484,7 +486,7 @@ void WinEDA_PcbFrame::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 }
 
 
-void WinEDA_PcbFrame::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
+void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {

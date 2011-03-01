@@ -34,34 +34,32 @@ static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
 static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 
 
-/*****************************/
-/* class WinEDA_BasePcbFrame */
-/*****************************/
+/****************************/
+/* class PCB_BASE_FRAME */
+/****************************/
 
-BEGIN_EVENT_TABLE( WinEDA_BasePcbFrame, EDA_DRAW_FRAME )
+BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
-                    WinEDA_BasePcbFrame::ProcessItemSelection )
+                    PCB_BASE_FRAME::ProcessItemSelection )
 
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, WinEDA_BasePcbFrame::OnTogglePolarCoords )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, WinEDA_BasePcbFrame::OnTogglePadDrawMode )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnTogglePolarCoords )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
 
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, WinEDA_BasePcbFrame::OnUpdateCoordType )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, WinEDA_BasePcbFrame::OnUpdatePadDrawMode )
-    EVT_UPDATE_UI_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
-                         WinEDA_BasePcbFrame::OnUpdateSelectGrid )
-    EVT_UPDATE_UI_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                         WinEDA_BasePcbFrame::OnUpdateSelectZoom )
-    EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE,
-                         WinEDA_BasePcbFrame::OnUpdateSelectZoom )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnUpdateCoordType )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
+    EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
+    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
+
+    EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
 
 
-WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
-                                          int             idtype,
-                                          const wxString& title,
-                                          const wxPoint&  pos,
-                                          const wxSize&   size,
-                                          long style) :
+PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
+                                        int             idtype,
+                                        const wxString& title,
+                                        const wxPoint&  pos,
+                                        const wxSize&   size,
+                                        long style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
     m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
@@ -83,13 +81,13 @@ WinEDA_BasePcbFrame::WinEDA_BasePcbFrame( wxWindow*       father,
 }
 
 
-WinEDA_BasePcbFrame::~WinEDA_BasePcbFrame()
+PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
 }
 
 
-void WinEDA_BasePcbFrame::SetBoard( BOARD* aBoard )
+void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
     if( m_Pcb != g_ModuleEditor_Pcb )
         delete m_Pcb;
@@ -101,7 +99,7 @@ void WinEDA_BasePcbFrame::SetBoard( BOARD* aBoard )
 /**
  * Return the "best" zoom, i.e. the zoom which shows the entire board on screen
  */
-int WinEDA_BasePcbFrame::BestZoom( void )
+int PCB_BASE_FRAME::BestZoom( void )
 {
     int    dx, dy, ii, jj;
     int    bestzoom;
@@ -117,12 +115,12 @@ int WinEDA_BasePcbFrame::BestZoom( void )
     size = DrawPanel->GetClientSize();
 
     if( size.x )
-        ii = ( dx + (size.x / 2) ) / size.x;
+        ii = wxRound( ( (double) dx + ((double) size.x / 2.0) ) / (double) size.x );
     else
         ii = 31;
 
     if ( size.y )
-        jj = ( dy + (size.y / 2) ) / size.y;
+        jj = wxRound( ( (double) dy + ((double) size.y / 2.0) ) / (double) size.y );
     else
         jj = 31;
 
@@ -133,7 +131,7 @@ int WinEDA_BasePcbFrame::BestZoom( void )
 }
 
 
-void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
+void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
 {
     // factored out of pcbnew/find.cpp
 
@@ -159,19 +157,19 @@ void WinEDA_BasePcbFrame::CursorGoto(  const wxPoint& aPos )
 
 
 // Virtual function
-void WinEDA_BasePcbFrame::ReCreateMenuBar( void )
+void PCB_BASE_FRAME::ReCreateMenuBar( void )
 {
 }
 
 
-/* Virtual functions: Do nothing for WinEDA_BasePcbFrame window */
-void WinEDA_BasePcbFrame::Show3D_Frame( wxCommandEvent& event )
+/* Virtual functions: Do nothing for PCB_BASE_FRAME window */
+void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
 }
 
 
-// Note: virtual, overridden in WinEDA_PcbFrame;
-void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
+// Note: virtual, overridden in PCB_EDIT_FRAME;
+void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, int layer )
 {
     int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
@@ -220,7 +218,7 @@ void WinEDA_BasePcbFrame::SwitchLayer( wxDC* DC, int layer )
 }
 
 
-void WinEDA_BasePcbFrame::OnTogglePolarCoords( wxCommandEvent& aEvent )
+void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 {
     SetStatusText( wxEmptyString );
     DisplayOpt.DisplayPolarCood = !DisplayOpt.DisplayPolarCood;
@@ -228,14 +226,14 @@ void WinEDA_BasePcbFrame::OnTogglePolarCoords( wxCommandEvent& aEvent )
 }
 
 
-void WinEDA_BasePcbFrame::OnTogglePadDrawMode( wxCommandEvent& aEvent )
+void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
     DrawPanel->Refresh();
 }
 
 
-void WinEDA_BasePcbFrame::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
+void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( DisplayOpt.DisplayPolarCood );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
@@ -245,7 +243,7 @@ void WinEDA_BasePcbFrame::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_BasePcbFrame::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
+void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPadFill );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
@@ -255,7 +253,7 @@ void WinEDA_BasePcbFrame::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_BasePcbFrame::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
+void PCB_BASE_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
     // No need to update the grid select box if it doesn't exist or the grid setting change
     // was made using the select box.
@@ -264,27 +262,21 @@ void WinEDA_BasePcbFrame::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     int select = wxNOT_FOUND;
 
-    if( aEvent.GetId() == ID_POPUP_GRID_USER )
+    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
-        select = 0;
-    }
-    else
-    {
-        for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+        if( GetScreen()->GetGridId() == GetScreen()->GetGrid( i ).m_Id )
         {
-            if( aEvent.GetId() == GetScreen()->GetGrid( i ).m_Id )
-            {
-                select = (int) i;
-                break;
-            }
+            select = (int) i;
+            break;
         }
     }
 
-    m_SelGridBox->SetSelection( select );
+    if( select != m_SelGridBox->GetSelection() )
+        m_SelGridBox->SetSelection( select );
 }
 
 
-void WinEDA_BasePcbFrame::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
+void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
     if( m_SelZoomBox == NULL || m_AuxiliaryToolBar == NULL )
         return;
@@ -305,7 +297,7 @@ void WinEDA_BasePcbFrame::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& aEvent )
+void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
@@ -326,7 +318,7 @@ void WinEDA_BasePcbFrame::ProcessItemSelection( wxCommandEvent& aEvent )
 }
 
 
-void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
+void PCB_BASE_FRAME::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
 {
     GetScreen()->SetCurItem( aItem );
 
@@ -355,13 +347,13 @@ void WinEDA_BasePcbFrame::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
 }
 
 
-BOARD_ITEM* WinEDA_BasePcbFrame::GetCurItem()
+BOARD_ITEM* PCB_BASE_FRAME::GetCurItem()
 {
     return GetScreen()->GetCurItem();
 }
 
 
-GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
+GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(),
                                     ( (PCB_SCREEN*)GetScreen())->m_Active_Layer );
@@ -378,7 +370,7 @@ GENERAL_COLLECTORS_GUIDE WinEDA_BasePcbFrame::GetCollectorsGuide()
     return guide;
 }
 
-void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
+void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     bool redraw = false;
 
@@ -405,7 +397,7 @@ void WinEDA_BasePcbFrame::SetToolID( int aId, int aCursor, const wxString& aTool
 /*
  * Update the status bar information.
  */
-void WinEDA_BasePcbFrame::UpdateStatusBar()
+void PCB_BASE_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
 
@@ -454,13 +446,21 @@ void WinEDA_BasePcbFrame::UpdateStatusBar()
 }
 
 
+void PCB_BASE_FRAME::unitsChangeRefresh()
+{
+    EDA_DRAW_FRAME::unitsChangeRefresh();    // Update the status bar.
+
+    updateGridSelectBox();
+}
+
+
 /**
  * Load PCB base frame specific configuration settings.
  *
  * Don't forget to call this base method from any derived classes or the
  * settings will not get loaded.
  */
-void WinEDA_BasePcbFrame::LoadSettings()
+void PCB_BASE_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
@@ -497,7 +497,7 @@ void WinEDA_BasePcbFrame::LoadSettings()
  * Don't forget to call this base method from any derived classes or the
  * settings will not get saved.
  */
-void WinEDA_BasePcbFrame::SaveSettings()
+void PCB_BASE_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
@@ -523,7 +523,7 @@ void WinEDA_BasePcbFrame::SaveSettings()
  * do not forget to call this basic OnModify function to update info
  * in derived OnModify functions
  */
-void WinEDA_BasePcbFrame::OnModify( )
+void PCB_BASE_FRAME::OnModify( )
 {
     GetScreen()->SetModify( );
 
@@ -532,7 +532,7 @@ void WinEDA_BasePcbFrame::OnModify( )
 }
 
 
-void WinEDA_BasePcbFrame::updateGridSelectBox()
+void PCB_BASE_FRAME::updateGridSelectBox()
 {
     UpdateStatusBar();
     DisplayUnitsMsg();
@@ -591,7 +591,7 @@ void WinEDA_BasePcbFrame::updateGridSelectBox()
 }
 
 
-void WinEDA_BasePcbFrame::updateZoomSelectBox()
+void PCB_BASE_FRAME::updateZoomSelectBox()
 {
     if( m_SelZoomBox == NULL )
         return;

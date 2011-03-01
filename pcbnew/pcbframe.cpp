@@ -64,178 +64,186 @@ extern int g_DrawDefaultLineThickness;
 #define SHOW_LAYER_MANAGER_TOOLS    wxT( "ShowLayerManagerTools" )
 
 
-BEGIN_EVENT_TABLE( WinEDA_PcbFrame, WinEDA_BasePcbFrame )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, WinEDA_PcbFrame::OnSockRequestServer )
-    EVT_SOCKET( ID_EDA_SOCKET_EVENT, WinEDA_PcbFrame::OnSockRequest )
+BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
+    EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, PCB_EDIT_FRAME::OnSockRequestServer )
+    EVT_SOCKET( ID_EDA_SOCKET_EVENT, PCB_EDIT_FRAME::OnSockRequest )
 
-    EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_PcbFrame::OnSelectZoom )
-    EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_PcbFrame::OnSelectGrid )
+    EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
+    EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
-    EVT_CLOSE( WinEDA_PcbFrame::OnCloseWindow )
-    EVT_SIZE( WinEDA_PcbFrame::OnSize )
+    EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
+    EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
-    EVT_TOOL( ID_LOAD_FILE, WinEDA_PcbFrame::Files_io )
-    EVT_TOOL( ID_MENU_READ_LAST_SAVED_VERSION_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_TOOL( ID_MENU_RECOVER_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_TOOL( ID_NEW_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_TOOL( ID_SAVE_BOARD, WinEDA_PcbFrame::Files_io )
-    EVT_TOOL( ID_OPEN_MODULE_EDITOR, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_LOAD_FILE, PCB_EDIT_FRAME::Files_io )
+    EVT_TOOL( ID_MENU_READ_LAST_SAVED_VERSION_BOARD, PCB_EDIT_FRAME::Files_io )
+    EVT_TOOL( ID_MENU_RECOVER_BOARD, PCB_EDIT_FRAME::Files_io )
+    EVT_TOOL( ID_NEW_BOARD, PCB_EDIT_FRAME::Files_io )
+    EVT_TOOL( ID_SAVE_BOARD, PCB_EDIT_FRAME::Files_io )
+    EVT_TOOL( ID_OPEN_MODULE_EDITOR, PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Menu Files:
-    EVT_MENU( ID_MAIN_MENUBAR, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_MAIN_MENUBAR, PCB_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU( ID_APPEND_FILE, WinEDA_PcbFrame::Files_io )
-    EVT_MENU( ID_SAVE_BOARD_AS, WinEDA_PcbFrame::Files_io )
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_PcbFrame::OnFileHistory )
+    EVT_MENU( ID_APPEND_FILE, PCB_EDIT_FRAME::Files_io )
+    EVT_MENU( ID_SAVE_BOARD_AS, PCB_EDIT_FRAME::Files_io )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, PCB_EDIT_FRAME::OnFileHistory )
 
-    EVT_MENU( ID_GEN_PLOT, WinEDA_PcbFrame::ToPlotter )
+    EVT_MENU( ID_GEN_PLOT, PCB_EDIT_FRAME::ToPlotter )
 
-    EVT_MENU( ID_GEN_EXPORT_SPECCTRA, WinEDA_PcbFrame::ExportToSpecctra )
-    EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, WinEDA_PcbFrame::ExportToGenCAD )
-    EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, WinEDA_PcbFrame::GenModuleReport )
-    EVT_MENU( ID_GEN_EXPORT_FILE_VRML, WinEDA_PcbFrame::OnExportVRML )
+    EVT_MENU( ID_GEN_EXPORT_SPECCTRA, PCB_EDIT_FRAME::ExportToSpecctra )
+    EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, PCB_EDIT_FRAME::ExportToGenCAD )
+    EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, PCB_EDIT_FRAME::GenModuleReport )
+    EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
 
-    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,WinEDA_PcbFrame::ImportSpecctraSession )
-    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, WinEDA_PcbFrame::ImportSpecctraDesign )
+    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
+    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
 
-    EVT_MENU( ID_MENU_ARCHIVE_NEW_MODULES, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_MENU( ID_MENU_ARCHIVE_ALL_MODULES, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_MENU_ARCHIVE_NEW_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_ARCHIVE_ALL_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU( wxID_EXIT, WinEDA_PcbFrame::OnQuit )
+    EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-    EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_PcbFrame::OnConfigurePcbOptions )
-    EVT_MENU( ID_CONFIG_REQ, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_CONFIG_READ, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START,
-                    ID_PREFERENCES_HOTKEY_END,
-                    WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_OPTIONS_SETUP, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PCB_LAYERS_SETUP, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PCB_MASK_CLEARANCE, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_CONFIG_SAVE, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_CONFIG_READ, WinEDA_PcbFrame::Process_Config )
-    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, WinEDA_PcbFrame::InstallDisplayOptionsDialog )
-    EVT_MENU( ID_PCB_USER_GRID_SETUP, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, PCB_EDIT_FRAME::OnConfigurePcbOptions )
+    EVT_MENU( ID_CONFIG_REQ, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
+                    PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_OPTIONS_SETUP, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PCB_LAYERS_SETUP, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PCB_MASK_CLEARANCE, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PCB_PAD_SETUP, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
+    EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, WinEDA_PcbFrame::SetLanguage )
+    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, PCB_EDIT_FRAME::SetLanguage )
 
     // menu Postprocess
-    EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, WinEDA_PcbFrame::GenModulesPosition )
-    EVT_MENU( ID_PCB_GEN_DRILL_FILE, WinEDA_PcbFrame::InstallDrillFrame )
-    EVT_MENU( ID_PCB_GEN_CMP_FILE, WinEDA_PcbFrame::RecreateCmpFileFromBoard )
-    EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, WinEDA_PcbFrame::RecreateBOMFileFromBoard )
+    EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenModulesPosition )
+    EVT_MENU( ID_PCB_GEN_DRILL_FILE, PCB_EDIT_FRAME::InstallDrillFrame )
+    EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
+    EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, PCB_EDIT_FRAME::RecreateBOMFileFromBoard )
 
     // menu Miscellaneous
-    EVT_MENU( ID_MENU_LIST_NETS, WinEDA_PcbFrame::ListNetsAndSelect )
-    EVT_MENU( ID_PCB_GLOBAL_DELETE, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_CLEAN, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_MENU_LIST_NETS, PCB_EDIT_FRAME::ListNetsAndSelect )
+    EVT_MENU( ID_PCB_GLOBAL_DELETE, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_CLEAN, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
-              WinEDA_PcbFrame::Process_Special_Functions )
+              PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
-              WinEDA_PcbFrame::Process_Special_Functions )
+              PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Menu Help
     EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Menu 3D Frame
-    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_PcbFrame::Show3D_Frame )
+    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Menu Get Design Rules Editor
-    EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, WinEDA_PcbFrame::ShowDesignRulesEditor )
+    EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
 
     // Horizontal toolbar
-    EVT_TOOL( ID_TO_LIBRARY, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( ID_TO_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
-    EVT_TOOL( wxID_CUT, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_COPY, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, WinEDA_PcbFrame::GetBoardFromUndoList )
-    EVT_TOOL( wxID_REDO, WinEDA_PcbFrame::GetBoardFromRedoList )
-    EVT_TOOL( wxID_PRINT, WinEDA_PcbFrame::ToPrinter )
-    EVT_TOOL( ID_GEN_PLOT_SVG, WinEDA_PcbFrame::SVG_Print )
-    EVT_TOOL( ID_GEN_PLOT, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_FIND_ITEMS, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_GET_NETLIST, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_DRC_CONTROL, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, WinEDA_PcbFrame::Process_Special_Functions )
-    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
-    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_TOOL( wxID_CUT, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_COPY, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PASTE, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::GetBoardFromUndoList )
+    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::GetBoardFromRedoList )
+    EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
+    EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::SVG_Print )
+    EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_FIND_ITEMS, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_GET_NETLIST, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_DRC_CONTROL, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
+    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                         WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
-    EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_VIA_SIZE, WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
-    EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, WinEDA_PcbFrame::AutoPlace )
-    EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, WinEDA_PcbFrame::AutoPlace )
-    EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, WinEDA_PcbFrame::Access_to_External_Tool )
+                         PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
+    EVT_KICAD_CHOICEBOX( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
+    EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::AutoPlace )
+    EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::AutoPlace )
+    EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 
     // Option toolbar
     EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
-                    WinEDA_PcbFrame::OnSelectOptionToolbar )
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_ZONES, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
-                    WinEDA_PcbFrame::OnSelectOptionToolbar )
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-              WinEDA_PcbFrame::OnSelectOptionToolbar )
+              PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
     // Vertical toolbar:
-    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_PcbFrame::OnSelectTool )
+    EVT_TOOL( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_PLACE_GRID_COORD_BUTT,
-                    WinEDA_PcbFrame::OnSelectTool )
+                    PCB_EDIT_FRAME::OnSelectTool )
 
     EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
-                    WinEDA_PcbFrame::ProcessMuWaveFunctions )
+                    PCB_EDIT_FRAME::ProcessMuWaveFunctions )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_AUTOPLACE_START_RANGE, ID_POPUP_PCB_AUTOPLACE_END_RANGE,
-                    WinEDA_PcbFrame::AutoPlace )
+                    PCB_EDIT_FRAME::AutoPlace )
 
-    EVT_MENU( ID_POPUP_PCB_REORIENT_ALL_MODULES, WinEDA_PcbFrame::OnOrientFootprints )
+    EVT_MENU( ID_POPUP_PCB_REORIENT_ALL_MODULES, PCB_EDIT_FRAME::OnOrientFootprints )
 
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
-                    WinEDA_PcbFrame::Process_Special_Functions )
+                    PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Tracks and vias sizes general options
     EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE,
                     ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
-                    WinEDA_PcbFrame::Tracks_and_Vias_Size_Event )
+                    PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
     // popup menus
-    EVT_MENU( ID_POPUP_PCB_DELETE_TRACKSEG, WinEDA_PcbFrame::Process_Special_Functions )
+    EVT_MENU( ID_POPUP_PCB_DELETE_TRACKSEG, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    WinEDA_PcbFrame::Process_Special_Functions )
+                    PCB_EDIT_FRAME::Process_Special_Functions )
 
     // User interface update event handlers.
-    EVT_UPDATE_UI( ID_SAVE_BOARD, WinEDA_PcbFrame::OnUpdateSave )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_DRC_OFF, WinEDA_PcbFrame::OnUpdateDrcEnable )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_RATSNEST, WinEDA_PcbFrame::OnUpdateShowBoardRatsnest )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_AUTO_DEL_TRACK, WinEDA_PcbFrame::OnUpdateAutoDeleteTrack )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, WinEDA_PcbFrame::OnUpdateViaDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, WinEDA_PcbFrame::OnUpdateTraceDrawMode )
+    EVT_UPDATE_UI( ID_SAVE_BOARD, PCB_EDIT_FRAME::OnUpdateSave )
+    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::OnUpdateLayerPair )
+    EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_DRC_OFF, PCB_EDIT_FRAME::OnUpdateDrcEnable )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_RATSNEST, PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_AUTO_DEL_TRACK, PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, PCB_EDIT_FRAME::OnUpdateViaDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, PCB_EDIT_FRAME::OnUpdateTraceDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                   WinEDA_PcbFrame::OnUpdateHighContrastDisplayMode )
+                   PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
-                   WinEDA_PcbFrame::OnUpdateShowLayerManager )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, WinEDA_PcbFrame::OnUpdateVerticalToolbar )
+                   PCB_EDIT_FRAME::OnUpdateShowLayerManager )
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
+    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
+                   PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
+    EVT_UPDATE_UI( ID_POPUP_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectAutoTrackWidth )
+    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
+    EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_WIDTH1, ID_POPUP_PCB_SELECT_WIDTH8,
+                         PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
+    EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_VIASIZE1, ID_POPUP_PCB_SELECT_VIASIZE8,
+                         PCB_EDIT_FRAME::OnUpdateSelectViaSize )
     EVT_UPDATE_UI_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_PLACE_GRID_COORD_BUTT,
-                         WinEDA_PcbFrame::OnUpdateVerticalToolbar )
-    EVT_UPDATE_UI_RANGE( ID_AUX_TOOLBAR_PCB_VIA_SIZE, ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
-                         WinEDA_PcbFrame::OnUpdateAuxilaryToolbar )
+                         PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_ZONES, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
-                         WinEDA_PcbFrame::OnUpdateZoneDisplayStyle )
+                         PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle )
 END_EVENT_TABLE()
 
 
 ///////****************************///////////:
 
 
-WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* parent, const wxString& title,
-                                  const wxPoint& pos, const wxSize& size,
-                                  long style ) :
-    WinEDA_BasePcbFrame( parent, PCB_FRAME, title, pos, size, style )
+PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
+                                const wxPoint& pos, const wxSize& size,
+                                long style ) :
+    PCB_BASE_FRAME( parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "PcbFrame" );
     m_Draw_Sheet_Ref = true;            // true to display sheet references
@@ -364,11 +372,7 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left()
                           .ToolbarPane().Gripper( false ) );
 
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                                      m_show_layer_manager_tools );
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
-        m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
-                                       m_show_microwave_tools );
         m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
     }
 
@@ -387,13 +391,13 @@ WinEDA_PcbFrame::WinEDA_PcbFrame( wxWindow* parent, const wxString& title,
 }
 
 
-WinEDA_PcbFrame::~WinEDA_PcbFrame()
+PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     delete m_drc;
 }
 
 
-void WinEDA_PcbFrame::ReFillLayerWidget()
+void PCB_EDIT_FRAME::ReFillLayerWidget()
 {
     m_Layers->ReFill();
 
@@ -412,13 +416,13 @@ void WinEDA_PcbFrame::ReFillLayerWidget()
 }
 
 
-void WinEDA_PcbFrame::OnQuit( wxCommandEvent& event )
+void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 {
     Close( true );
 }
 
 
-void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
+void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     DrawPanel->m_AbortRequest = true;
 
@@ -466,7 +470,7 @@ void WinEDA_PcbFrame::OnCloseWindow( wxCloseEvent& Event )
 /**
  * Display 3D frame of current printed circuit board.
  */
-void WinEDA_PcbFrame::Show3D_Frame( wxCommandEvent& event )
+void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
@@ -482,7 +486,7 @@ void WinEDA_PcbFrame::Show3D_Frame( wxCommandEvent& event )
 /**
  * Display the Design Rules Editor.
  */
-void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 {
     DIALOG_DESIGN_RULES dR_editor( this );
     int returncode = dR_editor.ShowModal();
@@ -490,12 +494,15 @@ void WinEDA_PcbFrame::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox( NULL );
+        updateDesignRulesSelectBoxes();
+        updateTraceWidthSelectBox();
+        updateViaSizeSelectBox();
         OnModify();
     }
 }
 
 
-void WinEDA_PcbFrame::LoadSettings()
+void PCB_EDIT_FRAME::LoadSettings()
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -507,7 +514,7 @@ void WinEDA_PcbFrame::LoadSettings()
      */
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    WinEDA_BasePcbFrame::LoadSettings();
+    PCB_BASE_FRAME::LoadSettings();
 
     long tmp;
     config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &g_DrawDefaultLineThickness );
@@ -520,7 +527,7 @@ void WinEDA_PcbFrame::LoadSettings()
 }
 
 
-void WinEDA_PcbFrame::SaveSettings()
+void PCB_EDIT_FRAME::SaveSettings()
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -532,7 +539,7 @@ void WinEDA_PcbFrame::SaveSettings()
      */
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
-    WinEDA_BasePcbFrame::SaveSettings();
+    PCB_BASE_FRAME::SaveSettings();
 
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 
@@ -550,7 +557,7 @@ void WinEDA_PcbFrame::SaveSettings()
  * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
  */
-bool WinEDA_PcbFrame::IsGridVisible()
+bool PCB_EDIT_FRAME::IsGridVisible()
 {
     return IsElementVisible( GRID_VISIBLE );
 }
@@ -562,7 +569,7 @@ bool WinEDA_PcbFrame::IsGridVisible()
  * if you want to store/retrieve the grid visibility in configuration.
  * @param aVisible = true if the grid must be shown
  */
-void WinEDA_PcbFrame::SetGridVisibility(bool aVisible)
+void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 {
     SetElementVisibility( GRID_VISIBLE, aVisible );
 }
@@ -572,7 +579,7 @@ void WinEDA_PcbFrame::SetGridVisibility(bool aVisible)
  * Function GetGridColor() , virtual
  * @return the color of the grid
  */
-int WinEDA_PcbFrame::GetGridColor()
+int PCB_EDIT_FRAME::GetGridColor()
 {
     return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
 }
@@ -582,7 +589,7 @@ int WinEDA_PcbFrame::GetGridColor()
  * Function SetGridColor() , virtual
  * @param aColor = the new color of the grid
  */
-void WinEDA_PcbFrame::SetGridColor(int aColor)
+void PCB_EDIT_FRAME::SetGridColor(int aColor)
 {
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
 }
@@ -594,7 +601,7 @@ void WinEDA_PcbFrame::SetGridColor(int aColor)
  * It is mainly used to connect BGA to the first inner layer
  * And it is allowed from an external layer to the first inner layer
  */
-bool WinEDA_PcbFrame::IsMicroViaAcceptable( void )
+bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
     int currLayer = getActiveLayer();
@@ -615,9 +622,19 @@ bool WinEDA_PcbFrame::IsMicroViaAcceptable( void )
 }
 
 
-void WinEDA_PcbFrame::syncLayerWidget( )
+void PCB_EDIT_FRAME::syncLayerWidget( )
 {
     m_Layers->SelectLayer( getActiveLayer() );
+}
+
+
+void PCB_EDIT_FRAME::unitsChangeRefresh()
+{
+    PCB_BASE_FRAME::unitsChangeRefresh();    // Update the grid size select box.
+
+    updateTraceWidthSelectBox();
+    updateViaSizeSelectBox();
+    updateDesignRulesSelectBoxes();
 }
 
 
@@ -628,7 +645,7 @@ void WinEDA_PcbFrame::syncLayerWidget( )
  * @param aNewState = The new visibility state of the element category
  * @see enum PCB_VISIBLE
  */
-void WinEDA_PcbFrame::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
+void PCB_EDIT_FRAME::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
 {
     GetBoard()->SetElementVisibility( aPCB_VISIBLE, aNewState );
     m_Layers->SetRenderState( aPCB_VISIBLE, aNewState );
@@ -639,7 +656,7 @@ void WinEDA_PcbFrame::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
  * Function SetVisibleAlls
  * Set the status of all visible element categories and layers to VISIBLE
  */
-void WinEDA_PcbFrame::SetVisibleAlls( )
+void PCB_EDIT_FRAME::SetVisibleAlls( )
 {
     GetBoard()->SetVisibleAlls(  );
 
@@ -652,7 +669,7 @@ void WinEDA_PcbFrame::SetVisibleAlls( )
  * Function SetLanguage
  * called on a language menu selection
  */
-void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
+void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_DRAW_FRAME::SetLanguage( event );
     m_Layers->SetLayersManagerTabsText();
@@ -666,7 +683,7 @@ void WinEDA_PcbFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-wxString WinEDA_PcbFrame::GetLastNetListRead()
+wxString PCB_EDIT_FRAME::GetLastNetListRead()
 {
     wxFileName absoluteFileName = m_lastNetListRead;
     wxFileName pcbFileName = GetScreen()->GetFileName();
@@ -681,7 +698,7 @@ wxString WinEDA_PcbFrame::GetLastNetListRead()
 }
 
 
-void WinEDA_PcbFrame::SetLastNetListRead( const wxString& aLastNetListRead )
+void PCB_EDIT_FRAME::SetLastNetListRead( const wxString& aLastNetListRead )
 {
     wxFileName relativeFileName = aLastNetListRead;
     wxFileName pcbFileName = GetScreen()->GetFileName();
@@ -701,9 +718,9 @@ void WinEDA_PcbFrame::SetLastNetListRead( const wxString& aLastNetListRead )
  * and prepare, if needed the refresh of the 3D frame showing the footprint
  * do not forget to call the basic OnModify function to update auxiliary info
  */
-void WinEDA_PcbFrame::OnModify( )
+void PCB_EDIT_FRAME::OnModify( )
 {
-    WinEDA_BasePcbFrame::OnModify();
+    PCB_BASE_FRAME::OnModify();
 
     if( m_Draw3DFrame )
         m_Draw3DFrame->ReloadRequest();
@@ -713,7 +730,7 @@ void WinEDA_PcbFrame::OnModify( )
 /* Prepare the data structures of print management
  * And displays the dialog window management of printing sheets
  */
-void WinEDA_PcbFrame::SVG_Print( wxCommandEvent& event )
+void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
     DIALOG_SVG_PRINT frame( this );
 

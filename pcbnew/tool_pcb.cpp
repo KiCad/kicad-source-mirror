@@ -61,7 +61,7 @@ static const char s_BitmapLayerIcon[16][16] = {
 
 /* Draw the icon for the "Select layer pair" bitmap tool
  */
-void WinEDA_PcbFrame::PrepareLayerIndicator()
+void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
     int        active_layer_color, Route_Layer_TOP_color,
@@ -80,7 +80,8 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
         change = true;
     }
 
-    Route_Layer_TOP_color = g_ColorsSettings.GetLayerColor(((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP);
+    Route_Layer_TOP_color =
+        g_ColorsSettings.GetLayerColor( ( ( PCB_SCREEN* ) GetScreen() )->m_Route_Layer_TOP );
 
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
@@ -88,7 +89,8 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
         change = true;
     }
 
-    Route_Layer_BOTTOM_color = g_ColorsSettings.GetLayerColor(((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM);
+    Route_Layer_BOTTOM_color =
+        g_ColorsSettings.GetLayerColor( ( (PCB_SCREEN*) GetScreen() )->m_Route_Layer_BOTTOM );
 
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
@@ -121,6 +123,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
     iconDC.SelectObject( *LayerPairBitmap );
     int        buttcolor = -1;
     wxPen      pen;
+
     for( ii = 0; ii < 16; ii++ )
     {
         for( jj = 0; jj < 16; jj++ )
@@ -156,6 +159,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
                                ColorRefs[color].m_Blue );
                 iconDC.SetPen( pen );
             }
+
             iconDC.DrawPoint( jj, ii );
         }
     }
@@ -174,7 +178,7 @@ void WinEDA_PcbFrame::PrepareLayerIndicator()
 
 /* Creates or updates the main horizontal toolbar for the board editor
 */
-void WinEDA_PcbFrame::ReCreateHToolbar()
+void PCB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
@@ -282,7 +286,7 @@ void WinEDA_PcbFrame::ReCreateHToolbar()
 }
 
 
-void WinEDA_PcbFrame::ReCreateOptToolbar()
+void PCB_EDIT_FRAME::ReCreateOptToolbar()
 {
     if( m_OptionsToolBar )
         return;
@@ -374,7 +378,7 @@ void WinEDA_PcbFrame::ReCreateOptToolbar()
 
 /* Create the main vertical right toolbar, showing usual tools
  */
-void WinEDA_PcbFrame::ReCreateVToolbar()
+void PCB_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_VToolBar )
         return;
@@ -445,7 +449,7 @@ void WinEDA_PcbFrame::ReCreateVToolbar()
 /* Create the auxiliary vertical right toolbar, showing tools for
  * microwave applications
  */
-void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
+void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 {
     if( m_AuxVToolBar )
         return;
@@ -491,7 +495,7 @@ void WinEDA_PcbFrame::ReCreateMicrowaveVToolbar()
  * grid size choice
  * zoom level choice
  */
-void WinEDA_PcbFrame::ReCreateAuxiliaryToolbar()
+void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxString msg;
 
@@ -606,7 +610,7 @@ static wxString ReturnStringValue( int aValue )
 }
 
 
-void WinEDA_PcbFrame::updateTraceWidthSelectBox()
+void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 {
     if( m_SelTrackWidthBox == NULL )
         return;
@@ -624,10 +628,13 @@ void WinEDA_PcbFrame::updateTraceWidthSelectBox()
 
         m_SelTrackWidthBox->Append( msg );
     }
+
+    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthList.size() )
+        GetBoard()->m_TrackWidthSelector = 0;
 }
 
 
-void WinEDA_PcbFrame::updateViaSizeSelectBox()
+void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 {
     if( m_SelViaSizeBox == NULL )
         return;
@@ -649,6 +656,9 @@ void WinEDA_PcbFrame::updateViaSizeSelectBox()
 
         m_SelViaSizeBox->Append( msg );
     }
+
+    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
+        GetBoard()->m_ViaSizeSelector = 0;
 }
 
 
@@ -657,7 +667,7 @@ void WinEDA_PcbFrame::updateViaSizeSelectBox()
  * update the displayed values: track widths, via sizes, clearance, Netclass name
  * used when a netclass is selected
  */
-void WinEDA_PcbFrame::updateDesignRulesSelectBoxes()
+void PCB_EDIT_FRAME::updateDesignRulesSelectBoxes()
 {
     wxString nclname = GetBoard()->m_CurrentNetClassName;
     wxString msg     = _( "NetClass: " ) + nclname;
@@ -679,16 +689,7 @@ void WinEDA_PcbFrame::updateDesignRulesSelectBoxes()
 }
 
 
-void WinEDA_PcbFrame::syncLayerBox()
-{
-    wxASSERT( m_SelLayerBox );
-
-    int     layer  = getActiveLayer();
-    m_SelLayerBox->SetLayerSelection(layer);
-}
-
-
-WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent )
+WinEDALayerChoiceBox* PCB_EDIT_FRAME::ReCreateLayerBox( WinEDA_Toolbar* parent )
 {
     if( m_SelLayerBox == NULL )
         return NULL;
@@ -696,8 +697,6 @@ WinEDALayerChoiceBox* WinEDA_PcbFrame::ReCreateLayerBox( WinEDA_Toolbar* parent 
     m_SelLayerBox->m_hotkeys = g_Board_Editor_Hokeys_Descr;
     m_SelLayerBox->Resync();
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
-
-    syncLayerBox();
 
     return m_SelLayerBox;
 }

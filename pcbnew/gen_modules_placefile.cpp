@@ -67,7 +67,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 
 /* Generate the module positions, used component placement.
  */
-void WinEDA_PcbFrame::GenModulesPosition( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 {
     bool        doBoardBack = false;
     MODULE*     module;
@@ -316,7 +316,7 @@ exit:   // the only safe way out of here, no returns please.
 
 /* Print a module report.
  */
-void WinEDA_PcbFrame::GenModuleReport( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 {
     double   conv_unit;
     MODULE*  Module;

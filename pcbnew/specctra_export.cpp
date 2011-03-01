@@ -61,7 +61,7 @@ static const double  safetyMargin = 0.1;
 
 
 // see wxPcbStruct.h
-void WinEDA_PcbFrame::ExportToSpecctra( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 {
     wxString        fullFileName = GetScreen()->GetFileName();
     wxString        path;

@@ -21,9 +21,8 @@
 #include "protos.h"
 
 /********************************************************************************/
-bool WinEDA_BasePcbFrame::Genere_GERBER( const wxString& FullFileName, int Layer,
-                                         bool PlotOriginIsAuxAxis,
-                                         GRTraceMode trace_mode )
+bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
+                                    bool PlotOriginIsAuxAxis, GRTraceMode trace_mode )
 /********************************************************************************/
 
 /* Creates the output files, one per board layer:

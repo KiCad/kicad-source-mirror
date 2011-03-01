@@ -22,8 +22,8 @@
 class DialogNonCopperZonesEditor : public DialogNonCopperZonesPropertiesBase
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
-    ZONE_CONTAINER*  m_Zone_Container;
+    PCB_EDIT_FRAME* m_Parent;
+    ZONE_CONTAINER* m_Zone_Container;
     ZONE_SETTING* m_Zone_Setting;
 
 private:
@@ -32,17 +32,17 @@ private:
     void Init();
 
 public:
-    DialogNonCopperZonesEditor( WinEDA_PcbFrame* parent,
-                                ZONE_CONTAINER*  zone_container,
-                                ZONE_SETTING*    zone_setting );
+    DialogNonCopperZonesEditor( PCB_EDIT_FRAME* parent,
+                                ZONE_CONTAINER* zone_container,
+                                ZONE_SETTING*   zone_setting );
     ~DialogNonCopperZonesEditor();
 };
 
 
 /*******************************************************************************************/
-DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( WinEDA_PcbFrame* parent,
-                                                        ZONE_CONTAINER*  zone_container,
-                                                        ZONE_SETTING*    zone_setting ) :
+DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( PCB_EDIT_FRAME* parent,
+                                                        ZONE_CONTAINER* zone_container,
+                                                        ZONE_SETTING*   zone_setting ) :
     DialogNonCopperZonesPropertiesBase( parent )
 /*******************************************************************************************/
 {
@@ -62,7 +62,7 @@ DialogNonCopperZonesEditor::~DialogNonCopperZonesEditor()
 }
 
 
-bool WinEDA_PcbFrame::InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone )
+bool PCB_EDIT_FRAME::InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone )
 {
     DialogNonCopperZonesEditor frame( this, aZone, &g_Zone_Default_Setting );
     bool diag = frame.ShowModal();

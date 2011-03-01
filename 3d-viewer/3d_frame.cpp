@@ -45,11 +45,10 @@ BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
     EVT_CLOSE( WinEDA3D_DrawFrame::OnCloseWindow )
 END_EVENT_TABLE()
 
-WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( WinEDA_BasePcbFrame* parent,
-                                        const wxString&      title,
-                                        long                 style ) :
-    wxFrame( parent, DISPLAY3D_FRAME, title, wxPoint( -1, -1 ),
-             wxSize( -1, -1 ), style )
+WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent,
+                                        const wxString& title,
+                                        long            style ) :
+    wxFrame( parent, DISPLAY3D_FRAME, title, wxPoint( -1, -1 ), wxSize( -1, -1 ), style )
 {
     m_FrameName     = wxT( "Frame3D" );
     m_Canvas        = NULL;

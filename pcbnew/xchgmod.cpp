@@ -21,10 +21,10 @@ class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
 {
 private:
 
-    WinEDA_PcbFrame* m_Parent;
-    MODULE*          m_CurrentModule;
+    PCB_EDIT_FRAME* m_Parent;
+    MODULE*         m_CurrentModule;
 
-public: DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* aParent, MODULE* aModule );
+public: DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
@@ -46,8 +46,7 @@ private:
 };
 
 
-DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* parent,
-                                                MODULE*          Module ) :
+DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module ) :
     DIALOG_EXCHANGE_MODULE_BASE( parent )
 {
     m_Parent = parent;
@@ -58,7 +57,7 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( WinEDA_PcbFrame* parent,
 }
 
 
-void WinEDA_PcbFrame::InstallExchangeModuleFrame( MODULE* Module )
+void PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
 {
     DIALOG_EXCHANGE_MODULE dialog( this, Module );
 
@@ -456,9 +455,9 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
  * @param aUndoPickList = the undo list used to save  OldModule. If null,
  * OldModule is deleted
  */
-void WinEDA_PcbFrame::Exchange_Module( MODULE*            aOldModule,
-                                       MODULE*            aNewModule,
-                                       PICKED_ITEMS_LIST* aUndoPickList )
+void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
+                                      MODULE*            aNewModule,
+                                      PICKED_ITEMS_LIST* aUndoPickList )
 {
     wxPoint oldpos;
     D_PAD*  pad, * old_pad;
@@ -466,7 +465,7 @@ void WinEDA_PcbFrame::Exchange_Module( MODULE*            aOldModule,
     if( ( aOldModule->Type() != TYPE_MODULE )
        || ( aNewModule->Type() != TYPE_MODULE ) )
     {
-        wxMessageBox( wxT( "WinEDA_PcbFrame::Exchange_Module() StuctType error" ) );
+        wxMessageBox( wxT( "PCB_EDIT_FRAME::Exchange_Module() StuctType error" ) );
         return;
     }
 
@@ -559,7 +558,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
  * this is the same as created by cvpcb.
  * can be used if this file is lost
  */
-void WinEDA_PcbFrame::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName fn;
     FILE*      FichCmp;

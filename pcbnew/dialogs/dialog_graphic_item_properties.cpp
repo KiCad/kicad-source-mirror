@@ -26,13 +26,13 @@
 class DialogGraphicItemProperties: public DialogGraphicItemProperties_base
 {
 private:
-    WinEDA_PcbFrame* m_Parent;
+    PCB_EDIT_FRAME* m_Parent;
     wxDC* m_DC;
     DRAWSEGMENT* m_Item;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
 public:
-    DialogGraphicItemProperties( WinEDA_PcbFrame* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
+    DialogGraphicItemProperties( PCB_EDIT_FRAME* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
     ~DialogGraphicItemProperties() {};
 
 private:
@@ -42,7 +42,8 @@ private:
     void OnLayerChoice( wxCommandEvent& event );
 };
 
-DialogGraphicItemProperties::DialogGraphicItemProperties( WinEDA_PcbFrame* aParent, DRAWSEGMENT * aItem, wxDC * aDC):
+DialogGraphicItemProperties::DialogGraphicItemProperties( PCB_EDIT_FRAME* aParent,
+                                                          DRAWSEGMENT * aItem, wxDC * aDC):
     DialogGraphicItemProperties_base( aParent )
 {
     m_Parent = aParent;
@@ -56,7 +57,7 @@ DialogGraphicItemProperties::DialogGraphicItemProperties( WinEDA_PcbFrame* aPare
 
 
 /*******************************************************************************************/
-void WinEDA_PcbFrame::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC)
+void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxDC* aDC)
 /*******************************************************************************************/
 {
     if ( aItem == NULL )

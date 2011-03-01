@@ -15,7 +15,7 @@ PCB_Plot_Options g_pcb_plot_options;
 
 
 /**************************************************************/
-/* void WinEDA_BasePcbFrame::ToPlotter(wxCommandEvent& event) */
+/* void PCB_BASE_FRAME::ToPlotter(wxCommandEvent& event) */
 /***************************************************************/
 
 /** TODO */

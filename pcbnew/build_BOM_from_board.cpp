@@ -46,7 +46,7 @@ WX_DECLARE_LIST( cmp, CmpList );
 
 WX_DEFINE_LIST( CmpList )
 
-void WinEDA_PcbFrame::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName fn;
     FILE*      FichBom;

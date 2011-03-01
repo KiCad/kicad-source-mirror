@@ -13,7 +13,7 @@
 #include "dialog_global_deletion.h"
 
 
-DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( WinEDA_PcbFrame* parent )
+DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
     : DIALOG_GLOBAL_DELETION_BASE( parent )
 {
     m_Parent = parent;
@@ -25,7 +25,7 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( WinEDA_PcbFrame* parent )
 
 
 /********************************************************************/
-void WinEDA_PcbFrame::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
+void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 /********************************************************************/
 {
     DIALOG_GLOBAL_DELETION dlg( this );

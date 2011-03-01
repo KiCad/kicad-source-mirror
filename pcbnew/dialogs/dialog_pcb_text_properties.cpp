@@ -44,7 +44,8 @@
  *  wxFormBuilder.
  */
 
-DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( WinEDA_PcbFrame* parent, TEXTE_PCB* passedTextPCB, wxDC* DC )
+DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
+                                                        TEXTE_PCB* passedTextPCB, wxDC* DC )
                             : DIALOG_PCB_TEXT_PROPERTIES_BASE( parent )
 {
     m_Parent = parent;
@@ -59,7 +60,7 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( WinEDA_PcbFrame* parent,
 /**
  * Routine for main window class to launch text properties dialog.
  */
-void WinEDA_PcbFrame::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
+void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 {
     DrawPanel->m_IgnoreMouseEvents = TRUE;
     DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, DC );

@@ -17,7 +17,7 @@
 
 /* Handle microwave commands.
  */
-void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -61,13 +61,13 @@ void WinEDA_PcbFrame::ProcessMuWaveFunctions( wxCommandEvent& event )
 
     default:
         DisplayError( this,
-                      wxT( "WinEDA_PcbFrame::ProcessMuWaveFunctions() id error" ) );
+                      wxT( "PCB_EDIT_FRAME::ProcessMuWaveFunctions() id error" ) );
         break;
     }
 }
 
 
-void WinEDA_PcbFrame::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
+void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
 {
     MODULE* module = NULL;
 
@@ -95,7 +95,7 @@ void WinEDA_PcbFrame::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DrawPanel->SetCursor( wxCURSOR_ARROW );
-        DisplayError( this, wxT( "WinEDA_PcbFrame::MuWaveCommand() id error" ) );
+        DisplayError( this, wxT( "PCB_EDIT_FRAME::MuWaveCommand() id error" ) );
         SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
     }

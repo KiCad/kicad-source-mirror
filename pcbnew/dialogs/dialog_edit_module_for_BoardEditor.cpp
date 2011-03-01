@@ -16,10 +16,9 @@
 #include "dialog_edit_module_for_BoardEditor.h"
 
 
-DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR(
-    WinEDA_PcbFrame* aParent,
-    MODULE*          aModule,
-    wxDC*            aDC ) :
+DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
+                                                        MODULE*          aModule,
+                                                        wxDC*            aDC ) :
     DIALOG_MODULE_BOARD_EDITOR_BASE( aParent )
 {
     m_Parent = aParent;

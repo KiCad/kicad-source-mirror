@@ -19,7 +19,7 @@
 
 
 /**********************************************************************/
-void WinEDA_PcbFrame::Access_to_External_Tool( wxCommandEvent& event )
+void PCB_EDIT_FRAME::Access_to_External_Tool( wxCommandEvent& event )
 /**********************************************************************/
 
 /* Run an external tool (currently, only freeroute)
@@ -31,7 +31,7 @@ void WinEDA_PcbFrame::Access_to_External_Tool( wxCommandEvent& event )
 
 
 
-DIALOG_FREEROUTE::DIALOG_FREEROUTE( WinEDA_PcbFrame* parent ):
+DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
     DIALOG_FREEROUTE_BASE( parent )
 {
     m_Parent = parent;

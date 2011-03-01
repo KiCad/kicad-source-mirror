@@ -88,15 +88,15 @@ static int     ReadListeModules( const wxString& CmpFullFileName,
                                  const wxString* RefCmp,
                                  const wxString* TimeStampPath,
                                  wxString&       NameModule );
-static MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
-                              wxTextCtrl*      aMessageWindow,
-                              const wxString&  CmpFullFileName,
-                              char*            Text,
-                              int*             UseFichCmp,
-                              int              TstOnly,
-                              bool             Select_By_Timestamp,
-                              bool             aChangeFootprint );
-static void LoadListeModules( WinEDA_PcbFrame* aPcbFrame );
+static MODULE* ReadNetModule( PCB_EDIT_FRAME* aFrame,
+                              wxTextCtrl*     aMessageWindow,
+                              const wxString& CmpFullFileName,
+                              char*           Text,
+                              int*            UseFichCmp,
+                              int             TstOnly,
+                              bool            Select_By_Timestamp,
+                              bool            aChangeFootprint );
+static void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame );
 
 
 static int           s_NbNewModules;
@@ -155,13 +155,13 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
  *  }
  * \#End
  */
-bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
-                                      const wxString&  aCmpFullFileName,
-                                      wxTextCtrl*      aMessageWindow,
-                                      bool             aChangeFootprint,
-                                      bool             aDeleteBadTracks,
-                                      bool             aDeleteExtraFootprints,
-                                      bool             aSelect_By_Timestamp )
+bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
+                                     const wxString&  aCmpFullFileName,
+                                     wxTextCtrl*      aMessageWindow,
+                                     bool             aChangeFootprint,
+                                     bool             aDeleteBadTracks,
+                                     bool             aDeleteExtraFootprints,
+                                     bool             aSelect_By_Timestamp )
 {
     int     State, Comment;
     MODULE* Module = NULL;
@@ -403,14 +403,14 @@ bool WinEDA_PcbFrame::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
  * (1 VCC)
  * (2 MODB_1)
  */
-MODULE* ReadNetModule( WinEDA_PcbFrame* aFrame,
-                       wxTextCtrl*      aMessageWindow,
-                       const wxString&  aCmpFullFileName,
-                       char*            Text,
-                       int*             UseFichCmp,
-                       int              TstOnly,
-                       bool             aSelect_By_Timestamp,
-                       bool             aChangeFootprint )
+MODULE* ReadNetModule( PCB_EDIT_FRAME* aFrame,
+                       wxTextCtrl*     aMessageWindow,
+                       const wxString& aCmpFullFileName,
+                       char*           Text,
+                       int*            UseFichCmp,
+                       int             TstOnly,
+                       bool            aSelect_By_Timestamp,
+                       bool            aChangeFootprint )
 {
     MODULE*  Module;
     char*    text;
@@ -639,7 +639,7 @@ int SetPadNetName( char*       Text,
  * The user can select a module from this list
  * @return a pointer to the selected module or NULL
  */
-MODULE* WinEDA_PcbFrame::ListAndSelectModuleName( void )
+MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
 {
     MODULE* Module;
 
@@ -988,7 +988,7 @@ void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxStr
  * If a module is being loaded it is duplicated, which avoids reading
  * unnecessary library.
  */
-void LoadListeModules( WinEDA_PcbFrame* aPcbFrame )
+void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame )
 {
     MODULEtoLOAD* ref, * cmp;
     int           ii;

@@ -83,10 +83,10 @@ int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 /** Read a list of segments (Tracks, zones)
  * @return items count or - count if no end block ($End...) found.
  */
-int WinEDA_BasePcbFrame::ReadListeSegmentDescr( LINE_READER* aReader,
-                                                TRACK* insertBeforeMe,
-                                                int    StructType,
-                                                int    NumSegm )
+int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
+                                           TRACK* insertBeforeMe,
+                                           int    StructType,
+                                           int    NumSegm )
 {
     int    shape, width, drill, layer, type, flags, net_code;
     int    tempStartX, tempStartY;
@@ -187,7 +187,7 @@ int WinEDA_BasePcbFrame::ReadListeSegmentDescr( LINE_READER* aReader,
 }
 
 
-int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( LINE_READER* aReader )
+int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 {
     char* Line, * data;
 
@@ -306,7 +306,7 @@ int WinEDA_BasePcbFrame::ReadGeneralDescrPcb( LINE_READER* aReader )
 }
 
 
-int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
+int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 {
     char*     Line;
     char*     data;
@@ -639,7 +639,7 @@ int WinEDA_BasePcbFrame::ReadSetup( LINE_READER* aReader )
 
 
 #ifdef PCBNEW
-static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
+static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
 {
     NETCLASS* netclass_default = aBoard->m_NetClasses.GetDefault();
     char      text[1024];
@@ -767,7 +767,7 @@ static int WriteSetup( FILE* aFile, WinEDA_BasePcbFrame* aFrame, BOARD* aBoard )
 #endif
 
 
-bool WinEDA_PcbFrame::WriteGeneralDescrPcb( FILE* File )
+bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
 {
     EDA_ITEM* PtStruct = GetBoard()->m_Modules;
     int       NbModules, NbDrawItem, NbLayers;
@@ -943,7 +943,7 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 }
 
 
-int WinEDA_PcbFrame::ReadPcbFile( LINE_READER* aReader, bool Append )
+int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 {
     char*        Line;
 
@@ -1131,7 +1131,7 @@ int WinEDA_PcbFrame::ReadPcbFile( LINE_READER* aReader, bool Append )
  * 1 if OK
  * 0 if error occurs saving file.
  */
-int WinEDA_PcbFrame::SavePcbFormatAscii( FILE* aFile )
+int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 {
     bool rc;
     char line[256];

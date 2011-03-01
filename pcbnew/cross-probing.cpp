@@ -34,14 +34,14 @@ void RemoteCommand(  const char* cmdline )
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  */
 {
-    char             line[1024];
-    wxString         msg;
-    wxString         modName;
-    char*            idcmd;
-    char*            text;
-    MODULE*          module = 0;
-    WinEDA_PcbFrame* frame  = (WinEDA_PcbFrame*)wxGetApp().GetTopWindow();
-    wxPoint          pos;
+    char            line[1024];
+    wxString        msg;
+    wxString        modName;
+    char*           idcmd;
+    char*           text;
+    MODULE*         module = 0;
+    PCB_EDIT_FRAME* frame  = (PCB_EDIT_FRAME*)wxGetApp().GetTopWindow();
+    wxPoint         pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
 
@@ -131,7 +131,7 @@ void RemoteCommand(  const char* cmdline )
 
 // see wxstruct.h
 /**************************************************************************/
-void WinEDA_PcbFrame::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
+void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 /**************************************************************************/
 
 /** Send a remote command to eeschema via a socket,

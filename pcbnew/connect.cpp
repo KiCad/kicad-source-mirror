@@ -266,7 +266,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
 
 /***************************************************/
-void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
+void PCB_BASE_FRAME::test_connexions( wxDC* DC )
 /***************************************************/
 
 /**
@@ -310,7 +310,7 @@ void WinEDA_BasePcbFrame::test_connexions( wxDC* DC )
 
 
 /*************************************************************************/
-void WinEDA_BasePcbFrame::test_1_net_connexion( wxDC* DC, int net_code )
+void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
 /*************************************************************************/
 
 /**
@@ -566,7 +566,7 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
 
 
 /********************************************************************/
-void WinEDA_BasePcbFrame::RecalculateAllTracksNetcode( )
+void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 /********************************************************************/
 
 /* search connections between tracks and pads, and propagate pad net codes to the track segments

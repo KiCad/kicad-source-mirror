@@ -5,7 +5,7 @@
 /* class DISPLAY_FOOTPRINTS_FRAME: used to display footprints */
 /*******************************************************/
 
-class DISPLAY_FOOTPRINTS_FRAME : public WinEDA_BasePcbFrame
+class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
 public:
     DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father, const wxString& title,
@@ -57,7 +57,7 @@ public:
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in cvpcb.
-     * but but be defined because it is a pure virtual in WinEDA_BasePcbFrame
+     * but but be defined because it is a pure virtual in PCB_BASE_FRAME
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
                                      UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,

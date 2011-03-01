@@ -53,7 +53,7 @@ extern int ChangeSideMaskLayer( int masque );
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
+    PCB_BASE_FRAME* m_Parent;
     D_PAD* m_CurrentPad;            // Pad currently edited
     D_PAD* m_dummyPad;              // a working copy used to show changes
     BOARD* m_Board;
@@ -63,7 +63,7 @@ private:
     bool   m_canUpdate;
 
 public:
-    DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad );
+    DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* parent, D_PAD* Pad );
     ~DIALOG_PAD_PROPERTIES()
     {
         delete m_dummyPad;
@@ -140,7 +140,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
 
 /*******************************************************************************************/
-DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD* Pad ) :
+DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* parent, D_PAD* Pad ) :
     DIALOG_PAD_PROPERTIES_BASE( parent )
 /*******************************************************************************************/
 {
@@ -163,7 +163,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( WinEDA_BasePcbFrame* parent, D_PAD
 }
 
 
-void WinEDA_BasePcbFrame::InstallPadOptionsFrame( D_PAD* Pad )
+void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* Pad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, Pad );
 

@@ -65,9 +65,9 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     Panel->GetScreen()->SetCrossHairPosition( oldpos );
     g_HighLight_Status = false;
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight( Panel,
-                                                                          DC,
-                                                                          g_HighLight_NetCode );
+    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->GetBoard()->DrawHighLight( Panel,
+                                                                         DC,
+                                                                         g_HighLight_NetCode );
 
     if( NewTrack )
     {
@@ -107,7 +107,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
         NewTrack = NULL;
     }
 
-    ( (WinEDA_PcbFrame*) Panel->GetParent() )->SetCurItem( NULL );
+    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->SetCurItem( NULL );
 
     /* Undo move and redraw trace segments. */
     for( unsigned jj=0 ; jj < g_DragSegmentList.size(); jj++ )
@@ -125,7 +125,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     g_HighLight_NetCode = Old_HighLigth_NetCode;
     g_HighLight_Status   = Old_HighLigt_Status;
     if( g_HighLight_Status )
-        ( (WinEDA_PcbFrame*) Panel->GetParent() )->GetBoard()->DrawHighLight(
+        ( (PCB_EDIT_FRAME*) Panel->GetParent() )->GetBoard()->DrawHighLight(
             Panel, DC, g_HighLight_NetCode );
 
     EraseDragList();
@@ -195,7 +195,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     DisplayOpt.DisplayPcbTrackFill = track_fill_copy;
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
     Track->DisplayInfo( frame );
 }
 
@@ -468,7 +468,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         tSegmentToEnd->Draw( aPanel, aDC, draw_mode );
 
     // Display track length
-    WinEDA_BasePcbFrame* frame = (WinEDA_BasePcbFrame*) aPanel->GetParent();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
     Track->DisplayInfo( frame );
 }
 
@@ -655,9 +655,7 @@ bool InitialiseDragParameters()
  *  a via or/and a terminal point of a track segment
  *  The terminal point of other connected segments (if any) are moved too.
  */
-void WinEDA_PcbFrame::Start_MoveOneNodeOrSegment( TRACK* track,
-                                                  wxDC*  DC,
-                                                  int    command )
+void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command )
 {
     if( !track )
         return;
@@ -783,7 +781,7 @@ void SortTrackEndPoints( TRACK* track )
  * and if they have the same width. See cleanup.cpp for merge functions,
  * and consider Marque_Une_Piste() to locate segments that can be merged
  */
-bool WinEDA_PcbFrame::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
+bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 {
     testtrack = (TRACK*) Locate_Piste_Connectee( track,
                                                  GetBoard()->m_Track, NULL,
@@ -837,8 +835,7 @@ bool WinEDA_PcbFrame::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 #endif
 
 
-void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
-                                                          wxDC*  DC )
+void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC )
 {
     TRACK* TrackToStartPoint = NULL;
     TRACK* TrackToEndPoint   = NULL;
@@ -969,7 +966,7 @@ void WinEDA_PcbFrame::Start_DragTrackSegmentAndKeepSlope( TRACK* track,
 
 
 /* Place a dragged (or moved) track segment or via */
-bool WinEDA_PcbFrame::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
+bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 {
     int        errdrc;
 

@@ -18,7 +18,7 @@
  * If There is evidence of new track: delete new segment.
  * Otherwise, delete segment under the cursor.
  */
-TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
+TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 {
     int current_net_code;
 
@@ -116,7 +116,7 @@ TRACK* WinEDA_PcbFrame::Delete_Segment( wxDC* DC, TRACK* aTrack )
 }
 
 
-void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* aTrack )
+void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack != NULL )
     {
@@ -128,7 +128,7 @@ void WinEDA_PcbFrame::Delete_Track( wxDC* DC, TRACK* aTrack )
 }
 
 
-void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
+void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 {
     if( aTrack == NULL )
         return;
@@ -172,7 +172,7 @@ void WinEDA_PcbFrame::Delete_net( wxDC* DC, TRACK* aTrack )
  * The leading segment is removed and all adjacent segments
  * until a pad or a junction point of more than 2 segments is found
  */
-void WinEDA_PcbFrame::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
+void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
 {
     int segments_to_delete_count;
 

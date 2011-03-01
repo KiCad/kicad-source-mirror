@@ -21,14 +21,14 @@ enum layer_sel_id {
 class WinEDA_SelLayerFrame : public wxDialog
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxRadioBox*          m_LayerList;
+    PCB_BASE_FRAME* m_Parent;
+    wxRadioBox*     m_LayerList;
     int m_LayerId[NB_LAYERS + 1]; // One extra element for "(Deselect)"
                                   // radiobutton
 
 public:
     // Constructor and destructor
-    WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent, int default_layer,
+    WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent, int default_layer,
                           int min_layer, int max_layer, bool null_layer );
     ~WinEDA_SelLayerFrame() { };
 
@@ -64,10 +64,10 @@ END_EVENT_TABLE()
  * "Deselect"
  * button provided within the "Swap Layers:" or "Layer selection:" dialog box).
  */
-int WinEDA_BasePcbFrame::SelectLayer( int  default_layer,
-                                      int  min_layer,
-                                      int  max_layer,
-                                      bool null_layer )
+int PCB_BASE_FRAME::SelectLayer( int  default_layer,
+                                 int  min_layer,
+                                 int  max_layer,
+                                 bool null_layer )
 {
     int layer;
     WinEDA_SelLayerFrame* frame = new WinEDA_SelLayerFrame( this,
@@ -88,7 +88,7 @@ int WinEDA_BasePcbFrame::SelectLayer( int  default_layer,
  * radiobuttons, in which case they are positioned (in a vertical line)
  * to the right of that radiobox.
  */
-WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( WinEDA_BasePcbFrame* parent,
+WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent,
                                             int default_layer, int min_layer,
                                             int max_layer, bool null_layer ) :
     wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
@@ -190,12 +190,12 @@ void WinEDA_SelLayerFrame::OnCancelClick( wxCommandEvent& event )
 class WinEDA_SelLayerPairFrame : public wxDialog
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
-    wxRadioBox*          m_LayerListTOP;
-    wxRadioBox*          m_LayerListBOTTOM;
+    PCB_BASE_FRAME* m_Parent;
+    wxRadioBox*     m_LayerListTOP;
+    wxRadioBox*     m_LayerListBOTTOM;
     int m_LayerId[NB_COPPER_LAYERS];
 
-public: WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent );
+public: WinEDA_SelLayerPairFrame( PCB_BASE_FRAME* parent );
     ~WinEDA_SelLayerPairFrame() { };
 
 private:
@@ -215,7 +215,7 @@ END_EVENT_TABLE()
 /* Display a list of two copper layers for selection of a pair of layers
  * for auto-routing, vias ...
  */
-void WinEDA_BasePcbFrame::SelectLayerPair()
+void PCB_BASE_FRAME::SelectLayerPair()
 {
     // Check whether more than one copper layer has been enabled for the
     // current PCB file, as Layer Pairs can only meaningfully be defined
@@ -245,7 +245,7 @@ void WinEDA_BasePcbFrame::SelectLayerPair()
 }
 
 
-WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( WinEDA_BasePcbFrame* parent ) :
+WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( PCB_BASE_FRAME* parent ) :
     wxDialog( parent, -1, _( "Select Layer Pair:" ), wxPoint( -1, -1 ),
               wxSize( 470, 250 ), DIALOG_STYLE )
 {

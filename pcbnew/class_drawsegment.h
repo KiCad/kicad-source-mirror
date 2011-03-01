@@ -84,7 +84,7 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Is virtual from EDA_ITEM.
-     * @param frame A WinEDA_BasePcbFrame in which to print status information.
+     * @param frame A PCB_BASE_FRAME in which to print status information.
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 

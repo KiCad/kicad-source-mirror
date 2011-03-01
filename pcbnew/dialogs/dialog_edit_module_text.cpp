@@ -23,13 +23,13 @@ extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod
 class DialogEditModuleText : public DialogEditModuleText_base
 {
 private:
-    WinEDA_BasePcbFrame* m_Parent;
+    PCB_BASE_FRAME* m_Parent;
     wxDC* m_DC;
     MODULE* m_Module;
     TEXTE_MODULE* m_CurrentTextMod;
 
 public:
-    DialogEditModuleText( WinEDA_BasePcbFrame* parent, TEXTE_MODULE* TextMod, wxDC* DC );
+    DialogEditModuleText( PCB_BASE_FRAME* parent, TEXTE_MODULE* TextMod, wxDC* DC );
     ~DialogEditModuleText() {};
 
 private:
@@ -39,7 +39,7 @@ private:
 };
 
 /*************************************************************************************/
-void WinEDA_BasePcbFrame::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
+void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
 /**************************************************************************************/
 {
     DrawPanel->m_IgnoreMouseEvents = TRUE;
@@ -49,7 +49,8 @@ void WinEDA_BasePcbFrame::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxD
 }
 
 
-DialogEditModuleText::DialogEditModuleText( WinEDA_BasePcbFrame* parent,  TEXTE_MODULE* TextMod, wxDC* DC ) :
+DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* parent,
+                                            TEXTE_MODULE* TextMod, wxDC* DC ) :
     DialogEditModuleText_base(parent)
 
 {

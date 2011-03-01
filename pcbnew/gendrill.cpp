@@ -84,7 +84,7 @@ static std::vector<HOLE_INFO>  s_HoleListBuffer;
 
 /* This function displays the dialog frame for drill tools
  */
-void WinEDA_PcbFrame::InstallDrillFrame( wxCommandEvent& event )
+void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
 {
     DIALOG_GENDRILL dlg( this );
     dlg.ShowModal();
