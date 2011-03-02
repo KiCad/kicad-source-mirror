@@ -4,7 +4,7 @@
     GPL v2.
 
     How to use:
-        https://lists.launchpad.net/kicad-developers/msg05157.html
+         see eeschema.pdf, chapter 14
 -->
 
 <!DOCTYPE xsl:stylesheet [
