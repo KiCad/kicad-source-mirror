@@ -10,12 +10,14 @@
 #include "confirm.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
+#include "kicad_device_context.h"
 
 #include "general.h"
 #include "protos.h"
 #include "class_library.h"
 #include "sch_component.h"
 #include "viewlib_frame.h"
+#include "eeschema_id.h"
 
 #include "dialog_get_component.h"
 
@@ -307,55 +309,77 @@ static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /*
  * Handle select part in multi-part component.
  */
-void SCH_EDIT_FRAME::SelPartUnit( SCH_COMPONENT* DrawComponent, int unit, wxDC* DC )
+void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 {
-    int m_UnitCount;
-    LIB_COMPONENT* LibEntry;
+    SCH_SCREEN* screen = GetScreen();
 
-    if( DrawComponent == NULL )
+    if( screen->GetCurItem() == NULL )
         return;
 
-    LibEntry = CMP_LIBRARY::FindLibraryComponent( DrawComponent->GetLibName() );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-    if( LibEntry == NULL )
+    // Verify the selected item is a component, it may be part of a component such as a field
+    // or text item.
+    if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
+    {
+        screen->SetCurItem( LocateSmallestComponent( screen ) );
+
+        if( screen->GetCurItem() == NULL )
+            return;
+    }
+
+    DrawPanel->MoveCursorToCrossHair();
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
+
+    wxCHECK_RET( (component != NULL) && (component->Type() == SCH_COMPONENT_T),
+                 wxT( "Cannot select unit for invalid component." ) );
+
+    int unit = aEvent.GetId() + 1 - ID_POPUP_SCH_SELECT_UNIT1;
+
+    LIB_COMPONENT* libEntry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
+    if( libEntry == NULL )
         return;
 
-    m_UnitCount = LibEntry->GetPartCount();
+    wxCHECK_RET( (unit >= 1) && (unit <= libEntry->GetPartCount()),
+                 wxString::Format( wxT( "Cannot select unit %d from component "), unit ) +
+                 libEntry->GetName() );
 
-    if( m_UnitCount <= 1 )
-        return;
+    int unitCount = libEntry->GetPartCount();
 
-    if( DrawComponent->GetUnit() == unit )
+    if( (unitCount <= 1) || (component->GetUnit() == unit) )
         return;
 
     if( unit < 1 )
         unit = 1;
 
-    if( unit > m_UnitCount )
-        unit = m_UnitCount;
+    if( unit > unitCount )
+        unit = unitCount;
 
-    int curr_flg = DrawComponent->m_Flags;
-    if( ! curr_flg )    // No command in progress: save in undo list
-        SaveCopyInUndoList( DrawComponent, UR_CHANGED );
+    int flags = component->GetFlags();
 
-    if( curr_flg )
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    if( !flags )    // No command in progress: save in undo list
+        SaveCopyInUndoList( component, UR_CHANGED );
+
+    if( flags )
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     /* Update the unit number. */
-    DrawComponent->SetUnitSelection( GetSheet(), unit );
-    DrawComponent->SetUnit( unit );
-    DrawComponent->m_Flags = curr_flg;  // Restore m_Flag modified by SetUnit();
+    component->SetUnitSelection( GetSheet(), unit );
+    component->SetUnit( unit );
+    component->SetFlags( flags );  // Restore m_Flag modified by SetUnit();
 
     /* Redraw the component in the new position. */
-    if( DrawComponent->m_Flags )
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    if( flags )
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    GetScreen()->TestDanglingEnds( DrawPanel, DC );
-    OnModify( );
+    GetScreen()->TestDanglingEnds( DrawPanel, &dc );
+    OnModify();
 }
 
 

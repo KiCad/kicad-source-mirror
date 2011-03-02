@@ -520,8 +520,7 @@ public:
                                       wxDC* DC, int type_rotate );
 
 private:
-    void           SelPartUnit( SCH_COMPONENT* DrawComponent,
-                                int unit, wxDC* DC );
+    void           OnSelectUnit( wxCommandEvent& aEvent );
     void           ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void           SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void           EditComponentReference( SCH_COMPONENT* DrawLibItem,

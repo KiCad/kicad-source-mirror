@@ -71,33 +71,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_EDIT_REF_CMP:
     case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_SELECT_UNIT_CMP:
-    case ID_POPUP_SCH_SELECT_UNIT1:
-    case ID_POPUP_SCH_SELECT_UNIT2:
-    case ID_POPUP_SCH_SELECT_UNIT3:
-    case ID_POPUP_SCH_SELECT_UNIT4:
-    case ID_POPUP_SCH_SELECT_UNIT5:
-    case ID_POPUP_SCH_SELECT_UNIT6:
-    case ID_POPUP_SCH_SELECT_UNIT7:
-    case ID_POPUP_SCH_SELECT_UNIT8:
-    case ID_POPUP_SCH_SELECT_UNIT9:
-    case ID_POPUP_SCH_SELECT_UNIT10:
-    case ID_POPUP_SCH_SELECT_UNIT11:
-    case ID_POPUP_SCH_SELECT_UNIT12:
-    case ID_POPUP_SCH_SELECT_UNIT13:
-    case ID_POPUP_SCH_SELECT_UNIT14:
-    case ID_POPUP_SCH_SELECT_UNIT15:
-    case ID_POPUP_SCH_SELECT_UNIT16:
-    case ID_POPUP_SCH_SELECT_UNIT17:
-    case ID_POPUP_SCH_SELECT_UNIT18:
-    case ID_POPUP_SCH_SELECT_UNIT19:
-    case ID_POPUP_SCH_SELECT_UNIT20:
-    case ID_POPUP_SCH_SELECT_UNIT21:
-    case ID_POPUP_SCH_SELECT_UNIT22:
-    case ID_POPUP_SCH_SELECT_UNIT23:
-    case ID_POPUP_SCH_SELECT_UNIT24:
-    case ID_POPUP_SCH_SELECT_UNIT25:
-    case ID_POPUP_SCH_SELECT_UNIT26:
     case ID_POPUP_SCH_ROTATE_FIELD:
     case ID_POPUP_SCH_EDIT_FIELD:
     case ID_POPUP_DELETE_BLOCK:
@@ -362,8 +335,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
         DrawPanel->MoveCursorToCrossHair();
-        // The easiest way to handle a drag component is to simulate a
-        // block drag command
+
+        // The easiest way to handle a drag component is to simulate a block drag command
         if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
             if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
@@ -494,46 +467,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         ConvertPart( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_SCH_SELECT_UNIT1:
-    case ID_POPUP_SCH_SELECT_UNIT2:
-    case ID_POPUP_SCH_SELECT_UNIT3:
-    case ID_POPUP_SCH_SELECT_UNIT4:
-    case ID_POPUP_SCH_SELECT_UNIT5:
-    case ID_POPUP_SCH_SELECT_UNIT6:
-    case ID_POPUP_SCH_SELECT_UNIT7:
-    case ID_POPUP_SCH_SELECT_UNIT8:
-    case ID_POPUP_SCH_SELECT_UNIT9:
-    case ID_POPUP_SCH_SELECT_UNIT10:
-    case ID_POPUP_SCH_SELECT_UNIT11:
-    case ID_POPUP_SCH_SELECT_UNIT12:
-    case ID_POPUP_SCH_SELECT_UNIT13:
-    case ID_POPUP_SCH_SELECT_UNIT14:
-    case ID_POPUP_SCH_SELECT_UNIT15:
-    case ID_POPUP_SCH_SELECT_UNIT16:
-    case ID_POPUP_SCH_SELECT_UNIT17:
-    case ID_POPUP_SCH_SELECT_UNIT18:
-    case ID_POPUP_SCH_SELECT_UNIT19:
-    case ID_POPUP_SCH_SELECT_UNIT20:
-    case ID_POPUP_SCH_SELECT_UNIT21:
-    case ID_POPUP_SCH_SELECT_UNIT22:
-    case ID_POPUP_SCH_SELECT_UNIT23:
-    case ID_POPUP_SCH_SELECT_UNIT24:
-    case ID_POPUP_SCH_SELECT_UNIT25:
-    case ID_POPUP_SCH_SELECT_UNIT26:
-
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
-
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        DrawPanel->MoveCursorToCrossHair();
-        SelPartUnit( (SCH_COMPONENT*) screen->GetCurItem(),
-                     id + 1 - ID_POPUP_SCH_SELECT_UNIT1, &dc );
-        break;
-
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
 
         // Ensure the struct is a component (could be a piece of a
@@ -541,8 +474,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
             screen->SetCurItem( LocateSmallestComponent( screen ) );
 
-        if( screen->GetCurItem() == NULL )
-            break;
+        if( screen->GetCurItem() )
         {
             LIB_ALIAS* LibEntry;
             LibEntry = CMP_LIBRARY::FindLibraryEntry(
