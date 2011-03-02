@@ -3300,7 +3300,7 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth ) throw( IO_ERROR )
         )
     */
 
-    NeedSYMBOL();
+    NeedSYMBOLorNUMBER();
     growth->net_id = CurText();
 
     while( (tok = NextTok()) != T_RIGHT )
