@@ -404,6 +404,27 @@ void WinEDA_GerberFrame::SetElementVisibility( int aGERBER_VISIBLE, bool aNewSta
 }
 
 
+int WinEDA_GerberFrame::getNextAvailableLayer( int aLayer ) const
+{
+    int layer = aLayer;
+
+    for( int i = 0;  i < NB_LAYERS;  i++ )
+    {
+        GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
+
+        if( gerber == NULL || gerber->m_FileName.IsEmpty() )
+            return layer;
+
+        layer++;
+
+        if( layer >= NB_LAYERS )
+            layer = 0;
+    }
+
+    return NO_AVAILABLE_LAYERS;
+}
+
+
 void WinEDA_GerberFrame::syncLayerWidget()
 {
     m_LayersManager->SelectLayer( getActiveLayer() );

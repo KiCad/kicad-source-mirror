@@ -39,19 +39,19 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
     switch( id )
     {
     case wxID_FILE:
-    {
         Erase_Current_Layer( false );
         LoadGerberFiles( wxEmptyString );
         break;
-    }
 
     case ID_MENU_INC_LAYER_AND_APPEND_FILE:
     case ID_INC_LAYER_AND_APPEND_FILE:
     {
-        int origLayer = getActiveLayer();
-        if( origLayer < NB_LAYERS )
+        int origLayer = getNextAvailableLayer();
+
+        if( origLayer != NO_AVAILABLE_LAYERS )
         {
-            setActiveLayer(origLayer+1);
+            setActiveLayer( origLayer );
+
             Erase_Current_Layer( false );
 
             if( !LoadGerberFiles( wxEmptyString ) )
@@ -61,7 +61,7 @@ void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "GerbView only supports a maximum of %d layers. You must first \
-delete an existing layer to load any new layers." ), NB_LAYERS );
+clear an existing layer to load any new layers." ), NB_LAYERS );
             wxMessageBox( msg );
         }
     }
@@ -96,7 +96,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
-    if( ! filename.IsOk() )
+    if( !filename.IsOk() )
     {
         /* Standard gerber filetypes
          * (See http://en.wikipedia.org/wiki/Gerber_File)
@@ -144,7 +144,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        dlg.GetFilenames( filenamesList );
+        dlg.GetPaths( filenamesList );
         currentPath = wxGetCwd();
     }
     else
@@ -160,18 +160,32 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
         wxFileName filename = filenamesList[ii];
-        filename.SetPath( currentPath );
+
+        if( !filename.IsAbsolute() )
+            filename.SetPath( currentPath );
+
+        if( !filename.HasExt() )
+            filename.SetExt( g_PenFilenameExt );
+
         GetScreen()->SetFileName( filename.GetFullPath() );
-        filename.SetExt( g_PenFilenameExt );
 
         setActiveLayer( layer, false );
 
-        if( Read_GERBER_File( GetScreen()->GetFileName(), filename.GetFullPath() ) )
+        if( Read_GERBER_File( filename.GetFullPath(), filename.GetFullPath() ) )
         {
             SetLastProject( GetScreen()->GetFileName() );
-            layer++;
-            if( layer >= NB_LAYERS )
-                layer = 0;
+
+            layer = getNextAvailableLayer( layer );
+
+            if( layer == NO_AVAILABLE_LAYERS )
+            {
+                wxString msg = wxT( "No more empty layers are available.  The remaining gerber " );
+                msg += wxT( "files will not be loaded." );
+                wxMessageBox( msg );
+                break;
+            }
+
+            setActiveLayer( layer, false );
         }
     }
 
@@ -179,7 +193,7 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
     g_SaveTime = time( NULL );
 
     // Synchronize layers tools with actual active layer:
-    setActiveLayer(getActiveLayer());
+    setActiveLayer( getActiveLayer() );
     syncLayerBox();
 
     return true;
