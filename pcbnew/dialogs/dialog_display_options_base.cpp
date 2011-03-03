@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -27,13 +27,11 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	
 	sLeftBoxSizer->Add( m_OptDisplayTracks, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("Always") };
-	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
-	m_OptDisplayTracksClearance = new wxRadioBox( this, ID_SHOW_CLEARANCE, _("Show Tracks Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptDisplayTracksClearance->SetSelection( 0 );
-	m_OptDisplayTracksClearance->SetToolTip( _("Show( or not) tracks clearance area.\nIf New track is selected,  track clearance area is shown only when creating the track.") );
-	
-	sLeftBoxSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );
+	wxString m_OptDisplayViasChoices[] = { _("Sketch"), _("Filled") };
+	int m_OptDisplayViasNChoices = sizeof( m_OptDisplayViasChoices ) / sizeof( wxString );
+	m_OptDisplayVias = new wxRadioBox( this, ID_VIAS_SHAPES, _("Via Shapes:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayViasNChoices, m_OptDisplayViasChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayVias->SetSelection( 1 );
+	sLeftBoxSizer->Add( m_OptDisplayVias, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayViaHoleChoices[] = { _("Never"), _("Defined holes"), _("Always") };
 	int m_OptDisplayViaHoleNChoices = sizeof( m_OptDisplayViaHoleChoices ) / sizeof( wxString );
@@ -46,7 +44,7 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	bMainSizer->Add( sLeftBoxSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbMiddleLeftSizer;
-	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Names:") ), wxVERTICAL );
+	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Routing help:") ), wxVERTICAL );
 	
 	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("On pads"), _("On tracks"), _("On pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
@@ -55,6 +53,14 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	m_ShowNetNamesOption->SetToolTip( _("Show or not net names on pads and/or tracks") );
 	
 	sbMiddleLeftSizer->Add( m_ShowNetNamesOption, 0, wxALL, 5 );
+	
+	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("Always") };
+	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
+	m_OptDisplayTracksClearance = new wxRadioBox( this, ID_SHOW_CLEARANCE, _("Show Tracks Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayTracksClearance->SetSelection( 0 );
+	m_OptDisplayTracksClearance->SetToolTip( _("Show( or not) tracks clearance area.\nIf New track is selected,  track clearance area is shown only when creating the track.") );
+	
+	sbMiddleLeftSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( sbMiddleLeftSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -87,24 +93,15 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	m_OptDisplayPads->SetSelection( 1 );
 	bRModuleSizer->Add( m_OptDisplayPads, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_OptDisplayViasChoices[] = { _("Sketch"), _("Filled") };
-	int m_OptDisplayViasNChoices = sizeof( m_OptDisplayViasChoices ) / sizeof( wxString );
-	m_OptDisplayVias = new wxRadioBox( this, ID_VIAS_SHAPES, _("Via Shapes:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayViasNChoices, m_OptDisplayViasChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptDisplayVias->SetSelection( 1 );
-	bRModuleSizer->Add( m_OptDisplayVias, 0, wxALL|wxEXPAND, 5 );
-	
 	m_OptDisplayPadClearence = new wxCheckBox( this, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bRModuleSizer->Add( m_OptDisplayPadClearence, 0, wxALL, 5 );
 	
 	m_OptDisplayPadNumber = new wxCheckBox( this, wxID_ANY, _("Show pad number"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayPadNumber->SetValue(true);
-	
+	m_OptDisplayPadNumber->SetValue(true); 
 	bRModuleSizer->Add( m_OptDisplayPadNumber, 0, wxALL, 5 );
 	
 	m_OptDisplayPadNoConn = new wxCheckBox( this, wxID_ANY, _("Show pad NoConnect"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayPadNoConn->SetValue(true);
-	
+	m_OptDisplayPadNoConn->SetValue(true); 
 	bRModuleSizer->Add( m_OptDisplayPadNoConn, 0, wxALL, 5 );
 	
 	sMiddleRightSizer->Add( bRModuleSizer, 0, 0, 5 );
@@ -146,13 +143,14 @@ DialogDisplayOptions_base::DialogDisplayOptions_base( wxWindow* parent, wxWindow
 	this->Layout();
 	
 	// Connect Events
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnCancelClick ), NULL, this );
+	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOkClick ), NULL, this );
+	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelClick ), NULL, this );
 }
 
-DialogDisplayOptions_base::~DialogDisplayOptions_base()
+DIALOG_DISPLAY_OPTIONS_BASE::~DIALOG_DISPLAY_OPTIONS_BASE()
 {
 	// Disconnect Events
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogDisplayOptions_base::OnCancelClick ), NULL, this );
+	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOkClick ), NULL, this );
+	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelClick ), NULL, this );
+	
 }

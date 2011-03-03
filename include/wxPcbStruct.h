@@ -167,6 +167,7 @@ public:
     void OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent );
     void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
+    void OnUpdateShowMicrowaveToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
@@ -215,7 +216,7 @@ public:
     virtual void     SetGridColor(int aColor);
 
     // Configurations:
-    void             InstallConfigFrame( const wxPoint& pos );
+    void             InstallConfigFrame( );
     void             Process_Config( wxCommandEvent& event );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters();

@@ -52,7 +52,7 @@ static void PlotLibPart( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem )
     Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
     if( Entry == NULL )
-        return;;
+        return;
 
     temp = DrawLibItem->GetTransform();
 

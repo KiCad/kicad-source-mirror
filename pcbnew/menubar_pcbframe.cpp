@@ -476,7 +476,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Colors and Visibility are also handled by the layers manager toolbar
     item = new wxMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                           _( "Hide &Layers Manager" ),
+                           m_show_layer_manager_tools ?
+                           _( "Hide &Layers Manager" ) : _("Show &Layers Manager" ),
                            HELP_SHOW_HIDE_LAYERMANAGER );
     item->SetBitmap( layers_manager_xpm );
     configmenu->Append( item );

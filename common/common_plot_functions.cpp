@@ -547,8 +547,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         case WS_SEGMENT:
         {
             wxPoint auxpos;
-            auxpos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;;
-            auxpos.y = ( ref.y - WsItem->m_Endy ) * conv_unit;;
+            auxpos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;
+            auxpos.y = ( ref.y - WsItem->m_Endy ) * conv_unit;
             plotter->move_to( pos );
             plotter->finish_to( auxpos );
         }

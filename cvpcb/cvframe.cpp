@@ -321,7 +321,7 @@ void CVPCB_MAINFRAME::OnChar( wxKeyEvent& event )
 
     case WXK_RIGHT:
     case WXK_NUMPAD_RIGHT:
-        m_FootprintList->SetFocus();;
+        m_FootprintList->SetFocus();
         break;
 
     default:

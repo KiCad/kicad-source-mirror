@@ -68,7 +68,7 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
 {
     int size = MIN( ABS( aSize.x ), ABS( aSize.y ) );
 
-    return Clamp_Text_PenSize( aPenSize, size, aBold );;
+    return Clamp_Text_PenSize( aPenSize, size, aBold );
 }
 
 

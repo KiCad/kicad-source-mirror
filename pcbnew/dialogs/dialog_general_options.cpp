@@ -172,12 +172,9 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
 
-        if( m_show_layer_manager_tools )
-            GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                    _("Hide &Layers Manager" ) );
-        else
-            GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                                    _("Show &Layers Manager" ) );
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                m_show_layer_manager_tools ?
+                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ) );
         break;
 
     default:

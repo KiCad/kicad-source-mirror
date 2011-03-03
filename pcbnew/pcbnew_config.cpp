@@ -30,28 +30,18 @@
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    wxPoint    pos;
-
     wxFileName fn;
-
-    pos    = GetPosition();
-    pos.x += 20;
-    pos.y += 20;
 
     switch( id )
     {
     case ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
-        if( m_OptionsToolBar )
-        {   //This command is same as the Options Vertical Toolbar
-            // tool Show/hide layers manager
-            bool state =
-                m_OptionsToolBar->GetToolState( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR );
-            m_OptionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                                          !state );
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR );
-            wxPostEvent( this, event );
-        }
+        m_show_layer_manager_tools = ! m_show_layer_manager_tools;
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_auimgr.Update();
+
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                m_show_layer_manager_tools ?
+                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
         break;
 
     case ID_PCB_LAYERS_SETUP:
@@ -59,7 +49,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_REQ:
-        InstallConfigFrame( pos );
+        InstallConfigFrame();
         break;
 
     case ID_PCB_MASK_CLEARANCE:
@@ -127,7 +117,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "PCB_EDIT_FRAME::Process_Config internal error" ) );
+        DisplayError( this, wxT( "PCB_EDIT_FRAME::Process_Config error" ) );
     }
 }
 
@@ -152,7 +142,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     /* Initialize default values. */
     g_LibName_List.Clear();
 
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), FALSE );
+    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
@@ -167,7 +157,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     SetVisibleAlls();
     SetElementVisibility( GRID_VISIBLE, showGrid );
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
-    return TRUE;
+    return true;
 }
 
 
@@ -215,8 +205,6 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ),
                                                       &boardDesignSettings.m_BoardThickness,
                                                       630, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SgPcb45" ), &Segments_45_Only,
-                                                       TRUE ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtPcbV" ),
                                                       &boardDesignSettings.m_PcbTextSize.y,
                                                       600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
@@ -271,32 +259,39 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ViaSHole" ),
+    // Units used in dialogs and toolbars
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ), (int*)&g_UserUnit, MILLIMETRES ) );
+
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
+                                                    &DisplayOpt.DisplayPolarCood, false ) );
+    // Display options and modes:
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ViaHoleDisplayMode" ),
                                                    &DisplayOpt.m_DisplayViaMode,
                                                    VIA_SPECIAL_HOLE_SHOW, VIA_HOLE_NOT_SHOW,
                                                    OPT_VIA_HOLE_END - 1 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
                                                    &DisplayOpt.DisplayNetNamesMode, 3, 0, 3 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Unite" ), (int*)&g_UserUnit, MILLIMETRES ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegFill" ),
-                                                    &DisplayOpt.DisplayPcbTrackFill, TRUE ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayTrackFilled" ),
+                                                    &DisplayOpt.DisplayPcbTrackFill, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),
                                                    &DisplayOpt.ShowTrackClearanceMode,
                                                    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadFill" ),
-                                                    &DisplayOpt.DisplayPadFill, TRUE ) );
+                                                    &DisplayOpt.DisplayPadFill, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ViaFill" ),
-                                                    &DisplayOpt.DisplayViaFill, TRUE ) );
+                                                    &DisplayOpt.DisplayViaFill, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadAffG" ),
-                                                    &DisplayOpt.DisplayPadIsol, TRUE ) );
+                                                    &DisplayOpt.DisplayPadIsol, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadSNum" ),
-                                                    &DisplayOpt.DisplayPadNum, TRUE ) );
+                                                    &DisplayOpt.DisplayPadNum, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffC" ),
                                                    &DisplayOpt.DisplayModEdge, FILLED, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ModAffT" ),
                                                    &DisplayOpt.DisplayModText, FILLED, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbAffT" ),
                                                    &DisplayOpt.DisplayDrawItems, FILLED, 0, 2 ) );
+
+    // Colors:
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay0" ), LOC_COLOR( 0 ),
                                                         GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay1" ), LOC_COLOR( 1 ),
@@ -388,15 +383,17 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoRatsN" ),
                                                         ITEM_COLOR( RATSNEST_VISIBLE ),
                                                         WHITE ) );
+
+    // Miscellaneous:
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TimeOut" ), &g_TimeOut,
                                                    600, 0, 60000 ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DPolair" ),
-                                                    &DisplayOpt.DisplayPolarCood, FALSE ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
                                                    3, 0, 15 ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowMRa" ),
-                                                    &g_Show_Module_Ratsnest, TRUE ) );
+                                                    &g_Show_Module_Ratsnest, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
-                                                    &g_TwoSegmentTrackBuild, TRUE ) );
+                                                    &g_TwoSegmentTrackBuild, true ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &Segments_45_Only,
+                                                       true ) );
     return m_configSettings;
 }

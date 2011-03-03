@@ -225,7 +225,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     /* Updating the Bus Labels Netcode connected by Bus */
     ConnectBusLabels( g_NetObjectslist );
 
-    activity << wxT( ",  " ) << _( "bus labels" ) << wxT( "..." );;
+    activity << wxT( ",  " ) << _( "bus labels" ) << wxT( "..." );
     SetStatusText( activity );
 
     /* Group objects by label. */
@@ -804,7 +804,7 @@ int IsBusLabel( const wxString& LabelDrawList )
     }
 
     if( !BufLine.ToLong( &tmp ) )
-        error = TRUE;
+        error = true;
 
     FirstNumWireBus = tmp;
     while( LabelDrawList[Num] == '.' && Num < LabelDrawList.Len() )
@@ -818,7 +818,7 @@ int IsBusLabel( const wxString& LabelDrawList )
     }
 
     if( !BufLine.ToLong( &tmp ) )
-        error = TRUE;;
+        error = true;
     LastNumWireBus = tmp;
 
     if( FirstNumWireBus < 0 )

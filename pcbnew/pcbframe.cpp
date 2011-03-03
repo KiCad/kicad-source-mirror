@@ -218,8 +218,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, PCB_EDIT_FRAME::OnUpdateTraceDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                    PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                    PCB_EDIT_FRAME::OnUpdateShowLayerManager )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+                   PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
@@ -344,29 +346,30 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     lyrs.IsFloatable();
 
 
-    if( m_HToolBar )
+    if( m_HToolBar )    // The main horizontal toolbar
     {
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
     }
 
-    if( m_AuxiliaryToolBar )
+    if( m_AuxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows track and via sizes, zoom ...)
     {
         m_auimgr.AddPane( m_AuxiliaryToolBar,
                           wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
     }
 
-    if( m_AuxVToolBar )
+    if( m_AuxVToolBar )    // The auxiliary vertical toolbar (currently microwave tools)
         m_auimgr.AddPane( m_AuxVToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Row( 2 ).Hide() );
 
-    if( m_VToolBar )
+    if( m_VToolBar )    // The main right vertical toolbar
         m_auimgr.AddPane( m_VToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
 
+    // Add the layer manager (right side of pcbframe)
     m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
 
-    if( m_OptionsToolBar )
+    if( m_OptionsToolBar )    // The left vertical toolbar
     {
         m_auimgr.AddPane( m_OptionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left()

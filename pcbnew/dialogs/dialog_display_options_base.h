@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,9 +25,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogDisplayOptions_base
+/// Class DIALOG_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogDisplayOptions_base : public wxDialog 
+class DIALOG_DISPLAY_OPTIONS_BASE : public wxDialog 
 {
 	private:
 	
@@ -35,22 +35,22 @@ class DialogDisplayOptions_base : public wxDialog
 		enum
 		{
 			wxID_DISPLAY_TRACK = 1000,
-			ID_SHOW_CLEARANCE,
+			ID_VIAS_SHAPES,
 			ID_VIAS_HOLES,
+			ID_SHOW_CLEARANCE,
 			ID_EDGES_MODULES,
 			ID_TEXT_MODULES,
 			ID_PADS_SHAPES,
-			ID_VIAS_SHAPES,
 		};
 		
 		wxRadioBox* m_OptDisplayTracks;
-		wxRadioBox* m_OptDisplayTracksClearance;
+		wxRadioBox* m_OptDisplayVias;
 		wxRadioBox* m_OptDisplayViaHole;
 		wxRadioBox* m_ShowNetNamesOption;
+		wxRadioBox* m_OptDisplayTracksClearance;
 		wxRadioBox* m_OptDisplayModEdges;
 		wxRadioBox* m_OptDisplayModTexts;
 		wxRadioBox* m_OptDisplayPads;
-		wxRadioBox* m_OptDisplayVias;
 		wxCheckBox* m_OptDisplayPadClearence;
 		wxCheckBox* m_OptDisplayPadNumber;
 		wxCheckBox* m_OptDisplayPadNoConn;
@@ -61,13 +61,14 @@ class DialogDisplayOptions_base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DialogDisplayOptions_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 731,331 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-		~DialogDisplayOptions_base();
+		
+		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 731,291 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_DISPLAY_OPTIONS_BASE();
 	
 };
 

@@ -20,32 +20,33 @@
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 {
-    Dialog_Display_Options* DisplayOptionsDialog =
-        new Dialog_Display_Options( this );
-
-    DisplayOptionsDialog->ShowModal();
-    DisplayOptionsDialog->Destroy();
+    DIALOG_DISPLAY_OPTIONS dlg( this );
+    dlg.ShowModal();
 }
 
 
 /*******************************************************************************/
-Dialog_Display_Options::Dialog_Display_Options( PCB_EDIT_FRAME* parent ) :
-    DialogDisplayOptions_base(parent)
+DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
+    DIALOG_DISPLAY_OPTIONS_BASE(parent)
 /*******************************************************************************/
 {
     m_Parent = parent;
 
     init();
+
+    GetSizer()->SetSizeHints( this );
 }
 
 /****************************************************************/
-void Dialog_Display_Options::init()
+void DIALOG_DISPLAY_OPTIONS::init()
 /****************************************************************/
 {
     SetFocus();
 
     if ( DisplayOpt.DisplayPcbTrackFill )
         m_OptDisplayTracks->SetSelection(1);
+    else
+        m_OptDisplayTracks->SetSelection(0);
 
     switch ( DisplayOpt.ShowTrackClearanceMode )
     {
@@ -84,31 +85,26 @@ void Dialog_Display_Options::init()
     m_OptDisplayPadNoConn->SetValue( m_Parent->IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) );
     m_OptDisplayDrawings->SetSelection( DisplayOpt.DisplayDrawItems );
     m_ShowNetNamesOption->SetSelection( DisplayOpt.DisplayNetNamesMode);
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 }
 
 /*****************************************************************/
-void Dialog_Display_Options::OnCancelClick( wxCommandEvent& event )
+void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 /*****************************************************************/
 {
-    event.Skip();
+    EndModal(0);
 }
 
 /*************************************************************************/
-void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
+void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 /*************************************************************************/
 /* Update variables with new options
 */
 {
-    if ( m_Show_Page_Limits->GetSelection() == 0 ) g_ShowPageLimits = TRUE;
+    if ( m_Show_Page_Limits->GetSelection() == 0 ) g_ShowPageLimits = true;
     else g_ShowPageLimits = FALSE;
 
     if ( m_OptDisplayTracks->GetSelection() == 1)
-        DisplayOpt.DisplayPcbTrackFill = TRUE;
+        DisplayOpt.DisplayPcbTrackFill = true;
     else DisplayOpt.DisplayPcbTrackFill = FALSE;
 
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -158,7 +154,7 @@ void Dialog_Display_Options::OnOkClick(wxCommandEvent& event)
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    m_Parent->DrawPanel->Refresh(TRUE);
+    m_Parent->DrawPanel->Refresh();
 
     EndModal(1);
 }

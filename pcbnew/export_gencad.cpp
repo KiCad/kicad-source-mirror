@@ -494,7 +494,7 @@ void CreateSignalsSection( FILE* file, BOARD* pcb )
                                                  // connection)
         {
             wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
-            net->SetNetname( msg );;
+            net->SetNetname( msg );
         }
 
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)

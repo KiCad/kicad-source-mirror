@@ -143,12 +143,18 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     int errorLevel = 0;
     int areaCount = GetBoard()->GetAreaCount();
     wxBusyCursor dummyCursor;
+    wxString msg;
+    #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
 
-    wxProgressDialog progressDialog( wxT( "Fill All Zones" ),
-                                     wxT( "Starting zone fill..." ),
+    // Create a message with a long net name, and build a wxProgressDialog
+    // with a correct size to show this long net name
+    msg.Printf( FORMAT_STRING,
+                000, 999, wxT("XXXXXXXXXXXXXXXXX" ) );
+    wxProgressDialog progressDialog( _( "Fill All Zones" ), msg,
                                      areaCount+2, this,
                                      wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT );
-    progressDialog.SetMinSize( wxSize( 400, 100 ) );
+    // Display the actual message
+    progressDialog.Update( 0, _( "Starting zone fill..." ) );
 
     // Remove segment zones
     GetBoard()->m_Zone.DeleteAll();
@@ -157,11 +163,10 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     for( ii = 0; ii < areaCount; ii++ )
     {
         ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
-        wxString str;
-        str.Printf( wxT( "Filling zone %d out of %d (net %s)..." ),
+        msg.Printf( FORMAT_STRING,
                     ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
 
-        if( !progressDialog.Update( ii+1, str ) )
+        if( !progressDialog.Update( ii+1, msg ) )
             break;
 
         errorLevel = Fill_Zone( zoneContainer, verbose );
@@ -169,7 +174,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
         if( errorLevel && !verbose )
             break;
     }
-    progressDialog.Update( ii+2, wxT( "Updating ratsnest..." ) );
+    progressDialog.Update( ii+2, _( "Updating ratsnest..." ) );
     test_connexions( NULL );
 
     // Recalculate the active ratsnest, i.e. the unconnected links

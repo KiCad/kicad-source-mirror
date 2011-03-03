@@ -241,7 +241,7 @@ bool PCB_EDIT_FRAME::Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, 
         if( (pt_segm->Type() == TYPE_TRACK ) && aTrack )
         {
             if( SetTrackSegmentWidth( pt_segm, &itemsListPicker, true ) )
-                change = true;;
+                change = true;
         }
     }
 

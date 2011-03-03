@@ -128,7 +128,7 @@ void WinEDA_ModuleEditFrame::GetComponentFromUndoList( wxCommandEvent& event )
         GetBoard()->Add( module, ADD_APPEND );
 
 
-    SetCurItem( NULL );;
+    SetCurItem( NULL );
 
     OnModify();
     DrawPanel->Refresh();

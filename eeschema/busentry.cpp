@@ -74,7 +74,7 @@ SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
     SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->GetCrossHairPosition(), s_LastShape,
                                                  entry_type );
     BusEntry->m_Flags = IS_NEW;
-    BusEntry->Place( this, DC );;
+    BusEntry->Place( this, DC );
     OnModify();
     return BusEntry;
 }

@@ -97,7 +97,7 @@ void Place_1_Pad_Board( BOARD* Pcb,
                         int    op_logique )
 {
     int     dx, dy;
-    wxPoint shape_pos = pt_pad->ReturnShapePos();;
+    wxPoint shape_pos = pt_pad->ReturnShapePos();
 
     dx = pt_pad->m_Size.x / 2; dx += marge;
 

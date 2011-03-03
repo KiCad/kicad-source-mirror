@@ -488,7 +488,7 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
 void D_CODE::ConvertShapeToPolygon()
 {
     wxPoint initialpos;
-    wxPoint currpos;;
+    wxPoint currpos;
 
     m_PolyCorners.clear();
 

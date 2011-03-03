@@ -491,7 +491,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase )
 {
     BASE_SCREEN*    screen = aPanel->GetScreen();
-    BLOCK_SELECTOR* block = &screen->m_BlockLocate;;
+    BLOCK_SELECTOR* block = &screen->m_BlockLocate;
     SCH_ITEM*       schitem;
 
     /* Erase old block contents. */

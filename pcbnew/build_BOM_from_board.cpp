@@ -12,21 +12,21 @@
 #include <wx/listimpl.cpp>
 
 /* creates a BOM list rom board
-The format is:
-"Id";"Designator";"Package";"Number";"Designation";"Supplier and ref";
-1;"P1";"DB25FC";1;"DB25FEMELLE";;;
-2;"U9";"PGA120";1;"4003APG120";;;
-3;"JP1";"pin_array_8x2";1;"CONN_8X2";;;
-4;"RR1";"r_pack9";1;"9x1K";;;
-5;"X1";"HC-18UH";1;"8MHz";;;
-6;"U8";"24dip300";1;"EP600";;;
-7;"U5";"32dip600";1;"628128";;;
-8;"C2,C3";"C1";2;"47pF";;;
-9;"U1";"20dip300";1;"74LS245";;;
-10;"U3";"20dip300";1;"74LS541";;;
-11;"U2";"20dip300";1;"74LS688";;;
-12;"C1,C4,C5,C6";"CP6";4;"47uF";;;
-*/
+ *  The format is:
+ *  "Id";"Designator";"Package";"Number";"Designation";"Supplier and ref";
+ *  1;"P1";"DB25FC";1;"DB25FEMELLE";;;
+ *  2;"U9";"PGA120";1;"4003APG120";;;
+ *  3;"JP1";"pin_array_8x2";1;"CONN_8X2";;;
+ *  4;"RR1";"r_pack9";1;"9x1K";;;
+ *  5;"X1";"HC-18UH";1;"8MHz";;;
+ *  6;"U8";"24dip300";1;"EP600";;;
+ *  7;"U5";"32dip600";1;"628128";;;
+ *  8;"C2,C3";"C1";2;"47pF";;;
+ *  9;"U1";"20dip300";1;"74LS245";;;
+ *  10;"U3";"20dip300";1;"74LS541";;;
+ *  11;"U2";"20dip300";1;"74LS688";;;
+ *  12;"C1,C4,C5,C6";"CP6";4;"47uF";;;
+ */
 
 const wxString CsvFileExtension( wxT( "csv" ) );    // BOM file extension
 
@@ -83,13 +83,13 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     }
 
     // Write header:
-    msg = wxT( "\"");
-    msg << _("Id") << wxT("\";\"");
-    msg << _("Designator") << wxT("\";\"");
-    msg << _("Package") << wxT("\";\"");
-    msg << _("Quantity") << wxT("\";\"");
-    msg << _("Designation") << wxT("\";\"");
-    msg << _("Supplier and ref") << wxT("\";\n" );
+    msg = wxT( "\"" );
+    msg << _( "Id" ) << wxT( "\";\"" );
+    msg << _( "Designator" ) << wxT( "\";\"" );
+    msg << _( "Package" ) << wxT( "\";\"" );
+    msg << _( "Quantity" ) << wxT( "\";\"" );
+    msg << _( "Designation" ) << wxT( "\";\"" );
+    msg << _( "Supplier and ref" ) << wxT( "\";\n" );
     fprintf( FichBom, "%s", TO_UTF8( msg ) );
 
     // Build list
@@ -97,7 +97,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     cmp*              comp = NULL;
     CmpList::iterator iter;
     int i = 1;
-    while (Module != NULL)
+    while( Module != NULL )
     {
         bool valExist = false;
 
@@ -119,11 +119,11 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         // If component does not exist yet, create new one and append it to the list.
         if( valExist == false )
         {
-            comp          = new cmp();
-            comp->m_Id    = i++;
-            comp->m_Val   = Module->m_Value->m_Text;
-            comp->m_Ref   = Module->m_Reference->m_Text;
-            comp->m_Pkg   = Module->m_LibRef;
+            comp = new cmp();
+            comp->m_Id  = i++;
+            comp->m_Val = Module->m_Value->m_Text;
+            comp->m_Ref = Module->m_Reference->m_Text;
+            comp->m_Pkg = Module->m_LibRef;
             comp->m_CmpCount = 1;
             list.Append( comp );
         }

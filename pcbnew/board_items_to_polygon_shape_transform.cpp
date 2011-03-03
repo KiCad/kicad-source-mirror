@@ -808,7 +808,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
             }
 
-            aCornerBuffer.back().end_contour = true;;
+            aCornerBuffer.back().end_contour = true;
             angle += 1800;       // this is calculate hole 3
             if( angle >= 3600 )
                 angle -= 3600;

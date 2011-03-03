@@ -755,7 +755,7 @@ void MODULE::SetRectangleExinscrit()
  */
 EDA_Rect MODULE::GetBoundingBox() const
 {
-    EDA_Rect area = GetFootPrintRect();;
+    EDA_Rect area = GetFootPrintRect();
 
     // Calculate extended area including text field:
     EDA_Rect text_area;

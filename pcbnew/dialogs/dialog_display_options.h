@@ -3,7 +3,7 @@
  */
 #include "dialog_display_options_base.h"
 
-class Dialog_Display_Options : public DialogDisplayOptions_base
+class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
 private:
    PCB_EDIT_FRAME* m_Parent;
@@ -11,8 +11,8 @@ private:
    void init();
 
 public:
-   Dialog_Display_Options( PCB_EDIT_FRAME* parent );
-   ~Dialog_Display_Options( ) { };
+   DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent );
+   ~DIALOG_DISPLAY_OPTIONS( ) { };
    void OnOkClick( wxCommandEvent& event );
    void OnCancelClick( wxCommandEvent& event );
 };

@@ -105,7 +105,7 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent,
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
     if( Dimension->m_Text->m_Mirror )
-        m_Mirror->SetSelection( 1 );;
+        m_Mirror->SetSelection( 1 );
     RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
     m_Name = new WinEDA_EnterText( this, wxT( "Text:" ),

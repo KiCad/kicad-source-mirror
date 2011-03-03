@@ -232,7 +232,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
         if( stricmp( data, "BoardThickness" ) == 0 )
         {
             data = strtok( NULL, " =\n\r" );
-            GetBoard()->GetBoardDesignSettings()->m_BoardThickness = atoi( data );;
+            GetBoard()->GetBoardDesignSettings()->m_BoardThickness = atoi( data );
             continue;
         }
 
@@ -269,7 +269,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
         if( stricmp( data, "Ndraw" ) == 0 )
         {
             data   = strtok( NULL, " =\n\r" );
-            NbDraw = atoi( data );;
+            NbDraw = atoi( data );
             continue;
         }
 

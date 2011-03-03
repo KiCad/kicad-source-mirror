@@ -75,7 +75,7 @@ wxString BOARD_ITEM::MenuText( const BOARD* aPcb ) const
         break;
 
     case TYPE_TEXTE:
-        text << _( "Pcb Text" ) << wxT( " " );;
+        text << _( "Pcb Text" ) << wxT( " " );
         if( ( (TEXTE_PCB*) item )->m_Text.Len() < 12 )
             text << ( (TEXTE_PCB*) item )->m_Text;
         else

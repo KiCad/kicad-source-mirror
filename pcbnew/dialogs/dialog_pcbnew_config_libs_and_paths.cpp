@@ -21,7 +21,7 @@
 
 
 /*****************************************************************/
-void PCB_EDIT_FRAME::InstallConfigFrame( const wxPoint& pos )
+void PCB_EDIT_FRAME::InstallConfigFrame( )
 /*****************************************************************/
 {
     DIALOG_PCBNEW_CONFIG_LIBS dialog( this );

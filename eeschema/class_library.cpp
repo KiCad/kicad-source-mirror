@@ -636,7 +636,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
         {
             if( strncmp( line, "$ENDCMP", 7 ) == 0 )
                 break;
-            text = strtok( line + 2, "\n\r" );;
+            text = strtok( line + 2, "\n\r" );
 
             if( entry )
             {

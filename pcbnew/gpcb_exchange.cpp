@@ -225,7 +225,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     }
 
     m_Reference->m_Pos.x  = wxRound( ibuf[2] * conv_unit );
-    m_Reference->m_Pos.y  = wxRound( ibuf[3] * conv_unit );;
+    m_Reference->m_Pos.y  = wxRound( ibuf[3] * conv_unit );
     m_Reference->m_Orient = ibuf[4] * 900;
 
     // Calculate size: default is 40 mils (400 pcb units)

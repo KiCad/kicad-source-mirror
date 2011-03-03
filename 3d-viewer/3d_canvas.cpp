@@ -31,7 +31,7 @@ void CheckGLError()
 {
     GLenum errLast = GL_NO_ERROR;
 
-    for ( ;; )
+    for ( ; ; )
     {
         GLenum err = glGetError();
         if ( err == GL_NO_ERROR )
