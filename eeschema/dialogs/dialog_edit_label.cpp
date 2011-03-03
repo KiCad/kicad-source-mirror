@@ -128,7 +128,7 @@ void DialogLabelEditor::InitDialog()
     EnsureTextCtrlWidth( m_textLabel, &textWidth );
 
     // Set validators
-    m_TextOrient->SetSelection( m_CurrentText->GetSchematicTextOrientation() );
+    m_TextOrient->SetSelection( m_CurrentText->GetOrientation() );
     m_TextShape->SetSelection( m_CurrentText->m_Shape );
 
     int style = 0;
@@ -205,7 +205,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
         DisplayError( this, _( "Empty Text!" ) );
 
-    m_CurrentText->SetSchematicTextOrientation( m_TextOrient->GetSelection() );
+    m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
     value = ReturnValueFromString( g_UserUnit, text, m_Parent->m_InternalUnits );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;

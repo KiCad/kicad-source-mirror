@@ -62,7 +62,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             default:
                 wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick error.  Item type <" ) +
                             item->GetClass() + wxT( "> is already being edited." ) );
-                item->SetFlags( 0 );
+                item->ClearFlags();
             }
         }
         else

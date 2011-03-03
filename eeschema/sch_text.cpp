@@ -165,7 +165,7 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
     int px = m_Pos.x;
     int dx;
 
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 0:             /* horizontal text */
         dx = LenSize( m_Text ) / 2;
@@ -206,7 +206,7 @@ void SCH_TEXT::Mirror_X( int aXaxis_position )
     int py = m_Pos.y;
     int dy;
 
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 0:             /* horizontal text */
         dy = -m_Size.y / 2;
@@ -243,8 +243,9 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
     int dy;
 
     RotatePoint( &m_Pos, rotationPoint, 900 );
-    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 1) % 4 );
-    switch( GetSchematicTextOrientation() )
+    SetOrientation( (GetOrientation() + 1) % 4 );
+
+    switch( GetOrientation() )
     {
     case 0:             /* horizontal text */
         dy = m_Size.y;
@@ -271,9 +272,9 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
 }
 
 
-void SCH_TEXT::SetSchematicTextOrientation( int aSchematicOrientation )
+void SCH_TEXT::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aSchematicOrientation;
+    m_SchematicOrientation = aOrientation;
 
     switch( m_SchematicOrientation )
     {
@@ -491,7 +492,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     m_Text = val;
     m_Size.x = m_Size.y = size;
-    SetSchematicTextOrientation( orient );
+    SetOrientation( orient );
 
     if( isdigit( Name3[0] ) )
     {
@@ -681,9 +682,9 @@ wxPoint SCH_LABEL::GetSchematicTextOffset()
 }
 
 
-void SCH_LABEL::SetSchematicTextOrientation( int aSchematicOrientation )
+void SCH_LABEL::SetOrientation( int aOrientation )
 {
-    SCH_TEXT::SetSchematicTextOrientation( aSchematicOrientation );
+    SCH_TEXT::SetOrientation( aOrientation );
 }
 
 
@@ -705,7 +706,7 @@ void SCH_LABEL::Mirror_X( int aXaxis_position )
 void SCH_LABEL::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
-    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 1) % 4 );
+    SetOrientation( (GetOrientation() + 1) % 4 );
 }
 
 
@@ -774,7 +775,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
-    SetSchematicTextOrientation( orient );
+    SetOrientation( orient );
 
     if( isdigit( Name3[0] ) )
     {
@@ -940,7 +941,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
-    SetSchematicTextOrientation( orient );
+    SetOrientation( orient );
     m_Shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
@@ -971,14 +972,14 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
      *  for a vertical label, the schematic orientation is not changed.
      *  and the label is moved to a suitable position
      */
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 0:             /* horizontal text */
-        SetSchematicTextOrientation( 2 );
+        SetOrientation( 2 );
         break;
 
     case 2:        /* invert horizontal text*/
-        SetSchematicTextOrientation( 0 );
+        SetOrientation( 0 );
         break;
     }
 
@@ -990,14 +991,14 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 
 void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
 {
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 1:             /* vertical text */
-        SetSchematicTextOrientation( 3 );
+        SetOrientation( 3 );
         break;
 
     case 3:        /* invert vertical text*/
-        SetSchematicTextOrientation( 1 );
+        SetOrientation( 1 );
         break;
     }
 
@@ -1010,7 +1011,7 @@ void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
 void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
-    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
+    SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
 
@@ -1063,9 +1064,9 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
 }
 
 
-void SCH_GLOBALLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
+void SCH_GLOBALLABEL::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aSchematicOrientation;
+    m_SchematicOrientation = aOrientation;
 
     switch( m_SchematicOrientation )
     {
@@ -1366,7 +1367,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
-    SetSchematicTextOrientation( orient );
+    SetOrientation( orient );
     m_Shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
@@ -1390,9 +1391,9 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-void SCH_HIERLABEL::SetSchematicTextOrientation( int aSchematicOrientation )
+void SCH_HIERLABEL::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aSchematicOrientation;
+    m_SchematicOrientation = aOrientation;
 
     switch( m_SchematicOrientation )
     {
@@ -1578,14 +1579,14 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
      * and the label is moved to a suitable position.
      */
 
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 0:             /* horizontal text */
-        SetSchematicTextOrientation( 2 );
+        SetOrientation( 2 );
         break;
 
     case 2:             /* invert horizontal text*/
-        SetSchematicTextOrientation( 0 );
+        SetOrientation( 0 );
         break;
     }
 
@@ -1597,14 +1598,14 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 
 void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
 {
-    switch( GetSchematicTextOrientation() )
+    switch( GetOrientation() )
     {
     case 1:             /* vertical text */
-        SetSchematicTextOrientation( 3 );
+        SetOrientation( 3 );
         break;
 
     case 3:        /* invert vertical text*/
-        SetSchematicTextOrientation( 1 );
+        SetOrientation( 1 );
         break;
     }
 
@@ -1617,7 +1618,7 @@ void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
 void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
 {
     RotatePoint( &m_Pos, rotationPoint, 900 );
-    SetSchematicTextOrientation( (GetSchematicTextOrientation() + 3) % 4 );
+    SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
 

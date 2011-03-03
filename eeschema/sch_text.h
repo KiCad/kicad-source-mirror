@@ -73,7 +73,7 @@ public:
     void IncrementLabel();
 
     /**
-     * Function SetTextOrientAndJustifyParmeters
+     * Function SetOrientation
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a text )
@@ -85,9 +85,9 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void SetSchematicTextOrientation( int aSchematicOrientation );
+    virtual void SetOrientation( int aSchematicOrientation );
 
-    int GetSchematicTextOrientation() { return m_SchematicOrientation; }
+    int GetOrientation() { return m_SchematicOrientation; }
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -234,7 +234,7 @@ public:
     }
 
     /**
-     * Function SetTextOrientAndJustifyParmeters
+     * Function SetOrientation
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation (for a label)
@@ -246,7 +246,7 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
+    virtual void    SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -319,7 +319,7 @@ public:
     }
 
     /**
-     * Function SetTextOrientAndJustifyParmeters
+     * Function SetOrientation
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -331,7 +331,7 @@ public:
      *      position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
+    virtual void    SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -420,7 +420,7 @@ public:
     }
 
     /**
-     * Function SetTextOrientAndJustifyParmeters
+     * Function SetOrientation
      * Set m_SchematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
      * m_SchematicOrientation
@@ -432,7 +432,7 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetSchematicTextOrientation( int aSchematicOrientation );
+    virtual void    SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)

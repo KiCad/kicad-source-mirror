@@ -123,22 +123,22 @@ void SCH_SHEET_PIN::SetEdge( int aEdge )
     {
     case 0:        /* pin on left side*/
         m_Pos.x = Sheet->m_Pos.x;
-        SetSchematicTextOrientation( 2 ); /* Orientation horiz inverse */
+        SetOrientation( 2 ); /* Orientation horiz inverse */
         break;
 
     case 1:        /* pin on right side*/
         m_Pos.x = Sheet->m_Pos.x + Sheet->m_Size.x;
-        SetSchematicTextOrientation( 0 ); /* Orientation horiz normal */
+        SetOrientation( 0 ); /* Orientation horiz normal */
         break;
 
     case 2:        /* pin on top side*/
         m_Pos.y = Sheet->m_Pos.y;
-        SetSchematicTextOrientation( 3 ); /* Orientation vert BOTTOM  */
+        SetOrientation( 3 ); /* Orientation vert BOTTOM  */
         break;
 
     case 3:        /* pin on bottom side*/
         m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
-        SetSchematicTextOrientation( 1 ); /* Orientation vert UP  */
+        SetOrientation( 1 ); /* Orientation vert UP  */
         break;
     }
 }

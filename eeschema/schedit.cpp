@@ -42,10 +42,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
     case ID_POPUP_END_LINE:
     case ID_POPUP_SCH_EDIT_TEXT:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
     case ID_POPUP_SCH_ROTATE_TEXT:
     case ID_POPUP_SCH_EDIT_SHEET:
@@ -160,26 +156,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         ChangeTextOrient( (SCH_TEXT*) screen->GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
-        DrawPanel->MoveCursorToCrossHair();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_LABEL_T );
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
-        DrawPanel->MoveCursorToCrossHair();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_GLOBAL_LABEL_T );
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
-        DrawPanel->MoveCursorToCrossHair();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_HIERARCHICAL_LABEL_T );
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
-        DrawPanel->MoveCursorToCrossHair();
-        ConvertTextType( (SCH_TEXT*) screen->GetCurItem(), &dc, SCH_TEXT_T );
-        break;
-
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
 
         // Not used
@@ -197,7 +173,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
         DrawPanel->MoveCursorToCrossHair();
-        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? TRUE : FALSE );
+        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? true : false );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
         screen->TestDanglingEnds( DrawPanel, &dc );
@@ -514,7 +490,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        DrawPanel->m_AutoPAN_Request = false;
         DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;

@@ -459,11 +459,18 @@ private:
     SCH_JUNCTION*   AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
 
     // Text ,label, glabel
-    SCH_TEXT*       CreateNewText( wxDC* DC, int type );
+    SCH_TEXT*       CreateNewText( wxDC* aDC, int aType );
     void            EditSchematicText( SCH_TEXT* TextStruct );
-    void            ChangeTextOrient( SCH_TEXT* TextStruct, wxDC* DC );
-    void            StartMoveTexte( SCH_TEXT* TextStruct, wxDC* DC );
-    void            ConvertTextType( SCH_TEXT* Text, wxDC* DC, int newtype );
+    void            ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
+    void            StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC );
+
+    /**
+     * Function OnCovertTextType
+     * is a command event handler to change a text type to an other one.  The new text,
+     * label, hierarchical label, or global label is created from the old text and the
+     * old text is deleted.
+     */
+    void OnConvertTextType( wxCommandEvent& aEvent );
 
     // Wire, Bus
     void            BeginSegment( wxDC* DC, int type );

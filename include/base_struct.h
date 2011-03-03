@@ -319,6 +319,8 @@ class DHEAD;
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
                                    // already been edited, in some functions
+#define EDA_ITEM_ALL_FLAGS -1
+
 
 class EDA_ITEM
 {
@@ -425,9 +427,9 @@ public:
         m_Status = new_status;
     }
 
-    void SetFlags( int aFlags ) { m_Flags = aFlags; }
-
-    int GetFlags() { return m_Flags; }
+    void SetFlags( int aMask ) { m_Flags |= aMask; }
+    void ClearFlags( int aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
+    int GetFlags() const { return m_Flags; }
 
     /**
      * Function DisplayInfo
@@ -435,7 +437,7 @@ public:
      * information about this object into the frame's message panel.
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    virtual void    DisplayInfo( EDA_DRAW_FRAME* frame )
+    virtual void DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         // derived classes may implement this
     }
@@ -446,7 +448,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool    HitTest( const wxPoint& refPos )
+    virtual bool HitTest( const wxPoint& refPos )
     {
         return false;   // derived classes should override this function
     }
