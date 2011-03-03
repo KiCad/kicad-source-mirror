@@ -244,38 +244,74 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
  *
  ** If DC == NULL: no repaint
  */
-void SCH_EDIT_FRAME::CmpRotationMiroir( SCH_COMPONENT* DrawComponent, wxDC* DC, int type_rotate )
+void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
 {
-    if( DrawComponent == NULL )
-        return;
+    SCH_SCREEN* screen = GetScreen();
 
-    /* Deletes the previous component. */
-    if( DC )
+    // Ensure the struct is a component (could be a struct of a
+    // component, like Field, text..)
+    if( screen->GetCurItem() == NULL || screen->GetCurItem()->Type() != SCH_COMPONENT_T )
     {
-        DrawPanel->CrossHairOff( DC );
+        screen->SetCurItem( LocateSmallestComponent( screen ) );
 
-        if( DrawComponent->m_Flags )
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-        else
-        {
-            DrawPanel->RefreshDrawingRect( DrawComponent->GetBoundingBox() );
-        }
+        if( screen->GetCurItem() == NULL || screen->GetCurItem()->Type() != SCH_COMPONENT_T )
+            return;
     }
 
-    DrawComponent->SetOrientation( type_rotate );
+    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
+
+    int orientation;
+
+    switch( aEvent.GetId() )
+    {
+    case ID_POPUP_SCH_MIROR_X_CMP:
+        orientation = CMP_MIRROR_X;
+        break;
+
+    case ID_POPUP_SCH_MIROR_Y_CMP:
+        orientation = CMP_MIRROR_Y;
+        break;
+
+    case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
+        orientation = CMP_ROTATE_COUNTERCLOCKWISE;
+        break;
+
+    case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
+        orientation = CMP_ROTATE_CLOCKWISE;
+        break;
+
+    case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
+    default:
+        orientation = CMP_NORMAL;
+    }
+
+    DrawPanel->MoveCursorToCrossHair();
+
+    if( screen->GetCurItem()->GetFlags() == 0 )
+        SaveCopyInUndoList( screen->GetCurItem(), UR_CHANGED );
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
+    // Erase the previous component in it's current orientation.
+
+    DrawPanel->CrossHairOff( &dc );
+
+    if( component->GetFlags() )
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    else
+        DrawPanel->RefreshDrawingRect( component->GetBoundingBox() );
+
+    component->SetOrientation( orientation );
 
     /* Redraw the component in the new position. */
-    if( DC )
-    {
-        if( DrawComponent->m_Flags )
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-        else
-            DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        DrawPanel->CrossHairOn( DC );
-    }
+    if( component->GetFlags() )
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    else
+        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    GetScreen()->TestDanglingEnds( DrawPanel, DC );
-    OnModify( );
+    DrawPanel->CrossHairOn( &dc );
+    GetScreen()->TestDanglingEnds( DrawPanel, &dc );
+    OnModify();
 }
 
 

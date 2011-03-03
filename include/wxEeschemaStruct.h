@@ -523,8 +523,7 @@ private:
     void           StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
 
 public:
-    void           CmpRotationMiroir( SCH_COMPONENT* DrawComponent,
-                                      wxDC* DC, int type_rotate );
+    void OnChangeComponentOrientation( wxCommandEvent& aEvent );
 
 private:
     void           OnSelectUnit( wxCommandEvent& aEvent );

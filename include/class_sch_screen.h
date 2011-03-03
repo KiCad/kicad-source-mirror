@@ -66,17 +66,14 @@ public:
      * returns the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
      * @return SCH_ITEM* - the one selected, or NULL.
      */
-    SCH_ITEM* GetCurItem() const {  return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
+    SCH_ITEM* GetCurItem() const { return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
 
     /**
      * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.
      * @param aItem Any object derived from SCH_ITEM
      */
-    void SetCurItem( SCH_ITEM* aItem )
-    {
-        BASE_SCREEN::SetCurItem( (BASE_SCREEN*) aItem );
-    }
+    void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*) aItem ); }
 
     /**
      * Free all the items from the schematic associated with the screen.

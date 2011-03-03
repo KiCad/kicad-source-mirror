@@ -559,7 +559,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:       // Component or other schematic item rotation
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK)//allows bloc operation on hotkey
+        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )//allows bloc operation on hotkey
         {
             HandleBlockEndByPopUp(BLOCK_ROTATE, aDC );
             break;
@@ -584,14 +584,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         {
             GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
 
-            // Create the events for rotating a component or other schematic item
-            wxCommandEvent eventRotateComponent( wxEVT_COMMAND_TOOL_CLICKED,
-                                                 ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
-            wxCommandEvent eventRotateText( wxEVT_COMMAND_TOOL_CLICKED,
-                                            ID_POPUP_SCH_ROTATE_TEXT );
-            wxCommandEvent eventRotateField( wxEVT_COMMAND_TOOL_CLICKED,
-                                             ID_POPUP_SCH_ROTATE_FIELD );
-
             switch( aItem->Type() )
             {
             case SCH_SHEET_T: //TODO allow sheet rotate on hotkey
@@ -599,18 +591,21 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 break;
 
             case SCH_COMPONENT_T:
-                wxPostEvent( this, eventRotateComponent );
+                cmd.SetId( ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
+                wxPostEvent( this, cmd );
                 break;
 
             case SCH_TEXT_T:
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
-                wxPostEvent( this, eventRotateText );
+                cmd.SetId( ID_POPUP_SCH_ROTATE_TEXT );
+                wxPostEvent( this, cmd );
                 break;
 
             case SCH_FIELD_T:
-                wxPostEvent( this, eventRotateField );
+                cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
+                wxPostEvent( this, cmd );
 
             default:
                 ;
@@ -620,9 +615,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
+        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
         {
-            HandleBlockEndByPopUp(BLOCK_MIRROR_Y, aDC );
+            HandleBlockEndByPopUp( BLOCK_MIRROR_Y, aDC );
             break;
         }
 
@@ -631,19 +626,16 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem )
         {
-            if( aItem->m_Flags == 0 )
-            {
-                SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-            }
-
-            CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_MIRROR_Y );
+            screen->SetCurItem( (SCH_ITEM*) aItem );
+            cmd.SetId( ID_POPUP_SCH_MIROR_Y_CMP );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 
     case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK ) //allows bloc operation on hotkey
+        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK ) //allows bloc operation on hotkey
 		{
-            HandleBlockEndByPopUp(BLOCK_MIRROR_X, aDC );
+            HandleBlockEndByPopUp( BLOCK_MIRROR_X, aDC );
             break;
 		}
 
@@ -652,12 +644,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem )
         {
-            if( aItem->m_Flags == 0 )
-            {
-                SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-            }
-
-            CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_MIRROR_X );
+            screen->SetCurItem( (SCH_ITEM*) aItem );
+            cmd.SetId( ID_POPUP_SCH_MIROR_X_CMP );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 
@@ -667,13 +656,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem )
         {
-            if( aItem->m_Flags == 0 )
-            {
-                SaveCopyInUndoList( (SCH_ITEM*) aItem, UR_CHANGED );
-            }
-
-            CmpRotationMiroir( (SCH_COMPONENT*) aItem, aDC, CMP_NORMAL );
-            GetScreen()->TestDanglingEnds( DrawPanel, aDC );
+            screen->SetCurItem( (SCH_ITEM*) aItem );
+            cmd.SetId( ID_POPUP_SCH_ORIENT_NORMAL_CMP );
+            GetEventHandler()->ProcessEvent( cmd );
         }
 
         break;
@@ -736,8 +721,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
 
             // Create the events for moving a component or other schematic item
-            wxCommandEvent eventMoveOrDragComponent( wxEVT_COMMAND_TOOL_CLICKED,
-                                                     HK_Descr->m_IdMenuEvent );
             wxCommandEvent eventMoveItem( wxEVT_COMMAND_TOOL_CLICKED,
                                           ID_POPUP_SCH_MOVE_ITEM_REQUEST );
             wxCommandEvent eventMovePinsheet( wxEVT_COMMAND_TOOL_CLICKED,
@@ -751,13 +734,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             // and add it to the event queue
             case SCH_SHEET_T:
             case SCH_COMPONENT_T:
-                wxPostEvent( this, eventMoveOrDragComponent );
-                break;
-
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
-                wxPostEvent( this, eventMoveOrDragComponent );
+                cmd.SetId( HK_Descr->m_IdMenuEvent );
+                wxPostEvent( this, cmd );
                 break;
 
             case SCH_TEXT_T:
@@ -810,9 +791,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem )
         {
-            wxCommandEvent eventEditPinsheet( wxEVT_COMMAND_TOOL_CLICKED,
-                                              ID_POPUP_SCH_EDIT_SHEET );
-
             switch( aItem->Type() )
             {
             case SCH_COMPONENT_T:
@@ -821,7 +799,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
             case SCH_SHEET_T:
                 GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
-                wxPostEvent( this, eventEditPinsheet );
+                cmd.SetId( ID_POPUP_SCH_EDIT_SHEET );
+                wxPostEvent( this, cmd );
                 break;
 
             case SCH_TEXT_T:

@@ -243,8 +243,8 @@ int WinEDA_GerberFrame::BestZoom()
 
     double      x, y;
     EDA_Rect    bbox;
-
     BOARD_ITEM* item = GetBoard()->m_Drawings;
+
     bbox = ( (GERBER_DRAW_ITEM*) item )->GetBoundingBox();
 
     for( ; item; item = item->Next() )

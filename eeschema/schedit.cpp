@@ -56,11 +56,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
-    case ID_POPUP_SCH_MIROR_X_CMP:
-    case ID_POPUP_SCH_MIROR_Y_CMP:
-    case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
-    case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
-    case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
     case ID_POPUP_SCH_EDIT_VALUE_CMP:
@@ -340,50 +335,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         InstallCmpeditFrame( this, (SCH_COMPONENT*) screen->GetCurItem() );
         break;
-
-    case ID_POPUP_SCH_MIROR_X_CMP:
-    case ID_POPUP_SCH_MIROR_Y_CMP:
-    case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
-    case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
-    case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
-
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
-
-        if( screen->GetCurItem() == NULL )
-            break;
-        {
-            int option;
-
-            switch( id )
-            {
-            case ID_POPUP_SCH_MIROR_X_CMP:
-                option = CMP_MIRROR_X; break;
-
-            case ID_POPUP_SCH_MIROR_Y_CMP:
-                option = CMP_MIRROR_Y; break;
-
-            case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
-                option = CMP_ROTATE_COUNTERCLOCKWISE; break;
-
-            case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
-                option = CMP_ROTATE_CLOCKWISE; break;
-
-            default:
-            case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
-                option = CMP_NORMAL; break;
-            }
-
-            DrawPanel->MoveCursorToCrossHair();
-
-            if( screen->GetCurItem()->m_Flags == 0 )
-                SaveCopyInUndoList( (SCH_ITEM*) screen->GetCurItem(), UR_CHANGED );
-
-            CmpRotationMiroir( (SCH_COMPONENT*) screen->GetCurItem(), &dc, option );
-            break;
-        }
 
     case ID_POPUP_SCH_INIT_CMP:
         DrawPanel->MoveCursorToCrossHair();
