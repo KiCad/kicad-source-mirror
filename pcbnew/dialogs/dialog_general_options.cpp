@@ -115,6 +115,13 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_DRC_OFF:
         Drc_On = !state;
+        if( GetToolId() == ID_TRACK_BUTT )
+        {
+            if( Drc_On )
+                DrawPanel->SetCursor( wxCURSOR_PENCIL );
+            else
+                DrawPanel->SetCursor( wxCURSOR_QUESTION_ARROW );
+        }
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
@@ -160,7 +167,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         DrawPanel->Refresh();
         break;
 
-    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1:
+    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
         m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
         m_auimgr.Update();

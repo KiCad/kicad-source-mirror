@@ -43,6 +43,10 @@ enum id_eeschema_frm
     ID_SCHEMATIC_DELETE_ITEM_BUTT,
     ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
 
+    // Toolbar options id:
+    ID_TB_OPTIONS_HIDDEN_PINS,
+    ID_TB_OPTIONS_BUS_WIRES_ORIENT,
+
     /* Schematic editor context menu IDs. */
     ID_POPUP_SCH_COPY_ITEM,
 

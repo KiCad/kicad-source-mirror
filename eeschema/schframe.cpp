@@ -113,7 +113,9 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::Process_Special_Functions )
 
     // Tools and buttons options toolbar
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+    EVT_TOOL( ID_TB_OPTIONS_HIDDEN_PINS,
+                    SCH_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_BUS_WIRES_ORIENT,
                     SCH_EDIT_FRAME::OnSelectOptionToolbar )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,

@@ -364,7 +364,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                wxBitmap( layers_manager_xpm ),
                                HELP_SHOW_HIDE_LAYERMANAGER,
                                wxITEM_CHECK );
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
                                wxEmptyString,
                                wxBitmap( mw_toolbar_xpm ),
  _( "Show/hide the toolbar for microwaves tools\n This is a experimental feature (under development)" ),

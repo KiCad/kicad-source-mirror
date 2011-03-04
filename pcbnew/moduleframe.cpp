@@ -66,7 +66,13 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, PCB_BASE_FRAME )
                     WinEDA_ModuleEditFrame::OnVerticalToolbar )
 
     // Options Toolbar
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
+                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
                     WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
 
     // popup commands

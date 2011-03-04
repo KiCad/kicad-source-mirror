@@ -173,15 +173,30 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
 
     // Option toolbar
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+    EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_RATSNEST,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_AUTO_DEL_TRACK,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
+                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_ZONES, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
               PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
-    // Vertical toolbar:
+    // Vertical main toolbar:
     EVT_TOOL( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_PLACE_GRID_COORD_BUTT,
                     PCB_EDIT_FRAME::OnSelectTool )
@@ -220,7 +235,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                    PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                    PCB_EDIT_FRAME::OnUpdateShowLayerManager )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR1,
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
                    PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )

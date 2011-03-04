@@ -93,7 +93,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, PCB_BASE_FRAME )
     EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
 
     // Option toolbar
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_START, ID_TB_OPTIONS_END,
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
                     WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, WinEDA_GerberFrame::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, WinEDA_GerberFrame::OnSelectOptionToolbar )
@@ -111,6 +111,7 @@ BEGIN_EVENT_TABLE( WinEDA_GerberFrame, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, WinEDA_GerberFrame::OnUpdateShowDCodes )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                    WinEDA_GerberFrame::OnUpdateShowLayerManager )
+
     EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, WinEDA_GerberFrame::OnUpdateSelectDCode )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_LAYER, WinEDA_GerberFrame::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
