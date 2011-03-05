@@ -12,7 +12,6 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "pcbplot.h"
 #include "trigo.h"
 
 #include "dialog_block_options_base.h"
@@ -391,13 +390,17 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
     ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
 
+    // Add modules
     if( blockIncludeModules )
     {
         for( MODULE* module = m_Pcb->m_Modules; module != NULL;
-            module = module->Next() )
+             module = module->Next() )
         {
+            int layer = module->GetLayer();
+
             if( module->HitTest( GetScreen()->m_BlockLocate )
-               && ( !module->IsLocked() || blockIncludeLockedModules ) )
+                && ( !module->IsLocked() || blockIncludeLockedModules )
+                && m_Pcb->IsModuleLayerVisible( layer ) )
             {
                 picker.m_PickedItem     = module;
                 picker.m_PickedItemType = module->Type();
@@ -406,15 +409,15 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         }
     }
 
-    /* Remove tracks and vias */
+    // Add tracks and vias
     if( blockIncludeTracks )
     {
         for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL;
-            pt_segm = pt_segm->Next() )
+             pt_segm = pt_segm->Next() )
         {
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate )
+                && m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
             {
-                /* This track is in bloc: select it */
                 picker.m_PickedItem     = pt_segm;
                 picker.m_PickedItemType = pt_segm->Type();
                 itemsList->PushItem( picker );
@@ -422,8 +425,9 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         }
     }
 
-    /* Select graphic items */
+    // Add graphic items
     masque_layer = EDGE_LAYER;
+
     if( blockIncludeItemsOnTechLayers )
         masque_layer = ALL_LAYERS;
 
@@ -431,14 +435,17 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         masque_layer &= ~EDGE_LAYER;
 
     for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL;
-        PtStruct = PtStruct->Next() )
+         PtStruct = PtStruct->Next() )
     {
+        if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) )
+            continue;
         bool select_me = false;
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
             if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
                 break;
+
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             select_me = true; // This item is in bloc: select it
@@ -447,6 +454,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         case TYPE_TEXTE:
             if( !blockIncludePcbTexts )
                 break;
+
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             select_me = true; // This item is in bloc: select it
@@ -455,6 +463,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         case TYPE_MIRE:
             if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0 )
                 break;
+
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             select_me = true; // This item is in bloc: select it
@@ -463,6 +472,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         case TYPE_DIMENSION:
             if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0 )
                 break;
+
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
             select_me = true; // This item is in bloc: select it
@@ -480,7 +490,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         }
     }
 
-    /* Zone selection */
+    // Add zones
     if( blockIncludeZones )
     {
 #if 0
@@ -494,7 +504,8 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         {
             /* Segments used in Zone filling selection */
 
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate )
+                && m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
             {
                 picker.m_PickedItem     = pt_segm;
                 picker.m_PickedItemType = pt_segm->Type();
@@ -505,9 +516,12 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 #endif
         for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
-            if( m_Pcb->GetArea( ii )->HitTest( GetScreen()->m_BlockLocate ) )
+            ZONE_CONTAINER* area = m_Pcb->GetArea( ii );
+
+            if( area->HitTest( GetScreen()->m_BlockLocate )
+                && m_Pcb->IsLayerVisible( area->GetLayer() ) )
             {
-                BOARD_ITEM* zone_c = m_Pcb->GetArea( ii );
+                BOARD_ITEM* zone_c = (BOARD_ITEM*) area;
                 picker.m_PickedItem     = zone_c;
                 picker.m_PickedItemType = zone_c->Type();
                 itemsList->PushItem( picker );
