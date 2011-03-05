@@ -585,9 +585,11 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
     }
     else
     {
-        // Stop the current command (if any) but keep the current tool
-        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
-    }
+        if( DrawPanel->IsMouseCaptured() ) // Stop the current command but keep the current tool
+            DrawPanel->EndMouseCapture();
+        else                    // Deselect current tool
+            DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+     }
 }
 
 
