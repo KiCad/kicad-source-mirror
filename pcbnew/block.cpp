@@ -49,6 +49,7 @@ static bool blockIncludeItemsOnTechLayers  = true;
 static bool blockIncludeBoardOutlineLayer = true;
 static bool blockIncludePcbTexts   = true;
 static bool blockDrawItems = true;
+static bool blockIncludeItemsOnInvisibleLayers = false;
 
 /************************************/
 /* class DIALOG_BLOCK_OPTIONS */
@@ -118,6 +119,7 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent, const wxStr
     m_Include_Edges_Items->SetValue( blockIncludeBoardOutlineLayer );
     m_Include_PcbTextes->SetValue( blockIncludePcbTexts );
     m_DrawBlockItems->SetValue( blockDrawItems );
+    m_checkBoxIncludeInvisible->SetValue( blockIncludeItemsOnInvisibleLayers );
     m_sdbSizer1OK->SetDefault();
     SetFocus();
     GetSizer()->SetSizeHints( this );
@@ -135,6 +137,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
     blockIncludeBoardOutlineLayer = m_Include_Edges_Items->GetValue();
     blockIncludePcbTexts   = m_Include_PcbTextes->GetValue();
     blockDrawItems = m_DrawBlockItems->GetValue();
+    blockIncludeItemsOnInvisibleLayers = m_checkBoxIncludeInvisible->GetValue();
 
     EndModal( 0 );
 }
@@ -297,8 +300,6 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             // Exit if no items found
             if( !GetScreen()->m_BlockLocate.GetCount() )
                 cancelCmd = true;
-//            else
-//                nextcmd = true;
         }
     }
 
@@ -399,12 +400,14 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             int layer = module->GetLayer();
 
             if( module->HitTest( GetScreen()->m_BlockLocate )
-                && ( !module->IsLocked() || blockIncludeLockedModules )
-                && m_Pcb->IsModuleLayerVisible( layer ) )
+                && ( !module->IsLocked() || blockIncludeLockedModules ) )
             {
-                picker.m_PickedItem     = module;
-                picker.m_PickedItemType = module->Type();
-                itemsList->PushItem( picker );
+                if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsModuleLayerVisible( layer ) )
+                {
+                    picker.m_PickedItem     = module;
+                    picker.m_PickedItemType = module->Type();
+                    itemsList->PushItem( picker );
+                }
             }
         }
     }
@@ -415,12 +418,14 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL;
              pt_segm = pt_segm->Next() )
         {
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate )
-                && m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
+            if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                picker.m_PickedItem     = pt_segm;
-                picker.m_PickedItemType = pt_segm->Type();
-                itemsList->PushItem( picker );
+                if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
+                {
+                    picker.m_PickedItem     = pt_segm;
+                    picker.m_PickedItemType = pt_segm->Type();
+                    itemsList->PushItem( picker );
+                }
             }
         }
     }
@@ -437,13 +442,13 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL;
          PtStruct = PtStruct->Next() )
     {
-        if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) )
+        if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) && ! blockIncludeItemsOnInvisibleLayers)
             continue;
         bool select_me = false;
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0 )
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -461,7 +466,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case TYPE_MIRE:
-            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0 )
+            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -493,38 +498,19 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add zones
     if( blockIncludeZones )
     {
-#if 0
-
-        /* This section can creates problems if selected:
-         * m_Pcb->m_Zone can have a *lot* of items (100 000 is easily possible)
-         * so it is not selected (and TODO: will be removed, one day)
-         */
-        for( SEGZONE* pt_segm = m_Pcb->m_Zone; pt_segm != NULL;
-            pt_segm = pt_segm->Next() )
-        {
-            /* Segments used in Zone filling selection */
-
-            if( pt_segm->HitTest( GetScreen()->m_BlockLocate )
-                && m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
-            {
-                picker.m_PickedItem     = pt_segm;
-                picker.m_PickedItemType = pt_segm->Type();
-                itemsList->PushItem( picker );
-            }
-        }
-
-#endif
         for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
         {
             ZONE_CONTAINER* area = m_Pcb->GetArea( ii );
 
-            if( area->HitTest( GetScreen()->m_BlockLocate )
-                && m_Pcb->IsLayerVisible( area->GetLayer() ) )
+            if( area->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                BOARD_ITEM* zone_c = (BOARD_ITEM*) area;
-                picker.m_PickedItem     = zone_c;
-                picker.m_PickedItemType = zone_c->Type();
-                itemsList->PushItem( picker );
+                if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsLayerVisible( area->GetLayer() ) )
+                {
+                    BOARD_ITEM* zone_c = (BOARD_ITEM*) area;
+                    picker.m_PickedItem     = zone_c;
+                    picker.m_PickedItemType = zone_c->Type();
+                    itemsList->PushItem( picker );
+                }
             }
         }
     }

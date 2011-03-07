@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -26,6 +26,7 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	gSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
 	
 	m_Include_PcbTextes = new wxCheckBox( this, wxID_ANY, _("Include text items"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Include_PcbTextes->SetValue(true); 
 	gSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
 	
 	m_IncludeLockedModules = new wxCheckBox( this, wxID_ANY, _("Include locked modules"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -47,6 +48,12 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	gSizer1->Add( m_DrawBlockItems, 0, wxALL, 5 );
 	
 	sbSizer1->Add( gSizer1, 0, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_checkBoxIncludeInvisible = new wxCheckBox( this, wxID_ANY, _("Include items on invisible layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkBoxIncludeInvisible, 0, wxALL, 5 );
 	
 	bSizerMain->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
 	
@@ -72,6 +79,7 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_Include_Edges_Items->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Zones->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_DrawBlockItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_checkBoxIncludeInvisible->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::ExecuteCommand ), NULL, this );
 }
@@ -87,6 +95,7 @@ DIALOG_BLOCK_OPTIONS_BASE::~DIALOG_BLOCK_OPTIONS_BASE()
 	m_Include_Edges_Items->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Zones->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_DrawBlockItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
+	m_checkBoxIncludeInvisible->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::checkBoxClicked ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::OnCancel ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BLOCK_OPTIONS_BASE::ExecuteCommand ), NULL, this );
 	
