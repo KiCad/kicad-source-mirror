@@ -686,6 +686,9 @@ void PCB_EDIT_FRAME::updateDesignRulesSelectBoxes()
         m_ClearanceBox->Clear();
         m_ClearanceBox->AppendText( msg );
     }
+
+    updateTraceWidthSelectBox();
+    updateViaSizeSelectBox();
 }
 
 
