@@ -1,6 +1,6 @@
-/*****************/
-/* drawpanel.cpp */
-/*****************/
+/**
+ * @file drawpanel.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -84,10 +84,10 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_Block_Enable       = false;
 
 #ifdef __WXMAC__
-    m_defaultCursor = m_cursor = wxCURSOR_CROSS;
+    m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
     m_showCrossHair = false;
 #else
-    m_defaultCursor = m_cursor = wxCURSOR_ARROW;
+    m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
     m_showCrossHair = true;
 #endif
 
@@ -1017,7 +1017,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     else
                     {
                         m_AutoPAN_Request = true;
-                        SetCursor( m_cursor = wxCURSOR_SIZING );
+                        SetCursor( wxCURSOR_SIZING );
                     }
                 }
             }
@@ -1045,20 +1045,19 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     m_AutoPAN_Request = false;
                 }
 
-                SetCursor( m_cursor = m_defaultCursor );
-            }
+                SetCursor( m_currentCursor );
+           }
             else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
                 m_AutoPAN_Request = false;
                 GetParent()->HandleBlockEnd( &DC );
-                SetCursor( m_cursor = m_defaultCursor );
-
+                SetCursor( m_currentCursor );
                 if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
                 {
                     m_AutoPAN_Request = true;
                     SetCursor( wxCURSOR_HAND );
                 }
-            }
+           }
         }
     }
 
@@ -1106,9 +1105,9 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         m_AbortRequest = true;
 
         if( IsMouseCaptured() )
-            EndMouseCapture( -1, m_defaultCursor );
+            EndMouseCapture( );
         else
-            EndMouseCapture( ID_NO_TOOL_SELECTED, m_cursor, wxEmptyString );
+            EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
 
         break;
     }

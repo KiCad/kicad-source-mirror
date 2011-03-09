@@ -94,7 +94,6 @@ static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title 
     parent->GetScreen()->SetCrossHairPosition( oldpos );
     parent->DrawPanel->MoveCursorToCrossHair();
     parent->DrawPanel->m_IgnoreMouseEvents = false;
-    parent->DrawPanel->SetCursor( parent->DrawPanel->GetDefaultCursor() );
 
     return nocmd ? false : true;
 }
@@ -253,7 +252,7 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     }
 
     DisplayToolMsg( wxEmptyString );
-    DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
+    DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
 }
 
 

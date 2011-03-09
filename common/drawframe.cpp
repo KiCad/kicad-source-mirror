@@ -440,7 +440,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // Change DrawPanel cursor if requested.
     if( DrawPanel && aCursor >= 0 )
-        DrawPanel->SetCursor( aCursor );
+        DrawPanel->SetCurrentCursor( aCursor );
 
     DisplayToolMsg( aToolMsg );
 

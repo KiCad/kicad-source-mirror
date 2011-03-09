@@ -48,11 +48,8 @@ extern int ClosNodes;   /* total number of nodes closed */
 extern int MoveNodes;   /* total number of nodes moved */
 extern int MaxNodes;    /* maximum number of nodes opened at one time */
 
-/* Grid size for automatic routing */
-extern int g_GridRoutingSize;
 
 /* Structures useful to the generation of board as bitmap. */
-
 typedef char MATRIX_CELL;
 typedef int  DIST_CELL;
 typedef char  DIR_CELL;
@@ -68,12 +65,14 @@ public:
     bool       m_InitBoardDone;
     int        m_Layers;
     int        m_GridRouting;                   // Size of grid for autoplace/autoroute
+    EDA_Rect   m_BrdBox;                        // Actual board bouding box
     int        m_Nrows, m_Ncols;
     int        m_MemSize;
 
 public:
     MATRIX_ROUTING_HEAD();
     ~MATRIX_ROUTING_HEAD();
+    bool    ComputeMatrixSize( BOARD* aPcb );
     int     InitBoard();
     void    UnInitBoard();
 };

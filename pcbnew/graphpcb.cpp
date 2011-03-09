@@ -75,7 +75,7 @@ static void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
  */
 int ToMatrixCoordinate( int aPhysicalCoordinate )
 {
-    return aPhysicalCoordinate / g_GridRoutingSize;
+    return aPhysicalCoordinate / Board.m_GridRouting;
 }
 
 
@@ -215,11 +215,11 @@ void TraceFilledCercle( BOARD* Pcb,
     uy1 = cy + radius;
 
     /* Calculate limit coordinates of cells belonging to the rectangle. */
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize;  // if (uy0 > row_min*g_GridRoutingSize
+    row_max = uy1 / Board.m_GridRouting;
+    col_max = ux1 / Board.m_GridRouting;
+    row_min = uy0 / Board.m_GridRouting;  // if (uy0 > row_min*Board.m_GridRouting
                                         // ) row_min++;
-    col_min = ux0 / g_GridRoutingSize;  // if (ux0 > col_min*g_GridRoutingSize
+    col_min = ux0 / Board.m_GridRouting;  // if (ux0 > col_min*Board.m_GridRouting
                                         // ) col_min++;
 
     if( row_min < 0 )
@@ -241,11 +241,11 @@ void TraceFilledCercle( BOARD* Pcb,
 
     for( row = row_min; row <= row_max; row++ )
     {
-        fdisty  = (float) ( cy - ( row * g_GridRoutingSize ) );
+        fdisty  = (float) ( cy - ( row * Board.m_GridRouting ) );
         fdisty *= fdisty;
         for( col = col_min; col <= col_max; col++ )
         {
-            fdistx  = (float) ( cx - ( col * g_GridRoutingSize ) );
+            fdistx  = (float) ( cx - ( col * Board.m_GridRouting ) );
             fdistx *= fdistx;
 
             if( fdistmin <= ( fdistx + fdisty ) )
@@ -265,17 +265,17 @@ void TraceFilledCercle( BOARD* Pcb,
     /* If no cell has been written, it affects the 4 neighboring diagonal
      * (Adverse event: pad off grid in the center of the 4 neighboring
      * diagonal) */
-    distmin  = g_GridRoutingSize / 2 + 1;
+    distmin  = Board.m_GridRouting / 2 + 1;
     fdistmin = ( (float) distmin * distmin ) * 2; /* Distance to center point
                                                    * diagonally */
 
     for( row = row_min; row <= row_max; row++ )
     {
-        fdisty  = (float) ( cy - ( row * g_GridRoutingSize ) );
+        fdisty  = (float) ( cy - ( row * Board.m_GridRouting ) );
         fdisty *= fdisty;
         for( col = col_min; col <= col_max; col++ )
         {
-            fdistx  = (float) ( cx - ( col * g_GridRoutingSize ) );
+            fdistx  = (float) ( cx - ( col * Board.m_GridRouting ) );
             fdistx *= fdistx;
 
             if( fdistmin <= ( fdistx + fdisty ) )
@@ -302,7 +302,7 @@ void TraceSegmentPcb( BOARD* Pcb,
     int ux0, uy0, ux1, uy1;
 
 
-    demi_pas     = g_GridRoutingSize / 2;
+    demi_pas     = Board.m_GridRouting / 2;
     demi_largeur = ( pt_segm->m_Width / 2 ) + marge;
     /* Calculate the bounding rectangle of the segment (if H, V or Via) */
     ux0 = pt_segm->m_Start.x - Pcb->m_BoundaryBox.m_Pos.x;
@@ -407,9 +407,9 @@ void TraceLignePcb( int x0,
     {
         if( y1 < y0 )
             EXCHG( y0, y1 );
-        dy  = y0 / g_GridRoutingSize;
-        lim = y1 / g_GridRoutingSize;
-        dx  = x0 / g_GridRoutingSize;
+        dy  = y0 / Board.m_GridRouting;
+        lim = y1 / Board.m_GridRouting;
+        dx  = x0 / Board.m_GridRouting;
         /* Clipping limits of board. */
         if( ( dx < 0 ) || ( dx >= Ncols ) )
             return;
@@ -429,9 +429,9 @@ void TraceLignePcb( int x0,
     {
         if( x1 < x0 )
             EXCHG( x0, x1 );
-        dx  = x0 / g_GridRoutingSize;
-        lim = x1 / g_GridRoutingSize;
-        dy  = y0 / g_GridRoutingSize;
+        dx  = x0 / Board.m_GridRouting;
+        lim = x1 / Board.m_GridRouting;
+        dy  = y0 / Board.m_GridRouting;
         /* Clipping limits of board. */
         if( ( dy < 0 ) || ( dy >= Nrows ) )
             return;
@@ -455,13 +455,13 @@ void TraceLignePcb( int x0,
             EXCHG( x1, x0 ); EXCHG( y1, y0 );
         }
 
-        dx  = x0 / g_GridRoutingSize;
-        lim = x1 / g_GridRoutingSize;
-        dy  = y0 / g_GridRoutingSize;
+        dx  = x0 / Board.m_GridRouting;
+        lim = x1 / Board.m_GridRouting;
+        dy  = y0 / Board.m_GridRouting;
         inc = 1; if( y1 < y0 )
             inc = -1;
         il    = lim - dx; cumul = il / 2;
-        delta = abs( y1 - y0 ) / g_GridRoutingSize;
+        delta = abs( y1 - y0 ) / Board.m_GridRouting;
 
         for( ; dx <= lim; )
         {
@@ -489,15 +489,15 @@ void TraceLignePcb( int x0,
             EXCHG( y1, y0 );
         }
 
-        dy  = y0 / g_GridRoutingSize;
-        lim = y1 / g_GridRoutingSize;
-        dx  = x0 / g_GridRoutingSize;
+        dy  = y0 / Board.m_GridRouting;
+        lim = y1 / Board.m_GridRouting;
+        dx  = x0 / Board.m_GridRouting;
         inc = 1;
         if( x1 < x0 )
             inc = -1;
 
         il    = lim - dy; cumul = il / 2;
-        delta = abs( x1 - x0 ) / g_GridRoutingSize;
+        delta = abs( x1 - x0 ) / Board.m_GridRouting;
 
         for( ; dy <= lim; )
         {
@@ -576,13 +576,13 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
     /* Calculating limits coord cells belonging to the rectangle. */
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize;
-    if( uy0 > row_min * g_GridRoutingSize )
+    row_max = uy1 / Board.m_GridRouting;
+    col_max = ux1 / Board.m_GridRouting;
+    row_min = uy0 / Board.m_GridRouting;
+    if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize;
-    if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / Board.m_GridRouting;
+    if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -673,13 +673,13 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
                        + (double) ( cy - uy0 ) * ( cy - uy0 ) );
 
     /* Calculating coordinate limits belonging to the rectangle. */
-    row_max = ( cy + radius ) / g_GridRoutingSize;
-    col_max = ( cx + radius ) / g_GridRoutingSize;
-    row_min = ( cy - radius ) / g_GridRoutingSize;
-    if( uy0 > row_min * g_GridRoutingSize )
+    row_max = ( cy + radius ) / Board.m_GridRouting;
+    col_max = ( cx + radius ) / Board.m_GridRouting;
+    row_min = ( cy - radius ) / Board.m_GridRouting;
+    if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
-    col_min = ( cx - radius ) / g_GridRoutingSize;
-    if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ( cx - radius ) / Board.m_GridRouting;
+    if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -695,8 +695,8 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     {
         for( col = col_min; col <= col_max; col++ )
         {
-            rotrow = row * g_GridRoutingSize;
-            rotcol = col * g_GridRoutingSize;
+            rotrow = row * Board.m_GridRouting;
+            rotcol = col * Board.m_GridRouting;
             RotatePoint( &rotcol, &rotrow, cx, cy, -angle );
             if( rotrow <= uy0 )
                 continue;
@@ -715,10 +715,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 }
 
 
-/* Fills all cells BOARD contained in the segment
- * half-width lg, org ux, ux end y0, y1 is set to color.
- * coordinates in PCB units (0.1 million) relating to the origin
- * pt_pcb-> m_PcbBox.m_Xmin, Y's board.
+/* Fills all cells inside a segment
+ * half-width lg, org ux, ux end y0, y1
+ * is set to color.
+ * coordinates are in PCB units (0.1 mil) are relative to the Board
  */
 void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                      int color, int op_logique )
@@ -768,24 +768,24 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     if( uy1 < uy0 )
         inc = -1;
 
-    demi_pas = g_GridRoutingSize / 2;
+    demi_pas = Board.m_GridRouting / 2;
 
-    col_min = ( ux0 - lg ) / g_GridRoutingSize;
+    col_min = ( ux0 - lg ) / Board.m_GridRouting;
     if( col_min < 0 )
         col_min = 0;
-    col_max = ( ux1 + lg + demi_pas ) / g_GridRoutingSize;
+    col_max = ( ux1 + lg + demi_pas ) / Board.m_GridRouting;
     if( col_max > ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     if( inc > 0 )
     {
-        row_min = ( uy0 - lg ) / g_GridRoutingSize;
-        row_max = ( uy1 + lg + demi_pas ) / g_GridRoutingSize;
+        row_min = ( uy0 - lg ) / Board.m_GridRouting;
+        row_max = ( uy1 + lg + demi_pas ) / Board.m_GridRouting;
     }
     else
     {
-        row_min = ( uy1 - lg ) / g_GridRoutingSize;
-        row_max = ( uy0 + lg + demi_pas ) / g_GridRoutingSize;
+        row_min = ( uy1 - lg ) / Board.m_GridRouting;
+        row_max = ( uy0 + lg + demi_pas ) / Board.m_GridRouting;
     }
 
     if( row_min < 0 )
@@ -813,10 +813,10 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     for( col = col_min; col <= col_max; col++ )
     {
         int cxr;
-        cxr = ( col * g_GridRoutingSize ) - ux0;
+        cxr = ( col * Board.m_GridRouting ) - ux0;
         for( row = row_min; row <= row_max; row++ )
         {
-            cy = (row * g_GridRoutingSize) - uy0;
+            cy = (row * Board.m_GridRouting) - uy0;
             cx = cxr;
             RotatePoint( &cx, &cy, angle );
             if( abs( cy ) > lg )

@@ -131,14 +131,14 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     start = time( NULL );
 
     /* Calculation of no fixed routing to 5 mils and more. */
-    g_GridRoutingSize = (int)GetScreen()->GetGridSize().x;
-    if( g_GridRoutingSize < 50 )
-        g_GridRoutingSize = 50;
-    E_scale = g_GridRoutingSize / 50; if( E_scale < 1 )
+    Board.m_GridRouting = (int)GetScreen()->GetGridSize().x;
+    if( Board.m_GridRouting < 50 )
+        Board.m_GridRouting = 50;
+    E_scale = Board.m_GridRouting / 50; if( E_scale < 1 )
         E_scale = 1;
 
     /* Calculated ncol and nrow, matrix size for routing. */
-    ComputeMatriceSize( GetBoard(), g_GridRoutingSize );
+    Board.ComputeMatrixSize( GetBoard() );
 
     MsgPanel->EraseMsgBox();
 

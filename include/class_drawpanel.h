@@ -30,7 +30,7 @@ typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC 
 class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
-    int m_cursor;                 ///< Current mouse cursor shape id.
+    int m_currentCursor;                 ///< Current mouse cursor shape id.
     int m_defaultCursor;          ///< The default mouse cursor shape id.
     bool m_showCrossHair;         ///< Indicate if cross hair is to be shown.
     int m_cursorLevel;            ///< Index for cursor redraw in XOR mode.
@@ -81,6 +81,7 @@ public:
     virtual EDA_DRAW_FRAME* GetParent();
 
     void OnPaint( wxPaintEvent& event );
+
 
     /**
      * Function DrawBackGround
@@ -300,7 +301,27 @@ public:
 
     inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
 
+    /**
+     * Function SetCurrentCursor
+     * Set the current cursor shape for drawpanel
+     */
+    void SetCurrentCursor( int aCursor )
+    {
+        m_currentCursor = aCursor;
+        SetCursor( m_currentCursor );
+    }
+
+    /**
+     * Function GetDefaultCursor
+     * return the default cursor shape
+     */
     int GetDefaultCursor() const { return m_defaultCursor; }
+
+    /**
+     * Function GetCurrentCursor
+     * return the current cursor shape, depending on the current selected tool
+     */
+    int GetCurrentCursor() const { return m_currentCursor; }
 
 
     DECLARE_EVENT_TABLE()

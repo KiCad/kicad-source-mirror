@@ -280,13 +280,13 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
 
         pt_cur_ch = pt_cur_ch;
         segm_oX = GetBoard()->m_BoundaryBox.m_Pos.x +
-                  (g_GridRoutingSize * col_source);
+                  (Board.m_GridRouting * col_source);
         segm_oY = GetBoard()->m_BoundaryBox.m_Pos.y +
-                  (g_GridRoutingSize * row_source);
+                  (Board.m_GridRouting * row_source);
         segm_fX = GetBoard()->m_BoundaryBox.m_Pos.x +
-                  (g_GridRoutingSize * col_target);
+                  (Board.m_GridRouting * col_target);
         segm_fY = GetBoard()->m_BoundaryBox.m_Pos.y +
-                  (g_GridRoutingSize * row_target);
+                  (Board.m_GridRouting * row_target);
 
         /* Draw segment. */
         GRLine( &DrawPanel->m_ClipBox,
@@ -434,9 +434,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
      * On the routing grid (1 grid point must be in the pad)
      */
     {
-        int cX = ( g_GridRoutingSize * col_source )
+        int cX = ( Board.m_GridRouting * col_source )
                  + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
-        int cY = ( g_GridRoutingSize * row_source )
+        int cY = ( Board.m_GridRouting * row_source )
                  + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
         int dx = pt_cur_ch->m_PadStart->m_Size.x / 2;
         int dy = pt_cur_ch->m_PadStart->m_Size.y / 2;
@@ -448,9 +448,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;
 
-        cX = ( g_GridRoutingSize * col_target )
+        cX = ( Board.m_GridRouting * col_target )
              + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
-        cY = ( g_GridRoutingSize * row_target )
+        cY = ( Board.m_GridRouting * row_target )
              + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
         dx = pt_cur_ch->m_PadEnd->m_Size.x / 2;
         dy = pt_cur_ch->m_PadEnd->m_Size.y / 2;
@@ -1118,11 +1118,11 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackSegment->m_Start.x   =
             g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x +
-                                             ( g_GridRoutingSize * row );
+                                             ( Board.m_GridRouting * row );
 
         g_CurrentTrackSegment->m_Start.y   =
             g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y +
-                                             ( g_GridRoutingSize * col );
+                                             ( Board.m_GridRouting * col );
 
         g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
         g_CurrentTrackSegment->m_Shape = pcb->GetBoardDesignSettings()->m_CurrentViaType;
@@ -1141,9 +1141,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackSegment->SetState( TRACK_AR, ON );
         g_CurrentTrackSegment->m_End.x = pcb->m_BoundaryBox.m_Pos.x +
-                                         ( g_GridRoutingSize * row );
+                                         ( Board.m_GridRouting * row );
         g_CurrentTrackSegment->m_End.y = pcb->m_BoundaryBox.m_Pos.y +
-                                         ( g_GridRoutingSize * col );
+                                         ( Board.m_GridRouting * col );
         g_CurrentTrackSegment->SetNet( current_net_code );
 
         if( g_CurrentTrackSegment->Back() == NULL ) /* Start trace. */

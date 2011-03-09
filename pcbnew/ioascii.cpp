@@ -649,8 +649,6 @@ static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
     sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
     fprintf( aFile, "%s", text );
 
-    fprintf( aFile, "ZoneGridSize %d\n", g_GridRoutingSize );
-
     fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
 
     unsigned layerMask =

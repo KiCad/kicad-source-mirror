@@ -44,7 +44,7 @@ static const float OrientPenality[11] =
 
 static wxPoint CurrPosition; // Current position of the current module
                              // placement
-static bool    AutoPlaceShowAll = TRUE;
+static bool    AutoPlaceShowAll = true;
 
 float          MinCout;
 
@@ -75,13 +75,13 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     int      NbModules = 0;
     int      NbTotalModules = 0;
     float    Pas;
-    int      lay_tmp_TOP, lay_tmp_BOTTOM, OldPasRoute;
+    int      lay_tmp_TOP, lay_tmp_BOTTOM;
 
     if( GetBoard()->m_Modules == NULL )
         return;
 
-    DrawPanel->m_AbortRequest = FALSE;
-    DrawPanel->m_AbortEnable  = TRUE;
+    DrawPanel->m_AbortRequest = false;
+    DrawPanel->m_AbortEnable  = true;
 
     switch( place_mode )
     {
@@ -109,13 +109,12 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     memopos = CurrPosition;
     lay_tmp_BOTTOM = Route_Layer_BOTTOM;
     lay_tmp_TOP    = Route_Layer_TOP;
-    OldPasRoute    = g_GridRoutingSize;
 
-    g_GridRoutingSize = (int) GetScreen()->GetGridSize().x;
+    Board.m_GridRouting = (int) GetScreen()->GetGridSize().x;
 
-    // Ensure g_GridRoutingSize has a reasonnable value:
-    if( g_GridRoutingSize < 10 )
-        g_GridRoutingSize = 10;                      // Min value = 1/1000 inch
+    // Ensure Board.m_GridRouting has a reasonnable value:
+    if( Board.m_GridRouting < 10 )
+        Board.m_GridRouting = 10;                      // Min value = 1/1000 inch
 
     /* Compute module parmeters used in auto place */
     Module = GetBoard()->m_Modules;
@@ -204,7 +203,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         if( ii != 0 )
         {
             int Angle_Rot_Module = 1800;
-            Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+            Rotate_Module( DC, Module, Angle_Rot_Module, false );
             Module->SetRectangleExinscrit();
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
@@ -216,7 +215,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             else
             {
                 Angle_Rot_Module = -1800;
-                Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+                Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
             if( error == ESC )
                 goto end_of_tst;
@@ -227,7 +226,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         if( ii != 0 )
         {
             int Angle_Rot_Module = 900;
-            Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+            Rotate_Module( DC, Module, Angle_Rot_Module, false );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -238,7 +237,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             else
             {
                 Angle_Rot_Module = -900;
-                Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+                Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
             if( error == ESC )
                 goto end_of_tst;
@@ -249,7 +248,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         if( ii != 0 )
         {
             int Angle_Rot_Module = 2700;
-            Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+            Rotate_Module( DC, Module, Angle_Rot_Module, false );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -260,7 +259,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             else
             {
                 Angle_Rot_Module = -2700;
-                Rotate_Module( DC, Module, Angle_Rot_Module, FALSE );
+                Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
             if( error == ESC )
                 goto end_of_tst;
@@ -291,7 +290,6 @@ end_of_tst:
 
     Route_Layer_TOP    = lay_tmp_TOP;
     Route_Layer_BOTTOM = lay_tmp_BOTTOM;
-    g_GridRoutingSize  = OldPasRoute;
 
     Module = GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
@@ -301,9 +299,9 @@ end_of_tst:
 
     GetBoard()->m_Status_Pcb = 0;
     Compile_Ratsnest( DC, true );
-    DrawPanel->ReDraw( DC, TRUE );
+    DrawPanel->ReDraw( DC, true );
 
-    DrawPanel->m_AbortEnable = FALSE;
+    DrawPanel->m_AbortEnable = false;
 }
 
 
@@ -316,12 +314,12 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
     GRSetDrawMode( DC, GR_COPY );
     for( ii = 0; ii < Board.m_Nrows; ii++ )
     {
-        oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * g_GridRoutingSize );
+        oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * Board.m_GridRouting );
 
         for( jj = 0; jj < Board.m_Ncols; jj++ )
         {
             ox = GetBoard()->m_BoundaryBox.m_Pos.x +
-                 (jj * g_GridRoutingSize);
+                 (jj * Board.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -386,19 +384,19 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     /* The boundary box must have its start point on placing grid: */
     GetBoard()->m_BoundaryBox.m_Pos.x -= GetBoard()->m_BoundaryBox.m_Pos.x %
-                                         g_GridRoutingSize;
+                                         Board.m_GridRouting;
     GetBoard()->m_BoundaryBox.m_Pos.y -= GetBoard()->m_BoundaryBox.m_Pos.y %
-                                         g_GridRoutingSize;
+                                         Board.m_GridRouting;
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = GetBoard()->m_BoundaryBox.GetEnd();
-    end.x -= end.x % g_GridRoutingSize;
-    end.x += g_GridRoutingSize;
-    end.y -= end.y % g_GridRoutingSize;
-    end.y += g_GridRoutingSize;
+    end.x -= end.x % Board.m_GridRouting;
+    end.x += Board.m_GridRouting;
+    end.y -= end.y % Board.m_GridRouting;
+    end.y += Board.m_GridRouting;
     GetBoard()->m_BoundaryBox.SetEnd( end );
 
-    Nrows = GetBoard()->m_BoundaryBox.GetHeight() / g_GridRoutingSize;
-    Ncols = GetBoard()->m_BoundaryBox.GetWidth() / g_GridRoutingSize;
+    Nrows = GetBoard()->m_BoundaryBox.GetHeight() / Board.m_GridRouting;
+    Ncols = GetBoard()->m_BoundaryBox.GetWidth() / Board.m_GridRouting;
     /* get a small margin for memory allocation: */
     Ncols  += 2; Nrows += 2;
     NbCells = Ncols * Nrows;
@@ -435,7 +433,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
-    TmpSegm.m_Width = g_GridRoutingSize / 2;
+    TmpSegm.m_Width = Board.m_GridRouting / 2;
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         DRAWSEGMENT* DrawSegm;
@@ -453,7 +451,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
             TmpSegm.m_Param = DrawSegm->m_Angle;
 
             TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE,
-                             g_GridRoutingSize, WRITE_CELL );
+                             Board.m_GridRouting, WRITE_CELL );
             break;
 
         case TYPE_TEXTE:
@@ -490,7 +488,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 {
     int    ox, oy, fx, fy, Penalite;
-    int    marge = g_GridRoutingSize / 2;
+    int    marge = Board.m_GridRouting / 2;
     int    masque_layer;
     D_PAD* Pad;
 
@@ -541,7 +539,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     }
 
     /* Trace clearance. */
-    marge    = (g_GridRoutingSize * Module->m_PadNum ) / GAIN;
+    marge    = (Board.m_GridRouting * Module->m_PadNum ) / GAIN;
     Penalite = PENALITE;
     TracePenaliteRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite,
                             masque_layer );
@@ -582,8 +580,8 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
     CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
     /* Module placement on grid. */
-    CurrPosition.x -= CurrPosition.x % g_GridRoutingSize;
-    CurrPosition.y -= CurrPosition.y % g_GridRoutingSize;
+    CurrPosition.x -= CurrPosition.x % Board.m_GridRouting;
+    CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
 
     g_Offset_Module.x = cx - CurrPosition.x;
     g_Offset_Module.y = cy - CurrPosition.y;
@@ -593,7 +591,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
      * can become a component on opposite side if there is at least 1 patch
      * appearing on the other side.
      */
-    TstOtherSide = FALSE;
+    TstOtherSide = false;
     if( Nb_Sides == TWO_SIDES )
     {
         D_PAD* Pad; int masque_otherlayer;
@@ -605,7 +603,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         {
             if( ( Pad->m_Masque_Layer & masque_otherlayer ) == 0 )
                 continue;
-            TstOtherSide = TRUE;
+            TstOtherSide = true;
             break;
         }
     }
@@ -617,7 +615,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     SetStatusText( wxT( "Score ??, pos ??" ) );
 
     for( ; CurrPosition.x < GetBoard()->m_BoundaryBox.GetRight() - fx;
-         CurrPosition.x += g_GridRoutingSize )
+         CurrPosition.x += Board.m_GridRouting )
     {
         wxYield();
         if( DrawPanel->m_AbortRequest )
@@ -625,7 +623,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
             if( IsOK( this, _( "Ok to abort?" ) ) )
                 return ESC;
             else
-                DrawPanel->m_AbortRequest = FALSE;
+                DrawPanel->m_AbortRequest = false;
         }
 
         cx = Module->m_Pos.x; cy = Module->m_Pos.y;
@@ -637,12 +635,12 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         g_Offset_Module.x = cx - CurrPosition.x;
         CurrPosition.y    = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
         /* Placement on grid. */
-        CurrPosition.y -= CurrPosition.y % g_GridRoutingSize;
+        CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
 
         DrawModuleOutlines( DrawPanel, DC, Module );
 
         for( ; CurrPosition.y < GetBoard()->m_BoundaryBox.GetBottom() - fy;
-             CurrPosition.y += g_GridRoutingSize )
+             CurrPosition.y += Board.m_GridRouting )
         {
             /* Erase traces. */
             DrawModuleOutlines( DrawPanel, DC, Module );
@@ -714,13 +712,13 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
     uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize;
-    if( uy0 > row_min * g_GridRoutingSize )
+    row_max = uy1 / Board.m_GridRouting;
+    col_max = ux1 / Board.m_GridRouting;
+    row_min = uy0 / Board.m_GridRouting;
+    if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize;
-    if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / Board.m_GridRouting;
+    if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -764,13 +762,13 @@ unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
     ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
     uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize;
-    if( uy0 > row_min * g_GridRoutingSize )
+    row_max = uy1 / Board.m_GridRouting;
+    col_max = ux1 / Board.m_GridRouting;
+    row_min = uy0 / Board.m_GridRouting;
+    if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize;
-    if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / Board.m_GridRouting;
+    if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -826,7 +824,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
             return error;
     }
 
-    marge = ( g_GridRoutingSize * Module->m_PadNum ) / GAIN;
+    marge = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
 
     Penalite = CalculePenaliteRectangle( Pcb, ox - marge, oy - marge,
                                          fx + marge, fy + marge, side );
@@ -941,15 +939,17 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;
 
-    pmarge = marge / g_GridRoutingSize; if( pmarge < 1 )
+    pmarge = marge / Board.m_GridRouting; if( pmarge < 1 )
         pmarge = 1;
 
     /* Calculate the coordinate limits of the rectangle. */
-    row_max = uy1 / g_GridRoutingSize;
-    col_max = ux1 / g_GridRoutingSize;
-    row_min = uy0 / g_GridRoutingSize; if( uy0 > row_min * g_GridRoutingSize )
+    row_max = uy1 / Board.m_GridRouting;
+    col_max = ux1 / Board.m_GridRouting;
+    row_min = uy0 / Board.m_GridRouting;
+    if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
-    col_min = ux0 / g_GridRoutingSize; if( ux0 > col_min * g_GridRoutingSize )
+    col_min = ux0 / Board.m_GridRouting;
+    if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
