@@ -100,6 +100,24 @@ Do not change the KiCad tree, or the location of binary files,
 else KiCad will not be able to find its required files (configuration,
 libraries, etc.).
 
+Mac OS X KiCad tree
+-------------------
+
+System wide files
+
+/Library/Application Support/kicad/demos 
+/Library/Application Support/kicad/internat 
+/Library/Application Support/kicad/library
+/Library/Application Support/kicad/modules 
+/Library/Application Support/kicad/modules/packages3d
+
+User files can be the same as the system wide files but only inside the users home directory.
+
+$HOME/Library/Application Support/kicad
+
+Warning:
+These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find them when a new 
+project is created. 
 
 Installation from source code
 -----------------------------

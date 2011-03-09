@@ -1,0 +1,29 @@
+Compiling KiCad on Fedora
+=========================
+
+First written: 2011-03-09
+
+Lasted edited by: Jerry Jacobs <xor.gate.engineering@gmail.com>
+
+Fedora 14
+---------
+
+First we need to install all the needed tools and libraries with yum. First
+become root with su.
+
+Then invoke yum:
+yum install gcc gcc-c++ bzr cmake doxygen wxGTK-devel make
+
+Create somewhere on your drive a kicad directory.
+
+Then clone the bzr repository:
+bzr checkout lp:kicad testing
+
+then cd into the build directory
+invoke cmake to generate the makefiles
+
+cmake ../testing
+
+If everything went well you should be able to build kicad with make.
+
+make
