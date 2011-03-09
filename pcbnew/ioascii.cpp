@@ -10,6 +10,7 @@
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "autorout.h"
 #include "class_board_design_settings.h"
 
 #ifdef PCBNEW

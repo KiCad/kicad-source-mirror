@@ -1,6 +1,6 @@
-update=10/5/2004-12:26:41
+update=07/03/2011 07:11:33
 version=1
-last_client=kicad
+last_client=cvpcb
 [pcbnew]
 version=1
 LibDir=
@@ -66,22 +66,13 @@ TimeOut=600
 ShowRat=0
 ShowMRa=0
 [pcbnew/libraries]
-LibName1=supports
-LibName2=connect
-LibName3=discret
-LibName4=pin_array
-LibName5=divers
-LibName6=libcms
-[cvpcb]
-version=1
-NetITyp=0
-NetIExt=.net
-PkgIExt=.pkg
-NetDir=
+LibName1=connect
+LibName2=discret
+LibName3=pin_array
+LibName4=divers
+LibName5=libcms
+LibName6=dip_sockets
 LibDir=
-NetType=0
-[cvpcb/libraries]
-EquName1=devcms
 [eeschema]
 version=1
 LibDir=
@@ -131,3 +122,8 @@ LibName11=analog_switches
 version=1
 RootSch=carte_test.sch
 BoardNm=carte_test.brd
+[cvpcb]
+version=1
+NetIExt=.net
+[cvpcb/libraries]
+EquName1=devcms

@@ -35,8 +35,6 @@ enum {                          // How pads are covered by copper in zone
 /* variables used in zone dialogs and functions */
 /************************************************/
 
-/* parametre grid size for automatic routing */
-extern int g_GridRoutingSize;
 extern bool g_Zone_45_Only;
 
 // Default setting used when creating a new zone

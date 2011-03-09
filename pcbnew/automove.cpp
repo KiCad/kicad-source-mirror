@@ -5,7 +5,6 @@
 #include <algorithm>
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -15,7 +14,6 @@
 #include "autorout.h"
 #include "cell.h"
 #include "pcbnew_id.h"
-#include "protos.h"
 
 #include "kicad_device_context.h"
 
@@ -74,19 +72,19 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE:
-        FixeModule( (MODULE*) GetScreen()->GetCurItem(), TRUE );
+        LockModule( (MODULE*) GetScreen()->GetCurItem(), true );
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
-        FixeModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
+        LockModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
-        FixeModule( NULL, FALSE );
+        LockModule( NULL, FALSE );
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
-        FixeModule( NULL, TRUE );
+        LockModule( NULL, true );
         return;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -130,7 +128,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_AUTOMOVE_NEW_MODULES:
-        AutoMoveModulesOnPcb( TRUE );
+        AutoMoveModulesOnPcb( true );
         break;
 
     case ID_POPUP_PCB_AUTOROUTE_ALL_MODULES:
@@ -154,7 +152,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "AutoPlace command error" ) );
+        wxMessageBox( wxT( "AutoPlace command error" ) );
         break;
     }
 
@@ -268,27 +266,27 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 }
 
 
-/* Update (TRUE or FALSE) FIXED attribute on the module Module
- * or all the modules if Module == NULL
+/* Set or reset (true or FALSE) Lock attribute of aModule
+ * or all modules if aModule == NULL
  */
-void PCB_EDIT_FRAME::FixeModule( MODULE* Module, bool Fixe )
+void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
 {
-    if( Module )
+    if( aModule )
     {
-        Module->SetLocked( Fixe );
+        aModule->SetLocked( aLocked );
 
-        Module->DisplayInfo( this );
+        aModule->DisplayInfo( this );
         OnModify();
     }
     else
     {
-        Module = GetBoard()->m_Modules;
-        for( ; Module != NULL; Module = Module->Next() )
+        aModule = GetBoard()->m_Modules;
+        for( ; aModule != NULL; aModule = aModule->Next() )
         {
             if( WildCompareString( ModulesMaskSelection,
-                                   Module->m_Reference->m_Text ) )
+                                   aModule->m_Reference->m_Text ) )
             {
-                Module->SetLocked( Fixe );
+                aModule->SetLocked( aLocked );
                 OnModify();
             }
         }

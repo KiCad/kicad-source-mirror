@@ -3,29 +3,19 @@
 	/***************************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
 #include "autorout.h"
 #include "cell.h"
 
-/* Routines exportees : */
-int GetApxDist( int, int, int, int );
-int CalcDist( int, int, int );
-
-/* Les tables de distances et penalites sont etablies sur la base du pas 
+/* Les tables de distances et penalites sont etablies sur la base du pas
 de routage de 50 unites(le pas entre les cellules est 50 unites)
 La distance vraie est calculee par un facteur d'echelle
 */
 
-
-	/************************************************/
-	/* int GetApxDist(int r1,int c1,int r2,int c2 ) */
-	/************************************************/
-
- /* calculate approximate distance */
-
+ /* calculate approximate distance
+ */
 int GetApxDist(int r1,int c1,int r2,int c2 )
 {
 int d1, d2; /* row and column deltas */
@@ -35,7 +25,7 @@ int d1, d2; /* row and column deltas */
 	if ((d2 = c1-c2) < 0) /* get absolute column delta */
 		d2 = -d2;
 
-return( (d1+d2) * 50 * E_scale);
+    return( (d1+d2) * 50 * E_scale);
 
 	if (!d1) /* in same row? */
 		return( (d2*50*E_scale) );	 /* 50 mils per cell */

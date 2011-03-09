@@ -3,14 +3,12 @@
 /*******************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "autorout.h"
-#include "zones.h"
 #include "cell.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
@@ -313,14 +311,14 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 {
     int       color, ii, jj;
     int       ox, oy;
-    BoardCell top_state, bottom_state;
+    MATRIX_CELL top_state, bottom_state;
 
     GRSetDrawMode( DC, GR_COPY );
-    for( ii = 0; ii < Nrows; ii++ )
+    for( ii = 0; ii < Board.m_Nrows; ii++ )
     {
         oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * g_GridRoutingSize );
 
-        for( jj = 0; jj < Ncols; jj++ )
+        for( jj = 0; jj < Board.m_Ncols; jj++ )
         {
             ox = GetBoard()->m_BoundaryBox.m_Pos.x +
                  (jj * g_GridRoutingSize);
@@ -393,8 +391,10 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
                                          g_GridRoutingSize;
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = GetBoard()->m_BoundaryBox.GetEnd();
-    end.x -= end.x % g_GridRoutingSize; end.x += g_GridRoutingSize;
-    end.y -= end.y % g_GridRoutingSize; end.y += g_GridRoutingSize;
+    end.x -= end.x % g_GridRoutingSize;
+    end.x += g_GridRoutingSize;
+    end.y -= end.y % g_GridRoutingSize;
+    end.y += g_GridRoutingSize;
     GetBoard()->m_BoundaryBox.SetEnd( end );
 
     Nrows = GetBoard()->m_BoundaryBox.GetHeight() / g_GridRoutingSize;
@@ -479,7 +479,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     /* Initialize top layer. */
     if( Board.m_BoardSide[TOP] )
         memcpy( Board.m_BoardSide[TOP], Board.m_BoardSide[BOTTOM],
-                NbCells * sizeof(BoardCell) );
+                NbCells * sizeof(MATRIX_CELL) );
 
     return 1;
 }
@@ -921,7 +921,7 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     int      row, col;
     int      row_min, row_max, col_min, col_max, pmarge;
     int      trace = 0;
-    DistCell data, LocalPenalite;
+    DIST_CELL data, LocalPenalite;
     int      lgain, cgain;
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )

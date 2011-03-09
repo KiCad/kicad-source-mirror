@@ -2,6 +2,9 @@
 /* ar-proto.h */
 /**************/
 
+
+int Propagation( PCB_EDIT_FRAME* frame );
+
 /* Initialize a value type, the cells included in the board surface of the
  * pad edge by pt_pad, with the margin reserved for isolation. */
 void Place_1_Pad_Board( BOARD * Pcb, D_PAD * pt_pad, int type, int marge,
@@ -56,17 +59,17 @@ int GetApxDist( int, int, int, int );
 int CalcDist( int, int, int ,int );
 
 /* BOARD.CPP */
-bool ComputeMatriceSize( PCB_BASE_FRAME * frame, int pas_route );
+bool ComputeMatriceSize( BOARD * aPcb, int aGridRouting );
 int Build_Work( BOARD * Pcb );
 void PlaceCells( BOARD * Pcb, int net_code, int flag = 0 );
 
-BoardCell GetCell( int, int, int );
-void SetCell( int, int, int, BoardCell );
-void OrCell( int, int, int, BoardCell );
-void XorCell( int, int, int, BoardCell );
-void AndCell( int, int, int, BoardCell );
-void AddCell( int, int, int, BoardCell );
-DistCell GetDist( int, int, int );
-void SetDist( int, int, int, DistCell );
-int GetDir( int, int, int );
-void SetDir( int, int, int, int );
+MATRIX_CELL GetCell( int aRow, int aCol, int aSide);
+void SetCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+void OrCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+void XorCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+void AndCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+void AddCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+DIST_CELL GetDist( int aRow, int aCol, int aSide );
+void SetDist( int aRow, int aCol, int aSide, DIST_CELL );
+int GetDir( int aRow, int aCol, int aSide );
+void SetDir( int aRow, int aCol, int aSide, int aDir);

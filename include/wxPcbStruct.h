@@ -1104,7 +1104,7 @@ public:
      */
     bool         ReOrientModules( const wxString& ModuleMask, int Orient,
                                   bool include_fixe );
-    void         FixeModule( MODULE* Module, bool Fixe );
+    void         LockModule( MODULE* aModule, bool aLocked );
     void         AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
     void         AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
     int          RecherchePlacementModule( MODULE* Module, wxDC* DC );

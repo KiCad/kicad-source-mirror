@@ -3,18 +3,14 @@
 /***************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "autorout.h"
 #include "cell.h"
 #include "zones.h"
 #include "class_board_design_settings.h"
-
-#include "protos.h"
 
 
 int E_scale;         /* Scaling factor of distance tables. */
@@ -27,7 +23,7 @@ int ClosNodes;       /* total number of nodes closed */
 int MoveNodes;       /* total number of nodes moved */
 int MaxNodes;        /* maximum number of nodes opened at one time */
 
-BOARDHEAD Board;     /* 2-sided board */
+MATRIX_ROUTING_HEAD Board;     /* 2-sided board */
 
 
 /* init board, route traces*/
@@ -41,8 +37,8 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     if( GetBoard()->GetCopperLayerCount() > 1 )
     {
-        Route_Layer_TOP    = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_TOP;
-        Route_Layer_BOTTOM = ((PCB_SCREEN*)GetScreen())->m_Route_Layer_BOTTOM;
+        Route_Layer_TOP    = GetScreen()->m_Route_Layer_TOP;
+        Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
     }
     else
     {
@@ -68,7 +64,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         }
         if( autoroute_net_code <= 0 )
         {
-            DisplayError( this, _( "Net not selected" ) ); return;
+            wxMessageBox( _( "Net not selected" ) ); return;
         }
         break;
 
@@ -76,7 +72,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         Module = (MODULE*) GetScreen()->GetCurItem();
         if( (Module == NULL) || (Module->Type() != TYPE_MODULE) )
         {
-            DisplayError( this, _( "Module not selected" ) );
+            wxMessageBox( _( "Module not selected" ) );
             return;
         }
         break;
@@ -85,14 +81,14 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         Pad = (D_PAD*) GetScreen()->GetCurItem();
         if( (Pad == NULL)  || (Pad->Type() != TYPE_PAD) )
         {
-            DisplayError( this, _( "Pad not selected" ) );
+            wxMessageBox( _( "Pad not selected" ) );
             return;
         }
         break;
     }
 
     if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
-        Compile_Ratsnest( DC, TRUE );
+        Compile_Ratsnest( DC, true );
 
     /* Set the flag on the ratsnest to CH_ROUTE_REQ. */
     for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
@@ -142,7 +138,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         E_scale = 1;
 
     /* Calculated ncol and nrow, matrix size for routing. */
-    ComputeMatriceSize( this, g_GridRoutingSize );
+    ComputeMatriceSize( GetBoard(), g_GridRoutingSize );
 
     MsgPanel->EraseMsgBox();
 
@@ -153,7 +149,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     if( Board.InitBoard() < 0 )
     {
-        DisplayError( this, _( "No memory for autorouting" ) );
+        wxMessageBox( _( "No memory for autorouting" ) );
         Board.UnInitBoard();  /* Free memory. */
         return;
     }
@@ -181,14 +177,14 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 }
 
 
-/* Clear the flag has CH_NOROUTABLE which is set to 1 by Solve()
- * When a ratsnets has not been routed.
- * If this flag is 1 it is not reroute
+/* Clear the flag CH_NOROUTABLE which is set to 1 by Solve(),
+ * when a track was not routed.
+ * (If this flag is 1 the corresponding track it is not rerouted)
  */
 void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 {
     if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK )== 0 )
-        Compile_Ratsnest( DC, TRUE );
+        Compile_Ratsnest( DC, true );
 
     for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
     {
@@ -197,7 +193,7 @@ void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 }
 
 
-/* Function DEBUG: displays filling cells TOP and BOTTOM */
+/* DEBUG Function: displays the routing matrix */
 void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
     int row, col, i, j;

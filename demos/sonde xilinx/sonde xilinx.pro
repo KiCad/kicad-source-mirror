@@ -1,4 +1,4 @@
-update=27/05/2010 12:18:31
+update=07/03/2011 09:04:59
 version=1
 last_client=pcbnew
 [cvpcb]
@@ -77,7 +77,6 @@ PadDrlX=320
 PadDimH=620
 PadDimV=900
 BoardThickness=630
-SgPcb45=1
 TxtPcbV=600
 TxtPcbH=600
 TxtModV=600
@@ -88,7 +87,7 @@ DrawLar=120
 EdgeLar=120
 TxtLar=120
 MSegLar=120
-LastNetListRead=
+LastNetListRead=sonde xilinx.net
 [pcbnew/libraries]
 LibDir=
 LibName1=supports

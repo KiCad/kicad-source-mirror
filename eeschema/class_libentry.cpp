@@ -1032,7 +1032,7 @@ void LIB_COMPONENT::deleteAllFields()
         }
 
         // 'it' is not advanced, but should point to next in list after erase()
-        drawings.erase( it );
+        it = drawings.erase( it );
     }
 }
 

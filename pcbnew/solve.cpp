@@ -3,7 +3,6 @@
 /*************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -12,7 +11,6 @@
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 #include "autorout.h"
-#include "zones.h"
 #include "protos.h"
 
 #include "cell.h"
@@ -237,7 +235,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     wxString      msg;
 
     DrawPanel->m_AbortRequest = FALSE;
-    DrawPanel->m_AbortEnable  = TRUE;
+    DrawPanel->m_AbortEnable  = true;
 
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
@@ -263,7 +261,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             if( IsOK( this, _( "Abort routing?" ) ) )
             {
                 success = STOP_FROM_ESC;
-                stop    = TRUE;
+                stop    = true;
                 break;
             }
             else
@@ -319,11 +317,11 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             break;
 
         case STOP_FROM_ESC:
-            stop = TRUE;
+            stop = true;
             break;
 
         case ERR_MEMORY:
-            stop = TRUE;
+            stop = true;
             break;
 
         default:
@@ -362,7 +360,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
  *
  * Returns:
  * SUCCESS if routed
- * TRIVIAL_SUCCESS if pads connected by overlay (no track has learned)
+ * TRIVIAL_SUCCESS if pads are connected by overlay (no track needed)
  * If failure NOSUCCESS
  * Escape STOP_FROM_ESC if demand
  * ERR_MEMORY if memory allocation failed.
@@ -406,7 +404,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     via_marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentViaSize() / 2 );
 
     /* clear direction flags */
-    i = Nrows * Ncols * sizeof(char);
+    i = Nrows * Ncols * sizeof(DIR_CELL);
     memset( Board.m_DirSide[TOP], FROM_NOWHERE, i );
     memset( Board.m_DirSide[BOTTOM], FROM_NOWHERE, i );
 

@@ -1,4 +1,4 @@
-update=17/02/2011 19:46:34
+update=07/03/2011 19:57:09
 version=1
 last_client=pcbnew
 [common]
@@ -55,13 +55,13 @@ LibName8=adc-dac
 LibName9=memory
 LibName10=xilinx
 LibName11=special
+LibName12=image
 [pcbnew]
 version=1
 PadDrlX=354
 PadDimH=550
 PadDimV=550
 BoardThickness=630
-SgPcb45=1
 TxtPcbV=800
 TxtPcbH=600
 TxtModV=600
@@ -71,10 +71,10 @@ VEgarde=100
 DrawLar=150
 EdgeLar=50
 TxtLar=170
-MSegLar=400
-LastNetListRead=interf_u.net
+MSegLar=150
+LastNetListRead=..\\pic_programmer\\pic_programmer.net
 [pcbnew/libraries]
-LibDir=F:\\kicad\\share\\modules\\packages3d
+LibDir=
 LibName1=connect
 LibName2=discret
 LibName3=dip_sockets

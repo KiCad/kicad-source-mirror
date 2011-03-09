@@ -249,12 +249,6 @@ int  ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** E
 void ListSetState( EDA_ITEM* Start, int Nbitem, int State, int onoff );
 
 
-/************/
-/* ZONES.CPP */
-/************/
-int Propagation( PCB_EDIT_FRAME* frame );
-
-
 /***************/
 /* DUPLTRAC.CPP */
 /***************/

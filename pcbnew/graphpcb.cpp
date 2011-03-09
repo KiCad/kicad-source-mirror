@@ -3,12 +3,10 @@
 /****************************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
 #include "autorout.h"
-#include "zones.h"
 #include "trigo.h"
 #include "cell.h"
 
@@ -42,7 +40,7 @@ static void DrawSegmentQcq( int ux0,
 static void TraceFilledCercle( BOARD* Pcb,
                                int    cx,
                                int    cy,
-                               int    rayon,
+                               int    radius,
                                int    masque_layer,
                                int    color,
                                int    op_logique );
@@ -151,7 +149,7 @@ void Place_1_Pad_Board( BOARD* Pcb,
 void TraceFilledCercle( BOARD* Pcb,
                         int    cx,
                         int    cy,
-                        int    rayon,
+                        int    radius,
                         int    masque_layer,
                         int    color,
                         int    op_logique )
@@ -162,7 +160,7 @@ void TraceFilledCercle( BOARD* Pcb,
     int   trace = 0;
     float fdistmin, fdistx, fdisty;
 
-    void  (* WriteCell)( int, int, int, BoardCell );
+    void  (* WriteCell)( int, int, int, MATRIX_CELL );
     int   tstwrite = 0;
     int   distmin;
 
@@ -208,13 +206,13 @@ void TraceFilledCercle( BOARD* Pcb,
     cx -= Pcb->m_BoundaryBox.m_Pos.x;
     cy -= Pcb->m_BoundaryBox.m_Pos.y;
 
-    distmin = rayon;
+    distmin = radius;
 
     /* Calculate the bounding rectangle of the circle. */
-    ux0 = cx - rayon;
-    uy0 = cy - rayon;
-    ux1 = cx + rayon;
-    uy1 = cy + rayon;
+    ux0 = cx - radius;
+    uy0 = cy - radius;
+    ux1 = cx + radius;
+    uy1 = cy + radius;
 
     /* Calculate limit coordinates of cells belonging to the rectangle. */
     row_max = uy1 / g_GridRoutingSize;
@@ -384,7 +382,7 @@ void TraceLignePcb( int x0,
     int  dx, dy, lim;
     int  cumul, inc, il, delta;
 
-    void (* WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, MATRIX_CELL );
 
     switch( op_logique )
     {
@@ -537,7 +535,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    void (* WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, MATRIX_CELL );
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;     /* Trace on BOTTOM */
@@ -623,12 +621,12 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 {
     int  row, col;
     int  cx, cy;    /* Center of rectangle */
-    int  rayon;     /* Radius of the circle */
+    int  radius;     /* Radius of the circle */
     int  row_min, row_max, col_min, col_max;
     int  rotrow, rotcol;
     int  trace = 0;
 
-    void (* WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, MATRIX_CELL );
 
     if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;     /* Trace on BOTTOM */
@@ -671,16 +669,16 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 
     cx    = (ux0 + ux1) / 2;
     cy    = (uy0 + uy1) / 2;
-    rayon = (int) sqrt( (double) ( cx - ux0 ) * ( cx - ux0 )
+    radius = (int) sqrt( (double) ( cx - ux0 ) * ( cx - ux0 )
                        + (double) ( cy - uy0 ) * ( cy - uy0 ) );
 
     /* Calculating coordinate limits belonging to the rectangle. */
-    row_max = ( cy + rayon ) / g_GridRoutingSize;
-    col_max = ( cx + rayon ) / g_GridRoutingSize;
-    row_min = ( cy - rayon ) / g_GridRoutingSize;
+    row_max = ( cy + radius ) / g_GridRoutingSize;
+    col_max = ( cx + radius ) / g_GridRoutingSize;
+    row_min = ( cy - radius ) / g_GridRoutingSize;
     if( uy0 > row_min * g_GridRoutingSize )
         row_min++;
-    col_min = ( cx - rayon ) / g_GridRoutingSize;
+    col_min = ( cx - radius ) / g_GridRoutingSize;
     if( ux0 > col_min * g_GridRoutingSize )
         col_min++;
 
@@ -730,7 +728,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     int  row_max, col_max, row_min, col_min;
     int  demi_pas;
 
-    void (* WriteCell)( int, int, int, BoardCell );
+    void (* WriteCell)( int, int, int, MATRIX_CELL );
     int  angle;
     int  cx, cy, dx, dy;
 
@@ -859,19 +857,19 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
 void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                   int color, int op_logique )
 {
-    int rayon, nb_segm;
+    int radius, nb_segm;
     int x0, y0,             // Starting point of the current segment trace.
         x1, y1;             // End point.
     int ii;
     int angle;
 
-    rayon = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
+    radius = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
 
-    x0 = x1 = rayon;
+    x0 = x1 = radius;
     y0 = y1 = 0;
     if( lg < 1 )
         lg = 1;
-    nb_segm = ( 2 * rayon ) / lg;
+    nb_segm = ( 2 * radius ) / lg;
     if( nb_segm < 5 )
         nb_segm = 5;
     if( nb_segm > 100 )
@@ -879,42 +877,42 @@ void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     for( ii = 1; ii < nb_segm; ii++ )
     {
         angle = (3600 * ii) / nb_segm;
-        x1    = (int) ( rayon * fcosinus[angle] );
-        y1    = (int) ( rayon * fsinus[angle] );
+        x1    = (int) ( radius * fcosinus[angle] );
+        y1    = (int) ( radius * fsinus[angle] );
         DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg,
                         layer, color, op_logique );
         x0 = x1;
         y0 = y1;
     }
 
-    DrawSegmentQcq( x1 + ux0, y1 + uy0, ux0 + rayon, uy0, lg, layer,
+    DrawSegmentQcq( x1 + ux0, y1 + uy0, ux0 + radius, uy0, lg, layer,
                     color, op_logique );
 }
 
 
-/* Fills all cells BOARD contained in the arc of "L" angle
+/* Fills all cells contained in arc with color , using op_logique.
  * half-width lg ux center, starting in ux y0, y1 is set to color.
- * coord in PCB units (0.1 million) relating to the origin
- * Pt_pcb->m_PcbBox.m_Xmin, Y's board.
+ * coord in PCB units (0.1 mil) relating to the origin
+ * of the board.
  */
 void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
                int layer, int color, int op_logique )
 {
-    int rayon, nb_segm;
+    int radius, nb_segm;
     int x0, y0,             // Starting point of the current segment trace
         x1, y1;             // End point
     int ii;
     int angle, StAngle;
 
 
-    rayon = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
+    radius = (int) hypot( (double) (ux1 - ux0), (double) (uy1 - uy0) );
 
     x0 = ux1 - ux0;
     y0 = uy1 - uy0;
     StAngle = ArcTangente( uy1 - uy0, ux1 - ux0 );
     if( lg < 1 )
         lg = 1;
-    nb_segm = ( 2 * rayon ) / lg;
+    nb_segm = ( 2 * radius ) / lg;
     nb_segm = ( nb_segm * abs( ArcAngle ) ) / 3600;
     if( nb_segm < 5 )
         nb_segm = 5;
@@ -932,14 +930,14 @@ void TraceArc( int ux0, int uy0, int ux1, int uy1, int ArcAngle, int lg,
         while( angle < 0 )
             angle += 3600;
 
-        x1 = (int) ( rayon * fcosinus[angle] );
-        y1 = (int) ( rayon * fsinus[angle] );
+        x1 = (int) ( radius * fcosinus[angle] );
+        y1 = (int) ( radius * fsinus[angle] );
         DrawSegmentQcq( x0 + ux0, y0 + uy0, x1 + ux0, y1 + uy0, lg, layer,
                         color, op_logique );
         x0 = x1;
         y0 = y1;
     }
 
-//	  DrawSegmentQcq(x1+ux0,y1+uy0, ux0+rayon, uy0,lg,layer, color,
+//	  DrawSegmentQcq(x1+ux0,y1+uy0, ux0+radius, uy0,lg,layer, color,
 // op_logique);
 }

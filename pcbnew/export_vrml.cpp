@@ -1037,10 +1037,11 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
 
         fname.Replace(wxT("\\"), wxT("/" ) );
         wxString source_fname = fname;
-        if( aExport3DFiles )
+        if( aExport3DFiles )    // Change dangerous characters in filenames
         {
             fname.Replace(wxT("/"), wxT("_" ) );
             fname.Replace(wxT(":_"), wxT("_" ) );
+            fname.Replace(wxT(" "), wxT("_" ) );
             fname = a3D_Subdir + wxT("/") + fname;
             if( !wxFileExists( fname ) )
                 wxCopyFile( source_fname, fname );

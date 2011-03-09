@@ -3,14 +3,11 @@
 /************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 
 #include "common.h"
 #include "pcbnew.h"
 #include "autorout.h"
 #include "cell.h"
-
-#include "protos.h"
 
 
 struct CWORK /* a unit of work is a hole-pair to connect */

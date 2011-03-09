@@ -321,6 +321,9 @@ void SCH_EDIT_FRAME::BuildNetListBase()
  */
 void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
 {
+    if( aNetItemBuffer.size() == 0 )
+        return; // Should not occur: if this function is called, obviously some items exist in list
+
     NETLIST_OBJECT_LIST candidates;
     int netcode = 0;            // current netcode for tested items
     unsigned idxstart = 0;       // index of the first item of this net
