@@ -33,7 +33,6 @@ extern void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveV
 extern void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
 extern void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
 extern void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-extern void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 extern void DuplicateItemsInList( SCH_SCREEN*        screen,
                                   PICKED_ITEMS_LIST& aItemsList,
                                   const wxPoint      aMoveVector );
@@ -522,22 +521,19 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
 {
     m_blockItems.ClearListAndDeleteItems();   // delete previous saved list, if exists
 
-    /* save the new list: */
-    ITEM_PICKER item;
-
-    // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
-    // status for the picker because pickers with this status are owner of the picked item
-    // (or TODO ?: create a new status like UR_DUPLICATE)
-    item.m_UndoRedoStatus = UR_DELETED;
-
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         // Clear m_Flag member of selected items:
-        aItemsList.GetPickedItem( ii )->m_Flags = 0;
+        aItemsList.GetPickedItem( ii )->ClearFlags();
         /* Make a copy of the original picked item. */
-        SCH_ITEM* DrawStructCopy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
-        DrawStructCopy->SetParent( NULL );
-        item.m_PickedItem = DrawStructCopy;
+        SCH_ITEM* copy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
+        copy->SetParent( NULL );
+
+        // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
+        // status for the picker because pickers with this status are owner of the picked item
+        // (or TODO ?: create a new status like UR_DUPLICATE)
+        ITEM_PICKER item( copy, UR_DELETED );
+
         m_blockItems.PushItem( item );
     }
 }
@@ -559,13 +555,12 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
     PICKED_ITEMS_LIST picklist;
 
-    // Creates data, and push it as new data in undo item list buffer
-    ITEM_PICKER       picker( NULL, UR_NEW );
-
     for( unsigned ii = 0; ii < m_blockItems.GetCount(); ii++ )
     {
         Struct = DuplicateStruct( (SCH_ITEM*) m_blockItems.m_ItemsSelection.GetPickedItem( ii ) );
-        picker.m_PickedItem = Struct;
+
+        // Creates data, and push it as new data in undo item list buffer
+        ITEM_PICKER picker( Struct, UR_NEW );
         picklist.PushItem( picker );
 
         // Clear annotation and init new time stamp for the new components:
@@ -574,6 +569,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
             ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetTimeStamp();
             ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
         }
+
         SetSchItemParent( Struct, GetScreen() );
         Struct->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         Struct->SetNext( GetScreen()->GetDrawItems() );
@@ -584,7 +580,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
     MoveItemsInList( picklist, GetScreen()->m_BlockLocate.m_MoveVector );
 
-    /* clear .m_Flags member for all items */
+    // Clear flags for all items.
     GetScreen()->ClearDrawingState();
 
     OnModify();

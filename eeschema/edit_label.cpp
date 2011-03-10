@@ -79,8 +79,8 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC )
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
 {
     if( aTextItem == NULL )
-        aTextItem = (SCH_TEXT*) PickStruct( GetScreen()->GetCrossHairPosition(),
-                                            GetScreen(), TEXT_T | LABEL_T );
+        aTextItem = (SCH_TEXT*) GetScreen()->GetItem( GetScreen()->GetCrossHairPosition(), 0,
+                                                      TEXT_T | LABEL_T );
     if( aTextItem == NULL )
         return;
 
@@ -348,7 +348,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     if( (flags & IS_NEW) == 0 )  // Remove old text from current list and save it in undo list
     {
         text->ClearFlags();
-        DeleteStruct( DrawPanel, &dc, text );    // old text is really saved in undo list
+        DeleteItem( text );      // old text is really saved in undo list
         GetScreen()->SetCurItem( NULL );
         m_itemToRepeat = NULL;
     }

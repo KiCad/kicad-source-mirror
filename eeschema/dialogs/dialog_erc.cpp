@@ -85,7 +85,8 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 {
 /* Delete the old ERC markers, over the whole hierarchy
  */
-    DeleteAllMarkers( MARK_ERC );
+    SCH_SCREENS ScreenList;
+    ScreenList.DeleteAllMarkers( MARK_ERC );
     m_MarkersList->ClearList();
     m_Parent->DrawPanel->Refresh();
 }
@@ -427,13 +428,12 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     }
 
     /* Erase all DRC markers */
-    DeleteAllMarkers( MARK_ERC );
+    SCH_SCREENS ScreenList;
+
+    ScreenList.DeleteAllMarkers( MARK_ERC );
 
     g_EESchemaVar.NbErrorErc   = 0;
     g_EESchemaVar.NbWarningErc = 0;
-
-    /* Cleanup the entire hierarchy */
-    SCH_SCREENS ScreenList;
 
     for( SCH_SCREEN* Screen = ScreenList.GetFirst();
          Screen != NULL;

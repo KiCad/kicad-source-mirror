@@ -209,7 +209,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( aItem )
     {
         itemWrapper.m_PickedItemType = aItem->Type();
-        itemWrapper.m_PickerFlags    = aItem->m_Flags;
+        itemWrapper.m_PickerFlags    = aItem->GetFlags();
     }
 
     switch( aCommandType )
@@ -329,12 +329,14 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     // complex command
     for( int ii = aList->GetCount() - 1; ii >= 0; ii--  )
     {
-        ITEM_PICKER itemWrapper = aList->GetItemWrapper( ii );
-        item = (SCH_ITEM*) itemWrapper.m_PickedItem;
+        item = (SCH_ITEM*) aList->GetPickedItem( ii );
+
         if( item )
-            item->m_Flags = 0;
-        SCH_ITEM* image = (SCH_ITEM*) itemWrapper.m_Link;
-        switch( itemWrapper.m_UndoRedoStatus )
+            item->ClearFlags();
+
+        SCH_ITEM* image = (SCH_ITEM*) aList->GetPickedItemLink( ii );
+
+        switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED: /* Exchange old and new data for each item */
             SwapData( item, image );
@@ -352,10 +354,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
 
         case UR_MOVED:
-            item->m_Flags = aList->GetPickerFlags( ii );
-            item->Move( aRedoCommand ?
-                        aList->m_TransformPoint : -aList->m_TransformPoint );
-            item->m_Flags = 0;
+            item->ClearFlags();
+            item->SetFlags( aList->GetPickerFlags( ii ) );
+            item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
+            item->ClearFlags();
             break;
 
         case UR_MIRRORED_Y:
@@ -385,12 +387,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             /* Exchange the current wires and the old wires */
             alt_item = GetScreen()->ExtractWires( false );
             aList->SetPickedItem( alt_item, ii );
+
             while( item )
             {
                 SCH_ITEM* nextitem = item->Next();
                 item->SetNext( GetScreen()->GetDrawItems() );
                 GetScreen()->SetDrawItems( item );
-                item->m_Flags = 0;
+                item->ClearFlags();
                 item = nextitem;
             }
 
@@ -400,7 +403,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         {
             wxString msg;
             msg.Printf( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
-                        itemWrapper.m_UndoRedoStatus );
+                        aList->GetPickedItemStatus( ii ) );
             wxMessageBox( msg );
         }
         break;

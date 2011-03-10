@@ -120,7 +120,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
     wxString       Text;
     wxString       msg;
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), MARKER_T );
+    item = GetScreen()->GetItem( aPosition, 0, MARKER_T );
 
     if( item )
     {
@@ -128,7 +128,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), NO_CONNECT_T );
+    item = GetScreen()->GetItem( aPosition, 0, NO_CONNECT_T );
 
     if( item )
     {
@@ -136,7 +136,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), JUNCTION_T );
+    item = GetScreen()->GetItem( aPosition, 0, JUNCTION_T );
 
     if( item )
     {
@@ -144,7 +144,8 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), WIRE_T | BUS_T | BUS_ENTRY_T );
+    item = GetScreen()->GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ),
+                                 WIRE_T | BUS_T | BUS_ENTRY_T );
 
     if( item )  // We have found a wire: Search for a connected pin at the same location
     {
@@ -164,17 +165,20 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), DRAW_ITEM_T );
+    item = GetScreen()->GetItem( aPosition, 0, DRAW_ITEM_T );
+
     if( item )
     {
         ClearMsgPanel();
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), FIELD_T );
+    item = GetScreen()->GetItem( aPosition, 0, FIELD_T );
 
     if( item )
     {
+        wxASSERT( item->Type() == SCH_FIELD_T );
+
         SCH_FIELD* Field = (SCH_FIELD*) item;
         LibItem = (SCH_COMPONENT*) Field->GetParent();
         LibItem->DisplayInfo( this );
@@ -182,7 +186,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), LABEL_T | TEXT_T );
+    item = GetScreen()->GetItem( aPosition, 0, LABEL_T | TEXT_T );
 
     if( item )
     {
@@ -204,7 +208,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
             return LibItem;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), COMPONENT_T );
+    item = GetScreen()->GetItem( aPosition, 0, COMPONENT_T );
 
     if( item )
     {
@@ -214,7 +218,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), SHEET_T );
+    item = GetScreen()->GetItem( aPosition, 0, SHEET_T );
 
     if( item )
     {
@@ -222,7 +226,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin
         return item;
     }
 
-    item = (SCH_ITEM*) PickStruct( aPosition, GetScreen(), NO_FILTER_T );
+    item = GetScreen()->GetItem( aPosition );
 
     if( item )
         return item;
@@ -295,7 +299,7 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
             OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
             OnHotKey( aDC, aHotKey, aPosition, NULL );
@@ -368,7 +372,7 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
             OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
             OnHotKey( aDC, aHotKey, aPosition, NULL );
@@ -441,7 +445,7 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        if( screen->GetCurItem() && screen->GetCurItem()->m_Flags )
+        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
             OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
             OnHotKey( aDC, aHotKey, aPosition, NULL );

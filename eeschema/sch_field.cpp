@@ -447,10 +447,10 @@ void SCH_FIELD::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
 {
-    // Do not hit test hidden fields.
-    if( !IsVisible() )
+    // Do not hit test hidden or empty fields.
+    if( !(aFilter & FIELD_T) || !IsVisible() || IsVoid() )
         return false;
 
     EDA_Rect rect = GetBoundingBox();

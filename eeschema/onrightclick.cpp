@@ -64,7 +64,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
 
     // Try to locate items at cursor position.
-    if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+    if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
     {
         DrawStruct = LocateAndShowItem( aPosition, false );
 
@@ -81,7 +81,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     // If Command in progress: add "cancel" and "end tool" menu
     if(  GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( DrawStruct && DrawStruct->GetFlags() )
         {
             ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
         }
@@ -93,7 +93,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
     else
     {
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( DrawStruct && DrawStruct->GetFlags() )
         {
             ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
             PopMenu->AppendSeparator();
@@ -112,7 +112,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     GetScreen()->SetCurItem( DrawStruct );
 
-    int  flags  = DrawStruct->m_Flags;
+    int  flags  = DrawStruct->GetFlags();
     bool is_new = (flags & IS_NEW) ? TRUE : FALSE;
 
     switch( DrawStruct->Type() )
@@ -228,7 +228,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
     wxString msg;
 
-    if( !Field->m_Flags )
+    if( !Field->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Field" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -259,7 +259,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     if( libEntry )
         libComponent = libEntry->GetComponent();
 
-    if( !Component->m_Flags )
+    if( !Component->GetFlags() )
     {
         msg = _( "Move Component" );
         msg << wxT( " " ) << Component->GetField( REFERENCE )->m_Text;
@@ -325,7 +325,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, editmenu, ID_POPUP_SCH_GENERIC_EDIT_CMP,
                                _( "Edit Component" ), edit_component_xpm );
 
-    if( !Component->m_Flags )
+    if( !Component->GetFlags() )
     {
         msg = AddHotkeyName( _( "Copy Component" ), s_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
@@ -344,7 +344,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
-    if( !GLabel->m_Flags )
+    if( !GLabel->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Global Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -381,7 +381,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
-    if( !HLabel->m_Flags )
+    if( !HLabel->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -417,7 +417,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     wxMenu*  menu_change_type = new wxMenu;
     wxString msg;
 
-    if( !Label->m_Flags )
+    if( !Label->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -453,7 +453,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     wxString msg;
     wxMenu*  menu_change_type = new wxMenu;
 
-    if( !Text->m_Flags )
+    if( !Text->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move Text" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -490,19 +490,20 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
 void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAME* frame )
 {
     bool     is_new = Junction->IsNew();
+    SCH_SCREEN* screen = frame->GetScreen();
     wxString msg;
 
     if( !is_new )
     {
-        if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(),
-                        WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
+        if( screen->GetItem( screen->GetCrossHairPosition(), 0,
+                             WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
 
     msg = AddHotkeyName( _( "Delete Junction" ), s_Schematic_Hokeys_Descr, HK_DELETE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_xpm );
 
-    if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(), WIRE_T | BUS_T ) )
+    if( screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T | BUS_T ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
@@ -514,7 +515,8 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
     bool     is_new = Wire->IsNew();
-    wxPoint  pos    = frame->GetScreen()->GetCrossHairPosition();
+    SCH_SCREEN* screen = frame->GetScreen();
+    wxPoint  pos    = screen->GetCrossHairPosition();
     wxString msg;
 
     if( is_new )
@@ -532,8 +534,8 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
                   delete_connection_xpm );
 
-    if( PickStruct( frame->GetScreen()->GetCrossHairPosition(), frame->GetScreen(),
-                    WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
+    if( screen->GetItem( screen->GetCrossHairPosition(), 0,
+                         WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
 
     PopMenu->AppendSeparator();
@@ -582,7 +584,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 {
     wxString msg;
 
-    if( !Sheet->m_Flags )
+    if( !Sheet->GetFlags() )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ENTER_SHEET, _( "Enter Sheet" ), enter_sheet_xpm );
         PopMenu->AppendSeparator();
@@ -594,7 +596,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_sheet_xpm );
     }
 
-    if( Sheet->m_Flags )
+    if( Sheet->GetFlags() )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_END_SHEET, _( "Place Sheet" ), apply_xpm );
     }
@@ -623,7 +625,7 @@ void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 {
     wxString msg;
 
-    if( !PinSheet->m_Flags )
+    if( !PinSheet->GetFlags() )
     {
         msg = AddHotkeyName( _( "Move PinSheet" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
@@ -632,7 +634,7 @@ void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_PINSHEET, _( "Edit PinSheet" ), edit_xpm );
 
-    if( !PinSheet->m_Flags )
+    if( !PinSheet->GetFlags() )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete PinSheet" ), delete_pinsheet_xpm );
 }
 

@@ -26,7 +26,6 @@
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer );
-static bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos );
 static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
 SCH_ITEM* s_OldWiresList;
@@ -92,7 +91,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     SCH_LINE* oldsegment, * newsegment, * nextsegment;
     wxPoint   cursorpos = GetScreen()->GetCrossHairPosition();
 
-    if( GetScreen()->GetCurItem() && (GetScreen()->GetCurItem()->m_Flags == 0) )
+    if( GetScreen()->GetCurItem() && (GetScreen()->GetCurItem()->GetFlags() == 0) )
         GetScreen()->SetCurItem( NULL );
 
     if( GetScreen()->GetCurItem() )
@@ -134,12 +133,12 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
             break;
         }
 
-        newsegment->m_Flags = IS_NEW;
+        newsegment->SetFlags( IS_NEW );
 
         if( g_HVLines ) // We need 2 segments to go from a given start pin to an end point
         {
             nextsegment = new SCH_LINE( *newsegment );
-            nextsegment->m_Flags = IS_NEW;
+            nextsegment->SetFlags( IS_NEW );
             newsegment->SetNext( nextsegment );
             nextsegment->SetBack( newsegment );
         }
@@ -199,8 +198,9 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         }
 
         newsegment->m_End   = cursorpos;
-        oldsegment->m_Flags = SELECTED;
-        newsegment->m_Flags = IS_NEW;
+        oldsegment->ClearFlags( IS_NEW );
+        oldsegment->SetFlags( SELECTED );
+        newsegment->SetFlags( IS_NEW );
         GetScreen()->SetCurItem( newsegment );
         DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
@@ -210,7 +210,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
          * (tested when the connection will be finished)*/
         if( oldsegment->m_Start == s_ConnexionStartPoint )
         {
-            if( IsJunctionNeeded( this, s_ConnexionStartPoint ) )
+            if( GetScreen()->IsJunctionNeeded( s_ConnexionStartPoint ) )
                 AddJunction( DC, s_ConnexionStartPoint );
         }
     }
@@ -291,28 +291,28 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
 
     while( segment )
     {
-        if( segment->m_Flags )
+        if( segment->GetFlags() )
         {
             if( !m_itemToRepeat )
                 m_itemToRepeat = segment;
         }
 
-        segment->m_Flags = 0;
+        segment->ClearFlags();
         segment = segment->Next();
     }
 
     // Automatic place of a junction on the end point, if needed
     if( lastsegment )
     {
-        if( IsJunctionNeeded( this, end_point ) )
+        if( GetScreen()->IsJunctionNeeded( end_point ) )
             AddJunction( DC, end_point );
-        else if( IsJunctionNeeded( this, alt_end_point ) )
+        else if( GetScreen()->IsJunctionNeeded( alt_end_point ) )
             AddJunction( DC, alt_end_point );
     }
 
     /* Automatic place of a junction on the start point if necessary because
      * the cleanup can suppress intermediate points by merging wire segments */
-    if( IsJunctionNeeded( this, s_ConnexionStartPoint ) )
+    if( GetScreen()->IsJunctionNeeded( s_ConnexionStartPoint ) )
         AddJunction( DC, s_ConnexionStartPoint );
 
     GetScreen()->TestDanglingEnds( DrawPanel, DC );
@@ -500,14 +500,8 @@ static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
         parent->SetRepeatItem( NULL );
     }
 
-    /* Clear m_Flags which is used in edit functions: */
-    SCH_ITEM* item = screen->GetDrawItems();
-
-    while( item )
-    {
-        item->m_Flags = 0;
-        item = item->Next();
-    }
+    // Clear flags used in edit functions.
+    screen->ClearDrawingState();
 }
 
 
@@ -526,7 +520,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     {
         wxPoint pos = GetScreen()->GetCrossHairPosition() -
             ( (SCH_COMPONENT*) m_itemToRepeat )->m_Pos;
-        m_itemToRepeat->m_Flags = IS_NEW;
+        m_itemToRepeat->SetFlags( IS_NEW );
         ( (SCH_COMPONENT*) m_itemToRepeat )->m_TimeStamp = GetTimeStamp();
         m_itemToRepeat->Move( pos );
         m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
@@ -546,7 +540,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         GetScreen()->TestDanglingEnds();
         m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         SaveCopyInUndoList( m_itemToRepeat, UR_NEW );
-        m_itemToRepeat->m_Flags = 0;
+        m_itemToRepeat->ClearFlags();
     }
 }
 
@@ -601,7 +595,7 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
     switch( layer )
     {
     case LAYER_BUS:
-        item = PickStruct( pos, screen, BUS_T );
+        item = screen->GetItem( pos, 0, BUS_T );
 
         if( item )
             return true;
@@ -618,13 +612,14 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
         break;
 
     case LAYER_NOTES:
-        item = PickStruct( pos, screen, DRAW_ITEM_T );
+        item = screen->GetItem( pos, 0, DRAW_ITEM_T );
         if( item )
             return true;
         break;
 
     case LAYER_WIRE:
-        item = PickStruct( pos, screen, BUS_ENTRY_T | JUNCTION_T );
+        item = screen->GetItem( pos, MAX( g_DrawDefaultLineThickness, 3 ),
+                                BUS_ENTRY_T | JUNCTION_T );
 
         if( item )
             return true;
@@ -643,12 +638,12 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
                 return true;
         }
 
-        item = PickStruct( pos, screen, WIRE_T );
+        item = screen->GetItem( pos, 0, WIRE_T );
 
         if( item )
             return true;
 
-        item = PickStruct( pos, screen, LABEL_T );
+        item = screen->GetItem( pos, 0, LABEL_T );
         if( item && (item->Type() != SCH_TEXT_T)
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
            && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
@@ -668,32 +663,6 @@ static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
 
     default:
         break;
-    }
-
-    return false;
-}
-
-
-/* Return True when a wire is located at pos "pos" if
- *  - there is no junction.
- *  - The wire has no ends at pos "pos",
- *      and therefore it is considered as no connected.
- *  - One (or more) wire has one end at pos "pos"
- *  or
- *  - a pin is on location pos
- */
-bool IsJunctionNeeded( SCH_EDIT_FRAME* frame, wxPoint& pos )
-{
-    if( PickStruct( pos, frame->GetScreen(), JUNCTION_T ) )
-        return false;
-
-    if( PickStruct( pos, frame->GetScreen(), WIRE_T | EXCLUDE_ENDPOINTS_T ) )
-    {
-        if( PickStruct( pos, frame->GetScreen(), WIRE_T | ENDPOINTS_ONLY_T ) )
-            return true;
-
-        if( frame->GetScreen()->GetPin( pos, NULL, true ) )
-            return true;
     }
 
     return false;

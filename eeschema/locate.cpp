@@ -23,10 +23,6 @@
 #include "template_fieldnames.h"
 
 
-static SCH_ITEM* LastSnappedStruct = NULL;
-static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList );
-
-
 /**
  * Search the smaller (considering its area) component under the mouse
  * cursor or the pcb cursor
@@ -36,289 +32,43 @@ static bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawLi
  */
 SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 {
-    SCH_COMPONENT* component = NULL, * lastcomponent = NULL;
-    SCH_ITEM*      DrawList;
-    EDA_Rect       BoundaryBox;
-    float          sizeref = 0, sizecurr;
+    double area;
+    EDA_Rect rect;
+    PICKED_ITEMS_LIST itemList;
+    SCH_COMPONENT* component = NULL;
+    SCH_COMPONENT* lastcomponent = NULL;
 
-    DrawList = Screen->GetDrawItems();
-
-    while( DrawList )
+    if( Screen->GetItems( Screen->RefPos( true ), itemList, COMPONENT_T ) == 0 )
     {
-        if( !SnapPoint2( Screen->RefPos( true ), COMPONENT_T, DrawList ) )
-        {
-            if( !SnapPoint2( Screen->GetCrossHairPosition(), COMPONENT_T, DrawList ) )
-                break;
-        }
+        if( Screen->GetItems( Screen->GetCrossHairPosition(), itemList, COMPONENT_T ) == 0 )
+            return NULL;
+    }
 
-        component = (SCH_COMPONENT*) LastSnappedStruct;
-        DrawList  = component->Next();
+    if( itemList.GetCount() == 1 )
+        return (SCH_COMPONENT*) itemList.GetPickedItem( 0 );
 
-        if( lastcomponent == NULL )  // First time a component is located
+    for( size_t i = 0;  i < itemList.GetCount();  i++ )
+    {
+        component = (SCH_COMPONENT*) itemList.GetPickedItem( i );
+
+        if( lastcomponent == NULL )  // First component
         {
             lastcomponent = component;
-            BoundaryBox   = lastcomponent->GetBoundingBox();
-            sizeref = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
+            rect = lastcomponent->GetBoundingBox();
+            area = ABS( (double) rect.GetWidth() * (double) rect.GetHeight() );
         }
         else
         {
-            BoundaryBox = component->GetBoundingBox();
-            sizecurr    = ABS( (float) BoundaryBox.GetWidth() * BoundaryBox.GetHeight() );
+            rect = component->GetBoundingBox();
+            double tmp = ABS( (double) rect.GetWidth() * (double) rect.GetHeight() );
 
-            if( sizeref > sizecurr )   // a smallest component is found
+            if( area > tmp )         // a smaller component is found
             {
-                sizeref = sizecurr;
+                area = tmp;
                 lastcomponent = component;
             }
         }
     }
 
     return lastcomponent;
-}
-
-
-/* Search an item at pos refpos
- *  SearchMask = (bitwise OR):
- *  COMPONENT_T
- *  WIRE_T
- *  BUS_T
- *  BUS_ENTRY_T
- *  JUNCTION_T
- *  DRAW_ITEM_T
- *  TEXT_T
- *  LABEL_T
- *  SHEETITEM
- *  MARKER_T
- *  NO_CONNECT_T
- *  SEARCH_PINITEM
- *  SHEETLABEL_T
- *  FIELDCMPITEM
- *
- *  if EXCLUDE_ENDPOINTS_T is set, in wire or bus search and locate,
- *  start and end points are not included in search
- *  if ENDPOINTS_ONLY_T is set, in wire or bus search and locate,
- *  only start and end points are included in search
- *
- *
- *  Return:
- *          pointer on item found or NULL
- *
- */
-SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask )
-{
-    if( screen == NULL || screen->GetDrawItems() == NULL )
-        return NULL;
-
-    if( SnapPoint2( refpos, SearchMask, screen->GetDrawItems() ) )
-    {
-        return LastSnappedStruct;
-    }
-
-    return NULL;
-}
-
-
-/*****************************************************************************
-* Routine to search all objects for the closest point to a given point, in   *
-* drawing space, and snap it to that points if closer than SnapDistance.     *
-* Note we use L1 norm as distance measure, as it is the fastest.             *
-* This routine updates LastSnappedStruct to the last object used in to snap  *
-* a point. This variable is global to this module only (see above).          *
-* The routine returns true if point was snapped.                             *
-*****************************************************************************/
-bool SnapPoint2( const wxPoint& aPosRef, int SearchMask, SCH_ITEM* DrawList )
-{
-    for( ; DrawList != NULL; DrawList = DrawList->Next() )
-    {
-        int hitminDist = MAX( g_DrawDefaultLineThickness, 3 );
-
-        switch( DrawList->Type() )
-        {
-        case SCH_POLYLINE_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_POLYLINE*) DrawList )
-            if( !( SearchMask & (DRAW_ITEM_T | WIRE_T | BUS_T) ) )
-                break;
-
-            for( unsigned i = 0; i < STRUCT->GetCornerCount() - 1; i++ )
-            {
-                if( TestSegmentHit( aPosRef, STRUCT->m_PolyPoints[i],
-                                    STRUCT->m_PolyPoints[i + 1], hitminDist ) )
-                {
-                    LastSnappedStruct = DrawList;
-                    return true;
-                }
-            }
-
-            break;
-
-        case SCH_LINE_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_LINE*) DrawList )
-            if( !( SearchMask & (DRAW_ITEM_T | WIRE_T | BUS_T) ) )
-                break;
-
-            if( TestSegmentHit( aPosRef, STRUCT->m_Start, STRUCT->m_End, 0 ) )
-            {
-                if( ( ( SearchMask & DRAW_ITEM_T ) && ( STRUCT->GetLayer() == LAYER_NOTES ) )
-                   || ( ( SearchMask & WIRE_T ) && ( STRUCT->GetLayer() == LAYER_WIRE ) )
-                   || ( ( SearchMask & BUS_T ) && ( STRUCT->GetLayer() == LAYER_BUS ) ) )
-                {
-                    if( SearchMask & EXCLUDE_ENDPOINTS_T && STRUCT->IsEndPoint( aPosRef ) )
-                        break;
-
-                    if( SearchMask & ENDPOINTS_ONLY_T && !STRUCT->IsEndPoint( aPosRef ) )
-                        break;
-
-                    LastSnappedStruct = DrawList;
-                    return true;
-                }
-            }
-            break;
-
-
-        case SCH_BUS_ENTRY_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_BUS_ENTRY*) DrawList )
-            if( !( SearchMask & (BUS_ENTRY_T) ) )
-                break;
-
-            if( TestSegmentHit( aPosRef, STRUCT->m_Pos, STRUCT->m_End(), hitminDist ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-        case SCH_JUNCTION_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_JUNCTION*) DrawList )
-            if( !(SearchMask & JUNCTION_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-        case SCH_NO_CONNECT_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
-            if( !(SearchMask & NO_CONNECT_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-        case SCH_MARKER_T:
-        {
-            #undef  STRUCT
-            #define STRUCT ( (SCH_MARKER*) DrawList )
-            if( !(SearchMask & MARKER_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-        }
-
-        case SCH_TEXT_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_TEXT*) DrawList )
-            if( !( SearchMask & TEXT_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-            #undef  STRUCT
-            #define STRUCT ( (SCH_TEXT*) DrawList ) // SCH_TEXT is the base
-                                                    // class of these labels
-            if( !(SearchMask & LABEL_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-        case SCH_COMPONENT_T:
-            if( !( SearchMask & (COMPONENT_T | FIELD_T) ) )
-                break;
-
-            if( SearchMask & FIELD_T )
-            {
-                SCH_COMPONENT* DrawLibItem = (SCH_COMPONENT*) DrawList;
-                for( int i = REFERENCE; i < DrawLibItem->GetFieldCount(); i++ )
-                {
-                    SCH_FIELD* field = DrawLibItem->GetField( i );
-
-                    if( field->m_Attributs & TEXT_NO_VISIBLE )
-                        continue;
-
-                    if( field->IsVoid() )
-                        continue;
-
-                    EDA_Rect BoundaryBox = field->GetBoundingBox();
-
-                    if( BoundaryBox.Contains( aPosRef ) )
-                    {
-                        LastSnappedStruct = field;
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                #undef  STRUCT
-                #define STRUCT ( (SCH_COMPONENT*) DrawList )
-                EDA_Rect BoundaryBox = STRUCT->GetBoundingBox();
-
-                if( BoundaryBox.Contains( aPosRef ) )
-                {
-                    LastSnappedStruct = DrawList;
-                    return true;
-                }
-            }
-            break;
-
-        case SCH_SHEET_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_SHEET*) DrawList )
-            if( !(SearchMask & SHEET_T) )
-                break;
-            if( STRUCT->HitTest( aPosRef ) )
-            {
-                LastSnappedStruct = DrawList;
-                return true;
-            }
-            break;
-
-        default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "SnapPoint2() error: unexpected struct type %d (" ),
-                        DrawList->Type() );
-            msg << DrawList->GetClass() << wxT( ")" );
-            wxMessageBox( msg );
-            break;
-        }
-        }
-    }
-
-    return FALSE;
 }

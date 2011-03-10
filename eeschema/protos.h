@@ -2,6 +2,8 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
+#include "class_undoredo_container.h"
+
 #include "colors.h"
 
 
@@ -50,13 +52,9 @@ void SnapLibItemPoint( int            OrigX,
 
 bool LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* DrawLibItem );
 
-/************/
-/* BLOCK.CPP */
-/************/
-void DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct );
-
 
 // operations_on_item_lists.cpp
+void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 
 /**
  * Function DuplicateStruct
@@ -74,38 +72,6 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 /*************/
 
 SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen );
-
-/* function PickStruct:
- *   Search at location pos
- *
- *   SearchMask = (bitwise OR):
- *   LIBITEM
- *   WIREITEM
- *   BUSITEM
- *   RACCORDITEM
- *   JUNCTIONITEM
- *   DRAWITEM
- *   TEXTITEM
- *   LABELITEM
- *   SHEETITEM
- *   MARKERITEM
- *   NOCONNECTITEM
- *   SEARCH_PINITEM
- *   SHEETLABELITEM
- *   FIELDCMPITEM
- *
- *   if EXCLUDE_WIRE_BUS_ENDPOINTS is set, in wire ou bus search and locate,
- *   start and end points are not included in search
- *   if WIRE_BUS_ENDPOINTS_ONLY is set, in wire ou bus search and locate,
- *   only start and end points are included in search
- *
- *
- *   Return:
- *     Pointer to list of pointers to structures if several items are selected.
- *     Pointer to the structure if only 1 item is selected.
- *     NULL if no items are selects.
- */
-SCH_ITEM* PickStruct( const wxPoint& refpos, SCH_SCREEN* screen, int SearchMask );
 
 
 /***************/
@@ -141,14 +107,6 @@ bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
 /* free the draw list screen->GetDrawItems() and the subhierarchies
  *   clear the screen datas (filenames ..)
  */
-
-/*************/
-/* DELETE.CPP */
-/*************/
-
-bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC );
-void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Window );
-void DeleteAllMarkers( int type );
 
 
 /**************/

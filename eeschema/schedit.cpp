@@ -204,7 +204,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item == NULL )
             break;
 
-        DeleteStruct( DrawPanel, &dc, item );
+        DeleteItem( item );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
         screen->TestDanglingEnds( DrawPanel, &dc );

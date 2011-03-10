@@ -17,98 +17,36 @@
 #include "sch_text.h"
 
 
-// Imported function:
-void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
-
-
-/*
- * Mark to "CANDIDATE" all wires or junction connected to "segment" in list
- * "ListStruct"
- * Search wire stop at an any  pin
- *
- * Used by SCH_EDIT_FRAME::DeleteConnection()
- */
-static bool MarkConnected( SCH_EDIT_FRAME* frame, SCH_ITEM* ListStruct, SCH_LINE* segment )
-{
-    EDA_ITEM* Struct;
-
-    for( Struct = ListStruct; Struct != NULL; Struct = Struct->Next() )
-    {
-        if( Struct->m_Flags )
-            continue;
-        if( Struct->Type() == SCH_JUNCTION_T )
-        {
-        #define JUNCTION ( (SCH_JUNCTION*) Struct )
-            if( segment->IsEndPoint( JUNCTION->m_Pos ) )
-                Struct->m_Flags |= CANDIDATE;
-            continue;
-        #undef JUNCTION
-        }
-
-        if( Struct->Type() != SCH_LINE_T )
-            continue;
-
-        #define SEGM ( (SCH_LINE*) Struct )
-        if( segment->IsEndPoint( SEGM->m_Start ) )
-        {
-            if( !frame->GetScreen()->GetPin( SEGM->m_Start, NULL, true ) )
-            {
-                Struct->m_Flags |= CANDIDATE;
-                MarkConnected( frame, ListStruct, SEGM );
-            }
-        }
-        if( segment->IsEndPoint( SEGM->m_End ) )
-        {
-            if( !frame->GetScreen()->GetPin( SEGM->m_End, NULL, true ) )
-            {
-                Struct->m_Flags |= CANDIDATE;
-                MarkConnected( frame, ListStruct, SEGM );
-            }
-        }
-        #undef SEGM
-    }
-
-    return TRUE;
-}
-
-
 /*
  * Delete a connection, i.e wires or bus connected
  * stop on a node (more than 2 wires (bus) connected)
  */
 void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 {
-    SCH_SCREEN* screen = GetScreen();
-    wxPoint refpos = screen->GetCrossHairPosition();
-    SCH_ITEM* DelStruct;
+    SCH_ITEM* item;
+    EDA_ITEM* tmp;
     PICKED_ITEMS_LIST pickList;
+    SCH_SCREEN* screen = GetScreen();
+    wxPoint pos = screen->GetCrossHairPosition();
 
-    /* Clear .m_Flags member for all items */
+    // Clear flags member for all items.
     screen->ClearDrawingState();
     screen->BreakSegmentsOnJunctions();
 
-    /* Locate all the wires, bus or junction under the mouse cursor, and put
-     * them in a list of items to delete
-     */
-    ITEM_PICKER picker( NULL, UR_DELETED );
-
     // Save the list entry point of this screen
     SCH_ITEM* savedItems = screen->GetDrawItems();
-    DelStruct = screen->GetDrawItems();
+    item = screen->GetDrawItems();
 
-    while( DelStruct
-           && ( DelStruct = PickStruct( screen->GetCrossHairPosition(), screen,
-                                        JUNCTION_T | WIRE_T | BUS_T ) ) != NULL )
+    while( item && ( item = screen->GetItem( pos, 0, JUNCTION_T | WIRE_T | BUS_T ) ) != NULL )
     {
-        DelStruct->m_Flags = SELECTEDNODE | STRUCT_DELETED;
+        item->SetFlags( SELECTEDNODE | STRUCT_DELETED );
 
         /* Put this structure in the picked list: */
-        picker.m_PickedItem = DelStruct;
-        picker.m_PickedItemType = DelStruct->Type();
+        ITEM_PICKER picker( item, UR_DELETED );
         pickList.PushItem( picker );
 
-        DelStruct  = DelStruct->Next();
-        screen->SetDrawItems( DelStruct );
+        item = item->Next();
+        screen->SetDrawItems( item );
     }
 
     screen->SetDrawItems( savedItems ); // Restore the list entry point.
@@ -117,150 +55,134 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
      */
     if( DeleteFullConnection )
     {
-        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
-             DelStruct = DelStruct->Next() )
+        SCH_LINE* segment;
+
+        for( item = screen->GetDrawItems(); item != NULL; item = item->Next() )
         {
-            if( !(DelStruct->m_Flags & SELECTEDNODE) )
+            if( !(item->GetFlags() & SELECTEDNODE) )
                 continue;
 
-            #define SEGM ( (SCH_LINE*) DelStruct )
-
-            if( DelStruct->Type() != SCH_LINE_T )
+            if( item->Type() != SCH_LINE_T )
                 continue;
 
-            MarkConnected( this, screen->GetDrawItems(), SEGM );
-            #undef SEGM
+            screen->MarkConnections( (SCH_LINE*) item );
         }
 
         // Search all removable wires (i.e wire with one new dangling end )
-        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
-             DelStruct = DelStruct->Next() )
+        for( item = screen->GetDrawItems(); item != NULL; item = item->Next() )
         {
-            bool noconnect = FALSE;
+            bool noconnect = false;
 
-            if( DelStruct->m_Flags & STRUCT_DELETED )
+            if( item->GetFlags() & STRUCT_DELETED )
                 continue;                                   // Already seen
 
-            if( !(DelStruct->m_Flags & CANDIDATE) )
+            if( !(item->GetFlags() & CANDIDATE) )
                 continue;                                   // Already seen
 
-            if( DelStruct->Type() != SCH_LINE_T )
+            if( item->Type() != SCH_LINE_T )
                 continue;
 
-            DelStruct->m_Flags |= SKIP_STRUCT;
-            #define SEGM ( (SCH_LINE*) DelStruct )
+            item->SetFlags( SKIP_STRUCT );
+
+            segment = (SCH_LINE*) item;
 
             /* Test the SEGM->m_Start point: if this point was connected to
              * an STRUCT_DELETED wire, and now is not connected, the wire can
              * be deleted */
-            EDA_ITEM* removed_struct;
-            for( removed_struct = screen->GetDrawItems();
-                 removed_struct != NULL;
-                 removed_struct = removed_struct->Next() )
+            SCH_LINE* testSegment = NULL;
+
+            for( tmp = screen->GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
             {
-                if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
+                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
                     continue;
 
-                if( removed_struct->Type() != SCH_LINE_T )
+                if( tmp->Type() != SCH_LINE_T )
                     continue;
 
-                #define WIRE ( (SCH_LINE*) removed_struct )
-                if( WIRE->IsEndPoint( SEGM->m_Start ) )
+                testSegment = (SCH_LINE*) tmp;
+
+                if( testSegment->IsEndPoint( segment->m_Start ) )
                     break;
             }
 
-            if( WIRE && !screen->CountConnectedItems( SEGM->m_Start, true ) )
-                noconnect = TRUE;
+            if( testSegment && !screen->CountConnectedItems( segment->m_Start, true ) )
+                noconnect = true;
 
             /* Test the SEGM->m_End point: if this point was connected to
              * an STRUCT_DELETED wire, and now is not connected, the wire
              * can be deleted */
-            for( removed_struct = screen->GetDrawItems();
-                 removed_struct != NULL;
-                 removed_struct = removed_struct->Next() )
+            for( tmp = screen->GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
             {
-                if( ( removed_struct->m_Flags & STRUCT_DELETED ) == 0 )
+                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
                     continue;
-                if( removed_struct->Type() != SCH_LINE_T )
+
+                if( tmp->Type() != SCH_LINE_T )
                     continue;
-                if( WIRE->IsEndPoint( SEGM->m_End ) )
+
+                if( testSegment->IsEndPoint( segment->m_End ) )
                     break;
             }
 
-            if( removed_struct && !screen->CountConnectedItems( SEGM->m_End, true ) )
-                noconnect = TRUE;
+            if( tmp && !screen->CountConnectedItems( segment->m_End, true ) )
+                noconnect = true;
 
-            DelStruct->m_Flags &= ~SKIP_STRUCT;
+            item->ClearFlags( SKIP_STRUCT );
 
             if( noconnect )
             {
-                DelStruct->m_Flags |= STRUCT_DELETED;
+                item->SetFlags( STRUCT_DELETED );
                 /* Put this structure in the picked list: */
-                picker.m_PickedItem = DelStruct;
-                picker.m_PickedItemType = DelStruct->Type();
+                ITEM_PICKER picker( item, UR_DELETED );
                 pickList.PushItem( picker );
 
-                DelStruct = screen->GetDrawItems();
+                item = screen->GetDrawItems();
             }
-            #undef SEGM
         }
 
         // Delete redundant junctions (junctions which connect < 3 end wires
         // and no pin are removed)
-        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
-             DelStruct = DelStruct->Next() )
+        for( item = screen->GetDrawItems(); item != NULL; item = item->Next() )
         {
-            if( DelStruct->m_Flags & STRUCT_DELETED )
+            if( item->GetFlags() & STRUCT_DELETED )
                 continue;
 
-            if( !(DelStruct->m_Flags & CANDIDATE) )
+            if( !(item->GetFlags() & CANDIDATE) )
                 continue;
 
-            if( DelStruct->Type() == SCH_JUNCTION_T )
+            if( item->Type() != SCH_JUNCTION_T )
+                continue;
+
+            SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
+
+            if( screen->CountConnectedItems( junction->m_Pos, false ) <= 2 )
             {
-                #define JUNCTION ( (SCH_JUNCTION*) DelStruct )
-
-                if( screen->CountConnectedItems( JUNCTION->m_Pos, false ) <= 2 )
-                {
-                    DelStruct->m_Flags |= STRUCT_DELETED;
-
-                    /* Put this structure in the picked list: */
-                    picker.m_PickedItem = DelStruct;
-                    picker.m_PickedItemType = DelStruct->Type();
-                    pickList.PushItem( picker );
-                }
-                #undef JUNCTION
-            }
-        }
-
-        // Delete labels attached to wires
-        wxPoint pos = screen->GetCrossHairPosition();
-
-        for( DelStruct = screen->GetDrawItems(); DelStruct != NULL;
-             DelStruct = DelStruct->Next() )
-        {
-            if( DelStruct->m_Flags & STRUCT_DELETED )
-                continue;
-
-            if( DelStruct->Type() != SCH_LABEL_T )
-                continue;
-
-            GetScreen()->SetCrossHairPosition( ( (SCH_TEXT*) DelStruct )->m_Pos );
-            EDA_ITEM* TstStruct = PickStruct( screen->GetCrossHairPosition(), GetScreen(),
-                                              WIRE_T | BUS_T );
-
-            if( TstStruct && TstStruct->m_Flags & STRUCT_DELETED )
-            {
-                DelStruct->m_Flags |= STRUCT_DELETED;
+                item->SetFlags( STRUCT_DELETED );
 
                 /* Put this structure in the picked list: */
-                picker.m_PickedItem = DelStruct;
-                picker.m_PickedItemType = DelStruct->Type();
+                ITEM_PICKER picker( item, UR_DELETED );
                 pickList.PushItem( picker );
             }
         }
 
-        screen->SetCrossHairPosition( pos );
+        for( item = screen->GetDrawItems(); item != NULL;  item = item->Next() )
+        {
+            if( item->GetFlags() & STRUCT_DELETED )
+                continue;
+
+            if( item->Type() != SCH_LABEL_T )
+                continue;
+
+            tmp = screen->GetItem( ( (SCH_TEXT*) item )->m_Pos, 0, WIRE_T | BUS_T );
+
+            if( tmp && tmp->GetFlags() & STRUCT_DELETED )
+            {
+                item->SetFlags( STRUCT_DELETED );
+
+                /* Put this structure in the picked list: */
+                ITEM_PICKER picker( item, UR_DELETED );
+                pickList.PushItem( picker );
+            }
+        }
     }
 
     screen->ClearDrawingState();
@@ -273,139 +195,46 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 }
 
 
-/*
- * Locate and delete the item found under the mouse cursor
- * If more than one item found: the priority order is:
- *  1 : MARKER
- *  2 : JUNCTION
- *  2 : NOCONNECT
- *  3 : WIRE or BUS
- *  4 : GRAPHIC ITEM
- *  5 : TEXT
- *  6 : COMPONENT
- *  7 : SHEET
- *
- * return TRUE if an item was deleted
- */
-bool LocateAndDeleteItem( SCH_EDIT_FRAME* frame, wxDC* DC )
+bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
 {
-    SCH_ITEM* DelStruct;
-    SCH_SCREEN* screen = (SCH_SCREEN*) ( frame->GetScreen() );
-    bool item_deleted  = FALSE;
+    SCH_ITEM* item;
+    SCH_SCREEN* screen = GetScreen();
+    bool item_deleted  = false;
 
-    DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, MARKER_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, JUNCTION_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, NO_CONNECT_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, BUS_ENTRY_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, WIRE_T | BUS_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, DRAW_ITEM_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, TEXT_T | LABEL_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, COMPONENT_T );
-    if( DelStruct == NULL )
-        DelStruct = PickStruct( screen->GetCrossHairPosition(), screen, SHEET_T );
+    item = screen->GetItem( screen->GetCrossHairPosition(), 0, MARKER_T );
 
-    if( DelStruct )
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, JUNCTION_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, NO_CONNECT_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, BUS_ENTRY_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T | BUS_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, DRAW_ITEM_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, TEXT_T | LABEL_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, COMPONENT_T );
+
+    if( item == NULL )
+        item = screen->GetItem( screen->GetCrossHairPosition(), 0, SHEET_T );
+
+    if( item )
     {
-        frame->SetRepeatItem( NULL );
-        DeleteStruct( frame->DrawPanel, DC, DelStruct );
-        frame->GetScreen()->TestDanglingEnds( frame->DrawPanel, DC );
-        frame->OnModify( );
-        item_deleted = TRUE;
+        SetRepeatItem( NULL );
+        DeleteItem( item );
+        screen->TestDanglingEnds( DrawPanel, DC );
+        OnModify();
+        item_deleted = true;
     }
 
     return item_deleted;
-}
-
-
-/*
- * Remove definition of a structure in a linked list
- * Elements of Drawing
- *   DrawStruct * = pointer to the structure
- *   Screen = pointer on the screen of belonging
- *
- * Note:
- * SCH_SHEET_T structures for the screen and structures
- * Corresponding keys are not.
- * They must be treated separately
- */
-void EraseStruct( SCH_ITEM* DrawStruct, SCH_SCREEN* Screen )
-{
-    EDA_ITEM* DrawList;
-
-    if( DrawStruct == NULL )
-        return;
-
-    if( Screen == NULL )
-        return;
-
-    Screen->SetModify();
-
-    if( DrawStruct->Type() == SCH_SHEET_LABEL_T )
-    {
-        // This structure is attached to a sheet, get the parent sheet object.
-        SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) DrawStruct;
-        SCH_SHEET* sheet = sheetLabel->GetParent();
-        wxASSERT_MSG( sheet != NULL,
-                      wxT( "Sheet label parent not properly set, bad programmer!" ) );
-        sheet->RemoveLabel( sheetLabel );
-        return;
-    }
-    else
-    {
-        if( DrawStruct == Screen->GetDrawItems() )
-        {
-            Screen->SetDrawItems( DrawStruct->Next() );
-            SAFE_DELETE( DrawStruct );
-        }
-        else
-        {
-            DrawList = Screen->GetDrawItems();
-
-            while( DrawList && DrawList->Next() )
-            {
-                if( DrawList->Next() == DrawStruct )
-                {
-                    DrawList->SetNext( DrawStruct->Next() );
-                    SAFE_DELETE( DrawStruct );
-                    return;
-                }
-                DrawList = DrawList->Next();
-            }
-        }
-    }
-}
-
-
-void DeleteAllMarkers( int type )
-{
-    SCH_SCREEN* screen;
-    SCH_ITEM * DrawStruct, * NextStruct;
-    SCH_MARKER* Marker;
-    SCH_SCREENS ScreenList;
-
-    for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-    {
-        for( DrawStruct = screen->GetDrawItems(); DrawStruct != NULL; DrawStruct = NextStruct )
-        {
-            NextStruct = DrawStruct->Next();
-
-            if( DrawStruct->Type() != SCH_MARKER_T )
-                continue;
-
-            Marker = (SCH_MARKER*) DrawStruct;
-
-            if( Marker->GetMarkerType() != type )
-                continue;
-
-            /* Remove marker */
-            EraseStruct( DrawStruct, screen );
-        }
-    }
 }

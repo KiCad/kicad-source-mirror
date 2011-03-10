@@ -265,7 +265,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     SCH_SCREEN* screen = GetScreen();
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
-    bool        itemInEdit = screen->GetCurItem() && screen->GetCurItem()->m_Flags;
+    bool        itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetFlags();
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
     bool        notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
@@ -342,7 +342,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_DELETE:
         if( notBusy)
         {
-            LocateAndDeleteItem( this, aDC );
+            DeleteItemAtCrossHair( aDC );
             OnModify();
             GetScreen()->SetCurItem( NULL );
             GetScreen()->TestDanglingEnds( DrawPanel, aDC );
@@ -350,7 +350,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_REPEAT_LAST:
-        if( notBusy && m_itemToRepeat && ( m_itemToRepeat->m_Flags == 0 ) )
+        if( notBusy && m_itemToRepeat && ( m_itemToRepeat->GetFlags() == 0 ) )
             RepeatDrawItem( aDC );
         break;
 
@@ -701,7 +701,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             if( aItem->Type() == SCH_JUNCTION_T )
             {
                 // If it's a junction, pick the underlying wire instead
-                aItem = PickStruct( GetScreen()->GetCrossHairPosition(), GetScreen(), WIRE_T );
+                aItem = screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T );
             }
 
             if( aItem == NULL )
@@ -716,7 +716,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             break;
         }
 
-        if( aItem && (aItem->m_Flags == 0) )
+        if( aItem && (aItem->GetFlags() == 0) )
         {
             GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
 
@@ -777,8 +777,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem == NULL )
         {
-            aItem = PickStruct( GetScreen()->GetCrossHairPosition(), GetScreen(),
-                                COMPONENT_T | TEXT_T | LABEL_T | SHEET_T );
+            aItem = screen->GetItem( screen->GetCrossHairPosition(), 0,
+                                     COMPONENT_T | TEXT_T | LABEL_T | SHEET_T );
             if( aItem == NULL )
                 break;
 
@@ -857,7 +857,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     cmd.SetEventObject( this );
 
-    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->m_Flags;
+    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
 
     if( aHotKey == 0 )
         return;
@@ -932,8 +932,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_REPEAT_LAST:
-        if( m_lastDrawItem && (m_lastDrawItem->m_Flags == 0)
-           && ( m_lastDrawItem->Type() == LIB_PIN_T ) )
+        if( m_lastDrawItem && (m_lastDrawItem->GetFlags() == 0)
+            && ( m_lastDrawItem->Type() == LIB_PIN_T ) )
             RepeatPinItem( aDC, (LIB_PIN*) m_lastDrawItem );
          break;
 

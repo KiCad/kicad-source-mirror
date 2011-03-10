@@ -14,6 +14,7 @@ class LIB_PIN;
 class SCH_COMPONENT;
 class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
+class SCH_LINE;
 
 
 /* Max number of sheets in a hierarchy project: */
@@ -94,6 +95,29 @@ public:
      */
     int GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const;
 
+    /**
+     * Function FindItem
+     * checks \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
+     * @param aPosition Position in drawing units.
+     * @param aAccuracy The maximum distance within \a Position to check for an item.
+     * @param aFilter The type of items to find.
+     * @return The item found that meets the search criteria or NULL if none found.
+     */
+    SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
+                        int aFilter = NO_FILTER_T ) const;
+
+    /**
+     * Function GetItems
+     * checks \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
+     * @param aPosition Position in drawing units.
+     * @param aItemList The list to add found items to.
+     * @param aAccuracy The maximum distance within \a Position to check for an item.
+     * @param aFilter The type of items to find.
+     * @return The number of items found that meets the search criteria.
+     */
+    int GetItems( const wxPoint& aPosition, PICKED_ITEMS_LIST& aItemList, int aAccuracy = 0,
+                  int aFilter = NO_FILTER_T ) const;
+
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
@@ -112,6 +136,15 @@ public:
      * @param aItem - Item to be removed from schematic.
      */
     void RemoveFromDrawList( SCH_ITEM* aItem );
+
+    /**
+     * Function DeleteItem
+     * removes \a aItem from the linked list and deletes the object.  If \a aItem is
+     * is a schematic sheet label, it is removed from the screen associated with the
+     * sheet that contains the label to be deleted.
+     * @param aItem The schematic object to be deleted from the screen.
+     */
+    void DeleteItem( SCH_ITEM* aItem );
 
     bool CheckIfOnDrawList( SCH_ITEM* st );
 
@@ -148,6 +181,15 @@ public:
      * @param aWireList List of wire to replace the existing wires with.
      */
     void ReplaceWires( SCH_ITEM* aWireList );
+
+    /**
+     * Functions MarkConnections
+     * add all wires and junctions connected to \a aSegment which are not connected any
+     * component pin to \a aItemList.
+     * @param aSegment The segment to test for connections.
+     * @param aItemList List of items to add connections.
+     */
+    void MarkConnections( SCH_LINE* aSegment );
 
     /**
      * Function BreakSegment
@@ -227,7 +269,7 @@ public:
      * @return The pin item if found, otherwise NULL.
      */
     LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL,
-                     bool aEndPointOnly = false );
+                     bool aEndPointOnly = false ) const;
 
     /**
      * Function GetSheetLabel
@@ -268,6 +310,7 @@ public:
     int UpdatePickList();
 
     virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
+
     virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
     {
         BASE_SCREEN::InsertItem( aIter, (EDA_ITEM*) aItem );
@@ -323,9 +366,17 @@ public:
      */
     void SetDate( const wxString& aDate );
 
+    /**
+     * Function DeleteAllMarkers
+     * deletes all electronic rules check markers of \a aMarkerType from all the screens in
+     * the list.
+     * @param aType Type of markers to be deleted.
+     */
+    void DeleteAllMarkers( int aMarkerType );
+
 private:
-    void        AddScreenToList( SCH_SCREEN* aScreen );
-    void        BuildScreenList( EDA_ITEM* aItem );
+    void AddScreenToList( SCH_SCREEN* aScreen );
+    void BuildScreenList( EDA_ITEM* aItem );
 };
 
 #endif /* CLASS_SCREEN_H */

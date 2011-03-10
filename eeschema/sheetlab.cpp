@@ -244,36 +244,3 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
 
     return NewSheetLabel;
 }
-
-
-/*
- * Remove sheet label.
- *
- * This sheet label can not be put in a pile "undelete" because it would not
- * Possible to link it back it's 'SCH_SHEET' parent.
- */
-void SCH_EDIT_FRAME::DeleteSheetLabel( bool aRedraw, SCH_SHEET_PIN* aSheetLabelToDel )
-{
-    SCH_SHEET* parent = (SCH_SHEET*) aSheetLabelToDel->GetParent();
-
-    wxASSERT( parent );
-    wxASSERT( parent->Type() == SCH_SHEET_T );
-
-#if 0 && defined(DEBUG)
-    std::cout << "\n\nbefore deleting:\n" << std::flush;
-    parent->Show( 0, std::cout );
-    std::cout << "\n\n\n" << std::flush;
-#endif
-
-    parent->RemoveLabel( aSheetLabelToDel );
-
-    if( aRedraw )
-        DrawPanel->RefreshDrawingRect( parent->GetBoundingBox() );
-
-
-#if 0 && defined(DEBUG)
-    std::cout << "\n\nafter deleting:\n" << std::flush;
-    parent->Show( 0, std::cout );
-    std::cout << "~after deleting\n\n" << std::flush;
-#endif
-}

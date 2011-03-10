@@ -57,7 +57,7 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Rotate( rotationPoint );      // Place it in its new position.
-        item->m_Flags = 0;
+        item->ClearFlags();
     }
 }
 
@@ -73,7 +73,7 @@ void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Mirror_Y( aMirrorPoint.x );      // Place it in its new position.
-        item->m_Flags = 0;
+        item->ClearFlags();
     }
 }
 
@@ -84,7 +84,7 @@ void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint 
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         item->Mirror_X( aMirrorPoint.y );      // Place it in its new position.
-        item->m_Flags = 0;
+        item->ClearFlags();
     }
 }
 
@@ -115,13 +115,11 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
     SCH_SCREEN*        screen = (SCH_SCREEN*) panel->GetScreen();
     SCH_EDIT_FRAME*    frame  = (SCH_EDIT_FRAME*) panel->GetParent();
     PICKED_ITEMS_LIST  itemsList;
-    ITEM_PICKER        itemWrapper;
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        itemWrapper.m_PickedItem     = item;
-        itemWrapper.m_UndoRedoStatus = UR_DELETED;
+        ITEM_PICKER itemWrapper( item, UR_DELETED );
 
         if( item->Type() == SCH_SHEET_LABEL_T )
         {
@@ -143,37 +141,31 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
 }
 
 
-/* Routine to delete an object from global drawing object list.
- *  Object is put in Undo list
- */
-void DeleteStruct( EDA_DRAW_PANEL* panel, wxDC* DC, SCH_ITEM* DrawStruct )
+void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 {
-    SCH_SCREEN*     screen = (SCH_SCREEN*) panel->GetScreen();
-    SCH_EDIT_FRAME* frame  = (SCH_EDIT_FRAME*) panel->GetParent();
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
 
-    if( !DrawStruct )
-        return;
+    SCH_SCREEN* screen = GetScreen();
 
-    if( DrawStruct->Type() == SCH_SHEET_LABEL_T )
+    if( aItem->Type() == SCH_SHEET_LABEL_T )
     {
-        /* This structure is attached to a node, and is not accessible by
-         * the global list directly. */
-        frame->SaveCopyInUndoList( (SCH_ITEM*)( (SCH_SHEET_PIN*) DrawStruct )->GetParent(),
-                                   UR_CHANGED );
-        frame->DeleteSheetLabel( DC ? true : false, (SCH_SHEET_PIN*) DrawStruct );
-        return;
+        // This iten is attached to a node, and is not accessible by the global list directly.
+        SCH_SHEET* sheet = (SCH_SHEET*) aItem->GetParent();
+        wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
+                     wxT( "Sheet label has invalid parent item." ) );
+        SaveCopyInUndoList( (SCH_ITEM*) sheet, UR_CHANGED );
+        sheet->RemoveLabel( (SCH_SHEET_PIN*) aItem );
+        DrawPanel->RefreshDrawingRect( sheet->GetBoundingBox() );
     }
     else
     {
-        screen->RemoveFromDrawList( DrawStruct );
+        screen->RemoveFromDrawList( aItem );
 
-        panel->RefreshDrawingRect( DrawStruct->GetBoundingBox() );
+        aItem->SetNext( NULL );
+        aItem->SetBack( NULL );  // Only one struct -> no link
 
-        /* Unlink the structure */
-        DrawStruct->SetNext( 0 );
-        DrawStruct->SetBack( 0 );  // Only one struct -> no link
-
-        frame->SaveCopyInUndoList( DrawStruct, UR_DELETED );
+        SaveCopyInUndoList( aItem, UR_DELETED );
+        DrawPanel->RefreshDrawingRect( aItem->GetBoundingBox() );
     }
 }
 

@@ -31,12 +31,12 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     SCH_ITEM* item = GetScreen()->GetCurItem();
     wxPoint gridPosition = GetGridPosition( aPosition );
 
-    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->m_Flags ) )
+    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->GetFlags() ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
         m_itemToRepeat = NULL;
 
-        if( item && item->m_Flags )
+        if( item && item->GetFlags() )
         {
             switch( item->Type() )
             {
@@ -77,7 +77,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
-        if( ( item && item->m_Flags ) || ( g_RootSheet->CountSheets() == 0 ) )
+        if( ( item && item->GetFlags() ) || ( g_RootSheet->CountSheets() == 0 ) )
             break;
 
         item = LocateAndShowItem( aPosition );
@@ -99,7 +99,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_NOCONN_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             m_itemToRepeat = AddNoConnect( aDC, gridPosition );
             GetScreen()->SetCurItem( m_itemToRepeat );
@@ -116,7 +116,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_JUNCTION_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             m_itemToRepeat = AddJunction( aDC, gridPosition, true );
             GetScreen()->SetCurItem( m_itemToRepeat );
@@ -134,7 +134,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_WIRETOBUS_ENTRY_BUTT:
     case ID_BUSTOBUS_ENTRY_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             item = CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
                                    WIRE_TO_BUS : BUS_TO_BUS );
@@ -152,7 +152,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        LocateAndDeleteItem( this, aDC );
+        DeleteItemAtCrossHair( aDC );
         OnModify();
         GetScreen()->SetCurItem( NULL );
         GetScreen()->TestDanglingEnds();
@@ -175,7 +175,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_TEXT_COMMENT_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
             DrawPanel->m_AutoPAN_Request = true;
@@ -188,7 +188,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_LABEL_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_LOCLABEL ) );
             DrawPanel->m_AutoPAN_Request = true;
@@ -204,7 +204,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_GLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
-        if( (item == NULL) || (item->m_Flags == 0) )
+        if( (item == NULL) || (item->GetFlags() == 0) )
         {
             if( GetToolId() == ID_GLABEL_BUTT )
                 GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_GLOBLABEL ) );
@@ -224,7 +224,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateSheet( aDC ) );
             DrawPanel->m_AutoPAN_Request = true;
@@ -240,20 +240,20 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_IMPORT_HLABEL_BUTT:
     case ID_SHEET_LABEL_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
             item = LocateAndShowItem( aPosition );
 
         if( item == NULL )
             break;
 
-        if( (item->Type() == SCH_SHEET_T) && (item->m_Flags == 0) )
+        if( (item->Type() == SCH_SHEET_T) && (item->GetFlags() == 0) )
         {
             if( GetToolId() == ID_IMPORT_HLABEL_BUTT )
                 GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, aDC ) );
             else
                 GetScreen()->SetCurItem( Create_PinSheet( (SCH_SHEET*) item, aDC ) );
         }
-        else if( (item->Type() == SCH_SHEET_LABEL_T) && (item->m_Flags != 0) )
+        else if( (item->Type() == SCH_SHEET_LABEL_T) && (item->GetFlags() != 0) )
         {
             item->Place( this, aDC );
             GetScreen()->TestDanglingEnds();
@@ -262,7 +262,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_SCH_PLACE_COMPONENT:
-        if( (item == NULL) || (item->m_Flags == 0) )
+        if( (item == NULL) || (item->GetFlags() == 0) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, true ) );
             DrawPanel->m_AutoPAN_Request = true;
@@ -277,7 +277,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PLACE_POWER_BUTT:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
                                                      s_PowerNameList, false ) );
@@ -317,12 +317,12 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             item = LocateAndShowItem( aPosition );
         }
 
-        if( ( item == NULL ) || ( item->m_Flags != 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() != 0 ) )
             break;
 
         switch( item->Type() )

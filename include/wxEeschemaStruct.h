@@ -123,7 +123,6 @@ public:
      */
     static wxString  GetDefaultFieldName( int aFieldNdx );
 
-
     /**
      * Function AddTemplateFieldName
      * inserts or appends a wanted symbol field name into the fieldnames
@@ -207,6 +206,26 @@ public:
 
     SCH_ITEM*        LocateAndShowItem( const wxPoint& aPosition, bool aIncludePin = true );
     SCH_ITEM*        LocateItem( const wxPoint& aPosition, bool aIncludePin );
+
+    /**
+     * Function DeleteItemAtCrossHair
+     * delete the item found under the cross hair.
+     * <p>
+     * If more than one item found, the priority order is:
+     * <ol>
+     * Marker
+     * Junction
+     * No connect
+     * Wire or bus
+     * Graphic item
+     * Text
+     * Component
+     * Sheet
+     * </ol></p>
+     * @param aDC The device context to update if and item is deleted.
+     * @return True if an item was deleted.
+     */
+    bool DeleteItemAtCrossHair( wxDC* DC );
 
     /**
      * Function FillFootprintFieldForAllInstancesofComponent
@@ -508,8 +527,12 @@ private:
     SCH_SHEET_PIN*  Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
 
 public:
-    void            DeleteSheetLabel( bool           aRedraw,
-                                      SCH_SHEET_PIN* aSheetLabelToDel );
+    /**
+     * Function DeleteItem
+     * removes \a aItem from the current screen and saves it in the undo list.
+     * @param aItem The item to remove from the current screen.
+     */
+    void DeleteItem( SCH_ITEM* aItem );
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 

@@ -144,15 +144,59 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 }
 
 
+void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
+{
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invaled item from screen." ) );
+
+    SetModify();
+
+    if( aItem->Type() == SCH_SHEET_LABEL_T )
+    {
+        // This structure is attached to a sheet, get the parent sheet object.
+        SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) aItem;
+        SCH_SHEET* sheet = sheetLabel->GetParent();
+        wxCHECK_RET( sheet != NULL,
+                     wxT( "Sheet label parent not properly set, bad programmer!" ) );
+        sheet->RemoveLabel( sheetLabel );
+        return;
+    }
+    else
+    {
+        if( aItem == GetDrawItems() )
+        {
+            SetDrawItems( aItem->Next() );
+            SAFE_DELETE( aItem );
+        }
+        else
+        {
+            SCH_ITEM* itemList = GetDrawItems();
+
+            while( itemList && itemList->Next() )
+            {
+                if( itemList->Next() == aItem )
+                {
+                    itemList->SetNext( aItem->Next() );
+                    SAFE_DELETE( aItem );
+                    return;
+                }
+
+                itemList = itemList->Next();
+            }
+        }
+    }
+}
+
+
 bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 {
-    SCH_ITEM * DrawList = GetDrawItems();
+    SCH_ITEM * itemList = GetDrawItems();
 
-    while( DrawList )
+    while( itemList )
     {
-        if( DrawList == st )
+        if( itemList == st )
             return true;
-        DrawList = DrawList->Next();
+
+        itemList = itemList->Next();
     }
 
     return false;
@@ -175,6 +219,52 @@ int SCH_SCREEN::GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const
     }
 
     return aItemList.size();
+}
+
+
+int SCH_SCREEN::GetItems( const wxPoint& aPosition, PICKED_ITEMS_LIST& aItemList,
+                          int aAccuracy, int aFilter ) const
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->HitTest( aPosition, aAccuracy, (SCH_FILTER_T) aFilter ) )
+        {
+            ITEM_PICKER picker( (EDA_ITEM*) item );
+            aItemList.PushItem( picker );
+        }
+    }
+
+    return aItemList.GetCount();
+}
+
+
+SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, int aFilter ) const
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->HitTest( aPosition, aAccuracy, (SCH_FILTER_T) aFilter ) )
+        {
+            if( (aFilter & FIELD_T) && (item->Type() == SCH_COMPONENT_T) )
+            {
+                SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+                for( int i = REFERENCE; i < component->GetFieldCount(); i++ )
+                {
+                    SCH_FIELD* field = component->GetField( i );
+
+                    if( field->HitTest( aPosition, aAccuracy ) )
+                        return (SCH_ITEM*) field;
+                }
+
+                if( !(aFilter & COMPONENT_T) )
+                    return NULL;
+            }
+
+            return item;
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -244,6 +334,64 @@ void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
 }
 
 
+void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
+{
+    wxCHECK_RET( (aSegment != NULL) && (aSegment->Type() == SCH_LINE_T),
+                 wxT( "Invalid object pointer." ) );
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->GetFlags() & CANDIDATE )
+            continue;
+
+        if( item->Type() == SCH_JUNCTION_T )
+        {
+            SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
+
+            if( aSegment->IsEndPoint( junction->m_Pos ) )
+                item->SetFlags( CANDIDATE );
+
+            continue;
+        }
+
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        SCH_LINE* segment = (SCH_LINE*) item;
+
+        if( aSegment->IsEndPoint( segment->m_Start ) && !GetPin( segment->m_Start, NULL, true ) )
+        {
+            item->SetFlags( CANDIDATE );
+            MarkConnections( segment );
+        }
+
+        if( aSegment->IsEndPoint( segment->m_End ) && !GetPin( segment->m_End, NULL, true ) )
+        {
+            item->SetFlags( CANDIDATE );
+            MarkConnections( segment );
+        }
+    }
+}
+
+
+bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition ) const
+{
+    if( GetItem( aPosition, 0, JUNCTION_T ) )
+        return false;
+
+    if( GetItem( aPosition, 0, WIRE_T | EXCLUDE_ENDPOINTS_T ) )
+    {
+        if( GetItem( aPosition, 0, WIRE_T | ENDPOINTS_ONLY_T ) )
+            return true;
+
+        if( GetPin( aPosition, NULL, true ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 /* Routine cleaning:
  * - Includes segments or buses aligned in only 1 segment
  * - Detects identical objects superimposed
@@ -269,10 +417,9 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 
                     if( line->MergeOverlap( (SCH_LINE*) TstDrawList ) )
                     {
-                        /* keep the bits set in .m_Flags, because the deleted
-                         * segment can be flagged */
-                        DrawList->m_Flags |= TstDrawList->m_Flags;
-                        EraseStruct( TstDrawList, this );
+                        // Keep the current flags, because the deleted segment can be flagged.
+                        DrawList->SetFlags( TstDrawList->GetFlags() );
+                        DeleteItem( TstDrawList );
                         TstDrawList = GetDrawItems();
                         Modify = true;
                     }
@@ -293,6 +440,7 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 
     if( aCanvas && Modify )
         aCanvas->Refresh();
+
     return Modify;
 }
 
@@ -372,18 +520,6 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
 }
 
 
-/**
- * Function ClearUndoORRedoList
- * free the undo or redo list from List element
- *  Wrappers are deleted.
- *  datas pointed by wrappers are deleted if not in use in schematic
- *  i.e. when they are copy of a schematic item or they are no more in use
- *  (DELETED)
- * @param aList = the UNDO_REDO_CONTAINER to clear
- * @param aItemCount = the count of items to remove. < 0 for all items
- * items (commands stored in list) are removed from the beginning of the list.
- * So this function can be called to remove old commands
- */
 void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )
@@ -411,12 +547,12 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 void SCH_SCREEN::ClearDrawingState()
 {
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
-        item->m_Flags = 0;
+        item->ClearFlags();
 }
 
 
 LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent,
-                             bool aEndPointOnly )
+                             bool aEndPointOnly ) const
 {
     SCH_ITEM* item;
     SCH_COMPONENT* component = NULL;
@@ -462,59 +598,6 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
     }
 
     return sheetLabel;
-}
-
-
-bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition ) const
-{
-    SCH_ITEMS items;
-    int wireEndPoints = 0;
-
-    if( GetItems( aPosition, items ) == 0 )
-        return false;
-
-    bool isJunctionNeeded = false;
-    bool isWireMidpoint = false;
-
-    for( size_t i = 0; i < items.size(); i++ )
-    {
-        KICAD_T itemType = items[i].Type();
-
-        if( itemType == SCH_JUNCTION_T )
-        {
-            isJunctionNeeded = false;
-            break;
-        }
-        else if( itemType == SCH_LINE_T )
-        {
-            SCH_LINE* line = ( SCH_LINE* ) &items[i];
-
-            if( !line->IsConnectable() )
-                continue;
-
-            if( !line->IsEndPoint( aPosition ) )
-                isWireMidpoint = true;
-            else
-                wireEndPoints += 1;
-
-            if( ( isWireMidpoint && ( wireEndPoints != 0 ) ) || ( wireEndPoints > 2 ) )
-                isJunctionNeeded = true;
-        }
-        else if( itemType == SCH_COMPONENT_T )
-        {
-            SCH_COMPONENT* component = ( SCH_COMPONENT* ) &items[i];
-
-            if( !component->IsConnected( aPosition ) )
-                continue;
-
-            if( isWireMidpoint || wireEndPoints > 2 )
-                isJunctionNeeded = true;
-        }
-    }
-
-    items.release();
-
-    return isJunctionNeeded;
 }
 
 
@@ -578,7 +661,7 @@ void SCH_SCREEN::SelectBlockItems()
     for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
     {
         item = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
-        item->m_Flags = SELECTED;
+        item->SetFlags( SELECTED );
     }
 
     if( !m_BlockLocate.IsDragging() )
@@ -589,6 +672,7 @@ void SCH_SCREEN::SelectBlockItems()
     m_BlockLocate.Inflate(1);
     unsigned last_select_id = pickedlist->GetCount();
     unsigned ii = 0;
+
     for( ; ii < last_select_id; ii++ )
     {
         item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
@@ -596,19 +680,22 @@ void SCH_SCREEN::SelectBlockItems()
         if( item->Type() == SCH_LINE_T )
         {
             item->IsSelectStateChanged( m_BlockLocate );
-            if( ( item->m_Flags & SELECTED ) == 0 )
+
+            if( ( item->GetFlags() & SELECTED ) == 0 )
             {   // This is a special case:
                 // this selected wire has no ends in block.
                 // But it was selected (because it intersects the selecting area),
                 // so we must keep it selected and select items connected to it
                 // Note: an other option could be: remove it from drag list
-                item->m_Flags |= SELECTED | SKIP_STRUCT;
+                item->SetFlags( SELECTED | SKIP_STRUCT );
                 std::vector< wxPoint > connections;
                 item->GetConnectionPoints( connections );
+
                 for( size_t i = 0; i < connections.size(); i++ )
                     addConnectedItemsToBlock( connections[i] );
             }
-            pickedlist->SetPickerFlags( item->m_Flags, ii );
+
+            pickedlist->SetPickerFlags( item->GetFlags(), ii );
         }
         else if( item->IsConnectable() )
         {
@@ -633,11 +720,11 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 
     for( item = GetDrawItems(); item != NULL; item = item->Next() )
     {
-        picker.m_PickedItem     = item;
-        picker.m_PickedItemType = item->Type();
+        picker.SetItem( item );
+        picker.SetItemType( item->Type() );
 
         if( !item->IsConnectable() || !item->IsConnected( position )
-          || (item->m_Flags & SKIP_STRUCT) )
+            || (item->GetFlags() & SKIP_STRUCT) )
             continue;
 
         if( item->IsSelected() && item->Type() != SCH_LINE_T )
@@ -647,23 +734,23 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
         if( item->Type() == SCH_LINE_T )
         {
             if( ! item->IsSelected() )      // First time this line is tested
-                item->m_Flags = SELECTED | STARTPOINT | ENDPOINT;
+                item->SetFlags( SELECTED | STARTPOINT | ENDPOINT );
             else      // second time (or more) this line is tested
                 addinlist = false;
 
             SCH_LINE* line = (SCH_LINE*) item;
 
             if( line->m_Start == position )
-                item->m_Flags &= ~STARTPOINT;
+                item->ClearFlags( STARTPOINT );
             else if( line->m_End == position )
-                item->m_Flags &= ~ENDPOINT;
+                item->ClearFlags( ENDPOINT );
         }
         else
-            item->m_Flags = SELECTED;
+            item->SetFlags( SELECTED );
 
         if( addinlist )
         {
-            picker.m_PickerFlags = item->m_Flags;
+            picker.m_PickerFlags = item->GetFlags();
             m_BlockLocate.m_ItemsSelection.PushItem( picker );
         }
     }
@@ -683,8 +770,8 @@ int SCH_SCREEN::UpdatePickList()
         // An item is picked if its bounding box intersects the reference area.
         if( item->HitTest( area ) )
         {
-            picker.m_PickedItem     = item;
-            picker.m_PickedItemType = item->Type();
+            picker.SetItem( item );
+            picker.SetItemType( item->Type() );
             m_BlockLocate.PushItem( picker );
         }
     }
@@ -946,4 +1033,31 @@ void SCH_SCREENS::SetDate( const wxString& aDate )
 {
     for( size_t i = 0;  i < m_screens.size();  i++ )
         m_screens[i]->m_Date = aDate;
+}
+
+
+void SCH_SCREENS::DeleteAllMarkers( int aMarkerType )
+{
+    SCH_ITEM* item;
+    SCH_ITEM* nextItem;
+    SCH_MARKER* marker;
+    SCH_SCREEN* screen;
+
+    for( screen = GetFirst(); screen != NULL; screen = GetNext() )
+    {
+        for( item = screen->GetDrawItems(); item != NULL; item = nextItem )
+        {
+            nextItem = item->Next();
+
+            if( item->Type() != SCH_MARKER_T )
+                continue;
+
+            marker = (SCH_MARKER*) item;
+
+            if( marker->GetMarkerType() != aMarkerType )
+                continue;
+
+            screen->DeleteItem( marker );
+        }
+    }
 }
