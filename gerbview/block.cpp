@@ -136,8 +136,9 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
         break;
     }
 
+    DrawPanel->SetMouseCapture( NULL, NULL );
     DrawPanel->EndMouseCapture( );
-    DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
+    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
     GetScreen()->SetModify();
     GetScreen()->ClearBlockCommand();
 
@@ -212,8 +213,9 @@ bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
     if( ! nextcmd )
     {
         GetScreen()->ClearBlockCommand();
+        DrawPanel->SetMouseCapture( NULL, NULL );
         DrawPanel->EndMouseCapture( );
-        DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
+        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
         DisplayToolMsg( wxEmptyString );
     }
 

@@ -183,7 +183,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
         DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
         DrawPanel->Refresh( true );
     }
 
@@ -269,7 +269,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->SetCurItem( NULL );
     DrawPanel->SetMouseCapture( NULL, NULL );
     DrawPanel->Refresh( true );
-    SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
+    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
 }
 
 

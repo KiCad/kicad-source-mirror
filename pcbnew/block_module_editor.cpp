@@ -194,7 +194,7 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
         GetScreen()->ClearBlockCommand();
         SetCurItem( NULL );
         DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
         DrawPanel->Refresh( true );
     }
 
@@ -276,7 +276,7 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     SetCurItem( NULL );
     DrawPanel->SetMouseCapture( NULL, NULL );
     DrawPanel->Refresh( true );
-    SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
+    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
 }
 
 
