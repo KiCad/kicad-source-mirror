@@ -211,15 +211,16 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         // this menu's handler is void PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the item.
-        DrawPanel->m_AbortRequest = true;   // changed in false if an item
-        PopupMenu( &itemMenu ); // m_AbortRequest = false if an item is selected
+        DrawPanel->m_AbortRequest = true;   // changed in false if an item is selected
+        PopupMenu( &itemMenu );
 
         DrawPanel->MoveCursorToCrossHair();
 
-//        DrawPanel->m_IgnoreMouseEvents = false;
-
         // The function ProcessItemSelection() has set the current item, return it.
-        item = GetCurItem();
+        if( DrawPanel->m_AbortRequest )     // Nothing selected
+            item = NULL;
+        else
+            item = GetCurItem();
     }
 
     return item;
