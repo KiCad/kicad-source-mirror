@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -87,9 +87,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 		wxTextCtrl* m_fineAdjustYscaleOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_forcePSA4OutputOpt;
-		wxStaticText* m_staticText2;
 		wxTextCtrl* m_messagesBox;
-		
 		wxButton* m_plotButton;
 		wxButton* m_buttonDrill;
 		wxButton* m_buttonQuit;
@@ -107,7 +105,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,723 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 474,747 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 	
 };

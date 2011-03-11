@@ -38,6 +38,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     // If needed, stop the current command and deselect current tool
     switch( id )
     {
+    case wxID_CUT:
+    case wxID_COPY:
+    case ID_POPUP_CANCEL_CURRENT_COMMAND:
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
     case ID_POPUP_END_LINE:
@@ -74,8 +77,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
-    case wxID_CUT:
-    case wxID_COPY:
     case ID_POPUP_SCH_ENTER_SHEET:
     case ID_POPUP_SCH_LEAVE_SHEET:
     case ID_POPUP_SCH_ADD_JUNCTION:
@@ -134,7 +135,13 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        if( DrawPanel->IsMouseCaptured() )
+        {
+            DrawPanel->EndMouseCapture();
+            SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+        }
+        else
+            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_END_LINE:
