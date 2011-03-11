@@ -542,38 +542,68 @@ order = Alphab. ) count = %d\n\n" ),
     fclose( f );
 }
 
-
+#if defined(KICAD_GOST)
+wxString DIALOG_BUILD_BOM::PrintFieldData( SCH_COMPONENT* DrawLibItem,
+#else
 void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
+#endif
                                        bool CompactForm )
 {
-    int ii;
+#if defined(KICAD_GOST)
+	wxString outStr;
+	wxString tmpStr;
 
+#endif
     if( IsFieldChecked( FOOTPRINT ) )
     {
         if( CompactForm )
         {
+#if defined(KICAD_GOST)
+            outStr.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol,
+						   GetChars( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+#else
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                      TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+#endif
         }
         else
         {
+#if defined(KICAD_GOST)
+            outStr.Printf( wxT( "; %-12s" ),
+                           GetChars( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+#else
             fprintf( f, "; %-12s",
                      TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+#endif
         }
     }
 
-    for( ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
+    for(int ii = FIELD1; ii < DrawLibItem->GetFieldCount(); ii++ )
     {
         if( ! IsFieldChecked( ii ) )
             continue;
 
         if( CompactForm )
+#if defined(KICAD_GOST)
+            tmpStr.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol,
+                           GetChars( DrawLibItem->GetField( ii )->m_Text ) );
+#else
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                      TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+#endif
         else
+#if defined(KICAD_GOST)
+            tmpStr.Printf( wxT( "; %-12s" ),
+                           GetChars( DrawLibItem->GetField( ii )->m_Text ) );
+        outStr+=tmpStr;
+#else
             fprintf( f, "; %-12s",
                      TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
+#endif
     }
+#if defined(KICAD_GOST)
+    return outStr;
+#endif
 }
 
 
@@ -628,6 +658,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 
     std::string     CmpName;
     wxString        subRef;
+#if defined(KICAD_GOST)
+    wxString        strCur;
+    wxString        strPred;
+    int             amount = 0;
+    std::string     CmpNameFirst;
+    std::string     CmpNameLast;
+#endif
 
     // Print list of items
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
@@ -660,9 +697,9 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 
         if( CompactForm )
 #if defined(KICAD_GOST)
-            fprintf( f, "%s%c%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
-                     TO_UTF8( comp->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
-                     TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+            strCur.Printf( wxT( "%c%s%c%s" ), s_ExportSeparatorSymbol,
+                           GetChars( comp->GetField( VALUE )->m_Text ), s_ExportSeparatorSymbol,
+                           GetChars( comp->GetField( DATASHEET )->m_Text ) );
 #else
             fprintf( f, "%s%c%s", CmpName.c_str(), s_ExportSeparatorSymbol,
                      TO_UTF8( comp->GetField( VALUE )->m_Text ) );
@@ -687,10 +724,16 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
             {
                 if( CompactForm )
                 {
+#if defined(KICAD_GOST)
+                    strCur.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol, GetChars( msg ) );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    strCur.Printf( wxT( "%c%s)" ), s_ExportSeparatorSymbol, GetChars( msg ) );
+#else
                     fprintf( f, "%c%s", s_ExportSeparatorSymbol, TO_UTF8( msg ) );
                     msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
                     fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
                              TO_UTF8( msg ) );
+#endif
                 }
                 else
                 {
@@ -701,9 +744,44 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
             }
         }
 
+#if defined(KICAD_GOST)
+        wxString tmpStr = PrintFieldData( comp, CompactForm );
+        strCur += tmpStr;
+        if ( CompactForm )
+        {
+          if ( strPred.Len() == 0 )
+            CmpNameFirst=CmpName;
+          else
+          {
+            if ( !strCur.IsSameAs(strPred) )
+            {
+              switch (amount)
+              {
+                case 1: fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                        break;
+                case 2: fprintf( f, "%s,%s%s%c%d\n",CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                        break;
+                default:fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                        break;
+              }
+              CmpNameFirst = CmpName;
+              amount = 0;
+            }
+          }
+          strPred = strCur;
+          CmpNameLast = CmpName;
+          amount++;
+        }
+        else
+        {
+          fprintf( f, "%s", TO_UTF8( tmpStr ) );
+          fprintf( f, "\n" );
+        }
+#else
         PrintFieldData( f, comp, CompactForm );
-
         fprintf( f, "\n" );
+#endif
+
     }
 
     if( !CompactForm )
@@ -711,6 +789,21 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
         msg = _( "#End Cmp\n" );
         fputs( TO_UTF8( msg ), f );
     }
+
+#if defined(KICAD_GOST)
+    else
+    {
+    	switch (amount)
+      	{
+        	case 1: fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                break;
+	        case 2: fprintf( f, "%s,%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                break;
+			default:fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                break;
+      	}
+	}
+#endif
 
     return 0;
 }
@@ -925,7 +1018,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             }
         }
 
+#if defined(KICAD_GOST)
+		fprintf( f, "%s", TO_UTF8( PrintFieldData( DrawLibItem ) ) );
+#else
         PrintFieldData( f, DrawLibItem );
+#endif
 
         fputs( "\n", f );
     }

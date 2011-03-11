@@ -55,7 +55,11 @@ private:
     int     PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aList,
                                        bool aIncludeSubComponents );
 
+#if defined(KICAD_GOST)
+	wxString PrintFieldData( SCH_COMPONENT* DrawLibItem, bool CompactForm = FALSE );
+#else
     void    PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem, bool CompactForm = FALSE );
+#endif
 
     bool    IsFieldChecked( int aFieldId );
 
