@@ -667,8 +667,6 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
     std::vector <VIA_DIMENSION>* vialist = &m_Parent->GetBoard()->m_ViasDimensionsList;
     vialist->erase( vialist->begin() + 1, vialist->end() );
     vialist->insert( vialist->end(), m_ViasDimensionsList.begin(), m_ViasDimensionsList.end() );
-
-    m_Parent->m_TrackAndViasSizesList_Changed = true;
 }
 
 
@@ -709,7 +707,6 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
     EndModal( wxID_OK );
 
     m_Pcb->SetCurrentNetClass( NETCLASS::Default );
-    m_Parent->m_TrackAndViasSizesList_Changed = true;
 }
 
 

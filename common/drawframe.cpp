@@ -138,6 +138,17 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 }
 
 
+void EDA_DRAW_FRAME::unitsChangeRefresh()
+{
+    UpdateStatusBar();
+
+    EDA_ITEM* item = GetScreen()->GetCurItem();
+
+    if( item )
+        item->DisplayInfo( this );
+}
+
+
 void EDA_DRAW_FRAME::EraseMsgBox()
 {
     if( MsgPanel )
@@ -792,4 +803,38 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
         return;
 
     MsgPanel->EraseMsgBox();
+}
+
+
+wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
+{
+    wxString      text;
+    const wxChar* format;
+    double        value = To_User_Unit( g_UserUnit, aValue, m_InternalUnits );
+
+    if( g_UserUnit == INCHES )
+    {
+        if( aConvertToMils )
+        {
+            format = ( m_InternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.0f" ) : wxT( "%.1f" );
+            value *= 1000;
+        }
+        else
+        {
+            format = ( m_InternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.3f" ) : wxT( "%.4f" );
+        }
+    }
+    else
+    {
+        format = ( m_InternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.2f" ) : wxT( "%.3f" );
+    }
+
+    text.Printf( format, value );
+
+    if( g_UserUnit == INCHES )
+        text += ( aConvertToMils ) ? _( " mils" ) : _( " in" );
+    else
+        text += _( " mm" );
+
+    return text;
 }

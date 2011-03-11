@@ -1116,7 +1116,6 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
     board->SynchronizeNetsAndNetClasses();
 
-    m_TrackAndViasSizesList_Changed = true;
     SetStatusText( wxEmptyString );
     BestZoom();
     return 1;
@@ -1154,7 +1153,6 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     // Select default Netclass before writing file.
     // Useful to save default values in headers
     GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName() );
-    m_TrackAndViasSizesList_Changed = true;
 
     WriteGeneralDescrPcb( aFile );
     WriteSheetDescr( GetScreen(), aFile );

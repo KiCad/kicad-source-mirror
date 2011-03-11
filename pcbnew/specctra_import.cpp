@@ -111,8 +111,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     SetLocaleTo_Default( );    // revert to the current locale
 
-    m_TrackAndViasSizesList_Changed = true;
-
     OnModify();
     GetBoard()->m_Status_Pcb = 0;
 

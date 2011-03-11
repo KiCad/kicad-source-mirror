@@ -55,7 +55,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     void updateTraceWidthSelectBox();
     void updateViaSizeSelectBox();
-    void updateDesignRulesSelectBoxes();
 
 protected:
 
@@ -120,12 +119,6 @@ public:
                                             // select current track width
     WinEDAChoiceBox* m_SelViaSizeBox;       // a combo box to display and
                                             // select current via diameter
-    wxTextCtrl*      m_ClearanceBox;        // a text ctrl to display the
-                                            // current tracks and vias
-                                            // clearance
-    wxTextCtrl*      m_NetClassSelectedBox; // a text ctrl to display the
-                                            // current NetClass
-    bool             m_TrackAndViasSizesList_Changed;
 
     bool             m_show_microwave_tools;
     bool             m_show_layer_manager_tools;
@@ -1147,7 +1140,6 @@ public:
      * called on a language menu selection
      */
     virtual void SetLanguage( wxCommandEvent& event );
-
 
     DECLARE_EVENT_TABLE()
 };

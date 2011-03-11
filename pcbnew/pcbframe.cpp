@@ -271,7 +271,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_SelTrackWidthBox    = NULL;
     m_SelViaSizeBox = NULL;
     m_SelLayerBox   = NULL;
-    m_TrackAndViasSizesList_Changed = false;
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
     m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
@@ -290,8 +289,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         pointSize = (pointSize * 8) / 10;
 
     m_Layers = new PCB_LAYER_WIDGET( this, DrawPanel, pointSize );
-
-    m_TrackAndViasSizesList_Changed = true;
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -513,7 +510,6 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
     if( returncode == wxID_OK )     // New rules, or others changes.
     {
         ReCreateLayerBox( NULL );
-        updateDesignRulesSelectBoxes();
         updateTraceWidthSelectBox();
         updateViaSizeSelectBox();
         OnModify();
@@ -653,7 +649,6 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
-    updateDesignRulesSelectBoxes();
 }
 
 

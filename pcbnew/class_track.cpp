@@ -951,8 +951,27 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         int trackLen = 0;
         Marque_Une_Piste( board, this, NULL, &trackLen, false );
-        valeur_param( trackLen, msg );
+        msg = frame->CoordinateToString( trackLen );
         frame->AppendMsgPanel( _( "Track Length" ), msg, DARKCYAN );
+    }
+
+    NETCLASS* netclass = GetNetClass();
+
+    if( netclass )
+    {
+        frame->AppendMsgPanel( _( "NC Name" ), netclass->GetName(), DARKMAGENTA );
+        frame->AppendMsgPanel( _( "NC Clearance" ),
+                               frame->CoordinateToString( netclass->GetClearance(), true ),
+                               DARKMAGENTA );
+        frame->AppendMsgPanel( _( "NC Width" ),
+                               frame->CoordinateToString( netclass->GetTrackWidth(), true ),
+                               DARKMAGENTA );
+        frame->AppendMsgPanel( _( "NC Via Size"),
+                               frame->CoordinateToString( netclass->GetViaDiameter(), true ),
+                               DARKMAGENTA );
+        frame->AppendMsgPanel( _( "NC Via Drill"),
+                               frame->CoordinateToString( netclass->GetViaDrill(), true ),
+                               DARKMAGENTA );
     }
 }
 
@@ -1041,7 +1060,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
 
     /* Display width */
-    valeur_param( (unsigned) m_Width, msg );
+    msg = frame->CoordinateToString( (unsigned) m_Width );
 
     if( Type() == TYPE_VIA )      // Display Diam and Drill values
     {
@@ -1051,7 +1070,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         // Display drill value
         int drill_value = GetDrillValue();
 
-        valeur_param( (unsigned) drill_value, msg );
+        msg = frame->CoordinateToString( (unsigned) drill_value );
 
         wxString title = _( "Drill" );
         title += wxT( " " );
@@ -1068,17 +1087,10 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
     }
 
-    NETCLASS* netclass = GetNetClass();
-    if( netclass )
-    {
-        msg = netclass->GetName();
-        frame->AppendMsgPanel( _( "Net Class" ), msg, DARKCYAN );
-    }
-
     // Display segment length
     if( Type() != TYPE_VIA )      // Display Diam and Drill values
     {
-        valeur_param( wxRound( GetLength() ), msg );
+        msg = frame->CoordinateToString( wxRound( GetLength() ) );
         frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
     }
 }

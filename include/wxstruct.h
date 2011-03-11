@@ -258,7 +258,7 @@ protected:
      * default version only updates the status bar.  Don't forget to call the default
      * in your derived class or the status bar will not get updated properly.
      */
-    virtual void unitsChangeRefresh() { UpdateStatusBar(); }
+    virtual void unitsChangeRefresh();
 
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype,
@@ -556,6 +556,17 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData = NULL );
+
+    /**
+     * Function CoordinateToString
+     * is a helper to convert the integer coordinate \a aValue to a string in inches or mm
+     * according to the current user units setting.
+     * @param aValue The coordinate to convert.
+     * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
+     *                       the current user unit is millimeters.
+     * @return The converted string for display in user interface elements.
+     */
+    wxString CoordinateToString( int aValue, bool aConvertToMils = false );
 
     DECLARE_EVENT_TABLE()
 };

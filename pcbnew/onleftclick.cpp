@@ -124,8 +124,6 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         case TYPE_PAD:
             GetBoard()->SetCurrentNetClass(
                 ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
-            m_TrackAndViasSizesList_Changed = true;
-            updateDesignRulesSelectBoxes();
             break;
 
         default:

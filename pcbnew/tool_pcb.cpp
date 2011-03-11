@@ -506,8 +506,6 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     m_AuxiliaryToolBar = new WinEDA_Toolbar( TOOLBAR_AUX, this, ID_AUX_TOOLBAR, true );
 
-    m_TrackAndViasSizesList_Changed = true;
-
     /* Set up toolbar items */
 
     // Creates box to display and choose tracks widths:
@@ -524,24 +522,6 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
                                            wxPoint( -1, -1 ),
                                            wxSize( (LISTBOX_WIDTH*12)/10, -1 ) );
     m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
-    m_AuxiliaryToolBar->AddSeparator();
-
-    // Creates box to display tracks and vias clearance:
-    m_ClearanceBox = new wxTextCtrl( m_AuxiliaryToolBar, -1,
-                                     wxEmptyString, wxPoint( -1, -1 ),
-                                     wxSize( LISTBOX_WIDTH + 10, -1 ),
-                                     wxTE_READONLY );
-    m_ClearanceBox->SetToolTip(_("Current NetClass clearance value") );
-    m_AuxiliaryToolBar->AddControl( m_ClearanceBox );
-    m_AuxiliaryToolBar->AddSeparator();
-
-    // Creates box to display the current NetClass:
-    m_NetClassSelectedBox = new wxTextCtrl( m_AuxiliaryToolBar, -1,
-                                            wxEmptyString, wxPoint( -1, -1 ),
-                                            wxSize( LISTBOX_WIDTH, -1 ),
-                                            wxTE_READONLY );
-    m_NetClassSelectedBox->SetToolTip(_("Name of the current NetClass") );
-    m_AuxiliaryToolBar->AddControl( m_NetClassSelectedBox );
     m_AuxiliaryToolBar->AddSeparator();
 
     // Creates box to display and choose strategy to handle tracks an vias sizes:
@@ -572,41 +552,10 @@ an existing track use its width\notherwise, use current width setting" ),
     updateGridSelectBox();
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
-    updateDesignRulesSelectBoxes();
 
     // after adding the buttons to the toolbar, must call Realize()
     m_AuxiliaryToolBar->Realize();
-
-    m_TrackAndViasSizesList_Changed = true;
     m_AuxiliaryToolBar->AddSeparator();
-}
-
-
-/* helper to convert an integer value to a string, using mils or mm
- * according to g_UserUnit value
- */
-static wxString ReturnStringValue( int aValue )
-{
-    wxString      text;
-    const wxChar* format;
-    double        value = To_User_Unit( g_UserUnit, aValue, PCB_INTERNAL_UNIT );
-
-    if( g_UserUnit == INCHES )
-    {
-        format = wxT( " %.1f" );
-        value *= 1000;
-    }
-    else
-        format = wxT( " %.3f" );
-
-    text.Printf( format, value );
-
-    if( g_UserUnit == INCHES )
-        text += _( " mils" );
-    else
-        text += _( " mm" );
-
-    return text;
 }
 
 
@@ -621,7 +570,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 
     for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthList.size(); ii++ )
     {
-        msg = _( "Track" ) + ReturnStringValue( GetBoard()->m_TrackWidthList[ii] );
+        msg = _( "Track " ) + CoordinateToString( GetBoard()->m_TrackWidthList[ii], true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -645,11 +594,12 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     for( unsigned ii = 0; ii < GetBoard()->m_ViasDimensionsList.size(); ii++ )
     {
-        msg = _( "Via" );
-        msg << ReturnStringValue( GetBoard()->m_ViasDimensionsList[ii].m_Diameter );
+        msg = _( "Via " );
+        msg << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Diameter, true );
 
         if( GetBoard()->m_ViasDimensionsList[ii].m_Drill )
-            msg  << wxT("/") << ReturnStringValue( GetBoard()->m_ViasDimensionsList[ii].m_Drill );
+            msg  << wxT("/ ")
+                 << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -659,33 +609,6 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
         GetBoard()->m_ViaSizeSelector = 0;
-}
-
-
-/**
- * Function updateDesignRulesSelectBoxes
- * update the displayed values: track widths, via sizes, clearance, Netclass name
- * used when a netclass is selected
- */
-void PCB_EDIT_FRAME::updateDesignRulesSelectBoxes()
-{
-    wxString nclname = GetBoard()->m_CurrentNetClassName;
-    wxString msg     = _( "NetClass: " ) + nclname;
-
-    if( m_NetClassSelectedBox )
-    {
-        m_NetClassSelectedBox->Clear();
-        m_NetClassSelectedBox->AppendText( msg );
-    }
-
-    NETCLASS* netclass = GetBoard()->m_NetClasses.Find( nclname );
-
-    if( m_ClearanceBox )
-    {
-        wxString msg = _( "Clearance" ) + ReturnStringValue( netclass->GetClearance() );
-        m_ClearanceBox->Clear();
-        m_ClearanceBox->AppendText( msg );
-    }
 }
 
 

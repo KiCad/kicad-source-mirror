@@ -25,9 +25,9 @@ void PCB_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
     case ID_TRACK_BUTT:
     {
         DIALOG_DESIGN_RULES dlg( this );
+
         if( dlg.ShowModal() == wxID_OK )
         {
-            updateDesignRulesSelectBoxes();
             updateTraceWidthSelectBox();
             updateViaSizeSelectBox();
         }

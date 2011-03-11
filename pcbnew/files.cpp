@@ -142,8 +142,6 @@ the changes?" ) ) )
             return false;
     }
 
-    m_TrackAndViasSizesList_Changed = true;
-
     if( aAppend )
     {
         GetScreen()->SetFileName( wxEmptyString );
@@ -273,14 +271,11 @@ this file again." ) );
 
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
-    m_TrackAndViasSizesList_Changed = true;
-
     ReFillLayerWidget();
 
     ReCreateLayerBox( NULL );
     syncLayerWidget();
 
-    updateDesignRulesSelectBoxes();
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
 

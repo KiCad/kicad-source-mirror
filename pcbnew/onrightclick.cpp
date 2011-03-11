@@ -393,8 +393,6 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     wxString msg;
 
     GetBoard()->SetCurrentNetClass( Track->GetNetClassName() );
-    m_TrackAndViasSizesList_Changed = true;
-    updateDesignRulesSelectBoxes();
 
     int flags = Track->m_Flags;
 
@@ -714,8 +712,6 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
         return;
 
     GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
-    m_TrackAndViasSizesList_Changed = true;
-    updateDesignRulesSelectBoxes();
 
     wxString msg = Pad->MenuText( GetBoard() );
 
