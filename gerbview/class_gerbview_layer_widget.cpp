@@ -204,8 +204,7 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
     myframe->syncLayerBox();
-    if(DisplayOpt.ContrastModeDisplay)
-        myframe->DrawPanel->Refresh();
+    myframe->DrawPanel->Refresh();
 
     return true;
 }
