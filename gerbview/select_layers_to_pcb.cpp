@@ -25,10 +25,10 @@ enum swap_layer_id {
 };
 
 
-class WinEDA_SwapLayerFrame : public wxDialog
+class SWAP_LAYERS_DIALOG : public wxDialog
 {
 private:
-    WinEDA_GerberFrame*     m_Parent;
+    GERBVIEW_FRAME*     m_Parent;
     wxBoxSizer*             OuterBoxSizer;
     wxBoxSizer*             MainBoxSizer;
     wxFlexGridSizer*        FlexColumnBoxSizer;
@@ -40,8 +40,8 @@ private:
 
 public:
 
-    WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent );
-    ~WinEDA_SwapLayerFrame() {};
+    SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent );
+    ~SWAP_LAYERS_DIALOG() {};
 
 private:
     void OnSelectLayer( wxCommandEvent& event );
@@ -52,12 +52,12 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
+BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + 31,
                        wxEVT_COMMAND_BUTTON_CLICKED,
-                       WinEDA_SwapLayerFrame::OnSelectLayer )
-    EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDA_SwapLayerFrame::OnCancelClick )
+                       SWAP_LAYERS_DIALOG::OnSelectLayer )
+    EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, SWAP_LAYERS_DIALOG::OnCancelClick )
 END_EVENT_TABLE()
 
 
@@ -65,9 +65,9 @@ END_EVENT_TABLE()
  * between gerber layers and pcbnew layers
  * return the "lookup table" if ok, or NULL
  */
-int* WinEDA_GerberFrame::InstallDialogLayerPairChoice( )
+int* GERBVIEW_FRAME::InstallDialogLayerPairChoice( )
 {
-    WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
+    SWAP_LAYERS_DIALOG* frame = new SWAP_LAYERS_DIALOG( this );
 
     int ii = frame->ShowModal();
 
@@ -79,7 +79,7 @@ int* WinEDA_GerberFrame::InstallDialogLayerPairChoice( )
 }
 
 
-WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
+SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent ) :
     wxDialog( parent, -1, _( "Layer selection:" ), wxPoint( -1, -1 ),
               wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
@@ -323,7 +323,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( WinEDA_GerberFrame* parent ) :
 }
 
 
-void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::OnSelectLayer( wxCommandEvent& event )
 {
     int ii, jj;
 
@@ -365,13 +365,13 @@ void WinEDA_SwapLayerFrame::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-void WinEDA_SwapLayerFrame::OnCancelClick( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }
 
 
-void WinEDA_SwapLayerFrame::OnOkClick( wxCommandEvent& event )
+void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     int  ii;
     bool AsCmpLayer = false;

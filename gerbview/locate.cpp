@@ -10,7 +10,7 @@
 /* localize a gerber item and return a pointer to it.
  * Display info about this item
  */
-GERBER_DRAW_ITEM* WinEDA_GerberFrame::Locate( const wxPoint& aPosition, int aTypeloc )
+GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc )
 {
     MsgPanel->EraseMsgBox();
     wxPoint ref = aPosition;

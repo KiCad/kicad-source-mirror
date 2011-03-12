@@ -15,7 +15,7 @@
 #define CURSEUR_ON_GRILLE  0
 #define CURSEUR_OFF_GRILLE 1
 
-class WinEDA_GerberFrame;
+class GERBVIEW_FRAME;
 //class BOARD;
 
 class GERBER_IMAGE;
@@ -50,21 +50,12 @@ enum GERBER_VISIBLE
 */
 #define GERBER_BUFZ     4000
 
-extern wxString g_PhotoFilenameExt;
-extern wxString g_DrillFilenameExt;
-extern wxString g_PenFilenameExt;
-
 extern int     g_DisplayPolygonsModeSketch;
 
 extern const wxString GerbviewProjectFileExt;
 extern const wxString GerbviewProjectFileWildcard;
 
 extern Ki_PageDescr* g_GerberPageSizeList[];
-
-// Config keywords
-extern const wxString GerbviewDrawModeOption;
-extern const wxString GerbviewShowPageSizeOption;
-extern const wxString GerbviewShowDCodes;
 
 // Interpolation type
 enum Gerb_Interpolation

@@ -14,7 +14,7 @@
 
 /* Read a gerber file, RS274D or RS274X format.
  */
-bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
+bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
 {
     int      G_commande = 0;        // command number for G commands like G04
@@ -149,6 +149,7 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
         }
     }
     fclose( gerber->m_Current_File );
+    SetLocaleTo_Default();
 
     // Display errors list
     if( m_Messages.size() > 0 )
@@ -157,8 +158,6 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
         dlg.ListSet(m_Messages);
         dlg.ShowModal();
     }
-
-    SetLocaleTo_Default();
 
     /* Init DCodes list and perhaps read a DCODES file,
      * if the gerber file is only a RS274D file
@@ -173,10 +172,8 @@ bool WinEDA_GerberFrame::Read_GERBER_File( const wxString& GERBER_FullFileName,
             wxString wildcard;
 
             fn = GERBER_FullFileName;
-            fn.SetExt( g_PenFilenameExt );
-            wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                             GetChars( g_PenFilenameExt ),
-                             GetChars( g_PenFilenameExt ) );
+            fn.SetExt( wxEmptyString );
+            wildcard = _( "Gerber DCODE files" );
             wildcard += AllFilesWildcard;
 
             wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),

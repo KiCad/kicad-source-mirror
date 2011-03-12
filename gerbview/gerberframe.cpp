@@ -21,106 +21,108 @@
 #include "build_version.h"
 
 
+// Config keywords
+const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
+
 /****************************************/
-/* class WinEDA_GerberFrame for GerbView*/
+/* class GERBVIEW_FRAME for GerbView*/
 /****************************************/
 
-BEGIN_EVENT_TABLE( WinEDA_GerberFrame, PCB_BASE_FRAME )
-    EVT_CLOSE( WinEDA_GerberFrame::OnCloseWindow )
-    EVT_SIZE( WinEDA_GerberFrame::OnSize )
+BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
+    EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
+    EVT_SIZE( GERBVIEW_FRAME::OnSize )
 
-    EVT_TOOL( wxID_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_TOOL( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
+    EVT_TOOL( wxID_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
 
     // Menu Files:
-    EVT_MENU( wxID_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_NEW_BOARD, WinEDA_GerberFrame::Files_io )
-    EVT_MENU( ID_GEN_PLOT, WinEDA_GerberFrame::ToPlotter )
-    EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, WinEDA_GerberFrame::ExportDataInPcbnewFormat )
+    EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
+    EVT_MENU( ID_GEN_PLOT, GERBVIEW_FRAME::ToPlotter )
+    EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, WinEDA_GerberFrame::OnFileHistory )
+    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnFileHistory )
 
-    EVT_MENU( ID_EXIT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_EXIT, GERBVIEW_FRAME::Process_Special_Functions )
 
     // menu Preferences
-    EVT_MENU( ID_CONFIG_REQ, WinEDA_GerberFrame::Process_Config )
-    EVT_MENU( ID_CONFIG_SAVE, WinEDA_GerberFrame::Process_Config )
+    EVT_MENU( ID_CONFIG_REQ, GERBVIEW_FRAME::Process_Config )
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    WinEDA_GerberFrame::Process_Config )
+                    GERBVIEW_FRAME::Process_Config )
 
     EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-              WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, WinEDA_GerberFrame::InstallGerberOptionsDialog )
+              GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, GERBVIEW_FRAME::InstallGerberOptionsDialog )
 
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
 
     // menu Postprocess
-    EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, GERBVIEW_FRAME::Process_Special_Functions )
 
     // menu Miscellaneous
-    EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE, GERBVIEW_FRAME::Process_Special_Functions )
 
     // Menu Help
     EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
-    EVT_TOOL( wxID_CUT, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_COPY, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_PRINT, WinEDA_GerberFrame::ToPrinter )
-    EVT_TOOL( ID_FIND_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( wxID_CUT, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_COPY, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PASTE, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_UNDO, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
+    EVT_TOOL( ID_FIND_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
-                         WinEDA_GerberFrame::Process_Special_Functions )
+                         GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_TOOL,
-                      WinEDA_GerberFrame::Process_Special_Functions )
+                      GERBVIEW_FRAME::Process_Special_Functions )
 
     // Vertical toolbar:
-    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_GerberFrame::Process_Special_Functions )
-    EVT_TOOL( ID_GERBVIEW_DELETE_ITEM_BUTT, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    WinEDA_GerberFrame::Process_Special_Functions )
+                    GERBVIEW_FRAME::Process_Special_Functions )
 
     // Pop up menu
-    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, WinEDA_GerberFrame::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
 
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                    WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, WinEDA_GerberFrame::OnSelectOptionToolbar )
+                    GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-              WinEDA_GerberFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, WinEDA_GerberFrame::OnSelectOptionToolbar )
+              GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                    WinEDA_GerberFrame::OnSelectDisplayMode )
+                    GERBVIEW_FRAME::OnSelectDisplayMode )
 
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
-                   WinEDA_GerberFrame::OnUpdateFlashedItemsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, WinEDA_GerberFrame::OnUpdateLinesDrawMode )
+                   GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLinesDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                   WinEDA_GerberFrame::OnUpdatePolygonsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, WinEDA_GerberFrame::OnUpdateShowDCodes )
+                   GERBVIEW_FRAME::OnUpdatePolygonsDrawMode )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                   WinEDA_GerberFrame::OnUpdateShowLayerManager )
+                   GERBVIEW_FRAME::OnUpdateShowLayerManager )
 
-    EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, WinEDA_GerberFrame::OnUpdateSelectDCode )
-    EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_LAYER, WinEDA_GerberFrame::OnUpdateLayerSelectBox )
+    EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, GERBVIEW_FRAME::OnUpdateSelectDCode )
+    EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_LAYER, GERBVIEW_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                         WinEDA_GerberFrame::OnUpdateDrawMode )
+                         GERBVIEW_FRAME::OnUpdateDrawMode )
 
 END_EVENT_TABLE()
 
 
-WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
+GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
                                         const wxString& title,
                                         const wxPoint&  pos,
                                         const wxSize&   size,
@@ -221,22 +223,21 @@ WinEDA_GerberFrame::WinEDA_GerberFrame( wxWindow*       father,
 }
 
 
-WinEDA_GerberFrame::~WinEDA_GerberFrame()
+GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
     SetScreen( ScreenPcb );
-    extern PARAM_CFG_BASE* ParamCfgList[];
-    wxGetApp().SaveCurrentSetupValues( ParamCfgList );
+    wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 
 
-void WinEDA_GerberFrame::OnCloseWindow( wxCloseEvent& Event )
+void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();
     Destroy();
 }
 
 
-int WinEDA_GerberFrame::BestZoom()
+int GERBVIEW_FRAME::BestZoom()
 {
     // gives a minimal value to zoom, if no item in list
     if( GetBoard()->m_Drawings == NULL  )
@@ -265,7 +266,7 @@ int WinEDA_GerberFrame::BestZoom()
 }
 
 
-void WinEDA_GerberFrame::LoadSettings()
+void GERBVIEW_FRAME::LoadSettings()
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -273,7 +274,9 @@ void WinEDA_GerberFrame::LoadSettings()
         return;
 
     PCB_BASE_FRAME::LoadSettings();
-    config->Read( GerbviewDrawModeOption, &m_displayMode, 0l );
+
+    wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
+
     long pageSize_opt;
     config->Read( GerbviewShowPageSizeOption, &pageSize_opt, 0l );
     int  imax = 0;
@@ -297,7 +300,7 @@ void WinEDA_GerberFrame::LoadSettings()
 }
 
 
-void WinEDA_GerberFrame::SaveSettings()
+void GERBVIEW_FRAME::SaveSettings()
 {
     wxConfig* config = wxGetApp().m_EDA_Config;
 
@@ -305,6 +308,8 @@ void WinEDA_GerberFrame::SaveSettings()
         return;
 
     PCB_BASE_FRAME::SaveSettings();
+
+    wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
     wxRealPoint GridSize = GetScreen()->GetGridSize();
 
@@ -322,13 +327,12 @@ void WinEDA_GerberFrame::SaveSettings()
         }
     }
 
-    config->Write( GerbviewDrawModeOption, m_displayMode );
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
     config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
 }
 
 
-void WinEDA_GerberFrame::ReFillLayerWidget()
+void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     m_LayersManager->ReFill();
 
@@ -353,7 +357,7 @@ void WinEDA_GerberFrame::ReFillLayerWidget()
  * Function IsGridVisible() , virtual
  * @return true if the grid must be shown
  */
-bool WinEDA_GerberFrame::IsGridVisible()
+bool GERBVIEW_FRAME::IsGridVisible()
 {
     return IsElementVisible( GERBER_GRID_VISIBLE );
 }
@@ -365,7 +369,7 @@ bool WinEDA_GerberFrame::IsGridVisible()
  * if you want to store/retrieve the grid visiblity in configuration.
  * @param aVisible = true if the grid must be shown
  */
-void WinEDA_GerberFrame::SetGridVisibility( bool aVisible )
+void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 {
     SetElementVisibility( GERBER_GRID_VISIBLE, aVisible );
 }
@@ -375,7 +379,7 @@ void WinEDA_GerberFrame::SetGridVisibility( bool aVisible )
  * Function GetGridColor() , virtual
  * @return the color of the grid
  */
-int WinEDA_GerberFrame::GetGridColor()
+int GERBVIEW_FRAME::GetGridColor()
 {
     return GetBoard()->GetVisibleElementColor( GERBER_GRID_VISIBLE );
 }
@@ -385,7 +389,7 @@ int WinEDA_GerberFrame::GetGridColor()
  * Function SetGridColor() , virtual
  * @param aColor = the new color of the grid
  */
-void WinEDA_GerberFrame::SetGridColor( int aColor )
+void GERBVIEW_FRAME::SetGridColor( int aColor )
 {
     GetBoard()->SetVisibleElementColor( GERBER_GRID_VISIBLE, aColor );
 }
@@ -398,14 +402,14 @@ void WinEDA_GerberFrame::SetGridColor( int aColor )
  * @param aNewState = The new visibility state of the element category
  * @see enum aGERBER_VISIBLE
  */
-void WinEDA_GerberFrame::SetElementVisibility( int aGERBER_VISIBLE, bool aNewState )
+void GERBVIEW_FRAME::SetElementVisibility( int aGERBER_VISIBLE, bool aNewState )
 {
     GetBoard()->SetElementVisibility( aGERBER_VISIBLE, aNewState );
     m_LayersManager->SetRenderState( aGERBER_VISIBLE, aNewState );
 }
 
 
-int WinEDA_GerberFrame::getNextAvailableLayer( int aLayer ) const
+int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
     int layer = aLayer;
 
@@ -426,7 +430,7 @@ int WinEDA_GerberFrame::getNextAvailableLayer( int aLayer ) const
 }
 
 
-void WinEDA_GerberFrame::syncLayerWidget()
+void GERBVIEW_FRAME::syncLayerWidget()
 {
     m_LayersManager->SelectLayer( getActiveLayer() );
     UpdateTitleAndInfo();
@@ -439,7 +443,7 @@ void WinEDA_GerberFrame::syncLayerWidget()
  * The currently active layer, as defined by the return value of
  * getActiveLayer().  And updates the colored icon in the toolbar.
  */
-void WinEDA_GerberFrame::syncLayerBox()
+void GERBVIEW_FRAME::syncLayerBox()
 {
     m_SelLayerBox->SetSelection( getActiveLayer() );
     int dcodeSelected = -1;
@@ -463,7 +467,7 @@ void WinEDA_GerberFrame::syncLayerBox()
  * called on a language menu selection
  * Update Layer manager title and tabs texts
  */
-void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
+void GERBVIEW_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_DRAW_FRAME::SetLanguage( event );
     m_LayersManager->SetLayersManagerTabsText();
@@ -475,7 +479,7 @@ void WinEDA_GerberFrame::SetLanguage( wxCommandEvent& event )
 }
 
 
-void WinEDA_GerberFrame::Liste_D_Codes()
+void GERBVIEW_FRAME::Liste_D_Codes()
 {
     int ii, jj;
     D_CODE*           pt_D_code;
@@ -549,7 +553,7 @@ void WinEDA_GerberFrame::Liste_D_Codes()
  * Note layer name can change when reading a gerber file, and the layer name is the last found.
  * So, show the layer name is not very useful, and can be seen as a debug feature.
  */
-void WinEDA_GerberFrame::UpdateTitleAndInfo()
+void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
     GERBER_IMAGE* gerber = g_GERBER_List[ GetScreen()->m_Active_Layer ];
     wxString      text;
@@ -592,7 +596,7 @@ void WinEDA_GerberFrame::UpdateTitleAndInfo()
 /* Function OnSelectDisplayMode: called to select display mode
  * (fast display, or exact mode with stacked images or with transparency
  */
-void WinEDA_GerberFrame::OnSelectDisplayMode( wxCommandEvent& event )
+void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
 {
     int oldMode = GetDisplayMode();
 

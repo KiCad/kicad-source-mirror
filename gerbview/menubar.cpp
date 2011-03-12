@@ -13,7 +13,7 @@
 #include "hotkeys.h"
 
 
-void WinEDA_GerberFrame::ReCreateMenuBar( void )
+void GERBVIEW_FRAME::ReCreateMenuBar( void )
 {
     wxMenuBar  *menuBar = GetMenuBar();
 
@@ -63,8 +63,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     // Configuration and preferences:
     wxMenu* configmenu = new wxMenu;
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&File Ext" ),
-                            _( "Set files extensions" ), config_xpm );
     ADD_MENUITEM_WITH_HELP( configmenu, ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                             _( "Hide &Layers Manager" ),
                             _( "Show/hide the layers manager toolbar" ),
@@ -79,11 +77,6 @@ void WinEDA_GerberFrame::ReCreateMenuBar( void )
 
     AddHotkeyConfigMenu( configmenu );
 
-
-    configmenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_SAVE, _( "&Save Setup" ),
-                            _( "Save application preferences" ),
-                            save_setup_xpm );
 
     wxMenu* miscellaneous_menu = new wxMenu;
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_SHOW_LIST_DCODES,

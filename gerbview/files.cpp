@@ -10,14 +10,14 @@
 
 #include "gerbview.h"
 
-static void LoadDCodeFile( WinEDA_GerberFrame* frame,
+static void LoadDCodeFile( GERBVIEW_FRAME* frame,
                            const wxString&     FullFileName );
 
 
 /* Load a Gerber file selected from history list on current layer
  * Previous data is deleted
  */
-void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
+void GERBVIEW_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
 
@@ -32,7 +32,7 @@ void WinEDA_GerberFrame::OnFileHistory( wxCommandEvent& event )
 
 
 /* File commands. */
-void WinEDA_GerberFrame::Files_io( wxCommandEvent& event )
+void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
 
@@ -89,7 +89,7 @@ clear an existing layer to load any new layers." ), NB_LAYERS );
 }
 
 
-bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
+bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 {
     wxString   filetypes;
     wxArrayString filenamesList;
@@ -164,9 +164,6 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
         if( !filename.IsAbsolute() )
             filename.SetPath( currentPath );
 
-        if( !filename.HasExt() )
-            filename.SetExt( g_PenFilenameExt );
-
         GetScreen()->SetFileName( filename.GetFullPath() );
 
         setActiveLayer( layer, false );
@@ -208,19 +205,16 @@ bool WinEDA_GerberFrame::LoadGerberFiles( const wxString& aFullFileName )
  *   0 if file not read (cancellation of order ...)
  *   1 if OK
  */
-static void LoadDCodeFile( WinEDA_GerberFrame* frame, const wxString& FullFileName )
+static void LoadDCodeFile( GERBVIEW_FRAME* frame, const wxString& FullFileName )
 {
     wxString   wildcard;
     wxFileName fn = FullFileName;
 
     if( !fn.IsOk() )
     {
-        wildcard.Printf( _( "Gerber DCODE files (%s)|*.%s" ),
-                         GetChars( g_PenFilenameExt ),
-                         GetChars( g_PenFilenameExt ) );
+        wildcard = _( "Gerber DCODE files" );
         wildcard += AllFilesWildcard;
         fn = frame->GetScreen()->GetFileName();
-        fn.SetExt( g_PenFilenameExt );
         wxFileDialog dlg( (wxWindow*) frame, _( "Load GERBER DCODE File" ),
                           fn.GetPath(), fn.GetFullName(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );

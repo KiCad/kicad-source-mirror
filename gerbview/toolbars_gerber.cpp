@@ -16,7 +16,7 @@
 #include "class_DCodeSelectionbox.h"
 #include "dialog_helpers.h"
 
-void WinEDA_GerberFrame::ReCreateHToolbar( void )
+void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {
     int           layer = 0;
     GERBER_IMAGE* gerber = NULL;
@@ -106,8 +106,9 @@ void WinEDA_GerberFrame::ReCreateHToolbar( void )
 
 /**
  * Create or update the right vertical toolbar
+ * Current no used
  */
-void WinEDA_GerberFrame::ReCreateVToolbar( void )
+void GERBVIEW_FRAME::ReCreateVToolbar( void )
 {
     if( m_VToolBar )
         return;
@@ -117,8 +118,6 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ) );
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_GERBVIEW_DELETE_ITEM_BUTT, wxEmptyString, wxBitmap( delete_body_xpm ),
-                         _( "Delete items" ) );
 
     m_VToolBar->Realize();
 }
@@ -127,7 +126,7 @@ void WinEDA_GerberFrame::ReCreateVToolbar( void )
 /**
  * Create or update the left vertical toolbar (option toolbar
  */
-void WinEDA_GerberFrame::ReCreateOptToolbar( void )
+void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 {
     if( m_OptionsToolBar )
         return;
@@ -203,7 +202,7 @@ void WinEDA_GerberFrame::ReCreateOptToolbar( void )
 }
 
 
-void WinEDA_GerberFrame::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
@@ -225,31 +224,31 @@ void WinEDA_GerberFrame::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_GerberFrame::OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPadFill );
 }
 
 
-void WinEDA_GerberFrame::OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPcbTrackFill );
 }
 
 
-void WinEDA_GerberFrame::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( g_DisplayPolygonsModeSketch != 0 );
 }
 
 
-void WinEDA_GerberFrame::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( IsElementVisible( DCODES_VISIBLE ) );
 }
 
 
-void WinEDA_GerberFrame::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_show_layer_manager_tools );
 
@@ -263,7 +262,7 @@ void WinEDA_GerberFrame::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_GerberFrame::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
     int layer = GetScreen()->m_Active_Layer;
     GERBER_IMAGE* gerber = g_GERBER_List[layer];
@@ -276,7 +275,7 @@ void WinEDA_GerberFrame::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_GerberFrame::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
+void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
     if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != GetScreen()->m_Active_Layer) )
     {

@@ -16,7 +16,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(DIALOGS_SRCS
     dialogs/gerbview_dialog_display_options_frame_base.cpp
     dialogs/gerbview_dialog_display_options_frame.cpp
-    dialogs/dialog_gerber_config.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
     )
@@ -31,7 +30,6 @@ set(GERBVIEW_SRCS
     class_gerbview_layer_widget.cpp
     controle.cpp
     dcode.cpp
-    deltrack.cpp
     dummy_functions.cpp
     draw_gerber_screen.cpp
     edit.cpp

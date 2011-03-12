@@ -20,7 +20,7 @@
 /* Process the command triggered by the left button of the mouse when a tool
  * is already selected.
  */
-void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
+void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
@@ -29,7 +29,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     {
         if( DrawStruct && DrawStruct->m_Flags  )
         {
-            msg.Printf( wxT( "WinEDA_GerberFrame::ProcessCommand err: Struct %d, m_Flags = %X" ),
+            msg.Printf( wxT( "GERBVIEW_FRAME::ProcessCommand err: Struct %d, m_Flags = %X" ),
                         (unsigned) DrawStruct->Type(),
                         (unsigned) DrawStruct->m_Flags );
             DisplayError( this, msg );
@@ -52,9 +52,6 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_NO_TOOL_SELECTED:
         break;
 
-    case ID_GERBVIEW_DELETE_ITEM_BUTT:
-        DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
-
         if( DrawStruct == NULL )
             break;
         /* TODO:
@@ -65,7 +62,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_GerberFrame::ProcessCommand error" ) );
+        DisplayError( this, wxT( "GERBVIEW_FRAME::ProcessCommand error" ) );
         break;
     }
 }
@@ -73,7 +70,7 @@ void WinEDA_GerberFrame::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
 /* Handles the selection of tools, menu, and popup menu commands.
  */
-void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
+void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id    = event.GetId();
     int        layer = GetScreen()->m_Active_Layer;
@@ -140,10 +137,6 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
-    case ID_GERBVIEW_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, wxT( "Delete item" ) );
-        break;
-
     case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
         setActiveLayer(m_SelLayerBox->GetChoice());
         DrawPanel->Refresh();
@@ -196,14 +189,8 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
-    case ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS:
-        if( gerber_layer )
-            Delete_DCode_Items( &dc, gerber_layer->m_Selected_Tool,
-                                ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
-        break;
-
     default:
-        wxMessageBox( wxT( "WinEDA_GerberFrame::Process_Special_Functions error" ) );
+        wxMessageBox( wxT( "GERBVIEW_FRAME::Process_Special_Functions error" ) );
         break;
     }
 }
@@ -211,7 +198,7 @@ void WinEDA_GerberFrame::Process_Special_Functions( wxCommandEvent& event )
 
 /* Called on a double click of left mouse button.
  */
-void WinEDA_GerberFrame::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
+void GERBVIEW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
     // Currently: no nothing
 }

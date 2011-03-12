@@ -24,25 +24,11 @@
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
-extern bool Read_Config();
-
-wxString g_PhotoFilenameExt;
-wxString g_DrillFilenameExt;
-wxString g_PenFilenameExt;
-
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 int      g_Default_GERBER_Format;
 int      g_DisplayPolygonsModeSketch;
-
-const wxString GerbviewProjectFileExt( wxT( "cnf" ) );
-const wxString GerbviewProjectFileWildcard( _( "GerbView project files (.cnf)|*.cnf" ) );
-
-// Config keywords
-const wxString GerbviewDrawModeOption( wxT( "DrawModeOption" ) );
-const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
-const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 
 GERBER_IMAGE*  g_GERBER_List[32];
 
@@ -65,7 +51,7 @@ IMPLEMENT_APP( WinEDA_App )
 void WinEDA_App::MacOpenFile(const wxString &fileName)
 {
     wxFileName           filename = fileName;
-    WinEDA_GerberFrame * frame = ((WinEDA_GerberFrame*)GetTopWindow());
+    GERBVIEW_FRAME * frame = ((GERBVIEW_FRAME*)GetTopWindow());
 
     if( !filename.FileExists() )
         return;
@@ -77,7 +63,7 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
 bool WinEDA_App::OnInit()
 {
     wxFileName          fn;
-    WinEDA_GerberFrame* frame = NULL;
+    GERBVIEW_FRAME* frame = NULL;
 
 #ifdef __WXMAC__
     wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
@@ -99,16 +85,13 @@ bool WinEDA_App::OnInit()
     bool reopenLastUsedDirectory = argc == 1;
     GetSettings( reopenLastUsedDirectory );
 
-    extern PARAM_CFG_BASE* ParamCfgList[];
-    wxGetApp().ReadCurrentSetupValues( ParamCfgList );
-
     g_DrawBgColor = BLACK;
 
    /* Must be called before creating the main frame in order to
     * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT("GerberFrame"), s_Gerbview_Hokeys_Descr );
 
-    frame = new  WinEDA_GerberFrame( NULL, wxT( "GerbView" ),
+    frame = new  GERBVIEW_FRAME( NULL, wxT( "GerbView" ),
                                      wxPoint( 0, 0 ),
                                      wxSize( 600, 400 ) );
 
@@ -125,8 +108,6 @@ bool WinEDA_App::OnInit()
     frame->Show( true );                    // Show GerbView mainframe
     frame->Zoom_Automatique( true );        // Zoom fit in frame
     frame->GetScreen()->m_FirstRedraw = false;
-
-    Read_Config();
 
     if( argc <= 1 )
         return true;

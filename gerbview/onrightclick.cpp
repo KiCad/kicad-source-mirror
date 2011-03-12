@@ -13,7 +13,7 @@
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
  */
-bool WinEDA_GerberFrame::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
+bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;

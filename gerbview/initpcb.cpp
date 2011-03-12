@@ -2,7 +2,6 @@
 /******* initpcb.cpp ********************/
 /****************************************/
 
-
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -13,7 +12,7 @@
 #include "class_GERBER.h"
 
 
-bool WinEDA_GerberFrame::Clear_Pcb( bool query )
+bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 {
     int layer;
 
@@ -52,7 +51,7 @@ bool WinEDA_GerberFrame::Clear_Pcb( bool query )
 }
 
 
-void WinEDA_GerberFrame::Erase_Current_Layer( bool query )
+void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 {
     int      layer = getActiveLayer();
     wxString msg;

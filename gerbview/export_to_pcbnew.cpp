@@ -15,13 +15,13 @@
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
 
-static int SavePcbFormatAscii( WinEDA_GerberFrame* frame,
+static int SavePcbFormatAscii( GERBVIEW_FRAME* frame,
                                FILE* File, int* LayerLookUpTable );
 
 
 /* Export data in pcbnew format
  */
-void WinEDA_GerberFrame::ExportDataInPcbnewFormat( wxCommandEvent& event )
+void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 {
     int  ii = 0;
     bool no_used_layers = true; // Changed to false if any used layer found
@@ -124,7 +124,7 @@ static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
  * @param LayerLookUpTable = look up table: pcbnew layer for each gerber layer
  * @return 1 if OK, 0 if fail
  */
-static int SavePcbFormatAscii( WinEDA_GerberFrame* frame, FILE* aFile,
+static int SavePcbFormatAscii( GERBVIEW_FRAME* frame, FILE* aFile,
                                int* LayerLookUpTable )
 {
     char   line[256];

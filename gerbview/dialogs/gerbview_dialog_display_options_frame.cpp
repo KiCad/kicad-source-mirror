@@ -19,11 +19,11 @@
 class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
 private:
-    WinEDA_GerberFrame* m_Parent;
+    GERBVIEW_FRAME* m_Parent;
 
 public:
 
-    DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame* parent );
+    DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME* parent );
     ~DIALOG_DISPLAY_OPTIONS() {};
 
 private:
@@ -33,7 +33,7 @@ private:
 };
 
 
-void WinEDA_GerberFrame::InstallGerberOptionsDialog( wxCommandEvent& event )
+void GERBVIEW_FRAME::InstallGerberOptionsDialog( wxCommandEvent& event )
 {
         DIALOG_DISPLAY_OPTIONS dlg( this );
         int opt = dlg.ShowModal();
@@ -41,7 +41,7 @@ void WinEDA_GerberFrame::InstallGerberOptionsDialog( wxCommandEvent& event )
             DrawPanel->Refresh();
 }
 
-DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( WinEDA_GerberFrame *parent) :
+DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :
     DIALOG_DISPLAY_OPTIONS_BASE( parent, wxID_ANY )
 {
     m_Parent = parent;

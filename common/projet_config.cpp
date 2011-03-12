@@ -664,11 +664,13 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxChar* ident,
 
 PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
                                         wxString* ptparam,
+                                        const wxString& default_val,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
 {
     m_Pt_param = ptparam;
     m_Setup    = Insetup;
+    m_default = default_val;
 }
 
 
@@ -680,7 +682,7 @@ void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig )
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
-    *m_Pt_param = aConfig->Read( m_Ident );
+    *m_Pt_param = aConfig->Read( m_Ident, m_default );
 }
 
 

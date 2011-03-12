@@ -41,12 +41,12 @@
 /*
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
- * may be tied into the WinEDA_GerberFrame's data and so we can add a popup
+ * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
  * menu which is specific to PCBNEW's needs.
  */
 
 
-GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow* aFocusOwner, int aPointSize ) :
+GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {

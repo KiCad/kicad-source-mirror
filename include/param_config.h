@@ -12,8 +12,7 @@
 
 
 /** Type of parameter in the configuration file */
-enum paramcfg_id
-{
+enum paramcfg_id {
     PARAM_INT,
     PARAM_SETCOLOR,
     PARAM_DOUBLE,
@@ -25,8 +24,8 @@ enum paramcfg_id
     PARAM_FIELDNAME_LIST
 };
 
-#define MAX_COLOR  0x8001F
-#define IS_VALID_COLOR( c )  ( ( c >= 0 ) && ( c <= 0x8001F ) )
+#define MAX_COLOR 0x8001F
+#define IS_VALID_COLOR( c ) ( ( c >= 0 ) && ( c <= 0x8001F ) )
 
 #define INT_MINVAL 0x80000000
 #define INT_MAXVAL 0x7FFFFFFF
@@ -46,8 +45,7 @@ public:
     const wxChar* m_Group;  ///<  Group name (this is like a path in the config data)
     bool          m_Setup;  ///<  Install or Project based parameter, true == install
 
-public:
-    PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
+public: PARAM_CFG_BASE( const wxChar* ident, const paramcfg_id type, const wxChar* group = NULL );
 
     /**
      * Function ReadParam
@@ -76,10 +74,9 @@ public:
     int  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
     int  m_Default;     ///<  The default value of the parameter
 
-public:
-    PARAM_CFG_INT( const wxChar* ident, int* ptparam,
-                   int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
-                   const wxChar* group = NULL );
+public: PARAM_CFG_INT( const wxChar* ident, int* ptparam,
+                       int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
+                       const wxChar* group = NULL );
     PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
                    int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
                    const wxChar* group = NULL );
@@ -99,9 +96,8 @@ public:
     int* m_Pt_param;    ///<  Pointer to the parameter value
     int  m_Default;     ///<  The default value of the parameter
 
-public:
-    PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
-                        int default_val, const wxChar* group = NULL );
+public: PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
+                            int default_val, const wxChar* group = NULL );
     PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, int* ptparam,
                         int default_val, const wxChar* group = NULL );
 
@@ -117,14 +113,13 @@ public:
 class PARAM_CFG_DOUBLE   : public PARAM_CFG_BASE
 {
 public:
-    double* m_Pt_param;    ///<  Pointer to the parameter value
-    double  m_Default;     ///<  The default value of the parameter
-    double  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
+    double* m_Pt_param;     ///<  Pointer to the parameter value
+    double  m_Default;      ///<  The default value of the parameter
+    double  m_Min, m_Max;   ///<  Minimum and maximum values of the param type
 
-public:
-    PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
-                      double default_val = 0.0, double min = 0.0, double max = 10000.0,
-                      const wxChar* group = NULL );
+public: PARAM_CFG_DOUBLE( const wxChar* ident, double* ptparam,
+                          double default_val = 0.0, double min = 0.0, double max = 10000.0,
+                          const wxChar* group = NULL );
     PARAM_CFG_DOUBLE( bool Insetup, const wxChar* ident, double* ptparam,
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
                       const wxChar* group = NULL );
@@ -141,12 +136,11 @@ public:
 class PARAM_CFG_BOOL     : public PARAM_CFG_BASE
 {
 public:
-    bool* m_Pt_param;    ///<  Pointer to the parameter value
-    int   m_Default;     ///<  The default value of the parameter
+    bool* m_Pt_param;       ///<  Pointer to the parameter value
+    int   m_Default;        ///<  The default value of the parameter
 
-public:
-    PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
-                    int default_val = FALSE, const wxChar* group = NULL );
+public: PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
+                        int default_val = FALSE, const wxChar* group = NULL );
     PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
                     int default_val = FALSE, const wxChar* group = NULL );
 
@@ -162,14 +156,15 @@ public:
 class PARAM_CFG_WXSTRING     : public PARAM_CFG_BASE
 {
 public:
-    wxString* m_Pt_param;    ///<  Pointer to the parameter value
+    wxString* m_Pt_param;       ///<  Pointer to the parameter value
+    wxString  m_default;        ///<  The default value of the parameter
 
-public:
-    PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
-    PARAM_CFG_WXSTRING( bool          Insetup,
-                        const wxChar* ident,
-                        wxString*     ptparam,
-                        const wxChar* group = NULL );
+public: PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_WXSTRING( bool            Insetup,
+                        const wxChar*   ident,
+                        wxString*       ptparam,
+                        const wxString& default_val = wxEmptyString,
+                        const wxChar*   group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );
@@ -186,12 +181,10 @@ class PARAM_CFG_FILENAME     : public PARAM_CFG_BASE
 public:
     wxString* m_Pt_param;    ///<  Pointer to the parameter value
 
-public:
-    PARAM_CFG_FILENAME( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+public: PARAM_CFG_FILENAME( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );
 };
-
 
 
 class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE
@@ -199,10 +192,9 @@ class PARAM_CFG_LIBNAME_LIST : public PARAM_CFG_BASE
 public:
     wxArrayString* m_Pt_param;     ///<  Pointer to the parameter value
 
-public:
-    PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
-                            wxArrayString* ptparam,
-                            const wxChar*  group = NULL );
+public: PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
+                                wxArrayString* ptparam,
+                                const wxChar*  group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );
@@ -210,6 +202,6 @@ public:
 
 
 /** A list of parameters type */
-typedef boost::ptr_vector< PARAM_CFG_BASE > PARAM_CFG_ARRAY;
+typedef boost::ptr_vector<PARAM_CFG_BASE> PARAM_CFG_ARRAY;
 
 #endif  /* __PARAM_CONFIG_H__ */

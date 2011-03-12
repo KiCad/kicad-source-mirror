@@ -83,7 +83,7 @@ void GERBER_LAYER::ResetDefaultValues()
 }
 
 
-GERBER_IMAGE::GERBER_IMAGE( WinEDA_GerberFrame* aParent, int aLayer )
+GERBER_IMAGE::GERBER_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 {
     m_Parent = aParent;
     m_GraphicLayer = aLayer;  // Graphic layer Number

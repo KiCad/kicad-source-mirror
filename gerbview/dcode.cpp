@@ -147,7 +147,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
  * tool,     Horiz,       Vert,   drill, vitesse, acc. ,Type ; [DCODE (commentaire)]
  * ex:     1,         12,       12,     0,        0,     0,   3 ; D10
  */
-int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
+int GERBVIEW_FRAME::Read_D_Code_File( const wxString& D_Code_FullFileName )
 {
     int      current_Dcode, ii, dcode_scale;
     char*    ptcar;
@@ -269,7 +269,7 @@ int WinEDA_GerberFrame::Read_D_Code_File( const wxString& D_Code_FullFileName )
 
 /* Set Size Items (Lines, Flashes) from DCodes List
  */
-void WinEDA_GerberFrame::CopyDCodesSizeToItems()
+void GERBVIEW_FRAME::CopyDCodesSizeToItems()
 {
     static D_CODE dummy( 999 );   //Used if D_CODE not found in list
 
@@ -318,7 +318,7 @@ void WinEDA_GerberFrame::CopyDCodesSizeToItems()
                 break;
 
             default:
-                wxMessageBox( wxT( "WinEDA_GerberFrame::CopyDCodesSizeToItems() error" ) );
+                wxMessageBox( wxT( "GERBVIEW_FRAME::CopyDCodesSizeToItems() error" ) );
                 break;
             }
         }

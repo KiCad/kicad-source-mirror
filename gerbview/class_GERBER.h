@@ -16,7 +16,7 @@
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
                        || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
 
-class WinEDA_GerberFrame;
+class GERBVIEW_FRAME;
 class BOARD;
 class D_CODE;
 
@@ -74,7 +74,7 @@ private:
  */
 class GERBER_IMAGE
 {
-    WinEDA_GerberFrame* m_Parent;                           // the parent WinEDA_GerberFrame (used to display messages...)
+    GERBVIEW_FRAME* m_Parent;                           // the parent GERBVIEW_FRAME (used to display messages...)
     D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];   ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
     BOARD*             m_Pcb;
@@ -138,7 +138,7 @@ private:
                                                                 // 1 = have negative items found
 
 public:
-    GERBER_IMAGE( WinEDA_GerberFrame* aParent, int layer );
+    GERBER_IMAGE( GERBVIEW_FRAME* aParent, int layer );
     ~GERBER_IMAGE();
     void Clear_GERBER_IMAGE();
     int  ReturnUsedDcodeNumber();

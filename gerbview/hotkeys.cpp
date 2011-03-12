@@ -69,7 +69,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Gerbview_Hokeys_Descr[] =
 
 
 /***********************************************************/
-void WinEDA_GerberFrame::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
+void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
 /***********************************************************/
 
 /* Hot keys. Some commands are relatives to the item under the mouse cursor

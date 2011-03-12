@@ -39,7 +39,6 @@ E4)  Change add component dialog search text control to combobox and add compone
      search history save and restore capability.  Also add session save and restore
      to component history list control.  Add advanced search capability similar to
      new find dialog.
-E5)  Make escape key work correctly in add component dialog.
 E6)  Start initial work for changing component library file format to use Dick's
      dsnlexer.  See note C2 above.  Come up with a workable library file format to
      handle the wishes of the library implementation group.  Add initial clipboard
@@ -48,55 +47,13 @@ E6)  Start initial work for changing component library file format to use Dick's
 
 GerbView
 --------
-* Need work as good as gerbv from gEDA
-  * Named layers
-  * List control for layer sort on the fly
+* List control for layer sort on the fly
 * Add excellon2 drill file support (small good library)
-* Fix the polygon bug.
-* Switch to use ZONE instead of SEGZONE for polygons.
-* Separate application settings and project configuration settings by converting
-  static list of parameters in gerbview_config.h to dynamically created lists of
-  settings.  See eeschema/eeschema_config.cpp for an example.
-
 
 
 PCBNew
 ------
 
 Dick:
-P2) Write accessors for all items in PCB_VISIBLE such as grid control, so that
-    the write accessor can fire change notifications to known listeners.
-    (Accessors should always be used in general for every class, but in the case
-    of PCB_VISIBLE I think we need them in WinEDA_PcbFrame, BOARD and
-    EDA_Settings.
-    <class>::IsElementVisible( aPCB_VISIBLE );
-    <class>::SetElementVisiblity( aPCB_VISIBLE, bool isVisible );
-    Two of the 3 classes already have these functions.  Once the functions are
-    in place, it is a simple matter to decide and move where the actual data
-    is stored without affecting client code.  The top most access point should
-    be WinEDA_PcbVisible, because some data is best retained there and this is
-    the "controller" part of MVC in PCBNEW.  Some data is best saved in the BOARD.
-    We should go through the list of PCB_VISIBLE and decide on this in a separate email.
-
-*   Fix block copy/move preview to not view only a border, we should
-    see the moved/copied parts.
-
-*   Fix DIALOG_PAD_PROPERTIES_BASE class to use actual layer names in the BOARD.
 
 *   Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
-*   Add ARC support to gerber polygons.
-*   Need to add polygon aperture type.
-    Then example 2 in RS274xrevd_e.pdf will draw properly.
-
-
-LAYER_WIDGET for PCBNEW (Dick)
------------------------
-L6) Test, and fix up any remaining issues with the PCB_VISIBLE support after P2)
-    is done.  This way we can fire change notifications to multiple GUI items
-    all interested in the same setting, such as the two grid buttons which
-    have to remain synchronized.  Using accessors makes this easy.
-
-L8) LAYER_WIDGET::GetBestSize() needs platform independence.
-
-L9) On board load, ReFill() is called, this should also update the Render
-    checkboxes and colors.

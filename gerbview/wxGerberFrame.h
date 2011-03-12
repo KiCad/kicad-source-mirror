@@ -7,6 +7,8 @@
 
 
 #include "id.h"
+#include "param_config.h"
+
 #include "class_gerbview_layer_widget.h"
 #include "class_layerchoicebox.h"
 
@@ -39,10 +41,10 @@ class DCODE_SELECTION_BOX;
 
 
 /******************************************************************
- *  class WinEDA_GerberFrame: this is the main window used in gerbview
+ *  class GERBVIEW_FRAME: this is the main window used in gerbview
  ******************************************************************/
 
-class WinEDA_GerberFrame : public PCB_BASE_FRAME
+class GERBVIEW_FRAME : public PCB_BASE_FRAME
 {
     friend class PCB_LAYER_WIDGET;
 
@@ -57,6 +59,7 @@ public:
     wxArrayString         m_DCodesList;     // an array string containing all decodes Id (10 to 999)
 
 private:
+    PARAM_CFG_ARRAY       m_configSettings; // list of PARAM_CFG_xxx to read/write parameters saved in config
     int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
                                         //  - in fast mode (write mode) but if there are negative
                                         // items only the last image is correctly drawn (no
@@ -70,13 +73,12 @@ private:
     wxArrayString m_Messages;           // An array sting to store warning messages when reaging
                                         // a gerber file
 
-public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
+public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
                             const wxPoint& pos, const wxSize& size,
                             long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
-    ~WinEDA_GerberFrame();
+    ~GERBVIEW_FRAME();
 
-    void Update_config();
     void OnCloseWindow( wxCloseEvent& Event );
 
     /**
@@ -245,6 +247,18 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     void UpdateTitleAndInfo();
 
     /**
+     * Function GetConfigurationSettings
+     * Populates the Gerbview applications settings list.
+     * (list of parameters that must be saved in Gerbview parameters)
+     * Currently, only the settings that are needed at start
+     * up by the main window are defined here.  There are other locally used
+     * settings scattered thoughout the Gerbview source code (mainle in dialogs).
+     * If you need to define a configuration setting that need to be loaded at run time,
+     * this is the place to define it.
+     */
+    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+
+    /**
      * Load applications settings specific to the PCBNew.
      *
      * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
@@ -298,9 +312,7 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
 
     void Process_Settings( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
-    void InstallConfigFrame( const wxPoint& pos );
     void InstallGerberOptionsDialog( wxCommandEvent& event );
-    void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent );
@@ -423,7 +435,6 @@ public: WinEDA_GerberFrame( wxWindow* father, const wxString& title,
     // PCB handling
     bool Clear_Pcb( bool query );
     void Erase_Current_Layer( bool query );
-    void Delete_DCode_Items( wxDC* DC, int dcode_value, int layer_number );
 
     // Conversion function
     void ExportDataInPcbnewFormat( wxCommandEvent& event );

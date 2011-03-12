@@ -8,7 +8,7 @@
 #include "gerbview.h"
 
 
-void WinEDA_GerberFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;

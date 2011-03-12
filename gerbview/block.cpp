@@ -47,7 +47,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
  */
-int WinEDA_GerberFrame::ReturnBlockCommand( int key )
+int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 {
     int cmd = 0;
 
@@ -85,7 +85,7 @@ int WinEDA_GerberFrame::ReturnBlockCommand( int key )
 
 
 /* Routine to handle the BLOCK PLACE command */
-void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
+void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 {
     bool err = false;
 
@@ -162,7 +162,7 @@ void WinEDA_GerberFrame::HandleBlockPlace( wxDC* DC )
  * @return false if no item selected, or command finished,
  * true if some items found and HandleBlockPlace must be called later
  */
-bool WinEDA_GerberFrame::HandleBlockEnd( wxDC* DC )
+bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool nextcmd  = false;
     bool zoom_command = false;
@@ -274,7 +274,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 /*
  * Erase the selected block.
  */
-void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
+void GERBVIEW_FRAME::Block_Delete( wxDC* DC )
 {
     if( !IsOK( this, _( "Ok to delete block ?" ) ) )
         return;
@@ -300,7 +300,7 @@ void WinEDA_GerberFrame::Block_Delete( wxDC* DC )
 /*
  *  Function to move items in the current selected block
  */
-void WinEDA_GerberFrame::Block_Move( wxDC* DC )
+void GERBVIEW_FRAME::Block_Move( wxDC* DC )
 {
     wxPoint delta;
     wxPoint oldpos;
@@ -332,7 +332,7 @@ void WinEDA_GerberFrame::Block_Move( wxDC* DC )
 /*
  *  Function to duplicate items in the current selected block
  */
-void WinEDA_GerberFrame::Block_Duplicate( wxDC* DC )
+void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
 {
     wxPoint delta;
     wxPoint oldpos;

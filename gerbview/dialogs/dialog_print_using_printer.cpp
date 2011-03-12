@@ -44,14 +44,14 @@ static PRINT_PARAMETERS  s_Parameters;
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
 {
 private:
-    WinEDA_GerberFrame* m_Parent;
+    GERBVIEW_FRAME* m_Parent;
     wxConfig*         m_Config;
     wxCheckBox*       m_BoxSelectLayer[32];
     static wxPoint      s_LastPos;
     static wxSize       s_LastSize;
 
 public:
-    DIALOG_PRINT_USING_PRINTER( WinEDA_GerberFrame* parent );
+    DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent );
     ~DIALOG_PRINT_USING_PRINTER() {};
 
 private:
@@ -80,7 +80,7 @@ wxSize  DIALOG_PRINT_USING_PRINTER::s_LastSize;
 
 
 /*******************************************************/
-void WinEDA_GerberFrame::ToPrinter( wxCommandEvent& event )
+void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
 /*******************************************************/
 
 /* Virtual function:
@@ -106,7 +106,7 @@ void WinEDA_GerberFrame::ToPrinter( wxCommandEvent& event )
 
 
 /*************************************************************************************/
-DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( WinEDA_GerberFrame* parent ) :
+DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent ) :
     DIALOG_PRINT_USING_PRINTER_base( parent )
 /*************************************************************************************/
 {

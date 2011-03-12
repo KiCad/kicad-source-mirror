@@ -16,7 +16,7 @@
 #include "gerbview_config.h"
 #include "dialog_hotkeys_editor.h"
 
-void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
+void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 {
     int      id = event.GetId();
     wxPoint  pos;
@@ -28,17 +28,7 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_CONFIG_REQ:
-    {
-        InstallConfigFrame( pos );
-        break;
-    }
-
-    case ID_CONFIG_SAVE:
-        Update_config();
-        break;
-
-   /* Hotkey IDs */
+    /* Hotkey IDs */
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
         ExportHotkeyConfigToFile( s_Gerbview_Hokeys_Descr );
         break;
@@ -52,50 +42,88 @@ void WinEDA_GerberFrame::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+
         // Display current hotkey list for eeschema.
         DisplayHotkeyList( this, s_Gerbview_Hokeys_Descr );
         break;
 
     default:
         DisplayError( this,
-                      wxT( "WinEDA_GerberFrame::Process_Config internal error" ) );
+                     wxT( "GERBVIEW_FRAME::Process_Config internal error" ) );
     }
 }
 
 
-/* Read configuration, if it has not already read.
- * 1 - bed gerbview.cnf
- * 2 - if no bed is path> gerbview.exe> / gerbview.cnf
- * 3 - If not found: init variables to default values
+/*
+ * Return the Gerbview applications settings list.
+ * (list of parameters that must be saved in Gerbview parameters)
+ *
+ * This replaces the old statically define list that had the project
+ * file settings and the application settings mixed together.  This
+ * was confusing and caused some settings to get saved and loaded
+ * incorrectly.  Currently, only the settings that are needed at start
+ * up by the main window are defined here.  There are other locally used
+ * settings scattered thoughout the EESchema source code.  If you need
+ * to define a configuration setting that need to be loaded at run time,
+ * this is the place to define it.
+ *
+ * TODO: Define the configuration variables as member variables instead of
+ *       global variables or move them to the object class where they are
+ *       used.
  */
-bool Read_Config()
+
+PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
 {
-    wxGetApp().ReadProjectConfig( wxT( "gerbview.cnf" ), GROUP, ParamCfgList,
-                                  FALSE );
+    if( !m_configSettings.empty() )
+        return m_configSettings;
 
-    if( g_PhotoFilenameExt.IsEmpty() )
-        g_PhotoFilenameExt = wxT( "pho" );
-    if( g_DrillFilenameExt.IsEmpty() )
-        g_DrillFilenameExt = wxT( "drl" );
-    if( g_PenFilenameExt.IsEmpty() )
-        g_PenFilenameExt = wxT( "pen" );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
+                                                    (int*) &g_UserUnit, 0, 0, 1 ) );
 
-    return TRUE;
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "DrawModeOption" ),
+                                                    &m_displayMode, 2, 0, 2 ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
+                                                        wxT( "DCodeColor" ),
+                                                        &g_ColorsSettings.m_ItemsColors[
+                                                            DCODES_VISIBLE],
+                                                        WHITE ) );
+
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true,
+                                                    wxT( "DisplayPolairCoordinates" ),
+                                                    &DisplayOpt.DisplayPolarCood,
+                                                    false ) );
+
+    // Color select parameters:
+    static const int color_default[32] = // Default values for color layers 0 to 31
+    {
+        GREEN,     BLUE,         LIGHTGRAY, MAGENTA,
+        RED,       DARKGREEN,    BROWN,     MAGENTA,
+        LIGHTGRAY, BLUE,         GREEN,     CYAN,
+        LIGHTRED,  LIGHTMAGENTA, YELLOW,    RED,
+        BLUE,      BROWN,        LIGHTCYAN, RED,
+        MAGENTA,   CYAN,         BROWN,     MAGENTA,
+        LIGHTGRAY, BLUE,         GREEN,     DARKCYAN,
+        YELLOW,    LIGHTMAGENTA, YELLOW,    LIGHTGRAY
+    };
+
+    // List of keywords used as identifiers in config
+    // they *must* be static const and not temporary created,
+    // because the parameter list that used these keywords does not store them,
+    // just points on them
+    static const wxChar * keys[32] =
+    {
+        wxT("ColorLayer0"), wxT("ColorLayer1"), wxT("ColorLayer2"), wxT("ColorLayer3"),
+        wxT("ColorLayer4"), wxT("ColorLayer5"), wxT("ColorLayer6"), wxT("ColorLayer7"),
+        wxT("ColorLayer8"), wxT("ColorLayer9"), wxT("ColorLayer10"), wxT("ColorLayer11"),
+        wxT("ColorLayer12"), wxT("ColorLaye13"), wxT("ColorLayer14"), wxT("ColorLayer15")
+    };
+    for( unsigned ii = 0; ii < 32; ii++ )
+    {
+        int * prm = &g_ColorsSettings.m_LayersColors[1];
+        PARAM_CFG_SETCOLOR * prm_entry =
+            new PARAM_CFG_SETCOLOR( true, keys[ii], prm, color_default[1] );
+        m_configSettings.push_back( prm_entry );
+    }
+
+    return m_configSettings;
 }
-
-
-void WinEDA_GerberFrame::Update_config()
-{
-    wxFileName fn = wxFileName( wxEmptyString, wxT( "gerbview" ),
-                                GerbviewProjectFileExt );
-
-    wxFileDialog dlg( this, _( "Save GerbView Project File" ), wxEmptyString,
-                      fn.GetFullName(), GerbviewProjectFileWildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, ParamCfgList );
-}
-

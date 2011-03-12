@@ -36,12 +36,12 @@
 /**
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
- * may be tied into the WinEDA_GerberFrame's data and so we can add a popup
+ * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
  * menu which is specific to PCBNEW's needs.
  */
 class GERBER_LAYER_WIDGET : public LAYER_WIDGET
 {
-    WinEDA_GerberFrame*    myframe;
+    GERBVIEW_FRAME*    myframe;
 
     // popup menu ids.
 #define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
@@ -69,7 +69,7 @@ public:
      *  effectively sets the overal size of the widget via the row height and bitmap
      *  button sizes.
      */
-    GERBER_LAYER_WIDGET( WinEDA_GerberFrame* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
+    GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
 
     void ReFill();
 

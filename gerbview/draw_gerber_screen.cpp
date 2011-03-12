@@ -28,7 +28,7 @@
  * @param aPrintMirrorMode = true to plot mirrored
  * @param aData = a pointer to an optional data (not used here: can be NULL)
  */
-void WinEDA_GerberFrame::PrintPage( wxDC* aDC, int aPrintMasklayer,
+void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
                                     bool aPrintMirrorMode, void* aData )
 {
     // Save current draw options, because print mode has specfic options:
@@ -58,7 +58,7 @@ void WinEDA_GerberFrame::PrintPage( wxDC* aDC, int aPrintMasklayer,
 
 /* Redraws the full screen, including axis and grid
  */
-void WinEDA_GerberFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
 
@@ -267,7 +267,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
  * Draw the DCode value (if exists) corresponding to gerber item
  * Polygons do not have a DCode
  */
-void WinEDA_GerberFrame::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
+void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 {
     wxPoint     pos;
     int         width, orient;

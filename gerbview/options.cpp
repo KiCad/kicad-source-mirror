@@ -10,7 +10,6 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
 
 #include "gerbview.h"
 #include "gerbview_id.h"
@@ -20,7 +19,7 @@
  * Function OnSelectOptionToolbar
  *  called to validate current choices
  */
-void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
+void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state;
@@ -85,7 +84,7 @@ void WinEDA_GerberFrame::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
+        wxMessageBox( wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
         break;
     }
 }
