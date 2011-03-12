@@ -150,8 +150,19 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
     bool doBlit = false; // this flag requests an image transfert to actual screen when true.
 
-    for( int layer = 0; layer < 32; layer++ )
+    bool end = false;
+    for( int layer = 0; !end; layer++ )
     {
+        int active_layer = ((GERBVIEW_FRAME*)m_PcbFrame)->getActiveLayer();
+        if( layer == active_layer ) // active layer will be drawn after other layers
+            continue;
+
+        if( layer == 32 )   // last loop: draw active layer
+        {
+            end = true;
+            layer = active_layer;
+        }
+
         if( !GetBoard()->IsLayerVisible( layer ) )
             continue;
 

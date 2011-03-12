@@ -66,8 +66,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     for( ii = 0; ii < 32; ii++ )
     {
-        wxString msg;
-        msg = _( "Layer " ); msg << ii + 1;
+        msg.Printf( _( "Layer %d" ), ii + 1);
         choices.Add( msg );
     }
 
@@ -80,14 +79,11 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_DCodesList.Alloc(TOOLS_MAX_COUNT+1);
     m_DCodesList.Add( _( "No tool" ) );
 
-    msg = _( "Tool " );
-    wxString text;
-
     for( ii = FIRST_DCODE; ii < TOOLS_MAX_COUNT; ii++ )
     {
-        text = msg;
-        text << ii;
-        m_DCodesList.Add( text );
+        msg = _( "Tool " );
+        msg << ii;
+        m_DCodesList.Add( msg );
     }
 
     m_DCodeSelector = new DCODE_SELECTION_BOX( m_HToolBar, ID_TOOLBARH_GERBER_SELECT_TOOL,

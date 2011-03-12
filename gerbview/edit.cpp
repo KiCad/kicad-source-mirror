@@ -113,7 +113,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    INSTALL_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     switch( id )
     {
@@ -139,7 +139,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
         setActiveLayer(m_SelLayerBox->GetChoice());
-        DrawPanel->Refresh();
+        DrawPanel->ReDraw( &dc, false );
         break;
 
     case ID_TOOLBARH_GERBER_SELECT_TOOL:
@@ -149,7 +149,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( tool != gerber_layer->m_Selected_Tool )
             {
                 gerber_layer->m_Selected_Tool = tool;
-                DrawPanel->Refresh();
+                DrawPanel->ReDraw( &dc, false );
             }
         }
         break;
