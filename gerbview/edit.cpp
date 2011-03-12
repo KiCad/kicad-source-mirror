@@ -138,8 +138,12 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_TOOLBARH_GERBVIEW_SELECT_LAYER:
-        setActiveLayer(m_SelLayerBox->GetChoice());
-        DrawPanel->ReDraw( &dc, false );
+    {
+        int layer = getActiveLayer( );
+        setActiveLayer(event.GetSelection());
+        if( layer != getActiveLayer( ) )
+            DrawPanel->ReDraw( &dc, false );
+    }
         break;
 
     case ID_TOOLBARH_GERBER_SELECT_TOOL:
