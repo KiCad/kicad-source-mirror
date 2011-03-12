@@ -585,17 +585,22 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
         if( CompactForm )
 #if defined(KICAD_GOST)
+		{
             tmpStr.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol,
                            GetChars( DrawLibItem->GetField( ii )->m_Text ) );
+        	outStr += tmpStr;
+        }
 #else
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                      TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
 #endif
         else
 #if defined(KICAD_GOST)
+		{
             tmpStr.Printf( wxT( "; %-12s" ),
                            GetChars( DrawLibItem->GetField( ii )->m_Text ) );
-        outStr+=tmpStr;
+        	outStr += tmpStr;
+        }
 #else
             fprintf( f, "; %-12s",
                      TO_UTF8( DrawLibItem->GetField( ii )->m_Text ) );
@@ -750,7 +755,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
         if ( CompactForm )
         {
           if ( strPred.Len() == 0 )
-            CmpNameFirst=CmpName;
+            CmpNameFirst = CmpName;
           else
           {
             if ( !strCur.IsSameAs(strPred) )
