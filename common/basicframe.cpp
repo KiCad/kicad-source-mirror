@@ -278,6 +278,37 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 #endif
 }
 
+/*
+ * Function OnSelectPreferredEditor
+ * Open a dialog to select the preferred editor that will be used in Kicad
+ * to edit or display files (reports ... )
+ * The full filename editor is saved in configuration (global params)
+ */
+void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
+{
+    wxFileName fn = wxGetApp().m_EditorName;
+    wxString wildcard( wxT( "*" ) );
+
+#ifdef __WINDOWS__
+    wildcard += wxT( ".exe" );
+#endif
+
+    wildcard = _( "Executable file (" ) + wildcard + wxT( ")|" ) + wildcard;
+
+    wxFileDialog dlg( this, _( "Select Prefered Editor" ), fn.GetPath(),
+                      fn.GetFullName(), wildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxASSERT( wxGetApp().m_EDA_CommonConfig );
+
+    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
+    wxGetApp().m_EditorName = dlg.GetPath();
+    cfg->Write( wxT( "Editor" ), wxGetApp().m_EditorName );
+}
+
 
 /*
  *

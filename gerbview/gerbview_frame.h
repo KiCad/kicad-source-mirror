@@ -406,7 +406,18 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
-     * Function Read_D_Code_File
+     * Read a DCode file (not used with RX274X files , just with RS274D old files).
+     * Note: there is no standard for DCode file.
+     * Just read a file format created by early versions of Pcbnew.
+     * @return false if file not read (cancellation)
+     *          true if OK
+     * @ aparm aFullFileName = name of file to load.
+     *  if empty, or if the file does not exist, a file dialog is opened
+     */
+    bool LoadDCodeFile( const wxString& aFullFileName );
+
+    /**
+     * Function ReadDCodeDefinitionFile
      * reads in a dcode file assuming ALSPCB file format with ';' indicating
      * comments.
      * <p>
@@ -418,7 +429,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * Ver,  Hor, Type, Tool [,Drill]<br>
      * example: 0.012, 0.012,  L   , D10<br>
      *
-     * Categorize all found dcodes into a table of D_CODE instantiations.
+     * Load all found dcodes into a table of D_CODE instantiations.
      * @param D_Code_FullFileName The name of the file to read from.
      * @return int - <br>
      *                 -1 = file not found<br>
@@ -428,7 +439,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *                      g_GERBER_List[]<br>
      *                  1 = read OK<br>
      */
-    int Read_D_Code_File( const wxString& D_Code_FullFileName );
+    int ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName );
     void CopyDCodesSizeToItems();
     void Liste_D_Codes();
 

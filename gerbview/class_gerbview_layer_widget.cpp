@@ -33,7 +33,6 @@
 #include "class_drawpanel.h"
 #include "pcbstruct.h"
 #include "gerbview.h"
-#include "wxGerberFrame.h"
 #include "layer_widget.h"
 #include "class_gerbview_layer_widget.h"
 

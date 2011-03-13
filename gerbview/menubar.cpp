@@ -6,7 +6,7 @@
 
 #include "appl_wxstruct.h"
 #include "common.h"
-#include "macros.h"
+//#include "macros.h"
 #include "gerbview.h"
 #include "bitmaps.h"
 #include "gerbview_id.h"
@@ -90,6 +90,13 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_GLOBAL_DELETE,
                             _( "&Clear Layer" ),
                             _( "Clear current layer" ), general_deletions_xpm );
+
+    miscellaneous_menu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
+                            _( "&Text Editor" ),
+                            _( "Select your preferred text editor" ),
+                            editor_xpm );
+
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;

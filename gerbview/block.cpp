@@ -1,6 +1,6 @@
-/**********************************************************/
-/* Block operations: displacement, rotation, deletion ... */
-/**********************************************************/
+/**********************************/
+/* Block operations: displacement */
+/**********************************/
 
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
@@ -28,15 +28,14 @@
 
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "trigo.h"
 #include "confirm.h"
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
 
+#include "wx/debug.h"
 
 #define BLOCK_COLOR BROWN
 
@@ -46,6 +45,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 /* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
  *  the key (ALT, SHIFT ALT ..)
+ * Currently, only block move and block zoom is supported
  */
 int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 {
@@ -62,17 +62,9 @@ int GERBVIEW_FRAME::ReturnBlockCommand( int key )
         break;
 
     case GR_KB_SHIFT:
-        break;
-
     case GR_KB_CTRL:
-        break;
-
     case GR_KB_SHIFTCTRL:
-        cmd = BLOCK_DELETE;
-        break;
-
     case GR_KB_ALT:
-        cmd = BLOCK_COPY;
         break;
 
     case MOUSE_MIDDLE:
@@ -87,25 +79,13 @@ int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 /* Routine to handle the BLOCK PLACE command */
 void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    bool err = false;
+    wxASSERT( DrawPanel->IsMouseCaptured() );
 
-    if( !DrawPanel->IsMouseCaptured() )
-    {
-        err = true;
-        DisplayError( this,
-                      wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
-    }
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
-    case BLOCK_IDLE:
-        err = true;
-        break;
-
-    case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
-    case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( DrawPanel->IsMouseCaptured() )
             DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
@@ -122,9 +102,9 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_PASTE:
-        break;
-
-    case BLOCK_ZOOM:        // Handle by HandleBlockEnd()
+    case BLOCK_DRAG:
+    case BLOCK_PRESELECT_MOVE:
+    case BLOCK_ZOOM:
     case BLOCK_ROTATE:
     case BLOCK_FLIP:
     case BLOCK_DELETE:
@@ -133,6 +113,8 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_SELECT_ITEMS_ONLY:
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
+    case BLOCK_IDLE:
+        wxFAIL_MSG( wxT("HandleBlockPlace: Unexpected block command") );
         break;
     }
 
@@ -142,11 +124,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->SetModify();
     GetScreen()->ClearBlockCommand();
 
-    if( GetScreen()->m_BlockLocate.GetCount() )
-    {
-        DisplayError( this, wxT( "HandleBlockPLace error: some items left" ) );
-        GetScreen()->m_BlockLocate.ClearItemsList();
-    }
+    wxASSERT( GetScreen()->m_BlockLocate.GetCount() == 0 );
 
     DisplayToolMsg( wxEmptyString );
 }
@@ -171,15 +149,8 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
 
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
-        case BLOCK_IDLE:
-            DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
-            break;
-
-        case BLOCK_DRAG:            /* Drag (not used, for future
-                                     * enhancements) */
         case BLOCK_MOVE:            /* Move */
         case BLOCK_COPY:            /* Copy */
-        case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
             DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
@@ -193,20 +164,22 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
             Block_Delete( DC );
             break;
 
+        case BLOCK_ZOOM: /* Window Zoom */
+            zoom_command = true;
+            break;
+
+        case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
+        case BLOCK_DRAG:
+        case BLOCK_IDLE:
         case BLOCK_MIRROR_X:    /* Mirror, unused*/
         case BLOCK_ROTATE:      /* Unused */
         case BLOCK_FLIP:        /* Flip, unused */
         case BLOCK_SAVE:        /* Save (not used)*/
         case BLOCK_PASTE:
-            break;
-
-        case BLOCK_ZOOM: /* Window Zoom */
-            zoom_command = true;
-            break;
-
         case BLOCK_ABORT:
         case BLOCK_SELECT_ITEMS_ONLY:
         case BLOCK_MIRROR_Y:
+            wxFAIL_MSG( wxT("HandleBlockEnd: Unexpected block command") );
             break;
         }
 

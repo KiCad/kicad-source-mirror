@@ -13,6 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 # Sources
 ###
+
 set(DIALOGS_SRCS
     dialogs/gerbview_dialog_display_options_frame_base.cpp
     dialogs/gerbview_dialog_display_options_frame.cpp
@@ -35,9 +36,9 @@ set(GERBVIEW_SRCS
     edit.cpp
     export_to_pcbnew.cpp
     files.cpp
-    gerberframe.cpp
-    gerbview_config.cpp
     gerbview.cpp
+    gerbview_config.cpp
+    gerbview_frame.cpp
     hotkeys.cpp
     initpcb.cpp
     locate.cpp
@@ -50,7 +51,8 @@ set(GERBVIEW_SRCS
     rs274d.cpp
     rs274x.cpp
     select_layers_to_pcb.cpp
-    toolbars_gerber.cpp )
+    toolbars_gerber.cpp
+    )
 
 ###
 # We need some extra sources from pcbnew

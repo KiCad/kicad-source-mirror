@@ -109,7 +109,6 @@ public:
     void OnRefresh( wxCommandEvent& event );
     void OnSelectDefaultPdfBrowser( wxCommandEvent& event );
     void OnSelectPreferredPdfBrowser( wxCommandEvent& event );
-    void OnSelectPreferredEditor( wxCommandEvent& event );
 
     void OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );

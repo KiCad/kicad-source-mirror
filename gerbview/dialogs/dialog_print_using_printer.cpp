@@ -15,7 +15,6 @@
 #include "printout_controler.h"
 
 #include "gerbview.h"
-#include "wxGerberFrame.h"
 #include "pcbplot.h"
 #include "class_board_design_settings.h"
 

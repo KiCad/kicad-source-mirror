@@ -127,6 +127,14 @@ public:
     virtual void LoadSettings();
     virtual void SaveSettings();
 
+    /**
+     * Function OnSelectPreferredEditor
+     * Open a dialog to select the editor that will used in Kicad
+     * to edit or display files (reports ... )
+     * The full filename editor is saved in configuration (global params)
+     */
+    virtual void OnSelectPreferredEditor( wxCommandEvent& event );
+
     // Read/Save and Import/export hotkeys config
 
     /**

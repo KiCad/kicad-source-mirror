@@ -165,31 +165,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
      */
     if( !gerber->m_Has_DCode )
     {
-        wxFileName fn;
-
-        if( D_Code_FullFileName.IsEmpty() )
-        {
-            wxString wildcard;
-
-            fn = GERBER_FullFileName;
-            fn.SetExt( wxEmptyString );
-            wildcard = _( "Gerber DCODE files" );
-            wildcard += AllFilesWildcard;
-
-            wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),
-                              wxEmptyString, fn.GetFullName(), wildcard,
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-        }
-        else
-            fn = D_Code_FullFileName;
-
-        if( fn.IsOk() )
-        {
-            Read_D_Code_File( fn.GetFullPath() );
-            CopyDCodesSizeToItems();
-        }
-        else
-            return false;
+        return LoadDCodeFile( D_Code_FullFileName );
     }
 
     return true;

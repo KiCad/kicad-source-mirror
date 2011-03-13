@@ -108,6 +108,6 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 extern GERBER_IMAGE* g_GERBER_List[32];
 
 #include "pcbcommon.h"
-#include "wxGerberFrame.h"
+#include "gerbview_frame.h"
 
 #endif  // ifndef GERBVIEW_H

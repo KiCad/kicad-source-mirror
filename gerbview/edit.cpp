@@ -118,11 +118,11 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( id )
     {
     case ID_EXIT:
-        Close( TRUE );
+        Close( true );
         break;
 
     case ID_GERBVIEW_GLOBAL_DELETE:
-        Erase_Current_Layer( TRUE );
+        Erase_Current_Layer( true );
         ClearMsgPanel();
         break;
 
@@ -170,6 +170,10 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 wxFileName fn( gerber_layer->m_FileName );
                 ExecuteFile( this, editorname, QuoteFullPath( fn ) );
+            }
+            else
+            {
+                wxMessageBox(_("No editor defined. Please select one") );
             }
         }
         break;

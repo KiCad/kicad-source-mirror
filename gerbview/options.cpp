@@ -88,3 +88,4 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
     }
 }
+

@@ -69,33 +69,6 @@ void WinEDA_MainFrame::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     wxGetApp().WritePdfBrowserInfos();
 }
 
-
-void WinEDA_MainFrame::OnSelectPreferredEditor( wxCommandEvent& event )
-{
-    wxFileName fn = wxGetApp().m_EditorName;
-    wxString wildcard( wxT( "*" ) );
-
-#ifdef __WINDOWS__
-    wildcard += wxT( ".exe" );
-#endif
-
-    wildcard = _( "Executable file (" ) + wildcard + wxT( ")|" ) + wildcard;
-
-    wxFileDialog dlg( this, _( "Select Prefered Editor" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxASSERT( wxGetApp().m_EDA_CommonConfig );
-
-    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-    wxGetApp().m_EditorName = dlg.GetPath();
-    cfg->Write( wxT( "Editor" ), wxGetApp().m_EditorName );
-}
-
-
 void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );

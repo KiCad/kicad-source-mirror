@@ -10,9 +10,6 @@
 
 #include "gerbview.h"
 
-static void LoadDCodeFile( GERBVIEW_FRAME* frame,
-                           const wxString&     FullFileName );
-
 
 /* Load a Gerber file selected from history list on current layer
  * Previous data is deleted
@@ -79,11 +76,12 @@ clear an existing layer to load any new layers." ), NB_LAYERS );
         break;
 
     case ID_GERBVIEW_LOAD_DCODE_FILE:
-        LoadDCodeFile( this, wxEmptyString );
+        LoadDCodeFile( wxEmptyString );
+        DrawPanel->Refresh();
         break;
 
     default:
-        DisplayError( this, wxT( "File_io Internal Error" ) );
+        wxFAIL_MSG( wxT( "File_io: unexpected command id" ) );
         break;
     }
 }
@@ -199,33 +197,33 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
 /*
  * Read a DCode file (not used with RX274X files , just with RS274D old files).
- * Note: there is no standard for DCode file.
+ * Note: there is no standard for DCode files.
  * Just read a file format created by early versions of Pcbnew.
  * Returns:
- *   0 if file not read (cancellation of order ...)
- *   1 if OK
+ *   false if file not read (cancellation of order ...)
+ *   true if OK
  */
-static void LoadDCodeFile( GERBVIEW_FRAME* frame, const wxString& FullFileName )
+bool GERBVIEW_FRAME::LoadDCodeFile( const wxString& aFullFileName )
 {
     wxString   wildcard;
-    wxFileName fn = FullFileName;
+    wxFileName fn = aFullFileName;
 
     if( !fn.IsOk() )
     {
         wildcard = _( "Gerber DCODE files" );
-        wildcard += AllFilesWildcard;
-        fn = frame->GetScreen()->GetFileName();
-        wxFileDialog dlg( (wxWindow*) frame, _( "Load GERBER DCODE File" ),
+        wildcard += wxT(" ") + AllFilesWildcard;
+        fn = GetScreen()->GetFileName();
+        wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),
                           fn.GetPath(), fn.GetFullName(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
-            return;
+            return false;
 
         fn = dlg.GetPath();
     }
 
-    frame->Read_D_Code_File( fn.GetFullPath() );
-    frame->CopyDCodesSizeToItems();
-    frame->Refresh();
+    ReadDCodeDefinitionFile( fn.GetFullPath() );
+    CopyDCodesSizeToItems();
+    return true;
 }

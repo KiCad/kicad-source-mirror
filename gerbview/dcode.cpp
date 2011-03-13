@@ -137,17 +137,17 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 
 /*
- * Function Read_D_Code_File
+ * Function ReadDCodeDefinitionFile
  * Can be useful only with old RS274D Gerber file format.
  * Is not needed with RS274X files format.
  * These files need an auxiliary DCode file description. There is no defined file format for this.
  * This function read a file format I needed a long time ago.
  * reads in a dcode file assuming ALSPCB file format with ';' indicating comments.
  * Format is like CSV but with optional ';' delineated comments:
- * tool,     Horiz,       Vert,   drill, vitesse, acc. ,Type ; [DCODE (commentaire)]
+ * tool,     Horiz,       Vert,   drill, speed, accel. ,Type ; [DCODE (commentaire)]
  * ex:     1,         12,       12,     0,        0,     0,   3 ; D10
  */
-int GERBVIEW_FRAME::Read_D_Code_File( const wxString& D_Code_FullFileName )
+int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName )
 {
     int      current_Dcode, ii, dcode_scale;
     char*    ptcar;

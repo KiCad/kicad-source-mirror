@@ -11,7 +11,6 @@
 
 #include "gerbview.h"
 #include "gerbview_id.h"
-#include "wxGerberFrame.h"
 #include "pcbplot.h"
 #include "bitmaps.h"
 #include "zones.h"
