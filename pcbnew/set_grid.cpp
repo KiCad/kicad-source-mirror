@@ -70,6 +70,7 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos ) :
     m_TextPosXUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
 }

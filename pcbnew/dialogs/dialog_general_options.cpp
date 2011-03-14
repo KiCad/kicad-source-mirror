@@ -25,6 +25,7 @@ Dialog_GeneralOptions::Dialog_GeneralOptions( PCB_EDIT_FRAME* parent ) :
     m_Parent = parent;
     init();
 
+    m_buttonOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
 }

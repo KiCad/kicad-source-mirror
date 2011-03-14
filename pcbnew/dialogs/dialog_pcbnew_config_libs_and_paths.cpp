@@ -40,9 +40,10 @@ DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME* parent ):
     wxString title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
     SetTitle( title );
 
+    m_sdbSizer1OK->SetDefault();
+
     if( GetSizer() )
         GetSizer()->SetSizeHints( this );
-
 }
 
 /*************************************/

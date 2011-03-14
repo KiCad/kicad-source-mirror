@@ -53,6 +53,7 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
     m_SelectedPCBText = passedTextPCB;
 
     MyInit();
+    m_StandardSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
 }

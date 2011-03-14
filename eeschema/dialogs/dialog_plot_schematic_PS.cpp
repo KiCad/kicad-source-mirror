@@ -97,6 +97,7 @@ DIALOG_PLOT_SCHEMATIC_PS::DIALOG_PLOT_SCHEMATIC_PS( SCH_EDIT_FRAME* parent ) :
 
     GetSizer()->SetSizeHints( this );
     Centre();
+    m_buttonPlotAll->SetDefault();
 }
 
 

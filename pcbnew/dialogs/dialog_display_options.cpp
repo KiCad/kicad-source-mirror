@@ -25,15 +25,14 @@ void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 }
 
 
-/*******************************************************************************/
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
-    DIALOG_DISPLAY_OPTIONS_BASE(parent)
-/*******************************************************************************/
+    DIALOG_DISPLAY_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
 
     init();
 
+    m_buttonOK->SetDefault();
     GetSizer()->SetSizeHints( this );
 }
 

@@ -55,11 +55,11 @@ END_EVENT_TABLE()
 
 
 PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
-                                        int             idtype,
-                                        const wxString& title,
-                                        const wxPoint&  pos,
-                                        const wxSize&   size,
-                                        long style) :
+                                int             idtype,
+                                const wxString& title,
+                                const wxPoint&  pos,
+                                const wxSize&   size,
+                                long style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
     m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch

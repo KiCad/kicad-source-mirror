@@ -51,6 +51,7 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Center();
+    m_sdbSizer1OK->SetDefault();
 }
 
 

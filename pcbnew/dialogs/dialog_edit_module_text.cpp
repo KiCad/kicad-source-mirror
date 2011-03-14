@@ -58,10 +58,13 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* parent,
     m_DC     = DC;
     m_Module = NULL;
     m_CurrentTextMod = TextMod;
+
     if( m_CurrentTextMod )
         m_Module = (MODULE*) m_CurrentTextMod->GetParent();
+
     Init( );
 
+    m_buttonOK->SetDefault();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }

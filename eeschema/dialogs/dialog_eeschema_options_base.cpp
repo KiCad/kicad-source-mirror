@@ -16,6 +16,7 @@ END_EVENT_TABLE()
 DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -25,6 +26,8 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panel1 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panel1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	
 	wxBoxSizer* p1mainSizer;
 	p1mainSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -148,8 +151,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
 	p1mainSizer->Fit( m_panel1 );
-	m_notebook1->AddPage( m_panel1, _("General Options"), true );
+	m_notebook1->AddPage( m_panel1, _("General Options"), false );
 	m_panel2 = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panel2->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
 	wxBoxSizer* bSizer6;
@@ -236,7 +240,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook1->AddPage( m_panel2, _("Template Field Names"), false );
+	m_notebook1->AddPage( m_panel2, _("Template Field Names"), true );
 	
 	bOptionsSizer->Add( m_notebook1, 1, wxEXPAND, 0 );
 	

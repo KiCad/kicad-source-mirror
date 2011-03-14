@@ -16,6 +16,7 @@ DIALOG_CLEANING_OPTIONS::DIALOG_CLEANING_OPTIONS( wxWindow* parent ):
     m_deleteUnconnectedOpt->SetValue( deleteUnconnectedSegm );
     m_reconnectToPadsOpt->SetValue( connectToPads );
 
+    m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints(this);
     Centre();
 }

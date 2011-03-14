@@ -18,7 +18,8 @@ enum id_netlist {
     ID_SETUP_PLUGIN,
     ID_VALIDATE_PLUGIN,
     ID_DELETE_PLUGIN,
-    ID_NETLIST_NOTEBOOK
+    ID_NETLIST_NOTEBOOK,
+    ID_CHANGE_NOTEBOOK_PAGE
 };
 
 /* panel (notebook page) identifiers */

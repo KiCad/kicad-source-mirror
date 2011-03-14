@@ -258,20 +258,23 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( PCB_BASE_FRAME* parent ) :
     m_Parent = parent;
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
-    int         Masque_Layer =
-        g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    int         Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;
 
     for( ii = 0, LayerCount = 0; ii < NB_COPPER_LAYERS; ii++ )
     {
         m_LayerId[ii] = 0;
+
         if( (g_TabOneLayerMask[ii] & Masque_Layer) )
         {
             LayerList[LayerCount] = board->GetLayerName( ii );
+
             if( ii == screen->m_Route_Layer_TOP )
                 LayerTopSelect = LayerCount;
+
             if( ii == screen->m_Route_Layer_BOTTOM )
                 LayerBottomSelect = LayerCount;
+
             m_LayerId[LayerCount] = ii;
             LayerCount++;
         }
@@ -306,6 +309,7 @@ WinEDA_SelLayerPairFrame::WinEDA_SelLayerPairFrame( PCB_BASE_FRAME* parent ) :
     RadioBoxSizer->Add( m_LayerListBOTTOM, 0, wxALIGN_TOP | wxALL, 5 );
 
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
+    Button->SetDefault();
     ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
@@ -323,16 +327,14 @@ void WinEDA_SelLayerPairFrame::OnOkClick( wxCommandEvent& event )
     // select the same layer for top and bottom is allowed (normal in some
     // boards)
     // but could be a mistake. So display an info message
-    if( m_LayerId[m_LayerListTOP->GetSelection()]
-        == m_LayerId[m_LayerListBOTTOM->GetSelection()] )
+    if( m_LayerId[m_LayerListTOP->GetSelection()] == m_LayerId[m_LayerListBOTTOM->GetSelection()] )
         DisplayInfoMessage( this,
                             _( "Warning: The Top Layer and Bottom Layer are same." ) );
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
 
     screen->m_Route_Layer_TOP    = m_LayerId[m_LayerListTOP->GetSelection()];
-    screen->m_Route_Layer_BOTTOM =
-        m_LayerId[m_LayerListBOTTOM->GetSelection()];
+    screen->m_Route_Layer_BOTTOM = m_LayerId[m_LayerListBOTTOM->GetSelection()];
 
     EndModal( 0 );
 }

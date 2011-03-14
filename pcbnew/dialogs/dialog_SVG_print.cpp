@@ -47,6 +47,7 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     initDialog( );
     GetSizer()->SetSizeHints( this );
     Centre();
+    m_buttonBoard->SetDefault();
 }
 
 

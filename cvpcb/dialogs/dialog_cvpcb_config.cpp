@@ -32,10 +32,13 @@ DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
     Init( );
     title = _( "Project file: " ) + fn.GetFullPath();
     SetTitle( title );
+
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    m_sdbSizer2OK->SetDefault();
 }
 
 

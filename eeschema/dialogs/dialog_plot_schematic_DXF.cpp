@@ -90,6 +90,7 @@ DIALOG_PLOT_SCHEMATIC_DXF::DIALOG_PLOT_SCHEMATIC_DXF( SCH_EDIT_FRAME* parent )
 
     GetSizer()->SetSizeHints( this );
     Centre();
+    m_buttonPlotAll->SetDefault();
 }
 
 void DIALOG_PLOT_SCHEMATIC_DXF::initDlg()

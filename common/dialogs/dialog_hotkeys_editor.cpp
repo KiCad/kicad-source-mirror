@@ -66,7 +66,8 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*                 pa
         m_hotkeyGrid->SetReadOnly( i, 1, true );
     }
 
-    SetFocus();
+    m_OKButton->SetDefault();
+    m_hotkeyGrid->SetFocus();
     GetSizer()->SetSizeHints( this );
     Center();
 }

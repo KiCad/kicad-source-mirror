@@ -118,6 +118,8 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    m_buttonPrint->SetDefault();
 }
 
 

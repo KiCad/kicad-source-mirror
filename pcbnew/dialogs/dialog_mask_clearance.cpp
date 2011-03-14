@@ -29,6 +29,7 @@ DIALOG_PADS_MASK_CLEARANCE::DIALOG_PADS_MASK_CLEARANCE( PCB_EDIT_FRAME* parent )
     m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
 
     MyInit();
+    m_sdbButtonsSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
 }

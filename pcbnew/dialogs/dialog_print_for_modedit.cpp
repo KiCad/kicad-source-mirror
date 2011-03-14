@@ -89,6 +89,7 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( EDA_DRAW_FRAME* parent ) :
     m_Config = wxGetApp().m_EDA_Config;
     InitValues();
 
+    m_buttonPrint->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
 }

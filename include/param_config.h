@@ -159,12 +159,15 @@ public:
     wxString* m_Pt_param;       ///<  Pointer to the parameter value
     wxString  m_default;        ///<  The default value of the parameter
 
-public: PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
+public:
+    PARAM_CFG_WXSTRING( const wxChar* ident, wxString* ptparam, const wxChar* group = NULL );
     PARAM_CFG_WXSTRING( bool            Insetup,
                         const wxChar*   ident,
                         wxString*       ptparam,
                         const wxString& default_val = wxEmptyString,
                         const wxChar*   group = NULL );
+
+    virtual ~PARAM_CFG_WXSTRING() {}
 
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );

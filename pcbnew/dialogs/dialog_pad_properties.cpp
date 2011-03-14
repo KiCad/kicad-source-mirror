@@ -157,6 +157,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* parent, D_PAD* Pad
 
     initValues();
 
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
     m_canUpdate = true;

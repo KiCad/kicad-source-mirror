@@ -43,6 +43,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* pare
     m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
     initValues(  );
 
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
 
     Centre();

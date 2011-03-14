@@ -37,6 +37,7 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
     m_Parent = parent;
     MyInit();
 
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
 }

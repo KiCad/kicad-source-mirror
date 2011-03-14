@@ -125,6 +125,7 @@ DIALOG_PLOT_SCHEMATIC_HPGL::DIALOG_PLOT_SCHEMATIC_HPGL( SCH_EDIT_FRAME* parent )
 
     GetSizer()->SetSizeHints( this );
     Centre();
+    m_buttonPlotAll->SetDefault();
 }
 
 
