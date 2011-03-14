@@ -106,9 +106,9 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent,
 
     /* Build the layer list */
     LayerCount = 0;
-    int Masque_Layer =
-        g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    int Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
     Masque_Layer += ALL_NO_CU_LAYERS;
+
     for( ii = 0; ii < NB_LAYERS; ii++ )
     {
         m_LayerId[ii] = 0;
@@ -122,6 +122,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent,
                 break;
 
             LayerList[LayerCount] = board->GetLayerName( ii );
+
             if( ii == default_layer )
                 LayerSelect = LayerCount;
 
@@ -134,6 +135,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent,
     if( null_layer )
     {
         LayerList[LayerCount] = _( "(Deselect)" );
+
         if( NB_LAYERS == default_layer )
             LayerSelect = LayerCount;
 
@@ -157,6 +159,7 @@ WinEDA_SelLayerFrame::WinEDA_SelLayerFrame( PCB_BASE_FRAME* parent,
     FrameBoxSizer->Add( ButtonBoxSizer, 0, wxALIGN_BOTTOM | wxALL, 0 );
 
     Button = new wxButton( this, wxID_OK, _( "OK" ) );
+    Button->SetDefault();
     ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );

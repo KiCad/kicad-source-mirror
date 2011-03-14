@@ -49,7 +49,7 @@ DIALOG_PLOT_SCHEMATIC_DXF_BASE::DIALOG_PLOT_SCHEMATIC_DXF_BASE( wxWindow* parent
 	m_buttonPlotAll = new wxButton( this, wxID_ANY, _("Plot A&LL"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	bupperSizer->Add( bbuttonsSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );

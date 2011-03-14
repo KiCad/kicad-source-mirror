@@ -254,6 +254,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
 
     Button = new wxButton( this, wxID_OK, _( "&OK" ), wxDefaultPosition,
                            wxDefaultSize, 0 );
+    Button->SetDefault();
     StdDialogButtonSizer->AddButton( Button );
 
     Button = new wxButton( this, wxID_CANCEL, _( "&Cancel" ),

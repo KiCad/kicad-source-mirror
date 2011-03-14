@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 12 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -63,7 +63,7 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	
 	bSizer1->Add( m_auiNotebook, 2, wxEXPAND | wxALL, 5 );
 	
-	m_buttonOK = new wxButton( this, wxID_ANY, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonOK = new wxButton( this, wxID_CANCEL, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonOK->SetDefault(); 
 	bSizer1->Add( m_buttonOK, 0, wxALIGN_CENTER|wxALL, 5 );
 	

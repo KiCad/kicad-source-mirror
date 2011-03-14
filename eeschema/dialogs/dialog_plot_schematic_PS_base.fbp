@@ -40,7 +40,7 @@
             <property name="size">387,365</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
-            <property name="title">EESchema Plot PS</property>
+            <property name="title">Plot Postsript</property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>

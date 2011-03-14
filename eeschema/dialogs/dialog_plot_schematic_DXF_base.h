@@ -52,7 +52,7 @@ class DIALOG_PLOT_SCHEMATIC_DXF_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PLOT_SCHEMATIC_DXF_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Plot DXF"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 387,365 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PLOT_SCHEMATIC_DXF_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot DXF"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 387,365 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PLOT_SCHEMATIC_DXF_BASE();
 	
 };

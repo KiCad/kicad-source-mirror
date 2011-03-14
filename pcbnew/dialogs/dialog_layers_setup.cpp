@@ -310,6 +310,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
     Center();
 
     m_sdbSizer2OK->SetFocus();
+    m_sdbSizer2OK->SetDefault();
 }
 
 

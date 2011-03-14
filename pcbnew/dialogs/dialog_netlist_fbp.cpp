@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,6 +68,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bRightSizerButtons->Add( m_button1, 0, wxALL|wxEXPAND, 5 );
 	
 	m_button2 = new wxButton( this, ID_READ_NETLIST_FILE, _("Read Current Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button2->SetDefault(); 
 	m_button2->SetToolTip( _("Read the current netlist and update connections and connectivity info") );
 	
 	bRightSizerButtons->Add( m_button2, 0, wxALL|wxEXPAND, 5 );
@@ -127,4 +128,5 @@ DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 	m_button3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnTestFootprintsClick ), NULL, this );
 	m_button4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
 	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
+	
 }

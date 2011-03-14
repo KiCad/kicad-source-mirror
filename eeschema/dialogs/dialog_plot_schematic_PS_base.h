@@ -55,7 +55,7 @@ class DIALOG_PLOT_SCHEMATIC_PS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Plot PS"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 387,365 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PLOT_SCHEMATIC_PS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot Postsript"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 387,365 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PLOT_SCHEMATIC_PS_BASE();
 	
 };

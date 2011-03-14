@@ -14,7 +14,11 @@ Dialogs:
     Follow the recommendations here:
     http://library.gnome.org/devel/hig-book/2.20/windows-dialog.html.en
     paying particular attention to "initial focus", "sensible default values",
-    "default buttons", ESC key termination.
+    "default buttons", ESC key termination.  Please note that the escape key
+    termination only works properly if there is a dialog button defined with
+    an ID of wxID_CANCEL or SetEscapeID( MY_ESCAPE_BUTTON_ID ) is called during
+    dialog initialization.  The former is the preferred method for handling
+    escape key dialog termination.
 
     Use wxWidgets "sizers" in all dialogs, no matter how simple they are:
     http://zetcode.com/tutorials/wxwidgetstutorial/layoutmanagement

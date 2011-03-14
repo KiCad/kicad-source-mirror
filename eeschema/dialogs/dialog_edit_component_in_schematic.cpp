@@ -109,6 +109,8 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     {
         GetSizer()->SetSizeHints( this );
     }
+
+    stdDialogButtonSizerOK->SetDefault();
 }
 
 

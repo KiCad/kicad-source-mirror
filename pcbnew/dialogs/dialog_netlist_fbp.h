@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,15 +57,16 @@ class DIALOG_NETLIST_FBP : public wxDialog
 		wxTextCtrl* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOpenNelistClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnReadNetlistFileClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnTestFootprintsClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCompileRatsnestClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOpenNelistClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnReadNetlistFileClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTestFootprintsClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist Dialog"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,431 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,431 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_NETLIST_FBP();
 	
 };
