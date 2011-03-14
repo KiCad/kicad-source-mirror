@@ -4,10 +4,11 @@
 
 #include "fctsys.h"
 #include "common.h"
-#include "hotkeys.h"
+#include "kicad_device_context.h"
 
 #include "gerbview.h"
 #include "class_drawpanel.h"
+#include "hotkeys.h"
 
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
@@ -139,13 +140,19 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer > 0 )
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer--;
+        if( getActiveLayer() > 0 )
+        {
+            setActiveLayer( getActiveLayer() - 1 );
+            DrawPanel->Refresh();
+        }
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        if( ((PCB_SCREEN*)GetScreen())->m_Active_Layer < 31 )
-            ((PCB_SCREEN*)GetScreen())->m_Active_Layer++;
+        if( getActiveLayer() < 31 )
+        {
+            setActiveLayer( getActiveLayer() + 1 );
+            DrawPanel->Refresh();
+        }
         break;
     }
 }

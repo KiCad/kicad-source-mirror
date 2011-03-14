@@ -89,7 +89,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
                                                         WHITE ) );
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true,
-                                                    wxT( "DisplayPolairCoordinates" ),
+                                                    wxT( "DisplayPolarCoordinates" ),
                                                     &DisplayOpt.DisplayPolarCood,
                                                     false ) );
 
@@ -108,7 +108,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
 
     // List of keywords used as identifiers in config
     // they *must* be static const and not temporary created,
-    // because the parameter list that used these keywords does not store them,
+    // because the parameter list that use these keywords does not store them,
     // just points on them
     static const wxChar * keys[32] =
     {

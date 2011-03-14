@@ -570,7 +570,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
     GERBER_DRAW_ITEM* gbritem;
     BOARD*            pcb = m_Parent->GetBoard();
 
-    int      activeLayer = m_Parent->GetScreen()->m_Active_Layer;
+    int      activeLayer = m_Parent->getActiveLayer();
 
     int      dcode = 0;
     D_CODE*  tool  = NULL;

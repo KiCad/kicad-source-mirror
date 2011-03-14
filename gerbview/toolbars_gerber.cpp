@@ -28,7 +28,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     if( GetScreen() )
     {
-        layer = GetScreen()->m_Active_Layer;
+        layer = getActiveLayer();
         gerber = g_GERBER_List[layer];
     }
 
@@ -70,7 +70,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
+    m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                                               wxDefaultPosition, wxSize( 150, -1 ), choices );
     m_HToolBar->AddControl( m_SelLayerBox );
 
@@ -260,7 +260,7 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
-    int layer = GetScreen()->m_Active_Layer;
+    int layer = getActiveLayer();
     GERBER_IMAGE* gerber = g_GERBER_List[layer];
     int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
 
@@ -273,8 +273,8 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != GetScreen()->m_Active_Layer) )
+    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != getActiveLayer()) )
     {
-        m_SelLayerBox->SetSelection( GetScreen()->m_Active_Layer );
+        m_SelLayerBox->SetSelection( getActiveLayer() );
     }
 }

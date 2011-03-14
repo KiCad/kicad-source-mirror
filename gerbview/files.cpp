@@ -9,6 +9,7 @@
 #include "gestfich.h"
 
 #include "gerbview.h"
+#include "gerbview_id.h"
 
 
 /* Load a Gerber file selected from history list on current layer

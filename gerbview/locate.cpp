@@ -19,7 +19,7 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     if( aTypeloc == CURSEUR_ON_GRILLE )
         ref = GetScreen()->GetNearestGridPosition( ref );
 
-    int layer = GetScreen()->m_Active_Layer;
+    int layer = getActiveLayer();
 
     // Search first on active layer
     BOARD_ITEM* item = GetBoard()->m_Drawings;

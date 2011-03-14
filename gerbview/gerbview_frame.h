@@ -16,27 +16,6 @@
 #define NO_AVAILABLE_LAYERS -1
 
 
-/**
- * Command IDs for the gerber file viewer.
- *
- * Please add IDs that are unique to the gerber file viewer here and not in the
- * global id.h file.  This will prevent the entire project from being rebuilt
- * when adding new command to the gerber file viewer.
- */
-enum id_gerbview_frm {
-    // A MenuItem ID of Zero does not work under Mac,first id = 1
-    ID_GERBVIEW_SHOW_LIST_DCODES = 1,
-    ID_GERBVIEW_LOAD_DRILL_FILE,
-    ID_GERBVIEW_LOAD_DCODE_FILE,
-    ID_TOOLBARH_GERBER_SELECT_TOOL,
-    ID_MENU_INC_LAYER_AND_APPEND_FILE,
-    ID_INC_LAYER_AND_APPEND_FILE,
-    ID_GERBVIEW_SHOW_SOURCE,
-    ID_GERBVIEW_EXPORT_TO_PCBNEW,
-    ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS
-};
-
-
 class DCODE_SELECTION_BOX;
 
 
@@ -80,6 +59,17 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     ~GERBVIEW_FRAME();
 
     void OnCloseWindow( wxCloseEvent& Event );
+
+    // Virtual basic functions:
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void ReCreateHToolbar();
+    void ReCreateVToolbar();
+    void ReCreateOptToolbar();
+    void ReCreateMenuBar();
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    int BestZoom();
 
     /**
      * Function ReportMessage
@@ -287,16 +277,22 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     virtual void SetLanguage( wxCommandEvent& event );
 
     void Process_Special_Functions( wxCommandEvent& event );
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
-    void ReCreateOptToolbar();
-    void ReCreateMenuBar();
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int BestZoom();
     void OnSelectOptionToolbar( wxCommandEvent& event );
+
+    /**
+     * Function OnSelectActiveLayer
+     * Selects the active layer:
+     *  - if a file is loaded, it is loaded in this layer
+     *  _ this layer is displayed on top of other layers
+     */
+    void OnSelectActiveLayer( wxCommandEvent& event );
+
+    /**
+     * Function OnShowGerberSourceFile
+     * Call the preferred editor to show (and edit) the gerber source file
+     * loaded in the active layer
+     */
+    void OnShowGerberSourceFile( wxCommandEvent& event );
 
     /**
      * Function OnSelectDisplayMode
@@ -305,6 +301,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * or exact mode with stacked images or with transparency
      */
     void OnSelectDisplayMode( wxCommandEvent& event );
+
     void OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     GERBER_DRAW_ITEM* GerberGeneralLocateAndDisplay();

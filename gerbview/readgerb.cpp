@@ -26,7 +26,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     char*    text;
     int      layer;         /* current layer used in gerbview */
 
-    layer = GetScreen()->m_Active_Layer;
+    layer = getActiveLayer();
 
     if( g_GERBER_List[layer] == NULL )
     {

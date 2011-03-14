@@ -33,7 +33,7 @@ set(GERBVIEW_SRCS
     dcode.cpp
     dummy_functions.cpp
     draw_gerber_screen.cpp
-    edit.cpp
+    events_called_functions.cpp
     export_to_pcbnew.cpp
     files.cpp
     gerbview.cpp
@@ -43,6 +43,7 @@ set(GERBVIEW_SRCS
     initpcb.cpp
     locate.cpp
     menubar.cpp
+    onleftclick.cpp
     onrightclick.cpp
     options.cpp
     pcbplot.cpp

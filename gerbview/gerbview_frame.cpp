@@ -29,99 +29,6 @@ const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 /* class GERBVIEW_FRAME for GerbView*/
 /****************************************/
 
-BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
-    EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
-    EVT_SIZE( GERBVIEW_FRAME::OnSize )
-
-    EVT_TOOL( wxID_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-
-    // Menu Files:
-    EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
-    EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-    EVT_MENU( ID_GEN_PLOT, GERBVIEW_FRAME::ToPlotter )
-    EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
-
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnFileHistory )
-
-    EVT_MENU( ID_EXIT, GERBVIEW_FRAME::Process_Special_Functions )
-
-    // menu Preferences
-    EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
-                    GERBVIEW_FRAME::Process_Config )
-
-    EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-              GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, GERBVIEW_FRAME::InstallGerberOptionsDialog )
-
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
-
-    // menu Postprocess
-    EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
-              EDA_BASE_FRAME::OnSelectPreferredEditor )
-
-    // menu Miscellaneous
-    EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE, GERBVIEW_FRAME::Process_Special_Functions )
-
-    // Menu Help
-    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
-
-    EVT_TOOL( wxID_CUT, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_COPY, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
-    EVT_TOOL( ID_FIND_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-    EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_LAYER,
-                         GERBVIEW_FRAME::Process_Special_Functions )
-
-    EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_TOOL,
-                      GERBVIEW_FRAME::Process_Special_Functions )
-
-    // Vertical toolbar:
-    EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
-
-    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    GERBVIEW_FRAME::Process_Special_Functions )
-
-    // Pop up menu
-    EVT_MENU( ID_GERBVIEW_POPUP_DELETE_DCODE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
-
-    // Option toolbar
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                    GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-              GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                    GERBVIEW_FRAME::OnSelectDisplayMode )
-
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
-                   GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLinesDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                   GERBVIEW_FRAME::OnUpdatePolygonsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                   GERBVIEW_FRAME::OnUpdateShowLayerManager )
-
-    EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, GERBVIEW_FRAME::OnUpdateSelectDCode )
-    EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_LAYER, GERBVIEW_FRAME::OnUpdateLayerSelectBox )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                         GERBVIEW_FRAME::OnUpdateDrawMode )
-
-END_EVENT_TABLE()
-
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
                                         const wxString& title,
@@ -463,23 +370,6 @@ void GERBVIEW_FRAME::syncLayerBox()
 }
 
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- * Update Layer manager title and tabs texts
- */
-void GERBVIEW_FRAME::SetLanguage( wxCommandEvent& event )
-{
-    EDA_DRAW_FRAME::SetLanguage( event );
-    m_LayersManager->SetLayersManagerTabsText();
-    wxAuiPaneInfo& pane_info = m_auimgr.GetPane( m_LayersManager );
-    pane_info.Caption( _( "Visibles" ) );
-    m_auimgr.Update();
-
-    ReFillLayerWidget();
-}
-
-
 void GERBVIEW_FRAME::Liste_D_Codes()
 {
     int ii, jj;
@@ -487,7 +377,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     wxString          Line;
     WinEDA_TextFrame* List;
     int               scale = 10000;
-    int               curr_layer = GetScreen()->m_Active_Layer;
+    int               curr_layer = getActiveLayer();
 
     List = new WinEDA_TextFrame( this, _( "List D codes" ) );
 
@@ -556,7 +446,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
  */
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE* gerber = g_GERBER_List[ GetScreen()->m_Active_Layer ];
+    GERBER_IMAGE* gerber = g_GERBER_List[ getActiveLayer() ];
     wxString      text;
 
     // Display the gerber filename
@@ -565,7 +455,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
-        text.Printf( _( "Layer %d not in use" ), GetScreen()->m_Active_Layer + 1 );
+        text.Printf( _( "Layer %d not in use" ), getActiveLayer() + 1 );
         m_TextInfo->SetValue( text );
         ClearMsgPanel();
         return;
@@ -593,29 +483,3 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     m_TextInfo->SetValue( text );
 }
 
-
-/* Function OnSelectDisplayMode: called to select display mode
- * (fast display, or exact mode with stacked images or with transparency
- */
-void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
-{
-    int oldMode = GetDisplayMode();
-
-    switch( event.GetId() )
-    {
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_0:
-        SetDisplayMode( 0 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_1:
-        SetDisplayMode( 1 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_2:
-        SetDisplayMode( 2 );
-        break;
-    }
-
-    if( GetDisplayMode() != oldMode )
-        DrawPanel->Refresh();
-}

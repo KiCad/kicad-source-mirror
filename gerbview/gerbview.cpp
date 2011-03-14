@@ -119,13 +119,14 @@ bool WinEDA_App::OnInit()
             wxSetWorkingDirectory( fn.GetPath() );
 
         // Load all files specified on the command line.
+        int jj = 0;
         for( int ii = 1; ii < argc && ii <= LAYER_COUNT; ++ii )
         {
             fn = wxFileName( argv[ii] );
 
             if( fn.FileExists() )
             {
-                ( (PCB_SCREEN*) frame->GetScreen() )->m_Active_Layer = ii - 1;
+                frame->setActiveLayer( jj++ );
                 frame->LoadGerberFiles( fn.GetFullPath() );
             }
         }

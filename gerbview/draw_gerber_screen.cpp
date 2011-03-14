@@ -222,7 +222,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
         int dcode_highlight = 0;
 
-        if( layer == m_PcbFrame->GetScreen()->m_Active_Layer )
+        if( layer == ((GERBVIEW_FRAME*)m_PcbFrame)->getActiveLayer() )
             dcode_highlight = gerber->m_Selected_Tool;
 
         int layerdrawMode = GR_COPY;

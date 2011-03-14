@@ -158,7 +158,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
     wxString msg;
     D_CODE*  dcode;
     FILE*    dest;
-    int      layer = GetScreen()->m_Active_Layer;
+    int      layer = getActiveLayer();
     int      type_outil;
 
     if( g_GERBER_List[layer] == NULL )
