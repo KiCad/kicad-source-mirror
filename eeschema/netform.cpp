@@ -49,6 +49,9 @@
 #include "sch_text.h"
 #include "sch_sheet.h"
 #include "template_fieldnames.h"
+#include <wx/tokenzr.h>
+
+
 
 #include "xnode.h"      // also nests: <wx/xml/xml.h>
 
@@ -1198,6 +1201,11 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
     wxString        netName;
 
 #define BUFYPOS_LEN 4
+#define WORSE_CASE_PIN_COUNT   500
+    long int        NodeSeqIndexArray[WORSE_CASE_PIN_COUNT];
+    int             NodeSeqIndex=0;
+
+
     wxChar          bufnum[BUFYPOS_LEN + 1];
 
     DateAndTime( Line );
@@ -1207,6 +1215,9 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_Flag = 0;
+
+    ret |= fprintf( f, "* To exclude a component from the Spice Netlist add [Spice_Netlist_Enabled] user FIELD set to: N\n");
+    ret |= fprintf( f, "* To reorder the component spice node sequence add [Spice_Node_Sequence] user FIELD and define sequence: 2,1,0\n");
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
@@ -1280,6 +1291,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
+        fprintf(f,"*Sheet Name:%s\n",TO_UTF8(sheet->PathHumanReadable()));
         for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, sheet );
@@ -1288,12 +1300,76 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
 
             item = comp;
 
+            //Check if Component should be excluded from Netlist
+            #define SPICE_ENB_FIELD     wxT("Spice_Netlist_Enabled")
+            //Reset NodeSeqIndex Count:
+            NodeSeqIndex=0;
+            //Initialize NodeSeqArray to all UNUSED:
+            #define UNUSED_NODE_FLAG -1
+            memset(NodeSeqIndexArray,UNUSED_NODE_FLAG,sizeof(NodeSeqIndexArray[WORSE_CASE_PIN_COUNT]));
+
+            //Check to see if Component should be removed from Spice Netlist:
+            wxString DisableStr = wxT("N");
+            SCH_FIELD*  Netlist_Enabled_obj = comp->FindField(SPICE_ENB_FIELD);
+            if(Netlist_Enabled_obj!=NULL){
+                wxString Netlist_Enabled_Value = Netlist_Enabled_obj->m_Text;
+                if(Netlist_Enabled_Value.IsEmpty()) break;
+                if(Netlist_Enabled_Value.IsNull()) break;
+                if( Netlist_Enabled_Value.CmpNoCase(DisableStr)==0 ){
+                    continue;
+                }
+            }
+
+            //Check if Alternative Pin Sequence is Available:
+            #define SPICE_SEQ_FIELD     wxT("Spice_Node_Sequence")
+            SCH_FIELD*  Spice_Seq_obj = comp->FindField(SPICE_SEQ_FIELD);
+            if(Spice_Seq_obj!=NULL){
+                //Get String containing the Sequence of Nodes:
+                wxString NodeSeqIndexLineStr = Spice_Seq_obj->m_Text;
+                //Verify Field Exists and is not empty:
+                if(NodeSeqIndexLineStr.IsEmpty()) break;
+                if(NodeSeqIndexLineStr.IsNull()) break;
+                //Parse Sequence List Textbox into List of Integer Array:
+                wxString Delimeters = wxT("{:,; }");
+                wxStringTokenizer tkz(NodeSeqIndexLineStr, Delimeters);
+                while ( tkz.HasMoreTokens() ){
+                    wxString NodeSeqIndexStr = tkz.GetNextToken();
+                    if( (NodeSeqIndexStr.IsNumber()) && (NodeSeqIndex < WORSE_CASE_PIN_COUNT) ){
+                        if(NodeSeqIndexStr.ToLong(&NodeSeqIndexArray[NodeSeqIndex],10)){
+                            if(NodeSeqIndexArray[NodeSeqIndex]>=0){
+                                NodeSeqIndex++;
+                            }
+                        }
+                    }
+                }
+            }
             ret |= fprintf( f, "%s ", TO_UTF8( comp->GetRef( sheet ) ) );
 
+
             // Write pin list:
+            int ActivePinIndex = 0;
+
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
-                NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+                //Case of Alt Sequence definition with Unused/Invalid Node index:
+                //Valid used Node Indexes are in the set {0,1,2,...m_SortedComponentPinList.size()-1}
+                long int MaxPartPinList = m_SortedComponentPinList.size();
+                if( (NodeSeqIndex!=0) ){
+                    if( (NodeSeqIndexArray[ii] <= UNUSED_NODE_FLAG) ||
+                        (NodeSeqIndexArray[ii] >= MaxPartPinList) ){
+                        continue;
+                    }
+                }
+                //Case of Alt Pin Sequence in control:
+                if(NodeSeqIndex!=0){
+                    ActivePinIndex = NodeSeqIndexArray[ii];
+                }
+                //Case of Standard Pin Sequence in control:
+                else{
+                    ActivePinIndex = ii;
+                }
+                NETLIST_OBJECT* pin = m_SortedComponentPinList[ActivePinIndex];
+
                 if( !pin )
                     continue;
 
@@ -1314,9 +1390,18 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
                         ret |= fprintf( f, " %d", pin->GetNet() );
                 }
             }
+            //Print Component Value:
+            ret |= fprintf( f, " %s\t\t",TO_UTF8( comp->GetField( VALUE )->m_Text ) );
 
-            ret |= fprintf( f, " %s\n",
-                    TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+            //Show Seq Spec on same line as component using line-comment ";":
+            for(int jj=0;jj<NodeSeqIndex;jj++){
+                if(jj==0)                fprintf(f,";Node Sequence Spec.<");
+                fprintf(f, "%d",NodeSeqIndexArray[jj]);
+                if(jj<NodeSeqIndex-1)    fprintf(f,",");
+                else                    fprintf(f,">");
+            }
+            //Next Netlist line record:
+            ret |= fprintf( f, "\n");
         }
     }
 
@@ -1341,6 +1426,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
 
     return ret >= 0;
 }
+
 
 
 bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
