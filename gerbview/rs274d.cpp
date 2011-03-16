@@ -67,8 +67,6 @@
 #define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
 #define GERB_FLASH       3      // Flash
 
-static wxPoint LastPosition;
-
 
 /* Local Functions (are lower case since they are private to this source file)
 **/
@@ -433,11 +431,11 @@ int GERBER_IMAGE::ReturnDCodeNumber( char*& Text )
 }
 
 
-bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_commande )
+bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 {
-//    D( printf( "%22s: G_CODE<%d>\n", __func__, G_commande ); )
+//    D( printf( "%22s: G_CODE<%d>\n", __func__, G_command ); )
 
-    switch( G_commande )
+    switch( G_command )
     {
     case GC_PHOTO_MODE:     // can starts a D03 flash command: redundant, can
                             // be safely ignored
@@ -534,7 +532,7 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_commande )
     default:
     {
         wxString msg;
-        msg.Printf( wxT( "G%0.2d command not handled" ), G_commande );
+        msg.Printf( wxT( "G%0.2d command not handled" ), G_command );
         ReportMessage( msg );
         return false;
     }

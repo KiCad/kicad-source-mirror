@@ -17,7 +17,7 @@
 bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
 {
-    int      G_commande = 0;        // command number for G commands like G04
+    int      G_command = 0;        // command number for G commands like G04
     int      D_commande = 0;        // command number for D commands like D02
 
     char     line[GERBER_BUFZ];
@@ -96,8 +96,8 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                 break;
 
             case 'G':    /* Line type Gxx : command */
-                G_commande = gerber->ReturnGCodeNumber( text );
-                gerber->Execute_G_Command( text, G_commande );
+                G_command = gerber->ReturnGCodeNumber( text );
+                gerber->Execute_G_Command( text, G_command );
                 break;
 
             case 'D':       /* Line type Dxx : Tool selection (xx > 0) or

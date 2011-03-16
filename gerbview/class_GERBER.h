@@ -200,8 +200,8 @@ public:
     int     ReturnDCodeNumber( char*& Text );
 
     // functions to execute G commands or D commands:
-    bool    Execute_G_Command( char*& text, int G_commande );
-    bool    Execute_DCODE_Command( char*& text, int D_commande );
+    bool    Execute_G_Command( char*& text, int G_command );
+    bool    Execute_DCODE_Command( char*& text, int D_command );
 
     /**
      * Function ReadRS274XCommand

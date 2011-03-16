@@ -71,8 +71,7 @@ EVT_TOOL( ID_FIND_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                      GERBVIEW_FRAME::OnSelectActiveLayer )
 
-EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_TOOL,
-                  GERBVIEW_FRAME::Process_Special_Functions )
+EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
 
 // Vertical toolbar:
 EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
@@ -100,7 +99,7 @@ EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
 EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                GERBVIEW_FRAME::OnUpdateShowLayerManager )
 
-EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_TOOL, GERBVIEW_FRAME::OnUpdateSelectDCode )
+EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnUpdateSelectDCode )
 EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER, GERBVIEW_FRAME::OnUpdateLayerSelectBox )
 EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                      GERBVIEW_FRAME::OnUpdateDrawMode )
@@ -112,7 +111,6 @@ END_EVENT_TABLE()
 void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int           id = event.GetId();
-    GERBER_IMAGE* gerber_layer = g_GERBER_List[getActiveLayer()];
 
     switch( id )
     {
@@ -126,9 +124,9 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         DrawPanel->EndMouseCapture();
 
-        /* Should not be executed, except bug */
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
+            /* Should not be executed, except bug */
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
             GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
             GetScreen()->m_BlockLocate.ClearItemsList();
@@ -137,8 +135,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         else
-            DrawPanel->SetCursor( DrawPanel->GetDefaultCursor() );
-
+            DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
         break;
 
     default:
@@ -170,18 +167,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
-    case ID_TOOLBARH_GERBER_SELECT_TOOL:
-        if( gerber_layer )
-        {
-            int tool = m_DCodeSelector->GetSelectedDCodeId();
-            if( tool != gerber_layer->m_Selected_Tool )
-            {
-                gerber_layer->m_Selected_Tool = tool;
-                DrawPanel->ReDraw( &dc, false );
-            }
-        }
-        break;
-
     case ID_GERBVIEW_SHOW_LIST_DCODES:
         Liste_D_Codes();
         break;
@@ -194,7 +179,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
@@ -211,6 +195,23 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 }
 
+
+/* Selects the active DCode for the current active layer.
+ *  Items using this DCode are hightlighted
+ */
+void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
+{
+    GERBER_IMAGE* gerber_image = g_GERBER_List[getActiveLayer()];
+    if( gerber_image )
+    {
+        int tool = m_DCodeSelector->GetSelectedDCodeId();
+        if( tool != gerber_image->m_Selected_Tool )
+        {
+            gerber_image->m_Selected_Tool = tool;
+            DrawPanel->Refresh();
+        }
+    }
+}
 
 /* Selects the active layer:
  *  - if a file is loaded, it is loaded in this layer

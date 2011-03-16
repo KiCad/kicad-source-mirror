@@ -280,6 +280,13 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void OnSelectOptionToolbar( wxCommandEvent& event );
 
     /**
+     * Function OnSelectActiveDCode
+     * Selects the active DCode for the current active layer.
+     * Items using this DCode are hightlighted
+     */
+    void OnSelectActiveDCode( wxCommandEvent& event );
+
+    /**
      * Function OnSelectActiveLayer
      * Selects the active layer:
      *  - if a file is loaded, it is loaded in this layer

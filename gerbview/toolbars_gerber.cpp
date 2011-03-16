@@ -86,9 +86,10 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         m_DCodesList.Add( msg );
     }
 
-    m_DCodeSelector = new DCODE_SELECTION_BOX( m_HToolBar, ID_TOOLBARH_GERBER_SELECT_TOOL,
-                                               wxDefaultPosition, wxSize( 150, -1 ),
-                                               m_DCodesList );
+    m_DCodeSelector = new DCODE_SELECTION_BOX(
+                m_HToolBar, ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                wxDefaultPosition, wxSize( 150, -1 ),
+                m_DCodesList );
     m_HToolBar->AddControl( m_DCodeSelector );
 
     m_TextInfo = new wxTextCtrl( m_HToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,

@@ -112,14 +112,11 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     // FILE_LINE_READER will close the file.
     FILE_LINE_READER netlistReader( source, m_NetlistFileName.GetFullPath() );
 
-    // hopes netlistReader's line buffer does not move.  It won't unless you encounter
-    // a line larger than LINE_READER_LINE_INITIAL_SIZE = 5000
-    const char* Line = netlistReader.Line();
-
     /* Read the file header (must be  "( { OrCAD PCB" or "({ OrCAD PCB" )
      * or "# EESchema Netlist"
      */
     netlistReader.ReadLine();
+    const char* Line = netlistReader.Line();
 
     /* test for netlist type PCB2 */
     idx = strnicmp( Line, "( {", 3 );
@@ -150,6 +147,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
 
         if( netlistReader.ReadLine( ) == 0 )
             break;
+        Line = netlistReader.Line();
 
         /* Remove blanks */
         idx = 0;
@@ -316,7 +314,6 @@ int ReadFootprintFilterList(  FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& 
 int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* Cmp )
 {
     int         i, jj;
-    char*       Line = aNetlistReader;
     char        cbuffer[BUFFER_CHAR_SIZE];
 
     for( ; ; )
@@ -326,6 +323,8 @@ int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* Cmp )
         {
             if( aNetlistReader.ReadLine() == 0 )
                 return -1;
+
+            char*  Line = aNetlistReader.Line();
 
             /* Remove blanks from the beginning of the line. */
             i = 0; while( Line[i] == ' ' )
