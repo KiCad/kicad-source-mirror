@@ -34,6 +34,7 @@ set(GERBVIEW_SRCS
     dummy_functions.cpp
     draw_gerber_screen.cpp
     events_called_functions.cpp
+    excellon_read_drill_file.cpp
     export_to_pcbnew.cpp
     files.cpp
     gerbview.cpp

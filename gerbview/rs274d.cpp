@@ -85,7 +85,7 @@
  * @param aSize The diameter of the round flash
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
+void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
                                  int               aLayer,
@@ -138,7 +138,7 @@ static void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
+void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
                               int               aLayer,
                               const wxPoint&    aStart,
@@ -725,10 +725,6 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
             m_Exposure = false;
-
-//            D( printf( "Move to %d,%d to %d,%d\n",
-//                       m_PreviousPos.x, m_PreviousPos.y,
-//                        m_CurrentPos.x, m_CurrentPos.y ); )
             m_PreviousPos = m_CurrentPos;
             break;
 
@@ -743,9 +739,6 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
             gbritem = new GERBER_DRAW_ITEM( pcb, this );
             pcb->m_Drawings.Append( gbritem );
-
-//          D( printf( "Add flashed dcode %d layer %d at %d %d\n", dcode, activeLayer,
-//                                m_CurrentPos.x, m_CurrentPos.y ); )
             fillFlashedGBRITEM( gbritem, aperture,
                                 dcode, activeLayer, m_CurrentPos,
                                 size, GetLayerParams().m_LayerNegative );

@@ -39,10 +39,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
 
     filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
                        _( "Load D-Codes File" ), FALSE );
-#if 0   // TODO
+
     filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load EXCELLON Drill File" ),
                        _( "Load excellon drill file" ), FALSE );
-#endif
 
     filesMenu->Append( ID_NEW_BOARD, _( "&Clear All" ),
                        _( "Clear all layers. All data will be deleted" ), FALSE );

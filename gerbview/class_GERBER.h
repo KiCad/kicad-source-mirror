@@ -74,8 +74,8 @@ private:
  */
 class GERBER_IMAGE
 {
-    GERBVIEW_FRAME* m_Parent;                           // the parent GERBVIEW_FRAME (used to display messages...)
-    D_CODE*             m_Aperture_List[TOOLS_MAX_COUNT];   ///< Dcode (Aperture) List for this layer (max 999)
+    GERBVIEW_FRAME* m_Parent;                               // the parent GERBVIEW_FRAME (used to display messages...)
+    D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
     BOARD*             m_Pcb;
 
@@ -142,7 +142,16 @@ public:
     ~GERBER_IMAGE();
     void Clear_GERBER_IMAGE();
     int  ReturnUsedDcodeNumber();
-    void ResetDefaultValues();
+    virtual void ResetDefaultValues();
+
+    /**
+     * Function GetParent
+     * @return the GERBVIEW_FRAME parent of this GERBER_IMAGE
+     */
+    GERBVIEW_FRAME* GetParent()
+    {
+        return m_Parent;
+    }
 
     /**
      * Function GetLayerParams

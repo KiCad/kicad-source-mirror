@@ -73,7 +73,8 @@ clear an existing layer to load any new layers." ), NB_LAYERS );
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
-        DisplayError( this, _( "Not yet available..." ) );
+        LoadExcellonFiles( wxEmptyString );
+        DrawPanel->Refresh();
         break;
 
     case ID_GERBVIEW_LOAD_DCODE_FILE:
@@ -171,6 +172,88 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         {
             SetLastProject( GetScreen()->GetFileName() );
 
+            layer = getNextAvailableLayer( layer );
+
+            if( layer == NO_AVAILABLE_LAYERS )
+            {
+                wxString msg = wxT( "No more empty layers are available.  The remaining gerber " );
+                msg += wxT( "files will not be loaded." );
+                wxMessageBox( msg );
+                break;
+            }
+
+            setActiveLayer( layer, false );
+        }
+    }
+
+    Zoom_Automatique( false );
+    g_SaveTime = time( NULL );
+
+    // Synchronize layers tools with actual active layer:
+    setActiveLayer( getActiveLayer() );
+    syncLayerBox();
+
+    return true;
+}
+
+bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
+{
+    wxString   filetypes;
+    wxArrayString filenamesList;
+    wxFileName filename = aFullFileName;
+    wxString currentPath;
+
+    if( !filename.IsOk() )
+    {
+        filetypes = _( "Drill files (.drl)" );
+        filetypes << wxT("|");
+        filetypes += wxT(";*.drl;*.DRL" );
+        filetypes << wxT("|");
+        /* All filetypes */
+        filetypes += AllFilesWildcard;
+
+        /* Use the current working directory if the file name path does not exist. */
+        if( filename.DirExists() )
+            currentPath = filename.GetPath();
+        else
+            currentPath = wxGetCwd();
+
+        wxFileDialog dlg( this,
+                          _( "Open Drill File" ),
+                          currentPath,
+                          filename.GetFullName(),
+                          filetypes,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        dlg.GetPaths( filenamesList );
+        currentPath = wxGetCwd();
+    }
+    else
+    {
+        wxFileName filename = aFullFileName;
+        filenamesList.Add( aFullFileName );
+        currentPath = filename.GetPath();
+    }
+
+    // Read gerber files: each file is loaded on a new gerbview layer
+    int layer = getActiveLayer();
+
+    for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
+    {
+        wxFileName filename = filenamesList[ii];
+
+        if( !filename.IsAbsolute() )
+            filename.SetPath( currentPath );
+
+        GetScreen()->SetFileName( filename.GetFullPath() );
+
+        setActiveLayer( layer, false );
+
+        if( Read_EXCELLON_File( filename.GetFullPath() ) )
+        {
             layer = getNextAvailableLayer( layer );
 
             if( layer == NO_AVAILABLE_LAYERS )

@@ -407,6 +407,17 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     bool Read_GERBER_File( const wxString& GERBER_FullFileName,
                            const wxString& D_Code_FullFileName );
 
+    /**
+     * function LoadDrllFiles
+     * Load a drill (EXCELLON) file or many files.
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file. In this case one one file is loaded
+     *                    if void string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
+     */
+    bool LoadExcellonFiles( const wxString& aFileName );
+    bool Read_EXCELLON_File( const wxString& aFullFileName );
+
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
