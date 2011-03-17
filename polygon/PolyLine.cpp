@@ -958,10 +958,10 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 
             // Chamfer one half of an edge at most
             if( 0.5*lena < distance )
-                distance = 0.5*lena;
+                distance = (unsigned int)(0.5*(double)lena);
 
             if( 0.5*lenb < distance )
-                distance = 0.5*lenb;
+                distance = (unsigned int)(0.5*(double)lenb);
 
             nx = (int) ( (double) (distance*xa)/sqrt( (double) (xa*xa + ya*ya) ) );
             ny = (int) ( (double) (distance*ya)/sqrt( (double) (xa*xa + ya*ya) ) );
@@ -1039,10 +1039,10 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
 
             // Limit rounding distance to one half of an edge
             if( 0.5*lena*denom < radius )
-                radius = 0.5*lena*denom;
+                radius = (unsigned int)(0.5*lena*denom);
 
             if( 0.5*lenb*denom < radius )
-                radius = 0.5*lenb*denom;
+                radius = (unsigned int)(0.5*lenb*denom);
 
             // Calculate fillet arc absolute center point (xc, yx)
             double k = radius / sqrt( .5*( 1-cosine ) );

@@ -139,7 +139,7 @@ private:
 
 public:
     GERBER_IMAGE( GERBVIEW_FRAME* aParent, int layer );
-    ~GERBER_IMAGE();
+    virtual ~GERBER_IMAGE();
     void Clear_GERBER_IMAGE();
     int  ReturnUsedDcodeNumber();
     virtual void ResetDefaultValues();
