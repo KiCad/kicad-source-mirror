@@ -1605,7 +1605,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
             if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
-            int unit2 = comp2->GetUnitSelection( aSheetPath );  // slow
+            int unit2 = comp2->GetUnitSelection( sheet );  // slow
 
             for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {
