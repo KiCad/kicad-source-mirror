@@ -135,7 +135,7 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
 {
     int px, py;
 
-    SetLastProject( m_ProjectFileName.GetFullPath() );
+    UpdateFileHistory( m_ProjectFileName.GetFullPath() );
 
     if( !IsIconized() )   // save main frame position and size
     {

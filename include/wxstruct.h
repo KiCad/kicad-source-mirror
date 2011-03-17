@@ -14,6 +14,7 @@
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
+#include <wx/docview.h>
 
 #include "colors.h"
 #include "common.h"
@@ -189,8 +190,25 @@ public:
      */
     virtual void SetLanguage( wxCommandEvent& event );
 
-    wxString     GetFileFromHistory( int cmdId, const wxString& type );
-    void         SetLastProject( const wxString& FullFileName );
+    /**
+     * function GetFileFromHistory
+     * Fetch the file name from the file history list.
+     * @param aFileHistory = the wxFileHistory in use. If null,
+     * the main application file history is used
+     * @return a wxString containing the selected filename
+     */
+    wxString     GetFileFromHistory( int cmdId, const wxString& type,
+                    wxFileHistory * aFileHistory = NULL);
+
+    /**
+     * Function UpdateFileHistory
+     * Update the list of recent opened files.
+     * @param aFileHistory = the wxFileHistory in use. If NULL,
+     * the main application file history is used
+     */
+    void         UpdateFileHistory( const wxString& FullFileName,
+                                    wxFileHistory * aFileHistory = NULL );
+
     void         DisplayActivity( int PerCent, const wxString& Text );
     virtual void ReCreateMenuBar();
 };

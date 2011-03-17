@@ -78,7 +78,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
             style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
         }
 
-        SetLastProject( m_ProjectFileName.GetFullPath() );
+        UpdateFileHistory( m_ProjectFileName.GetFullPath() );
         wxFileDialog dlg( this, title, wxGetCwd(), wxEmptyString,
                           ProjectFileWildcard, style );
 
@@ -99,7 +99,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
             CreateNewProject( m_ProjectFileName.GetFullPath() );
         }
 
-        SetLastProject( m_ProjectFileName.GetFullPath() );
+        UpdateFileHistory( m_ProjectFileName.GetFullPath() );
     }
 
     wxLogDebug( wxT( "Loading Kicad project file: " ) +
@@ -123,7 +123,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
 
     SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
               wxT( " " ) +  m_ProjectFileName.GetFullPath() );
-    SetLastProject( m_ProjectFileName.GetFullPath() );
+    UpdateFileHistory( m_ProjectFileName.GetFullPath() );
     m_LeftWin->ReCreateTreePrj();
 
     PrintMsg( _( "Working dir: " ) + m_ProjectFileName.GetPath() +

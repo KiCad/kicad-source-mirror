@@ -253,7 +253,7 @@ this file again." ) );
     GetScreen()->GetFileName().Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
     SetTitle( GetScreen()->GetFileName() );
-    SetLastProject( GetScreen()->GetFileName() );
+    UpdateFileHistory( GetScreen()->GetFileName() );
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
     GetBoard()->m_Status_Pcb = 0;

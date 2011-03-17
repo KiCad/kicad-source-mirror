@@ -374,7 +374,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty()
        && (g_RootSheet->GetScreen()->GetDrawItems() != NULL) )
-        SetLastProject( g_RootSheet->GetScreen()->GetFileName() );
+        UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
 
     ClearProjectDrawList( g_RootSheet->GetScreen(), TRUE );
 

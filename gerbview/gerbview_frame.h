@@ -5,10 +5,8 @@
 #ifndef  WX_GERBER_STRUCT_H
 #define  WX_GERBER_STRUCT_H
 
-
 #include "id.h"
 #include "param_config.h"
-
 #include "class_gerbview_layer_widget.h"
 #include "class_layerchoicebox.h"
 
@@ -29,6 +27,7 @@ class GERBVIEW_FRAME : public PCB_BASE_FRAME
 
 protected:
     GERBER_LAYER_WIDGET*  m_LayersManager;
+    wxFileHistory         m_drillFileHistory;   // Auxiliary file history used to store drill files history
 
 public:
     WinEDALayerChoiceBox* m_SelLayerBox;
@@ -392,7 +391,8 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
                         GRTraceMode trace_mode );
 
     void Files_io( wxCommandEvent& event );
-    void OnFileHistory( wxCommandEvent& event );
+    void OnGbrFileHistory( wxCommandEvent& event );
+    void OnDrlFileHistory( wxCommandEvent& event );
 
     /**
      * function LoadGerberFiles

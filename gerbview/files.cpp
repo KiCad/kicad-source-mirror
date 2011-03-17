@@ -15,16 +15,32 @@
 /* Load a Gerber file selected from history list on current layer
  * Previous data is deleted
  */
-void GERBVIEW_FRAME::OnFileHistory( wxCommandEvent& event )
+void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
     wxString fn;
 
-    fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+    fn = GetFileFromHistory( event.GetId(), _( "Gerber files" ) );
 
-    if( fn != wxEmptyString )
+    if( !fn.IsEmpty() )
     {
         Erase_Current_Layer( false );
         LoadGerberFiles( fn );
+    }
+}
+
+/* Load a Drll (Excellon) file selected from history list on current layer
+ * Previous data is deleted
+ */
+void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
+{
+    wxString fn;
+
+    fn = GetFileFromHistory( event.GetId(), _( "Drill files" ), &m_drillFileHistory );
+
+    if( !fn.IsEmpty() )
+    {
+        Erase_Current_Layer( false );
+        LoadExcellonFiles( fn );
     }
 }
 
@@ -41,31 +57,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         LoadGerberFiles( wxEmptyString );
         break;
 
-    case ID_MENU_INC_LAYER_AND_APPEND_FILE:
-    case ID_INC_LAYER_AND_APPEND_FILE:
-    {
-        int origLayer = getNextAvailableLayer();
-
-        if( origLayer != NO_AVAILABLE_LAYERS )
-        {
-            setActiveLayer( origLayer );
-
-            Erase_Current_Layer( false );
-
-            if( !LoadGerberFiles( wxEmptyString ) )
-                setActiveLayer( origLayer );
-        }
-        else
-        {
-            wxString msg;
-            msg.Printf( _( "GerbView only supports a maximum of %d layers. You must first \
-clear an existing layer to load any new layers." ), NB_LAYERS );
-            wxMessageBox( msg );
-        }
-    }
-    break;
-
-    case ID_NEW_BOARD:
+    case ID_GERBVIEW_ERASE_ALL:
         Clear_Pcb( true );
         Zoom_Automatique( false );
         DrawPanel->Refresh();
@@ -170,7 +162,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
         if( Read_GERBER_File( filename.GetFullPath(), filename.GetFullPath() ) )
         {
-            SetLastProject( GetScreen()->GetFileName() );
+            UpdateFileHistory( GetScreen()->GetFileName() );
 
             layer = getNextAvailableLayer( layer );
 
@@ -254,6 +246,9 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         if( Read_EXCELLON_File( filename.GetFullPath() ) )
         {
+            // Update the list of recentdrill files.
+            UpdateFileHistory( filename.GetFullPath(),  &m_drillFileHistory );
+
             layer = getNextAvailableLayer( layer );
 
             if( layer == NO_AVAILABLE_LAYERS )

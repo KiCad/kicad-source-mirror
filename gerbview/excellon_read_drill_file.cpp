@@ -1,11 +1,36 @@
-/********************************/
-/* excellon_read_drill_file.cpp */
-/********************************/
-
-/*
+/**
+ * @file excellon_read_drill_file.cpp
  *  Functions to read drill files (EXCELLON format) created by PcbNew
  *  These files use only a subset of EXCELLON commands.
- *  Here is a sample, in decimal format:
+ */
+
+
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2011 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/*
+ *  Here is a sample of drill files created by pcbnew, in decimal format:
  * (Note: coordinates formats are same as Gerber, and T commands are near Gerber D commands).
  *  M48
  *  ;DRILL file {PCBnew (2011-03-14 BZR 2894)-testing} date 15/03/2011 14:23:22
@@ -107,7 +132,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
     { "G01", DRILL_G_LINEARMOVE,  0 },  // Linear (Straight Line) Mode
     { "G02", DRILL_G_CWMOVE,      0 },  // Circular CW Mode
     { "G03", DRILL_G_CCWMOVE,     0 },  // Circular CCW Mode
-    { "G93", DRILL_G_ZERO_SET,     1 },  // Zero Set (XnnYmm and coordintes origin)
+    { "G93", DRILL_G_ZERO_SET,    1 },  // Zero Set (XnnYmm and coordintes origin)
     { "",    DRILL_G_UNKNOWN,     0 },  // last item in list
 };
 
@@ -119,7 +144,10 @@ static EXCELLON_CMD excellon_G_CmdList[] =
  * DCode can easily store T code (tool size) as round (or oval) shape
  * Drill commands are similar to flashed gerber items
  * Routing commands are similar to Gerber polygons
- * coordinates have the same format as Gerber.
+ * coordinates have the same format as Gerber, can be given in:
+ *   decimal format (i.i. floating notation format)
+ *   integer 2.4 format in imperial units,
+ *   integer 3.2 or 3.3 format (metric units).
  */
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
@@ -213,7 +241,7 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
             case 'I':
             case 'J':               /* Auxiliary Move command */
                 m_IJPos = ReadIJCoord( text );
-                if( *text == '*' )  // command like X35142Y15945J504*
+                if( *text == '*' )  // command like X35142Y15945J504
                 {
                     Execute_Drill_Command( text);
                 }

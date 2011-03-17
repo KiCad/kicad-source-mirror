@@ -166,7 +166,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             wxSetWorkingDirectory( fn.GetPath() );
             frame->GetScreen()->SetFileName( fn.GetFullPath( wxPATH_UNIX ) );
             frame->SetTitle( frame->GetScreen()->GetFileName() );
-            frame->SetLastProject( frame->GetScreen()->GetFileName() );
+            frame->UpdateFileHistory( frame->GetScreen()->GetFileName() );
             frame->OnModify();  // Ready to save the new empty board
 
             wxString msg;

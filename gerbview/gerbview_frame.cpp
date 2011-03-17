@@ -46,6 +46,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_displayMode   = 0;
+    m_drillFileHistory.SetBaseId(ID_GERBVIEW_DRILL_FILE1);
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
@@ -205,6 +206,12 @@ void GERBVIEW_FRAME::LoadSettings()
     long tmp;
     config->Read( GerbviewShowDCodes, &tmp, 1 );
     SetElementVisibility( DCODES_VISIBLE, tmp );
+
+    // because we have 2 file historues, we must read this one
+    // using a specific path
+    config->SetPath( wxT("drl_files") );
+    m_drillFileHistory.Load( *config );
+    config->SetPath( wxT("..") );
 }
 
 
@@ -237,6 +244,12 @@ void GERBVIEW_FRAME::SaveSettings()
 
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
     config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
+    // Save the drill file history list
+    // because we have 2 file historues, we must save this one
+    // in a specific path
+    config->SetPath(wxT("drl_files") );
+    m_drillFileHistory.Save( *config );
+    config->SetPath( wxT("..") );
 }
 
 

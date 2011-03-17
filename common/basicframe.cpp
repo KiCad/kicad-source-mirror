@@ -7,7 +7,6 @@
 #include <wx/fontdlg.h>
 #include <wx/clipbrd.h>
 #include <wx/statline.h>
-#include <wx/aboutdlg.h>
 #include <wx/platinfo.h>
 
 #include "build_version.h"
@@ -196,11 +195,16 @@ void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
 
 
 /*
- * Update the list of past projects.
+ * Update the list of recent opened files.
  */
-void EDA_BASE_FRAME::SetLastProject( const wxString& FullFileName )
+void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
+                                     wxFileHistory * aFileHistory )
 {
-    wxGetApp().m_fileHistory.AddFileToHistory( FullFileName );
+    wxFileHistory * fileHistory = aFileHistory;
+    if( fileHistory == NULL )
+        fileHistory = & wxGetApp().m_fileHistory;
+
+    fileHistory->AddFileToHistory( FullFileName );
     ReCreateMenuBar();
 }
 
@@ -208,25 +212,30 @@ void EDA_BASE_FRAME::SetLastProject( const wxString& FullFileName )
 /*
  * Fetch the file name from the file history list.
  */
-wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type )
+wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
+                                             wxFileHistory * aFileHistory )
 {
     wxString fn, msg;
     size_t   i;
-    int      baseId = wxGetApp().m_fileHistory.GetBaseId();
+    wxFileHistory * fileHistory = aFileHistory;
+    if( fileHistory == NULL )
+        fileHistory = & wxGetApp().m_fileHistory;
+
+    int      baseId = fileHistory->GetBaseId();
 
     wxASSERT( cmdId >= baseId
-              && cmdId < baseId + ( int )wxGetApp().m_fileHistory.GetCount() );
+              && cmdId < baseId + ( int )fileHistory->GetCount() );
 
     i = ( size_t )( cmdId - baseId );
 
-    if( i < wxGetApp().m_fileHistory.GetCount() )
+    if( i < fileHistory->GetCount() )
     {
-        fn = wxGetApp().m_fileHistory.GetHistoryFile( i );
+        fn = fileHistory->GetHistoryFile( i );
         if( !wxFileName::FileExists( fn ) )
         {
             msg = type + _( " file <" ) + fn + _( "> was not found." );
             DisplayError( this, msg );
-            wxGetApp().m_fileHistory.RemoveFileFromHistory( i );
+            fileHistory->RemoveFileFromHistory( i );
             fn = wxEmptyString;
             ReCreateMenuBar();
         }

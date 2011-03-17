@@ -60,7 +60,7 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
 
     if( frame->ReadNetList() )
     {
-        frame->SetLastProject( filename.GetFullPath() );
+        frame->UpdateFileHistory( filename.GetFullPath() );
 
         frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
                   wxT( " " ) + filename.GetFullPath() );

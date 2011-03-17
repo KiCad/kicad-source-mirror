@@ -3,11 +3,11 @@
 /**********************************************************/
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "common.h"
 #include "gestfich.h"
-#include "appl_wxstruct.h"
 
 #include "gerbview.h"
 #include "kicad_device_context.h"
@@ -23,19 +23,20 @@ EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
 EVT_SIZE( GERBVIEW_FRAME::OnSize )
 
 EVT_TOOL( wxID_FILE, GERBVIEW_FRAME::Files_io )
-EVT_TOOL( ID_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
+EVT_TOOL( ID_GERBVIEW_ERASE_ALL, GERBVIEW_FRAME::Files_io )
 EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
 EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, GERBVIEW_FRAME::Files_io )
 EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
 
 // Menu Files:
 EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
-EVT_MENU( ID_MENU_INC_LAYER_AND_APPEND_FILE, GERBVIEW_FRAME::Files_io )
 EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
 EVT_MENU( ID_GEN_PLOT, GERBVIEW_FRAME::ToPlotter )
 EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 
-EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnFileHistory )
+EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnGbrFileHistory )
+EVT_MENU_RANGE( ID_GERBVIEW_DRILL_FILE1, ID_GERBVIEW_DRILL_FILE9,
+                GERBVIEW_FRAME::OnDrlFileHistory )
 
 EVT_MENU( ID_EXIT, GERBVIEW_FRAME::Process_Special_Functions )
 

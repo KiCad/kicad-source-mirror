@@ -6,6 +6,7 @@
 
 #include "appl_wxstruct.h"
 #include "common.h"
+
 //#include "macros.h"
 #include "gerbview.h"
 #include "bitmaps.h"
@@ -15,50 +16,75 @@
 
 void GERBVIEW_FRAME::ReCreateMenuBar( void )
 {
-    wxMenuBar  *menuBar = GetMenuBar();
+    wxMenuBar* menuBar = GetMenuBar();
 
-    if( ! menuBar )
+    if( !menuBar )
         menuBar = new wxMenuBar();
 
     // Delete all existing menus so they can be rebuilt.
     // This allows language changes of the menu text on the fly.
     menuBar->Freeze();
     while( menuBar->GetMenuCount() )
-        delete menuBar->Remove(0);
+        delete menuBar->Remove( 0 );
 
     // Recreate all menus:
     wxMenu* filesMenu = new wxMenu;
-    filesMenu->Append( wxID_FILE, _( "Load Gerber File" ),
-                       _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
-                       FALSE );
+    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_FILE, _( "Load Gerber File" ),
+                            _(
+                                "Load a new Gerber file on the current layer. Previous data will be deleted" ),
+                            open_xpm );
 
-    filesMenu->Append( ID_MENU_INC_LAYER_AND_APPEND_FILE,
-                       _( "Inc Layer and load Gerber file" ),
-                       _( "Increment layer number, and Load Gerber file" ),
-                       FALSE );
+    ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
+                            _( "Load EXCELLON Drill File" ),
+                            _( "Load excellon drill file" ),
+                            open_xpm );
 
-    filesMenu->Append( ID_GERBVIEW_LOAD_DCODE_FILE, _( "Load DCodes" ),
-                       _( "Load D-Codes File" ), FALSE );
+    ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DCODE_FILE,
+                            _( "Load DCodes" ),
+                            _( "Load D-Codes File" ),
+                            open_xpm );
 
-    filesMenu->Append( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Load EXCELLON Drill File" ),
-                       _( "Load excellon drill file" ), FALSE );
+    // Open Recent submenus
+    wxMenu* openRecentGbrMenu = new wxMenu();
+    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentGbrMenu );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentGbrMenu,
+                                        wxID_ANY, _( "Open &Recent Gerber File" ),
+                                        _( "Open a recent opened Gerber file" ),
+                                        open_project_xpm );
 
-    filesMenu->Append( ID_NEW_BOARD, _( "&Clear All" ),
-                       _( "Clear all layers. All data will be deleted" ), FALSE );
+    wxMenu* openRecentDrlMenu = new wxMenu();
+    m_drillFileHistory.AddFilesToMenu( openRecentDrlMenu );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentDrlMenu,
+                                        wxID_ANY, _( "Open &Recent Drill File" ),
+                                        _( "Open a recent opened drill file" ),
+                                        open_project_xpm );
+
 
     filesMenu->AppendSeparator();
-    filesMenu->Append( ID_GERBVIEW_EXPORT_TO_PCBNEW,  _( "&Export to Pcbnew" ),
-                       _( "Export data in pcbnew format" ), FALSE );
+    ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_ERASE_ALL,
+                            _( "&Clear All" ),
+                            _( "Clear all layers. All data will be deleted" ),
+                            delete_body_xpm );
+
+    filesMenu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_EXPORT_TO_PCBNEW,
+                            _( "&Export to Pcbnew" ),
+                            _( "Export data in pcbnew format" ),
+                            export_xpm );
 
 
     filesMenu->AppendSeparator();
 
-    filesMenu->Append( wxID_PRINT, _( "P&rint" ), _( "Print gerber" ) );
+    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_PRINT,
+                            _( "P&rint" ),
+                            _( "Print gerber" ),
+                            print_button );
 
     filesMenu->AppendSeparator();
-    filesMenu->Append( ID_EXIT, _( "E&xit" ), _( "Quit Gerbview" ) );
-
-    wxGetApp().m_fileHistory.AddFilesToMenu( filesMenu );
+    ADD_MENUITEM_WITH_HELP( filesMenu, ID_EXIT,
+                            _( "E&xit" ),
+                            _( "Quit Gerbview" ),
+                            exit_xpm );
 
     // Configuration and preferences:
     wxMenu* configmenu = new wxMenu;
@@ -85,6 +111,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                             _( "&Show Source" ),
                             _( "Show source file for the current layer" ),
                             tools_xpm );
+
     miscellaneous_menu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( miscellaneous_menu, ID_GERBVIEW_GLOBAL_DELETE,
                             _( "&Clear Layer" ),

@@ -155,7 +155,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
             return false;
 
         if( g_RootSheet->GetScreen()->GetFileName() != m_DefaultSchematicFileName )
-            SetLastProject( g_RootSheet->GetScreen()->GetFileName() );
+            UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
     }
 
     FullFileName = FileName;

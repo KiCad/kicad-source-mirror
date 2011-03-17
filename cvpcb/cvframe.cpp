@@ -300,7 +300,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( m_NetlistFileName.IsOk() )
     {
-        SetLastProject( m_NetlistFileName.GetFullPath() );
+        UpdateFileHistory( m_NetlistFileName.GetFullPath() );
     }
 
     m_modified = false;
@@ -461,7 +461,7 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 
     if( ReadNetList() )
     {
-        SetLastProject( m_NetlistFileName.GetFullPath() );
+        UpdateFileHistory( m_NetlistFileName.GetFullPath() );
 
         SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
                   wxT( " " ) + m_NetlistFileName.GetFullPath() );
