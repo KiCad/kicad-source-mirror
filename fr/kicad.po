@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-18 07:40+0100\n"
-"PO-Revision-Date: 2011-03-18 07:46+0100\n"
+"POT-Creation-Date: 2011-03-18 13:46+0100\n"
+"PO-Revision-Date: 2011-03-18 13:52+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -12001,40 +12001,40 @@ msgid "File "
 msgstr "Fichier "
 
 #: gerbview/menubar.cpp:32
-msgid "Load Gerber File"
-msgstr "Charger Fichier Gerber"
+msgid "Load &Gerber File"
+msgstr "Charger Fichier &Gerber"
 
 #: gerbview/menubar.cpp:34
 msgid "Load a new Gerber file on the current layer. Previous data will be deleted"
 msgstr "Charger un nouveau fichier Gerber sur couche courante. Les données précédentes seront supprimées"
 
 #: gerbview/menubar.cpp:38
-msgid "Load EXCELLON Drill File"
-msgstr "Charger Fichier de Perçage EXCELLON"
+msgid "Load &EXCELLON Drill File"
+msgstr "Charger Fichier de Perçage &EXCELLON"
 
 #: gerbview/menubar.cpp:39
 msgid "Load excellon drill file"
 msgstr "Charger Fichier Excellon"
 
 #: gerbview/menubar.cpp:43
-msgid "Load DCodes"
-msgstr "Charger DCodes"
+msgid "Load &DCodes"
+msgstr "Charger &DCodes"
 
 #: gerbview/menubar.cpp:44
-msgid "Load D-Codes File"
-msgstr "Charger Fichier de DCodes"
+msgid "Load D-Codes definition file"
+msgstr "Charger un fichier de définition de DCodes"
 
 #: gerbview/menubar.cpp:51
 msgid "Open &Recent Gerber File"
-msgstr "Ouvrir Fichier Gerber Récent"
+msgstr "Ouvrir Fichier Gerber &Récent"
 
 #: gerbview/menubar.cpp:52
 msgid "Open a recent opened Gerber file"
 msgstr "Ouvrir un fichier Gerber récemment ouvert"
 
 #: gerbview/menubar.cpp:58
-msgid "Open &Recent Drill File"
-msgstr "Ouvrir Fichier de &Perçage"
+msgid "Open Recent &Drill File"
+msgstr "Ouvrir Fichier de &Perçage Récent"
 
 #: gerbview/menubar.cpp:59
 msgid "Open a recent opened drill file"
@@ -12049,8 +12049,8 @@ msgid "Clear all layers. All data will be deleted"
 msgstr "Effacer toutes les couches.Toutes les données seront supprimées"
 
 #: gerbview/menubar.cpp:71
-msgid "&Export to Pcbnew"
-msgstr "&Exporter vers Pcbnew"
+msgid "Export to &Pcbnew"
+msgstr "Exporter vers &Pcbnew"
 
 #: gerbview/menubar.cpp:72
 msgid "Export data in pcbnew format"
