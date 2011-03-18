@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-18 13:46+0100\n"
-"PO-Revision-Date: 2011-03-18 13:52+0100\n"
+"POT-Creation-Date: 2011-03-18 15:29+0100\n"
+"PO-Revision-Date: 2011-03-18 15:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -11573,15 +11573,19 @@ msgstr "Erreur en Librairie de Composant"
 
 #: cvpcb/savecmp.cpp:85
 #, c-format
-msgid "Cannot open component library <%s>."
-msgstr "Ne peut pas ouvrir le fichier librairie <%s>."
+msgid "Cannot open CvPcb component file <%s>."
+msgstr "Ne peut pas ouvrir le fichier composants CvPcb <%s>."
 
-#: cvpcb/savecmp.cpp:94
+#: cvpcb/savecmp.cpp:87
+msgid "This is normal if you are opening a new netlist file"
+msgstr "Ceci est normal si vous avez ouvert un nouveau fichier netliste"
+
+#: cvpcb/savecmp.cpp:95
 #, c-format
 msgid " <%s> does not appear to be a valid Kicad component library."
 msgstr " <%s>ne semble pas être une librairie de composants de Kicad valide."
 
-#: cvpcb/savecmp.cpp:103
+#: cvpcb/savecmp.cpp:104
 #, c-format
 msgid "<%s> is an old version component file."
 msgstr "<%s> est un fichier composant de version ancienne."
