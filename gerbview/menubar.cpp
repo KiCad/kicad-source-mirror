@@ -29,19 +29,19 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
 
     // Recreate all menus:
     wxMenu* filesMenu = new wxMenu;
-    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_FILE, _( "Load Gerber File" ),
+    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_FILE, _( "Load &Gerber File" ),
                             _(
                                 "Load a new Gerber file on the current layer. Previous data will be deleted" ),
                             open_xpm );
 
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
-                            _( "Load EXCELLON Drill File" ),
+                            _( "Load &EXCELLON Drill File" ),
                             _( "Load excellon drill file" ),
                             open_xpm );
 
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DCODE_FILE,
-                            _( "Load DCodes" ),
-                            _( "Load D-Codes File" ),
+                            _( "Load &DCodes" ),
+                            _( "Load D-Codes definition file" ),
                             open_xpm );
 
     // Open Recent submenus
@@ -55,7 +55,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     wxMenu* openRecentDrlMenu = new wxMenu();
     m_drillFileHistory.AddFilesToMenu( openRecentDrlMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentDrlMenu,
-                                        wxID_ANY, _( "Open &Recent Drill File" ),
+                                        wxID_ANY, _( "Open Recent &Drill File" ),
                                         _( "Open a recent opened drill file" ),
                                         open_project_xpm );
 
@@ -68,7 +68,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
 
     filesMenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_EXPORT_TO_PCBNEW,
-                            _( "&Export to Pcbnew" ),
+                            _( "Export to &Pcbnew" ),
                             _( "Export data in pcbnew format" ),
                             export_xpm );
 
