@@ -9,9 +9,12 @@
 #define KICAD_BUILD_VERSION "(2011-03-17)"
 #endif
 
+// uncomment this line only when creating a stable version
 //#define VERSION_STABILITY      "stable"
-#define VERSION_STABILITY       "testing"
 
+#ifndef VERSION_STABILITY
+#define VERSION_STABILITY       "testing"
+#endif
 
 /**
  * Function GetBuildVersion

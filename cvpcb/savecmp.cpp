@@ -82,8 +82,9 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& fileName )
     source = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
     if( source == NULL )
     {
-        msg.Printf( _( "Cannot open component library <%s>." ),
+        msg.Printf( _( "Cannot open CvPcb component file <%s>." ),
                     GetChars( fn.GetFullPath() ) );
+        msg << wxT("\n") << _("This is normal if you are opening a new netlist file");
         wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
         return false;
     }
