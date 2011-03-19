@@ -138,6 +138,9 @@ set(BITMAP_SRCS
     gbr_select_mode0.xpm
     gbr_select_mode1.xpm
     gbr_select_mode2.xpm
+    gerber_file.xpm
+    gerbview_drill_file.xpm
+    gerbview_clear_layers.xpm
     general_deletions.xpm
     general_ratsnet.xpm
     GLabel2Label.xpm
@@ -273,7 +276,7 @@ set(BITMAP_SRCS
     online_help.xpm
     Open_Library.xpm
     Open_Project.xpm
-    open.xpm
+    open_document.xpm
     options_all_tracks_and_vias.xpm
     Options_All_Tracks.xpm
     Options_All_Vias.xpm
