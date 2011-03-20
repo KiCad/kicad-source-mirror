@@ -68,7 +68,6 @@ EVT_TOOL( wxID_COPY, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_TOOL( wxID_PASTE, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_TOOL( wxID_UNDO, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
-EVT_TOOL( ID_FIND_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_KICAD_CHOICEBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                      GERBVIEW_FRAME::OnSelectActiveLayer )
 
