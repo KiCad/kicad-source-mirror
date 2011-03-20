@@ -33,17 +33,19 @@ using namespace SCH;
 using namespace PR;
 
 
-#define MAX_INHERITANCE_NESTING     6      // no problem going larger
+#define MAX_INHERITANCE_NESTING     6       ///< max depth of inheritance, no problem going larger
+#define INTERNAL_PER_LOGICAL        10000   ///< no. internal units per logical unit
+
 
 /**
  * Function log2int
  * converts a logical coordinate to an internal coordinate.  Logical coordinates
  * are defined as the standard distance between pins being equal to one.
- * Internal coordinates are 1000 times that.
+ * Internal coordinates are currently INTERNAL_PER_LOGICAL times that.
  */
 static inline int log2int( double aCoord )
 {
-    return int( aCoord * 1000 );
+    return int( aCoord * INTERNAL_PER_LOGICAL );
 }
 
 static inline int internal( const STRING& aCoord )
@@ -78,7 +80,6 @@ static inline const int PB( PartBit oneBitOnly )
 {
     return ( 1 << oneBitOnly );
 }
-
 
 
 void SWEET_PARSER::parseExtends( PART* me )
@@ -280,6 +281,13 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             NeedRIGHT();
             break;
 
+        case T_pin:
+            PIN* pin;
+            pin = new PIN( me );
+            me->pins.push_back( pin );
+            parsePin( pin );
+            break;
+
     /*
         case T_keywords:
             break;
@@ -291,9 +299,6 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             break;
 
         case T_property_del:
-            break;
-
-        case T_pin:
             break;
 
         case T_pin_merge:
@@ -326,6 +331,130 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     contains |= PB(PARSED);
 
     me->contains |= contains;
+}
+
+
+void SWEET_PARSER::parseBool( bool* aBool )
+{
+    T   tok = NeedSYMBOL();
+
+    switch( tok )
+    {
+    case T_yes:
+    case T_no:
+        *aBool = (tok == T_yes);
+        break;
+    default:
+        Expecting( "yes|no" );
+    }
+}
+
+
+void SWEET_PARSER::parsePin( PIN* me )
+{
+    /*
+        (pin TYPE SHAPE
+            (at X Y [ANGLE])
+            (length LENGTH)
+            (name NAME (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])(visible YES))
+            (number NUMBER (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD] (visible YES))
+            (visible YES)
+        )
+    */
+
+    T       tok;
+    bool    sawShape = false;
+    bool    sawType  = false;
+    bool    sawAt    = false;
+    bool    sawLen   = false;
+    bool    sawName  = false;
+    bool    sawNum   = false;
+    bool    sawVis   = false;
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+        {
+            tok = NextTok();
+
+            switch( tok )
+            {
+            case T_at:
+                if( sawAt )
+                    Duplicate( tok );
+                sawAt = true;
+                parseAt( &me->pos, &me->angle );
+                break;
+
+            case T_length:
+                if( sawLen )
+                    Duplicate( tok );
+                sawLen = true;
+                NeedNUMBER( "length" );
+                me->length = internal( CurText() );
+                NeedRIGHT();
+                break;
+
+/*          @todo and associated fonts
+            case T_name:
+            case T_number:
+                break;
+*/
+
+            case T_visible:
+                if( sawVis )
+                    Duplicate( tok );
+                parseBool( &me->isVisible );
+                NeedRIGHT();
+                sawVis = true;
+                break;
+
+            default:
+                Unexpected( tok );
+            }
+        }
+
+        else    // not wrapped in parentheses
+        {
+            switch( tok )
+            {
+            case T_input:
+            case T_output:
+            case T_bidirectional:
+            case T_tristate:
+            case T_passive:
+            case T_unspecified:
+            case T_power_in:
+            case T_power_out:
+            case T_open_collector:
+            case T_open_emitter:
+            case T_unconnected:
+                if( sawType )
+                    Duplicate( tok );
+                sawType = true;
+                me->connectionType = tok;
+                break;
+
+            case T_none:
+            case T_line:
+            case T_inverted:
+            case T_clock:
+            case T_inverted_clk:
+            case T_input_low:
+            case T_clock_low:
+            case T_falling_edge:
+            case T_non_logic:
+                if( sawShape )
+                    Duplicate( tok );
+                sawShape = true;
+                me->shape = tok;
+                break;
+
+            default:
+                Unexpected( tok );
+            }
+        }
+    }
 }
 
 
@@ -646,6 +775,27 @@ void SWEET_PARSER::parseArc( ARC* me )
 }
 
 
+void SWEET_PARSER::parseAt( POINT* pos, float* angle )
+{
+    T       tok;
+
+    NeedNUMBER( "at x" );
+    pos->x = internal( CurText() );
+
+    NeedNUMBER( "at y" );
+    pos->y = internal( CurText() );
+
+    tok = NextTok();
+    if( angle && tok == T_NUMBER )
+    {
+        *angle = strtod( CurText(), NULL );
+        tok = NextTok();
+    }
+    if( tok != T_RIGHT )
+        Expecting( T_RIGHT );
+}
+
+
 void SWEET_PARSER::parseText( GR_TEXT* me )
 {
     T       tok;
@@ -670,19 +820,7 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
         case T_at:
             if( sawAt )
                 Duplicate( tok );
-            NeedNUMBER( "at x" );
-            me->pos.x = internal( CurText() );
-            NeedNUMBER( "at y" );
-            me->pos.y = internal( CurText() );
-
-            tok = NextTok();
-            if( tok == T_NUMBER )
-            {
-                me->angle = strtod( CurText(), NULL );
-                tok = NextTok();
-            }
-            if( tok != T_RIGHT )
-                Expecting( T_RIGHT );
+            parseAt( &me->pos, &me->angle );
             sawAt = true;
             break;
 
@@ -737,16 +875,7 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
         case T_visible:
             if( sawVis )
                 Duplicate( tok );
-            tok = NeedSYMBOL();
-            switch( tok )
-            {
-            case T_yes:
-            case T_no:
-                me->isVisible = (tok == T_yes);
-                break;
-            default:
-                Expecting( "yes|no" );
-            }
+            parseBool( &me->isVisible );
             NeedRIGHT();
             sawVis = true;
             break;

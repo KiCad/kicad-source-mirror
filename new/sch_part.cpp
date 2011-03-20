@@ -53,13 +53,17 @@ void PART::clear()
         extends = 0;
     }
 
-    // graphics objects I own, and the container will not destroy them:
+    // delete graphics I own, since their container will not destroy them:
     for( GRAPHICS::iterator it = graphics.begin();  it != graphics.end();  ++it )
         delete *it;
     graphics.clear();
 
+    // delete PINs I own, since their container will not destroy them.
+    for( PINS::iterator it = pins.begin();  it != pins.end();  ++it )
+        delete *it;
+    pins.clear();
 
-    // @todo delete all properties, pins, and graphics
+    // @todo delete all properties
 }
 
 

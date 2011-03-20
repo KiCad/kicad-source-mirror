@@ -399,6 +399,15 @@ public:
     void Unexpected( int aTok ) throw( IO_ERROR );
 
     /**
+     * Function Unexpected
+     * throws an IO_ERROR exception with an input file specific error message.
+     * @param aToken is the token which was not expected at the
+     *         current input location.
+     * @throw IO_ERROR with the location within the input file of the problem.
+     */
+    void Unexpected( const char* aToken ) throw( IO_ERROR );
+
+    /**
      * Function Duplicate
      * throws an IO_ERROR exception with a message saying specifically that aTok
      * is a duplicate of one already seen in current context.
@@ -407,15 +416,6 @@ public:
      * @throw IO_ERROR with the location within the input file of the problem.
      */
     void Duplicate( int aTok ) throw( IO_ERROR );
-
-    /**
-     * Function Unexpected
-     * throws an IO_ERROR exception with an input file specific error message.
-     * @param aToken is the token which was not expected at the
-     *         current input location.
-     * @throw IO_ERROR with the location within the input file of the problem.
-     */
-    void Unexpected( const char* aToken ) throw( IO_ERROR );
 
     /**
      * Function NeedLEFT

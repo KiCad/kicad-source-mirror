@@ -28,6 +28,7 @@
 #include <utf8.h>
 #include <sweet_lexer.h>
 
+class POINT;
 
 namespace SCH {
 
@@ -41,6 +42,7 @@ class CIRCLE;
 class ARC;
 class BEZIER;
 class GR_TEXT;
+class PIN;
 
 
 /**
@@ -66,6 +68,9 @@ class SWEET_PARSER : public SWEET_LEXER
     void parseCircle( CIRCLE* me );
     void parseArc( ARC* me );
     void parseText( GR_TEXT* me );
+    void parsePin( PIN* me );
+    void parseAt( POINT* pos, float* angle );
+    void parseBool( bool* aBool );
 
 public:
 

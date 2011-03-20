@@ -15,6 +15,12 @@ ARC="(arc (pos 22 33)(radius 12)(start 2 4)(end 13 33)(line_width 2.3)(fill fill
 BEZIER="(bezier (fill none)(line_width 2.0)(pts (xy 0 1)(xy 2 4)))"
 TEXT="(text \"This is some text\" (at 23 23 90.0)(justify left bottom)(visible yes)(fill filled))"
 
+PIN="(pin input line (at 7 8 90.0)(length 2)(visible YES))"
+# add to pin
+#            (name NAME (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])(visible YES))
+#            (number NUMBER (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD] (visible YES))
+
+
 for C in ${CATEGORIES}; do
 
     mkdir -p $BASEDIR/$C
@@ -28,6 +34,7 @@ for C in ${CATEGORIES}; do
                 $ARC
                 $BEZIER
                 $TEXT
+                $PIN
                 )" > $BASEDIR/$C/$P.part.$R
         done
         # also make the part without a rev:
@@ -38,6 +45,7 @@ for C in ${CATEGORIES}; do
             $ARC
             $BEZIER
             $TEXT
+            $PIN
             )" > $BASEDIR/$C/$P.part
     done
 done

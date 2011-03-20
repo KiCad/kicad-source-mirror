@@ -7,10 +7,19 @@
 
 //-----<temporary home for PART sub objects, move after stable>------------------
 
-typedef     wxPoint     POINT;
-
 #include <wx/gdicmn.h>
 #include <deque>
+#include <vector>
+#include <sweet_lexer.h>
+
+
+class POINT : public wxPoint
+{
+public:
+    POINT( int x, int y ) : wxPoint( x, y ) {}
+    POINT() : wxPoint() {}
+};
+
 
 namespace SCH {
 
@@ -36,7 +45,7 @@ public:
 
 typedef std::deque<POINT>  POINTS;
 
-class POLY_LINE : BASE_GRAPHIC
+class POLY_LINE : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -52,7 +61,7 @@ public:
     {}
 };
 
-class BEZIER : POLY_LINE
+class BEZIER : public POLY_LINE
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -63,7 +72,7 @@ public:
     {}
 };
 
-class RECTANGLE : BASE_GRAPHIC
+class RECTANGLE : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -81,16 +90,16 @@ public:
 };
 
 
-class CIRCLE : BASE_GRAPHIC
+class CIRCLE : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
 
 protected:
-    double      lineWidth;
-    int         fillType;       // T_none, T_filled, or T_transparent
     POINT       center;
     int         radius;
+    double      lineWidth;
+    int         fillType;       // T_none, T_filled, or T_transparent
 
 public:
     CIRCLE( PART* aOwner ) :
@@ -99,15 +108,15 @@ public:
 };
 
 
-class ARC : BASE_GRAPHIC
+class ARC : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
 
 protected:
+    POINT       pos;
     double      lineWidth;
     int         fillType;       // T_none, T_filled, or T_transparent
-    POINT       pos;
     int         radius;
     POINT       start;
     POINT       end;
@@ -119,7 +128,7 @@ public:
 };
 
 
-class GR_TEXT : BASE_GRAPHIC
+class GR_TEXT : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -127,24 +136,54 @@ class GR_TEXT : BASE_GRAPHIC
 protected:
     POINT       pos;
     float       angle;
-    int         fillType;       // T_none, T_filled, or T_transparent
-    int         hjustify;       // T_center, T_right, or T_left
-    int         vjustify;       // T_center, T_top, or T_bottom
+    int         fillType;       ///< T_none, T_filled, or T_transparent
+    int         hjustify;       ///< T_center, T_right, or T_left
+    int         vjustify;       ///< T_center, T_top, or T_bottom
     bool        isVisible;
     wxString    text;
 //    FONT        font;
 
 public:
     GR_TEXT( PART* aOwner ) :
-        BASE_GRAPHIC( aOwner )
-/*
-        ,
-        fillType( T_filled ),
-        hjustify( T_left ),
-        vjustify( T_bottom ),
+        BASE_GRAPHIC( aOwner ),
         angle( 0 ),
+        fillType( PR::T_filled ),
+        hjustify( PR::T_left ),
+        vjustify( PR::T_bottom ),
         isVisible( true )
-*/
+    {}
+};
+
+
+class PIN : public BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    POINT       pos;
+    float       angle;
+    int         connectionType;     ///< T_input, T_output, T_bidirectional, T_tristate, T_passive, T_unspecified,
+                                    ///< T_power_in, T_power_out, T_open_collector, T_open_emitter, or T_unconnected.
+    int         shape;              ///< T_none, T_line, T_inverted, T_clock, T_inverted_clk, T_input_low, T_clock_low,
+                                    ///< T_falling_edge, T_non_logic.
+    int         length;             ///< length of pin in internal units
+    wxString    name;
+    wxString    number;
+    bool        nameIsVisible;      ///< name is visible
+    bool        numIsVisible;       ///< number is visible
+    bool        isVisible;          ///< pin is visible
+
+public:
+    PIN( PART* aOwner ) :
+        BASE_GRAPHIC( aOwner ),
+        angle( 0 ),
+        connectionType( PR::T_input ),
+        shape( PR::T_line ),
+        length( 0 ),
+        nameIsVisible( true ),
+        numIsVisible( true ),
+        isVisible( true )
     {}
 };
 
@@ -156,7 +195,8 @@ public:
 
 namespace SCH {
 
-typedef std::deque< BASE_GRAPHIC* >    GRAPHICS;
+typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
+typedef std::vector< PIN* >             PINS;
 
 class LPID;
 class SWEET_PARSER;
@@ -227,8 +267,12 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
      */
     GRAPHICS        graphics;
 
-    /// A pin list
-    //PINS        pins;
+    /**
+     * Member pins
+     * owns all the PINs in pins.
+     */
+    PINS            pins;
+
 
     /// Alternate body forms.
     //ALTERNATES  alternates;
