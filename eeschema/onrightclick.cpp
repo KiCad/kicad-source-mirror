@@ -648,7 +648,8 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     PopMenu->AppendSeparator();
 
     if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
-        ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK, _( "Window Zoom" ), zoom_selected_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK, _( "Window Zoom" ),
+                      zoom_area_xpm );
 
     ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
 

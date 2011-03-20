@@ -276,7 +276,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
     if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
         ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
                       _( "Zoom Block (drag middle mouse)" ),
-                      zoom_selected_xpm );
+                      zoom_area_xpm );
 
     PopMenu->AppendSeparator();
 

@@ -217,7 +217,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ),
                          _( "Redraw view (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ),
                          _( "Zoom auto (Home)" ) );
 
     m_HToolBar->AddSeparator();

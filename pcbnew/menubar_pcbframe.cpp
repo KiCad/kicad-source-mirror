@@ -345,7 +345,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
                            HELP_ZOOM_FIT, wxITEM_NORMAL );
-    item->SetBitmap( zoom_auto_xpm );
+    item->SetBitmap( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
     viewMenu->AppendSeparator();

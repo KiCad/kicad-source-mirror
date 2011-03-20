@@ -216,7 +216,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
                               _( "Cancel Block" ), cancel_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_ZOOM_BLOCK,
                               _( "Zoom Block (drag middle mouse)" ),
-                              zoom_selected_xpm );
+                              zoom_area_xpm );
                 PopMenu->AppendSeparator();
                 ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK,
                               _( "Place Block" ), apply_xpm );

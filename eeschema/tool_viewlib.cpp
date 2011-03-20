@@ -67,7 +67,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
         msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr,
                              HK_ZOOM_AUTO, false );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                             wxBitmap( zoom_auto_xpm ), msg );
+                             wxBitmap( zoom_fit_in_page_xpm ), msg );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
