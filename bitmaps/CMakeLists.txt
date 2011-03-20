@@ -414,7 +414,6 @@ set(BITMAP_SRCS
     Width_Vias.xpm
     zip_tool.xpm
     zip.xpm
-    Zoom_1.xpm
     zoom_auto.xpm
     Zoom_Center.xpm
     zoom_in.xpm
