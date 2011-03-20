@@ -6,6 +6,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "bitmaps.h"
 
 #include "gerbview.h"
 
@@ -33,9 +34,11 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( DrawStruct && DrawStruct->m_Flags )
-            PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ) );
+            ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                          _( "Cancel" ), cancel_xpm  );
         else
-            PopMenu->Append( ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ) );
+            ADD_MENUITEM( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
+                            _( "End Tool" ), cancel_tool_xpm );
 
         PopMenu->AppendSeparator();
     }
@@ -45,15 +48,17 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         {
             if( BlockActive )
             {
-                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ) );
+                ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                              _( "Cancel Block" ), cancel_xpm );
                 PopMenu->AppendSeparator();
-                PopMenu->Append( ID_POPUP_PLACE_BLOCK, _( "Place Block" ) );
-                PopMenu->Append( ID_POPUP_DELETE_BLOCK,
-                                 _( "Delete Block (ctrl + drag mouse)" ) );
+                ADD_MENUITEM( PopMenu, ID_POPUP_PLACE_BLOCK,
+                              _( "Place Block" ), apply_xpm );
+                ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK,
+                              _( "Delete Block (ctrl + drag mouse)" ), delete_xpm );
             }
             else
-                PopMenu->Append( ID_POPUP_CANCEL_CURRENT_COMMAND,
-                                 _( "Cancel" ) );
+                ADD_MENUITEM( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                                 _( "Cancel" ), cancel_xpm );
             PopMenu->AppendSeparator();
         }
     }

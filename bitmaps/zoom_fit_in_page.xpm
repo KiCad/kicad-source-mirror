@@ -1,0 +1,38 @@
+/* XPM */
+const char *zoom_fit_in_page_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"# c #323432",
+"@ c #9D9187",
+"X c #6E6A6A",
+"& c #121322",
+"O c #595FCC",
+"  c #1521D7",
+"$ c #9A9EB7",
+"= c #F4C284",
+"* c #6C727C",
+"o c None",
+"- c #D65A1F",
+". c #545056",
+"+ c #282EA4",
+"% c #CAE5FB",
+": c #B22407",
+"; c #FCCB43",
+/* pixels */
+"   ..X..XooO   O",
+" +.@ooo@.#$o    ",
+" .o%%%%%o.&$    ",
+".@%%%%%%%$#&    ",
+".o%%%%%%%%.& O$O",
+".%%o%%%o%%*&Oooo",
+".%%%%%%%%%X&oooo",
+".o%%%%%%%%#&oooo",
+"**%%%%%%%@&@oooo",
+"o.@%%%%%$*.Xoooo",
+"o$.X$$$X#.o=-ooo",
+"$o$+.X..@X@;;-oo",
+" O   $oooo:-;;-o",
+"    $oooooo:-;;-",
+"   Ooooooooo:-;-",
+"O   $oooooooo::-"
+};

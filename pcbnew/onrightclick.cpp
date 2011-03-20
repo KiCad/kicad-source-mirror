@@ -374,7 +374,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
 {
     ADD_MENUITEM( menu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), cancel_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), zoom_selected_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), zoom_area_xpm );
     menu->AppendSeparator();
     ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
     ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), copyblock_xpm );

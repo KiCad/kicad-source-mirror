@@ -102,7 +102,7 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_AUTO, false );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, wxBitmap( options_pad_xpm ),

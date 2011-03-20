@@ -414,19 +414,18 @@ set(BITMAP_SRCS
     Width_Vias.xpm
     zip_tool.xpm
     zip.xpm
-    zoom_auto.xpm
-    Zoom_Center.xpm
+    zoom.xpm
+    zoom_area.xpm
+    zoom_fit_in_page.xpm
+    zoom_center_on_screen.xpm
     zoom_in.xpm
     zoomoins3d.xpm
     zoom_out.xpm
     zoompage3d.xpm
-    Zoom_Page.xpm
     zoomplus3d.xpm
     zoom_redraw.xpm
     zoomrefr3d.xpm
-    Zoom_Selected.xpm
-    Zoom_Select.xpm
-    zoom.xpm
+    zoom_selection.xpm
 )
 
 

@@ -208,7 +208,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
                            ID_ZOOM_PAGE,
                            _( "Fit on Screen" ),
                            _( "Zoom and fit the module in the window" ) );
-    item->SetBitmap( zoom_auto_xpm );
+    item->SetBitmap( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
     /* Separator */

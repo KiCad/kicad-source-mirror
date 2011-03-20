@@ -132,7 +132,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
-    item->SetBitmap( zoom_auto_xpm );
+    item->SetBitmap( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
     viewMenu->AppendSeparator();

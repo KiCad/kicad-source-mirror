@@ -46,8 +46,8 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
                          wxBitmap( zoom_redraw_xpm ),
                          _( "Redraw view" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ),
-                         _( "Zoom auto" ) );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ),
+                         _( "Fit in page" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,

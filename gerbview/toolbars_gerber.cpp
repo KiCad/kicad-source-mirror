@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 
-//#include "appl_wxstruct.h"
 #include "common.h"
 #include "macros.h"
 #include "gerbview.h"
@@ -59,7 +58,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_AUTO );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_auto_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ), _( "Find D-codes" ) );
