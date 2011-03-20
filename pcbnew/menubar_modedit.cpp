@@ -70,7 +70,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     /* Append openSubmenu to fileMenu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openSubmenu, -1, _( "&Load Module" ),
-                                        _( "Load a footprint module" ), open_xpm );
+                                        _( "Load a footprint module" ), open_document_xpm );
 
     /* Save module */
     item = new wxMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE,

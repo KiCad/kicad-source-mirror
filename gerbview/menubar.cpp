@@ -32,17 +32,17 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     ADD_MENUITEM_WITH_HELP( filesMenu, wxID_FILE, _( "Load &Gerber File" ),
                             _(
                                 "Load a new Gerber file on the current layer. Previous data will be deleted" ),
-                            open_xpm );
+                            gerber_file_xpm );
 
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DRILL_FILE,
                             _( "Load &EXCELLON Drill File" ),
                             _( "Load excellon drill file" ),
-                            open_xpm );
+                            gerbview_drill_file_xpm );
 
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_LOAD_DCODE_FILE,
                             _( "Load &DCodes" ),
                             _( "Load D-Codes definition file" ),
-                            open_xpm );
+                            gerber_open_dcode_file_xpm );
 
     // Open Recent submenus
     wxMenu* openRecentGbrMenu = new wxMenu();
@@ -64,7 +64,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_ERASE_ALL,
                             _( "&Clear All" ),
                             _( "Clear all layers. All data will be deleted" ),
-                            delete_body_xpm );
+                            gerbview_clear_layers_xpm );
 
     filesMenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( filesMenu, ID_GERBVIEW_EXPORT_TO_PCBNEW,

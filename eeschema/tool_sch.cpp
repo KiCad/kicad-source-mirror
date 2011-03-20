@@ -31,7 +31,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, wxBitmap( new_xpm ),
                          _( "New schematic project" ) );
 
-    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, wxBitmap( open_xpm ),
+    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, wxBitmap( open_document_xpm ),
                          _( "Open schematic project" ) );
 
     m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, wxBitmap( save_project_xpm ),

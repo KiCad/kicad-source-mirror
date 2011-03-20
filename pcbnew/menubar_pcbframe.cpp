@@ -48,7 +48,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( filesMenu, ID_LOAD_FILE,
                            _( "&Open\tCtrl+O" ),
                            _( "Delete current board and load new board" ) );
-    item->SetBitmap( open_xpm );
+    item->SetBitmap( open_document_xpm );
     filesMenu->Append( item );
 
     // Load Recent submenu

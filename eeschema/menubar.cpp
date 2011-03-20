@@ -52,7 +52,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Open
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing schematic project" ) );
-    item->SetBitmap( open_xpm );
+    item->SetBitmap( open_document_xpm );
     filesMenu->Append( item );
 
     // Open Recent submenu

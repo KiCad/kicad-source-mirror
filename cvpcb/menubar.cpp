@@ -35,7 +35,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT,
                            _( "&Open" ),
                            _( "Open a net list file" ) );
-    item->SetBitmap( open_xpm );
+    item->SetBitmap( open_document_xpm );
     filesMenu->Append( item );
 
     /* Open Recent submenu */

@@ -23,7 +23,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
-                         wxBitmap( open_xpm ),
+                         wxBitmap( open_document_xpm ),
                          _( "Open a net list file" ) );
 
     m_HToolBar->AddTool( ID_CVPCB_SAVEQUITCVPCB, wxEmptyString,

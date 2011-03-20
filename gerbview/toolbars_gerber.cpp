@@ -35,11 +35,14 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( new_xpm ),
+    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( gerbview_clear_layers_xpm ),
                          _( "Erase all layers" ) );
 
-    m_HToolBar->AddTool( wxID_FILE, wxEmptyString, wxBitmap( open_xpm ),
+    m_HToolBar->AddTool( wxID_FILE, wxEmptyString, wxBitmap( gerber_file_xpm ),
                          _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
+
+    m_HToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString, wxBitmap( gerbview_drill_file_xpm ),
+                         _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),

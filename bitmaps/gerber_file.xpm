@@ -1,0 +1,38 @@
+/* XPM */
+const char *gerber_file_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"X c #9CAA8C",
+"$ c #484607",
+"& c #3C6704",
+"; c #BC0807",
+"- c #BC6644",
+"* c #30A506",
+"# c #89C35C",
+"% c #34B60B",
+"o c #BCC990",
+"O c #657642",
+". c #FAFCF9",
+"@ c #87904F",
+"= c #BC9C6C",
+"  c #56692F",
+": c #543A04",
+"+ c #A9BC7A",
+/* pixels */
+"                ",
+" ...X .... o... ",
+" ...X .... o...O",
+" OOO  O OO  OOO ",
+"ooooooo+@@+ooo#o",
+"ooo+ooO$$$$@#%%%",
+"ooooo@$$$$&*%%%+",
+"=----$$$&*%**#oo",
+";;;;;:$$***& ooo",
+"=----$$$&&$$@ooo",
+"ooooo+$$$$$$+ooo",
+"oooooo+ $$O+oo+o",
+"                ",
+" ...XO.... o... ",
+" ...X .... o...O",
+" OOO  OOOO OOOOO"
+};
