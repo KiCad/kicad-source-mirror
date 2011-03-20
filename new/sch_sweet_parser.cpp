@@ -148,7 +148,6 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     // Caller may not have read the first two tokens out of the
     // stream: T_LEFT and T_part, so ignore them if seen here.
     // The 1st two tokens T_LEFT and T_part are then optional in the grammar.
-
     if( (tok = NextTok() ) == T_LEFT )
     {
         if( ( tok = NextTok() ) != T_part )
@@ -163,7 +162,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
         Expecting( T_part );
 #endif
 
-    NeedSYMBOLorNUMBER(); // read in part NAME_HINT, and toss
+    NeedSYMBOLorNUMBER();       // toss NAME_HINT
     tok = NextTok();
 
     // extends must be _first_ thing, if it is present at all, after NAME_HINT
@@ -231,7 +230,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             break;
 
         case T_arc:
-            ARC*    arc;
+            ARC* arc;
             arc = new ARC( me );
             me->graphics.push_back( arc );
             parseArc( arc );
@@ -331,6 +330,77 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     contains |= PB(PARSED);
 
     me->contains |= contains;
+}
+
+
+void SWEET_PARSER::parseFont( GR_FONT* me )
+{
+    /*
+        # The FONT value needs to be defined.  Currently, EESchema does not support
+        # different fonts.  In the future this feature may be implemented and at
+        # that time FONT will have to be defined.  Initially, only the font size and
+        # style are required.  Italic and bold styles are optional.  The font size
+        # height and width are in units yet to be determined.
+        (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])
+    */
+
+
+
+    // handle the [FONT] position dependently, i.e. first
+    T       tok = NextTok();
+    bool    sawBold   = false;
+    bool    sawItalic = false;
+    bool    sawSize   = false;
+
+    if( IsSymbol( tok ) )
+    {
+        me->name = FromUTF8();
+        tok = NextTok();
+    }
+
+    while( tok != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+        {
+            tok = NextTok();
+            if( tok != T_size )
+                Expecting( T_size );
+
+            if( sawSize )
+                Duplicate( T_size );
+            sawSize = true;
+
+            NeedNUMBER( "size height" );
+            me->size.SetHeight( internal( CurText() ) );
+
+            NeedNUMBER( "size width" );
+            me->size.SetWidth( internal( CurText() ) );
+            NeedRIGHT();
+        }
+        else
+        {
+            if( tok == T_bold )
+            {
+                if( sawBold )
+                    Duplicate( T_bold );
+                sawBold = true;
+
+                me->bold = true;
+            }
+            else if( tok == T_italic )
+            {
+                if( sawItalic )
+                    Duplicate( T_italic );
+                sawItalic = true;
+
+                me->italic = true;
+            }
+            else
+                Unexpected( tok );
+        }
+
+        tok = NextTok();
+    }
 }
 
 
@@ -460,16 +530,29 @@ void SWEET_PARSER::parsePin( PIN* me )
 
 void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
 {
+    /*
+        (polyline|line
+            (pts (xy X Y) (xy X Y) (xy X Y) (xy X Y) (xy X Y))
+
+            # Line widths are in units as defined above.
+            (line_width WIDTH)
+
+            # Valid fill types are none, filled, and transparent.
+            (fill FILL_TYPE)
+        )
+    */
+
     T       tok;
     int     count = 0;
     bool    sawWidth = false;
     bool    sawFill  = false;
 
-    NeedLEFT();
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( tok == T_LEFT )
-            tok = NextTok();
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
 
         switch( tok )
         {
@@ -541,17 +624,22 @@ void SWEET_PARSER::parseBezier( BEZIER* me )
 
 void SWEET_PARSER::parseRectangle( RECTANGLE* me )
 {
+    /*
+        (rectangle (start X Y) (end X Y) (line_width WIDTH) (fill FILL_TYPE))
+    */
+
     T       tok;
     bool    sawStart = false;
     bool    sawEnd   = false;
     bool    sawWidth = false;
     bool    sawFill  = false;
 
-    NeedLEFT();
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( tok == T_LEFT )
-            tok = NextTok();
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
 
         switch( tok )
         {
@@ -613,17 +701,27 @@ void SWEET_PARSER::parseRectangle( RECTANGLE* me )
 
 void SWEET_PARSER::parseCircle( CIRCLE* me )
 {
+    /*
+        (circle (center X Y)
+            # Radius length is in units if defined or mils.
+            (radius LENGTH)
+            (line_width WIDTH)
+            (fill FILL_TYPE)
+        )
+    */
+
     T       tok;
     bool    sawCenter = false;
     bool    sawRadius = false;
     bool    sawWidth  = false;
     bool    sawFill   = false;
 
-    NeedLEFT();
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( tok == T_LEFT )
-            tok = NextTok();
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
 
         switch( tok )
         {
@@ -683,6 +781,13 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
 
 void SWEET_PARSER::parseArc( ARC* me )
 {
+    /*
+        (arc (pos X Y) (radius RADIUS) (start X Y) (end X Y)
+            (line_width WIDTH)
+            (fill FILL_TYPE)
+        )
+    */
+
     T       tok;
     bool    sawPos    = false;
     bool    sawStart  = false;
@@ -691,11 +796,12 @@ void SWEET_PARSER::parseArc( ARC* me )
     bool    sawWidth  = false;
     bool    sawFill   = false;
 
-    NeedLEFT();
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( tok == T_LEFT )
-            tok = NextTok();
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
 
         switch( tok )
         {
@@ -798,6 +904,19 @@ void SWEET_PARSER::parseAt( POINT* pos, float* angle )
 
 void SWEET_PARSER::parseText( GR_TEXT* me )
 {
+    /*
+        (text "This is the text that gets drawn."
+            (at X Y [ANGLE])
+
+            # Valid horizontal justification values are center, right, and left.  Valid
+            # vertical justification values are center, top, bottom.
+            (justify HORIZONTAL_JUSTIFY VERTICAL_JUSTIFY)
+            (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])
+            (visible YES)
+            (fill FILL_TYPE)
+        )
+    */
+
     T       tok;
     bool    sawAt   = false;
     bool    sawFill = false;
@@ -808,12 +927,12 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
     NeedSYMBOLorNUMBER();
     me->text = FROM_UTF8( CurText() );
 
-    NeedLEFT();
-
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( tok == T_LEFT )
-            tok = NextTok();
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
 
         switch( tok )
         {

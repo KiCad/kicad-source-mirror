@@ -35,6 +35,7 @@ namespace SCH {
 class LIB_TABLE;
 class PART;
 
+
 // GRAPHICS
 class POLY_LINE;
 class RECTANGLE;
@@ -43,6 +44,7 @@ class ARC;
 class BEZIER;
 class GR_TEXT;
 class PIN;
+class GR_FONT;
 
 
 /**
@@ -71,6 +73,7 @@ class SWEET_PARSER : public SWEET_LEXER
     void parsePin( PIN* me );
     void parseAt( POINT* pos, float* angle );
     void parseBool( bool* aBool );
+    void parseFont( GR_FONT* me );
 
 public:
 

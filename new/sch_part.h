@@ -13,19 +13,46 @@
 #include <sweet_lexer.h>
 
 
-class POINT : public wxPoint
-{
-public:
-    POINT( int x, int y ) : wxPoint( x, y ) {}
-    POINT() : wxPoint() {}
-};
-
-
 namespace SCH {
 
 class PART;
 class SWEET_PARSER;
 
+};
+
+
+class POINT : public wxPoint
+{
+public:
+    POINT( int x, int y ) :
+        wxPoint( x, y )
+    {}
+
+    POINT() :
+        wxPoint()
+    {}
+};
+
+
+namespace SCH {
+
+class GR_FONT
+{
+    friend class PART;
+    friend class SWEET_PARSER;
+
+protected:
+    wxString        name;       ///< name or other id such as number, TBD
+    wxSize          size;
+    bool            italic;
+    bool            bold;
+
+public:
+    GR_FONT() :
+        italic( false ),
+        bold( false )
+    {}
+};
 
 class   BASE_GRAPHIC
 {
@@ -186,6 +213,7 @@ public:
         isVisible( true )
     {}
 };
+
 
 }  // namespace SCH
 

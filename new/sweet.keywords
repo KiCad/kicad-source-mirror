@@ -4,6 +4,7 @@ arc
 at
 bezier
 bidirectional
+bold
 bottom
 center
 circle
@@ -23,6 +24,7 @@ input
 input_low
 inverted
 inverted_clk
+italic
 justify
 keywords
 left
