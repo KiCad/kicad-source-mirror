@@ -474,9 +474,9 @@ void SWEET_PARSER::parsePin( PIN* me )
             case T_visible:
                 if( sawVis )
                     Duplicate( tok );
+                sawVis = true;
                 parseBool( &me->isVisible );
                 NeedRIGHT();
-                sawVis = true;
                 break;
 
             default:
