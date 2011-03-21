@@ -1,6 +1,6 @@
-/****************************/
-/*  EESchema - libedit_onrightclick.cpp */
-/****************************/
+/**
+ *  @file libedit_onrightclick.cpp
+ */
 
 /* , In library editor, create the pop menu when clicking on mouse right button
  */
@@ -30,7 +30,7 @@ static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame
 
 bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    LIB_DRAW_ITEM* DrawEntry = LocateItemUsingCursor( aPosition );
+    LIB_DRAW_ITEM* DrawEntry = GetDrawItem();
     bool BlockActive = GetScreen()->IsBlockActive();
 
     if( BlockActive )
@@ -44,17 +44,21 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
 
     //  If Command in progress, put menu "cancel"
-    if( DrawEntry && DrawEntry->m_Flags )
+    if( DrawEntry && DrawEntry->GetFlags() )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "Cancel" ), cancel_xpm );
         PopMenu->AppendSeparator();
     }
-    else if( GetToolId() != ID_NO_TOOL_SELECTED )
-    {   // If a tool is active, put menu "end tool"
-        ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "End Tool" ), cancel_tool_xpm );
-        PopMenu->AppendSeparator();
+    else
+    {
+        DrawEntry = LocateItemUsingCursor( aPosition );
+        if( GetToolId() != ID_NO_TOOL_SELECTED )
+        {
+            // If a tool is active, put menu "end tool"
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "End Tool" ), cancel_tool_xpm );
+            PopMenu->AppendSeparator();
+        }
     }
-
 
     if( DrawEntry )
         DrawEntry->DisplayInfo( this );
