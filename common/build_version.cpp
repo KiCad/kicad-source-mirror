@@ -6,7 +6,7 @@
 #endif
 
 #ifndef KICAD_BUILD_VERSION
-#define KICAD_BUILD_VERSION "(2011-03-20)"
+#define KICAD_BUILD_VERSION "(2011-03-22)"
 #endif
 
 // uncomment this line only when creating a stable version
