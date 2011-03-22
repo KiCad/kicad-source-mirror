@@ -467,13 +467,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    if( !GetScreen()->GetFileName().IsEmpty() )
-    {
-        wxFileName fn = GetScreen()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
-        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
-    }
-
     SaveSettings();
 
     // do not show the window because ScreenPcb will be deleted and we do not

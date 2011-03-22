@@ -5,10 +5,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "fctsys.h"
+#include "appl_wxstruct.h"
 #include "common.h"
+#include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-
+#include "pcbnew_config.h"
 
 #include "dialog_netlist.h"
 
@@ -24,6 +26,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
      * name if no last file read is not set.
      */
     wxFileName fn = GetLastNetListRead();
+    wxString lastNetlistName = GetLastNetListRead();
 
     if( !fn.FileExists() )
     {
@@ -31,9 +34,21 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC, const wxPoint& pos )
         fn.SetExt( NetExtBuffer );
     }
 
-    DIALOG_NETLIST frame( this, DC, fn.GetFullPath() );
+    DIALOG_NETLIST frame( this, DC, lastNetlistName );
 
     frame.ShowModal();
+
+    // Save project settings if needed.
+    // Project settings are saved in the corresponding <board name>.pro file
+    if( lastNetlistName != GetLastNetListRead() &&
+        !GetScreen()->GetFileName().IsEmpty() &&
+        IsOK(NULL, _("Project config has changed. Save it ?") ) )
+    {
+        wxFileName fn = GetScreen()->GetFileName();
+        fn.SetExt( ProjectFileExtension );
+        wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP,
+                                       GetProjectFileParameters() );
+    }
 }
 
 

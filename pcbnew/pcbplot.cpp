@@ -19,7 +19,6 @@
 #include "dialog_plot_base.h"
 #include "pcb_plot_params.h"
 
-
 /* Keywords to r/w options in m_Config */
 #define CONFIG_XFINESCALE_ADJ    wxT( "PlotXFineScaleAdj" )
 #define CONFIG_YFINESCALE_ADJ    wxT( "PlotYFineScaleAdj" )
@@ -57,10 +56,10 @@ class DIALOG_PLOT : public DIALOG_PLOT_BASE
 private:
     PCB_EDIT_FRAME*  m_Parent;
     wxConfig*        m_Config;
-    std::vector<int> layerList;           // List to hold CheckListBox layer numbers
+    std::vector<int> layerList;         // List to hold CheckListBox layer numbers
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
-    static wxPoint   prevPosition;        // Dialog position & size
+    static wxPoint   prevPosition;      // Dialog position & size
     static wxSize    prevSize;
 public:
     DIALOG_PLOT( PCB_EDIT_FRAME* parent );
@@ -235,6 +234,7 @@ void DIALOG_PLOT::OnClose( wxCloseEvent& event )
     prevPosition = GetPosition();
     prevSize = GetSize();
     applyPlotSettings();
+
     EndModal( 0 );
 }
 
@@ -260,7 +260,7 @@ void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output plot directory
-    // to preselect it when opening the Di Dialog.
+    // to preselect it when opening the dialog.
     wxFileName fn( m_outputDirectoryName->GetValue() );
     wxString path;
     if( fn.IsRelative() )

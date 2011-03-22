@@ -231,7 +231,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
                                                       120, 0, 0xFFFF ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &g_ModuleSegmentWidth,
                                                       120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "LastNetListRead" ),
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
                                                            &m_lastNetListRead ) );
     return m_projectFileParams;
 }
