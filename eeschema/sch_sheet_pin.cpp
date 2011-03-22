@@ -23,6 +23,7 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_sheet.h"
+#include "kicad_string.h"
 
 
 /* m_Edge define on which edge the pin is positionned:
@@ -253,19 +254,45 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 
 bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    int  size;
-    char number[256];
-    char name[256];
-    char connectType[256];
-    char sheetSide[256];
+    int     size;
+    char    number[256];
+    char    name[256];
+    char    connectType[256];
+    char    sheetSide[256];
+    char*   line = aLine.Line();
+    char*   cp;
 
-    /* Read coordinates. */
-    if( sscanf( ((char*)aLine), "%s %s %s %s %d %d %d",
-                number, name, connectType, sheetSide, &m_Pos.x, &m_Pos.y, &size ) != 7 )
+    static const char delims[] = " \t";
+
+    // Read coordinates.
+    D( printf( "line: \"%s\"\n", line );)
+
+    cp = strtok( line, delims );
+
+    strncpy( number, cp, sizeof(number) );
+    number[sizeof(number)-1] = 0;
+
+    cp += strlen( number ) + 1;
+
+    cp += ReadDelimitedText( name, cp, sizeof(name) );
+
+    cp = strtok( cp, delims );
+    strncpy( connectType, cp, sizeof(connectType) );
+    connectType[sizeof(connectType)-1] = 0;
+
+    cp = strtok( NULL, delims );
+    strncpy( sheetSide, cp, sizeof(sheetSide) );
+    sheetSide[sizeof(sheetSide)-1] = 0;
+
+    cp += strlen( sheetSide ) + 1;
+
+    int r = sscanf( cp, "%d %d %d", &m_Pos.x, &m_Pos.y, &size );
+    if( r != 3 )
     {
         aErrorMsg.Printf( wxT( "EESchema file sheet hierarchical label error at line %d.\n" ),
                           aLine.LineNumber() );
-        aErrorMsg << FROM_UTF8( ((char*)aLine) );
+
+        aErrorMsg << FROM_UTF8( line );
         return false;
     }
 
