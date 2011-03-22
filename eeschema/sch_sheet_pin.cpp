@@ -241,8 +241,9 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
         type = 'U'; break;
     }
 
-    if( fprintf( aFile, "F%d \"%s\" %c %c %-3d %-3d %-3d\n", m_Number,
-                 TO_UTF8( m_Text ), type, side, m_Pos.x, m_Pos.y,
+    if( fprintf( aFile, "F%d %s %c %c %-3d %-3d %-3d\n", m_Number,
+                 EscapedUTF8( m_Text ).c_str(),     // supplies wrapping quotes
+                 type, side, m_Pos.x, m_Pos.y,
                  m_Size.x ) == EOF )
     {
         return false;
@@ -297,9 +298,6 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     m_Text = FROM_UTF8( name );
-
-    m_Text = m_Text.AfterFirst( wxChar( '"' ) );
-    m_Text = m_Text.BeforeLast( wxChar( '"' ) );
 
     if( size == 0 )
         size = DEFAULT_SIZE_TEXT;

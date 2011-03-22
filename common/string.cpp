@@ -58,7 +58,7 @@ std::string EscapedUTF8( const wxString& aString )
 
     std::string ret;
 
-    // ret += '"';
+    ret += '"';
 
     for( std::string::const_iterator it = utf8.begin();  it!=utf8.end();  ++it )
     {
@@ -77,7 +77,7 @@ std::string EscapedUTF8( const wxString& aString )
             ret += *it;
     }
 
-    // ret += '"';
+    ret += '"';
 
     return ret;
 }

@@ -341,7 +341,7 @@ void SWEET_PARSER::parseFont( GR_FONT* me )
         # that time FONT will have to be defined.  Initially, only the font size and
         # style are required.  Italic and bold styles are optional.  The font size
         # height and width are in units yet to be determined.
-        (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])
+        (font [FONT] (size HEIGHT WIDTH) [italic] [bold])
     */
 
 
@@ -426,8 +426,8 @@ void SWEET_PARSER::parsePin( PIN* me )
         (pin TYPE SHAPE
             (at X Y [ANGLE])
             (length LENGTH)
-            (name NAME (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])(visible YES))
-            (number NUMBER (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD] (visible YES))
+            (name NAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
+            (number NUMBER (font [FONT] (size HEIGHT WIDTH) [italic] [bold] (visible YES))
             (visible YES)
         )
     */
@@ -911,7 +911,7 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
             # Valid horizontal justification values are center, right, and left.  Valid
             # vertical justification values are center, top, bottom.
             (justify HORIZONTAL_JUSTIFY VERTICAL_JUSTIFY)
-            (font [FONT] (size HEIGHT WIDTH) [ITALIC] [BOLD])
+            (font [FONT] (size HEIGHT WIDTH) [italic] [bold])
             (visible YES)
             (fill FILL_TYPE)
         )

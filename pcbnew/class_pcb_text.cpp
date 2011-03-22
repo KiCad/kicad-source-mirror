@@ -163,9 +163,9 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
         wxString txt  = list->Item( ii );
 
         if ( ii == 0 )
-            fprintf( aFile, "Te \"%s\"\n", EscapedUTF8( txt ).c_str() );
+            fprintf( aFile, "Te %s\n", EscapedUTF8( txt ).c_str() );
         else
-            fprintf( aFile, "nl \"%s\"\n", TO_UTF8( txt ) );
+            fprintf( aFile, "nl %s\n", EscapedUTF8( txt ).c_str() );
     }
 
     delete list;
