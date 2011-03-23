@@ -10,6 +10,11 @@
 
 #include "protos.h"
 
+static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
+extern int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
+                     TRACK** StartTrack, TRACK** EndTrack );
+
+
 /**
  * Function EraseRedundantTrack
  * Called after creating a track
@@ -272,4 +277,20 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     }
 
     return 0;
+}
+
+
+
+/* Set the bits of .m_State member to onoff value, using bit mask State
+ * of a list of EDA_ITEM
+ */
+static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )
+{
+    if( Start == NULL )
+        return;
+
+    for( ; (Start != NULL ) && ( NbItem > 0 ); NbItem--, Start = Start->Next() )
+    {
+        Start->SetState( State, onoff );
+    }
 }

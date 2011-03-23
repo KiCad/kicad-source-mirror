@@ -30,7 +30,6 @@ set(CVPCB_SRCS
     class_footprints_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
-    dummy_functions.cpp
     genequiv.cpp
     init.cpp
     listboxes.cpp

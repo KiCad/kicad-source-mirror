@@ -113,3 +113,20 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
         m_Modules->Draw( aPanel, aDC, GR_COPY );
     }
 }
+
+/* dummy_functions:
+ *
+ *  These functions are used in some classes.
+ *  they are useful in pcbnew, but have no meaning or are never used
+ *  in cvpcb or gerbview.
+ *  but they must exist because they appear in some classes.
+ *  Do nothing in CvPcb.
+ */
+TRACK* Marque_Une_Piste( BOARD* aPcb,
+                         TRACK* aStartSegm,
+                         int*   aSegmCount,
+                         int*   aTrackLen,
+                         bool   aReorder )
+{
+    return NULL;
+}

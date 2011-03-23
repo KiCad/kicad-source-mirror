@@ -139,6 +139,7 @@ set(BITMAP_SRCS
     gbr_select_mode1.xpm
     gbr_select_mode2.xpm
     gerber_file.xpm
+    gerber_recent_files.xpm
     gerbview_drill_file.xpm
     gerbview_clear_layers.xpm
     gerber_open_dcode_file.xpm

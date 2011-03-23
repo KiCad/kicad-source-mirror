@@ -530,16 +530,3 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     return ok;
 }
 
-
-/* Set to onoff the .m_State member, bit mask State of a list of items
- */
-void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )
-{
-    if( Start == NULL )
-        return;
-
-    for( ; (Start != NULL ) && ( NbItem > 0 ); NbItem--, Start = Start->Next() )
-    {
-        Start->SetState( State, onoff );
-    }
-}

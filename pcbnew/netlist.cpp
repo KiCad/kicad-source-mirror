@@ -102,8 +102,6 @@ static void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame );
 static int           s_NbNewModules;
 static MODULEtoLOAD* s_ModuleToLoad_List;
 
-#define BUFFER_CHAR_SIZE 2048
-
 /**
  * Function OpenNetlistFile
  *  used to open a netlist file

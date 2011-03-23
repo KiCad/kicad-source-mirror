@@ -50,7 +50,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentGbrMenu,
                                         wxID_ANY, _( "Open &Recent Gerber File" ),
                                         _( "Open a recent opened Gerber file" ),
-                                        open_project_xpm );
+                                        gerber_recent_files_xpm );
 
     wxMenu* openRecentDrlMenu = new wxMenu();
     m_drillFileHistory.AddFilesToMenu( openRecentDrlMenu );

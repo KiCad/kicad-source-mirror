@@ -34,7 +34,7 @@ private:
     void BrowseAndSelectFootprint( wxCommandEvent& event );
     void Init();
 
-    void Change_Module();
+    void Change_Current_Module();
     void Change_ModuleId( bool aUseValue );
     void Change_ModuleAll();
     int  Maj_ListeCmp( const wxString& reference, const wxString& old_name,
@@ -93,7 +93,7 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
     switch( m_Selection->GetSelection() )
     {
     case 0:
-        Change_Module();
+        Change_Current_Module();
         break;
 
     case 1:
@@ -147,12 +147,12 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*      FichCmp, * NewFile;
     char       Line[1024];
     wxString   msg;
-    char*      result;                      // quiet compiler
+    char*      result;              // quiet compiler
 
     if( old_name == new_name )
-        return 0;                           /* no change of name */
+        return 0;
 
-    /* Calculation CMP file name by changing the extension name NetList */
+    /* Build CMP file name by changing the extension of NetList filename */
     fn = m_Parent->GetScreen()->GetFileName();
     fn.SetExt( NetCmpExtBuffer );
 
@@ -232,7 +232,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
  * - Same text value and ref
  * - Same NetNames for pads same name
  */
-void DIALOG_EXCHANGE_MODULE::Change_Module()
+void DIALOG_EXCHANGE_MODULE::Change_Current_Module()
 {
     wxString newmodulename = m_NewModule->GetValue();
 

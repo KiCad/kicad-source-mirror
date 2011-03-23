@@ -245,12 +245,8 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
  */
 int  ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
 
-/* Update the state of a list of structures. */
-void ListSetState( EDA_ITEM* Start, int Nbitem, int State, int onoff );
-
 
 /***************/
-/* DUPLTRAC.CPP */
 /***************/
 
 /* Routine to find the point "attachment" at the end of a trace.

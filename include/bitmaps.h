@@ -134,6 +134,7 @@ extern const char* gbr_select_mode1_xpm[];
 extern const char* gbr_select_mode2_xpm[];
 extern const char* gerbview_drill_file_xpm[];
 extern const char* gerber_file_xpm[];
+extern const char* gerber_recent_files_xpm[];
 extern const char* gerbview_clear_layers_xpm[];
 extern const char* gerber_open_dcode_file_xpm[];
 extern const char* general_deletions_xpm[];
