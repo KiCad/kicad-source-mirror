@@ -1,5 +1,5 @@
-#ifndef CLASS_LAYERCHOICEBOX_H
-#define CLASS_LAYERCHOICEBOX_H 1
+#ifndef CLASS_LAYER_BOX_SELECTOR_H
+#define CLASS_LAYER_BOX_SELECTOR_H 1
 
 #include "hotkeys_basic.h"
 #include <wx/bmpcbox.h>
@@ -8,18 +8,18 @@
  *
  */
 
-class WinEDALayerChoiceBox : public wxBitmapComboBox
+class LAYER_BOX_SELECTOR : public wxBitmapComboBox
 {
 private:
     bool m_layerhotkeys;
     bool m_layerorder;
 public:
-    WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
+    LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int n = 0, const wxString choices[] = NULL );
 
-    WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
+    LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
                      const wxPoint& pos, const wxSize& size,
                      const wxArrayString& choices );
 
@@ -62,4 +62,4 @@ public:
             HK_SWITCH_LAYER_TO_COMPONENT \
         };
 
-#endif //CLASS_LAYERCHOICEBOX_H
+#endif //CLASS_LAYER_BOX_SELECTOR_H

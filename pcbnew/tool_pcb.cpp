@@ -26,7 +26,7 @@
 #include "hotkeys.h"
 
 #include "help_common_strings.h"
-#include "class_layerchoicebox.h"
+#include "class_layer_box_selector.h"
 
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
@@ -256,7 +256,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
 
     if( m_SelLayerBox == NULL )
-        m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_SelLayerBox = new LAYER_BOX_SELECTOR( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
 
     ReCreateLayerBox( m_HToolBar );
     m_HToolBar->AddControl( m_SelLayerBox );
@@ -612,7 +612,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 }
 
 
-WinEDALayerChoiceBox* PCB_EDIT_FRAME::ReCreateLayerBox( WinEDA_Toolbar* parent )
+LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( WinEDA_Toolbar* parent )
 {
     if( m_SelLayerBox == NULL )
         return NULL;

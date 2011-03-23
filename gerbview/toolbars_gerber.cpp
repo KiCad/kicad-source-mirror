@@ -11,7 +11,7 @@
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include "class_GERBER.h"
-#include "class_layerchoicebox.h"
+#include "class_layer_box_selector.h"
 #include "class_DCodeSelectionbox.h"
 #include "dialog_helpers.h"
 
@@ -69,7 +69,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerBox = new WinEDALayerChoiceBox( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+    m_SelLayerBox = new LAYER_BOX_SELECTOR( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                                               wxDefaultPosition, wxSize( 150, -1 ), choices );
     m_HToolBar->AddControl( m_SelLayerBox );
 

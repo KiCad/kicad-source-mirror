@@ -28,7 +28,6 @@ set(COMMON_SRCS
     block_commande.cpp
     build_version.cpp
     class_colors_design_settings.cpp
-    class_layerchoicebox.cpp
     class_marker_base.cpp
     class_plotter.cpp
     class_undoredo_container.cpp
@@ -76,6 +75,7 @@ add_library(common ${COMMON_SRCS})
 set(PCB_COMMON_SRCS
     pcbcommon.cpp
     footprint_info.cpp
+    class_layer_box_selector.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp

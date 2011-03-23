@@ -8,7 +8,7 @@
 #include "id.h"
 #include "param_config.h"
 #include "class_gerbview_layer_widget.h"
-#include "class_layerchoicebox.h"
+#include "class_layer_box_selector.h"
 
 
 #define NO_AVAILABLE_LAYERS -1
@@ -30,7 +30,7 @@ protected:
     wxFileHistory         m_drillFileHistory;   // Auxiliary file history used to store drill files history
 
 public:
-    WinEDALayerChoiceBox* m_SelLayerBox;
+    LAYER_BOX_SELECTOR* m_SelLayerBox;
     DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to highlight.
     wxTextCtrl*           m_TextInfo;       // a wxTextCtrl used to display some info about
                                             // gerber data (format..)

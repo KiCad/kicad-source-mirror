@@ -31,7 +31,6 @@ set(GERBVIEW_SRCS
     class_gerbview_layer_widget.cpp
     controle.cpp
     dcode.cpp
-    dummy_functions.cpp
     draw_gerber_screen.cpp
     events_called_functions.cpp
     excellon_read_drill_file.cpp

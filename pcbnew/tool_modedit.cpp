@@ -13,8 +13,6 @@
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 
-//#include "protos.h"
-
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
 #else

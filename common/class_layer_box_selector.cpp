@@ -14,13 +14,13 @@
 #include <wx/bmpcbox.h>
 #include <wx/wx.h>
 
-#include "class_layerchoicebox.h"
+#include "class_layer_box_selector.h"
 
 /* class to display a layer list.
  *
  */
 
-WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
                                             const wxPoint& pos, const wxSize& size,
                                             int n, const wxString choices[] ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
@@ -35,7 +35,7 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
 }
 
 
-WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID id,
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
                                             const wxPoint& pos, const wxSize& size,
                                             const wxArrayString& choices ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
@@ -50,14 +50,14 @@ WinEDALayerChoiceBox::WinEDALayerChoiceBox( WinEDA_Toolbar* parent, wxWindowID i
 }
 
 
-bool WinEDALayerChoiceBox::SetLayersOrdered( bool value )
+bool LAYER_BOX_SELECTOR::SetLayersOrdered( bool value )
 {
     m_layerorder = value;
     return m_layerorder;
 }
 
 
-bool WinEDALayerChoiceBox::SetLayersHotkeys( bool value )
+bool LAYER_BOX_SELECTOR::SetLayersHotkeys( bool value )
 {
     m_layerhotkeys = value;
     return m_layerhotkeys;
@@ -65,21 +65,21 @@ bool WinEDALayerChoiceBox::SetLayersHotkeys( bool value )
 
 
 // Get Current Item #
-int WinEDALayerChoiceBox::GetChoice()
+int LAYER_BOX_SELECTOR::GetChoice()
 {
     return GetSelection();
 }
 
 
 // Get Current Layer
-int WinEDALayerChoiceBox::GetLayerSelection()
+int LAYER_BOX_SELECTOR::GetLayerSelection()
 {
     return (long) GetClientData( GetSelection() );
 }
 
 
 // Set Layer #
-int WinEDALayerChoiceBox::SetLayerSelection( int layer )
+int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 {
     int elements = GetCount();
 
@@ -104,7 +104,7 @@ int WinEDALayerChoiceBox::SetLayerSelection( int layer )
 
 
 // Reload the Layers
-void WinEDALayerChoiceBox::Resync()
+void LAYER_BOX_SELECTOR::Resync()
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
@@ -150,7 +150,7 @@ void WinEDALayerChoiceBox::Resync()
     }
 }
 
-void WinEDALayerChoiceBox::ResyncBitmapOnly()
+void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
@@ -175,6 +175,6 @@ void WinEDALayerChoiceBox::ResyncBitmapOnly()
         bmpDC.SetPen( *wxBLACK_PEN );
         bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
 
-        SetItemBitmap(i, layerbmp); 
+        SetItemBitmap(i, layerbmp);
     }
 }
