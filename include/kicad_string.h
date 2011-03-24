@@ -26,9 +26,20 @@ char*    strlower( char* Text );
  * @param aDestSize is the size of the destination byte buffer.
  * @return int - the number of bytes read from source, which may be more than
  *   the number copied, due to escaping of double quotes and the escape byte itself.
+ * @deprecated should use the one which fetches a wxString, below.
  */
 int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 
+/**
+ * Function ReadDelimitedText
+ * copies bytes from @a aSource delimited string segment to @a aDest wxString.
+ *
+ * @param aDest is the destination wxString
+ * @param aSource is the source C string holding utf8 encoded bytes.
+ * @return int - the number of bytes read from source, which may be more than
+ *   the number copied, due to escaping of double quotes and the escape byte itself.
+ */
+int ReadDelimitedText( wxString* aDest, const char* aSource );
 
 /**
  * Function EscapedUTF8

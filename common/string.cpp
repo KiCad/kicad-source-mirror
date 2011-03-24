@@ -8,6 +8,48 @@
 #include "kicad_string.h"
 
 
+int ReadDelimitedText( wxString* aDest, const char* aSource )
+{
+    std::string utf8;               // utf8 but without escapes and quotes.
+    bool        inside = false;
+    const char* start = aSource;
+    char        cc;
+
+    while( (cc = *aSource++) != 0  )
+    {
+        if( cc == '"' )
+        {
+            if( inside )
+                break;          // 2nd double quote is end of delimited text
+
+            inside = true;      // first delimiter found, make note, do not copy
+        }
+
+        else if( inside )
+        {
+            if( cc == '\\' )
+            {
+                cc = *aSource++;
+                if( !cc )
+                    break;
+
+                // do no copy the escape byte if it is followed by \ or "
+                if( cc != '"' && cc != '\\' )
+                    utf8 += '\\';
+
+                utf8 += cc;
+            }
+            else
+                utf8 += cc;
+        }
+    }
+
+    *aDest = FROM_UTF8( utf8.c_str() );
+
+    return aSource - start;
+}
+
+
 int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 {
     if( aDestSize <= 0 )
@@ -33,6 +75,8 @@ int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
             if( cc == '\\' )
             {
                 cc = *aSource++;
+                if( !cc )
+                    break;
 
                 // do no copy the escape byte if it is followed by \ or "
                 if( cc != '"' && cc != '\\' )

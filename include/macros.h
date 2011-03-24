@@ -20,13 +20,14 @@
  * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
  */
 //#define FROM_UTF8( cstring )    wxString::FromUTF8( cstring )
-inline wxString FROM_UTF8( const char* cstring )
+static inline wxString FROM_UTF8( const char* cstring )
 {
     wxString line = wxString::FromUTF8( cstring );
     if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
         line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
     return line;
 }
+
 /**
  * Function GetChars
  * returns a wxChar* to the actual character data within a wxString, and is
