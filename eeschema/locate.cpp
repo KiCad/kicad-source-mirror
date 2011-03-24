@@ -32,7 +32,7 @@
  */
 SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen )
 {
-    double area;
+    double area = 0.0;      // Quiet compiler
     EDA_Rect rect;
     PICKED_ITEMS_LIST itemList;
     SCH_COMPONENT* component = NULL;

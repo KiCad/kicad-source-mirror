@@ -1,5 +1,5 @@
 /* XPM */
-char *gerber_recent_files_xpm[] = {
+const char *gerber_recent_files_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 16 1",
 "$ c #969997",
