@@ -113,8 +113,10 @@ bool LIB_FIELD::Save( FILE* ExportFile )
     if( text.IsEmpty() )
         text = wxT( "~" );
 
-    if( fprintf( ExportFile, "F%d \"%s\" %d %d %d %c %c %c %c%c%c",
-                 m_id, TO_UTF8( text ), m_Pos.x, m_Pos.y, m_Size.x,
+    if( fprintf( ExportFile, "F%d %s %d %d %d %c %c %c %c%c%c",
+                 m_id,
+                 EscapedUTF8( text ).c_str(),       // wraps in quotes
+                 m_Pos.x, m_Pos.y, m_Size.x,
                  m_Orient == 0 ? 'H' : 'V',
                  (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
                  hjustify, vjustify,
@@ -129,10 +131,11 @@ bool LIB_FIELD::Save( FILE* ExportFile )
      */
     wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
 
-    if( m_id >= FIELD1 && !m_name.IsEmpty()
-        && m_name != defName
-        && fprintf( ExportFile, " \"%s\"", TO_UTF8( m_name ) ) < 0 )
+    if( m_id >= FIELD1 && !m_name.IsEmpty() && m_name != defName
+        && fprintf( ExportFile, " %s", EscapedUTF8( m_name ).c_str() ) < 0 )
+    {
         return false;
+    }
 
     if( fprintf( ExportFile, "\n" ) < 0 )
         return false;
@@ -148,8 +151,6 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
     char  textVisible;
     char  textHJustify;
     char  textVJustify[256];
-    char  fieldUserName[1024];
-    char* text;
 
     if( sscanf( line + 1, "%d", &m_id ) != 1 || m_id < 0 )
     {
@@ -169,21 +170,12 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 
     if( *line == 0 )
         return false;
-    line++;
 
-    text = line;
-
-    /* Find end of text. */
-    while( *line && (*line != '"') )
-        line++;
+    line += ReadDelimitedText( &m_Text, line );
 
     if( *line == 0 )
         return false;
 
-    *line = 0;
-    line++;
-
-    fieldUserName[0] = 0;
     memset( textVJustify, 0, sizeof( textVJustify ) );
 
     cnt = sscanf( line, " %d %d %d %c %c %c %s", &m_Pos.x, &m_Pos.y, &m_Size.y,
@@ -196,7 +188,6 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
         return false;
     }
 
-    m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y;
 
     if( textOrient == 'H' )
@@ -270,8 +261,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
     }
     else
     {
-        ReadDelimitedText( fieldUserName, line, sizeof( fieldUserName ) );
-        m_name = FROM_UTF8( fieldUserName );
+        ReadDelimitedText( &m_name, line );
     }
 
     return true;

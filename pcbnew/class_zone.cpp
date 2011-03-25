@@ -107,9 +107,9 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     fprintf( aFile, "$CZONE_OUTLINE\n" );
 
     // Save the outline main info
-    ret = fprintf( aFile, "ZInfo %8.8lX %d \"%s\"\n",
+    ret = fprintf( aFile, "ZInfo %8.8lX %d %s\n",
                   m_TimeStamp, m_NetCode,
-                  TO_UTF8( m_Netname ) );
+                  EscapedUTF8( m_Netname ).c_str() );
     if( ret < 3 )
         return false;
 

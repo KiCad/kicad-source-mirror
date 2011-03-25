@@ -362,7 +362,7 @@ bool DIMENSION::Save( FILE* aFile ) const
     fprintf( aFile, "Va %d\n", m_Value );
 
     if( !m_Text->m_Text.IsEmpty() )
-        fprintf( aFile, "Te \"%s\"\n", TO_UTF8( m_Text->m_Text ) );
+        fprintf( aFile, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
     else
         fprintf( aFile, "Te \"?\"\n" );
 

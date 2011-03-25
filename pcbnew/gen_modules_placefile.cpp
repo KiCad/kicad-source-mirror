@@ -386,17 +386,14 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     Module = (MODULE*) GetBoard()->m_Modules;
     for( ; Module != NULL; Module = Module->Next() )
     {
-        sprintf( line, "$MODULE \"%s\"\n",
-                 TO_UTF8( Module->m_Reference->m_Text ) );
+        sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
         fputs( line, rptfile );
 
-        sprintf( line, "reference \"%s\"\n",
-                 TO_UTF8( Module->m_Reference->m_Text ) );
+        sprintf( line, "reference %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
         fputs( line, rptfile );
-        sprintf( line, "value \"%s\"\n",
-                 TO_UTF8( Module->m_Value->m_Text ) );
+        sprintf( line, "value %s\n", EscapedUTF8( Module->m_Value->m_Text ).c_str() );
         fputs( line, rptfile );
-        sprintf( line, "footprint \"%s\"\n", TO_UTF8( Module->m_LibRef ) );
+        sprintf( line, "footprint %s\n", EscapedUTF8( Module->m_LibRef ).c_str() );
         fputs( line, rptfile );
 
         msg = wxT( "attribut" );

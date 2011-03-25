@@ -43,9 +43,10 @@ void CVPCB_MAINFRAME::WriteStuffList( wxCommandEvent& event )
     {
         if( component.m_Module.empty() )
             continue;
-        fprintf( FileEquiv, "comp = \"%s\" module = \"%s\"\n",
-                 TO_UTF8( component.m_Reference ),
-                 TO_UTF8( component.m_Module ) );
+
+        fprintf( FileEquiv, "comp = %s module = %s\n",
+                 EscapedUTF8( component.m_Reference ).c_str(),
+                 EscapedUTF8( component.m_Module ).c_str() );
     }
 
     fclose( FileEquiv );

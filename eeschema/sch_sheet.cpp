@@ -26,7 +26,7 @@
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
 #include "sch_component.h"
-
+#include "kicad_string.h"
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_SHEET_T )
@@ -131,14 +131,14 @@ bool SCH_SHEET::Save( FILE* aFile ) const
     /* Save schematic sheetname and filename. */
     if( !m_SheetName.IsEmpty() )
     {
-        if( fprintf( aFile, "F0 \"%s\" %d\n", TO_UTF8( m_SheetName ),
+        if( fprintf( aFile, "F0 %s %d\n", EscapedUTF8( m_SheetName ).c_str(),
                      m_SheetNameSize ) == EOF )
             return false;
     }
 
     if( !m_FileName.IsEmpty() )
     {
-        if( fprintf( aFile, "F1 \"%s\" %d\n", TO_UTF8( m_FileName ),
+        if( fprintf( aFile, "F1 %s %d\n", EscapedUTF8( m_FileName ).c_str(),
                      m_FileNameSize ) == EOF )
             return false;
     }
@@ -160,8 +160,7 @@ bool SCH_SHEET::Save( FILE* aFile ) const
 
 bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    int              ii, fieldNdx, size;
-    char             Name1[256];
+    int              fieldNdx, size;
     SCH_SHEET_PIN*   SheetLabel;
     char*            ptcar;
 
@@ -231,24 +230,15 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
             return false;
         }
 
-        for( ptcar++, ii = 0; ; ii++, ptcar++ )
+        wxString sheetName;
+        ptcar += ReadDelimitedText( &sheetName, ptcar );
+
+        if( *ptcar == 0 )
         {
-            Name1[ii] = *ptcar;
-
-            if( *ptcar == 0 )
-            {
-                aErrorMsg.Printf( wxT( "EESchema file sheet field F at line %d, aborted\n" ),
-                                  aLine.LineNumber() );
-                aErrorMsg << FROM_UTF8( (char*) aLine );
-                return false;
-            }
-
-            if( *ptcar == '"' )
-            {
-                Name1[ii] = 0;
-                ptcar++;
-                break;
-            }
+            aErrorMsg.Printf( wxT( "EESchema file sheet field F at line %d, aborted\n" ),
+                              aLine.LineNumber() );
+            aErrorMsg << FROM_UTF8( (char*) aLine );
+            return false;
         }
 
         if( ( fieldNdx == 0 ) || ( fieldNdx == 1 ) )
@@ -265,14 +255,12 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             if( fieldNdx == 0 )
             {
-                m_SheetName     = FROM_UTF8( Name1 );
+                m_SheetName     = sheetName;
                 m_SheetNameSize = size;
             }
             else
             {
-                SetFileName( FROM_UTF8( Name1 ) );
-
-                //printf( "in ReadSheetDescr : m_FileName = %s \n", Name1 );
+                SetFileName( sheetName );
                 m_FileNameSize = size;
             }
         }

@@ -558,18 +558,19 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "At %s N %8.8X\n", texttype, m_Masque_Layer );
 
-    fprintf( aFile, "Ne %d \"%s\"\n", GetNet(), TO_UTF8( m_Netname ) );
+    fprintf( aFile, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 
     if( m_LocalSolderMaskMargin != 0 )
         fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+
     if( m_LocalSolderPasteMargin != 0 )
         fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+
     if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( aFile,
-                 ".SolderPasteRatio %g\n",
-                 m_LocalSolderPasteMarginRatio );
+        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+
     if( m_LocalClearance != 0 )
         fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
 

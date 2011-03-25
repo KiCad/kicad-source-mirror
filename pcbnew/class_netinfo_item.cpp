@@ -78,10 +78,8 @@ bool NETINFO_ITEM::Save( FILE* aFile ) const
     bool success = false;
 
     fprintf( aFile, "$EQUIPOT\n" );
-    fprintf( aFile, "Na %d \"%s\"\n", GetNet(), TO_UTF8( m_Netname ) );
+    fprintf( aFile, "Na %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
     fprintf( aFile, "St %s\n", "~" );
-
-    // fprintf( aFile, "NetClass \"%s\"\n", TO_UTF8(m_NetClassName) );
 
     if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
         goto out;
