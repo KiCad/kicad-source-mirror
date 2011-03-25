@@ -78,7 +78,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     if( parent )
         orient += parent->m_Orient;
 
-    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c\"%s\"\n",
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
                       m_Type,
                       m_Pos0.x, m_Pos0.y,
                       m_Size.y, m_Size.x,
@@ -159,12 +159,11 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
 
     SetLayer( layer );
 
-    // Calculate the true position.
+    // Calculate the actual position.
     SetDrawCoord();
 
 
-    // Read the "text" string.
-    // @todo why is line not incremented, what are we reading here?
+    // Search and read the "text" string (a quoted text).
     ReadDelimitedText( &m_Text, line );
 
     // Test for a reasonable size:
