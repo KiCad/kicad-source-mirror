@@ -517,14 +517,14 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
                  m_CurrentSheetDesc->m_Size.x, m_CurrentSheetDesc->m_Size.y ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0
         || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
-        || fprintf( aFile, "Title \"%s\"\n", TO_UTF8( m_Title ) ) < 0
-        || fprintf( aFile, "Date \"%s\"\n", TO_UTF8( m_Date ) ) < 0
-        || fprintf( aFile, "Rev \"%s\"\n", TO_UTF8( m_Revision ) ) < 0
-        || fprintf( aFile, "Comp \"%s\"\n", TO_UTF8( m_Company ) ) < 0
-        || fprintf( aFile, "Comment1 \"%s\"\n", TO_UTF8( m_Commentaire1 ) ) < 0
-        || fprintf( aFile, "Comment2 \"%s\"\n", TO_UTF8( m_Commentaire2 ) ) < 0
-        || fprintf( aFile, "Comment3 \"%s\"\n", TO_UTF8( m_Commentaire3 ) ) < 0
-        || fprintf( aFile, "Comment4 \"%s\"\n", TO_UTF8( m_Commentaire4 ) ) < 0
+        || fprintf( aFile, "Title %s\n",    EscapedUTF8( m_Title ).c_str() ) < 0
+        || fprintf( aFile, "Date %s\n",     EscapedUTF8( m_Date ).c_str() ) < 0
+        || fprintf( aFile, "Rev %s\n",      EscapedUTF8( m_Revision ).c_str() ) < 0
+        || fprintf( aFile, "Comp %s\n",     EscapedUTF8( m_Company ).c_str() ) < 0
+        || fprintf( aFile, "Comment1 %s\n", EscapedUTF8( m_Commentaire1 ).c_str() ) < 0
+        || fprintf( aFile, "Comment2 %s\n", EscapedUTF8( m_Commentaire2 ).c_str() ) < 0
+        || fprintf( aFile, "Comment3 %s\n", EscapedUTF8( m_Commentaire3 ).c_str() ) < 0
+        || fprintf( aFile, "Comment4 %s\n", EscapedUTF8( m_Commentaire4 ).c_str() ) < 0
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
         return false;
 

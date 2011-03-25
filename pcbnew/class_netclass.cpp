@@ -286,8 +286,8 @@ bool NETCLASS::Save( FILE* aFile ) const
     bool result = true;
 
     fprintf( aFile, "$" BRD_NETCLASS "\n" );
-    fprintf( aFile, "Name \"%s\"\n", TO_UTF8( m_Name ) );
-    fprintf( aFile, "Desc \"%s\"\n", TO_UTF8( GetDescription() ) );
+    fprintf( aFile, "Name %s\n",        EscapedUTF8( m_Name ).c_str() );
+    fprintf( aFile, "Desc %s\n",        EscapedUTF8( GetDescription() ).c_str() );
 
     // Write parameters
 
@@ -302,7 +302,7 @@ bool NETCLASS::Save( FILE* aFile ) const
 
     // Write members:
     for( const_iterator i = begin();  i!=end();  ++i )
-        fprintf( aFile, "AddNet \"%s\"\n", TO_UTF8( *i ) );
+        fprintf( aFile, "AddNet %s\n", EscapedUTF8( *i ).c_str() );
 
     fprintf( aFile, "$End" BRD_NETCLASS "\n" );
 

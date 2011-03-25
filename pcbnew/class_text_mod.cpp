@@ -78,7 +78,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     if( parent )
         orient += parent->m_Orient;
 
-    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c\"%s\"\n",
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
                       m_Type,
                       m_Pos0.x, m_Pos0.y,
                       m_Size.y, m_Size.x,
@@ -87,7 +87,8 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
                       m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
                       GetLayer(),
                       m_Italic ? 'I' : 'N',
-                      TO_UTF8( m_Text ) );
+                      EscapedUTF8( m_Text ).c_str()
+                      );
 
     return ret > 20;
 }
@@ -101,37 +102,41 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
  */
 int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
 {
-    int  success = true;
-    int  type;
-    int  layer;
-    char BufCar1[128], BufCar2[128], BufCar3[128], BufLine[256];
-    char *aLine;
+    int     success = true;
+    int     type;
+    char    BufCar1[128], BufCar2[128], BufCar3[128];
+    char*   line = aReader->Line();
 
-    aLine = aReader->Line();
+    int     layer = SILKSCREEN_N_FRONT;
 
-    layer = SILKSCREEN_N_FRONT;
     BufCar1[0] = 0;
     BufCar2[0] = 0;
     BufCar3[0] = 0;
-    if( sscanf( aLine + 1, "%d %d %d %d %d %d %d %s %s %d %s",
+
+    if( sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s",
                 &type,
                 &m_Pos0.x, &m_Pos0.y,
                 &m_Size.y, &m_Size.x,
                 &m_Orient, &m_Thickness,
                 BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
+    {
         success = true;
+    }
 
     if( (type != TEXT_is_REFERENCE) && (type != TEXT_is_VALUE) )
         type = TEXT_is_DIVERS;
+
     m_Type = type;
 
     // Due to the pcbnew history, .m_Orient is saved in screen value
     // but it is handled as relative to its parent footprint
     m_Orient -= ( (MODULE*) m_Parent )->m_Orient;
+
     if( BufCar1[0] == 'M' )
         m_Mirror = true;
     else
         m_Mirror = false;
+
     if( BufCar2[0]  == 'I' )
         m_NoShow = true;
     else
@@ -154,11 +159,12 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
 
     SetLayer( layer );
 
-    /* Calculate the true position. */
+    // Calculate the actual position.
     SetDrawCoord();
-    /* Read the "text" string. */
-    ReadDelimitedText( BufLine, aLine, sizeof(BufLine) );
-    m_Text = FROM_UTF8( BufLine );
+
+
+    // Search and read the "text" string (a quoted text).
+    ReadDelimitedText( &m_Text, line );
 
     // Test for a reasonable size:
     if( m_Size.x < TEXTS_MIN_SIZE )

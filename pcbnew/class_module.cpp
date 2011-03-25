@@ -370,7 +370,7 @@ int MODULE::Write_3D_Descr( FILE* File ) const
         {
             fprintf( File, "$SHAPE3D\n" );
 
-            fprintf( File, "Na \"%s\"\n", TO_UTF8( t3D->m_Shape3DName ) );
+            fprintf( File, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
 
             sprintf( buf, "Sc %lf %lf %lf\n",
                      t3D->m_MatScale.x,

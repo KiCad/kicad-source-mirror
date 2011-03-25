@@ -27,7 +27,7 @@
 #include "sch_component.h"
 #include "sch_field.h"
 #include "template_fieldnames.h"
-
+#include "kicad_string.h"
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
@@ -329,9 +329,9 @@ bool SCH_FIELD::Save( FILE* aFile ) const
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    if( fprintf( aFile, "F %d \"%s\" %c %-3d %-3d %-3d %4.4X %c %c%c%c",
+    if( fprintf( aFile, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
                  m_FieldId,
-                 TO_UTF8( m_Text ),
+                 EscapedUTF8( m_Text ).c_str(),     // wraps in quotes too
                  m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
                  m_Pos.x, m_Pos.y,
                  m_Size.x,
@@ -346,7 +346,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
     // Save field name, if the name is user definable
     if( m_FieldId >= FIELD1 )
     {
-        if( fprintf( aFile, " \"%s\"", TO_UTF8( m_Name ) ) == EOF )
+        if( fprintf( aFile, " %s", EscapedUTF8( m_Name ).c_str() ) == EOF )
         {
             return false;
         }

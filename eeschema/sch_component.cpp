@@ -1179,11 +1179,9 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         {
             int  fieldNdx;
 
-            char FieldUserName[1024];
+            wxString fieldText;
             GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
             GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
-
-            FieldUserName[0] = 0;
 
             ptcar = (char*) aLine;
 
@@ -1197,32 +1195,20 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 return false;
             }
 
-            for( ptcar++, ii = 0; ; ii++, ptcar++ )
+            ptcar += ReadDelimitedText( &fieldText, ptcar );
+            if( *ptcar == 0 )
             {
-                Name1[ii] = *ptcar;
-                if( *ptcar == 0 )
-                {
-                    aErrorMsg.Printf( wxT( "Component field F at line %d, aborted" ),
-                                      aLine.LineNumber() );
-                    return false;
-                }
-
-                if( *ptcar == '"' )
-                {
-                    Name1[ii] = 0;
-                    ptcar++;
-                    break;
-                }
+                aErrorMsg.Printf( wxT( "Component field F at line %d, aborted" ),
+                                  aLine.LineNumber() );
+                return false;
             }
 
             fieldNdx = atoi( line + 2 );
 
-            ReadDelimitedText( FieldUserName, ptcar, sizeof(FieldUserName) );
+            ReadDelimitedText( &fieldName, ptcar );
 
-            if( !FieldUserName[0] )
+            if( fieldName.IsEmpty() )
                 fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
-            else
-                fieldName = FROM_UTF8( FieldUserName );
 
             if( fieldNdx >= GetFieldCount() )
             {
@@ -1248,7 +1234,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 GetField( fieldNdx )->m_Name = fieldName;
             }
 
-            GetField( fieldNdx )->m_Text = FROM_UTF8( Name1 );
+            GetField( fieldNdx )->m_Text = fieldText;
             memset( Char3, 0, sizeof(Char3) );
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
                                &GetField( fieldNdx )->m_Pos.x,

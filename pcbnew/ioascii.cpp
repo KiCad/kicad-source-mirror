@@ -830,14 +830,14 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d\n",
              TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );
-    fprintf( File, "Title \"%s\"\n", TO_UTF8( screen->m_Title ) );
-    fprintf( File, "Date \"%s\"\n", TO_UTF8( screen->m_Date ) );
-    fprintf( File, "Rev \"%s\"\n", TO_UTF8( screen->m_Revision ) );
-    fprintf( File, "Comp \"%s\"\n", TO_UTF8( screen->m_Company ) );
-    fprintf( File, "Comment1 \"%s\"\n", TO_UTF8( screen->m_Commentaire1 ) );
-    fprintf( File, "Comment2 \"%s\"\n", TO_UTF8( screen->m_Commentaire2 ) );
-    fprintf( File, "Comment3 \"%s\"\n", TO_UTF8( screen->m_Commentaire3 ) );
-    fprintf( File, "Comment4 \"%s\"\n", TO_UTF8( screen->m_Commentaire4 ) );
+    fprintf( File, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
+    fprintf( File, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
+    fprintf( File, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
+    fprintf( File, "Comp %s\n",         EscapedUTF8( screen->m_Company ).c_str() );
+    fprintf( File, "Comment1 %s\n",     EscapedUTF8( screen->m_Commentaire1 ).c_str() );
+    fprintf( File, "Comment2 %s\n",     EscapedUTF8( screen->m_Commentaire2 ).c_str() );
+    fprintf( File, "Comment3 %s\n",     EscapedUTF8( screen->m_Commentaire3 ).c_str() );
+    fprintf( File, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
 
     fprintf( File, "$EndSHEETDESCR\n\n" );
     return TRUE;
